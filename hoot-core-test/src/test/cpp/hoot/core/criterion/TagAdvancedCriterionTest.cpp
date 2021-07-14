@@ -395,7 +395,9 @@ public:
     node->getTags().set("amenity", "community_centre");
 
     // similarityThreshold is disabled by default
-    uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"tag\": \"amenity=arts_centre\" } ] }"));
+    uut =
+      std::make_shared<TagAdvancedCriterion>(
+        "{ \"must\": [ { \"tag\": \"amenity=arts_centre\" } ] }");
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
     // a similarity score of -1.0 is the same as not using similarity scoring at all
@@ -434,7 +436,9 @@ public:
     node->getTags().set("amenity", "ev_charging");
 
     // allowAliases is false by default
-    uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"tag\": \"amenity=charging_station\" } ] }"));
+    uut =
+      std::make_shared<TagAdvancedCriterion>(
+        "{ \"must\": [ { \"tag\": \"amenity=charging_station\" } ] }");
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
     uut.reset(
@@ -478,7 +482,8 @@ public:
     node->getTags().set("surface", "pebblestone");
 
     // allowChildren is false by default
-    uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"tag\": \"surface=gravel\" } ] }"));
+    uut =
+      std::make_shared<TagAdvancedCriterion>("{ \"must\": [ { \"tag\": \"surface=gravel\" } ] }");
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
     uut.reset(
@@ -520,7 +525,8 @@ public:
     node->getTags().set("highway", "road");
 
     // allowAncestors is false by default
-    uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"tag\": \"highway=primary\" } ] }"));
+    uut =
+      std::make_shared<TagAdvancedCriterion>("{ \"must\": [ { \"tag\": \"highway=primary\" } ] }");
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
     uut.reset(
@@ -562,7 +568,9 @@ public:
     node->getTags().set("roof:height", "15");
 
     // allowAssociations is false by default
-    uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"tag\": \"building:part=yes\" } ] }"));
+    uut =
+      std::make_shared<TagAdvancedCriterion>(
+        "{ \"must\": [ { \"tag\": \"building:part=yes\" } ] }");
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
 
     uut.reset(
@@ -627,10 +635,13 @@ public:
     node->getTags().clear();
     node->getTags().set("highway", "road");
 
-    uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"category\": \"transportation\" } ] }"));
+    uut =
+      std::make_shared<TagAdvancedCriterion>(
+        "{ \"must\": [ { \"category\": \"transportation\" } ] }");
     CPPUNIT_ASSERT(uut->isSatisfied(node));
 
-    uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"category\": \"building\" } ] }"));
+    uut =
+      std::make_shared<TagAdvancedCriterion>("{ \"must\": [ { \"category\": \"building\" } ] }");
     CPPUNIT_ASSERT(!uut->isSatisfied(node));
   }
 
@@ -747,7 +758,8 @@ public:
 
     try
     {
-      uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"tag\": \" =arts_centre\" } ] }"));
+      uut =
+        std::make_shared<TagAdvancedCriterion>("{ \"must\": [ { \"tag\": \" =arts_centre\" } ] }");
     }
     catch (const HootException& e)
     {
@@ -757,7 +769,7 @@ public:
 
     try
     {
-      uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"tag\": \"amenity = \" } ] }"));
+      uut = std::make_shared<TagAdvancedCriterion>("{ \"must\": [ { \"tag\": \"amenity = \" } ] }");
     }
     catch (const HootException& e)
     {
@@ -767,7 +779,7 @@ public:
 
     try
     {
-      uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"tag\": \" =\" } ] }"));
+      uut = std::make_shared<TagAdvancedCriterion>("{ \"must\": [ { \"tag\": \" =\" } ] }");
     }
     catch (const HootException& e)
     {
@@ -777,7 +789,7 @@ public:
 
     try
     {
-      uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"tag\": \"amenity \" } ] }"));
+      uut = std::make_shared<TagAdvancedCriterion>("{ \"must\": [ { \"tag\": \"amenity \" } ] }");
     }
     catch (const HootException& e)
     {
@@ -789,7 +801,7 @@ public:
     // the filter won't actually do any filtering
     try
     {
-      uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"tag\": \"*\" } ] }"));
+      uut = std::make_shared<TagAdvancedCriterion>("{ \"must\": [ { \"tag\": \"*\" } ] }");
     }
     catch (const HootException& e)
     {
@@ -837,7 +849,7 @@ public:
 
     try
     {
-      uut.reset(new TagAdvancedCriterion("{}"));
+      uut = std::make_shared<TagAdvancedCriterion>("{}");
     }
     catch (const HootException& e)
     {
@@ -849,7 +861,7 @@ public:
 
     try
     {
-      uut.reset(new TagAdvancedCriterion("{ \"must\": [ ] }"));
+      uut = std::make_shared<TagAdvancedCriterion>("{ \"must\": [ ] }");
     }
     catch (const HootException& e)
     {
@@ -861,7 +873,7 @@ public:
 
     try
     {
-      uut.reset(new TagAdvancedCriterion("{ \"must\": [ {} ] }"));
+      uut = std::make_shared<TagAdvancedCriterion>("{ \"must\": [ {} ] }");
     }
     catch (const HootException& e)
     {
@@ -873,7 +885,9 @@ public:
 
     try
     {
-      uut.reset(new TagAdvancedCriterion("{ \"blah\": [ { \"tag\": \"amenity=arts_centre\" } ] }"));
+      uut =
+        std::make_shared<TagAdvancedCriterion>(
+          "{ \"blah\": [ { \"tag\": \"amenity=arts_centre\" } ] }");
     }
     catch (const HootException& e)
     {
@@ -892,7 +906,7 @@ public:
 
     try
     {
-      uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"category\": \"blah\" } ] }"));
+      uut = std::make_shared<TagAdvancedCriterion>("{ \"must\": [ { \"category\": \"blah\" } ] }");
       LOG_VART(uut->getDescription());
     }
     catch (const HootException& e)
@@ -905,7 +919,7 @@ public:
 
     try
     {
-      uut.reset(new TagAdvancedCriterion("{ \"must\": [ { \"category\": \"\" } ] }"));
+      uut = std::make_shared<TagAdvancedCriterion>("{ \"must\": [ { \"category\": \"\" } ] }");
       LOG_VART(uut->getDescription());
     }
     catch (const HootException& e)

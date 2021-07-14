@@ -72,7 +72,7 @@ public:
       map, "test-files/conflate/unified/AllDataTypesA.osm", false, Status::Unknown1);
 
     NodesPerWayVisitor uut;
-    uut.addCriterion(std::shared_ptr<BuildingCriterion>(new BuildingCriterion()));
+    uut.addCriterion(std::make_shared<BuildingCriterion>());
     map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(81, (int)uut.getStat());

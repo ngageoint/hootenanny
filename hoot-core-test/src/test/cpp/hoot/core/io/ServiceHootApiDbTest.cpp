@@ -567,7 +567,7 @@ public:
 
     database.commit();
 
-    return std::shared_ptr<QList<long>>(new QList<long>(ids));
+    return std::make_shared<QList<long>>(ids);
   }
 
   const std::shared_ptr<QList<long>> insertTestMap2(HootApiDb& database)
@@ -623,7 +623,7 @@ public:
 
     database.commit();
 
-    return std::shared_ptr<QList<long>>(new QList<long>(ids));
+    return std::make_shared<QList<long>>(ids);
   }
 
   const std::shared_ptr<QList<long>> insertTestMapWithCustomTags(HootApiDb& database)
@@ -654,9 +654,8 @@ public:
 
     database.commit();
 
-    return std::shared_ptr<QList<long>>(new QList<long>(ids));
+    return std::make_shared<QList<long>>(ids);
   }
-
 };
 
 #ifdef HOOT_HAVE_SERVICES

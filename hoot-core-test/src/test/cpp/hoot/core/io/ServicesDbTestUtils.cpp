@@ -358,7 +358,7 @@ bool ServicesDbTestUtils::deleteUserByUserName(const QString& userName)
 
 std::shared_ptr<HootNetworkCookieJar> ServicesDbTestUtils::getTestSessionCookie(const QString& sessionId, const QString& url)
 {
-  std::shared_ptr<HootNetworkCookieJar> cookieJar(new HootNetworkCookieJar());
+  std::shared_ptr<HootNetworkCookieJar> cookieJar = std::make_shared<HootNetworkCookieJar>();
   QList<QNetworkCookie> cookies;
   QNetworkCookie sessionCookie(QString("SESSION").toUtf8(), sessionId.toUtf8());
   cookies.append(sessionCookie);

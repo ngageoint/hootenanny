@@ -204,20 +204,20 @@ public:
   void testRegion(const OGREnvelope& env, QString name)
   {
     std::shared_ptr<OGRSpatialReference> sinusoidal = MapProjector::createSinusoidalProjection(env);
-    std::shared_ptr<OGRSpatialReference> mollweide(new OGRSpatialReference());
+    std::shared_ptr<OGRSpatialReference> mollweide = std::make_shared<OGRSpatialReference>();
     if (mollweide->importFromEPSG(54009) != OGRERR_NONE)
     {
       throw HootException("Error creating mollweide projection.");
     }
     std::shared_ptr<OGRSpatialReference> orthographic = MapProjector::createOrthographic(env);
 
-    std::shared_ptr<OGRSpatialReference> eckertVI(new OGRSpatialReference());
+    std::shared_ptr<OGRSpatialReference> eckertVI = std::make_shared<OGRSpatialReference>();
     if (eckertVI->importFromEPSG(53010) != OGRERR_NONE)
     {
       throw HootException("Error creating mollweide projection.");
     }
 
-    std::shared_ptr<OGRSpatialReference> sphereBoone(new OGRSpatialReference());
+    std::shared_ptr<OGRSpatialReference> sphereBoone = std::make_shared<OGRSpatialReference>();
     if (sphereBoone->importFromEPSG(53024) != OGRERR_NONE)
     {
       throw HootException("Error creating mollweide projection.");

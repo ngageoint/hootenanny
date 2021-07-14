@@ -42,9 +42,9 @@ bool SimpleReaderTestServer::respond(HttpConnectionPtr& connection)
   //  Reply with ToyTestA.osm or with an HTTP 404 error
   HttpResponsePtr response;
   if (_headers.find(OsmApiEndpoints::API_PATH_MAP) != std::string::npos)
-    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, FileUtils::readFully("test-files/ToyTestA.osm").toStdString()));
+    response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, FileUtils::readFully("test-files/ToyTestA.osm").toStdString());
   else
-    response.reset(new HttpResponse(HttpResponseCode::HTTP_NOT_FOUND));
+    response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_NOT_FOUND);
   //  Write out the response
   write_response(connection, response->to_string());
   return false;
@@ -67,7 +67,7 @@ bool GeographicSplitReaderTestServer::respond(HttpConnectionPtr& connection)
   }
   else
   {
-    response.reset(new HttpResponse(HttpResponseCode::HTTP_NOT_FOUND));
+    response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_NOT_FOUND);
     continue_processing = false;
   }
   //  Write out the response
@@ -78,7 +78,7 @@ bool GeographicSplitReaderTestServer::respond(HttpConnectionPtr& connection)
 
 HttpResponsePtr GeographicSplitReaderTestServer::get_sequence_response(const std::string& request)
 {
-  HttpResponsePtr response(new HttpResponse(HttpResponseCode::HTTP_NOT_FOUND));
+  HttpResponsePtr response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_NOT_FOUND);
   //  Only respond up until the max is reached, then shutdown
   if (_current < _max)
   {
@@ -91,7 +91,7 @@ HttpResponsePtr GeographicSplitReaderTestServer::get_sequence_response(const std
       //  Increment the sequence
       _current++;
       QString path = QString("test-files/io/OsmApiReaderTest/ToyTestA-Part%1.osm").arg(_current);
-      response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, FileUtils::readFully(path).toStdString()));
+      response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, FileUtils::readFully(path).toStdString());
       _sequence_responses[request] = response;
     }
   }
@@ -115,7 +115,7 @@ bool ElementSplitReaderTestServer::respond(HttpConnectionPtr& connection)
   }
   else
   {
-    response.reset(new HttpResponse(HttpResponseCode::HTTP_NOT_FOUND));
+    response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_NOT_FOUND);
     continue_processing = false;
   }
   //  Write out the response
@@ -126,7 +126,7 @@ bool ElementSplitReaderTestServer::respond(HttpConnectionPtr& connection)
 
 HttpResponsePtr ElementSplitReaderTestServer::get_sequence_response(const std::string& request)
 {
-  HttpResponsePtr response(new HttpResponse(HttpResponseCode::HTTP_NOT_FOUND));
+  HttpResponsePtr response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_NOT_FOUND);
   //  Only respond up until the max is reached, then shutdown
   if (_current < _max)
   {
@@ -135,7 +135,7 @@ HttpResponsePtr ElementSplitReaderTestServer::get_sequence_response(const std::s
       //  Force a split by responding with 400 BAD REQUEST
       _split_forced = true;
       _current = 1;
-      response.reset(new HttpResponse(HttpResponseCode::HTTP_BAD_REQUEST));
+      response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_BAD_REQUEST);
       _sequence_responses[request] = response;
     }
     else
@@ -149,7 +149,7 @@ HttpResponsePtr ElementSplitReaderTestServer::get_sequence_response(const std::s
         //  Increment the sequence
         _current++;
         QString path = QString("test-files/io/OsmApiReaderTest/ToyTestA-Part%1.osm").arg(_current - 1);
-        response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, FileUtils::readFully(path).toStdString()));
+        response = std::make_shared<HttpResponse>(HttpResponseCode::HTTP_OK, FileUtils::readFully(path).toStdString());
         _sequence_responses[request] = response;
       }
     }

@@ -287,7 +287,7 @@ public:
     attributesToAdd.append("uid=550560");
     attributesToAdd.append("user=Seandebasti");
     AddAttributesVisitor visitor(attributesToAdd, true);
-    visitor.addCriterion(ElementCriterionPtr(new PoiCriterion()));
+    visitor.addCriterion(std::make_shared<PoiCriterion>());
     map->visitRw(visitor);
 
     OsmMapWriterFactory::write(map, _outputPath + "runNegatedFilterTest.osm");
@@ -309,8 +309,8 @@ public:
     attributesToAdd.append("uid=550560");
     attributesToAdd.append("user=Seandebasti");
     AddAttributesVisitor visitor(attributesToAdd);
-    visitor.addCriterion(ElementCriterionPtr(new PoiCriterion()));
-    visitor.addCriterion(ElementCriterionPtr(new HighwayCriterion(map)));
+    visitor.addCriterion(std::make_shared<PoiCriterion>());
+    visitor.addCriterion(std::make_shared<HighwayCriterion>(map));
     map->visitRw(visitor);
 
     OsmMapWriterFactory::write(map, _outputPath + "runMultipleCriteriaTest.osm");

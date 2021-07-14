@@ -185,68 +185,84 @@ public:
     NetworkDetailsPtr details = createSampleDetails();
 
     EdgeStringPtr str = std::make_shared<EdgeString>();
-    str->appendEdge(EdgeSublinePtr(new EdgeSubline(
-      ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.4)),
-      ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 1.0)))));
+    str->appendEdge(
+      EdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.4)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 1.0)))));
     str->appendEdge(_e1bc);
-    str->appendEdge(EdgeSublinePtr(new EdgeSubline(
-      ConstEdgeLocationPtr(new EdgeLocation(_e1cd, 0.0)),
-      ConstEdgeLocationPtr(new EdgeLocation(_e1cd, 0.6)))));
+    str->appendEdge(
+      EdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e1cd, 0.0)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e1cd, 0.6)))));
 
     ConstEdgeLocationPtr elStr, elSub;
 
-    details->calculateNearestLocation(str,
-      ConstEdgeSublinePtr(new EdgeSubline(
-        ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.1)),
-        ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.2)))),
+    details->calculateNearestLocation(
+      str,
+      ConstEdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.1)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.2)))),
       elStr, elSub);
     HOOT_STR_EQUALS("{ _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 0.4 }", elStr);
     HOOT_STR_EQUALS("{ _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 0.2 }", elSub);
 
-    details->calculateNearestLocation(str,
-      ConstEdgeSublinePtr(new EdgeSubline(
-        ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.1)),
-        ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.6)))),
+    details->calculateNearestLocation(
+      str,
+      ConstEdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.1)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.6)))),
       elStr, elSub);
     // There are a range of valid values.
     CPPUNIT_ASSERT(elStr == elSub);
     CPPUNIT_ASSERT(elStr->getEdge() == _e1ab);
     CPPUNIT_ASSERT(elStr->getPortion() >= 0.4 && elStr->getPortion() <= 0.6);
 
-    details->calculateNearestLocation(str,
-      ConstEdgeSublinePtr(new EdgeSubline(
-        ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.7)),
-        ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.3)))),
+    details->calculateNearestLocation(
+      str,
+      ConstEdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.7)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.3)))),
       elStr, elSub);
     // There are a range of valid values.
     CPPUNIT_ASSERT(elStr == elSub);
     CPPUNIT_ASSERT(elStr->getEdge() == _e1ab);
     CPPUNIT_ASSERT(elStr->getPortion() >= 0.4 && elStr->getPortion() <= 0.7);
 
-    details->calculateNearestLocation(str,
-      ConstEdgeSublinePtr(new EdgeSubline(
-        ConstEdgeLocationPtr(new EdgeLocation(_e1cd, 0.7)),
-        ConstEdgeLocationPtr(new EdgeLocation(_e1cd, 0.3)))),
+    details->calculateNearestLocation(
+      str,
+      ConstEdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e1cd, 0.7)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e1cd, 0.3)))),
       elStr, elSub);
     // There are a range of valid values.
     CPPUNIT_ASSERT(elStr == elSub);
     CPPUNIT_ASSERT(elStr->getEdge() == _e1cd);
     CPPUNIT_ASSERT(elStr->getPortion() >= 0.3 && elStr->getPortion() <= 0.6);
 
-    details->calculateNearestLocation(str,
-      ConstEdgeSublinePtr(new EdgeSubline(
-        ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.0)),
-        ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 1.0)))),
+    details->calculateNearestLocation(
+      str,
+      ConstEdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.0)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 1.0)))),
       elStr, elSub);
     // There are a range of valid values.
     CPPUNIT_ASSERT(elStr == elSub);
     CPPUNIT_ASSERT(elStr->getEdge() == _e1bc);
     CPPUNIT_ASSERT(elStr->getPortion() >= 0.0 && elStr->getPortion() <= 1.0);
 
-    details->calculateNearestLocation(str,
-      ConstEdgeSublinePtr(new EdgeSubline(
-        ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.5)),
-        ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.51)))),
+    details->calculateNearestLocation(
+      str,
+      ConstEdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.5)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.51)))),
       elStr, elSub);
     // There are a range of valid values.
     CPPUNIT_ASSERT(elStr == elSub);
@@ -257,34 +273,42 @@ public:
     str2->appendEdge(_e1bc);
     str2->appendEdge(_e1cd);
 
-    details->calculateNearestLocation(str2,
-      ConstEdgeSublinePtr(new EdgeSubline(
-        ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.0)),
-        ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.3)))),
+    details->calculateNearestLocation(
+      str2,
+      ConstEdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.0)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.3)))),
       elStr, elSub);
     HOOT_STR_EQUALS("{ _e: (2) Node(-3) -- Way(-3) -- (3) Node(-4), _portion: 1 }", elStr);
     HOOT_STR_EQUALS("{ _e: (2) Node(-3) -- Way(-3) -- (3) Node(-4), _portion: 1 }", elSub);
 
-    details->calculateNearestLocation(str2,
-      ConstEdgeSublinePtr(new EdgeSubline(
-        ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.6)),
-        ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.0)))),
+    details->calculateNearestLocation(
+      str2,
+      ConstEdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.6)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.0)))),
       elStr, elSub);
     HOOT_STR_EQUALS("{ _e: (2) Node(-3) -- Way(-3) -- (3) Node(-4), _portion: 1 }", elStr);
     HOOT_STR_EQUALS("{ _e: (2) Node(-3) -- Way(-3) -- (3) Node(-4), _portion: 1 }", elSub);
 
-    details->calculateNearestLocation(str2,
-      ConstEdgeSublinePtr(new EdgeSubline(
-        ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.6)),
-        ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 1.0)))),
+    details->calculateNearestLocation(
+      str2,
+      ConstEdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.6)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 1.0)))),
       elStr, elSub);
     HOOT_STR_EQUALS("{ _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 }", elStr);
     HOOT_STR_EQUALS("{ _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 }", elSub);
 
-    details->calculateNearestLocation(str2,
-      ConstEdgeSublinePtr(new EdgeSubline(
-        ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 1.0)),
-        ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.0)))),
+    details->calculateNearestLocation(
+      str2,
+      ConstEdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 1.0)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.0)))),
       elStr, elSub);
     HOOT_STR_EQUALS("{ _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 }", elStr);
     HOOT_STR_EQUALS("{ _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 }", elSub);
@@ -296,13 +320,17 @@ public:
     NetworkDetailsPtr details = createSampleDetails();
 
     EdgeStringPtr str = std::make_shared<EdgeString>();
-    str->appendEdge(EdgeSublinePtr(new EdgeSubline(
-      ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.4)),
-      ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 1.0)))));
+    str->appendEdge(
+      EdgeSublinePtr(
+        new EdgeSubline(
+        ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.4)),
+        ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 1.0)))));
     str->appendEdge(_e1bc);
-    str->appendEdge(EdgeSublinePtr(new EdgeSubline(
-      ConstEdgeLocationPtr(new EdgeLocation(_e1cd, 0.0)),
-      ConstEdgeLocationPtr(new EdgeLocation(_e1cd, 0.6)))));
+    str->appendEdge(
+      EdgeSublinePtr(
+        new EdgeSubline(
+        ConstEdgeLocationPtr(new EdgeLocation(_e1cd, 0.0)),
+        ConstEdgeLocationPtr(new EdgeLocation(_e1cd, 0.6)))));
 
     HOOT_STR_EQUALS(-40,
       details->calculateStringLocation(str, ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.0))));
@@ -331,14 +359,18 @@ public:
     /// *---------*|--es2----|-----------------*
     ///     |=====match======|
     es1 = std::make_shared<EdgeString>();
-    es1->appendEdge(EdgeSublinePtr(new EdgeSubline(
-      ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.1)),
-      ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.5)))));
+    es1->appendEdge(
+      EdgeSublinePtr(
+        new EdgeSubline(
+        ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.1)),
+        ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.5)))));
 
     es2 = std::make_shared<EdgeString>();
-    es2->appendEdge(EdgeSublinePtr(new EdgeSubline(
-      ConstEdgeLocationPtr(new EdgeLocation(_e2bc, 0.07)),
-      ConstEdgeLocationPtr(new EdgeLocation(_e2bc, 0.33)))));
+    es2->appendEdge(
+      EdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e2bc, 0.07)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e2bc, 0.33)))));
 
     em.reset(new EdgeMatch(es1, es2));
 
@@ -353,14 +385,18 @@ public:
     /// *---|-es2-*------e2bc--------*
     ///     |=====match======|
     es1 = std::make_shared<EdgeString>();
-    es1->appendEdge(EdgeSublinePtr(new EdgeSubline(
-      ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0)),
-      ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 1)))));
+    es1->appendEdge(
+      EdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 1)))));
 
     es2 = std::make_shared<EdgeString>();
-    es2->appendEdge(EdgeSublinePtr(new EdgeSubline(
-      ConstEdgeLocationPtr(new EdgeLocation(_e2ab, 0.33)),
-      ConstEdgeLocationPtr(new EdgeLocation(_e2ab, 1)))));
+    es2->appendEdge(
+      EdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e2ab, 0.33)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e2ab, 1)))));
 
     em.reset(new EdgeMatch(es1, es2));
 
@@ -379,9 +415,11 @@ public:
     NetworkDetailsPtr details = createSampleDetails();
 
     EdgeStringPtr str = std::make_shared<EdgeString>();
-    str->appendEdge(EdgeSublinePtr(new EdgeSubline(
-      ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.4)),
-      ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.6)))));
+    str->appendEdge(
+      EdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.4)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.6)))));
 
     details->extendEdgeString(str, _e1ab);
     HOOT_STR_EQUALS("[2]{{ _start: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 0 }, _end: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 1 } }, { _start: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 }, _end: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0.6 } }}", str);
@@ -391,9 +429,11 @@ public:
 
     // try again, but start with a backwards edge
     str = std::make_shared<EdgeString>();
-    str->appendEdge(EdgeSublinePtr(new EdgeSubline(
-      ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.6)),
-      ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.4)))));
+    str->appendEdge(
+      EdgeSublinePtr(
+        new EdgeSubline(
+          ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.6)),
+          ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.4)))));
 
     details->extendEdgeString(str, _e1ab);
     HOOT_STR_EQUALS("[2]{{ _start: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0.6 }, _end: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 } }, { _start: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 1 }, _end: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 0 } }}", str);

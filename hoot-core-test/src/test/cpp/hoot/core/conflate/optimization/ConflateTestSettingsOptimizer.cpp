@@ -76,7 +76,7 @@ Tgs::StateDescriptionPtr ConflateTestSettingsOptimizer::_initStateDescription(co
     throw HootException("Error parsing JSON " + reason);
   }
 
-  Tgs::StateDescriptionPtr stateDescription(new Tgs::StateDescription());
+  Tgs::StateDescriptionPtr stateDescription = std::make_shared<Tgs::StateDescription>();
   for (boost::property_tree::ptree::value_type& setting : propTree.get_child("settings"))
   {
     const QString settingName = QString::fromStdString(setting.second.get<std::string>("name", ""));

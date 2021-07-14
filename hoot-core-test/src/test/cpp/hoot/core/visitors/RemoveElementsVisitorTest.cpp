@@ -67,7 +67,7 @@ public:
 
     RemoveElementsVisitor removeElementsVisitor(false);
     removeElementsVisitor.setRecursive(false);
-    removeElementsVisitor.addCriterion(ElementCriterionPtr(new PoiCriterion()));
+    removeElementsVisitor.addCriterion(std::make_shared<PoiCriterion>());
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
@@ -84,7 +84,7 @@ public:
 
     RemoveElementsVisitor removeElementsVisitor(false);
     removeElementsVisitor.setRecursive(true);
-    removeElementsVisitor.addCriterion(ElementCriterionPtr(new HighwayCriterion(map)));
+    removeElementsVisitor.addCriterion(std::make_shared<HighwayCriterion>(map));
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
@@ -101,7 +101,7 @@ public:
 
     RemoveElementsVisitor removeElementsVisitor(true);
     removeElementsVisitor.setRecursive(false);
-    removeElementsVisitor.addCriterion(ElementCriterionPtr(new PoiCriterion()));
+    removeElementsVisitor.addCriterion(std::make_shared<PoiCriterion>());
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
@@ -118,7 +118,7 @@ public:
 
     RemoveElementsVisitor removeElementsVisitor(false);
     removeElementsVisitor.setRecursive(false);
-    removeElementsVisitor.addCriterion(ElementCriterionPtr(new ReviewRelationCriterion()));
+    removeElementsVisitor.addCriterion(std::make_shared<ReviewRelationCriterion>());
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
@@ -135,8 +135,8 @@ public:
 
     RemoveElementsVisitor removeElementsVisitor(false);
     removeElementsVisitor.setRecursive(false);
-    removeElementsVisitor.addCriterion(ElementCriterionPtr(new PoiCriterion()));
-    removeElementsVisitor.addCriterion(ElementCriterionPtr(new HighwayCriterion(map)));
+    removeElementsVisitor.addCriterion(std::make_shared<PoiCriterion>());
+    removeElementsVisitor.addCriterion(std::make_shared<HighwayCriterion>(map));
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
