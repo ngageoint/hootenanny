@@ -809,7 +809,7 @@ double CalculateStatsOp::_applyVisitor(
   shared_ptr<FilteredVisitor> critFv;
   if (_criterion)
   {
-    critFv.reset(new FilteredVisitor(*_criterion, *fv));
+    critFv = std::make_shared<FilteredVisitor>(*_criterion, *fv);
     fv = critFv.get();
   }
 
@@ -840,7 +840,7 @@ void CalculateStatsOp::_applyVisitor(ConstElementVisitor* v, const QString& stat
   shared_ptr<FilteredVisitor> critFv;
   if (_criterion)
   {
-    critFv.reset(new FilteredVisitor(*_criterion, *v));
+    critFv = std::make_shared<FilteredVisitor>(*_criterion, *v);
     v = critFv.get();
   }
   _constMap->visitRo(*v);
@@ -974,7 +974,7 @@ void CalculateStatsOp::_generateFeatureStats(
     _applyVisitor(
       FilteredVisitor(
         ChainCriterion(
-          new StatusCriterion(Status::Unknown1),
+          std::make_shared<StatusCriterion>(Status::Unknown1),
           criterion->clone()),
       _getElementVisitorForFeatureType(featureType)),
       "Unconflated Feature Count Map 1: " + description);
@@ -983,7 +983,7 @@ void CalculateStatsOp::_generateFeatureStats(
     _applyVisitor(
       FilteredVisitor(
         ChainCriterion(
-          new StatusCriterion(Status::Unknown2),
+          std::make_shared<StatusCriterion>(Status::Unknown2),
           criterion->clone()),
       _getElementVisitorForFeatureType(featureType)),
       "Unconflated Feature Count Map 2: " + description);
@@ -992,7 +992,7 @@ void CalculateStatsOp::_generateFeatureStats(
     _applyVisitor(
       FilteredVisitor(
         ChainCriterion(
-          new NotCriterion(new StatusCriterion(Status::Conflated)),
+          std::make_shared<NotCriterion>(std::make_shared<StatusCriterion>(Status::Conflated)),
           criterion->clone()),
       _getElementVisitorForFeatureType(featureType)),
       "Total Unconflated Feature Count: " + description);
@@ -1026,7 +1026,6 @@ void CalculateStatsOp::_generateFeatureStats(
           ChainCriterion(std::make_shared<StatusCriterion>(Status::Conflated), criterion->clone()),
           std::make_shared<LengthOfWaysVisitor>()),
         "Meters Conflated: " + description));
-    // ConstElementVisitorPtr(new LengthOfWaysVisitor())
     _addStat(QString("Meters of Unmatched %1s From Map 1").arg(description),
       _applyVisitor(
         FilteredVisitor(
