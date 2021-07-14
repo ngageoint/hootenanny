@@ -27,11 +27,7 @@ export LANG=en_US.UTF-8
 cd ~
 source ~/.bash_profile
 
-# Install yum-utils for setting up repositories
-sudo yum install -y yum-utils > CentOS_upgrade.txt
-
-# UNCOMMENT BELOW when new Vagrant boxes are available with these already installed
-#if [ "${ADDREPOS:-yes}" = "yes" ]; then
+if [ "${ADDREPOS:-yes}" = "yes" ]; then
     echo "Adding additional software repositories..."
 
     # Ensure that CentOS Yum repository data is GPG-verified.
@@ -57,7 +53,7 @@ sudo yum install -y yum-utils > CentOS_upgrade.txt
     # configure PGDG repository for PostgreSQL
     echo "### Add pgdg repo ###" >> CentOS_upgrade.txt
     sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh $POSTGRESQL_VERSION
-#fi
+fi
 
 # configure the devtoolset repository
 echo "### Add devtoolset repo and postgresql ${POSTGRESQL_VERSION} libraries ###"
