@@ -236,8 +236,8 @@ bool BufferedLineSegmentIntersector::intersect(
       a.p1.x - va90[0] * buffer,
       a.p1.y - va90[1] * buffer);
 
-    Coordinate tmp;
-    if (pLeft.intersection(b, tmp))
+    Coordinate tmp = pLeft.intersection(b);
+    if (!tmp.isNull())
     {
       lsr.addCoordinate(tmp);
       if (lsr.isValid())
@@ -247,7 +247,8 @@ bool BufferedLineSegmentIntersector::intersect(
       }
     }
 
-    if (pRight.intersection(b, tmp))
+    tmp = pRight.intersection(b);
+    if (!tmp.isNull())
     {
       lsr.addCoordinate(tmp);
       if (lsr.isValid())

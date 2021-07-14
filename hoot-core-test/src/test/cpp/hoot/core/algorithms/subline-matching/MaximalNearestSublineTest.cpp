@@ -83,6 +83,7 @@ public:
 
     std::shared_ptr<OGRSpatialReference> srs =
         MapProjector::createAeacProjection(CalculateMapBoundsVisitor::getBounds(map));
+    srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     MapProjector::project(map, srs);
 
     stringstream ss;

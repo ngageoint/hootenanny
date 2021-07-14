@@ -86,7 +86,7 @@
 #include <unicode/uversion.h>
 #endif
 //  Proj4
-#include <projects.h>
+#include <proj.h>
 
 using namespace geos::geom;
 using namespace std;

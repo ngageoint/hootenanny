@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osmChange version="0.6" generator="hootenanny">
     <create>
-        <node id="-1" version="0" lat="39.5932775937153281" lon="-104.8065567697200038" timestamp=""/>
-        <node id="-2" version="0" lat="39.5931136941252362" lon="-104.8065277660100065" timestamp=""/>
-        <node id="-3" version="0" lat="39.5931241241152776" lon="-104.8064523563499932" timestamp=""/>
-        <node id="-4" version="0" lat="39.5931062441352353" lon="-104.8064407548600059" timestamp=""/>
-        <node id="-5" version="0" lat="39.5931136941252362" lon="-104.8064001496600071" timestamp=""/>
-        <node id="-6" version="0" lat="39.5931151841252813" lon="-104.8063479429700067" timestamp=""/>
-        <node id="-7" version="0" lat="39.5933073935953743" lon="-104.8063769466800039" timestamp=""/>
-        <node id="-8" version="0" lat="39.5932790837053261" lon="-104.8064697585799934" timestamp=""/>
-        <node id="-9" version="0" lat="39.5931238528953031" lon="-104.8061136186200031" timestamp=""/>
-        <node id="-10" version="0" lat="39.5931524340652743" lon="-104.8061255811399803" timestamp=""/>
+        <node id="-1" version="0" lat="39.5932775937153352" lon="-104.8065567697200038" timestamp=""/>
+        <node id="-2" version="0" lat="39.5931136941252433" lon="-104.8065277660100065" timestamp=""/>
+        <node id="-3" version="0" lat="39.5931241241152634" lon="-104.8064523563499932" timestamp=""/>
+        <node id="-4" version="0" lat="39.5931062441352424" lon="-104.8064407548600201" timestamp=""/>
+        <node id="-5" version="0" lat="39.5931136941252433" lon="-104.8064001496600071" timestamp=""/>
+        <node id="-6" version="0" lat="39.5931151841252884" lon="-104.8063479429700067" timestamp=""/>
+        <node id="-7" version="0" lat="39.5933073935953530" lon="-104.8063769466800039" timestamp=""/>
+        <node id="-8" version="0" lat="39.5932790837053332" lon="-104.8064697585799934" timestamp=""/>
+        <node id="-9" version="0" lat="39.5931238528952747" lon="-104.8061136186200031" timestamp=""/>
+        <node id="-10" version="0" lat="39.5931524340652814" lon="-104.8061255811399946" timestamp=""/>
         <node id="-11" version="0" lat="39.5931432794752851" lon="-104.8062152723099985" timestamp=""/>
-        <node id="-12" version="0" lat="39.5931217619152704" lon="-104.8062120958900039" timestamp=""/>
+        <node id="-12" version="0" lat="39.5931217619152847" lon="-104.8062120958900039" timestamp=""/>
     </create>
     <modify>
-        <node id="101" version="1" lat="39.5931271041053066" lon="-104.8060869095200047" timestamp=""/>
-        <node id="102" version="1" lat="39.5933034419353405" lon="-104.8061230577099820" timestamp=""/>
-        <node id="103" version="1" lat="39.5932969636353960" lon="-104.8062512639099992" timestamp=""/>
-        <node id="104" version="1" lat="39.5932910036553452" lon="-104.8063692123599822" timestamp=""/>
+        <node id="101" version="1" lat="39.5931271041053137" lon="-104.8060869095200047" timestamp=""/>
+        <node id="102" version="1" lat="39.5933034419353476" lon="-104.8061230577099963" timestamp=""/>
+        <node id="103" version="1" lat="39.5932969636353889" lon="-104.8062512639099992" timestamp=""/>
+        <node id="104" version="1" lat="39.5932910036553594" lon="-104.8063692123599964" timestamp=""/>
         <way id="101" version="1" timestamp="">
             <nd ref="104"/>
             <nd ref="103"/>

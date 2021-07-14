@@ -81,8 +81,8 @@ public:
     uut.setIterations(10);
     uut.compareMaps();
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.57142, uut.getMeanScore(), 0.001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.1175, uut.getConfidenceInterval(), 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5625, uut.getMeanScore(), 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.1028125, uut.getConfidenceInterval(), 0.001);
   }
 
 };

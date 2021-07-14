@@ -75,8 +75,8 @@ bool CollapsePolyGeoModifierAction::processElement(const ElementPtr& pElement, O
     if (checkLength)
     {
       // calculate minimum rectangle/aligned bounding box
-      const Geometry* pMinRect = MinimumDiameter::getMinimumRectangle(pPoly.get());
-      const CoordinateSequence* pMinRectCoords = pMinRect->getCoordinates();
+      std::unique_ptr<Geometry> pMinRect = MinimumDiameter::getMinimumRectangle(pPoly.get());
+      std::unique_ptr<CoordinateSequence> pMinRectCoords = pMinRect->getCoordinates();
 
       if (pMinRectCoords->getSize() > 2)
       {

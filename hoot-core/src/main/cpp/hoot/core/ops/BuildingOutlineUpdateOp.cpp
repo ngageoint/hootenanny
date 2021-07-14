@@ -27,7 +27,6 @@
 #include "BuildingOutlineUpdateOp.h"
 
 // geos
-#include <geos/opBuffer.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Polygon.h>
@@ -182,7 +181,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
       return;
     }
 
-    pOutline.reset(pOutline->Union(pGeometry.get()));
+    pOutline = pOutline->Union(pGeometry.get());
     LOG_VART(pOutline->getGeometryTypeId());
   }
   catch (const geos::util::TopologyException& e)
@@ -191,7 +190,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
     std::shared_ptr<Geometry> cleanedGeom(GeometryUtils::validateGeometry(pGeometry.get()));
     try
     {
-      pOutline.reset(pOutline->Union(cleanedGeom.get()));
+      pOutline = pOutline->Union(cleanedGeom.get());
       LOG_VART(pOutline->getGeometryTypeId());
     }
     catch (const geos::util::TopologyException& e)

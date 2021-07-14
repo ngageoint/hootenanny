@@ -41,45 +41,10 @@ hoot diff -C Testing.conf \
 # | Delete |    2 |        1 |  59 |
 # | Modify |    0 |        0 |   4 |
 #
-# @bb953fb - WaySplitter keep IDs
+# @ - GDAL, GEOS upgrades
 #
 # |        | Node | Relation | Way |
-# | Create |  859 |        0 | 860 |
-# | Delete |    1 |        1 |  17 |
-# | Modify |    0 |        0 |  45 |
-#
-# @ - WayJoiner checking tags
-#
-# |        | Node | Relation | Way |
-# | Create |  859 |        0 | 670 |
-# | Delete |    1 |        1 |  17 |
-# | Modify |    0 |        0 |  33 |
-#
-# @ - WayJoiner no tag checking
-#
-# |        | Node | Relation | Way |
-# | Create |  859 |        0 | 474 |
-# | Delete |    1 |        1 |  17 |
+# | Create |  873 |        0 | 244 |
+# | Delete |    2 |        1 |  15 |
 # | Modify |    0 |        0 |  10 |
-#
-# @ - WayJoiner rejoin siblings
-#
-# |        | Node | Relation | Way | 
-# | Create |  859 |        0 | 312 | 
-# | Delete |    1 |        1 |  18 | 
-# | Modify |    0 |        0 |   9 | 
-#
-# @ - WayJoiner join at node
-#
-# |        | Node | Relation | Way |
-# | Create |  859 |        0 | 309 |
-# | Delete |    1 |        1 |  17 |
-# | Modify |    0 |        0 |   9 |
-#
-# @ - WaySplitter::createSplits change
-#
-# |        | Node | Relation | Way |
-# | Create |  859 |        0 | 282 |
-# | Delete |    1 |        1 |  17 |
-# | Modify |    0 |        0 |   9 |
 #

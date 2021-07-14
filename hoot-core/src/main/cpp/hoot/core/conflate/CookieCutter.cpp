@@ -76,7 +76,7 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap) co
   std::shared_ptr<Geometry> cutterShape = v.getUnion();
   if (_outputBuffer != 0.0)
   {
-    cutterShape.reset(cutterShape->buffer(_outputBuffer));
+    cutterShape = cutterShape->buffer(_outputBuffer);
   }
   if (cutterShape->getArea() == 0.0)
   {

@@ -59,7 +59,7 @@ MultiLineString* MultiLineStringVisitor::createMultiLineString()
   }
   else
   {
-    return GeometryFactory::getDefaultInstance()->createMultiLineString();
+    return GeometryFactory::getDefaultInstance()->createMultiLineString().release();
   }
 }
 
@@ -91,7 +91,7 @@ void MultiLineStringVisitor::visit(const ConstWayPtr& w)
       _ls = new vector<Geometry*>();
     }
 
-    Geometry* g = ElementToGeometryConverter(_provider).convertToLineString(w)->clone();
+    Geometry* g = ElementToGeometryConverter(_provider).convertToLineString(w)->clone().release();
     _ls->push_back(g);
   }
 }

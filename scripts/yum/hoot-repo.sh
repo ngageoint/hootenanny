@@ -1,10 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-HOOT_BASEURL="${HOOT_BASEURL:-https://hoot-repo.s3.amazonaws.com/el7/deps/release}"
-HOOT_KEY=/etc/pki/rpm-gpg/RPM-GPG-KEY-Hoot
+HOOT_DEPS_CHANNEL="${HOOT_DEPS_CHANNEL:-stable}"
+HOOT_DEPS_BASEURL="${HOOT_DEPS_BASEURL:-https://hoot-repo.s3.amazonaws.com/el7/deps/${HOOT_DEPS_CHANNEL}}"
+HOOT_DEPS_KEY=/etc/pki/rpm-gpg/RPM-GPG-KEY-Hoot
 
-cat > $HOOT_KEY <<EOF
+cat > $HOOT_DEPS_KEY <<EOF
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1
 
@@ -40,9 +41,9 @@ EOF
 cat > /etc/yum.repos.d/hoot.repo <<EOF
 [hoot-deps]
 name = Hootenanny Dependencies
-baseurl = ${HOOT_BASEURL}
+baseurl = ${HOOT_DEPS_BASEURL}
 enable = 1
 gpgcheck = 1
 repo_gpgcheck = 1
-gpgkey=file://${HOOT_KEY}
+gpgkey=file://${HOOT_DEPS_KEY}
 EOF

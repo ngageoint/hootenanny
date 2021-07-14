@@ -15,12 +15,13 @@
 
 */
 
+syntax = "proto2";
+
 //option optimize_for = LITE_RUNTIME;
 //option java_package = "crosby.binary";
 package hoot.pb;
 
 //protoc --java_out=../.. fileformat.proto
-
 
 //
 //  STORAGE LAYER: Storing primitives.

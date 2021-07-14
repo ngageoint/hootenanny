@@ -54,7 +54,7 @@ public:
     OsmMapReaderFactory::read(map2, "test-files/ToyTestB.osm");
 
     CPPUNIT_ASSERT_EQUAL(1000, MapCompareUtils::getAttributeComparisonFinalScore(map1, map2, 1));
-    CPPUNIT_ASSERT_EQUAL(974, MapCompareUtils::getGraphComparisonFinalScore(map1, map2));
+    CPPUNIT_ASSERT_EQUAL(976, MapCompareUtils::getGraphComparisonFinalScore(map1, map2));
     CPPUNIT_ASSERT_EQUAL(886, MapCompareUtils::getRasterComparisonFinalScore(map1, map2));
   }
 

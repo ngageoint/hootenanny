@@ -159,7 +159,7 @@
 16:25:51.576 STATUS ...changeset/ChangesetCreator.cpp( 799) Changeset Stats:
 
 |        | Node | Relation | Way | 
-| Create |  871 |        0 | 243 | 
+| Create |  873 |        0 | 244 | 
 | Delete |    2 |        1 |  15 | 
 | Modify |    0 |        0 |  10 | 
 

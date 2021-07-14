@@ -174,6 +174,14 @@ private:
     Radians angleError;
     double score;
 
+    PlanarTestResult()
+      : i(-1),
+        distanceError(0.0),
+        angleError(0.0),
+        score(0.0)
+    {
+    }
+
     QString toString() const
     {
       return

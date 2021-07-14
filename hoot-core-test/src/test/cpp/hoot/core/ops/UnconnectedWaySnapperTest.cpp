@@ -424,8 +424,8 @@ public:
     writer.write(map, _outputPath + testName +  + "Out.osm");
 
     CPPUNIT_ASSERT_EQUAL(117L, uut.getNumFeaturesAffected());
-    CPPUNIT_ASSERT_EQUAL(115L, uut.getNumSnappedToWayNodes());
-    CPPUNIT_ASSERT_EQUAL(2L, uut.getNumSnappedToWays());
+    CPPUNIT_ASSERT_EQUAL(114L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(3L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 
@@ -472,8 +472,8 @@ public:
     writer.write(map, _outputPath + testName +  + "Out.osm");
 
     CPPUNIT_ASSERT_EQUAL(131L, uut.getNumFeaturesAffected());
-    CPPUNIT_ASSERT_EQUAL(126L, uut.getNumSnappedToWayNodes());
-    CPPUNIT_ASSERT_EQUAL(5L, uut.getNumSnappedToWays());
+    CPPUNIT_ASSERT_EQUAL(125L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(6L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 };

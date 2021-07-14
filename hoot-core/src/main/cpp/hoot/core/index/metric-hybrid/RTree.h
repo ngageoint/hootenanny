@@ -203,7 +203,7 @@ public:
   {
     geos::geom::Envelope e2(c.x, c.x, c.y, c.y);
     _distanceCount++;
-    return e.distance(&e2);
+    return e.distance(e2);
   }
 
   /**

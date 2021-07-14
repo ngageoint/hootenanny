@@ -289,7 +289,7 @@ public:
     set<int> result;
     for (size_t i = 0; i < haystack.size(); i++)
     {
-      if (e.distance(&haystack[i].getEnvelope()) <= radius &&
+      if (e.distance(haystack[i].getEnvelope()) <= radius &&
         (int)LevenshteinDistance::distance(
             term.getMetricElement(), haystack[i].getMetricElement()) <= D)
       {

@@ -1,70 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="38.8845" minlon="-77.0551" maxlat="38.90310000000001" maxlon="-77.02809999999999"/>
-    <node visible="true" id="-89023" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000088437800" lon="-77.0449996532546919"/>
-    <node visible="true" id="-89022" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8870114193258090" lon="-77.0281068602247529"/>
-    <node visible="true" id="-89021" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9030995821348853" lon="-77.0547459999999660"/>
-    <node visible="true" id="-89020" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8870141570189602" lon="-77.0281068263642510"/>
-    <node visible="true" id="-89019" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8874760626060265" lon="-77.0550995047498049"/>
-    <node visible="true" id="-89018" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000209905933" lon="-77.0447320003197120"/>
-    <node visible="true" id="-89017" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8875655001325171" lon="-77.0281000071542650"/>
-    <node visible="true" id="-89016" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8849750392651572" lon="-77.0281232845027404"/>
-    <node visible="true" id="-89005" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8849763170731677" lon="-77.0280999999999949"/>
-    <node visible="true" id="-89004" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8875655000000222" lon="-77.0280999999999949"/>
-    <node visible="true" id="-88998" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8844999999999956" lon="-77.0447319676258928"/>
-    <node visible="true" id="-88994" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8874758830409277" lon="-77.0550999999999959"/>
-    <node visible="true" id="-88986" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8871382727272206" lon="-77.0280999999999949"/>
-    <node visible="true" id="-88958" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9031000000000091" lon="-77.0547459999999660"/>
-    <node visible="true" id="-88955" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8870319999999694" lon="-77.0280999999999949"/>
-    <node visible="true" id="-88949" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0449996524163510"/>
-    <way visible="true" id="-5053" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-89023"/>
-        <nd ref="-88949"/>
-        <tag k="name" v="W Basin Dr SW"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="unclassified"/>
-    </way>
+    <bounds minlat="38.88449999998353" minlon="-77.0547459999738" maxlat="38.90310000001215" maxlon="-77.02809999998431"/>
+    <node visible="true" id="-89022" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000087620178" lon="-77.0449996529605272"/>
+    <node visible="true" id="-89021" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8870114193478358" lon="-77.0281068602434260"/>
+    <node visible="true" id="-89020" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9030995820534145" lon="-77.0547459998964257"/>
+    <node visible="true" id="-89019" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8870141574145833" lon="-77.0281068263319781"/>
+    <node visible="true" id="-89018" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000209211733" lon="-77.0447320001600104"/>
+    <node visible="true" id="-89017" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8875655001316503" lon="-77.0281000072014166"/>
+    <node visible="true" id="-89016" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8849750548517292" lon="-77.0281230005369650"/>
+    <node visible="true" id="-89005" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8849763170546581" lon="-77.0281000000372984"/>
+    <node visible="true" id="-89004" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8875654999740661" lon="-77.0281000000273934"/>
+    <node visible="true" id="-88998" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8844999999947092" lon="-77.0447319675104723"/>
+    <node visible="true" id="-88986" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8871382727000068" lon="-77.0280999999843061"/>
+    <node visible="true" id="-88958" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9031000000121523" lon="-77.0547459999738038"/>
+    <node visible="true" id="-88955" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8870319999986052" lon="-77.0280999999945379"/>
+    <node visible="true" id="-88949" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8844999999835323" lon="-77.0449996522523861"/>
     <way visible="true" id="-5052" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-89022"/>
-        <nd ref="-88955"/>
-        <tag k="name" v="12th St SW"/>
+        <nd ref="-88949"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="unclassified"/>
+        <tag k="name" v="W Basin Dr SW"/>
     </way>
     <way visible="true" id="-5051" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-89021"/>
-        <nd ref="-88958"/>
-        <tag k="name" v="26th St NW"/>
+        <nd ref="-88955"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="unclassified"/>
+        <tag k="name" v="12th St SW"/>
     </way>
     <way visible="true" id="-5050" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88986"/>
         <nd ref="-89020"/>
-        <tag k="name" v="12th St SW"/>
+        <nd ref="-88958"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="unclassified"/>
+        <tag k="name" v="26th St NW"/>
     </way>
     <way visible="true" id="-5049" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-88986"/>
         <nd ref="-89019"/>
-        <nd ref="-88994"/>
-        <tag k="name" v="Arlington Memorial Brg"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="unclassified"/>
+        <tag k="name" v="12th St SW"/>
     </way>
     <way visible="true" id="-5048" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-88998"/>
         <nd ref="-89018"/>
-        <tag k="name" v="W Basin Dr SW"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="unclassified"/>
+        <tag k="name" v="W Basin Dr SW"/>
     </way>
     <way visible="true" id="-5047" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-89004"/>
         <nd ref="-89017"/>
-        <tag k="name" v="Independence Ave SW"/>
         <tag k="error:circular" v="5"/>
         <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Independence Ave SW"/>
     </way>
     <way visible="true" id="-5046" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-89005"/>

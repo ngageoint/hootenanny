@@ -65,7 +65,7 @@ _rf(rf),
 _explainText(""),
 _dateTagKey(ConfigOptions().getBuildingDateTagKey()),
 _dateFormat(ConfigOptions().getBuildingDateFormat())
-{  
+{
   ConstElementPtr element1 = map->getElement(_eid1);
   ConstElementPtr element2 = map->getElement(_eid2);
   LOG_TRACE("BuildingMatch: e1\n" << OsmUtils::getElementDetailString(element1, map));

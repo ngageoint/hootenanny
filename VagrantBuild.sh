@@ -2,8 +2,6 @@
 
 set -e
 
-BUILD_VERBOSE=yes
-
 SILENT_MAKE=-s
 SILENT_CONFIGURE=--quiet
 if [ "$BUILD_VERBOSE" == "yes" ]; then

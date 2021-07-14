@@ -40,7 +40,7 @@ class CoordinateExt : public geos::geom::Coordinate
 public:
 
   CoordinateExt(geos::geom::Coordinate c) : geos::geom::Coordinate(c) { }
-  CoordinateExt(double xNew = 0.0, double yNew = 0.0, double zNew = DoubleNotANumber)
+  CoordinateExt(double xNew = 0.0, double yNew = 0.0, double zNew = geos::DoubleNotANumber)
     : Coordinate( xNew, yNew, zNew ) { }
 
   double length() const

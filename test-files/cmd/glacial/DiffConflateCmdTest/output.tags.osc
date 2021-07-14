@@ -13,45 +13,6 @@
             <tag k="alt_name" v="Old Name"/>
             <tag k="building" v="yes"/>
         </way>
-        <way id="3" version="1" timestamp="2018-06-11T16:49:01Z">
-            <nd ref="24"/>
-            <nd ref="60"/>
-            <nd ref="59"/>
-            <nd ref="25"/>
-            <nd ref="58"/>
-            <nd ref="57"/>
-            <nd ref="56"/>
-            <nd ref="55"/>
-            <nd ref="52"/>
-            <nd ref="26"/>
-            <nd ref="54"/>
-            <nd ref="53"/>
-            <nd ref="51"/>
-            <nd ref="50"/>
-            <nd ref="49"/>
-            <nd ref="48"/>
-            <nd ref="47"/>
-            <nd ref="46"/>
-            <nd ref="45"/>
-            <nd ref="27"/>
-            <nd ref="44"/>
-            <nd ref="43"/>
-            <nd ref="42"/>
-            <nd ref="41"/>
-            <nd ref="28"/>
-            <nd ref="40"/>
-            <nd ref="39"/>
-            <nd ref="9"/>
-            <tag k="source" v="osm"/>
-            <tag k="highway" v="primary"/>
-            <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="name" v="Yellow Brick Road"/>
-            <tag k="source:imagery" v="Unknown"/>
-            <tag k="uuid" v="{71756076-65b1-4e09-ad86-53b3f6483bf8};{2fd871c5-751e-40d1-9749-afcf31df94c9}"/>
-            <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
-            <tag k="surface" v="cobblestone"/>
-            <tag k="attribution" v="osm"/>
-        </way>
         <way id="2" version="1" timestamp="2018-06-11T16:49:01Z">
             <nd ref="9"/>
             <nd ref="61"/>
@@ -111,6 +72,45 @@
             <tag k="name" v="Yellow Brick Road"/>
             <tag k="source:imagery" v="Unknown"/>
             <tag k="uuid" v="{71756076-65b1-4e09-ad86-53b3f6483bf8};{1b31ba72-0a8f-4731-8dba-5a66a55bcec4}"/>
+            <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
+            <tag k="surface" v="cobblestone"/>
+            <tag k="attribution" v="osm"/>
+        </way>
+        <way id="3" version="1" timestamp="2018-06-11T16:49:01Z">
+            <nd ref="24"/>
+            <nd ref="60"/>
+            <nd ref="59"/>
+            <nd ref="25"/>
+            <nd ref="58"/>
+            <nd ref="57"/>
+            <nd ref="56"/>
+            <nd ref="55"/>
+            <nd ref="52"/>
+            <nd ref="26"/>
+            <nd ref="54"/>
+            <nd ref="53"/>
+            <nd ref="51"/>
+            <nd ref="50"/>
+            <nd ref="49"/>
+            <nd ref="48"/>
+            <nd ref="47"/>
+            <nd ref="46"/>
+            <nd ref="45"/>
+            <nd ref="27"/>
+            <nd ref="44"/>
+            <nd ref="43"/>
+            <nd ref="42"/>
+            <nd ref="41"/>
+            <nd ref="28"/>
+            <nd ref="40"/>
+            <nd ref="39"/>
+            <nd ref="9"/>
+            <tag k="source" v="osm"/>
+            <tag k="highway" v="primary"/>
+            <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+            <tag k="name" v="Yellow Brick Road"/>
+            <tag k="source:imagery" v="Unknown"/>
+            <tag k="uuid" v="{71756076-65b1-4e09-ad86-53b3f6483bf8};{2fd871c5-751e-40d1-9749-afcf31df94c9}"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
             <tag k="surface" v="cobblestone"/>
             <tag k="attribution" v="osm"/>

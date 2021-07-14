@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="0.005120397112659148" minlon="-0.02712912158040955" maxlat="0.01958327281250578" maxlon="-0.01401371843226453"/>
-    <node visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0195832728125058" lon="-0.0269494585235856"/>
-    <node visible="true" id="-139" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0052102286407060" lon="-0.0271291215804095"/>
-    <node visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0051203971126591" lon="-0.0140137184322645"/>
-    <node visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0195832728125058" lon="-0.0140137184322645"/>
-    <node visible="true" id="-136" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0195832728125058" lon="-0.0269494585235856"/>
+    <node visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0195832728125058" lon="-0.0140137184322645"/>
+    <node visible="true" id="-139" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0195832728125058" lon="-0.0269494585235856"/>
+    <node visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0052102286407060" lon="-0.0271291215804095"/>
+    <node visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0051203971126591" lon="-0.0140137184322645"/>
+    <node visible="true" id="-136" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0195832728125058" lon="-0.0140137184322645"/>
     <way visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-136"/>
         <nd ref="-137"/>
@@ -13,5 +13,6 @@
         <nd ref="-139"/>
         <nd ref="-140"/>
         <tag k="area" v="yes"/>
+        <tag k="error:circular" v="15"/>
     </way>
 </osm>

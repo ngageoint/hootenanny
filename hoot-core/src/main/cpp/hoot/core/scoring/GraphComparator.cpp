@@ -346,6 +346,7 @@ void GraphComparator::drawCostDistance(
   _saveImage(mat, output.replace(".png", "2.png"), -1.0, true);
 
   std::shared_ptr<OGRSpatialReference> srs = std::make_shared<OGRSpatialReference>();
+  srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   srs->importFromEPSG(900913);
 
   Coordinate c1 =
