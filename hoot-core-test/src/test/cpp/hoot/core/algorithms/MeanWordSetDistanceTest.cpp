@@ -75,10 +75,8 @@ public:
 
     HOOT_STR_EQUALS(1, uut.compare("Sheraton hotel", "Sheraton Sana'a Hotel"));
   }
-
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MeanWordSetDistanceTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MeanWordSetDistanceTest, "quick");
 
 }

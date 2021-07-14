@@ -58,12 +58,11 @@ OsmMapPtr MapUtils::getMapSubset(const ConstOsmMapPtr& map, const ElementCriteri
 
 bool MapUtils::mapIsPointsOnly(const OsmMapPtr& map)
 {
-  std::shared_ptr<PointCriterion> pointCrit(new PointCriterion());
+  std::shared_ptr<PointCriterion> pointCrit = std::make_shared<PointCriterion>();
   pointCrit->setOsmMap(map.get());
   return
     (int)FilteredVisitor::getStat(
-      pointCrit,
-      ElementVisitorPtr(new ElementCountVisitor()), map) == (int)map->getElementCount();
+      pointCrit, std::make_shared<ElementCountVisitor>(), map) == (int)map->getElementCount();
 }
 
 void MapUtils::combineMaps(const OsmMapPtr& map1, const OsmMapPtr& map2, const bool throwOutDupes)

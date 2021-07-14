@@ -62,7 +62,7 @@ void UnionPolygonsOp::apply(std::shared_ptr<OsmMap>& map)
   GeometryToElementConverter(result).convertGeometryToElement(
     g.get(), Status::Unknown1, WorstCircularErrorVisitor::getWorstCircularError(map));
 
-  map.reset(new OsmMap(result));
+  map = std::make_shared<OsmMap>(result);
   LOG_VART(map.get());
 }
 

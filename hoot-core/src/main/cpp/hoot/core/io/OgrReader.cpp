@@ -288,7 +288,7 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(
   int epsgOverride = ConfigOptions().getOgrReaderEpsgOverride();
   if (epsgOverride >= 0)
   {
-    result.reset(new OGRSpatialReference());
+    result = std::make_shared<OGRSpatialReference>();
 
     if (result->importFromEPSG(epsgOverride) != OGRERR_NONE)
     {
@@ -300,7 +300,7 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(
 
   // proj4 requires some extra parameters to handle Google map style projections. Check for this
   // situation for known EPSGs and warn/fix the issue.
-  result.reset(new OGRSpatialReference());
+  result = std::make_shared<OGRSpatialReference>();
   result->importFromEPSG(3785);
   if (srs && result->IsSame(srs.get()) &&
     _toWkt(result.get()) != _toWkt(srs.get()))

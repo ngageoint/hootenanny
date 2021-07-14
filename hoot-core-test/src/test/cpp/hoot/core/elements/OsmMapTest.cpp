@@ -156,7 +156,7 @@ public:
   void runCopyTest()
   {
     OsmMapPtr map = createMapForCopyTest();
-    OsmMapPtr copy = OsmMapPtr(new OsmMap(map));
+    OsmMapPtr copy = std::make_shared<OsmMap>();
 
     QString nodePreChange = copy->getNode(-1669793)->toString();
     QString wayPreChange = copy->getWay(-1669801)->toString();
@@ -171,7 +171,7 @@ public:
 
     // now change the copy
     map = createMapForCopyTest();
-    copy = OsmMapPtr(new OsmMap(map));
+    copy = std::make_shared<OsmMap>();
     changeMapForCopyTest(copy);
 
     HOOT_STR_EQUALS(nodePreChange, map->getNode(-1669793)->toString());

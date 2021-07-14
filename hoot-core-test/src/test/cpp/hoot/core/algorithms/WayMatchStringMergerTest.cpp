@@ -66,7 +66,7 @@ public:
     WayPtr w1b = getWay(map, "1b");
 
     // Create matching WayStrings
-    WayStringPtr str1(new WayString());
+    WayStringPtr str1 = std::make_shared<WayString>();
     str1->append(WaySubline(WayLocation(map, w1a, 0.0), WayLocation::createAtEndOfWay(map, w1a)));
     str1->append(WaySubline(WayLocation(map, w1b, 0.0), WayLocation::createAtEndOfWay(map, w1b)));
 
@@ -79,7 +79,7 @@ public:
     WayPtr w2b = getWay(map, "2b");
     WayPtr w2c = getWay(map, "2c");
 
-    WayStringPtr str2(new WayString());
+    WayStringPtr str2 = std::make_shared<WayString>();
     str2->append(WaySubline(WayLocation(map, w2a, 0.0), WayLocation::createAtEndOfWay(map, w2a)));
     // these segments are reversed
     str2->append(WaySubline(WayLocation::createAtEndOfWay(map, w2b), WayLocation(map, w2b, 0.0)));
@@ -141,7 +141,7 @@ public:
     uut.mergeIntersection(getNode(map, "n3")->getElementId());
 
     MapProjector::projectToWgs84(map);
-    std::shared_ptr<OsmXmlWriter> writer(new OsmXmlWriter());
+    std::shared_ptr<OsmXmlWriter> writer = std::make_shared<OsmXmlWriter>();
     writer->setIncludeHootInfo(true);
     writer->write(map, _outputPath + "WayMatchStringMergerTestMergeNode.osm");
 
@@ -167,7 +167,7 @@ public:
     uut.setKeeperStatus(Status::Conflated);
 
     MapProjector::projectToWgs84(map);
-    std::shared_ptr<OsmXmlWriter> writer(new OsmXmlWriter());
+    std::shared_ptr<OsmXmlWriter> writer = std::make_shared<OsmXmlWriter>();
     writer->setIncludeHootInfo(true);
     writer->write(map, _outputPath + "WayMatchStringMergerTestMergeTags.osm");
 
