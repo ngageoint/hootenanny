@@ -49,10 +49,10 @@ public:
   void basicTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    ConstNetworkVertexPtr vertex1(
-      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
-    ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
+    ConstNetworkVertexPtr vertex1 =
+      std::make_shared<NetworkVertex>(TestUtils::createNode(map, "", Status::Unknown1, 0, 0));
+    ConstNetworkVertexPtr vertex2 =
+      std::make_shared<NetworkVertex>(TestUtils::createNode(map, "", Status::Unknown1, 10, 0));
     ConstNetworkEdgePtr edge = std::make_shared<NetworkEdge>(vertex1, vertex2, true);
     ConstEdgeLocationPtr edgeLocStart = std::make_shared<EdgeLocation>(edge, 0.0);
     ConstEdgeLocationPtr edgeLocEnd = std::make_shared<EdgeLocation>(edge, 0.7);

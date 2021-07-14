@@ -85,12 +85,12 @@ Tgs::StateDescriptionPtr ConflateTestSettingsOptimizer::_initStateDescription(co
     {
       throw HootException("Invalid setting: " + settingName);
     }
-    Tgs::ConstVariableDescriptionPtr var(
-      new Tgs::VariableDescription(
+    Tgs::ConstVariableDescriptionPtr var =
+      std::make_shared<Tgs::VariableDescription>(
         settingName,
         Tgs::VariableDescription::Real,
         setting.second.get<double>("min", DBL_MIN),
-        setting.second.get<double>("max", DBL_MAX)));
+        setting.second.get<double>("max", DBL_MAX));
     LOG_VART(var->toString());
     stateDescription->addVariable(var);
   }
