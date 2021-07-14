@@ -61,9 +61,8 @@ std::shared_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFacto
     ways.insert(string.getSublines()[i].getWay());
   }
 
-  nfPtr.reset(new FindNodesInWayFactory());
-
-  // add all the ways to the FindNodesInWayFactory
+  nfPtr = std::make_shared<FindNodesInWayFactory>();
+  // Add all the ways to the FindNodesInWayFactory/
   for (set<ConstWayPtr, WayPtrCompare>::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     nfPtr->addWay(*it);

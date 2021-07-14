@@ -47,10 +47,10 @@ namespace hoot
 {
 
 WaySplitter::WaySplitter(const OsmMapPtr& map, WayPtr way) :
-  _map(map)
+_map(map),
+_way(way),
+_nf(std::make_shared<FindNodesInWayFactory>(_way))
 {
-  _way = way;
-  _nf.reset(new FindNodesInWayFactory(_way));
 }
 
 vector<WayPtr> WaySplitter::createSplits(const vector<WayLocation>& wl) const

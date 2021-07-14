@@ -110,7 +110,7 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
   _criteria.reset();
   if (!criteria.isEmpty())
   {
-    _criteria.reset(new OrCriterion());
+    _criteria = std::make_shared<OrCriterion>();
     for (int i = 0; i < criteria.size(); i++)
     {
       const QString critName = criteria.at(i).trimmed();
@@ -250,7 +250,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   // copy out elements meeting the filter criteria into a map
   OsmMapPtr toModify = std::make_shared<OsmMap>();
   LOG_VARD(_criteria->toString());
-  mapCopier.reset(new CopyMapSubsetOp(map, _criteria));
+  mapCopier = std::make_shared<CopyMapSubsetOp>(map, _criteria);
   mapCopier->apply(toModify);
   LOG_DEBUG(
     "Element count for map being modified: " <<
@@ -690,7 +690,7 @@ std::shared_ptr<Interpolator> RubberSheet::_readInterpolator(QIODevice& is)
   QDataStream ds(&is);
   QString projStr;
   ds >> projStr;
-  _projection.reset(new OGRSpatialReference());
+  _projection = std::make_shared<OGRSpatialReference>();
   _projection->importFromProj4(projStr.toUtf8().data());
 
   QString interpolatorClass;

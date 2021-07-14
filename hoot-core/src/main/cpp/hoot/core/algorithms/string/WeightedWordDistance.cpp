@@ -59,10 +59,10 @@ WeightedWordDistance::WeightedWordDistance(StringDistance* d, WordWeightDictiona
   setConfiguration(conf());
 }
 
-WeightedWordDistance::WeightedWordDistance()
+WeightedWordDistance::WeightedWordDistance() :
+_d(std::make_shared<LevenshteinDistance>(1.5))
 {
   QString dictPath;
-
   try
   {
     dictPath = ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary());
@@ -78,9 +78,8 @@ WeightedWordDistance::WeightedWordDistance()
     LOG_WARN("Using abridged dictionary. This may result in reduced conflation accuracy. " +
       dictPath);
   }
+  _dictionary = std::make_shared<SqliteWordWeightDictionary>(dictPath);
 
-  _dictionary.reset(new SqliteWordWeightDictionary(dictPath));
-  _d.reset(new LevenshteinDistance(1.5));
   setConfiguration(conf());
 }
 

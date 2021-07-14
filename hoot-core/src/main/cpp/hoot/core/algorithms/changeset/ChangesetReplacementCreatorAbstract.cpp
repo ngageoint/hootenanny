@@ -102,13 +102,10 @@ QString ChangesetReplacementCreatorAbstract::_boundsInterpretationToString(
   {
     case BoundsInterpretation::Lenient:
       return "lenient";
-
     case BoundsInterpretation::Strict:
       return "strict";
-
     case BoundsInterpretation::Hybrid:
       return "hybrid";
-
     default:
       return "";
   }
@@ -120,7 +117,7 @@ void ChangesetReplacementCreatorAbstract::setChangesetOptions(
   LOG_VARD(printStats);
   LOG_VARD(statsOutputFile);
   LOG_VARD(osmApiDbUrl);
-  _changesetCreator.reset(new ChangesetCreator(printStats, statsOutputFile, osmApiDbUrl));
+  _changesetCreator = std::make_shared<ChangesetCreator>(printStats, statsOutputFile, osmApiDbUrl);
 }
 
 void ChangesetReplacementCreatorAbstract::_printJobDescription() const
@@ -274,7 +271,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
     LOG_STATUS(
       "Copying map of size: " << StringUtils::formatLargeNumber(cachedMap->size()) <<
       " from: " << cachedMap->getName() << "...");
-    map.reset(new OsmMap(cachedMap));
+    map = std::make_shared<OsmMap>(cachedMap);
   }
   // Formerly, we let ApiDbReader do the cropping and only if the crop options here were different
   // than the default. However, its been found that the way ApiDbReader returns relations can result
@@ -572,7 +569,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
     LOG_DEBUG("Creating a cutter shape map transformation for point map...");
     // Make a copy here since we're making destructive changes to the geometry here for alpha shape
     // generation purposes only.
-    cutterMapToUse.reset(new OsmMap(cutterMap));
+    cutterMapToUse = std::make_shared<OsmMap>(cutterMap);
     PointsToPolysConverter pointConverter;
     LOG_INFO(pointConverter.getInitStatusMessage());
     pointConverter.apply(cutterMapToUse);
