@@ -90,7 +90,7 @@ public:
     keys.append("key2");
     RemoveTagsVisitor visitor(keys);
     visitor.setNegateCriterion(false);
-    visitor.addCriterion(std::shared_ptr<NodeCriterion>(new NodeCriterion()));
+    visitor.addCriterion(std::make_shared<NodeCriterion>());
     map->visitRw(visitor);
 
     OsmMapWriterFactory::write(map, _outputPath + "RunFilterTest.osm");
@@ -110,7 +110,7 @@ public:
     keys.append("key2");
     RemoveTagsVisitor visitor(keys);
     visitor.setNegateCriterion(true);
-    visitor.addCriterion(std::shared_ptr<NodeCriterion>(new NodeCriterion()));
+    visitor.addCriterion(std::make_shared<NodeCriterion>());
     map->visitRw(visitor);
 
     OsmMapWriterFactory::write(map, _outputPath + "RunNegatedFilterTest.osm");

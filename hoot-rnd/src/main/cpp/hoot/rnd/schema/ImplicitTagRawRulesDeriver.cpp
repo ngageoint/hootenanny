@@ -328,7 +328,7 @@ std::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(
     // always set the direction before setting the script
     translationVisitor->setTranslationScript(translationScript);
 
-    inputStream.reset(new ElementVisitorInputStream(_inputReader, translationVisitor));
+    inputStream = std::make_shared<ElementVisitorInputStream>(_inputReader, translationVisitor);
   }
   return inputStream;
 }

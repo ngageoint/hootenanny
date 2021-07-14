@@ -414,7 +414,7 @@ void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
         new ScriptTestSuite(
           "test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests,
           suppressFailureDetail)));
-    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
+    vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases", hideDisableTests));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest()));
   }
   //  Add glacial tests if the bit flag is set
@@ -450,7 +450,7 @@ void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
 
   if (t == CASE_ONLY)
   {
-    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
+    vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases", hideDisableTests));
   }
 }
 
@@ -650,7 +650,7 @@ int main(int argc, char* argv[])
       }
       QString testName = args[i];
 
-      listener.reset(new HootTestListener(false, suppressFailureDetail, -1));
+      listener = std::make_shared<HootTestListener>(false, suppressFailureDetail, -1);
       result.addListener(listener.get());
       Log::getInstance().setLevel(Log::Status);
       populateTests(ALL, vAllTests, printDiff, suppressFailureDetail, true);
@@ -673,7 +673,7 @@ int main(int argc, char* argv[])
       if (i < args.size())
         slowTest = args[i].toDouble();
 
-      listener.reset(new HootTestListener(false, suppressFailureDetail, slowTest, false));
+      listener = std::make_shared<HootTestListener>(false, suppressFailureDetail, slowTest, false);
       if (args.contains("--names"))
         listener->showTestNames(true);
       result.addListener(listener.get());
@@ -704,11 +704,11 @@ int main(int argc, char* argv[])
       _TimeOutValue timeout = getTimeoutValue(type);
       if (type == CURRENT)
       {
-        listener.reset(new HootTestListener(true, suppressFailureDetail, timeout));
+        listener = std::make_shared<HootTestListener>(true, suppressFailureDetail, timeout);
         Log::getInstance().setLevel(Log::Status);
       }
       else
-        listener.reset(new HootTestListener(false, suppressFailureDetail, timeout));
+        listener = std::make_shared<HootTestListener>(false, suppressFailureDetail, timeout);
       //  Populate the list of tests
       populateTests(type, vAllTests, printDiff, suppressFailureDetail);
 

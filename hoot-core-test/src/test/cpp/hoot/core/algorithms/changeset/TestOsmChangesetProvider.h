@@ -111,7 +111,9 @@ public:
           new Node(
             Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
             version));
-        WayPtr way(new Way(Status::Unknown1, ++_way, 15.0, ElementData::CHANGESET_EMPTY, version));
+        WayPtr way =
+          std::make_shared<Way>(
+            Status::Unknown1, ++_way, 15.0, ElementData::CHANGESET_EMPTY, version);
         way->addNode(node1->getId());
         way->addNode(node2->getId());
         way->setTag("key1", "value1");
@@ -128,7 +130,9 @@ public:
           new Node(
             Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
             version));
-        WayPtr way(new Way(Status::Unknown1, ++_way, 15.0, ElementData::CHANGESET_EMPTY, version));
+        WayPtr way =
+          std::make_shared<Way>(
+            Status::Unknown1, ++_way, 15.0, ElementData::CHANGESET_EMPTY, version);
         way->addNode(node1->getId());
         way->addNode(node2->getId());
         way->setTag("key1", "value1");

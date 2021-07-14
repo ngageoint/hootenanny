@@ -163,13 +163,15 @@ public:
       std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
-    MatchPtr match12(new HighwayMatch(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
-                         mt));
+    MatchPtr match12 =
+      std::make_shared<HighwayMatch>(
+        classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(), mt);
     HOOT_STR_EQUALS("HighwayMatch Way(-1) Way(-2) P: match: 0.0921884 miss: 0.907812 review: 0",
                     match12->toString());
 
-    MatchPtr match23(new HighwayMatch(classifier, sublineMatcher, map, w2->getElementId(), w3->getElementId(),
-                         mt));
+    MatchPtr match23 =
+      std::make_shared<HighwayMatch>(
+        classifier, sublineMatcher, map, w2->getElementId(), w3->getElementId(), mt);
     HOOT_STR_EQUALS("HighwayMatch Way(-2) Way(-3) P: match: 0.0921884 miss: 0.907812 review: 0",
                     match23->toString());
 

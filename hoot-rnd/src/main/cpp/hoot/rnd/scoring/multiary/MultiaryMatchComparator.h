@@ -175,7 +175,7 @@ private:
       IdClusterPtr result = value(id);
       if (!result.get())
       {
-        result.reset(new IdCluster());
+        result = std::make_shared<IdCluster>();
       }
       return result;
     }
@@ -190,7 +190,7 @@ private:
       }
       else
       {
-        c.reset(new IdCluster());
+        c = std::make_shared<IdCluster>();
         insert(fromId, c);
       }
 

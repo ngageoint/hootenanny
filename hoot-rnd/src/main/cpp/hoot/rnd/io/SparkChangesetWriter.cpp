@@ -70,7 +70,6 @@ void SparkChangesetWriter::open(const QString& fileName)
 
   QFileInfo fileInfo(fileName);
 
-  //_addFile.reset(new QFile());
   _addFile = std::make_shared<QFile>();
   const QString addFileName =
     fileInfo.absolutePath() + "/" + fileInfo.baseName() + "-add." + fileInfo.completeSuffix();
