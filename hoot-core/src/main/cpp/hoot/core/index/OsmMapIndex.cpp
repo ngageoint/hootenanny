@@ -61,7 +61,8 @@ using namespace Tgs;
 namespace hoot
 {
 
-OsmMapIndex::OsmMapIndex(const OsmMap& map) : _map(map)
+OsmMapIndex::OsmMapIndex(const OsmMap& map) :
+_map(map)
 {
   _indexSlush = 0.0;
 }
@@ -413,7 +414,7 @@ const std::shared_ptr<ElementToRelationMap>& OsmMapIndex::getElementToRelationMa
 {
   if (_elementToRelationMap == nullptr)
   {
-    _elementToRelationMap.reset(new ElementToRelationMap());
+    _elementToRelationMap = std::make_shared<ElementToRelationMap>();
 
     const RelationMap& relations = _map.getRelations();
     for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
@@ -430,7 +431,7 @@ std::shared_ptr<NodeToWayMap> OsmMapIndex::getNodeToWayMap() const
   if (_nodeToWayMap == nullptr)
   {
     LOG_TRACE("Initializing node to way map with map of size: " << _map.size() << "...");
-    _nodeToWayMap.reset(new NodeToWayMap(_map));
+    _nodeToWayMap = std::make_shared<NodeToWayMap>(_map);
   }
   return _nodeToWayMap;
 }
