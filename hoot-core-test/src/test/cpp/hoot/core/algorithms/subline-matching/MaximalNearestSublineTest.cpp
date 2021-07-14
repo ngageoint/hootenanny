@@ -153,7 +153,7 @@ public:
     map->addWay(w);
 
     {
-      OsmMapPtr wgs84 = std::make_shared<OsmMap>();
+      OsmMapPtr wgs84 = std::make_shared<OsmMap>(map);
       MapProjector::projectToWgs84(wgs84);
       OsmXmlWriter writer;
       writer.setIncludeCompatibilityTags(false);
@@ -202,7 +202,7 @@ public:
     map->addWay(w);
 
     {
-      OsmMapPtr wgs84 = std::make_shared<OsmMap>();
+      OsmMapPtr wgs84 = std::make_shared<OsmMap>(map);
       MapProjector::projectToWgs84(wgs84);
       OsmXmlWriter writer;
       QString fn = QString(_outputPath + "MaximalNearestSublineOneShortTestOutput.osm");

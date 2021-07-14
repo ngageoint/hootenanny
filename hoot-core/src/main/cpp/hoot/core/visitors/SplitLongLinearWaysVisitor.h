@@ -57,8 +57,7 @@ public:
 
   void visit(const std::shared_ptr<Element>& e) override;
 
-  QString getInitStatusMessage() const override
-  { return "Splitting ways..."; }
+  QString getInitStatusMessage() const override { return "Splitting ways..."; }
   QString getCompletedStatusMessage() const override
   { return "Split " + QString::number(_numAffected) + " ways"; }
 
@@ -74,7 +73,7 @@ private:
   unsigned int _maxNodesPerWay;
 
   // Actual max is 2000, but in order to allow editors to insert nodes without issues,
-  //    leaving some breathing room
+  // leaving some breathing room.
   static const unsigned int _defaultMaxNodesPerWay = 1900;
 };
 

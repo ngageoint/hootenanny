@@ -231,7 +231,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   {
     // Create a new copy of the map and reproject it. This way we can be sure we do the bounds
     // calculation correctly.
-    reprojected = std::make_shared<OsmMap>();
+    reprojected = std::make_shared<OsmMap>(map);
     MapProjector::projectToWgs84(reprojected);
     nodesWgs84 = &reprojected->getNodes();
     LOG_VART(nodesWgs84->size());

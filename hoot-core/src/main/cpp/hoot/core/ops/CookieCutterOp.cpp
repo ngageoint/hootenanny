@@ -78,7 +78,7 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
 
   // Remove elements with the dough status out of the full input map and create a new map, which
   // will be our cutter shape map.
-  std::shared_ptr<OsmMap> cutterShapeMap = std::make_shared<OsmMap>();
+  std::shared_ptr<OsmMap> cutterShapeMap = std::make_shared<OsmMap>(map);
   RemoveElementsVisitor doughRemover;
   doughRemover.setRecursive(true);
   doughRemover.addCriterion(std::make_shared<StatusCriterion>(doughMapStatus));
@@ -93,7 +93,7 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
     AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generateMap(cutterShapeMap);
 
   // Remove elements with the cutter shape status create a new map, which will be our dough map.
-  std::shared_ptr<OsmMap> doughMap = std::make_shared<OsmMap>();
+  std::shared_ptr<OsmMap> doughMap = std::make_shared<OsmMap>(map);
   RemoveElementsVisitor cutterShapeRemover;
   cutterShapeRemover.setRecursive(true);
   cutterShapeRemover.addCriterion(std::make_shared<StatusCriterion>(cutterMapStatus));

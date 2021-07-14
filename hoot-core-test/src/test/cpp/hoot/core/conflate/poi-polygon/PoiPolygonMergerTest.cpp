@@ -89,7 +89,7 @@ public:
     map->addNode(n1);
 
     {
-      OsmMapPtr map2 = std::make_shared<OsmMap>();
+      OsmMapPtr map2 = std::make_shared<OsmMap>(map);
       set<pair<ElementId, ElementId>> s;
       s.insert(pair<ElementId, ElementId>(w1->getElementId(), n1->getElementId()));
       PoiPolygonMerger uut(s);
@@ -110,7 +110,7 @@ public:
     {
       w1->setStatus(Status::Unknown2);
       n1->setStatus(Status::Unknown1);
-      OsmMapPtr map2 = std::make_shared<OsmMap>();
+      OsmMapPtr map2 = std::make_shared<OsmMap>(map);
       set<pair<ElementId, ElementId>> s;
       s.insert(pair<ElementId, ElementId>(w1->getElementId(), n1->getElementId()));
       PoiPolygonMerger uut(s);

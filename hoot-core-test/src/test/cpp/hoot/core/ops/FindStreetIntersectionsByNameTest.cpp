@@ -91,7 +91,7 @@ public:
       // Case sensitivity is turned on and no intersection node match should be found.
 
       OsmMapReaderFactory::read(map, true, Status::Unknown1, "test-files/DcTigerRoads.osm");
-      cachedMap = std::make_shared<OsmMap>();
+      cachedMap = std::make_shared<OsmMap>(map);
 
       conf.set("name.criterion.names", "I ST NW;19th St NW");
       conf.set("name.criterion.case.sensitive", true);
@@ -136,7 +136,7 @@ public:
       // Partial matching is turned off and no intersection node match should be found.
 
       OsmMapReaderFactory::read(map, true, Status::Unknown1, "test-files/DcTigerRoads.osm");
-      cachedMap = std::make_shared<OsmMap>();
+      cachedMap = std::make_shared<OsmMap>(map);
 
       conf.set("name.criterion.names", "I St;19th St");
       conf.set("name.criterion.case.sensitive", false);

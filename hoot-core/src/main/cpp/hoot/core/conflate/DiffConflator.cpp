@@ -283,7 +283,7 @@ void DiffConflator::storeOriginalMap(const OsmMapPtr& map)
   }
 
   // Use the copy constructor to copy the entire map.
-  _originalMap = std::make_shared<OsmMap>();
+  _originalMap = std::make_shared<OsmMap>(map);
 
   // We're storing this part off for potential use later on if any roads get snapped after
   // conflation. Get rid of ref2 and children. See additional comments in _getChangesetFromMap.
