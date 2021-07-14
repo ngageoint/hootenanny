@@ -46,6 +46,7 @@ namespace hoot
 ImplicitTypeTaggerBase::ImplicitTypeTaggerBase() :
 _allowTaggingSpecificFeatures(true),
 _elementIsASpecificFeature(false),
+_ruleReader(std::make_shared<ImplicitTagRulesSqliteReader>()),
 _numFeaturesModified(0),
 _numTagsAdded(0),
 _numFeaturesInvolvedInMultipleRules(0),
@@ -58,13 +59,13 @@ _matchEndOfNameSingleTokenFirst(true),
 _additionalNameKeys(ConfigOptions().getImplicitTaggerAdditionalNameKeys()),
 _maxNameLength(ConfigOptions().getImplicitTaggerMaxNameLength())
 {
-  _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(ConfigOptions().getImplicitTaggerRulesDatabase());
 }
 
 ImplicitTypeTaggerBase::ImplicitTypeTaggerBase(const QString& databasePath) :
 _allowTaggingSpecificFeatures(true),
 _elementIsASpecificFeature(false),
+_ruleReader(std::make_shared<ImplicitTagRulesSqliteReader>()),
 _numFeaturesModified(0),
 _numTagsAdded(0),
 _numFeaturesInvolvedInMultipleRules(0),
@@ -77,7 +78,6 @@ _matchEndOfNameSingleTokenFirst(true),
 _additionalNameKeys(ConfigOptions().getImplicitTaggerAdditionalNameKeys()),
 _maxNameLength(ConfigOptions().getImplicitTaggerMaxNameLength())
 {
-  _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(databasePath);
 }
 

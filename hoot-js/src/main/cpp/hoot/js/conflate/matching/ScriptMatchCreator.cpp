@@ -726,7 +726,7 @@ void ScriptMatchCreator::setArguments(QStringList args)
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   _scriptPath = ConfPath::search(args[0], "rules");
-  _script.reset(new PluginContext());
+  _script = std::make_shared<PluginContext>();
   Context::Scope context_scope(_script->getContext(current));
   _script->loadScript(_scriptPath, "plugin");
   // bit of a hack...see MatchCreator.h...need to refactor

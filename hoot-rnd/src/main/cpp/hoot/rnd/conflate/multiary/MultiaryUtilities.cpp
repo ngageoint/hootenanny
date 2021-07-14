@@ -193,7 +193,7 @@ SearchBoundsCalculatorPtr MultiaryUtilities::getBoundsCalculator()
         }
         else
         {
-          _searchBoundsCalculator.reset(new SearchBoundsCalculator(sbc));
+          _searchBoundsCalculator = std::make_shared<SearchBoundsCalculator>(sbc);
         }
       }
     }
