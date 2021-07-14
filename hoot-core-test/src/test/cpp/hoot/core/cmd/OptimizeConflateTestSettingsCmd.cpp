@@ -87,15 +87,15 @@ public:
     std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction;
     if (testType == "case")
     {
-      fitnessFunction.reset(new CaseTestFitnessFunction(testsDir, configFilePath));
+      fitnessFunction = std::make_shared<CaseTestFitnessFunction>(testsDir, configFilePath);
     }
     else if (testType == "release")
     {
-      fitnessFunction.reset(new ReleaseTestFitnessFunction(testsDir, configFilePath));
+      fitnessFunction = std::make_shared<ReleaseTestFitnessFunction>(testsDir, configFilePath);
     }
     else
     {
-      fitnessFunction.reset(new PertyTestFitnessFunction(testsDir, configFilePath));
+      fitnessFunction = std::make_shared<PertyTestFitnessFunction>(testsDir, configFilePath);
     }
 
     ConflateTestSettingsOptimizer(verbose).runOptimization(

@@ -104,18 +104,20 @@ public:
     Coordinate w3c[] = { Coordinate(10, 10), Coordinate(100, 10), Coordinate::getNull() };
     WayPtr w3 = TestUtils::createWay(map, w3c, "", Status::Unknown1);
 
-    ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.6));
+    ConstMatchThresholdPtr mt = std::make_shared<MatchThreshold>(0.05, 0.6);
     std::shared_ptr<HighwayExpertClassifier> classifier = std::make_shared<HighwayExpertClassifier>();
     std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
-    MatchPtr match12(new HighwayMatch(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
-      mt));
+    MatchPtr match12 =
+      std::make_shared<HighwayMatch>(
+        classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(), mt);
     HOOT_STR_EQUALS("HighwayMatch Way(-1) Way(-2) P: match: 0.129353 miss: 0.870647 review: 0",
                     match12->toString());
 
-    MatchPtr match23(new HighwayMatch(classifier, sublineMatcher, map, w2->getElementId(), w3->getElementId(),
-      mt));
+    MatchPtr match23 =
+      std::make_shared<HighwayMatch>(
+        classifier, sublineMatcher, map, w2->getElementId(), w3->getElementId(), mt);
     HOOT_STR_EQUALS("HighwayMatch Way(-2) Way(-3) P: match: 0.129353 miss: 0.870647 review: 0",
                     match23->toString());
 
@@ -153,10 +155,12 @@ public:
     Coordinate w3c[] = { Coordinate(50, 10), Coordinate(100, 10), Coordinate::getNull() };
     WayPtr w3 = TestUtils::createWay(map, w3c, "", Status::Unknown1);
 
-    ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.9));
+    ConstMatchThresholdPtr mt = std::make_shared<MatchThreshold>(0.05, 0.9);
 
-    std::shared_ptr<HighwayExpertClassifier> classifier = std::make_shared<HighwayExpertClassifier>();
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
+    std::shared_ptr<HighwayExpertClassifier> classifier =
+      std::make_shared<HighwayExpertClassifier>();
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher =
+      std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     MatchPtr match12(new HighwayMatch(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -203,8 +207,10 @@ public:
     WayPtr w3 = TestUtils::createWay(map, w3c, "", Status::Unknown1);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.95));
-    std::shared_ptr<HighwayExpertClassifier> classifier = std::make_shared<HighwayExpertClassifier>();
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
+    std::shared_ptr<HighwayExpertClassifier> classifier =
+      std::make_shared<HighwayExpertClassifier>();
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher =
+      std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     MatchPtr match12(new HighwayMatch(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -249,8 +255,10 @@ public:
     WayPtr w3 = TestUtils::createWay(map, w3c, "", Status::Unknown1);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.1, 0.6));
-    std::shared_ptr<HighwayExpertClassifier> classifier = std::make_shared<HighwayExpertClassifier>();
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
+    std::shared_ptr<HighwayExpertClassifier> classifier =
+      std::make_shared<HighwayExpertClassifier>();
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher =
+      std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     MatchPtr match12(new HighwayMatch(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),

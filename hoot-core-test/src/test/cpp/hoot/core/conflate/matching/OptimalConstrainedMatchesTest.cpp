@@ -162,12 +162,12 @@ public:
     ElementId b2 = ElementId::way(5);
     ElementId b3 = ElementId::way(6);
 
-    MatchThresholdPtr mt(new MatchThreshold(0.5, 0.5));
+    MatchThresholdPtr mt = std::make_shared<MatchThreshold>(0.5, 0.5);
     vector<std::shared_ptr<OptimalConstrainedFakeMatch>> fm(4);
-    fm[0].reset(new OptimalConstrainedFakeMatch(a1, b1, 0.8, mt));
-    fm[1].reset(new OptimalConstrainedFakeMatch(a2, b1, 1.0, mt));
-    fm[2].reset(new OptimalConstrainedFakeMatch(a2, b2, 0.9, mt));
-    fm[3].reset(new OptimalConstrainedFakeMatch(a3, b3, 0.9, mt));
+    fm[0] = std::make_shared<OptimalConstrainedFakeMatch>(a1, b1, 0.8, mt);
+    fm[1] = std::make_shared<OptimalConstrainedFakeMatch>(a2, b1, 1.0, mt);
+    fm[2] = std::make_shared<OptimalConstrainedFakeMatch>(a2, b2, 0.9, mt);
+    fm[3] = std::make_shared<OptimalConstrainedFakeMatch>(a3, b3, 0.9, mt);
 
     fm[0]->addConflict(fm[1]);
     fm[1]->addConflict(fm[2]);
@@ -191,8 +191,7 @@ public:
   virtual void setUp()
   {
     MergerFactory::getInstance().reset();
-    MergerFactory::getInstance().registerCreator(
-          MergerCreatorPtr(new OptimalConstrainedFakeCreator()));
+    MergerFactory::getInstance().registerCreator(std::make_shared<OptimalConstrainedFakeCreator>());
   }
 
   virtual void tearDown()
@@ -202,7 +201,6 @@ public:
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OptimalConstrainedMatchesTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OptimalConstrainedMatchesTest, "quick");
 
 }

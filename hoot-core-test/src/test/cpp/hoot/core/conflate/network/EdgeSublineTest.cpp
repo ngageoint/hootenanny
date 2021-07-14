@@ -55,9 +55,9 @@ public:
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
-    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, 0.0));
-    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.7));
+    ConstNetworkEdgePtr edge = std::make_shared<NetworkEdge>(vertex1, vertex2, true);
+    ConstEdgeLocationPtr edgeLocStart = std::make_shared<EdgeLocation>(edge, 0.0);
+    ConstEdgeLocationPtr edgeLocEnd = std::make_shared<EdgeLocation>(edge, 0.7);
 
     EdgeSubline edgeSubline(edgeLocStart, edgeLocEnd);
 
@@ -83,9 +83,9 @@ public:
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
-    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, -0.1));
-    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.7));
+    ConstNetworkEdgePtr edge = std::make_shared<NetworkEdge>(vertex1, vertex2, true);
+    ConstEdgeLocationPtr edgeLocStart = std::make_shared<EdgeLocation>(edge, -0.1);
+    ConstEdgeLocationPtr edgeLocEnd = std::make_shared<EdgeLocation>(edge, 0.7);
 
     EdgeSubline edgeSubline(edgeLocStart, edgeLocEnd);
 
@@ -100,8 +100,8 @@ public:
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
-    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge1, 0.0));
+    ConstNetworkEdgePtr edge1 = std::make_shared<NetworkEdge>(vertex1, vertex2, true);
+    ConstEdgeLocationPtr edgeLocStart = std::make_shared<EdgeLocation>(edge1, 0.0);
 
     EdgeSubline edgeSubline(edgeLocStart, edgeLocStart);
 
@@ -116,9 +116,9 @@ public:
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
-    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, 0.7));
-    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.0));
+    ConstNetworkEdgePtr edge = std::make_shared<NetworkEdge>(vertex1, vertex2, true);
+    ConstEdgeLocationPtr edgeLocStart = std::make_shared<EdgeLocation>(edge, 0.7);
+    ConstEdgeLocationPtr edgeLocEnd = std::make_shared<EdgeLocation>(edge, 0.0);
 
     EdgeSubline edgeSubline(edgeLocStart, edgeLocEnd);
 
@@ -133,18 +133,18 @@ public:
           new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
           new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstNetworkEdgePtr edge1 = std::make_shared<NetworkEdge>(vertex1, vertex2, true);
 
-    ConstEdgeLocationPtr edgeLoc1(new EdgeLocation(edge1, 0.0));
-    ConstEdgeLocationPtr edgeLoc2(new EdgeLocation(edge1, 0.7));
-    ConstEdgeSublinePtr edgeSubline1(new EdgeSubline(edgeLoc1, edgeLoc2));
-    ConstEdgeLocationPtr edgeLoc3(new EdgeLocation(edge1, 0.2));
-    ConstEdgeSublinePtr edgeSubline2(new EdgeSubline(edgeLoc1, edgeLoc3));
+    ConstEdgeLocationPtr edgeLoc1 = std::make_shared<EdgeLocation>(edge1, 0.0);
+    ConstEdgeLocationPtr edgeLoc2 = std::make_shared<EdgeLocation>(edge1, 0.7);
+    ConstEdgeSublinePtr edgeSubline1 = std::make_shared<EdgeSubline>(edgeLoc1, edgeLoc2);
+    ConstEdgeLocationPtr edgeLoc3 = std::make_shared<EdgeLocation>(edge1, 0.2);
+    ConstEdgeSublinePtr edgeSubline2 = std::make_shared<EdgeSubline>(edgeLoc1, edgeLoc3);
     CPPUNIT_ASSERT(edgeSubline1->overlaps(edgeSubline2));
 
-    ConstEdgeLocationPtr edgeLoc4(new EdgeLocation(edge1, 0.8));
-    ConstEdgeLocationPtr edgeLoc5(new EdgeLocation(edge1, 1.0));
-    ConstEdgeSublinePtr edgeSubline3(new EdgeSubline(edgeLoc4, edgeLoc5));
+    ConstEdgeLocationPtr edgeLoc4 = std::make_shared<EdgeLocation>(edge1, 0.8);
+    ConstEdgeLocationPtr edgeLoc5 = std::make_shared<EdgeLocation>(edge1, 1.0);
+    ConstEdgeSublinePtr edgeSubline3 = std::make_shared<EdgeSubline>(edgeLoc4, edgeLoc5);
     CPPUNIT_ASSERT(!edgeSubline1->overlaps(edgeSubline3));
   }
 
@@ -156,9 +156,9 @@ public:
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
-    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge1, 0.0));
-    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge1, 0.7));
+    ConstNetworkEdgePtr edge1 = std::make_shared<NetworkEdge>(vertex1, vertex2, true);
+    ConstEdgeLocationPtr edgeLocStart = std::make_shared<EdgeLocation>(edge1, 0.0);
+    ConstEdgeLocationPtr edgeLocEnd = std::make_shared<EdgeLocation>(edge1, 0.7);
 
     EdgeSubline edgeSubline(edgeLocStart, edgeLocEnd);
     edgeSubline.reverse();
@@ -182,7 +182,7 @@ public:
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
+    ConstNetworkEdgePtr edge1 = std::make_shared<NetworkEdge>(vertex1, vertex2, true);
 
     EdgeSublinePtr edgeSubline = EdgeSubline::createFullSubline(edge1);
 
@@ -212,16 +212,16 @@ public:
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
-    ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, 0.0));
-    ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.7));
+    ConstNetworkEdgePtr edge = std::make_shared<NetworkEdge>(vertex1, vertex2, true);
+    ConstEdgeLocationPtr edgeLocStart = std::make_shared<EdgeLocation>(edge, 0.0);
+    ConstEdgeLocationPtr edgeLocEnd = std::make_shared<EdgeLocation>(edge, 0.7);
 
-    ConstEdgeSublinePtr edgeSubline1(new EdgeSubline(edgeLocStart, edgeLocEnd));
-    ConstEdgeSublinePtr edgeSubline2(new EdgeSubline(edgeLocStart, edgeLocEnd));
+    ConstEdgeSublinePtr edgeSubline1 = std::make_shared<EdgeSubline>(edgeLocStart, edgeLocEnd);
+    ConstEdgeSublinePtr edgeSubline2 = std::make_shared<EdgeSubline>(edgeLocStart, edgeLocEnd);
     CPPUNIT_ASSERT(edgeSubline1 == edgeSubline2);
 
-    ConstEdgeSublinePtr edgeSubline3(new EdgeSubline(edgeLocStart, edgeLocEnd));
-    ConstEdgeSublinePtr edgeSubline4(new EdgeSubline(edgeLocEnd, edgeLocStart));
+    ConstEdgeSublinePtr edgeSubline3 = std::make_shared<EdgeSubline>(edgeLocStart, edgeLocEnd);
+    ConstEdgeSublinePtr edgeSubline4 = std::make_shared<EdgeSubline>(edgeLocEnd, edgeLocStart);
     CPPUNIT_ASSERT(edgeSubline3 != edgeSubline4);
   }
 
