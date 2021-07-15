@@ -94,7 +94,7 @@ bool LinearCriterion::isLinearRelation(const ConstRelationPtr& relation)
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
-    uint16_t g = tv.geometries;
+    uint16_t g = tv.getGeometries();
 
     LOG_VART(g & OsmGeometries::LineString);
     LOG_VART(g & OsmGeometries::Area);

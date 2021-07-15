@@ -51,7 +51,7 @@ public:
    * @param output optional output path for writing the bounds file
    */
   BoundsStringTaskGridGenerator(const QString& bounds, const QString& outputPath = "");
-  ~BoundsStringTaskGridGenerator() = default;
+  virtual ~BoundsStringTaskGridGenerator() = default;
 
   /**
    * @see TaskGridGenerator

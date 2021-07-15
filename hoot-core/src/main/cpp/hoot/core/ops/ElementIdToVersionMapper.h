@@ -50,15 +50,12 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Mapping element IDs to changeset versions..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Mapped " +  StringUtils::formatLargeNumber(_numAffected) + " element IDs to versions."; }
 
   QString getDescription() const override
   { return "Maintains a mapping of element IDs to changeset versions"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

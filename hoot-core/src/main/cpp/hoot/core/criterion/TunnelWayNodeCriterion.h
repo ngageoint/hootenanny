@@ -43,8 +43,7 @@ public:
   TunnelWayNodeCriterion(ConstOsmMapPtr map);
   ~TunnelWayNodeCriterion() = default;
 
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new TunnelWayNodeCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<TunnelWayNodeCriterion>(); }
 
   QString getDescription() const override { return "Identifies tunnel nodes"; }
   QString getName() const override { return className(); }

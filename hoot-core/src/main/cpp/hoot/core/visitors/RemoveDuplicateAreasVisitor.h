@@ -64,19 +64,16 @@ public:
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getInitStatusMessage() const override { return "Removing duplicate areas..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " duplicate areas"; }
-
-  QString getDescription() const override { return "Removes duplicate areas"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
   QStringList getCriteria() const override;
 
+  QString getDescription() const override { return "Removes duplicate areas"; }
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

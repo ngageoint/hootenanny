@@ -112,7 +112,7 @@ namespace Tgs
         QList<std::shared_ptr<RandomTree>> mapTrees;
         for (unsigned int i = 0; i < numTrees; i++)
         {
-          mapTrees.append(std::shared_ptr<RandomTree>(new RandomTree()));
+          mapTrees.append(std::make_shared<RandomTree>());
         }
 
         QList<std::shared_ptr<RandomTree>> forestList =
@@ -175,7 +175,7 @@ namespace Tgs
           QList<std::shared_ptr<RandomTree>> mapRetrainingTrees;
           for (unsigned int i = 0; i < numTrees; i++)
           {
-             mapRetrainingTrees.append(std::shared_ptr<RandomTree>(new RandomTree()));
+            mapRetrainingTrees.append(std::make_shared<RandomTree>());
           }
 
           QList<std::shared_ptr<RandomTree>> forestRetrainList =

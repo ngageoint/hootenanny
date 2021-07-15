@@ -96,13 +96,11 @@ public:
       TestUtils::createWay(map, QList<NodePtr>() << b2 << e2, "", Status::Unknown2, 15, tags);
 
     OsmNetworkExtractor ext1;
-    ElementCriterionPtr criterion1(new StatusCriterion(Status::Unknown1));
-    ext1.setCriterion(criterion1);
+    ext1.setCriterion(std::make_shared<StatusCriterion>(Status::Unknown1));
     OsmNetworkPtr n1 = ext1.extractNetwork(map);
 
     OsmNetworkExtractor ext2;
-    ElementCriterionPtr criterion2(new StatusCriterion(Status::Unknown2));
-    ext2.setCriterion(criterion2);
+    ext2.setCriterion(std::make_shared<StatusCriterion>(Status::Unknown2));
     OsmNetworkPtr n2 = ext2.extractNetwork(map);
 
     NetworkDetails details(map, n1, n2);

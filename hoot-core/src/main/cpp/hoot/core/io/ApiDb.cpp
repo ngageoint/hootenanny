@@ -232,7 +232,7 @@ long ApiDb::getUserIdByName(const QString& userName)
   LOG_VART(userName);
   if (_getUserIdByName == nullptr)
   {
-    _getUserIdByName.reset(new QSqlQuery(_db));
+    _getUserIdByName = std::make_shared<QSqlQuery>(_db);
     _getUserIdByName->prepare(
       "SELECT id FROM " + ApiDb::getUsersTableName() + " WHERE display_name = :displayName");
   }
@@ -271,7 +271,7 @@ QString ApiDb::getUserNameById(const long userId)
   LOG_VART(userId);
   if (_getUserNameById == nullptr)
   {
-    _getUserNameById.reset(new QSqlQuery(_db));
+    _getUserNameById = std::make_shared<QSqlQuery>(_db);
     _getUserNameById->prepare(
       "SELECT display_name FROM " + ApiDb::getUsersTableName() + " WHERE id = :userId");
   }
@@ -311,7 +311,7 @@ bool ApiDb::userExists(const long id)
   LOG_VART(id);
   if (_userExists == nullptr)
   {
-    _userExists.reset(new QSqlQuery(_db));
+    _userExists = std::make_shared<QSqlQuery>(_db);
     _userExists->prepare("SELECT id FROM " + ApiDb::getUsersTableName() + " WHERE id = :id");
   }
   _userExists->bindValue(":id", (qlonglong)id);
@@ -347,7 +347,7 @@ long ApiDb::getUserId(const QString& email, bool throwWhenMissing)
 {
   if (_selectUserByEmail == nullptr)
   {
-    _selectUserByEmail.reset(new QSqlQuery(_db));
+    _selectUserByEmail = std::make_shared<QSqlQuery>(_db);
     _selectUserByEmail->prepare(
       "SELECT email, id, display_name FROM " + ApiDb::getUsersTableName() +
       " WHERE email LIKE :email");
@@ -389,7 +389,7 @@ long ApiDb::insertUser(const QString& email, const QString& displayName)
 
   if (_insertUser == nullptr)
   {
-    _insertUser.reset(new QSqlQuery(_db));
+    _insertUser = std::make_shared<QSqlQuery>(_db);
     _insertUser->prepare("INSERT INTO " + ApiDb::getUsersTableName() + " (email, display_name) "
                          "VALUES (:email, :display_name) "
                          "RETURNING id");
@@ -446,7 +446,7 @@ vector<long> ApiDb::selectNodeIdsForWay(long wayId, const QString& sql)
 
   if (!_selectNodeIdsForWay)
   {
-    _selectNodeIdsForWay.reset(new QSqlQuery(_db));
+    _selectNodeIdsForWay = std::make_shared<QSqlQuery>(_db);
     _selectNodeIdsForWay->setForwardOnly(true);
     _selectNodeIdsForWay->prepare(sql);
   }
@@ -582,7 +582,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
   // prepared once.
   if (!_selectNodesByBounds)
   {
-    _selectNodesByBounds.reset(new QSqlQuery(_db));
+    _selectNodesByBounds = std::make_shared<QSqlQuery>(_db);
     _selectNodesByBounds->setForwardOnly(true);
   }
   QString sql = "SELECT * FROM " + tableTypeToTableName(TableType::Node) + " WHERE";
@@ -628,7 +628,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& 
 
   if (!_selectWayIdsByWayNodeIds)
   {
-    _selectWayIdsByWayNodeIds.reset(new QSqlQuery(_db));
+    _selectWayIdsByWayNodeIds = std::make_shared<QSqlQuery>(_db);
     _selectWayIdsByWayNodeIds->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
@@ -692,7 +692,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QStri
 
   if (!_selectElementsByElementIdList)
   {
-    _selectElementsByElementIdList.reset(new QSqlQuery(_db));
+    _selectElementsByElementIdList = std::make_shared<QSqlQuery>(_db);
     _selectElementsByElementIdList->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
@@ -722,7 +722,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& 
 
   if (!_selectWayNodeIdsByWayIds)
   {
-    _selectWayNodeIdsByWayIds.reset(new QSqlQuery(_db));
+    _selectWayNodeIdsByWayIds = std::make_shared<QSqlQuery>(_db);
     _selectWayNodeIdsByWayIds->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
@@ -752,7 +752,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QStrin
 
   if (!_selectRelationIdsByMemberIds)
   {
-    _selectRelationIdsByMemberIds.reset(new QSqlQuery(_db));
+    _selectRelationIdsByMemberIds = std::make_shared<QSqlQuery>(_db);
     _selectRelationIdsByMemberIds->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
@@ -834,7 +834,7 @@ std::shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString& t
   LOG_VART(timeStr);
   if (!_selectChangesetsCreatedAfterTime)
   {
-    _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
+    _selectChangesetsCreatedAfterTime = std::make_shared<QSqlQuery>(_db);
     _selectChangesetsCreatedAfterTime->prepare(
       QString("SELECT min_lon, max_lon, min_lat, max_lat FROM %1 ")
         .arg(ApiDb::getChangesetsTableName()) +
@@ -945,7 +945,7 @@ long ApiDb::maxId(const ElementType& elementType)
   const QString elementTableName = elementTypeToElementTableName(elementType);
   if (!_maxIdQueries[elementTableName])
   {
-    _maxIdQueries[elementTableName].reset(new QSqlQuery(_db));
+    _maxIdQueries[elementTableName] = std::make_shared<QSqlQuery>(_db);
     _maxIdQueries[elementTableName]->prepare(
       "SELECT id FROM " + elementTableName + " ORDER BY id DESC LIMIT 1");
   }
@@ -977,7 +977,7 @@ long ApiDb::numElements(const ElementType& elementType)
   const QString elementTableName = elementTypeToElementTableName(elementType);
   if (!_numElementsQueries[elementTableName])
   {
-    _numElementsQueries[elementTableName].reset(new QSqlQuery(_db));
+    _numElementsQueries[elementTableName] = std::make_shared<QSqlQuery>(_db);
     _numElementsQueries[elementTableName]->prepare(
       "SELECT COUNT(*) FROM " + elementTableName + " WHERE visible = true");
   }
@@ -1009,7 +1009,7 @@ long ApiDb::numEstimatedElements(const ElementType& elementType)
   const QString elementTableName = elementTypeToElementTableName(elementType);
   if (!_numEstimatedElementsQueries[elementTableName])
   {
-    _numEstimatedElementsQueries[elementTableName].reset(new QSqlQuery(_db));
+    _numEstimatedElementsQueries[elementTableName] = std::make_shared<QSqlQuery>(_db);
     _numEstimatedElementsQueries[elementTableName]->prepare(
       "SELECT reltuples AS approximate_row_count FROM pg_class WHERE relname = '" +
       elementTableName + "'");
@@ -1042,7 +1042,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectAllElements(const ElementType& elementTy
   const QString elementTableName = elementTypeToElementTableName(elementType);
   if (!_selectAllQueries[elementTableName])
   {
-    _selectAllQueries[elementTableName].reset(new QSqlQuery(_db));
+    _selectAllQueries[elementTableName] = std::make_shared<QSqlQuery>(_db);
     _selectAllQueries[elementTableName]->setForwardOnly(true);
     const QString sql = "SELECT * FROM " + elementTableName + " WHERE visible = true ORDER BY id";
     LOG_VARD(sql);
@@ -1069,7 +1069,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectElements(const ElementType& elementType,
   const QString elementTableName = elementTypeToElementTableName(elementType);
   if (!_selectQueries[elementTableName])
   {
-    _selectQueries[elementTableName].reset(new QSqlQuery(_db));
+    _selectQueries[elementTableName] = std::make_shared<QSqlQuery>(_db);
     _selectQueries[elementTableName]->setForwardOnly(true);
     //This query uses the ORDER BY with LIMIT to ensure that we consistently see unique pages
     //of data returned. However, the data coming back won't necessarily be strictly sorted by

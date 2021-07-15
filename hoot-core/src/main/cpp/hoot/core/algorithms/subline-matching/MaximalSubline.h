@@ -65,7 +65,7 @@ public:
   public:
 
     MatchCriteria() = default;
-    ~MatchCriteria() = default;
+    virtual ~MatchCriteria() = default;
 
     /**
      * @brief match returns a match score for @a index1 way segment matches @a index2.
@@ -112,7 +112,7 @@ public:
   public:
 
     ThresholdMatchCriteria(Meters maxDistance, Radians maxAngleDiff);
-    ~ThresholdMatchCriteria() = default;
+    virtual ~ThresholdMatchCriteria() = default;
 
     double match(int index1, int index2) const override;
 
@@ -216,8 +216,7 @@ private:
     const ConstWayPtr& w1, const ConstWayPtr& w2, std::vector<WaySublineMatch> &rawSublineMatches) const;
 
   std::vector<WaySublineMatch> _extractAllMatches(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-    const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix) const;
-
+    const ConstWayPtr& w2, const Sparse2dMatrix& sublineMatrix) const;
   std::vector<WaySublineMatch> _findBestMatches(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix, double& bestScore);
   double _findBestMatchesRecursive(std::vector<WaySublineMatch>& candidates,
@@ -229,8 +228,8 @@ private:
   /**
    * Finds the starting location for the given end match location.
    */
-  Sparse2dMatrix::CellId _findStartMatch(Sparse2dMatrix &sublines,
-    Sparse2dMatrix::CellId end) const;
+  Sparse2dMatrix::CellId _findStartMatch(
+    const Sparse2dMatrix &sublines, Sparse2dMatrix::CellId end) const;
 
   void _populateTotalScores(const Sparse2dMatrix& scores, Sparse2dMatrix& sublines,
     Sparse2dMatrix::CellId& bestCid, double& bestScore) const;

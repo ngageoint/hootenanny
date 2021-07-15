@@ -86,7 +86,7 @@ QString HootServicesLoginManager::_getLogoutUrl()
 QString HootServicesLoginManager::getRequestToken(QString& authUrlStr)
 {
   HootNetworkRequest requestTokenRequest;
-  _cookies.reset(new HootNetworkCookieJar());
+  _cookies = std::make_shared<HootNetworkCookieJar>();
   requestTokenRequest.setCookies(_cookies);
   try
   {

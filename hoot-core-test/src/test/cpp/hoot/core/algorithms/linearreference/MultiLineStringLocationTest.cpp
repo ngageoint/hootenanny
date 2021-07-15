@@ -79,8 +79,10 @@ public:
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+      way->getStatus(), map->createNextRelationId(), way->getCircularError(),
+      MetadataTags::RelationMultilineString());
     relation->addElement("", way->getElementId());
     map->addElement(relation);
 
@@ -121,8 +123,10 @@ public:
                              Coordinate::getNull() };
     WayPtr way1 = TestUtils::createWay(map, coords1, "", Status::Unknown1, 1);
     WayPtr way2 = TestUtils::createWay(map, coords2, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
-      way1->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+        way1->getStatus(), map->createNextRelationId(), way1->getCircularError(),
+        MetadataTags::RelationMultilineString());
     relation->addElement("", way1->getElementId());
     relation->addElement("", way2->getElementId());
     map->addElement(relation);
@@ -162,8 +166,10 @@ public:
                              Coordinate::getNull() };
     WayPtr way1 = TestUtils::createWay(map, coords1, "", Status::Unknown1, 1);
     WayPtr way2 = TestUtils::createWay(map, coords2, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
-      way1->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+      way1->getStatus(), map->createNextRelationId(), way1->getCircularError(),
+      MetadataTags::RelationMultilineString());
     relation->addElement("", way1->getElementId());
     relation->addElement("", way2->getElementId());
     map->addElement(relation);
@@ -206,8 +212,10 @@ public:
     WayPtr way1 = TestUtils::createWay(map, coords1, "", Status::Unknown1, 1);
     WayPtr way2 = TestUtils::createWay(map, coords2, "", Status::Unknown1, 1);
     WayPtr way3 = TestUtils::createWay(map, coords3, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
-      way1->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+        way1->getStatus(), map->createNextRelationId(), way1->getCircularError(),
+        MetadataTags::RelationMultilineString());
     relation->addElement("", way1->getElementId());
     relation->addElement("", way2->getElementId());
     relation->addElement("", way3->getElementId());
@@ -246,8 +254,10 @@ public:
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+        way->getStatus(), map->createNextRelationId(), way->getCircularError(),
+        MetadataTags::RelationMultilineString());
     relation->addElement("", way->getElementId());
     map->addElement(relation);
 
@@ -286,8 +296,10 @@ public:
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+      way->getStatus(), map->createNextRelationId(), way->getCircularError(),
+      MetadataTags::RelationMultilineString());
     relation->addElement("", way->getElementId());
     map->addElement(relation);
 
@@ -326,9 +338,10 @@ public:
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), MetadataTags::RelationMultilineString()));
-    //relation->addElement("", way->getElementId());
+    RelationPtr relation =
+      std::make_shared<Relation>(
+        way->getStatus(), map->createNextRelationId(), way->getCircularError(),
+        MetadataTags::RelationMultilineString());
     map->addElement(relation);
 
     QString exceptionMsg;
@@ -355,8 +368,10 @@ public:
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), MetadataTags::RelationMultiPolygon()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+      way->getStatus(), map->createNextRelationId(), way->getCircularError(),
+      MetadataTags::RelationMultiPolygon());
     relation->addElement("", way->getElementId());
     map->addElement(relation);
 
@@ -383,8 +398,10 @@ public:
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+        way->getStatus(), map->createNextRelationId(), way->getCircularError(),
+        MetadataTags::RelationMultilineString());
     relation->addElement("", way->getElementId());
     map->addElement(relation);
 
@@ -411,8 +428,10 @@ public:
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+      way->getStatus(), map->createNextRelationId(), way->getCircularError(),
+      MetadataTags::RelationMultilineString());
     relation->addElement("", map->getNode(way->getNodeId(0))->getElementId());
     relation->addElement("", way->getElementId());
     map->addElement(relation);
@@ -443,8 +462,10 @@ public:
                              Coordinate::getNull() };
     WayPtr way1 = TestUtils::createWay(map, coords1, "", Status::Unknown1, 1);
     WayPtr way2 = TestUtils::createWay(map, coords2, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
-      way1->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+      way1->getStatus(), map->createNextRelationId(), way1->getCircularError(),
+      MetadataTags::RelationMultilineString());
     relation->addElement("", map->getNode(way1->getNodeId(0))->getElementId());
     relation->addElement("", way1->getElementId());
     relation->addElement("", way2->getElementId());

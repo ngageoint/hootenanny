@@ -141,7 +141,7 @@ void SplitLongLinearWaysVisitor::visit(const std::shared_ptr<Element>& element)
     long way_id = way->getId();
     if (masterNodeIndex > 0)
       way_id = _map->createNextWayId();
-    WayPtr newWay(new Way(Status::Unknown1, way_id, way->getRawCircularError()));
+    WayPtr newWay = std::make_shared<Way>(Status::Unknown1, way_id, way->getRawCircularError());
     newWay->setPid(way->getPid());
     LOG_TRACE(
       "Created new way w/ ID " << newWay->getId() << " that is going to hold " << nodesThisTime <<

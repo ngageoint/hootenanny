@@ -75,26 +75,15 @@ bool CollapsePolyGeoModifierAction::processElement(const ElementPtr& pElement, O
     if (checkLength)
     {
       // calculate minimum rectangle/aligned bounding box
-      Geometry* pMinRect = MinimumDiameter::getMinimumRectangle(pPoly.get());
-      CoordinateSequence* pMinRectCoords = pMinRect->getCoordinates();
-
-      /* Debug polygon
-      WayPtr pDebugWay(new Way(Status::Unknown1, pMap->createNextWayId()));
-      pMap->addElement(pDebugWay);
-
-      for (size_t i = 0; i < pMinRectCoords->getSize(); i++)
-      {
-        Coordinate pos = pMinRectCoords->getAt(i);
-        NodePtr pNode(new Node(Status::Unknown1, pMap->createNextNodeId(), pos));
-        pDebugWay->addNode(pNode->getId());
-        pMap->addElement(pNode);
-      }
-      */
+      const Geometry* pMinRect = MinimumDiameter::getMinimumRectangle(pPoly.get());
+      const CoordinateSequence* pMinRectCoords = pMinRect->getCoordinates();
 
       if (pMinRectCoords->getSize() > 2)
       {
-        double len1 = (CoordinateExt(pMinRectCoords->getAt(0)) - CoordinateExt(pMinRectCoords->getAt(1))).length();
-        double len2 = (CoordinateExt(pMinRectCoords->getAt(1)) - CoordinateExt(pMinRectCoords->getAt(2))).length();
+        double len1 =
+          (CoordinateExt(pMinRectCoords->getAt(0)) - CoordinateExt(pMinRectCoords->getAt(1))).length();
+        double len2 =
+          (CoordinateExt(pMinRectCoords->getAt(1)) - CoordinateExt(pMinRectCoords->getAt(2))).length();
         polyLength = std::max(len1,len2);
       }
     }
@@ -106,11 +95,13 @@ bool CollapsePolyGeoModifierAction::processElement(const ElementPtr& pElement, O
       if (pPoly->getCentroid(centroid) == false)
       {
         // throwing a HootException might be too harsh
-        LOG_ERROR("Collapse polygon modifier could not calculate centroid for element id " + pElement->getId());
+        LOG_ERROR(
+          "Collapse polygon modifier could not calculate centroid for element id " +
+          pElement->getId());
         return false;
       }
 
-      NodePtr pNode(new Node(Status::Unknown1, pMap->createNextNodeId(), centroid));
+      NodePtr pNode = std::make_shared<Node>(Status::Unknown1, pMap->createNextNodeId(), centroid);
 
       // copy tags from original way to node
       pNode->setTags(pWay->getTags());

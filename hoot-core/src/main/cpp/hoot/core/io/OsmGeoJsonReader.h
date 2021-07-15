@@ -90,7 +90,7 @@ public:
    * @param jsonStr - input string, map - the map to load the JSON into
    * @return
    */
-  void loadFromString(const QString& jsonStr, const OsmMapPtr& map);
+  void loadFromString(const QString& jsonStr, const OsmMapPtr& map) override;
 
   /**
    * @brief loadFromFile - Reads the whole file as a string, passes it
@@ -98,7 +98,7 @@ public:
    * @param path - Path to file
    * @return Smart pointer to the OSM map
    */
-  OsmMapPtr loadFromFile(const QString& path);
+  OsmMapPtr loadFromFile(const QString& path) override;
 
   QString supportedFormats() override { return ".geojson"; }
 

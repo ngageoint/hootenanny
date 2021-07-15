@@ -80,10 +80,10 @@ _maxThreads(1)
 }
 
 cv::Mat GraphComparator::_calculateCostDistance(
-  OsmMapPtr map, Coordinate c, double& maxGraphCost, const RandomPtr& random)
+  OsmMapPtr map, Coordinate c, double& maxGraphCost, const RandomPtr& random) const
 {
-  // make a copy of the map so we can manipulate it.
-  map.reset(new OsmMap(map));
+  // Make a copy of the map so we can manipulate it.
+  map = std::make_shared<OsmMap>(map);
 
   // find the nearest feature
   LOG_TRACE("Finding nearest feature...");
@@ -107,7 +107,7 @@ cv::Mat GraphComparator::_calculateCostDistance(
 
   // populate graph
   LOG_TRACE("Populating graph...");
-  std::shared_ptr<DirectedGraph> graph(new DirectedGraph());
+  std::shared_ptr<DirectedGraph> graph = std::make_shared<DirectedGraph>();
   graph->deriveEdges(map);
 
   LOG_TRACE("Calculating cost...");
@@ -141,7 +141,7 @@ void GraphComparator::_calculateRasterCost(cv::Mat& mat, const RandomPtr& random
 
   for (int y = 0; y < _height; y++)
   {
-    float* row = mat.ptr<float>(y);
+    const float* row = mat.ptr<float>(y);
     for (int x = 0; x < _width; x++)
     {
       cost.pixel(x, y) = row[x];
@@ -248,7 +248,7 @@ void GraphComparator::_graphCompareThreadFunc()
     _workQueueMutex.unlock();
 
     double maxGraphCost = 0.0;
-    RandomPtr random(new Random(info.index));
+    RandomPtr random = std::make_shared<Random>(info.index);
 
     // find the random source point's nearest point on a feature in one of the maps
     info.coord = _findNearestPointOnFeature(info.referenceMap, info.coord);
@@ -301,7 +301,7 @@ void GraphComparator::drawCostDistance(
 {
   _updateBounds();
   // make a copy of the map so we can manipulate it.
-  map.reset(new OsmMap(map));
+  map = std::make_shared<OsmMap>(map);
 
   for (size_t i = 0; i < c.size(); i++)
   {
@@ -320,7 +320,7 @@ void GraphComparator::drawCostDistance(
   }
 
   // populate graph
-  std::shared_ptr<DirectedGraph> graph(new DirectedGraph());
+  std::shared_ptr<DirectedGraph> graph = std::make_shared<DirectedGraph>();
   graph->deriveEdges(map);
 
   ShortestPath sp(graph);
@@ -345,7 +345,7 @@ void GraphComparator::drawCostDistance(
   _saveImage(mat, output, -1.0, false);
   _saveImage(mat, output.replace(".png", "2.png"), -1.0, true);
 
-  std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+  std::shared_ptr<OGRSpatialReference> srs = std::make_shared<OGRSpatialReference>();
   srs->importFromEPSG(900913);
 
   Coordinate c1 =

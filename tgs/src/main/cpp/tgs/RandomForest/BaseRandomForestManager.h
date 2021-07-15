@@ -67,8 +67,8 @@ namespace Tgs
     * @param scores a map to hold the classification results as class name mapped to probability
     */
     void classifyTestVector(const std::string& objId, const std::string& objClass,
-      std::vector<double>& dataVector,
-      std::map<std::string, double> & scores);
+      const std::vector<double>& dataVector,
+      std::map<std::string, double>& scores);
 
     /**
     * Classifies a data vector against a generated random forest.
@@ -80,7 +80,7 @@ namespace Tgs
     * @param dataVector a single data vector of size N where N is the number of factors
     * @param scores a map to hold the classification results as class name mapped to probability
     */
-    void classifyVector(const std::string& objId, std::vector<double>& dataVector,
+    void classifyVector(const std::string& objId, const std::vector<double>& dataVector,
       std::map<std::string, double> & scores);
 
     /**
@@ -323,7 +323,7 @@ namespace Tgs
     * @param scores a map to hold the classification results as class name mapped to probability
     */
     void _classifyBinaryTestVector(const std::string& objId, const std::string& objClass,
-      std::vector<double>& dataVector, std::map<std::string, double>& scores);
+      const std::vector<double>& dataVector, std::map<std::string, double>& scores);
     /**
     * Classifies a data vector against a single multi-class generated random forest.
     *
@@ -336,7 +336,7 @@ namespace Tgs
     * @param scores a map to hold the classification results as class name mapped to probability
     */
     void _classifyMultiClassTestVector(const std::string& objId, const std::string& objClass,
-      std::vector<double> & dataVector, std::map<std::string, double> & scores);
+      const std::vector<double> & dataVector, std::map<std::string, double> & scores);
     /**
     * Classifies a data vector against a set of pairwise generated random forest.
     *
@@ -349,7 +349,7 @@ namespace Tgs
     * @param scores a map to hold the classification results as class name mapped to probability
     */
     void _classifyRoundRobinTestVector(const std::string& objId, const std::string& objClass,
-      std::vector<double>& dataVector, std::map<std::string, double>& scores);
+      const std::vector<double>& dataVector, std::map<std::string, double>& scores);
     /**
     * Classifies a data vector against a single multi-class generated random forest.
     *
@@ -360,7 +360,7 @@ namespace Tgs
     * @param dataVector a single data vector of size N where N is the number of factors
     * @param scores a map to hold the classification results as class name mapped to probability
     */
-    void _classifyMultiClassVector(const std::string& objId, std::vector<double>& dataVector,
+    void _classifyMultiClassVector(const std::string& objId, const std::vector<double>& dataVector,
       std::map<std::string, double>& scores);
 
     /**

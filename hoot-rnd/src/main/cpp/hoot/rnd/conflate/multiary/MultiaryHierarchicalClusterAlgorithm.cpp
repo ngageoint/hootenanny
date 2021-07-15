@@ -61,7 +61,7 @@ void MultiaryHierarchicalClusterAlgorithm::_addChildLinks(MultiaryClusterPtr par
         parent->links.append(other);
         other->links.append(parent);
 
-        ClusterLinkPtr l(new ClusterLink(parent, other, s));
+        ClusterLinkPtr l = std::make_shared<ClusterLink>(parent, other, s);
         l->explainText = _scoreCache->getLastExplainText();
         _linkQueue.push(l);
       }
@@ -150,7 +150,7 @@ void MultiaryHierarchicalClusterAlgorithm::_initializeClusters(
 
   foreach (ElementId eid, allElements)
   {
-    MultiaryClusterPtr c(new MultiaryCluster());
+    MultiaryClusterPtr c = std::make_shared<MultiaryCluster>();
     c->append(map->getElement(eid));
     c->mergedElement = map->getElement(eid);
     _clusters.append(c);
@@ -165,7 +165,8 @@ void MultiaryHierarchicalClusterAlgorithm::_initializeClusters(
     MatchType mt = _matchThreshold.getType(score);
     if (mt == MatchType::Match || mt == MatchType::Review)
     {
-      ClusterLinkPtr l(new ClusterLink(eToCluster[it->first], eToCluster[it->second], score));
+      ClusterLinkPtr l =
+        std::make_shared<ClusterLink>(eToCluster[it->first], eToCluster[it->second], score);
       l->a->links.append(l->b);
       l->b->links.append(l->a);
       l->explainText = _scoreCache->getLastExplainText();

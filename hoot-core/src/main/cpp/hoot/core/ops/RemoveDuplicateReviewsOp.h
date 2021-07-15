@@ -52,13 +52,8 @@ public:
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
   QString getInitStatusMessage() const override
   { return "Removing duplicate conflation review relations..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
@@ -66,6 +61,8 @@ public:
       " duplicate conflation review relations";
   }
 
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Removes duplicate conflation reviews"; }
 
 private:

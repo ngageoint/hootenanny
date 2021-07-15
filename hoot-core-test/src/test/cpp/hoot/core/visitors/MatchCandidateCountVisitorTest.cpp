@@ -232,8 +232,10 @@ public:
   void runFilteredPoiMatchCreatorTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr node1(new Node(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    NodePtr node2(new Node(Status::Unknown2, 2, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown2, 2, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node1->getTags().clear();
     node1->getTags().set("poi", "yes");
@@ -253,7 +255,7 @@ public:
     MatchFactory::getInstance().reset();
     MatchFactory::getInstance()._setTagFilterJson(poiTagFilter);
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
-    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    uut = std::make_shared<MatchCandidateCountVisitor>(MatchFactory::getInstance().getCreators());
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)2, (int)uut->getStat());
 
@@ -262,7 +264,7 @@ public:
     MatchFactory::getInstance().reset();
     MatchFactory::getInstance()._setTagFilterJson(restaurantTagFilter);
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
-    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    uut = std::make_shared<MatchCandidateCountVisitor>(MatchFactory::getInstance().getCreators());
     node1->getTags().set("amenity", "restaurant");
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)1, (int)uut->getStat());
@@ -270,7 +272,7 @@ public:
     MatchFactory::getInstance().reset();
     MatchFactory::getInstance()._setTagFilterJson(restaurantTagFilter);
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
-    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    uut = std::make_shared<MatchCandidateCountVisitor>(MatchFactory::getInstance().getCreators());
     node2->getTags().set("amenity", "restaurant");
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)2, (int)uut->getStat());
@@ -294,7 +296,7 @@ public:
     MatchFactory::getInstance().reset();
     MatchFactory::getInstance()._setTagFilterJson("");
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
-    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    uut = std::make_shared<MatchCandidateCountVisitor>(MatchFactory::getInstance().getCreators());
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)39, (int)uut->getStat());
 
@@ -302,14 +304,14 @@ public:
     MatchFactory::getInstance()._setTagFilterJson(
       "{ \"must\": [ { \"tag\": \"building=yes\" } ] }");
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
-    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    uut = std::make_shared<MatchCandidateCountVisitor>(MatchFactory::getInstance().getCreators());
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)17, (int)uut->getStat());
 
     MatchFactory::getInstance().reset();
     MatchFactory::getInstance()._setTagFilterJson("{ \"must\": [ { \"tag\": \"poi=yes\" } ] }");
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
-    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    uut = std::make_shared<MatchCandidateCountVisitor>(MatchFactory::getInstance().getCreators());
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)21, (int)uut->getStat());
 
@@ -317,7 +319,7 @@ public:
     MatchFactory::getInstance()._setTagFilterJson(
       "{ \"must\": [ { \"tag\": \"name=Starbucks\" } ] }");
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
-    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    uut = std::make_shared<MatchCandidateCountVisitor>(MatchFactory::getInstance().getCreators());
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)12, (int)uut->getStat());
   }

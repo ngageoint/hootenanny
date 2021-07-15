@@ -190,7 +190,7 @@ void CopyMapSubsetOp::apply(OsmMapPtr& map)
   std::set<ElementId> eids = v.getElementsAdded();
   LOG_VART(eids.size());
   _eidsCopied.insert(eids.begin(), eids.end());
-  //  Copy the cached rubbersheet if it exists
+  //  Copy the cached rubbersheet if it exists.
   map->setCachedRubberSheet(_from->getCachedRubberSheet());
 }
 
@@ -202,7 +202,7 @@ void CopyMapSubsetOp::addCriterion(const ElementCriterionPtr& crit)
   }
   LOG_VART(crit);
 
-  std::shared_ptr<UniqueElementIdVisitor> getIdVis(new UniqueElementIdVisitor());
+  std::shared_ptr<UniqueElementIdVisitor> getIdVis = std::make_shared<UniqueElementIdVisitor>();
   FilteredVisitor idVis(crit, getIdVis);
   _from->visitRo(idVis);
   _eids = getIdVis->getElementSet();

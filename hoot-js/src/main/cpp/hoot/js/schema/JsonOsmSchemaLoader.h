@@ -70,11 +70,11 @@ private:
 
   void _loadBase(QVariantMap& v, const OsmSchema &s, SchemaVertex& tv) const;
   void _loadAssociatedWith(const SchemaVertex& tv, const QVariant& v, const OsmSchema& s) const;
-  void _loadCompound(const QVariantMap& v, OsmSchema& s) const;
+  void _loadCompound(const QVariantMap& v, const OsmSchema& s) const;
   void _loadCompoundTags(SchemaVertex& tv, const QVariant& value) const;
   void _loadGeometries(SchemaVertex& tv, const QVariant& v) const;
   void _loadSimilarTo(QString fromName, const QVariant& value, const OsmSchema& s) const;
-  void _loadTag(const QVariantMap& v, OsmSchema& s) const;
+  void _loadTag(const QVariantMap& v, const OsmSchema& s) const;
 };
 
 }

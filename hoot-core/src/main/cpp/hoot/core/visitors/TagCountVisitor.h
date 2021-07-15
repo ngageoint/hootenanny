@@ -50,14 +50,6 @@ public:
 
   void visit(const ConstElementPtr& e) override;
 
-  QString getDescription() const override { return "Calculates tag count statistics"; }
-
-  QString getInitStatusMessage() const override
-  { return "Calculating tag count statistics..."; }
-
-  QString getCompletedStatusMessage() const override
-  { return "Calculated tag count statistics for " + QString::number(_numAffected) + " elements"; }
-
   long numWithStat() const override { return _numAffected; }
   double getStat() const override { return _totalCount; }
   double getMin() const override { return _smallestCount; }
@@ -68,7 +60,6 @@ public:
     return average;
   }
 
-  long numWithInformationStat() const { return _numInformationAffected; }
   long getInformationCount() const override { return _informationCount; }
   long getInformationMin() const override { return _smallestInformationCount; }
   long getInformationMax() const override { return _largestInformationCount; }
@@ -80,9 +71,16 @@ public:
     return average;
   }
 
-  QString getName() const override { return className(); }
+  QString getInitStatusMessage() const override
+  { return "Calculating tag count statistics..."; }
+  QString getCompletedStatusMessage() const override
+  { return "Calculated tag count statistics for " + QString::number(_numAffected) + " elements"; }
 
+  QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Calculates tag count statistics"; }
+
+  long numWithInformationStat() const { return _numInformationAffected; }
 
 private:
 

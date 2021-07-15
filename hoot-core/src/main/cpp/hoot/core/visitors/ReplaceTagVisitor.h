@@ -72,22 +72,19 @@ public:
    */
   void visit(const std::shared_ptr<Element>& e) override;
 
-  QString getDescription() const override
-  { return "Replaces matching tags with the specified replacement tag"; }
-
   void setConfiguration(const Settings& conf) override;
 
   QString getInitStatusMessage() const override
   { return "Replacing tags..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return "Replaced " + QString::number(_numAffected) + " element tags";
   }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Replaces matching tags with the specified replacement tag"; }
 
 private:
 

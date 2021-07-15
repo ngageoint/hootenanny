@@ -49,8 +49,7 @@ public:
 
   void test1()
   {
-    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(100));
-    RTreeNodeStore uut(2, mps);
+    RTreeNodeStore uut(2, std::make_shared<MemoryPageStore>(100));
 
     RTreeNode* n1 = uut.createNode();
     CPPUNIT_ASSERT_EQUAL(0, n1->getChildCount());

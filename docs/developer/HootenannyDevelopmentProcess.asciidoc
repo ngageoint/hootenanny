@@ -8,16 +8,19 @@ derived from the master branch and named as the number of the corresponding GitH
 * Ensure your changes follow the https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyCodeBestPractices.asciidoc[coding best practices].
 * Ensure your changes match the https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyCodeStyle.asciidoc[approved code style].
 * Ensure your changes are https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[adequately tested]. While we have no official test coverage requirement and 100% test coverage is not 
-required, you should be able to get to 90%-95% coverage for most code. A test coverage report may 
-be generated from the command line.
+required, you should be able to get between 90%-95% coverage for most code (maybe a bit lower for 
+code inside the `hoot-rnd` module). A test coverage report may be generated from the command line or 
+as part of the pull request job.
 * Ensure your changes are https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyCodeDocumentation.asciidoc[properly documented] with code comments. 
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyAPI.asciidoc[API documentation] 
 may be generated from the command line or as part of the pull request job.
 * Ensure your changes are adequately documented in the Algorithms, Developer, and/or User Guide(s).
-* Create a https://github.com/ngageoint/hootenanny/pulls[pull request] to merge the work branch 
-into the master branch and assign it to yourself. Link the pull request to the original issue and
-add any additional required detail to the pull request description. Tests will automatically run as
-part of the pull request and their outcome may be viewed on Jenkins.
+* If you are making significant changes to the conflation algorithms, you may want to run the 
+regression tests at this point. They will run automatically nightly against the master branch.
+* Create a https://github.com/ngageoint/hootenanny/pulls[pull request] to merge the work branch into 
+the master branch and assign it to yourself. Link the pull request to the original issue and add any 
+additional required detail to the pull request description. Tests will automatically run as part of 
+the pull request and their outcome may be viewed on Jenkins.
 * Correct pull request job test failures if necessary.
 * After all tests are passing, check the quality of your changes using 
 https://sonarcloud.io/dashboard?id=hoot[Sonar] and improve them as necessary.

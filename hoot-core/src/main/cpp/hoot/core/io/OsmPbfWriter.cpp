@@ -77,8 +77,8 @@ public:
   PrimitiveBlock primitiveBlock;
 };
 
-OsmPbfWriter::OsmPbfWriter()
-  : _d(new OsmPbfWriterData())
+OsmPbfWriter::OsmPbfWriter() :
+_d(std::make_shared<OsmPbfWriterData>())
 {
   _dn = nullptr;
   _lonOffset = 0.0;
@@ -224,7 +224,7 @@ void OsmPbfWriter::initializePartial()
 void OsmPbfWriter::_open(const QString& url)
 {
   LOG_TRACE("Opening url: " << url);
-  _openStream.reset(new fstream(url.toUtf8().constData(), ios::out | ios::binary));
+  _openStream = std::make_shared<std::fstream>(url.toUtf8().constData(), ios::out | ios::binary);
   if (_openStream->good() == false)
   {
     throw HootException(QString("Error opening for writing: %1").arg(url));
@@ -729,7 +729,7 @@ void OsmPbfWriter::_writeRelation(const std::shared_ptr<const hoot::Relation>& r
     lastId = id + _nodeIdDelta;
     pbr->add_types((hoot::pb::Relation_MemberType)
                    _toRelationMemberType(entries[i].getElementId().getType()));
-    pbr->add_roles_sid(_convertString(entries[i].role));
+    pbr->add_roles_sid(_convertString(entries[i].getRole()));
   }
 
   // From http://wiki.openstreetmap.org/wiki/PBF_Format#Ways_and_Relations

@@ -231,12 +231,9 @@ ProcessPool::ProcessPool(int nproc, double waitTime,
   {
     //  First process gets the serial jobs
     JobQueue* serial = (i == 0) ? &_serialJobs : nullptr;
-    ProcessThreadPtr thread(new ProcessThread(showTestName,
-                                              suppressFailureDetail,
-                                              printDiff,
-                                              waitTime, &_mutex,
-                                              &_parallelJobs,
-                                              serial));
+    ProcessThreadPtr thread =
+      std::make_shared<ProcessThread>(
+        showTestName, suppressFailureDetail, printDiff, waitTime, &_mutex, &_parallelJobs, serial);
     _threads.push_back(thread);
   }
 }

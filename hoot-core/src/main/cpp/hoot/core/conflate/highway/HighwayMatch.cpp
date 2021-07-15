@@ -132,19 +132,13 @@ void HighwayMatch::_updateNonMatchDescriptionBasedOnGeometricProperties(
   else                        description.append("Highway orientation not similar.");
 
   //  Use the average of the edge distance extractors
-  double edge = (EdgeDistanceExtractor(
-                   ValueAggregatorPtr(new RmseAggregator())).extract(*map, e1, e2) +
-                 EdgeDistanceExtractor(
-                   ValueAggregatorPtr(new SigmaAggregator())).extract(*map, e1, e2)) / 2.0;
+  double edge =
+    (EdgeDistanceExtractor(std::make_shared<RmseAggregator>()).extract(*map, e1, e2) +
+     EdgeDistanceExtractor(std::make_shared<SigmaAggregator>()).extract(*map, e1, e2)) / 2.0;
 
   if (edge >= 90)             description.append("Highway edges very close to each other.");
   else if (edge >= 70)        description.append("Highway edges somewhat close to each other.");
   else                        description.append("Highway edges not very close to each other.");
-}
-
-QString HighwayMatch::explain() const
-{
-  return _explainText;
 }
 
 map<QString, double> HighwayMatch::getFeatures(const ConstOsmMapPtr& m) const
@@ -264,7 +258,7 @@ bool HighwayMatch::_isOrderedConflicting(
   eids.insert(sharedEid);
   eids.insert(other1);
   eids.insert(other2);
-  OsmMapPtr copiedMap(new OsmMap(map->getProjection()));
+  OsmMapPtr copiedMap = std::make_shared<OsmMap>(map->getProjection());
   CopyMapSubsetOp(map, eids).apply(copiedMap);
 
   WaySublineMatchString match(_sublineMatch, copiedMap);

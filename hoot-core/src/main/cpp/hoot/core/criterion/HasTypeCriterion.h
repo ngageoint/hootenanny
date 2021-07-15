@@ -46,8 +46,7 @@ public:
   ~HasTypeCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new HasTypeCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<HasTypeCriterion>(); }
 
   QString getDescription() const override
   { return "Determines if an element has a recognizable type."; }

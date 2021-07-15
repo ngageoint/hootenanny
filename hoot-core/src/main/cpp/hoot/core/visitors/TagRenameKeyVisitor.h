@@ -44,27 +44,23 @@ public:
   static QString className() { return "hoot::TagRenameKeyVisitor"; }
 
   TagRenameKeyVisitor() = default;
-  ~TagRenameKeyVisitor() = default;
-
   TagRenameKeyVisitor(const QString& oldKey, const QString& newKey);
+  ~TagRenameKeyVisitor() = default;
 
   void visit(const ElementPtr& e) override;
 
   void setConfiguration(const Settings& conf) override;
 
-  QString getDescription() const override { return "Renames tag keys"; }
-
   QString getInitStatusMessage() const override { return "Renaming tag keys..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Renamed " + QString::number(_numAffected) + " tag keys"; }
 
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Renames tag keys"; }
+
   void setOldKey(const QString& key) { _oldKey = key; }
   void setNewKey(const QString& key) { _newKey = key; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 private:
 

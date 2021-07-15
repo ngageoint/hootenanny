@@ -138,7 +138,7 @@ public:
 #endif
 
     QList<QString> changesets;
-    HootNetworkRequestPtr request(new HootNetworkRequest());
+    HootNetworkRequestPtr request = std::make_shared<HootNetworkRequest>();
     OsmApiWriter writer(osm, changesets);
     CPPUNIT_ASSERT(writer.queryCapabilities(request));
     CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), HttpResponseCode::HTTP_OK);
@@ -174,7 +174,7 @@ public:
 #endif
 
     QList<QString> changesets;
-    HootNetworkRequestPtr request(new HootNetworkRequest());
+    HootNetworkRequestPtr request = std::make_shared<HootNetworkRequest>();
     OsmApiWriter writer(osm, changesets);
     CPPUNIT_ASSERT(writer.validatePermissions(request));
     CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), HttpResponseCode::HTTP_OK);

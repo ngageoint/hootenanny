@@ -47,22 +47,19 @@ public:
   WorstCircularErrorVisitor() : _worst(ElementData::CIRCULAR_ERROR_EMPTY) {}
   ~WorstCircularErrorVisitor() = default;
 
-  Meters getWorstCircularError() const { return _worst; }
-
   double getStat() const override { return _worst; }
 
   void visit(const std::shared_ptr<const Element>& e) override;
-
-  // Convenient way to get worst circular error
-  static Meters getWorstCircularError(const OsmMapPtr& map);
-  // Handle const pointers to const
-  static Meters getWorstCircularError(const ConstOsmMapPtr& map);
-  static Meters getWorstCircularError(const std::vector<ElementPtr>& elements);
 
   QString getDescription() const override
   { return "Determines the highest circular error value"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
+
+  Meters getWorstCircularError() const { return _worst; }
+  static Meters getWorstCircularError(const OsmMapPtr& map);
+  static Meters getWorstCircularError(const ConstOsmMapPtr& map);
+  static Meters getWorstCircularError(const std::vector<ElementPtr>& elements);
 
 private:
 

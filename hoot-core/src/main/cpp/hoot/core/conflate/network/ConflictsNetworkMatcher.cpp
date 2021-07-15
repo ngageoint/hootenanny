@@ -49,22 +49,22 @@ HOOT_FACTORY_REGISTER(NetworkMatcher, ConflictsNetworkMatcher)
 
 const double ConflictsNetworkMatcher::EPSILON = 1e-6;
 
-ConflictsNetworkMatcher::ConflictsNetworkMatcher()
+ConflictsNetworkMatcher::ConflictsNetworkMatcher() :
+_edgeMatches(std::make_shared<IndexedEdgeMatchSet>()),
+_partialHandicap(ConfigOptions().getNetworkConflictsPartialHandicap()),
+_stubHandicap(ConfigOptions().getNetworkConflictsStubHandicap()),
+_aggression(ConfigOptions().getNetworkConflictsAggression()),
+_stubThroughWeighting(ConfigOptions().getNetworkConflictsStubThroughWeighting()),
+_weightInfluence(ConfigOptions().getNetworkConflictsWeightInfluence()),
+_outboundWeighting(ConfigOptions().getNetworkConflictsOutboundWeighting()),
+_sanityCheckMinSeparationDistance(
+   ConfigOptions().getNetworkConflictsSanityCheckMinSeparationDistance()),
+_sanityCheckSeparationDistanceMultiplier(
+  ConfigOptions().getNetworkConflictsSanityCheckSeparationDistanceMultiplier()),
+_conflictingScoreThresholdModifier(
+  ConfigOptions().getNetworkConflictsConflictingScoreThresholdModifier()),
+_matchThreshold(ConfigOptions().getNetworkConflictsMatcherThreshold())
 {
-  _edgeMatches.reset(new IndexedEdgeMatchSet());
-
-  ConfigOptions conf;
-  _partialHandicap = conf.getNetworkConflictsPartialHandicap();
-  _stubHandicap = conf.getNetworkConflictsStubHandicap();
-  _aggression = conf.getNetworkConflictsAggression();
-  _weightInfluence = conf.getNetworkConflictsWeightInfluence();
-  _outboundWeighting = conf.getNetworkConflictsOutboundWeighting();
-  _stubThroughWeighting = conf.getNetworkConflictsStubThroughWeighting();
-  _sanityCheckMinSeparationDistance = conf.getNetworkConflictsSanityCheckMinSeparationDistance();
-  _sanityCheckSeparationDistanceMultiplier =
-    conf.getNetworkConflictsSanityCheckSeparationDistanceMultiplier();
-  _conflictingScoreThresholdModifier = conf.getNetworkConflictsConflictingScoreThresholdModifier();
-  _matchThreshold = conf.getNetworkConflictsMatcherThreshold();
   if (_matchThreshold <= 0.0 || _matchThreshold > 1.0)
   {
     throw IllegalArgumentException(
@@ -75,7 +75,6 @@ ConflictsNetworkMatcher::ConflictsNetworkMatcher()
 
 double ConflictsNetworkMatcher::_aggregateScores(QList<double> pairs) const
 {
-  //qSort(pairs.begin(), pairs.end(), greaterThan);
   qSort(pairs);
 
   // this quick little method makes the scores decrease with each matching pair
@@ -101,7 +100,7 @@ QList<NetworkVertexScorePtr> ConflictsNetworkMatcher::getAllVertexScores() const
 
 std::shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcher::create()
 {
-  return std::shared_ptr<ConflictsNetworkMatcher>(new ConflictsNetworkMatcher());
+  return std::make_shared<ConflictsNetworkMatcher>();
 }
 
 void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb) const
@@ -144,7 +143,7 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
     if (createStub)
     {
       // Create stub
-      NetworkEdgePtr newStub(new NetworkEdge(va, va, false));
+      NetworkEdgePtr newStub = std::make_shared<NetworkEdge>(va, va, false);
       newStub->addMember(va->getElement());
       LOG_TRACE("Adding new edge: " << newStub);
       na->addEdge(newStub);
@@ -308,12 +307,12 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     // Conflicts
     foreach (ConstEdgeMatchPtr other, conflict)
     {
-      _matchRelationships[em].append(ConstMatchRelationshipPtr(new MatchRelationship(other, true)));
+      _matchRelationships[em].append(std::make_shared<const MatchRelationship>(other, true));
     }
 
     foreach (ConstEdgeMatchPtr other, support)
     {
-      MatchRelationshipPtr mr(new MatchRelationship(other, false));
+      MatchRelationshipPtr mr = std::make_shared<MatchRelationship>(other, false);
       QSet<ConstEdgeMatchPtr> connectingStubs = _edgeMatches->getConnectingStubs(em, other);
       QSet<ConstEdgeMatchPtr> nonConflictingStubs = connectingStubs - conflict;
       if (connectingStubs.empty() || nonConflictingStubs.size() >= 1)
@@ -352,8 +351,7 @@ QList<NetworkEdgeScorePtr> ConflictsNetworkMatcher::getAllEdgeScores() const
   QList<NetworkEdgeScorePtr> result;
   foreach (ConstEdgeMatchPtr em, _scores.keys())
   {
-    NetworkEdgeScorePtr p(new NetworkEdgeScore(em, _scores[em], _scores[em]));
-    result.append(p);
+    result.append(std::make_shared<NetworkEdgeScore>(em, _scores[em], _scores[em]));
   }
   return result;
 }
@@ -630,7 +628,7 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
 {
   _n1 = n1;
   _n2 = n2;
-  _details.reset(new NetworkDetails(map, n1, n2));
+  _details = std::make_shared<NetworkDetails>(map, n1, n2);
 
   // Add stub edges to both networks.
   // if both vertices on an edge match a single vertex (v2)
@@ -640,7 +638,7 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
 
   // create empty stub edges can change the map, recreate the details so the indexes are
   // reinitialized.
-  _details.reset(new NetworkDetails(map, n1, n2));
+  _details = std::make_shared<NetworkDetails>(map, n1, n2);
 
   // create a spatial index of n2 vertices & edges.
   _createEdge2Index();

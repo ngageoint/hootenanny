@@ -55,7 +55,7 @@ bool MultiaryPoiMergerCreator::createMergers(const MatchSet& matches, std::vecto
 
   if (eids.size() >= 1)
   {
-    mergers.push_back(MergerPtr(new MultiaryPoiMerger(eids)));
+    mergers.push_back(std::make_shared<MultiaryPoiMerger>(eids));
     result = true;
   }
 
@@ -66,7 +66,8 @@ std::vector<CreatorDescription> MultiaryPoiMergerCreator::getAllCreators() const
 {
   CreatorDescription d;
   d.setClassName(className());
-  d.setDescription("Generates mergers that identify Multiary POI clusters within a match set and merges each cluster.");
+  d.setDescription(
+    "Generates mergers that identify Multiary POI clusters within a match set and merges each cluster.");
   d.setExperimental(true);
   vector<CreatorDescription> result;
   result.push_back(d);

@@ -70,7 +70,7 @@ void SparkChangesetWriter::open(const QString& fileName)
 
   QFileInfo fileInfo(fileName);
 
-  _addFile.reset(new QFile());
+  _addFile = std::make_shared<QFile>();
   const QString addFileName =
     fileInfo.absolutePath() + "/" + fileInfo.baseName() + "-add." + fileInfo.completeSuffix();
   _addFile->setFileName(addFileName);
@@ -84,7 +84,7 @@ void SparkChangesetWriter::open(const QString& fileName)
   }
   LOG_DEBUG("Opened: " << addFileName << ".");
 
-  _deleteFile.reset(new QFile());
+  _deleteFile = std::make_shared<QFile>();
   const QString deleteFileName =
     fileInfo.absolutePath() + "/" + fileInfo.baseName() + "-delete." + fileInfo.completeSuffix();
   _deleteFile->setFileName(deleteFileName);
@@ -111,7 +111,7 @@ void SparkChangesetWriter::open(const QString& fileName)
       }
       else
       {
-        _boundsCalculator.reset(new SearchBoundsCalculator(sbc));
+        _boundsCalculator = std::make_shared<SearchBoundsCalculator>(sbc);
       }
     }
   }

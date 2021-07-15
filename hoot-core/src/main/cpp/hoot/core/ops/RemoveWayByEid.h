@@ -71,7 +71,6 @@ public:
    * @param wId ID of way to remove
    */
   static void removeWay(OsmMapPtr map, long wId);
-
   /**
    * @brief removeWayFully Removes the way from all relations and
    *                       then removes the way from the map.
@@ -92,7 +91,7 @@ private:
   bool _removeFully;
 
   void _removeWay(const OsmMapPtr& map, long wId) const;
-  void _removeWayFully(OsmMapPtr& map, long wId) const;
+  void _removeWayFully(const OsmMapPtr& map, long wId) const;
 };
 
 }

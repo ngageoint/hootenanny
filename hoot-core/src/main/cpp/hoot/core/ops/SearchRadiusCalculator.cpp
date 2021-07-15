@@ -97,10 +97,10 @@ OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map) con
 
   // don't care about conflated data and invalid data, so filter them out always
   ElementCriterionPtr crit;
-  ElementCriterionPtr unknownCrit(
-    new OrCriterion(
-      ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
-      ElementCriterionPtr(new StatusCriterion(Status::Unknown2))));
+  ElementCriterionPtr unknownCrit =
+    std::make_shared<OrCriterion>(
+      std::make_shared<StatusCriterion>(Status::Unknown1),
+      std::make_shared<StatusCriterion>(Status::Unknown2));
   if (_elementCriterion.isEmpty())
   {
     // If no match candidate criterion was specified, then we'll use all remaining elements.
@@ -112,7 +112,7 @@ OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map) con
     // fit the criterion.
     ElementCriterionPtr candidateCrit(
       Factory::getInstance().constructObject<ElementCriterion>(_elementCriterion));
-    crit.reset(new ChainCriterion(unknownCrit, candidateCrit));
+    crit = std::make_shared<ChainCriterion>(unknownCrit, candidateCrit);
   }
 
   // make a copy of the filtered map to do the search radius calc on
@@ -132,7 +132,7 @@ std::vector<double> SearchRadiusCalculator::_getTiePointDistances(OsmMapPtr& map
   std::shared_ptr<RubberSheet> rubberSheet = map->getCachedRubberSheet();
   if (!rubberSheet)
   {
-    rubberSheet.reset(new RubberSheet());
+    rubberSheet = std::make_shared<RubberSheet>();
     rubberSheet->setReference(_rubberSheetRef);
     rubberSheet->setMinimumTies(_minTies);
     rubberSheet->setFailWhenMinimumTiePointsNotFound(false);
@@ -154,7 +154,7 @@ std::vector<double> SearchRadiusCalculator::_getTiePointDistances(OsmMapPtr& map
       {
         MapCleaner().apply(map);
 
-        rubberSheet.reset(new RubberSheet());
+        rubberSheet = std::make_shared<RubberSheet>();
         rubberSheet->setReference(_rubberSheetRef);
         rubberSheet->setMinimumTies(_minTies);
         rubberSheet->setFailWhenMinimumTiePointsNotFound(false);

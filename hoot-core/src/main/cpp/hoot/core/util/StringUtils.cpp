@@ -116,12 +116,13 @@ std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(
   {
     throw HootException(QString("Error reading from reply string:\n%1").arg(jsonStr));
   }
-  std::shared_ptr<boost::property_tree::ptree> jsonObj(new boost::property_tree::ptree());
+  std::shared_ptr<boost::property_tree::ptree> jsonObj =
+    std::make_shared<boost::property_tree::ptree>();
   try
   {
     boost::property_tree::read_json(strStrm, *jsonObj);
   }
-  catch (boost::property_tree::json_parser::json_parser_error& e)
+  catch (const boost::property_tree::json_parser::json_parser_error& e)
   {
     QString reason = QString::fromStdString(e.message());
     QString line = QString::number(e.line());
@@ -133,7 +134,8 @@ std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(
 std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonStringArray(
   const QStringList& stringList)
 {
-  std::shared_ptr<boost::property_tree::ptree> strArr(new boost::property_tree::ptree());
+  std::shared_ptr<boost::property_tree::ptree> strArr =
+    std::make_shared<boost::property_tree::ptree>();
   for (int i = 0; i < stringList.size(); i++)
   {
     boost::property_tree::ptree str;

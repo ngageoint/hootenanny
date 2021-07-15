@@ -71,7 +71,7 @@ inline void toCpp(v8::Local<v8::Value> v, SublineStringMatcherPtr& ptr)
   }
 
   v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
-  SublineStringMatcherJs* ptrj = node::ObjectWrap::Unwrap<SublineStringMatcherJs>(obj);
+  const SublineStringMatcherJs* ptrj = node::ObjectWrap::Unwrap<SublineStringMatcherJs>(obj);
   ptr = ptrj->getSublineStringMatcher();
 }
 

@@ -63,7 +63,7 @@ void WayGeneralizeVisitor::setOsmMap(OsmMap* map)
   MapProjector::projectToPlanar(_map->shared_from_this());
 
   assert(_epsilon != -1.0);
-  _generalizer.reset(new RdpWayGeneralizer(_epsilon));
+  _generalizer = std::make_shared<RdpWayGeneralizer>(_epsilon);
   _generalizer->setOsmMap(_map);
   _generalizer->setRemoveNodesSharedByWays(_removeNodesSharedByWays);
 }

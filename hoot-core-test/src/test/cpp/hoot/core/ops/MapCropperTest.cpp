@@ -91,8 +91,8 @@ public:
       double x = Random::instance()->generateUniform() * 360 - 180;
       double y = Random::instance()->generateUniform() * 180 - 90;
 
-      NodePtr n(new Node(Status::Invalid, result->createNextNodeId(), x, y, 10));
-      result->addNode(n);
+      result->addNode(
+        std::make_shared<Node>(Status::Invalid, result->createNextNodeId(), x, y, 10));
     }
 
     return result;
@@ -399,7 +399,7 @@ public:
     // Exclude one way outside of the bounds from being cropped out of the map. The whole way and
     // its nodes should be retained.
     uut.setInclusionCriterion(
-      ElementCriterionPtr(new ElementIdCriterion(ElementId(ElementType::Way, 1687))));
+      std::make_shared<ElementIdCriterion>(ElementId(ElementType::Way, 1687)));
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);

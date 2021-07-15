@@ -78,9 +78,11 @@ HilbertRTree* BaseInterpolator::_getIndex() const
   {
     const DataFrame& df = *_df;
     // 8 children was picked experimentally with two dimensions.
-    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(
-      BoxInternalData::size(_indColumns.size()) * 8 + sizeof(int) * 4));
-    _index.reset(new HilbertRTree(mps, _indColumns.size()));
+    _index =
+      std::make_shared<HilbertRTree>(
+        std::make_shared<MemoryPageStore>(
+          BoxInternalData::size(_indColumns.size()) * 8 + sizeof(int) * 4),
+        _indColumns.size());
 
     vector<Box> boxes(df.getNumDataVectors());
     vector<int> fids(df.getNumDataVectors());
@@ -142,7 +144,7 @@ void BaseInterpolator::readInterpolator(QIODevice& is)
   ds >> qb;
   string str = QString::fromUtf8(qb.constData()).toStdString();
   stringstream ss(str);
-  std::shared_ptr<DataFrame> df(new DataFrame());
+  std::shared_ptr<DataFrame> df = std::make_shared<DataFrame>();
   df->import(ss);
   _df = df;
 

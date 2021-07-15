@@ -60,20 +60,17 @@ public:
     _addArea(area), _addLength(length), _addWidth(width) { }
   ~AddMeasurementTagsVisitor() = default;
 
-  // ElementVisitor
   static QString className() { return "hoot::AddMeasurementTagsVisitor"; }
-  QString getDescription() const override { return "Modifies map geometry as specified"; }
 
   void visit(const ElementPtr& e) override;
 
-  // OperationStatus
   QString getInitStatusMessage() const override { return "Adding measurement tags..."; }
   QString getCompletedStatusMessage() const override
   { return "Added tags to " + QString::number(_numAffected) + " elements"; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Modifies map geometry as specified"; }
 
 private:
 
@@ -81,12 +78,12 @@ private:
   bool _addLength = true;
   bool _addWidth = true;
 
-  void processRelation(const RelationPtr pRelation );
-  void processWay(const WayPtr pWay);
+  void _processRelation(const RelationPtr pRelation );
+  void _processWay(const WayPtr pWay);
 
-  void calculateExtents(geos::geom::Geometry* pGeometry, double& length, double &width) const;
+  void _calculateExtents(geos::geom::Geometry* pGeometry, double& length, double &width) const;
 };
 
-} // namespace hoot
+}
 
 #endif // ADDMEASUREMENTTAGSVISITOR_H

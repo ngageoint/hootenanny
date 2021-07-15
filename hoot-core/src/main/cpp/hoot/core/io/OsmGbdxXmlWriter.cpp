@@ -118,12 +118,9 @@ void OsmGbdxXmlWriter::open(const QString& url)
   _outputDir = fi.absoluteDir();
   _outputFileName = fi.baseName();
 
-  if (_outputDir.exists() == false)
+  if (_outputDir.exists() == false && FileUtils::makeDir(_outputDir.path()) == false)
   {
-    if (FileUtils::makeDir(_outputDir.path()) == false)
-    {
-      throw HootException("Error creating directory for writing.");
-    }
+    throw HootException("Error creating directory for writing.");
   }
   _bounds.init();
 }
@@ -155,7 +152,7 @@ void OsmGbdxXmlWriter::_newOutputFile()
     }
   }
 
-  _fp.reset(new QFile());
+  _fp = std::make_shared<QFile>();
   std::dynamic_pointer_cast<QFile>(_fp)->setFileName(url);
 
   if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text))
@@ -163,7 +160,7 @@ void OsmGbdxXmlWriter::_newOutputFile()
     throw HootException(QObject::tr("Error opening %1 for writing").arg(url));
   }
 
-  _writer.reset(new QXmlStreamWriter(_fp.get()));
+  _writer = std::make_shared<QXmlStreamWriter>(_fp.get());
   _writer->setCodec("UTF-8");
 
   if (_formatXml)
@@ -194,8 +191,8 @@ QString OsmGbdxXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatX
 {
   OsmGbdxXmlWriter writer;
   writer.setFormatXml(formatXml);
-  // this will be deleted by the _fp std::shared_ptr
-  std::shared_ptr<QBuffer> buf(new QBuffer());
+  // This will be deleted by the _fp std::shared_ptr.
+  std::shared_ptr<QBuffer> buf = std::make_shared<QBuffer>();
   writer._fp = buf;
   if (!writer._fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {
@@ -241,9 +238,6 @@ void OsmGbdxXmlWriter::_writeTags(const ConstElementPtr& element)
   // GBDX XML format:
   //   <M_Lang>English</M_Lang>
 
-  //  const ElementType type = element->getElementType();
-  //  assert(type != ElementType::Unknown);
-
   const Tags& tags = element->getTags();
 
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
@@ -266,30 +260,6 @@ void OsmGbdxXmlWriter::_writeTags(const ConstElementPtr& element)
       continue;
     }
 
-    // Image, Platform and Instrument can be a list
-//    if (key == "Src_imgid" || key == "Pltfrm_id" || key == "Ins_Type")
-//    {
-//      QStringList l = val.split(";");
-
-//      _writer->writeStartElement(key);
-//      _writer->writeStartElement("t1");
-//      _writer->writeCharacters(removeInvalidCharacters(l[0]));
-//      _writer->writeEndElement();
-//      _writer->writeStartElement("t2");
-//      // Look for a second value
-//      if (l.size() == 2)
-//      {
-//        _writer->writeCharacters(removeInvalidCharacters(l[1]));
-//      }
-//      else
-//      {
-//        _writer->writeCharacters("NULL");
-//      }
-//      _writer->writeEndElement(); // t2
-//      _writer->writeEndElement(); // key
-//      continue;
-//    }
-
     // Keywords can be a list
     if (key == "Kywrd" || key == "Src_imgid" || key == "Pltfrm_id" || key == "Ins_Type")
     {
@@ -309,21 +279,7 @@ void OsmGbdxXmlWriter::_writeTags(const ConstElementPtr& element)
     _writer->writeStartElement(removeInvalidCharacters(key));
     _writer->writeCharacters(removeInvalidCharacters(val));
     _writer->writeEndElement();
-  } // End tag loop
-
-//  // This is the next to fix.
-//  if (type == ElementType::Relation)
-//  {
-//    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
-//    if (relation->getType() != "")
-//    {
-//      _writer->writeStartElement("Got Relation");
-//      _writer->writeAttribute("k", "type");
-//      _writer->writeAttribute("v", removeInvalidCharacters(relation->getType()));
-//      _writer->writeEndElement();
-//    }
-//  }
-
+  }
 }
 
 void OsmGbdxXmlWriter::_writeNodes(ConstOsmMapPtr map)
@@ -553,7 +509,7 @@ void OsmGbdxXmlWriter::writePartial(const ConstRelationPtr& r)
     _writer->writeStartElement("member");
     _writer->writeAttribute("type", _typeName(e.getElementId().getType()));
     _writer->writeAttribute("ref", QString::number(e.getElementId().getId()));
-    _writer->writeAttribute("role", removeInvalidCharacters(e.role));
+    _writer->writeAttribute("role", removeInvalidCharacters(e.getRole()));
     _writer->writeEndElement();
   }
 

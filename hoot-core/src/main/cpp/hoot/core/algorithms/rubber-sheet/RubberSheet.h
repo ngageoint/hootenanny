@@ -229,7 +229,7 @@ private:
   // are conflatable given the current configuration before modifying them.
   std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
-  bool _calcAndApplyTransform(OsmMapPtr& map);
+  bool _calcAndApplyTransform(const OsmMapPtr& map);
   void _filterCalcAndApplyTransform(OsmMapPtr& map);
 
   bool _findTies();

@@ -70,11 +70,13 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     nodes.append(node1);
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
 
@@ -97,11 +99,13 @@ public:
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     map->addNode(node1);
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     map->addNode(node2);
 
@@ -124,11 +128,13 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     nodes.append(node1);
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
 
@@ -148,14 +154,16 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     nodes.append(node1);
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
-    WayPtr way1(new Way(Status::Unknown1, 15, 15));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 15, 15);
     way1->getTags().appendValue("hoot:test", "test3");
     map->addWay(way1);
 
@@ -173,10 +181,12 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     WayPtr way1 = TestUtils::createWay(map, nodes);
@@ -197,12 +207,14 @@ public:
     QList<ElementPtr> elements;
 
     QList<NodePtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     node1->getTags().appendValue("test", "test2");
     nodes.append(node2);
@@ -237,12 +249,14 @@ public:
     QList<ElementPtr> elements;
 
     QList<NodePtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     node1->getTags().appendValue("test", "test2");
     nodes.append(node2);
@@ -274,12 +288,14 @@ public:
     QList<ElementPtr> elements;
 
     QList<NodePtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     elements.append(node2);
@@ -311,12 +327,14 @@ public:
     QList<ElementPtr> elements;
 
     QList<NodePtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     elements.append(node2);
@@ -330,7 +348,7 @@ public:
     way2->getTags().appendValue("hoot:test", "test2");
     elements.append(way2);
 
-    RelationPtr relation1(new Relation(Status::Unknown1, 15, 15));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 15, 15);
     map->addRelation(relation1);
     relation1->getTags().appendValue("hoot:test", "test");
 
@@ -346,21 +364,23 @@ public:
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
 
-    WayPtr way1(new Way(Status::Unknown1, 15, 15));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 15, 15);
     way1->getTags().appendValue("hoot:test", "test3");
     map->addWay(way1);
 
-    WayPtr way2(new Way(Status::Unknown1, 15, 15));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, 15, 15);
     way2->getTags().appendValue("hoot:test", "test4");
     map->addWay(way2);
 
-    RelationPtr relation1(new Relation(Status::Unknown1, 15, 15));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 15, 15);
     map->addRelation(relation1);
     relation1->getTags().appendValue("hoot:test", "test");
 
@@ -376,28 +396,30 @@ public:
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("name", "red house");
     map->addNode(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     node2->getTags().appendValue("name", "blue house");
     map->addNode(node2);
 
-    WayPtr way1(new Way(Status::Unknown1, 15, 15));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 15, 15);
     way1->getTags().appendValue("hoot:test", "test3");
     way1->getTags().appendValue("name", "some way");
     map->addWay(way1);
 
-    WayPtr way2(new Way(Status::Unknown1, 16, 15));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, 16, 15);
     way2->getTags().appendValue("hoot:test", "test4");
     way2->getTags().appendValue("name", "some other way");
     map->addWay(way2);
 
 
-    RelationPtr relation1(new Relation(Status::Unknown1, 15, 15));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 15, 15);
     map->addRelation(relation1);
     relation1->getTags().appendValue("hoot:test", "test");
     relation1->getTags().appendValue("name", "some relation");
@@ -412,7 +434,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NoInformationElementRemoverTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NoInformationElementRemoverTest, "current");
 
 }
 

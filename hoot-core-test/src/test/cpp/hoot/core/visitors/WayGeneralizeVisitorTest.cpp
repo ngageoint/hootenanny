@@ -88,7 +88,7 @@ public:
     WayGeneralizeVisitor uut;
     uut.setEpsilon(0.1);
     uut.setRemoveNodesSharedByWays(true);
-    uut.addCriterion(std::shared_ptr<HighwayCriterion>(new HighwayCriterion()));
+    uut.addCriterion(std::make_shared<HighwayCriterion>());
     map->visitRw(uut);
 
     const QString outputFile = _outputPath + "runCritTest.osm";

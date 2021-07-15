@@ -72,12 +72,12 @@ public:
 
   void simpleTest()
   {
-    StateDescriptionPtr sd(new StateDescription());
+    StateDescriptionPtr sd = std::make_shared<StateDescription>();
     sd->addVariable(new VariableDescription("w", VariableDescription::Integer, 0, 4));
     sd->addVariable(new VariableDescription("x", VariableDescription::Real, 0, 1));
     sd->addVariable(new VariableDescription("y", VariableDescription::Real, 0, 7));
     sd->addVariable(new VariableDescription("z", VariableDescription::Real, 0, 3));
-    SimulatedAnnealing uut(sd, std::shared_ptr<TestFitnessFunction>(new TestFitnessFunction()));
+    SimulatedAnnealing uut(sd,  std::make_shared<TestFitnessFunction>());
     CPPUNIT_ASSERT(uut.iterate(100) < 5.5);
     CPPUNIT_ASSERT_EQUAL(uut.getBestStates().size(), 1);
     ConstStatePtr state = *uut.getBestStates().begin();

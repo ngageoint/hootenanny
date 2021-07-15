@@ -51,7 +51,7 @@ _useNulls(useNulls)
 
 ArffWriter::ArffWriter(QString path, bool useNulls) :
 _path(path),
-_autoStrm(new fstream()),
+_autoStrm(std::make_shared<std::fstream>()),
 _useNulls(useNulls)
 {
   _autoStrm->exceptions(fstream::failbit | fstream::badbit);

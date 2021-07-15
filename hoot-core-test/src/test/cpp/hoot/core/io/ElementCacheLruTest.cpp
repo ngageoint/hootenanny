@@ -94,7 +94,7 @@ public:
     // Add new node
     Status nodeStatus;
     Meters circularError(3.0);
-    ConstElementPtr newNode(new Node(nodeStatus, 1, 2.0, 3.0, circularError) );
+    ConstElementPtr newNode = std::make_shared<const Node>(nodeStatus, 1, 2.0, 3.0, circularError);
     myCache.addElement(newNode);
     // Now we should be not empty
     CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), true );
@@ -126,7 +126,7 @@ public:
     // Add new node
     Status status;
     Meters circularError(3.0);
-    ConstElementPtr newNode(new Node(status, 1, 2.0, 3.0, circularError) );
+    ConstElementPtr newNode = std::make_shared<const Node>(status, 1, 2.0, 3.0, circularError);
     myCache.addElement(newNode);
     // Now we should be not empty, iterators have work
     CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), true );
@@ -134,14 +134,14 @@ public:
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(1) );
 
     // Add new way
-    ConstElementPtr newWay(new Way(status, 10, circularError));
+    ConstElementPtr newWay = std::make_shared<const Way>(status, 10, circularError);
     myCache.addElement(newWay);
     CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), true );
     CPPUNIT_ASSERT_EQUAL( myCache.isEmpty(), false );
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(2) );
 
     // Add new relation
-    ConstElementPtr newRelation(new Relation(status, 20, circularError));
+    ConstElementPtr newRelation = std::make_shared<Relation>(status, 20, circularError);
     myCache.addElement(newRelation);
     CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), true );
     CPPUNIT_ASSERT_EQUAL( myCache.isEmpty(), false );
@@ -215,17 +215,17 @@ public:
     // Add first node
     Status status;
     Meters circularError(4.0);
-    ConstElementPtr newNode1(new Node(status, 1, 2.0, 3.0, circularError) );
+    ConstElementPtr newNode1 = std::make_shared<const Node>(status, 1, 2.0, 3.0, circularError);
     myCache.addElement(newNode1);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(1) );
 
     // Add second node
-    ConstElementPtr newNode2 = ConstElementPtr(new Node(status, 5, 6.0, 7.0, circularError));
+    ConstElementPtr newNode2 = std::make_shared<const Node>(status, 5, 6.0, 7.0, circularError);
     myCache.addElement(newNode2);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(2) );
 
     // Add third node -- force first node out
-    ConstElementPtr newNode3 = ConstElementPtr(new Node(status, 8, 9.0, 10.0, circularError));
+    ConstElementPtr newNode3 = std::make_shared<Node>(status, 8, 9.0, 10.0, circularError);
     myCache.addElement(newNode3);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(2) );
 
@@ -247,17 +247,17 @@ public:
     // Add first way
     Status status;
     Meters circularError(4.0);
-    ConstElementPtr newWay1(new Way(status, 1, circularError));
+    ConstElementPtr newWay1 = std::make_shared<const Way>(status, 1, circularError);
     myCache.addElement(newWay1);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(1) );
 
     // Add second way
-    ConstElementPtr newWay2 = ConstElementPtr(new Way(status, 2, circularError));
+    ConstElementPtr newWay2 = std::make_shared<const Way>(status, 2, circularError);
     myCache.addElement(newWay2);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(2) );
 
     // Add third way -- force first way out
-    ConstElementPtr newWay3 = ConstElementPtr(new Way(status, 3, circularError));
+    ConstElementPtr newWay3 = std::make_shared<const Way>(status, 3, circularError);
     myCache.addElement(newWay3);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(2) );
 
@@ -279,17 +279,17 @@ public:
     // Add first relation
     Status status;
     Meters circularError(4.0);
-    ConstElementPtr newRelation1(new Relation(status, 1, circularError));
+    ConstElementPtr newRelation1 = std::make_shared<const Relation>(status, 1, circularError);
     myCache.addElement(newRelation1);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(1) );
 
     // Add second relation
-    ConstElementPtr newRelation2 = ConstElementPtr(new Relation(status, 2, circularError));
+    ConstElementPtr newRelation2 = std::make_shared<const Relation>(status, 2, circularError);
     myCache.addElement(newRelation2);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(2) );
 
     // Add third relation -- force first relation out
-    ConstElementPtr newRelation3 = ConstElementPtr(new Relation(status, 3, circularError));
+    ConstElementPtr newRelation3 = std::make_shared<const Relation>(status, 3, circularError);
     myCache.addElement(newRelation3);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(2) );
 
@@ -315,7 +315,7 @@ public:
     {
       Status status(Status::Unknown1);
       Meters circularError(15.0);
-      ConstElementPtr newNode(new Node(status, i, 2.0, 3.0, circularError));
+      ConstElementPtr newNode = std::make_shared<const Node>(status, i, 2.0, 3.0, circularError);
       myCache.addElement(newNode);
     }
 
@@ -341,7 +341,7 @@ public:
     {
       Status status(Status::Unknown1);
       Meters circularError(15.0);
-      ConstElementPtr newNode(new Node(status, i, 2.0, 3.0, circularError));
+      ConstElementPtr newNode = std::make_shared<const Node>(status, i, 2.0, 3.0, circularError);
       myCache.addElement(newNode);
     }
 

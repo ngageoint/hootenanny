@@ -103,8 +103,7 @@ public:
    */
   AutoJsRegister()
   {
-    std::shared_ptr<ClassInitializerTemplate<T>> p(new ClassInitializerTemplate<T>());
-    JsRegistrar::getInstance().registerInitializer(p);
+    JsRegistrar::getInstance().registerInitializer(std::make_shared<ClassInitializerTemplate<T>>());
   }
 };
 

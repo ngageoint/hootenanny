@@ -67,28 +67,25 @@ public:
    */
   void addCriterion(const ElementCriterionPtr& e) override;
 
-  void setNegateCriterion(bool negate) { _negateCriterion = negate; }
-
-  /**
-   * @see ApiEntityInfo
-   */
-  QString getDescription() const override
-  { return "Adds or updates specific tags on elements and their children"; }
-
   /**
    * @see OperationStatus
    */
   QString getInitStatusMessage() const override { return _tagger->getInitStatusMessage(); }
-
   /**
    * @see OperationStatus
    */
   QString getCompletedStatusMessage() const override
   { return _tagger->getCompletedStatusMessage(); }
 
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getDescription() const override
+  { return "Adds or updates specific tags on elements and their children"; }
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+
+  void setNegateCriterion(bool negate) { _negateCriterion = negate; }
 
 private:
 

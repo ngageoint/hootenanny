@@ -78,7 +78,7 @@ public:
     int i = 0;
     while (v[i] >= 0)
     {
-      std::shared_ptr<ActorTask> ptr(new ActorTask(v[i++]));
+      std::shared_ptr<ActorTask> ptr = std::make_shared<ActorTask>(v[i++]);
       toDelete.push_back(ptr);
       solver.addActor(ptr.get());
     }
@@ -89,7 +89,7 @@ public:
     int i = 0;
     while (v[i] >= 0)
     {
-      std::shared_ptr<ActorTask> ptr(new ActorTask(v[i++]));
+      std::shared_ptr<ActorTask> ptr = std::make_shared<ActorTask>(v[i++]);
       toDelete.push_back(ptr);
       solver.addTask(ptr.get());
     }

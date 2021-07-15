@@ -47,10 +47,9 @@ _namesProcessed(0),
 _matchAttemptMade(false)
 {
   // default string comp
-  _stringComp.reset(
-    new MeanWordSetDistance(
-      StringDistancePtr(
-        new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))));
+  _stringComp =
+    std::make_shared<MeanWordSetDistance>(
+      std::make_shared<LevenshteinDistance>(ConfigOptions().getLevenshteinDistanceAlpha()));
 }
 
 void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
@@ -82,7 +81,7 @@ void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
     if (strDistConsumer)
     {
       strDistConsumer->setStringDistance(
-        StringDistancePtr(new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha())));
+        std::make_shared<LevenshteinDistance>(ConfigOptions().getLevenshteinDistanceAlpha()));
     }
   }
 
@@ -103,14 +102,14 @@ std::shared_ptr<NameExtractor> PoiPolygonNameScoreExtractor::_getNameExtractor()
   assert(_stringComp);
   if (_translateTagValuesToEnglish)
   {
-    std::shared_ptr<ToEnglishTranslateStringDistance> translateStringDist(
-      new ToEnglishTranslateStringDistance(_stringComp, _translator));
+    std::shared_ptr<ToEnglishTranslateStringDistance> translateStringDist =
+      std::make_shared<ToEnglishTranslateStringDistance>(_stringComp, _translator);
     translateStringDist->setTranslateAll(false);
-    return std::shared_ptr<NameExtractor>(new NameExtractor(translateStringDist));
+    return std::make_shared<NameExtractor>(translateStringDist);
   }
   else
   {
-    return std::shared_ptr<NameExtractor>(new NameExtractor(_stringComp));
+    return std::make_shared<NameExtractor>(_stringComp);
   }
 }
 

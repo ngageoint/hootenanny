@@ -52,7 +52,7 @@ ArffReader::ArffReader(istream* strm) : _strm(strm)
 }
 
 ArffReader::ArffReader(QString path) :
-_autoStrm(new fstream())
+_autoStrm(std::make_shared<std::fstream>())
 {
   LOG_DEBUG("Opening " + path + " for input.");
   _autoStrm->exceptions(fstream::badbit);
@@ -62,7 +62,7 @@ _autoStrm(new fstream())
 
   if (path.endsWith(".bz2"))
   {
-    _bstrm.reset(new boost::iostreams::filtering_istream);
+    _bstrm = std::make_shared<boost::iostreams::filtering_istream>();
     boost::iostreams::filtering_istream& zdat = *_bstrm;
     zdat.push(boost::iostreams::bzip2_decompressor());
     zdat.push(*_autoStrm.get());
@@ -87,7 +87,7 @@ bool ArffReader::_eof() const
 
 std::shared_ptr<DataSamples> ArffReader::read()
 {
-  std::shared_ptr<DataSamples> result(new DataSamples());
+  std::shared_ptr<DataSamples> result = std::make_shared<DataSamples>();
   DataSamples& ds = *result;
   QStringList columnNames;
 

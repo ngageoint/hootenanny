@@ -67,7 +67,8 @@ public:
     env.MaxX = 1;
     env.MaxY = 1;
 
-    OsmMapPtr map(new OsmMap(MapProjector::getInstance().createPlanarProjection(env)));
+    OsmMapPtr map =
+      std::make_shared<OsmMap>(MapProjector::getInstance().createPlanarProjection(env));
 
     Tags foo;
     foo["poi"] = "yes";

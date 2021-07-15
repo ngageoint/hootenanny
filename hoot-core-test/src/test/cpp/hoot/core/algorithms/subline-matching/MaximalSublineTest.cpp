@@ -89,7 +89,7 @@ public:
 
   void addEndNode(OsmMapPtr map, Coordinate c, QString note)
   {
-    NodePtr n(new Node(Status::Unknown1, map->createNextNodeId(), c, 10));
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), c, 10);
     n->getTags()["note"] = note;
     map->addNode(n);
   }
@@ -277,7 +277,6 @@ public:
     WayPtr w1 = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, "1"));
     WayPtr w2 = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, "2"));
 
-    //MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(36, 1.57079632679), 5);
     MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(46, 1.5708), 5);
 
     double bestScore;

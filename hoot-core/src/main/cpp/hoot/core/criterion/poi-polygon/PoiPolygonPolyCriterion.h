@@ -51,13 +51,10 @@ public:
   ~PoiPolygonPolyCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  GeometryType getGeometryType() const override { return GeometryType::Polygon; }
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new PoiPolygonPolyCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<PoiPolygonPolyCriterion>(); }
 
   bool supportsSpecificConflation() const override { return true; }
-
+  GeometryType getGeometryType() const override { return GeometryType::Polygon; }
   QStringList getChildCriteria() const override;
 
   QString getDescription() const override

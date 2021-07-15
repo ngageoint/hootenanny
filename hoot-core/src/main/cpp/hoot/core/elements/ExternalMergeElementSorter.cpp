@@ -159,10 +159,10 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
 
       LOG_DEBUG("Writing elements to temp file...");
 
-      std::shared_ptr<QTemporaryFile> tempOutputFile(
-        new QTemporaryFile(
+      std::shared_ptr<QTemporaryFile> tempOutputFile =
+        std::make_shared<QTemporaryFile>(
           ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME +
-          ".osm"));
+          ".osm");
       tempOutputFile->setAutoRemove(!_retainTempFiles);
       if (!tempOutputFile->open())
       {
@@ -197,7 +197,7 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
       tempOutputFile->close();
     }
   }
-  //caller should close the input
+  // The caller should close the input.
 
   LOG_DEBUG("Finished writing sorted file outputs.");
   LOG_VART(elementCtr);
@@ -318,7 +318,7 @@ std::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutput
 
   const QString tempFile =
     ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME + ".osm";
-  _sortFinalOutput.reset(new QTemporaryFile(tempFile));
+  _sortFinalOutput = std::make_shared<QTemporaryFile>(tempFile);
   _sortFinalOutput->setAutoRemove(!_retainTempFiles);
   if (!_sortFinalOutput->open())
   {

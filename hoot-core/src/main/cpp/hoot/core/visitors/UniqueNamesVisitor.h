@@ -49,17 +49,15 @@ public:
   UniqueNamesVisitor() = default;
   ~UniqueNamesVisitor() = default;
 
-  QSet<QString> getUniqueNames() const { return _names; }
-
   double getStat() const override { return _names.size(); }
 
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override { return "Counts unique names"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+
+  QSet<QString> getUniqueNames() const { return _names; }
 
 private:
 

@@ -121,7 +121,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  SublineStringMatcherJs* smJs = ObjectWrap::Unwrap<SublineStringMatcherJs>(args.This());
+  const SublineStringMatcherJs* smJs = ObjectWrap::Unwrap<SublineStringMatcherJs>(args.This());
   SublineStringMatcherPtr sm = smJs->getSublineStringMatcher();
 
   OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
@@ -150,7 +150,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
     set<ElementId> eids;
     eids.insert(e1->getElementId());
     eids.insert(e2->getElementId());
-    OsmMapPtr copiedMap(new OsmMap(m->getProjection()));
+    OsmMapPtr copiedMap = std::make_shared<OsmMap>(m->getProjection());
     CopyMapSubsetOp(m, eids).apply(copiedMap);
     LOG_VART(copiedMap->size());
     WaySublineMatchString copiedMatch(match, copiedMap);

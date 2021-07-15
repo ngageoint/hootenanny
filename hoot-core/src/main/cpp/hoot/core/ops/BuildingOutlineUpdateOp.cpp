@@ -224,13 +224,13 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding) const
 
   for (size_t i = 0; i < entries.size(); i++)
   {
-    LOG_VART(entries[i].role);
-    if (entries[i].role == MetadataTags::RoleOutline())
+    LOG_VART(entries[i].getRole());
+    if (entries[i].getRole() == MetadataTags::RoleOutline())
     {
       LOG_TRACE("Removing outline role from: " << entries[i] << "...");
-      pBuilding->removeElement(entries[i].role, entries[i].getElementId());
+      pBuilding->removeElement(entries[i].getRole(), entries[i].getElementId());
     }
-    else if (entries[i].role == MetadataTags::RolePart())
+    else if (entries[i].getRole() == MetadataTags::RolePart())
     {
       if (entries[i].getElementId().getType() == ElementType::Way)
       {

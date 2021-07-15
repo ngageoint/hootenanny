@@ -60,7 +60,7 @@ void OsmPgCsvWriter::open(const QString& url)
 
   for (int i = 0; i < FileType::MaxFileType; ++i)
   {
-    _files[i].reset(new QFile(filenames[i]));
+    _files[i] = std::make_shared<QFile>(filenames[i]);
     if (!_files[i]->open(QIODevice::WriteOnly | QIODevice::Text))
       throw HootException(QString("Error opening %1 for writing").arg(filenames[i]));
     _streams[i].setDevice(_files[i].get());

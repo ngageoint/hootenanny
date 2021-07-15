@@ -120,7 +120,8 @@ private:
 
   void _snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap) const;
   void _snapUnconnectedPostChangesetMapCropping(
-    OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays) const;
+    const OsmMapPtr& refMap, OsmMapPtr& combinedMap,
+    const OsmMapPtr& immediatelyConnectedOutOfBoundsWays) const;
 
   /*
    * Performs cropping to prepare a map for changeset derivation. This is potentially different
@@ -130,7 +131,7 @@ private:
     OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
     const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName) const;
 
-  void _generateChangeset(OsmMapPtr& refMap, OsmMapPtr& combinedMap);
+  void _generateChangeset(const OsmMapPtr& refMap, const OsmMapPtr& combinedMap);
 };
 
 }

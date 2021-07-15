@@ -46,25 +46,18 @@ public:
   ~GeoNamesReader() = default;
 
   void close() override;
-
   void initializePartial() override { }
-
   void finalizePartial() override { }
 
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   bool hasMoreElements() override;
-
   bool isSupported(const QString& url) override;
-
   void open(const QString& url) override;
-
   ElementPtr readNextElement() override;
 
   void setDefaultAccuracy(Meters circularError) { _defaultCircularError = circularError; }
-
-  void setDefaultStatus(Status s) { _status = s; }
-
+  void setDefaultStatus(Status s) override { _status = s; }
   void setUseDataSourceIds(bool useDataSourceIds) override { _useDataSourceIds = useDataSourceIds; }
 
   QString supportedFormats() override { return ".geonames"; }

@@ -247,12 +247,12 @@ private:
 };
 
 OgrReader::OgrReader() :
-_d(new OgrReaderInternal())
+_d(std::make_shared<OgrReaderInternal>())
 {
 }
 
 OgrReader::OgrReader(const QString& path) :
-_d(new OgrReaderInternal())
+_d(std::make_shared<OgrReaderInternal>())
 {
   if (isSupported(path) == true)
   {
@@ -288,7 +288,7 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(
   int epsgOverride = ConfigOptions().getOgrReaderEpsgOverride();
   if (epsgOverride >= 0)
   {
-    result.reset(new OGRSpatialReference());
+    result = std::make_shared<OGRSpatialReference>();
 
     if (result->importFromEPSG(epsgOverride) != OGRERR_NONE)
     {
@@ -300,7 +300,7 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(
 
   // proj4 requires some extra parameters to handle Google map style projections. Check for this
   // situation for known EPSGs and warn/fix the issue.
-  result.reset(new OGRSpatialReference());
+  result = std::make_shared<OGRSpatialReference>();
   result->importFromEPSG(3785);
   if (srs && result->IsSame(srs.get()) &&
     _toWkt(result.get()) != _toWkt(srs.get()))
@@ -600,7 +600,7 @@ OgrReaderInternal::OgrReaderInternal() :
 _defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
 _circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys()),
 _status(Status::Invalid),
-_map(OsmMapPtr(new OsmMap())),
+_map(std::make_shared<OsmMap>()),
 _layer(nullptr),
 _limit(-1),
 _featureCount(0),
@@ -765,7 +765,7 @@ void OgrReaderInternal::_addLineString(const OGRLineString* ls, Tags& t)
 {
   Meters circularError = _parseCircularError(t);
 
-  WayPtr way(new Way(_status, _map->createNextWayId(), circularError));
+  WayPtr way = std::make_shared<Way>(_status, _map->createNextWayId(), circularError);
 
   way->setTags(t);
   for (int i = 0; i < ls->getNumPoints(); i++)
@@ -791,8 +791,9 @@ void OgrReaderInternal::_addMultiPolygon(OGRMultiPolygon* mp, Tags& t)
   }
   else
   {
-    RelationPtr r(new Relation(_status, _map->createNextRelationId(), circularError,
-      MetadataTags::RelationMultiPolygon()));
+    RelationPtr r =
+      std::make_shared<Relation>(
+        _status, _map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
     r->setTags(t);
 
     for (int i = 0; i < nParts; i++)
@@ -838,7 +839,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   AreaCriterion areaCrit;
   if (p->getNumInteriorRings() == 0)
   {
-    OGRLinearRing* exteriorRing = p->getExteriorRing();
+    const OGRLinearRing* exteriorRing = p->getExteriorRing();
     if (exteriorRing != nullptr)
     {
       WayPtr outer = _createWay(p->getExteriorRing(), circularError);
@@ -866,8 +867,9 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   }
   else
   {
-    RelationPtr r(new Relation(_status, _map->createNextRelationId(), circularError,
-      MetadataTags::RelationMultiPolygon()));
+    RelationPtr r =
+      std::make_shared<Relation>(
+        _status, _map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
     if (areaCrit.isSatisfied(t, ElementType::Relation) == false)
     {
       t.setArea(true);
@@ -921,7 +923,7 @@ void OgrReaderInternal::close()
 
 WayPtr OgrReaderInternal::_createWay(OGRLinearRing* lr, Meters circularError)
 {
-  WayPtr way(new Way(_status, _map->createNextWayId(), circularError));
+  WayPtr way = std::make_shared<Way>(_status, _map->createNextWayId(), circularError);
 
   // make sure the ring is closed
   lr->closeRings();
@@ -972,7 +974,7 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(
 
   if (!asWgs84)
   {
-    result.reset(new Envelope(GeometryUtils::envelopeFromString(bboxStr)));
+    result = std::make_shared<Envelope>(GeometryUtils::envelopeFromString(bboxStr));
   }
   else
   {
@@ -1002,7 +1004,7 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(
       }
     }
 
-    result.reset(new Envelope());
+    result = std::make_shared<Envelope>();
     std::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
     std::shared_ptr<OGRCoordinateTransformation> transform(
       OGRCreateCoordinateTransformation(wgs84.get(), srs));
@@ -1088,7 +1090,7 @@ void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
   if (sourceSrs.get() != nullptr && sourceSrs->IsProjected())
   {
     LOG_DEBUG("Input SRS: " << _toWkt(sourceSrs.get()));
-    _wgs84.reset(new OGRSpatialReference());
+    _wgs84 = std::make_shared<OGRSpatialReference>();
     if (_wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
     {
       throw HootException("Error creating EPSG:4326 projection.");
@@ -1381,12 +1383,12 @@ ElementPtr OgrReaderInternal::readNextElement()
   }
   else if (_waysItr != _map->getWays().end())
   {
-    returnElement.reset(new Way(*_waysItr->second.get()));
+    returnElement = std::make_shared<Way>(*_waysItr->second.get());
     ++_waysItr;
   }
   else
   {
-    returnElement.reset(new Relation(*_relationsItr->second.get()));
+    returnElement = std::make_shared<Relation>(*_relationsItr->second.get());
     ++_relationsItr;
   }
 
@@ -1406,7 +1408,7 @@ void OgrReaderInternal::populateElementMap()
 
 std::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
 {
-  std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
+  std::shared_ptr<OGRSpatialReference> wgs84 = std::make_shared<OGRSpatialReference>();
   if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
   {
     throw HootException("Error creating EPSG:4326 projection.");

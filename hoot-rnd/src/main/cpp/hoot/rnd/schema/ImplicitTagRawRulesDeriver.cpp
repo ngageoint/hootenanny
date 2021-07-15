@@ -106,8 +106,9 @@ void ImplicitTagRawRulesDeriver::_init()
   _duplicatedWordTagKeyCountsToValues.clear();
   _countFileLineCtr = 0;
 
-  _countFile.reset(
-    new QTemporaryFile(_tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX"));
+  _countFile =
+    std::make_shared<QTemporaryFile>(
+      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
   _countFile->setAutoRemove(!_keepTempFiles);
   if (!_countFile->open())
   {
@@ -256,7 +257,7 @@ void ImplicitTagRawRulesDeriver::_validateInputs(const QStringList& inputs,
   {
     throw HootException("No output was specified.");
   }
-  _output.reset(new QFile());
+  _output = std::make_shared<QFile>();
   _output->setFileName(output);
   if (_output->exists() && !_output->remove())
   {
@@ -311,7 +312,8 @@ std::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(
   //"none" allows for bypassing translation for an input; e.g. OSM data
   if (translationScript.toLower() != "none")
   {
-    std::shared_ptr<SchemaTranslationVisitor> translationVisitor(new SchemaTranslationVisitor());
+    std::shared_ptr<SchemaTranslationVisitor> translationVisitor =
+      std::make_shared<SchemaTranslationVisitor>();
 
     // I think we always want to be going to OSM here unless otherwise specified (or maybe
     // regardless if its specified), but that should be verified.
@@ -327,7 +329,7 @@ std::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(
     // always set the direction before setting the script
     translationVisitor->setTranslationScript(translationScript);
 
-    inputStream.reset(new ElementVisitorInputStream(_inputReader, translationVisitor));
+    inputStream = std::make_shared<ElementVisitorInputStream>(_inputReader, translationVisitor);
   }
   return inputStream;
 }
@@ -401,8 +403,9 @@ void ImplicitTagRawRulesDeriver::_sortByTagOccurrence()
   LOG_INFO("Sorting output by tag occurrence count...");
   LOG_VART(_sortParallelCount);
 
-  _sortedCountFile.reset(
-    new QTemporaryFile(_tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX"));
+  _sortedCountFile =
+    std::make_shared<QTemporaryFile>(
+      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
   _sortedCountFile->setAutoRemove(!_keepTempFiles);
   if (!_sortedCountFile->open())
   {
@@ -452,9 +455,9 @@ void ImplicitTagRawRulesDeriver::_removeDuplicatedKeyTypes()
   //i.e. don't allow amenity=school AND amenity=shop to be associated with the same word...pick one
   //of them
 
-  _dedupedCountFile.reset(
-    new QTemporaryFile(
-      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX"));
+  _dedupedCountFile =
+    std::make_shared<QTemporaryFile>(
+      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
   _dedupedCountFile->setAutoRemove(!_keepTempFiles);
   if (!_dedupedCountFile->open())
   {
@@ -552,9 +555,9 @@ void ImplicitTagRawRulesDeriver::_resolveCountTies()
     StringUtils::formatLargeNumber(_duplicatedWordTagKeyCountsToValues.size()) <<
     " duplicated word/tag key/counts...");
 
-  _tieResolvedCountFile.reset(
-    new QTemporaryFile(
-      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX"));
+  _tieResolvedCountFile =
+    std::make_shared<QTemporaryFile>(
+      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
   _tieResolvedCountFile->setAutoRemove(!_keepTempFiles);
   if (!_tieResolvedCountFile->open())
   {

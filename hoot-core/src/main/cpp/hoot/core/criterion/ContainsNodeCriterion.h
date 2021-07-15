@@ -43,13 +43,11 @@ public:
   static QString className() { return "hoot::ContainsNodeCriterion"; }
 
   ContainsNodeCriterion() = default;
-  explicit ContainsNodeCriterion(long nodeId) : _nodeId(nodeId) { }
+  explicit ContainsNodeCriterion(long nodeId);
   ~ContainsNodeCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new ContainsNodeCriterion(_nodeId)); }
+  ElementCriterionPtr clone() override { return std::make_shared<ContainsNodeCriterion>(_nodeId); }
 
   void setConfiguration(const Settings& s) override;
 

@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/criterion/RelationWithMembersOfTypeCriterion.h>
-#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -49,7 +48,7 @@ public:
   ~RelationWithBuildingMembersCriterion() = default;
 
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new RelationWithBuildingMembersCriterion(_map)); }
+  { return std::make_shared<RelationWithBuildingMembersCriterion>(_map); }
 
   QString getCriterion() const override;
 
@@ -58,8 +57,7 @@ public:
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
-  QString getDescription() const override
-  { return "Identifies relations with building members"; }
+  QString getDescription() const override { return "Identifies relations with building members"; }
 };
 
 }

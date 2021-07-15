@@ -123,7 +123,7 @@ void HootServicesLanguageDetectorClient::setConfiguration(const Settings& conf)
   _cacheMaxSize = opts.getLanguageMaxCacheSize();
   if (_cacheMaxSize != -1)
   {
-    _cache.reset(new QCache<QString, DetectionResult>(_cacheMaxSize));
+    _cache = std::make_shared<QCache<QString, DetectionResult>>(_cacheMaxSize);
   }
 
   if (_useCookies)
@@ -344,7 +344,7 @@ QString HootServicesLanguageDetectorClient::_parseResponse(
 QString HootServicesLanguageDetectorClient::_getLangFromCache(const QString& text)
 {
   QString detectedLangCode = "";
-  DetectionResult* cachedDetection = _cache->object(text.toLower());
+  const DetectionResult* cachedDetection = _cache->object(text.toLower());
   if (cachedDetection != nullptr)
   {
     detectedLangCode = cachedDetection->detectedLangCode;

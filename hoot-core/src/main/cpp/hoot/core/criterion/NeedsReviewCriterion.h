@@ -49,9 +49,7 @@ public:
   ~NeedsReviewCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new NeedsReviewCriterion(_map)); }
+  ElementCriterionPtr clone() override { return std::make_shared<NeedsReviewCriterion>(_map); }
 
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 

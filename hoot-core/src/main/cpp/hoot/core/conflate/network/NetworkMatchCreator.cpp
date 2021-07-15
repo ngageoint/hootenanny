@@ -65,11 +65,11 @@ namespace hoot
 HOOT_FACTORY_REGISTER(MatchCreator, NetworkMatchCreator)
 
 NetworkMatchCreator::NetworkMatchCreator() :
+_userCriterion(std::make_shared<HighwayCriterion>()),
 _matchScoringFunctionMax(ConfigOptions().getNetworkMatchScoringFunctionMax()),
 _matchScoringFunctionCurveMidpointX(ConfigOptions().getNetworkMatchScoringFunctionCurveMidX()),
 _matchScoringFunctionCurveSteepness(ConfigOptions().getNetworkMatchScoringFunctionCurveSteepness())
 {
-  _userCriterion.reset(new HighwayCriterion());
 }
 
 MatchPtr NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, ElementId /*eid1*/,
@@ -78,13 +78,13 @@ MatchPtr NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, Element
   return MatchPtr();
 }
 
-ConstMatchPtr NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, NetworkEdgeScorePtr e,
-  ConstMatchThresholdPtr mt) const
+ConstMatchPtr NetworkMatchCreator::_createMatch(
+  const NetworkDetailsPtr& map, NetworkEdgeScorePtr e, ConstMatchThresholdPtr mt) const
 {
-  return ConstMatchPtr(
-    new NetworkMatch(
+  return
+    std::make_shared<const NetworkMatch>(
       map, e->getEdgeMatch(), e->getScore(), mt, _matchScoringFunctionMax,
-      _matchScoringFunctionCurveMidpointX, _matchScoringFunctionCurveSteepness));
+      _matchScoringFunctionCurveMidpointX, _matchScoringFunctionCurveSteepness);
 }
 
 void NetworkMatchCreator::createMatches(
@@ -113,9 +113,9 @@ void NetworkMatchCreator::createMatches(
 
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
-  std::shared_ptr<ChainCriterion> c1(
-    new ChainCriterion(
-      ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), _userCriterion));
+  std::shared_ptr<ChainCriterion> c1 =
+    std::make_shared<ChainCriterion>(
+      std::make_shared<StatusCriterion>(Status::Unknown1), _userCriterion);
   if (_filter)
   {
     c1->addCriterion(_filter);
@@ -125,9 +125,9 @@ void NetworkMatchCreator::createMatches(
   LOG_TRACE("Extracted Network 1: " << n1->toString());
 
   OsmNetworkExtractor e2;
-  std::shared_ptr<ChainCriterion> c2(
-    new ChainCriterion(
-      ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), _userCriterion));
+  std::shared_ptr<ChainCriterion> c2 =
+    std::make_shared<ChainCriterion>(
+      std::make_shared<StatusCriterion>(Status::Unknown2), _userCriterion);
   if (_filter)
   {
     c2->addCriterion(_filter);
@@ -142,7 +142,7 @@ void NetworkMatchCreator::createMatches(
     Factory::getInstance().constructObject<NetworkMatcher>(ConfigOptions().getNetworkMatcher()));
   matcher->matchNetworks(map, n1, n2);
 
-  NetworkDetailsPtr details(new NetworkDetails(map, n1, n2));
+  NetworkDetailsPtr details = std::make_shared<NetworkDetails>(map, n1, n2);
 
   const size_t numIterations = ConfigOptions().getNetworkOptimizationIterations();
   if (numIterations < 1)
@@ -218,10 +218,10 @@ std::shared_ptr<MatchThreshold> NetworkMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
-    _matchThreshold.reset(
-      new MatchThreshold(
+    _matchThreshold =
+      std::make_shared<MatchThreshold>(
         ConfigOptions().getNetworkMatchThreshold(), ConfigOptions().getNetworkMissThreshold(),
-        ConfigOptions().getNetworkReviewThreshold()));
+        ConfigOptions().getNetworkReviewThreshold());
   }
   return _matchThreshold;
 }

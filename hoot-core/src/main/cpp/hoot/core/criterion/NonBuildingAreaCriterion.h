@@ -39,7 +39,7 @@ namespace hoot
  * A criterion that will either keep or remove areas, but not if the areas are also buildings.
  *
  * Should be able to accomplish the same thing with a not building and is area chain but
- * couldn't.  See comments in train-area/RemoveIrrelevants.js
+ * couldn't. See comments in train-area/RemoveIrrelevants.js in the regression tests.
  */
 class NonBuildingAreaCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
 {
@@ -52,9 +52,7 @@ public:
   ~NonBuildingAreaCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new NonBuildingAreaCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<NonBuildingAreaCriterion>(_map); }
 
   GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 

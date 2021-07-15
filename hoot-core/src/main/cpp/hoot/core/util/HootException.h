@@ -161,7 +161,7 @@ public: \
   Name(const Name& e) : HootException(e.getWhat()) { } \
   virtual ~Name() throw() {} \
   virtual HootException* clone() const { return new Name(*this); } \
-  virtual QString getName() const { return className(); } \
+  QString getName() const override { return className(); } \
 };
 
 #define HOOT_DEFINE_EXCEPTION_STR(Name, Default) \
@@ -174,7 +174,7 @@ public: \
   Name(const Name& e) : HootException(e.getWhat()) { } \
   virtual ~Name() throw() {} \
   virtual HootException* clone() const { return new Name(*this); } \
-  virtual QString getName() const { return className(); } \
+  QString getName() const override { return className(); } \
 };
 
 /****

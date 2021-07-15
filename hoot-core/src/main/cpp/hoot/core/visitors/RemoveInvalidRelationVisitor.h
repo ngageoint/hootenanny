@@ -57,7 +57,6 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Removing invalid and multiline string relations..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numMembersRemoved) + " relation member(s) and " +
     QString::number(_numAffected) + " relation(s)"; }
@@ -66,9 +65,7 @@ public:
   {
     return "Removes duplicate ways in relations and invalid relations";
   }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

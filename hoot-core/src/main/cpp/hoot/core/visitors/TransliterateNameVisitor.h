@@ -42,20 +42,17 @@ public:
   TransliterateNameVisitor() = default;
   ~TransliterateNameVisitor() = default;
 
-  static bool isLatin(const QString& s);
-
   void visit(const std::shared_ptr<Element>& e) override;
 
-  QString getDescription() const override { return "Transliterates names"; }
-
   QString getInitStatusMessage() const override { return "Transliterating names..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Transliterated " + QString::number(_numAffected) + " names"; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Transliterates names"; }
+
+  static bool isLatin(const QString& s);
 };
 
 }

@@ -49,15 +49,12 @@ public:
   ~HighwayCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  GeometryType getGeometryType() const override { return GeometryType::Line; }
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new HighwayCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<HighwayCriterion>(_map); }
 
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
+  GeometryType getGeometryType() const override { return GeometryType::Line; }
   bool supportsSpecificConflation() const override { return true; }
-
   QStringList getChildCriteria() const override;
 
   QString getName() const override { return className(); }

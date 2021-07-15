@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Identifies relations with children having point geometries
+ * Identifies relations with members that have point geometries
  */
 class RelationWithPointMembersCriterion : public RelationWithMembersOfTypeCriterion
 {
@@ -48,7 +48,7 @@ public:
   ~RelationWithPointMembersCriterion() = default;
 
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new RelationWithPointMembersCriterion(_map)); }
+  { return std::make_shared<RelationWithPointMembersCriterion>(_map); }
 
   QString getCriterion() const override;
 

@@ -155,8 +155,7 @@ std::shared_ptr<Feature> JavaScriptSchemaTranslator::_createFeature(const QVaria
 
   QVariantMap attrs = vm["attrs"].toMap();
 
-  std::shared_ptr<Feature> result(new Feature(layer->getFeatureDefinition()));
-
+  std::shared_ptr<Feature> result = std::make_shared<Feature>(layer->getFeatureDefinition());
 
   for (QVariantMap::const_iterator it = attrs.begin(); it != attrs.end(); ++it)
   {
@@ -211,11 +210,11 @@ void JavaScriptSchemaTranslator::_finalize()
 
 void JavaScriptSchemaTranslator::_init()
 {
-  //This can be a costly operation, hence putting it at INFO for runtime awareness purposes.
+  // This can be a costly operation, hence putting it at INFO for runtime awareness purposes.
   LOG_INFO("Loading translation script: " << _scriptPath << "...");
 
   _error = false;
-  _gContext.reset(new PluginContext());
+  _gContext = std::make_shared<PluginContext>();
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
@@ -346,7 +345,7 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
 
     if (schemaJs->IsArray())
     {
-      std::shared_ptr<Schema> schema(new Schema());
+      std::shared_ptr<Schema> schema = std::make_shared<Schema>();
       QVariantList schemaV = toCpp<QVariant>(schemaJs).toList();
 
       for (int i = 0; i < schemaV.size(); ++i)
@@ -654,7 +653,7 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
 
 std::shared_ptr<Layer> JavaScriptSchemaTranslator::_parseLayer(const QVariant& layer) const
 {
-  std::shared_ptr<Layer> newLayer(new Layer());
+  std::shared_ptr<Layer> newLayer = std::make_shared<Layer>();
 
   if (layer.canConvert(QVariant::Map) == false)
   {
@@ -663,14 +662,14 @@ std::shared_ptr<Layer> JavaScriptSchemaTranslator::_parseLayer(const QVariant& l
 
   QVariantMap map = layer.toMap();
 
-  // parse out the name of the layer.
+  // Parse out the name of the layer.
   if (map.contains("name") == false)
   {
     throw HootException("Expected layer to contain a name.");
   }
   newLayer->setName(map["name"].toString());
 
-  // parse out the geometry portion of the layer.
+  // Parse out the geometry portion of the layer.
   if (map.contains("geom") == false)
   {
     throw HootException(QString("Expected layer (%1) to contain a geom.").arg(newLayer->getName()));
@@ -708,7 +707,7 @@ std::shared_ptr<Layer> JavaScriptSchemaTranslator::_parseLayer(const QVariant& l
   }
   set<QString> names;
   QVariantList columns = columnsV.toList();
-  std::shared_ptr<FeatureDefinition> dfd(new FeatureDefinition());
+  std::shared_ptr<FeatureDefinition> dfd = std::make_shared<FeatureDefinition>();
   for (int i = 0; i < columns.size(); i++)
   {
     std::shared_ptr<FieldDefinition> fd = _parseFieldDefinition(columns[i]);

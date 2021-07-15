@@ -95,7 +95,7 @@ public:
    * Process n1 and n2 to identify candidate and confident tie points.
    */
   void identifyVertexMatches(ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2,
-    SearchRadiusProvider& srp);
+    const SearchRadiusProvider& srp);
 
   /**
    * Returns true if this is a confident tie point. If this is true then scoreTiePoint should return

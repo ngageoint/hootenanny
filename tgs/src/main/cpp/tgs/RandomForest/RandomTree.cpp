@@ -87,7 +87,7 @@ namespace Tgs
         indices[i] = i;
       }
 
-      _root = std::shared_ptr<TreeNode>(new TreeNode());
+      _root = std::make_shared<TreeNode>();
       _root->leftChild.reset();
       _root->rightChild.reset();
       _root->isPure = false;
@@ -120,13 +120,6 @@ namespace Tgs
         }
         else
         {
-  //         if (dataVector[currentNode->factorIndex] < currentNode->rangeMin || dataVector[currentNode->factorIndex] > currentNode->rangeMax)
-  //         {
-  //           std::cout << " Node Val " << dataVector[currentNode->factorIndex] << " Min " << currentNode->rangeMin << " Max " << currentNode->rangeMax << std::endl;
-  //           outputClass = "zz00";
-  //           nodeId = currentNode->nodeId;
-  //           return nodeId;
-  //         }
           if (dataVector[currentNode->factorIndex] < currentNode->splitValue)
           {
             currentNode = currentNode->leftChild;
@@ -288,7 +281,7 @@ namespace Tgs
 
       if (fileStream.good())
       {
-        _root = std::shared_ptr<TreeNode>(new TreeNode());
+        _root = std::make_shared<TreeNode>();
         _importOobSet(fileStream);
         _importNode(fileStream, _root);
         //Discard end tag
@@ -314,7 +307,7 @@ namespace Tgs
     {
 
       _root.reset();
-      _root = std::shared_ptr<TreeNode>(new TreeNode());
+      _root = std::make_shared<TreeNode>();
 
       QDomNodeList childList = e.childNodes();
 
@@ -393,7 +386,7 @@ namespace Tgs
         data->makeBoostrapAndOobSets(bootstrapSet, _oobSet);
       }
 
-      _root = std::shared_ptr<TreeNode>(new TreeNode());
+      _root = std::make_shared<TreeNode>();
       _root->leftChild.reset();
       _root->rightChild.reset();
       _root->isPure = false;
@@ -429,7 +422,7 @@ namespace Tgs
         data->makeBoostrapAndOobSets(bootstrapSet, _oobSet);
       }
 
-      _root = std::shared_ptr<TreeNode>(new TreeNode());
+      _root = std::make_shared<TreeNode>();
       _root->leftChild.reset();
       _root->rightChild.reset();
       _root->isPure = false;
@@ -457,7 +450,7 @@ namespace Tgs
 
       data->makeBalancedRoundRobinBootstrapAndOobSets(posClass, negClass, bootstrapSet, _oobSet);
 
-      _root = std::shared_ptr<TreeNode>(new TreeNode());
+      _root = std::make_shared<TreeNode>();
       _root->leftChild.reset();
       _root->rightChild.reset();
       _root->isPure = false;
@@ -515,8 +508,8 @@ namespace Tgs
 
           std::vector<unsigned int> leftSplit;
           std::vector<unsigned int> rightSplit;
-          node->leftChild = std::shared_ptr<TreeNode>(new TreeNode());
-          node->rightChild = std::shared_ptr<TreeNode>(new TreeNode());
+          node->leftChild = std::make_shared<TreeNode>();
+          node->rightChild = std::make_shared<TreeNode>();
 
           node->splitValue = splitVal;
           node->factorIndex = fIdx;
@@ -733,7 +726,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_exportOobSet(std::ostream & fileStream, std::string tabDepth)
+  void RandomTree::_exportOobSet(std::ostream & fileStream, const std::string& tabDepth)
   {
     try
     {
@@ -857,9 +850,9 @@ namespace Tgs
         }
         else
         {
-          node->leftChild = std::shared_ptr<TreeNode>(new TreeNode());
+          node->leftChild = std::make_shared<TreeNode>();
           _importNode(fileStream, node->leftChild);
-          node->rightChild = std::shared_ptr<TreeNode>(new TreeNode());
+          node->rightChild = std::make_shared<TreeNode>();
           _importNode(fileStream, node->rightChild);
         }
       }
@@ -992,7 +985,6 @@ namespace Tgs
             ss << "The tree node type " << treeNodeType.toLatin1().constData() << " is not a valid type.";
             throw Exception(__LINE__, ss.str());
           }
-
         }
         else
         {
@@ -1019,7 +1011,7 @@ namespace Tgs
           return leftNode;
         }
 
-        node->leftChild = std::shared_ptr<TreeNode>(new TreeNode());
+        node->leftChild = std::make_shared<TreeNode>();
 
         QDomElement rightNode = _importNode(leftNode, node->leftChild);
 
@@ -1028,7 +1020,7 @@ namespace Tgs
           return rightNode;
         }
 
-        node->rightChild = std::shared_ptr<TreeNode>(new TreeNode());
+        node->rightChild = std::make_shared<TreeNode>();
         return _importNode(rightNode, node->rightChild);
       }
 

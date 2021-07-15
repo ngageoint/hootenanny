@@ -40,11 +40,13 @@ namespace Tgs
 {
   const float BaseRandomForestManager::RF_XML_VERSION = 2.0;
 
-  BaseRandomForestManager::BaseRandomForestManager() : _initialized(false), _trained(false)
+  BaseRandomForestManager::BaseRandomForestManager() :
+  _initialized(false),
+  _trained(false)
   {
     try
     {
-      _data = std::shared_ptr<DataFrame>(new DataFrame);
+      _data = std::make_shared<DataFrame>();
     }
     catch(const Exception & e)
     {
@@ -67,7 +69,7 @@ namespace Tgs
 
   void BaseRandomForestManager::classifyTestVector(
     const std::string& objId, const std::string& objClass,
-    std::vector<double>& dataVector, std::map<std::string, double>& scores)
+    const std::vector<double>& dataVector, std::map<std::string, double>& scores)
   {
     try
     {
@@ -103,7 +105,7 @@ namespace Tgs
   }
 
   void BaseRandomForestManager::classifyVector(const std::string& objId,
-    std::vector<double>& dataVector, std::map<std::string, double>& scores)
+    const std::vector<double>& dataVector, std::map<std::string, double>& scores)
   {
     try
     {
@@ -676,7 +678,7 @@ namespace Tgs
   }
 
   void BaseRandomForestManager::_classifyBinaryTestVector(const std::string& objId,
-    const std::string& objClass, std::vector<double>& dataVector,
+    const std::string& objClass, const std::vector<double>& dataVector,
     std::map<std::string, double>& scores)
   {
     try
@@ -744,7 +746,7 @@ namespace Tgs
   }
 
   void BaseRandomForestManager::_classifyMultiClassTestVector(const std::string& objId,
-    const std::string& objClass, std::vector<double>& dataVector,
+    const std::string& objClass, const std::vector<double>& dataVector,
     std::map<std::string, double>& scores)
   {
     try
@@ -786,7 +788,7 @@ namespace Tgs
   }
 
   void BaseRandomForestManager::_classifyRoundRobinTestVector(const std::string& objId,
-    const std::string& objClass, std::vector<double>& dataVector,
+    const std::string& objClass, const std::vector<double>& dataVector,
     std::map<std::string, double>& scores)
   {
     try
@@ -837,7 +839,7 @@ namespace Tgs
   }
 
   void BaseRandomForestManager::_classifyMultiClassVector(const std::string& objId,
-    std::vector<double>& dataVector, std::map<std::string, double>& scores)
+    const std::vector<double>& dataVector, std::map<std::string, double>& scores)
   {
     try
     {

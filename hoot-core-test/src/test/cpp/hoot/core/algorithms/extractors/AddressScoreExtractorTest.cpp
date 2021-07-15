@@ -83,34 +83,34 @@ public:
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     map->addNode(node1);
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 main street");
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     map->addNode(node2);
-    WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown2, -2, 15.0);
     way2->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "567 first street");
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node2, way2), 0.01);
 
-    NodePtr node3(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node3 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node3->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     map->addNode(node3);
-    WayPtr way3(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way3 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way3->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 main St");
     map->addWay(way3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node3, way3), 0.0);
 
-    NodePtr node4(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node4 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node4->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Avenue");
     map->addNode(node4);
-    WayPtr way4(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way4 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way4->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 main Ave");
     map->addWay(way4);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node4, way4), 0.0);
@@ -123,21 +123,21 @@ public:
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node1);
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     way1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node2->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node2);
-    WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown2, -2, 15.0);
     way2->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "567");
     way2->getTags().set(AddressTagKeys::STREET_TAG_NAME, "first street");
     map->addWay(way2);
@@ -151,31 +151,31 @@ public:
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123-125");
     node1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node1);
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "124");
     way1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123-125");
     node2->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node2);
-    WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown2, -2, 15.0);
     way2->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     way2->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node2, way2), 0.0);
 
-    NodePtr node3(new Node(Status::Unknown1, -3, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node3 = std::make_shared<Node>(Status::Unknown1, -3, Coordinate(0.0, 0.0), 15.0);
     node3->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123-125");
     node3->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node3);
-    WayPtr way3(new Way(Status::Unknown2, -3, 15.0));
+    WayPtr way3 = std::make_shared<Way>(Status::Unknown2, -3, 15.0);
     way3->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "567");
     way3->getTags().set(AddressTagKeys::STREET_TAG_NAME, "first street");
     map->addWay(way3);
@@ -189,30 +189,30 @@ public:
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(
       AddressTagKeys::FULL_ADDRESS_TAG_NAME_2, "Main Street 123 20121 mytown");
     map->addNode(node1);
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME_2, "main street 123");
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set(
       AddressTagKeys::FULL_ADDRESS_TAG_NAME_2, "Main Street 123 20121 mytown");
     map->addNode(node2);
-    WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown2, -2, 15.0);
     way2->getTags().set(
       AddressTagKeys::FULL_ADDRESS_TAG_NAME_2, "first street 567");
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node2, way2), 0.01);
 
-    NodePtr node3(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node3 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node3->getTags().set(
       AddressTagKeys::FULL_ADDRESS_TAG_NAME_2, "ZENTRALLÄNDSTRASSE 40 81379 MÜNCHEN");
     map->addNode(node3);
-    WayPtr way3(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way3 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way3->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME_2, "40 ZENTRALLÄNDSTRASSE");
     map->addWay(way3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node3, way3), 0.0);
@@ -225,11 +225,11 @@ public:
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node1);
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123a");
     way1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
     map->addWay(way1);
@@ -248,9 +248,9 @@ public:
     uut.setCacheEnabled(false);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     map->addNode(node1);
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     map->addWay(way1);
 
     node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Jones Street and Bryant Street");
@@ -347,12 +347,12 @@ public:
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node1);
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
-    NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node2->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
     map->addNode(node2);
@@ -360,12 +360,12 @@ public:
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    NodePtr node3(new Node(Status::Unknown1, -3, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node3 = std::make_shared<Node>(Status::Unknown1, -3, Coordinate(0.0, 0.0), 15.0);
     node3->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node3->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node3);
-    WayPtr way2(new Way(Status::Unknown2, -2, 15.0));
-    NodePtr node4(new Node(Status::Unknown2, -4, Coordinate(0.0, 0.0), 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown2, -2, 15.0);
+    NodePtr node4 = std::make_shared<Node>(Status::Unknown2, -4, Coordinate(0.0, 0.0), 15.0);
     node4->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "567");
     node4->getTags().set(AddressTagKeys::STREET_TAG_NAME, "first street");
     map->addNode(node4);
@@ -373,14 +373,14 @@ public:
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node3, way2), 0.01);
 
-    NodePtr node5(new Node(Status::Unknown1, -5, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node5 = std::make_shared<Node>(Status::Unknown1, -5, Coordinate(0.0, 0.0), 15.0);
     map->addNode(node5);
-    WayPtr way3(new Way(Status::Unknown2, -3, 15.0));
+    WayPtr way3 = std::make_shared<Way>(Status::Unknown2, -3, 15.0);
     way3->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     way3->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     way3->addNode(node5->getId());
     map->addWay(way3);
-    WayPtr way4(new Way(Status::Unknown2, -4, 15.0));
+    WayPtr way4 = std::make_shared<Way>(Status::Unknown2, -4, 15.0);
     way4->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     way4->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     way4->addNode(node5->getId());
@@ -395,12 +395,12 @@ public:
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node1);
-    RelationPtr relation1(new Relation(Status::Unknown2, -1, 15.0));
-    NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown2, -1, 15.0);
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node2->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
     map->addNode(node2);
@@ -408,12 +408,12 @@ public:
     map->addRelation(relation1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, relation1), 0.0);
 
-    NodePtr node4(new Node(Status::Unknown1, -4, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node4 = std::make_shared<Node>(Status::Unknown1, -4, Coordinate(0.0, 0.0), 15.0);
     node4->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node4->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node4);
-    RelationPtr relation3(new Relation(Status::Unknown2, -3, 15.0));
-    NodePtr node5(new Node(Status::Unknown1, -5, Coordinate(0.0, 0.0), 15.0));
+    RelationPtr relation3 = std::make_shared<Relation>(Status::Unknown2, -3, 15.0);
+    NodePtr node5 = std::make_shared<Node>(Status::Unknown1, -5, Coordinate(0.0, 0.0), 15.0);
     node5->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "567");
     node5->getTags().set(AddressTagKeys::STREET_TAG_NAME, "first street");
     map->addNode(node5);
@@ -421,12 +421,12 @@ public:
     map->addRelation(relation3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node4, relation3), 0.01);
 
-    NodePtr node6(new Node(Status::Unknown1, -6, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node6 = std::make_shared<Node>(Status::Unknown1, -6, Coordinate(0.0, 0.0), 15.0);
     node6->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "567");
     node6->getTags().set(AddressTagKeys::STREET_TAG_NAME, "first street");
     map->addNode(node6);
-    RelationPtr relation4(new Relation(Status::Unknown2, -4, 15.0));
-    WayPtr way3(new Way(Status::Unknown2, -3, 15.0));
+    RelationPtr relation4 = std::make_shared<Relation>(Status::Unknown2, -4, 15.0);
+    WayPtr way3 = std::make_shared<Way>(Status::Unknown2, -3, 15.0);
     way3->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     way3->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
     map->addWay(way3);
@@ -434,12 +434,12 @@ public:
     map->addRelation(relation4);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node6, relation4), 0.01);
 
-    NodePtr node7(new Node(Status::Unknown1, -7, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node7 = std::make_shared<Node>(Status::Unknown1, -7, Coordinate(0.0, 0.0), 15.0);
     node7->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node7->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
     map->addNode(node7);
-    RelationPtr relation5(new Relation(Status::Unknown2, -5, 15.0));
-    WayPtr way4(new Way(Status::Unknown2, -4, 15.0));
+    RelationPtr relation5 = std::make_shared<Relation>(Status::Unknown2, -5, 15.0);
+    WayPtr way4 = std::make_shared<Way>(Status::Unknown2, -4, 15.0);
     way4->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     way4->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
     map->addWay(way4);
@@ -447,16 +447,16 @@ public:
     map->addRelation(relation5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node7, relation5), 0.01);
 
-    NodePtr node8(new Node(Status::Unknown1, -8, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node8 = std::make_shared<Node>(Status::Unknown1, -8, Coordinate(0.0, 0.0), 15.0);
     map->addNode(node8);
-    WayPtr way5(new Way(Status::Unknown2, -5, 15.0));
+    WayPtr way5 = std::make_shared<Way>(Status::Unknown2, -5, 15.0);
     map->addWay(way5);
-    RelationPtr relation6(new Relation(Status::Unknown2, -6, 15.0));
+    RelationPtr relation6 = std::make_shared<Relation>(Status::Unknown2, -6, 15.0);
     relation6->addElement("test", way5->getElementId());
     relation6->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     relation6->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
     map->addRelation(relation5);
-    RelationPtr relation7(new Relation(Status::Unknown2, -7, 15.0));
+    RelationPtr relation7 = std::make_shared<Relation>(Status::Unknown2, -7, 15.0);
     relation7->addElement("test", node8->getElementId());
     relation7->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     relation7->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
@@ -480,20 +480,20 @@ public:
         ToEnglishAddressTranslator::_translator);
     dictTranslator->setTokenizeInput(false);
 
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     map->addNode(node1);
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way1->getTags().set(
       AddressTagKeys::FULL_ADDRESS_TAG_NAME, QString::fromUtf8("123 Hauptstraße"));
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set(
       AddressTagKeys::FULL_ADDRESS_TAG_NAME_2, "Central Border Street 40 81379");
     map->addNode(node2);
-    WayPtr way2(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way2->getTags().set(
       AddressTagKeys::FULL_ADDRESS_TAG_NAME_2,
       QString::fromUtf8("ZENTRALLÄNDE STRASSE 40 81379 MÜNCHEN"));
@@ -513,9 +513,9 @@ public:
     uut.setCacheEnabled(false);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     map->addNode(node1);
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     map->addWay(way1);
 
     node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
@@ -548,9 +548,9 @@ public:
     uut.setCacheEnabled(false);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     map->addNode(node1);
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     map->addWay(way1);
 
     node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
@@ -592,9 +592,9 @@ public:
     uut.setCacheEnabled(false);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     map->addNode(node1);
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     map->addWay(way1);
 
     node1->getTags().set("note", "123 Main Street");
@@ -630,11 +630,11 @@ public:
     {
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
       node->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Main Street");
       map->addNode(node);
 
-      WayPtr way(new Way(Status::Unknown2, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
       way->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
       map->addWay(way);
 
@@ -644,11 +644,11 @@ public:
     {
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
       node->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
       map->addNode(node);
 
-      WayPtr way(new Way(Status::Unknown2, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
       way->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Main Street");
       map->addWay(way);
 
@@ -658,11 +658,11 @@ public:
     {
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
       node->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Main Street");
       map->addNode(node);
 
-      WayPtr way(new Way(Status::Unknown2, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
       way->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Main Street");
       map->addWay(way);
 
@@ -672,12 +672,12 @@ public:
     {
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      WayPtr way(new Way(Status::Unknown1, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
       way->getTags().set(AddressTagKeys::CITY_TAG_NAME, "San Ignacio");
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Hudson Street");
       map->addWay(way);
 
-      NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
       node->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Hudson Street, San Ignacio, Belize");
       map->addNode(node);
 
@@ -687,14 +687,14 @@ public:
     {
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      WayPtr way(new Way(Status::Unknown1, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
       // See note in AddressTagKeys::_getAddressTag. Not completely sure that this is a valid
       // address but going with it for now.
       way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "462");
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addWay(way);
 
-      NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
       node->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "462");
       node->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addNode(node);
@@ -705,14 +705,14 @@ public:
     {
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      WayPtr way(new Way(Status::Unknown1, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
       // See note in AddressTagKeys::_getAddressTag. Don't allow anything other than a number for
       // addr:housename posing as a street num.
       way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "462 blah");
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addWay(way);
 
-      NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
       node->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addNode(node);
 
@@ -722,12 +722,12 @@ public:
     {
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      WayPtr way(new Way(Status::Unknown1, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
       way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "462");
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addWay(way);
 
-      NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
       node->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addNode(node);
 
@@ -746,11 +746,11 @@ public:
 
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
       node->getTags().set("address", "670 Brunswick");
       map->addNode(node);
 
-      WayPtr way(new Way(Status::Unknown2, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
       way->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "670");
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Brunswick Street");
       map->addWay(way);
@@ -763,11 +763,11 @@ public:
 
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
       node->getTags().set("name", "100 Whitney Young Circle");
       map->addNode(node);
 
-      WayPtr way(new Way(Status::Unknown2, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
       way->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "100");
       way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "Whitney Yound Circle");
       map->addWay(way);
@@ -780,11 +780,11 @@ public:
 
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
       node->getTags().set("address", "150 Sutter Street");
       map->addNode(node);
 
-      WayPtr way(new Way(Status::Unknown2, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
       way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "Hallidie Building");
       way->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "130-150");
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Sutter");

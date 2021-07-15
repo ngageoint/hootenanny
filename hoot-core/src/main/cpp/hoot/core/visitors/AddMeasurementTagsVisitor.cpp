@@ -67,19 +67,19 @@ void AddMeasurementTagsVisitor::visit(const ElementPtr& pElement)
   if (pElement->getElementType() == ElementType::Relation)
   {
     const RelationPtr& pRelation = std::dynamic_pointer_cast<Relation>(pElement);
-    processRelation(pRelation);
+    _processRelation(pRelation);
     _numAffected++;
   }
 
   if (pElement->getElementType() == ElementType::Way)
   {
     const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pElement);
-    processWay(pWay);
+    _processWay(pWay);
     _numAffected++;
   }
 }
 
-void AddMeasurementTagsVisitor::processRelation(const RelationPtr pRelation)
+void AddMeasurementTagsVisitor::_processRelation(const RelationPtr pRelation)
 {
   //  Ignore NULL elements
   if (!pRelation) return;
@@ -127,7 +127,7 @@ void AddMeasurementTagsVisitor::processRelation(const RelationPtr pRelation)
   double polyLength = 0;
   double polyWidth = 0;
 
-  calculateExtents(pCombined.get(), polyLength, polyWidth);
+  _calculateExtents(pCombined.get(), polyLength, polyWidth);
 
   // write to tags
   Tags& tags = pRelation->getTags();
@@ -136,7 +136,7 @@ void AddMeasurementTagsVisitor::processRelation(const RelationPtr pRelation)
   if (_addArea) tags["area"] = QString::number(totalArea);
 }
 
-void AddMeasurementTagsVisitor::processWay(const WayPtr pWay)
+void AddMeasurementTagsVisitor::_processWay(const WayPtr pWay)
 {
   //  Ignore NULL elements
   if (!pWay) return;
@@ -159,7 +159,7 @@ void AddMeasurementTagsVisitor::processWay(const WayPtr pWay)
     }
     else
     {
-      calculateExtents(pPoly.get(), polyLength, polyWidth);
+      _calculateExtents(pPoly.get(), polyLength, polyWidth);
     }
 
     if (_addLength) tags["length"] = QString::number(polyLength);
@@ -174,15 +174,16 @@ void AddMeasurementTagsVisitor::processWay(const WayPtr pWay)
   }
 }
 
-void AddMeasurementTagsVisitor::calculateExtents(Geometry* pGeometry, double& length, double &width) const
+void AddMeasurementTagsVisitor::_calculateExtents(
+  Geometry* pGeometry, double& length, double &width) const
 {
   // calculate polygon length and width
   length = 0;
   width = 0;
 
   // calculate minimum rectangle/aligned bounding box
-  Geometry* pMinRect = MinimumDiameter::getMinimumRectangle(pGeometry);
-  CoordinateSequence* pMinRectCoords = pMinRect->getCoordinates();
+  const Geometry* pMinRect = MinimumDiameter::getMinimumRectangle(pGeometry);
+  const CoordinateSequence* pMinRectCoords = pMinRect->getCoordinates();
 
   if (pMinRectCoords->getSize() > 2)
   {

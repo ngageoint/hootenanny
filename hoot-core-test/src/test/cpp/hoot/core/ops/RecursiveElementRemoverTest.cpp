@@ -52,20 +52,17 @@ public:
 
     for (long nid = 1; nid <= 13; nid++)
     {
-      NodePtr n(new Node(Status::Unknown1, nid, 0.0, 0.0, -1));
-      result->addNode(n);
+      result->addNode(std::make_shared<Node>(Status::Unknown1, nid, 0.0, 0.0, -1));
     }
 
     for (long wid = 1; wid <= 5; wid++)
     {
-      WayPtr w(new Way(Status::Unknown1, wid, -1));
-      result->addWay(w);
+      result->addWay(std::make_shared<Way>(Status::Unknown1, wid, -1));
     }
 
     for (long rid = 1; rid <= 4; rid++)
     {
-      RelationPtr r(new Relation(Status::Unknown1, rid, -1));
-      result->addRelation(r);
+      result->addRelation(std::make_shared<Relation>(Status::Unknown1, rid, -1));
     }
 
     WayPtr w1 = result->getWay(1);

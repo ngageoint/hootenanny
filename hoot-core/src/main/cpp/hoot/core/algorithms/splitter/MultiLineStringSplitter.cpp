@@ -61,9 +61,8 @@ std::shared_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFacto
     ways.insert(string.getSublines()[i].getWay());
   }
 
-  nfPtr.reset(new FindNodesInWayFactory());
-
-  // add all the ways to the FindNodesInWayFactory
+  nfPtr = std::make_shared<FindNodesInWayFactory>();
+  // Add all the ways to the FindNodesInWayFactory/
   for (set<ConstWayPtr, WayPtrCompare>::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     nfPtr->addWay(*it);
@@ -118,9 +117,10 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   // If there were multiple matches then create a relation to contain the matches.
   else if (matches.size() > 1)
   {
-    RelationPtr r(
-      new Relation(matches[0]->getStatus(), map->createNextRelationId(),
-      matches[0]->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr r =
+      std::make_shared<Relation>(
+        matches[0]->getStatus(), map->createNextRelationId(), matches[0]->getCircularError(),
+        MetadataTags::RelationMultilineString());
     for (size_t i = 0; i < matches.size(); i++)
     {
       LOG_TRACE(

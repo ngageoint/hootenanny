@@ -53,9 +53,7 @@ public:
   void visit(const ElementPtr& e) override;
 
   QString getDescription() const override { return "Adds REF1 tags"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

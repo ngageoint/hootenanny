@@ -55,16 +55,13 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Removing relation members with circular references..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) +
            " relation members involved in circular references"; }
 
   QString getDescription() const override
   { return "Removes half of a relation pair that reference each other from a map"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

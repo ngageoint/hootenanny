@@ -53,7 +53,7 @@ void PoiMergerJs::mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isola
   LOG_INFO("Merging POIs...");
 
   // instantiate script merger
-  std::shared_ptr<PluginContext> script(new PluginContext());
+  std::shared_ptr<PluginContext> script = std::make_shared<PluginContext>();
   HandleScope handleScope(current);
   Context::Scope context_scope(script->getContext(current));
   Local<Context> context = current->GetCurrentContext();

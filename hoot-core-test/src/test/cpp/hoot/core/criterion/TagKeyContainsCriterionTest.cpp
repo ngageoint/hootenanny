@@ -45,7 +45,7 @@ public:
   void runTest()
   {
     TagKeyContainsCriterion uut;
-    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node->getTags().set("source:phone", "blah");
     node->getTags().set("key2", "blah");
 

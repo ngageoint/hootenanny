@@ -27,13 +27,14 @@
 #ifndef POWERLINECRITERION_H
 #define POWERLINECRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
 
 /**
- * A criterion that will either keep or remove power line utilities.
+ * A criterion that matches power line utilities
  */
 class PowerLineCriterion : public ConflatableElementCriterion
 {
@@ -45,13 +46,10 @@ public:
   ~PowerLineCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<PowerLineCriterion>(); }
 
   GeometryType getGeometryType() const override { return GeometryType::Line; }
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new PowerLineCriterion()); }
-
   bool supportsSpecificConflation() const override { return true; }
-
   QStringList getChildCriteria() const override;
 
   QString getDescription() const override { return "Identifies power line utilities"; }

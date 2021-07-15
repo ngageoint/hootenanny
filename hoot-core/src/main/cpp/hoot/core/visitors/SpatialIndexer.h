@@ -89,7 +89,6 @@ public:
     const std::deque<ElementId>& indexToEid, ConstOsmMapPtr pMap,
     const ElementType& elementType = ElementType::Unknown,
     const bool includeContainingRelations = true);
-
   /**
    * Find nodes nearby a specified node sorted by increasing distance given a bounds
    *
@@ -105,19 +104,16 @@ public:
     const std::shared_ptr<Tgs::HilbertRTree>& index, const std::deque<ElementId>& indexToEid,
     ConstOsmMapPtr pMap);
 
-  QString getDescription() const override { return "Build an index of input elements"; }
-
   QString getInitStatusMessage() const override
   { return "Indexing elements..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Indexed " + StringUtils::formatLargeNumber(_numAffected) + " elements."; }
 
-  long getSize() const { return _numAffected; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Build an index of input elements"; }
+
+  long getSize() const { return _numAffected; }
 
 private:
 

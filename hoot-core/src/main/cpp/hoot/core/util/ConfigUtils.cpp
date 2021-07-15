@@ -102,14 +102,14 @@ std::shared_ptr<InBoundsCriterion> ConfigUtils::getBoundsFilter(const ConstOsmMa
   {
     const GeometricRelationship boundsRelationship = ConfigUtils::getBoundsRelationship();
     const bool mustContain = true ? (boundsRelationship == GeometricRelationship::Contains) : false;
-    boundsCrit.reset(new InBoundsCriterion(mustContain));
+    boundsCrit = std::make_shared<InBoundsCriterion>(mustContain);
     std::shared_ptr<geos::geom::Geometry> bounds = GeometryUtils::boundsFromString(boundsStr);
     if (!MapProjector::isGeographic(map))
     {
       // The bounds is always in WGS84, so if our map isn't currently in WGS84 we need to reproject
       // the bounds.
       LOG_DEBUG("Reprojecting bounds: " << boundsStr << "...");
-      std::shared_ptr<OGRSpatialReference> srs84(new OGRSpatialReference());
+      std::shared_ptr<OGRSpatialReference> srs84 = std::make_shared<OGRSpatialReference>();
       srs84->SetWellKnownGeogCS("WGS84");
       MapProjector::project(bounds, srs84, map->getProjection());
     }

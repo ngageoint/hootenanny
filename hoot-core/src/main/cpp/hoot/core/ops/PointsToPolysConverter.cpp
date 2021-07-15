@@ -79,38 +79,34 @@ void PointsToPolysConverter::apply(OsmMapPtr& map)
 
 void PointsToPolysConverter::_addPolyFromPoint(const ConstNodePtr& point, const OsmMapPtr& map)
 {
-  // TODO: any way to consolidate some of this with  GeometryUtils::createMapFromBounds?
+  // TODO: any way to consolidate some of this with GeometryUtils::createMapFromBounds?
 
   geos::geom::Envelope polyBounds(point->toCoordinate());
   polyBounds.expandBy(_bufferSize);
 
-  NodePtr lowerLeft(
-    new Node(
-      point->getStatus(),
-      map->createNextNodeId(),
-      geos::geom::Coordinate(polyBounds.getMinX(), polyBounds.getMinY())));
+  NodePtr lowerLeft =
+    std::make_shared<Node>(
+      point->getStatus(), map->createNextNodeId(), geos::geom::Coordinate(polyBounds.getMinX(),
+      polyBounds.getMinY()));
   map->addNode(lowerLeft);
-  NodePtr upperLeft(
-    new Node(
-      point->getStatus(),
-      map->createNextNodeId(),
-      geos::geom::Coordinate(polyBounds.getMinX(), polyBounds.getMaxY())));
+  NodePtr upperLeft =
+    std::make_shared<Node>(
+      point->getStatus(), map->createNextNodeId(), geos::geom::Coordinate(polyBounds.getMinX(),
+      polyBounds.getMaxY()));
   map->addNode(upperLeft);
-  NodePtr upperRight(
-    new Node(
-      point->getStatus(),
-      map->createNextNodeId(),
-      geos::geom::Coordinate(polyBounds.getMaxX(), polyBounds.getMaxY())));
+  NodePtr upperRight =
+    std::make_shared<Node>(
+      point->getStatus(), map->createNextNodeId(), geos::geom::Coordinate(polyBounds.getMaxX(),
+      polyBounds.getMaxY()));
   map->addNode(upperRight);
-  NodePtr lowerRight(
-    new Node(
-      point->getStatus(),
-      map->createNextNodeId(),
-      geos::geom::Coordinate(polyBounds.getMaxX(), polyBounds.getMinY())));
+  NodePtr lowerRight =
+    std::make_shared<Node>(
+      point->getStatus(), map->createNextNodeId(), geos::geom::Coordinate(polyBounds.getMaxX(),
+      polyBounds.getMinY()));
   map->addNode(lowerRight);
   _nodeIdsConverted.append(point->getId());
 
-  WayPtr poly(new Way(point->getStatus(), map->createNextWayId()));
+  WayPtr poly = std::make_shared<Way>(point->getStatus(), map->createNextWayId());
   poly->addNode(lowerLeft->getId());
   poly->addNode(upperLeft->getId());
   poly->addNode(upperRight->getId());

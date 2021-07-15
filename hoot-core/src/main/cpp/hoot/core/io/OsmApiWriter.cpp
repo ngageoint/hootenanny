@@ -192,7 +192,7 @@ bool OsmApiWriter::apply()
     if (queueSize < QUEUE_SIZE_MULTIPLIER * _maxWriters)
     {
       //  Divide up the changes into atomic changesets
-      ChangesetInfoPtr changeset_info(new ChangesetInfo());
+      ChangesetInfoPtr changeset_info = std::make_shared<ChangesetInfo>();
       //  Repeat divide until all changes have been committed
       _changesetMutex.lock();
       bool newChangeset = _changeset.calculateChangeset(changeset_info);
@@ -736,7 +736,7 @@ bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request) const
     QRegExp regex("generator=(\"|')CGImap", Qt::CaseInsensitive);
     cgimap = responseXml.contains(regex);
   }
-  catch (HootException& ex)
+  catch (const HootException& ex)
   {
     LOG_WARN(ex.what());
   }
@@ -923,7 +923,7 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset
  */
 OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset) const
 {
-  OsmApiFailureInfoPtr info(new OsmApiFailureInfo());
+  OsmApiFailureInfoPtr info = std::make_shared<OsmApiFailureInfo>();
   //  Don't even attempt if the ID is bad
   if (id < 1)
     return info;
@@ -1099,7 +1099,7 @@ HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentica
   if (!requiresAuthentication)
   {
     //  When the call doesn't require authentication, don't pass in OAuth credentials
-    request.reset(new HootNetworkRequest());
+    request = std::make_shared<HootNetworkRequest>();
   }
   else if (!_consumerKey.isEmpty() &&
       !_consumerSecret.isEmpty() &&
@@ -1107,12 +1107,14 @@ HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentica
       !_secretToken.isEmpty())
   {
     //  When OAuth credentials are present and authentication is requested, pass OAuth crendentials
-    request.reset(new HootNetworkRequest(_consumerKey, _consumerSecret, _accessToken, _secretToken));
+    request =
+      std::make_shared<HootNetworkRequest>(
+        _consumerKey, _consumerSecret, _accessToken, _secretToken);
   }
   else
   {
     //  No OAuth credentials are present, so authentication must be by username/password
-    request.reset(new HootNetworkRequest());
+    request = std::make_shared<HootNetworkRequest>();
   }
   return request;
 }

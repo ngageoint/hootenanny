@@ -179,7 +179,8 @@ public:
     v8::HandleScope scope(current);
     v8::Local<v8::Context> context = current->GetCurrentContext();
 
-    ElementCriterionJs* obj = node::ObjectWrap::Unwrap<ElementCriterionJs>(v->ToObject(context).ToLocalChecked());
+    const ElementCriterionJs* obj =
+      node::ObjectWrap::Unwrap<ElementCriterionJs>(v->ToObject(context).ToLocalChecked());
     ElementCriterionConsumer* c = dynamic_cast<ElementCriterionConsumer*>(consumer);
 
     if (c == nullptr)
@@ -317,7 +318,8 @@ public:
     v8::HandleScope scope(current);
     v8::Local<v8::Context> context = current->GetCurrentContext();
 
-    ElementVisitorJs* obj = node::ObjectWrap::Unwrap<ElementVisitorJs>(v->ToObject(context).ToLocalChecked());
+    const ElementVisitorJs* obj =
+      node::ObjectWrap::Unwrap<ElementVisitorJs>(v->ToObject(context).ToLocalChecked());
 
     ElementVisitorConsumer* c = dynamic_cast<ElementVisitorConsumer*>(consumer);
 
@@ -361,7 +363,7 @@ public:
     }
     else if (ecc != nullptr)
     {
-      std::shared_ptr<JsFunctionCriterion> ecp(new JsFunctionCriterion());
+      std::shared_ptr<JsFunctionCriterion> ecp = std::make_shared<JsFunctionCriterion>();
       ecp->addFunction(current, func);
       ecc->addCriterion(ecp);
     }

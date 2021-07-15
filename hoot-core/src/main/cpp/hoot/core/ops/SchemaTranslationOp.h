@@ -55,24 +55,21 @@ public:
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
-  void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
+
+  QString getInitStatusMessage() const override
+  { return _translator.getInitStatusMessage(); }
+  QString getCompletedStatusMessage() const override
+  { return _translator.getCompletedStatusMessage(); }
+
+  QString getDescription() const override { return _translator.getDescription(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * Set the path to the translation script.
    */
   void setTranslationScript(QString path) { _translator.setTranslationScript(path); }
-
-  QString getDescription() const override { return _translator.getDescription(); }
-
-  QString getInitStatusMessage() const override
-  { return _translator.getInitStatusMessage(); }
-
-  QString getCompletedStatusMessage() const override
-  { return _translator.getCompletedStatusMessage(); }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 private:
 

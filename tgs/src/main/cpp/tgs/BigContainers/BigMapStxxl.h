@@ -60,9 +60,9 @@ public:
       // be overwritting (that is the 0 at the end).
       setenv("STXXLLOGFILE", "/dev/null", 0);
       setenv("STXXLERRLOGFILE", "/dev/null", 0);
-      _map.reset(new MapType(nodeSize, leafSize));
+      _map = std::make_shared<MapType>(nodeSize, leafSize);
     }
-    _bloom.reset(new BloomFilter());
+    _bloom = std::make_shared<BloomFilter>();
   }
 
   const V& at(const K& k) const

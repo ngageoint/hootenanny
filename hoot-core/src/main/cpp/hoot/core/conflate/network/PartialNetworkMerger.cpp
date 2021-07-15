@@ -165,7 +165,7 @@ WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(
   LOG_VART(str1);
   LOG_VART(str2);
 
-  WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(str1, str2));
+  WayMatchStringMappingPtr mapping = std::make_shared<NaiveWayMatchStringMapping>(str1, str2);
   LOG_VART(mapping->toString());
 
   /******************
@@ -174,7 +174,7 @@ WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(
    * created at the beginning in the merger and used throughout the rest of the operations.
    ******************/
 
-  WayMatchStringMergerPtr merger(new WayMatchStringMerger(map, mapping, replaced));
+  WayMatchStringMergerPtr merger = std::make_shared<WayMatchStringMerger>(map, mapping, replaced);
   // merge the tags in the keeper segments
   merger->setTagMerger(TagMergerFactory::getInstance().getDefaultPtr());
   return merger;
@@ -249,7 +249,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
       _applyMerger(map, merger);
     }
   }
-  catch (NeedsReviewException& e)
+  catch (const NeedsReviewException& e)
   {
     set<ElementId> reviews;
     foreach (WayMatchStringMerger::SublineMappingPtr mapping, _allSublineMappings)

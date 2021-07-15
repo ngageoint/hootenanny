@@ -195,7 +195,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::deactivateFactor(std::string factor)
+  void DataFrame::deactivateFactor(const std::string& factor)
   {
     try
     {
@@ -689,7 +689,7 @@ namespace Tgs
     }
   }
 
-  bool DataFrame::isDataSetPure(const std::vector<unsigned int>& indices)
+  bool DataFrame::isDataSetPure(const std::vector<unsigned int>& indices) const
   {
     try
     {

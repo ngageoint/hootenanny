@@ -63,12 +63,12 @@ public:
     uut.setConfiguration(s);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    WayPtr w1(new Way(Status::Unknown1, -1, 0));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, -1, 0);
     w1->getTags()["name"] = "foo";
     w1->getTags()["highway"] = "road";
     w1->getTags()["sidewalk"] = "both";
 
-    WayPtr w2(new Way(Status::Unknown1, -1, 0));
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown1, -1, 0);
     w2->getTags()["name"] = "foo";
     w2->getTags()["highway"] = "road";
     w2->getTags()["sidewalk"] = "left";
@@ -102,11 +102,11 @@ public:
     uut.setConfiguration(s);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    WayPtr w1(new Way(Status::Unknown1, -1, 0));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, -1, 0);
     w1->getTags()["name"] = "foo";
     w1->getTags()["highway"] = "road";
 
-    WayPtr w2(new Way(Status::Unknown1, -1, 0));
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown1, -1, 0);
     w2->getTags()["name"] = "foo";
     w2->getTags()["highway"] = "road";
     w2->getTags()["bridge"] = "yes";
@@ -114,12 +114,12 @@ public:
     // creates one record in w1 and two in w2.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5.0 / 11.0, uut.diff(map, w1, w2), 1e-5);
 
-    WayPtr w3(new Way(Status::Unknown1, -1, 0));
+    WayPtr w3 = std::make_shared<Way>(Status::Unknown1, -1, 0);
     w3->getTags()["name"] = "foo";
     w3->getTags()["highway"] = "road";
     w3->getTags()["bridge"] = "yes";
 
-    WayPtr w4(new Way(Status::Unknown1, -1, 0));
+    WayPtr w4 = std::make_shared<Way>(Status::Unknown1, -1, 0);
     w4->getTags()["name"] = "bar";
     w4->getTags()["highway"] = "road";
     w4->getTags()["bridge"] = "yes";

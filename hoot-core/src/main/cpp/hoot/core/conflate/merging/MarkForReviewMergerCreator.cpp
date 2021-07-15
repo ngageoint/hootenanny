@@ -85,8 +85,8 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
   if (!eids.empty())
   {
     mergers.push_back(
-      MergerPtr(
-        new MarkForReviewMerger(eids, matchStrings.join(","), reviewType.join(";"), score)));
+      std::make_shared<MarkForReviewMerger>(
+        eids, matchStrings.join(","), reviewType.join(";"), score));
     result = true;
   }
   else

@@ -65,6 +65,7 @@ public:
 
   void parseArguments(const QHash<QString, QString>& /*arguments*/) override { }
   bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
+
 private:
 
   void processIntersections(

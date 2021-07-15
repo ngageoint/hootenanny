@@ -56,8 +56,7 @@ public:
   void addKey(QString key);
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new TagKeyCriterion(_keys)); }
+  ElementCriterionPtr clone() override { return std::make_shared<TagKeyCriterion>(_keys); }
 
   void setConfiguration(const Settings& conf) override;
 

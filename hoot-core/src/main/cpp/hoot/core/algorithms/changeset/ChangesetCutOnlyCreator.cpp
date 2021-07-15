@@ -135,8 +135,8 @@ void ChangesetCutOnlyCreator::create(
   // DIFF CALCULATION
 
   _currentTask = 1;
-  _progress.reset(
-    new Progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running));
+  _progress =
+    std::make_shared<Progress>(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
 
   // Since data with different geometry types require different settings, we'll calculate a separate
   // pair of before/after maps for each geometry type.
@@ -608,23 +608,21 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   // The maps will get set on the crits here that need them by the RemoveElementsVisitor later on,
   // right before they are needed.
 
-  ElementCriterionPtr pointCrit(new PointCriterion());
-  std::shared_ptr<RelationWithPointMembersCriterion> relationPointCrit(
-    new RelationWithPointMembersCriterion());
+  std::shared_ptr<RelationWithPointMembersCriterion> relationPointCrit =
+    std::make_shared<RelationWithPointMembersCriterion>();
   relationPointCrit->setAllowMixedChildren(false);
-  OrCriterionPtr pointOr(new OrCriterion(pointCrit, relationPointCrit));
-  featureFilters[GeometryTypeCriterion::GeometryType::Point] = pointOr;
+  featureFilters[GeometryTypeCriterion::GeometryType::Point] =
+    std::make_shared<OrCriterion>(std::make_shared<PointCriterion>(), relationPointCrit);
 
-  ElementCriterionPtr lineCrit(new LinearCriterion());
-  std::shared_ptr<RelationWithLinearMembersCriterion> relationLinearCrit(
-    new RelationWithLinearMembersCriterion());
+  std::shared_ptr<RelationWithLinearMembersCriterion> relationLinearCrit =
+    std::make_shared<RelationWithLinearMembersCriterion>();
   relationLinearCrit->setAllowMixedChildren(true);
-  OrCriterionPtr lineOr(new OrCriterion(lineCrit, relationLinearCrit));
-  featureFilters[GeometryTypeCriterion::GeometryType::Line] = lineOr;
+  featureFilters[GeometryTypeCriterion::GeometryType::Line] =
+    std::make_shared<OrCriterion>(std::make_shared<LinearCriterion>(), relationLinearCrit);
 
   // Poly crit has been converted over to encapsulate RelationWithGeometryMembersCriterion, while
   // the other types have not yet (#4151).
-  std::shared_ptr<PolygonCriterion> polyCrit(new PolygonCriterion());
+  std::shared_ptr<PolygonCriterion> polyCrit = std::make_shared<PolygonCriterion>();
   polyCrit->setAllowMixedChildren(false);
   featureFilters[GeometryTypeCriterion::GeometryType::Polygon] = polyCrit;
 
@@ -672,18 +670,15 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
     if (geomType == GeometryTypeCriterion::GeometryType::Line)
     {
       LOG_TRACE("Adding roundabouts to line filter...");
-      updatedGeometryCrit.reset(
-        new OrCriterion(
-          geometryCrit, std::shared_ptr<HighwayCriterion>(new HighwayCriterion())));
+      updatedGeometryCrit =
+        std::make_shared<OrCriterion>(geometryCrit, std::make_shared<HighwayCriterion>());
     }
     else if (geomType == GeometryTypeCriterion::GeometryType::Polygon)
     {
       LOG_TRACE("Removing roads from polygon filter...");
-      updatedGeometryCrit.reset(
-        new ChainCriterion(
-          geometryCrit,
-          NotCriterionPtr(
-            new NotCriterion(std::shared_ptr<HighwayCriterion>(new HighwayCriterion())))));
+      updatedGeometryCrit =
+        std::make_shared<ChainCriterion>(
+          geometryCrit, std::make_shared<NotCriterion>(std::make_shared<HighwayCriterion>()));
     }
     else
     {

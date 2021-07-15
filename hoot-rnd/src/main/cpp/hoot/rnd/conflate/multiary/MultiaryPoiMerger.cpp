@@ -79,8 +79,9 @@ void MultiaryPoiMerger::apply(const OsmMapPtr& map,
     }
   }
 
-  MultiaryScoreCachePtr score(new MultiaryScoreCache(map, _matchCreator));
-  MultiaryPoiMergeCachePtr merge(new MultiaryPoiMergeCache(map, _matchCreator, _mergerCreator));
+  MultiaryScoreCachePtr score = std::make_shared<MultiaryScoreCache>(map, _matchCreator);
+  MultiaryPoiMergeCachePtr merge =
+    std::make_shared<MultiaryPoiMergeCache>(map, _matchCreator, _mergerCreator);
   MultiaryHierarchicalClusterAlgorithm clusterer(merge, score,
     _matchCreator->getMatchThreshold()->getMissThreshold());
 

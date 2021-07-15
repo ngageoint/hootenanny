@@ -51,7 +51,8 @@ public:
   ~WayToPolyGeoModifierAction() = default;
 
   QString getCommandName() const override { return "way_to_poly"; }
-  QList<QString> getParameterNames() const override { return QList<QString>( { WIDTH_TAG_PARAM, DEFAULT_WIDTH_PARAM } ); }
+  QList<QString> getParameterNames() const override
+  { return QList<QString>( { WIDTH_TAG_PARAM, DEFAULT_WIDTH_PARAM } ); }
 
   void parseArguments(const QHash<QString, QString>& arguments) override;
   bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;

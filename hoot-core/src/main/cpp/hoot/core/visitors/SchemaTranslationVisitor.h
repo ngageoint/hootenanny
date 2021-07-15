@@ -58,22 +58,19 @@ public:
    */
   void setConfiguration(const Settings& conf) override;
 
-  void setTranslationScript(QString path);
-  void setTranslationDirection(QString direction);
-
   void visit(const ElementPtr& e) override;
-
-  QString getDescription() const override { return "Translates features to a schema"; }
 
   QString getInitStatusMessage() const override
   { return "Translating features to a schema..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Translated " + QString::number(_numAffected) + " features to a schema"; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Translates features to a schema"; }
+
+  void setTranslationScript(QString path);
+  void setTranslationDirection(QString direction);
 
 private:
 

@@ -53,8 +53,8 @@ EdgeSubline::EdgeSubline(const ConstEdgeLocationPtr& start, const ConstEdgeLocat
 }
 
 EdgeSubline::EdgeSubline(const ConstNetworkEdgePtr& e, double start, double end) :
-  _start(new EdgeLocation(e, start)),
-  _end(new EdgeLocation(e, end))
+  _start(std::make_shared<const EdgeLocation>(e, start)),
+  _end(std::make_shared<const EdgeLocation>(e, end))
 {
 }
 
@@ -66,7 +66,7 @@ Meters EdgeSubline::calculateLength(const ConstElementProviderPtr& provider) con
 
 EdgeSublinePtr EdgeSubline::clone() const
 {
-  return EdgeSublinePtr(new EdgeSubline(_start, _end));
+  return std::make_shared<EdgeSubline>(_start, _end);
 }
 
 bool EdgeSubline::contains(const ConstNetworkVertexPtr& v) const
@@ -103,7 +103,7 @@ bool EdgeSubline::contains(const ConstEdgeLocationPtr& el) const
 
 EdgeSublinePtr EdgeSubline::createFullSubline(const ConstNetworkEdgePtr& e)
 {
-  return EdgeSublinePtr(new EdgeSubline(e, 0.0, 1.0));
+  return std::make_shared<EdgeSubline>(e, 0.0, 1.0);
 }
 
 bool EdgeSubline::intersects(const ConstEdgeSublinePtr& other) const
@@ -204,15 +204,13 @@ std::shared_ptr<EdgeSubline> EdgeSubline::unionSubline(const ConstEdgeSublinePtr
     throw IllegalArgumentException("Expected 'other' go in the same direction.");
   }
 
-  EdgeSublinePtr result(new EdgeSubline(
-    std::min(getFormer(), other->getFormer()),
-    std::max(getLatter(), other->getLatter())));
-
+  EdgeSublinePtr result =
+    std::make_shared<EdgeSubline>(
+      std::min(getFormer(), other->getFormer()), std::max(getLatter(), other->getLatter()));
   if (isBackwards())
   {
     result->reverse();
   }
-
   return result;
 }
 

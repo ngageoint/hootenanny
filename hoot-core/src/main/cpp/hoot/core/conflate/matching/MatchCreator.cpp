@@ -86,7 +86,7 @@ void MatchCreator::createMatches(
     else
     {
       ElementCriterionPtr existingFilter = _filter->clone();
-      _filter.reset(new ChainCriterion(existingFilter, boundsFilter));
+      _filter = std::make_shared<ChainCriterion>(existingFilter, boundsFilter);
     }
     _boundsAddedToFilter = true;
   }

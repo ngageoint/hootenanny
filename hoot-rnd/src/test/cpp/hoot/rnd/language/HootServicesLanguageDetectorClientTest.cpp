@@ -103,8 +103,8 @@ private:
 
   std::shared_ptr<HootServicesLanguageDetectorClient> _getClient()
   {
-    std::shared_ptr<HootServicesLanguageDetectorClient> client(
-      new HootServicesLanguageDetectorMockClient());
+    std::shared_ptr<HootServicesLanguageDetectorClient> client =
+      std::make_shared<HootServicesLanguageDetectorMockClient>();
 
     Settings conf;
     conf.set("hoot.services.auth.host", "localhost");

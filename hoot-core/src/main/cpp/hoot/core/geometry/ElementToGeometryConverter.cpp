@@ -331,11 +331,11 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
       ElementCriterionPtr areaCrit;
       if (statsFlag)
       {
-        areaCrit.reset(new StatsAreaCriterion());
+        areaCrit = std::make_shared<StatsAreaCriterion>();
       }
       else
       {
-        areaCrit.reset(new AreaCriterion());
+        areaCrit = std::make_shared<AreaCriterion>();
       }
 
       // Hootenanny by default requires that an polygon element be an area in the schema in order

@@ -64,15 +64,12 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   QString getInitStatusMessage() const override { return "Removing unlikely roads..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + StringUtils::formatLargeNumber(_numAffected) + " unlikely roads."; }
 
   QString getDescription() const override
   { return "Removes road features that are very likely not roads"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   /**

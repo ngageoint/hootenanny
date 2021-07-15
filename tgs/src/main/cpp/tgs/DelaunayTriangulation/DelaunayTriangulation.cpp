@@ -590,11 +590,10 @@ void Subdivision::InsertSite(const Point2d & x)
   while (e->Lnext() != startingEdge);
 
   looping = 0;
-  // Examine suspect edges to ensure that the Delaunay condition
-  // is satisfied.
+  // Examine suspect edges to ensure that the Delaunay condition is satisfied.
   do
   {
-    InternalEdge *t = e->Oprev();
+    const InternalEdge *t = e->Oprev();
     if (RightOf(t->Dest2d(), e) && InCircle(e->Org2d(), t->Dest2d(), e->Dest2d(), x))
     {
       Swap(e);

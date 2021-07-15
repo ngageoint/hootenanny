@@ -44,8 +44,8 @@ WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString
   // keep stepping through till you reach the end of both ways.
   while (wl1 != wstr1->back().getEnd() || wl2 != wstr2->back().getEnd())
   {
-    WaySubline& ws1 = wstr1->at(i1);
-    WaySubline& ws2 = wstr2->at(i2);
+    const WaySubline& ws1 = wstr1->at(i1);
+    const WaySubline& ws2 = wstr2->at(i2);
 
     // calculate the distance on str1 that the next subline map to. Not that we aren't calculating
     // the distance on str2, but mapping from str2 to str1, then calculate the distance.
@@ -89,7 +89,7 @@ WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString
     }
   }
 
-  return WaySublineMatchStringPtr(new WaySublineMatchString(coll));
+  return std::make_shared<WaySublineMatchString>(coll);
 }
 
 }

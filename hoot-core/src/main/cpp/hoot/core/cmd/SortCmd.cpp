@@ -113,7 +113,7 @@ private:
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
     IoUtils::loadMap(map, input, true, Status::Unknown1);
-    InMemoryElementSorterPtr(new InMemoryElementSorter(map));
+    /*InMemoryElementSorterPtr sorter =*/ std::make_shared<InMemoryElementSorter>(map);
     IoUtils::saveMap(map, output);
   }
 
@@ -126,7 +126,8 @@ private:
     reader->open(input);
     reader->initializePartial();
 
-    std::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
+    std::shared_ptr<ExternalMergeElementSorter> sorted =
+      std::make_shared<ExternalMergeElementSorter>();
     sorted->sort(std::dynamic_pointer_cast<ElementInputStream>(reader));
 
     reader->finalizePartial();

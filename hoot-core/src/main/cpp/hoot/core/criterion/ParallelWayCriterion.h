@@ -52,26 +52,24 @@ public:
   ~ParallelWayCriterion();
 
   Radians calculateDifference(const ConstWayPtr& w) const;
-
-  void setThreshold(Degrees threshold) { _threshold = threshold; }
-
-  bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new ParallelWayCriterion(_map, _baseWay, _isParallel)); }
-
-  GeometryType getGeometryType() const override { return GeometryType::Line; }
-
   static bool isParallel(
     const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
   static bool notParallel(
     const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
+
+  bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override
+  { return std::make_shared<ParallelWayCriterion>(_map, _baseWay, _isParallel); }
+
+  GeometryType getGeometryType() const override { return GeometryType::Line; }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
   QString getDescription() const override
   { return "Identifies ways that are parallel to each other"; }
+
+  void setThreshold(Degrees threshold) { _threshold = threshold; }
 
 private:
 

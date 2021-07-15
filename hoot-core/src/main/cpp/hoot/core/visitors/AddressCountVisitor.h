@@ -58,9 +58,7 @@ public:
 
   QString getDescription() const override
   { return "Counts the total number of valid element addresses"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

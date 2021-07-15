@@ -45,8 +45,7 @@ public:
   ~HasNameCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new HasNameCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<HasNameCriterion>(); }
 
   QString getDescription() const override { return ""; }
   QString getName() const override { return className(); }

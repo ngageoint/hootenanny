@@ -122,7 +122,7 @@ namespace Tgs
     *
     * @param factor the factor to deactivate
     */
-    void deactivateFactor(std::string factor);
+    void deactivateFactor(const std::string& factor);
 
     /**
     *  @return true is DataFrame contains 0 data vectors
@@ -297,7 +297,7 @@ namespace Tgs
     *  Checks to see if the data vectors belonging to the set of indices
     * are all of the same class
     */
-    bool isDataSetPure(const std::vector<unsigned int>& indices);
+    bool isDataSetPure(const std::vector<unsigned int>& indices) const;
 
     /**
      * Returns true if the specified column is nominal.

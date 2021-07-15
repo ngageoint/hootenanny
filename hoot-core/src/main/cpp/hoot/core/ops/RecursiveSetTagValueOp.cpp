@@ -52,21 +52,22 @@ RecursiveSetTagValueOp::RecursiveSetTagValueOp(
   const QStringList& keys, const QStringList& values, ElementCriterionPtr elementCriterion,
   bool appendToExistingValue, const bool overwriteExistingTag) :
 _crit(elementCriterion),
-_negateCriterion(false)
+_negateCriterion(false),
+_tagger(
+  std::make_shared<SetTagValueVisitor>(
+    keys, values, appendToExistingValue, QStringList(), overwriteExistingTag))
 {
-  _tagger.reset(
-    new SetTagValueVisitor(
-      keys, values, appendToExistingValue, QStringList(), overwriteExistingTag));
 }
 
 RecursiveSetTagValueOp::RecursiveSetTagValueOp(
   const QString& key, const QString& value, ElementCriterionPtr elementCriterion,
   bool appendToExistingValue, const bool overwriteExistingTag) :
 _crit(elementCriterion),
-_negateCriterion(false)
+_negateCriterion(false),
+_tagger(
+  std::make_shared<SetTagValueVisitor>(
+    key, value, appendToExistingValue, QStringList(), overwriteExistingTag))
 {
-  _tagger.reset(
-    new SetTagValueVisitor(key, value, appendToExistingValue, QStringList(), overwriteExistingTag));
 }
 
 void RecursiveSetTagValueOp::addCriterion(const ElementCriterionPtr& e)
@@ -77,7 +78,7 @@ void RecursiveSetTagValueOp::addCriterion(const ElementCriterionPtr& e)
   }
   else
   {
-    _crit.reset(new NotCriterion(e));
+    _crit = std::make_shared<NotCriterion>(e);
   }
 }
 

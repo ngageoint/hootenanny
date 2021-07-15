@@ -170,7 +170,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
 
   QList<std::shared_ptr<const PertyTestRunResult>> testRunResults;
   double dynamicVariableValue = _dynamicVariableStartValue;
-  _matchScorer.reset(new PertyMatchScorer());
+  _matchScorer = std::make_shared<PertyMatchScorer>();
   int testScoreCtr = 0;
   for (int i = 0; i < _numTestRuns; i++)
   {
@@ -230,11 +230,11 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
     const double scoreVariance = abs(_expectedScores[i] - avgScore);
     LOG_VARD(scoreVariance);
 
-    std::shared_ptr<const PertyTestRunResult> testRunResult(
-      new PertyTestRunResult(
-         referenceMapInputPath, outputPath, i + 1, simulationScores, avgScore, _expectedScores[i],
-          scoreVariance, _allowedScoreVariance, _failOnBetterScore, _dynamicVariables,
-          _dynamicVariableStartValue, _dynamicVariableIncrement, dynamicVariableValue));
+    std::shared_ptr<const PertyTestRunResult> testRunResult =
+      std::make_shared<PertyTestRunResult>(
+        referenceMapInputPath, outputPath, i + 1, simulationScores, avgScore, _expectedScores[i],
+        scoreVariance, _allowedScoreVariance, _failOnBetterScore, _dynamicVariables,
+        _dynamicVariableStartValue, _dynamicVariableIncrement, dynamicVariableValue);
     testRunResults.append(testRunResult);
     const QString testRunResultStr = testRunResult->toString();
 

@@ -67,7 +67,7 @@ void NodesPerWayVisitor::addCriterion(const ElementCriterionPtr& e)
   }
   else
   {
-    _customCrit.reset(new NotCriterion(e));
+    _customCrit = std::make_shared<NotCriterion>(e);
   }
 }
 

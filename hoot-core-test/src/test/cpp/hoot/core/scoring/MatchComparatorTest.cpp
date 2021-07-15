@@ -92,7 +92,7 @@ public:
     FilteredVisitor v(tagKeyCrit, uuid);
     map->visitRw(v);
 
-    OsmMapPtr copy(new OsmMap(map));
+    OsmMapPtr copy = std::make_shared<OsmMap>(map);
 
     UnifyingConflator conflator;
     conflator.apply(copy);

@@ -103,7 +103,7 @@ void ReuseNodeIdsOnWayOp::apply(const std::shared_ptr<OsmMap>& map)
   //  Only replace node IDs of non-shared nodes
   std::shared_ptr<NodeToWayMap> nodeToWayMap = map->getIndex().getNodeToWayMap();
   //  Swap all of the node IDs at once
-  std::shared_ptr<IdSwap> swap(new IdSwap());
+  std::shared_ptr<IdSwap> swap = std::make_shared<IdSwap>();
   //  For closed ways the use the unique node count
   size_t toNodeCount = to->getNodeCount();
   if (toNodeCount > 1 && to->getNodeId(0) == to->getNodeId(toNodeCount - 1))

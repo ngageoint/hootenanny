@@ -59,6 +59,18 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
+  void setRng(boost::minstd_rand& rng) override { _rng = &rng; }
+
+  QString getInitStatusMessage() const override
+  { return "Randomly duplicating nodes..."; }
+  QString getCompletedStatusMessage() const override
+  { return "Randomly duplicated " + QString::number(_numAffected) + " nodes"; }
+
+  QString getDescription() const override
+  { return "Duplicates a node with some random error"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
   /**
    * The number of duplicates is set as round(abs(N(0, sigma^2))) + 1. Setting sigma to 0 will
    * guarantee that there will always be exactly one duplicate.
@@ -77,21 +89,6 @@ public:
    * how many duplicates will be created.
    */
   void setProbability(double p) { _p = p; }
-
-  void setRng(boost::minstd_rand& rng) override { _rng = &rng; }
-
-  QString getDescription() const override
-  { return "Duplicates a node with some random error"; }
-
-  QString getInitStatusMessage() const override
-  { return "Randomly duplicating nodes..."; }
-
-  QString getCompletedStatusMessage() const override
-  { return "Randomly duplicated " + QString::number(_numAffected) + " nodes"; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 private:
 

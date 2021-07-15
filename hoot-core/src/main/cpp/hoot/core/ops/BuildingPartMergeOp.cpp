@@ -75,7 +75,7 @@ void BuildingPartMergeOp::_init(const OsmMapPtr& map)
 {
   _buildingPartGroups.clear();
   _map = map;
-  _elementToGeometryConverter.reset(new ElementToGeometryConverter(_map));
+  _elementToGeometryConverter = std::make_shared<ElementToGeometryConverter>(_map);
   _numAffected = 0;
   _totalBuildingGroupsProcessed = 0;
   _numBuildingGroupsMerged = 0;

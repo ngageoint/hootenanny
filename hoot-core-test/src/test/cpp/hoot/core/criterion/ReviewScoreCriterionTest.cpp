@@ -53,7 +53,7 @@ public:
     uut.setInvertThresholding(false);
 
     // just creating a barebones, empty review relation...all we need for these tests
-    RelationPtr reviewRelation(new Relation(Status::Conflated, 1));
+    RelationPtr reviewRelation = std::make_shared<Relation>(Status::Conflated, 1);
     reviewRelation->getTags().set(MetadataTags::HootReviewNeeds(), true);
 
     reviewRelation->getTags().set(MetadataTags::HootReviewScore(), "0.6");
@@ -83,7 +83,7 @@ public:
     uut.setMaxScoreThreshold(0.8);
     uut.setInvertThresholding(true);
 
-    RelationPtr reviewRelation(new Relation(Status::Conflated, 1));
+    RelationPtr reviewRelation = std::make_shared<Relation>(Status::Conflated, 1);
     reviewRelation->getTags().set(MetadataTags::HootReviewNeeds(), true);
 
     reviewRelation->getTags().set(MetadataTags::HootReviewScore(), "0.1");

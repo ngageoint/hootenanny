@@ -65,18 +65,18 @@ namespace Tgs
     return entSum;
   }
  
-  void InfoGainCalculator::_findCandidateSplits(DataFrame & df, std::vector<unsigned int> & indices, unsigned int fIdx, 
-    std::vector<unsigned int> & splits) const
+  void InfoGainCalculator::_findCandidateSplits(
+    const DataFrame& df, std::vector<unsigned int>& indices, unsigned int fIdx,
+    std::vector<unsigned int>& splits) const
   {
      splits.clear();
  
-     //The split will be based on any difference between the value of 2 contiguous values
-     //Note the miniumum split idx is always 1
+     // The split will be based on any difference between the value of 2 contiguous values
+     // Note the miniumum split idx is always 1
      for (unsigned int i = 1; i < indices.size(); i++)
      {
        double val1 = df.getDataVector(indices[i-1])[fIdx];
        double val2 = df.getDataVector(indices[i])[fIdx];
-      //std::cout << "Potential Split " << i << " " << val1 << " " << val2 << std::endl;
        if (fabs(val1 - val2) >= std::numeric_limits<double>::epsilon())
        {
          splits.push_back(i);
@@ -85,7 +85,7 @@ namespace Tgs
    }
 
   bool InfoGainCalculator::findDataSplit(
-    DataFrame& df, std::vector<unsigned int>& fIndices, std::vector<unsigned int>& indices,
+    const DataFrame& df, std::vector<unsigned int>& fIndices, std::vector<unsigned int>& indices,
     unsigned int& splitIdx, unsigned int& fIdx, double& splitVal, double& purityDelta) const
   {
     if (!df.empty())
@@ -101,12 +101,9 @@ namespace Tgs
       std::vector<std::vector<unsigned int>> sortedIndices;
       sortedIndices.resize(fIndices.size());
 
-      //Sort each indices set based on the factor values
-      //This maintains a list of indices for each factor
-      //being considered.  Trade off is memory vs. cost
-      //of resorting indices on winning factor
-      //
-      //Note fIndices is the list of factor indices to consider
+      // Sort each indices set based on the factor values. This maintains a list of indices for each
+      // factor being considered. Trade off is memory vs. cost of resorting indices on winning
+      // factor. Note fIndices is the list of factor indices to consider.
       for (unsigned int i = 0; i < fIndices.size(); i++)
       {
         sortedIndices[i] = indices;                                  //Load up all the data vectors of interest
@@ -151,9 +148,9 @@ namespace Tgs
     }
   }
 
-  double InfoGainCalculator::getMaxInfoGainByFactor(DataFrame & df, 
-    std::vector<unsigned int> & indices, unsigned int fIdx, double totalEntropy, 
-    unsigned int & bestSplit) const
+  double InfoGainCalculator::getMaxInfoGainByFactor(const DataFrame& df,
+    std::vector<unsigned int>& indices, unsigned int fIdx, double totalEntropy,
+    unsigned int& bestSplit) const
   {
     //Indices need to be sorted on the factor to use this as a public function 
 
@@ -247,7 +244,7 @@ namespace Tgs
   }
 
   double InfoGainCalculator::getMaxInfoGainRatioByFactor(
-    DataFrame& df, std::vector<unsigned int>& indices, unsigned int fIdx, double totalEntropy,
+    const DataFrame& df, std::vector<unsigned int>& indices, unsigned int fIdx, double totalEntropy,
     unsigned int& bestSplit) const
   {
     //Indices need to be sorted on the factor to use this as a public function 

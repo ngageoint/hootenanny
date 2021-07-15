@@ -147,7 +147,7 @@ void MapStatsWriter::writeStats(
   MapProjector::projectToPlanar(map);
 
   QList<QList<SingleStat>> allStats;
-  std::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
+  std::shared_ptr<CalculateStatsOp> cso = std::make_shared<CalculateStatsOp>();
   cso->apply(map);
   allStats.append(cso->getStats());
 

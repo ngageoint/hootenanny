@@ -83,13 +83,13 @@ public:
     w1->getTags().set("area", true);
     w1->getTags()["name"] = "foo";
     w1->getTags()["amenity"] = "bar";
-    NodePtr n1(new Node(Status::Unknown2, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown2, 1, 10, 10, 5);
     n1->getTags()["name"] = "bar";
     n1->getTags()["amenity"] = "cafe";
     map->addNode(n1);
 
     {
-      OsmMapPtr map2(new OsmMap(map));
+      OsmMapPtr map2 = std::make_shared<OsmMap>(map);
       set<pair<ElementId, ElementId>> s;
       s.insert(pair<ElementId, ElementId>(w1->getElementId(), n1->getElementId()));
       PoiPolygonMerger uut(s);
@@ -110,7 +110,7 @@ public:
     {
       w1->setStatus(Status::Unknown2);
       n1->setStatus(Status::Unknown1);
-      OsmMapPtr map2(new OsmMap(map));
+      OsmMapPtr map2 = std::make_shared<OsmMap>(map);
       set<pair<ElementId, ElementId>> s;
       s.insert(pair<ElementId, ElementId>(w1->getElementId(), n1->getElementId()));
       PoiPolygonMerger uut(s);
@@ -330,9 +330,9 @@ private:
       }
     }
 
-    virtual QString getDescription() const {return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const { return ""; }
+    QString getDescription() const override {return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
   private:
 

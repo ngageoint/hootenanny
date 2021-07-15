@@ -44,15 +44,14 @@ public:
 
   static QString className() { return "hoot::StatusCriterion"; }
 
-  StatusCriterion() { setConfiguration(conf()); }
-  StatusCriterion(Status s) : _status(s) { }
+  StatusCriterion();
+  StatusCriterion(Status s);
   ~StatusCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<StatusCriterion>(_status); }
 
   void setConfiguration(const Settings& conf) override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new StatusCriterion(_status)); }
 
   QString getDescription() const override { return "Identifies elements with a particular status"; }
   QString getName() const override { return className(); }

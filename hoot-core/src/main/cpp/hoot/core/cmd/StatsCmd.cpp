@@ -135,7 +135,7 @@ public:
         "Calculating statistics for map " << i + 1 << " of " << inputs.size() << ": " <<
         inputs[i].right(25) << "...");
 
-      std::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
+      std::shared_ptr<CalculateStatsOp> cso = std::make_shared<CalculateStatsOp>();
       cso->setQuickSubset(quick);
       cso->apply(map);
       allStats.append(cso->getStats());

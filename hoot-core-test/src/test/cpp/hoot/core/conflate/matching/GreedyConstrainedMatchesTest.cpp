@@ -78,9 +78,8 @@ public:
     return _c;
   }
 
-  virtual QString getName() const override { return "Fake Match"; }
-
-  virtual QString getClassName() const { return ""; }
+  QString getName() const override { return "Fake Match"; }
+  QString getClassName() const { return ""; }
 
   virtual double getProbability() const override { return _p; }
 
@@ -103,14 +102,14 @@ public:
     return result;
   }
 
-  virtual QString toString() const override
+  QString toString() const override
   {
     stringstream ss;
     ss << "pairs: " << getMatchPairs() << " p: " << getProbability();
     return QString::fromStdString(ss.str());
   }
 
-  virtual QString getDescription() const override { return ""; }
+  QString getDescription() const override { return ""; }
 
 private:
 
@@ -163,12 +162,12 @@ public:
     ElementId b2 = ElementId::way(5);
     ElementId b3 = ElementId::way(6);
 
-    MatchThresholdPtr mt(new MatchThreshold(0.5, 0.5));
+    MatchThresholdPtr mt = std::make_shared<MatchThreshold>(0.5, 0.5);
     vector<std::shared_ptr<GreedyConstrainedFakeMatch>> fm(4);
-    fm[0].reset(new GreedyConstrainedFakeMatch(a1, b1, 0.8, mt));
-    fm[1].reset(new GreedyConstrainedFakeMatch(a2, b1, 1.0, mt));
-    fm[2].reset(new GreedyConstrainedFakeMatch(a2, b2, 0.9, mt));
-    fm[3].reset(new GreedyConstrainedFakeMatch(a3, b3, 0.9, mt));
+    fm[0] = std::make_shared<GreedyConstrainedFakeMatch>(a1, b1, 0.8, mt);
+    fm[1] = std::make_shared<GreedyConstrainedFakeMatch>(a2, b1, 1.0, mt);
+    fm[2] = std::make_shared<GreedyConstrainedFakeMatch>(a2, b2, 0.9, mt);
+    fm[3] = std::make_shared<GreedyConstrainedFakeMatch>(a3, b3, 0.9, mt);
 
     fm[0]->addConflict(fm[1]);
     fm[1]->addConflict(fm[2]);
@@ -191,8 +190,7 @@ public:
   virtual void setUp()
   {
     MergerFactory::getInstance().reset();
-    MergerFactory::getInstance().registerCreator(
-          MergerCreatorPtr(new GreedyConstrainedFakeCreator()));
+    MergerFactory::getInstance().registerCreator(std::make_shared<GreedyConstrainedFakeCreator>());
   }
 
   virtual void tearDown()
@@ -202,7 +200,6 @@ public:
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GreedyConstrainedMatchesTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GreedyConstrainedMatchesTest, "quick");
 
 }

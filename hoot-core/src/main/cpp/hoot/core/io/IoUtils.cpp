@@ -407,7 +407,7 @@ ElementInputStreamPtr IoUtils::getFilteredInputStream(
           critConfig->setConfiguration(conf());
         }
 
-        streamToFilter.reset(new ElementCriterionInputStream(streamToFilter, criterion));
+        streamToFilter = std::make_shared<ElementCriterionInputStream>(streamToFilter, criterion);
       }
       else if (Factory::getInstance().hasBase<ElementVisitor>(opName))
       {
@@ -425,7 +425,7 @@ ElementInputStreamPtr IoUtils::getFilteredInputStream(
           visConfig->setConfiguration(conf());
         }
 
-        streamToFilter.reset(new ElementVisitorInputStream(streamToFilter, visitor));
+        streamToFilter = std::make_shared<ElementVisitorInputStream>(streamToFilter, visitor);
       }
       else
       {
@@ -525,11 +525,10 @@ void IoUtils::cropToBounds(
     LOG_INFO(tagger.getInitStatusMessage());
     tagger.apply(map);
     LOG_DEBUG(tagger.getCompletedStatusMessage());
-    inclusionCrit.reset(
-      new ChainCriterion(
-        std::shared_ptr<WayCriterion>(new WayCriterion()),
-        std::shared_ptr<TagKeyCriterion>(
-          new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
+    inclusionCrit =
+      std::make_shared<ChainCriterion>(
+        std::make_shared<WayCriterion>(),
+        std::make_shared<TagKeyCriterion>(MetadataTags::HootConnectedWayOutsideBounds()));
   }
   cropper.setInclusionCriterion(inclusionCrit);
 
@@ -553,11 +552,9 @@ std::shared_ptr<ElementVisitorInputStream> IoUtils::getVisitorInputStream(
   reader->initializePartial();
 
   return
-    std::shared_ptr<ElementVisitorInputStream>(
-      new ElementVisitorInputStream(
-        std::dynamic_pointer_cast<ElementInputStream>(reader),
-        ElementVisitorPtr(
-          Factory::getInstance().constructObject<ElementVisitor>(visitorClassName))));
+    std::make_shared<ElementVisitorInputStream>(
+      std::dynamic_pointer_cast<ElementInputStream>(reader),
+      ElementVisitorPtr(Factory::getInstance().constructObject<ElementVisitor>(visitorClassName)));
 }
 
 bool IoUtils::isUrl(const QString& str)

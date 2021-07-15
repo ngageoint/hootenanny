@@ -51,26 +51,25 @@ public:
   TagContainsCriterion(QString key, QString valueSubstring);
   ~TagContainsCriterion() = default;
 
-  bool isSatisfied(const ConstElementPtr& e) const override;
-
-  void setConfiguration(const Settings& s) override;
-
  /**
-   * Adds an additional pair to the search list. If any one of the pairs matches then it is
-   * considered a match.
-   */
+  * Adds an additional pair to the search list. If any one of the pairs matches then it is
+  * considered a match.
+  */
   void addPair(QString key, QString valueSubstring);
 
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new TagContainsCriterion()); }
+  bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<TagContainsCriterion>(); }
 
-  void setKvps(const QStringList kvps);
-  void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
+  void setConfiguration(const Settings& s) override;
 
   QString toString() const override;
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString getDescription() const override
   { return "Identifies elements having a particular tag key and tag value substring"; }
+
+  void setKvps(const QStringList kvps);
+  void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
 private:
 
