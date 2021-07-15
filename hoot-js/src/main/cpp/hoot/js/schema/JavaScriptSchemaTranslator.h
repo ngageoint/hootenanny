@@ -60,8 +60,8 @@ class ElementType;
  * Script functions available:
  * http://qt-project.org/doc/qt-4.7/ecmascript.html
  */
-class JavaScriptSchemaTranslator : public ScriptSchemaTranslator, public ScriptToOgrSchemaTranslator,
-  public Configurable
+class JavaScriptSchemaTranslator : public ScriptSchemaTranslator,
+  public ScriptToOgrSchemaTranslator, public Configurable
 {
 public:
 

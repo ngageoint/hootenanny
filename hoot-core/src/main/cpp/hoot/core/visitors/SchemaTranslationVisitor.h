@@ -75,7 +75,7 @@ public:
 private:
 
   ScriptSchemaTranslatorPtr _translator;
-  ScriptToOgrSchemaTranslator* _ogrTranslator;
+  std::shared_ptr<ScriptToOgrSchemaTranslator> _ogrTranslator;
   bool _toOgr;
 
   // keys for tags containing CE data

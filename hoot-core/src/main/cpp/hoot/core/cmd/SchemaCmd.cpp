@@ -61,9 +61,9 @@ public:
     }
 
     LOG_STATUS("Printing schema...");
-    std::shared_ptr<ScriptSchemaTranslator> schemaPrinter(
+    std::shared_ptr<ScriptSchemaTranslator> schemaPrinter =
       ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-        ConfigOptions().getTagPrintingScript()));
+        ConfigOptions().getTagPrintingScript());
     if (!schemaPrinter)
     {
       throw IllegalArgumentException(

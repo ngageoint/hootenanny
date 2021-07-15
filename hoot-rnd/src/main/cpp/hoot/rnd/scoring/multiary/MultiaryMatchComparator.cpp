@@ -102,9 +102,9 @@ void MultiaryMatchComparator::_calculateNodeBasedStats(const ConstOsmMapPtr& con
 
   if (_translationScript != "")
   {
-    translator.reset(
-      dynamic_cast<ScriptToOgrSchemaTranslator*>(
-        ScriptSchemaTranslatorFactory::getInstance().createTranslator(_translationScript)));
+    translator =
+      std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(
+        ScriptSchemaTranslatorFactory::getInstance().createTranslator(_translationScript));
     translator->getOgrOutputSchema();
   }
 

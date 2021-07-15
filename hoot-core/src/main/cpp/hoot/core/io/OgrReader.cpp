@@ -1034,8 +1034,7 @@ void OgrReaderInternal::_initTranslate()
 
   if (_translatePath != "" && _translator.get() == nullptr)
   {
-    _translator.reset(
-      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_translatePath));
+    _translator = ScriptSchemaTranslatorFactory::getInstance().createTranslator(_translatePath);
     if (_translator.get() == nullptr)
     {
       throw HootException("Unable to find a valid translation format for: " + _translatePath);

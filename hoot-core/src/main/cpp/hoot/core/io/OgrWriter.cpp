@@ -221,8 +221,8 @@ void OgrWriter::initTranslator()
   if (_translator == nullptr)
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    std::shared_ptr<ScriptSchemaTranslator> st(
-      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_scriptPath));
+    std::shared_ptr<ScriptSchemaTranslator> st =
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_scriptPath);
     st->setErrorTreatment(_strictChecking);
     _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
   }
