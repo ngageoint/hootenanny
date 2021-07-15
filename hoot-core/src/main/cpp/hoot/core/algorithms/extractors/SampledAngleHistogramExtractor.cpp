@@ -163,10 +163,10 @@ void SampledAngleHistogramExtractor::setConfiguration(const Settings& conf)
   setHeadingDelta(config.getWayMatcherHeadingDelta());
 }
 
-Histogram* SampledAngleHistogramExtractor::_createHistogram(
+std::shared_ptr<Histogram> SampledAngleHistogramExtractor::_createHistogram(
   const OsmMap& map, const ConstElementPtr& e) const
 {
-  Histogram* result = new Histogram(_bins);
+  shared_ptr<Histogram> result = std::make_shared<Histogram>(_bins);
   SampledAngleHistogramVisitor v(*result, _sampleDistance, _headingDelta);
   v.setOsmMap(&map);
   e->visitRo(map, v);

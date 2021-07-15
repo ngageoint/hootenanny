@@ -91,10 +91,10 @@ void SchemaTranslationVisitor::setTranslationDirection(QString direction)
 void SchemaTranslationVisitor::setTranslationScript(QString path)
 {
   LOG_VARD(path);
-  _translator.reset(ScriptSchemaTranslatorFactory::getInstance().createTranslator(path));
+  _translator = ScriptSchemaTranslatorFactory::getInstance().createTranslator(path);
   if (_toOgr)
   {
-    _ogrTranslator = dynamic_cast<ScriptToOgrSchemaTranslator*>(_translator.get());
+    _ogrTranslator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(_translator);
     if (_ogrTranslator == nullptr)
     {
       throw IllegalArgumentException(

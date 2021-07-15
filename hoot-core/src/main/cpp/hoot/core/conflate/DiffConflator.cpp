@@ -862,7 +862,7 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
   // with new tags.
 
   // Copy the old one to get the geometry
-  ElementPtr pChangeElement(pOldElement->clone());
+  ElementPtr pChangeElement = pOldElement->clone();
   assert(pChangeElement->getId() == pOldElement->getId());
 
   // Need to merge tags into the new element. Keeps all names, chooses tags1 in event of a conflict.

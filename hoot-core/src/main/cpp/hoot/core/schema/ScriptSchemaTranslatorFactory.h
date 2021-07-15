@@ -48,7 +48,7 @@ public:
 
   static ScriptSchemaTranslatorFactory& getInstance();
 
-  ScriptSchemaTranslator* createTranslator(QString scriptPath);
+  std::shared_ptr<ScriptSchemaTranslator> createTranslator(QString scriptPath);
 
   /**
    * This can be used to register translators, but using the Factory methods are preferred. See

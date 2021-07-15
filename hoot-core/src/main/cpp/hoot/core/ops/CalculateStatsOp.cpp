@@ -557,9 +557,9 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       if (!_schemaTranslator)
       {
         assert(!ConfigOptions().getStatsTranslateScript().isEmpty());
-        _schemaTranslator.reset(
+        _schemaTranslator =
           ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-            ConfigOptions().getStatsTranslateScript()));
+            ConfigOptions().getStatsTranslateScript());
         _schemaTranslator->setErrorTreatment(StrictOff);
       }
       SchemaTranslatedTagCountVisitor tcv(_schemaTranslator);
@@ -687,9 +687,9 @@ void CalculateStatsOp::_interpretStatData(
         if (!_schemaTranslator)
         {
           assert(!ConfigOptions().getStatsTranslateScript().isEmpty());
-          _schemaTranslator.reset(
+          _schemaTranslator =
             ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-              ConfigOptions().getStatsTranslateScript()));
+              ConfigOptions().getStatsTranslateScript());
           _schemaTranslator->setErrorTreatment(StrictOff);
         }
         shared_ptr<SchemaTranslatedTagCountVisitor> translatedVis =

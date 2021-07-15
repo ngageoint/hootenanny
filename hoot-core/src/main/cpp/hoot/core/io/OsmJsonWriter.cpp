@@ -296,7 +296,7 @@ void OsmJsonWriter::_writeTag(const QString& key, const QString& value, bool& fi
 
 void OsmJsonWriter::_writeTags(const ConstElementPtr& e)
 {
-  ElementPtr eClone(e->clone());
+  ElementPtr eClone = e->clone();
   _addExportTagsVisitor.visit(eClone);
 
   bool firstTag = true;

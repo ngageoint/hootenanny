@@ -131,7 +131,7 @@ public:
    * @param criteria The matching criteria for matching these lines. This class takes ownership
    * of @a criteria.
    */
-  MaximalSubline(MatchCriteria* criteria, Meters minSplitSize);
+  MaximalSubline(std::shared_ptr<MatchCriteria> criteria, Meters minSplitSize);
   ~MaximalSubline() = default;
 
   /**
