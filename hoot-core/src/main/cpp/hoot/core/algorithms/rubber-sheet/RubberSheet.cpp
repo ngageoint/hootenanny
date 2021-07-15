@@ -210,7 +210,7 @@ void RubberSheet::apply(std::shared_ptr<OsmMap>& map)
   }
   _numProcessed = map->getWayCount();
   //  Cache the rubbersheet for use later
-  map->setCachedRubberSheet(std::shared_ptr<RubberSheet>(this->clone()));
+  map->setCachedRubberSheet(this->clone());
 }
 
 bool RubberSheet::_calcAndApplyTransform(const OsmMapPtr& map)
