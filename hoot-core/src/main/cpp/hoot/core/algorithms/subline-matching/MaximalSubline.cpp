@@ -50,7 +50,7 @@ namespace hoot
 
 int MaximalSubline::logWarnCount = 0;
 
-MaximalSubline::MaximalSubline(MatchCriteria* criteria, Meters minSplitSize) :
+MaximalSubline::MaximalSubline(std::shared_ptr<MatchCriteria> criteria, Meters minSplitSize) :
 _criteria(criteria),
 _spacing(ConfigOptions().getMaximalSublineSpacing()),
 _minSplitSize(minSplitSize),
