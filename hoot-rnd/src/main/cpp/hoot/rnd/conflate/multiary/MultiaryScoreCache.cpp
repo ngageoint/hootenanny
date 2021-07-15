@@ -64,8 +64,8 @@ MatchClassification MultiaryScoreCache::getScore(ConstElementPtr e1, ConstElemen
   _lastExplainText.clear();
 
   OsmMapPtr tmp = std::make_shared<OsmMap>(_map->getProjection());
-  tmp->addElement(ElementPtr(e1->clone()));
-  tmp->addElement(ElementPtr(e2->clone()));
+  tmp->addElement(e1->clone());
+  tmp->addElement(e2->clone());
 
   ConstMatchPtr m(_matchCreator->createMatch(tmp, e1->getElementId(), e2->getElementId()));
 

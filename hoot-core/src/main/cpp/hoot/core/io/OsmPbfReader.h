@@ -118,7 +118,7 @@ public:
   void setUseFileStatus(bool useFileStatus) override { _useFileStatus = useFileStatus; }
   QString supportedFormats() override { return ".osm.pbf"; }
 
-  OsmPbfReader* clone() const { return new OsmPbfReader(*this); }
+  //std::shared_ptr<OsmPbfReader> clone() const { return std::shared_ptr<OsmPbfReader>(*this); }
 
   /**
    * Scan through the file and calculate the offsets of every blob. This is handy when

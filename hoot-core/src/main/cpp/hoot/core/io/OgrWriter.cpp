@@ -346,7 +346,7 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
   std::shared_ptr<Geometry> g;
   vector<ScriptToOgrSchemaTranslator::TranslatedFeature> tf;
 
-  ElementPtr elementClone(element->clone());
+  ElementPtr elementClone = element->clone();
   _addExportTagsVisitor.visit(elementClone);
 
   translateToFeatures(provider, elementClone, g, tf);
