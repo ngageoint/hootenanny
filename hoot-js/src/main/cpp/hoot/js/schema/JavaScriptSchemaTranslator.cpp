@@ -364,9 +364,8 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
   return _schema;
 }
 
-void JavaScriptSchemaTranslator::_parseEnumerations(DoubleFieldDefinition* fd,
-                                                    const QVariant& enumerations)
-  const
+void JavaScriptSchemaTranslator::_parseEnumerations(
+  std::shared_ptr<DoubleFieldDefinition> fd, const QVariant& enumerations) const
 {
   if (enumerations.canConvert(QVariant::List) == false)
   {
@@ -407,9 +406,8 @@ void JavaScriptSchemaTranslator::_parseEnumerations(DoubleFieldDefinition* fd,
   }
 }
 
-void JavaScriptSchemaTranslator::_parseEnumerations(IntegerFieldDefinition *fd,
-                                                    const QVariant& enumerations)
-  const
+void JavaScriptSchemaTranslator::_parseEnumerations(
+  std::shared_ptr<IntegerFieldDefinition> fd, const QVariant& enumerations) const
 {
   if (enumerations.canConvert(QVariant::List) == false)
   {
@@ -450,9 +448,8 @@ void JavaScriptSchemaTranslator::_parseEnumerations(IntegerFieldDefinition *fd,
   }
 }
 
-void JavaScriptSchemaTranslator::_parseEnumerations(LongIntegerFieldDefinition* fd,
-                                                    const QVariant& enumerations)
-  const
+void JavaScriptSchemaTranslator::_parseEnumerations(
+  std::shared_ptr<LongIntegerFieldDefinition> fd, const QVariant& enumerations) const
 {
   if (enumerations.canConvert(QVariant::List) == false)
   {
@@ -513,8 +510,7 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
 
   if (type == "string")
   {
-    StringFieldDefinition* fd = new StringFieldDefinition();
-    result.reset(fd);
+    std::shared_ptr<StringFieldDefinition> fd = std::make_shared<StringFieldDefinition>();
 
     if (map.contains("defValue"))
     {
@@ -531,11 +527,12 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     {
       fd->setWidth(_toInt32(map["length"]));
     }
+
+    result = fd;
   }
   else if (type == "double" || type == "real")
   {
-    DoubleFieldDefinition* fd = new DoubleFieldDefinition();
-    result.reset(fd);
+    std::shared_ptr<DoubleFieldDefinition> fd = std::make_shared<DoubleFieldDefinition>();
 
     if (map.contains("defValue"))
     {
@@ -561,11 +558,12 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     {
       _parseEnumerations(fd, map["enumerations"]);
     }
+
+    result = fd;
   }
   else if (type == "enumeration" || type == "integer")
   {
-    IntegerFieldDefinition* fd = new IntegerFieldDefinition();
-    result.reset(fd);
+    std::shared_ptr<IntegerFieldDefinition> fd = std::make_shared<IntegerFieldDefinition>();
 
     if (map.contains("defValue"))
     {
@@ -591,11 +589,12 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     {
       _parseEnumerations(fd, map["enumerations"]);
     }
+
+    result = fd;
   }
   else if (type == "long integer")
   {
-    LongIntegerFieldDefinition* fd = new LongIntegerFieldDefinition();
-    result.reset(fd);
+    std::shared_ptr<LongIntegerFieldDefinition> fd = std::make_shared<LongIntegerFieldDefinition>();
 
     if (map.contains("defValue"))
     {
@@ -620,6 +619,8 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     {
       _parseEnumerations(fd, map["enumerations"]);
     }
+
+    result = fd;
   }
   else
   {

@@ -38,13 +38,10 @@ HOOT_FACTORY_REGISTER(IdGenerator, DefaultIdGenerator)
 
 IdGeneratorPtr DefaultIdGenerator::clone() const
 {
-  DefaultIdGenerator* copy = new DefaultIdGenerator();
-  IdGeneratorPtr result(copy);
-
-  copy->_nodeId = _nodeId;
-  copy->_wayId = _wayId;
-  copy->_relationId = _relationId;
-
+  std::shared_ptr<DefaultIdGenerator> result = std::make_shared<DefaultIdGenerator>();
+  result->_nodeId = _nodeId;
+  result->_wayId = _wayId;
+  result->_relationId = _relationId;
   return result;
 }
 

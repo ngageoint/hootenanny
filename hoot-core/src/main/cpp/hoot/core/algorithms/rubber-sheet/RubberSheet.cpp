@@ -480,7 +480,7 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
     throw HootException("Unable to determine rubber sheeting interpolation candidate.");
   }
 
-  LOG_DEBUG("Best candidate: " << bestCandidate->toString());
+  LOG_INFO("Using interpolator: " << bestCandidate->toString());
 
   return bestCandidate;
 }

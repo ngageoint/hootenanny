@@ -32,6 +32,7 @@
 #include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QString>
@@ -63,7 +64,7 @@ public:
   QString getInitStatusMessage() const override
   { return "Translating features to a schema..."; }
   QString getCompletedStatusMessage() const override
-  { return "Translated " + QString::number(_numAffected) + " features to a schema"; }
+  { return "Translated " + StringUtils::formatLargeNumber(_numAffected) + " features to a schema"; }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }

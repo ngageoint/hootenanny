@@ -205,7 +205,7 @@ class OgrElementIterator : public ElementIterator
 {
 public:
 
-  OgrElementIterator(OgrReaderInternal* d)
+  OgrElementIterator(std::shared_ptr<OgrReaderInternal> d)
   {
     _d = d;
     _map = std::make_shared<OsmMap>();
@@ -214,7 +214,6 @@ public:
   ~OgrElementIterator()
   {
     _d->close();
-    delete _d;
   }
 
   // not implemented
@@ -243,7 +242,7 @@ protected:
 private:
 
   OsmMapPtr _map;
-  OgrReaderInternal* _d;
+  std::shared_ptr<OgrReaderInternal> _d;
 };
 
 OgrReader::OgrReader() :
@@ -262,7 +261,7 @@ _d(std::make_shared<OgrReaderInternal>())
 
 void OgrReader::setProgress(const Progress& progress)
 {
-  if (_d == nullptr)
+  if (!_d)
   {
     throw IllegalArgumentException(
       "Internal reader must be initialized before setting progress on OgrReader.");
@@ -270,15 +269,16 @@ void OgrReader::setProgress(const Progress& progress)
   _d->setProgress(progress);
 }
 
-ElementIterator* OgrReader::createIterator(const QString& path, const QString& layer) const
+std::shared_ptr<ElementIterator> OgrReader::createIterator(
+  const QString& path, const QString& layer) const
 {
-  OgrReaderInternal* d = new OgrReaderInternal();
+  std::shared_ptr<OgrReaderInternal> d = std::make_shared<OgrReaderInternal>();
   d->setDefaultCircularError(_d->getDefaultCircularError());
   d->setDefaultStatus(_d->getDefaultStatus());
   d->setSchemaTranslationScript(_d->getTranslationFile());
   d->open(path, layer);
 
-  return new OgrElementIterator(d);
+  return std::make_shared<OgrElementIterator>(d);
 }
 
 std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(

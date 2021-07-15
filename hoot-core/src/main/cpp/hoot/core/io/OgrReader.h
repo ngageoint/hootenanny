@@ -98,7 +98,7 @@ public:
   static bool isReasonablePath(const QString& path);
 
   long getFeatureCount(const QString& path, const QString& layer) const;
-  ElementIterator* createIterator(const QString& path, const QString& layer) const;
+  std::shared_ptr<ElementIterator> createIterator(const QString& path, const QString& layer) const;
   /**
    * Returns a filtered list of layer names that have geometry.
    */
