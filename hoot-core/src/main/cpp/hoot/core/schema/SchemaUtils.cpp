@@ -31,6 +31,7 @@
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/criterion/HasTypeCriterion.h>
+#include <hoot/core/io/IoUtils.h>
 
 // Qt
 #include <QFileInfo>
@@ -55,6 +56,25 @@ void SchemaUtils::validateTranslationUrl(const QString& url)
   else if (!url.endsWith(".js") && !url.endsWith(".py"))
   {
     throw IllegalArgumentException("Invalid translation file format: " + url);
+  }
+}
+
+QString SchemaUtils::outputFormatToTranslationDirection(const QString& output)
+{
+  if (IoUtils::isSupportedOgrFormat(output, true))
+  {
+    LOG_INFO("No translation direction specified. Assuming 'toogr' based on output format...");
+    return "toogr";
+  }
+  else if (IoUtils::isSupportedOsmFormat(output))
+  {
+    LOG_INFO("No translation direction specified. Assuming 'toosm' based on output format...");
+    return "toosm";
+  }
+  else
+  {
+    LOG_INFO("No translation direction specified. Using 'toosm'...");
+    return "toosm";
   }
 }
 

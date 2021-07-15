@@ -59,6 +59,13 @@ public:
    * format
    */
   static void validateTranslationUrl(const QString& url);
+
+  /**
+   * @brief TODO
+   * @param output
+   * @return
+   */
+  static QString outputFormatToTranslationDirection(const QString& output);
 };
 
 }
