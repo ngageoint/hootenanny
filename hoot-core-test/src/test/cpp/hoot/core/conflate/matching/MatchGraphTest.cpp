@@ -137,17 +137,17 @@ public:
     ElementId e = ElementId::way(5);
     ElementId f = ElementId::way(6);
 
-    std::shared_ptr<MatchThreshold> mt(new MatchThreshold(0.5, 0.5));
+    std::shared_ptr<MatchThreshold> mt = std::make_shared<MatchThreshold>(0.5, 0.5);
     vector<std::shared_ptr<FakeMatch>> fm(7);
-    fm[0].reset(new FakeMatch(a, b, 1.0, mt));
-    fm[1].reset(new FakeMatch(a, c, 0.1, mt));
-    fm[2].reset(new FakeMatch(c, d, 1.0, mt));
+    fm[0] = std::make_shared<FakeMatch>(a, b, 1.0, mt);
+    fm[1] = std::make_shared<FakeMatch>(a, c, 0.1, mt);
+    fm[2] = std::make_shared<FakeMatch>(c, d, 1.0, mt);
     // duplicates are silly, but allowable
-    fm[3].reset(new FakeMatch(d, e, 0.9, mt));
-    fm[4].reset(new FakeMatch(d, e, 0.9, mt));
-    fm[5].reset(new FakeMatch(c, e, 0.1, mt));
+    fm[3] = std::make_shared<FakeMatch>(d, e, 0.9, mt);
+    fm[4] = std::make_shared<FakeMatch>(d, e, 0.9, mt);
+    fm[5] = std::make_shared<FakeMatch>(c, e, 0.1, mt);
     // doesn't really make sense, but it shouldn't throw an error.
-    fm[6].reset(new FakeMatch(f, f, 1.0, mt));
+    fm[6] = std::make_shared<FakeMatch>(f, f, 1.0, mt);
 
     MatchGraph uut;
 

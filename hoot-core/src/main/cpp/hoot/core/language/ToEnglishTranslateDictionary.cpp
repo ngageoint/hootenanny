@@ -50,8 +50,9 @@ _transliterationCachingEnabled(false)
 {
   if (ConfigOptions().getTransliterationMaxCacheSize() != -1)
   {
-    _transliterationCache.reset(
-      new Tgs::LruCache<QString, QString>(ConfigOptions().getTransliterationMaxCacheSize()));
+    _transliterationCache =
+      std::make_shared<Tgs::LruCache<QString, QString>>(
+        ConfigOptions().getTransliterationMaxCacheSize());
     _transliterationCachingEnabled = true;
   }
   LOG_VARD(_transliterationCachingEnabled);

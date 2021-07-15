@@ -109,7 +109,7 @@ public:
     {
       // case sensitivity is turned off and one intersection node match should be found
 
-      map.reset(new OsmMap(cachedMap));
+      map = std::make_shared<OsmMap>(cachedMap);
 
       conf.set("name.criterion.names", "I ST NW;19th St NW");
       conf.set("name.criterion.case.sensitive", false);
@@ -153,7 +153,7 @@ public:
     {
       // partial matching is turned on and one intersection node match should be found
 
-      map.reset(new OsmMap(cachedMap));
+      map = std::make_shared<OsmMap>(cachedMap);
 
       conf.set("name.criterion.names", "I St;19th St");
       conf.set("name.criterion.case.sensitive", false);

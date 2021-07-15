@@ -71,7 +71,7 @@ public:
     OsmMapReaderFactory::read(map, _inputPath + "ScriptMatchTest.osm", true);
     MapProjector::projectToPlanar(map);
 
-    std::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0.6, 0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> mt = std::make_shared<MatchThreshold>(0.6, 0.6, 0.6);
 
     ScriptMatchCreator smc;
     smc.setArguments(QStringList() << "Line.js");

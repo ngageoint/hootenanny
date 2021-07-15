@@ -119,7 +119,8 @@ private:
 
   std::shared_ptr<HootServicesTranslatorClient> _getClient()
   {
-    std::shared_ptr<HootServicesTranslatorClient> client(new HootServicesTranslatorMockClient());
+    std::shared_ptr<HootServicesTranslatorClient> client =
+      std::make_shared<HootServicesTranslatorMockClient>();
 
     Settings conf;
     conf.set("language.translation.translator", "hoot::HootServicesTranslatorClient");

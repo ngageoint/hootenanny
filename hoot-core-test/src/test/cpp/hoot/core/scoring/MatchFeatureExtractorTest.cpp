@@ -83,7 +83,7 @@ public:
   {
     // This test is primarily useful as an input to Weka for training models.
     MatchFeatureExtractor uut;
-    std::shared_ptr<BuildingMatchCreator> matchCreator(new BuildingMatchCreator());
+    std::shared_ptr<BuildingMatchCreator> matchCreator = std::make_shared<BuildingMatchCreator>();
     matchCreator->getMatchThreshold(); // This inits the threshold on the match creator.
     uut.addMatchCreator(matchCreator);
     uut.processMap(load(_inputPath + "BuildingsA.osm", _inputPath + "BuildingsB.osm"));

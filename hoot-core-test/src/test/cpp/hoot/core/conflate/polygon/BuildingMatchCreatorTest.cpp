@@ -140,7 +140,7 @@ public:
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
 
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
@@ -197,7 +197,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
 
@@ -258,7 +258,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
@@ -287,7 +287,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
@@ -315,7 +315,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
 
     QString exceptionMsg("");
     try
@@ -338,7 +338,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
 
@@ -362,7 +362,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
 

@@ -58,8 +58,9 @@ _hasCriterionCache(CACHE_SIZE_DEFAULT),
 _numAddressesCache(CACHE_SIZE_DEFAULT),
 _conflatableElementCache(CACHE_SIZE_DEFAULT)
 {
-  _geometryCache.reset(
-    new Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>(CACHE_SIZE_DEFAULT));
+  _geometryCache =
+    std::make_shared<Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>>(
+      CACHE_SIZE_DEFAULT);
 }
 
 void ConflateInfoCache::setConfiguration(const Settings& conf)
@@ -72,8 +73,9 @@ void ConflateInfoCache::setConfiguration(const Settings& conf)
     _elementIntersectsCache.setMaxCost(maxCacheSize);
     _hasCriterionCache.setMaxCost(maxCacheSize);
     _numAddressesCache.setMaxCost(maxCacheSize);
-    _geometryCache.reset(
-      new Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>(maxCacheSize));
+    _geometryCache =
+      std::make_shared<Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>>(
+        maxCacheSize);
     _conflatableElementCache.setMaxCost(maxCacheSize);
   }
   else

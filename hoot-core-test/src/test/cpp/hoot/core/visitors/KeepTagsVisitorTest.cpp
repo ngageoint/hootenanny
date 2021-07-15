@@ -65,15 +65,16 @@ public:
     KeepTagsVisitor visitor(keysToKeep);
     map->visitRw(visitor);
 
-    std::shared_ptr<TagKeyCountVisitor> keyCountVisitor(new TagKeyCountVisitor("source"));
+    std::shared_ptr<TagKeyCountVisitor> keyCountVisitor =
+      std::make_shared<TagKeyCountVisitor>("source");
     map->visitRo(*keyCountVisitor);
     HOOT_STR_EQUALS("0", keyCountVisitor->getStat());
 
-    keyCountVisitor.reset(new TagKeyCountVisitor("highway"));
+    keyCountVisitor = std::make_shared<TagKeyCountVisitor>("highway");
     map->visitRo(*keyCountVisitor);
     HOOT_STR_EQUALS("6", keyCountVisitor->getStat());
 
-    keyCountVisitor.reset(new TagKeyCountVisitor("blah"));
+    keyCountVisitor = std::make_shared<TagKeyCountVisitor>("blah");
     map->visitRo(*keyCountVisitor);
     HOOT_STR_EQUALS("0", keyCountVisitor->getStat());
   }
@@ -88,15 +89,16 @@ public:
     KeepTagsVisitor visitor(keysToKeep);
     map->visitRw(visitor);
 
-    std::shared_ptr<TagKeyCountVisitor> keyCountVisitor(new TagKeyCountVisitor("source"));
+    std::shared_ptr<TagKeyCountVisitor> keyCountVisitor =
+      std::make_shared<TagKeyCountVisitor>("source");
     map->visitRo(*keyCountVisitor);
     HOOT_STR_EQUALS("0", keyCountVisitor->getStat());
 
-    keyCountVisitor.reset(new TagKeyCountVisitor("highway"));
+    keyCountVisitor = std::make_shared<TagKeyCountVisitor>("highway");
     map->visitRo(*keyCountVisitor);
     HOOT_STR_EQUALS("6", keyCountVisitor->getStat());
 
-    keyCountVisitor.reset(new TagKeyCountVisitor("blah"));
+    keyCountVisitor = std::make_shared<TagKeyCountVisitor>("blah");
     map->visitRo(*keyCountVisitor);
     HOOT_STR_EQUALS("0", keyCountVisitor->getStat());
   }

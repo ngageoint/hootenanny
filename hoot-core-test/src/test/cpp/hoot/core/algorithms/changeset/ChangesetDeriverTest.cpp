@@ -60,11 +60,12 @@ public:
     OsmMapReaderFactory::read(map2, input2, true, Status::Unknown2);
 
     // input has to be sorted
-    InMemoryElementSorterPtr map1SortedElements(new InMemoryElementSorter(map1));
-    InMemoryElementSorterPtr map2SortedElements(new InMemoryElementSorter(map2));
+    InMemoryElementSorterPtr map1SortedElements = std::make_shared<InMemoryElementSorter>(map1);
+    InMemoryElementSorterPtr map2SortedElements = std::make_shared<InMemoryElementSorter>(map2);
 
     // stream out the changeset results grouped by change type
-    ChangesetDeriverPtr changesetDiff(new ChangesetDeriver(map1SortedElements, map2SortedElements));
+    ChangesetDeriverPtr changesetDiff =
+      std::make_shared<ChangesetDeriver>(map1SortedElements, map2SortedElements);
     changesetDiff->setAllowDeletingReferenceFeatures(allowRefDelete);
     QMap<Change::ChangeType, QList<long>> changeTypeToIds;
     while (changesetDiff->hasMoreChanges())

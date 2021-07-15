@@ -124,8 +124,7 @@ public:
 
   void test1()
   {
-    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(2048));
-    RStarTree uut(mps, 2);
+    RStarTree uut(std::make_shared<MemoryPageStore>(2048), 2);
     int maxChildCount = uut.getRoot()->getMaxChildCount();
 
     CPPUNIT_ASSERT_EQUAL(0, uut.getRoot()->getChildCount());
@@ -184,8 +183,7 @@ public:
   {
     int testSize = 1000;
 
-    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
-    HilbertRTree uut(mps, 2);
+    HilbertRTree uut(std::make_shared<MemoryPageStore>(256), 2);
 
     std::vector<Box> boxes;
     std::vector<int> fids;
@@ -200,8 +198,7 @@ public:
   {
     int testSize = 1000;
 
-    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
-    HilbertRTree uut(mps, 2);
+    HilbertRTree uut(std::make_shared<MemoryPageStore>(256), 2);
     
     std::vector<Box> boxes;
     std::vector<int> fids;
@@ -220,8 +217,7 @@ public:
   {
     int testSize = 1000;
 
-    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
-    HilbertRTree uut(mps, 2);
+    HilbertRTree uut(std::make_shared<MemoryPageStore>(256), 2);
 
     std::vector<Box> boxes;
     std::vector<int> fids;
@@ -246,8 +242,8 @@ public:
     int testSize = 500;
     int sampleSize = 50;
 
-    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
-    std::shared_ptr<HilbertRTree> uut(new HilbertRTree(mps, 2));
+    std::shared_ptr<HilbertRTree> uut =
+      std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(256), 2);
     _testTreeDistance(uut, testSize, sampleSize, true);
   }
 
@@ -259,8 +255,8 @@ public:
     std::vector<int> fids;
     _createRandomTestData(testSize, boxes, fids);
 
-    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
-    std::shared_ptr<HilbertRTree> uut(new HilbertRTree(mps, 2));
+    std::shared_ptr<HilbertRTree> uut =
+      std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(256), 2);
     std::vector<Box> firstBoxes = boxes;
     std::vector<int> firstFids = fids;
     firstBoxes.resize(testSize / 2);
@@ -330,7 +326,8 @@ public:
     _testTreeDistance(uut, testSize, sampleSize, false);
   }
 
-  void _testTreeDistance(const std::shared_ptr<RStarTree>& uut, int testSize, int sampleSize, bool bulkLoad)
+  void _testTreeDistance(
+    const std::shared_ptr<RStarTree>& uut, int testSize, int sampleSize, bool bulkLoad)
   {
     std::vector<Box> boxes;
     std::vector<int> fids;
@@ -430,21 +427,21 @@ public:
     {
       printf("%d\t%d\t", testSize, pageSize);
       {
-        std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(pageSize));
-        std::shared_ptr<HilbertRTree> hrt(new HilbertRTree(mps, 2));
+        std::shared_ptr<HilbertRTree> hrt =
+          std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(pageSize), 2);
         printf("%d\t", hrt->getRoot()->getMaxChildCount());
         benchmarkTree(hrt, testSize, sampleSize, false);
       }
 
       {
-        std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(pageSize));
-        std::shared_ptr<HilbertRTree> hrt(new HilbertRTree(mps, 2));
+        std::shared_ptr<HilbertRTree> hrt =
+          std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(pageSize), 2);
         benchmarkTree(hrt, testSize, sampleSize, true);
       }
 
       {
-        std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(pageSize));
-        std::shared_ptr<RStarTree> rst(new RStarTree(mps, 2));
+        std::shared_ptr<HilbertRTree> rst =
+          std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(pageSize), 2);
         benchmarkTree(rst, testSize, sampleSize, false);
       }
       printf("\n");

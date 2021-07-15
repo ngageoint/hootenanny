@@ -59,14 +59,14 @@ public:
     NodePtr pN3 = std::make_shared<Node>(Status::Unknown1, -300, Coordinate(1.0, 2.0), 10.0);
     NodePtr pN4 = std::make_shared<Node>(Status::Unknown1, -400, Coordinate(2.0, 1.0), 10.0);
     WayPtr  pW2 = std::make_shared<Way>(Status::Unknown1, -1001, 10);
-    ConstNetworkVertexPtr pNV1(new NetworkVertex(pN1));
-    ConstNetworkVertexPtr pNV2(new NetworkVertex(pN2));
-    ConstNetworkVertexPtr pNV3(new NetworkVertex(pN3));
-    ConstNetworkVertexPtr pNV4(new NetworkVertex(pN4));
+    ConstNetworkVertexPtr pNV1 = std::make_shared<NetworkVertex>(pN1);
+    ConstNetworkVertexPtr pNV2 = std::make_shared<NetworkVertex>(pN2);
+    ConstNetworkVertexPtr pNV3 = std::make_shared<NetworkVertex>(pN3);
+    ConstNetworkVertexPtr pNV4 = std::make_shared<NetworkVertex>(pN4);
 
-    NetworkEdgePtr pEdge1(new NetworkEdge(pNV1, pNV2, true));
+    NetworkEdgePtr pEdge1 = std::make_shared<NetworkEdge>(pNV1, pNV2, true);
     pEdge1->addMember(pW1);
-    NetworkEdgePtr pEdge2(new NetworkEdge(pNV3, pNV4, true));
+    NetworkEdgePtr pEdge2 = std::make_shared<NetworkEdge>(pNV3, pNV4, true);
     pEdge2->addMember(pW2);
 
     // Test addVertex

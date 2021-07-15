@@ -50,6 +50,7 @@ public:
 
   static QString className() { return "hoot::WeightedWordDistance"; }
 
+  // TODO: change this to take in shared ptrs
   WeightedWordDistance(StringDistance* d, WordWeightDictionary* dictionary);
   WeightedWordDistance();
   ~WeightedWordDistance() = default;

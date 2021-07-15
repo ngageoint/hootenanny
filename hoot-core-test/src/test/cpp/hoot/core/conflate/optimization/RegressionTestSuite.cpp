@@ -38,9 +38,9 @@
 namespace hoot
 {
 
-RegressionTestSuite::RegressionTestSuite(const QString& dir, const QString& testDirExtension)
-  : AbstractTestSuite(dir),
-    _testDirExtension(testDirExtension)
+RegressionTestSuite::RegressionTestSuite(const QString& dir, const QString& testDirExtension) :
+AbstractTestSuite(dir),
+_testDirExtension(testDirExtension)
 {
   QDir dirInfo(dir);
   _topLevelDir = dirInfo.dirName();

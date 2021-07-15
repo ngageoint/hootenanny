@@ -772,8 +772,9 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
     columns << "id" << "latitude" << "longitude" << "changeset_id" << "timestamp" <<
                "tile" << "version" << "tags";
 
-    _nodeBulkInsert.reset(
-      new SqlBulkInsert(_db, getCurrentNodesTableName(mapId), columns, _ignoreInsertConflicts));
+    _nodeBulkInsert =
+      std::make_shared<SqlBulkInsert>(
+        _db, getCurrentNodesTableName(mapId), columns, _ignoreInsertConflicts);
   }
 
   QList<QVariant> v;
@@ -872,8 +873,9 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags, long ver
     QStringList columns;
     columns << "id" << "changeset_id" << "timestamp" << "version" << "tags";
 
-    _relationBulkInsert.reset(
-      new SqlBulkInsert(_db, getCurrentRelationsTableName(mapId), columns, _ignoreInsertConflicts));
+    _relationBulkInsert =
+      std::make_shared<SqlBulkInsert>(
+        _db, getCurrentRelationsTableName(mapId), columns, _ignoreInsertConflicts);
   }
 
   QList<QVariant> v;
@@ -2208,8 +2210,9 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags, long version)
     QStringList columns;
     columns << "id" << "changeset_id" << "timestamp" << "version" << "tags";
 
-    _wayBulkInsert.reset(
-      new SqlBulkInsert(_db, getCurrentWaysTableName(mapId), columns, _ignoreInsertConflicts));
+    _wayBulkInsert =
+      std::make_shared<SqlBulkInsert>(
+        _db, getCurrentWaysTableName(mapId), columns, _ignoreInsertConflicts);
   }
 
   QList<QVariant> v;

@@ -1331,8 +1331,9 @@ void OsmApiDbBulkInserter::_createOutputFile(const QString& tableName, const QSt
   msg += "...";
   LOG_DEBUG(msg);
 
-  _outputSections[tableName].reset(
-    new QTemporaryFile(_tempDir + "/ApiDbBulkInserter-" + tableName + "-temp-XXXXXX.sql"));
+  _outputSections[tableName] =
+    std::make_shared<QTemporaryFile>(
+      _tempDir + "/ApiDbBulkInserter-" + tableName + "-temp-XXXXXX.sql");
   if (!_outputSections[tableName]->open())
   {
     throw HootException(

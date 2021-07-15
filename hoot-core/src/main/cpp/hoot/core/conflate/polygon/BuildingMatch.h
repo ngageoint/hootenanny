@@ -58,34 +58,25 @@ public:
   ~BuildingMatch() = default;
 
   const MatchClassification& getClassification() const override { return _p; }
-
   std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
-
   MatchMembers getMatchMembers() const override { return MatchMembers::Polygon; }
-
-  QString getName() const override { return MATCH_NAME; }
-
-  QString getClassName() const override { return className(); }
-
   double getProbability() const override;
-
   /**
    * Building matches never conflict other building matches, but conflict with everything else.
    */
   bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map,
     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
-
   /**
    * Simply returns the two elements that were matched.
    */
   std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
-
-  QString toString() const override;
-
   QString explain() const override { return _explainText; }
   void setExplain(const QString& explainText) override { _explainText = explainText; }
 
+  QString getName() const override { return MATCH_NAME; }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Matches buildings"; }
+  QString toString() const override;
 
 private:
 

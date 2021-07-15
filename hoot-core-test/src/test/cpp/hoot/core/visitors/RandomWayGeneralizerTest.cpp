@@ -87,7 +87,7 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     if (_inputMapCache.contains(inputFile))
     {
-      map.reset(new OsmMap(_inputMapCache[inputFile]));
+      map = std::make_shared<OsmMap>(_inputMapCache[inputFile]);
     }
     else
     {

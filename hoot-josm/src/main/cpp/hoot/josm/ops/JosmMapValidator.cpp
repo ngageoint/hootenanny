@@ -53,9 +53,9 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
   {
     // pass map as temp file and get it back as a temp file
 
-    std::shared_ptr<QTemporaryFile> tempInputFile(
-      new QTemporaryFile(
-        ConfigOptions().getApidbBulkInserterTempFileDir() + "/JosmMapValidator-in.osm"));
+    std::shared_ptr<QTemporaryFile> tempInputFile =
+      std::make_shared<QTemporaryFile>(
+        ConfigOptions().getApidbBulkInserterTempFileDir() + "/JosmMapValidator-in.osm");
     tempInputFile->setAutoRemove(true);
     if (!tempInputFile->open())
     {

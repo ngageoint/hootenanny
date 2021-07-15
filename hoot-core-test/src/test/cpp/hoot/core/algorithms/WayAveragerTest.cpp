@@ -84,7 +84,8 @@ private:
     std::set<ElementId> elementIds;
     elementIds.insert(way1->getElementId());
     elementIds.insert(way2->getElementId());
-    std::shared_ptr<CopyMapSubsetOp> mapCopier(new CopyMapSubsetOp(sourceMap, elementIds));
+    std::shared_ptr<CopyMapSubsetOp> mapCopier =
+      std::make_shared<CopyMapSubsetOp>(sourceMap, elementIds);
     mapCopier->apply(targetMap);
 
     /*WayPtr averagedWay =*/ WayAverager::replaceWaysWithAveragedWay(targetMap, way1, way2);

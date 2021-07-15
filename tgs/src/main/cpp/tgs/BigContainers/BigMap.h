@@ -120,7 +120,7 @@ private:
     if (_inMemory && _smallMap.size() > _maxEntriesInRam)
     {
       //std::cerr << "Creating stxxl" << std::endl;
-      _bigMap.reset(new BigMapStxxl<K,V>());
+      _bigMap = std::make_shared<BigMapStxxl<K,V>>();
       for (typename std::map<K, V>::const_iterator it = _smallMap.begin(); it != _smallMap.end();
            ++it)
       {

@@ -75,7 +75,7 @@ public:
     LOG_INFO("* " << s1 << " (" << normalize(s1) << ")  vs. " << s2 << " (" <<
       normalize(s2) << ")");
 
-    MeanWordSetDistance mwsd(StringDistancePtr(new LevenshteinDistance(1.5)));
+    MeanWordSetDistance mwsd(std::make_shared<LevenshteinDistance>(1.5));
 
     LevenshteinDistance ld(1.5);
 
@@ -86,7 +86,8 @@ public:
 
   void runTest()
   {
-    WeightedWordDistance uut(new LevenshteinDistance(),
+    WeightedWordDistance uut(
+      new LevenshteinDistance(),
       new TextFileWordWeightDictionary("test-files/algorithms/string/WordWeight.tsv"));
     HOOT_STR_EQUALS(0, uut.compare("foo", "bar"));
     HOOT_STR_EQUALS(0.631018, uut.compare("foo street", "fou street"));
