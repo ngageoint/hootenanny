@@ -796,8 +796,8 @@ vector<Tags> JavaScriptSchemaTranslator::translateToOgrTags(Tags& tags, ElementT
   return result;
 }
 
-QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
-  ElementType elementType, geos::geom::GeometryTypeId geometryType)
+QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(
+  Tags& tags, ElementType elementType, geos::geom::GeometryTypeId geometryType)
 {
   _tags = &tags;
 
@@ -901,8 +901,8 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
   return result;
 }
 
-void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName,
-                                                 const char* geomType)
+void JavaScriptSchemaTranslator::_translateToOsm(
+  Tags& t, const char* layerName, const char* geomType)
 {
   LOG_VART(_toOsmFunctionName);
   LOG_VART(layerName);
