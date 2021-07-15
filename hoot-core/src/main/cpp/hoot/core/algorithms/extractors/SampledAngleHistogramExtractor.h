@@ -38,9 +38,8 @@ namespace hoot
 class Histogram;
 
 /**
- * @brief The SampledAngleHistogramExtractor class is similar to AngleHistogramExtractor
- *
- * It has the following differences:
+ * @brief The SampledAngleHistogramExtractor class is similar to AngleHistogramExtractor but has the
+ * following differences:
  *
  * - The angle is sampled at a configurable distance along the way.
  * - The distance from the sampled location on the way to look to calculate the heading is
@@ -51,11 +50,11 @@ class SampledAngleHistogramExtractor : public AngleHistogramExtractor
 {
 public:
 
+  static QString className() { return "hoot::SampledAngleHistogramExtractor"; }
+
   SampledAngleHistogramExtractor();
   SampledAngleHistogramExtractor(Radians smoothing, unsigned int bins = 8);
   ~SampledAngleHistogramExtractor() = default;
-
-  static QString className() { return "hoot::SampledAngleHistogramExtractor"; }
 
   void setConfiguration(const Settings& conf) override;
 
@@ -72,7 +71,8 @@ public:
 
 protected:
 
-  Histogram* _createHistogram(const OsmMap& map, const ConstElementPtr& e) const override;
+  std::shared_ptr<Histogram> _createHistogram(
+    const OsmMap& map, const ConstElementPtr& e) const override;
 
 private:
 
