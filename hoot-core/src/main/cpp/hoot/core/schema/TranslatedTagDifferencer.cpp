@@ -156,8 +156,8 @@ std::shared_ptr<ScriptToOgrSchemaTranslator> TranslatedTagDifferencer::_getTrans
 {
   if (_translator == nullptr)
   {
-    std::shared_ptr<ScriptSchemaTranslator> st(
-      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_script));
+    std::shared_ptr<ScriptSchemaTranslator> st =
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_script);
 
     st->setErrorTreatment(StrictOff);
     _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);

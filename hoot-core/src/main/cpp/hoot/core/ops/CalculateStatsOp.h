@@ -84,7 +84,6 @@ private:
 
   friend class CalculateStatsOpTest;
 
-  const Settings* _pConf;
   ElementCriterionPtr _criterion;
   // simple map name string for logging purposes
   QString _mapName;
@@ -94,6 +93,7 @@ private:
   // output of a conflation job.  Another option would be to refactor this class for both maps
   // meant to be input to a conflation job and those that are output from a conflation job.
   bool _inputIsConflatedMapOutput;
+  QString _statsFileName;
   QList<SingleStat> _stats;
   // list of GeometryTypeCriterion class names used to control which statistics are generated; see
   // ConflateExecutor and SuperfluousConflateOpRemover
@@ -125,11 +125,10 @@ private:
   void _initConflatableFeatureCounts();
   void _readGenericStatsConfiguration();
   void _addStat(const QString& name, double value);
-  void _addStat(const char* name, double value);
   bool _statPassesFilter(const StatData& statData) const;
   int _getNumStatsPassingFilter(const QList<StatData>& stats) const;
   void _interpretStatData(const std::shared_ptr<const OsmMap>& constMap, const StatData& d);
-  double GetRequestedStatValue(const ElementVisitor* pVisitor, StatData::StatCall call) const;
+  double _getRequestedStatValue(const ElementVisitor* pVisitor, StatData::StatCall call) const;
 
   /**
    * @brief getMatchCreator finds the match creator (in the supplied vector) by name
@@ -148,7 +147,6 @@ private:
   double _applyVisitor(
     const hoot::FilteredVisitor& v, boost::any& visitorData, const QString& statName,
     StatData::StatCall call = StatData::StatCall::Stat);
-  // TODO: Change these to take in shared ptrs?
   double _applyVisitor(
     const ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
     StatData::StatCall call = StatData::StatCall::Stat);

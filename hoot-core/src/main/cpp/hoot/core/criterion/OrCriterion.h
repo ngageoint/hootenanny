@@ -42,7 +42,6 @@ public:
   static QString className() { return "hoot::OrCriterion"; }
 
   OrCriterion() = default;
-  // TODO: Think we can probably get rid of this version that takes in ElementCriterion*.
   OrCriterion(ElementCriterion* child1, ElementCriterion* child2);
   OrCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2);
   ~OrCriterion() = default;

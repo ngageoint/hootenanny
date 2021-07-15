@@ -210,7 +210,7 @@ void RubberSheet::apply(std::shared_ptr<OsmMap>& map)
   }
   _numProcessed = map->getWayCount();
   //  Cache the rubbersheet for use later
-  map->setCachedRubberSheet(std::shared_ptr<RubberSheet>(this->clone()));
+  map->setCachedRubberSheet(this->clone());
 }
 
 bool RubberSheet::_calcAndApplyTransform(const OsmMapPtr& map)
@@ -480,7 +480,7 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
     throw HootException("Unable to determine rubber sheeting interpolation candidate.");
   }
 
-  LOG_DEBUG("Best candidate: " << bestCandidate->toString());
+  LOG_INFO("Using interpolator: " << bestCandidate->toString());
 
   return bestCandidate;
 }

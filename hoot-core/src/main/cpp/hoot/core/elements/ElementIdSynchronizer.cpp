@@ -133,7 +133,7 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
           !_syncedElementIds.contains(map1IdenticalElement->getElementId()))
       {
         // Copy it to be safe.
-        ElementPtr map1IdenticalElementCopy(map1IdenticalElement->clone());
+        ElementPtr map1IdenticalElementCopy = map1IdenticalElement->clone();
         LOG_VART(map1IdenticalElementCopy->getElementId());
         // Get the element with matching hash from the sec map.
         ElementPtr map2IdenticalElement = _map2->getElement(_map2HashesToElementIds[identicalHash]);

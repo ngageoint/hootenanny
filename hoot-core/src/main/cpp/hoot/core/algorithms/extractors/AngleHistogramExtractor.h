@@ -54,26 +54,16 @@ class AngleHistogramExtractor : public FeatureExtractorBase, public Configurable
 {
 public:
 
+  static QString className() { return "hoot::AngleHistogramExtractor"; }
+
   AngleHistogramExtractor();
   AngleHistogramExtractor(Radians smoothing, unsigned int bins = 16);
   virtual ~AngleHistogramExtractor() = default;
-
-  static QString className() { return "hoot::AngleHistogramExtractor"; }
-
-  QString getClassName() const override { return className(); }
-
-  QString getName() const override;
 
   void setConfiguration(const Settings& conf) override;
 
   double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
-
-  void setBins(int bins) { _bins = bins; }
-  void setSmoothing(Radians sigma) { _smoothing = sigma; }
-
-  QString getDescription() const override
-  { return "Calculates the angle of each line segment and adds it to a histogram"; }
 
   /**
    * @brief getNormalizedHistogram creates a normalized heading variance histogram for an element.
@@ -84,11 +74,20 @@ public:
   std::shared_ptr<Histogram> getNormalizedHistogram(
     const OsmMap& map, const ConstElementPtr& element) const;
 
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Calculates the angle of each line segment and adds it to a histogram"; }
+  QString getName() const override;
+
+  void setBins(int bins) { _bins = bins; }
+  void setSmoothing(Radians sigma) { _smoothing = sigma; }
+
 protected:
 
   unsigned int _bins;
 
-  virtual Histogram* _createHistogram(const OsmMap& map, const ConstElementPtr& e) const;
+  virtual std::shared_ptr<Histogram> _createHistogram(
+    const OsmMap& map, const ConstElementPtr& e) const;
 
 private:
 

@@ -116,7 +116,7 @@ ElementPtr InMemoryElementSorter::readNextElement()
 
   if (cr.get())
   {
-    result.reset(cr->clone());
+    result = cr->clone();
   }
 
   return result;

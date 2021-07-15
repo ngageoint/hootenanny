@@ -45,7 +45,7 @@ public:
 
   static QString className() { return "hoot::FilteredVisitor"; }
 
-  FilteredVisitor() : _criterion(nullptr), _visitor(nullptr) { }
+  FilteredVisitor();
   ~FilteredVisitor() = default;
 
   /**
@@ -65,21 +65,8 @@ public:
    * Similar to above but this is convenient if you want to pass in a temporary criterion and
    * visitor. WARNING: FilteredVisitor DOES NOT take ownership of the criterion and visitor and
    * WON'T delete them when destructed.
-   *
-   * @todo think we can probably get rid of this constructor
    */
   FilteredVisitor(const ElementCriterion* criterion, ElementVisitor* visitor);
-
-  void addCriterion(const ElementCriterionPtr& e) override;
-
-  void addVisitor(const ElementVisitorPtr& v) override;
-
-  ElementVisitor& getChildVisitor() const { return *_visitor; }
-
-  void setOsmMap(OsmMap* map) override;
-  void setOsmMap(const OsmMap* map) override;
-
-  void visit(const ConstElementPtr& e) override;
 
   static double getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
                         const ConstOsmMapPtr& map);
@@ -88,9 +75,20 @@ public:
   static double getStat(const ElementCriterion* criterion, ElementVisitor* visitor,
                         const ConstOsmMapPtr& map, const ElementPtr& element);
 
+  void addCriterion(const ElementCriterionPtr& e) override;
+
+  void addVisitor(const ElementVisitorPtr& v) override;
+
+  void setOsmMap(OsmMap* map) override;
+  void setOsmMap(const OsmMap* map) override;
+
+  void visit(const ConstElementPtr& e) override;
+
   QString getDescription() const override { return ""; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
+
+  ElementVisitor& getChildVisitor() const { return *_visitor; }
 
 private:
 

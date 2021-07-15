@@ -38,6 +38,12 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, FilteredVisitor)
 
+FilteredVisitor::FilteredVisitor() :
+_criterion(nullptr),
+_visitor(nullptr)
+{
+}
+
 FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisitor& visitor) :
   _criterion(&criterion),
   _visitor(&visitor),

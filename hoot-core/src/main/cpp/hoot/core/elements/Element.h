@@ -74,15 +74,14 @@ public:
 
   virtual void clear() = 0;
 
-  virtual Element* clone() const = 0;
+  virtual std::shared_ptr<Element> clone() const = 0;
+
+  virtual ElementType getElementType() const = 0;
 
   /**
-   * Circular Error is in meters to 2 standard deviations. In other words it is about the 95%
-   * confidence interval assuming a normal distribution.
+   * Returns a string description of the object to aid in debugging.
    */
-  Meters getCircularError() const { return _getElementData().getCircularError(); }
-
-  ElementId getElementId() const { return ElementId(getElementType(), getId()); }
+  virtual QString toString() const = 0;
 
   /**
    * Calculates and returns this element's envelope. Returns a null envelope if this element is
@@ -93,77 +92,6 @@ public:
     const std::shared_ptr<const ElementProvider>& ep) const = 0;
   virtual const geos::geom::Envelope& getEnvelopeInternal(
     const std::shared_ptr<const ElementProvider>& ep) const = 0;
-
-  long getId() const { return _getElementData().getId(); }
-  void setId(long id) { _getElementData().setId(id); }
-
-  long getChangeset() const { return _getElementData().getChangeset(); }
-  void setChangeset(long changeset) { _getElementData().setChangeset(changeset); }
-
-  Meters getRawCircularError() const { return _getElementData().getRawCircularError(); }
-
-  long getVersion() const { return _getElementData().getVersion(); }
-  void setVersion(long version) { _getElementData().setVersion(version); }
-
-  quint64 getTimestamp() const { return _getElementData().getTimestamp(); }
-  void setTimestamp(quint64 timestamp) { _getElementData().setTimestamp(timestamp); }
-
-  QString getUser() const { return _getElementData().getUser(); }
-  void setUser(QString user) { _getElementData().setUser(user); }
-
-  long getUid() const { return _getElementData().getUid(); }
-  void setUid(long uid) { _getElementData().setUid(uid); }
-
-  const Tags& getTags() const { return _getElementData().getTags(); }
-  Tags& getTags() { return _getElementData().getTags(); }
-  QString getTag(const QString& key) const { return _getElementData().getTags().get(key); }
-  bool hasTag(const QString& key) const { return _getElementData().getTags().contains(key); }
-  bool hasTag(const QString& key, const QString& val) const
-  { return _getElementData().getTags().get(key) == val; }
-  int getTagCount() const { return _getElementData().getTags().size(); }
-
-  bool hasCircularError() const { return _getElementData().hasCircularError(); }
-  void setCircularError(Meters circularError) { _getElementData().setCircularError(circularError); }
-
-  void removeTag(QString k) { _getElementData().getTags().remove(k); }
-  void setTags(const Tags& tags) { _getElementData().setTags(tags); }
-  void setTag(QString k, QString v) { _getElementData().setTag(k, v); }
-  void addTags(const Tags& tags) { _getElementData().addTags(tags); }
-
-  /**
-   * Compares information tags with another element
-   *
-   * @param other element to compare this element's tags with
-   * @return true if this element has the same information tags as the other element; false
-   * otherwise
-   */
-  bool hasSameNonMetadataTags(const Element& other) const;
-
-  bool getVisible() const { return _getElementData().getVisible(); }
-  void setVisible(bool visible) { _getElementData().setVisible(visible); }
-
-  Status getStatus() const { return _status; }
-  QString getStatusString() const;
-
-  bool isUnknown() const { return getStatus().isUnknown(); }
-
-  virtual ElementType getElementType() const = 0;
-
-  /**
-   * At this point only one listener is supported, but we could support more later if needed.
-   */
-  void registerListener(ElementListener* l)
-  { assert(_listener == 0 || _listener == l); _listener = l; }
-
-  /**
-   * Set the enumerated status code.
-   */
-  void setStatus(Status s) { _status = s; }
-
-  /**
-   * Returns a string description of the object to aid in debugging.
-   */
-  virtual QString toString() const = 0;
 
   /**
    * Applies a read only visitor to this element and all child elements. The visitor will be called
@@ -208,10 +136,68 @@ public:
   virtual void visitRw(
     ElementProvider& map, ConstElementVisitor& visitor, const bool recursive = true) = 0;
 
+  /**
+   * At this point only one listener is supported, but we could support more later if needed.
+   */
+  void registerListener(ElementListener* l)
+  { assert(_listener == 0 || _listener == l); _listener = l; }
+
+  /**
+   * Compares information tags with another element
+   *
+   * @param other element to compare this element's tags with
+   * @return true if this element has the same information tags as the other element; false
+   * otherwise
+   */
+  bool hasSameNonMetadataTags(const Element& other) const;
+  bool hasTag(const QString& key) const { return _getElementData().getTags().contains(key); }
+  bool hasTag(const QString& key, const QString& val) const
+  { return _getElementData().getTags().get(key) == val; }
+
+  bool hasCircularError() const { return _getElementData().hasCircularError(); }
+  bool isUnknown() const { return getStatus().isUnknown(); }
+
+  /**
+   * Circular Error is in meters to 2 standard deviations. In other words it is about the 95%
+   * confidence interval assuming a normal distribution.
+   */
+  Meters getCircularError() const { return _getElementData().getCircularError(); }
+  ElementId getElementId() const { return ElementId(getElementType(), getId()); }
+  long getId() const { return _getElementData().getId(); }
+  long getChangeset() const { return _getElementData().getChangeset(); }
+  Meters getRawCircularError() const { return _getElementData().getRawCircularError(); }
+  long getVersion() const { return _getElementData().getVersion(); }
+  quint64 getTimestamp() const { return _getElementData().getTimestamp(); }
+  QString getUser() const { return _getElementData().getUser(); }
+  long getUid() const { return _getElementData().getUid(); }
+  const Tags& getTags() const { return _getElementData().getTags(); }
+  Tags& getTags() { return _getElementData().getTags(); }
+  QString getTag(const QString& key) const { return _getElementData().getTags().get(key); }
+  int getTagCount() const { return _getElementData().getTags().size(); }
+  bool getVisible() const { return _getElementData().getVisible(); }
+  Status getStatus() const { return _status; }
+  QString getStatusString() const;
+
+  /**
+   * Set the enumerated status code.
+   */
+  void setStatus(Status s) { _status = s; }
+  void setId(long id) { _getElementData().setId(id); }
+  void setVisible(bool visible) { _getElementData().setVisible(visible); }
+  void setTags(const Tags& tags) { _getElementData().setTags(tags); }
+  void setTag(QString k, QString v) { _getElementData().setTag(k, v); }
+  void setCircularError(Meters circularError) { _getElementData().setCircularError(circularError); }
+  void setUid(long uid) { _getElementData().setUid(uid); }
+  void setUser(QString user) { _getElementData().setUser(user); }
+  void setTimestamp(quint64 timestamp) { _getElementData().setTimestamp(timestamp); }
+  void setVersion(long version) { _getElementData().setVersion(version); }
+  void setChangeset(long changeset) { _getElementData().setChangeset(changeset); }
+  void removeTag(QString k) { _getElementData().getTags().remove(k); }
+  void addTags(const Tags& tags) { _getElementData().addTags(tags); }
+
 protected:
 
   Status _status;
-
   ElementListener* _listener;
 
   Element(Status s);

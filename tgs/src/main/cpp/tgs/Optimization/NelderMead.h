@@ -55,6 +55,7 @@ namespace Tgs
 class Vector
 {
 public:
+
     Vector() = default;
     ~Vector() = default;
 
@@ -197,6 +198,7 @@ private:
 class ValueDB
 {
 public:
+
   ValueDB() = default;
 
   double lookup(Vector vec)
@@ -223,6 +225,7 @@ public:
   }
 
 private:
+
   // not implemented.
   ValueDB(const ValueDB&);
   ValueDB& operator=(const ValueDB&);
@@ -237,12 +240,13 @@ public:
   class VectorSort
   {
   public:
+
     VectorSort(NelderMead* nm) : _nm(nm) { }
 
     // used in `step` to sort the vectors
     bool operator()(const Vector& a, const Vector& b)
     {
-        return _nm->f(a) < _nm->f(b);
+      return _nm->f(a) < _nm->f(b);
     }
 
     NelderMead* _nm;
@@ -254,6 +258,7 @@ public:
   class Function
   {
   public:
+
     virtual ~Function() = default;
 
     virtual double f(Vector v) = 0;
@@ -401,20 +406,21 @@ public:
     }
     else
     {
-        // as long as we don't have enough vectors, request random ones,
-        // with coordinates between 0 and 1. If you want other start vectors,
-        // simply ignore these and use `step` on the vectors you want.
-        Vector result;
-        result.prepare(dimension);
-        for (size_t i = 0; i<dimension; ++i)
-        {
-            result[i] = 0.001*(Tgs::Random::instance()->generateInt(1000));
-        }
-        return result;
+      // as long as we don't have enough vectors, request random ones,
+      // with coordinates between 0 and 1. If you want other start vectors,
+      // simply ignore these and use `step` on the vectors you want.
+      Vector result;
+      result.prepare(dimension);
+      for (size_t i = 0; i<dimension; ++i)
+      {
+        result[i] = 0.001*(Tgs::Random::instance()->generateInt(1000));
+      }
+      return result;
     }
   }
 
 private:
+
   // not implememnted
   NelderMead();
   NelderMead(const NelderMead&);

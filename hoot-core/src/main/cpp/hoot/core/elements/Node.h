@@ -98,7 +98,7 @@ public:
    */
   void clear() override;
 
-  Element* clone() const override { return new Node(*this); }
+  ElementPtr clone() const override { return std::make_shared<Node>(*this); }
   /**
    * Clone this node as a shared pointer. At this time the allocated node will be allocated as
    * part of an object pool which should avoid some memory fragmentation and provide faster
