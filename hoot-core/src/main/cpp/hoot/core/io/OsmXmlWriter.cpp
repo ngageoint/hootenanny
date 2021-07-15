@@ -295,7 +295,7 @@ void OsmXmlWriter::_writeMetadata(const Element* e) const
 
 void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
 {
-  ElementPtr elementClone(element->clone());
+  ElementPtr elementClone = element->clone();
   _addExportTagsVisitor.visit(elementClone);
 
   const ElementType type = elementClone->getElementType();

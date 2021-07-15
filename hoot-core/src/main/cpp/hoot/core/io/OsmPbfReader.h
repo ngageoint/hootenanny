@@ -118,13 +118,11 @@ public:
   void setUseFileStatus(bool useFileStatus) override { _useFileStatus = useFileStatus; }
   QString supportedFormats() override { return ".osm.pbf"; }
 
-  OsmPbfReader* clone() const { return new OsmPbfReader(*this); }
-
   /**
    * Scan through the file and calculate the offsets of every blob. This is handy when
    * distributing the processing of the file.
    */
-  std::vector<BlobLocation> loadOsmDataBlobOffsets(std::istream& strm);
+  std::vector<BlobLocation> loadOsmDataBlobOffsets(std::shared_ptr<std::istream> strm);
 
   /**
    * If the input is a directory then the underlying files are read in turn, otherwise readFile
@@ -134,14 +132,14 @@ public:
    */
   void read(const QString& path, const OsmMapPtr& map);
 
-  void parse(std::istream* strm, const OsmMapPtr& map);
-  void parseBlob(const BlobLocation& bl, std::istream* strm, const OsmMapPtr& map);
-  void parseBlob(long headerOffset, std::istream* strm, const OsmMapPtr& map);
+  void parse(std::shared_ptr<std::istream> strm, const OsmMapPtr& map);
+  void parseBlob(const BlobLocation& bl, std::shared_ptr<std::istream> strm, const OsmMapPtr& map);
+  void parseBlob(long headerOffset, std::shared_ptr<std::istream> strm, const OsmMapPtr& map);
   /**
    * Reads a uint32 in network order from the stream to determine the PBF size, then reads the
    * PrimitiveBlock from the stream specified into the provided map.
    */
-  void parseElements(std::istream* strm, const OsmMapPtr& map);
+  void parseElements(std::shared_ptr<std::istream> strm, const OsmMapPtr& map);
   void parseElements(QByteArray bytes, const OsmMapPtr& map);
 
   /**
@@ -170,7 +168,7 @@ private:
   QStringList _circularErrorTagKeys;
 
   std::string _buffer;
-  std::istream* _in;
+  std::shared_ptr<std::istream> _in;
   bool _needToCloseInput;
 
   std::vector<std::shared_ptr<hoot::Node>> _denseNodeTmp;
@@ -261,7 +259,7 @@ private:
 
   void _parseTimestamp(const hoot::pb::Info& info, Tags& t) const;
 
-  uint32_t _readUInt32();
+  uint32_t _readUInt32() const;
 
 };
 

@@ -93,6 +93,8 @@ public:
    */
   void translateToOsm(Tags& tags, const char* layerName, const char* geomType);
 
+  QString toString() const { return _scriptPath; }
+
 protected:
 
   bool _initialized;

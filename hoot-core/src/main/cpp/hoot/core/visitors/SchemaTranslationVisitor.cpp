@@ -69,6 +69,11 @@ void SchemaTranslationVisitor::setConfiguration(const Settings& conf)
   }
   LOG_VARD(_toOgr);
   _circularErrorTagKeys = c.getCircularErrorTagKeys();
+  const QString elementStatusFilter = c.getSchemaTranslationElementStatus();
+  if (!elementStatusFilter.trimmed().isEmpty())
+  {
+    _elementStatusFilter = Status::fromString(elementStatusFilter);
+  }
 }
 
 void SchemaTranslationVisitor::setTranslationDirection(QString direction)
@@ -91,10 +96,10 @@ void SchemaTranslationVisitor::setTranslationDirection(QString direction)
 void SchemaTranslationVisitor::setTranslationScript(QString path)
 {
   LOG_VARD(path);
-  _translator.reset(ScriptSchemaTranslatorFactory::getInstance().createTranslator(path));
+  _translator = ScriptSchemaTranslatorFactory::getInstance().createTranslator(path);
   if (_toOgr)
   {
-    _ogrTranslator = dynamic_cast<ScriptToOgrSchemaTranslator*>(_translator.get());
+    _ogrTranslator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(_translator);
     if (_ogrTranslator == nullptr)
     {
       throw IllegalArgumentException(
@@ -105,7 +110,8 @@ void SchemaTranslationVisitor::setTranslationScript(QString path)
 
 void SchemaTranslationVisitor::visit(const ElementPtr& e)
 {
-  if (e.get() && e->getTags().getNonDebugCount() > 0)
+  if (e.get() && e->getTags().getNonDebugCount() > 0 &&
+      (_elementStatusFilter == Status::Invalid || e->getStatus() == _elementStatusFilter))
   {
     Tags& tags = e->getTags();
 

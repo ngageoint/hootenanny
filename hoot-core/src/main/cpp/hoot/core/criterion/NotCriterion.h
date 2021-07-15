@@ -43,7 +43,6 @@ public:
   static QString className() { return "hoot::NotCriterion"; }
 
   NotCriterion() = default;
-  // TODO: Think we can probably get rid of this version that takes in ElementCriterion*.
   NotCriterion(ElementCriterion* c) : _child(c) { }
   NotCriterion(ElementCriterionPtr c) : _child(c) { }
   ~NotCriterion() = default;

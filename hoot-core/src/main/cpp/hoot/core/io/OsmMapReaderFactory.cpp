@@ -187,7 +187,7 @@ void OsmMapReaderFactory::_read(
     }
   }
   VALIDATE(map->validate(true));
-  LOG_INFO(
+  LOG_STATUS(
     "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
     " elements from input in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }

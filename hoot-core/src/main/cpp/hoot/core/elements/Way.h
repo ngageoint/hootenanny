@@ -74,7 +74,7 @@ public:
    */
   void clear() override;
 
-  Element* clone() const override { return new Way(*this); }
+  ElementPtr clone() const override { return std::make_shared<Way>(*this); }
 
   bool containsNodeId(long nid) const;
 

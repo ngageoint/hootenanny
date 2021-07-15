@@ -14,6 +14,8 @@ getters/setters are ok in a header file.
 constructors/destructors being toward the top.
 * Per class member access type, list member variables before member methods.
 * Place getters/setters at the end of the public documentation in the header file.
+* Prepend private member variables and methods with "_".
+* Place private member variables before member methods in the function file.
 * Group header includes by type. e.g. hoot includes together, Qt includes together, etc.
 * Header includes should be alphabetized.
 * Keep as much logic out of classes inheriting `BaseCommand` as possible. Create a new class to hold

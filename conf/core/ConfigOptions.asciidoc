@@ -4643,6 +4643,15 @@ first conversion operation. If you want the translation operation to occur in a 
 then you must explicitly specify it in convert.ops. For more information on translation files read
 the "Translation" section of the Hootenanny User Guide.
 
+=== schema.translation.element.status
+
+* Data Type: string
+* Default Value: ``
+
+Optional element status filter to use when performing schema translation. Valid values are empty
+(default), 'Unknown1', and 'Unknown2'. An empty value will cause no filtering to occur. A non-empty
+value will only translate elements with the specified status.
+
 === score.graph.debug.images
 
 * Data Type: bool

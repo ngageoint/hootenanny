@@ -150,7 +150,8 @@ void PythonSchemaTranslator::_finalize()
   Py_Finalize();
 }
 
-void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, const char* geomType)
+void PythonSchemaTranslator::_translateToOsm(
+  Tags& tags, const char* layerName, const char* geomType)
 {
   PyObject* layerNamePy = PyString_FromString(layerName);
   PyObject* geomTypePy = PyString_FromString(geomType);

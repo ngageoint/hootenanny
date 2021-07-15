@@ -32,6 +32,7 @@
 #include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QString>
@@ -63,7 +64,7 @@ public:
   QString getInitStatusMessage() const override
   { return "Translating features to a schema..."; }
   QString getCompletedStatusMessage() const override
-  { return "Translated " + QString::number(_numAffected) + " features to a schema"; }
+  { return "Translated " + StringUtils::formatLargeNumber(_numAffected) + " features to a schema"; }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
@@ -75,11 +76,14 @@ public:
 private:
 
   ScriptSchemaTranslatorPtr _translator;
-  ScriptToOgrSchemaTranslator* _ogrTranslator;
+  std::shared_ptr<ScriptToOgrSchemaTranslator> _ogrTranslator;
   bool _toOgr;
 
   // keys for tags containing CE data
   QStringList _circularErrorTagKeys;
+  // if populated, skips elements whose status don't match the filter; defaults to Status::Invalid,
+  // which equates to no filtering
+  Status _elementStatusFilter;
 };
 
 }
