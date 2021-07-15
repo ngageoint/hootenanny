@@ -88,7 +88,8 @@ public:
   void runOffsetsTest()
   {
     OsmPbfReader uut(false);
-    fstream input(_inputPath.toStdString() + "SmallSplits.pbf", ios::in | ios::binary);
+    std::shared_ptr<fstream> input =
+      std::make_shared<fstream>(_inputPath.toStdString() + "SmallSplits.pbf", ios::in | ios::binary);
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     vector<OsmPbfReader::BlobLocation> v = uut.loadOsmDataBlobOffsets(input);
@@ -122,7 +123,7 @@ public:
 
     for (size_t i = 0; i < v.size(); i++)
     {
-      uut.parseBlob(v[i], &input, map);
+      uut.parseBlob(v[i], input, map);
     }
 
     // sanity check that it actually read the data.
@@ -157,13 +158,13 @@ public:
     string s;
     s.resize(dataSize);
     memcpy((char*)s.data(), data, dataSize);
-    stringstream ss(s, stringstream::in);
+    std::shared_ptr<stringstream> ss = std::make_shared<stringstream>(s, stringstream::in);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
-    reader.parse(&ss, map);
+    reader.parse(ss, map);
 
     string expected("highway = road\nnote = test tag\nhello = world\n");
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
@@ -191,13 +192,13 @@ public:
     string s;
     s.resize(dataSize);
     memcpy((char*)s.data(), data, dataSize);
-    stringstream ss(s, stringstream::in);
+    std::shared_ptr<stringstream> ss = std::make_shared<stringstream>(s, stringstream::in);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmPbfReader reader(true);
     reader.setPermissive(true);
-    reader.parseElements(&ss, map);
+    reader.parseElements(ss, map);
 
     string expected("note = test tag\nhello = world\n");
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
@@ -224,13 +225,13 @@ public:
     string s;
     s.resize(dataSize);
     memcpy((char*)s.data(), data, dataSize);
-    stringstream ss(s, stringstream::in);
+    std::shared_ptr<stringstream> ss = std::make_shared<stringstream>(s, stringstream::in);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmPbfReader reader(true);
     reader.setPermissive(true);
-    reader.parseElements(&ss, map);
+    reader.parseElements(ss, map);
 
     OsmJsonWriter writer;
     writer.setIncludeCompatibilityTags(false);
@@ -262,13 +263,13 @@ public:
     string s;
     s.resize(dataSize);
     memcpy((char*)s.data(), data, dataSize);
-    stringstream ss(s, stringstream::in);
+    std::shared_ptr<stringstream> ss = std::make_shared<stringstream>(s, stringstream::in);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmPbfReader reader(true);
     reader.setPermissive(true);
-    reader.parseElements(&ss, map);
+    reader.parseElements(ss, map);
 
     string expected("highway = road\nnote = test tag\nhello = world\n");
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
@@ -285,9 +286,10 @@ public:
   void runToyTest()
   {
     OsmPbfReader uut(false);
-    fstream input("test-files/ToyTestA.osm.pbf", ios::in | ios::binary);
+    std::shared_ptr<fstream> input =
+      std::make_shared<fstream>("test-files/ToyTestA.osm.pbf", ios::in | ios::binary);
     OsmMapPtr map = std::make_shared<OsmMap>();
-    uut.parse(&input, map);
+    uut.parse(input, map);
 
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
@@ -300,9 +302,11 @@ public:
   void runToyRelationTest()
   {
     OsmPbfReader uut(false);
-    fstream input(_inputPath.toStdString() + "OsmPbfRelationTest.osm.pbf", ios::in | ios::binary);
+    std::shared_ptr<fstream> input =
+      std::make_shared<fstream>(
+        _inputPath.toStdString() + "OsmPbfRelationTest.osm.pbf", ios::in | ios::binary);
     OsmMapPtr map = std::make_shared<OsmMap>();
-    uut.parse(&input, map);
+    uut.parse(input, map);
 
     const QString testFileName = "runToyRelationTest.json";
     OsmJsonWriter writer;
