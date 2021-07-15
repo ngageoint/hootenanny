@@ -69,6 +69,11 @@ void SchemaTranslationVisitor::setConfiguration(const Settings& conf)
   }
   LOG_VARD(_toOgr);
   _circularErrorTagKeys = c.getCircularErrorTagKeys();
+  const QString elementStatusFilter = c.getSchemaTranslationElementStatus();
+  if (!elementStatusFilter.trimmed().isEmpty())
+  {
+    _elementStatusFilter = Status::fromString(elementStatusFilter);
+  }
 }
 
 void SchemaTranslationVisitor::setTranslationDirection(QString direction)
@@ -105,7 +110,8 @@ void SchemaTranslationVisitor::setTranslationScript(QString path)
 
 void SchemaTranslationVisitor::visit(const ElementPtr& e)
 {
-  if (e.get() && e->getTags().getNonDebugCount() > 0)
+  if (e.get() && e->getTags().getNonDebugCount() > 0 &&
+      (_elementStatusFilter == Status::Invalid || e->getStatus() == _elementStatusFilter))
   {
     Tags& tags = e->getTags();
 

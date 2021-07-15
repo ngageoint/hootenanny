@@ -80,6 +80,8 @@ private:
 
   // keys for tags containing CE data
   QStringList _circularErrorTagKeys;
+  // TODO; defaults to invalid
+  Status _elementStatusFilter;
 };
 
 }
