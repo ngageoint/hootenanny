@@ -259,7 +259,7 @@ private:
 
   void _parseTimestamp(const hoot::pb::Info& info, Tags& t) const;
 
-  uint32_t _readUInt32();
+  uint32_t _readUInt32() const;
 
 };
 

@@ -1075,7 +1075,7 @@ void OsmPbfReader::_parseOsmHeader()
   _osmHeaderRead = true;
 }
 
-uint32_t OsmPbfReader::_readUInt32()
+uint32_t OsmPbfReader::_readUInt32() const
 {
   uint32_t buf = 0xFFFFFFFF;
   _in->read((char*)&buf, 4);

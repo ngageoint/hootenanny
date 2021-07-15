@@ -58,7 +58,6 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, CalculateStatsOp)
 
 CalculateStatsOp::CalculateStatsOp(QString mapName, bool inputIsConflatedMapOutput) :
-  _pConf(&conf()),
   _mapName(mapName),
   _quick(false),
   _inputIsConflatedMapOutput(inputIsConflatedMapOutput),
@@ -70,13 +69,13 @@ CalculateStatsOp::CalculateStatsOp(QString mapName, bool inputIsConflatedMapOutp
   _numInterpretStatVisCacheHits(0),
   _numGenerateFeatureStatCalls(0)
 {
+  setConfiguration(conf());
   _initConflatableFeatureCounts();
   _readGenericStatsConfiguration();
 }
 
 CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapName,
                                    bool inputIsConflatedMapOutput) :
-  _pConf(&conf()),
   _criterion(criterion),
   _mapName(mapName),
   _quick(false),
@@ -88,24 +87,22 @@ CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapNam
   _numInterpretStatVisCacheHits(0),
   _numGenerateFeatureStatCalls(0)
 {
-  LOG_VART(_inputIsConflatedMapOutput);
-
+  setConfiguration(conf());
   _initConflatableFeatureCounts();
   _readGenericStatsConfiguration();
 }
 
 void CalculateStatsOp::setConfiguration(const Settings& conf)
 {
-  _pConf = &conf;
+  ConfigOptions opts = ConfigOptions(conf);
+  _statsFileName = opts.getStatsGenericDataFile();
 }
 
 void CalculateStatsOp::_readGenericStatsConfiguration()
 {
   // read generic stats from json file
-  ConfigOptions opts = ConfigOptions(*_pConf);
-  QString statsFileName = opts.getStatsGenericDataFile();
   bpt::ptree propPtree;
-  bpt::read_json(statsFileName.toLatin1().constData(), propPtree );
+  bpt::read_json(_statsFileName.toLatin1().constData(), propPtree );
 
   _quickStatData.clear();
   _slowStatData.clear();
@@ -131,7 +128,7 @@ void CalculateStatsOp::_readGenericStatsConfiguration()
     else
     {
       throw HootException(
-        "Invalid stats data list name '" + listType.first + "' in " + statsFileName.toStdString() +
+        "Invalid stats data list name '" + listType.first + "' in " + _statsFileName.toStdString() +
         ". Allowed: 'quick' or 'slow'.");
     }
 
@@ -159,14 +156,14 @@ void CalculateStatsOp::_readGenericStatsConfiguration()
           {
             throw HootException(
               "Invalid stats data field '" + val.toStdString() + "' in " +
-              statsFileName.toStdString());
+              _statsFileName.toStdString());
           }
         }
         else
         {
           throw HootException(
             "Invalid stats data field '" + val.toStdString() + "' in " +
-            statsFileName.toStdString());
+            _statsFileName.toStdString());
         }
       }
 
@@ -595,11 +592,6 @@ void CalculateStatsOp::_addStat(const QString& name, double value)
   _stats.append(SingleStat(name, value));
 }
 
-void CalculateStatsOp::_addStat(const char* name, double value)
-{
-  _stats.append(SingleStat(QString(name), value));
-}
-
 bool CalculateStatsOp::_statPassesFilter(const StatData& statData) const
 {
   return
@@ -741,14 +733,14 @@ void CalculateStatsOp::_interpretStatData(
         _numInterpresetStatDataCalls++;
       }
 
-      val = GetRequestedStatValue(pVisitor.get(), d.getStatCall());
+      val = _getRequestedStatValue(pVisitor.get(), d.getStatCall());
     }
 
     _addStat(d.getName(), val);
   }
 }
 
-double CalculateStatsOp::GetRequestedStatValue(
+double CalculateStatsOp::_getRequestedStatValue(
   const ElementVisitor* pVisitor, StatData::StatCall call) const
 {
   if (call == StatData::StatCall::Stat)
@@ -828,7 +820,7 @@ double CalculateStatsOp::_applyVisitor(
   }
 
   _currentStatCalcIndex++;
-  return GetRequestedStatValue(&childVisitor, call);
+  return _getRequestedStatValue(&childVisitor, call);
 }
 
 void CalculateStatsOp::_applyVisitor(ConstElementVisitor* v, const QString& statName)
