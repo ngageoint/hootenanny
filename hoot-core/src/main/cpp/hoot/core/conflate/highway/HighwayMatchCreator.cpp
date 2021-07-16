@@ -327,9 +327,9 @@ private:
 
 HighwayMatchCreator::HighwayMatchCreator()
 {
-  _classifier.reset(
+  _classifier =
     Factory::getInstance().constructObject<HighwayClassifier>(
-      ConfigOptions().getConflateMatchHighwayClassifier()));
+      ConfigOptions().getConflateMatchHighwayClassifier());
   _sublineMatcher =
     SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
   _tagAncestorDiff = std::make_shared<TagAncestorDifferencer>("highway");

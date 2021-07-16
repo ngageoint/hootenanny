@@ -109,7 +109,7 @@ QString WeightedMetricDistanceExtractor::getName() const
 
 void WeightedMetricDistanceExtractor::setPointAggregator(const QString& aggregator)
 {
-  _pointAgg.reset(Factory::getInstance().constructObject<ValueAggregator>(aggregator));
+  _pointAgg = Factory::getInstance().constructObject<ValueAggregator>(aggregator);
 }
 
 void WeightedMetricDistanceExtractor::setSearchRadius(const double radius)

@@ -68,10 +68,7 @@ void MultipleCriterionConsumerVisitor::_addCriteria(
       if (!critName.trimmed().isEmpty())
       {
         LOG_VART(critName);
-        ElementCriterionPtr crit =
-          std::shared_ptr<ElementCriterion>(
-            Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
-        addCriterion(crit);
+        addCriterion(Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
       }
     }
   }

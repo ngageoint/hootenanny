@@ -53,6 +53,11 @@ namespace hoot
 
 HOOT_JS_REGISTER(OsmMapOperationJs)
 
+OsmMapOperationJs::OsmMapOperationJs(std::shared_ptr<OsmMapOperation> op) :
+_op(op)
+{
+}
+
 void OsmMapOperationJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
@@ -94,7 +99,8 @@ void OsmMapOperationJs::New(const FunctionCallbackInfo<Value>& args)
         HootExceptionJs::create(
           IllegalArgumentException("Invalid OsmMapOperation. Did you forget 'new'?"))));
   }
-  OsmMapOperation* op = Factory::getInstance().constructObject<OsmMapOperation>(className);
+  std::shared_ptr<OsmMapOperation> op =
+    Factory::getInstance().constructObject<OsmMapOperation>(className);
   OsmMapOperationJs* obj = new OsmMapOperationJs(op);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());

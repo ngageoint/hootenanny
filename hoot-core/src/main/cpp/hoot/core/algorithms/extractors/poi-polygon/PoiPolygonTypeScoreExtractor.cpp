@@ -67,9 +67,9 @@ void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
   _translateTagValuesToEnglish = config.getPoiPolygonTypeTranslateToEnglish();
   if (_translateTagValuesToEnglish && !_translator)
   {
-    _translator.reset(
+    _translator =
       Factory::getInstance().constructObject<ToEnglishTranslator>(
-        config.getLanguageTranslationTranslator()));
+        config.getLanguageTranslationTranslator());
     _translator->setConfiguration(conf);
     _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
     _translator->setId(className());

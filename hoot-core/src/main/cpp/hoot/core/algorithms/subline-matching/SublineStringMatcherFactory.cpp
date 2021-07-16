@@ -131,8 +131,8 @@ SublineStringMatcherPtr SublineStringMatcherFactory::_getMatcher(
   const double maxAngle, const double headingDelta, const int maxRecursions)
 {
   // Create the primary matcher. This one will always be used.
-  std::shared_ptr<SublineStringMatcher> primaryMatcher(
-    Factory::getInstance().constructObject<SublineStringMatcher>(sublineStringMatcherName));
+  std::shared_ptr<SublineStringMatcher> primaryMatcher =
+    Factory::getInstance().constructObject<SublineStringMatcher>(sublineStringMatcherName);
   Settings settings = conf();
   settings.set(ConfigOptions::getWaySublineMatcherKey(), sublineMatcherName);
   settings.set(ConfigOptions::getWayMatcherMaxAngleKey(), maxAngle);

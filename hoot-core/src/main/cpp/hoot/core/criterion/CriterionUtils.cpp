@@ -82,8 +82,7 @@ ElementCriterionPtr CriterionUtils::constructCriterion(
     const QString criterionClassName = criteriaClassNames.at(i);
     try
     {
-      subCrit.reset(
-        Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
+      subCrit = Factory::getInstance().constructObject<ElementCriterion>(criterionClassName);
     }
     catch (const boost::bad_any_cast&)
     {

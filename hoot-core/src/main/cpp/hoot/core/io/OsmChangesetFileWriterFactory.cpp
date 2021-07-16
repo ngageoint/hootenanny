@@ -55,7 +55,7 @@ std::shared_ptr<OsmChangesetFileWriter> OsmChangesetFileWriterFactory::createWri
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
     LOG_VARD(names[i]);
-    writer.reset(Factory::getInstance().constructObject<OsmChangesetFileWriter>(names[i]));
+    writer = Factory::getInstance().constructObject<OsmChangesetFileWriter>(names[i]);
     if (writer->isSupported(url))
     { LOG_DEBUG("Using changeset output writer: " << names[i]);
 

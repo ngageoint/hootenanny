@@ -44,8 +44,8 @@ QStringList GeometryTypeCriterion::getCriterionClassNamesByGeometryType(const Ge
   {
     const QString className = classNames[i];
 
-    ElementCriterionPtr crit(
-      Factory::getInstance().constructObject<ElementCriterion>(className));
+    ElementCriterionPtr crit =
+      Factory::getInstance().constructObject<ElementCriterion>(className);
     std::shared_ptr<GeometryTypeCriterion> geometryTypeCrit =
       std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
     if (geometryTypeCrit &&

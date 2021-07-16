@@ -131,8 +131,7 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
         }
 
         ElementCriterionPtr crit =
-          std::shared_ptr<ElementCriterion>(
-            Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
+          Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed());
         LOG_VART(crit.get());
 
         std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
@@ -695,8 +694,8 @@ std::shared_ptr<Interpolator> RubberSheet::_readInterpolator(QIODevice& is)
 
   QString interpolatorClass;
   ds >> interpolatorClass;
-  std::shared_ptr<Interpolator> result;
-  result.reset(Factory::getInstance().constructObject<Interpolator>(interpolatorClass));
+  std::shared_ptr<Interpolator> result =
+    Factory::getInstance().constructObject<Interpolator>(interpolatorClass);
   result->readInterpolator(is);
   return result;
 }

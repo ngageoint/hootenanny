@@ -65,8 +65,8 @@ public:
       {
         continue;
       }
-      ElementCriterionPtr crit(
-        Factory::getInstance().constructObject<ElementCriterion>(className));
+      ElementCriterionPtr crit =
+        Factory::getInstance().constructObject<ElementCriterion>(className);
       LOG_VART(crit.get());
 
       std::shared_ptr<ConstOsmMapConsumer> mapConsumer =

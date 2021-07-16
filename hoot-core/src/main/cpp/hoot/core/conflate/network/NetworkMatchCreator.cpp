@@ -138,8 +138,8 @@ void NetworkMatchCreator::createMatches(
 
   LOG_INFO("Matching networks...");
   // call class to derive final graph node and graph edge matches
-  NetworkMatcherPtr matcher(
-    Factory::getInstance().constructObject<NetworkMatcher>(ConfigOptions().getNetworkMatcher()));
+  NetworkMatcherPtr matcher =
+    Factory::getInstance().constructObject<NetworkMatcher>(ConfigOptions().getNetworkMatcher());
   matcher->matchNetworks(map, n1, n2);
 
   NetworkDetailsPtr details = std::make_shared<NetworkDetails>(map, n1, n2);
