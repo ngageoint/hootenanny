@@ -51,8 +51,6 @@ class WeightedWordDistanceTest : public HootTestFixture
 
 public:
 
-  WeightedWordDistance* _wwd;
-
   QString normalize(QString s)
   {
     QStringList l = s.split(" ");
@@ -87,8 +85,8 @@ public:
   void runTest()
   {
     WeightedWordDistance uut(
-      new LevenshteinDistance(),
-      new TextFileWordWeightDictionary("test-files/algorithms/string/WordWeight.tsv"));
+      std::make_shared<LevenshteinDistance>(),
+      std::make_shared<TextFileWordWeightDictionary>("test-files/algorithms/string/WordWeight.tsv"));
     HOOT_STR_EQUALS(0, uut.compare("foo", "bar"));
     HOOT_STR_EQUALS(0.631018, uut.compare("foo street", "fou street"));
     HOOT_STR_EQUALS(0.987104, uut.compare("foo road", "foo street"));
@@ -101,10 +99,10 @@ public:
 
   void runRealWorldTest()
   {
-    SqliteWordWeightDictionary* dict = new SqliteWordWeightDictionary(
-      ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary()));
-    WeightedWordDistance uut(new LevenshteinDistance(1.5),
-      dict);
+    std::shared_ptr<SqliteWordWeightDictionary> dict =
+      std::make_shared<SqliteWordWeightDictionary>(
+        ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary()));
+    WeightedWordDistance uut(std::make_shared<LevenshteinDistance>(1.5), dict);
     _wwd = &uut;
     LOG_VAR(dict->getWeight("kafr"));
     LOG_VAR(uut.compare("Kafr Ibrahim al Aydi", "Kafr Ayyub"));
@@ -126,6 +124,10 @@ public:
     test3("`Izbat ash Sharaqwah", "Izbat al Sharaqwah");
     test3("Joe's Coffee", "Joe's Restaurant");
   }
+
+private:
+
+  WeightedWordDistance* _wwd;
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WeightedWordDistanceTest, "quick");
