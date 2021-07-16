@@ -69,7 +69,7 @@ public:
   OsmMapPtr createMap()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    std::shared_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
+    std::shared_ptr<OGREnvelope> env = GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1));
     MapProjector::projectToPlanar(map, *env);
 
     return map;

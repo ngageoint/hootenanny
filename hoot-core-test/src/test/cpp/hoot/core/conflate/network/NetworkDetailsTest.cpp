@@ -65,7 +65,7 @@ public:
   NetworkDetailsPtr createSampleDetails()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    std::shared_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
+    std::shared_ptr<OGREnvelope> env = GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1));
     MapProjector::projectToPlanar(map, *env);
 
     NodePtr n1a = std::make_shared<Node>(Status::Invalid, -1, 0, 0, 15.0);

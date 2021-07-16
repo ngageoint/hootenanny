@@ -125,6 +125,7 @@ GeometryPtr AlphaShape::_convertFaceToPolygon(const Face& face) const
 
   lr = GeometryFactory::getDefaultInstance()->createLinearRing(cs);
   std::vector<Geometry*>* holes = new std::vector<Geometry*>();
+  // GeometryFactory takes ownership of these input parameters.
   result.reset(GeometryFactory::getDefaultInstance()->createPolygon(lr, holes));
 
   return result;

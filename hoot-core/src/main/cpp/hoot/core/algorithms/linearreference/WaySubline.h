@@ -88,7 +88,9 @@ public:
    * @return the created way
    */
   WayPtr toWay(
-    const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf = nullptr,
+    const OsmMapPtr& map,
+    std::shared_ptr<GeometryToElementConverter::NodeFactory> nf =
+      std::shared_ptr<GeometryToElementConverter::NodeFactory>(),
     bool reuse = false) const;
 
   /**

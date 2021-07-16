@@ -56,7 +56,7 @@ public:
   ~MultiLineStringVisitor() = default;
 
   /**
-   * Retrieves the multi line string created by this visitor. The caller retains ownership. If the
+   * Retrieves the multiline string created by this visitor. The caller retains ownership. If the
    * method is called multiple times the first call will create a multi line string for the elements
    * visited and clear any history. If it is called again (without visiting) it will return a valid
    * but empty geometry.

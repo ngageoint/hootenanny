@@ -147,7 +147,7 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(
   }
   else
   {
-    // we don't recognize this geometry type.
+    // We don't recognize this geometry type.
     std::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
     return g;
   }
@@ -297,7 +297,7 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
 
   // an empty set of holes
   vector<Geometry*>* holes = new vector<Geometry*>();
-  // create the outer line
+  // create the outer line; GeometryFactory takes ownership of these input parameters.
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(cs);
 
   std::shared_ptr<Polygon> result(

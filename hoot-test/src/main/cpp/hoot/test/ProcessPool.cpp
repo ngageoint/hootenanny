@@ -114,7 +114,9 @@ QProcess* ProcessThread::createProcess()
   QString names = (_showTestName ? "--names" : "");
   QString suppressFailureDetail = (_suppressFailureDetail ? "--suppress-failure-detail" : "");
   QString diff = (_printDiff ? "--diff" : "");
-  proc->start(QString("HootTest %1 %2 %3 --listen %4").arg(names).arg(suppressFailureDetail).arg(diff).arg((int)_waitTime));
+  proc->start(
+    QString("HootTest %1 %2 %3 --listen %4")
+    .arg(names).arg(suppressFailureDetail).arg(diff).arg((int)_waitTime));
   return proc;
 }
 
