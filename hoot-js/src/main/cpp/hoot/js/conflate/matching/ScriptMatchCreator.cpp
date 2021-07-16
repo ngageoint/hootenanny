@@ -121,7 +121,7 @@ public:
 
   ~ScriptMatchVisitor()
   {
-    //  Free the perisistent object
+    //  Free the persistent object
     if (_mapJs.IsEmpty())
       return;
     Local<Object> mapJs(ToLocal(&_mapJs));
