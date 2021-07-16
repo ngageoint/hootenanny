@@ -79,7 +79,6 @@ private:
   QStringList _tagKeysAsList;
   QStringList _preTranslatedTagKeys;
   QString _preTranslatedVal;
-  long _numTagsCompared;
 };
 
 }
