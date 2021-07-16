@@ -142,14 +142,12 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(
     MultiLineStringVisitor v;
     v.setElementProvider(_constProvider);
     e->visitRo(*_constProvider, v);
-    std::shared_ptr<Geometry> result(v.createMultiLineString());
-    return result;
+    return v.createMultiLineString();
   }
   else
   {
     // We don't recognize this geometry type.
-    std::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
-    return g;
+    return std::shared_ptr<Geometry>(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
   }
 }
 

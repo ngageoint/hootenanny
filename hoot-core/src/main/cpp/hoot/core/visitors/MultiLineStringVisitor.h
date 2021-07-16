@@ -53,15 +53,14 @@ public:
   static QString className() { return "hoot::MultiLineStringVisitor"; }
 
   MultiLineStringVisitor();
-  ~MultiLineStringVisitor() = default;
+  virtual ~MultiLineStringVisitor() = default;
 
   /**
-   * Retrieves the multiline string created by this visitor. The caller retains ownership. If the
-   * method is called multiple times the first call will create a multi line string for the elements
-   * visited and clear any history. If it is called again (without visiting) it will return a valid
-   * but empty geometry.
+   * Retrieves the multiline string created by this visitor. If the method is called multiple times
+   * the first call will create a multi line string for the elements visited and clear any history.
+   * If it is called again (without visiting) it will return a valid but empty geometry.
    */
-  geos::geom::MultiLineString* createMultiLineString();
+  std::shared_ptr<geos::geom::MultiLineString> createMultiLineString();
 
   void visit(const ConstElementPtr& e) override;
   void visit(const ConstWayPtr& w);
