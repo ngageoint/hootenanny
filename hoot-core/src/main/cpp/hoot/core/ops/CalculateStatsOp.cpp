@@ -418,7 +418,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     }
     _addStat("Total Conflatable Features", conflatableFeatureCount);
     _addStat("Percentage of Total Features Conflatable",
-             (conflatableFeatureCount / (double)featureCount) * 100.0);
+             (conflatableFeatureCount / featureCount) * 100.0);
     const double numFeaturesMarkedForReview =
       _applyVisitor(
         std::make_shared<NeedsReviewCriterion>(_constMap), std::make_shared<FeatureCountVisitor>(),
@@ -446,7 +446,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     }
     _addStat("Total Unconflatable Features", unconflatableFeatureCount);
     _addStat("Percentage of Total Features Unconflatable",
-             ((double)unconflatableFeatureCount / (double)featureCount) * 100.0);
+             ((double)unconflatableFeatureCount / featureCount) * 100.0);
 
     _addStat("Match Creators", matchCreators.size());
 
@@ -509,10 +509,10 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
     _addStat("Total Conflated Features", conflatedFeatureCount);
     _addStat("Percentage of Total Features Conflated",
-              (conflatedFeatureCount / (double)featureCount) * 100.0);
+              (conflatedFeatureCount / featureCount) * 100.0);
     _addStat("Total Features Marked for Review", numFeaturesMarkedForReview);
     _addStat("Percentage of Total Features Marked for Review",
-             (numFeaturesMarkedForReview / (double)featureCount) * 100.0);
+             (numFeaturesMarkedForReview / featureCount) * 100.0);
     _addStat("Total Reviews to be Made", numReviewsToBeMade);
     const double unconflatedFeatureCountFromMap1 =
       _applyVisitor(
@@ -528,13 +528,13 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         std::make_shared<FeatureCountVisitor>(), "Unconflated Feature Count");
     _addStat("Total Unmatched Features", totalUnconflatedFeatureCount);
     _addStat("Percentage of Total Features Unmatched",
-             (totalUnconflatedFeatureCount / (double)featureCount) * 100.0);
+             (totalUnconflatedFeatureCount / featureCount) * 100.0);
     _addStat("Total Unmatched Features From Map 1", unconflatedFeatureCountFromMap1);
     _addStat("Percentage of Total Features Unmatched From Map 1",
-             (unconflatedFeatureCountFromMap1 / (double)featureCount) * 100.0);
+             (unconflatedFeatureCountFromMap1 / featureCount) * 100.0);
     _addStat("Total Unmatched Features From Map 2", unconflatedFeatureCountFromMap2);
     _addStat("Percentage of Total Features Unmatched From Map 2",
-             (unconflatedFeatureCountFromMap2 / (double)featureCount) * 100.0);
+             (unconflatedFeatureCountFromMap2 / featureCount) * 100.0);
 
     for (QMap<CreatorDescription::BaseFeatureType, double>::const_iterator it =
            _conflatableFeatureCounts.begin(); it != _conflatableFeatureCounts.end(); ++it)

@@ -438,32 +438,29 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 
   ruleDescription = "#24: address";
   LOG_TRACE("Checking rule : " << ruleDescription << "...");
-  if (_addressParsingEnabled)
+  // If both have addresses and they explicitly contradict each other, throw out the review. Don't
+  // do it if the poly has more than one address, like in many multi-use buildings.
+  if (_addressParsingEnabled && !_addressMatch &&
+      // We don't want to shoot ourselves and throw out a good review just b/c of an address
+      // mismatch when we have some other good evidence. TODO: should this be moved down to the if
+      // block that checks the address score?
+      !(_distance == 0 && (_nameMatch || _typeMatch)))
   {
-    // If both have addresses and they explicitly contradict each other, throw out the review. Don't
-    // do it if the poly has more than one address, like in many multi-use buildings.
-    if (!_addressMatch &&
-        // We don't want to shoot ourselves and throw out a good review just b/c of an address
-        // mismatch when we have some other good evidence. TODO: should this be moved down to the if
-        // block that checks the address score?
-        !(_distance == 0 && (_nameMatch || _typeMatch)))
-    {
-      const int numPoiAddresses = _infoCache->numAddresses(poi);
-      const int numPolyAddresses = _infoCache->numAddresses(poly);
+    const int numPoiAddresses = _infoCache->numAddresses(poi);
+    const int numPolyAddresses = _infoCache->numAddresses(poly);
 
-      if (numPoiAddresses > 0 && numPolyAddresses > 0)
+    if (numPoiAddresses > 0 && numPolyAddresses > 0)
+    {
+      // Check to make sure the only address the poly has isn't the poi itself as a way node /
+      // relation member.
+      if (numPolyAddresses < 2 && _infoCache->containsMember(poly, poi->getElementId()))
       {
-        // Check to make sure the only address the poly has isn't the poi itself as a way node /
-        // relation member.
-        if (numPolyAddresses < 2 && _infoCache->containsMember(poly, poi->getElementId()))
-        {
-        }
-        else if (_addressScore < 0.8)
-        {
-          LOG_TRACE("Returning miss per review reduction rule: " << ruleDescription << "...");
-          _triggeredRuleDescription = ruleDescription;
-          return true;
-        }
+      }
+      else if (_addressScore < 0.8)
+      {
+        LOG_TRACE("Returning miss per review reduction rule: " << ruleDescription << "...");
+        _triggeredRuleDescription = ruleDescription;
+        return true;
       }
     }
   }

@@ -209,16 +209,16 @@ bool OsmApiWriter::apply()
         //  all of the threads are idle and not waiting for something to come back
         //  There are two things that can be done here, first is to put everything that is
         //  "ready to send" in a changeset and send it OR move everything to the error state
-/*
+
         //  Option #1: Get all of the remaining elements as a single changeset
-        _changesetMutex.lock();
-        _changeset.calculateRemainingChangeset(changeset_info);
-        _changesetMutex.unlock();
+        //_changesetMutex.lock();
+        //_changeset.calculateRemainingChangeset(changeset_info);
+        //_changesetMutex.unlock();
         //  Push that changeset
-        _pushChangesets(changeset_info);
+        //_pushChangesets(changeset_info);
         //  Let the threads know that the remaining changeset is the "remaining" changeset
-        _threadsCanExit = true;
-*/
+        //_threadsCanExit = true;
+
         LOG_STATUS("Apply Changeset: Remaining elements unsendable...");
         //  Option #2: Move everything to the error state and exit
         _changesetMutex.lock();
