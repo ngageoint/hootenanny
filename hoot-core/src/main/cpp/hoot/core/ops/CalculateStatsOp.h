@@ -150,8 +150,12 @@ private:
   double _applyVisitor(
     const ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
     StatData::StatCall call = StatData::StatCall::Stat);
+  double _applyVisitor(
+    const std::shared_ptr<ElementCriterion> pCrit, std::shared_ptr<ConstElementVisitor> pVis,
+    const QString& statName, StatData::StatCall call = StatData::StatCall::Stat);
+  void _applyVisitor(std::shared_ptr<ConstElementVisitor> v, const QString& statName);
   void _applyVisitor(ConstElementVisitor* v, const QString& statName);
-  double _getApplyVisitor(ConstElementVisitor* v, const QString& statName);
+  double _getApplyVisitor(std::shared_ptr<ConstElementVisitor> v, const QString& statName);
 
   static bool _matchDescriptorCompare(
     const CreatorDescription& m1, const CreatorDescription& m2);
