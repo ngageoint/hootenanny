@@ -196,12 +196,10 @@ public:
     std::vector<size_t>& order = *_order;
 
     Leaf<KeyType, DataType>* result = new Leaf<KeyType, DataType>();
-
     for (size_t i = start; i < end; ++i)
     {
       result->addData(keys[order[i]], values[order[i]]);
     }
-
     return result;
   }
 
