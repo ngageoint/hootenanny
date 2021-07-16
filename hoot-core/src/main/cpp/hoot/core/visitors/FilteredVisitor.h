@@ -46,33 +46,21 @@ public:
   static QString className() { return "hoot::FilteredVisitor"; }
 
   FilteredVisitor();
-  ~FilteredVisitor() = default;
-
   /**
    * Calls the visit method on visitor whenever ElementCriterion::isSatisfied == true.
    */
   FilteredVisitor(const ElementCriterion& criterion, ElementVisitor& visitor);
   /**
-   * Similar to above but this is convenient if you want to pass in a temporary visitor. In this
-   * case FilteredVisitor will take ownership of the visitor and delete it when destructed.
-   */
-  FilteredVisitor(const ElementCriterion& criterion, ElementVisitorPtr visitor);
-  /**
    * Similar to the first, but takes smart pointer params.
    */
   FilteredVisitor(ElementCriterionPtr criterion, ElementVisitorPtr visitor);
-  /**
-   * Similar to above but this is convenient if you want to pass in a temporary criterion and
-   * visitor. WARNING: FilteredVisitor DOES NOT take ownership of the criterion and visitor and
-   * WON'T delete them when destructed.
-   */
-  FilteredVisitor(const ElementCriterion* criterion, ElementVisitor* visitor);
+  ~FilteredVisitor() = default;
 
   static double getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
                         const ConstOsmMapPtr& map);
   static double getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
                         const ConstOsmMapPtr& map, const ElementPtr& element);
-  static double getStat(const ElementCriterion* criterion, ElementVisitor* visitor,
+  static double getStat(const ElementCriterion& criterion, ElementVisitor& visitor,
                         const ConstOsmMapPtr& map, const ElementPtr& element);
 
   void addCriterion(const ElementCriterionPtr& e) override;

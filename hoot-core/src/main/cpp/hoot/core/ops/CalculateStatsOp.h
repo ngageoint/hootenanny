@@ -60,22 +60,23 @@ public:
   static QString className() { return "hoot::CalculateStatsOp"; }
 
   CalculateStatsOp(QString mapName = "", bool inputIsConflatedMapOutput = false);
-  CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "",
-                   bool inputIsConflatedMapOutput = false);
+  CalculateStatsOp(
+    ElementCriterionPtr criterion, QString mapName = "", bool inputIsConflatedMapOutput = false);
   ~CalculateStatsOp() = default;
 
-  void apply(const OsmMapPtr& map) override;
-
-  QList<SingleStat> getStats() const { return _stats; }
   double getSingleStat(const QString& n) const;
   bool hasSingleStat(const QString& n) const;
   long indexOfSingleStat(const QString& n) const;
+
+  void apply(const OsmMapPtr& map) override;
 
   void setConfiguration(const Settings& conf) override;
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Calculates map statistics"; }
+
+  QList<SingleStat> getStats() const { return _stats; }
 
   void setFilter(const QSet<QString>& filter) { _filter = filter; }
   void setQuickSubset(bool quick) { _quick = quick; }
@@ -129,6 +130,11 @@ private:
   int _getNumStatsPassingFilter(const QList<StatData>& stats) const;
   void _interpretStatData(const std::shared_ptr<const OsmMap>& constMap, const StatData& d);
   double _getRequestedStatValue(const ElementVisitor* pVisitor, StatData::StatCall call) const;
+  void _generateFeatureStats(
+    const CreatorDescription::BaseFeatureType& featureType, const float conflatableCount,
+    const CreatorDescription::FeatureCalcType& type, ElementCriterionPtr criterion,
+    const long poisMergedIntoPolys, const long poisMergedIntoPolysFromMap1,
+    const long poisMergedIntoPolysFromMap2);
 
   /**
    * @brief getMatchCreator finds the match creator (in the supplied vector) by name
@@ -137,9 +143,11 @@ private:
    * @param [out] featureType base feature type for the found matchCreator
    * @return ptr to match creator, if found, otherwise std::shared_ptr to null
    */
-  std::shared_ptr<MatchCreator> getMatchCreator(
+  std::shared_ptr<MatchCreator> _getMatchCreator(
     const std::vector<std::shared_ptr<MatchCreator>>& matchCreators,
     const QString &matchCreatorName, CreatorDescription::BaseFeatureType& featureType) const;
+  static bool _matchDescriptorCompare(
+    const CreatorDescription& m1, const CreatorDescription& m2);
 
   double _applyVisitor(
     const hoot::FilteredVisitor& v, const QString& statName,
@@ -148,7 +156,7 @@ private:
     const hoot::FilteredVisitor& v, boost::any& visitorData, const QString& statName,
     StatData::StatCall call = StatData::StatCall::Stat);
   double _applyVisitor(
-    const ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
+    const ElementCriterion& pCrit, ElementVisitor& pVis, const QString& statName,
     StatData::StatCall call = StatData::StatCall::Stat);
   double _applyVisitor(
     const std::shared_ptr<ElementCriterion> pCrit, std::shared_ptr<ConstElementVisitor> pVis,
@@ -156,16 +164,6 @@ private:
   void _applyVisitor(std::shared_ptr<ConstElementVisitor> v, const QString& statName);
   void _applyVisitor(ConstElementVisitor* v, const QString& statName);
   double _getApplyVisitor(std::shared_ptr<ConstElementVisitor> v, const QString& statName);
-
-  static bool _matchDescriptorCompare(
-    const CreatorDescription& m1, const CreatorDescription& m2);
-
-  void _generateFeatureStats(
-    const CreatorDescription::BaseFeatureType& featureType, const float conflatableCount,
-    const CreatorDescription::FeatureCalcType& type, ElementCriterionPtr criterion,
-    const long poisMergedIntoPolys, const long poisMergedIntoPolysFromMap1,
-    const long poisMergedIntoPolysFromMap2);
-
   ConstElementVisitorPtr _getElementVisitorForFeatureType(
     const CreatorDescription::BaseFeatureType& featureType) const;
 };

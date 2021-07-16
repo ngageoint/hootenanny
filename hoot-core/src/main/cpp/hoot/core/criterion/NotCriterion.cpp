@@ -35,6 +35,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NotCriterion)
 
+NotCriterion::NotCriterion(ElementCriterion* c) :
+_child(c)
+{
+}
+
+NotCriterion::NotCriterion(ElementCriterionPtr c) :
+_child(c)
+{
+}
+
 void NotCriterion::addCriterion(const ElementCriterionPtr& e)
 {
   assert(_child.get() == 0);
