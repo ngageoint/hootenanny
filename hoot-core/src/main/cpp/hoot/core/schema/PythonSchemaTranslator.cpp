@@ -214,8 +214,8 @@ void PythonSchemaTranslator::_translateToOsm(
       QString qKey, qValue;
 #       if (Py_UNICODE_SIZE == 4)
       {
-        qKey = QString::fromUcs4((const uint*)keyUnicodeData);
-        qValue = QString::fromUcs4((const uint*)valueUnicodeData);
+        qKey = QString::fromUcs4(keyUnicodeData);
+        qValue = QString::fromUcs4(valueUnicodeData);
       }
 #       elif (Py_UNICODE_SIZE == 2)
       {

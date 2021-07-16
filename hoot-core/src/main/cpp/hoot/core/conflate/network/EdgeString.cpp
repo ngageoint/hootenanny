@@ -238,6 +238,37 @@ bool EdgeString::contains(const ConstEdgeLocationPtr& el) const
   return false;
 }
 
+bool EdgeString::overlaps(const std::shared_ptr<const EdgeString>& other) const
+{
+  for (int i = 0; i < _edges.size(); ++i)
+  {
+    if (other->overlaps(_edges[i].getSubline()))
+    {
+      LOG_TRACE("Overlaps; this edge: " << _edges[i].getSubline() << " other edge: " << other);
+      return true;
+    }
+  }
+  return false;
+}
+
+bool EdgeString::overlaps(const ConstNetworkEdgePtr& e) const
+{
+  return contains(e);
+}
+
+bool EdgeString::overlaps(const ConstEdgeSublinePtr& es) const
+{
+  for (int i = 0; i < _edges.size(); ++i)
+  {
+    if (_edges[i].getSubline()->overlaps(es))
+    {
+      LOG_TRACE("Overlaps; this subline: " << _edges[i].getSubline() << " other subline: " << es);
+      return true;
+    }
+  }
+  return false;
+}
+
 bool EdgeString::containsInteriorVertex(const ConstNetworkVertexPtr& v) const
 {
   return contains(v) && isAtExtreme(v) == false;
@@ -362,44 +393,6 @@ bool EdgeString::isAtExtreme(const ConstNetworkVertexPtr& v) const
   }
 
   return result;
-}
-
-bool EdgeString::overlaps(const std::shared_ptr<const EdgeString>& other) const
-{
-  for (int i = 0; i < _edges.size(); ++i)
-  {
-    if (other->overlaps(_edges[i].getSubline()))
-    {
-      LOG_TRACE("Overlaps; this edge: " << _edges[i].getSubline() << " other edge: " << other);
-      return true;
-    }
-  }
-  return false;
-}
-
-bool EdgeString::overlaps(const ConstNetworkEdgePtr& e) const
-{
-  for (int i = 0; i < _edges.size(); ++i)
-  {
-    if (_edges[i].getEdge() == e)
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
-bool EdgeString::overlaps(const ConstEdgeSublinePtr& es) const
-{
-  for (int i = 0; i < _edges.size(); ++i)
-  {
-    if (_edges[i].getSubline()->overlaps(es))
-    {
-      LOG_TRACE("Overlaps; this subline: " << _edges[i].getSubline() << " other subline: " << es);
-      return true;
-    }
-  }
-  return false;
 }
 
 void EdgeString::prependEdge(const ConstEdgeSublinePtr& subline)

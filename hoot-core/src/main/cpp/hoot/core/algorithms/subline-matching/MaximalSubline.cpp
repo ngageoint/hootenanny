@@ -361,7 +361,8 @@ vector<WaySublineMatch> MaximalSubline::findAllMatches(const ConstOsmMapPtr& map
 }
 
 vector<WaySublineMatch> MaximalSubline::_findBestMatches(const ConstOsmMapPtr &map,
-  const ConstWayPtr& w1, const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix, double& bestScore)
+  const ConstWayPtr& w1, const ConstWayPtr& w2, const Sparse2dMatrix& sublineMatrix,
+  double& bestScore)
 {
   LOG_TRACE("Finding best matches...");
 

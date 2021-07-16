@@ -218,7 +218,7 @@ private:
   std::vector<WaySublineMatch> _extractAllMatches(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const ConstWayPtr& w2, const Sparse2dMatrix& sublineMatrix) const;
   std::vector<WaySublineMatch> _findBestMatches(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-    const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix, double& bestScore);
+    const ConstWayPtr& w2, const Sparse2dMatrix& sublineMatrix, double& bestScore);
   double _findBestMatchesRecursive(std::vector<WaySublineMatch>& candidates,
                                    std::vector<bool>& keepers, size_t offset);
   /**
