@@ -95,6 +95,7 @@ void MultiLineStringVisitor::visit(const ConstWayPtr& w)
   {
     if (_ls == nullptr)
     {
+      // We'll pass ownership of this pointer off in createMultiLineString.
       _ls = new vector<Geometry*>();
     }
     _ls->push_back(ElementToGeometryConverter(_provider).convertToLineString(w)->clone());
