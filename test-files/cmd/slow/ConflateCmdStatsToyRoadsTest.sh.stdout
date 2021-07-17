@@ -1,5 +1,5 @@
-17:05:02.234 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 114) Comparing ...atsTest/toy-roads-out.osm and ...atsTest/toy-roads-out.osm...
-17:05:02.241 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 149) Map difference calculated in 00:00 total.
+10:21:17.622 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 118) Comparing ...atsTest/toy-roads-out.osm and ...atsTest/toy-roads-out.osm...
+10:21:17.638 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 153) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	36	65	37	
 Ways	4	4	4	
@@ -66,7 +66,7 @@ Percentage of Roads Marked for Review	0	0	0
 Percentage of Unmatched Roads From Map 1	100	0	25	
 Percentage of Unmatched Roads From Map 2	0	100	0	
 Percentage of Unmatched Roads	100	100	25	
-Translated Populated Tags	20	20	20	
+Translated Populated Tags	24	20	24	
 Difference Between Total Features in Output and Total Features in Inputs			-4	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-50	
 Percentage of Number of Total Map 1 Features Matched With Map 2 Features			75	
@@ -75,10 +75,10 @@ Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features			0
 Percentage of Length of Map 1 Roads Matched With Map 2 Roads			94.07987660599386	
 Percentage of Length of Map 1 Roads Not Matched With Map 2 Roads			5.920123412083215	
 Percentage of Length of Map 2 Roads Not Matched With Map 1 Roads			0	
-Calculate Stats for Input 1 Time (sec)				3.927995920181274
-Calculate Stats for Input 2 Time (sec)				0.2804830074310303
-Apply Pre-Conflate Ops Time (sec)				0.003022909164428711
-Apply Post-Conflate Ops Time (sec)				0.001689910888671875
-Calculate Stats for Output Time (sec)				0.3091721534729004
+Calculate Stats for Input 1 Time (sec)				6.780512094497681
+Calculate Stats for Input 2 Time (sec)				0.830604076385498
+Apply Pre-Conflate Ops Time (sec)				0.01437497138977051
+Apply Post-Conflate Ops Time (sec)				0.008264064788818359
+Calculate Stats for Output Time (sec)				0.9144349098205566
 
-17:05:01.878 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:05 for reference map: ...test-files/ToyTestA.osm and secondary map: ...test-files/ToyTestB.osm and written to output: ...CmdStatsTest/toy-roads-out.osm
+10:21:16.941 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:09 for reference map: ...test-files/ToyTestA.osm and secondary map: ...test-files/ToyTestB.osm and written to output: ...CmdStatsTest/toy-roads-out.osm

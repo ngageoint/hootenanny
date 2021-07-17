@@ -42,11 +42,6 @@ dnc = {
     // Now add some fields to hold OSM specific information on export
     for (var i = 0, schemaLen = dnc.rawSchema.length; i < schemaLen; i++)
     {
-      dnc.rawSchema[i].columns.push( { name:'OSM_TAGS',
-        desc:'Unused OSM tags',
-        type:'String',
-        defValue:''
-      });
       dnc.rawSchema[i].columns.push( { name:'OSM_UUID',
         desc:'OSM UUID',
         type:'String',
@@ -59,12 +54,12 @@ dnc = {
     if (config.getOgrOutputFormat() == 'shp')
     {
       // Add tag1, tag2, tag3 and tag4
-      dnc.rawSchema = translate.addO2sFeatures(dnc.rawSchema);
+      dnc.rawSchema = translate.addO2sFeatures(translate.addTagFeatures(dnc.rawSchema));
     }
     else
     {
       // Just add tag1
-      dnc.rawSchema = translate.addSingleO2sFeature(dnc.rawSchema);
+      dnc.rawSchema = translate.addSingleO2sFeature(translate.addSingleTagFeature(dncPreRules.rawSchema));
     }
 
     // Add the empty Review layers
@@ -94,7 +89,6 @@ dnc = {
       returnData.push({attrs:{'F_CODE':'FA000X'}, tableName:'COALINE'});
       return returnData;
     }
-
 
     // Only looking at roads & railways with something else tacked on
     if (!(tags.highway || tags.railway)) return returnData;
@@ -579,22 +573,65 @@ dnc = {
 
   applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
   {
-    // Unpack the OSM_TAGS attribute if it exists
-    if (attrs.OSM_TAGS)
+    // Unpack the note field or OSMTAGS
+    if (tags.note || attrs.OSMTAGS || attrs.OSM_TAGS)
     {
-      var tObj = translate.unpackMemo(attrs.OSM_TAGS);
+      var tTags = {};
+      var tObj = translate.unpackMemo(tags.note);
 
       if (tObj.tags !== '')
       {
-        var tTags = JSON.parse(tObj.tags);
-        for (i in tTags)
+        try
         {
-          // Debug
-          // print('Memo: Add: ' + i + ' = ' + tTags[i]);
-          if (tags[tTags[i]]) hoot.logWarn('Unpacking OSM_TAGS, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
-          tags[i] = tTags[i];
+          tTags = JSON.parse(tObj.tags);
+        }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags in TXT attribute: ' + tObj.tags);
         }
       }
+
+      if (attrs.OSM_TAGS) // Old style
+      {
+        tObj = translate.unpackMemo(attrs.OSM_TAGS);
+        try
+        {
+          if (tObj.tags !== '')
+          {
+            var tmp = JSON.parse(tObj.tags);
+            for (var i in tmp)
+            {
+              // Debug
+              // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+              if (tTags[tmp[i]]) hoot.logWarn('Unpacking OSM_TAGS, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+              tTags[i] = tmp[i];
+            }
+          }
+        }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags from the OSM_TAGS attribute');
+        }
+      }
+
+      if (attrs.OSMTAGS)
+      {
+        var tmp = translate.unpackText(attrs,'OSMTAGS',4);
+        for (var i in tmp)
+        {
+          if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
+          tTags[i] = tmp[i];
+        }
+      }
+
+      // Now add the unpacked tags to the main list
+      for (var i in tTags)
+      {
+        // Debug
+        // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+        if (tags[tTags[i]]) hoot.logDebug('Unpacking tags, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+        tags[i] = tTags[i];
+      } // End nTags
 
       if (tObj.text !== '')
       {
@@ -604,7 +641,8 @@ dnc = {
       {
         delete tags.note;
       }
-    } // End process attrs.OSM_TAGS
+    } // End process tags.note
+
 
     // F_CODE specific tags
     switch (attrs.F_CODE)
@@ -1306,7 +1344,7 @@ dnc = {
     // See if we have an o2s_X layer and try to unpack it
     if (layerName.indexOf('o2s_') > -1)
     {
-      tags = translate.parseO2S(attrs);
+      tags = translate.unpackText(attrs,'tag',4);
 
       // Add some metadata
       if (! tags.uuid)
@@ -1577,8 +1615,21 @@ dnc = {
           if (Object.keys(notUsedTags).length > 0)
           {
             // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            returnData[i]['attrs']['OSM_TAGS'] = tStr;
+            var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
+            if (dnc.configOut.OgrFormat == 'shp')
+            {
+              // Split the tags into a maximum of 4 fields, each no greater than 225 char long.
+              var tList = translate.packText(notUsedTags,4,225);
+              returnData[i]['attrs']['OSMTAGS'] = tList[1];
+              for (var j = 2; j < 5; j++)
+              {
+                returnData[i]['attrs']['OSMTAGS' + j] = tList[j];
+              }
+            }
+            else
+            {
+              returnData[i]['attrs']['OSMTAGS'] = str;
+            }
           }
         }
         else
@@ -1668,12 +1719,12 @@ dnc = {
         // Throw a warning that text will get truncated.
         if (str.length > 900) hoot.logWarn('o2s tags truncated to fit in available space.');
 
-        // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
-        // which means that it returns an empty string.
-        attrs = {tag1:str.substring(0,225),
-          tag2:str.substring(225,450),
-          tag3:str.substring(450,675),
-          tag4:str.substring(675,900)};
+        attrs = {};
+        var tList = translate.packText(tags,4,225);
+        for (var i = 1; i < 5; i++)
+        {
+          attrs['tag'+i] = tList[i];
+        }
       }
       else
       {

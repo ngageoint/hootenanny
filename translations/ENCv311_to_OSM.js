@@ -369,7 +369,7 @@ enc311 = {
     // See if we have an o2s_X layer and try to unpack it.
     if (layerName.indexOf('o2s_') > -1)
     {
-      tags = translate.parseO2S(attrs);
+      tags = translate.unpackText(attrs,'tag',4);
 
       // Add some metadata
       if (! tags.uuid) tags.uuid = createUuid();

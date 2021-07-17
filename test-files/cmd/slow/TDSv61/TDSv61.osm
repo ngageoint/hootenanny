@@ -3158,7 +3158,7 @@
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="electrified" v="rail"/>
         <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="3"/>
+        <tag k="gauge" v="3000"/>
         <tag k="gauge:type" v="broad"/>
         <tag k="location" v="surface"/>
         <tag k="name" v="Choo Choo Train"/>
@@ -3183,7 +3183,7 @@
         <tag k="demolished:railway" v="monorail"/>
         <tag k="electrified" v="no"/>
         <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="4"/>
+        <tag k="gauge" v="4000"/>
         <tag k="gauge:type" v="standard"/>
         <tag k="location" v="surface"/>
         <tag k="railway:in_road" v="yes"/>
@@ -3206,7 +3206,7 @@
         <tag k="condition" v="functional"/>
         <tag k="electrified" v="unknown"/>
         <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="2"/>
+        <tag k="gauge" v="2000"/>
         <tag k="gauge:type" v="narrow"/>
         <tag k="location" v="surface"/>
         <tag k="railway" v="carline"/>
@@ -3231,7 +3231,7 @@
         <tag k="construction" v="logging"/>
         <tag k="electrified" v="no"/>
         <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="1"/>
+        <tag k="gauge" v="1000"/>
         <tag k="gauge:type" v="narrow"/>
         <tag k="location" v="surface"/>
         <tag k="name" v="Santa Train"/>
@@ -3257,7 +3257,7 @@
         <tag k="condition" v="destroyed"/>
         <tag k="electrified" v="contact_line"/>
         <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="2"/>
+        <tag k="gauge" v="2000"/>
         <tag k="location" v="surface"/>
         <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>

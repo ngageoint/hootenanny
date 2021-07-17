@@ -575,17 +575,118 @@ translate = {
 
     // Check if the tags got split
     var tTags = attrs.tag1;
-    if (attrs.tag2) tTags = tTags + attrs.tag2;
-    if (attrs.tag3) tTags = tTags + attrs.tag3;
-    if (attrs.tag4) tTags = tTags + attrs.tag4;
 
-    // If the JSON looks complete then parse it
-    if (tTags.charAt(0) == '{' && tTags.charAt(tTags.length-1) == '}')
+    ['tag2','tag3','tag4'].forEach( item => { if (attrs[item]) tTags = tTags.concat(attrs[item]); });
+    tTags = tTags.split('}{').join(','); // Join the JSON if needed
+
+    try
     {
       outTags = JSON.parse(tTags);
     }
-    else
+    catch (error)
     {
+      hoot.logWarn('Unable to parse OSM tags from one of the o2s attributes. Trying a different method');
+
+      // Bad o2s_X. Usual cause is writing > 254 char to a shapefile attribute
+      // We are expecting something that got chopped like this:
+      //  {"source":"Tdh","building":"yes","statu
+
+      // Wipe out JSON fragments
+      if (tTags.charAt(0) == '{') tTags = tTags.slice(1);
+      // Just in case...
+      if (tTags.charAt(tTags.length-1) == '}') tTags = tTags.slice(-1);
+
+      // Now get rid of begining and/or ending '"' to make the next string split cleaner
+      if (tTags.charAt(0) == '"') tTags = tTags.slice(1);
+      if (tTags.charAt(tTags.length-1) == '"') tTags = tTags.slice(-1);
+
+      var tArray = tTags.split('","');
+
+      for (var i in tArray)
+      {
+        // Now split each key:value pair and only keep complete pairs
+        // Each pair should look like: building":"yes
+        var j = tArray[i].split('":"');
+        if (j[1])
+        {
+          outTags[j[0]] = j[1];
+        }
+      }
+    } // End else Bad o2s
+
+    return outTags;
+  },
+
+  // Pack tags+values into JSON  strings with a set size
+  packText(input,num,maxLen)
+  {
+    var outTags = [];
+    // Yes, arrays start at 0 but we are going to build values like tag1, tag2, tag3 etc
+    // NOTE: This may bite me later
+    for (var i = 1; i <= num; i++) outTags[i] = '';
+
+    var kList = Object.keys(input).sort();
+    for (var i=0, kLen=kList.length; i < kLen; i++)
+    {
+      var key = kList[i];
+      var value = input[key];
+      var tmpObj = {};
+      tmpObj[kList[i]] = input[kList[i]];
+
+      var sTag = JSON.stringify(tmpObj).slice(1,-1);
+      // print('Pack: tag :' + kList[i] + ':  sTag :' + sTag + ':' + '  length: ' + sTag.length);
+
+      var packed = false;
+      for (var j = 1; j <= num; j++)
+      {
+        // print('item' + j + '  len:' + (sTag.length + outTags[j].length) );
+        if ((sTag.length + outTags[j].length) < maxLen)
+        {
+          outTags[j] += sTag + ',';
+          packed = true;
+          break;
+        }
+      }
+        if (!packed) hoot.logError('Unable to store ' + sTag + ' in a text field!');
+    }
+
+    // Now clean up dangling ',' and add braces
+    outTags.forEach( (item,index) => {
+      if (item.slice(-1) == ',') item = item.slice(0,-1);
+      if (item.length > 0) outTags[index] = '{' + item + '}';
+    });
+
+    return outTags;
+  },
+
+
+  // Parse JSON packed attributes
+  unpackText(input, attribute, num)
+  {
+    var outTags = {};
+
+    // Check if the tags got split
+    // NOTE: This should handle tag, tag1, tag2 etc or obj1, obj2, obj3
+
+    var tList = [];
+    if (input[attribute]) tList.push('' + attribute);
+    for (var i = 1; i <= num; i++)
+    {
+      tList.push('' + attribute + i);
+    }
+
+    var tTags = '';
+    tList.forEach( item => { if (input[item]) tTags = tTags.concat(input[item]); });
+    tTags = tTags.split('}{').join(','); // Join the JSON if needed
+    try
+    {
+      outTags = JSON.parse(tTags);
+    }
+    catch (error)
+    {
+      hoot.logWarn('Parse Error: ' + error);
+      hoot.logWarn('Unable to parse OSM tags from one of the text attributes. Trying a different method');
+
       // Bad o2s_X. Usual cause is writing > 254 char to a shapefile attribute
       // We are expecting something that got chopped like this:
       //  {"source":"Tdh","building":"yes","statu
@@ -1306,10 +1407,9 @@ translate = {
   // addSingleO2sFeature - Add a single o2s feature to a schema
   addSingleO2sFeature: function(schema)
   {
-    // 8K of text should be enough
-    schema.push({ name:'o2s_A',desc:'o2s',geom:'Area',columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'8192'}] });
-    schema.push({ name:'o2s_L',desc:'o2s',geom:'Line',columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'8192'}] });
-    schema.push({ name:'o2s_P',desc:'o2s',geom:'Point',columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'8192'}] });
+    schema.push({ name:'o2s_A',desc:'o2s',geom:'Area',columns:[ {name:'tag1',desc:'Tag List',type:'String'/*,length:'8192'*/}] });
+    schema.push({ name:'o2s_L',desc:'o2s',geom:'Line',columns:[ {name:'tag1',desc:'Tag List',type:'String'/*,length:'8192'*/}] });
+    schema.push({ name:'o2s_P',desc:'o2s',geom:'Point',columns:[ {name:'tag1',desc:'Tag List',type:'String'/*,length:'8192'*/}] });
 
     return schema;
   }, // End addSingleO2sFeature
@@ -1319,21 +1419,21 @@ translate = {
   addO2sFeatures: function(schema)
   {
     schema.push({ name:'o2s_A',desc:'o2s',geom:'Area',
-      columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'8192'/*,length:'254'*/},
+      columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'254'},
         {name:'tag2',desc:'Tag List',type:'String',defValue:'',length:'254'},
         {name:'tag3',desc:'Tag List',type:'String',defValue:'',length:'254'},
         {name:'tag4',desc:'Tag List',type:'String',defValue:'',length:'254'}
       ]
     });
     schema.push({ name:'o2s_L',desc:'o2s',geom:'Line',
-      columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'8192'/*,length:'254'*/},
+      columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'254'},
         {name:'tag2',desc:'Tag List',type:'String',defValue:'',length:'254'},
         {name:'tag3',desc:'Tag List',type:'String',defValue:'',length:'254'},
         {name:'tag4',desc:'Tag List',type:'String',defValue:'',length:'254'}
       ]
     });
     schema.push({ name:'o2s_P',desc:'o2s',geom:'Point',
-      columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'8192'/*,length:'254'*/},
+      columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'254'},
         {name:'tag2',desc:'Tag List',type:'String',defValue:'',length:'254'},
         {name:'tag3',desc:'Tag List',type:'String',defValue:'',length:'254'},
         {name:'tag4',desc:'Tag List',type:'String',defValue:'',length:'254'}
@@ -1349,7 +1449,7 @@ translate = {
   addSingleTagFeature: function(schema)
   {
     schema.forEach( function (item) {
-      item.columns.push({name:'OSMTAGS',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'8192'});
+      item.columns.push({name:'OSMTAGS',desc:'Stored OSM tags and values',type:'String',defValue:''/*,length:'8192'*/});
     });
 
     return schema;
@@ -1359,10 +1459,10 @@ translate = {
   addTagFeatures: function(schema)
   {
     schema.forEach( function (item) {
-      item.columns.push({name:'OSMTAGS',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'253'});
-      item.columns.push({name:'OSMTAGS2',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'253'});
-      item.columns.push({name:'OSMTAGS3',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'253'});
-      item.columns.push({name:'OSMTAGS4',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'253'});
+      item.columns.push({name:'OSMTAGS',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'254'});
+      item.columns.push({name:'OSMTAGS2',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'254'});
+      item.columns.push({name:'OSMTAGS3',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'254'});
+      item.columns.push({name:'OSMTAGS4',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'254'});
     });
 
     return schema;
