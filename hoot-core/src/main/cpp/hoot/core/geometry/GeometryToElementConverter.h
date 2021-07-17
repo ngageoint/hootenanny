@@ -76,6 +76,7 @@ public:
 
     NodeFactory() = default;
     virtual ~NodeFactory() = default;
+
     virtual NodePtr createNode(
       const OsmMapPtr& map, const geos::geom::Coordinate& c, Status s, double circularError) = 0;
   };

@@ -484,8 +484,7 @@ ElementCriterionPtr ConflateInfoCache::_getCrit(const QString& criterionClassNam
   }
 
   ElementCriterionPtr crit =
-    ElementCriterionPtr(
-      Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
+    Factory::getInstance().constructObject<ElementCriterion>(criterionClassName);
   if (!crit)
   {
     throw IllegalArgumentException(

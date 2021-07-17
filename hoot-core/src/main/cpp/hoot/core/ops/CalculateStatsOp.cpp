@@ -635,10 +635,7 @@ void CalculateStatsOp::_interpretStatData(
       try
       {
         // create criterion
-        pCrit =
-          shared_ptr<ElementCriterion>(
-            Factory::getInstance().constructObject<ElementCriterion>(d.getCriterion()));
-
+        pCrit = Factory::getInstance().constructObject<ElementCriterion>(d.getCriterion());
         // make sure the map is set before we use it
         ConstOsmMapConsumer* pMapConsumer = dynamic_cast<ConstOsmMapConsumer*>(pCrit.get());
         if (pMapConsumer) pMapConsumer->setOsmMap(constMap.get());
@@ -668,9 +665,8 @@ void CalculateStatsOp::_interpretStatData(
       {
         // create visitor to set in FilteredVisitor
         pCriterionVisitor =
-          shared_ptr<ConstElementVisitor>(
-            static_cast<ConstElementVisitor *>(
-              Factory::getInstance().constructObject<ElementVisitor>(d.getVisitor())));
+          std::static_pointer_cast<ConstElementVisitor>(
+            Factory::getInstance().constructObject<ElementVisitor>(d.getVisitor()));
       }
       catch (...)
       {
@@ -721,9 +717,8 @@ void CalculateStatsOp::_interpretStatData(
         try
         {
           pVisitor =
-            shared_ptr<ConstElementVisitor>(
-              static_cast<ConstElementVisitor *>(
-                Factory::getInstance().constructObject<ElementVisitor>(d.getVisitor())));
+            std::static_pointer_cast<ConstElementVisitor >(
+              Factory::getInstance().constructObject<ElementVisitor>(d.getVisitor()));
         }
         catch (...)
         {

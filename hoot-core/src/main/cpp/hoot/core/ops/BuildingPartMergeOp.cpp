@@ -267,11 +267,12 @@ void BuildingPartMergeOp::_preProcessBuildingParts()
   LOG_VART(threadPool.maxThreadCount());
   for (int i = 0; i < _threadCount; i++)
   {
+    // The thread pool takes ownership of this task.
     BuildingPartPreMergeCollector* buildingPartCollectTask = new BuildingPartPreMergeCollector();
     buildingPartCollectTask->setBuildingPartsInput(&buildingPartsInput);
     buildingPartCollectTask->setStartingInputSize(buildingPartsInput.size());
-    // Passing the groups into the threads as a shared pointer slows down processing by ~60%, so
-    // will pass in as a raw pointer.
+    // Passing the groups into the threads as a shared pointer slows down processing by ~60% (not
+    // sure why), so will pass in as a raw pointer.
     buildingPartCollectTask->setBuildingPartGroupsOutput(&_buildingPartGroups);
     buildingPartCollectTask->setMap(_map);
     buildingPartCollectTask->setBuildingPartInputMutex(&buildingPartsInputMutex);

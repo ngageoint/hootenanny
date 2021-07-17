@@ -99,7 +99,7 @@ void KernelEstimationInterpolator::_buildModel()
     // prevent some edge conditions.
     double silvermans = max(1.0, 1.06 * sdx * pow(n, -.2));
 
-    NelderMead optimizer(1, new OptimizeFunction(*this), _stopDelta);
+    NelderMead optimizer(1, std::make_shared<OptimizeFunction>(*this), _stopDelta);
     Vector result;
     result.prepare(1);
 

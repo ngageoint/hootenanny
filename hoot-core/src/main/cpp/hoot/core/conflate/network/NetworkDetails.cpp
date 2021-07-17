@@ -73,9 +73,9 @@ void NetworkDetails::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
   _sublineMatcher =
     SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
-  _classifier.reset(
+  _classifier =
     Factory::getInstance().constructObject<HighwayClassifier>(
-      opts.getConflateMatchHighwayClassifier()));
+      opts.getConflateMatchHighwayClassifier());
 }
 
 Meters NetworkDetails::calculateDistance(ConstEdgeLocationPtr el) const

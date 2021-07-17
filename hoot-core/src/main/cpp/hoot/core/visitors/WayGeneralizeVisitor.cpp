@@ -52,8 +52,7 @@ void WayGeneralizeVisitor::setConfiguration(const Settings& conf)
   const QString critClass = configOptions.getWayGeneralizerCriterion().trimmed();
   if (!critClass.isEmpty())
   {
-    addCriterion(
-      ElementCriterionPtr(Factory::getInstance().constructObject<ElementCriterion>(critClass)));
+    addCriterion(Factory::getInstance().constructObject<ElementCriterion>(critClass));
   }
 }
 

@@ -111,15 +111,15 @@ QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName)
     // :-( this is messy...
     if (Factory::getInstance().hasBase<OsmMapOperation>(className))
     {
-      std::shared_ptr<OsmMapOperation> apiEntity(
-        Factory::getInstance().constructObject<OsmMapOperation>(className));
+      std::shared_ptr<OsmMapOperation> apiEntity =
+        Factory::getInstance().constructObject<OsmMapOperation>(className);
       apiEntityInfo = std::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
       singleStat = std::dynamic_pointer_cast<SingleStatistic>(apiEntity);
     }
     else if (Factory::getInstance().hasBase<ElementVisitor>(className))
     {
-      std::shared_ptr<ElementVisitor> apiEntity(
-        Factory::getInstance().constructObject<ElementVisitor>(className));
+      std::shared_ptr<ElementVisitor> apiEntity =
+        Factory::getInstance().constructObject<ElementVisitor>(className);
       apiEntityInfo = std::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
       singleStat = std::dynamic_pointer_cast<SingleStatistic>(apiEntity);
     }
@@ -335,8 +335,8 @@ QString ApiEntityDisplayInfo::_getApiEntities(
     QString className = classNames[i];
     LOG_VARD(className);
 
-    std::shared_ptr<ApiEntity> apiEntity(
-      Factory::getInstance().constructObject<ApiEntity>(className));
+    std::shared_ptr<ApiEntity> apiEntity =
+      Factory::getInstance().constructObject<ApiEntity>(className);
 
     std::shared_ptr<ApiEntityInfo> apiEntityInfo =
       std::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
@@ -418,8 +418,8 @@ QString ApiEntityDisplayInfo::_getApiEntitiesForMatchMergerCreators(
   for (size_t i = 0; i < names.size(); i++)
   {
     // get all names known by this creator
-    std::shared_ptr<ApiEntity> mc(
-      Factory::getInstance().constructObject<ApiEntity>(names[i]));
+    std::shared_ptr<ApiEntity> mc =
+      Factory::getInstance().constructObject<ApiEntity>(names[i]);
     std::vector<CreatorDescription> creators = mc->getAllCreators();
     LOG_VARD(creators.size());
 

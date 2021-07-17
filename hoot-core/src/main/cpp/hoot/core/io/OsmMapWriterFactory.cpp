@@ -61,14 +61,14 @@ std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& u
   std::shared_ptr<OsmMapWriter> writer;
   if (writerOverride != "" && url != ConfigOptions().getDebugMapsFilename())
   {
-    writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(writerOverride));
+    writer = Factory::getInstance().constructObject<OsmMapWriter>(writerOverride);
   }
 
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
     LOG_VART(names[i]);
-    writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(names[i]));
+    writer = Factory::getInstance().constructObject<OsmMapWriter>(names[i]);
 
     // We may be able to make this a little more generic by referencing an interface instead.
     // Currently, OgrWriter is the only writer that runs a schema translation inline.
@@ -111,7 +111,7 @@ QString OsmMapWriterFactory::getWriterName(const QString& url)
   {
     const QString name = names[i];
     LOG_VART(name);
-    writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(name));
+    writer = Factory::getInstance().constructObject<OsmMapWriter>(name);
     if (writer->isSupported(url))
     {
       return name;

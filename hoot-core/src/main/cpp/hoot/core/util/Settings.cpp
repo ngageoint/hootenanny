@@ -513,7 +513,7 @@ void Settings::_validateOperatorRefs(const QStringList& operators)
     std::shared_ptr<OsmMapOperation> op;
     try
     {
-      op.reset(Factory::getInstance().constructObject<OsmMapOperation>(operatorName));
+      op = Factory::getInstance().constructObject<OsmMapOperation>(operatorName);
     }
     catch (const boost::bad_any_cast&)
     {
@@ -527,7 +527,7 @@ void Settings::_validateOperatorRefs(const QStringList& operators)
       std::shared_ptr<ElementVisitor> vis;
       try
       {
-        vis.reset(Factory::getInstance().constructObject<ElementVisitor>(operatorName));
+        vis = Factory::getInstance().constructObject<ElementVisitor>(operatorName);
       }
       catch (const boost::bad_any_cast&)
       {
@@ -540,7 +540,7 @@ void Settings::_validateOperatorRefs(const QStringList& operators)
         std::shared_ptr<ElementCriterion> crit;
         try
         {
-          crit.reset(Factory::getInstance().constructObject<ElementCriterion>(operatorName));
+          crit = Factory::getInstance().constructObject<ElementCriterion>(operatorName);
         }
         catch (const boost::bad_any_cast&)
         {

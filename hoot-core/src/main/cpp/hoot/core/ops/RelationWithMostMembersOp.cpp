@@ -62,8 +62,8 @@ void RelationWithMostMembersOp::setCriterion(const QString& criterionClass, cons
   LOG_VARD(criterionClass);
   if (!criterionClass.trimmed().isEmpty())
   {
-    ElementCriterionPtr crit(
-      Factory::getInstance().constructObject<ElementCriterion>(criterionClass.trimmed()));
+    ElementCriterionPtr crit =
+      Factory::getInstance().constructObject<ElementCriterion>(criterionClass.trimmed());
     Configurable* c = dynamic_cast<Configurable*>(crit.get());
     if (c != nullptr)
     {

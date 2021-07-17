@@ -73,7 +73,7 @@ std::shared_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFacto
 
 ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   const WaySublineCollection& string, const vector<bool>& reverse,
-  GeometryToElementConverter::NodeFactory* nf) const
+  std::shared_ptr<GeometryToElementConverter::NodeFactory> nf) const
 {
   assert(reverse.size() == string.getSublines().size());
   LOG_VART(string.getSublines().size());
@@ -81,11 +81,9 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   ElementPtr result;
   vector<WayPtr> matches;
 
-  std::shared_ptr<FindNodesInWayFactory> nfPtr;
-  if (nf == nullptr)
+  if (!nf)
   {
-    nfPtr = _createNodeFactory(string);
-    nf = nfPtr.get();
+    nf = _createNodeFactory(string);
   }
 
   // Extract all the sublines into ways.
@@ -143,15 +141,13 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
 
 void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollection& string,
   const vector<bool>& reverse, ElementPtr& match, ElementPtr& scraps,
-  GeometryToElementConverter::NodeFactory* nf) const
+  std::shared_ptr<GeometryToElementConverter::NodeFactory> nf) const
 {
   LOG_TRACE("Splitting " << string.toString().left(100) << "...");
 
-  std::shared_ptr<FindNodesInWayFactory> nfPtr;
-  if (nf == nullptr)
+  if (!nf)
   {
-    nfPtr = _createNodeFactory(string);
-    nf = nfPtr.get();
+    nf = _createNodeFactory(string);
   }
 
   // Rename the matches to the positive subline string.

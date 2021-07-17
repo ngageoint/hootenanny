@@ -119,15 +119,13 @@ QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
     {
       op =
         std::dynamic_pointer_cast<FilteredByGeometryTypeCriteria>(
-          std::shared_ptr<OsmMapOperation>(
-            Factory::getInstance().constructObject<OsmMapOperation>(opName)));
+          Factory::getInstance().constructObject<OsmMapOperation>(opName));
     }
     else if (Factory::getInstance().hasBase<ElementVisitor>(opName))
     {
       op =
         std::dynamic_pointer_cast<FilteredByGeometryTypeCriteria>(
-          std::shared_ptr<ElementVisitor>(
-            Factory::getInstance().constructObject<ElementVisitor>(opName)));
+          Factory::getInstance().constructObject<ElementVisitor>(opName));
     }
 
     if (op)
@@ -286,8 +284,7 @@ bool SuperfluousConflateOpRemover::_isGeometryTypeCrit(const QString& className)
   {
     crit =
       std::dynamic_pointer_cast<GeometryTypeCriterion>(
-        std::shared_ptr<ElementCriterion>(
-          Factory::getInstance().constructObject<ElementCriterion>(className)));
+        Factory::getInstance().constructObject<ElementCriterion>(className));
     return crit.get();
   }
 

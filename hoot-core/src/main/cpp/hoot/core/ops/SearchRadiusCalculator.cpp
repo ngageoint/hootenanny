@@ -110,8 +110,8 @@ OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map) con
   {
     // If a match candidate criterion was specified, filter out the remaining elements that don't
     // fit the criterion.
-    ElementCriterionPtr candidateCrit(
-      Factory::getInstance().constructObject<ElementCriterion>(_elementCriterion));
+    ElementCriterionPtr candidateCrit =
+      Factory::getInstance().constructObject<ElementCriterion>(_elementCriterion);
     crit = std::make_shared<ChainCriterion>(unknownCrit, candidateCrit);
   }
 

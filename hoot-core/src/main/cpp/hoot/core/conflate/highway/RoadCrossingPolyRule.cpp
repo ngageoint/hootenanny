@@ -202,8 +202,7 @@ ElementCriterionPtr RoadCrossingPolyRule::polyRuleFilterStringsToFilter(
       else
       {
         polyCriteriaFilter->addCriterion(
-          ElementCriterionPtr(
-            Factory::getInstance().constructObject<ElementCriterion>(critPart.trimmed())));
+          Factory::getInstance().constructObject<ElementCriterion>(critPart.trimmed()));
       }
     }
   }

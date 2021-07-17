@@ -368,6 +368,7 @@ QString HootServicesLanguageDetectorClient::_getLangFromCache(const QString& tex
 void HootServicesLanguageDetectorClient::_insertLangIntoCache(const QString& text,
                                                               const QString& detectedLangCode)
 {
+  // The cache takes ownership of this object.
   DetectionResult* detectionResult = new DetectionResult();
   detectionResult->detectedLangCode = detectedLangCode;
   detectionResult->sourceText = text;

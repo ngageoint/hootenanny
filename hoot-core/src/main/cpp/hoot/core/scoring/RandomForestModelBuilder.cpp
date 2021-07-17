@@ -70,12 +70,13 @@ void RandomForestModelBuilder::build(
     QStringList creatorParts = creator.split(",");
     QString className = creatorParts[0];
     creatorParts.removeFirst();
-    MatchCreator* mc = Factory::getInstance().constructObject<MatchCreator>(className);
+    std::shared_ptr<MatchCreator> mc =
+      Factory::getInstance().constructObject<MatchCreator>(className);
     if (!creatorParts.empty())
     {
       mc->setArguments(creatorParts);
     }
-    mfe.addMatchCreator(std::shared_ptr<MatchCreator>(mc));
+    mfe.addMatchCreator(mc);
   }
 
   int datasetPairCtr = 1;

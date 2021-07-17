@@ -50,6 +50,11 @@ namespace hoot
 
 HOOT_JS_REGISTER(TagDifferencerJs)
 
+TagDifferencerJs::TagDifferencerJs(std::shared_ptr<TagDifferencer> op) :
+_td(op)
+{
+}
+
 void TagDifferencerJs::diff(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = v8::Isolate::GetCurrent();
@@ -126,7 +131,8 @@ void TagDifferencerJs::New(const FunctionCallbackInfo<Value>& args)
     }
     else
     {
-      TagDifferencer* op = Factory::getInstance().constructObject<TagDifferencer>(className);
+      std::shared_ptr<TagDifferencer> op =
+        Factory::getInstance().constructObject<TagDifferencer>(className);
       TagDifferencerJs* obj = new TagDifferencerJs(op);
       //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
       obj->Wrap(args.This());

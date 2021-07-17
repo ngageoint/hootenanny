@@ -60,9 +60,9 @@ HOOT_FACTORY_REGISTER(ElementVisitor, RemoveDuplicateAreasVisitor)
 
 RemoveDuplicateAreasVisitor::RemoveDuplicateAreasVisitor()
 {
-  _diff.reset(
+  _diff =
     Factory::getInstance().constructObject<TagDifferencer>(
-      ConfigOptions().getRemoveDuplicateAreasDiff()));
+      ConfigOptions().getRemoveDuplicateAreasDiff());
 }
 
 std::shared_ptr<Geometry> RemoveDuplicateAreasVisitor::_convertToGeometry(

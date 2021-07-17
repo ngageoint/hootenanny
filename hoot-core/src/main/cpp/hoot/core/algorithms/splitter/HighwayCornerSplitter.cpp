@@ -251,6 +251,7 @@ bool HighwayCornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, boo
       CoordinateArraySequence* subline = new CoordinateArraySequence();
       subline->add(0, ls->getCoordinateN(nodeIdx), true);
       subline->add(1, ls->getCoordinateN(nodeIdx - 1), true);
+      // GeometryFactory takes ownership of these input parameters.
       std::shared_ptr<LineString> sub(factory->createLineString(subline));
       if (sub->getLength() <= pWay->getCircularError())
         return false;
@@ -262,6 +263,7 @@ bool HighwayCornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, boo
       CoordinateArraySequence* subline = new CoordinateArraySequence();
       subline->add(0, ls->getCoordinateN(nodeIdx), true);
       subline->add(1, ls->getCoordinateN(nodeIdx + 1), true);
+      // GeometryFactory takes ownership of these input parameters.
       std::shared_ptr<LineString> sub(factory->createLineString(subline));
       if (sub->getLength() <= pWay->getCircularError())
         return false;
