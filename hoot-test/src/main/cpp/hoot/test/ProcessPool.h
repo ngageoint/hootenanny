@@ -93,7 +93,6 @@ private:
 class ProcessThread : public QThread
 {
 public:
-
   /**
    * @brief ProcessThread constructor
    * @param showTestName - boolean flag indicating if the thread should pass the '--names' flag to the process
@@ -119,12 +118,11 @@ public:
   int getFailures();
 
 private:
-
   /**
    * @brief createProcess actually creates a HootTest process that is listening for tests on standard in to run
    * @return pointer to the process created, ownership is passed back
    */
-  std::shared_ptr<QProcess> createProcess();
+  QProcess* createProcess();
 
   /**
    * @brief resetProcess shutsdown the current process and starts a new one in its place for error handling
@@ -168,7 +166,6 @@ using ProcessThreadPtr = std::shared_ptr<ProcessThread>;
 class ProcessPool
 {
 public:
-
   /**
    * @brief ProcessPool constructor
    * @param nproc - number of threads/processes to add to the pool
@@ -205,9 +202,7 @@ public:
    * @brief wait for all threads (and processes) to finish working
    */
   void wait();
-
 private:
-
   /** vector of n threads to do the processing */
   std::vector<ProcessThreadPtr> _threads;
   /** queue of jobs that must be run in serial */
