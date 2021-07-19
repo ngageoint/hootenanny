@@ -110,10 +110,11 @@ private:
 
   Tgs::Timer _taskTimer;
 
-  void _initConfig();
+  void _initConfig(const QString& output);
   void _updateConfigOptionsForAttributeConflation() const;
   void _updateConfigOptionsForDifferentialConflation() const;
   void _updateConfigOptionsForBounds() const;
+  void _updateTranslationDirection(const QString& output) const;
   void _disableRoundaboutRemoval() const;
   void _checkForTagValueTruncationOverride();
 

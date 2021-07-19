@@ -283,7 +283,7 @@ void DiffConflator::storeOriginalMap(const OsmMapPtr& map)
   }
 
   // Use the copy constructor to copy the entire map.
-  _originalMap.reset(new OsmMap(map));
+  _originalMap = std::make_shared<OsmMap>(map);
 
   // We're storing this part off for potential use later on if any roads get snapped after
   // conflation. Get rid of ref2 and children. See additional comments in _getChangesetFromMap.
@@ -751,7 +751,7 @@ void DiffConflator::_calcAndStoreTagChanges()
   // Make sure we have a container for our changes
   if (!_tagChanges)
   {
-    _tagChanges.reset(new MemChangesetProvider(_map->getProjection()));
+    _tagChanges = std::make_shared<MemChangesetProvider>(_map->getProjection());
   }
 
   int numMatchesProcessed = 0;
@@ -862,7 +862,7 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
   // with new tags.
 
   // Copy the old one to get the geometry
-  ElementPtr pChangeElement(pOldElement->clone());
+  ElementPtr pChangeElement = pOldElement->clone();
   assert(pChangeElement->getId() == pOldElement->getId());
 
   // Need to merge tags into the new element. Keeps all names, chooses tags1 in event of a conflict.

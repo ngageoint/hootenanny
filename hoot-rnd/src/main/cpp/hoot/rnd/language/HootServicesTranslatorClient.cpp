@@ -114,15 +114,15 @@ void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
   _detectors = opts.getLanguageHootServicesDetectors();
   _skipWordsInEnglishDict = opts.getLanguageSkipWordsInEnglishDictionary();
 
-  _infoClient.reset(
+  _infoClient =
     Factory::getInstance().constructObject<LanguageInfoProvider>(
-      opts.getLanguageInfoProvider()));
+      opts.getLanguageInfoProvider());
   _infoClient->setConfiguration(conf);
 
   _cacheMaxSize = opts.getLanguageMaxCacheSize();
   if (_cacheMaxSize != -1)
   {
-    _cache.reset(new QCache<QString, TranslationResult>(_cacheMaxSize));
+    _cache = std::make_shared<QCache<QString, TranslationResult>>(_cacheMaxSize);
   }
 
   if (_useCookies)
@@ -284,6 +284,7 @@ void HootServicesTranslatorClient::_insertTranslationIntoCache(const QString& te
                                                                const QString& translatedText,
                                                                const QString& detectedLang)
 {
+  // The cache takes ownership of this object.
   TranslationResult* translationResult = new TranslationResult();
   translationResult->detectedLang = detectedLang;
   translationResult->translatedText = translatedText;

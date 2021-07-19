@@ -168,18 +168,18 @@ void MultiaryIngester::_sortInputFile(const QString& input)
   if (!OgrReader().isSupported(input))
   {
     QFileInfo newInputFileInfo(input);
-      _sortTempFile.reset(
-        new QTemporaryFile(
-          ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + sortTempFileBaseName + "." +
-          newInputFileInfo.completeSuffix()));
+    _sortTempFile =
+      std::make_shared<QTemporaryFile>(
+        ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + sortTempFileBaseName + "." +
+        newInputFileInfo.completeSuffix());
   }
   else
   {
     //OGR formats have to be converted to PBF before sorting
-    _sortTempFile.reset(
-      new QTemporaryFile(
+    _sortTempFile =
+      std::make_shared<QTemporaryFile>(
         ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + sortTempFileBaseName +
-        ".osm.pbf"));
+        ".osm.pbf");
   }
   //for debugging only
   //sortTempFile->setAutoRemove(false);

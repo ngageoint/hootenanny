@@ -194,9 +194,9 @@ public:
       if (tagAncestorDiff->diff(map, e1, e2) <= maxEnumDiff)
       {
         // score each candidate and push it on the result vector
-        result.reset(
-          new HighwayMatch(
-            classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold));
+        result =
+          std::make_shared<HighwayMatch>(
+            classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold);
         // if we're confident this is a miss
         if (result->getType() == MatchType::Miss)
         {
@@ -273,8 +273,7 @@ public:
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
-      std::shared_ptr<MemoryPageStore> mps = std::make_shared<MemoryPageStore>(728);
-      _index.reset(new HilbertRTree(mps, 2));
+      _index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
       // Only index elements satisfy isMatchCandidate(e)
       std::function<bool (ConstElementPtr e)> f =
@@ -328,9 +327,9 @@ private:
 
 HighwayMatchCreator::HighwayMatchCreator()
 {
-  _classifier.reset(
+  _classifier =
     Factory::getInstance().constructObject<HighwayClassifier>(
-      ConfigOptions().getConflateMatchHighwayClassifier()));
+      ConfigOptions().getConflateMatchHighwayClassifier());
   _sublineMatcher =
     SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
   _tagAncestorDiff = std::make_shared<TagAncestorDifferencer>("highway");
@@ -403,10 +402,10 @@ std::shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
-    _matchThreshold.reset(
-      new MatchThreshold(
+    _matchThreshold =
+      std::make_shared<MatchThreshold>(
         ConfigOptions().getHighwayMatchThreshold(), ConfigOptions().getHighwayMissThreshold(),
-        ConfigOptions().getHighwayReviewThreshold()));
+        ConfigOptions().getHighwayReviewThreshold());
   }
   return _matchThreshold;
 }

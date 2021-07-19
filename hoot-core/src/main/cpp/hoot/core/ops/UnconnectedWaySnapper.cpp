@@ -425,8 +425,7 @@ ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriterion(
   ElementCriterionPtr typeCrit = ElementCriterionPtr();
   if (!typeCriterion.trimmed().isEmpty())
   {
-    typeCrit.reset(
-      Factory::getInstance().constructObject<ElementCriterion>(typeCriterion));
+    typeCrit = Factory::getInstance().constructObject<ElementCriterion>(typeCriterion);
     LOG_VART(typeCrit);
 
     // TODO: I think requiring that the criteria be ConflatableElementCriterion is a little kludy,
@@ -451,9 +450,9 @@ ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriterion(
     // all linear crits.
     if (isNode)
     {
-      typeCrit.reset(
+      typeCrit =
         Factory::getInstance().constructObject<ElementCriterion>(
-          conflatableCrit->getChildCriteria().at(0)));
+          conflatableCrit->getChildCriteria().at(0));
     }
 
     // configure our element criterion, in case it needs it
@@ -480,7 +479,7 @@ ElementCriterionPtr UnconnectedWaySnapper::_getStatusCriteria(const QStringList&
   ElementCriterionPtr statusCrit = ElementCriterionPtr();
   if (statuses.size() == 1)
   {
-    statusCrit.reset(new StatusCriterion(Status::fromString(statuses.at(0))));
+    statusCrit = std::make_shared<StatusCriterion>(Status::fromString(statuses.at(0)));
   }
   else
   {

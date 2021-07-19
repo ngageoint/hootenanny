@@ -128,11 +128,11 @@ void OsmMapJs::clone(const FunctionCallbackInfo<Value>& args)
   OsmMapPtr newMap;
   if (from->isConst())
   {
-    newConstMap.reset(new OsmMap(from->getConstMap()));
+    newConstMap = std::make_shared<OsmMap>(from->getConstMap());
   }
   else
   {
-    newMap.reset(new OsmMap(from->getMap()));
+    newMap = std::make_shared<OsmMap>(from->getMap());
   }
 
   const unsigned argc = 1;

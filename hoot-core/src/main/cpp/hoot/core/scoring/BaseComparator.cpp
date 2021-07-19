@@ -148,11 +148,11 @@ Coordinate BaseComparator::_findNearestPointOnFeature(
 {
   Coordinate result;
 
-  // find the nearest feature
+  // Find the nearest feature.
   long wId = map->getIndex().findNearestWay(c);
   WayPtr w = map->getWay(wId);
 
-  // find the nearest point on that feature.
+  // Find the nearest point on that feature.
   std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
   std::shared_ptr<LineString> ls = ElementToGeometryConverter(map).convertToLineString(w);
   std::unique_ptr<CoordinateSequence> cs = DistanceOp::nearestPoints(p.get(), ls.get());
@@ -174,9 +174,9 @@ void BaseComparator::_init(const std::shared_ptr<OsmMap>& map1, const std::share
   _worldBounds.Merge(CalculateMapBoundsVisitor::getBounds(_map1));
   _worldBounds.Merge(CalculateMapBoundsVisitor::getBounds(_map2));
 
-  _mapP1.reset(new OsmMap(_map1));
+  _mapP1 = std::make_shared<OsmMap>(_map1);
   MapProjector::projectToOrthographic(_mapP1, _worldBounds);
-  _mapP2.reset(new OsmMap(_map2));
+  _mapP2 = std::make_shared<OsmMap>(_map2);
   MapProjector::projectToOrthographic(_mapP2, _worldBounds);
 }
 

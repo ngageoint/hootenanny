@@ -44,10 +44,10 @@ bool operator==(const hoot::ConstEdgeMatchPtr& em1, const hoot::ConstEdgeMatchPt
   return result;
 }
 
-EdgeMatch::EdgeMatch()
+EdgeMatch::EdgeMatch() :
+_edges1(std::make_shared<EdgeString>()),
+_edges2(std::make_shared<EdgeString>())
 {
-  _edges1.reset(new EdgeString());
-  _edges2.reset(new EdgeString());
   _resetHash();
 }
 

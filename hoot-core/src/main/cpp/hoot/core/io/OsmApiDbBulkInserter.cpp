@@ -62,7 +62,7 @@ _includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
   _reset();
   _sectionNames = _createSectionNameList();
   setConfiguration(conf());
-  _sqlFormatter.reset(new OsmApiDbSqlStatementFormatter(_outputDelimiter));
+  _sqlFormatter = std::make_shared<OsmApiDbSqlStatementFormatter>(_outputDelimiter);
 }
 
 OsmApiDbBulkInserter::~OsmApiDbBulkInserter()
@@ -504,7 +504,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
   {
     outputFile.remove();
   }
-  _sqlOutputCombinedFile.reset(new QFile(dest));
+  _sqlOutputCombinedFile = std::make_shared<QFile>(dest);
   if (!_sqlOutputCombinedFile->open(QIODevice::WriteOnly))
   {
     throw HootException("Could not open file for SQL output: " + dest);
@@ -792,14 +792,14 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
 {
   if (_writeStats.nodesWritten == 0)
   {
-    _timer.reset(new QElapsedTimer());
+    _timer = std::make_shared<QElapsedTimer>();
     _timer->start();
     _fileDataPassCtr++;
     LOG_INFO(
       "Streaming elements from input to file outputs.  (data pass #" <<
       _fileDataPassCtr << " of " << _numberOfFileDataPasses() << ")...");
     _createNodeOutputFiles();
-    _idMappings.nodeIdMap.reset(new Tgs::BigMap<long, unsigned long>(_stxxlMapMinSize));
+    _idMappings.nodeIdMap = std::make_shared<Tgs::BigMap<long, unsigned long>>(_stxxlMapMinSize);
   }
 
   LOG_VART(node);
@@ -857,7 +857,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   if (_writeStats.waysWritten == 0)
   {
     _createWayOutputFiles();
-    _idMappings.wayIdMap.reset(new Tgs::BigMap<long, unsigned long>(_stxxlMapMinSize));
+    _idMappings.wayIdMap = std::make_shared<Tgs::BigMap<long, unsigned long>>(_stxxlMapMinSize);
   }
 
   // Do we already know about this way?
@@ -906,7 +906,8 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   if (_writeStats.relationsWritten == 0)
   {
     _createRelationOutputFiles();
-    _idMappings.relationIdMap.reset(new Tgs::BigMap<long, unsigned long>(_stxxlMapMinSize));
+    _idMappings.relationIdMap =
+      std::make_shared<Tgs::BigMap<long, unsigned long>>(_stxxlMapMinSize);
   }
 
   // Do we already know about this node?
@@ -1330,8 +1331,9 @@ void OsmApiDbBulkInserter::_createOutputFile(const QString& tableName, const QSt
   msg += "...";
   LOG_DEBUG(msg);
 
-  _outputSections[tableName].reset(
-    new QTemporaryFile(_tempDir + "/ApiDbBulkInserter-" + tableName + "-temp-XXXXXX.sql"));
+  _outputSections[tableName] =
+    std::make_shared<QTemporaryFile>(
+      _tempDir + "/ApiDbBulkInserter-" + tableName + "-temp-XXXXXX.sql");
   if (!_outputSections[tableName]->open())
   {
     throw HootException(

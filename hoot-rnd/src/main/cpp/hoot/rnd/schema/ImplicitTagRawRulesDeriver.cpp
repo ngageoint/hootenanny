@@ -77,9 +77,9 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
 
   if (_translateNamesToEnglish)
   {
-    _translator.reset(
+    _translator =
       Factory::getInstance().constructObject<ToEnglishTranslator>(
-        options.getLanguageTranslationTranslator()));
+        options.getLanguageTranslationTranslator());
     _translator->setConfiguration(conf);
     _translator->setSourceLanguages(options.getLanguageTranslationSourceLanguages());
     _translator->setId("ImplicitTagRawRulesDeriver");
@@ -88,11 +88,13 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
 
 void ImplicitTagRawRulesDeriver::setElementCriterion(const QString& criterionName)
 {
-  ElementCriterion* criterion =
+  ElementCriterionPtr criterion =
     Factory::getInstance().constructObject<ElementCriterion>(criterionName);
-  if (dynamic_cast<ImplicitTagEligibleCriterion*>(criterion) != nullptr)
+  std::shared_ptr<ImplicitTagEligibleCriterion> eligibleCrit =
+    std::dynamic_pointer_cast<ImplicitTagEligibleCriterion>(criterion);
+  if (eligibleCrit)
   {
-    _elementCriterion.reset(dynamic_cast<ImplicitTagEligibleCriterion*>(criterion));
+    _elementCriterion = eligibleCrit;
   }
   else
   {
@@ -106,8 +108,9 @@ void ImplicitTagRawRulesDeriver::_init()
   _duplicatedWordTagKeyCountsToValues.clear();
   _countFileLineCtr = 0;
 
-  _countFile.reset(
-    new QTemporaryFile(_tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX"));
+  _countFile =
+    std::make_shared<QTemporaryFile>(
+      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
   _countFile->setAutoRemove(!_keepTempFiles);
   if (!_countFile->open())
   {
@@ -256,7 +259,7 @@ void ImplicitTagRawRulesDeriver::_validateInputs(const QStringList& inputs,
   {
     throw HootException("No output was specified.");
   }
-  _output.reset(new QFile());
+  _output = std::make_shared<QFile>();
   _output->setFileName(output);
   if (_output->exists() && !_output->remove())
   {
@@ -328,7 +331,7 @@ std::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(
     // always set the direction before setting the script
     translationVisitor->setTranslationScript(translationScript);
 
-    inputStream.reset(new ElementVisitorInputStream(_inputReader, translationVisitor));
+    inputStream = std::make_shared<ElementVisitorInputStream>(_inputReader, translationVisitor);
   }
   return inputStream;
 }
@@ -402,8 +405,9 @@ void ImplicitTagRawRulesDeriver::_sortByTagOccurrence()
   LOG_INFO("Sorting output by tag occurrence count...");
   LOG_VART(_sortParallelCount);
 
-  _sortedCountFile.reset(
-    new QTemporaryFile(_tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX"));
+  _sortedCountFile =
+    std::make_shared<QTemporaryFile>(
+      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
   _sortedCountFile->setAutoRemove(!_keepTempFiles);
   if (!_sortedCountFile->open())
   {
@@ -453,9 +457,9 @@ void ImplicitTagRawRulesDeriver::_removeDuplicatedKeyTypes()
   //i.e. don't allow amenity=school AND amenity=shop to be associated with the same word...pick one
   //of them
 
-  _dedupedCountFile.reset(
-    new QTemporaryFile(
-      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX"));
+  _dedupedCountFile =
+    std::make_shared<QTemporaryFile>(
+      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
   _dedupedCountFile->setAutoRemove(!_keepTempFiles);
   if (!_dedupedCountFile->open())
   {
@@ -553,9 +557,9 @@ void ImplicitTagRawRulesDeriver::_resolveCountTies()
     StringUtils::formatLargeNumber(_duplicatedWordTagKeyCountsToValues.size()) <<
     " duplicated word/tag key/counts...");
 
-  _tieResolvedCountFile.reset(
-    new QTemporaryFile(
-      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX"));
+  _tieResolvedCountFile =
+    std::make_shared<QTemporaryFile>(
+      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
   _tieResolvedCountFile->setAutoRemove(!_keepTempFiles);
   if (!_tieResolvedCountFile->open())
   {

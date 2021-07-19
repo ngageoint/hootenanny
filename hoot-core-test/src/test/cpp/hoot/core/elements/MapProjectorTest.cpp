@@ -204,7 +204,7 @@ public:
   void testRegion(const OGREnvelope& env, QString name)
   {
     std::shared_ptr<OGRSpatialReference> sinusoidal = MapProjector::createSinusoidalProjection(env);
-    std::shared_ptr<OGRSpatialReference> mollweide(new OGRSpatialReference());
+    std::shared_ptr<OGRSpatialReference> mollweide = std::make_shared<OGRSpatialReference>();
     mollweide->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (mollweide->SetFromUserInput("ESRI:54009") != OGRERR_NONE)
     {
@@ -213,14 +213,14 @@ public:
 
     std::shared_ptr<OGRSpatialReference> orthographic = MapProjector::createOrthographic(env);
 
-    std::shared_ptr<OGRSpatialReference> eckertVI(new OGRSpatialReference());
+    std::shared_ptr<OGRSpatialReference> eckertVI = std::make_shared<OGRSpatialReference>();
     eckertVI->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (eckertVI->SetFromUserInput("ESRI:53010") != OGRERR_NONE)
     {
       throw HootException("Error creating EckertVI projection.");
     }
 
-    std::shared_ptr<OGRSpatialReference> sphereBoone(new OGRSpatialReference());
+    std::shared_ptr<OGRSpatialReference> sphereBoone = std::make_shared<OGRSpatialReference>();
     sphereBoone->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (sphereBoone->SetFromUserInput("ESRI:53024") != OGRERR_NONE)
     {

@@ -150,7 +150,8 @@ void PythonSchemaTranslator::_finalize()
   Py_Finalize();
 }
 
-void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, const char* geomType)
+void PythonSchemaTranslator::_translateToOsm(
+  Tags& tags, const char* layerName, const char* geomType)
 {
   PyObject* layerNamePy = PyString_FromString(layerName);
   PyObject* geomTypePy = PyString_FromString(geomType);
@@ -213,8 +214,8 @@ void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, 
       QString qKey, qValue;
 #       if (Py_UNICODE_SIZE == 4)
       {
-        qKey = QString::fromUcs4((const uint*)keyUnicodeData);
-        qValue = QString::fromUcs4((const uint*)valueUnicodeData);
+        qKey = QString::fromUcs4(keyUnicodeData);
+        qValue = QString::fromUcs4(valueUnicodeData);
       }
 #       elif (Py_UNICODE_SIZE == 2)
       {

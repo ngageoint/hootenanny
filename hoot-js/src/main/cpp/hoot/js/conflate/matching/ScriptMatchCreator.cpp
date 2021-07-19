@@ -98,7 +98,6 @@ public:
     _neighborCountMax(-1),
     _neighborCountSum(0),
     _elementsEvaluated(0),
-    _maxGroupSize(0),
     _numElementsVisited(0),
     _numMatchCandidatesVisited(0),
     _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
@@ -122,7 +121,7 @@ public:
 
   ~ScriptMatchVisitor()
   {
-    //  Free the perisistent object
+    //  Free the persistent object
     if (_mapJs.IsEmpty())
       return;
     Local<Object> mapJs(ToLocal(&_mapJs));
@@ -672,7 +671,6 @@ private:
   int _neighborCountMax;
   int _neighborCountSum;
   int _elementsEvaluated;
-  size_t _maxGroupSize;
   long _numElementsVisited;
   long _numMatchCandidatesVisited;
 
@@ -684,8 +682,6 @@ private:
   std::shared_ptr<ChainCriterion> _pointPolyCrit;
 
   QElapsedTimer _timer;
-
-  long _elementCount;
 
   CreatorDescription _scriptInfo;
 
@@ -726,7 +722,7 @@ void ScriptMatchCreator::setArguments(QStringList args)
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   _scriptPath = ConfPath::search(args[0], "rules");
-  _script.reset(new PluginContext());
+  _script = std::make_shared<PluginContext>();
   Context::Scope context_scope(_script->getContext(current));
   _script->loadScript(_scriptPath, "plugin");
   // bit of a hack...see MatchCreator.h...need to refactor
@@ -950,8 +946,9 @@ std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
     LOG_TRACE("Resetting the match candidate checker: " << scriptFileInfo.fileName() << "...");
 
     vector<ConstMatchPtr> emptyMatches;
-    _cachedScriptVisitor.reset(
-      new ScriptMatchVisitor(map, emptyMatches, ConstMatchThresholdPtr(), _script, _filter));
+    _cachedScriptVisitor =
+      std::make_shared<ScriptMatchVisitor>(
+        map, emptyMatches, ConstMatchThresholdPtr(), _script, _filter);
 
     _cachedScriptVisitor->setScriptPath(scriptPath);
 

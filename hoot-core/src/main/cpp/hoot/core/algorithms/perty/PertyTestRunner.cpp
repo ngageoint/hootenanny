@@ -170,7 +170,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
 
   QList<std::shared_ptr<const PertyTestRunResult>> testRunResults;
   double dynamicVariableValue = _dynamicVariableStartValue;
-  _matchScorer.reset(new PertyMatchScorer());
+  _matchScorer = std::make_shared<PertyMatchScorer>();
   int testScoreCtr = 0;
   for (int i = 0; i < _numTestRuns; i++)
   {

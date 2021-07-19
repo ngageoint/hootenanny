@@ -294,8 +294,8 @@ private:
 MatchGraph::MatchGraph()
 {
   _checkForConflicts = true;
-  // the two classes share the matches vector.
-  _d.reset(new MatchGraphInternal(_matches));
+  // The two classes share the matches vector.
+  _d = std::make_shared<MatchGraphInternal>(_matches);
 }
 
 void MatchGraph::_resetGraph() const

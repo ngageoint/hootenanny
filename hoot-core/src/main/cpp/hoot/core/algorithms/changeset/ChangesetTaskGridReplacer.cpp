@@ -137,13 +137,13 @@ void ChangesetTaskGridReplacer::_initChangesetStats()
 
 void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
 {
-  _changesetCreator.reset(
+  _changesetCreator =
     Factory::getInstance().constructObject<ChangesetReplacement>(
-      ConfigOptions().getChangesetReplacementImplementation()));
+      ConfigOptions().getChangesetReplacementImplementation());
   _changesetCreator->setChangesetOptions(true, "", _dataToReplaceUrl);
   LOG_VARD(_changesetCreator->toString());
 
-  _changesetApplier.reset(new OsmApiDbSqlChangesetApplier(_dataToReplaceUrl));
+  _changesetApplier = std::make_shared<OsmApiDbSqlChangesetApplier>(_dataToReplaceUrl);
 
   // for each task grid cell
     // derive the difference between the replacement data and the being replaced

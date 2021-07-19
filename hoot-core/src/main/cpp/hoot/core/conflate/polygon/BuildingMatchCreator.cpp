@@ -424,7 +424,7 @@ MatchPtr BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
     if (BuildingMatchVisitor::isRelated(e1, e2))
     {
       // score each candidate and push it on the result vector
-      result.reset(new BuildingMatch(map, _getRf(), eid1, eid2, getMatchThreshold()));
+      result = std::make_shared<BuildingMatch>(map, _getRf(), eid1, eid2, getMatchThreshold());
     }
   }
   return result;
@@ -498,7 +498,7 @@ std::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
     }
     file.close();
 
-    _rf.reset(new BuildingRfClassifier());
+    _rf = std::make_shared<BuildingRfClassifier>();
     QDomElement docRoot = doc.elementsByTagName("RandomForest").at(0).toElement();
     _rf->import(docRoot);
   }
@@ -517,10 +517,10 @@ std::shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()
   if (!_matchThreshold.get())
   {
     LOG_VART(ConfigOptions().getBuildingMatchThreshold());
-    _matchThreshold.reset(
-      new MatchThreshold(
+    _matchThreshold =
+      std::make_shared<MatchThreshold>(
         ConfigOptions().getBuildingMatchThreshold(), ConfigOptions().getBuildingMissThreshold(),
-        ConfigOptions().getBuildingReviewThreshold()));
+        ConfigOptions().getBuildingReviewThreshold());
   }
   return _matchThreshold;
 }

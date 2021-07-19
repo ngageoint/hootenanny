@@ -143,10 +143,10 @@ map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtr& m,
   WaySublineCollection string1 = copiedMatch.getSublineString1();
   WaySublineCollection string2 = copiedMatch.getSublineString2();
 
-  MultiLineStringSplitter().split(copiedMap, string1, copiedMatch.getReverseVector1(), match1,
-    scraps1);
-  MultiLineStringSplitter().split(copiedMap, string2, copiedMatch.getReverseVector2(), match2,
-    scraps2);
+  MultiLineStringSplitter().split(
+    copiedMap, string1, copiedMatch.getReverseVector1(), match1, scraps1);
+  MultiLineStringSplitter().split(
+    copiedMap, string2, copiedMatch.getReverseVector2(), match2, scraps2);
 
   if (!match1 || !match2)
   {
@@ -189,7 +189,7 @@ void HighwayRfClassifier::_init() const
     {
       throw HootException("Error opening file: " + path);
     }
-    _rf.reset(new RandomForest());
+    _rf = std::make_shared<RandomForest>();
     try
     {
       _rf->importModel(file);

@@ -335,17 +335,27 @@ QList<ElementId> IntersectionSplitter::_getAdjoiningRelationMembers(
   }
   else if (adjoiningMemberIds.size() == 1)
   {
+    LOG_VART(containingRelation->isFirstMember(wayId));
+    LOG_VART(containingRelation->isLastMember(wayId));
     if (containingRelation->isFirstMember(wayId))
     {
       // The only entry in adjoiningMemberIds is the ID of the way member after it.
       adjoiningWayMemberIndexedAfter = _map->getWay(*(adjoiningMemberIds.begin()));
-      LOG_VART(adjoiningWayMemberIndexedAfter->getElementId());
+      LOG_VART(adjoiningWayMemberIndexedAfter.get());
+      if (adjoiningWayMemberIndexedAfter)
+      {
+        LOG_VART(adjoiningWayMemberIndexedAfter->getElementId());
+      }
     }
     else if (containingRelation->isLastMember(wayId))
     {
       // The only entry in adjoiningMemberIds is the ID of the way member before it.
       adjoiningWayMemberIndexedBefore = _map->getWay(*(adjoiningMemberIds.begin()));
-      LOG_VART(adjoiningWayMemberIndexedBefore->getElementId());
+      LOG_VART(adjoiningWayMemberIndexedBefore.get());
+      if (adjoiningWayMemberIndexedBefore)
+      {
+        LOG_VART(adjoiningWayMemberIndexedBefore->getElementId());
+      }
     }
   }
 
@@ -392,7 +402,7 @@ void IntersectionSplitter::_preserveWayRelationMemberOrder(
       // last member in the relation. (We may eventually be able to combine the cases for
       // adjoiningMemberIds.size() == 1 and adjoiningMemberIds.size() == 2 together here).
       bool reverseNewWays = false;
-      if (adjoiningMemberIds.size() == 2)
+      if (adjoiningWayMemberIndexedBefore && adjoiningMemberIds.size() == 2)
       {
         LOG_VART(addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedBefore));
         // If the new way created by the split shares an endpoint with the member indexed before the

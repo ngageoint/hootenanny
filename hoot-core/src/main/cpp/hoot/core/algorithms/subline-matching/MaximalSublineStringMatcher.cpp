@@ -66,8 +66,8 @@ void MaximalSublineStringMatcher::setConfiguration(const Settings& s)
   setMinSplitSize(co.getWayMergerMinSplitSize());
   setHeadingDelta(co.getWayMatcherHeadingDelta());
 
-  _sublineMatcher.reset(
-    Factory::getInstance().constructObject<SublineMatcher>(co.getWaySublineMatcher()));
+  _sublineMatcher =
+    Factory::getInstance().constructObject<SublineMatcher>(co.getWaySublineMatcher());
   _configureSublineMatcher();
   std::shared_ptr<MaximalSublineMatcher> maximalSublineMatcher =
     std::dynamic_pointer_cast<MaximalSublineMatcher>(_sublineMatcher);
@@ -136,7 +136,7 @@ void MaximalSublineStringMatcher::_configureSublineMatcher()
 {
   if (!_sublineMatcher)
   {
-    _sublineMatcher.reset(new MaximalSublineMatcher());
+    _sublineMatcher = std::make_shared<MaximalSublineMatcher>();
   }
   _sublineMatcher->setMaxRelevantAngle(_maxAngle);
   _sublineMatcher->setMinSplitSize(_minSplitsize);

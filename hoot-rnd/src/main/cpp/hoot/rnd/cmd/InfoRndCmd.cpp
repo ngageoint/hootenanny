@@ -110,10 +110,9 @@ public:
 
       try
       {
-        std::shared_ptr<LanguageInfoProvider> client;
-        client.reset(
+        std::shared_ptr<LanguageInfoProvider> client =
           Factory::getInstance().constructObject<LanguageInfoProvider>(
-            opts.getLanguageInfoProvider()));
+            opts.getLanguageInfoProvider());
         client->setConfiguration(conf());
 
         const QString type = args[0].replace("--", "").toLower();

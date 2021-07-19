@@ -58,7 +58,7 @@ void OgrWriterThread::run()
   std::shared_ptr<OgrWriter> ogrWriter;
   { // Mutex Scope
     QMutexLocker lock(_pInitMutex);
-    ogrWriter.reset(new OgrWriter());
+    ogrWriter = std::make_shared<OgrWriter>();
     ogrWriter->setSchemaTranslationScript(_translation);
     ogrWriter->open(_output);
   }

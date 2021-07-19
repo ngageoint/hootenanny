@@ -67,7 +67,7 @@ QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStrin
       throw IllegalArgumentException("POI to POI search radii file does not exist.");
     }
 
-    propTree.reset(new boost::property_tree::ptree());
+    propTree = std::make_shared<boost::property_tree::ptree>();
     try
     {
       boost::property_tree::read_json(jsonStringOrFile.toStdString(), *propTree);

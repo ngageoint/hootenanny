@@ -51,15 +51,15 @@ int LongestCommonNodeString::apply()
 
   if (_w1->getNodeCount() == 0 || _w2->getNodeCount() == 0)
   {
-       return 0;
+    return 0;
   }
 
   const vector<long>& str1 = _w1->getNodeIds();
   const vector<long>& str2 = _w2->getNodeIds();
 
-  int *curr = new int [_w2->getNodeCount()];
-  int *prev = new int [_w2->getNodeCount()];
-  int *swap = nullptr;
+  int* curr = new int[_w2->getNodeCount()];
+  int* prev = new int[_w2->getNodeCount()];
+  int* swap = nullptr;
   int maxSubstr = 0;
 
   for (size_t i = 0; i < str1.size(); ++i)

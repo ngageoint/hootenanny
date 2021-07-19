@@ -94,8 +94,8 @@ void ChangesetReplacementCreator::create(
 
   LOG_INFO("******************************************");
   _currentTask = 1;
-  _progress.reset(
-    new Progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running));
+  _progress =
+    std::make_shared<Progress>(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
   _progress->set(
     0.0, "Generating diff maps for changeset derivation with ID: " + _changesetId + "...");
 

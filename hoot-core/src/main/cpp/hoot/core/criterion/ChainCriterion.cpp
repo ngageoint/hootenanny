@@ -51,20 +51,6 @@ ChainCriterion::ChainCriterion(ElementCriterion* child1, ElementCriterion* child
   _criteria.push_back(std::shared_ptr<ElementCriterion>(child2));
 }
 
-ChainCriterion::ChainCriterion(ElementCriterion* child1, ElementCriterionPtr child2)
-{
-  _criteria.push_back(std::shared_ptr<ElementCriterion>(child1));
-  _criteria.push_back(child2);
-}
-
-ChainCriterion::ChainCriterion(
-  ElementCriterion* child1, ElementCriterion* child2, ElementCriterion* child3)
-{
-  _criteria.push_back(std::shared_ptr<ElementCriterion>(child1));
-  _criteria.push_back(std::shared_ptr<ElementCriterion>(child2));
-  _criteria.push_back(std::shared_ptr<ElementCriterion>(child3));
-}
-
 ChainCriterion::ChainCriterion(const std::vector<ElementCriterionPtr>& criteria)
 {
   for (size_t i = 0; i < criteria.size(); i++)

@@ -109,13 +109,13 @@ EdgeDistanceExtractor::EdgeDistanceExtractor(ValueAggregatorPtr a, Meters spacin
 _aggregator(a)
 {
   if (!_aggregator)
-    _aggregator.reset(new MeanAggregator());
+    _aggregator = std::make_shared<MeanAggregator>();
   setSpacing(spacing);
 }
 
 EdgeDistanceExtractor::EdgeDistanceExtractor(Meters spacing)
 {
-  _aggregator.reset(new MeanAggregator());
+  _aggregator = std::make_shared<MeanAggregator>();
   setSpacing(spacing);
 }
 
@@ -183,6 +183,7 @@ std::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(
     LinesWaysVisitor v(*lines);
     v.setOsmMap(&map);
     e->visitRo(map, v);
+    // GeometryFactory takes ownership of these input parameters.
     result.reset(GeometryFactory::getDefaultInstance()->createMultiLineString(lines));
   }
   else

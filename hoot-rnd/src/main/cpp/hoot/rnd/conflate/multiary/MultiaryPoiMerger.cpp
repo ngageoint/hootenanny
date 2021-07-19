@@ -75,7 +75,7 @@ void MultiaryPoiMerger::apply(const OsmMapPtr& map,
     // way to add that dep.
     if (d.getClassName() == "hoot::ScriptMergerCreator")
     {
-      _mergerCreator.reset(Factory::getInstance().constructObject<MergerCreator>(d.getClassName()));
+      _mergerCreator = Factory::getInstance().constructObject<MergerCreator>(d.getClassName());
     }
   }
 
@@ -127,7 +127,7 @@ void MultiaryPoiMerger::_mergeClusters(const OsmMapPtr& map,
       }
     }
     // Copy mergedElement so we know this is the only map that contains the element.
-    ElementPtr newE(mc->mergedElement->clone());
+    ElementPtr newE = mc->mergedElement->clone();
     // this will replace the old entry.
     map->addElement(newE);
   }

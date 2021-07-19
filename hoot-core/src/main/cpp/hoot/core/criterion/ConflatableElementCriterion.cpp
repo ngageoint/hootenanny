@@ -57,7 +57,7 @@ void ConflatableElementCriterion::_createConflatableCriteria()
   for (std::vector<QString>::const_iterator itr = criterionClassNames.begin();
        itr != criterionClassNames.end(); ++itr)
   {
-    ElementCriterionPtr crit(Factory::getInstance().constructObject<ElementCriterion>(*itr));
+    ElementCriterionPtr crit = Factory::getInstance().constructObject<ElementCriterion>(*itr);
     if (std::dynamic_pointer_cast<ConflatableElementCriterion>(crit) != nullptr)
     {
       _conflatableCriteria[*itr] = crit;

@@ -73,9 +73,9 @@ void NetworkDetails::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
   _sublineMatcher =
     SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
-  _classifier.reset(
+  _classifier =
     Factory::getInstance().constructObject<HighwayClassifier>(
-      opts.getConflateMatchHighwayClassifier()));
+      opts.getConflateMatchHighwayClassifier());
 }
 
 Meters NetworkDetails::calculateDistance(ConstEdgeLocationPtr el) const
@@ -480,7 +480,7 @@ EdgeMatchPtr NetworkDetails::extendEdgeMatch(
         tmp1->contains(e1) && tmp2->contains(e2) &&
         tmp1->touches(em->getString1()) && tmp2->touches(em->getString2()))
     {
-      result.reset(new EdgeMatch(tmp1, tmp2));
+      result = std::make_shared<EdgeMatch>(tmp1, tmp2);
       LOG_TRACE("Successful edge match extension: " << result);
       return result;
     }
@@ -508,11 +508,11 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
 
     if (sub->isBackwards())
     {
-      elEnd.reset(new EdgeLocation(sub->getEdge(), 0));
+      elEnd = std::make_shared<EdgeLocation>(sub->getEdge(), 0);
     }
     else
     {
-      elEnd.reset(new EdgeLocation(sub->getEdge(), 1));
+      elEnd = std::make_shared<EdgeLocation>(sub->getEdge(), 1);
     }
 
     es->removeLast();
@@ -532,11 +532,11 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
 
     if (sub->isBackwards())
     {
-      elStart.reset(new EdgeLocation(sub->getEdge(), 1));
+      elStart = std::make_shared<EdgeLocation>(sub->getEdge(), 1);
     }
     else
     {
-      elStart.reset(new EdgeLocation(sub->getEdge(), 0));
+      elStart = std::make_shared<EdgeLocation>(sub->getEdge(), 0);
     }
 
     es->removeFirst();
@@ -918,7 +918,7 @@ LegacyVertexMatcherPtr NetworkDetails::_getVertexMatcher()
   if (!_vertexMatcher)
   {
     LOG_TRACE("Creating vertex matcher...");
-    _vertexMatcher.reset(new LegacyVertexMatcher(_map));
+    _vertexMatcher = std::make_shared<LegacyVertexMatcher>(_map);
     _vertexMatcher->identifyVertexMatches(_n1, _n2, *this);
   }
   return _vertexMatcher;
@@ -1078,11 +1078,10 @@ bool NetworkDetails::isStringCandidate(ConstEdgeStringPtr es, ConstEdgeSublinePt
 EdgeSublinePtr NetworkDetails::_toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr e) const
 {
   EdgeSublinePtr result;
-
   Meters l = ElementGeometryUtils::calculateLength(ws.getWay(), _map);
-  result.reset(new EdgeSubline(e, ws.getStart().calculateDistanceOnWay() / l,
-    ws.getEnd().calculateDistanceOnWay() / l));
-
+  result =
+    std::make_shared<EdgeSubline>(
+      e, ws.getStart().calculateDistanceOnWay() / l, ws.getEnd().calculateDistanceOnWay() / l);
   return result;
 }
 

@@ -162,7 +162,7 @@ public:
 
     OsmXmlWriter writer;
 
-    OsmMapPtr original(new OsmMap(map));
+    OsmMapPtr original = std::make_shared<OsmMap>(map);
     MapProjector::projectToWgs84(original);
     writer.write(original, _outputPath + "Original.osm");
 

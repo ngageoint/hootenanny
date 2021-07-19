@@ -32,20 +32,21 @@
 namespace hoot
 {
 
-CaseTestFitnessFunction::CaseTestFitnessFunction(QString dir, QString configFile)
-  : AbstractTestFitnessFunction(),
-    _configFile(configFile)
+CaseTestFitnessFunction::CaseTestFitnessFunction(QString dir, QString configFile) :
+AbstractTestFitnessFunction(),
+_configFile(configFile)
 {
-  _testSuite.reset(new ConflateCaseTestSuite(dir));
+  _testSuite = std::make_shared<ConflateCaseTestSuite>(dir);
   QStringList confs;
   _testSuite->loadDir(dir, confs);
   _testCount = _testSuite->getChildTestCount();
 }
 
-//this init will add the conflicts network case tests conf which is a subset of the overall
-//network cases tests conf
 void CaseTestFitnessFunction::initTest(Settings& /*testSettings*/)
 {
+  // This init will add the conflicts network case tests conf which is a subset of the overall
+  // network cases tests conf.
+
   if (!_configFile.trimmed().isEmpty())
   {
     _test->addConfig(_configFile);

@@ -39,8 +39,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, ToEnglishTranslationComparisonVisitor)
 
 ToEnglishTranslationComparisonVisitor::ToEnglishTranslationComparisonVisitor() :
-ToEnglishTranslationVisitor(),
-_numTagsCompared(0)
+ToEnglishTranslationVisitor()
 {
 }
 
@@ -69,9 +68,9 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
       "language.ignore.pre.translated.tags\nDisabling the options.");
   }
 
-  _translationScorer.reset(
+  _translationScorer =
     Factory::getInstance().constructObject<StringDistance>(
-      opts.getLanguageTranslationComparisonScorer()));
+      opts.getLanguageTranslationComparisonScorer());
 
   //use a different collection of tag keys here as a list and ignore the parse names option, since
   //we need to retain the key ordering to be in sync with _preTranslatedTagKeys and don't care

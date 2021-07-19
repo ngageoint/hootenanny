@@ -101,7 +101,8 @@ void HootApiDbBulkInserter::open(const QString& url)
   LOG_VART(_database.getMapId());
 
   _sectionNames = _createSectionNameList();
-  _sqlFormatter.reset(new HootApiDbSqlStatementFormatter(_outputDelimiter, _database.getMapId()));
+  _sqlFormatter =
+    std::make_shared<HootApiDbSqlStatementFormatter>(_outputDelimiter, _database.getMapId());
 }
 
 void HootApiDbBulkInserter::_getOrCreateMap()
@@ -254,7 +255,7 @@ void HootApiDbBulkInserter::_writeCombinedSqlFile()
   {
     outputFile.remove();
   }
-  _sqlOutputCombinedFile.reset(new QFile(dest));
+  _sqlOutputCombinedFile = std::make_shared<QFile>(dest);
   if (!_sqlOutputCombinedFile->open(QIODevice::WriteOnly))
   {
     throw HootException("Could not open file for SQL output: " + dest);
@@ -375,14 +376,14 @@ void HootApiDbBulkInserter::writePartial(const ConstNodePtr& node)
 {
   if (_writeStats.nodesWritten == 0)
   {
-    _timer.reset(new QElapsedTimer());
+    _timer = std::make_shared<QElapsedTimer>();
     _timer->start();
     _fileDataPassCtr++;
     LOG_INFO(
       "Streaming elements from input to file outputs.  (data pass #" <<
       _fileDataPassCtr << " of " << _numberOfFileDataPasses() << ")...");
     _createNodeOutputFiles();
-    _idMappings.nodeIdMap.reset(new Tgs::BigMap<long, unsigned long>(_stxxlMapMinSize));
+    _idMappings.nodeIdMap = std::make_shared<Tgs::BigMap<long, unsigned long>>(_stxxlMapMinSize);
   }
 
   LOG_VART(node);
@@ -438,7 +439,7 @@ void HootApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   if (_writeStats.waysWritten == 0)
   {
     _createWayOutputFiles();
-    _idMappings.wayIdMap.reset(new Tgs::BigMap<long, unsigned long>(_stxxlMapMinSize));
+    _idMappings.wayIdMap = std::make_shared<Tgs::BigMap<long, unsigned long>>(_stxxlMapMinSize);
   }
 
   // Do we already know about this way?
@@ -485,7 +486,8 @@ void HootApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   if (_writeStats.relationsWritten == 0)
   {
     _createRelationOutputFiles();
-    _idMappings.relationIdMap.reset(new Tgs::BigMap<long, unsigned long>(_stxxlMapMinSize));
+    _idMappings.relationIdMap =
+      std::make_shared<Tgs::BigMap<long, unsigned long>>(_stxxlMapMinSize);
   }
 
   //  Do we already know about this node?

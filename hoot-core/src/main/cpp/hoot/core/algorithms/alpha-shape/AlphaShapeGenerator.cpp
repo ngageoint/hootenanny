@@ -73,8 +73,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   OsmMapWriterFactory::writeDebugMap(
     cutterShape, inputMap->getProjection(), className(), "cutter-shape-map");
 
-  OsmMapPtr result;
-  result.reset(new OsmMap(inputMap->getProjection()));
+  OsmMapPtr result = std::make_shared<OsmMap>(inputMap->getProjection());
   result->appendSource(inputMap->getSource());
   GeometryToElementConverter(result)
     .convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);

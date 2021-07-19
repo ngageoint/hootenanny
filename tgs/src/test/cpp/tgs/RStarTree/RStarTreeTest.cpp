@@ -65,8 +65,7 @@ public:
 
    void test1()
    {
-    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(2048));
-     RStarTree uut(mps, 2);
+     RStarTree uut(std::make_shared<MemoryPageStore>(2048), 2);
      int maxChildCount = uut.getRoot()->getMaxChildCount();
 
      CPPUNIT_ASSERT_EQUAL(0, uut.getRoot()->getChildCount());
@@ -123,8 +122,7 @@ public:
 
    void test2()
    {
-    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
-     RStarTree uut(mps, 2);
+     RStarTree uut(std::make_shared<MemoryPageStore>(256), 2);
 
      Box b(2);
      for (int i = 0; i < 1000; i++)
@@ -149,8 +147,7 @@ public:
          QFile::remove("fileTest.dat");
        }
 
-      std::shared_ptr<FilePageStore> mps(new FilePageStore(256, "fileTest.dat"));
-       RStarTree uut(mps, 2);
+       RStarTree uut(std::make_shared<FilePageStore>(256, "fileTest.dat"), 2);
 
        Box b(2);
        for (int i = 0; i < 3000; i++)
@@ -166,8 +163,7 @@ public:
        validateTreeBounds(uut);
      }
      {
-      std::shared_ptr<FilePageStore> mps(new FilePageStore(256, "fileTest.dat", true));
-       RStarTree uut(mps, 2);
+       RStarTree uut(std::make_shared<FilePageStore>(256, "fileTest.dat"), 2);
 
        validateTreeBounds(uut);
      }

@@ -51,9 +51,9 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, RandomWaySplitter)
 
 RandomWaySplitter::RandomWaySplitter() :
+_localRng(std::make_shared<boost::minstd_rand>()),
 _splitRecursionLevel(0)
 {
-  _localRng.reset(new boost::minstd_rand());
   _rng = _localRng.get();
 }
 

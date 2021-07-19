@@ -209,16 +209,16 @@ bool OsmApiWriter::apply()
         //  all of the threads are idle and not waiting for something to come back
         //  There are two things that can be done here, first is to put everything that is
         //  "ready to send" in a changeset and send it OR move everything to the error state
-/*
+
         //  Option #1: Get all of the remaining elements as a single changeset
-        _changesetMutex.lock();
-        _changeset.calculateRemainingChangeset(changeset_info);
-        _changesetMutex.unlock();
+        //_changesetMutex.lock();
+        //_changeset.calculateRemainingChangeset(changeset_info);
+        //_changesetMutex.unlock();
         //  Push that changeset
-        _pushChangesets(changeset_info);
+        //_pushChangesets(changeset_info);
         //  Let the threads know that the remaining changeset is the "remaining" changeset
-        _threadsCanExit = true;
-*/
+        //_threadsCanExit = true;
+
         LOG_STATUS("Apply Changeset: Remaining elements unsendable...");
         //  Option #2: Move everything to the error state and exit
         _changesetMutex.lock();
@@ -1099,7 +1099,7 @@ HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentica
   if (!requiresAuthentication)
   {
     //  When the call doesn't require authentication, don't pass in OAuth credentials
-    request.reset(new HootNetworkRequest());
+    request = std::make_shared<HootNetworkRequest>();
   }
   else if (!_consumerKey.isEmpty() &&
       !_consumerSecret.isEmpty() &&
@@ -1107,12 +1107,14 @@ HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentica
       !_secretToken.isEmpty())
   {
     //  When OAuth credentials are present and authentication is requested, pass OAuth crendentials
-    request.reset(new HootNetworkRequest(_consumerKey, _consumerSecret, _accessToken, _secretToken));
+    request =
+      std::make_shared<HootNetworkRequest>(
+        _consumerKey, _consumerSecret, _accessToken, _secretToken);
   }
   else
   {
     //  No OAuth credentials are present, so authentication must be by username/password
-    request.reset(new HootNetworkRequest());
+    request = std::make_shared<HootNetworkRequest>();
   }
   return request;
 }

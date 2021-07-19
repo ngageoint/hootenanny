@@ -45,11 +45,13 @@ namespace Tgs
     CPPUNIT_TEST(test1);
     CPPUNIT_TEST(test2);
     CPPUNIT_TEST_SUITE_END();
+
   public:
+
     void test1()
     {
-      std::shared_ptr<PageStore>mps(new MemoryPageStore(100));
-      std::shared_ptr<RTreeNodeStore>store(new RTreeNodeStore(2, mps));
+      std::shared_ptr<PageStore> mps = std::make_shared<MemoryPageStore>(100);
+      std::shared_ptr<RTreeNodeStore> store = std::make_shared<RTreeNodeStore>(2, mps);
 
       {
         Tgs::RTreeNode rtn(2, mps->createPage());
@@ -76,8 +78,8 @@ namespace Tgs
 
     void test2()
     {
-      std::shared_ptr<PageStore>mps(new MemoryPageStore(368));
-      std::shared_ptr<RTreeNodeStore>store(new RTreeNodeStore(2, mps));
+      std::shared_ptr<PageStore> mps = std::make_shared<MemoryPageStore>(368);
+      std::shared_ptr<RTreeNodeStore> store = std::make_shared<RTreeNodeStore>(2, mps);
 
       RTreeNode rtn(2, mps->createPage());
       rtn.clear();

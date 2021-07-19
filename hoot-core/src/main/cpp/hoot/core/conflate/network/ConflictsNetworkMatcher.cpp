@@ -49,22 +49,22 @@ HOOT_FACTORY_REGISTER(NetworkMatcher, ConflictsNetworkMatcher)
 
 const double ConflictsNetworkMatcher::EPSILON = 1e-6;
 
-ConflictsNetworkMatcher::ConflictsNetworkMatcher()
+ConflictsNetworkMatcher::ConflictsNetworkMatcher() :
+_edgeMatches(std::make_shared<IndexedEdgeMatchSet>()),
+_partialHandicap(ConfigOptions().getNetworkConflictsPartialHandicap()),
+_stubHandicap(ConfigOptions().getNetworkConflictsStubHandicap()),
+_aggression(ConfigOptions().getNetworkConflictsAggression()),
+_stubThroughWeighting(ConfigOptions().getNetworkConflictsStubThroughWeighting()),
+_weightInfluence(ConfigOptions().getNetworkConflictsWeightInfluence()),
+_outboundWeighting(ConfigOptions().getNetworkConflictsOutboundWeighting()),
+_sanityCheckMinSeparationDistance(
+   ConfigOptions().getNetworkConflictsSanityCheckMinSeparationDistance()),
+_sanityCheckSeparationDistanceMultiplier(
+  ConfigOptions().getNetworkConflictsSanityCheckSeparationDistanceMultiplier()),
+_conflictingScoreThresholdModifier(
+  ConfigOptions().getNetworkConflictsConflictingScoreThresholdModifier()),
+_matchThreshold(ConfigOptions().getNetworkConflictsMatcherThreshold())
 {
-  _edgeMatches.reset(new IndexedEdgeMatchSet());
-
-  ConfigOptions conf;
-  _partialHandicap = conf.getNetworkConflictsPartialHandicap();
-  _stubHandicap = conf.getNetworkConflictsStubHandicap();
-  _aggression = conf.getNetworkConflictsAggression();
-  _weightInfluence = conf.getNetworkConflictsWeightInfluence();
-  _outboundWeighting = conf.getNetworkConflictsOutboundWeighting();
-  _stubThroughWeighting = conf.getNetworkConflictsStubThroughWeighting();
-  _sanityCheckMinSeparationDistance = conf.getNetworkConflictsSanityCheckMinSeparationDistance();
-  _sanityCheckSeparationDistanceMultiplier =
-    conf.getNetworkConflictsSanityCheckSeparationDistanceMultiplier();
-  _conflictingScoreThresholdModifier = conf.getNetworkConflictsConflictingScoreThresholdModifier();
-  _matchThreshold = conf.getNetworkConflictsMatcherThreshold();
   if (_matchThreshold <= 0.0 || _matchThreshold > 1.0)
   {
     throw IllegalArgumentException(
@@ -628,7 +628,7 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
 {
   _n1 = n1;
   _n2 = n2;
-  _details.reset(new NetworkDetails(map, n1, n2));
+  _details = std::make_shared<NetworkDetails>(map, n1, n2);
 
   // Add stub edges to both networks.
   // if both vertices on an edge match a single vertex (v2)
@@ -638,7 +638,7 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
 
   // create empty stub edges can change the map, recreate the details so the indexes are
   // reinitialized.
-  _details.reset(new NetworkDetails(map, n1, n2));
+  _details = std::make_shared<NetworkDetails>(map, n1, n2);
 
   // create a spatial index of n2 vertices & edges.
   _createEdge2Index();

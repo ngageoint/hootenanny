@@ -65,11 +65,11 @@ namespace hoot
 HOOT_FACTORY_REGISTER(MatchCreator, NetworkMatchCreator)
 
 NetworkMatchCreator::NetworkMatchCreator() :
+_userCriterion(std::make_shared<HighwayCriterion>()),
 _matchScoringFunctionMax(ConfigOptions().getNetworkMatchScoringFunctionMax()),
 _matchScoringFunctionCurveMidpointX(ConfigOptions().getNetworkMatchScoringFunctionCurveMidX()),
 _matchScoringFunctionCurveSteepness(ConfigOptions().getNetworkMatchScoringFunctionCurveSteepness())
 {
-  _userCriterion.reset(new HighwayCriterion());
 }
 
 MatchPtr NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, ElementId /*eid1*/,
@@ -138,8 +138,8 @@ void NetworkMatchCreator::createMatches(
 
   LOG_INFO("Matching networks...");
   // call class to derive final graph node and graph edge matches
-  NetworkMatcherPtr matcher(
-    Factory::getInstance().constructObject<NetworkMatcher>(ConfigOptions().getNetworkMatcher()));
+  NetworkMatcherPtr matcher =
+    Factory::getInstance().constructObject<NetworkMatcher>(ConfigOptions().getNetworkMatcher());
   matcher->matchNetworks(map, n1, n2);
 
   NetworkDetailsPtr details = std::make_shared<NetworkDetails>(map, n1, n2);
@@ -218,10 +218,10 @@ std::shared_ptr<MatchThreshold> NetworkMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
-    _matchThreshold.reset(
-      new MatchThreshold(
+    _matchThreshold =
+      std::make_shared<MatchThreshold>(
         ConfigOptions().getNetworkMatchThreshold(), ConfigOptions().getNetworkMissThreshold(),
-        ConfigOptions().getNetworkReviewThreshold()));
+        ConfigOptions().getNetworkReviewThreshold());
   }
   return _matchThreshold;
 }

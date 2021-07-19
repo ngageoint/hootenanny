@@ -434,7 +434,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   // If the translation direction wasn't specified, try to guess it.
   if (!_translation.trimmed().isEmpty() && _translationDirection.isEmpty())
   {
-    _translationDirection = _outputFormatToTranslationDirection(output);
+    _translationDirection = SchemaUtils::outputFormatToTranslationDirection(output);
     // This gets read by the TranslationVisitor and cannot be empty.
     conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), _translationDirection);
   }
@@ -722,25 +722,6 @@ void DataConverter::_setToOgrOptions(const QString& output)
   // be done with convert ops, so let's ignore any translation ops that were specified.
   _convertOps.removeAll(SchemaTranslationOp::className());
   _convertOps.removeAll(SchemaTranslationVisitor::className());
-}
-
-QString DataConverter::_outputFormatToTranslationDirection(const QString& output) const
-{
-  if (IoUtils::isSupportedOgrFormat(output, true))
-  {
-    LOG_INFO("No translation direction specified. Assuming 'toogr' based on output format...");
-    return "toogr";
-  }
-  else if (IoUtils::isSupportedOsmFormat(output))
-  {
-    LOG_INFO("No translation direction specified. Assuming 'toosm' based on output format...");
-    return "toosm";
-  }
-  else
-  {
-    LOG_INFO("No translation direction specified. Using 'toosm'...");
-    return "toosm";
-  }
 }
 
 void DataConverter::_handleNonOgrOutputTranslationOpts()

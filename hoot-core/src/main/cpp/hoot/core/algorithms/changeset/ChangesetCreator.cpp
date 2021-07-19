@@ -430,12 +430,12 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Separating out input maps...");
   RemoveUnknown1Visitor remove1Vis;
   RemoveUnknown2Visitor remove2Vis;
-  map1.reset(new OsmMap(fullMap));
+  map1 = std::make_shared<OsmMap>(fullMap);
   if (!_singleInput)
   {
     map1->visitRw(remove2Vis);
 
-    map2.reset(new OsmMap(fullMap));
+    map2 = std::make_shared<OsmMap>(fullMap);
     map2->visitRw(remove1Vis);
   }
   else
@@ -643,12 +643,12 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
   ElementInputStreamPtr filteredInputStream;
   if (elementCriterion)
   {
-    filteredInputStream.reset(
-      new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
+    filteredInputStream =
+      std::make_shared<ElementCriterionVisitorInputStream>(inputStream, elementCriterion, visitors);
   }
   else
   {
-    filteredInputStream.reset(new ElementVisitorInputStream(inputStream, visitors.at(0)));
+    filteredInputStream = std::make_shared<ElementVisitorInputStream>(inputStream, visitors.at(0));
   }
 
   // Add convert ops supporting streaming into the pipeline, if there are any.

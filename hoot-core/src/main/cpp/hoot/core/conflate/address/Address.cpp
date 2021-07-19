@@ -79,9 +79,7 @@ void Address::_initializeStringComparator() const
   }
   else
   {
-    _stringComp =
-      StringDistancePtr(
-        Factory::getInstance().constructObject<StringDistance>(stringCompClassName));
+    _stringComp = Factory::getInstance().constructObject<StringDistance>(stringCompClassName);
     if (!_stringComp)
     {
       throw IllegalArgumentException(

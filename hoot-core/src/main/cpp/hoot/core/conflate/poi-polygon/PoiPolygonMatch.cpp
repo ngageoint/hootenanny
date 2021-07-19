@@ -79,6 +79,7 @@ PoiPolygonMatch::PoiPolygonMatch(
   const set<ElementId>& polyNeighborIds) :
 Match(threshold),
 _map(map),
+_infoCache(infoCache),
 _e1IsPoi(false),
 _matchEvidenceThreshold(3),
 _reviewEvidenceThreshold(1),
@@ -87,6 +88,7 @@ _matchDistanceThreshold(-1.0),
 _reviewDistanceThreshold(-1.0),
 _reviewDistancePlusCe(-1.0),
 _closeDistanceMatch(false),
+_typeScorer(std::make_shared<PoiPolygonTypeScoreExtractor>(_infoCache)),
 _typeScore(-1.0),
 _typeScoreThreshold(-1.0),
 _reviewIfMatchedTypes(QStringList()),
@@ -107,12 +109,8 @@ _disableIntradatasetConflation2(false),
 _reviewMultiUseBuildings(false),
 _rf(rf),
 _explainText(""),
-_infoCache(infoCache),
 _timingThreshold(1000000)    // nanoseconds
 {
-  LOG_VART(_infoCache.get());
-
-  _typeScorer.reset(new PoiPolygonTypeScoreExtractor(_infoCache));
 }
 
 void PoiPolygonMatch::setMatchDistanceThreshold(double distance)
@@ -249,7 +247,7 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   }
   if (!_typeScorer)
   {
-    _typeScorer.reset(new PoiPolygonTypeScoreExtractor(_infoCache));
+    _typeScorer = std::make_shared<PoiPolygonTypeScoreExtractor>(_infoCache);
   }
   _typeScorer->setConfiguration(conf);
   _nameScorer.setConfiguration(conf);

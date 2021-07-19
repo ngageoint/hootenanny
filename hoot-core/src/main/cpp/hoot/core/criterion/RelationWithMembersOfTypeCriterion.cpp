@@ -48,9 +48,7 @@ _allowMixedChildren(false)
 
 void RelationWithMembersOfTypeCriterion::_initCrit() const
 {
-  _crit =
-    std::shared_ptr<ElementCriterion>(
-      Factory::getInstance().constructObject<ElementCriterion>(getCriterion()));
+  _crit = Factory::getInstance().constructObject<ElementCriterion>(getCriterion());
   if (_map)
   {
     std::shared_ptr<ConstOsmMapConsumer> consumer =

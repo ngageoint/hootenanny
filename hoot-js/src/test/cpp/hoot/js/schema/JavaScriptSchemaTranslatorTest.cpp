@@ -60,9 +60,9 @@ public:
   void runToOsmTest()
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    std::shared_ptr<ScriptSchemaTranslator> st(
+    std::shared_ptr<ScriptSchemaTranslator> st =
       ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-        "test-files/io/SampleTranslation.js"));
+        "test-files/io/SampleTranslation.js");
 
     std::shared_ptr<ScriptToOgrSchemaTranslator> uut =
       std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
@@ -148,9 +148,9 @@ public:
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
     // We just need a standard ScriptSchemaTranslator for this test.
-    std::shared_ptr<ScriptSchemaTranslator> uut(
+    std::shared_ptr<ScriptSchemaTranslator> uut =
       ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-        "test-files/io/SampleTranslation.js"));
+        "test-files/io/SampleTranslation.js");
 
     if (!uut)
     {
@@ -164,9 +164,9 @@ public:
   void runSchemaTest()
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    std::shared_ptr<ScriptSchemaTranslator> st(
+    std::shared_ptr<ScriptSchemaTranslator> st =
       ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-        "test-files/io/SampleTranslation.js"));
+        "test-files/io/SampleTranslation.js");
 
     std::shared_ptr<ScriptToOgrSchemaTranslator>uut =
       std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);

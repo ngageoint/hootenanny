@@ -102,7 +102,7 @@ HttpTestServer::HttpTestServer(int port)
 void HttpTestServer::start()
 {
   //  Kick off the run_server thread
-  _thread.reset(new std::thread(std::bind(&HttpTestServer::run_server, this, _port)));
+  _thread = std::make_shared<std::thread>(std::bind(&HttpTestServer::run_server, this, _port));
 }
 
 void HttpTestServer::wait()
@@ -135,8 +135,8 @@ void HttpTestServer::run_server(int port)
   try
   {
     //  Create the acceptor
-    _acceptor.reset(new boost::asio::ip::tcp::acceptor(_io_service,
-      boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)));
+    _acceptor = std::make_shared<boost::asio::ip::tcp::acceptor>(_io_service,
+      boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port));
     //  Start accepting connections
     start_accept();
     //  Run the IO service
@@ -157,7 +157,7 @@ void HttpTestServer::start_accept()
   if (_interupt)
     return;
   //  Creat the connection
-  HttpConnectionPtr new_connection(new HttpConnection(_acceptor->get_io_service()));
+  HttpConnectionPtr new_connection = std::make_shared<HttpConnection>(_acceptor->get_io_service());
   //  Accept connections async
   _acceptor->async_accept(new_connection->socket(),
     boost::bind(&HttpTestServer::handle_accept, this, new_connection, boost::asio::placeholders::error));

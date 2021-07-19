@@ -79,20 +79,7 @@ public:
   RubberSheet();
   ~RubberSheet() = default;
 
-  RubberSheet* clone() const { return new RubberSheet(*this); }
-
-  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
-  { _conflateInfoCache = cache; }
-
-  /**
-   * @see OsmMapOperation
-   */
-  void apply(std::shared_ptr<OsmMap>& map) override;
-
-  /**
-   * @see Configurable
-   */
-  void setConfiguration(const Settings& conf) override;
+  std::shared_ptr<RubberSheet> clone() const { return std::make_shared<RubberSheet>(*this); }
 
   /**
    * @brief applyTransform applies a perviously calculated or loaded transform to the specified map.
@@ -136,6 +123,19 @@ public:
    * @throws HootException if the tie points have not been created
    */
    std::vector<double> calculateTiePointDistances();
+
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
+  { _conflateInfoCache = cache; }
+
+  /**
+   * @see OsmMapOperation
+   */
+  void apply(std::shared_ptr<OsmMap>& map) override;
+
+  /**
+   * @see Configurable
+   */
+  void setConfiguration(const Settings& conf) override;
 
    /**
     * @see FilteredByGeometryTypeCriteria

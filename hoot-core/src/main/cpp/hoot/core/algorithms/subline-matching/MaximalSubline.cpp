@@ -50,7 +50,7 @@ namespace hoot
 
 int MaximalSubline::logWarnCount = 0;
 
-MaximalSubline::MaximalSubline(MatchCriteria* criteria, Meters minSplitSize) :
+MaximalSubline::MaximalSubline(std::shared_ptr<MatchCriteria> criteria, Meters minSplitSize) :
 _criteria(criteria),
 _spacing(ConfigOptions().getMaximalSublineSpacing()),
 _minSplitSize(minSplitSize),
@@ -361,7 +361,8 @@ vector<WaySublineMatch> MaximalSubline::findAllMatches(const ConstOsmMapPtr& map
 }
 
 vector<WaySublineMatch> MaximalSubline::_findBestMatches(const ConstOsmMapPtr &map,
-  const ConstWayPtr& w1, const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix, double& bestScore)
+  const ConstWayPtr& w1, const ConstWayPtr& w2, const Sparse2dMatrix& sublineMatrix,
+  double& bestScore)
 {
   LOG_TRACE("Finding best matches...");
 

@@ -50,7 +50,6 @@ class ObjectCreator
 public:
 
   ObjectCreator() = default;
-
   virtual ~ObjectCreator() = default;
 
   virtual boost::any create() = 0;
@@ -72,7 +71,6 @@ public:
   _name(name), _baseName(baseName)
   {
   }
-
   virtual ~ObjectCreatorTemplate() = default;
 
   /**
@@ -80,8 +78,8 @@ public:
    */
   boost::any create() override
   {
-    Base* b = new T();
-    return dynamic_cast<Base*>(b);
+    std::shared_ptr<Base> b = std::make_shared<T>();
+    return std::dynamic_pointer_cast<Base>(b);
   }
 
   QString getBaseName() const override { return _baseName; }
@@ -102,6 +100,20 @@ public:
 
   static Factory& getInstance();
 
+  boost::any constructObject(const QString& name);
+  template<class T>
+  std::shared_ptr<T> constructObject(const QString& name)
+  {
+    return boost::any_cast<std::shared_ptr<T>>(constructObject(name));
+  }
+  /**
+   * Register an object creator.
+   *
+   * @param baseClass If set to true, then the object creator may implement the base class. This is
+   * very unusual, but accidentally forgetting to implement "string className()" is quite common.
+   */
+  void registerCreator(const std::shared_ptr<ObjectCreator>& oc, bool baseClass = false);
+
   /**
    * Returns true if the specified class has the ExpectedBase.
    *
@@ -121,6 +133,7 @@ public:
     }
     return true;
   }
+  bool hasClass(const QString& name) const;
 
   /**
    * Checks to make sure the class works as expected. Nice for error checking.
@@ -140,25 +153,7 @@ public:
     }
   }
 
-  boost::any constructObject(const QString& name);
-
-  template<class T>
-  T* constructObject(const QString& name)
-  {
-    return boost::any_cast<T*>(constructObject(name));
-  }
-
   std::vector<QString> getObjectNamesByBase(const QString& baseName);
-
-  bool hasClass(const QString& name) const;
-
-  /**
-   * Register an object creator.
-   *
-   * @param baseClass If set to true, then the object creator may implement the base class. This is
-   *  very unusual, but accidentally forgetting to implement "string className()" is quite common.
-   */
-  void registerCreator(const std::shared_ptr<ObjectCreator>& oc, bool baseClass = false);
 
 private:
 
@@ -191,7 +186,6 @@ public:
 #define HOOT_FACTORY_REGISTER(Base, ClassName)      \
   static hoot::AutoRegister<Base, ClassName> ClassName##AutoRegister(Base::className(), \
     ClassName::className());
-
 /**
  * It is very unusual to register the base class, so you have to call this method to do it.
  * Otherwise you'll get a nasty exception.

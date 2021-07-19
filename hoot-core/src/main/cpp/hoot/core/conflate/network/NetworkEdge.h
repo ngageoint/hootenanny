@@ -57,14 +57,7 @@ public:
 
   bool contains(const ConstNetworkVertexPtr& v) const;
 
-  ConstNetworkVertexPtr getFrom() const { return _from; }
-
-  const QList<ConstElementPtr>& getMembers() const { return _members; }
-
-  ConstNetworkVertexPtr getTo() const { return _to; }
-
   bool isDirected() const { return _directed; }
-
   /**
    * Returns true if this is a stub edge (both vertices are the same). Stubs are handy when trying
    * to match an edge to a vertex.
@@ -73,9 +66,13 @@ public:
 
   bool operator==(const NetworkEdge& other) const { return toString() == other.toString(); }
 
-  void setMembers(QList<ConstElementPtr> members) { _members = members; }
-
   QString toString() const;
+
+  ConstNetworkVertexPtr getFrom() const { return _from; }
+  const QList<ConstElementPtr>& getMembers() const { return _members; }
+  ConstNetworkVertexPtr getTo() const { return _to; }
+
+  void setMembers(QList<ConstElementPtr> members) { _members = members; }
 
 private:
 

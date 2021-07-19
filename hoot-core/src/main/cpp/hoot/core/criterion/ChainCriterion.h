@@ -48,10 +48,7 @@ public:
   ChainCriterion() = default;
   ChainCriterion(const std::vector<ElementCriterionPtr>& criteria);
   ChainCriterion(const ElementCriterionPtr& child1, const ElementCriterionPtr& child2);
-  // TODO: Think we can probably get rid of these versions that take in ElementCriterion*.
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2);
-  ChainCriterion(ElementCriterion* child1, ElementCriterionPtr child2);
-  ChainCriterion(ElementCriterion* child1, ElementCriterion* child2, ElementCriterion* child3);
   virtual ~ChainCriterion() = default;
 
   void addCriterion(const ElementCriterionPtr& e) override;

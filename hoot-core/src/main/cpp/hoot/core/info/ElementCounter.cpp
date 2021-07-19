@@ -176,12 +176,12 @@ ElementInputStreamPtr ElementCounter::_getFilteredInputStream(
   ElementInputStreamPtr filteredInputStream;
   if (_crit)
   {
-    filteredInputStream.reset(
-      new ElementCriterionVisitorInputStream(inputStream, _crit, countVis));
+    filteredInputStream =
+      std::make_shared<ElementCriterionVisitorInputStream>(inputStream, _crit, countVis);
   }
   else
   {
-    filteredInputStream.reset(new ElementVisitorInputStream(inputStream, countVis));
+    filteredInputStream = std::make_shared<ElementVisitorInputStream>(inputStream, countVis);
   }
 
   return filteredInputStream;
@@ -195,11 +195,11 @@ ConstElementVisitorPtr ElementCounter::_getCountVis() const
   LOG_VART(_countFeaturesOnly);
   if (_countFeaturesOnly)
   {
-    countVis.reset(new FeatureCountVisitor());
+    countVis = std::make_shared<FeatureCountVisitor>();
   }
   else
   {
-    countVis.reset(new ElementCountVisitor());
+    countVis = std::make_shared<ElementCountVisitor>();
   }
   return countVis;
 }
@@ -222,7 +222,7 @@ long ElementCounter::_countMemoryBound(const QStringList& inputs) const
   ConstElementVisitorPtr vis;
   if (_crit)
   {
-    vis.reset(new FilteredVisitor(_crit, countVis));
+    vis = std::make_shared<FilteredVisitor>(_crit, countVis);
   }
   else
   {

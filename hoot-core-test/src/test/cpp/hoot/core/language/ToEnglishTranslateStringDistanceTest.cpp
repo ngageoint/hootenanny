@@ -56,7 +56,7 @@ public:
   void runTest()
   {
     ToEnglishTranslateStringDistance uut(
-      StringDistancePtr(new MeanWordSetDistance(StringDistancePtr(new ExactStringDistance()))));
+      std::make_shared<MeanWordSetDistance>(std::make_shared<ExactStringDistance>()));
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, uut.compare("embassy of hungary", "Kedutaan Besar Swiss"),
       0.01);

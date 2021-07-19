@@ -228,12 +228,14 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
     options["ADD_SOUNDG_DEPTH"] = "ON";
   }
 
-  std::shared_ptr<GDALDataset> result(static_cast<GDALDataset*>(GDALOpenEx(url.toUtf8().data(),
-    driverInfo._driverType, (driverInfo._driverName != nullptr ? drivers : nullptr), options.getCrypticOptions(), nullptr)));
-
+  std::shared_ptr<GDALDataset> result(
+      static_cast<GDALDataset*>(
+        GDALOpenEx(
+          url.toUtf8().data(), driverInfo._driverType,
+          (driverInfo._driverName != nullptr ? drivers : nullptr),
+          options.getCrypticOptions(), nullptr)));
   if (!result)
     throw HootException("Unable to open: " + url);
-
   return result;
 }
 

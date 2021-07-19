@@ -61,7 +61,8 @@ public:
 
   void runBasicTest()
   {
-    std::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(true));
+    std::shared_ptr<ChangesetProvider> changesetProvider =
+      std::make_shared<TestOsmChangesetProvider>(true);
 
     // Clear out the db so we get consistent next id results.
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());

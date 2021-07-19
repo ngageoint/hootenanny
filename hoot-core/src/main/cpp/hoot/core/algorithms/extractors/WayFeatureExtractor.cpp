@@ -40,12 +40,12 @@ WayFeatureExtractor::WayFeatureExtractor(ValueAggregatorPtr agg):
   _agg(agg)
 {
   if (!_agg)
-    _agg.reset(new MeanAggregator());
+    _agg = std::make_shared<MeanAggregator>();
 }
 
 WayFeatureExtractor::WayFeatureExtractor()
 {
-  _agg.reset(new MeanAggregator());
+  _agg = std::make_shared<MeanAggregator>();
 }
 
 double WayFeatureExtractor::extract(

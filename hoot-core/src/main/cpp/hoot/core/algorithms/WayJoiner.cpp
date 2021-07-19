@@ -274,7 +274,7 @@ void WayJoiner::_writeParentIdsToChildIds() const
       LOG_TRACE(
         "Setting parent ID: " << ElementId(ElementType::Way, pid) << " on: " <<
         way->getElementId());
-      ElementPtr newWay(way->clone());
+      ElementPtr newWay = way->clone();
       newWay->setId(pid);
       if (newWay->hasTag(MetadataTags::HootId()))
       {

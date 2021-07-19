@@ -79,7 +79,7 @@ void TagAdvancedCriterion::_parseFilterString(const QString& filterJsonStringOrP
   }
   else
   {
-    propTree.reset(new boost::property_tree::ptree());
+    propTree = std::make_shared<boost::property_tree::ptree>();
     try
     {
       boost::property_tree::read_json(filterJsonStringOrPath.toStdString(), *propTree);

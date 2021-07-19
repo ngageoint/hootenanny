@@ -89,7 +89,7 @@ public:
     Coordinate w2c[] = { Coordinate(50, 50), Coordinate(50, -50), Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
-    std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    std::shared_ptr<HighwayExpertClassifier> classifier = std::make_shared<HighwayExpertClassifier>();
 
     WaySublineMatch match(WaySubline(WayLocation(map, w1, 0, 0.0), WayLocation(map, w1, 1, 0.0)),
                           WaySubline(WayLocation(map, w2, 0, 0.0), WayLocation(map, w2, 1, 0.0)));
@@ -122,7 +122,7 @@ public:
     Coordinate w2c[] = { Coordinate(0, 5), Coordinate(100, 5), Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
-    std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    std::shared_ptr<HighwayExpertClassifier> classifier = std::make_shared<HighwayExpertClassifier>();
 
     WaySublineMatch match(WaySubline(WayLocation(map, w1, 0, 0.0), WayLocation(map, w1, 1, 0.0)),
                           WaySubline(WayLocation(map, w2, 0, 0.0), WayLocation(map, w2, 1, 0.0)));
@@ -155,7 +155,7 @@ public:
     Coordinate w2c[] = { Coordinate(90, 5), Coordinate(190, 5), Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
-    std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    std::shared_ptr<HighwayExpertClassifier> classifier = std::make_shared<HighwayExpertClassifier>();
 
     WaySublineMatch match(WaySubline(WayLocation(map, w1, 0, 0.0), WayLocation(map, w1, 1, 0.0)),
                           WaySubline(WayLocation(map, w2, 0, 0.0), WayLocation(map, w2, 1, 0.0)));

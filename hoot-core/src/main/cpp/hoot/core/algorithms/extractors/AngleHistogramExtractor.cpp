@@ -125,10 +125,10 @@ void AngleHistogramExtractor::setConfiguration(const Settings& conf)
   _bins = options.getAngleHistogramExtractorBins();
 }
 
-Histogram* AngleHistogramExtractor::_createHistogram(
+shared_ptr<Histogram> AngleHistogramExtractor::_createHistogram(
   const OsmMap& map, const ConstElementPtr& e) const
 {
-  Histogram* result = new Histogram(_bins);
+  shared_ptr<Histogram> result = std::make_shared<Histogram>(_bins);
   HistogramVisitor v(*result);
   v.setOsmMap(&map);
   e->visitRo(map, v);
@@ -139,7 +139,7 @@ Histogram* AngleHistogramExtractor::_createHistogram(
 std::shared_ptr<Histogram> AngleHistogramExtractor::getNormalizedHistogram(
   const OsmMap& map, const ConstElementPtr& element) const
 {
-  std::shared_ptr<Histogram> hist(_createHistogram(map, element));
+  std::shared_ptr<Histogram> hist = _createHistogram(map, element);
   if (_smoothing > 0.0)
   {
     hist->smooth(_smoothing);

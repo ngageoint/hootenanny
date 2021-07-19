@@ -67,9 +67,7 @@ void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
   }
   else
   {
-    _stringComp =
-      StringDistancePtr(
-        Factory::getInstance().constructObject<StringDistance>(stringCompClassName));
+    _stringComp = Factory::getInstance().constructObject<StringDistance>(stringCompClassName);
     if (!_stringComp)
     {
       throw IllegalArgumentException(
@@ -88,9 +86,9 @@ void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
   setTranslateTagValuesToEnglish(config.getPoiPolygonNameTranslateToEnglish());
   if (_translateTagValuesToEnglish && !_translator)
   {
-    _translator.reset(
+    _translator =
       Factory::getInstance().constructObject<ToEnglishTranslator>(
-        config.getLanguageTranslationTranslator()));
+        config.getLanguageTranslationTranslator());
     _translator->setConfiguration(conf);
     _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
     _translator->setId(className());

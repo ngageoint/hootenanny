@@ -96,7 +96,7 @@ void OpExecutor::apply(OsmMapPtr& map)
   std::shared_ptr<ConflateInfoCache> conflateInfoCache;
   if (_operateOnlyOnConflatableElements)
   {
-    conflateInfoCache.reset(new ConflateInfoCache(map));
+    conflateInfoCache = std::make_shared<ConflateInfoCache>(map);
   }
 
   int opCount = 1;
@@ -120,8 +120,8 @@ void OpExecutor::apply(OsmMapPtr& map)
     std::shared_ptr<OperationStatus> statusInfo;
     if (f.hasBase<OsmMapOperation>(s))
     {
-      std::shared_ptr<OsmMapOperation> op(
-        Factory::getInstance().constructObject<OsmMapOperation>(s));
+      std::shared_ptr<OsmMapOperation> op =
+        Factory::getInstance().constructObject<OsmMapOperation>(s);
 
       statusInfo = std::dynamic_pointer_cast<OperationStatus>(op);
       if (_progress.getState() == Progress::JobState::Running)
@@ -167,8 +167,8 @@ void OpExecutor::apply(OsmMapPtr& map)
     }
     else if (f.hasBase<ElementVisitor>(s))
     {
-      std::shared_ptr<ElementVisitor> vis(
-        Factory::getInstance().constructObject<ElementVisitor>(s));
+      std::shared_ptr<ElementVisitor> vis =
+        Factory::getInstance().constructObject<ElementVisitor>(s);
 
       statusInfo = std::dynamic_pointer_cast<OperationStatus>(vis);
       if (_progress.getState() == Progress::JobState::Running)

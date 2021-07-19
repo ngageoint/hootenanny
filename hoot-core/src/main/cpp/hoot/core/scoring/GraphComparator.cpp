@@ -82,8 +82,8 @@ _maxThreads(1)
 cv::Mat GraphComparator::_calculateCostDistance(
   OsmMapPtr map, Coordinate c, double& maxGraphCost, const RandomPtr& random) const
 {
-  // make a copy of the map so we can manipulate it.
-  map.reset(new OsmMap(map));
+  // Make a copy of the map so we can manipulate it.
+  map = std::make_shared<OsmMap>(map);
 
   // find the nearest feature
   LOG_TRACE("Finding nearest feature...");
@@ -301,7 +301,7 @@ void GraphComparator::drawCostDistance(
 {
   _updateBounds();
   // make a copy of the map so we can manipulate it.
-  map.reset(new OsmMap(map));
+  map = std::make_shared<OsmMap>(map);
 
   for (size_t i = 0; i < c.size(); i++)
   {

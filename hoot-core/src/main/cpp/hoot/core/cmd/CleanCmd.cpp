@@ -141,11 +141,11 @@ private:
   void _clean(
     const QStringList& inputs, const QString& output, std::shared_ptr<Progress> progress) const
   {
-    progress.reset(
-      new Progress(
+    progress =
+      std::make_shared<Progress>(
         ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0,
         // import, export, and cleaning tasks
-        1.0f / 3.0f));
+        1.0f / 3.0f);
 
     progress->set(
       0.0, Progress::JobState::Running,
@@ -180,10 +180,10 @@ private:
     // (import, export, and cleaning tasks) * number of inputs
     const float numTasks = 3.0f * (float)inputs.size();
     LOG_VARD(numTasks);
-    progress.reset(
-      new Progress(
+    progress =
+      std::make_shared<Progress>(
         ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-        0.0f, 1.0f / numTasks));
+        0.0f, 1.0f / numTasks);
 
     float currentTask = 0.0;
     for (int i = 0; i < inputs.size(); i++)

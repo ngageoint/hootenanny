@@ -83,7 +83,7 @@ _maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax())
 {
 }
 
-void ConflateExecutor::_initConfig()
+void ConflateExecutor::_initConfig(const QString& output)
 {
   ConfigUtils::checkForTagValueTruncationOverride();
   QStringList allOps = ConfigOptions().getConflatePreOps();
@@ -134,6 +134,11 @@ void ConflateExecutor::_initConfig()
     // feature types we're conflating in order to improve runtime performance.
     SuperfluousConflateOpRemover::removeSuperfluousOps();
   }
+
+  // If no translation was specified, this does nothing. Otherwise, this attempts to set the
+  // translation direction if it wasn't specified. The caller must have also added a translation
+  // operator to the conflate pre ops for anything to translate.
+  _updateTranslationDirection(output);
 }
 
 void ConflateExecutor::_initTaskCount()
@@ -167,8 +172,8 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, co
 {
   Tgs::Timer totalTime;
   _taskTimer.reset();
-  _progress.reset(
-    new Progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running));
+  _progress =
+    std::make_shared<Progress>(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
   OsmMapPtr map = std::make_shared<OsmMap>();
   const bool isChangesetOutput = output.endsWith(".osc") || output.endsWith(".osc.sql");
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
@@ -176,7 +181,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, co
   _allStats.clear();
   _stats.clear();
 
-  _initConfig();
+  _initConfig(output);
   _initTaskCount();
   if (!IoUtils::isUrl(output))
   {
@@ -678,6 +683,20 @@ void ConflateExecutor::_updateConfigOptionsForBounds() const
   // If we're working with a bounds, we need to ensure that IDs of the original ref parents created
   // by a split operation are applied to their split children.
   conf().set(ConfigOptions::getWayJoinerWriteParentIdToChildIdKey(), true);
+}
+
+void ConflateExecutor::_updateTranslationDirection(const QString& output) const
+{
+  ConfigOptions config;
+  const QString translation = config.getSchemaTranslationScript();
+  QString translationDirection = config.getSchemaTranslationDirection();
+  // If the translation direction wasn't specified, try to guess it.
+  if (!translation.trimmed().isEmpty() && translationDirection.isEmpty())
+  {
+    translationDirection = SchemaUtils::outputFormatToTranslationDirection(output);
+    // This gets read by the TranslationVisitor and cannot be empty.
+    conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), translationDirection);
+  }
 }
 
 }

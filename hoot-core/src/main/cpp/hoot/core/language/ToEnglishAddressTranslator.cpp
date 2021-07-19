@@ -46,9 +46,9 @@ void ToEnglishAddressTranslator::setConfiguration(const Settings& conf)
   ConfigOptions config = ConfigOptions(conf);
   if (!_translator)
   {
-    _translator.reset(
+    _translator =
       Factory::getInstance().constructObject<ToEnglishTranslator>(
-        config.getLanguageTranslationTranslator()));
+        config.getLanguageTranslationTranslator());
     _translator->setConfiguration(conf);
     _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
     _translator->setId(className());

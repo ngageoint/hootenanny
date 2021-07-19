@@ -65,7 +65,7 @@ public:
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
     PoiPolygonDistanceTruthRecorder::resetMatchDistanceInfo();
-    PoiPolygonInfoCachePtr infoCache(new PoiPolygonInfoCache(map));
+    PoiPolygonInfoCachePtr infoCache = std::make_shared<PoiPolygonInfoCache>(map);
     infoCache->setConfiguration(conf());
     PoiPolygonTypeScoreExtractor uut(infoCache);
     uut.setConfiguration(conf());
@@ -108,7 +108,7 @@ public:
 
     settings.set("poi.polygon.type.translate.to.english", "true");
     settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
-    PoiPolygonInfoCachePtr infoCache(new PoiPolygonInfoCache(map));
+    PoiPolygonInfoCachePtr infoCache = std::make_shared<PoiPolygonInfoCache>(map);
     infoCache->setConfiguration(settings);
     PoiPolygonTypeScoreExtractor uut(infoCache);
     uut.setConfiguration(settings);

@@ -628,11 +628,11 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   LOG_VART(overwriteExcludeTags);
   if (!preserveTypes)
   {
-    tagMerger.reset(new BuildingRelationMemberTagMerger(overwriteExcludeTags));
+    tagMerger = std::make_shared<BuildingRelationMemberTagMerger>(overwriteExcludeTags);
   }
   else
   {
-    tagMerger.reset(new PreserveTypesTagMerger(overwriteExcludeTags));
+    tagMerger = std::make_shared<PreserveTypesTagMerger>(overwriteExcludeTags);
   }
 
   Tags& relationTags = parentRelation->getTags();

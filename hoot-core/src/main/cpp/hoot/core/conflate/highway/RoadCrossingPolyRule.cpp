@@ -185,7 +185,7 @@ ElementCriterionPtr RoadCrossingPolyRule::polyRuleFilterStringsToFilter(
   std::shared_ptr<OrCriterion> polyCriteriaFilter;
   if (!polyCriteriaFilterStr.isEmpty())
   {
-    polyCriteriaFilter.reset(new OrCriterion());
+    polyCriteriaFilter = std::make_shared<OrCriterion>();
 
     const QStringList critStrParts = polyCriteriaFilterStr.split(";");
     LOG_VART(critStrParts.size());
@@ -202,8 +202,7 @@ ElementCriterionPtr RoadCrossingPolyRule::polyRuleFilterStringsToFilter(
       else
       {
         polyCriteriaFilter->addCriterion(
-          ElementCriterionPtr(
-            Factory::getInstance().constructObject<ElementCriterion>(critPart.trimmed())));
+          Factory::getInstance().constructObject<ElementCriterion>(critPart.trimmed()));
       }
     }
   }

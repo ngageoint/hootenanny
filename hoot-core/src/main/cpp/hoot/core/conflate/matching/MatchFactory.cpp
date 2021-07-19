@@ -117,8 +117,8 @@ vector<CreatorDescription> MatchFactory::getAllAvailableCreators() const
   for (size_t i = 0; i < names.size(); i++)
   {
     // Get all names known by this creator.
-    std::shared_ptr<MatchCreator> mc(
-      Factory::getInstance().constructObject<MatchCreator>(names[i]));
+    std::shared_ptr<MatchCreator> mc =
+      Factory::getInstance().constructObject<MatchCreator>(names[i]);
 
     vector<CreatorDescription> d = mc->getAllCreators();
     result.insert(result.end(), d.begin(), d.end());
@@ -135,8 +135,8 @@ void MatchFactory::registerCreator(const QString& c)
   if (className.length() > 0)
   {
     args.removeFirst();
-    std::shared_ptr<MatchCreator> mc(
-      Factory::getInstance().constructObject<MatchCreator>(className));
+    std::shared_ptr<MatchCreator> mc =
+      Factory::getInstance().constructObject<MatchCreator>(className);
     mc->setFilter(_createFilter());
 
     registerCreator(mc);
@@ -160,17 +160,17 @@ ElementCriterionPtr MatchFactory::_createFilter() const
   {
     // We're specifically checking for an option to feed this tag criterion. Additional combined
     // criteria can be added to this match creator if needed.
-    tagFilter.reset(new TagAdvancedCriterion(_tagFilterJson));
+    tagFilter = std::make_shared<TagAdvancedCriterion>(_tagFilterJson);
   }
 
   ElementCriterionPtr critFilter;
   if (!_critFilterClassName.trimmed().isEmpty())
   {
-    ElementCriterionPtr elementCrit(
-      Factory::getInstance().constructObject<ElementCriterion>(_critFilterClassName));
+    ElementCriterionPtr elementCrit =
+      Factory::getInstance().constructObject<ElementCriterion>(_critFilterClassName);
     if (_negateCritFilter)
     {
-      critFilter.reset(new NotCriterion(elementCrit));
+      critFilter = std::make_shared<NotCriterion>(elementCrit);
     }
     else
     {
@@ -180,7 +180,7 @@ ElementCriterionPtr MatchFactory::_createFilter() const
 
   if (tagFilter && critFilter)
   {
-    filter.reset(new ChainCriterion(tagFilter, critFilter));
+    filter = std::make_shared<ChainCriterion>(tagFilter, critFilter);
   }
   else if (tagFilter)
   {

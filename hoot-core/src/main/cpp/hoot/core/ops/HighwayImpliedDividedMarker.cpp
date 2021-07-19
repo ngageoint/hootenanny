@@ -101,7 +101,7 @@ std::shared_ptr<OsmMap> HighwayImpliedDividedMarker::markDivided()
   _result = result;
 
   // create a map from nodes to ways
-  _n2w.reset(new NodeToWayMap(*_inputMap));
+  _n2w = std::make_shared<NodeToWayMap>(*_inputMap);
 
   // find all the tunnels & bridges
   std::shared_ptr<TagCriterion> tunnelCrit = std::make_shared<TagCriterion>("tunnel", "yes");

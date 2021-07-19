@@ -38,13 +38,13 @@ HOOT_FACTORY_REGISTER(ElementCriterion, PowerLineWayNodeCriterion)
 PowerLineWayNodeCriterion::PowerLineWayNodeCriterion() :
 WayNodeCriterion()
 {
-  _parentCriterion.reset(new PowerLineCriterion());
+  _parentCriterion = std::make_shared<PowerLineCriterion>();
 }
 
 PowerLineWayNodeCriterion::PowerLineWayNodeCriterion(ConstOsmMapPtr map) :
 WayNodeCriterion(map)
 {
-  _parentCriterion.reset(new PowerLineCriterion());
+  _parentCriterion = std::make_shared<PowerLineCriterion>();
 }
 
 }

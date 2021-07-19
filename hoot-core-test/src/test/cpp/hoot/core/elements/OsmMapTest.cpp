@@ -156,7 +156,7 @@ public:
   void runCopyTest()
   {
     OsmMapPtr map = createMapForCopyTest();
-    OsmMapPtr copy = OsmMapPtr(new OsmMap(map));
+    OsmMapPtr copy = std::make_shared<OsmMap>(map);
 
     QString nodePreChange = copy->getNode(-1669793)->toString();
     QString wayPreChange = copy->getWay(-1669801)->toString();
@@ -171,7 +171,7 @@ public:
 
     // now change the copy
     map = createMapForCopyTest();
-    copy = OsmMapPtr(new OsmMap(map));
+    copy = std::make_shared<OsmMap>(map);
     changeMapForCopyTest(copy);
 
     HOOT_STR_EQUALS(nodePreChange, map->getNode(-1669793)->toString());
@@ -217,7 +217,7 @@ public:
     const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
 
     // Since the element is an exact duplicate with the same ID, the map will skip appending it.
-    ElementPtr duplicateNode(mapA->getNode(-1669765)->clone());
+    ElementPtr duplicateNode  = mapA->getNode(-1669765)->clone();
     mapB->addElement(duplicateNode);
 
     mapA->append(mapB);
@@ -241,7 +241,7 @@ public:
     const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
 
     // Since the element is an exact duplicate with the same ID, the map will skip appending it.
-    ElementPtr duplicateWay(mapA->getWay(-1669801)->clone());
+    ElementPtr duplicateWay = mapA->getWay(-1669801)->clone();
     mapB->addElement(duplicateWay);
 
     mapA->append(mapB);
@@ -269,7 +269,7 @@ public:
 
     const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
 
-    ElementPtr duplicatedRelation(mapA->getRelation(relation->getId())->clone());
+    ElementPtr duplicatedRelation = mapA->getRelation(relation->getId())->clone();
     mapB->addElement(duplicatedRelation);
 
     mapA->append(mapB);
@@ -292,7 +292,7 @@ public:
 
     // Since the element is not an exact duplicate and has the same ID, no appending will occur
     // and an error will be thrown.
-    ElementPtr nearDuplicateNode(mapA->getNode(-1669765)->clone());
+    ElementPtr nearDuplicateNode = mapA->getNode(-1669765)->clone();
     nearDuplicateNode->getTags().set("runAppendDifferentNodeSameIdTest", true);
     mapB->addElement(nearDuplicateNode);
 
@@ -323,7 +323,7 @@ public:
 
     // Since the element is not an exact duplicate and has the same ID, no appending will occur
     // and an error will be thrown.
-    ElementPtr nearDuplicateWay(mapA->getWay(-1669801)->clone());
+    ElementPtr nearDuplicateWay = mapA->getWay(-1669801)->clone();
     nearDuplicateWay->getTags().set("runAppendDifferentWaySameIdTest", true);
     mapB->addElement(nearDuplicateWay);
 
@@ -359,7 +359,7 @@ public:
 
     // Since the element is not an exact duplicate and has the same ID, no appending will occur
     // and an error will be thrown.
-    ElementPtr nearDuplicateRelation(mapA->getRelation(relation->getId())->clone());
+    ElementPtr nearDuplicateRelation = mapA->getRelation(relation->getId())->clone();
     nearDuplicateRelation->getTags().set("runAppendDifferentRelationSameIdTest", true);
     mapB->addElement(nearDuplicateRelation);
 
@@ -392,7 +392,7 @@ public:
 
     // Since the element is not an exact duplicate, has the same ID, and the throwOutDupes option is
     // enabled, the element will be skipped for appending and no error will be thrown.
-    ElementPtr nearDuplicateNode(mapA->getNode(-1669765)->clone());
+    ElementPtr nearDuplicateNode = mapA->getNode(-1669765)->clone();
     nearDuplicateNode->getTags().set("runAppendDifferentWaySameIdTest", true);
     mapB->addElement(nearDuplicateNode);
 
@@ -418,7 +418,7 @@ public:
 
     // Since the element is not an exact duplicate, has the same ID, and the throwOutDupes option is
     // enabled, the element will be skipped for appending and no error will be thrown.
-    ElementPtr nearDuplicateWay(mapA->getWay(-1669801)->clone());
+    ElementPtr nearDuplicateWay = mapA->getWay(-1669801)->clone();
     nearDuplicateWay->getTags().set("runAppendDifferentWaySameIdTest", true);
     mapB->addElement(nearDuplicateWay);
 
@@ -449,7 +449,7 @@ public:
 
     // Since the element is not an exact duplicate, has the same ID, and the throwOutDupes option is
     // enabled, the element will be skipped for appending and no error will be thrown.
-    ElementPtr nearDuplicateRelation(mapA->getRelation(relation->getId())->clone());
+    ElementPtr nearDuplicateRelation = mapA->getRelation(relation->getId())->clone();
     nearDuplicateRelation->getTags().set("runAppendDifferentRelationSameIdTest", true);
     mapB->addElement(nearDuplicateRelation);
 

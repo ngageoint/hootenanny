@@ -65,7 +65,7 @@ public:
     if (eid != _exempt && _to->containsElement(eid) == false)
     {
       // create a copy of the element.
-      ElementPtr ee(_from->getElement(eid)->clone());
+      ElementPtr ee = _from->getElement(eid)->clone();
       LOG_VART(ee->getElementId());
 
       // If it is a node, just copy it, as we don't need to worry about dependencies.

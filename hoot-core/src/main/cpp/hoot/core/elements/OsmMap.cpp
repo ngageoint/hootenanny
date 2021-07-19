@@ -63,42 +63,42 @@ namespace hoot
 std::shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
 
 OsmMap::OsmMap() :
-_idSwap(std::make_shared<IdSwap>())
+_index(std::make_shared<OsmMapIndex>(*this)),
+_idSwap(std::make_shared<IdSwap>()),
+_enableProgressLogging(true)
 {
   if (!_wgs84)
   {
     _wgs84 = MapProjector::createWgs84Projection();
   }
+  _srs = _wgs84;
 
   setIdGenerator(IdGenerator::getInstance());
-  _index.reset(new OsmMapIndex(*this));
-  _srs = _wgs84;
   _initCounters();
-  _enableProgressLogging = true;
 }
 
-OsmMap::OsmMap(const ConstOsmMapPtr& map)
+OsmMap::OsmMap(const ConstOsmMapPtr& map) :
+_enableProgressLogging(true)
 {
   _copy(map);
   _initCounters();
-  _enableProgressLogging = true;
 }
 
-OsmMap::OsmMap(const OsmMapPtr& map)
+OsmMap::OsmMap(const OsmMapPtr& map) :
+_enableProgressLogging(true)
 {
   _copy(map);
   _initCounters();
-  _enableProgressLogging = true;
 }
 
 OsmMap::OsmMap(const std::shared_ptr<OGRSpatialReference>& srs) :
-_idSwap(std::make_shared<IdSwap>())
+_srs(srs),
+_index(std::make_shared<OsmMapIndex>(*this)),
+_idSwap(std::make_shared<IdSwap>()),
+_enableProgressLogging(true)
 {
   setIdGenerator(IdGenerator::getInstance());
-  _index.reset(new OsmMapIndex(*this));
-  _srs = srs;
   _initCounters();
-  _enableProgressLogging = true;
 }
 
 void OsmMap::_initCounters()
@@ -396,7 +396,7 @@ bool OsmMap::containsElement(const std::shared_ptr<const Element>& e) const
 void OsmMap::_copy(const ConstOsmMapPtr& from)
 {
   _idGen = from->_idGen;
-  _index.reset(new OsmMapIndex(*this));
+  _index = std::make_shared<OsmMapIndex>(*this);
   _srs = from->getProjection();
   _roundabouts = from->getRoundabouts();
   _idSwap = from->getIdSwap();

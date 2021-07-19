@@ -224,7 +224,7 @@ void OsmPbfWriter::initializePartial()
 void OsmPbfWriter::_open(const QString& url)
 {
   LOG_TRACE("Opening url: " << url);
-  _openStream.reset(new fstream(url.toUtf8().constData(), ios::out | ios::binary));
+  _openStream = std::make_shared<std::fstream>(url.toUtf8().constData(), ios::out | ios::binary);
   if (_openStream->good() == false)
   {
     throw HootException(QString("Error opening for writing: %1").arg(url));

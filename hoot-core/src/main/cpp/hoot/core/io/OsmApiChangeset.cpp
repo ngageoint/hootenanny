@@ -224,19 +224,19 @@ void XmlChangeset::loadElements(QXmlStreamReader& reader, ChangesetType changese
     {
       if (name == "node")
       {
-        element.reset(new ChangesetNode(XmlObject(name, reader.attributes()), &_idMap));
+        element = std::make_shared<ChangesetNode>(XmlObject(name, reader.attributes()), &_idMap);
         long id = reader.attributes().value("id").toString().toLong();
         _idMap.addId(ElementType::Node, id);
       }
       else if (name == "way")
       {
-        element.reset(new ChangesetWay(XmlObject(name, reader.attributes()), &_idMap));
+        element = std::make_shared<ChangesetWay>(XmlObject(name, reader.attributes()), &_idMap);
         long id = reader.attributes().value("id").toString().toLong();
         _idMap.addId(ElementType::Way, id);
       }
       else if (name == "relation")
       {
-        element.reset(new ChangesetRelation(XmlObject(name, reader.attributes()), &_idMap));
+        element = std::make_shared<ChangesetRelation>(XmlObject(name, reader.attributes()), &_idMap);
         long id = reader.attributes().value("id").toString().toLong();
         _idMap.addId(ElementType::Relation, id);
       }
@@ -1341,7 +1341,7 @@ bool XmlChangeset::calculateChangeset(ChangesetInfoPtr& changeset)
 {
   //  Create the changeset info object if there isn't one
   if (!changeset)
-    changeset.reset(new ChangesetInfo());
+    changeset = std::make_shared<ChangesetInfo>();
   changeset->clear();
   //  Build up the changeset to be around the MAX changeset push size
   ChangesetType type = ChangesetType::TypeCreate;
@@ -1957,7 +1957,7 @@ bool XmlChangeset::calculateRemainingChangeset(ChangesetInfoPtr& changeset)
 {
   //  Create the changeset info object if there isn't one
   if (!changeset)
-    changeset.reset(new ChangesetInfo());
+    changeset = std::make_shared<ChangesetInfo>();
   changeset->clear();
   //  This is the last changeset of the bunch because of the error state
   changeset->setFinished();

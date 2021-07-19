@@ -74,6 +74,7 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmPbfReader)
 class OsmPbfReaderData
 {
 public:
+
   Blob blob;
   BlobHeader blobHeader;
   HeaderBlock headerBlock;
@@ -102,12 +103,12 @@ OsmPbfReader::OsmPbfReader(const QString& urlString)
 
 void OsmPbfReader::_init(bool useFileId)
 {
-  _d.reset(new OsmPbfReaderData());
+  _d = std::make_shared<OsmPbfReaderData>();
   _useFileId = useFileId;
   _status = hoot::Status::Invalid;
   _useFileStatus = false;
   _permissive = true;
-  _in = nullptr;
+  _in.reset();
   _needToCloseInput = false;
   _typeThenId = false;
 
@@ -593,18 +594,19 @@ void OsmPbfReader::_loadOsmData()
   _latOffset = _d->primitiveBlock.lat_offset();
   _dateGranularity = _d->primitiveBlock.date_granularity();
 
+  // We don't handle changesets.
   _loadNodes();
   _loadDenseNodes();
   _loadWays();
   _loadRelations();
-  // we don't handle change sets
 }
 
-vector<OsmPbfReader::BlobLocation> OsmPbfReader::loadOsmDataBlobOffsets(istream& strm)
+vector<OsmPbfReader::BlobLocation> OsmPbfReader::loadOsmDataBlobOffsets(
+  std::shared_ptr<istream> strm)
 {
   vector<BlobLocation> result;
 
-  _in = &strm;
+  _in = strm;
 
   _in->seekg (0, ios::end);
   long length = _in->tellg();
@@ -934,12 +936,14 @@ void OsmPbfReader::_loadWays()
   }
 }
 
-void OsmPbfReader::parseBlob(const BlobLocation& bl, istream* strm, const OsmMapPtr& map)
+void OsmPbfReader::parseBlob(
+  const BlobLocation& bl, std::shared_ptr<istream> strm, const OsmMapPtr& map)
 {
   parseBlob(bl.headerOffset, strm, map);
 }
 
-void OsmPbfReader::parseBlob(long headerOffset, istream* strm, const OsmMapPtr& map)
+void OsmPbfReader::parseBlob(
+  long headerOffset, std::shared_ptr<istream> strm, const OsmMapPtr& map)
 {
   _in = strm;
   _map = map;
@@ -996,7 +1000,7 @@ void OsmPbfReader::_parseBlobHeader()
   _d->blobHeader.ParseFromArray(_buffer.data(), size);
 }
 
-void OsmPbfReader::parseElements(istream* strm, const OsmMapPtr& map)
+void OsmPbfReader::parseElements(std::shared_ptr<istream> strm, const OsmMapPtr& map)
 {
   _map = map;
   _in = strm;
@@ -1019,9 +1023,9 @@ void OsmPbfReader::parseElements(QByteArray bytes, const OsmMapPtr& map)
 {
   // this could be made more efficient by reading directly into the buffer, but that comes at the
   // expense of complexity.
-  std::stringstream ss;
-  ss.str(std::string(bytes.data(), bytes.size()));
-  parseElements(&ss, map);
+  std::shared_ptr<std::stringstream> ss = std::make_shared<std::stringstream>();
+  ss->str(std::string(bytes.data(), bytes.size()));
+  parseElements(ss, map);
 }
 
 int OsmPbfReader::_parseInt(const QString& s) const
@@ -1072,7 +1076,7 @@ void OsmPbfReader::_parseOsmHeader()
   _osmHeaderRead = true;
 }
 
-uint32_t OsmPbfReader::_readUInt32()
+uint32_t OsmPbfReader::_readUInt32() const
 {
   uint32_t buf = 0xFFFFFFFF;
   _in->read((char*)&buf, 4);
@@ -1101,7 +1105,7 @@ Status OsmPbfReader::_parseStatus(const QString& s) const
   return result;
 }
 
-void OsmPbfReader::parse(istream* strm, const OsmMapPtr& map)
+void OsmPbfReader::parse(std::shared_ptr<istream> strm, const OsmMapPtr& map)
 {
   _in = strm;
   _map = map;
@@ -1171,14 +1175,13 @@ void OsmPbfReader::read(const QString& path, const OsmMapPtr& map)
 
 void OsmPbfReader::_readFile(const QString& path, const OsmMapPtr& map)
 {
-  fstream input(path.toUtf8().constData(), ios::in | ios::binary);
-
-  if (input.good() == false)
+  std::shared_ptr<fstream> input =
+    std::make_shared<fstream>(path.toUtf8().constData(), ios::in | ios::binary);
+  if (input->good() == false)
   {
     throw HootException(QString("Error reading %1").arg(path));
   }
-
-  parse(&input, map);
+  parse(input, map);
 }
 
 void OsmPbfReader::read(const OsmMapPtr& map)
@@ -1236,11 +1239,11 @@ bool OsmPbfReader::isSorted(const QString& file)
 void OsmPbfReader::open(const QString& urlStr)
 {
   OsmMapReader::open(urlStr);
-  fstream* fp = new fstream();
+  std::shared_ptr<fstream> fp = std::make_shared<fstream>();
   fp->open(urlStr.toUtf8().data(), ios::in | ios::binary);
   if (fp->is_open() == false)
   {
-    delete fp;
+    fp.reset();
     throw HootException("Error opening " + urlStr + " for reading.");
   }
   _in = fp;
@@ -1264,19 +1267,19 @@ void OsmPbfReader::initializePartial()
   _firstPartialReadCompleted = false;
 
   // If nothing's been opened yet, this needs to be a no-op to be safe
-  if (_in != nullptr)
+  if (_in)
   {
-    _blobs = loadOsmDataBlobOffsets(*_in);
-    _in->seekg (0, ios::end);
+    _blobs = loadOsmDataBlobOffsets(_in);
+    _in->seekg(0, ios::end);
     _fileLength = _in->tellg();
-    _in->seekg (0, ios::beg);
+    _in->seekg(0, ios::beg);
   }
 }
 
 bool OsmPbfReader::hasMoreElements()
 {
   // If we've closed/finalized, definitely no
-  if (_in == nullptr)
+  if (!_in)
   {
     return false;
   }
@@ -1400,12 +1403,11 @@ void OsmPbfReader::close()
   {
     // Deleting fstream objects invokes the istream destructor, who in turn calls istream::close as
     // part of its contract
-    delete _in;
     _needToCloseInput = false;
   }
 
   // Either path, drop our pointer to the stream
-  _in = nullptr;
+  _in.reset();
 }
 
 void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t) const

@@ -119,8 +119,8 @@ public:
 
   void test1()
   {
-    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
-    std::shared_ptr<HilbertRTree> tree(new HilbertRTree(mps, 3));
+    std::shared_ptr<HilbertRTree> tree =
+      std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(256), 3);
 
     createTestData(3, 4);
     tree->bulkInsert(testData, testId);

@@ -141,17 +141,15 @@ QString WaySubline::toString() const
 }
 
 WayPtr WaySubline::toWay(
-  const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf, bool reuse) const
+  const OsmMapPtr& map, std::shared_ptr<GeometryToElementConverter::NodeFactory> nf,
+  bool reuse) const
 {
   ConstWayPtr way = _start.getWay();
   LOG_VART(way->getElementId());
 
-  std::shared_ptr<GeometryToElementConverter::NodeFactory> nfPtr;
-  if (nf == nullptr)
+  if (!nf)
   {
-    nf = new FindNodesInWayFactory(way);
-    // delete it automatically.
-    nfPtr.reset(nf);
+    nf = std::make_shared<FindNodesInWayFactory>(way);
   }
 
   Meters ce = way->getRawCircularError();

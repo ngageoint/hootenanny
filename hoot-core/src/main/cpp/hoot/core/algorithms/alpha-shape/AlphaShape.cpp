@@ -96,8 +96,8 @@ AlphaShape::AlphaShape(double alpha)
     _sizeX(0.0),
     _sizeY(0.0)
 {
-  LOG_VARD(_alpha);
-  _pDelauneyTriangles.reset(new Tgs::DelaunayTriangulation);
+  LOG_VART(_alpha);
+  _pDelauneyTriangles = std::make_shared<Tgs::DelaunayTriangulation>();
 }
 
 GeometryPtr AlphaShape::_convertFaceToPolygon(const Face& face) const
@@ -125,6 +125,7 @@ GeometryPtr AlphaShape::_convertFaceToPolygon(const Face& face) const
 
   lr = GeometryFactory::getDefaultInstance()->createLinearRing(cs);
   std::vector<LinearRing*>* holes = new std::vector<LinearRing*>();
+  // GeometryFactory takes ownership of these input parameters.
   result.reset(GeometryFactory::getDefaultInstance()->createPolygon(lr, holes));
 
   return result;
