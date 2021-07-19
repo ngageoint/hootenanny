@@ -155,11 +155,9 @@ Coordinate BaseComparator::_findNearestPointOnFeature(
   // Find the nearest point on that feature.
   std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
   std::shared_ptr<LineString> ls = ElementToGeometryConverter(map).convertToLineString(w);
-  CoordinateSequence* cs = DistanceOp::closestPoints(p.get(), ls.get());
+  std::shared_ptr<CoordinateSequence> cs(DistanceOp::closestPoints(p.get(), ls.get()));
 
   cs->getAt(0, result);
-
-  delete cs;
 
   return result;
 }
