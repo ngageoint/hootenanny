@@ -126,9 +126,9 @@ void ImplicitTypeTaggerBase::setConfiguration(const Settings& conf)
 
   if (_translateNamesToEnglish)
   {
-    _translator.reset(
+    _translator =
       Factory::getInstance().constructObject<ToEnglishTranslator>(
-        confOptions.getLanguageTranslationTranslator()));
+        confOptions.getLanguageTranslationTranslator());
     _translator->setConfiguration(conf);
     _translator->setSourceLanguages(confOptions.getLanguageTranslationSourceLanguages());
     _translator->setId("ImplicitTypeTaggerBase");

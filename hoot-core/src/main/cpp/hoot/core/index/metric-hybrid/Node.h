@@ -66,7 +66,6 @@ public:
     _size = 0;
     _next = 0;
   }
-
   virtual ~Leaf()
   {
     delete _next;

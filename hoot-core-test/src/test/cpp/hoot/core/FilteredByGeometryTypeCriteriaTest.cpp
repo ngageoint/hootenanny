@@ -74,8 +74,8 @@ public:
         continue;
       }
 
-      ElementCriterionPtr crit(
-        Factory::getInstance().constructObject<ElementCriterion>(className));
+      ElementCriterionPtr crit =
+        Factory::getInstance().constructObject<ElementCriterion>(className);
       LOG_VART(crit.get());
       QString str = crit->getName();
       LOG_VART(str);
@@ -130,8 +130,8 @@ public:
       const QString className = opClassNames[i];
       LOG_VART(className);
 
-      std::shared_ptr<OsmMapOperation> op(
-        Factory::getInstance().constructObject<OsmMapOperation>(className));
+      std::shared_ptr<OsmMapOperation> op =
+        Factory::getInstance().constructObject<OsmMapOperation>(className);
       LOG_VART(op.get());
       QString str = op->getName();
       LOG_VART(str);
@@ -177,8 +177,8 @@ public:
       const QString className = visClassNames[i];
       LOG_VART(className);
 
-      std::shared_ptr<ElementVisitor> vis(
-        Factory::getInstance().constructObject<ElementVisitor>(className));
+      std::shared_ptr<ElementVisitor> vis =
+        Factory::getInstance().constructObject<ElementVisitor>(className);
       LOG_VART(vis.get());
       QString str = vis->getName();
       LOG_VART(str);

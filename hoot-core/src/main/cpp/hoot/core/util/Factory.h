@@ -78,8 +78,8 @@ public:
    */
   boost::any create() override
   {
-    Base* b = new T();
-    return dynamic_cast<Base*>(b);
+    std::shared_ptr<Base> b = std::make_shared<T>();
+    return std::dynamic_pointer_cast<Base>(b);
   }
 
   QString getBaseName() const override { return _baseName; }
@@ -102,9 +102,9 @@ public:
 
   boost::any constructObject(const QString& name);
   template<class T>
-  T* constructObject(const QString& name)
+  std::shared_ptr<T> constructObject(const QString& name)
   {
-    return boost::any_cast<T*>(constructObject(name));
+    return boost::any_cast<std::shared_ptr<T>>(constructObject(name));
   }
   /**
    * Register an object creator.
@@ -186,7 +186,6 @@ public:
 #define HOOT_FACTORY_REGISTER(Base, ClassName)      \
   static hoot::AutoRegister<Base, ClassName> ClassName##AutoRegister(Base::className(), \
     ClassName::className());
-
 /**
  * It is very unusual to register the base class, so you have to call this method to do it.
  * Otherwise you'll get a nasty exception.

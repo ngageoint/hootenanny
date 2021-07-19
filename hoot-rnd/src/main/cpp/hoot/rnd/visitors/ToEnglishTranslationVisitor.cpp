@@ -77,9 +77,9 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
 
-  _translatorClient.reset(
+  _translatorClient =
     Factory::getInstance().constructObject<ToEnglishTranslator>(
-      opts.getLanguageTranslationTranslator()));
+      opts.getLanguageTranslationTranslator());
   _translatorClient->setConfiguration(conf);
   _translatorClient->setSourceLanguages(opts.getLanguageTranslationSourceLanguages());
 

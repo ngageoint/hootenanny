@@ -117,8 +117,8 @@ vector<CreatorDescription> MatchFactory::getAllAvailableCreators() const
   for (size_t i = 0; i < names.size(); i++)
   {
     // Get all names known by this creator.
-    std::shared_ptr<MatchCreator> mc(
-      Factory::getInstance().constructObject<MatchCreator>(names[i]));
+    std::shared_ptr<MatchCreator> mc =
+      Factory::getInstance().constructObject<MatchCreator>(names[i]);
 
     vector<CreatorDescription> d = mc->getAllCreators();
     result.insert(result.end(), d.begin(), d.end());
@@ -135,8 +135,8 @@ void MatchFactory::registerCreator(const QString& c)
   if (className.length() > 0)
   {
     args.removeFirst();
-    std::shared_ptr<MatchCreator> mc(
-      Factory::getInstance().constructObject<MatchCreator>(className));
+    std::shared_ptr<MatchCreator> mc =
+      Factory::getInstance().constructObject<MatchCreator>(className);
     mc->setFilter(_createFilter());
 
     registerCreator(mc);
@@ -166,8 +166,8 @@ ElementCriterionPtr MatchFactory::_createFilter() const
   ElementCriterionPtr critFilter;
   if (!_critFilterClassName.trimmed().isEmpty())
   {
-    ElementCriterionPtr elementCrit(
-      Factory::getInstance().constructObject<ElementCriterion>(_critFilterClassName));
+    ElementCriterionPtr elementCrit =
+      Factory::getInstance().constructObject<ElementCriterion>(_critFilterClassName);
     if (_negateCritFilter)
     {
       critFilter = std::make_shared<NotCriterion>(elementCrit);

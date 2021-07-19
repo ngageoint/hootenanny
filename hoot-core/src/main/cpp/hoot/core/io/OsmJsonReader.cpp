@@ -77,8 +77,6 @@ _circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys()),
 _isWeb(false),
 _keepImmediatelyConnectedWaysOutsideBounds(
   ConfigOptions().getBoundsKeepImmediatelyConnectedWaysOutsideBounds()),
-_missingNodeCount(0),
-_missingWayCount(0),
 _addChildRefsWhenMissing(ConfigOptions().getMapReaderAddChildRefsWhenMissing()),
 _logWarningsForMissingElements(ConfigOptions().getLogWarningsForMissingElements())
 {

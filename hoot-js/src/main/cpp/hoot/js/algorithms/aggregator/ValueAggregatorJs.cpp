@@ -78,8 +78,8 @@ void ValueAggregatorJs::New(const FunctionCallbackInfo<Value>& args)
 
   const QString className = "hoot::" + str(args.This()->GetConstructorName());
 
-  ValueAggregator* c = Factory::getInstance().constructObject<ValueAggregator>(className);
-  ValueAggregatorJs* obj = new ValueAggregatorJs(ValueAggregatorPtr(c));
+  ValueAggregatorPtr c = Factory::getInstance().constructObject<ValueAggregator>(className);
+  ValueAggregatorJs* obj = new ValueAggregatorJs(c);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 

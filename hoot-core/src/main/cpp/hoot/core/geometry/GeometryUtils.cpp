@@ -130,9 +130,9 @@ Envelope* GeometryUtils::toEnvelope(const OGREnvelope& e)
   return new Envelope(e.MinX, e.MaxX, e.MinY, e.MaxY);
 }
 
-OGREnvelope* GeometryUtils::toOGREnvelope(const geos::geom::Envelope& e)
+std::shared_ptr<OGREnvelope> GeometryUtils::toOGREnvelope(const geos::geom::Envelope& e)
 {
-  OGREnvelope* result = new OGREnvelope();
+  std::shared_ptr<OGREnvelope> result = std::make_shared<OGREnvelope>();
   result->MinX = e.getMinX();
   result->MaxX = e.getMaxX();
   result->MinY = e.getMinY();
@@ -243,8 +243,9 @@ std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
 
   // an empty set of holes
   vector<Geometry*>* holes = new vector<Geometry*>();
-  // create the outer line
+  // create the outer line; GeometryFactory takes ownership of these input parameters.
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(coordSeq);
+  // GeometryFactory takes ownership of these input parameters.
   std::shared_ptr<Polygon> poly(
     GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
   LOG_VART(poly->isValid());
@@ -306,8 +307,9 @@ std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
 
   // an empty set of holes
   vector<Geometry*>* holes = new vector<Geometry*>();
-  // create the outer line
+  // create the outer line; GeometryFactory takes ownership of these input parameters.
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(coordSeq);
+  // GeometryFactory takes ownership of these input parameters.
   return std::shared_ptr<Polygon>(
     GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
 }
@@ -451,6 +453,7 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
       }
     }
 
+    // GeometryFactory takes ownership of these input parameters.
     result = GeometryFactory::getDefaultInstance()->createPolygon(shell, holes);
   }
 

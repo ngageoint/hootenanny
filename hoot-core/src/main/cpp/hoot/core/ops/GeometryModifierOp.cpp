@@ -51,7 +51,8 @@ GeometryModifierOp::GeometryModifierOp(): _pConf(&conf())
   LOG_DEBUG( "Available Geometry Modifiers:")
   for (QString availType : availableActionTypes)
   {
-    std::shared_ptr<GeometryModifierAction> pAction(Factory::getInstance().constructObject<GeometryModifierAction>(availType));
+    std::shared_ptr<GeometryModifierAction> pAction =
+      Factory::getInstance().constructObject<GeometryModifierAction>(availType);
     _actions.append(pAction);
     LOG_DEBUG( "class: " << availType << " command: " << pAction->getCommandName());
   }

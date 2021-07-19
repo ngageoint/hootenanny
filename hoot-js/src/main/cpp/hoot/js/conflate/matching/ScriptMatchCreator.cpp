@@ -98,7 +98,6 @@ public:
     _neighborCountMax(-1),
     _neighborCountSum(0),
     _elementsEvaluated(0),
-    _maxGroupSize(0),
     _numElementsVisited(0),
     _numMatchCandidatesVisited(0),
     _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
@@ -122,7 +121,7 @@ public:
 
   ~ScriptMatchVisitor()
   {
-    //  Free the perisistent object
+    //  Free the persistent object
     if (_mapJs.IsEmpty())
       return;
     Local<Object> mapJs(ToLocal(&_mapJs));
@@ -672,7 +671,6 @@ private:
   int _neighborCountMax;
   int _neighborCountSum;
   int _elementsEvaluated;
-  size_t _maxGroupSize;
   long _numElementsVisited;
   long _numMatchCandidatesVisited;
 
@@ -684,8 +682,6 @@ private:
   std::shared_ptr<ChainCriterion> _pointPolyCrit;
 
   QElapsedTimer _timer;
-
-  long _elementCount;
 
   CreatorDescription _scriptInfo;
 

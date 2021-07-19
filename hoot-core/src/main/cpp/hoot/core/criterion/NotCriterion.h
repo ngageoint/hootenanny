@@ -43,8 +43,8 @@ public:
   static QString className() { return "hoot::NotCriterion"; }
 
   NotCriterion() = default;
-  NotCriterion(ElementCriterion* c) : _child(c) { }
-  NotCriterion(ElementCriterionPtr c) : _child(c) { }
+  NotCriterion(ElementCriterion* c);
+  NotCriterion(ElementCriterionPtr c);
   ~NotCriterion() = default;
 
   void addCriterion(const ElementCriterionPtr& e) override;

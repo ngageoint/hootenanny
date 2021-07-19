@@ -51,23 +51,9 @@ FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisit
 {
 }
 
-FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisitorPtr visitor) :
-  _criterion(&criterion),
-  _visitor(visitor.get()),
-  _map(nullptr)
-{
-}
-
 FilteredVisitor::FilteredVisitor(ElementCriterionPtr criterion, ElementVisitorPtr visitor) :
   _criterion(criterion.get()),
   _visitor(visitor.get()),
-  _map(nullptr)
-{
-}
-
-FilteredVisitor::FilteredVisitor(const ElementCriterion* criterion, ElementVisitor* visitor) :
-  _criterion(criterion),
-  _visitor(visitor),
   _map(nullptr)
 {
 }
@@ -146,10 +132,10 @@ double FilteredVisitor::getStat(ElementCriterionPtr criterion, ElementVisitorPtr
 double FilteredVisitor::getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
                                 const ConstOsmMapPtr& map, const ElementPtr& element)
 {
-  return getStat(criterion.get(), visitor.get(), map, element);
+  return getStat(*criterion, *visitor, map, element);
 }
 
-double FilteredVisitor::getStat(const ElementCriterion* criterion, ElementVisitor* visitor,
+double FilteredVisitor::getStat(const ElementCriterion& criterion, ElementVisitor& visitor,
                                 const ConstOsmMapPtr& map, const ElementPtr& element)
 {
   FilteredVisitor filteredVisitor(criterion, visitor);

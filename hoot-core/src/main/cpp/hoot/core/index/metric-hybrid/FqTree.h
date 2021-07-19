@@ -60,7 +60,7 @@ public:
       _children[i] = nullptr;
       _childDistance[i] = 0;
     }
-    _next = nullptr;
+    _next.reset();
   }
 
   virtual ~FqNode()
@@ -69,14 +69,13 @@ public:
     {
       delete _children[i];
     }
-    delete _next;
   }
 
   void addChild(Node<KeyType, DataType>* n, short d)
   {
     if (n != nullptr)
     {
-      if (_next != nullptr)
+      if (_next)
       {
         _next->addChild(n, d);
       }
@@ -95,7 +94,7 @@ public:
 
         if (!done)
         {
-          _next = new FqNode();
+          _next = std::make_shared<FqNode>();
           _next->addChild(n, d);
         }
       }
@@ -129,7 +128,7 @@ public:
   virtual size_t getChildCount() const
   {
     size_t result = 0;
-    if (_next == nullptr)
+    if (!_next)
     {
       for (size_t i = 0; i < FQ_NODE_SIZE; ++i)
       {
@@ -160,13 +159,14 @@ public:
   }
 
 private:
+
   // This strange memory structure is here to prevent unnecessary news and to keep the majority
   // of the objects allocated the same size. Switching from vectors to this structure reduced
   // memory usage of the index by about 60% without a substantial difference in speed. Switching
   // to boost pools at some point in the future may further improve memory usage.
   Node<KeyType, DataType>* _children[FQ_NODE_SIZE];
   short _childDistance[FQ_NODE_SIZE];
-  FqNode* _next;
+  std::shared_ptr<FqNode> _next;
 };
 
 /**
@@ -196,12 +196,10 @@ public:
     std::vector<size_t>& order = *_order;
 
     Leaf<KeyType, DataType>* result = new Leaf<KeyType, DataType>();
-
     for (size_t i = start; i < end; ++i)
     {
       result->addData(keys[order[i]], values[order[i]]);
     }
-
     return result;
   }
 

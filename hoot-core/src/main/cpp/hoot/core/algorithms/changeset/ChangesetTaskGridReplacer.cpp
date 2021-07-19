@@ -137,9 +137,9 @@ void ChangesetTaskGridReplacer::_initChangesetStats()
 
 void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
 {
-  _changesetCreator.reset(
+  _changesetCreator =
     Factory::getInstance().constructObject<ChangesetReplacement>(
-      ConfigOptions().getChangesetReplacementImplementation()));
+      ConfigOptions().getChangesetReplacementImplementation());
   _changesetCreator->setChangesetOptions(true, "", _dataToReplaceUrl);
   LOG_VARD(_changesetCreator->toString());
 

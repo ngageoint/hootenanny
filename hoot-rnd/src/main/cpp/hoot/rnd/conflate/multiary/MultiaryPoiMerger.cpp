@@ -75,7 +75,7 @@ void MultiaryPoiMerger::apply(const OsmMapPtr& map,
     // way to add that dep.
     if (d.getClassName() == "hoot::ScriptMergerCreator")
     {
-      _mergerCreator.reset(Factory::getInstance().constructObject<MergerCreator>(d.getClassName()));
+      _mergerCreator = Factory::getInstance().constructObject<MergerCreator>(d.getClassName());
     }
   }
 

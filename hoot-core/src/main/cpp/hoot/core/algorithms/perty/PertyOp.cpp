@@ -216,8 +216,8 @@ void PertyOp::apply(std::shared_ptr<OsmMap>& map)
 Mat PertyOp::_calculatePermuteGrid(const geos::geom::Envelope& env, int& rows, int& cols)
 {
   LOG_DEBUG("Using permute algorithm: " + _permuteAlgorithm);
-  _gridCalculator.reset(
-    Factory::getInstance().constructObject<PermuteGridCalculator>(_permuteAlgorithm));
+  _gridCalculator =
+    Factory::getInstance().constructObject<PermuteGridCalculator>(_permuteAlgorithm);
   _gridCalculator->setCsmParameters(_D);
   _gridCalculator->setGridSpacing(_gridSpacing);
   _gridCalculator->setSeed(_seed);

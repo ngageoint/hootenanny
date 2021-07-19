@@ -92,10 +92,10 @@ void SublineStringMatcherJs::New(const FunctionCallbackInfo<Value>& args)
 
   const QString className = "hoot::" + str(args.This()->GetConstructorName());
 
-  SublineStringMatcherPtr sm(
-    Factory::getInstance().constructObject<SublineStringMatcher>(className));
+  SublineStringMatcherPtr sm =
+    Factory::getInstance().constructObject<SublineStringMatcher>(className);
   SublineStringMatcherJs* obj = new SublineStringMatcherJs(sm);
-  PopulateConsumersJs::populateConsumers(sm.get(), args);
+  PopulateConsumersJs::populateConsumers(sm, args);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 

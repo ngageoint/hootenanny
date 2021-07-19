@@ -267,20 +267,21 @@ public:
   /**
    * Takes ownership of the function object.
    */
-  NelderMead(size_t dimension, Function* function, double termination_distance=0.001)
+  NelderMead(
+    size_t dimensionSize, std::shared_ptr<Function> function,
+    double terminationDistance = 0.001) :
+  _function(function),
+  dimension(dimensionSize),
+  alpha(1),
+  gamma(2),
+  rho(-0.5),
+  sigma(0.5),
+  termination_distance(terminationDistance),
+  _bestDistance(std::numeric_limits<double>::max()),
+  _noChange(0),
+  _maxNoChange(4)
   {
-    _function.reset(function);
-    this->dimension = dimension;
-    alpha = 1;
-    gamma = 2;
-    rho = -0.5;
-    sigma = 0.5;
-    this->termination_distance = termination_distance;
-    _bestDistance = std::numeric_limits<double>::max();
-    _noChange = 0;
-    _maxNoChange = 4;
   }
-
   ~NelderMead() = default;
 
   // termination criteria: each pair of vectors in the simplex has to
@@ -413,7 +414,7 @@ public:
       result.prepare(dimension);
       for (size_t i = 0; i<dimension; ++i)
       {
-        result[i] = 0.001*(Tgs::Random::instance()->generateInt(1000));
+        result[i] = 0.001 * (Tgs::Random::instance()->generateInt(1000));
       }
       return result;
     }

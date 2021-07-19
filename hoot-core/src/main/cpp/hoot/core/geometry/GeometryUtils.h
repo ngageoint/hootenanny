@@ -79,7 +79,7 @@ public:
 
   static geos::geom::Envelope* toEnvelope(const OGREnvelope& e);
 
-  static OGREnvelope* toOGREnvelope(const geos::geom::Envelope& e);
+  static std::shared_ptr<OGREnvelope> toOGREnvelope(const geos::geom::Envelope& e);
 
   /** Creates a bounds string in the format (minx,maxx,miny,maxy)
    *  from an envelope using the `writer.precision` value

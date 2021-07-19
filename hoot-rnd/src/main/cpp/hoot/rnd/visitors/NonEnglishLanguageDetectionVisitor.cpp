@@ -103,18 +103,17 @@ void NonEnglishLanguageDetectionVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
 
-  _infoClient.reset(
+  _infoClient =
     Factory::getInstance().constructObject<LanguageInfoProvider>(
-      opts.getLanguageInfoProvider()));
+      opts.getLanguageInfoProvider());
   _infoClient->setConfiguration(conf);
   _langCodesToLangs =
     HootServicesLanguageInfoResponseParser::getLangCodesToLangs(
       _infoClient->getAvailableLanguages("detectable"));
   LOG_VART(_langCodesToLangs.size());
 
-  _langDetector.reset(
-    Factory::getInstance().constructObject<LanguageDetector>(
-      opts.getLanguageDetectionDetector()));
+  _langDetector =
+    Factory::getInstance().constructObject<LanguageDetector>(opts.getLanguageDetectionDetector());
   _langDetector->setConfiguration(conf);
 
   _tagKeys = opts.getLanguageTagKeys().toSet();
@@ -165,8 +164,8 @@ void NonEnglishLanguageDetectionVisitor::visit(const std::shared_ptr<Element>& e
 
   const Tags& tags = e->getTags();
   bool elementProcessed = false;
-  for (QSet<QString>::const_iterator tagKeysItr = _tagKeys.begin();
-       tagKeysItr != _tagKeys.end(); ++tagKeysItr)
+  for (QSet<QString>::const_iterator tagKeysItr = _tagKeys.begin(); tagKeysItr != _tagKeys.end();
+       ++tagKeysItr)
   {
     const QString tagKey = *tagKeysItr;
     if (tags.contains(tagKey))

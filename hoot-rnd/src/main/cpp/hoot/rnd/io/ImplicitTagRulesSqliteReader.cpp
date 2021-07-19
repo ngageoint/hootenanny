@@ -376,6 +376,7 @@ void ImplicitTagRulesSqliteReader::_queryWords(const QSet<QString>& words,
 void ImplicitTagRulesSqliteReader::_cacheTags(const QSet<QString>& words, const Tags& tags)
 {
   QStringList wordsList = words.toList();
+  // The cache takes ownership of this object.
   Tags* tagsToCache = new Tags(tags);
   _tagsCache.insert(wordsList.join(";"), tagsToCache);
 }

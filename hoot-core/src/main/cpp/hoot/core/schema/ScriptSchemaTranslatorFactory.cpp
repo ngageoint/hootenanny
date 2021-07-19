@@ -62,9 +62,7 @@ std::shared_ptr<ScriptSchemaTranslator> ScriptSchemaTranslatorFactory::createTra
   for (size_t i = 0; i < _translators.size(); ++i)
   {
     LOG_VART(_translators[i]);
-    st.push_back(
-      std::shared_ptr<ScriptSchemaTranslator>(
-        Factory::getInstance().constructObject<ScriptSchemaTranslator>(_translators[i])));
+    st.push_back(Factory::getInstance().constructObject<ScriptSchemaTranslator>(_translators[i]));
   }
 
   sort(st.begin(), st.end(), CompareSt);

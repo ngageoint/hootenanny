@@ -94,9 +94,9 @@ public:
     matchFactory.reset();
     matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");
 
-    MergerCreatorPtr mergerCreator(
+    MergerCreatorPtr mergerCreator =
       Factory::getInstance().constructObject<MergerCreator>(
-        QString("hoot::ScriptMergerCreator")));
+        QString("hoot::ScriptMergerCreator"));
     MergerFactory& mergerFactory = MergerFactory::getInstance();
     mergerFactory.reset();
     mergerFactory.registerCreator(mergerCreator);

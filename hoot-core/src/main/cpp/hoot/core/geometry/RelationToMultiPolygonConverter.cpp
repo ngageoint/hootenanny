@@ -159,7 +159,7 @@ Geometry* RelationToMultiPolygonConverter::_addHoles(
     tmpPolygons[i] = p;
   }
 
-  // create the final MultiPolygon
+  // create the final MultiPolygon; GeometryFactory takes ownership of these input parameters.
   return gf.createMultiPolygon(polygons);
 }
 

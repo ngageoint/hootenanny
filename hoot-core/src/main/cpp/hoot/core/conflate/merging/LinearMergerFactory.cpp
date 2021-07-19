@@ -42,9 +42,9 @@ MergerPtr LinearMergerFactory::getMerger(
   const std::set<std::pair<ElementId, ElementId>>& eids,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const QString matchedBy)
 {
-  MergerPtr merger(
+  MergerPtr merger =
     Factory::getInstance().constructObject<Merger>(
-      ConfigOptions().getGeometryLinearMergerDefault()));
+      ConfigOptions().getGeometryLinearMergerDefault());
   std::shared_ptr<LinearMergerAbstract> linearMerger =
     std::dynamic_pointer_cast<LinearMergerAbstract>(merger);
   if (!linearMerger)

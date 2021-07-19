@@ -52,10 +52,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, WeightedWordDistance)
 
-WeightedWordDistance::WeightedWordDistance(StringDistance* d, WordWeightDictionary* dictionary)
+WeightedWordDistance::WeightedWordDistance(
+  std::shared_ptr<StringDistance> d, std::shared_ptr<WordWeightDictionary> dictionary) :
+_d(d),
+_dictionary(dictionary)
 {
-  _d.reset(d);
-  _dictionary.reset(dictionary);
   setConfiguration(conf());
 }
 

@@ -77,9 +77,9 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
 
   if (_translateNamesToEnglish)
   {
-    _translator.reset(
+    _translator =
       Factory::getInstance().constructObject<ToEnglishTranslator>(
-        options.getLanguageTranslationTranslator()));
+        options.getLanguageTranslationTranslator());
     _translator->setConfiguration(conf);
     _translator->setSourceLanguages(options.getLanguageTranslationSourceLanguages());
     _translator->setId("ImplicitTagRawRulesDeriver");
@@ -88,11 +88,13 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
 
 void ImplicitTagRawRulesDeriver::setElementCriterion(const QString& criterionName)
 {
-  ElementCriterion* criterion =
+  ElementCriterionPtr criterion =
     Factory::getInstance().constructObject<ElementCriterion>(criterionName);
-  if (dynamic_cast<ImplicitTagEligibleCriterion*>(criterion) != nullptr)
+  std::shared_ptr<ImplicitTagEligibleCriterion> eligibleCrit =
+    std::dynamic_pointer_cast<ImplicitTagEligibleCriterion>(criterion);
+  if (eligibleCrit)
   {
-    _elementCriterion.reset(dynamic_cast<ImplicitTagEligibleCriterion*>(criterion));
+    _elementCriterion = eligibleCrit;
   }
   else
   {
