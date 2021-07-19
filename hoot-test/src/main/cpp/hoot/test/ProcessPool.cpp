@@ -102,12 +102,12 @@ void ProcessThread::resetProcess()
   _proc->write(QString("%1\n").arg(HOOT_TEST_FINISHED).toLatin1());
   _proc->waitForFinished();
   //  Start a new process
-  _proc.reset(createProcess());
+  _proc = createProcess();
 }
 
-QProcess* ProcessThread::createProcess()
+std::shared_ptr<QProcess> ProcessThread::createProcess()
 {
-  QProcess* proc = new QProcess();
+  std::shared_ptr<QProcess> proc = std::make_shared<QProcess>();
   proc->setProcessChannelMode(QProcess::MergedChannels);
   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
   proc->setProcessEnvironment(env);
@@ -122,7 +122,7 @@ QProcess* ProcessThread::createProcess()
 
 void ProcessThread::run()
 {
-  _proc.reset(createProcess());
+  _proc = createProcess();
   if (_serialJobs != nullptr)
   {
     processJobs(_serialJobs);
@@ -164,7 +164,7 @@ void ProcessThread::processJobs(JobQueue* queue)
           //  Restart the process if there was a process failure
           if (restart_count < MAX_RESTART)
           {
-            _proc.reset(createProcess());
+            _proc = createProcess();
             output.clear();
           }
           else
