@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
 	http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>hoot.core.josm</groupId>
+	<groupId>hoot.josm</groupId>
 	<artifactId>hoot-josm</artifactId>
 	<packaging>jar</packaging>
 	<version>0.0.1</version>
@@ -11,15 +11,17 @@
 	<url>http://hootenanny.org</url>
 
 	<properties>
+	
 		<jdk.version>1.8</jdk.version>
 		
     <josm.artifactId>josm</josm.artifactId>
-		<josm.version>15628</josm.version> <!-- working -->
-		<!-- josm.version>17919</josm.version --> <!-- untested -->
+		<!-- josm.version>17702</josm.version --> <!-- 4/2/21; tested -->
+		<josm.version>17833</josm.version> <!-- 4/28/21; hangs on program exit -->
 		
 	  <!-- josm.artifactId>me-josm</josm.artifactId -->
 		<!-- josm.version>4.4.9</josm.version --> <!-- working -->
 		<!-- josm.version>10.0.1</josm.version --> <!-- untested -->
+		
 	</properties>
 
   <repositories>

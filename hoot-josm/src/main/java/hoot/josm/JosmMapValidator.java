@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collection;
+import java.util.Collections;
 import java.lang.Exception;
 import java.io.ByteArrayInputStream;
 import java.lang.Class;
@@ -178,6 +179,12 @@ public class JosmMapValidator
     try
     {
       Collection<Test> validationTests = OsmValidator.getTests();
+
+      //ArrayList<Test> validationTests = new ArrayList<Test>(OsmValidator.getTests());
+      //Collections.copy(validationTests, OsmValidator.getTests());
+      //Collection<Class<? extends Test>> validationTests = OsmValidator.getAllAvailableTestClasses();
+      //String test = OsmValidator.getValidatorDir();
+
       for (Test validationTest : validationTests)
       {
         if (validationTest != null)
@@ -192,6 +199,16 @@ public class JosmMapValidator
           validators.put(testName, testDescription);
         }
       }
+      /*for (Test validationTest : validationTests)
+      {
+        validationTest = null;
+      }
+      validationTests = null;
+      OsmValidator.errorLayer = null;
+      OsmValidator.ignoredErrors = null;
+      OsmValidator.allTests = null;
+      OsmValidator.allTestsMap = null;
+      OsmValidator.CORE_TEST_CLASSES = null;*/
     }
     catch (Exception e)
     {

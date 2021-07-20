@@ -2189,8 +2189,9 @@ satisfy the criterion.
 ** `${HOOT_HOME}/hoot-josm/target/dependency-jars/josm.jar;${HOOT_HOME}/hoot-josm/target/hoot-josm.jar`
 
 A list of JAR files to place on the JAVA classpath when Hootenanny C++ code in the hoot-josm project
-interacts with Hootenany and JOSM Java code via JNI. At a minimum this includes the JOSM jar managed
-by `hoot-josm/pom.xml` (`josm.jar`) and the Hootenanny JOSM integration jar (`hoot-josm.jar`).
+interacts with Hootenany and JOSM Java code via JNI. At a minimum this path includes the JOSM jar
+managed by `hoot-josm/pom.xml` (`josm.jar`) and the Hootenanny JOSM integration jar
+(`hoot-josm.jar`).
 
 === jni.initial.memory
 

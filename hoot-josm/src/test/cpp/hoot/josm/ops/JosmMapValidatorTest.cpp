@@ -39,11 +39,11 @@ class JosmMapValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmMapValidatorTest);
   CPPUNIT_TEST(runGetAvailableValidatorsTest);
-  CPPUNIT_TEST(runValidatorInclusionTest);
-  CPPUNIT_TEST(runValidatorExclusionTest);
-  CPPUNIT_TEST(runEmptyValidatorsTest);
-  CPPUNIT_TEST(runValidateTest);
-  CPPUNIT_TEST(runValidateFileTest);
+  //CPPUNIT_TEST(runValidatorInclusionTest);
+  //CPPUNIT_TEST(runValidatorExclusionTest);
+  ////CPPUNIT_TEST(runEmptyValidatorsTest);
+  //CPPUNIT_TEST(runValidateTest);
+  //CPPUNIT_TEST(runValidateFileTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -188,5 +188,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapValidatorTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapValidatorTest, "serial");
 
 }
