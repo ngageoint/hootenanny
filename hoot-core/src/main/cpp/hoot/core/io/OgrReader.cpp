@@ -1098,16 +1098,8 @@ void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
   if (sourceSrs.get() != nullptr && sourceSrs->IsProjected())
   {
     LOG_DEBUG("Input SRS: " << _toWkt(sourceSrs.get()));
-<<<<<<< HEAD
-    _wgs84 = MapProjector::createWgs84Projection();
-=======
-    _wgs84 = std::make_shared<OGRSpatialReference>();
-    if (_wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
-    {
-      throw HootException("Error creating EPSG:4326 projection.");
-    }
 
->>>>>>> master
+    _wgs84 = MapProjector::createWgs84Projection();
     _transform = OGRCreateCoordinateTransformation(sourceSrs.get(), _wgs84.get());
 
     if (_transform == nullptr)
