@@ -56,6 +56,8 @@ class OsmMap;
 
 /**
  * (Singleton)
+ *
+ * Note that OGRSpatialReference does not always play nicely with make_shared at GDAL 3.2.3.
  */
 class MapProjector
 {
