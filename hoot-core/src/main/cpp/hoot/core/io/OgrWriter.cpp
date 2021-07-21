@@ -114,13 +114,10 @@ _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
 
 OgrWriter::~OgrWriter()
 {
-  //_translator.reset();
   // Clearing things out here helps keep a geopackage file write from crashing inside GDAL.
   _ds.reset();
   _layers.clear();
   _projections.clear();
-  //_schema.reset();
-  //_elementCache.reset();
 }
 
 void OgrWriter::setConfiguration(const Settings& conf)
