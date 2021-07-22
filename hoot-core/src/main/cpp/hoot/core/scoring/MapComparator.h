@@ -53,12 +53,14 @@ public:
   void setIgnoreUUID() { _ignoreUUID = true; }
   void setUseDateTime() { _useDateTime = true; }
   void setErrorLimit(int limit) { _errorLimit = limit; }
+  void setIgnoreTagKeys(const QStringList& keys) { _ignoreTagKeys = keys; }
 
 private:
 
   bool _ignoreUUID;
   bool _useDateTime;
   int _errorLimit;
+  QStringList _ignoreTagKeys;
 
   void _printIdDiff(
     const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2,

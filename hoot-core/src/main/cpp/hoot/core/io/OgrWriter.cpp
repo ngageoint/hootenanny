@@ -620,6 +620,11 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
     {
       options["FEATURE_DATASET"] = layer->getFdName();
     }
+
+    if (name == QString("GPKG"))
+    {
+      options["OVERWRITE"] = "YES";
+    }
   }
 
   QString layerName = _prependLayerName + layer->getName();
