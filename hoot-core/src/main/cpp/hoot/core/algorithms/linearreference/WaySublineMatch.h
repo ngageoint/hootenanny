@@ -54,7 +54,6 @@ public:
   WaySublineCollection getSublineString2() const;
 
   bool isReverseMatch() const { return _reversed; }
-
   bool isValid() const { return _ws1.isValid() && _ws2.isValid(); }
 
   /**

@@ -43,9 +43,7 @@ class OsmNetworkExtractorTest : public HootTestFixture
 
 public:
 
-  OsmNetworkExtractorTest()
-    : HootTestFixture("test-files/conflate/network/",
-                      UNUSED_PATH)
+  OsmNetworkExtractorTest() : HootTestFixture("test-files/conflate/network/", UNUSED_PATH)
   {
   }
 
@@ -63,15 +61,15 @@ public:
     uut.setCriterion(std::make_shared<HighwayCriterion>(map));
     OsmNetworkPtr network = uut.extractNetwork(map);
 
-    //LOG_VAR(TestUtils::toQuotedString(network->toString()));
+    // Note 7/23/21: As a result of #4895, now believe that the untagged road belonging to the
+    // relation in the input is invalid and shouldn't be picked up by the network extractor.
     HOOT_STR_EQUALS("(0) Node(-169) -- Way(-247) -- (1) Node(-221)\n"
       "(2) Node(-175) -- Way(-245) -- (3) Node(-217)\n"
       "(4) Node(-165) -- Way(-243) -- (0) Node(-169)\n"
       "(5) Node(-229) -- Way(-241) -- (1) Node(-221)\n"
       "(6) Node(-171) -- Way(-239) -- (2) Node(-175)\n"
       "(1) Node(-221) -- Way(-237) -- (6) Node(-171)\n"
-      "(0) Node(-169) -- Way(-235) -- (2) Node(-175)\n"
-      "(6) Node(-171) -- Relation(-477) -- (7) Node(-233)",
+      "(0) Node(-169) -- Way(-235) -- (2) Node(-175)",
       network->toString());
   }
 };

@@ -29,7 +29,6 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
 
 namespace hoot
 {
@@ -51,9 +50,8 @@ void PointCriterion::setOsmMap(const OsmMap* map)
 bool PointCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
-  LOG_VART(ElementTypeCriterion(ElementType::Node).isSatisfied(e));
   LOG_VART(_wayNodeCrit.isSatisfied(e));
-  return ElementTypeCriterion(ElementType::Node).isSatisfied(e) && !_wayNodeCrit.isSatisfied(e);
+  return e->getElementType() == ElementType::Node && !_wayNodeCrit.isSatisfied(e);
 }
 
 }

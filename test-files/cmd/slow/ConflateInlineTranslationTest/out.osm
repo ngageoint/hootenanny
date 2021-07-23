@@ -951,7 +951,7 @@
     <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1277365449533399" lon="-97.7637000000822951"/>
     <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1269000000881562" lon="-97.7617269755744900"/>
     <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1331522167462751" lon="-97.7637000001202381"/>
-    <way visible="true" id="-2250" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2325" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-473"/>
         <nd ref="-472"/>
         <tag k="bridge" v="yes"/>
@@ -965,7 +965,7 @@
         <tag k="tiger:zip_left" v="76544"/>
         <tag k="tiger:zip_right" v="76544"/>
     </way>
-    <way visible="true" id="-358" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-352" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-490"/>
         <nd ref="-489"/>
         <nd ref="-488"/>
@@ -980,7 +980,7 @@
         <tag k="source" v="maxar"/>
         <tag k="surface" v="unpaved"/>
     </way>
-    <way visible="true" id="-355" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-349" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-926"/>
         <nd ref="-927"/>
         <nd ref="-928"/>
@@ -1686,15 +1686,6 @@
         <tag k="source:datetime" v="2019-02-20T21:49:05Z"/>
         <tag k="surface" v="paved"/>
     </way>
-    <way visible="true" id="-189" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-746"/>
-        <nd ref="-745"/>
-        <tag k="highway" v="service"/>
-        <tag k="service" v="parking_aisle"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2012-11-23T19:07:17Z"/>
-        <tag k="surface" v="paved"/>
-    </way>
     <way visible="true" id="-188" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-746"/>
         <nd ref="-743"/>
@@ -1766,8 +1757,8 @@
         <tag k="surface" v="paved"/>
     </way>
     <way visible="true" id="-182" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-720"/>
-        <nd ref="-745"/>
+        <nd ref="-711"/>
+        <nd ref="-706"/>
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Red Ball Road"/>
         <tag k="source" v="osm"/>
@@ -1800,8 +1791,8 @@
         <tag k="tiger:zip_right" v="76544"/>
     </way>
     <way visible="true" id="-179" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-720"/>
         <nd ref="-745"/>
-        <nd ref="-711"/>
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Red Ball Road"/>
         <tag k="source" v="osm"/>
@@ -1822,8 +1813,8 @@
         <tag k="tiger:zip_right" v="76544"/>
     </way>
     <way visible="true" id="-177" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-745"/>
         <nd ref="-711"/>
-        <nd ref="-706"/>
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Red Ball Road"/>
         <tag k="source" v="osm"/>
@@ -2274,6 +2265,18 @@
         <tag k="source" v="maxar"/>
         <tag k="surface" v="unpaved"/>
     </way>
+    <way visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-416"/>
+        <nd ref="-343"/>
+        <nd ref="-68"/>
+        <tag k="highway" v="residential"/>
+        <tag k="name" v="Sadowski Road"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:datetime" v="2014-08-28T14:13:38Z"/>
+        <tag k="surface" v="paved"/>
+        <tag k="tiger:zip_left" v="76544"/>
+        <tag k="tiger:zip_right" v="76544"/>
+    </way>
     <way visible="true" id="-128" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-579"/>
         <nd ref="-574"/>
@@ -2636,10 +2639,8 @@
         <tag k="surface" v="paved"/>
     </way>
     <way visible="true" id="-92" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-71"/>
         <nd ref="-313"/>
-        <nd ref="-160"/>
-        <nd ref="-159"/>
-        <nd ref="-178"/>
         <tag k="highway" v="residential"/>
         <tag k="name" v="South 37th Street"/>
         <tag k="source" v="osm"/>
@@ -2835,18 +2836,6 @@
         <tag k="tiger:zip_left" v="76544"/>
         <tag k="tiger:zip_right" v="76544"/>
     </way>
-    <way visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-416"/>
-        <nd ref="-343"/>
-        <nd ref="-68"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Sadowski Road"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2014-08-28T14:13:38Z"/>
-        <tag k="surface" v="paved"/>
-        <tag k="tiger:zip_left" v="76544"/>
-        <tag k="tiger:zip_right" v="76544"/>
-    </way>
     <way visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-398"/>
         <nd ref="-371"/>
@@ -2891,6 +2880,15 @@
         <tag k="name" v="Red Ball Road"/>
         <tag k="source" v="osm"/>
         <tag k="source:datetime" v="2019-02-20T21:49:05Z"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-746"/>
+        <nd ref="-745"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:datetime" v="2012-11-23T19:07:17Z"/>
         <tag k="surface" v="paved"/>
     </way>
     <way visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -3041,8 +3039,10 @@
         <tag k="tiger:zip_right" v="76544"/>
     </way>
     <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-71"/>
         <nd ref="-313"/>
+        <nd ref="-160"/>
+        <nd ref="-159"/>
+        <nd ref="-178"/>
         <tag k="highway" v="residential"/>
         <tag k="name" v="South 37th Street"/>
         <tag k="source" v="osm"/>

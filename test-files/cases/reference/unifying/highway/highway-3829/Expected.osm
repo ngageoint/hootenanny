@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="2.806" minlon="32.3346" maxlat="2.8173" maxlon="32.3433"/>
-    <node visible="true" id="-424925" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8150898755157683" lon="32.3374037158030774"/>
-    <node visible="true" id="-424923" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8152949410004648" lon="32.3403926399641648"/>
-    <node visible="true" id="-424920" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8155540985005816" lon="32.3402301652424811"/>
-    <node visible="true" id="-424918" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8154760323459680" lon="32.3402344215304893"/>
-    <node visible="true" id="-424913" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8152607220997909" lon="32.3403093741012455"/>
-    <node visible="true" id="-424911" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8161462082445272" lon="32.3399277996769214"/>
-    <node visible="true" id="-424909" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8157495372384846" lon="32.3353664252137918"/>
-    <node visible="true" id="-424906" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8159698059911644" lon="32.3351972999523127"/>
-    <node visible="true" id="-424903" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8080967135172923" lon="32.3427169675380242"/>
-    <node visible="true" id="-424899" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8075611645736709" lon="32.3404777475164877"/>
-    <node visible="true" id="-424894" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8100854186960569" lon="32.3391513397915915"/>
-    <node visible="true" id="-424890" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8130129626016838" lon="32.3402940862476100"/>
-    <node visible="true" id="-424885" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8141274184824727" lon="32.3415939916905515"/>
-    <node visible="true" id="-424880" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8137925662671086" lon="32.3406007959782400"/>
-    <node visible="true" id="-424879" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8137008760569704" lon="32.3402857586117136"/>
-    <node visible="true" id="-424875" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8120139623309459" lon="32.3363395295416680"/>
-    <node visible="true" id="-424873" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8138196646891065" lon="32.3373522763754835"/>
-    <node visible="true" id="-424868" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8093720321539863" lon="32.3379896434321665"/>
-    <node visible="true" id="-424865" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8137565399267381" lon="32.3432503234009587"/>
-    <node visible="true" id="-424863" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8166974899818262" lon="32.3385056378452234"/>
-    <node visible="true" id="-424859" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8161805833453353" lon="32.3395467312840665"/>
-    <node visible="true" id="-424856" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8109170729878579" lon="32.3386594299454728"/>
+    <node visible="true" id="-424916" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8150898755157683" lon="32.3374037158030774"/>
+    <node visible="true" id="-424914" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8152949410004648" lon="32.3403926399641648"/>
+    <node visible="true" id="-424911" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8155540985005816" lon="32.3402301652424811"/>
+    <node visible="true" id="-424909" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8154760323459680" lon="32.3402344215304893"/>
+    <node visible="true" id="-424904" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8152607220997909" lon="32.3403093741012455"/>
+    <node visible="true" id="-424902" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8161462082445272" lon="32.3399277996769214"/>
+    <node visible="true" id="-424900" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8157495372384846" lon="32.3353664252137918"/>
+    <node visible="true" id="-424897" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8159698059911644" lon="32.3351972999523127"/>
+    <node visible="true" id="-424894" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8080967135172923" lon="32.3427169675380242"/>
+    <node visible="true" id="-424887" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8100854186960569" lon="32.3391513397915915"/>
+    <node visible="true" id="-424883" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8130129626016838" lon="32.3402940862476100"/>
+    <node visible="true" id="-424878" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8141274184824727" lon="32.3415939916905515"/>
+    <node visible="true" id="-424873" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8137925662671086" lon="32.3406007959782400"/>
+    <node visible="true" id="-424872" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8137008760569704" lon="32.3402857586117136"/>
+    <node visible="true" id="-424868" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8120139623309459" lon="32.3363395295416680"/>
+    <node visible="true" id="-424866" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8138196646891065" lon="32.3373522763754835"/>
+    <node visible="true" id="-424861" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8093720321539863" lon="32.3379896434321665"/>
+    <node visible="true" id="-424858" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8137565399267381" lon="32.3432503234009587"/>
+    <node visible="true" id="-424856" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8166974899818262" lon="32.3385056378452234"/>
+    <node visible="true" id="-424852" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8161805833453353" lon="32.3395467312840665"/>
+    <node visible="true" id="-424849" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8109170729878579" lon="32.3386594299454728"/>
     <node visible="true" id="-424445" timestamp="2019-01-16T08:36:39Z" version="1" user="Ayerawaddy" uid="9090034" lat="2.8085863999999998" lon="32.3378760000000014"/>
     <node visible="true" id="-424444" timestamp="2019-01-16T08:36:39Z" version="1" user="Ayerawaddy" uid="9090034" lat="2.8087765999999998" lon="32.3378812999999994"/>
     <node visible="true" id="-424443" timestamp="2019-01-16T08:36:39Z" version="1" user="Ayerawaddy" uid="9090034" lat="2.8089802000000001" lon="32.3378933999999987"/>
@@ -662,14 +661,26 @@
     <node visible="true" id="-19424" timestamp="2020-02-20T19:51:41Z" version="1" lat="2.8152949750689999" lon="32.3403944354408992"/>
     <node visible="true" id="-19423" timestamp="2020-02-20T19:51:41Z" version="1" lat="2.8152935961977104" lon="32.3403217664145970"/>
     <node visible="true" id="-19422" timestamp="2020-02-20T19:51:41Z" version="1" lat="2.8152957424803202" lon="32.3403057138750967"/>
-    <way visible="true" id="-17169" timestamp="2019-01-04T01:26:59Z" version="1">
-        <nd ref="-424925"/>
+    <way visible="true" id="-17150" timestamp="2019-01-04T01:26:59Z" version="1">
+        <nd ref="-424916"/>
         <nd ref="-424413"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-04T01:26:59Z"/>
     </way>
-    <way visible="true" id="-17160" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-17141" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-282828"/>
+        <nd ref="-123094"/>
+        <nd ref="-123093"/>
+        <nd ref="-123092"/>
+        <nd ref="-123091"/>
+        <nd ref="-123090"/>
+        <nd ref="-123089"/>
+        <nd ref="-123088"/>
+        <nd ref="-123087"/>
+        <nd ref="-123086"/>
+        <nd ref="-123085"/>
+        <nd ref="-123084"/>
         <nd ref="-251495"/>
         <nd ref="-232484"/>
         <nd ref="-232483"/>
@@ -683,10 +694,10 @@
         <tag k="highway" v="tertiary"/>
         <tag k="horse" v="no"/>
         <tag k="name" v="Unyama Pageya Road"/>
-        <tag k="source:datetime" v="2019-01-22T08:57:24Z;2020-02-20T19:51:47Z"/>
+        <tag k="source:datetime" v="2019-01-22T08:57:24Z;2020-02-20T19:51:47Z;2020-02-20T19:51:49Z"/>
         <tag k="surface" v="paved"/>
     </way>
-    <way visible="true" id="-17155" timestamp="2020-02-20T19:51:47Z" version="1">
+    <way visible="true" id="-17136" timestamp="2020-02-20T19:51:47Z" version="1">
         <nd ref="-347591"/>
         <nd ref="-242726"/>
         <nd ref="-242727"/>
@@ -709,14 +720,14 @@
         <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-22T08:57:24Z;2020-02-20T19:51:45Z"/>
         <tag k="surface" v="paved"/>
     </way>
-    <way visible="true" id="-17136" timestamp="2019-01-03T01:43:02Z" version="3">
-        <nd ref="-424923"/>
-        <nd ref="-424913"/>
+    <way visible="true" id="-17117" timestamp="2019-01-03T01:43:02Z" version="3">
+        <nd ref="-424914"/>
+        <nd ref="-424904"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-03T01:43:02Z"/>
     </way>
-    <way visible="true" id="-17120" timestamp="2019-01-03T09:05:08Z" version="2">
+    <way visible="true" id="-17101" timestamp="2019-01-03T09:05:08Z" version="2">
         <nd ref="-280686"/>
         <nd ref="-424116"/>
         <nd ref="-424117"/>
@@ -724,7 +735,7 @@
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-03T09:05:08Z"/>
     </way>
-    <way visible="true" id="-17114" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-17095" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-266306"/>
         <nd ref="-421957"/>
         <nd ref="-421958"/>
@@ -739,8 +750,8 @@
         <tag k="source:datetime" v="2020-02-20T19:51:45Z;2019-01-22T08:57:24Z"/>
         <tag k="surface" v="paved"/>
     </way>
-    <way visible="true" id="-17112" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-424903"/>
+    <way visible="true" id="-17093" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-424894"/>
         <nd ref="-424104"/>
         <nd ref="-424102"/>
         <nd ref="-424421"/>
@@ -751,7 +762,7 @@
         <tag k="highway" v="path"/>
         <tag k="source:datetime" v="2019-01-17T09:12:55Z"/>
     </way>
-    <way visible="true" id="-17106" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-17087" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-424048"/>
         <nd ref="-136545"/>
         <nd ref="-136546"/>
@@ -763,7 +774,7 @@
         <tag k="source:datetime" v="2020-02-20T19:51:49Z;2019-11-13T19:13:38Z"/>
         <tag k="surface" v="paved"/>
     </way>
-    <way visible="true" id="-17104" timestamp="2019-01-19T08:25:38Z" version="4">
+    <way visible="true" id="-17085" timestamp="2019-01-19T08:25:38Z" version="4">
         <nd ref="-365548"/>
         <nd ref="-424372"/>
         <nd ref="-424371"/>
@@ -774,7 +785,7 @@
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-19T08:25:38Z"/>
     </way>
-    <way visible="true" id="-17102" timestamp="2020-02-20T19:51:45Z" version="1">
+    <way visible="true" id="-17083" timestamp="2020-02-20T19:51:45Z" version="1">
         <nd ref="-365540"/>
         <nd ref="-365541"/>
         <nd ref="-365542"/>
@@ -788,7 +799,7 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:45Z;2019-01-19T08:25:38Z"/>
     </way>
-    <way visible="true" id="-17099" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-17080" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-365540"/>
         <nd ref="-43356"/>
         <nd ref="-43357"/>
@@ -808,14 +819,14 @@
         <tag k="source:datetime" v="2020-02-20T19:51:50Z;2019-11-13T19:13:38Z"/>
         <tag k="surface" v="paved"/>
     </way>
-    <way visible="true" id="-17096" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-17077" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-328806"/>
         <nd ref="-424052"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:50Z;2019-01-03T02:53:18Z"/>
     </way>
-    <way visible="true" id="-17092" timestamp="2020-02-20T19:51:46Z" version="1">
+    <way visible="true" id="-17073" timestamp="2020-02-20T19:51:46Z" version="1">
         <nd ref="-328803"/>
         <nd ref="-328804"/>
         <nd ref="-328805"/>
@@ -824,7 +835,7 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:46Z;2019-01-03T02:53:18Z"/>
     </way>
-    <way visible="true" id="-17089" timestamp="2020-02-20T19:51:48Z" version="1">
+    <way visible="true" id="-17070" timestamp="2020-02-20T19:51:48Z" version="1">
         <nd ref="-266404"/>
         <nd ref="-196382"/>
         <nd ref="-196383"/>
@@ -842,18 +853,6 @@
         <nd ref="-196395"/>
         <nd ref="-196396"/>
         <nd ref="-196397"/>
-        <nd ref="-424899"/>
-        <nd ref="-266014"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="foot" v="yes"/>
-        <tag k="highway" v="road"/>
-        <tag k="horse" v="no"/>
-        <tag k="name" v="Unyama Pageya Road"/>
-        <tag k="source:datetime" v="2020-02-20T19:51:48Z;2019-01-22T08:57:24Z"/>
-        <tag k="surface" v="paved"/>
-    </way>
-    <way visible="true" id="-17081" timestamp="2020-02-20T19:51:47Z" version="1">
         <nd ref="-266014"/>
         <nd ref="-265864"/>
         <nd ref="-265865"/>
@@ -869,10 +868,10 @@
         <tag k="highway" v="road"/>
         <tag k="horse" v="no"/>
         <tag k="name" v="Unyama Pageya Road"/>
-        <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-22T08:57:24Z"/>
+        <tag k="source:datetime" v="2020-02-20T19:51:48Z;2019-01-22T08:57:24Z;2020-02-20T19:51:47Z"/>
         <tag k="surface" v="paved"/>
     </way>
-    <way visible="true" id="-17078" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-17063" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-424043"/>
         <nd ref="-291695"/>
         <nd ref="-291696"/>
@@ -891,7 +890,7 @@
         <tag k="source:datetime" v="2020-02-20T19:51:46Z;2019-01-16T07:51:17Z"/>
         <tag k="surface" v="unpaved"/>
     </way>
-    <way visible="true" id="-17074" timestamp="2020-02-20T19:51:47Z" version="1">
+    <way visible="true" id="-17059" timestamp="2020-02-20T19:51:47Z" version="1">
         <nd ref="-291706"/>
         <nd ref="-266287"/>
         <nd ref="-266288"/>
@@ -918,7 +917,7 @@
         <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-16T07:51:17Z"/>
         <tag k="surface" v="unpaved"/>
     </way>
-    <way visible="true" id="-17072" timestamp="2019-01-04T01:26:59Z" version="1">
+    <way visible="true" id="-17057" timestamp="2019-01-04T01:26:59Z" version="1">
         <nd ref="-266389"/>
         <nd ref="-424403"/>
         <tag k="error:circular" v="15"/>
@@ -926,7 +925,7 @@
         <tag k="note" v="check_me"/>
         <tag k="source:datetime" v="2019-01-04T01:26:59Z"/>
     </way>
-    <way visible="true" id="-17065" timestamp="2020-02-20T19:51:47Z" version="1">
+    <way visible="true" id="-17050" timestamp="2020-02-20T19:51:47Z" version="1">
         <nd ref="-282828"/>
         <nd ref="-282829"/>
         <nd ref="-282830"/>
@@ -939,13 +938,13 @@
         <nd ref="-282837"/>
         <nd ref="-282838"/>
         <nd ref="-282839"/>
-        <nd ref="-424890"/>
+        <nd ref="-424883"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-03T02:53:18Z"/>
     </way>
-    <way visible="true" id="-17062" timestamp="2020-02-20T19:51:47Z" version="1">
-        <nd ref="-424880"/>
+    <way visible="true" id="-17047" timestamp="2020-02-20T19:51:47Z" version="1">
+        <nd ref="-424873"/>
         <nd ref="-282848"/>
         <nd ref="-282849"/>
         <nd ref="-282850"/>
@@ -965,32 +964,32 @@
         <nd ref="-282864"/>
         <nd ref="-282865"/>
         <nd ref="-282866"/>
-        <nd ref="-424885"/>
+        <nd ref="-424878"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:47Z;2018-06-05T15:27:39Z"/>
     </way>
-    <way visible="true" id="-17057" timestamp="2019-01-03T02:53:20Z" version="2">
-        <nd ref="-424890"/>
+    <way visible="true" id="-17042" timestamp="2019-01-03T02:53:20Z" version="2">
+        <nd ref="-424883"/>
         <nd ref="-424293"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-03T02:53:18Z;2019-01-03T02:53:20Z"/>
     </way>
-    <way visible="true" id="-17054" timestamp="2020-02-20T19:51:47Z" version="1">
-        <nd ref="-424890"/>
+    <way visible="true" id="-17039" timestamp="2020-02-20T19:51:47Z" version="1">
+        <nd ref="-424883"/>
         <nd ref="-282840"/>
         <nd ref="-282841"/>
         <nd ref="-282842"/>
         <nd ref="-282843"/>
         <nd ref="-282844"/>
-        <nd ref="-424879"/>
+        <nd ref="-424872"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-03T02:53:20Z"/>
     </way>
-    <way visible="true" id="-17047" timestamp="2020-02-20T19:51:47Z" version="1">
-        <nd ref="-424885"/>
+    <way visible="true" id="-17032" timestamp="2020-02-20T19:51:47Z" version="1">
+        <nd ref="-424878"/>
         <nd ref="-282867"/>
         <nd ref="-282868"/>
         <nd ref="-282869"/>
@@ -999,30 +998,7 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:47Z;2018-06-05T15:27:38Z"/>
     </way>
-    <way visible="true" id="-17036" timestamp="2020-02-20T19:51:49Z" version="1">
-        <nd ref="-251495"/>
-        <nd ref="-123084"/>
-        <nd ref="-123085"/>
-        <nd ref="-123086"/>
-        <nd ref="-123087"/>
-        <nd ref="-123088"/>
-        <nd ref="-123089"/>
-        <nd ref="-123090"/>
-        <nd ref="-123091"/>
-        <nd ref="-123092"/>
-        <nd ref="-123093"/>
-        <nd ref="-123094"/>
-        <nd ref="-282828"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="foot" v="yes"/>
-        <tag k="highway" v="road"/>
-        <tag k="horse" v="no"/>
-        <tag k="name" v="Unyama Pageya Road"/>
-        <tag k="source:datetime" v="2020-02-20T19:51:49Z;2019-01-22T08:57:24Z"/>
-        <tag k="surface" v="paved"/>
-    </way>
-    <way visible="true" id="-17033" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-17018" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-424042"/>
         <nd ref="-371800"/>
         <nd ref="-371801"/>
@@ -1050,13 +1026,13 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:45Z;2019-01-23T03:33:03Z"/>
     </way>
-    <way visible="true" id="-17029" timestamp="2020-02-20T19:51:47Z" version="1">
+    <way visible="true" id="-17014" timestamp="2020-02-20T19:51:47Z" version="1">
         <nd ref="-371821"/>
         <nd ref="-224405"/>
         <nd ref="-224406"/>
         <nd ref="-224407"/>
         <nd ref="-224408"/>
-        <nd ref="-424875"/>
+        <nd ref="-424868"/>
         <nd ref="-224409"/>
         <nd ref="-224410"/>
         <nd ref="-224411"/>
@@ -1081,7 +1057,7 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-23T03:33:03Z"/>
     </way>
-    <way visible="true" id="-17009" timestamp="2019-01-16T08:36:40Z" version="3">
+    <way visible="true" id="-16994" timestamp="2019-01-16T08:36:40Z" version="3">
         <nd ref="-232479"/>
         <nd ref="-266404"/>
         <tag k="bicycle" v="yes"/>
@@ -1091,10 +1067,10 @@
         <tag k="horse" v="no"/>
         <tag k="name" v="Unyama Pageya Road"/>
         <tag k="note" v="check_me"/>
-        <tag k="source:datetime" v="2019-01-16T08:36:40Z;2019-01-22T08:57:24Z;2020-02-20T19:51:47Z;2020-02-20T19:51:48Z"/>
+        <tag k="source:datetime" v="2019-01-16T08:36:40Z;2019-01-22T08:57:24Z;2020-02-20T19:51:47Z;2020-02-20T19:51:49Z;2020-02-20T19:51:48Z"/>
         <tag k="surface" v="paved"/>
     </way>
-    <way visible="true" id="-17007" timestamp="2020-02-20T19:51:48Z" version="1">
+    <way visible="true" id="-16992" timestamp="2020-02-20T19:51:48Z" version="1">
         <nd ref="-232479"/>
         <nd ref="-159607"/>
         <nd ref="-159608"/>
@@ -1107,15 +1083,15 @@
         <tag k="note" v="check_me"/>
         <tag k="source:datetime" v="2020-02-20T19:51:48Z;2019-01-16T08:36:40Z"/>
     </way>
-    <way visible="true" id="-17003" timestamp="2019-01-16T08:36:40Z" version="3">
+    <way visible="true" id="-16988" timestamp="2019-01-16T08:36:40Z" version="3">
         <nd ref="-424395"/>
-        <nd ref="-424868"/>
+        <nd ref="-424861"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="note" v="check_me"/>
         <tag k="source:datetime" v="2019-01-16T08:36:40Z"/>
     </way>
-    <way visible="true" id="-16997" timestamp="2020-02-20T19:51:46Z" version="1">
+    <way visible="true" id="-16982" timestamp="2020-02-20T19:51:46Z" version="1">
         <nd ref="-297616"/>
         <nd ref="-297617"/>
         <nd ref="-297618"/>
@@ -1142,7 +1118,7 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:46Z;2019-01-03T02:53:20Z"/>
     </way>
-    <way visible="true" id="-16982" timestamp="2020-02-20T19:51:46Z" version="1">
+    <way visible="true" id="-16967" timestamp="2020-02-20T19:51:46Z" version="1">
         <nd ref="-347589"/>
         <nd ref="-347590"/>
         <nd ref="-347591"/>
@@ -1155,15 +1131,15 @@
         <tag k="source:datetime" v="2020-02-20T19:51:46Z;2019-01-22T08:57:24Z"/>
         <tag k="surface" v="paved"/>
     </way>
-    <way visible="true" id="-16980" timestamp="2019-01-03T01:43:02Z" version="3">
-        <nd ref="-424859"/>
-        <nd ref="-424859"/>
+    <way visible="true" id="-16965" timestamp="2019-01-03T01:43:02Z" version="3">
+        <nd ref="-424852"/>
+        <nd ref="-424852"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-03T01:43:02Z"/>
     </way>
-    <way visible="true" id="-16979" timestamp="2019-01-03T01:43:02Z" version="3">
-        <nd ref="-424863"/>
+    <way visible="true" id="-16964" timestamp="2019-01-03T01:43:02Z" version="3">
+        <nd ref="-424856"/>
         <nd ref="-257960"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
@@ -1187,20 +1163,20 @@
         <nd ref="-279401"/>
         <nd ref="-424273"/>
         <nd ref="-424284"/>
-        <nd ref="-424923"/>
+        <nd ref="-424914"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-03T01:43:02Z"/>
     </way>
     <way visible="true" id="-16050" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-424865"/>
+        <nd ref="-424858"/>
         <nd ref="-424066"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-03T02:53:20Z"/>
     </way>
     <way visible="true" id="-16045" timestamp="2019-01-03T01:41:35Z" version="2">
-        <nd ref="-424880"/>
+        <nd ref="-424873"/>
         <nd ref="-424186"/>
         <nd ref="-424163"/>
         <tag k="error:circular" v="15"/>
@@ -1208,9 +1184,9 @@
         <tag k="source:datetime" v="2019-01-03T01:41:35Z"/>
     </way>
     <way visible="true" id="-16040" timestamp="2019-01-03T01:43:02Z" version="3">
-        <nd ref="-424918"/>
+        <nd ref="-424909"/>
         <nd ref="-424196"/>
-        <nd ref="-424920"/>
+        <nd ref="-424911"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-03T01:43:02Z"/>
@@ -1229,7 +1205,7 @@
     </way>
     <way visible="true" id="-16038" timestamp="2019-01-04T01:26:59Z" version="1" user="likes2map" uid="8392813">
         <nd ref="-424074"/>
-        <nd ref="-424873"/>
+        <nd ref="-424866"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-04T01:26:59Z"/>
@@ -1273,7 +1249,7 @@
         <tag k="source:datetime" v="2019-01-03T01:41:33Z"/>
     </way>
     <way visible="true" id="-16027" timestamp="2018-06-05T15:27:39Z" version="1" user="Siobhan Corbett" uid="8376937">
-        <nd ref="-424920"/>
+        <nd ref="-424911"/>
         <nd ref="-424247"/>
         <nd ref="-424248"/>
         <nd ref="-424249"/>
@@ -1298,7 +1274,7 @@
         <nd ref="-424242"/>
         <nd ref="-424243"/>
         <nd ref="-424244"/>
-        <nd ref="-424918"/>
+        <nd ref="-424909"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="path"/>
         <tag k="source:datetime" v="2018-06-05T15:27:39Z"/>
@@ -1330,7 +1306,7 @@
         <tag k="source:datetime" v="2018-06-05T15:27:39Z"/>
     </way>
     <way visible="true" id="-16022" timestamp="2018-06-05T15:27:39Z" version="1" user="Siobhan Corbett" uid="8376937">
-        <nd ref="-424911"/>
+        <nd ref="-424902"/>
         <nd ref="-424211"/>
         <nd ref="-424212"/>
         <tag k="error:circular" v="15"/>
@@ -1350,7 +1326,7 @@
         <nd ref="-424180"/>
         <nd ref="-424181"/>
         <nd ref="-424182"/>
-        <nd ref="-424879"/>
+        <nd ref="-424872"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="path"/>
         <tag k="source:datetime" v="2019-01-03T01:41:35Z"/>
@@ -1416,7 +1392,7 @@
         <tag k="source:datetime" v="2019-01-03T09:05:08Z"/>
     </way>
     <way visible="true" id="-16009" timestamp="2019-01-03T09:05:08Z" version="2" user="likes2map" uid="8392813">
-        <nd ref="-424909"/>
+        <nd ref="-424900"/>
         <nd ref="-424120"/>
         <nd ref="-424121"/>
         <nd ref="-424122"/>
@@ -1426,7 +1402,7 @@
         <tag k="source:datetime" v="2019-01-03T09:05:08Z"/>
     </way>
     <way visible="true" id="-16008" timestamp="2019-01-03T09:05:08Z" version="3" user="likes2map" uid="8392813">
-        <nd ref="-424906"/>
+        <nd ref="-424897"/>
         <nd ref="-424118"/>
         <nd ref="-424302"/>
         <nd ref="-424303"/>
@@ -1442,14 +1418,14 @@
         <tag k="source:datetime" v="2019-01-17T09:12:55Z"/>
     </way>
     <way visible="true" id="-16000" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-424865"/>
+        <nd ref="-424858"/>
         <nd ref="-424062"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="path"/>
         <tag k="source:datetime" v="2019-01-03T01:41:35Z"/>
     </way>
     <way visible="true" id="-15998" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-424875"/>
+        <nd ref="-424868"/>
         <nd ref="-424356"/>
         <nd ref="-424355"/>
         <nd ref="-424354"/>
@@ -1526,7 +1502,7 @@
         <nd ref="-103291"/>
         <nd ref="-103292"/>
         <nd ref="-103293"/>
-        <nd ref="-424865"/>
+        <nd ref="-424858"/>
         <nd ref="-424049"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
@@ -1541,7 +1517,7 @@
         <nd ref="-215552"/>
         <nd ref="-215553"/>
         <nd ref="-215554"/>
-        <nd ref="-424863"/>
+        <nd ref="-424856"/>
         <nd ref="-215555"/>
         <nd ref="-215556"/>
         <nd ref="-347589"/>
@@ -1600,7 +1576,7 @@
         <nd ref="-265997"/>
         <nd ref="-265998"/>
         <nd ref="-265999"/>
-        <nd ref="-424903"/>
+        <nd ref="-424894"/>
         <nd ref="-266000"/>
         <nd ref="-266001"/>
         <nd ref="-266002"/>
@@ -1637,7 +1613,7 @@
         <nd ref="-289238"/>
         <nd ref="-289239"/>
         <nd ref="-289240"/>
-        <nd ref="-424925"/>
+        <nd ref="-424916"/>
         <nd ref="-289241"/>
         <nd ref="-289242"/>
         <nd ref="-289243"/>
@@ -1647,11 +1623,11 @@
         <tag k="source:datetime" v="2020-02-20T19:51:46Z;2019-01-04T01:26:59Z"/>
     </way>
     <way visible="true" id="-10248" timestamp="2020-02-20T19:51:47Z" version="1">
-        <nd ref="-424879"/>
+        <nd ref="-424872"/>
         <nd ref="-282845"/>
         <nd ref="-282846"/>
         <nd ref="-282847"/>
-        <nd ref="-424880"/>
+        <nd ref="-424873"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-03T01:41:35Z"/>
@@ -1662,9 +1638,9 @@
         <nd ref="-280680"/>
         <nd ref="-280681"/>
         <nd ref="-280682"/>
-        <nd ref="-424909"/>
+        <nd ref="-424900"/>
         <nd ref="-280683"/>
-        <nd ref="-424906"/>
+        <nd ref="-424897"/>
         <nd ref="-280684"/>
         <nd ref="-280685"/>
         <nd ref="-280686"/>
@@ -1699,7 +1675,7 @@
         <nd ref="-279401"/>
         <nd ref="-279402"/>
         <nd ref="-279403"/>
-        <nd ref="-424913"/>
+        <nd ref="-424904"/>
         <nd ref="-279404"/>
         <nd ref="-279405"/>
         <nd ref="-279406"/>
@@ -1708,8 +1684,8 @@
         <nd ref="-257937"/>
         <nd ref="-257938"/>
         <nd ref="-257939"/>
-        <nd ref="-424918"/>
-        <nd ref="-424920"/>
+        <nd ref="-424909"/>
+        <nd ref="-424911"/>
         <nd ref="-257940"/>
         <nd ref="-257941"/>
         <nd ref="-257942"/>
@@ -1720,7 +1696,7 @@
         <nd ref="-257947"/>
         <nd ref="-257948"/>
         <nd ref="-257949"/>
-        <nd ref="-424911"/>
+        <nd ref="-424902"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-03T01:43:02Z"/>
@@ -1741,7 +1717,7 @@
         <nd ref="-266401"/>
         <nd ref="-266402"/>
         <nd ref="-266403"/>
-        <nd ref="-424894"/>
+        <nd ref="-424887"/>
         <nd ref="-266404"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
@@ -1751,7 +1727,7 @@
     <way visible="true" id="-9643" timestamp="2020-02-20T19:51:47Z" version="1">
         <nd ref="-265959"/>
         <nd ref="-265960"/>
-        <nd ref="-424868"/>
+        <nd ref="-424861"/>
         <nd ref="-265961"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
@@ -1759,14 +1735,14 @@
         <tag k="source:datetime" v="2020-02-20T19:51:47Z;2019-01-16T08:36:40Z"/>
     </way>
     <way visible="true" id="-9401" timestamp="2020-02-20T19:51:47Z" version="1">
-        <nd ref="-424911"/>
+        <nd ref="-424902"/>
         <nd ref="-257950"/>
         <nd ref="-257951"/>
         <nd ref="-257952"/>
         <nd ref="-257953"/>
         <nd ref="-257954"/>
         <nd ref="-257955"/>
-        <nd ref="-424859"/>
+        <nd ref="-424852"/>
         <nd ref="-257956"/>
         <nd ref="-257957"/>
         <nd ref="-257958"/>
@@ -1778,7 +1754,7 @@
     </way>
     <way visible="true" id="-9145" timestamp="2020-02-20T19:51:47Z" version="1">
         <nd ref="-251495"/>
-        <nd ref="-424856"/>
+        <nd ref="-424849"/>
         <nd ref="-251496"/>
         <nd ref="-251497"/>
         <nd ref="-251498"/>
@@ -1797,7 +1773,7 @@
         <nd ref="-224430"/>
         <nd ref="-224431"/>
         <nd ref="-224432"/>
-        <nd ref="-424873"/>
+        <nd ref="-424866"/>
         <nd ref="-224433"/>
         <nd ref="-224434"/>
         <nd ref="-224435"/>
@@ -1829,7 +1805,7 @@
         <nd ref="-279406"/>
         <nd ref="-19422"/>
         <nd ref="-19423"/>
-        <nd ref="-424923"/>
+        <nd ref="-424914"/>
         <nd ref="-19424"/>
         <nd ref="-19425"/>
         <nd ref="-19426"/>

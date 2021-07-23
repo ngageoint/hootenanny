@@ -486,8 +486,8 @@ long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
     LOG_DEBUG("\t" << wayJoiner.getCompletedStatusMessage());
     OsmMapWriterFactory::writeDebugMap(_map, className(), "after-way-joining");
 
-    // No point in running way joining a second time in post conflate ops since we already did it here
-    // (its configured in post ops by default), so let's remove it.
+    // No point in running way joining a second time in post conflate ops since we already did it
+    // here (its configured in post ops by default), so let's remove it.
     ConfigUtils::removeListOpEntry(
       ConfigOptions::getConflatePostOpsKey(), WayJoinerOp::className());
   }
@@ -553,7 +553,7 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
   }
 
   LOG_TRACE(
-    "\tRemoved " << StringUtils::formatLargeNumber(mapSizeBefore -_map->size()) <<
+    "\tRemoved " << StringUtils::formatLargeNumber(mapSizeBefore - _map->size()) <<
     " match elements completely with status: " << status.toString() << "...");
   OsmMapWriterFactory::writeDebugMap(
     _map, className(), "after-removing-" + status.toString() + "-matches");

@@ -1136,7 +1136,7 @@ inputs (false).
 
 This is the minimum valid manipulation score in the legacy greedy optimization routine. Setting
 the value lower will create more (likely overzealous) matches. Setting the value higher will drop
-less confident matches.
+less confident matches. TODO: rename this
 
 === contains.node.criterion.id
 

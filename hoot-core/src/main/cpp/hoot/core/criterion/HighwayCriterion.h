@@ -44,8 +44,8 @@ public:
 
   static QString className() { return "hoot::HighwayCriterion"; }
 
-  HighwayCriterion() = default;
-  HighwayCriterion(ConstOsmMapPtr map);
+  HighwayCriterion(const bool includeRelations = false);
+  HighwayCriterion(ConstOsmMapPtr map, const bool includeRelations = false);
   ~HighwayCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
@@ -65,6 +65,12 @@ public:
 private:
 
   ConstOsmMapPtr _map;
+  // Determines whether we count relations with a highway tag as highways. The main reason we'd want
+  // to for conflate is to handle untagged roads in a tagged highway relation. *However*, its still
+  // not clear if that situation is valid OSM data. Therefore, have added this switch to allow us
+  // to switch back to the original behavior of allowing highway relations to be roads. If the
+  // aforementioned situation definitely turns out to be invalid OSM, then this var can be removed.
+  bool _includeRelations;
 };
 
 }

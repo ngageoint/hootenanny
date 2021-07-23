@@ -43,7 +43,9 @@ class OneWayRoadStandardizerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OneWayRoadStandardizerTest);
   CPPUNIT_TEST(runWayTest);
-  CPPUNIT_TEST(runRelationTest);
+  // #4895 basically invalidates this test. Leaving the test code in with the test deactivated for
+  // awhile until #4895 has been proven to be a correct solution.
+  //CPPUNIT_TEST(runRelationTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
