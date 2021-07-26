@@ -98,7 +98,7 @@ public:
 
 private:
 
-  void _processUniformGrid(QStringList& args)
+  void _processUniformGrid(QStringList& args) const
   {
     if (args.size() < 3)
     {
@@ -159,7 +159,7 @@ private:
     }
   }
 
-  void _processNodeDensityGrid(QStringList& args)
+  void _processNodeDensityGrid(QStringList& args) const
   {
     // optional parameters
 

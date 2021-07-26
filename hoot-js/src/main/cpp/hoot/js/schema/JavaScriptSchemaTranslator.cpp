@@ -93,7 +93,7 @@ JavaScriptSchemaTranslator::~JavaScriptSchemaTranslator()
 }
 
 vector<JavaScriptSchemaTranslator::TranslatedFeature> JavaScriptSchemaTranslator::_createAllFeatures(
-  const QVariantList& list)
+  const QVariantList& list) const
 {
   vector<TranslatedFeature> result;
   result.reserve(list.size());
@@ -155,8 +155,7 @@ std::shared_ptr<Feature> JavaScriptSchemaTranslator::_createFeature(const QVaria
 
   QVariantMap attrs = vm["attrs"].toMap();
 
-  std::shared_ptr<Feature> result(new Feature(layer->getFeatureDefinition()));
-
+  std::shared_ptr<Feature> result = std::make_shared<Feature>(layer->getFeatureDefinition());
 
   for (QVariantMap::const_iterator it = attrs.begin(); it != attrs.end(); ++it)
   {
@@ -211,11 +210,11 @@ void JavaScriptSchemaTranslator::_finalize()
 
 void JavaScriptSchemaTranslator::_init()
 {
-  //This can be a costly operation, hence putting it at INFO for runtime awareness purposes.
+  // This can be a costly operation, hence putting it at INFO for runtime awareness purposes.
   LOG_INFO("Loading translation script: " << _scriptPath << "...");
 
   _error = false;
-  _gContext.reset(new PluginContext());
+  _gContext = std::make_shared<PluginContext>();
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
@@ -346,7 +345,7 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
 
     if (schemaJs->IsArray())
     {
-      std::shared_ptr<Schema> schema(new Schema());
+      std::shared_ptr<Schema> schema = std::make_shared<Schema>();
       QVariantList schemaV = toCpp<QVariant>(schemaJs).toList();
 
       for (int i = 0; i < schemaV.size(); ++i)
@@ -365,9 +364,8 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
   return _schema;
 }
 
-void JavaScriptSchemaTranslator::_parseEnumerations(DoubleFieldDefinition* fd,
-                                                    QVariant& enumerations)
-  const
+void JavaScriptSchemaTranslator::_parseEnumerations(
+  std::shared_ptr<DoubleFieldDefinition> fd, const QVariant& enumerations) const
 {
   if (enumerations.canConvert(QVariant::List) == false)
   {
@@ -408,9 +406,8 @@ void JavaScriptSchemaTranslator::_parseEnumerations(DoubleFieldDefinition* fd,
   }
 }
 
-void JavaScriptSchemaTranslator::_parseEnumerations(IntegerFieldDefinition *fd,
-                                                    QVariant& enumerations)
-  const
+void JavaScriptSchemaTranslator::_parseEnumerations(
+  std::shared_ptr<IntegerFieldDefinition> fd, const QVariant& enumerations) const
 {
   if (enumerations.canConvert(QVariant::List) == false)
   {
@@ -451,9 +448,8 @@ void JavaScriptSchemaTranslator::_parseEnumerations(IntegerFieldDefinition *fd,
   }
 }
 
-void JavaScriptSchemaTranslator::_parseEnumerations(LongIntegerFieldDefinition* fd,
-                                                    QVariant& enumerations)
-  const
+void JavaScriptSchemaTranslator::_parseEnumerations(
+  std::shared_ptr<LongIntegerFieldDefinition> fd, const QVariant& enumerations) const
 {
   if (enumerations.canConvert(QVariant::List) == false)
   {
@@ -514,8 +510,7 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
 
   if (type == "string")
   {
-    StringFieldDefinition* fd = new StringFieldDefinition();
-    result.reset(fd);
+    std::shared_ptr<StringFieldDefinition> fd = std::make_shared<StringFieldDefinition>();
 
     if (map.contains("defValue"))
     {
@@ -532,11 +527,12 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     {
       fd->setWidth(_toInt32(map["length"]));
     }
+
+    result = fd;
   }
   else if (type == "double" || type == "real")
   {
-    DoubleFieldDefinition* fd = new DoubleFieldDefinition();
-    result.reset(fd);
+    std::shared_ptr<DoubleFieldDefinition> fd = std::make_shared<DoubleFieldDefinition>();
 
     if (map.contains("defValue"))
     {
@@ -562,11 +558,12 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     {
       _parseEnumerations(fd, map["enumerations"]);
     }
+
+    result = fd;
   }
   else if (type == "enumeration" || type == "integer")
   {
-    IntegerFieldDefinition* fd = new IntegerFieldDefinition();
-    result.reset(fd);
+    std::shared_ptr<IntegerFieldDefinition> fd = std::make_shared<IntegerFieldDefinition>();
 
     if (map.contains("defValue"))
     {
@@ -592,11 +589,12 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     {
       _parseEnumerations(fd, map["enumerations"]);
     }
+
+    result = fd;
   }
   else if (type == "long integer")
   {
-    LongIntegerFieldDefinition* fd = new LongIntegerFieldDefinition();
-    result.reset(fd);
+    std::shared_ptr<LongIntegerFieldDefinition> fd = std::make_shared<LongIntegerFieldDefinition>();
 
     if (map.contains("defValue"))
     {
@@ -621,6 +619,8 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     {
       _parseEnumerations(fd, map["enumerations"]);
     }
+
+    result = fd;
   }
   else
   {
@@ -654,7 +654,7 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
 
 std::shared_ptr<Layer> JavaScriptSchemaTranslator::_parseLayer(const QVariant& layer) const
 {
-  std::shared_ptr<Layer> newLayer(new Layer());
+  std::shared_ptr<Layer> newLayer = std::make_shared<Layer>();
 
   if (layer.canConvert(QVariant::Map) == false)
   {
@@ -663,14 +663,14 @@ std::shared_ptr<Layer> JavaScriptSchemaTranslator::_parseLayer(const QVariant& l
 
   QVariantMap map = layer.toMap();
 
-  // parse out the name of the layer.
+  // Parse out the name of the layer.
   if (map.contains("name") == false)
   {
     throw HootException("Expected layer to contain a name.");
   }
   newLayer->setName(map["name"].toString());
 
-  // parse out the geometry portion of the layer.
+  // Parse out the geometry portion of the layer.
   if (map.contains("geom") == false)
   {
     throw HootException(QString("Expected layer (%1) to contain a geom.").arg(newLayer->getName()));
@@ -708,7 +708,7 @@ std::shared_ptr<Layer> JavaScriptSchemaTranslator::_parseLayer(const QVariant& l
   }
   set<QString> names;
   QVariantList columns = columnsV.toList();
-  std::shared_ptr<FeatureDefinition> dfd(new FeatureDefinition());
+  std::shared_ptr<FeatureDefinition> dfd = std::make_shared<FeatureDefinition>();
   for (int i = 0; i < columns.size(); i++)
   {
     std::shared_ptr<FieldDefinition> fd = _parseFieldDefinition(columns[i]);
@@ -796,8 +796,8 @@ vector<Tags> JavaScriptSchemaTranslator::translateToOgrTags(Tags& tags, ElementT
   return result;
 }
 
-QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
-  ElementType elementType, geos::geom::GeometryTypeId geometryType)
+QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(
+  Tags& tags, ElementType elementType, geos::geom::GeometryTypeId geometryType)
 {
   _tags = &tags;
 
@@ -901,8 +901,8 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
   return result;
 }
 
-void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName,
-                                                 const char* geomType)
+void JavaScriptSchemaTranslator::_translateToOsm(
+  Tags& t, const char* layerName, const char* geomType)
 {
   LOG_VART(_toOsmFunctionName);
   LOG_VART(layerName);

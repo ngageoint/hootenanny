@@ -95,6 +95,7 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   bool hasTypes() const { return !_typeKeys.isEmpty() || !_typeKvps.isEmpty(); }
+
   void setTypes(const QStringList& types);
 
 private:

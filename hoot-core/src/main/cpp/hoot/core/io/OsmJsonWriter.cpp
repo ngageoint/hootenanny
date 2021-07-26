@@ -253,7 +253,7 @@ void OsmJsonWriter::_writeNodes()
     _write("}", false);
 
     _numWritten++;
-    if (_numWritten % (_statusUpdateInterval) == 0)
+    if (_numWritten % _statusUpdateInterval == 0)
     {
       PROGRESS_INFO(
         "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
@@ -296,7 +296,7 @@ void OsmJsonWriter::_writeTag(const QString& key, const QString& value, bool& fi
 
 void OsmJsonWriter::_writeTags(const ConstElementPtr& e)
 {
-  ElementPtr eClone(e->clone());
+  ElementPtr eClone = e->clone();
   _addExportTagsVisitor.visit(eClone);
 
   bool firstTag = true;
@@ -370,7 +370,7 @@ void OsmJsonWriter::_writeWays()
     _write("}", false);
 
     _numWritten++;
-    if (_numWritten % (_statusUpdateInterval) == 0)
+    if (_numWritten % _statusUpdateInterval == 0)
     {
       PROGRESS_INFO(
         "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
@@ -439,7 +439,7 @@ void OsmJsonWriter::_writeRelations()
     _write("}", false);
 
     _numWritten++;
-    if (_numWritten % (_statusUpdateInterval) == 0)
+    if (_numWritten % _statusUpdateInterval == 0)
     {
       PROGRESS_INFO(
         "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");

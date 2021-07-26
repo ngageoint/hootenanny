@@ -47,7 +47,7 @@ public:
   ~RelationWithPoiMembersCriterion() = default;
 
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new RelationWithPoiMembersCriterion()); }
+  { return std::make_shared<RelationWithPoiMembersCriterion>(); }
 
   QString getCriterion() const override;
 

@@ -209,8 +209,8 @@ private:
       implementation = ConfigOptions().getChangesetReplacementCutOnlyImplementation();
     }
     LOG_VARD(implementation);
-    std::shared_ptr<ChangesetReplacement> changesetCreator(
-      Factory::getInstance().constructObject<ChangesetReplacement>(implementation));
+    std::shared_ptr<ChangesetReplacement> changesetCreator =
+      Factory::getInstance().constructObject<ChangesetReplacement>(implementation);
     changesetCreator->setFullReplacement(true);
     ChangesetReplacement::BoundsInterpretation boundInterpretation =
       ChangesetReplacement::BoundsInterpretation::Lenient;

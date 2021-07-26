@@ -56,13 +56,9 @@ public:
   ~NonConflatableCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<NonConflatableCriterion>(_map); }
 
   void setConfiguration(const Settings& conf) override;
-
-  ElementCriterionPtr clone() override
-  {
-    return ElementCriterionPtr(new NonConflatableCriterion(_map));
-  }
 
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 

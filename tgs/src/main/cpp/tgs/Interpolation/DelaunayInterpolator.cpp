@@ -73,7 +73,7 @@ void DelaunayInterpolator::_buildModel()
 
   if (_dt.get() == nullptr)
   {
-    _dt.reset(new DelaunayTriangulation());
+    _dt = std::make_shared<DelaunayTriangulation>();
 
     const DataFrame& df = *_df;
 
@@ -124,7 +124,7 @@ void DelaunayInterpolator::_buildModel()
 double DelaunayInterpolator::_calculateFoldError(int fold, const vector<size_t>& indexes) const
 {
   std::shared_ptr<const DataFrame> originalDf = _df;
-  std::shared_ptr<DataFrame> copiedDf(new DataFrame());
+  std::shared_ptr<DataFrame> copiedDf = std::make_shared<DataFrame>();
 
   copiedDf->setFactorLabels(_df->getFactorLabels());
   copiedDf->setFactorTypes(_df->getFactorTypes());

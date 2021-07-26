@@ -61,7 +61,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MaxX = 1;
@@ -72,7 +72,7 @@ public:
     map->resetCounters();
     for (int i = 0; i < 10; i++)
     {
-      NodePtr n(new Node(Status::Unknown1, map->createNextNodeId(), i * 100, 0, 10));
+      NodePtr n = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), i * 100, 0, 10);
       n->getTags()["name"] = QString("n%1").arg(i);
       map->addNode(n);
     }

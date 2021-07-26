@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
   std::shared_ptr<Command> c;
   for (size_t i = 0; i < cmds.size(); i++)
   {
-    c.reset(Factory::getInstance().constructObject<Command>(cmds[i]));
+    c = Factory::getInstance().constructObject<Command>(cmds[i]);
     QString argName = c->getName();
     if (QString(argv[1]) == argName)
     {
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
   }
   else
   {
-    c.reset(Factory::getInstance().constructObject<Command>("hoot::HelpCmd"));
+    c = Factory::getInstance().constructObject<Command>("hoot::HelpCmd");
     c->run(argv, argc);
     return -1;
   }

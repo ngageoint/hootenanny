@@ -72,8 +72,8 @@ void InBoundsCriterion::setConfiguration(const Settings& conf)
 void InBoundsCriterion::setOsmMap(const OsmMap* map)
 {
   _map = map->shared_from_this();
-  _elementConverter.reset(new ElementToGeometryConverter(_map));
-  _wayNodeCrit.reset(new WayNodeCriterion(_map));
+  _elementConverter = std::make_shared<ElementToGeometryConverter>(_map);
+  _wayNodeCrit = std::make_shared<WayNodeCriterion>(_map);
 }
 
 bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const

@@ -53,6 +53,7 @@ namespace hoot
 class FqDummyData
 {
 public:
+
   FqDummyData() {}
   FqDummyData(const FqDummyData& dd) : _str(dd._str) {}
   FqDummyData(const char* s) : _str(s) {}
@@ -231,7 +232,7 @@ public:
 
   void runRandomQueryTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmPbfReader(true).read("test-files/index/metric-hybrid/TinyGeoNamesOrg.osm.pbf", map);
 
     set<QString> bag;

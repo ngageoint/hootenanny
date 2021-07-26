@@ -42,6 +42,7 @@ namespace hoot
 class IdSwapOp : public ConstOsmMapOperation
 {
 public:
+
   /**
    * @brief className - Get classname string
    * @return - "hoot::IdSwapOp"
@@ -52,17 +53,14 @@ public:
    * @brief IdSwapOp - Default constructor
    */
   IdSwapOp() = default;
-
   /**
    * @brief IdSwapOp - Constructor taking a swap object with the IDs to swap
    */
-  IdSwapOp(const IdSwapPtr& idSwap) : _idSwap(idSwap) { }
-
+  IdSwapOp(const IdSwapPtr& idSwap);
   /**
    * @brief IdSwapOp - Constructor taking two elements to swap IDs
    */
-  IdSwapOp(ElementId e1, ElementId e2) : _idSwap(new IdSwap(e1, e2)) { }
-
+  IdSwapOp(ElementId e1, ElementId e2);
   ~IdSwapOp() = default;
 
   /**
@@ -81,6 +79,7 @@ public:
   { return "Swap IDs for ID preservation in Attribute Conflation"; }
 
 private:
+
   /**
    * @brief swapNodeIdInWay Swap the node ID in the ways with the swap ID
    * @param map - Target map
@@ -91,7 +90,6 @@ private:
 
   /** Element IDs of elements to swap, if empty check the map for an IdSwap object */
   IdSwapPtr _idSwap;
-
 };
 
 }

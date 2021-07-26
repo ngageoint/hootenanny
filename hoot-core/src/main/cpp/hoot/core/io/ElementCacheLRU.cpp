@@ -238,28 +238,20 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
     id = _nodeList.back();
     _nodeList.pop_back();
     _nodes.erase(id);
-
     LOG_TRACE("Removed node: " << id << " from cache.");
     break;
-
   case ElementType::Way:
     id = _wayList.back();
     _wayList.pop_back();
     _ways.erase(id);
-
     LOG_TRACE("Removed way: " << id << " from cache.");
     break;
-
   case ElementType::Relation:
     id = _relationList.back();
     _relationList.pop_back();
     _relations.erase(id);
-
     LOG_TRACE("Removed relation: " << id << " from cache.");
     break;
-
-  // Intentional fallthrow
-  case ElementType::Unknown:
   default:
     throw HootException(QString("Tried to remove oldest of invalid type"));
     break;
@@ -285,7 +277,6 @@ bool ElementCacheLRU::containsElement(const ElementId& eid) const
     }
 
     break;
-
   case ElementType::Way:
     if ( _ways.find(id) != _ways.end() )
     {
@@ -293,7 +284,6 @@ bool ElementCacheLRU::containsElement(const ElementId& eid) const
     }
 
     break;
-
   case ElementType::Relation:
     if ( _relations.find(id) != _relations.end() )
     {
@@ -301,9 +291,6 @@ bool ElementCacheLRU::containsElement(const ElementId& eid) const
     }
 
     break;
-
-  // Intentional fallthrow
-  case ElementType::Unknown:
   default:
     break;
   }
@@ -321,21 +308,13 @@ ConstElementPtr ElementCacheLRU::getElement(const ElementId& eid) const
   case ElementType::Node:
     returnPtr = getNode(id);
     break;
-
   case ElementType::Way:
     returnPtr = getWay(id);
-
     break;
-
   case ElementType::Relation:
     returnPtr = getRelation(id);
-
     break;
-
-  // Intentional fallthrow
-  case ElementType::Unknown:
   default:
-
     break;
   }
 

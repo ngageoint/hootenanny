@@ -50,7 +50,7 @@ public:
 private:
 
   ElementCriterionJs() = default;
-  ElementCriterionJs(ElementCriterion* c) : _c(c) {}
+  ElementCriterionJs(ElementCriterionPtr c);
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isSatisfied(const v8::FunctionCallbackInfo<v8::Value>& args);

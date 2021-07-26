@@ -312,7 +312,7 @@ Tags ImplicitTagRulesSqliteReader::_checkCachedTags(const QSet<QString>& words,
 {
   const QStringList wordsList = words.toList();
   const QString wordsKey = wordsList.join(";");
-  Tags* cachedTags = _tagsCache[wordsKey];
+  const Tags* cachedTags = _tagsCache[wordsKey];
   if (cachedTags != nullptr)
   {
     LOG_TRACE("Found cached tags.");
@@ -376,6 +376,7 @@ void ImplicitTagRulesSqliteReader::_queryWords(const QSet<QString>& words,
 void ImplicitTagRulesSqliteReader::_cacheTags(const QSet<QString>& words, const Tags& tags)
 {
   QStringList wordsList = words.toList();
+  // The cache takes ownership of this object.
   Tags* tagsToCache = new Tags(tags);
   _tagsCache.insert(wordsList.join(";"), tagsToCache);
 }
@@ -449,7 +450,7 @@ Tags ImplicitTagRulesSqliteReader::_getTagsForWords(const QSet<long>& queriedWor
       //file.  It would also work for any entires in the rules database, but we don't write multiple
       //tags for the same rules during derivation yet.
       const QStringList kvps = kvp.split(";");
-      if ((!_addTopTagOnly || (_addTopTagOnly && tags2.isEmpty())))
+      if (!_addTopTagOnly || (_addTopTagOnly && tags2.isEmpty()))
       {
         for (int i = 0; i < kvps.size(); i++)
         {

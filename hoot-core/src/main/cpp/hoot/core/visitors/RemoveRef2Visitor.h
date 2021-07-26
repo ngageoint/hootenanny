@@ -72,9 +72,7 @@ public:
 
   QString getDescription() const override
   { return "Removes REF2 tags when a criterion is met for both REF1 and REF2 elements"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 protected:
@@ -87,7 +85,6 @@ private:
   Ref1ToEid _ref1ToEid;
   static QStringList _ref2Keys;
   static QMutex _mutex;
-  bool _errorOnMissingRef1;
 
   bool _hasRef2Tag(ElementPtr e) const;
   void _checkAndDeleteRef2(ElementPtr e, QString ref);

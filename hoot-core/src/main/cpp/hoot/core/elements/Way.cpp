@@ -50,16 +50,16 @@ namespace hoot
 {
 
 Way::Way(Status s, long id, Meters circularError, long changeset, long version,
-         quint64 timestamp, QString user, long uid, bool visible, long pid)
-  : Element(s)
+         quint64 timestamp, QString user, long uid, bool visible, long pid) :
+Element(s)
 {
-  _wayData.reset(new WayData(id, changeset, version, timestamp, user, uid, visible, pid));
+  _wayData = std::make_shared<WayData>(id, changeset, version, timestamp, user, uid, visible, pid);
   _wayData->setCircularError(circularError);
 }
 
-Way::Way(const Way& from)
-  : Element(from.getStatus()),
-    _wayData(new WayData(*from._wayData.get()))
+Way::Way(const Way& from) :
+Element(from.getStatus()),
+_wayData(std::make_shared<WayData>(*from._wayData.get()))
 {
 }
 
@@ -325,10 +325,10 @@ bool Way::isValidPolygon() const
 
 void Way::_makeWritable()
 {
-  // make sure we're the only ones referencing the way data.
+  // Make sure we're the only ones referencing the way data.
   if (_wayData.use_count() > 1)
   {
-    _wayData.reset(new WayData(*_wayData));
+    _wayData = std::make_shared<WayData>(*_wayData);
   }
 }
 

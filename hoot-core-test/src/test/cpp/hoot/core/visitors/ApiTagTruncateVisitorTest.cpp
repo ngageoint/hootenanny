@@ -53,7 +53,7 @@ public:
 
   void runUUIDTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     QString value = UuidHelper::createUuid().toString();
 
@@ -81,7 +81,7 @@ public:
 
   void runDatesTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     QString value = DateTimeUtils::toTimeString(0);
     int dateLength = value.length();
@@ -112,7 +112,7 @@ public:
   void runListTest()
   {
     int max = ConfigOptions().getMaxTagLength();
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     QString value = "Some random text goes here that is going into a list.";
     int length = value.length();
@@ -143,7 +143,7 @@ public:
   void runTruncateTest()
   {
     int max = ConfigOptions().getMaxTagLength();
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
 
     int length = max - 5;
@@ -168,7 +168,7 @@ public:
 
   void runArabicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
 
     tags["name"] = "&quot;This &amp; that&quot; or other stuff.";

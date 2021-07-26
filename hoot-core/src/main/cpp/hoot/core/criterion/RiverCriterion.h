@@ -46,11 +46,7 @@ public:
   ~RiverCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  GeometryType getGeometryType() const override { return GeometryType::Line; }
-
-  ElementCriterionPtr clone() override
-  { return std::make_shared<RiverCriterion>(); }
+  ElementCriterionPtr clone() override { return std::make_shared<RiverCriterion>(); }
 
   QString getDescription() const override { return "Identifies linear bodies of water"; }
   QString getName() const override { return className(); }
@@ -58,8 +54,8 @@ public:
   QString toString() const override { return className(); }
 
   bool supportsSpecificConflation() const override { return true; }
-
   QStringList getChildCriteria() const override;
+  GeometryType getGeometryType() const override { return GeometryType::Line; }
 };
 
 }

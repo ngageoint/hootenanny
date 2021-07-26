@@ -54,16 +54,13 @@ tmp/rules-lib-doxygen: RulesLib.dox ../rules/lib/*
 tmp/rules-template-doxygen: RulesTemplate.dox ../rules/template/*
 	mkdir -p tmp
 	doxygen RulesTemplate.dox
-	
-# This generates XML. Tried without success to embed the Core API docs into asciidoc via XML, like 
-# the Javascript API is done, but it errors out with a non-descript message during the conversion 
-# from xml to asciidoc. Worth trying to fix at some point. Going with HTML instead for now.
-#tmp/core-doxygen: CoreAPI.dox
-#  mkdir -p tmp
-#	doxygen CoreAPI.dox
-	
-# This generates HTML.
-CoreAPI: CoreAPI.dox
+
+# Tried without success to embed the Core API docs into asciidoc via XML, like the Javascript API is 
+# done, but it errors out with a non-descript message during the conversion from xml to asciidoc. 
+# Worth trying to fix at some point. Going with HTML instead for now.
+CoreAPI: developer/CoreAPI/html/index.html
+
+developer/CoreAPI/html/index.html: CoreAPI.dox
 	mkdir -p developer/CoreAPI
 	doxygen CoreAPI.dox
 
@@ -74,10 +71,6 @@ tmp/RulesLib.asciidoc: tmp/rules-lib-doxygen DoxygenToAsciiDoc.xslt
 tmp/RulesTemplate.asciidoc: tmp/rules-template-doxygen DoxygenToAsciiDoc.xslt
 	xsltproc tmp/rules-template-doxygen/xml/combine.xslt tmp/rules-template-doxygen/xml/index.xml > tmp/rules-template-doxygen/xml/combined.xml
 	xsltproc DoxygenToAsciiDoc.xslt tmp/rules-template-doxygen/xml/combined.xml > $@
-	
-tmp/Core.asciidoc: tmp/core-doxygen DoxygenToAsciiDoc.xslt
-	xsltproc tmp/core-doxygen/xml/combine.xslt tmp/core-doxygen/xml/index.xml > tmp/core-doxygen/xml/combined.xml
-	xsltproc DoxygenToAsciiDoc.xslt tmp/core-doxygen/xml/combined.xml > $@
 
 Hootenanny\ -\ Algorithms.pdf: \
 	HootenannyAlgorithms.asciidoc \

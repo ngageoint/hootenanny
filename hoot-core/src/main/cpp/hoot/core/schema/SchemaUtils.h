@@ -59,6 +59,13 @@ public:
    * format
    */
   static void validateTranslationUrl(const QString& url);
+
+  /**
+   * @brief Attempts to determine the direction of schema translation based on an output file format
+   * @param output output path for the data to be translated
+   * @return a schema translation direction of 'toosm' or 'toogr'
+   */
+  static QString outputFormatToTranslationDirection(const QString& output);
 };
 
 }

@@ -61,14 +61,14 @@ std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& u
   std::shared_ptr<OsmMapWriter> writer;
   if (writerOverride != "" && url != ConfigOptions().getDebugMapsFilename())
   {
-    writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(writerOverride));
+    writer = Factory::getInstance().constructObject<OsmMapWriter>(writerOverride);
   }
 
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
     LOG_VART(names[i]);
-    writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(names[i]));
+    writer = Factory::getInstance().constructObject<OsmMapWriter>(names[i]);
 
     // We may be able to make this a little more generic by referencing an interface instead.
     // Currently, OgrWriter is the only writer that runs a schema translation inline.
@@ -111,7 +111,7 @@ QString OsmMapWriterFactory::getWriterName(const QString& url)
   {
     const QString name = names[i];
     LOG_VART(name);
-    writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(name));
+    writer = Factory::getInstance().constructObject<OsmMapWriter>(name);
     if (writer->isSupported(url))
     {
       return name;
@@ -218,7 +218,7 @@ void OsmMapWriterFactory::writeDebugMap(
             ".osm", "-" + fileNumberStr + "-" + callingClassNoNamespace + ".osm");
       }
       LOG_INFO("Writing debug output to: ..." << FileUtils::toLogFormat(debugMapFileName, 30));
-      OsmMapPtr copy(new OsmMap(map));
+      OsmMapPtr copy = std::make_shared<OsmMap>(map);
 
       if (matcher)
       {
@@ -247,7 +247,7 @@ void OsmMapWriterFactory::writeDebugMap(
   std::shared_ptr<OGRSpatialReference> spatRef, const QString& callingClass, const QString& title,
   NetworkMatcherPtr matcher)
 {
-  OsmMapPtr map(new OsmMap(spatRef));
+  OsmMapPtr map = std::make_shared<OsmMap>(spatRef);
   // add the resulting alpha shape for debugging.
   GeometryToElementConverter(map).convertGeometryToElement(geometry.get(), Status::Invalid, -1);
 

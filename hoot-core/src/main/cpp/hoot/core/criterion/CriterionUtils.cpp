@@ -82,15 +82,14 @@ ElementCriterionPtr CriterionUtils::constructCriterion(
     const QString criterionClassName = criteriaClassNames.at(i);
     try
     {
-      subCrit.reset(
-        Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
+      subCrit = Factory::getInstance().constructObject<ElementCriterion>(criterionClassName);
     }
     catch (const boost::bad_any_cast&)
     {
       throw IllegalArgumentException("Invalid criterion: " + criterionClassName);
     }
 
-    OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(subCrit.get());
+    const OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(subCrit.get());
     if (omc)
     {
       isStreamable = isStreamable && false;
@@ -102,7 +101,7 @@ ElementCriterionPtr CriterionUtils::constructCriterion(
 
     if (negate)
     {
-      subCrit.reset(new NotCriterion(subCrit));
+      subCrit = std::make_shared<NotCriterion>(subCrit);
     }
     LOG_VART(subCrit.get());
 

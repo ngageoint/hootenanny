@@ -54,7 +54,7 @@ public:
     // Invalid height formats log warnings, so disable log output.
     DisableLog dl;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "BuildingHeightVisitorTestInput.osm", false, Status::Unknown1);
 
     BuildingHeightVisitor uut;

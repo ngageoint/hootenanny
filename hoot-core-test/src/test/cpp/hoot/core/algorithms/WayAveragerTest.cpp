@@ -53,11 +53,11 @@ public:
 
   void runSimpleTest()
   {
-    OsmMapPtr sourceMap(new OsmMap());
+    OsmMapPtr sourceMap = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(sourceMap, _inputPath + "input1.osm", false, Status::Unknown1);
     OsmMapReaderFactory::read(sourceMap, _inputPath + "input2.osm", false, Status::Unknown2);
 
-    OsmMapPtr targetMap(new OsmMap());
+    OsmMapPtr targetMap = std::make_shared<OsmMap>();
     _replaceWithAveragedWay(
       sourceMap, "{7dec13af-4519-426b-a007-a392a3e8710c}", "{46030cab-b4e4-4a65-952f-99bb09de439f}",
       targetMap);
@@ -84,7 +84,8 @@ private:
     std::set<ElementId> elementIds;
     elementIds.insert(way1->getElementId());
     elementIds.insert(way2->getElementId());
-    std::shared_ptr<CopyMapSubsetOp> mapCopier(new CopyMapSubsetOp(sourceMap, elementIds));
+    std::shared_ptr<CopyMapSubsetOp> mapCopier =
+      std::make_shared<CopyMapSubsetOp>(sourceMap, elementIds);
     mapCopier->apply(targetMap);
 
     /*WayPtr averagedWay =*/ WayAverager::replaceWaysWithAveragedWay(targetMap, way1, way2);

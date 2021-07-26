@@ -335,7 +335,7 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
 
   if (!_selectMembersForRelation)
   {
-    _selectMembersForRelation.reset(new QSqlQuery(_db));
+    _selectMembersForRelation = std::make_shared<QSqlQuery>(_db);
     _selectMembersForRelation->setForwardOnly(true);
     _selectMembersForRelation->prepare(
       "SELECT member_type, member_id, member_role FROM " + getCurrentRelationMembersTableName() +
@@ -391,7 +391,7 @@ std::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)
 {
   if (!_selectTagsForRelation)
   {
-    _selectTagsForRelation.reset(new QSqlQuery(_db));
+    _selectTagsForRelation = std::make_shared<QSqlQuery>(_db);
     _selectTagsForRelation->setForwardOnly(true);
     QString sql =
       "SELECT relation_id, k, v FROM " + ApiDb::getCurrentRelationTagsTableName() +
@@ -415,7 +415,7 @@ std::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForWay(long wayId)
 {
   if (!_selectTagsForWay)
   {
-    _selectTagsForWay.reset(new QSqlQuery(_db));
+    _selectTagsForWay = std::make_shared<QSqlQuery>(_db);
     _selectTagsForWay->setForwardOnly(true);
     QString sql =  "SELECT way_id, k, v FROM " + ApiDb::getCurrentWayTagsTableName() + " WHERE way_id = :wayId";
     _selectTagsForWay->prepare( sql );
@@ -437,7 +437,7 @@ std::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
 {
   if (!_selectTagsForNode)
   {
-    _selectTagsForNode.reset(new QSqlQuery(_db));
+    _selectTagsForNode = std::make_shared<QSqlQuery>(_db);
     _selectTagsForNode->setForwardOnly(true);
     QString sql =
       "SELECT node_id, k, v FROM " + ApiDb::getCurrentNodeTagsTableName() + " WHERE node_id = :nodeId";
@@ -503,7 +503,7 @@ long OsmApiDb::_getIdFromSequence(const QString& tableName, const QString& seque
   long result;
   if (_seqQueries[tableName].get() == nullptr)
   {
-    _seqQueries[tableName].reset(new QSqlQuery(_db));
+    _seqQueries[tableName] = std::make_shared<QSqlQuery>(_db);
     _seqQueries[tableName]->setForwardOnly(true);
     //valid sequence types are "next" and "current"
     QString sql =

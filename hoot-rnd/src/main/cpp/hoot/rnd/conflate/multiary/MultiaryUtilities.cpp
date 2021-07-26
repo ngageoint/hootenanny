@@ -49,9 +49,9 @@ void MultiaryUtilities::conflate(OsmMapPtr map)
 
   MergerFactory::getInstance().reset();
   std::shared_ptr<MergerFactory> mergerFactory(new MergerFactory());
-  mergerFactory->registerCreator(MergerCreatorPtr(new MultiaryPoiMergerCreator()));
+  mergerFactory->registerCreator(std::make_shared<MultiaryPoiMergerCreator>());
 
-  // Apparently, multiary will allow with > 1.0 review thresholds.
+  // Apparently, multiary will allow matches with > 1.0 review thresholds.
   std::shared_ptr<MatchThreshold> mt = std::make_shared<MatchThreshold>(0.39, 0.61, 1.1, false);
 
   // call new conflation routine
@@ -74,9 +74,9 @@ QList<MultiaryElement> MultiaryUtilities::conflateCluster(QList<QByteArray> pbfE
 {
   QList<MultiaryElement> result;
 
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
 
-  OsmMapPtr tmpMap(new OsmMap());
+  OsmMapPtr tmpMap = std::make_shared<OsmMap>();
   foreach (const QByteArray& ba, pbfElements)
   {
     tmpMap->clear();
@@ -126,7 +126,7 @@ QList<hoot::MultiarySimpleMatch> MultiaryUtilities::findMatches(
   OsmPbfReader reader;
   reader.setUseDataSourceIds(false);
 
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
 
   reader.parseElements(checkElement, map);
   if (map->getElementCount() != 1)
@@ -139,7 +139,7 @@ QList<hoot::MultiarySimpleMatch> MultiaryUtilities::findMatches(
   NodePtr check = map->getNodes().begin()->second;
 
   QList<int> ids;
-  OsmMapPtr tmpMap(new OsmMap());
+  OsmMapPtr tmpMap = std::make_shared<OsmMap>();
   foreach (const QByteArray& ba, againstElements)
   {
     tmpMap->clear();
@@ -193,7 +193,7 @@ SearchBoundsCalculatorPtr MultiaryUtilities::getBoundsCalculator()
         }
         else
         {
-          _searchBoundsCalculator.reset(new SearchBoundsCalculator(sbc));
+          _searchBoundsCalculator = std::make_shared<SearchBoundsCalculator>(sbc);
         }
       }
     }

@@ -83,12 +83,9 @@ _numDeleteChanges(0)
   if (printDetailedStats)
   {
     QFile statsFile(statsOutputFile);
-    if (statsFile.exists())
+    if (statsFile.exists() && !statsFile.remove())
     {
-      if (!statsFile.remove())
-      {
-        LOG_ERROR("Unable to remove changeset statistics file: " << statsOutputFile);
-      }
+      LOG_ERROR("Unable to remove changeset statistics file: " << statsOutputFile);
     }
   }
 }
@@ -184,8 +181,8 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     // use memory bound sorting.
 
     // read both inputs completely
-    OsmMapPtr map1(new OsmMap());
-    OsmMapPtr map2(new OsmMap());
+    OsmMapPtr map1 = std::make_shared<OsmMap>();
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
     _readInputsFully(input1, input2, map1, map2, progress);
     _map1List.append(map1);
     _map2List.append(map2);
@@ -238,7 +235,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     "Changeset written to: ..." + FileUtils::toLogFormat(output, maxFilePrintLength));
 }
 
-void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& output)
+void ChangesetCreator::create(const OsmMapPtr& map1, const OsmMapPtr& map2, const QString& output)
 {
   QList<OsmMapPtr> map1Inputs;
   map1Inputs.append(map1);
@@ -273,8 +270,8 @@ void ChangesetCreator::create(
 
     if (!_includeReviews)
     {
-      std::shared_ptr<TagKeyCriterion> elementCriterion(
-        new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
+      std::shared_ptr<TagKeyCriterion> elementCriterion =
+        std::make_shared<TagKeyCriterion>(MetadataTags::HootReviewNeeds());
       RemoveElementsVisitor removeElementsVisitor;
       removeElementsVisitor.setRecursive(false);
       removeElementsVisitor.addCriterion(elementCriterion);
@@ -363,7 +360,7 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
 
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input ...");
-  OsmMapPtr fullMap(new OsmMap());
+  OsmMapPtr fullMap = std::make_shared<OsmMap>();
   if (!_singleInput)
   {
     // We must preserve the original element IDs while loading in order for changeset derivation
@@ -377,7 +374,7 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
 
     // append the second map onto the first one
 
-    OsmMapPtr tmpMap(new OsmMap());
+    OsmMapPtr tmpMap = std::make_shared<OsmMap>();
     IoUtils::loadMap(tmpMap, input2, true, Status::Unknown2);
     OsmMapWriterFactory::writeDebugMap(
       tmpMap, className(), "after-initial-read-unstreamable-sec-map");
@@ -433,12 +430,12 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Separating out input maps...");
   RemoveUnknown1Visitor remove1Vis;
   RemoveUnknown2Visitor remove2Vis;
-  map1.reset(new OsmMap(fullMap));
+  map1 = std::make_shared<OsmMap>(fullMap);
   if (!_singleInput)
   {
     map1->visitRw(remove2Vis);
 
-    map2.reset(new OsmMap(fullMap));
+    map2 = std::make_shared<OsmMap>(fullMap);
     map2->visitRw(remove1Vis);
   }
   else
@@ -557,8 +554,8 @@ void ChangesetCreator::_readInputsFully(
   {
     progress.set(
       (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Removing review relations...");
-    std::shared_ptr<TagKeyCriterion> elementCriterion(
-      new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
+    std::shared_ptr<TagKeyCriterion> elementCriterion =
+      std::make_shared<TagKeyCriterion>(MetadataTags::HootReviewNeeds());
     RemoveElementsVisitor removeElementsVisitor;
     removeElementsVisitor.setRecursive(false);
     removeElementsVisitor.addCriterion(elementCriterion);
@@ -618,7 +615,7 @@ ElementInputStreamPtr ChangesetCreator::_getEmptyInputStream() const
 {
   // a no-op here since InMemoryElementSorter taking in an empty map will just return an empty
   // element stream
-  return InMemoryElementSorterPtr(new InMemoryElementSorter(OsmMapPtr(new OsmMap())));
+  return std::make_shared<InMemoryElementSorter>(std::make_shared<OsmMap>());
 }
 
 ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& input) const
@@ -629,13 +626,12 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
   std::shared_ptr<ElementCriterion> elementCriterion;
   if (!_includeReviews)
   {
-    elementCriterion.reset(
-      new NotCriterion(
-        std::shared_ptr<TagKeyCriterion>(
-          new TagKeyCriterion(MetadataTags::HootReviewNeeds()))));
+    elementCriterion =
+      std::make_shared<NotCriterion>(
+        std::make_shared<TagKeyCriterion>(MetadataTags::HootReviewNeeds()));
   }
   // Tags need to be truncated if they are over max tag length characters.
-  visitors.append(std::shared_ptr<ApiTagTruncateVisitor>(new ApiTagTruncateVisitor()));
+  visitors.append(std::make_shared<ApiTagTruncateVisitor>());
 
   // open a stream to the input data
   std::shared_ptr<PartialOsmMapReader> reader =
@@ -647,12 +643,12 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
   ElementInputStreamPtr filteredInputStream;
   if (elementCriterion)
   {
-    filteredInputStream.reset(
-      new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
+    filteredInputStream =
+      std::make_shared<ElementCriterionVisitorInputStream>(inputStream, elementCriterion, visitors);
   }
   else
   {
-    filteredInputStream.reset(new ElementVisitorInputStream(inputStream, visitors.at(0)));
+    filteredInputStream = std::make_shared<ElementVisitorInputStream>(inputStream, visitors.at(0));
   }
 
   // Add convert ops supporting streaming into the pipeline, if there are any.
@@ -664,12 +660,13 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
 
 ElementInputStreamPtr ChangesetCreator::_sortElementsInMemory(OsmMapPtr map) const
 {
-  return InMemoryElementSorterPtr(new InMemoryElementSorter(map));
+  return std::make_shared<InMemoryElementSorter>(map);
 }
 
 ElementInputStreamPtr ChangesetCreator::_sortElementsExternally(const QString& input) const
 {
-  std::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
+  std::shared_ptr<ExternalMergeElementSorter> sorted =
+    std::make_shared<ExternalMergeElementSorter>();
   sorted->sort(_getFilteredInputStream(input));
   return sorted;
 }
@@ -696,8 +693,7 @@ void ChangesetCreator::_streamChangesetOutput(
   QList<ChangesetProviderPtr> changesetProviders;
   for (int i = 0; i < inputs1.size(); i++)
   {
-    changesetProviders.append(
-      ChangesetDeriverPtr(new ChangesetDeriver(inputs1.at(i), inputs2.at(i))));
+    changesetProviders.append(std::make_shared<ChangesetDeriver>(inputs1.at(i), inputs2.at(i)));
   }
   LOG_VARD(changesetProviders.size());
   assert(inputs1.size() == changesetProviders.size());
@@ -706,7 +702,8 @@ void ChangesetCreator::_streamChangesetOutput(
   {
     // This was added primarily for use by ChangesetReplacementCreator implementations. Eventually,
     // it may be able to be removed if its changeset writing bugs can be fixed.
-    std::shared_ptr<ChangesetCleaner> cleaner(new ChangesetCleaner(changesetProviders));
+    std::shared_ptr<ChangesetCleaner> cleaner =
+      std::make_shared<ChangesetCleaner>(changesetProviders);
     changesetProviders.clear();
     changesetProviders.append(cleaner);
   }

@@ -63,7 +63,7 @@ public:
 
   void runAddNewTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
@@ -78,7 +78,7 @@ public:
 
   void runOverwriteExistingTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
@@ -93,7 +93,7 @@ public:
 
   void runAppendValueTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
@@ -108,7 +108,7 @@ public:
 
   void runFilterTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
@@ -123,7 +123,7 @@ public:
 
   void runOverwriteDisabledTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
@@ -141,7 +141,7 @@ public:
 
   void runNegatedFilterTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "SetTagValueVisitorTest.osm", false, Status::Unknown1);
 

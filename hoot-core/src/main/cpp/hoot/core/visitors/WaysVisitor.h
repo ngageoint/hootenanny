@@ -50,9 +50,7 @@ public:
   static std::vector<ConstWayPtr> extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e);
 
   QString getDescription() const override { return "Collects the ways visited"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

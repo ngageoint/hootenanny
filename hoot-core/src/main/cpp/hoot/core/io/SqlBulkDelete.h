@@ -46,7 +46,6 @@ class SqlBulkDelete : public BulkDelete
 public:
 
   SqlBulkDelete(const QSqlDatabase& db, const QString& tableName);
-
   ~SqlBulkDelete();
 
   void flush() override;

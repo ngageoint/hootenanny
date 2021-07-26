@@ -119,7 +119,7 @@ public:
   virtual ~KnnIterator();
 
   const Box& getBox() const override;
-  int getId() const { return _knnId; }
+  int getId() const override { return _knnId; }
   virtual double getDistance() const { return _knnDistance; }
   bool hasNext() override;
   bool next() override;

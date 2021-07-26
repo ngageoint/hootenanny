@@ -97,7 +97,7 @@ OsmMapPtr NodeDensityTaskGridGenerator::_getNodeDensityTaskGridInput()
   }
 
   // IMPORTANT: data used here must be unknown1 for node density calc to work
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   // small optimization since node density only needs nodes in the input; can only do this with
   // a db reader right now
   // TODO: I don't think the node only read is working correctly.

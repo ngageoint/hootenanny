@@ -74,7 +74,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
     {
       continue;
     }
-    ElementPtr newElement(currentElement->clone());
+    ElementPtr newElement = currentElement->clone();
     const ElementId newElementId =
       ElementId(ElementType::Node, IdGenerator::getInstance()->createNodeId());
     newElement->setId(newElementId.getId());
@@ -96,7 +96,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
     {
       continue;
     }
-    ElementPtr newElement(currentElement->clone());
+    ElementPtr newElement = currentElement->clone();
     const ElementId newElementId =
       ElementId(ElementType::Way, IdGenerator::getInstance()->createWayId());
     newElement->setId(newElementId.getId());
@@ -118,7 +118,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
     {
       continue;
     }
-    ElementPtr newElement(currentElement->clone());
+    ElementPtr newElement = currentElement->clone();
     const ElementId newElementId =
       ElementId(ElementType::Relation, IdGenerator::getInstance()->createRelationId());
     newElement->setId(newElementId.getId());
@@ -132,7 +132,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
   }
 }
 
-void ElementIdRemapper::restore(OsmMapPtr& map)
+void ElementIdRemapper::restore(const OsmMapPtr& map)
 {
   LOG_INFO("Restoring original element IDs for: " << map->getName() << "...");
 
@@ -163,7 +163,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
         RemoveElementByEid::removeElement(map, originalElementId);
       }
 
-      ElementPtr originalElement(currentElement->clone());
+      ElementPtr originalElement = currentElement->clone();
       originalElement->setId(originalElementId.getId());
       LOG_TRACE(
         "Restoring " << currentElement->getElementId() << " to " <<
@@ -192,7 +192,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
         RemoveElementByEid::removeElement(map, originalElementId);
       }
 
-      ElementPtr originalElement(currentElement->clone());
+      ElementPtr originalElement = currentElement->clone();
       originalElement->setId(originalElementId.getId());
       LOG_TRACE(
         "Restoring " << currentElement->getElementId() << " to " <<
@@ -221,7 +221,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
         RemoveElementByEid::removeElement(map, originalElementId);
       }
 
-      ElementPtr originalElement(currentElement->clone());
+      ElementPtr originalElement = currentElement->clone();
       originalElement->setId(originalElementId.getId());
       LOG_TRACE(
         "Restoring " << currentElement->getElementId() << " to " <<

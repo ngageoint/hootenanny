@@ -46,10 +46,9 @@ public:
 
   ValidateCmd() = default;
 
-  virtual QString getName() const override { return "validate"; }
-  virtual QString getType() const { return "josm"; }
-  virtual QString getDescription() const override
-  { return "Checks map data for validation errors"; }
+  QString getName() const override { return "validate"; }
+  QString getType() const override { return "josm"; }
+  QString getDescription() const override { return "Checks map data for validation errors"; }
 
   virtual int runSimple(QStringList& args) override
   {
@@ -140,7 +139,7 @@ private:
 
   std::shared_ptr<JosmMapValidator> _validate(const QStringList& inputs, const QString& output)
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     if (inputs.size() == 1)
     {
       IoUtils::loadMap(map, inputs.at(0), true, Status::Unknown1);
@@ -168,7 +167,7 @@ private:
     {
       const QString input = inputs.at(i);
 
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       IoUtils::loadMap(map, input, true, Status::Unknown1);
 
       /*std::shared_ptr<JosmMapValidator> validator =*/ _validate(map);

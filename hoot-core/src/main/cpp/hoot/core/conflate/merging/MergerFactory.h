@@ -97,7 +97,6 @@ public:
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.
    */
   void registerCreator(MergerCreatorPtr creator) { _creators.push_back(creator); }
-
   void registerDefaultCreators();
 
   void reset();

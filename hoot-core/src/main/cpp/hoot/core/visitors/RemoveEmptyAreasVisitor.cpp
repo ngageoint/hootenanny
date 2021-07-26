@@ -67,7 +67,7 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
 
   if (!_ec.get())
   {
-    _ec.reset(new ElementToGeometryConverter(_map->shared_from_this()));
+    _ec = std::make_shared<ElementToGeometryConverter>(_map->shared_from_this());
     // TODO: This is directly related to the relation change commented out below. If this logic
     // isn't needed, then we can remove implementation of the Configurable interface.
     _ec->setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);

@@ -120,8 +120,8 @@ QStringList FormatsDisplayer::_getFormats(
       Factory::getInstance().getObjectNamesByBase(className);
     for (size_t i = 0; i < classNames.size(); i++)
     {
-      std::shared_ptr<IoClass> ioClass(
-        Factory::getInstance().constructObject<IoClass>(classNames[i]));
+      std::shared_ptr<IoClass> ioClass =
+        Factory::getInstance().constructObject<IoClass>(classNames[i]);
       const QString supportedFormats = ioClass->supportedFormats();
       if (!supportedFormats.isEmpty())
       {
@@ -175,8 +175,8 @@ QString FormatsDisplayer::_getFormatsSupportingBoundsString(const bool ogrOnly)
     LOG_VART(supportedReaderName);
     if (!supportedReaderName.trimmed().isEmpty())
     {
-      std::shared_ptr<OsmMapReader> reader(
-        Factory::getInstance().constructObject<OsmMapReader>(supportedReaderName));
+      std::shared_ptr<OsmMapReader> reader =
+        Factory::getInstance().constructObject<OsmMapReader>(supportedReaderName);
       LOG_VART(reader.get());
       std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(reader);
       LOG_VART(boundable.get());
@@ -213,8 +213,8 @@ QString FormatsDisplayer::_getInputFormatsSupportingStreamingString(const bool o
     LOG_VART(supportedReaderName);
     if (!supportedReaderName.trimmed().isEmpty())
     {
-      std::shared_ptr<OsmMapReader> reader(
-        Factory::getInstance().constructObject<OsmMapReader>(supportedReaderName));
+      std::shared_ptr<OsmMapReader> reader =
+        Factory::getInstance().constructObject<OsmMapReader>(supportedReaderName);
       LOG_VART(reader.get());
       std::shared_ptr<PartialOsmMapReader> partial =
         std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
@@ -250,8 +250,8 @@ QString FormatsDisplayer::_getOutputFormatsSupportingStreamingString(const bool 
     LOG_VART(supportedWriterName);
     if (!supportedWriterName.trimmed().isEmpty())
     {
-      std::shared_ptr<OsmMapWriter> writer(
-        Factory::getInstance().constructObject<OsmMapWriter>(supportedWriterName));
+      std::shared_ptr<OsmMapWriter> writer =
+        Factory::getInstance().constructObject<OsmMapWriter>(supportedWriterName);
       LOG_VART(writer.get());
       std::shared_ptr<PartialOsmMapWriter> partial =
         std::dynamic_pointer_cast<PartialOsmMapWriter>(writer);

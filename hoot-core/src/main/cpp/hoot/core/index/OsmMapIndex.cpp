@@ -61,7 +61,8 @@ using namespace Tgs;
 namespace hoot
 {
 
-OsmMapIndex::OsmMapIndex(const OsmMap& map) : _map(map)
+OsmMapIndex::OsmMapIndex(const OsmMap& map) :
+_map(map)
 {
   _indexSlush = 0.0;
 }
@@ -97,8 +98,7 @@ void OsmMapIndex::_buildNodeTree() const
 
   LOG_INFO("Building node R-Tree index");
   // 10 children - 368 - see #3054
-  std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-  _nodeTree.reset(new HilbertRTree(mps, 2));
+  _nodeTree = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
   vector<Box> boxes;
   vector<int> ids;
@@ -149,8 +149,7 @@ void OsmMapIndex::_buildWayTree() const
 
   LOG_INFO("Building way R-Tree index...");
   // 10 children - 368 - see #3054
-  std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-  _wayTree.reset(new HilbertRTree(mps, 2));
+  _wayTree = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
   vector<Box> boxes;
   vector<int> ids;
@@ -359,7 +358,7 @@ long OsmMapIndex::findNearestWay(Coordinate c) const
   return result;
 }
 
-std::vector<long> OsmMapIndex::findWayNeighbors(Coordinate& from, Meters buffer) const
+std::vector<long> OsmMapIndex::findWayNeighbors(const Coordinate& from, Meters buffer) const
 {
   vector<long> result;
 
@@ -415,7 +414,7 @@ const std::shared_ptr<ElementToRelationMap>& OsmMapIndex::getElementToRelationMa
 {
   if (_elementToRelationMap == nullptr)
   {
-    _elementToRelationMap.reset(new ElementToRelationMap());
+    _elementToRelationMap = std::make_shared<ElementToRelationMap>();
 
     const RelationMap& relations = _map.getRelations();
     for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
@@ -432,7 +431,7 @@ std::shared_ptr<NodeToWayMap> OsmMapIndex::getNodeToWayMap() const
   if (_nodeToWayMap == nullptr)
   {
     LOG_TRACE("Initializing node to way map with map of size: " << _map.size() << "...");
-    _nodeToWayMap.reset(new NodeToWayMap(_map));
+    _nodeToWayMap = std::make_shared<NodeToWayMap>(_map);
   }
   return _nodeToWayMap;
 }
@@ -444,7 +443,7 @@ std::shared_ptr<const HilbertRTree> OsmMapIndex::getNodeTree() const
     _buildNodeTree();
   }
 
-  OsmMapIndex* t = const_cast<OsmMapIndex*>(this);
+  const OsmMapIndex* t = const_cast<OsmMapIndex*>(this);
   for (set<long>::const_iterator it = _pendingNodeInsert.begin(); it != _pendingNodeInsert.end();
        ++it)
   {
@@ -505,7 +504,7 @@ std::shared_ptr<const HilbertRTree> OsmMapIndex::getWayTree() const
     _buildWayTree();
   }
 
-  OsmMapIndex* t = const_cast<OsmMapIndex*>(this);
+  const OsmMapIndex* t = const_cast<OsmMapIndex*>(this);
   for (set<long>::const_iterator it = _pendingWayInsert.begin(); it != _pendingWayInsert.end();
        ++it)
   {

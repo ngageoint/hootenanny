@@ -108,7 +108,7 @@ std::shared_ptr<TagMerger> PoiPolygonMerger::_getTagMerger()
     }
     LOG_VART(tagMergerClass);
 
-    _tagMerger.reset(Factory::getInstance().constructObject<TagMerger>(tagMergerClass));
+    _tagMerger = Factory::getInstance().constructObject<TagMerger>(tagMergerClass);
 
     std::shared_ptr<Configurable> critConfig = std::dynamic_pointer_cast<Configurable>(_tagMerger);
     if (critConfig.get())

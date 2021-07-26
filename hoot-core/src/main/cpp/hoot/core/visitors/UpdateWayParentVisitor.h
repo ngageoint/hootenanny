@@ -46,9 +46,7 @@ public:
 
   QString getDescription() const override
   { return "Updates all way parent IDs to a new ID"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

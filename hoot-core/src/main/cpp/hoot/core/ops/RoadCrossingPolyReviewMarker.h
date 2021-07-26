@@ -68,7 +68,6 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Marking roads crossing polygons for review..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
@@ -78,9 +77,7 @@ public:
 
   QString getDescription() const override
   { return "Marks roads crossing polygons for review during conflation"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   /**

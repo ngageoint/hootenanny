@@ -52,9 +52,7 @@ public:
   void apply(std::shared_ptr<OsmMap>& map) override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
-
   QString getDescription() const override
   { return "Reprojects to a geographic projection"; }
 };

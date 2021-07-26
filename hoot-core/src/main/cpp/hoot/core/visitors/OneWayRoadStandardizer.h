@@ -51,12 +51,8 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Standardizing one way roads..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Standardized " + QString::number(_numAffected) + " one way roads."; }
-
-  QString getDescription() const override
-  { return "Replaces all reversed one way roads with regular one way roads"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
@@ -64,8 +60,9 @@ public:
   QStringList getCriteria() const override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Replaces all reversed one way roads with regular one way roads"; }
 };
 
 }

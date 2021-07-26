@@ -59,7 +59,7 @@ public:
   void runBasic()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ScoreMatchRef1.osm", map);
 
@@ -84,7 +84,7 @@ public:
   void runString()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/UndividedHighwayPreSplit.osm", map);
 
@@ -95,7 +95,7 @@ public:
 
   void runEscapeTags()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Coordinate coords[] = { Coordinate(0, 0), Coordinate(0, 1), Coordinate(1, 1), Coordinate(1, 0), Coordinate::getNull() };
     Tags tags;
     tags.set("note", "<2>");
@@ -106,11 +106,13 @@ public:
     way->setTags(tags);
 
     QList<ElementPtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.1), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.1), 15);
     node1->getTags().appendValue("name", "test1");
     nodes.append(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.1, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.1, 0.0), 15);
     node2->getTags().appendValue("name", "test2");
     nodes.append(node2);
 
@@ -118,8 +120,8 @@ public:
     relation->setType("review");
     relation->getTags().appendValue("name", "Test Review");
     std::vector<RelationData::Entry> members = relation->getMembers();
-    members[0].role = "reviewee";
-    members[1].role = "reviewee";
+    members[0].setRole("reviewee");
+    members[1].setRole("reviewee");
     relation->setMembers(members);
 
     QString output = OsmPgCsvWriter::toString(map);

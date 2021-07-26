@@ -30,9 +30,6 @@
 // hoot
 #include <hoot/core/conflate/RfExtractorClassifier.h>
 
-// tgs
-#include <tgs/RandomForest/RandomForest.h>
-
 namespace hoot
 {
 
@@ -46,12 +43,6 @@ public:
 protected:
 
   void _createExtractors() const override;
-
-  /**
-   * Creates all the reasonable extractors for a data set. This can be quite large and is good
-   * for experimentation.
-   */
-  void _createAllExtractors() const;
 
   /**
    * Create the best extractors found during experimentation.

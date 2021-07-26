@@ -87,7 +87,7 @@ namespace Tgs
         indices[i] = i;
       }
 
-      _root = std::shared_ptr<TreeNode>(new TreeNode());
+      _root = std::make_shared<TreeNode>();
       _root->leftChild.reset();
       _root->rightChild.reset();
       _root->isPure = false;
@@ -120,13 +120,6 @@ namespace Tgs
         }
         else
         {
-  //         if (dataVector[currentNode->factorIndex] < currentNode->rangeMin || dataVector[currentNode->factorIndex] > currentNode->rangeMax)
-  //         {
-  //           std::cout << " Node Val " << dataVector[currentNode->factorIndex] << " Min " << currentNode->rangeMin << " Max " << currentNode->rangeMax << std::endl;
-  //           outputClass = "zz00";
-  //           nodeId = currentNode->nodeId;
-  //           return nodeId;
-  //         }
           if (dataVector[currentNode->factorIndex] < currentNode->splitValue)
           {
             currentNode = currentNode->leftChild;
@@ -178,7 +171,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::exportTree(std::ostream & fileStream, std::string tabDepth)
+  void RandomTree::exportTree(std::ostream& fileStream, const std::string& tabDepth)
   {
     try
     {
@@ -288,7 +281,7 @@ namespace Tgs
 
       if (fileStream.good())
       {
-        _root = std::shared_ptr<TreeNode>(new TreeNode());
+        _root = std::make_shared<TreeNode>();
         _importOobSet(fileStream);
         _importNode(fileStream, _root);
         //Discard end tag
@@ -308,13 +301,13 @@ namespace Tgs
 
   }
 
-  void RandomTree::import(QDomElement & e)
+  void RandomTree::import(const QDomElement& e)
   {
     try
     {
 
       _root.reset();
-      _root = std::shared_ptr<TreeNode>(new TreeNode());
+      _root = std::make_shared<TreeNode>();
 
       QDomNodeList childList = e.childNodes();
 
@@ -374,7 +367,7 @@ namespace Tgs
   }
 
   void RandomTree::trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
-    std::string /*posClass*/, unsigned int nodeSize, bool balanced)
+    const std::string& /*posClass*/, unsigned int nodeSize, bool balanced)
   {
     try
     {
@@ -393,7 +386,7 @@ namespace Tgs
         data->makeBoostrapAndOobSets(bootstrapSet, _oobSet);
       }
 
-      _root = std::shared_ptr<TreeNode>(new TreeNode());
+      _root = std::make_shared<TreeNode>();
       _root->leftChild.reset();
       _root->rightChild.reset();
       _root->isPure = false;
@@ -429,7 +422,7 @@ namespace Tgs
         data->makeBoostrapAndOobSets(bootstrapSet, _oobSet);
       }
 
-      _root = std::shared_ptr<TreeNode>(new TreeNode());
+      _root = std::make_shared<TreeNode>();
       _root->leftChild.reset();
       _root->rightChild.reset();
       _root->isPure = false;
@@ -444,7 +437,8 @@ namespace Tgs
   }
 
   void RandomTree::trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
-    std::string posClass, std::string negClass, unsigned int nodeSize, bool /*balanced*/)
+    const std::string& posClass, const std::string& negClass, unsigned int nodeSize,
+    bool /*balanced*/)
   {
     try
     {
@@ -456,7 +450,7 @@ namespace Tgs
 
       data->makeBalancedRoundRobinBootstrapAndOobSets(posClass, negClass, bootstrapSet, _oobSet);
 
-      _root = std::shared_ptr<TreeNode>(new TreeNode());
+      _root = std::make_shared<TreeNode>();
       _root->leftChild.reset();
       _root->rightChild.reset();
       _root->isPure = false;
@@ -471,8 +465,9 @@ namespace Tgs
 
   }
 
-  void RandomTree::_build(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & dataSet,
-    std::shared_ptr<TreeNode> & node, unsigned int nodeSize)
+  void RandomTree::_build(
+    const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & dataSet,
+    const std::shared_ptr<TreeNode>& node, unsigned int nodeSize)
   {
     try
     {
@@ -513,8 +508,8 @@ namespace Tgs
 
           std::vector<unsigned int> leftSplit;
           std::vector<unsigned int> rightSplit;
-          node->leftChild = std::shared_ptr<TreeNode>(new TreeNode());
-          node->rightChild = std::shared_ptr<TreeNode>(new TreeNode());
+          node->leftChild = std::make_shared<TreeNode>();
+          node->rightChild = std::make_shared<TreeNode>();
 
           node->splitValue = splitVal;
           node->factorIndex = fIdx;
@@ -525,16 +520,10 @@ namespace Tgs
 
           //  bandwidth
           data->computeBandwidthByFactor(fIdx, dataSet, minVal,
-            maxVal, mean, q1, q3);
-//          node->rangeMin = mean - (6 * bandwidth);
-//          node->rangeMax = mean + (6 * bandwidth);
-//          double midVal = (maxVal - minVal) / 2.0;
-//          node->rangeMin = minVal - (0.5 *(maxVal - minVal));
-//          node->rangeMax = maxVal + (0.5 * (maxVal - minVal));
-           double iqr = q3 - q1;
-           node->rangeMin = q1 - ( 3 * iqr);
-           node->rangeMax = q3 + (3 * iqr);
-
+          maxVal, mean, q1, q3);
+          double iqr = q3 - q1;
+          node->rangeMin = q1 - ( 3 * iqr);
+          node->rangeMax = q3 + (3 * iqr);
 
           data->sortIndicesOnFactorValue(dataSet, fIdx);
 
@@ -572,8 +561,8 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_calcFactorPurity(std::shared_ptr<TreeNode> & node,
-    std::map<unsigned int, double> & factorPurity)
+  void RandomTree::_calcFactorPurity(
+    const std::shared_ptr<TreeNode>& node, std::map<unsigned int, double>& factorPurity)
   {
     try
     {
@@ -604,8 +593,8 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_exportNode(std::ostream & fileStream, std::shared_ptr<TreeNode> & node,
-     std::string tabDepth)
+  void RandomTree::_exportNode(
+     std::ostream& fileStream, const std::shared_ptr<TreeNode>& node, const std::string& tabDepth)
   {
     try
     {
@@ -658,8 +647,8 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_exportNode(QDomDocument & modelDoc, QDomElement & parentNode,
-    std::shared_ptr<TreeNode> & node)
+  void RandomTree::_exportNode(
+    QDomDocument& modelDoc, QDomElement& parentNode, const std::shared_ptr<TreeNode>& node)
   {
     try
     {
@@ -737,7 +726,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_exportOobSet(std::ostream & fileStream, std::string tabDepth)
+  void RandomTree::_exportOobSet(std::ostream & fileStream, const std::string& tabDepth)
   {
     try
     {
@@ -761,7 +750,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_importNode(std::istream & fileStream, std::shared_ptr<TreeNode> & node)
+  void RandomTree::_importNode(std::istream& fileStream, const std::shared_ptr<TreeNode>& node)
   {
     try
     {
@@ -861,9 +850,9 @@ namespace Tgs
         }
         else
         {
-          node->leftChild = std::shared_ptr<TreeNode>(new TreeNode());
+          node->leftChild = std::make_shared<TreeNode>();
           _importNode(fileStream, node->leftChild);
-          node->rightChild = std::shared_ptr<TreeNode>(new TreeNode());
+          node->rightChild = std::make_shared<TreeNode>();
           _importNode(fileStream, node->rightChild);
         }
       }
@@ -874,7 +863,8 @@ namespace Tgs
     }
   }
 
-  QDomElement RandomTree::_importNode(QDomElement & treeNode, std::shared_ptr<TreeNode> &node)
+  QDomElement RandomTree::_importNode(
+    const QDomElement& treeNode, const std::shared_ptr<TreeNode>& node)
   {
     try
     {
@@ -995,7 +985,6 @@ namespace Tgs
             ss << "The tree node type " << treeNodeType.toLatin1().constData() << " is not a valid type.";
             throw Exception(__LINE__, ss.str());
           }
-
         }
         else
         {
@@ -1022,7 +1011,7 @@ namespace Tgs
           return leftNode;
         }
 
-        node->leftChild = std::shared_ptr<TreeNode>(new TreeNode());
+        node->leftChild = std::make_shared<TreeNode>();
 
         QDomElement rightNode = _importNode(leftNode, node->leftChild);
 
@@ -1031,7 +1020,7 @@ namespace Tgs
           return rightNode;
         }
 
-        node->rightChild = std::shared_ptr<TreeNode>(new TreeNode());
+        node->rightChild = std::make_shared<TreeNode>();
         return _importNode(rightNode, node->rightChild);
       }
 
@@ -1078,7 +1067,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_importOobSet(QString & oobString)
+  void RandomTree::_importOobSet(const QString& oobString)
   {
     try
     {

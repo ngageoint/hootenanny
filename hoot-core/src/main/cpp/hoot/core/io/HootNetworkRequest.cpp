@@ -66,9 +66,11 @@ void HootNetworkRequest::setOAuthKeys(const QString& consumer_key, const QString
                                       const QString& request_token, const QString& request_secret)
 {
   //  Initialize the consumer key
-  _consumer.reset(new OAuth::Consumer(consumer_key.toStdString(), consumer_secret.toStdString()));
+  _consumer =
+    std::make_shared<OAuth::Consumer>(consumer_key.toStdString(), consumer_secret.toStdString());
   //  Initialize the request token
-  _tokenRequest.reset(new OAuth::Token(request_token.toStdString(), request_secret.toStdString()));
+  _tokenRequest =
+    std::make_shared<OAuth::Token>(request_token.toStdString(), request_secret.toStdString());
   //  Set the OAuth flag
   _useOAuth = true;
 }
@@ -213,7 +215,7 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
   return true;
 }
 
-int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply) const
+int HootNetworkRequest::_getHttpResponseCode(const QNetworkReply* reply) const
 {
   if (reply != nullptr)
   {

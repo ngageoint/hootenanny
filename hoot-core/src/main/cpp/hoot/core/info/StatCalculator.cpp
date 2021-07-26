@@ -116,7 +116,7 @@ ConstElementVisitorPtr StatCalculator::_getStatCollector(
   ElementVisitorPtr vis;
   try
   {
-    vis.reset(Factory::getInstance().constructObject<ElementVisitor>(visClassName));
+    vis = Factory::getInstance().constructObject<ElementVisitor>(visClassName);
   }
   catch (const boost::bad_any_cast&)
   {

@@ -79,9 +79,7 @@ void Address::_initializeStringComparator() const
   }
   else
   {
-    _stringComp =
-      StringDistancePtr(
-        Factory::getInstance().constructObject<StringDistance>(stringCompClassName));
+    _stringComp = Factory::getInstance().constructObject<StringDistance>(stringCompClassName);
     if (!_stringComp)
     {
       throw IllegalArgumentException(
@@ -93,7 +91,7 @@ void Address::_initializeStringComparator() const
     if (strDistConsumer)
     {
       strDistConsumer->setStringDistance(
-        StringDistancePtr(new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha())));
+        std::make_shared<LevenshteinDistance>(ConfigOptions().getLevenshteinDistanceAlpha()));
     }
   }
 }
@@ -107,7 +105,7 @@ bool Address::operator==(const Address& address) const
     !_address.isEmpty() &&
       (_stringComp->compare(_address, address._address) == 1.0 ||
        (_allowLenientHouseNumberMatching &&
-        // don't do subletter matching on an intersection, as it won't have house numbers
+        // Don't do subletter matching on an intersection, as it won't have house numbers.
         !isStreetIntersectionAddress(_address, !_parsedFromAddressTag) &&
         AddressParser::addressesMatchDespiteSubletterDiffs(_address, address._address)));
 }

@@ -50,13 +50,8 @@ public:
 
   void apply(OsmMapPtr& map) override;
 
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
   QString getInitStatusMessage() const override
   { return "Converting non-child points to polygons..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
@@ -64,6 +59,8 @@ public:
       StringUtils::formatLargeNumber(_numProcessed) + " non-child points to polygons.";
   }
 
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override
   { return "Converts non-child points to rectangular polygons"; }
 

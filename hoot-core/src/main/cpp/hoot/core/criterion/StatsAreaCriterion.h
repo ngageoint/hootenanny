@@ -46,8 +46,7 @@ public:
   ~StatsAreaCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new StatsAreaCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<StatsAreaCriterion>(); }
 
   QString getDescription() const override { return "Identifies areas for use by statistics"; }
   QString getName() const override { return className(); }

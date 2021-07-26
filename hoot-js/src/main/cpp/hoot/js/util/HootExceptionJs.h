@@ -63,14 +63,14 @@ public:
    * @param result Result of the V8 function call.
    * @param tc Try catch object. Must be instantiated before the V8 function is called.
    */
-  static void checkV8Exception(v8::Local<v8::Value> result, v8::TryCatch& tc);
+  static void checkV8Exception(v8::Local<v8::Value> result, const v8::TryCatch& tc);
 
   /**
    * This will throw an appropriate HootException based on the contents of tc.
    *
    * @param tc Try catch object. Must be instantiated before the V8 function is called.
    */
-  static void throwAsHootException(v8::TryCatch& tc);
+  static void throwAsHootException(const v8::TryCatch& tc);
 
   virtual ~HootExceptionJs() = default;
 
@@ -91,7 +91,7 @@ inline void toCpp(v8::Local<v8::Value> v, std::shared_ptr<HootException>& e)
   if (HootExceptionJs::isHootException(v))
   {
     v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
-    HootExceptionJs* ex = node::ObjectWrap::Unwrap<HootExceptionJs>(obj);
+    const HootExceptionJs* ex = node::ObjectWrap::Unwrap<HootExceptionJs>(obj);
 
     e = ex->getException();
   }

@@ -65,7 +65,7 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString& 
   const QString readerOverride = ConfigOptions().getMapFactoryReader();
   if (readerOverride != "")
   {
-    reader.reset(Factory::getInstance().constructObject<OsmMapReader>(readerOverride));
+    reader = Factory::getInstance().constructObject<OsmMapReader>(readerOverride);
     LOG_DEBUG("Using reader: " << readerOverride);
   }
 
@@ -73,7 +73,7 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString& 
   for (size_t i = 0; i < names.size() && !reader; ++i)
   {
     LOG_TRACE("Checking input " << url << " with reader " << names[i]);
-    reader.reset(Factory::getInstance().constructObject<OsmMapReader>(names[i]));
+    reader = Factory::getInstance().constructObject<OsmMapReader>(names[i]);
     if (reader->isSupported(url))
     {
       LOG_DEBUG("Using input reader: " << names[i]);
@@ -130,7 +130,7 @@ QString OsmMapReaderFactory::getReaderName(const QString& url)
   {
     const QString name = names[i];
     LOG_VART(name);
-    reader.reset(Factory::getInstance().constructObject<OsmMapReader>(name));
+    reader = Factory::getInstance().constructObject<OsmMapReader>(name);
     LOG_VART(url);
     LOG_VART(reader->isSupported(url));
     if (reader->isSupported(url))
@@ -187,7 +187,7 @@ void OsmMapReaderFactory::_read(
     }
   }
   VALIDATE(map->validate(true));
-  LOG_INFO(
+  LOG_STATUS(
     "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
     " elements from input in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }

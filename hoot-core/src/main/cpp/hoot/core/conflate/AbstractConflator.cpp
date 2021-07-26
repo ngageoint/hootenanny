@@ -83,9 +83,9 @@ void AbstractConflator::_reset()
   if (_mergerFactory == nullptr)
   {
     _mergerFactory.reset(new MergerFactory());
-    // register the mark for review merger first so all reviews get tagged before another merger
+    // Register the mark for review merger first so all reviews get tagged before another merger
     // gets a chance.
-    _mergerFactory->registerCreator(MergerCreatorPtr(new MarkForReviewMergerCreator()));
+    _mergerFactory->registerCreator(std::make_shared<MarkForReviewMergerCreator>());
     _mergerFactory->registerDefaultCreators();
   }
 
@@ -306,7 +306,7 @@ void AbstractConflator::_replaceElementIds(
   }
 }
 
-void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map)
+void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, const OsmMapPtr& map)
 {
   if (mergers.empty())
   {

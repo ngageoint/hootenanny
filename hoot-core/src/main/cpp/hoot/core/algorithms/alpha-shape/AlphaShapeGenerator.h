@@ -83,10 +83,6 @@ private:
   double _buffer;
   /** Flag to trigger _coverStragglers (read description). */
   bool _manuallyCoverSmallPointClusters;
-  /** The maximum number of alpha values retries to.
-   * Right now this is hardcoded to 2 as that's all that has ever been needed.
-   */
-  bool _maxTries;
   /**
    * @brief _coverStragglers This is a bit of hack to the alg, if you will, that will alow for covering
    * small groups of features when a smaller alpha value is selected. This is desirable in certain

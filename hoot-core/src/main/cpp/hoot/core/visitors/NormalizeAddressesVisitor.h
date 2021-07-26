@@ -52,16 +52,13 @@ public:
    */
   void visit(const ElementPtr& e) override;
 
-  QString getDescription() const override { return "Normalizes addresses"; }
-
   QString getInitStatusMessage() const override { return "Normalizing addresses..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Normalized " + QString::number(_addressNormalizer.getNumNormalized()) + " addresses"; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Normalizes addresses"; }
 
 private:
 

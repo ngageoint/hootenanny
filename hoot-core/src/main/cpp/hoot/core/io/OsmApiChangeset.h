@@ -382,8 +382,8 @@ private:
    * @param failing Set to true if the element is getting set to failed state, it is more selective about moves
    * @return false if the element cannot be moved successfully
    */
-  bool moveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node, bool failing = false) const;
-  bool moveWay(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way, bool failing = false);
+  bool moveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, const ChangesetNode* node, bool failing = false) const;
+  bool moveWay(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, const ChangesetWay* way, bool failing = false);
   bool moveRelation(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation, bool failing = false);
   /**
    * @brief moveOrRemoveNode/Way/Relation Move an element from one subset to another, or if all related elements aren't
@@ -405,8 +405,8 @@ private:
    * @param node/way/relation Pointer to the element to be checked
    * @return
    */
-  bool canMoveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node);
-  bool canMoveWay(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way);
+  bool canMoveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, const ChangesetNode* node);
+  bool canMoveWay(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, const ChangesetWay* way);
   bool canMoveRelation(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation);
   /**
    * @brief getObjectCount Get the number of elements affected by this node/way/relation
@@ -416,25 +416,25 @@ private:
    * @param countSent
    * @return total number of elements within this element
    */
-  size_t getObjectCount(ChangesetNode* node, ElementCountSet& elements, bool countSent = true) const;
-  size_t getObjectCount(ChangesetWay* way, ElementCountSet& elements, bool countSent = true);
+  size_t getObjectCount(const ChangesetNode* node, ElementCountSet& elements, bool countSent = true) const;
+  size_t getObjectCount(const ChangesetWay* way, ElementCountSet& elements, bool countSent = true);
   size_t getObjectCount(ChangesetRelation* relation, ElementCountSet& elements, bool countSent = true);
-  size_t getObjectCount(const ChangesetInfoPtr& /*changeset*/, ChangesetNode* node, ElementCountSet& elements, bool countSent = true) const;
-  size_t getObjectCount(const ChangesetInfoPtr& changeset, ChangesetWay* way, ElementCountSet& elements, bool countSent = true);
+  size_t getObjectCount(const ChangesetInfoPtr& /*changeset*/, const ChangesetNode* node, ElementCountSet& elements, bool countSent = true) const;
+  size_t getObjectCount(const ChangesetInfoPtr& changeset, const ChangesetWay* way, ElementCountSet& elements, bool countSent = true);
   size_t getObjectCount(const ChangesetInfoPtr& changeset, ChangesetRelation* relation, ElementCountSet& elements, bool countSent = true);
   /**
    * @brief isSent Check if this element's status is buffering, sent, or finalized
    * @param element Pointer to the element to check
    * @return true if the element has been sent to the API
    */
-  bool isSent(ChangesetElement* element) const;
+  bool isSent(const ChangesetElement* element) const;
   /**
    * @brief canSend Check if the node/way/relation can be sent (if it is available) along with all of its downstream elements
    * @param node/way/relation Pointer to the element to check
    * @return true if element and all downstream elements are available to send
    */
-  bool canSend(ChangesetNode* node) const;
-  bool canSend(ChangesetWay* way);
+  bool canSend(const ChangesetNode* node) const;
+  bool canSend(const ChangesetWay* way);
   bool canSend(ChangesetRelation* relation);
   /**
    * @brief markBuffered Mark the element as buffered
@@ -504,15 +504,15 @@ private:
    */
   void insertElement(const ChangesetElementPtr& element, ChangesetType type, ChangesetTypeMap& elementMap, ChangesetElementMap& all) const;
 
-  bool fixPlaceholderFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
+  bool fixPlaceholderFailure(ChangesetInfoPtr changeset, const ChangesetInfoPtr& split,
                              long member_id, ElementType::Type member_type,
                              long element_id, ElementType::Type element_type);
-  bool fixRelationFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
+  bool fixRelationFailure(ChangesetInfoPtr changeset, const ChangesetInfoPtr& split,
                           long element_id,
                           long member_id, ElementType::Type member_type);
-  bool fixElementGoneDeletedFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
+  bool fixElementGoneDeletedFailure(ChangesetInfoPtr changeset, const ChangesetInfoPtr& split,
                                     long element_id, ElementType::Type element_type);
-  bool fixMultiElementFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
+  bool fixMultiElementFailure(ChangesetInfoPtr changeset, const ChangesetInfoPtr& split,
                               long element_id, ElementType::Type element_type,
                               const std::vector<long>& member_ids, ElementType::Type member_type);
   bool fixChangesetDeletePreconditionFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,

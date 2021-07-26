@@ -78,11 +78,10 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
 
   // Remove elements with the dough status out of the full input map and create a new map, which
   // will be our cutter shape map.
-  std::shared_ptr<OsmMap> cutterShapeMap(new OsmMap(map));
-  //MapProjector::projectToWgs84(cutterShapeMap);
+  std::shared_ptr<OsmMap> cutterShapeMap = std::make_shared<OsmMap>(map);
   RemoveElementsVisitor doughRemover;
   doughRemover.setRecursive(true);
-  doughRemover.addCriterion(ElementCriterionPtr(new StatusCriterion(doughMapStatus)));
+  doughRemover.addCriterion(std::make_shared<StatusCriterion>(doughMapStatus));
   cutterShapeMap->visitRw(doughRemover);
   LOG_VARD(cutterShapeMap->getNodes().size());
   LOG_VARD(MapProjector::toWkt(cutterShapeMap->getProjection()));
@@ -92,26 +91,24 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   // shape outline.
   std::shared_ptr<OsmMap> cutterShapeOutlineMap =
     AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generateMap(cutterShapeMap);
-  //MapProjector::projectToWgs84(cutterShapeOutlineMap);
 
   // Remove elements with the cutter shape status create a new map, which will be our dough map.
-  std::shared_ptr<OsmMap> doughMap(new OsmMap(map));
+  std::shared_ptr<OsmMap> doughMap = std::make_shared<OsmMap>(map);
   RemoveElementsVisitor cutterShapeRemover;
   cutterShapeRemover.setRecursive(true);
-  cutterShapeRemover.addCriterion(ElementCriterionPtr(new StatusCriterion(cutterMapStatus)));
+  cutterShapeRemover.addCriterion(std::make_shared<StatusCriterion>(cutterMapStatus));
   doughMap->visitRw(cutterShapeRemover);
 
   // Cut the outline cutter shape obtained from the cutter shape map out of the dough map, leaving
   // a hole in it (or if _crop=false, drop what's around the outline shape instead).
   CookieCutter(_crop, 0.0).cut(cutterShapeOutlineMap, doughMap);
   std::shared_ptr<OsmMap> cookieCutMap = doughMap;
-  //MapProjector::projectToWgs84(cookieCutMap);
 
   // Combine the cutter shape map with the dough map by adding the cutter shape data back into the
   // hole created by cookie cutting the dough map.
   cutterShapeMap->append(cookieCutMap);
   std::shared_ptr<OsmMap> result = cutterShapeMap;
-  map.reset(new OsmMap(result));
+  map = std::make_shared<OsmMap>(result);
   LOG_VARD(map->getNodes().size());
   LOG_VARD(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, className(), "final-combined-map");

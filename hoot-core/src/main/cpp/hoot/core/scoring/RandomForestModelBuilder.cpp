@@ -70,12 +70,13 @@ void RandomForestModelBuilder::build(
     QStringList creatorParts = creator.split(",");
     QString className = creatorParts[0];
     creatorParts.removeFirst();
-    MatchCreator* mc = Factory::getInstance().constructObject<MatchCreator>(className);
+    std::shared_ptr<MatchCreator> mc =
+      Factory::getInstance().constructObject<MatchCreator>(className);
     if (!creatorParts.empty())
     {
       mc->setArguments(creatorParts);
     }
-    mfe.addMatchCreator(std::shared_ptr<MatchCreator>(mc));
+    mfe.addMatchCreator(mc);
   }
 
   int datasetPairCtr = 1;
@@ -85,7 +86,7 @@ void RandomForestModelBuilder::build(
       "Processing dataset pair " << datasetPairCtr << " of " << ((trainingData.size() - 1) / 2) <<
       ": " << trainingData[i].right(50) << " and " << trainingData[i + 1].right(50));
     datasetPairCtr++;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     IoUtils::loadMap(map, trainingData[i], false, Status::Unknown1);
     IoUtils::loadMap(map, trainingData[i + 1], false, Status::Unknown2);
@@ -114,7 +115,7 @@ void RandomForestModelBuilder::build(
   if (Log::getInstance().getLevel() >= Log::Warn)
   {
     // disable the printing of "Trained Tree ..."
-    dc.reset(new Tgs::DisableCout());
+    dc = std::make_shared<Tgs::DisableCout>();
   }
   const int numFactors =
     std::min(df->getNumFactors(), std::max<unsigned int>(3, df->getNumFactors() / 5));

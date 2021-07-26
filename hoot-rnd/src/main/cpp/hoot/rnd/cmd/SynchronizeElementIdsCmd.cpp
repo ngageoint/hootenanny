@@ -78,9 +78,9 @@ public:
       "Synchronizing element IDs between ..." << FileUtils::toLogFormat(input1, 25) << " and ..." <<
       FileUtils::toLogFormat(input2, 25) << " to ..." << FileUtils::toLogFormat(output, 25) << "...");
 
-    OsmMapPtr input1Map(new OsmMap());
+    OsmMapPtr input1Map = std::make_shared<OsmMap>();
     IoUtils::loadMap(input1Map, input1, true, Status::Unknown1);
-    OsmMapPtr input2Map(new OsmMap());
+    OsmMapPtr input2Map = std::make_shared<OsmMap>();
     IoUtils::loadMap(input2Map, input2, true, Status::Unknown2);
 
     ElementIdSynchronizer idSynchronizer;

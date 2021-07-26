@@ -40,8 +40,8 @@ std::shared_ptr<IdGenerator> IdGenerator::getInstance()
   if (!_theInstance)
   {
     LOG_VARD(ConfigOptions().getIdGenerator());
-    _theInstance.reset(
-      Factory::getInstance().constructObject<IdGenerator>(ConfigOptions().getIdGenerator()));
+    _theInstance =
+      Factory::getInstance().constructObject<IdGenerator>(ConfigOptions().getIdGenerator());
   }
   return _theInstance;
 }

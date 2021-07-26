@@ -73,8 +73,7 @@ private:
   RemoveRef2Visitor::Ref1ToEid _ref1ToEid;
 };
 
-RemoveRef2Visitor::RemoveRef2Visitor() :
-_errorOnMissingRef1(false)
+RemoveRef2Visitor::RemoveRef2Visitor()
 {
   // make sure we're re-entrant.
   QMutexLocker ml(&_mutex);

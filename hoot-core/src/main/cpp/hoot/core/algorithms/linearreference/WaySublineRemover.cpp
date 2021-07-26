@@ -47,7 +47,7 @@ namespace hoot
 {
 
 std::vector<ElementId> WaySublineRemover::removeSubline(
-  const WayPtr& way, const WaySubline& subline, OsmMapPtr& map)
+  const WayPtr& way, const WaySubline& subline, const OsmMapPtr& map)
 {
   if (!way || !subline.isValid())
   {
@@ -101,7 +101,7 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
 }
 
 std::vector<ElementId> WaySublineRemover::removeSubline(
-  const WayPtr& way, const WayLocation& start, const WayLocation& end, OsmMapPtr& map)
+  const WayPtr& way, const WayLocation& start, const WayLocation& end, const OsmMapPtr& map)
 {
   if (!MapProjector::isPlanar(map))
   {
@@ -121,7 +121,7 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
 
   // Make a copy of the input way so that the first split doesn't affect calculation of the second
   // one.
-  WayPtr wayCopy1 = std::dynamic_pointer_cast<Way>(ElementPtr(way->clone()));
+  WayPtr wayCopy1 = std::dynamic_pointer_cast<Way>(way->clone());
   // Thought about trying to preserve the original way ID on the first segment here but had problems
   // making it work.
   wayCopy1->setId(map->createNextWayId());
@@ -130,7 +130,7 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
   // We copied the way, so we need to also copy the loc.
   WayLocation startCopy(map, wayCopy1, start.getSegmentIndex(), start.getSegmentFraction());
 
-  WayPtr wayCopy2 = std::dynamic_pointer_cast<Way>(ElementPtr(way->clone()));
+  WayPtr wayCopy2 = std::dynamic_pointer_cast<Way>(way->clone());
   wayCopy2->setId(map->createNextWayId());
   LOG_VART(wayCopy2->getElementId());
   map->addWay(wayCopy2);
@@ -213,7 +213,8 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
 }
 
 std::vector<ElementId> WaySublineRemover::_split(
-  const WayPtr& way, WayLocation& splitLocation, const OsmMapPtr& map, const bool keepFirstSegment)
+  const WayPtr& way, const WayLocation& splitLocation, const OsmMapPtr& map,
+  const bool keepFirstSegment)
 {
   std::vector<ElementId> newWayIds;
   LOG_VART(splitLocation.isExtreme());

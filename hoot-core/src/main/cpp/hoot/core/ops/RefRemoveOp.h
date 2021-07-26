@@ -59,9 +59,7 @@ public:
 
   QString getDescription() const override
   { return "Removes elements meeting a criterion and updates REF tags"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

@@ -97,7 +97,7 @@ static OGRFieldType toOgrFieldType(QVariant::Type t)
 
 OgrWriter::OgrWriter():
 _elementCache(
-  new ElementCacheLRU(
+  std::make_shared<ElementCacheLRU>(
     ConfigOptions().getElementCacheSizeNode(),
     ConfigOptions().getElementCacheSizeWay(),
     ConfigOptions().getElementCacheSizeRelation())),
@@ -144,9 +144,7 @@ void OgrWriter::setConfiguration(const Settings& conf)
 void OgrWriter::setCacheCapacity(const unsigned long maxNodes, const unsigned long maxWays,
                                  const unsigned long maxRelations)
 {
-  _elementCache.reset();
-  _elementCache =
-    std::shared_ptr<ElementCache>(new ElementCacheLRU(maxNodes, maxWays, maxRelations));
+  _elementCache = std::make_shared<ElementCacheLRU>(maxNodes, maxWays, maxRelations);
 }
 
 void OgrWriter::_strictError(const QString& warning) const
@@ -223,8 +221,8 @@ void OgrWriter::initTranslator()
   if (_translator == nullptr)
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    std::shared_ptr<ScriptSchemaTranslator> st(
-      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_scriptPath));
+    std::shared_ptr<ScriptSchemaTranslator> st =
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_scriptPath);
     st->setErrorTreatment(_strictChecking);
     _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
   }
@@ -309,7 +307,7 @@ void OgrWriter::translateToFeatures(
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
       logWarnCount++;
-      g.reset((GeometryFactory::getDefaultInstance()->createEmptyGeometry()));
+      g.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
     }
 
     LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType());
@@ -348,7 +346,7 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
   std::shared_ptr<Geometry> g;
   vector<ScriptToOgrSchemaTranslator::TranslatedFeature> tf;
 
-  ElementPtr elementClone(element->clone());
+  ElementPtr elementClone = element->clone();
   _addExportTagsVisitor.visit(elementClone);
 
   translateToFeatures(provider, elementClone, g, tf);
@@ -610,15 +608,9 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
     }
 
     // Add a Feature Dataset to a ESRI File GeoDatabase if requested
-    if (name == QString("FileGDB"))
+    if (name == QString("FileGDB") && layer->getFdName() != "")
     {
-      if (layer->getFdName() != "")
-      {
-        options["FEATURE_DATASET"] = layer->getFdName();
-        // speed up bulk inserts.
-        // NOTE: Seems to be depreciated in GDAL 2.0+
-        //options["FGDB_BULK_LOAD"] = "YES";
-      }
+      options["FEATURE_DATASET"] = layer->getFdName();
     }
   }
 

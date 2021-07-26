@@ -47,12 +47,13 @@ int ConflateUtils::writeNonConflatable(
 {
   LOG_STATUS("Writing non-conflatable data to: ..." << FileUtils::toLogFormat(output, 25) << " ...");
 
-  OsmMapPtr nonConflatableMap(new OsmMap(map));
+  OsmMapPtr nonConflatableMap = std::make_shared<OsmMap>(map);
   LOG_VART(nonConflatableMap->size());
-  std::shared_ptr<RemoveElementsVisitor> elementRemover(new RemoveElementsVisitor(true));
+  std::shared_ptr<RemoveElementsVisitor> elementRemover =
+    std::make_shared<RemoveElementsVisitor>(true);
   elementRemover->setRecursive(true);
-  std::shared_ptr<NonConflatableCriterion> nonConflatableCrit(
-    new NonConflatableCriterion(nonConflatableMap));
+  std::shared_ptr<NonConflatableCriterion> nonConflatableCrit =
+    std::make_shared<NonConflatableCriterion>(nonConflatableMap);
   nonConflatableCrit->setIgnoreGenericConflators(ignoreGenericConflators);
   elementRemover->addCriterion(nonConflatableCrit);
   nonConflatableMap->visitRw(*elementRemover);
@@ -68,7 +69,7 @@ int ConflateUtils::writeNonConflatable(
 
 void ConflateUtils::writeDiff(
   const QString& mapUrl1, const QString& mapUrl2, const geos::geom::Envelope& bounds,
-  QString& output)
+  const QString& output)
 {
   conf().set(ConfigOptions::getBoundsKey(), GeometryUtils::toConfigString(bounds));
 

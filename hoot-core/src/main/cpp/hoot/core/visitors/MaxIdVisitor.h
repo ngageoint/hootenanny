@@ -47,18 +47,16 @@ public:
   MaxIdVisitor() : _maxId(-std::numeric_limits<long>::max()) { }
   ~MaxIdVisitor() = default;
 
-  long getMinId() const { return _maxId; }
-
   double getStat() const override { return _maxId; }
 
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override
   { return "Returns the largest element ID value found"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+
+  long getMinId() const { return _maxId; }
 
 private:
 

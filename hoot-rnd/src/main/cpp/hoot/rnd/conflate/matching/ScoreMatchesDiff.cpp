@@ -99,10 +99,10 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
   // and the inputs had to be conflated at some point where they were read completely into
   // memory anyway. There's a lot of repeated element processing here that could be optimized.
 
-  OsmMapPtr map1(new OsmMap());
+  OsmMapPtr map1 = std::make_shared<OsmMap>();
   IoUtils::loadMap(map1, _input1, true);
   map1->setName("original");
-  OsmMapPtr map2(new OsmMap());
+  OsmMapPtr map2 = std::make_shared<OsmMap>();
   IoUtils::loadMap(map2, _input2, true);
   map2->setName("new");
 
@@ -111,11 +111,11 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
 
   // count the manual matches made
 
-  std::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor(
-    new CountManualMatchesVisitor());
+  std::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor =
+    std::make_shared<CountManualMatchesVisitor>();
   map1->visitRo(*manualMatchVisitor);
   const int numManualMatches1 = static_cast<int>(manualMatchVisitor->getStat());
-  manualMatchVisitor.reset(new CountManualMatchesVisitor());
+  manualMatchVisitor = std::make_shared<CountManualMatchesVisitor>();
   map2->visitRo(*manualMatchVisitor);
   const int numManualMatches2 = static_cast<int>(manualMatchVisitor->getStat());
 
@@ -245,7 +245,7 @@ bool ScoreMatchesDiff::printDiff(const QString& output)
 
 std::shared_ptr<QFile> ScoreMatchesDiff::_getOutputFile(const QString& outputPath) const
 {
-  std::shared_ptr<QFile> outputFile(new QFile(outputPath));
+  std::shared_ptr<QFile> outputFile = std::make_shared<QFile>(outputPath);
   if (outputFile->exists())
   {
     outputFile->remove();

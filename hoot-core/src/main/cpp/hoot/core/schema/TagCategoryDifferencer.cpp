@@ -49,7 +49,7 @@ bool TagCategoryDifferencer::_isValidTag(const SchemaVertex& sv) const
     throw IllegalArgumentException("You must specify exactly one category to the "
       "TagCategoryDifferencer.");
   }
-  return sv.categories.contains(_category.toString());
+  return sv.getCategories().contains(_category.toString());
 }
 
 void TagCategoryDifferencer::setConfiguration(const Settings& conf)

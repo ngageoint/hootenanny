@@ -253,7 +253,7 @@ void MatchScorer::_printIssues(
 
 void MatchScorer::_optimize(const std::vector<OsmMapPtr>& maps, const bool showConfusion)
 {
-  ScoreFunction* sf = new ScoreFunction();
+  std::shared_ptr<ScoreFunction> sf = std::make_shared<ScoreFunction>();
   sf->_scorer = this;
   sf->_maps = maps;
   sf->_showConfusion = showConfusion;

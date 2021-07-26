@@ -64,7 +64,7 @@ public:
 
   void runRelationTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, true, true, "test-files/ops/ElementIdToVersionMapper/runBasicTest-in.osm");
 
@@ -77,7 +77,7 @@ public:
 
     // Write two tags to the relation and its members only.
 
-    RecursiveSetTagValueOp uut(keys, values, ElementCriterionPtr(new RelationCriterion()));
+    RecursiveSetTagValueOp uut(keys, values, std::make_shared<RelationCriterion>());
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -88,7 +88,7 @@ public:
 
   void runNoCritTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, true, true, "test-files/ops/ElementIdToVersionMapper/runBasicTest-in.osm");
 

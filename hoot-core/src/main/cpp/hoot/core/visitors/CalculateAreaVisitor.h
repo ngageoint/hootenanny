@@ -47,17 +47,15 @@ public:
   CalculateAreaVisitor() : _total(0) { }
   ~CalculateAreaVisitor() = default;
 
-  double getArea() const { return _total; }
-
   double getStat() const override { return getArea(); }
 
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override { return "Calculates feature area totals"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+
+  double getArea() const { return _total; }
 
 private:
 

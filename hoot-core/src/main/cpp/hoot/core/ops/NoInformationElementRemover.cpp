@@ -47,9 +47,10 @@ void NoInformationElementRemover::apply(std::shared_ptr<OsmMap>& map)
   _numAffected = 0;
   _map = map;
 
-  std::shared_ptr<NoInformationCriterion> pNoInfoCrit(new NoInformationCriterion());
-  std::shared_ptr<UselessElementCriterion> pUselessCrit(new UselessElementCriterion(map));
-  std::shared_ptr<ChainCriterion> pCrit(new ChainCriterion(pNoInfoCrit, pUselessCrit));
+  std::shared_ptr<ChainCriterion> pCrit(
+    std::make_shared<ChainCriterion>(
+      std::make_shared<NoInformationCriterion>(),
+      std::make_shared<UselessElementCriterion>(map)));
   RemoveElementsVisitor removeElementsVisitor;
   removeElementsVisitor.setRecursive(false);
   removeElementsVisitor.addCriterion(pCrit);

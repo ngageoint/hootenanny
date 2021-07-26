@@ -191,6 +191,7 @@ std::string Edge::toString() const
 class Subdivision
 {
 public:
+
   Subdivision(const Point2d &, const Point2d &, const Point2d &);
   virtual ~Subdivision();
   void InsertSite(const Point2d &);
@@ -207,6 +208,7 @@ public:
   InternalEdge *Locate(const Point2d &);
 
 private:
+
   InternalEdge * startingEdge;
 
   set<QuadEdge*> _edges;
@@ -216,6 +218,7 @@ private:
 class QuadEdge
 {
 public:
+
   QuadEdge();
   // should only be used by MakeEdge
   InternalEdge e[4];
@@ -341,15 +344,16 @@ Point2d* Subdivision::MakePoint(const Point2d& pt)
 }
 
 void Splice(InternalEdge * a, InternalEdge * b)
-// This operator affects the two edge rings around the origins of a and b,
-// and, independently, the two edge rings around the left faces of a and b.
-// In each case, (i) if the two rings are distinct, Splice will combine
-// them into one; (ii) if the two are the same ring, Splice will break it
-// into two separate pieces.
-// Thus, Splice can be used both to attach the two edges together, and
-// to break them apart. See Guibas and Stolfi (1985) p.96 for more details
-// and illustrations.
 {
+  // This operator affects the two edge rings around the origins of a and b,
+  // and, independently, the two edge rings around the left faces of a and b.
+  // In each case, (i) if the two rings are distinct, Splice will combine
+  // them into one; (ii) if the two are the same ring, Splice will break it
+  // into two separate pieces.
+  // Thus, Splice can be used both to attach the two edges together, and
+  // to break them apart. See Guibas and Stolfi (1985) p.96 for more details
+  // and illustrations.
+
   InternalEdge *alpha = a->Onext()->Rot();
   InternalEdge *beta = b->Onext()->Rot();
   InternalEdge *t1 = b->Onext();
@@ -440,17 +444,17 @@ int ccw(const Point2d & a, const Point2d & b, const Point2d & c)
   return (TriArea2(a, b, c) > 0);
 }
 
-int RightOf(const Point2d & x, InternalEdge * e)
+int RightOf(const Point2d & x, const InternalEdge * e)
 {
   return ccw(x, e->Dest2d(), e->Org2d());
 }
 
-int LeftOf(const Point2d & x, InternalEdge * e)
+int LeftOf(const Point2d & x, const InternalEdge * e)
 {
   return ccw(x, e->Org2d(), e->Dest2d());
 }
 
-int OnEdge(const Point2d & x, InternalEdge * e)
+int OnEdge(const Point2d & x, const InternalEdge * e)
 // A predicate that determines if the point x is on the edge e.
 // The point is considered on if it is in the EPS-neighborhood
 // of the edge.
@@ -587,11 +591,10 @@ void Subdivision::InsertSite(const Point2d & x)
   while (e->Lnext() != startingEdge);
 
   looping = 0;
-  // Examine suspect edges to ensure that the Delaunay condition
-  // is satisfied.
+  // Examine suspect edges to ensure that the Delaunay condition is satisfied.
   do
   {
-    InternalEdge *t = e->Oprev();
+    const InternalEdge *t = e->Oprev();
     if (RightOf(t->Dest2d(), e) && InCircle(e->Org2d(), t->Dest2d(), e->Dest2d(), x))
     {
       Swap(e);
@@ -661,11 +664,6 @@ Edge& EdgeIterator::operator++()
   _todo.pop_front();
 
   return _e;
-}
-
-Face::Face(Face& other)
-{
-  *this = other;
 }
 
 Face::Face(const Face& other)
@@ -787,7 +785,6 @@ std::string Face::toString() const
   return strm.str();
 }
 
-
 FaceIterator::FaceIterator(const FaceIterator& from)
   : _it(from._it),
     _end(from._end),
@@ -797,7 +794,7 @@ FaceIterator::FaceIterator(const FaceIterator& from)
   _f = new Face(*_it);
 }
 
-FaceIterator::FaceIterator(EdgeIterator it, const EdgeIterator& end)
+FaceIterator::FaceIterator(const EdgeIterator& it, const EdgeIterator& end)
   : _f(new Face(*it)),
     _it(it),
     _end(end),

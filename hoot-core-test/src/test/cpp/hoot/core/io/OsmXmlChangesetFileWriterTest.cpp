@@ -53,7 +53,8 @@ public:
 
   void runSimpleTest()
   {
-    std::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
+    std::shared_ptr<ChangesetProvider> changesetProvider =
+      std::make_shared<TestOsmChangesetProvider>(false);
     OsmXmlChangesetFileWriter uut;
     uut.setConfiguration(conf());
     uut.write(_outputPath + "changeset.osc", changesetProvider);

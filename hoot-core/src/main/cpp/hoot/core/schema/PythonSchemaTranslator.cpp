@@ -134,9 +134,9 @@ bool PythonSchemaTranslator::isValidScript()
       _init();
       _initialized = true;
     }
-    catch (const HootException&)
+    catch (const HootException& e)
     {
-      // pass
+      LOG_DEBUG(e.getWhat());
     }
   }
 
@@ -150,7 +150,8 @@ void PythonSchemaTranslator::_finalize()
   Py_Finalize();
 }
 
-void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, const char* geomType)
+void PythonSchemaTranslator::_translateToOsm(
+  Tags& tags, const char* layerName, const char* geomType)
 {
   PyObject* layerNamePy = PyString_FromString(layerName);
   PyObject* geomTypePy = PyString_FromString(geomType);
@@ -208,13 +209,13 @@ void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, 
                             "convertable to strings.");
       }
 
-      Py_UNICODE* keyUnicodeData = PyUnicode_AsUnicode(keyUnicode);
-      Py_UNICODE* valueUnicodeData = PyUnicode_AsUnicode(valueUnicode);
+      const Py_UNICODE* keyUnicodeData = PyUnicode_AsUnicode(keyUnicode);
+      const Py_UNICODE* valueUnicodeData = PyUnicode_AsUnicode(valueUnicode);
       QString qKey, qValue;
 #       if (Py_UNICODE_SIZE == 4)
       {
-        qKey = QString::fromUcs4((const uint*)keyUnicodeData);
-        qValue = QString::fromUcs4((const uint*)valueUnicodeData);
+        qKey = QString::fromUcs4(keyUnicodeData);
+        qValue = QString::fromUcs4(valueUnicodeData);
       }
 #       elif (Py_UNICODE_SIZE == 2)
       {

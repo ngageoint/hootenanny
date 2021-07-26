@@ -120,7 +120,7 @@ WayPtr WayAverager::replaceWaysWithAveragedWay()
   Meters newAcc = 2.0 * sqrt(weight1 * weight1 * v1 + weight2 * weight2 * v2);
   LOG_VART(newAcc);
 
-  WayPtr result(new Way(_w1->getStatus(), _w1->getId(), newAcc));
+  WayPtr result = std::make_shared<Way>(_w1->getStatus(), _w1->getId(), newAcc);
   result->setPid(Way::getPid(_w1, _w2));
 
   ConstNodePtr node1a = _map->getNode(_w1->getNodeIds()[0]);

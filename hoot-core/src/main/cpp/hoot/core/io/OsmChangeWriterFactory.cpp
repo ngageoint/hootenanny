@@ -55,7 +55,7 @@ std::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
     LOG_VART(names[i]);
-    writer.reset(Factory::getInstance().constructObject<OsmChangeWriter>(names[i]));
+    writer = Factory::getInstance().constructObject<OsmChangeWriter>(names[i]);
     if (writer->isSupported(url))
     {
       writer->setElementPayloadFormat(elementPayloadFormat);

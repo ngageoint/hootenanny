@@ -83,8 +83,7 @@ bool NodeMatcher::isNetworkFeatureType(ConstElementPtr element)
     for (int i = 0; i < critClasses.size(); i++)
     {
       _networkFeatureTypeCriteria.append(
-        std::shared_ptr<ElementCriterion>(
-          Factory::getInstance().constructObject<ElementCriterion>(critClasses.at(i))));
+        Factory::getInstance().constructObject<ElementCriterion>(critClasses.at(i)));
     }
   }
 

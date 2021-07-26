@@ -71,8 +71,6 @@ private:
   /** Main isolate */
   v8::Isolate* _isolate;
   std::shared_ptr<v8::Isolate::Scope> _isolateScope;
-  /** In Hootenanny we own the Isolate, when called from Node we do not */
-  bool _ownIsolate;
   /** Platform object */
   std::unique_ptr<v8::Platform> _platform;
   std::shared_ptr<v8::Locker> _locker;

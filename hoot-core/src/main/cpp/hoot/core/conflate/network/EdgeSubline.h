@@ -49,29 +49,23 @@ public:
   std::shared_ptr<EdgeSubline> clone() const;
 
   bool contains(const ConstNetworkVertexPtr& v) const;
-
   bool contains(const std::shared_ptr<const EdgeSubline>& es) const;
-
   bool contains(const ConstEdgeLocationPtr& el) const;
 
   static std::shared_ptr<EdgeSubline> createFullSubline(const ConstNetworkEdgePtr& e);
 
   const ConstNetworkEdgePtr& getEdge() const { return _start->getEdge(); }
-
   const ConstEdgeLocationPtr& getEnd() const { return _end; }
-
   /**
    * Returns the way location that is closer to the beginning of the way regardless of the
    * isBackwards() result.
    */
   ConstEdgeLocationPtr getFormer() const { return isBackwards() ? _end : _start; }
-
   /**
    * Returns the way location that is closer to the end of the way regardless of the
    * isBackwards() result.
    */
   ConstEdgeLocationPtr getLatter() const { return isBackwards() ? _start : _end; }
-
   const ConstEdgeLocationPtr& getStart() const { return _start; }
 
   /**
@@ -85,11 +79,8 @@ public:
    * a valid test if sublines belong to the same edge.
    */
   bool isSameDirection(const std::shared_ptr<const EdgeSubline>& other) const;
-
   bool isBackwards() const { return _end < _start; }
-
   bool isValid() const { return _start->isValid() && _end->isValid(); }
-
   bool isZeroLength() const { return _start == _end; }
 
   /**

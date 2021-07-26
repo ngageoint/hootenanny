@@ -60,10 +60,11 @@ public:
 
   std::shared_ptr<KernelEstimationInterpolator> buildRandom()
   {
-    std::shared_ptr<KernelEstimationInterpolator> result(new KernelEstimationInterpolator());
+    std::shared_ptr<KernelEstimationInterpolator> result =
+      std::make_shared<KernelEstimationInterpolator>();
     KernelEstimationInterpolator& uut = *result;
 
-    std::shared_ptr<DataFrame> dfPtr(new DataFrame());
+    std::shared_ptr<DataFrame> dfPtr = std::make_shared<DataFrame>();
     DataFrame& df = *dfPtr;
     vector<string> labels;
     labels.push_back("x");
@@ -177,7 +178,7 @@ public:
     Tgs::Random::instance()->seed(0);
     KernelEstimationInterpolator uut(.1);
 
-    std::shared_ptr<DataFrame> dfPtr(new DataFrame());
+    std::shared_ptr<DataFrame> dfPtr = std::make_shared<DataFrame>();
     DataFrame& df = *dfPtr;
     vector<string> labels;
     labels.push_back("x");

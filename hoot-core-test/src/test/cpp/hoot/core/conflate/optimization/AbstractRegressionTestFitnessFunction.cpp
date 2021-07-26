@@ -43,13 +43,12 @@
 namespace hoot
 {
 
-AbstractRegressionTestFitnessFunction::AbstractRegressionTestFitnessFunction(const QString& dir,
-                                                                             const QString& configFile,
-                                                                             const QString& testDirExtension)
-  : AbstractTestFitnessFunction(),
-    _configFile(configFile)
+AbstractRegressionTestFitnessFunction::AbstractRegressionTestFitnessFunction(
+  const QString& dir, const QString& configFile, const QString& testDirExtension) :
+AbstractTestFitnessFunction(),
+_configFile(configFile)
 {
-  _testSuite.reset(new RegressionTestSuite(dir, testDirExtension));
+  _testSuite = std::make_shared<RegressionTestSuite>(dir, testDirExtension);
   QStringList confs;
   _testSuite->loadDir(dir, confs);
   _testCount = _testSuite->getChildTestCount();

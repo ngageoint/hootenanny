@@ -81,7 +81,7 @@ void SettingsJs::get(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  Settings* settings = &conf();
+  const Settings* settings = &conf();
 
   QString key = str(args[0]->ToString(context).ToLocalChecked());
   try

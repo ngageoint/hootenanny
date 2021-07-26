@@ -136,10 +136,8 @@ bool LinearAverageMerger::_mergePair(
   _map->addWay(averagedWay);
 
   // Do bookkeeping on the ways being replaced.
-  replaced.emplace_back(
-    std::pair<ElementId, ElementId>(averagedWay->getElementId(), way1->getElementId()));
-  replaced.emplace_back(
-    std::pair<ElementId, ElementId>(averagedWay->getElementId(), way2->getElementId()));
+  replaced.emplace_back(averagedWay->getElementId(), way1->getElementId());
+  replaced.emplace_back(averagedWay->getElementId(), way2->getElementId());
   LOG_VART(replaced);
 
   return false;

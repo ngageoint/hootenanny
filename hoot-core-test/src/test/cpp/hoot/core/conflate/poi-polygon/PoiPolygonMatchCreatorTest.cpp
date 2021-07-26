@@ -53,7 +53,7 @@ private:
 
   OsmMapPtr getTestMap1()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
@@ -65,11 +65,11 @@ private:
     WayPtr w2 = TestUtils::createWay(map, c1, "w2", Status::Unknown1, 5);
     w2->getTags().set("area", true);
 
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     n1->getTags().set("name", "foo");
     map->addNode(n1);
-    NodePtr n2(new Node(Status::Unknown2, 2, 5, 10, 5));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 5, 10, 5);
     n2->getTags().set("poi", true);
     n2->getTags().set("name", "bar");
     map->addNode(n2);
@@ -95,7 +95,8 @@ public:
     {
       PoiPolygonMatchCreator uut;
       vector<ConstMatchPtr> matches;
-      std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.5, 0.5, 0.5));
+      std::shared_ptr<const MatchThreshold> threshold =
+        std::make_shared<MatchThreshold>(0.5, 0.5, 0.5);
       uut.createMatches(map, matches, threshold);
       HOOT_STR_EQUALS(2, matches.size());
       HOOT_STR_EQUALS(
@@ -124,7 +125,7 @@ public:
         map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "foo")[0]), map));
 
     OsmXmlReader reader;
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);

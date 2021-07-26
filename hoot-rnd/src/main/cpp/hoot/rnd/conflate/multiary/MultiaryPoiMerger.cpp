@@ -41,7 +41,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, MultiaryPoiMerger)
 
-MultiaryPoiMerger::MultiaryPoiMerger(std::set<std::pair<ElementId, ElementId>>& pairs) :
+MultiaryPoiMerger::MultiaryPoiMerger(const std::set<std::pair<ElementId, ElementId>>& pairs) :
 MergerBase(pairs)
 {
 }
@@ -75,12 +75,13 @@ void MultiaryPoiMerger::apply(const OsmMapPtr& map,
     // way to add that dep.
     if (d.getClassName() == "hoot::ScriptMergerCreator")
     {
-      _mergerCreator.reset(Factory::getInstance().constructObject<MergerCreator>(d.getClassName()));
+      _mergerCreator = Factory::getInstance().constructObject<MergerCreator>(d.getClassName());
     }
   }
 
-  MultiaryScoreCachePtr score(new MultiaryScoreCache(map, _matchCreator));
-  MultiaryPoiMergeCachePtr merge(new MultiaryPoiMergeCache(map, _matchCreator, _mergerCreator));
+  MultiaryScoreCachePtr score = std::make_shared<MultiaryScoreCache>(map, _matchCreator);
+  MultiaryPoiMergeCachePtr merge =
+    std::make_shared<MultiaryPoiMergeCache>(map, _matchCreator, _mergerCreator);
   MultiaryHierarchicalClusterAlgorithm clusterer(merge, score,
     _matchCreator->getMatchThreshold()->getMissThreshold());
 
@@ -126,7 +127,7 @@ void MultiaryPoiMerger::_mergeClusters(const OsmMapPtr& map,
       }
     }
     // Copy mergedElement so we know this is the only map that contains the element.
-    ElementPtr newE(mc->mergedElement->clone());
+    ElementPtr newE = mc->mergedElement->clone();
     // this will replace the old entry.
     map->addElement(newE);
   }

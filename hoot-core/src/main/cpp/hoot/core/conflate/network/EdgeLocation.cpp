@@ -67,7 +67,7 @@ std::shared_ptr<EdgeLocation> EdgeLocation::move(const ConstElementProviderPtr& 
   Meters offset = _portion * l + distance;
   Meters portion = min(1.0, max(offset / l, 0.0));
 
-  return std::shared_ptr<EdgeLocation>(new EdgeLocation(_e, portion));
+  return std::make_shared<EdgeLocation>(_e, portion);
 }
 
 QString EdgeLocation::toString() const

@@ -49,6 +49,11 @@ HOOT_JS_REGISTER(ElementCriterionJs)
 
 Persistent<Function> ElementCriterionJs::_constructor;
 
+ElementCriterionJs::ElementCriterionJs(ElementCriterionPtr c) :
+_c(c)
+{
+}
+
 void ElementCriterionJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
@@ -85,7 +90,7 @@ void ElementCriterionJs::New(const FunctionCallbackInfo<Value>& args)
 
   const QString className = "hoot::" + str(args.This()->GetConstructorName());
   LOG_VART(className);
-  ElementCriterion* c = Factory::getInstance().constructObject<ElementCriterion>(className);
+  ElementCriterionPtr c = Factory::getInstance().constructObject<ElementCriterion>(className);
   ElementCriterionJs* obj = new ElementCriterionJs(c);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a Persistent<Object>
   obj->Wrap(args.This());
@@ -102,7 +107,8 @@ void ElementCriterionJs::isSatisfied(const FunctionCallbackInfo<Value>& args)
   Local<Context> context = current->GetCurrentContext();
 
   ElementCriterionPtr ec = ObjectWrap::Unwrap<ElementCriterionJs>(args.This())->getCriterion();
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
+  ConstElementPtr e =
+    ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, ec->isSatisfied(e)));
 }

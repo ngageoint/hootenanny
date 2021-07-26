@@ -73,7 +73,7 @@ void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdge
 
   if (e1->isStub() || e2->isStub())
   {
-    EdgeMatchPtr em(new EdgeMatch());
+    EdgeMatchPtr em = std::make_shared<EdgeMatch>();
     em->getString1()->addFirstEdge(e1);
     em->getString2()->addFirstEdge(e2);
     _recordMatch(em);
@@ -84,7 +84,7 @@ void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdge
     QList<EdgeSublineMatchPtr> sublines = _details->calculateMatchingSublines(e1, e2);
     foreach (EdgeSublineMatchPtr s, sublines)
     {
-      EdgeMatchPtr em(new EdgeMatch());
+      EdgeMatchPtr em = std::make_shared<EdgeMatch>();
       em->getString1()->addFirstEdge(s->getSubline1());
       em->getString2()->addFirstEdge(s->getSubline2());
       _steps = 0;
@@ -126,47 +126,43 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
   }
   else
   {
-    // if the end of the match isn't terminated.
-    if (!toMatch)
+    // If the end of the match isn't terminated and
+    if (!toMatch &&
+        // either of the vertices doesn't have a tie point, then we need to keep searching.
+        (_hasConfidentTiePoint(to1) == false || _hasConfidentTiePoint(to2) == false))
     {
-      // if either of the vertices doesn't have a tie point then we need to keep searching.
-      if (_hasConfidentTiePoint(to1) == false || _hasConfidentTiePoint(to2) == false)
+      // Get all the neighboring edges to 1 and 2.
+      QSet<ConstNetworkEdgePtr> neighbors1 = _getEdgesFromLocation(to1);
+      QSet<ConstNetworkEdgePtr> neighbors2 = _getEdgesFromLocation(to2);
+
+      // Subtract all the edges that are already in the solution.
+      neighbors1.subtract(em->getString1()->getEdgeSet());
+      neighbors2.subtract(em->getString2()->getEdgeSet());
+
+      LOG_VART(neighbors1);
+      LOG_VART(neighbors2);
+
+      if (!neighbors1.empty() || !neighbors2.empty())
       {
-        // get all the neighboring edges to 1 and 2
-        QSet<ConstNetworkEdgePtr> neighbors1 = _getEdgesFromLocation(to1);
-        QSet<ConstNetworkEdgePtr> neighbors2 = _getEdgesFromLocation(to2);
-
-        // subtract all the edges that are already in the solution.
-        neighbors1.subtract(em->getString1()->getEdgeSet());
-        neighbors2.subtract(em->getString2()->getEdgeSet());
-
-        LOG_VART(neighbors1);
-        LOG_VART(neighbors2);
-
-        if (!neighbors1.empty() || !neighbors2.empty())
-        {
-          foundSolution = _addEdgeNeighborsToEnd(em, neighbors1, neighbors2) || foundSolution;
-        }
+        foundSolution = _addEdgeNeighborsToEnd(em, neighbors1, neighbors2) || foundSolution;
       }
     }
-    // if the beginning of the match isn't terminated
-    if (!fromMatch && !foundSolution)
+    // If the beginning of the match isn't terminated and
+    if (!fromMatch && !foundSolution &&
+        // either of the vertices doesn't have a tie point, then we need to keep searching.
+        (_hasConfidentTiePoint(from1) == false || _hasConfidentTiePoint(from2) == false))
     {
-      // if either of the vertices doesn't have a tie point then we need to keep searching.
-      if (_hasConfidentTiePoint(from1) == false || _hasConfidentTiePoint(from2) == false)
-      {
-        // get all the neighboring edges to 1 and 2
-        QSet<ConstNetworkEdgePtr> neighbors1 = _getEdgesFromLocation(from1);
-        QSet<ConstNetworkEdgePtr> neighbors2 = _getEdgesFromLocation(from2);
+      // Get all the neighboring edges to 1 and 2.
+      QSet<ConstNetworkEdgePtr> neighbors1 = _getEdgesFromLocation(from1);
+      QSet<ConstNetworkEdgePtr> neighbors2 = _getEdgesFromLocation(from2);
 
-        neighbors1.subtract(em->getString1()->getEdgeSet());
-        neighbors2.subtract(em->getString2()->getEdgeSet());
+      neighbors1.subtract(em->getString1()->getEdgeSet());
+      neighbors2.subtract(em->getString2()->getEdgeSet());
 
-        LOG_VART(neighbors1);
-        LOG_VART(neighbors2);
+      LOG_VART(neighbors1);
+      LOG_VART(neighbors2);
 
-        foundSolution = _addEdgeNeighborsToStart(em, neighbors1, neighbors2) || foundSolution;
-      }
+      foundSolution = _addEdgeNeighborsToStart(em, neighbors1, neighbors2) || foundSolution;
     }
   }
   LOG_VART(foundSolution);
@@ -449,7 +445,7 @@ void EdgeMatchSetFinder::_addReverseMatch(ConstEdgeMatchPtr edgeMatch, const dou
 {
   EdgeStringPtr rev1 = edgeMatch->getString1()->clone();
   rev1->reverse();
-  EdgeMatchPtr em2(new EdgeMatch(rev1, edgeMatch->getString2()));
+  EdgeMatchPtr em2 = std::make_shared<EdgeMatch>(rev1, edgeMatch->getString2());
   _matchSet->addEdgeMatch(em2, score);
 }
 

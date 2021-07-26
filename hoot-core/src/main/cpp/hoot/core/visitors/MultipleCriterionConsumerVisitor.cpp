@@ -47,7 +47,7 @@ void MultipleCriterionConsumerVisitor::addCriterion(const ElementCriterionPtr& c
   LOG_VART(crit.get());
   if (_negateCriteria)
   {
-    _criteria.push_back(ElementCriterionPtr(new NotCriterion(crit)));
+    _criteria.push_back(std::make_shared<NotCriterion>(crit));
   }
   else
   {
@@ -68,10 +68,7 @@ void MultipleCriterionConsumerVisitor::_addCriteria(
       if (!critName.trimmed().isEmpty())
       {
         LOG_VART(critName);
-        ElementCriterionPtr crit =
-          std::shared_ptr<ElementCriterion>(
-            Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
-        addCriterion(crit);
+        addCriterion(Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
       }
     }
   }

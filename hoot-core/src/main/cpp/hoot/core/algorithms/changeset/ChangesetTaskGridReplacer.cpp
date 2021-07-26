@@ -88,42 +88,10 @@ OsmMapPtr ChangesetTaskGridReplacer::replace(
 
   try
   {
-    bool exceptionOccurred = false;
-    try
-    {
-      _replaceEntireTaskGrid(taskGrid);
-    }
-    catch (const HootException& e)
-    {
-      exceptionOccurred = true;
-      const QString exceptionMsg = e.getWhat().toLower();
-      if (exceptionMsg.startsWith("killing"))
-      {
-        LOG_STATUS(
-          "Entire task grid cell replacement halted early at " <<
-          _killAfterNumChangesetDerivations << " changeset derivations in: " <<
-          StringUtils::millisecondsToDhms(_opTimer.elapsed()));
-      }
-      else if (exceptionMsg.startsWith("error executing query"))
-      {
-        LOG_ERROR(
-          "Error applying changeset at: " <<
-          StringUtils::millisecondsToDhms(_opTimer.elapsed()) << "; Error: " << e.getWhat());
-      }
-      else
-      {
-        //  Rethrow original exception
-        throw;
-      }
-    }
-
-    if (!exceptionOccurred)
-    {
-      LOG_STATUS(
-        "Task grid cell replacement operation successfully completed in: " <<
-        StringUtils::millisecondsToDhms(_opTimer.elapsed()));
-    }
-
+    _replaceEntireTaskGrid(taskGrid);
+    LOG_STATUS(
+      "Task grid cell replacement operation successfully completed in: " <<
+      StringUtils::millisecondsToDhms(_opTimer.elapsed()));
     return _writeUpdatedData(_finalOutput);
   }
   catch (const HootException& e)
@@ -169,13 +137,13 @@ void ChangesetTaskGridReplacer::_initChangesetStats()
 
 void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
 {
-  _changesetCreator.reset(
+  _changesetCreator =
     Factory::getInstance().constructObject<ChangesetReplacement>(
-      ConfigOptions().getChangesetReplacementImplementation()));
+      ConfigOptions().getChangesetReplacementImplementation());
   _changesetCreator->setChangesetOptions(true, "", _dataToReplaceUrl);
   LOG_VARD(_changesetCreator->toString());
 
-  _changesetApplier.reset(new OsmApiDbSqlChangesetApplier(_dataToReplaceUrl));
+  _changesetApplier = std::make_shared<OsmApiDbSqlChangesetApplier>(_dataToReplaceUrl);
 
   // for each task grid cell
     // derive the difference between the replacement data and the being replaced
@@ -185,25 +153,50 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
   _totalChangesetDeriveTime = 0.0;
   int changesetCtr = 0;
   const QList<TaskGrid::TaskGridCell> taskGridCells = taskGrid.getCells();
-  // probably a cleaner way to do this reversal handling...
-  if (!_reverseTaskGrid)
+  try
   {
-    for (QList<TaskGrid::TaskGridCell>::const_iterator taskGridCellItr = taskGridCells.begin();
-         taskGridCellItr != taskGridCells.end(); ++taskGridCellItr)
+    // probably a cleaner way to do this reversal handling...
+    if (!_reverseTaskGrid)
     {
-      const TaskGrid::TaskGridCell taskGridCell = *taskGridCellItr;
-      _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGridCells.size());
-      changesetCtr++;
+      for (QList<TaskGrid::TaskGridCell>::const_iterator taskGridCellItr = taskGridCells.begin();
+           taskGridCellItr != taskGridCells.end(); ++taskGridCellItr)
+      {
+        const TaskGrid::TaskGridCell taskGridCell = *taskGridCellItr;
+        _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGridCells.size());
+        changesetCtr++;
+      }
+    }
+    else
+    {
+      for (QList<TaskGrid::TaskGridCell>::const_reverse_iterator taskGridCellItr =
+             taskGridCells.crbegin();
+           taskGridCellItr != taskGridCells.crend(); ++taskGridCellItr)
+      {
+        const TaskGrid::TaskGridCell taskGridCell = *taskGridCellItr;
+        _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGridCells.size());
+        changesetCtr++;
+      }
     }
   }
-  else
+  catch (const HootException& e)
   {
-    for (QList<TaskGrid::TaskGridCell>::const_reverse_iterator taskGridCellItr = taskGridCells.crbegin();
-         taskGridCellItr != taskGridCells.crend(); ++taskGridCellItr)
+    const QString exceptionMsg = e.getWhat().toLower();
+    if (exceptionMsg.startsWith("killing"))
     {
-      const TaskGrid::TaskGridCell taskGridCell = *taskGridCellItr;
-      _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGridCells.size());
-      changesetCtr++;
+      LOG_STATUS(
+        "Entire task grid cell replacement halted early at " <<
+        _killAfterNumChangesetDerivations << " changeset derivations in: " <<
+        StringUtils::millisecondsToDhms(_opTimer.elapsed()));
+    }
+    else if (exceptionMsg.startsWith("error executing query"))
+    {
+      LOG_ERROR(
+        "Error applying changeset at: " <<
+        StringUtils::millisecondsToDhms(_opTimer.elapsed()) << "; Error: " << e.getWhat());
+    }
+    else
+    {
+      throw;
     }
   }
 }
@@ -371,7 +364,7 @@ OsmMapPtr ChangesetTaskGridReplacer::_writeUpdatedData(const QString& outputFile
   conf().set(ConfigOptions::getBoundsKey(), "");
 
   LOG_STATUS("Reading the modified data out of: ..." << FileUtils::toLogFormat(_dataToReplaceUrl, 25) << "...");
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   OsmMapReaderFactory::read(map, _dataToReplaceUrl, true, Status::Unknown1);
 
   // had to do this cleaning to get the relations to behave and be viewable in JOSM

@@ -469,10 +469,10 @@ void LinearSnapMerger::_splitElement(
     RelationPtr r;
     if (!scrap || scrap->getElementType() == ElementType::Way)
     {
-      r.reset(
-        new Relation(
+      r =
+        std::make_shared<Relation>(
           splitee->getStatus(), _map->createNextRelationId(), splitee->getCircularError(),
-          MetadataTags::RelationMultilineString()));
+          MetadataTags::RelationMultilineString());
       if (scrap)
       {
         r->addElement("", scrap);
@@ -529,10 +529,10 @@ void LinearSnapMerger::_splitElement(
         scrap->getTags().getInformationCount() > 0 && scrap->getElementType() == ElementType::Way)
     {
       // Create a new relation to contain this single way (footway relation).
-      RelationPtr r(
-        new Relation(
+      RelationPtr r =
+        std::make_shared<Relation>(
           splitee->getStatus(), _map->createNextRelationId(), splitee->getCircularError(),
-          MetadataTags::RelationMultilineString()));
+          MetadataTags::RelationMultilineString());
       r->addElement("", scrap->getElementId());
       if (_markAddedMultilineStringRelations)
       {
@@ -697,7 +697,8 @@ void LinearSnapMerger::_dropSecondaryElements(
   // them.
   WayNodeCopier nodeCopier;
   nodeCopier.setOsmMap(_map.get());
-  nodeCopier.addCriterion(NotCriterionPtr(new NotCriterion(new NoInformationCriterion())));
+  nodeCopier.addCriterion(
+    std::make_shared<NotCriterion>(std::make_shared<NoInformationCriterion>()));
 
   if (eid1.getType() == ElementType::Way && eidMatch2.getType() == ElementType::Way)
   {

@@ -95,7 +95,7 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   setDefaultAccuracy(configOptions.getCircularErrorDefaultValue());
   setKeepStatusTag(configOptions.getReaderKeepStatusTag());
-  setUseFileStatus(configOptions.getReaderUseFileStatus()),
+  setUseFileStatus(configOptions.getReaderUseFileStatus());
   setAddSourceDateTime(configOptions.getReaderAddSourceDatetime());
   setPreserveAllTags(configOptions.getReaderPreserveAllTags());
   setStatusUpdateInterval(configOptions.getTaskStatusUpdateInterval() * 10);
@@ -284,8 +284,9 @@ void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
     logWarnCount++;
   }
 
-  _element.reset(
-    new Way(_status, newId, _defaultCircularError, changeset, version, timestamp, user, uid));
+  _element =
+    std::make_shared<Way>(
+      _status, newId, _defaultCircularError, changeset, version, timestamp, user, uid);
 
   _parseTimeStamp(attributes);
 }
@@ -353,9 +354,9 @@ void OsmXmlReader::_createRelation(const QXmlAttributes& attributes)
     logWarnCount++;
   }
 
-  _element.reset(
-    new Relation(
-      _status, newId, _defaultCircularError, "", changeset, version, timestamp, user, uid));
+  _element =
+    std::make_shared<Relation>(
+      _status, newId, _defaultCircularError, "", changeset, version, timestamp, user, uid);
 
   _parseTimeStamp(attributes);
 }
@@ -490,7 +491,7 @@ OsmMapPtr OsmXmlReader::fromXml(
 
   LOG_DEBUG("Reading map from xml...");
   //LOG_VART(xml);
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   OsmXmlReader reader;
   reader.setUseDataSourceIds(useDataSourceId);
   reader.setUseFileStatus(useDataSourceStatus);
@@ -1019,7 +1020,7 @@ bool OsmXmlReader::hasMoreElements()
     finalizePartial();
     //map needed for assigning new element ids only (not actually putting any of the elements that
     //are read into this map, since this is the partial reading logic)
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
 
     if (_url.endsWith(".osm.bz2") || _url.endsWith(".osm.gz"))
     {

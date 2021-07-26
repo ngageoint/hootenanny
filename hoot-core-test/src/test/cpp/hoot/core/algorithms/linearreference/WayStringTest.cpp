@@ -58,7 +58,7 @@ public:
 
   OsmMapPtr createMap()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -103,7 +103,7 @@ public:
     map->addWay(w3);
 
     // WayString::append
-    WayStringPtr wstring(new WayString());
+    WayStringPtr wstring = std::make_shared<WayString>();
     WaySubline w1subline(WayLocation(map, w1, 0), WayLocation::createAtEndOfWay(map, w1));
     wstring->append(w1subline);
     WaySubline w2subline(WayLocation(map, w2, 0), WayLocation::createAtEndOfWay(map, w2));
@@ -186,7 +186,7 @@ public:
     bool exThrown = false;
     try
     {
-      WayStringPtr wstring(new WayString());
+      WayStringPtr wstring = std::make_shared<WayString>();
       WaySubline w1subline(WayLocation(map, w1, 0.0), WayLocation(map, w1, 10.0));
       wstring->append(w1subline);
       WaySubline w2subline(WayLocation(map, w1, 11.0), WayLocation(map, w1, 15.0));
@@ -204,7 +204,7 @@ public:
     exThrown = false;
     try
     {
-      WayStringPtr wstring(new WayString());
+      WayStringPtr wstring = std::make_shared<WayString>();
       WaySubline w1subline(WayLocation(map, w1, 0.0), WayLocation::createAtEndOfWay(map, w1));
       wstring->append(w1subline);
       WaySubline w2subline(WayLocation(map, w2, 10.0), WayLocation::createAtEndOfWay(map, w2));
@@ -224,7 +224,7 @@ public:
 //    exThrown = false;
 //    try
 //    {
-//      WayStringPtr wstring(new WayString());
+//      WayStringPtr wstring = std::make_shared<WayString>();
 //      WaySubline w1subline(WayLocation(map, w1, 0), WayLocation::createAtEndOfWay(map, w1));
 //      wstring->append(w1subline);
 //      WaySubline w2subline(WayLocation(map, w2, 0), WayLocation::createAtEndOfWay(map, w2));
@@ -274,7 +274,7 @@ public:
     map->addWay(w1);
     map->addWay(w2);
 
-    WayStringPtr ws(new WayString());
+    WayStringPtr ws = std::make_shared<WayString>();
     ws->append(WaySubline(WayLocation(map, w1, 0), WayLocation::createAtEndOfWay(map, w1)));
     ws->append(WaySubline(WayLocation::createAtEndOfWay(map, w2), WayLocation(map, w2, 0.0)));
 
@@ -307,7 +307,7 @@ public:
 
     map->addWay(w1);
 
-    WayStringPtr ws(new WayString());
+    WayStringPtr ws = std::make_shared<WayString>();
     ws->append(WaySubline(WayLocation(map, w1, 0), WayLocation(map, w1, 40)));
 
     WayPtr wayCopy = ws->copySimplifiedWayIntoMap(*map, map);
@@ -350,7 +350,7 @@ public:
     map->addWay(w1);
     map->addWay(w2);
 
-    WayStringPtr ws(new WayString());
+    WayStringPtr ws = std::make_shared<WayString>();
     WaySubline w1subline(WayLocation(map, w1, 0), WayLocation::createAtEndOfWay(map, w1));
     WaySubline w2subline(WayLocation(map, w2, 0), WayLocation(map, w2, 1, 0.75));
 

@@ -71,11 +71,11 @@ void BuildingPartMergeOp::setConfiguration(const Settings& conf)
   LOG_VARD(_threadCount);
 }
 
-void BuildingPartMergeOp::_init(OsmMapPtr& map)
+void BuildingPartMergeOp::_init(const OsmMapPtr& map)
 {
   _buildingPartGroups.clear();
   _map = map;
-  _elementToGeometryConverter.reset(new ElementToGeometryConverter(_map));
+  _elementToGeometryConverter = std::make_shared<ElementToGeometryConverter>(_map);
   _numAffected = 0;
   _totalBuildingGroupsProcessed = 0;
   _numBuildingGroupsMerged = 0;
@@ -101,7 +101,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   _map.reset();
 }
 
-QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProcessingInput()
+QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProcessingInput() const
 {
   QQueue<BuildingPartRelationship> buildingPartInput;
 
@@ -158,7 +158,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProc
   return buildingPartInput;
 }
 
-QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPreProcessingInput()
+QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPreProcessingInput() const
 {
   QQueue<BuildingPartRelationship> buildingPartInput;
 
@@ -239,7 +239,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPr
   return buildingPartInput;
 }
 
-QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartPreProcessingInput()
+QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartPreProcessingInput() const
 {
   // Tried caching all of the geometries beforehand in order to pass them to the task threads to
   // try to not only avoid repeated geometry calcs but also get rid of an extra call to
@@ -267,11 +267,12 @@ void BuildingPartMergeOp::_preProcessBuildingParts()
   LOG_VART(threadPool.maxThreadCount());
   for (int i = 0; i < _threadCount; i++)
   {
+    // The thread pool takes ownership of this task.
     BuildingPartPreMergeCollector* buildingPartCollectTask = new BuildingPartPreMergeCollector();
     buildingPartCollectTask->setBuildingPartsInput(&buildingPartsInput);
     buildingPartCollectTask->setStartingInputSize(buildingPartsInput.size());
-    // Passing the groups into the threads as a shared pointer slows down processing by ~60%, so
-    // will pass in as a raw pointer.
+    // Passing the groups into the threads as a shared pointer slows down processing by ~60% (not
+    // sure why), so will pass in as a raw pointer.
     buildingPartCollectTask->setBuildingPartGroupsOutput(&_buildingPartGroups);
     buildingPartCollectTask->setMap(_map);
     buildingPartCollectTask->setBuildingPartInputMutex(&buildingPartsInputMutex);

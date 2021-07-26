@@ -71,7 +71,6 @@ private:
   std::shared_ptr<std::fstream> _autoStrm;
   std::shared_ptr<boost::iostreams::filtering_istream> _bstrm;
   std::istream* _strm;
-  char _buffer[2048];
 
   bool _eof() const;
   QString _readLine();

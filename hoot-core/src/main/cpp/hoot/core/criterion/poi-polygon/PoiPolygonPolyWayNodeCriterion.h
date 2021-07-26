@@ -44,7 +44,7 @@ public:
   ~PoiPolygonPolyWayNodeCriterion() = default;
 
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new PoiPolygonPolyWayNodeCriterion(_map)); }
+  { return std::make_shared<PoiPolygonPolyWayNodeCriterion>(_map); }
 
   QString getDescription() const override
   { return "Identifies nodes belonging to polygons as identified by POI/Polygon Conflation"; }

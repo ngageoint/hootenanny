@@ -128,7 +128,7 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
       elementSqlStatements += sqlStatement + ";";
 
       // The sql changeset is made up of one or more sql statements for each changeset operation
-      // type. Each operation starts with a comment header (e.g. /* node create 1 */), which can be
+      // type. Each operation starts with a comment header (e.g. 'node create 1'), which can be
       // used to determine its type.
       if (sqlStatement.startsWith("\n/*"))
       {

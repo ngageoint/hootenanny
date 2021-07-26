@@ -55,7 +55,7 @@ void ElementTranslatorThread::run()
     // We use this init mutex as a bandaid. Hoot uses a lot of problematic
     // singletons that cause issues when you try to multithread stuff.
     QMutexLocker lock(_pInitMutex);
-    ogrWriter.reset(new OgrWriter());
+    ogrWriter = std::make_shared<OgrWriter>();
     ogrWriter->setSchemaTranslationScript(_translation);
     ogrWriter->initTranslator();
     ogrWriter->setCache(_pElementCache);

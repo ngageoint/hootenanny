@@ -79,34 +79,21 @@ public:
   RubberSheet();
   ~RubberSheet() = default;
 
-  RubberSheet* clone() const { return new RubberSheet(*this); }
-
-  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
-  { _conflateInfoCache = cache; }
-
-  /**
-   * @see OsmMapOperation
-   */
-  void apply(std::shared_ptr<OsmMap>& map) override;
-
-  /**
-   * @see Configurable
-   */
-  void setConfiguration(const Settings& conf) override;
+  std::shared_ptr<RubberSheet> clone() const { return std::make_shared<RubberSheet>(*this); }
 
   /**
    * @brief applyTransform applies a perviously calculated or loaded transform to the specified map.
    * @param map the map to apply the transform to
    * @return true if the operation succeeded; false otherwise
    */
-  bool applyTransform(std::shared_ptr<OsmMap>& map);
+  bool applyTransform(const std::shared_ptr<OsmMap>& map);
   /**
    * @brief calculateTransform calculates an appropriate transform for the specified map, but does
    * not change any data.
    * @param map the map to calculate the transform for
    * @return true if the operation succeeded; false otherwise
    */
-  bool calculateTransform(std::shared_ptr<OsmMap>& map);
+  bool calculateTransform(const std::shared_ptr<OsmMap>& map);
 
   /**
    * @brief readTransform1to2 reads the data necessary to perform a transform from unknown1 to
@@ -136,6 +123,19 @@ public:
    * @throws HootException if the tie points have not been created
    */
    std::vector<double> calculateTiePointDistances();
+
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
+  { _conflateInfoCache = cache; }
+
+  /**
+   * @see OsmMapOperation
+   */
+  void apply(std::shared_ptr<OsmMap>& map) override;
+
+  /**
+   * @see Configurable
+   */
+  void setConfiguration(const Settings& conf) override;
 
    /**
     * @see FilteredByGeometryTypeCriteria
@@ -229,7 +229,7 @@ private:
   // are conflatable given the current configuration before modifying them.
   std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
-  bool _calcAndApplyTransform(OsmMapPtr& map);
+  bool _calcAndApplyTransform(const OsmMapPtr& map);
   void _filterCalcAndApplyTransform(OsmMapPtr& map);
 
   bool _findTies();

@@ -92,10 +92,10 @@ void SublineStringMatcherJs::New(const FunctionCallbackInfo<Value>& args)
 
   const QString className = "hoot::" + str(args.This()->GetConstructorName());
 
-  SublineStringMatcherPtr sm(
-    Factory::getInstance().constructObject<SublineStringMatcher>(className));
+  SublineStringMatcherPtr sm =
+    Factory::getInstance().constructObject<SublineStringMatcher>(className);
   SublineStringMatcherJs* obj = new SublineStringMatcherJs(sm);
-  PopulateConsumersJs::populateConsumers(sm.get(), args);
+  PopulateConsumersJs::populateConsumers(sm, args);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
@@ -121,7 +121,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  SublineStringMatcherJs* smJs = ObjectWrap::Unwrap<SublineStringMatcherJs>(args.This());
+  const SublineStringMatcherJs* smJs = ObjectWrap::Unwrap<SublineStringMatcherJs>(args.This());
   SublineStringMatcherPtr sm = smJs->getSublineStringMatcher();
 
   OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
@@ -150,7 +150,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
     set<ElementId> eids;
     eids.insert(e1->getElementId());
     eids.insert(e2->getElementId());
-    OsmMapPtr copiedMap(new OsmMap(m->getProjection()));
+    OsmMapPtr copiedMap = std::make_shared<OsmMap>(m->getProjection());
     CopyMapSubsetOp(m, eids).apply(copiedMap);
     LOG_VART(copiedMap->size());
     WaySublineMatchString copiedMatch(match, copiedMap);

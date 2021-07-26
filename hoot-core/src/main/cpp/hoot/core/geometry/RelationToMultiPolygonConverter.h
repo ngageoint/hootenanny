@@ -117,9 +117,10 @@ private:
    * Given two Linear Rings, determine the realtionship between the two.
    * Inner, Outer or "" for neither
    */
-  QString _findRelationship(geos::geom::LinearRing* ring1, geos::geom::LinearRing* ring2) const;
+  QString _findRelationship(
+    const geos::geom::LinearRing* ring1, const geos::geom::LinearRing* ring2) const;
 
-  bool _isValidInner(geos::geom::LinearRing* innerRing) const;
+  bool _isValidInner(const geos::geom::LinearRing* innerRing) const;
 
   /*
    * Put the ways into the right order so they can just be added one after another into a ring.

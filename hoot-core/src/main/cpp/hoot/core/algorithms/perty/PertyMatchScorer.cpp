@@ -107,17 +107,18 @@ OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString& referenceMapInputPa
     "Loading the reference data with status " << MetadataTags::Unknown1() << " and adding " <<
     MetadataTags::Ref1() << " tags to it; Saving a copy to " << referenceMapOutputPath << "...");
 
-  OsmMapPtr referenceMap(new OsmMap());
+  OsmMapPtr referenceMap = std::make_shared<OsmMap>();
   IoUtils::loadMap(referenceMap, referenceMapInputPath, false, Status::Unknown1);
   OsmMapWriterFactory::writeDebugMap(referenceMap, className(), "ref-map-initial");
   MapCleaner().apply(referenceMap);
   OsmMapWriterFactory::writeDebugMap(referenceMap, className(), "cleaned-ref-map");
 
-  std::shared_ptr<AddRef1Visitor> addRef1Visitor(new AddRef1Visitor());
+  std::shared_ptr<AddRef1Visitor> addRef1Visitor = std::make_shared<AddRef1Visitor>();
   referenceMap->visitRw(*addRef1Visitor);
 
-  std::shared_ptr<SetTagValueVisitor> setAccuracyVisitor(
-    new SetTagValueVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
+  std::shared_ptr<SetTagValueVisitor> setAccuracyVisitor =
+    std::make_shared<SetTagValueVisitor>(
+      MetadataTags::ErrorCircular(), QString::number(_searchDistance));
   referenceMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(referenceMap->getNodes().size());
   LOG_VARD(referenceMap->getWays().size());
@@ -138,18 +139,19 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
 
   // load from the modified reference data output to get the added ref1 tags; don't copy the map,
   // since updates to the names of the ref tags on this map will propagate to the map copied from
-  OsmMapPtr perturbedMap(new OsmMap());
+  OsmMapPtr perturbedMap = std::make_shared<OsmMap>();
   IoUtils::loadMap(perturbedMap, perturbedMapInputPath, false, Status::Unknown2);
   OsmMapWriterFactory::writeDebugMap(perturbedMap, className(), "pre-perturbed-map");
   MapCleaner().apply(perturbedMap);
   OsmMapWriterFactory::writeDebugMap(perturbedMap, className(), "pre-perturbed-cleaned-map");
 
-  std::shared_ptr<TagRenameKeyVisitor> tagRenameKeyVisitor(
-    new TagRenameKeyVisitor(MetadataTags::Ref1(), MetadataTags::Ref2()));
+  std::shared_ptr<TagRenameKeyVisitor> tagRenameKeyVisitor =
+    std::make_shared<TagRenameKeyVisitor>(MetadataTags::Ref1(), MetadataTags::Ref2());
   perturbedMap->visitRw(*tagRenameKeyVisitor);
 
-  std::shared_ptr<SetTagValueVisitor> setAccuracyVisitor(
-    new SetTagValueVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
+  std::shared_ptr<SetTagValueVisitor> setAccuracyVisitor =
+    std::make_shared<SetTagValueVisitor>(
+      MetadataTags::ErrorCircular(), QString::number(_searchDistance));
   perturbedMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(perturbedMap->getNodes().size());
   LOG_VARD(perturbedMap->getWays().size());
@@ -190,7 +192,7 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
   {
     // move Unknown2 toward Unknown1
     conf().set(RubberSheet::refKey(), true);
-    std::shared_ptr<RubberSheet> rubberSheetOp(new RubberSheet());
+    std::shared_ptr<RubberSheet> rubberSheetOp = std::make_shared<RubberSheet>();
     rubberSheetOp->setConfiguration(_settings);
     rubberSheetOp->apply(combinedMap);
     OsmMapWriterFactory::writeDebugMap(combinedMap, className(), "after-rubber-sheet");
@@ -208,8 +210,8 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
   LOG_DEBUG("Conflating the reference data with the perturbed data, scoring the matches, and " <<
             "saving the conflated output to: " << conflatedMapOutputPath);
 
-  std::shared_ptr<MatchComparator> comparator(new MatchComparator());
-  OsmMapPtr conflationCopy(new OsmMap(combinedDataToConflate));
+  std::shared_ptr<MatchComparator> comparator = std::make_shared<MatchComparator>();
+  OsmMapPtr conflationCopy = std::make_shared<OsmMap>(combinedDataToConflate);
 
   // TODO: We're not applying pre/post conflate ops here, since they tank scores. Should we be? We
   // are, however, cleaning each input map with MapCleaner beforehand.

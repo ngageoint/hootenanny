@@ -74,12 +74,12 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read(_inputPath + "MaximalNearestSubline.osm", map);
 
-    OsmMapPtr map2(new OsmMap(map->getProjection()));
+    OsmMapPtr map2 = std::make_shared<OsmMap>(map->getProjection());
 
     std::shared_ptr<OGRSpatialReference> srs =
         MapProjector::createAeacProjection(CalculateMapBoundsVisitor::getBounds(map));
@@ -123,7 +123,7 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "MaximalNearestSubline2.osm", map);
 
@@ -153,7 +153,7 @@ public:
     map->addWay(w);
 
     {
-      OsmMapPtr wgs84(new OsmMap(map));
+      OsmMapPtr wgs84 = std::make_shared<OsmMap>(map);
       MapProjector::projectToWgs84(wgs84);
       OsmXmlWriter writer;
       writer.setIncludeCompatibilityTags(false);
@@ -170,7 +170,7 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "MaximalNearestSubline2.osm", map);
 
@@ -202,7 +202,7 @@ public:
     map->addWay(w);
 
     {
-      OsmMapPtr wgs84(new OsmMap(map));
+      OsmMapPtr wgs84 = std::make_shared<OsmMap>(map);
       MapProjector::projectToWgs84(wgs84);
       OsmXmlWriter writer;
       QString fn = QString(_outputPath + "MaximalNearestSublineOneShortTestOutput.osm");

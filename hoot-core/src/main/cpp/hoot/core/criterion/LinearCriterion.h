@@ -47,16 +47,13 @@ public:
   ~LinearCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new LinearCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<LinearCriterion>(); }
 
   GeometryType getGeometryType() const override { return GeometryType::Line; }
-
   bool supportsSpecificConflation() const override { return false; }
+  QStringList getChildCriteria() const override;
 
   static bool isLinearRelation(const ConstRelationPtr& relation);
-
-  QStringList getChildCriteria() const override;
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }

@@ -181,16 +181,14 @@ double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode,
       p *= .2;
       LOG_VART(p);
     }
-    // if one is a motorway and the other isn't
-    if ((w1->getTags()["highway"] == "motorway") != (w2->getTags()["highway"] == "motorway"))
+    // If one is a motorway and the other isn't, and
+    if ((w1->getTags()["highway"] == "motorway") != (w2->getTags()["highway"] == "motorway") &&
+        // if one is a motorway and the other is a motorway_link
+        w1->getTags()["highway"].startsWith("motorway") !=
+        w2->getTags()["highway"].startsWith("motorway"))
     {
-      // if one is a motorway and the other is a motorway_link
-      if (w1->getTags()["highway"].startsWith("motorway") !=
-          w2->getTags()["highway"].startsWith("motorway"))
-      {
-        p *= .4;
-        LOG_VART(p);
-      }
+      p *= .4;
+      LOG_VART(p);
     }
   }
   LOG_VART(p);
@@ -212,16 +210,14 @@ double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode,
       p *= .2;
       LOG_VART(p);
     }
-    // if one is a motorway and the other isn't
-    if ((w1->getTags()["highway"] == "motorway") != (w2->getTags()["highway"] == "motorway"))
+    // If one is a motorway and the other isn't, and
+    if ((w1->getTags()["highway"] == "motorway") != (w2->getTags()["highway"] == "motorway") &&
+        // if one is a motorway and the other is a motorway_link
+        w1->getTags()["highway"].startsWith("motorway") !=
+        w2->getTags()["highway"].startsWith("motorway"))
     {
-      // if one is a motorway and the other is a motorway_link
-      if (w1->getTags()["highway"].startsWith("motorway") !=
-          w2->getTags()["highway"].startsWith("motorway"))
-      {
-        p *= .4;
-        LOG_VART(p);
-      }
+      p *= .4;
+      LOG_VART(p);
     }
   }
 
@@ -249,10 +245,10 @@ void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
   }
   LOG_VART(oldNode->getElementId());
   // create a copy of the intersecting node
-  NodePtr newNode(
-    new Node(
+  NodePtr newNode =
+    std::make_shared<Node>(
       oldNode->getStatus(), _result->createNextNodeId(), oldNode->toCoordinate(),
-      oldNode->getCircularError()));
+      oldNode->getCircularError());
   newNode->setTags(oldNode->getTags());
   LOG_VART(newNode->getElementId());
   _result->addNode(newNode);

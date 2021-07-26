@@ -99,9 +99,9 @@ public:
       }
     }
 
-    virtual QString getDescription() const {return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const { return ""; }
+    QString getDescription() const override {return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
   private:
 
@@ -112,7 +112,7 @@ public:
   void runMatchTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -144,7 +144,7 @@ public:
   void runTagTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -183,7 +183,7 @@ public:
 
   void runKeepMoreComplexGeometryWhenAutoMergingTest1()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     set<pair<ElementId, ElementId>> pairs = getPairsForComplexAutoMergingTests(map);
 
     BuildingMerger bm(pairs);
@@ -202,7 +202,7 @@ public:
 
   void runKeepMoreComplexGeometryWhenAutoMergingTest2()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     set<pair<ElementId, ElementId>> pairs = getPairsForComplexAutoMergingTests(map);
 
     BuildingMerger bm(pairs);
@@ -220,7 +220,7 @@ public:
 
   void runManyToManyMergeTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmXmlReader reader;
     const QString inputPath =
       "test-files/cases/attribute/unifying/building/building-3136-many-to-many-auto-merge-1";
@@ -254,7 +254,7 @@ public:
     set<pair<ElementId, ElementId>> pairs;
     vector<pair<ElementId, ElementId>> replaced;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map,
       "test-files/algorithms/extractors/IntersectionOverUnionExtractorTest/IntersectionOverUnionExtractorTest-in.osm");

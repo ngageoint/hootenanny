@@ -88,7 +88,7 @@ public:
   void runCombineMapTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr referenceMap(new OsmMap());
+    OsmMapPtr referenceMap = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read(
@@ -102,13 +102,15 @@ public:
         referenceMap,
         _inputPath + "PertyMatchScorerTest-perturbed-out-1.osm");
 
-    //can't do a file comparison on the output here since the UUID's added to the file will be
-    //different with each run
+    // Can't do a file comparison on the output here since the UUID's added to the file will be
+    // different with each run.
     CPPUNIT_ASSERT_EQUAL(99, (int)combinedMap->getElementCount());
-    std::shared_ptr<TagKeyCountVisitor> tagKeyCountVisitorRef1(new TagKeyCountVisitor(MetadataTags::Ref1()));
+    std::shared_ptr<TagKeyCountVisitor> tagKeyCountVisitorRef1 =
+      std::make_shared<TagKeyCountVisitor>(MetadataTags::Ref1());
     combinedMap->visitRo(*tagKeyCountVisitorRef1);
     CPPUNIT_ASSERT_EQUAL(8, (int)tagKeyCountVisitorRef1->getStat());
-    std::shared_ptr<TagKeyCountVisitor> tagKeyCountVisitorRef2(new TagKeyCountVisitor(MetadataTags::Ref2()));
+    std::shared_ptr<TagKeyCountVisitor> tagKeyCountVisitorRef2 =
+      std::make_shared<TagKeyCountVisitor>(MetadataTags::Ref2());
     combinedMap->visitRo(*tagKeyCountVisitorRef2);
     CPPUNIT_ASSERT_EQUAL(10, (int)tagKeyCountVisitorRef2->getStat());
   }
@@ -119,7 +121,7 @@ public:
     testSettings.set("conflate.enable.old.roads", "false");
 
     OsmXmlReader reader;
-    OsmMapPtr combinedMap(new OsmMap());
+    OsmMapPtr combinedMap = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read(

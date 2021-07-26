@@ -78,7 +78,7 @@ void SchemaTranslatedTagCountVisitor::setTranslator(
   _schema = _translator->getOgrOutputSchema();
 }
 
-void SchemaTranslatedTagCountVisitor::_countTags(std::shared_ptr<Feature>& f)
+void SchemaTranslatedTagCountVisitor::_countTags(const std::shared_ptr<Feature>& f)
 {
   const std::shared_ptr<const FeatureDefinition>& defn = f->getFeatureDefinition();
 

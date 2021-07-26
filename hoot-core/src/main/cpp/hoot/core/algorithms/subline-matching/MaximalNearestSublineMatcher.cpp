@@ -54,7 +54,7 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
     maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() :
     maxRelevantDistance;
 
-  OsmMapPtr mapCopy(new OsmMap());
+  OsmMapPtr mapCopy = std::make_shared<OsmMap>();
   CopyMapSubsetOp(map, way1->getElementId(), way2->getElementId()).apply(mapCopy);
 
   WayPtr way1NonConst = mapCopy->getWay(way1->getId());

@@ -160,13 +160,13 @@ private:
                                                                      const QString& outputFile,
                                                                      const QString& goldFile)
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/ToEnglishTranslationVisitorTest/ToEnglishTranslationVisitorTest.osm",
       false, Status::Unknown1);
 
-    std::shared_ptr<NonEnglishLanguageDetectionVisitor> visitor(
-      new NonEnglishLanguageDetectionVisitor());
+    std::shared_ptr<NonEnglishLanguageDetectionVisitor> visitor =
+      std::make_shared<NonEnglishLanguageDetectionVisitor>();
     visitor->setConfiguration(config);
 
     map->visitRw(*visitor);

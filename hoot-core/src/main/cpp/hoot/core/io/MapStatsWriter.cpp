@@ -142,12 +142,12 @@ void MapStatsWriter::writeStats(
 
   // read the conflation status from the file.
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   IoUtils::loadMap(map, mapInputPath, true, Status::Invalid);
   MapProjector::projectToPlanar(map);
 
   QList<QList<SingleStat>> allStats;
-  std::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
+  std::shared_ptr<CalculateStatsOp> cso = std::make_shared<CalculateStatsOp>();
   cso->apply(map);
   allStats.append(cso->getStats());
 

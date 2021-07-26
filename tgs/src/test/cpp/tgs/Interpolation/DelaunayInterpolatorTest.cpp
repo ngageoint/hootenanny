@@ -61,10 +61,10 @@ public:
 
   std::shared_ptr<DelaunayInterpolator> buildRandom()
   {
-    std::shared_ptr<DelaunayInterpolator> result(new DelaunayInterpolator);
+    std::shared_ptr<DelaunayInterpolator> result = std::make_shared<DelaunayInterpolator>();
     DelaunayInterpolator& uut = *result;
 
-    std::shared_ptr<DataFrame> dfPtr(new DataFrame());
+    std::shared_ptr<DataFrame> dfPtr = std::make_shared<DataFrame>();
     DataFrame& df = *dfPtr;
     vector<string> labels;
     labels.push_back("x");
@@ -187,7 +187,7 @@ public:
     Tgs::Random::instance()->seed(0);
     DelaunayInterpolator uut;
 
-    std::shared_ptr<DataFrame> dfPtr(new DataFrame());
+    std::shared_ptr<DataFrame> dfPtr = std::make_shared<DataFrame>();
     DataFrame& df = *dfPtr;
     vector<string> labels;
     labels.push_back("x");

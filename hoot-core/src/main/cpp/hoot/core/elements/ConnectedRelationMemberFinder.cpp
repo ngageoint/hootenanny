@@ -54,13 +54,10 @@ bool ConnectedRelationMemberFinder::haveConnectedWayMembers(
         {
           ConstWayPtr way1 = _map->getWay(elementId1);
           ConstWayPtr way2 = _map->getWay(elementId1);
-          if (way1 && way2)
+          if (way1 && way2 && SharedWayNodeFinder::waysShareEndNode(way1, way2, true))
           {
-            if (SharedWayNodeFinder::waysShareEndNode(way1, way2, true))
-            {
-              LOG_TRACE("Found shared end node.");
-              return true;
-            }
+            LOG_TRACE("Found shared end node.");
+            return true;
           }
         }
       }

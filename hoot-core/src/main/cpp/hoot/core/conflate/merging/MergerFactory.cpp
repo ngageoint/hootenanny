@@ -106,8 +106,8 @@ vector<CreatorDescription> MergerFactory::getAllAvailableCreators() const
   for (size_t i = 0; i < names.size(); i++)
   {
     // get all names known by this creator.
-    std::shared_ptr<MergerCreator> mc(
-      Factory::getInstance().constructObject<MergerCreator>(names[i]));
+    std::shared_ptr<MergerCreator> mc =
+      Factory::getInstance().constructObject<MergerCreator>(names[i]);
 
     vector<CreatorDescription> d = mc->getAllCreators();
     result.insert(result.end(), d.begin(), d.end());

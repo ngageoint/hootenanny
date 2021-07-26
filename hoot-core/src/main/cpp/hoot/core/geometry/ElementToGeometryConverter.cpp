@@ -142,14 +142,12 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(
     MultiLineStringVisitor v;
     v.setElementProvider(_constProvider);
     e->visitRo(*_constProvider, v);
-    std::shared_ptr<Geometry> result(v.createMultiLineString());
-    return result;
+    return v.createMultiLineString();
   }
   else
   {
-    // we don't recognize this geometry type.
-    std::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
-    return g;
+    // We don't recognize this geometry type.
+    return std::shared_ptr<Geometry>(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
   }
 }
 
@@ -297,7 +295,7 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
 
   // an empty set of holes
   vector<Geometry*>* holes = new vector<Geometry*>();
-  // create the outer line
+  // create the outer line; GeometryFactory takes ownership of these input parameters.
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(cs);
 
   std::shared_ptr<Polygon> result(
@@ -331,11 +329,11 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
       ElementCriterionPtr areaCrit;
       if (statsFlag)
       {
-        areaCrit.reset(new StatsAreaCriterion());
+        areaCrit = std::make_shared<StatsAreaCriterion>();
       }
       else
       {
-        areaCrit.reset(new AreaCriterion());
+        areaCrit = std::make_shared<AreaCriterion>();
       }
 
       // Hootenanny by default requires that an polygon element be an area in the schema in order

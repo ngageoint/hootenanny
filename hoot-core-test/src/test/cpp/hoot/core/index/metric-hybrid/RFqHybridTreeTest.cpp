@@ -327,9 +327,9 @@ public:
       }
     }
 
-    virtual QString getDescription() const {return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const { return ""; }
+    QString getDescription() const override {return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
   private:
 
@@ -484,7 +484,7 @@ public:
 
   void runRandomQueryTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmPbfReader(true).read("test-files/index/metric-hybrid/TinyGeoNamesOrg.osm.pbf", map);
 
     MapProjector::projectToPlanar(map);
@@ -502,42 +502,6 @@ public:
     LOG_INFO("Key count: " << keys.size());
 
     Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(map);
-
-//    OptimizeFunction::TestRun best;
-//    best.score = -1e12;
-//    for (int i = 0; i < 20; i++)
-//    {
-//      OptimizeFunction* of = new OptimizeFunction(keys, values, bounds);
-//      Tgs::NelderMead optimizer(4, of, 1e-9);
-//      Tgs::Vector result;
-//      result.prepare(4);
-
-//      for (int j = 0; j < 5; j++)
-//      {
-//        result[0] = 2 + Tgs::Random::instance()->generateInt(8); // child count
-//        result[1] = 1 + Tgs::Random::instance()->generateInt(8); // bucket size
-//        result[2] = -1 + Tgs::Random::instance()->generate(20); // r depth
-//        result[3] = -1 + Tgs::Random::instance()->generate(30); // fq depth
-//        optimizer.step(result, of->f(result));
-//      }
-
-//      optimizer.setMaxNoChange(10);
-//      while (optimizer.done() == false)
-//      {
-//        double e = of->f(result);
-//        result = optimizer.step(result, e);
-//      }
-
-//      OptimizeFunction::TestRun thisBest = of->getBest();
-//      if (thisBest.score > best.score)
-//      {
-//        best = thisBest;
-//      }
-
-//      LOG_INFO("###########################");
-//      LOG_INFO(best.toString());
-//      LOG_INFO("###########################");
-//    }
 
     OptimizeFunction::TestRun best;
     best.bucketSize = 1;

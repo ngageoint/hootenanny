@@ -52,7 +52,7 @@ public:
   {
     ElementHashVisitor uut;
 
-    NodePtr n1(new Node(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5);
     n1->getTags()["highway"] = "bus_stop";
     n1->getTags()["name"] = "Bus Stop 1";
     n1->getTags()["source"] = "imagery";
@@ -71,7 +71,7 @@ public:
     ElementHashVisitor uut;
     uut.setIncludeCircularError(true);
 
-    NodePtr n1(new Node(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5);
     n1->getTags()["highway"] = "bus_stop";
     n1->getTags()["name"] = "Bus Stop 1";
     n1->getTags()["source"] = "imagery";
@@ -90,20 +90,20 @@ public:
   void runWayTest()
   {
     ElementHashVisitor uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     uut.setOsmMap(map.get());
 
-    NodePtr n1(new Node(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5);
     n1->getTags()["highway"] = "bus_stop";
     n1->getTags()["name"] = "Bus Stop 1";
     n1->getTags()["source"] = "imagery";
     map->addNode(n1);
-    NodePtr n2(new Node(Status::Unknown1, -2, -104.8852158123, 38.8467228123, 15));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, -2, -104.8852158123, 38.8467228123, 15);
     n2->getTags()["highway"] = "bus_stop";
     n2->getTags()["name"] = "Bus Stop 2";
     n2->getTags()["source"] = "imagery";
     map->addNode(n2);
-    WayPtr way(new Way(Status::Unknown1, -1, 15.0));
+    WayPtr way = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
     way->getTags().set("area", "yes");
     way->addNode(n1->getId());
     way->addNode(n2->getId());
@@ -121,25 +121,25 @@ public:
   void runRelationTest()
   {
     ElementHashVisitor uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     uut.setOsmMap(map.get());
 
-    NodePtr n1(new Node(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5);
     n1->getTags()["highway"] = "bus_stop";
     n1->getTags()["name"] = "Bus Stop 1";
     n1->getTags()["source"] = "imagery";
     map->addNode(n1);
-    NodePtr n2(new Node(Status::Unknown1, -2, -104.8852158123, 38.8467228123, 15));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, -2, -104.8852158123, 38.8467228123, 15);
     n2->getTags()["highway"] = "bus_stop";
     n2->getTags()["name"] = "Bus Stop 2";
     n2->getTags()["source"] = "imagery";
     map->addNode(n2);
-    WayPtr way(new Way(Status::Unknown1, -1, 15.0));
+    WayPtr way = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
     way->getTags().set("area", "yes");
     way->addNode(n1->getId());
     way->addNode(n2->getId());
     map->addWay(way);
-    RelationPtr relation(new Relation(Status::Unknown1, -1, 15, "route"));
+    RelationPtr relation = std::make_shared<Relation>(Status::Unknown1, -1, 15, "route");
     relation->addElement("test1", n1->getElementId());
     relation->addElement("test1", n2->getElementId());
     relation->addElement("test2", way->getElementId());

@@ -52,7 +52,7 @@ void RubberSheetApplier::apply(
     "Applying alignment transform from ..." << FileUtils::toLogFormat(input, 25) << " to " <<
     FileUtils::toLogFormat(output, 25) << "...");
 
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   IoUtils::loadMap(map, input, true, Status::Unknown1);
 
   // make sure rubber sheeting isn't applied during cleaning.

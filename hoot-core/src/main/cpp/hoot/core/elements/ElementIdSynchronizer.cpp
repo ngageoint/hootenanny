@@ -133,7 +133,7 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
           !_syncedElementIds.contains(map1IdenticalElement->getElementId()))
       {
         // Copy it to be safe.
-        ElementPtr map1IdenticalElementCopy(map1IdenticalElement->clone());
+        ElementPtr map1IdenticalElementCopy = map1IdenticalElement->clone();
         LOG_VART(map1IdenticalElementCopy->getElementId());
         // Get the element with matching hash from the sec map.
         ElementPtr map2IdenticalElement = _map2->getElement(_map2HashesToElementIds[identicalHash]);
@@ -317,16 +317,14 @@ bool ElementIdSynchronizer::_areWayNodesWithoutAWayInCommon(
         const QString way2Hash =
           _map2ElementIdsToHashes[ElementId(ElementType::Way, *containingWays2Itr)];
         LOG_VART(way2Hash);
-        if (!way2Hash.trimmed().isEmpty())
+        if (!way2Hash.trimmed().isEmpty() &&
+            // If any of the ways between the two are identical, then they share a parent way.
+            way1Hash == way2Hash)
         {
-          // If any of the ways between the two are identical, then they share a parent way.
-          if (way1Hash == way2Hash)
-          {
-            LOG_TRACE(
-              "Found common way node for " << element1->getElementId() << " and " <<
-              element2->getElementId() << ".");
-            return false;
-          }
+          LOG_TRACE(
+            "Found common way node for " << element1->getElementId() << " and " <<
+            element2->getElementId() << ".");
+          return false;
         }
       }
     }

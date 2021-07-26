@@ -110,7 +110,7 @@ void EdgeString::appendEdge(const ConstNetworkEdgePtr& e)
       throw HootException("Error attempting to append an edge that isn't connected.");
     }
 
-    _edges.append(ConstEdgeSublinePtr(new EdgeSubline(e, fromPortion, toPortion)));
+    _edges.append(std::make_shared<const EdgeSubline>(e, fromPortion, toPortion));
   }
   assert(validate());
 }
@@ -173,7 +173,7 @@ Meters EdgeString::calculateLength(const ConstElementProviderPtr& provider) cons
 
 std::shared_ptr<EdgeString> EdgeString::clone() const
 {
-  EdgeStringPtr result(new EdgeString());
+  EdgeStringPtr result = std::make_shared<EdgeString>();
   result->_edges = _edges;
   return result;
 }
@@ -232,6 +232,37 @@ bool EdgeString::contains(const ConstEdgeLocationPtr& el) const
   {
     if (ee.getSubline()->intersects(el))
     {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool EdgeString::overlaps(const std::shared_ptr<const EdgeString>& other) const
+{
+  for (int i = 0; i < _edges.size(); ++i)
+  {
+    if (other->overlaps(_edges[i].getSubline()))
+    {
+      LOG_TRACE("Overlaps; this edge: " << _edges[i].getSubline() << " other edge: " << other);
+      return true;
+    }
+  }
+  return false;
+}
+
+bool EdgeString::overlaps(const ConstNetworkEdgePtr& e) const
+{
+  return contains(e);
+}
+
+bool EdgeString::overlaps(const ConstEdgeSublinePtr& es) const
+{
+  for (int i = 0; i < _edges.size(); ++i)
+  {
+    if (_edges[i].getSubline()->overlaps(es))
+    {
+      LOG_TRACE("Overlaps; this subline: " << _edges[i].getSubline() << " other subline: " << es);
       return true;
     }
   }
@@ -364,44 +395,6 @@ bool EdgeString::isAtExtreme(const ConstNetworkVertexPtr& v) const
   return result;
 }
 
-bool EdgeString::overlaps(const std::shared_ptr<const EdgeString>& other) const
-{
-  for (int i = 0; i < _edges.size(); ++i)
-  {
-    if (other->overlaps(_edges[i].getSubline()))
-    {
-      LOG_TRACE("Overlaps; this edge: " << _edges[i].getSubline() << " other edge: " << other);
-      return true;
-    }
-  }
-  return false;
-}
-
-bool EdgeString::overlaps(const ConstNetworkEdgePtr& e) const
-{
-  for (int i = 0; i < _edges.size(); ++i)
-  {
-    if (_edges[i].getEdge() == e)
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
-bool EdgeString::overlaps(const ConstEdgeSublinePtr& es) const
-{
-  for (int i = 0; i < _edges.size(); ++i)
-  {
-    if (_edges[i].getSubline()->overlaps(es))
-    {
-      LOG_TRACE("Overlaps; this subline: " << _edges[i].getSubline() << " other subline: " << es);
-      return true;
-    }
-  }
-  return false;
-}
-
 void EdgeString::prependEdge(const ConstEdgeSublinePtr& subline)
 {
   if (_edges.empty())
@@ -471,7 +464,8 @@ void EdgeString::snapExtremes(double epsilon)
     {
       p = 1.0;
     }
-    EdgeSublinePtr newEs(new EdgeSubline(es->getEdge(), p, es->getEnd()->getPortion()));
+    EdgeSublinePtr newEs =
+      std::make_shared<EdgeSubline>(es->getEdge(), p, es->getEnd()->getPortion());
     _edges[0].setSubline(newEs);
   }
   if (getTo()->isExtreme(epsilon))
@@ -486,7 +480,8 @@ void EdgeString::snapExtremes(double epsilon)
     {
       p = 1.0;
     }
-    EdgeSublinePtr newEs(new EdgeSubline(es->getEdge(), es->getStart()->getPortion(), p));
+    EdgeSublinePtr newEs =
+      std::make_shared<EdgeSubline>(es->getEdge(), es->getStart()->getPortion(), p);
     _edges.back().setSubline(newEs);
   }
 }
@@ -560,7 +555,7 @@ void EdgeString::trim(const ConstElementProviderPtr& provider, Meters newStartOf
   // handle this edge case early which simplifies the loop
   if (newStart->getEdge() == newEnd->getEdge())
   {
-    newEdges.append(EdgeEntry(ConstEdgeSublinePtr(new EdgeSubline(newStart, newEnd))));
+    newEdges.append(EdgeEntry(std::make_shared<const EdgeSubline>(newStart, newEnd)));
   }
   else
   {
@@ -572,11 +567,11 @@ void EdgeString::trim(const ConstElementProviderPtr& provider, Meters newStartOf
       if (s->getEdge() == newStart->getEdge() && newStart != s->getEnd())
       {
         assert(newEdges.size() == 0);
-        newEdges.append(EdgeEntry(ConstEdgeSublinePtr(new EdgeSubline(newStart, s->getEnd()))));
+        newEdges.append(EdgeEntry(std::make_shared<const EdgeSubline>(newStart, s->getEnd())));
       }
       else if (s->getEdge() == newEnd->getEdge() && s->getStart() != newEnd)
       {
-        newEdges.append(EdgeEntry(ConstEdgeSublinePtr(new EdgeSubline(s->getStart(), newEnd))));
+        newEdges.append(EdgeEntry(std::make_shared<const EdgeSubline>(s->getStart(), newEnd)));
         break;
       }
       else if (offset >= newStartOffset && offset + l <= newEndOffset)

@@ -39,7 +39,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(FeatureExtractor, NameExtractor)
 
 NameExtractor::NameExtractor() :
-_d(new LevenshteinDistance()),
+_d(std::make_shared<LevenshteinDistance>()),
 _namesProcessed(0),
 _matchAttemptMade(false)
 {

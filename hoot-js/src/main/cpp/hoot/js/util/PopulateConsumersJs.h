@@ -63,7 +63,8 @@ public:
   { return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "baseClass").ToLocalChecked(); }
 
   template <typename T>
-  static void populateConsumers(T* consumer, const v8::FunctionCallbackInfo<v8::Value>& args)
+  static void populateConsumers(
+    std::shared_ptr<T> consumer, const v8::FunctionCallbackInfo<v8::Value>& args)
   {
     for (int i = 0; i < args.Length(); i++)
     {
@@ -72,7 +73,7 @@ public:
   }
 
   template <typename T>
-  static void populateConsumers(T* consumer, const v8::Local<v8::Value>& v)
+  static void populateConsumers(std::shared_ptr<T> consumer, const v8::Local<v8::Value>& v)
   {
     v8::Isolate* current = v8::Isolate::GetCurrent();
     v8::HandleScope scope(current);
@@ -125,7 +126,7 @@ public:
   }
 
   template <typename T>
-  static void populateConfigurable(T* consumer, const v8::Local<v8::Object>& obj)
+  static void populateConfigurable(std::shared_ptr<T> consumer, const v8::Local<v8::Object>& obj)
   {
     LOG_TRACE("Populating configurable...");
 
@@ -143,15 +144,17 @@ public:
 
     for (uint32_t i = 0; i < keys->Length(); i++)
     {
-      v8::Local<v8::String> k = keys->Get(context, i).ToLocalChecked()->ToString(context).ToLocalChecked();
-      v8::Local<v8::String> v = obj->Get(context, k).ToLocalChecked()->ToString(context).ToLocalChecked();
+      v8::Local<v8::String> k =
+        keys->Get(context, i).ToLocalChecked()->ToString(context).ToLocalChecked();
+      v8::Local<v8::String> v =
+        obj->Get(context, k).ToLocalChecked()->ToString(context).ToLocalChecked();
       LOG_VART(str(k));
       LOG_VART(str(v));
       settings.set(str(k), str(v));
     }
 
-    Configurable* c = dynamic_cast<Configurable*>(consumer);
-    if (c == nullptr)
+    std::shared_ptr<Configurable> c = std::dynamic_pointer_cast<Configurable>(consumer);
+    if (!c)
     {
       throw IllegalArgumentException(
         "Object does not accept custom settings as an argument: " + str(obj->Get(context, baseClass()).ToLocalChecked()));
@@ -159,8 +162,8 @@ public:
 
     // Configuration from Javascript for criterion consumers is handled a little differently where
     // we expect the child crits to be configured separately outside of the parent visitor.
-    MultipleCriterionConsumerVisitor* multipleCritVis =
-      dynamic_cast<MultipleCriterionConsumerVisitor*>(consumer);
+    std::shared_ptr<MultipleCriterionConsumerVisitor> multipleCritVis =
+      std::dynamic_pointer_cast<MultipleCriterionConsumerVisitor>(consumer);
     LOG_VART(multipleCritVis == nullptr);
     if (multipleCritVis != nullptr)
     {
@@ -171,7 +174,7 @@ public:
   }
 
   template <typename T>
-  static void populateCriterionConsumer(T* consumer, const v8::Local<v8::Value>& v)
+  static void populateCriterionConsumer(std::shared_ptr<T> consumer, const v8::Local<v8::Value>& v)
   {
     LOG_TRACE("Populating criterion consumer...");
 
@@ -179,10 +182,11 @@ public:
     v8::HandleScope scope(current);
     v8::Local<v8::Context> context = current->GetCurrentContext();
 
-    ElementCriterionJs* obj = node::ObjectWrap::Unwrap<ElementCriterionJs>(v->ToObject(context).ToLocalChecked());
-    ElementCriterionConsumer* c = dynamic_cast<ElementCriterionConsumer*>(consumer);
-
-    if (c == nullptr)
+    const ElementCriterionJs* obj =
+      node::ObjectWrap::Unwrap<ElementCriterionJs>(v->ToObject(context).ToLocalChecked());
+    std::shared_ptr<ElementCriterionConsumer> c =
+      std::dynamic_pointer_cast<ElementCriterionConsumer>(consumer);
+    if (!c)
     {
       throw IllegalArgumentException(
         "Object does not accept ElementCriterion as an argument: " +
@@ -195,7 +199,7 @@ public:
   }
 
   template <typename T>
-  static void populateElementConsumer(T* consumer, const v8::Local<v8::Value>& v)
+  static void populateElementConsumer(std::shared_ptr<T> consumer, const v8::Local<v8::Value>& v)
   {
     LOG_TRACE("Populating element consumer...");
 
@@ -204,12 +208,12 @@ public:
     v8::Local<v8::Context> context = current->GetCurrentContext();
 
     ElementJs* obj = node::ObjectWrap::Unwrap<ElementJs>(v->ToObject(context).ToLocalChecked());
-    ElementConsumer* c = dynamic_cast<ElementConsumer*>(consumer);
-
-    if (c == nullptr)
+    std::shared_ptr<ElementConsumer> c = std::dynamic_pointer_cast<ElementConsumer>(consumer);
+    if (!c)
     {
       throw IllegalArgumentException(
-        "Object does not accept Element as an argument: " + str(v->ToObject(context).ToLocalChecked()->Get(context, baseClass()).ToLocalChecked()));
+        "Object does not accept Element as an argument: " +
+        str(v->ToObject(context).ToLocalChecked()->Get(context, baseClass()).ToLocalChecked()));
     }
     else
     {
@@ -218,7 +222,7 @@ public:
   }
 
   template <typename T>
-  static void populateOsmMapConsumer(T* consumer, const v8::Local<v8::Value>& v)
+  static void populateOsmMapConsumer(std::shared_ptr<T> consumer, const v8::Local<v8::Value>& v)
   {
     LOG_TRACE("Populating osm map consumer...");
 
@@ -227,12 +231,11 @@ public:
     v8::Local<v8::Context> context = current->GetCurrentContext();
 
     OsmMapJs* obj = node::ObjectWrap::Unwrap<OsmMapJs>(v->ToObject(context).ToLocalChecked());
-
     if (obj->isConst())
     {
-      ConstOsmMapConsumer* c = dynamic_cast<ConstOsmMapConsumer*>(consumer);
-
-      if (c == nullptr)
+      std::shared_ptr<ConstOsmMapConsumer> c =
+        std::dynamic_pointer_cast<ConstOsmMapConsumer>(consumer);
+      if (!c)
       {
         throw IllegalArgumentException(
           "Object does not accept const OsmMap as an argument. Maybe try a non-const OsmMap?: " +
@@ -245,9 +248,8 @@ public:
     }
     else
     {
-      OsmMapConsumer* c = dynamic_cast<OsmMapConsumer*>(consumer);
-
-      if (c == nullptr)
+      std::shared_ptr<OsmMapConsumer> c = std::dynamic_pointer_cast<OsmMapConsumer>(consumer);
+      if (!c)
       {
         throw IllegalArgumentException("Object does not accept OsmMap as an argument.");
       }
@@ -259,7 +261,8 @@ public:
   }
 
   template <typename T>
-  static void populateStringDistanceConsumer(T* consumer, const v8::Local<v8::Value>& v)
+  static void populateStringDistanceConsumer(
+    std::shared_ptr<T> consumer, const v8::Local<v8::Value>& v)
   {
     LOG_TRACE("Populating string distance consumer...");
 
@@ -268,10 +271,9 @@ public:
     v8::Local<v8::Context> context = current->GetCurrentContext();
 
     StringDistancePtr sd = toCpp<StringDistancePtr>(v);
-
-    StringDistanceConsumer* c = dynamic_cast<StringDistanceConsumer*>(consumer);
-
-    if (c == nullptr)
+    std::shared_ptr<StringDistanceConsumer> c =
+      std::dynamic_pointer_cast<StringDistanceConsumer>(consumer);
+    if (!c)
     {
       throw IllegalArgumentException(
         "Object does not accept StringDistance as an argument: " +
@@ -284,7 +286,8 @@ public:
   }
 
   template <typename T>
-  static void populateValueAggregatorConsumer(T* consumer, const v8::Local<v8::Value>& v)
+  static void populateValueAggregatorConsumer(
+    std::shared_ptr<T> consumer, const v8::Local<v8::Value>& v)
   {
     LOG_TRACE("Populating aggregator consumer...");
 
@@ -293,10 +296,9 @@ public:
     v8::Local<v8::Context> context = current->GetCurrentContext();
 
     ValueAggregatorPtr va = toCpp<ValueAggregatorPtr>(v);
-
-    ValueAggregatorConsumer* c = dynamic_cast<ValueAggregatorConsumer*>(consumer);
-
-    if (c == nullptr)
+    std::shared_ptr<ValueAggregatorConsumer> c =
+      std::dynamic_pointer_cast<ValueAggregatorConsumer>(consumer);
+    if (!c)
     {
       throw IllegalArgumentException(
         "Object does not accept ValueAggregator as an argument: " +
@@ -309,7 +311,7 @@ public:
   }
 
   template <typename T>
-  static void populateVisitorConsumer(T* consumer, const v8::Local<v8::Value>& v)
+  static void populateVisitorConsumer(std::shared_ptr<T> consumer, const v8::Local<v8::Value>& v)
   {
     LOG_TRACE("Populating visitor consumer...");
 
@@ -317,11 +319,11 @@ public:
     v8::HandleScope scope(current);
     v8::Local<v8::Context> context = current->GetCurrentContext();
 
-    ElementVisitorJs* obj = node::ObjectWrap::Unwrap<ElementVisitorJs>(v->ToObject(context).ToLocalChecked());
-
-    ElementVisitorConsumer* c = dynamic_cast<ElementVisitorConsumer*>(consumer);
-
-    if (c == nullptr)
+    const ElementVisitorJs* obj =
+      node::ObjectWrap::Unwrap<ElementVisitorJs>(v->ToObject(context).ToLocalChecked());
+    std::shared_ptr<ElementVisitorConsumer> c =
+      std::dynamic_pointer_cast<ElementVisitorConsumer>(consumer);
+    if (!c)
     {
       throw IllegalArgumentException(
         "Object does not accept ElementCriterion as an argument: " +
@@ -334,7 +336,7 @@ public:
   }
 
   template <typename T>
-  static void populateFunctionConsumer(T* consumer, const v8::Local<v8::Value>& v)
+  static void populateFunctionConsumer(std::shared_ptr<T> consumer, const v8::Local<v8::Value>& v)
   {
     if (v.IsEmpty() || v->IsFunction() == false)
     {
@@ -345,23 +347,24 @@ public:
 
     v8::Isolate* current = v8::Isolate::GetCurrent();
     v8::Local<v8::Function> func(v8::Local<v8::Function>::Cast(v));
-    JsFunctionConsumer* c = dynamic_cast<JsFunctionConsumer*>(consumer);
-    ElementCriterionConsumer* ecc = dynamic_cast<ElementCriterionConsumer*>(consumer);
 
-    if (c != nullptr && ecc != nullptr)
+    std::shared_ptr<JsFunctionConsumer> c = std::dynamic_pointer_cast<JsFunctionConsumer>(consumer);
+    std::shared_ptr<ElementCriterionConsumer> ecc =
+      std::dynamic_pointer_cast<ElementCriterionConsumer>(consumer);
+    if (c && ecc)
     {
       // At the time of this writing this isn't possible. Give a good hard think about how the code
       // should respond before you change it.
       throw IllegalArgumentException(
         "Ambiguous consumption of both a function and an ElementCriterionConsumer.");
     }
-    else if (c != nullptr)
+    else if (c)
     {
       c->addFunction(current, func);
     }
-    else if (ecc != nullptr)
+    else if (ecc)
     {
-      std::shared_ptr<JsFunctionCriterion> ecp(new JsFunctionCriterion());
+      std::shared_ptr<JsFunctionCriterion> ecp = std::make_shared<JsFunctionCriterion>();
       ecp->addFunction(current, func);
       ecc->addCriterion(ecp);
     }

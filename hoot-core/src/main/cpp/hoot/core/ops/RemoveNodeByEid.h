@@ -78,7 +78,6 @@ public:
    * @param removeOnlyUnused remove only nodes that aren't a part of a way
    */
   static void removeNode(const OsmMapPtr& map, long nId, bool removeOnlyUnused = false);
-
   /**
    * Simply removes the node from the map (from index, from nodes collection)
    *
@@ -86,7 +85,6 @@ public:
    * @param nId ID of the node to remove
    */
   static void removeNodeNoCheck(const OsmMapPtr& map, long nId);
-
   /**
    * Removes node from relations, ways, then from node collection
    *
@@ -109,8 +107,8 @@ private:
   bool _removeOnlyUnused;
 
   void _removeNodeNoCheck(const OsmMapPtr& map, long nId) const;
-  void _removeNode(const OsmMapPtr& map, long nId);
-  void _removeNodeFully(const OsmMapPtr& map, long nId);
+  void _removeNode(const OsmMapPtr& map, long nId) const;
+  void _removeNodeFully(const OsmMapPtr& map, long nId) const;
 };
 
 }

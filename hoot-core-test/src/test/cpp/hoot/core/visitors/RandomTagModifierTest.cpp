@@ -60,14 +60,14 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
-    NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 0, 0, 10);
     n1->getTags()["name"] = "strange test";
     n1->getTags()["name:ru"] = QString::fromUtf8("странное испытание");
     n1->getTags()["alt_name"] = "strange;test";
     map->addNode(n1);
 
-    NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), 500, 500, 10));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 500, 500, 10);
     n2->getTags()["name"] = "little town";
     n2->getTags()["name:he"] = QString::fromUtf8("העיר קטנה");
     n2->getTags()["alt_name"] = "small town;littleville";
@@ -91,13 +91,13 @@ public:
 
   void runExemptTagKeysTest()
   {
-    OsmMapPtr map(new OsmMap());
-    NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 0, 0, 10);
     n1->getTags()[MetadataTags::Ref1()] = MetadataTags::Ref1();
     n1->getTags()[MetadataTags::Ref2()] = MetadataTags::Ref2();
     map->addNode(n1);
 
-    NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), 500, 500, 10));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 500, 500, 10);
     n2->getTags()[MetadataTags::Ref1()] = MetadataTags::Ref1();
     n2->getTags()[MetadataTags::Ref2()] = MetadataTags::Ref2();
     map->addNode(n2);
@@ -125,13 +125,13 @@ public:
 
   void runSubstituteValuesTest()
   {
-    OsmMapPtr map(new OsmMap());
-    NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 0, 0, 10);
     n1->getTags()[MetadataTags::Ref1()] = MetadataTags::Ref1();
     n1->getTags()[MetadataTags::Ref2()] = MetadataTags::Ref2();
     map->addNode(n1);
 
-    NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), 500, 500, 10));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 500, 500, 10);
     n2->getTags()["highway"] = "blah";
     n2->getTags()[MetadataTags::Ref2()] = MetadataTags::Ref2();
     map->addNode(n2);

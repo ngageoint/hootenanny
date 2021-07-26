@@ -65,16 +65,13 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   QString toString() const override { return "Translate " + _d->toString(); }
+  QString getDescription() const override
+  { return "Returns a string comparison score based on the associated string comparator after first translating to English"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   void setTokenize(bool tokenize) { _tokenize = tokenize; }
   void setTranslateAll(bool translateAll) { _translateAll = translateAll; }
-
-  QString getDescription() const override
-  { return "Returns a string comparison score based on the associated string comparator after first translating to English"; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 private:
 

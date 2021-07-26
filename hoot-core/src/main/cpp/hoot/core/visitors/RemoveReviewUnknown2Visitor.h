@@ -48,12 +48,8 @@ public:
 
   void visit(const std::shared_ptr<Element>& e) override;
 
-  QString getDescription() const override
-  { return "Removes review relations and their UNKNOWN2 elements"; }
-
   QString getInitStatusMessage() const override
   { return "Removing relations..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
@@ -62,8 +58,9 @@ public:
   }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Removes review relations and their UNKNOWN2 elements"; }
 
 private:
 

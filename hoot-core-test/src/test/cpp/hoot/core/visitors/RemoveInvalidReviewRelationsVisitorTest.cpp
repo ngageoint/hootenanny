@@ -55,11 +55,11 @@ public:
   void runInvalidMemberCountTest()
   {
     //add some nodes to a map
-    OsmMapPtr map(new OsmMap());
-    ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
-    ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
-    ElementPtr n3(new Node(Status::Unknown1, 3, 0, 0, 0));
-    ElementPtr n4(new Node(Status::Unknown2, 4, 0, 0, 0));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    ElementPtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
+    ElementPtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0, 0, 0);
+    ElementPtr n3 = std::make_shared<Node>(Status::Unknown1, 3, 0, 0, 0);
+    ElementPtr n4 = std::make_shared<Node>(Status::Unknown2, 4, 0, 0, 0);
     map->addElement(n1);
     map->addElement(n2);
     map->addElement(n3);
@@ -102,11 +102,11 @@ public:
   void runEmptyRelationNoMemberCountTagTest()
   {
     //add some nodes to a map
-    OsmMapPtr map(new OsmMap());
-    ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
-    ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
-    ElementPtr n3(new Node(Status::Unknown1, 3, 0, 0, 0));
-    ElementPtr n4(new Node(Status::Unknown2, 4, 0, 0, 0));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    ElementPtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
+    ElementPtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0, 0, 0);
+    ElementPtr n3 = std::make_shared<Node>(Status::Unknown1, 3, 0, 0, 0);
+    ElementPtr n4 = std::make_shared<Node>(Status::Unknown2, 4, 0, 0, 0);
     map->addElement(n1);
     map->addElement(n2);
     map->addElement(n3);

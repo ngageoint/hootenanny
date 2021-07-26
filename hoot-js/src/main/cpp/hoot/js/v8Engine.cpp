@@ -50,13 +50,13 @@ v8Engine::v8Engine()
     Isolate::CreateParams params;
     params.array_buffer_allocator = _allocator.get();
     _isolate = Isolate::New(params);
-    _isolateScope.reset(new Isolate::Scope(_isolate));
+    _isolateScope = std::make_shared<Isolate::Scope>(_isolate);
     //  Create the main context
-    _locker.reset(new Locker(_isolate));
+    _locker = std::make_shared<Locker>(_isolate);
     HandleScope handleScope(_isolate);
-    _context.reset(new Persistent<Context>(_isolate, Context::New(_isolate)));
+    _context = std::make_shared<Persistent<Context>>(_isolate, Context::New(_isolate));
     Local<Context> context = ToLocal(_context.get());
-    _scopeContext.reset(new Context::Scope(context));
+    _scopeContext = std::make_shared<Context::Scope>(context);
   }
   else
   {

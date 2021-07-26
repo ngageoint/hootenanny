@@ -30,15 +30,11 @@
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 
-namespace Tgs
-{
-class RandomForest;
-}
-
 namespace hoot
 {
 
 class BuildingRfClassifier;
+class RandomForest;
 
 class BuildingMatchCreator : public MatchCreator
 {

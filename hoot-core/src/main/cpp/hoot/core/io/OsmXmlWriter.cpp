@@ -118,7 +118,7 @@ QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
 
 void OsmXmlWriter::open(const QString& url)
 {
-  std::shared_ptr<QFile> f(new QFile());
+  std::shared_ptr<QFile> f = std::make_shared<QFile>();
   f->setFileName(url);
   _fp = f;
   if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text))
@@ -153,8 +153,8 @@ QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml)
 
   OsmXmlWriter writer;
   writer.setFormatXml(formatXml);
-  // this will be deleted by the _fp std::shared_ptr
-  std::shared_ptr<QBuffer> buf(new QBuffer());
+  // This will be deleted by the _fp std::shared_ptr.
+  std::shared_ptr<QBuffer> buf = std::make_shared<QBuffer>();
   writer._fp = buf;
   if (!writer._fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {
@@ -181,7 +181,7 @@ QString OsmXmlWriter::_typeName(ElementType e)
 
 void OsmXmlWriter::_initWriter()
 {
-  _writer.reset(new QXmlStreamWriter(_fp.get()));
+  _writer = std::make_shared<QXmlStreamWriter>(_fp.get());
   _writer->setCodec("UTF-8");
 
   if (_formatXml)
@@ -295,7 +295,7 @@ void OsmXmlWriter::_writeMetadata(const Element* e) const
 
 void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
 {
-  ElementPtr elementClone(element->clone());
+  ElementPtr elementClone = element->clone();
   _addExportTagsVisitor.visit(elementClone);
 
   const ElementType type = elementClone->getElementType();
@@ -546,7 +546,7 @@ void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
     _writer->writeStartElement("member");
     _writer->writeAttribute("type", _typeName(e.getElementId().getType()));
     _writer->writeAttribute("ref", QString::number(e.getElementId().getId()));
-    _writer->writeAttribute("role", removeInvalidCharacters(e.role));
+    _writer->writeAttribute("role", removeInvalidCharacters(e.getRole()));
     _writer->writeEndElement();
   }
 

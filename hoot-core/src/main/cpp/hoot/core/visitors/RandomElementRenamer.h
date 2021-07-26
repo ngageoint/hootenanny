@@ -51,32 +51,28 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
+  void setRng(boost::minstd_rand& rng) override { _rng = &rng; }
+
+  void visit(const std::shared_ptr<Element>& e) override;
+
+  QString getInitStatusMessage() const override
+  { return "Randomly changing element names..."; }
+  QString getCompletedStatusMessage() const override
+  { return "Randomly changed " + QString::number(_numAffected) + " element names"; }
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Randomly changes element names"; }
+
   /**
    * The probability of a change to each character in the name. The expected number of changes is
    * perty.name.change.p * str.size()
    */
   void setChangeProbability(double changeP) { _changeP = changeP; }
-
   /**
    * Set the probability that a name will be modified.
    */
   void setProbability(double p) { _p = p; }
-
-  void setRng(boost::minstd_rand& rng) override { _rng = &rng; }
-
-  void visit(const std::shared_ptr<Element>& e) override;
-
-  QString getDescription() const override { return "Randomly changes element names"; }
-
-  QString getInitStatusMessage() const override
-  { return "Randomly changing element names..."; }
-
-  QString getCompletedStatusMessage() const override
-  { return "Randomly changed " + QString::number(_numAffected) + " element names"; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 private:
 

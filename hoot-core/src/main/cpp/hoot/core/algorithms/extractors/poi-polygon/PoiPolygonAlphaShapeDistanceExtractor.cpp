@@ -64,7 +64,7 @@ double PoiPolygonAlphaShapeDistanceExtractor::extract(const OsmMap& map,
     }
 
     ConstOsmMapPtr original = map.shared_from_this();
-    OsmMapPtr polyMap(new OsmMap());
+    OsmMapPtr polyMap = std::make_shared<OsmMap>();
     CopyMapSubsetOp(original, poly->getElementId()).apply(polyMap);
     AlphaShapeGenerator alphaShapeGenerator(1000.0, 0.0);
     std::shared_ptr<Geometry> polyAlphaShape = alphaShapeGenerator.generateGeometry(polyMap);

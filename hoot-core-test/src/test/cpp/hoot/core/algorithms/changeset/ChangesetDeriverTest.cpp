@@ -52,19 +52,20 @@ public:
   QMap<Change::ChangeType, QList<long>> _getChangeset(
     const QString& input1, const QString& input2, const bool allowRefDelete = true)
   {
-    OsmMapPtr map1(new OsmMap());
+    OsmMapPtr map1 = std::make_shared<OsmMap>();
     // each dataset needs to have a different input status
     OsmMapReaderFactory::read(map1, input1, true, Status::Unknown1);
 
-    OsmMapPtr map2(new OsmMap());
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map2, input2, true, Status::Unknown2);
 
     // input has to be sorted
-    InMemoryElementSorterPtr map1SortedElements(new InMemoryElementSorter(map1));
-    InMemoryElementSorterPtr map2SortedElements(new InMemoryElementSorter(map2));
+    InMemoryElementSorterPtr map1SortedElements = std::make_shared<InMemoryElementSorter>(map1);
+    InMemoryElementSorterPtr map2SortedElements = std::make_shared<InMemoryElementSorter>(map2);
 
     // stream out the changeset results grouped by change type
-    ChangesetDeriverPtr changesetDiff(new ChangesetDeriver(map1SortedElements, map2SortedElements));
+    ChangesetDeriverPtr changesetDiff =
+      std::make_shared<ChangesetDeriver>(map1SortedElements, map2SortedElements);
     changesetDiff->setAllowDeletingReferenceFeatures(allowRefDelete);
     QMap<Change::ChangeType, QList<long>> changeTypeToIds;
     while (changesetDiff->hasMoreChanges())

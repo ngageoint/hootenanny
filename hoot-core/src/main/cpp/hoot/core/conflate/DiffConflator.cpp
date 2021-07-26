@@ -265,11 +265,11 @@ void DiffConflator::_discardUnconflatableElements()
     " unconflatable elements.");
 }
 
-void DiffConflator::storeOriginalMap(OsmMapPtr& map)
+void DiffConflator::storeOriginalMap(const OsmMapPtr& map)
 {
   // Check map to make sure it contains only Unknown1 elements
   // TODO: valid and conflated could be in here too, should we check for them as well?
-  ElementCriterionPtr pStatusCrit(new StatusCriterion(Status::Unknown2));
+  ElementCriterionPtr pStatusCrit = std::make_shared<StatusCriterion>(Status::Unknown2);
   CriterionCountVisitor countVtor(pStatusCrit);
   map->visitRo(countVtor);
 
@@ -283,15 +283,15 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& map)
   }
 
   // Use the copy constructor to copy the entire map.
-  _originalMap.reset(new OsmMap(map));
+  _originalMap = std::make_shared<OsmMap>(map);
 
   // We're storing this part off for potential use later on if any roads get snapped after
   // conflation. Get rid of ref2 and children. See additional comments in _getChangesetFromMap.
   // TODO: Can we filter this down to whatever feature type the snapping is configured for?
-  std::shared_ptr<NotCriterion> crit(
-    new NotCriterion(ElementCriterionPtr(new TagKeyCriterion(MetadataTags::Ref2()))));
+  std::shared_ptr<NotCriterion> crit =
+    std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::Ref2()));
   CopyMapSubsetOp mapCopier(map, crit);
-  _originalRef1Map.reset(new OsmMap());
+  _originalRef1Map = std::make_shared<OsmMap>();
   mapCopier.apply(_originalRef1Map);
 }
 
@@ -299,9 +299,9 @@ std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr map1, Osm
 {
   // Conflation requires all data to be in memory, so no point in adding support for the
   // ExternalMergeElementSorter here.
-  InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(map1));
-  InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(map2));
-  std::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
+  InMemoryElementSorterPtr sorted1 = std::make_shared<InMemoryElementSorter>(map1);
+  InMemoryElementSorterPtr sorted2 = std::make_shared<InMemoryElementSorter>(map2);
+  std::shared_ptr<ChangesetDeriver> delta = std::make_shared<ChangesetDeriver>(sorted1, sorted2);
   //  Deriving changesets for differential shouldn't include any deletes, create and modify only
   delta->setAllowDeletingReferenceFeatures(false);
   return delta;
@@ -312,7 +312,7 @@ void DiffConflator::markInputElements(OsmMapPtr map) const
   // mark input1 elements
   Settings visitorConf;
   visitorConf.set(ConfigOptions::getAddRefVisitorInformationOnlyKey(), "false");
-  std::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
+  std::shared_ptr<AddRef1Visitor> pRef1v = std::make_shared<AddRef1Visitor>();
   pRef1v->setConfiguration(visitorConf);
   map->visitRw(*pRef1v);
 }
@@ -562,8 +562,8 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
 bool DiffConflator::_satisfiesCompleteElementRemovalCondition(
   const ConstElementPtr& element, const Status& status, const ConstMatchPtr& match) const
 {
-  ElementCriterionPtr notSnappedCrit(
-    NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
+  ElementCriterionPtr notSnappedCrit =
+    std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::HootSnapped()));
   return
     element->getStatus() == status  &&
     // We don't want to remove any ref snapped ways here. They need to be included in the
@@ -672,10 +672,10 @@ void DiffConflator::_removeRefData()
 
   // Now remove input1 elements. Don't remove any features involved in a snap, as they are needed
   // to properly generate the changeset and keep sec ways snapped in the final output.
-  ElementCriterionPtr refCrit(new TagKeyCriterion(MetadataTags::Ref1()));
-  ElementCriterionPtr notSnappedCrit(
-    NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
-  ElementCriterionPtr removeCrit(ChainCriterionPtr(new ChainCriterion(refCrit, notSnappedCrit)));
+  ElementCriterionPtr refCrit = std::make_shared<TagKeyCriterion>(MetadataTags::Ref1());
+  ElementCriterionPtr notSnappedCrit =
+    std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::HootSnapped()));
+  ElementCriterionPtr removeCrit = std::make_shared<ChainCriterion>(refCrit, notSnappedCrit);
 
   RemoveElementsVisitor removeRef1Visitor;
   removeRef1Visitor.setRecursive(true);
@@ -710,8 +710,8 @@ void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges
       {
         if (!map->containsNode(*it))
         {
-          // Add a copy
-          NodePtr pNewNode(new Node(*(_originalMap->getNode(*it))));
+          // Add a copy.
+          NodePtr pNewNode = std::make_shared<Node>(*(_originalMap->getNode(*it)));
           pNewNode->setStatus(Status::TagChange);
           map->addNode(pNewNode);
         }
@@ -719,7 +719,7 @@ void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges
 
       // Add the changed way with merged tags
       ConstWayPtr pTempWay = std::dynamic_pointer_cast<const Way>(c.getElement());
-      WayPtr pNewWay(new Way(*pTempWay));
+      WayPtr pNewWay = std::make_shared<Way>(*pTempWay);
       pNewWay->setStatus(Status::TagChange);
       map->addWay(pNewWay);
     }
@@ -751,7 +751,7 @@ void DiffConflator::_calcAndStoreTagChanges()
   // Make sure we have a container for our changes
   if (!_tagChanges)
   {
-    _tagChanges.reset(new MemChangesetProvider(_map->getProjection()));
+    _tagChanges = std::make_shared<MemChangesetProvider>(_map->getProjection());
   }
 
   int numMatchesProcessed = 0;
@@ -862,7 +862,7 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
   // with new tags.
 
   // Copy the old one to get the geometry
-  ElementPtr pChangeElement(pOldElement->clone());
+  ElementPtr pChangeElement = pOldElement->clone();
   assert(pChangeElement->getId() == pOldElement->getId());
 
   // Need to merge tags into the new element. Keeps all names, chooses tags1 in event of a conflict.
@@ -882,7 +882,7 @@ ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr map) const
 {
   if (_numSnappedWays == 0)
   {
-    return _sortInputs(OsmMapPtr(new OsmMap()), map);
+    return _sortInputs(std::make_shared<OsmMap>(), map);
   }
   else
   {
@@ -898,7 +898,7 @@ ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr map) const
 }
 
 void DiffConflator::writeChangeset(
-  OsmMapPtr pResultMap, QString& output, bool separateOutput,
+  OsmMapPtr pResultMap, const QString& output, bool separateOutput,
   const ChangesetStatsFormat& changesetStatsFormat, const QString& osmApiDbUrl)
 {
   LOG_DEBUG("Writing changeset: " << output << "...");
@@ -975,8 +975,8 @@ void DiffConflator::writeChangeset(
   {
     // write unified output
     LOG_DEBUG("Writing unified changesets...");
-    MultipleChangesetProviderPtr pChanges(
-      new MultipleChangesetProvider(pResultMap->getProjection()));
+    MultipleChangesetProviderPtr pChanges =
+      std::make_shared<MultipleChangesetProvider>(pResultMap->getProjection());
     pChanges->addChangesetProvider(geoChanges);
     pChanges->addChangesetProvider(_tagChanges);
     writer->write(output, pChanges);

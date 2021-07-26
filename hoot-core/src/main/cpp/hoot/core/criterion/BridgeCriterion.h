@@ -47,8 +47,7 @@ public:
   ~BridgeCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new BridgeCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<BridgeCriterion>(); }
 
   QString getDescription() const override { return "Identifies bridges"; }
   QString getName() const override { return className(); }

@@ -38,6 +38,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, IdSwapOp)
 
+IdSwapOp::IdSwapOp(const IdSwapPtr& idSwap) :
+_idSwap(idSwap)
+{
+}
+
+IdSwapOp::IdSwapOp(ElementId e1, ElementId e2) :
+_idSwap(std::make_shared<IdSwap>(e1, e2))
+{
+}
+
 void IdSwapOp::apply(const std::shared_ptr<hoot::OsmMap>& map)
 {
   //  Validate the swap information
@@ -67,8 +77,8 @@ void IdSwapOp::apply(const std::shared_ptr<hoot::OsmMap>& map)
     {
       //  This is tricky because element1a has replaced element1 as the actual object
       //  Create a copy of element elements
-      ElementPtr element1a(element1->clone());
-      ElementPtr element2a(element2->clone());
+      ElementPtr element1a = element1->clone();
+      ElementPtr element2a = element2->clone();
       //  Replace element 2 with an empty ID temporarily
       element2a->setId(0);
       map->replace(element2, element2a);

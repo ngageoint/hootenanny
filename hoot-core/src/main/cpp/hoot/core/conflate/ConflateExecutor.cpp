@@ -83,7 +83,7 @@ _maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax())
 {
 }
 
-void ConflateExecutor::_initConfig()
+void ConflateExecutor::_initConfig(const QString& output)
 {
   ConfigUtils::checkForTagValueTruncationOverride();
   QStringList allOps = ConfigOptions().getConflatePreOps();
@@ -134,6 +134,11 @@ void ConflateExecutor::_initConfig()
     // feature types we're conflating in order to improve runtime performance.
     SuperfluousConflateOpRemover::removeSuperfluousOps();
   }
+
+  // If no translation was specified, this does nothing. Otherwise, this attempts to set the
+  // translation direction if it wasn't specified. The caller must have also added a translation
+  // operator to the conflate pre ops for anything to translate.
+  _updateTranslationDirection(output);
 }
 
 void ConflateExecutor::_initTaskCount()
@@ -163,20 +168,20 @@ void ConflateExecutor::_initTaskCount()
   _currentTask = 1;
 }
 
-void ConflateExecutor::conflate(const QString& input1, const QString& input2, QString& output)
+void ConflateExecutor::conflate(const QString& input1, const QString& input2, const QString& output)
 {
   Tgs::Timer totalTime;
   _taskTimer.reset();
-  _progress.reset(
-    new Progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running));
-  OsmMapPtr map(new OsmMap());
+  _progress =
+    std::make_shared<Progress>(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
+  OsmMapPtr map = std::make_shared<OsmMap>();
   const bool isChangesetOutput = output.endsWith(".osc") || output.endsWith(".osc.sql");
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
   LOG_VART(bytesRead);
   _allStats.clear();
   _stats.clear();
 
-  _initConfig();
+  _initConfig(output);
   _initTaskCount();
   if (!IoUtils::isUrl(output))
   {
@@ -250,11 +255,9 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
 
   const QSet<QString> matchCreatorCrits =
     SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits(false);
-  CalculateStatsOp input1Cso(
-    ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), "input map 1");
+  CalculateStatsOp input1Cso(std::make_shared<StatusCriterion>(Status::Unknown1), "input map 1");
   input1Cso.setFilter(matchCreatorCrits);
-  CalculateStatsOp input2Cso(
-    ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), "input map 2");
+  CalculateStatsOp input2Cso(std::make_shared<StatusCriterion>(Status::Unknown2), "input map 2");
   // We only want statistics generated that correspond to the feature types being conflated.
   input2Cso.setFilter(matchCreatorCrits);
   if (_displayStats)
@@ -359,8 +362,8 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
     FileUtils::toLogFormat(output, _maxFilePrintLength));
 }
 
-void ConflateExecutor::_load(const QString& input1, const QString& input2, OsmMapPtr& map,
-                             const bool isChangesetOut)
+void ConflateExecutor::_load(
+  const QString& input1, const QString& input2, const OsmMapPtr& map, const bool isChangesetOut)
 {
   //  Loading order is important if datasource IDs 2 is true but 1 is not
   if (!ConfigOptions().getConflateUseDataSourceIds1() &&
@@ -498,7 +501,8 @@ void ConflateExecutor::_runConflateOps(OsmMapPtr& map, const bool runPre)
     StringUtils::millisecondsToDhms(opsTimer.elapsed()) << " total.");
 }
 
-void ConflateExecutor::_writeOutput(OsmMapPtr& map, QString& output, const bool isChangesetOutput)
+void ConflateExecutor::_writeOutput(
+  const OsmMapPtr& map, const QString& output, const bool isChangesetOutput)
 {
   // Figure out what to write
   _progress->set(
@@ -541,7 +545,7 @@ void ConflateExecutor::_writeOutput(OsmMapPtr& map, QString& output, const bool 
 }
 
 void ConflateExecutor::_writeStats(
-  OsmMapPtr& map, const CalculateStatsOp& input1Cso, const CalculateStatsOp& input2Cso,
+  const OsmMapPtr& map, const CalculateStatsOp& input1Cso, const CalculateStatsOp& input2Cso,
   const QString& outputFileName)
 {
   _progress->set(
@@ -679,6 +683,20 @@ void ConflateExecutor::_updateConfigOptionsForBounds() const
   // If we're working with a bounds, we need to ensure that IDs of the original ref parents created
   // by a split operation are applied to their split children.
   conf().set(ConfigOptions::getWayJoinerWriteParentIdToChildIdKey(), true);
+}
+
+void ConflateExecutor::_updateTranslationDirection(const QString& output) const
+{
+  ConfigOptions config;
+  const QString translation = config.getSchemaTranslationScript();
+  QString translationDirection = config.getSchemaTranslationDirection();
+  // If the translation direction wasn't specified, try to guess it.
+  if (!translation.trimmed().isEmpty() && translationDirection.isEmpty())
+  {
+    translationDirection = SchemaUtils::outputFormatToTranslationDirection(output);
+    // This gets read by the TranslationVisitor and cannot be empty.
+    conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), translationDirection);
+  }
 }
 
 }

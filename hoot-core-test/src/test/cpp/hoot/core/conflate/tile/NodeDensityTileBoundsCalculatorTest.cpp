@@ -64,11 +64,19 @@ public:
 
   void addEnvelope(OsmMapPtr map, Envelope& e, int tx, int ty)
   {
-    WayPtr w(new Way(Status::Unknown1, map->createNextWayId(), 10.0));
-    NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMinY(), 10.0));
-    NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMinY(), 10.0));
-    NodePtr n3(new Node(Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMaxY(), 10.0));
-    NodePtr n4(new Node(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMaxY(), 10.0));
+    WayPtr w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10.0);
+    NodePtr n1 =
+      std::make_shared<Node>(
+        Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMinY(), 10.0);
+    NodePtr n2 =
+      std::make_shared<Node>(
+        Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMinY(), 10.0);
+    NodePtr n3 =
+      std::make_shared<Node>(
+        Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMaxY(), 10.0);
+    NodePtr n4 =
+      std::make_shared<Node>(
+        Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMaxY(), 10.0);
 
     map->addNode(n1);
     map->addNode(n2);
@@ -89,7 +97,7 @@ public:
   void runToyTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcGisRoads.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -105,7 +113,7 @@ public:
     uut._calculateTiles();
     vector<vector<Envelope>> e = uut.getTiles();
 
-    OsmMapPtr bounds(new OsmMap());
+    OsmMapPtr bounds = std::make_shared<OsmMap>();
 
     for (size_t tx = 0; tx < e.size(); tx++)
     {

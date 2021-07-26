@@ -45,23 +45,20 @@ public:
   static QString className() { return "hoot::BuildingCriterion"; }
 
   BuildingCriterion() = default;
-  BuildingCriterion(ConstOsmMapPtr map) : _map(map) { }
+  BuildingCriterion(ConstOsmMapPtr map);
   ~BuildingCriterion() = default;
 
   bool isParentABuilding(ElementId eid) const;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
   bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
+  ElementCriterionPtr clone() override { return std::make_shared<BuildingCriterion>(_map); }
 
   GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new BuildingCriterion(_map)); }
-
   bool supportsSpecificConflation() const override { return true; }
-
   QStringList getChildCriteria() const override;
 
   QString getClassName() const override { return className(); }

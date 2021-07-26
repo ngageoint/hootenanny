@@ -61,16 +61,13 @@ public:
    * Returns true if all the children of this element are available within the specified map.
    */
   static bool isComplete(const OsmMap* map, ElementId eid);
-
   bool isComplete() const { return _complete; }
 
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override
   { return "Determines if a element is completely contained within a map"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

@@ -314,11 +314,29 @@ See the User Guide for more specific details on command usage. Most of these exa
     hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf input1.osm input2.osm output.osm
 -----
 
-==== Translate features to a schema before conflating them:
+==== Translate features to a schema just before conflating them:
 
 -----
     hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf \
-      -D conflate.pre.ops="SchemaTranslationVisitor" \
+      -D conflate.pre.ops++="SchemaTranslationVisitor" \
+      -D schema.translation.script=myTranslation.js input1.osm input2.osm output.osm
+-----
+
+==== Translate reference features to a schema just before conflating them:
+
+-----
+    hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf \
+      -D conflate.pre.ops++="SchemaTranslationVisitor" \
+      -D schema.translation.element.status=Unknown1 \
+      -D schema.translation.script=myTranslation.js input1.osm input2.osm output.osm
+-----
+
+==== Translate secondary features to a schema just before conflating them:
+
+-----
+    hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf \
+      -D conflate.pre.ops++="SchemaTranslationVisitor" \
+      -D schema.translation.element.status=Unknown2 \
       -D schema.translation.script=myTranslation.js input1.osm input2.osm output.osm
 -----
 

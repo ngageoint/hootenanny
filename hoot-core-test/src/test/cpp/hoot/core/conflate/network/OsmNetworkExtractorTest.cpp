@@ -56,13 +56,11 @@ public:
   {
     NetworkVertex::reset();
 
-    OsmMapPtr map(new OsmMap());
-
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "ToyInput.osm");
 
-    ElementCriterionPtr c(new HighwayCriterion(map));
     OsmNetworkExtractor uut;
-    uut.setCriterion(c);
+    uut.setCriterion(std::make_shared<HighwayCriterion>(map));
     OsmNetworkPtr network = uut.extractNetwork(map);
 
     //LOG_VAR(TestUtils::toQuotedString(network->toString()));

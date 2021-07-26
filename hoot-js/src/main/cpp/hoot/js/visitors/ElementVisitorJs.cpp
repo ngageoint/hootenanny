@@ -47,6 +47,11 @@ namespace hoot
 
 HOOT_JS_REGISTER(ElementVisitorJs)
 
+ElementVisitorJs::ElementVisitorJs(std::shared_ptr<ElementVisitor> v) :
+_v(v)
+{
+}
+
 void ElementVisitorJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
@@ -81,7 +86,8 @@ void ElementVisitorJs::New(const FunctionCallbackInfo<Value>& args)
 
   const QString className = "hoot::" + str(args.This()->GetConstructorName());
   LOG_VART(className);
-  ElementVisitor* vis = Factory::getInstance().constructObject<ElementVisitor>(className);
+  std::shared_ptr<ElementVisitor> vis =
+    Factory::getInstance().constructObject<ElementVisitor>(className);
   ElementVisitorJs* obj = new ElementVisitorJs(vis);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());

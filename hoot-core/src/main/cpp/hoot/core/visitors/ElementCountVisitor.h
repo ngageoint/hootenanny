@@ -46,8 +46,6 @@ public:
   ElementCountVisitor() : _count(0) { }
   ~ElementCountVisitor() = default;
 
-  int getCount() const { return _count; }
-
   double getStat() const override { return _count; }
 
   void visit(const ConstElementPtr& e) override;
@@ -55,6 +53,8 @@ public:
   QString getDescription() const override { return "Counts the number of elements"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
+
+  int getCount() const { return _count; }
 
 private:
 

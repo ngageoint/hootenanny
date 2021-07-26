@@ -192,7 +192,7 @@ bool OsmApiWriter::apply()
     if (queueSize < QUEUE_SIZE_MULTIPLIER * _maxWriters)
     {
       //  Divide up the changes into atomic changesets
-      ChangesetInfoPtr changeset_info(new ChangesetInfo());
+      ChangesetInfoPtr changeset_info = std::make_shared<ChangesetInfo>();
       //  Repeat divide until all changes have been committed
       _changesetMutex.lock();
       bool newChangeset = _changeset.calculateChangeset(changeset_info);
@@ -209,16 +209,16 @@ bool OsmApiWriter::apply()
         //  all of the threads are idle and not waiting for something to come back
         //  There are two things that can be done here, first is to put everything that is
         //  "ready to send" in a changeset and send it OR move everything to the error state
-/*
+
         //  Option #1: Get all of the remaining elements as a single changeset
-        _changesetMutex.lock();
-        _changeset.calculateRemainingChangeset(changeset_info);
-        _changesetMutex.unlock();
+        //_changesetMutex.lock();
+        //_changeset.calculateRemainingChangeset(changeset_info);
+        //_changesetMutex.unlock();
         //  Push that changeset
-        _pushChangesets(changeset_info);
+        //_pushChangesets(changeset_info);
         //  Let the threads know that the remaining changeset is the "remaining" changeset
-        _threadsCanExit = true;
-*/
+        //_threadsCanExit = true;
+
         LOG_STATUS("Apply Changeset: Remaining elements unsendable...");
         //  Option #2: Move everything to the error state and exit
         _changesetMutex.lock();
@@ -512,12 +512,12 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           if (workInfo->size() == 1)
             workInfo->setAttemptedResolveChangesetIssues(true);
           //  Attempt to split the changeset
-          if (!_splitChangeset(workInfo, info->response))
+          if (!_splitChangeset(workInfo, info->response) &&
+              //  For HTTP_GONE, it could come back false if the element that is gone is removed
+              //  successfully and the rest of the changeset needs to be processed
+              workInfo->size() > 0)
           {
-            //  For HTTP_GONE, it could come back false if the element that is gone is removed
-            //  successfully and the rest of the changeset needs to be processed
-            if (workInfo->size() > 0)
-              _pushChangesets(workInfo);
+            _pushChangesets(workInfo);
           }
           break;
         case HttpResponseCode::HTTP_INTERNAL_SERVER_ERROR:  //  Internal Server Error, could be caused by the database being saturated
@@ -736,7 +736,7 @@ bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request) const
     QRegExp regex("generator=(\"|')CGImap", Qt::CaseInsensitive);
     cgimap = responseXml.contains(regex);
   }
-  catch (HootException& ex)
+  catch (const HootException& ex)
   {
     LOG_WARN(ex.what());
   }
@@ -806,10 +806,10 @@ bool OsmApiWriter::_parsePermissions(const QString& permissions) const
     {
       QStringRef name = reader.name();
       QXmlStreamAttributes attributes = reader.attributes();
-      if (name == "permission" && attributes.hasAttribute("name"))
+      if (name == "permission" && attributes.hasAttribute("name") &&
+          attributes.value("name") == "allow_write_api")
       {
-        if (attributes.value("name") == "allow_write_api")
-          return true;
+        return true;
       }
     }
   }
@@ -923,7 +923,7 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset
  */
 OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset) const
 {
-  OsmApiFailureInfoPtr info(new OsmApiFailureInfo());
+  OsmApiFailureInfoPtr info = std::make_shared<OsmApiFailureInfo>();
   //  Don't even attempt if the ID is bad
   if (id < 1)
     return info;
@@ -1099,7 +1099,7 @@ HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentica
   if (!requiresAuthentication)
   {
     //  When the call doesn't require authentication, don't pass in OAuth credentials
-    request.reset(new HootNetworkRequest());
+    request = std::make_shared<HootNetworkRequest>();
   }
   else if (!_consumerKey.isEmpty() &&
       !_consumerSecret.isEmpty() &&
@@ -1107,12 +1107,14 @@ HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentica
       !_secretToken.isEmpty())
   {
     //  When OAuth credentials are present and authentication is requested, pass OAuth crendentials
-    request.reset(new HootNetworkRequest(_consumerKey, _consumerSecret, _accessToken, _secretToken));
+    request =
+      std::make_shared<HootNetworkRequest>(
+        _consumerKey, _consumerSecret, _accessToken, _secretToken);
   }
   else
   {
     //  No OAuth credentials are present, so authentication must be by username/password
-    request.reset(new HootNetworkRequest());
+    request = std::make_shared<HootNetworkRequest>();
   }
   return request;
 }

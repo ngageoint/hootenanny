@@ -53,9 +53,9 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
   {
     // pass map as temp file and get it back as a temp file
 
-    std::shared_ptr<QTemporaryFile> tempInputFile(
-      new QTemporaryFile(
-        ConfigOptions().getApidbBulkInserterTempFileDir() + "/JosmMapValidator-in.osm"));
+    std::shared_ptr<QTemporaryFile> tempInputFile =
+      std::make_shared<QTemporaryFile>(
+        ConfigOptions().getApidbBulkInserterTempFileDir() + "/JosmMapValidator-in.osm");
     tempInputFile->setAutoRemove(true);
     if (!tempInputFile->open())
     {
@@ -70,7 +70,7 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
     _validate(_josmValidators, tempInputFile->fileName(), tempOutputPath);
 
     LOG_DEBUG("Reading validated map from " << tempOutputPath << "...");
-    OsmMapPtr validatedMap(new OsmMap());
+    OsmMapPtr validatedMap = std::make_shared<OsmMap>();
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.setUseFileStatus(true);

@@ -56,7 +56,7 @@ void SparkJsonWriter::open(const QString& fileName)
 {
   close();
 
-  _fp.reset(new QFile());
+  _fp = std::make_shared<QFile>();
   _fp->setFileName(fileName);
   if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {
@@ -76,7 +76,7 @@ void SparkJsonWriter::open(const QString& fileName)
       }
       else
       {
-        _bounds.reset(new SearchBoundsCalculator(sbc));
+        _bounds = std::make_shared<SearchBoundsCalculator>(sbc);
       }
     }
   }

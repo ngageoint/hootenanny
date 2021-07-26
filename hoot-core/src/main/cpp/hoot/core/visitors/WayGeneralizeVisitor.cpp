@@ -52,8 +52,7 @@ void WayGeneralizeVisitor::setConfiguration(const Settings& conf)
   const QString critClass = configOptions.getWayGeneralizerCriterion().trimmed();
   if (!critClass.isEmpty())
   {
-    addCriterion(
-      ElementCriterionPtr(Factory::getInstance().constructObject<ElementCriterion>(critClass)));
+    addCriterion(Factory::getInstance().constructObject<ElementCriterion>(critClass));
   }
 }
 
@@ -63,7 +62,7 @@ void WayGeneralizeVisitor::setOsmMap(OsmMap* map)
   MapProjector::projectToPlanar(_map->shared_from_this());
 
   assert(_epsilon != -1.0);
-  _generalizer.reset(new RdpWayGeneralizer(_epsilon));
+  _generalizer = std::make_shared<RdpWayGeneralizer>(_epsilon);
   _generalizer->setOsmMap(_map);
   _generalizer->setRemoveNodesSharedByWays(_removeNodesSharedByWays);
 }

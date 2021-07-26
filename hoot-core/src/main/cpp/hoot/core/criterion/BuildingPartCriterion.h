@@ -46,11 +46,9 @@ public:
   ~BuildingPartCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<BuildingPartCriterion>(); }
 
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new BuildingPartCriterion()); }
-
-  GeometryType getGeometryType() const override
-  { return GeometryType::Polygon; }
+  GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
