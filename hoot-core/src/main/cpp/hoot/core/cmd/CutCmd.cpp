@@ -104,11 +104,11 @@ public:
       FileUtils::toLogFormat(outputPath, 25) << "...");
 
     // Load up the shape being cut out.
-    OsmMapPtr cutterShapeMap(new OsmMap());
+    OsmMapPtr cutterShapeMap = std::make_shared<OsmMap>();
     IoUtils::loadMap(cutterShapeMap, cutterShapePath, true, Status::Unknown1);
 
     // Load up the dough.
-    OsmMapPtr doughMap(new OsmMap());
+    OsmMapPtr doughMap = std::make_shared<OsmMap>();
     IoUtils::loadMap(doughMap, doughPath, true, Status::Unknown1);
 
     // Cut the cutter shape out of the dough.

@@ -50,12 +50,10 @@ public:
   ~ChildElementCriterion() = default;
 
   /**
-   * @see ElementVisitor
+   * @see ElementCriterion
    */
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new ChildElementCriterion(_map)); }
+  ElementCriterionPtr clone() override { return std::make_shared<ChildElementCriterion>(_map); }
 
   QString getDescription() const override { return "Identifies way nodes and relation members"; }
   QString getName() const override { return className(); }

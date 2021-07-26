@@ -46,8 +46,8 @@ namespace Tgs
 {
 
 HilbertRTree::HilbertRTree(const std::shared_ptr<PageStore>& ps, int dimensions) :
-  RStarTree(ps, dimensions),
-  _hilbertCurve(new HilbertCurve(dimensions, 8))
+RStarTree(ps, dimensions),
+_hilbertCurve(std::make_shared<HilbertCurve>(dimensions, 8))
 {
 }
 
@@ -289,7 +289,7 @@ void HilbertRTree::greedyShuffle()
 void HilbertRTree::_greedyShuffle(int parentId)
 {
   std::vector<double> tmp;
-  RTreeNode* parent = _getNode(parentId);
+  const RTreeNode* parent = _getNode(parentId);
   // if we're a leaf, no shuffling is possible, return the overlap
   if (parent->isLeafNode())
   {
@@ -371,7 +371,7 @@ int HilbertRTree::_splitBoxes(BoxVector& boxes)
   hilbertBoxes.reserve(boxes.size());
   for (unsigned int i = 0; i < boxes.size(); i++)
   {
-    BoxInternalData& box = boxes[i].box;
+    const BoxInternalData& box = boxes[i].box;
     for (int j = 0; j < box.getDimensions(); j++)
     {
       double v = (box.getLowerBoundRaw(j) + box.getUpperBoundRaw(j)) / 2.0;
@@ -425,7 +425,7 @@ double HilbertRTree::_sum(const std::vector<double>& v) const
 
 double HilbertRTree::_swapGrandChildNodes(int parentId, const std::vector<double>& overlaps)
 {
-  RTreeNode* parent = _getNode(parentId);
+  const RTreeNode* parent = _getNode(parentId);
   assert(parent->isLeafNode() == false);
   assert(parent->getChildCount() >= 2);
 

@@ -81,7 +81,7 @@ void RemoveTagsVisitor::addCriterion(const ElementCriterionPtr& e)
   }
   else
   {
-    _criterion.reset(new NotCriterion(e));
+    _criterion = std::make_shared<NotCriterion>(e);
   }
 }
 
@@ -91,8 +91,7 @@ void RemoveTagsVisitor::_setCriterion(const QString& criterionName)
   {
     LOG_VART(criterionName);
     addCriterion(
-      std::shared_ptr<ElementCriterion>(
-        Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed())));
+      Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed()));
   }
 }
 

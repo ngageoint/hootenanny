@@ -48,9 +48,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RandomTagModifier)
 
-RandomTagModifier::RandomTagModifier()
+RandomTagModifier::RandomTagModifier() :
+_localRng(std::make_shared<boost::minstd_rand>())
 {
-  _localRng.reset(new boost::minstd_rand());
   _rng = _localRng.get();
 }
 

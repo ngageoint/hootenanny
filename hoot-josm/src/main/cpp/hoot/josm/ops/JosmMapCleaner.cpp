@@ -80,9 +80,9 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
   {
     // pass map as temp file and get it back as a temp file
 
-    std::shared_ptr<QTemporaryFile> tempInputFile(
-      new QTemporaryFile(
-        ConfigOptions().getApidbBulkInserterTempFileDir() + "/JosmMapCleaner-in.osm"));
+    std::shared_ptr<QTemporaryFile> tempInputFile =
+      std::make_shared<QTemporaryFile>(
+        ConfigOptions().getApidbBulkInserterTempFileDir() + "/JosmMapCleaner-in.osm");
     tempInputFile->setAutoRemove(true);
     if (!tempInputFile->open())
     {
@@ -97,7 +97,7 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
     _clean(_josmValidators, tempInputFile->fileName(), tempOutputPath, _addDetailTags);
 
     LOG_DEBUG("Reading cleaned map from " << tempOutputPath << "...");
-    OsmMapPtr cleanedMap(new OsmMap());
+    OsmMapPtr cleanedMap = std::make_shared<OsmMap>();
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.setUseFileStatus(true);

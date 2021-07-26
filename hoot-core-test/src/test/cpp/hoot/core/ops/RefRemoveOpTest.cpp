@@ -67,12 +67,12 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "Toy.osm", map);
 
     RefRemoveOp uut;
-    uut.addCriterion(ElementCriterionPtr(new BuildingCriterion(map)));
+    uut.addCriterion(std::make_shared<BuildingCriterion>(map));
     uut.apply(map);
 
     LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter(5).toString(map)));

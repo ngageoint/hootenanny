@@ -34,6 +34,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, StatusCriterion)
 
+StatusCriterion::StatusCriterion()
+{
+  setConfiguration(conf());
+}
+
+StatusCriterion::StatusCriterion(Status s) :
+_status(s)
+{
+}
+
 bool StatusCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(_status);

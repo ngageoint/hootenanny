@@ -53,7 +53,7 @@ public:
 
 private:
 
-  TagDifferencerJs(TagDifferencer *op) : _td(op) { }
+  TagDifferencerJs(std::shared_ptr<TagDifferencer> op);
 
   static void diff(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);

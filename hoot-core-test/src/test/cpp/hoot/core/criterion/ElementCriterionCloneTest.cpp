@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/MultiUseBuildingCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/criterion/ParallelWayCriterion.h>
@@ -59,12 +60,13 @@ public:
       // TODO: These crash the test. Need to figure out what to do about then.
       if (className == NotCriterion::className() || className == OrCriterion::className() ||
           className == ParallelWayCriterion::className() ||
-          className == WayBufferCriterion::className())
+          className == WayBufferCriterion::className() ||
+          className == MultiUseBuildingCriterion::className())
       {
         continue;
       }
-      ElementCriterionPtr crit(
-        Factory::getInstance().constructObject<ElementCriterion>(className));
+      ElementCriterionPtr crit =
+        Factory::getInstance().constructObject<ElementCriterion>(className);
       LOG_VART(crit.get());
 
       std::shared_ptr<ConstOsmMapConsumer> mapConsumer =

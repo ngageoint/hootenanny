@@ -51,7 +51,7 @@ namespace Tgs
     /**
     *  Constructor
     */
-    RandomForestManager();
+    RandomForestManager() = default;
     /**
     *  Destructor
     */

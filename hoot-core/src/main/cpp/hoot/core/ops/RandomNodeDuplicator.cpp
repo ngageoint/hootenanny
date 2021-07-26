@@ -45,10 +45,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RandomNodeDuplicator)
 
-RandomNodeDuplicator::RandomNodeDuplicator()
+RandomNodeDuplicator::RandomNodeDuplicator() :
+_localRng(std::make_shared<boost::minstd_rand>())
 {
-  _localRng.reset(new boost::minstd_rand());
-  _rng = _localRng.get();
+  _rng =_localRng.get();
 }
 
 void RandomNodeDuplicator::apply(OsmMapPtr& map)
@@ -88,8 +88,8 @@ void RandomNodeDuplicator::duplicateNode(const NodePtr& n, const OsmMapPtr& map)
   double x = n->getX() + N() * sigma * _moveMultiplier;
   double y = n->getY() + N() * sigma * _moveMultiplier;
 
-  NodePtr newNode(
-    new Node(n->getStatus(), map->createNextNodeId(), x, y, n->getCircularError()));
+  NodePtr newNode =
+    std::make_shared<Node>(n->getStatus(), map->createNextNodeId(), x, y, n->getCircularError());
   map->addNode(newNode);
 
   _numAffected++;

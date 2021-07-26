@@ -1459,7 +1459,7 @@ private:
     const QString& input, const QString& cropBounds = "", const QString& cropOut = "",
     const bool clearDb = true)
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     // make sure the db is empty
     if (clearDb)
@@ -1473,7 +1473,7 @@ private:
       }
     }
 
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     // TODO: replace the string truncation lengths with getProgressVarPrintLengthMax
     LOG_STATUS("Reading the data to replace from: ..." << FileUtils::toLogFormat(input, 25) << "...");
     OsmMapReaderFactory::read(map, input, true, Status::Unknown1);
@@ -1508,7 +1508,7 @@ private:
 
     // Add a tag specifying this is the to replace data, so we can see it in the output.
     SetTagValueVisitor addTagVis("note", "Source 1");
-    NotCriterion addTagCrit(std::shared_ptr<WayNodeCriterion>(new WayNodeCriterion(map)));
+    NotCriterion addTagCrit(std::make_shared<WayNodeCriterion>(map));
     FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
     map->visitRw(deleteExcludeTagVis);
 
@@ -1529,7 +1529,7 @@ private:
   {
     // TODO: Can this be converted over to use the bulk inserter?
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     LOG_STATUS("Reading the replacement data from: ..." << FileUtils::toLogFormat(input, 25) << "...");
     // Load in with the replacement source IDs to mimic production behavior.
     // ChangesetReplacementCreator will throw them out when the data is first loaded in to avoid ID
@@ -1566,7 +1566,7 @@ private:
 
     // add a tag specifying this is the to replace data, so we can see it in the output
     SetTagValueVisitor addTagVis("note", "Source 2");
-    NotCriterion addTagCrit(std::shared_ptr<WayNodeCriterion>(new WayNodeCriterion(map)));
+    NotCriterion addTagCrit(std::make_shared<WayNodeCriterion>(map));
     FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
     map->visitRw(deleteExcludeTagVis);
 

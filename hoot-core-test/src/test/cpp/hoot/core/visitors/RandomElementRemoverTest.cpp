@@ -59,7 +59,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -72,8 +72,8 @@ public:
 
     for (int i = 0; i < 100; i++)
     {
-      NodePtr n(new Node(Status::Unknown1, map->createNextNodeId(), uni(rng), uni(rng), 10));
-      map->addNode(n);
+      map->addNode(
+        std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), uni(rng), uni(rng), 10));
     }
 
     RandomElementRemover v;

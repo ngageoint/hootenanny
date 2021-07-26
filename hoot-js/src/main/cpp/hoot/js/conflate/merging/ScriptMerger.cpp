@@ -50,8 +50,9 @@ HOOT_FACTORY_REGISTER(Merger, ScriptMerger)
 
 int ScriptMerger::logWarnCount = 0;
 
-ScriptMerger::ScriptMerger(const std::shared_ptr<PluginContext>& script, Persistent<Object>& plugin,
-                           const set<pair<ElementId, ElementId>>& pairs) :
+ScriptMerger::ScriptMerger(
+  const std::shared_ptr<PluginContext>& script, const Persistent<Object>& plugin,
+  const set<pair<ElementId, ElementId>>& pairs) :
 MergerBase(pairs),
 _script(script)
 {
@@ -113,7 +114,7 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
     logWarnCount++;
     return;
   }
-  else if (_pairs.size() == 0)
+  else if (_pairs.empty())
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
@@ -139,7 +140,7 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
   Local<Value> v = _callMergePair(map);
 
   Local<Object> o = Local<Object>::Cast(v);
-  ElementJs* newElementJs = ObjectWrap::Unwrap<ElementJs>(o);
+  const ElementJs* newElementJs = ObjectWrap::Unwrap<ElementJs>(o);
   ConstElementPtr newElement = newElementJs->getConstElement();
 
   if (map->containsElement(newElement) == false)

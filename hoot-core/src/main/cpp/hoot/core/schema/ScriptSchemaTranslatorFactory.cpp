@@ -44,18 +44,21 @@ ScriptSchemaTranslatorFactory& ScriptSchemaTranslatorFactory::getInstance()
   return instance;
 }
 
-bool CompareSt(ScriptSchemaTranslator* st1, ScriptSchemaTranslator* st2)
+bool CompareSt(
+  const std::shared_ptr<ScriptSchemaTranslator> st1,
+  const std::shared_ptr<ScriptSchemaTranslator> st2)
 {
   return st1->order() < st2->order();
 }
 
-ScriptSchemaTranslator* ScriptSchemaTranslatorFactory::createTranslator(QString scriptPath)
+std::shared_ptr<ScriptSchemaTranslator> ScriptSchemaTranslatorFactory::createTranslator(
+  QString scriptPath)
 {
   LOG_VARD(scriptPath);
 
   _init();
 
-  vector<ScriptSchemaTranslator*> st;
+  vector<std::shared_ptr<ScriptSchemaTranslator>> st;
   for (size_t i = 0; i < _translators.size(); ++i)
   {
     LOG_VART(_translators[i]);
@@ -63,35 +66,29 @@ ScriptSchemaTranslator* ScriptSchemaTranslatorFactory::createTranslator(QString 
   }
 
   sort(st.begin(), st.end(), CompareSt);
-  LOG_VART(st);
 
-  ScriptSchemaTranslator* result = nullptr;
+  std::shared_ptr<ScriptSchemaTranslator> result;
   for (size_t i = 0; i < st.size(); ++i)
   {
     try
     {
       st[i]->setScript(scriptPath);
       LOG_VART(st[i]->isValidScript());
-      if (result == nullptr && st[i]->isValidScript())
+      if (!result && st[i]->isValidScript())
       {
         result = st[i];
         LOG_TRACE("Found a valid translator: " + _translators[i]);
         break;
-      }
-      else
-      {
-        delete st[i];
       }
       LOG_VART(result);
     }
     catch (...)
     {
       LOG_WARN("isValidScript shouldn't throw an exception.");
-      delete st[i];
     }
   }
 
-  if (result == nullptr)
+  if (!result)
   {
     throw HootException("Unable to find an appropriate scripting language for: " + scriptPath);
   }

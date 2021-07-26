@@ -56,7 +56,8 @@ public:
   HootException(const HootException& e) { _what = e._what; }
   virtual ~HootException() throw() = default;
 
-  virtual HootException* clone() const { return new HootException(*this); }
+  virtual std::shared_ptr<HootException> clone() const
+  { return std::make_shared<HootException>(*this); }
 
   virtual QString getName() const { return className(); }
 
@@ -160,8 +161,8 @@ public: \
   Name(QString str) : HootException(str) { } \
   Name(const Name& e) : HootException(e.getWhat()) { } \
   virtual ~Name() throw() {} \
-  virtual HootException* clone() const { return new Name(*this); } \
-  virtual QString getName() const { return className(); } \
+  virtual std::shared_ptr<HootException> clone() const { return std::make_shared<Name>(*this); } \
+  QString getName() const override { return className(); } \
 };
 
 #define HOOT_DEFINE_EXCEPTION_STR(Name, Default) \
@@ -173,8 +174,8 @@ public: \
   Name(QString str) : HootException(str) { } \
   Name(const Name& e) : HootException(e.getWhat()) { } \
   virtual ~Name() throw() {} \
-  virtual HootException* clone() const { return new Name(*this); } \
-  virtual QString getName() const { return className(); } \
+  virtual std::shared_ptr<HootException> clone() const { return std::make_shared<Name>(*this); } \
+  QString getName() const override { return className(); } \
 };
 
 /****

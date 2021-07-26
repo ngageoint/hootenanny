@@ -59,7 +59,7 @@ std::shared_ptr<TagMerger> TagMergerFactory::getMergerPtr(const QString& name)
   QHash<QString, std::shared_ptr<TagMerger>>::const_iterator it = _mergers.find(name);
   if (it == _mergers.end())
   {
-    result.reset(Factory::getInstance().constructObject<TagMerger>(name));
+    result = Factory::getInstance().constructObject<TagMerger>(name);
     std::shared_ptr<Configurable> configurable = std::dynamic_pointer_cast<Configurable>(result);
     if (configurable)
     {

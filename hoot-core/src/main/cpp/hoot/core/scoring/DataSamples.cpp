@@ -62,7 +62,7 @@ vector<string> DataSamples::getUniqueLabels() const
 
 std::shared_ptr<DataFrame> DataSamples::toDataFrame(double nullValue) const
 {
-  std::shared_ptr<DataFrame> result(new DataFrame);
+  std::shared_ptr<DataFrame> result = std::make_shared<DataFrame>();
   vector<string> labels = getUniqueLabels();
   result->setFactorLabels(labels);
 

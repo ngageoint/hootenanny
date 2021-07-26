@@ -85,7 +85,7 @@ public:
 
   OsmMapPtr createMap()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -117,7 +117,7 @@ public:
     Coordinate w2c[] = { Coordinate(100, 0), Coordinate(0, 0), Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -187,7 +187,7 @@ public:
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -234,7 +234,7 @@ public:
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -293,14 +293,15 @@ public:
     w3->getTags()["highway"] = "path";
     w3->getTags()["uuid"] = "w3";
 
-    RelationPtr r(new Relation(Status::Unknown1, 0, 15, MetadataTags::RelationMultilineString()));
+    RelationPtr r =
+      std::make_shared<Relation>(Status::Unknown1, 0, 15, MetadataTags::RelationMultilineString());
     r->addElement("", w1);
     r->addElement("", w2);
     r->setTag("uuid", "r");
     r->setTag("highway", "footway");
     map->addElement(r);
 
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -349,7 +350,7 @@ public:
     w2->getTags()["highway"] = "path";
     w2->getTags()["uuid"] = "w2";
 
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -400,13 +401,14 @@ public:
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
-    RelationPtr r(new Relation(Status::Unknown2, 0, 15, MetadataTags::RelationMultilineString()));
+    RelationPtr r =
+      std::make_shared<Relation>(Status::Unknown2, 0, 15, MetadataTags::RelationMultilineString());
     r->addElement("", w2);
     r->setTag("uuid", "r");
     r->setTag("highway", "footway");
     map->addElement(r);
 
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -440,7 +442,7 @@ public:
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 

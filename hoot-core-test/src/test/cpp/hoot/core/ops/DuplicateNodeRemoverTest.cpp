@@ -62,7 +62,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     IoUtils::loadMap(map, _inputPath + "jakarta_raya_coastline.shp", true);
     MapProjector::projectToOrthographic(map);
     CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
@@ -75,7 +75,7 @@ public:
 
   void runMetadataTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     // Nodes are within the proximity threshold and have no tags...so they're dupes.
     /*NodePtr node1 =*/ TestUtils::createNode(map);
@@ -145,7 +145,7 @@ public:
 
   void runIgnoreStatusTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     // Statuses are different, so won't be considered dupes unless we explicitly ignore status.
     /*NodePtr node1 =*/ TestUtils::createNode(map, "", Status::Unknown1);

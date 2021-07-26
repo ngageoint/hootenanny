@@ -55,7 +55,7 @@ void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  FeatureExtractorJs* feJs = ObjectWrap::Unwrap<FeatureExtractorJs>(args.This());
+  const FeatureExtractorJs* feJs = ObjectWrap::Unwrap<FeatureExtractorJs>(args.This());
 
   if (args.Length() != 3)
   {
@@ -70,7 +70,7 @@ void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
     feJs->getFeatureExtractor()->extract(
       *(mapJs->getConstMap()), e1Js->getConstElement(), e2Js->getConstElement());
 
-  if (result == feJs->getFeatureExtractor()->nullValue())
+  if (result == FeatureExtractor::nullValue())
   {
     args.GetReturnValue().SetNull();
   }
@@ -111,12 +111,12 @@ void FeatureExtractorJs::New(const FunctionCallbackInfo<Value>& args)
 
   const QString className = "hoot::" + str(args.This()->GetConstructorName());
 
-  FeatureExtractorPtr fe(Factory::getInstance().constructObject<FeatureExtractor>(className));
+  FeatureExtractorPtr fe = Factory::getInstance().constructObject<FeatureExtractor>(className);
   FeatureExtractorJs* obj = new FeatureExtractorJs(fe);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
-  PopulateConsumersJs::populateConsumers<FeatureExtractor>(fe.get(), args);
+  PopulateConsumersJs::populateConsumers<FeatureExtractor>(fe, args);
 
   args.GetReturnValue().Set(args.This());
 }

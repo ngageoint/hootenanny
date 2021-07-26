@@ -75,7 +75,7 @@ public:
       "]                                      \n"
       "}                                      \n";
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmJsonReader().loadFromString(testJsonStr, map);
 
 
@@ -94,9 +94,9 @@ public:
     matchFactory.reset();
     matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");
 
-    MergerCreatorPtr mergerCreator(
+    MergerCreatorPtr mergerCreator =
       Factory::getInstance().constructObject<MergerCreator>(
-        QString("hoot::ScriptMergerCreator")));
+        QString("hoot::ScriptMergerCreator"));
     MergerFactory& mergerFactory = MergerFactory::getInstance();
     mergerFactory.reset();
     mergerFactory.registerCreator(mergerCreator);
@@ -108,11 +108,11 @@ public:
     // compare a cluster of 2 to a cluster of 1. This isn't strictly the way it will operate
     // under real conditions, but it makes a reasonable test.
     {
-      MultiaryClusterPtr mc1(new MultiaryCluster());
+      MultiaryClusterPtr mc1 = std::make_shared<MultiaryCluster>();
       mc1->append(map->getNode(-2));
       mc1->append(map->getNode(-3));
 
-      MultiaryClusterPtr mc2(new MultiaryCluster());
+      MultiaryClusterPtr mc2 = std::make_shared<MultiaryCluster>();
       mc2->append(map->getNode(-1));
 
       MultiaryClusterPtr out = cache.merge(mc1, mc2);

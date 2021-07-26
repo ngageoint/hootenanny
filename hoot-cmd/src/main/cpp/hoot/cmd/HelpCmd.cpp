@@ -46,6 +46,9 @@ public:
 
   static QString className() { return "hoot::HelpCmd"; }
 
+  QString getName() const override { return "help"; }
+  QString getDescription() const override { return "Displays help documentation"; }
+
   HelpCmd()
   {
     // Add hoot-core commands to this list that are not part of hoot-rnd and are typically used by
@@ -65,9 +68,8 @@ public:
 
   static bool commandCompare(const QString& n1, const QString& n2)
   {
-    std::shared_ptr<Command> c1(Factory::getInstance().constructObject<Command>(n1));
-    std::shared_ptr<Command> c2(Factory::getInstance().constructObject<Command>(n2));
-
+    std::shared_ptr<Command> c1 = Factory::getInstance().constructObject<Command>(n1);
+    std::shared_ptr<Command> c2 =  Factory::getInstance().constructObject<Command>(n2);
     return c1->getName() < c2->getName();
   }
 
@@ -75,10 +77,6 @@ public:
   {
     return c1->getName() < c2->getName();
   }
-
-  virtual QString getName() const override { return "help"; }
-
-  virtual QString getDescription() const override { return "Displays help documentation"; }
 
   virtual int runSimple(QStringList& args) override
   {
@@ -111,7 +109,7 @@ private:
     bool foundIt = false;
     for (size_t i = 0; i < cmds.size(); i++)
     {
-      std::shared_ptr<Command> c(Factory::getInstance().constructObject<Command>(cmds[i]));
+      std::shared_ptr<Command> c = Factory::getInstance().constructObject<Command>(cmds[i]);
 
       if (c->getName() == command)
       {
@@ -147,8 +145,8 @@ private:
     {
       const QString cmdClassName = cmds[i];
       LOG_VART(cmdClassName);
-      std::shared_ptr<Command> command(
-        Factory::getInstance().constructObject<Command>(cmdClassName));
+      std::shared_ptr<Command> command =
+        Factory::getInstance().constructObject<Command>(cmdClassName);
       if (command->displayInHelp())
       {
         const QString commandName = command->getName();

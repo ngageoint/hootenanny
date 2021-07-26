@@ -52,15 +52,12 @@ public:
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
   QString getInitStatusMessage() const override { return "Removing outlines around buildings..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " building outlines"; }
 
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Removes the outline around buildings"; }
 
   /**

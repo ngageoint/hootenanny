@@ -43,19 +43,17 @@ public:
   static QString className() { return "hoot::NotCriterion"; }
 
   NotCriterion() = default;
-  NotCriterion(ElementCriterion* c) : _child(c) { }
-  NotCriterion(ElementCriterionPtr c) : _child(c) { }
+  NotCriterion(ElementCriterion* c);
+  NotCriterion(ElementCriterionPtr c);
   ~NotCriterion() = default;
 
   void addCriterion(const ElementCriterionPtr& e) override;
 
   /**
-   * Returns true if the element satisfies the criterion.
+   * @see ElementCriterion
    */
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new NotCriterion(_child->clone())); }
+  ElementCriterionPtr clone() override { return std::make_shared<NotCriterion>(_child->clone()); }
 
   QString getDescription() const override { return "Negates a criterion"; }
   QString toString() const override;

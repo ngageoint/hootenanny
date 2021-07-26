@@ -65,7 +65,7 @@ inline void toCpp(v8::Local<v8::Value> v, StringDistancePtr& p)
   }
 
   v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
-  StringDistanceJs* sdj = nullptr;
+  const StringDistanceJs* sdj = nullptr;
   sdj = node::ObjectWrap::Unwrap<StringDistanceJs>(obj);
   if (sdj)
   {

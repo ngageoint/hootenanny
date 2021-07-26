@@ -281,8 +281,7 @@ bool AddressScoreExtractor::_addressesMatchWithNameComparisonRelaxed(
    LOG_VART(elementAddress2Temp.getAddressStr());
 
    MeanWordSetDistance stringComp(
-     StringDistancePtr(
-       new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha())));
+     std::make_shared<LevenshteinDistance>(ConfigOptions().getLevenshteinDistanceAlpha()));
    const double stringSim =
      stringComp.compare(elementAddress1Temp.getAddressStr(), elementAddress2Temp.getAddressStr());
    LOG_VART(stringSim);

@@ -47,8 +47,7 @@ void NonConflatableElementRemover::apply(std::shared_ptr<OsmMap>& map)
   RemoveElementsVisitor removeElementsVisitor;
   removeElementsVisitor.setRecursive(true);
   // RemoveElementsVisitor will auto handle setting the config on this crit.
-  removeElementsVisitor.addCriterion(
-    std::shared_ptr<NonConflatableCriterion>(new NonConflatableCriterion()));
+  removeElementsVisitor.addCriterion(std::make_shared<NonConflatableCriterion>());
   removeElementsVisitor.setConfiguration(conf());
   _map->visitRw(removeElementsVisitor);
 

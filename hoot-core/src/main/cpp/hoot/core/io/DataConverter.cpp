@@ -277,7 +277,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
 
     Progress inputLoadProgress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0, taskWeight);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     for (int i = 0; i < inputs.size(); i++)
     {
       inputLoadProgress.setFromRelative(
@@ -311,7 +311,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
       (float)(currentTask - 1) / (float)numTasks,
       "Writing map: ..." + FileUtils::toLogFormat(output, _printLengthMax) + "...");
     MapProjector::projectToWgs84(map);
-    std::shared_ptr<OgrWriter> writer(new OgrWriter());
+    std::shared_ptr<OgrWriter> writer = std::make_shared<OgrWriter>();
     writer->setSchemaTranslationScript(_translation);
     writer->open(output);
     writer->write(map);
@@ -362,7 +362,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   int currentTask = 1;
   const float taskWeight = 1.0 / (float)numTasks;
 
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   for (int i = 0; i < inputs.size(); i++)
   {
     QString input = inputs[i].trimmed();
@@ -434,7 +434,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   // If the translation direction wasn't specified, try to guess it.
   if (!_translation.trimmed().isEmpty() && _translationDirection.isEmpty())
   {
-    _translationDirection = _outputFormatToTranslationDirection(output);
+    _translationDirection = SchemaUtils::outputFormatToTranslationDirection(output);
     // This gets read by the TranslationVisitor and cannot be empty.
     conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), _translationDirection);
   }
@@ -496,7 +496,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   {
     Progress inputLoadProgress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0, taskWeight);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     for (int i = 0; i < inputs.size(); i++)
     {
       inputLoadProgress.setFromRelative(
@@ -608,11 +608,11 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
   LOG_DEBUG("_transToOgrMT");
 
   QQueue<ElementPtr> elementQ;
-  ElementCachePtr pElementCache(
-    new ElementCacheLRU(
+  ElementCachePtr pElementCache =
+    std::make_shared<ElementCacheLRU>(
       ConfigOptions().getElementCacheSizeNode(),
       ConfigOptions().getElementCacheSizeWay(),
-      ConfigOptions().getElementCacheSizeRelation()));
+      ConfigOptions().getElementCacheSizeRelation());
   QMutex initMutex;
   QMutex transFeaturesMutex;
   QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
@@ -670,14 +670,12 @@ void DataConverter::_setFromOgrOptions()
 
   // Nodes that are very close together but with different IDs present a problem from OGR sources,
   // so let's merge them together.
-  if (ConfigOptions().getOgr2osmMergeNearbyNodes())
+  if (ConfigOptions().getOgr2osmMergeNearbyNodes() &&
+      !_convertOps.contains(DuplicateNodeRemover::className()))
   {
-    if (!_convertOps.contains(DuplicateNodeRemover::className()))
-    {
-      _convertOps.append(DuplicateNodeRemover::className());
-      // also run dupe way node removal
-      _convertOps.append(RemoveDuplicateWayNodesVisitor::className());
-    }
+    _convertOps.append(DuplicateNodeRemover::className());
+    // Also run dupe way node removal.
+    _convertOps.append(RemoveDuplicateWayNodesVisitor::className());
   }
 
   // Complex building simplification is primarily meant for UFD buildings, commonly read from OGR
@@ -724,25 +722,6 @@ void DataConverter::_setToOgrOptions(const QString& output)
   // be done with convert ops, so let's ignore any translation ops that were specified.
   _convertOps.removeAll(SchemaTranslationOp::className());
   _convertOps.removeAll(SchemaTranslationVisitor::className());
-}
-
-QString DataConverter::_outputFormatToTranslationDirection(const QString& output) const
-{
-  if (IoUtils::isSupportedOgrFormat(output, true))
-  {
-    LOG_INFO("No translation direction specified. Assuming 'toogr' based on output format...");
-    return "toogr";
-  }
-  else if (IoUtils::isSupportedOsmFormat(output))
-  {
-    LOG_INFO("No translation direction specified. Assuming 'toosm' based on output format...");
-    return "toosm";
-  }
-  else
-  {
-    LOG_INFO("No translation direction specified. Using 'toosm'...");
-    return "toosm";
-  }
 }
 
 void DataConverter::_handleNonOgrOutputTranslationOpts()

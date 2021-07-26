@@ -60,8 +60,8 @@ class ElementType;
  * Script functions available:
  * http://qt-project.org/doc/qt-4.7/ecmascript.html
  */
-class JavaScriptSchemaTranslator : public ScriptSchemaTranslator, public ScriptToOgrSchemaTranslator,
-  public Configurable
+class JavaScriptSchemaTranslator : public ScriptSchemaTranslator,
+  public ScriptToOgrSchemaTranslator, public Configurable
 {
 public:
 
@@ -122,12 +122,15 @@ private:
 
   Settings _conf;
 
-  std::vector<TranslatedFeature> _createAllFeatures(const QVariantList& vm);
+  std::vector<TranslatedFeature> _createAllFeatures(const QVariantList& vm) const;
   std::shared_ptr<Feature> _createFeature(const QVariantMap& vm, QString& tableName) const;
 
-  void _parseEnumerations(DoubleFieldDefinition* fd, QVariant& enumerations) const;
-  void _parseEnumerations(IntegerFieldDefinition* fd, QVariant& enumerations) const;
-  void _parseEnumerations(LongIntegerFieldDefinition* fd, QVariant& enumerations) const;
+  void _parseEnumerations(
+    std::shared_ptr<DoubleFieldDefinition> fd, const QVariant& enumerations) const;
+  void _parseEnumerations(
+    std::shared_ptr<IntegerFieldDefinition> fd, const QVariant& enumerations) const;
+  void _parseEnumerations(
+    std::shared_ptr<LongIntegerFieldDefinition> fd, const QVariant& enumerations) const;
 
   std::shared_ptr<FieldDefinition> _parseFieldDefinition(const QVariant& fieldV) const;
 

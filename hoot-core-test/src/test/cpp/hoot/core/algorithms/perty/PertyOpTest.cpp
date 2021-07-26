@@ -68,18 +68,16 @@ public:
 
   void runDirectSequentialSimulationTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
     map->setProjection(MapProjector::createAeacProjection(env));
-    //OsmXmlReader reader;
-    //reader.read("test-files/ToyTestA.osm", map);
-    // force the map bounds.
-    NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
-    NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), 500, 500, 10));
+    // force the map bounds
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 0, 0, 10);
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 500, 500, 10);
     map->addNode(n1);
     map->addNode(n2);
 
@@ -87,8 +85,7 @@ public:
     {
       for (double y = 0.0; y <= 500.0; y += 260)
       {
-        NodePtr n(new Node(Status::Unknown1, map->createNextNodeId(), x, y, 10));
-        map->addNode(n);
+        map->addNode(std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), x, y, 10));
       }
     }
 
@@ -107,19 +104,6 @@ public:
       nids.insert(it->first);
     QList<long> keys = QList<long>::fromSet(nids);
     qSort(keys);
-
-//    OsmXmlWriter writer;
-//    MapProjector::reprojectToWgs84(map);
-//    writer.write(map, _outputPath + "BasicTest.osm");
-//    QString result = "";
-//    for (int i = 0; i < keys.size(); i++)
-//    {
-//      const NodePtr& n = map->getNode(keys[i]);
-//      result += QString("n = map->getNode(keys[%1]);\n").arg(i);
-//      result += QString("CPPUNIT_ASSERT_DOUBLES_EQUAL(%1, n->getX(), 1e-3);\n").arg(n->getX());
-//      result += QString("CPPUNIT_ASSERT_DOUBLES_EQUAL(%1, n->getY(), 1e-3);\n").arg(n->getY());
-//    }
-//    LOG_INFO(result);
 
     NodePtr n;
     n = map->getNode(keys[0]);
@@ -153,18 +137,16 @@ public:
    */
   void runDebugTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
     env.MaxX = 1;
     env.MaxY = 1;
     map->setProjection(MapProjector::createAeacProjection(env));
-    //OsmXmlReader reader;
-    //reader.read("test-files/ToyTestA.osm", map);
-    // force the map bounds.
-    NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
-    NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), 100, 100, 10));
+    // force the map bounds
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 0, 0, 10);
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 100, 100, 10);
     map->addNode(n1);
     map->addNode(n2);
 
@@ -174,41 +156,21 @@ public:
     {
       for (double y = 0.0; y < 100.0; y += gridSpacing / 4)
       {
-        NodePtr n(new Node(Status::Unknown1, map->createNextNodeId(), x, y, 10));
-        //n->setTag("note", QString::number(n->getId()));
-        map->addNode(n);
+        map->addNode(std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), x, y, 10));
       }
     }
 
     OsmXmlWriter writer;
 
-    OsmMapPtr original(new OsmMap(map));
+    OsmMapPtr original = std::make_shared<OsmMap>(map);
     MapProjector::projectToWgs84(original);
     writer.write(original, _outputPath + "Original.osm");
 
     PertyOp uut;
     uut.setGridSpacing(gridSpacing);
-    //uut.setRandomError(0.0, 0.0);
     uut.setSeed(1);
-    //uut.setSystematicError(10.0, 10.0);
-    //uut.setCsmParameters(9, 10);
-    //uut.apply(map);
-//    for (int i = 0; i < 100; i++)
-//    {
-//      OsmMapPtr tmp(new OsmMap(map));
-//      uut.permute(tmp);
-//    }
-    //tbs::SampleStats ss(uut._x);
-    //LOG_TRACE("sd: " << ss.calculateUnbiasedStandardDeviation());
-    OsmMapPtr debug = uut.generateDebugMap(map);
-    //    for (int i = 0; i < 100; i++)
-    //    {
-    //      OsmMapPtr tmp(new OsmMap(map));
-    //      uut.permute(tmp);
-    //    }
-        //tbs::SampleStats ss(uut._x);
-        //LOG_TRACE("sd: " << ss.calculateUnbiasedStandardDeviation
 
+    OsmMapPtr debug = uut.generateDebugMap(map);
 
     MapProjector::projectToWgs84(debug);
     writer.write(debug, _outputPath + "Debug.osm");
@@ -217,7 +179,6 @@ public:
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyOpTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyOpTest, "quick");
 
 }

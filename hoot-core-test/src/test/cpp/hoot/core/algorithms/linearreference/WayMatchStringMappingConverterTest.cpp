@@ -51,7 +51,7 @@ public:
    */
   void runTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr n1a = TestUtils::createNode(map, "", Status::Unknown1, 0, 0);
     NodePtr n1b = TestUtils::createNode(map, "", Status::Unknown1, 100, 0);
@@ -65,14 +65,14 @@ public:
     WayPtr w3 = TestUtils::createWay(map, QList<NodePtr>() << n2a << n2b, "", Status::Unknown1);
     WayPtr w4 = TestUtils::createWay(map, QList<NodePtr>() << n2c << n2b, "", Status::Unknown1);
 
-    WayStringPtr wstr1(new WayString());
+    WayStringPtr wstr1 = std::make_shared<WayString>();
     wstr1->append(WaySubline(WayLocation(map, w1, 0), WayLocation::createAtEndOfWay(map, w1)));
     wstr1->append(WaySubline(WayLocation(map, w2, 0), WayLocation::createAtEndOfWay(map, w2)));
-    WayStringPtr wstr2(new WayString());
+    WayStringPtr wstr2 = std::make_shared<WayString>();
     wstr2->append(WaySubline(WayLocation(map, w3, 0), WayLocation::createAtEndOfWay(map, w3)));
     wstr2->append(WaySubline(WayLocation::createAtEndOfWay(map, w4), WayLocation(map, w4, 0)));
 
-    WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(wstr1, wstr2));
+    WayMatchStringMappingPtr mapping = std::make_shared<NaiveWayMatchStringMapping>(wstr1, wstr2);
     WaySublineMatchStringPtr wsms = WayMatchStringMappingConverter().
       toWaySublineMatchString(mapping);
 

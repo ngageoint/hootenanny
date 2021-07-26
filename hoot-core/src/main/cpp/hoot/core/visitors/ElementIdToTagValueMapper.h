@@ -49,21 +49,18 @@ public:
 
   void visit(const ConstElementPtr& e) override;
 
-  QString getDescription() const override
-  { return "Maps element IDs to tag values for a given tag key"; }
-
   QString getInitStatusMessage() const override { return "Mapping tag values..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Mapped " + StringUtils::formatLargeNumber(_numAffected) + " tag values."; }
 
   QMap<ElementId, QString> getIdToTagValueMappings() const { return _idToTagValueMappings; }
 
-  void setTagKey(const QString& key) { _tagKey = key; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Maps element IDs to tag values for a given tag key"; }
+
+  void setTagKey(const QString& key) { _tagKey = key; }
 
 private:
 

@@ -9,7 +9,8 @@ from overlapping sources so as to retain accurate data, minimize redundancy, and
 reconcile data conflicts.
 _____
 
-Check out the quick Hootenanny overview http://github.com/ngageoint/hootenanny#readme[here].
+Check out the quick Hootenanny overview http://github.com/ngageoint/hootenanny#readme[here]. Also, 
+there is a brief (https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)[FAQ].
 
 Conflation within GIS can generally be grouped into several high level
 categories:

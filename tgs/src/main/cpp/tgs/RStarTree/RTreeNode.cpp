@@ -177,7 +177,7 @@ RTreeNode::RTreeNode(int dimensions, const std::shared_ptr<Page>& page)
     throw Exception("Internal Error: page is not large enough to support two children.");
   }
   
-  int* childCount = (int*)_page->getData();
+  const int* childCount = (int*)_page->getData();
   _getHeader()->childCount = *childCount;
 }
 

@@ -59,7 +59,7 @@ public:
 
   void runUpdateTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "StatusUpdateVisitorTest.osm", false, Status::Unknown1);
 
@@ -75,7 +75,7 @@ public:
 
   void runUpdateOnlyIfInvalidTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "StatusUpdateVisitorTest.osm", false, Status::Unknown1);
 

@@ -17,8 +17,15 @@ pipeline {
         booleanParam(name: 'Destroy_VM', defaultValue: true)
         booleanParam(name: 'Hoot_provision', defaultValue: true)
         booleanParam(name: 'Configure_Tests', defaultValue: false)
+        // Generating a core test coverage report slows down the core tests quite a bit, so turning 
+        // it off by default. This must be set the same as Core_coverage. Tried to couple this to 
+        // Core_coverage to avoid an extra parameter but was unsuccessful.
+        booleanParam(name: 'Configure_coverage', defaultValue: false)
         booleanParam(name: 'Build', defaultValue: true)
+        booleanParam(name: 'Archive_docs', defaultValue: false)
         booleanParam(name: 'Core_tests', defaultValue: true)
+        booleanParam(name: 'Translations_tests', defaultValue: true) 
+        booleanParam(name: 'Core_coverage', defaultValue: false)
         booleanParam(name: 'Services_tests', defaultValue: true)
         booleanParam(name: 'UI_hoot1_tests', defaultValue: true)
         booleanParam(name: 'UI_hoot2_tests', defaultValue: true)
@@ -111,12 +118,13 @@ pipeline {
                 sh "sed -i 's/^make \$SILENT_MAKE -j\$(nproc)\$/build-wrapper-linux-x86-64 --out-dir bw-output make \$SILENT_MAKE -j\$(nproc)/' VagrantBuild.sh"
                 // Until PCH support is fixed in Sonar, run this to fix
                 sh "sed -i 's|^make \$SILENT_MAKE clean|make \$SILENT_MAKE clean\\n./scripts/sonar/sonar-prep-makefile.sh|g' VagrantBuild.sh"
-                script {
-                    if (env.BRANCH_NAME == "master") {
-                        // Compile instrumented code for master branch which allows for calculating coverage
-                        sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
-                    }
-                }
+            }
+        }
+        stage("Configure Coverage") {
+            when { expression { return params.Configure_coverage } }
+            steps {
+                // Allow test coverage to be generated.
+                sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
             }
         }
         stage("Build") {
@@ -133,16 +141,41 @@ pipeline {
                 sh "vagrant provision ${params.Box} --provision-with tomcat"
             }
         }
+        stage("Archive Docs") {
+            when { expression { return params.Archive_docs } }
+            steps {
+                // make archive does this same thing, but we don't run it from this script.
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; tar czf docs.tar.gz docs || touch docs.tar.gz'"
+                sh "vagrant scp ${params.Box}:~/hoot/docs.tar.gz ./"
+                archiveArtifacts artifacts: '**/docs.tar.gz'
+            }
+        }
         stage("Core Tests") {
             when { expression { return params.Core_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel 6'"
+                // Running HootTest with --error here, as when the code coverage report generation slows down tests and 
+                // results in a lot of "Waiting for process to finish..." messages to be displayed that you wouldn't 
+                // see otherwise.
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --error --diff --glacial --parallel 6'"
+            }
+        }
+        stage("Translations Tests") {
+            when { expression { return params.Services_tests } }
+            steps {
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` translations-test'"
+            }
+        }
+        stage("Core Coverage") {
+            when { expression { return params.Core_coverage } }
+            steps {
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; make -j`nproc` core-coverage; tar czf coverage.tar.gz coverage || touch coverage.tar.gz'"
+                sh "vagrant scp ${params.Box}:~/hoot/coverage.tar.gz ./"
+                archiveArtifacts artifacts: '**/coverage.tar.gz'
             }
         }
         stage("Services Tests") {
             when { expression { return params.Services_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` translations-test'"
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test-all'"
             }
         }
@@ -185,9 +218,6 @@ pipeline {
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME} -p ${env.CHANGE_ID} -a ${env.DGIS_BOT_TOKEN}'"
                     }
                     else {
-                        if (env.BRANCH_NAME == "master") {
-                            sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/cover/coverGcov.sh'"
-                        }
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME}'"
                     }
                 }

@@ -52,7 +52,7 @@ public:
 
   void runTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.setKeepStatusTag(true);

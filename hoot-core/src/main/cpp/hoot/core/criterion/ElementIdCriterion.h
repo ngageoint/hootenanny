@@ -53,13 +53,12 @@ public:
    * @see ElementCriterion
    */
   bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<ElementIdCriterion>(); }
 
   /**
    * @see Configurable
    */
   void setConfiguration(const Settings& conf) override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new ElementIdCriterion()); }
 
   QString getDescription() const override { return "Identifies elements by type and ID"; }
   QString getName() const override { return className(); }

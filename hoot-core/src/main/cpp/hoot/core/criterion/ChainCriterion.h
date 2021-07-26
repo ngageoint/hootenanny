@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * Is satisified if all of its children criteria are satisfied
+ * Is satisfied if all of its children criteria are satisfied.
  */
 class ChainCriterion : public ElementCriterion, public ElementCriterionConsumer,
   public Configurable, public ConstOsmMapConsumer
@@ -46,18 +46,15 @@ public:
   static QString className() { return "hoot::ChainCriterion"; }
 
   ChainCriterion() = default;
+  ChainCriterion(const std::vector<ElementCriterionPtr>& criteria);
   ChainCriterion(const ElementCriterionPtr& child1, const ElementCriterionPtr& child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2);
-  ChainCriterion(ElementCriterion* child1, ElementCriterionPtr child2);
-  ChainCriterion(ElementCriterion* child1, ElementCriterion* child2, ElementCriterion* child3);
   virtual ~ChainCriterion() = default;
 
   void addCriterion(const ElementCriterionPtr& e) override;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new ChainCriterion(_criteria)); }
+  ElementCriterionPtr clone() override { return std::make_shared<ChainCriterion>(_criteria); }
 
   void setOsmMap(const OsmMap* map) override;
 
@@ -74,8 +71,6 @@ public:
 protected:
 
   std::vector<std::shared_ptr<ElementCriterion>> _criteria;
-
-  ChainCriterion(const std::vector<ElementCriterionPtr>& criteria);
 
 private:
 

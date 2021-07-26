@@ -53,9 +53,7 @@ public:
    * @see ElementVisitor
    */
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new RelationMemberCriterion(_map)); }
+  ElementCriterionPtr clone() override { return std::make_shared<RelationMemberCriterion>(_map); }
 
   QString getDescription() const override { return "Identifies relation members"; }
   QString getName() const override { return className(); }

@@ -104,11 +104,11 @@ map<QString, double> RfExtractorClassifier::getFeatures(
   return result;
 }
 
-void RfExtractorClassifier::import(QDomElement& docRoot)
+void RfExtractorClassifier::import(const QDomElement& docRoot)
 {
   _getExtractors();
 
-  _rf.reset(new RandomForest());
+  _rf = std::make_shared<RandomForest>();
   _rf->importModel(docRoot);
   vector<string> factorLabels = _rf->getFactorLabels();
 

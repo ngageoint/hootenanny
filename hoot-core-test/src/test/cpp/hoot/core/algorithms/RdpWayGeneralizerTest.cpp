@@ -87,17 +87,17 @@ public:
 
     QTextStream textStream(&file);
     QList<ConstNodePtr> points;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     while (!textStream.atEnd())
     {
       QStringList pointParts = textStream.readLine().split(",");
-      ConstNodePtr node(
-        new Node(
+      ConstNodePtr node =
+        std::make_shared<const Node>(
           Status::Unknown1,
           map->createNextNodeId(),
           pointParts.at(0).toDouble(),
           pointParts.at(1).toDouble(),
-          15.0));
+          15.0);
       points.append(node);
     }
     file.close();
@@ -144,13 +144,13 @@ public:
 
   void writePointOutput(const QList<ConstNodePtr>& points, const QString& outFileName)
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    //points will be empty for the generalize calls with way inputs instead of points
+    // Points will be empty for the generalize calls with way inputs instead of points.
     for (QList<ConstNodePtr>::const_iterator it = points.constBegin();
          it != points.constEnd(); ++it)
     {
-      NodePtr nodeCopy(new Node(*(*it).get()));
+      NodePtr nodeCopy = std::make_shared<Node>(*(*it).get());
       map->addNode(nodeCopy);
     }
 
@@ -238,7 +238,7 @@ public:
 
   void runGeneralizeWayInput1NoInformationNodesTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     QList<Coordinate> inputCoords =
       readCoords(_inputPath + "RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputCoords.size());
@@ -260,7 +260,7 @@ public:
 
   void runGeneralizeWayInput1WithInformationNodesTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     QList<Coordinate> inputCoords =
       readCoords(_inputPath + "RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputCoords.size());

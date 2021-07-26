@@ -47,8 +47,7 @@ LongBox::LongBox(const std::vector<long>& min, const std::vector<long>& max)
 
 std::shared_ptr<LongBox> LongBox::copy() const
 {
-  std::shared_ptr<LongBox> box = std::shared_ptr<LongBox>(new LongBox(getMin(), getMax()));
-  return box;
+  return std::make_shared<LongBox>(getMin(), getMax());
 }
 
 LongBox::~LongBox()

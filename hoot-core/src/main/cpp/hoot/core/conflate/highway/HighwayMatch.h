@@ -69,7 +69,7 @@ public:
   std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
   double getProbability() const override;
   double getScore() const override { return _score; }
-  QString explain() const override;
+  QString explain() const override { return _explainText; }
   const MatchClassification& getClassification() const override { return _c; }
   MatchMembers getMatchMembers() const override { return MatchMembers::Polyline; }
 
@@ -79,8 +79,7 @@ public:
   std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
 
   const WaySublineMatchString& getSublineMatch() const { return _sublineMatch; }
-  const std::shared_ptr<SublineStringMatcher>& getSublineMatcher() const
-  { return _sublineMatcher; }
+  const std::shared_ptr<SublineStringMatcher>& getSublineMatcher() const { return _sublineMatcher; }
 
   QString toString() const override;
 

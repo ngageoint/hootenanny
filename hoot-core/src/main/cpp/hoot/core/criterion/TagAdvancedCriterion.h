@@ -66,8 +66,7 @@ public:
   ~TagAdvancedCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new TagAdvancedCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<TagAdvancedCriterion>(); }
 
   void setConfiguration(const Settings& s) override;
 

@@ -38,13 +38,13 @@ HOOT_FACTORY_REGISTER(ElementCriterion, HighwayWayNodeCriterion)
 HighwayWayNodeCriterion::HighwayWayNodeCriterion() :
 WayNodeCriterion()
 {
-  _parentCriterion.reset(new HighwayCriterion());
+  _parentCriterion = std::make_shared<HighwayCriterion>();
 }
 
 HighwayWayNodeCriterion::HighwayWayNodeCriterion(ConstOsmMapPtr map) :
 WayNodeCriterion(map)
 {
-  _parentCriterion.reset(new HighwayCriterion(_map));
+  _parentCriterion = std::make_shared<HighwayCriterion>(_map);
 }
 
 void HighwayWayNodeCriterion::setOsmMap(const OsmMap* map)
@@ -52,7 +52,7 @@ void HighwayWayNodeCriterion::setOsmMap(const OsmMap* map)
   _map = map->shared_from_this();
   if (_parentCriterion)
   {
-    _parentCriterion.reset(new HighwayCriterion(_map));
+    _parentCriterion = std::make_shared<HighwayCriterion>(_map);
   }
 }
 

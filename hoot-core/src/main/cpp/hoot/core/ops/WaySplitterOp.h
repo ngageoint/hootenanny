@@ -59,20 +59,17 @@ public:
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
   void setConfiguration(const Settings& conf) override;
 
-  void setMaxLength(Meters l) { _maxLength = l; }
-
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Splits ways"; }
 
   QString getInitStatusMessage() const override { return "Splitting ways..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Split " + QString::number(_numAffected) + " ways"; }
+
+  void setMaxLength(Meters l) { _maxLength = l; }
 
 private:
 

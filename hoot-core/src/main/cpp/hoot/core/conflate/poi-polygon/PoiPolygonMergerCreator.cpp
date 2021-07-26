@@ -124,17 +124,17 @@ bool PoiPolygonMergerCreator::createMergers(
     if (_isConflictingSet(matches))
     {
       mergers.push_back(
-        MergerPtr(
-          new MarkForReviewMerger(
-            eids,
-            QString("Conflicting information: multiple features have been matched to the same ") +
-            QString("feature and require review."),
-            matchTypes.join(";"), 1)));
+        std::make_shared<MarkForReviewMerger>(
+          eids,
+          "Conflicting information: multiple features have been matched to the same feature and "
+          "require review.",
+          matchTypes.join(";"),
+          1));
       LOG_TRACE("Pushed back review merger for : " << eids);
     }
     else
     {
-      mergers.push_back(MergerPtr(new PoiPolygonMerger(eids)));
+      mergers.push_back(std::make_shared<PoiPolygonMerger>(eids));
       LOG_TRACE("Pushed back merger for : " << eids);
     }
 
@@ -429,9 +429,8 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(
             "Adding review for POI to Polygon match conflicting with another POI/POI match and " <<
             "removing; ids: " << matchPairs << "...");
           mergers.push_back(
-            MergerPtr(
-              new MarkForReviewMerger(
-                matchPairs, "Inter-matcher overlapping matches", match->getName(), 1.0)));
+            std::make_shared<MarkForReviewMerger>(
+              matchPairs, "Inter-matcher overlapping matches", match->getName(), 1.0));
         }
         else
         {

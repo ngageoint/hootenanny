@@ -50,7 +50,7 @@ public:
 
 private:
 
-  ElementVisitorJs(ElementVisitor* v) : _v(v) { }
+  ElementVisitorJs(std::shared_ptr<ElementVisitor> v);
   ElementVisitorJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);

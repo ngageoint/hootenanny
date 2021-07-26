@@ -68,8 +68,8 @@ namespace Tgs
   }
 
   void MultithreadedRandomForest::trainBinary(const std::shared_ptr<DataFrame>& /*data*/,
-    unsigned int /*numTrees*/, unsigned int /*numFactors*/, std::string /*posClass*/, unsigned int /*nodeSize*/,
-    double /*retrain*/, bool /*balanced*/)
+    unsigned int /*numTrees*/, unsigned int /*numFactors*/, const std::string& /*posClass*/,
+    unsigned int /*nodeSize*/, double /*retrain*/, bool /*balanced*/)
   {
     try
     {
@@ -112,7 +112,7 @@ namespace Tgs
         QList<std::shared_ptr<RandomTree>> mapTrees;
         for (unsigned int i = 0; i < numTrees; i++)
         {
-          mapTrees.append(std::shared_ptr<RandomTree>(new RandomTree()));
+          mapTrees.append(std::make_shared<RandomTree>());
         }
 
         QList<std::shared_ptr<RandomTree>> forestList =
@@ -175,7 +175,7 @@ namespace Tgs
           QList<std::shared_ptr<RandomTree>> mapRetrainingTrees;
           for (unsigned int i = 0; i < numTrees; i++)
           {
-             mapRetrainingTrees.append(std::shared_ptr<RandomTree>(new RandomTree()));
+            mapRetrainingTrees.append(std::make_shared<RandomTree>());
           }
 
           QList<std::shared_ptr<RandomTree>> forestRetrainList =
@@ -201,8 +201,9 @@ namespace Tgs
   }
 
   void MultithreadedRandomForest::trainRoundRobin(const std::shared_ptr<DataFrame>& /*data*/,
-    unsigned int /*numTrees*/, unsigned int /*numFactors*/, std::string /*posClass*/, std::string /*negClass*/,
-    unsigned int /*nodeSize*/, double /*retrain*/, bool /*balanced*/)
+    unsigned int /*numTrees*/, unsigned int /*numFactors*/, const std::string& /*posClass*/,
+    const std::string& /*negClass*/, unsigned int /*nodeSize*/, double /*retrain*/,
+    bool /*balanced*/)
   {
     try
     {

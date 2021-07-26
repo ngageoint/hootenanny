@@ -2,9 +2,6 @@
 [[SupportedDataFormats]]
 == Supported Data Formats
 
-Additional data types can be made supportable via development effort using Hootenanny's pluggable I/O architecture. See 
-the Hootenanny Developer Guide for details.
-
 === Input
 
 * File Geodatabase (.gdb)
@@ -16,7 +13,7 @@ the Hootenanny Developer Guide for details.
 * OpenStreetMap API Web Service (http://)
 * OpenStreetMap Protocol Buffers (.osm.pbf)
 * OpenStreetMap XML (.osm)
-* Overpass JSON (.json or http://overpass-api.de) (memory bound)
+* Overpass JSON (.json or http://overpass-api.de/) (memory bound)
 * Shapefile (.shp)
 * Zip files containing shape files and/or File Geodatabase files (.zip)
 * Any additional OGR supported format not listed here (untested)
@@ -35,6 +32,9 @@ the Hootenanny Developer Guide for details.
 * Overpass JSON (.json) (memory bound)
 * Shapefile (.shp) (memory bound)
 * Any additional OGR supported format not listed here (untested)
+
+Additional data types can be made supportable via development effort using Hootenanny's pluggable I/O architecture. See 
+the Hootenanny Developer Guide for details.
 
 === Memory Consumption
 
@@ -98,7 +98,7 @@ Only changesets may be written to an OSM API Web Service (http://).
 * The format for specifying zip file data is: "/vsizip/<path to Zip file>/<path to the shape file INSIDE the Zip file>. 
 The "/" are field separators. If you get errors using absolute paths, check that you have the right number of "/".
 * A Zip file located at /gis-data/test_data.zip:
-  * The path to the shapefile inside the Zip file: "dir/LAP010.shp
-  * The input is: "/vsizip//gis-data/test_data.zip/dir/LAP010.shp"
-  * If the Zip file is in the current directory, the input will be: /vsizip/./test_data.zip/dir/LAP010.shp
-  * If you do not specify a specific shapefile then, it will read in all shapefiles in the given directory.
+** The path to the shapefile inside the Zip file: "dir/LAP010.shp
+** The input is: "/vsizip//gis-data/test_data.zip/dir/LAP010.shp"
+** If the Zip file is in the current directory, the input will be: /vsizip/./test_data.zip/dir/LAP010.shp
+** If you do not specify a specific shapefile then, it will read in all shapefiles in the given directory.

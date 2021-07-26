@@ -43,15 +43,13 @@ public:
 
   static QString className() { return "hoot::WayDirectionCriterion"; }
 
-  WayDirectionCriterion(const ConstOsmMapPtr& map,
-                        ConstWayPtr baseWay,
-                        bool similarDirection = true);
+  WayDirectionCriterion(
+    const ConstOsmMapPtr& map, ConstWayPtr baseWay, bool similarDirection = true);
   ~WayDirectionCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new WayDirectionCriterion(_map, _baseWay, _similarDirection)); }
+  { return std::make_shared<WayDirectionCriterion>(_map, _baseWay, _similarDirection); }
 
   QString getDescription() const override
   { return "Determines if two ways point in a similar direction"; }

@@ -47,42 +47,42 @@ public:
     PoiPolygonPolyCriterion uut;
 
     //way only
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     CPPUNIT_ASSERT(!uut.isSatisfied(node1));
 
     //type specifically excluded outside of schema
-    WayPtr way1(new Way(Status::Unknown1, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
     way1->getTags().set("area", "yes");
     way1->getTags().set("landuse", "grass");
     CPPUNIT_ASSERT(!uut.isSatisfied(way1));
 
     //is area, but not a poi or building type
-    WayPtr way2(new Way(Status::Unknown1, -1, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
     way2->getTags().set("area", "yes");
     way2->getTags().set("email", "blah");
     CPPUNIT_ASSERT(!uut.isSatisfied(way2));
 
     //is area and a poi or building type
-    WayPtr way3(new Way(Status::Unknown1, -1, 15.0));
+    WayPtr way3 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
     way3->getTags().set("area", "yes");
     way3->getTags().set("amenity", "school");
     CPPUNIT_ASSERT(uut.isSatisfied(way3));
 
     //is building and a poi or building type
-    WayPtr way4(new Way(Status::Unknown1, -1, 15.0));
+    WayPtr way4 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
     way4->getTags().set("building", "yes");
     way4->getTags().set("amenity", "school");
     CPPUNIT_ASSERT(uut.isSatisfied(way4));
 
     //is area and has name
-    WayPtr way5(new Way(Status::Unknown1, -1, 15.0));
+    WayPtr way5 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
     way5->getTags().set("area", "yes");
     way5->getTags().set("name", "blah");
     way5->getTags().set("email", "blah");
     CPPUNIT_ASSERT(uut.isSatisfied(way5));
 
     //is building and has name
-    WayPtr way6(new Way(Status::Unknown1, -1, 15.0));
+    WayPtr way6 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
     way6->getTags().set("building", "yes");
     way6->getTags().set("name", "blah");
     way6->getTags().set("email", "blah");

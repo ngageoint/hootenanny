@@ -39,7 +39,6 @@
 // hoot
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/NotImplementedException.h>
-#include <hoot/core/visitors/MultiLineStringVisitor.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -70,7 +69,7 @@ std::shared_ptr<Element> GeometryToElementConverter::convertGeometryCollection(
   if (gc->getNumGeometries() > 1)
   {
     LOG_DEBUG("Creating relation. convertGeometryCollection");
-    RelationPtr r(new Relation(s, _map->createNextRelationId(), circularError));
+    RelationPtr r = std::make_shared<Relation>(s, _map->createNextRelationId(), circularError);
     int count = gc->getNumGeometries();
 
     for (int i = 0; i < count; i++)
@@ -143,7 +142,7 @@ WayPtr GeometryToElementConverter::convertLineStringToWay(
   if (ls->getNumPoints() > 0)
   {
     Coordinate c = ls->getCoordinateN(0);
-    way.reset(new Way(s, map->createNextWayId(), circularError));
+    way = std::make_shared<Way>(s, map->createNextWayId(), circularError);
 
     for (size_t i = 0; i < ls->getNumPoints(); i++)
     {
@@ -163,9 +162,9 @@ std::shared_ptr<Element> GeometryToElementConverter::convertMultiLineStringToEle
 
   if (mls->getNumGeometries() > 1)
   {
-    RelationPtr r(
-      new Relation(
-        s, map->createNextRelationId(), circularError, MetadataTags::RelationMultilineString()));
+    RelationPtr r =
+      std::make_shared<Relation>(
+        s, map->createNextRelationId(), circularError, MetadataTags::RelationMultilineString());
     for (size_t i = 0; i < mls->getNumGeometries(); i++)
     {
       WayPtr w =
@@ -189,9 +188,9 @@ RelationPtr GeometryToElementConverter::convertMultiPolygonToRelation(
 {
   LOG_TRACE("Converting multipolygon to relation...");
 
-  RelationPtr r(
-    new Relation(
-      s, map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon()));
+  RelationPtr r =
+    std::make_shared<Relation>(
+      s, map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
   for (size_t i = 0; i < mp->getNumGeometries(); i++)
   {
     convertPolygonToRelation(
@@ -225,8 +224,9 @@ std::shared_ptr<Element> GeometryToElementConverter::convertPolygonToElement(
 RelationPtr GeometryToElementConverter::convertPolygonToRelation(const Polygon* polygon,
   const OsmMapPtr& map, Status s, double circularError) const
 {
-  RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
-    MetadataTags::RelationMultiPolygon()));
+  RelationPtr r =
+    std::make_shared<Relation>(
+      s, map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
   convertPolygonToRelation(polygon, map, r, s, circularError);
   map->addRelation(r);
   return r;
@@ -253,7 +253,7 @@ NodePtr GeometryToElementConverter::_createNode(const OsmMapPtr& map, const Coor
 {
   if (_nf == nullptr)
   {
-    NodePtr n = NodePtr(new Node(s, map->createNextNodeId(), c, circularError));
+    NodePtr n = std::make_shared<Node>(s, map->createNextNodeId(), c, circularError);
     map->addNode(n);
     return n;
   }

@@ -69,7 +69,7 @@ void MultiaryIngestChangesetWriter::open(const QString& fileName)
 {
   close();
 
-  _fp.reset(new QFile());
+  _fp = std::make_shared<QFile>();
   _fp->setFileName(fileName);
   if (_fp->exists() && !_fp->remove())
   {
@@ -133,7 +133,7 @@ void MultiaryIngestChangesetWriter::writeChange(const Change& change)
   nodeCopy->getTags().remove(MetadataTags::HootHash());
   _exportTagsVisitor.visit(nodeCopy);
 
-  OsmMapPtr tmpMap(new OsmMap());
+  OsmMapPtr tmpMap = std::make_shared<OsmMap>();
   tmpMap->addElement(nodeCopy);
 
   QString changeLine;

@@ -75,7 +75,7 @@ public:
     Vector g(0.75,0.5);
     Vector h(0.5,1);
 
-    FunctionLookup* fl = new FunctionLookup();
+    std::shared_ptr<FunctionLookup> fl = std::make_shared<FunctionLookup>();
     fl->vMap[a] = 0;
     fl->vMap[b] = 0.1;
     fl->vMap[c] = 0.5;
@@ -107,7 +107,5 @@ public:
 
 }
 
-
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Tgs::NelderMeadTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Tgs::NelderMeadTest, "quick");
 

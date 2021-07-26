@@ -48,14 +48,12 @@ public:
   /**
    * Adds the user name and user id as tags to all valid elements.
    */
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Adds the user name and user id to elements as tags"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

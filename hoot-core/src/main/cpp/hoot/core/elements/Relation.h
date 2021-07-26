@@ -60,7 +60,7 @@ public:
   explicit Relation(const Relation& from);
   ~Relation() = default;
 
-  Element* clone() const override { return new Relation(*this); }
+  ElementPtr clone() const override { return std::make_shared<Relation>(*this); }
 
   void addElement(const QString& role, const std::shared_ptr<const Element>& e);
   void addElement(const QString& role, ElementType t, long id);

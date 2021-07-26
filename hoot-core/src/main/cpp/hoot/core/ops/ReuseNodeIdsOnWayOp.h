@@ -56,9 +56,7 @@ public:
   void addElement(const ConstElementPtr& e) override;
 
   QString getDescription() const override { return "Reuses the node IDs from one way in another."; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

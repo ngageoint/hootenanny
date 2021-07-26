@@ -71,7 +71,7 @@ public:
 
   OsmMapPtr createMap()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -84,7 +84,7 @@ public:
 
   OsmMapPtr createMatchTestMap()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     OGREnvelope env;
     env.MinX = 0;
@@ -185,8 +185,9 @@ public:
                           Coordinate::getNull() };
     WayPtr wg2b = TestUtils::createWay(map, cg2b, "g2", Status::Unknown2, 15.0);
 
-    RelationPtr r(new Relation(Status::Unknown1, map->createNextRelationId(), 5,
-      MetadataTags::RelationMultilineString()));
+    RelationPtr r =
+      std::make_shared<Relation>(
+        Status::Unknown1, map->createNextRelationId(), 5, MetadataTags::RelationMultilineString());
     r->getTags()["note"] = "rg2";
     r->addElement("", wg2a);
     r->addElement("", wg2b);
@@ -216,8 +217,9 @@ public:
                           Coordinate::getNull() };
     WayPtr wh2b = TestUtils::createWay(map, ch2b, "h2", Status::Unknown2, ce);
 
-    RelationPtr rh2(new Relation(Status::Unknown1, map->createNextRelationId(), 3,
-      MetadataTags::RelationMultilineString()));
+    RelationPtr rh2 =
+      std::make_shared<Relation>(
+        Status::Unknown1, map->createNextRelationId(), 3, MetadataTags::RelationMultilineString());
     rh2->getTags()["note"] = "rh2";
     rh2->addElement("", wh2a);
     rh2->addElement("", wh2b);
@@ -247,8 +249,9 @@ public:
                           Coordinate::getNull() };
     WayPtr wi2b = TestUtils::createWay(map, ci2b, "i2", Status::Unknown2, ce);
 
-    RelationPtr ri2(new Relation(Status::Unknown1, map->createNextRelationId(), 3,
-      MetadataTags::RelationMultilineString()));
+    RelationPtr ri2 =
+      std::make_shared<Relation>(
+      Status::Unknown1, map->createNextRelationId(), 3, MetadataTags::RelationMultilineString());
     ri2->getTags()["note"] = "ri2";
     ri2->addElement("", wi2a);
     ri2->addElement("", wi2b);
@@ -267,7 +270,7 @@ public:
     Coordinate w2c[] = { Coordinate(100, 0), Coordinate(0, 0), Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, w2c, "w2", Status::Unknown1, 5);
 
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -299,7 +302,7 @@ public:
                          Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, w2c, "w2", Status::Unknown1, 5);
 
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -505,7 +508,7 @@ public:
                          Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, w2c, "w2", Status::Unknown1, 5);
 
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -528,8 +531,9 @@ public:
 
     // test the simplest case
     {
-      RelationPtr r(new Relation(Status::Unknown1, map->createNextRelationId(), 5,
-        MetadataTags::RelationMultilineString()));
+      RelationPtr r =
+        std::make_shared<Relation>(
+          Status::Unknown1, map->createNextRelationId(), 5, MetadataTags::RelationMultilineString());
       r->addElement("", toWay(map, "a1"));
       map->addElement(r);
 

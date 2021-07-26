@@ -30,13 +30,12 @@
 
 // Hoot
 #include <hoot/core/criterion/RelationWithMembersOfTypeCriterion.h>
-#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
 /**
- * Identifies relations with children having linear geometries
+ * Identifies relations with members that have linear geometries
  */
 class RelationWithLinearMembersCriterion : public RelationWithMembersOfTypeCriterion
 {
@@ -49,7 +48,7 @@ public:
   ~RelationWithLinearMembersCriterion() = default;
 
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new RelationWithLinearMembersCriterion(_map)); }
+  { return std::make_shared<RelationWithLinearMembersCriterion>(_map); }
 
   QString getCriterion() const override;
 

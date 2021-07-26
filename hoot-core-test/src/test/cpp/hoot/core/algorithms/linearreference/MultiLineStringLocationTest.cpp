@@ -73,14 +73,16 @@ public:
 
   void runSingleWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+      way->getStatus(), map->createNextRelationId(), way->getCircularError(),
+      MetadataTags::RelationMultilineString());
     relation->addElement("", way->getElementId());
     map->addElement(relation);
 
@@ -113,7 +115,7 @@ public:
 
   void runMultipleWaysWayLocationOnFirstWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                              Coordinate::getNull() };
@@ -121,8 +123,10 @@ public:
                              Coordinate::getNull() };
     WayPtr way1 = TestUtils::createWay(map, coords1, "", Status::Unknown1, 1);
     WayPtr way2 = TestUtils::createWay(map, coords2, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
-      way1->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+        way1->getStatus(), map->createNextRelationId(), way1->getCircularError(),
+        MetadataTags::RelationMultilineString());
     relation->addElement("", way1->getElementId());
     relation->addElement("", way2->getElementId());
     map->addElement(relation);
@@ -154,7 +158,7 @@ public:
 
   void runMultipleWaysWayLocationOnLastWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                              Coordinate::getNull() };
@@ -162,8 +166,10 @@ public:
                              Coordinate::getNull() };
     WayPtr way1 = TestUtils::createWay(map, coords1, "", Status::Unknown1, 1);
     WayPtr way2 = TestUtils::createWay(map, coords2, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
-      way1->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+      way1->getStatus(), map->createNextRelationId(), way1->getCircularError(),
+      MetadataTags::RelationMultilineString());
     relation->addElement("", way1->getElementId());
     relation->addElement("", way2->getElementId());
     map->addElement(relation);
@@ -195,7 +201,7 @@ public:
 
   void runMultipleWaysWayLocationOnMiddleWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                              Coordinate::getNull() };
@@ -206,8 +212,10 @@ public:
     WayPtr way1 = TestUtils::createWay(map, coords1, "", Status::Unknown1, 1);
     WayPtr way2 = TestUtils::createWay(map, coords2, "", Status::Unknown1, 1);
     WayPtr way3 = TestUtils::createWay(map, coords3, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
-      way1->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+        way1->getStatus(), map->createNextRelationId(), way1->getCircularError(),
+        MetadataTags::RelationMultilineString());
     relation->addElement("", way1->getElementId());
     relation->addElement("", way2->getElementId());
     relation->addElement("", way3->getElementId());
@@ -240,14 +248,16 @@ public:
 
   void runWayLocationAtBeginningOfWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+        way->getStatus(), map->createNextRelationId(), way->getCircularError(),
+        MetadataTags::RelationMultilineString());
     relation->addElement("", way->getElementId());
     map->addElement(relation);
 
@@ -280,14 +290,16 @@ public:
 
   void runWayLocationAtEndOfWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+      way->getStatus(), map->createNextRelationId(), way->getCircularError(),
+      MetadataTags::RelationMultilineString());
     relation->addElement("", way->getElementId());
     map->addElement(relation);
 
@@ -320,15 +332,16 @@ public:
 
   void runRelationHasNoWaysTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), MetadataTags::RelationMultilineString()));
-    //relation->addElement("", way->getElementId());
+    RelationPtr relation =
+      std::make_shared<Relation>(
+        way->getStatus(), map->createNextRelationId(), way->getCircularError(),
+        MetadataTags::RelationMultilineString());
     map->addElement(relation);
 
     QString exceptionMsg;
@@ -349,14 +362,16 @@ public:
 
   void runRelationNotMultiLineStringTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), MetadataTags::RelationMultiPolygon()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+      way->getStatus(), map->createNextRelationId(), way->getCircularError(),
+      MetadataTags::RelationMultiPolygon());
     relation->addElement("", way->getElementId());
     map->addElement(relation);
 
@@ -377,14 +392,16 @@ public:
 
   void runInvalidWayIndexTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+        way->getStatus(), map->createNextRelationId(), way->getCircularError(),
+        MetadataTags::RelationMultilineString());
     relation->addElement("", way->getElementId());
     map->addElement(relation);
 
@@ -405,14 +422,16 @@ public:
 
   void runRelationWayMemberDoesntMatchWayLocationWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+      way->getStatus(), map->createNextRelationId(), way->getCircularError(),
+      MetadataTags::RelationMultilineString());
     relation->addElement("", map->getNode(way->getNodeId(0))->getElementId());
     relation->addElement("", way->getElementId());
     map->addElement(relation);
@@ -435,7 +454,7 @@ public:
 
   void runRelationContainsFeaturesOtherThanWaysTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                              Coordinate::getNull() };
@@ -443,8 +462,10 @@ public:
                              Coordinate::getNull() };
     WayPtr way1 = TestUtils::createWay(map, coords1, "", Status::Unknown1, 1);
     WayPtr way2 = TestUtils::createWay(map, coords2, "", Status::Unknown1, 1);
-    RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
-      way1->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+      way1->getStatus(), map->createNextRelationId(), way1->getCircularError(),
+      MetadataTags::RelationMultilineString());
     relation->addElement("", map->getNode(way1->getNodeId(0))->getElementId());
     relation->addElement("", way1->getElementId());
     relation->addElement("", way2->getElementId());

@@ -89,8 +89,7 @@ void DualHighwayMarker::_createIndex()
   LOG_DEBUG("Creating spatial index...");
 
   // No tuning done - see #3054
-  std::shared_ptr<Tgs::MemoryPageStore> mps = std::make_shared<Tgs::MemoryPageStore>(728);
-  _index.reset(new Tgs::HilbertRTree(mps, 2));
+  _index = std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
 
   // Only index elements that satisfy isMatchCandidate.
   std::function<bool (ConstElementPtr e)> f =
@@ -113,7 +112,7 @@ void DualHighwayMarker::apply(const OsmMapPtr& map)
   _numProcessed = 0;
   _map = map;
   _createIndex();
-  _elementInfo.reset(new ConflateInfoCache(map));
+  _elementInfo = std::make_shared<ConflateInfoCache>(map);
 
   const WayMap& ways = _map->getWays();
   for (WayMap::const_iterator waysItr = ways.begin(); waysItr != ways.end(); ++waysItr)

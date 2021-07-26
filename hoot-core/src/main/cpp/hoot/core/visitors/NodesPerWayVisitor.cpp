@@ -67,7 +67,7 @@ void NodesPerWayVisitor::addCriterion(const ElementCriterionPtr& e)
   }
   else
   {
-    _customCrit.reset(new NotCriterion(e));
+    _customCrit = std::make_shared<NotCriterion>(e);
   }
 }
 
@@ -77,8 +77,7 @@ void NodesPerWayVisitor::_setCriterion(const QString& criterionName)
   {
     LOG_VART(criterionName);
     addCriterion(
-      std::shared_ptr<ElementCriterion>(
-        Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed())));
+      Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed()));
   }
 }
 

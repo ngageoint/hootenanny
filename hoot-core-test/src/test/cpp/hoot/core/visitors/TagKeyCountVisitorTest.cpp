@@ -56,7 +56,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "TagKeyCountVisitorTest.osm", false, Status::Unknown1);
 
@@ -68,7 +68,7 @@ public:
 
   void runConfigureTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "TagKeyCountVisitorTest.osm", false, Status::Unknown1);
 

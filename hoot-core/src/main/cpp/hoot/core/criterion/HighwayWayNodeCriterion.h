@@ -45,8 +45,7 @@ public:
 
   void setOsmMap(const OsmMap* map) override;
 
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new HighwayWayNodeCriterion(_map)); }
+  ElementCriterionPtr clone() override { return std::make_shared<HighwayWayNodeCriterion>(_map); }
 
   QString getDescription() const override { return "Identifies highway nodes"; }
   QString getName() const override { return className(); }

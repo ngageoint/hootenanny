@@ -45,8 +45,7 @@ public:
 
   void setOsmMap(const OsmMap* map) override;
 
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new AreaWayNodeCriterion(_map)); }
+  ElementCriterionPtr clone() override { return std::make_shared<AreaWayNodeCriterion>(_map); }
 
   QString getDescription() const override { return "Identifies area nodes"; }
   QString getName() const override { return className(); }

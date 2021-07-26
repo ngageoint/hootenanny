@@ -107,7 +107,7 @@ double TranslatedTagDifferencer::diff(const ConstOsmMapPtr& map, const ConstElem
   {
   public:
     CostFunction() = default;
-    ~CostFunction() = default;
+    virtual ~CostFunction() = default;
 
     const TranslatedTagDifferencer* ttd;
     /**
@@ -156,8 +156,8 @@ std::shared_ptr<ScriptToOgrSchemaTranslator> TranslatedTagDifferencer::_getTrans
 {
   if (_translator == nullptr)
   {
-    std::shared_ptr<ScriptSchemaTranslator> st(
-      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_script));
+    std::shared_ptr<ScriptSchemaTranslator> st =
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_script);
 
     st->setErrorTreatment(StrictOff);
     _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);

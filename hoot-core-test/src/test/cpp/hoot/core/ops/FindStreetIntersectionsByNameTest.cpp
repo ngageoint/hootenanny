@@ -64,7 +64,7 @@ public:
     // basic test with default config; one intersection node should be found
 
     FindStreetIntersectionsByName uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Settings conf;
 
     OsmMapReaderFactory::read(map, true, Status::Unknown1, "test-files/DcTigerRoads.osm");
@@ -83,15 +83,15 @@ public:
   void runCaseSensitivityTest()
   {
     FindStreetIntersectionsByName uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapPtr cachedMap;
     Settings conf;
 
     {
-      // case sensitivity is turned on and no intersection node match should be found
+      // Case sensitivity is turned on and no intersection node match should be found.
 
       OsmMapReaderFactory::read(map, true, Status::Unknown1, "test-files/DcTigerRoads.osm");
-      cachedMap.reset(new OsmMap(map));
+      cachedMap = std::make_shared<OsmMap>(map);
 
       conf.set("name.criterion.names", "I ST NW;19th St NW");
       conf.set("name.criterion.case.sensitive", true);
@@ -109,7 +109,7 @@ public:
     {
       // case sensitivity is turned off and one intersection node match should be found
 
-      map.reset(new OsmMap(cachedMap));
+      map = std::make_shared<OsmMap>(cachedMap);
 
       conf.set("name.criterion.names", "I ST NW;19th St NW");
       conf.set("name.criterion.case.sensitive", false);
@@ -128,15 +128,15 @@ public:
   void runPartialMatchTest()
   {
     FindStreetIntersectionsByName uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapPtr cachedMap;
     Settings conf;
 
     {
-      // partial matching is turned off and no intersection node match should be found
+      // Partial matching is turned off and no intersection node match should be found.
 
       OsmMapReaderFactory::read(map, true, Status::Unknown1, "test-files/DcTigerRoads.osm");
-      cachedMap.reset(new OsmMap(map));
+      cachedMap = std::make_shared<OsmMap>(map);
 
       conf.set("name.criterion.names", "I St;19th St");
       conf.set("name.criterion.case.sensitive", false);
@@ -153,7 +153,7 @@ public:
     {
       // partial matching is turned on and one intersection node match should be found
 
-      map.reset(new OsmMap(cachedMap));
+      map = std::make_shared<OsmMap>(cachedMap);
 
       conf.set("name.criterion.names", "I St;19th St");
       conf.set("name.criterion.case.sensitive", false);
@@ -175,7 +175,7 @@ public:
     // input and a single street matching the second input should be returned.
 
     FindStreetIntersectionsByName uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Settings conf;
 
     OsmMapReaderFactory::read(

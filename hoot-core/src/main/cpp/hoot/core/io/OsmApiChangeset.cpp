@@ -224,19 +224,19 @@ void XmlChangeset::loadElements(QXmlStreamReader& reader, ChangesetType changese
     {
       if (name == "node")
       {
-        element.reset(new ChangesetNode(XmlObject(name, reader.attributes()), &_idMap));
+        element = std::make_shared<ChangesetNode>(XmlObject(name, reader.attributes()), &_idMap);
         long id = reader.attributes().value("id").toString().toLong();
         _idMap.addId(ElementType::Node, id);
       }
       else if (name == "way")
       {
-        element.reset(new ChangesetWay(XmlObject(name, reader.attributes()), &_idMap));
+        element = std::make_shared<ChangesetWay>(XmlObject(name, reader.attributes()), &_idMap);
         long id = reader.attributes().value("id").toString().toLong();
         _idMap.addId(ElementType::Way, id);
       }
       else if (name == "relation")
       {
-        element.reset(new ChangesetRelation(XmlObject(name, reader.attributes()), &_idMap));
+        element = std::make_shared<ChangesetRelation>(XmlObject(name, reader.attributes()), &_idMap);
         long id = reader.attributes().value("id").toString().toLong();
         _idMap.addId(ElementType::Relation, id);
       }
@@ -253,7 +253,7 @@ void XmlChangeset::loadElements(QXmlStreamReader& reader, ChangesetType changese
       {
         std::shared_ptr<ChangesetRelation> relation = std::dynamic_pointer_cast<ChangesetRelation>(element);
         relation->addMember(reader.attributes());
-        ChangesetRelationMember& member = relation->getMember(relation->getMemberCount() - 1);
+        const ChangesetRelationMember& member = relation->getMember(relation->getMemberCount() - 1);
         //  Update the node/way/relation to relation maps
         if (member.isNode())
           _nodeIdsToRelations[member.getRef()].insert(element->id());
@@ -294,7 +294,7 @@ void XmlChangeset::splitLongWays(long maxWayNodes)
       while (way->getNodeCount() > maxWayNodes)
       {
         //  Create a copy of the way
-        ChangesetWayPtr newWay(new ChangesetWay(*way));
+        ChangesetWayPtr newWay = std::make_shared<ChangesetWay>(*way);
         newWay->changeId(getNextWayId());
         //  Remove maxWayNodes from the original and add them to this way
         way->removeNodes(0, maxWayNodes - 1);
@@ -351,7 +351,7 @@ void XmlChangeset::fixMalformedInput()
     std::stack<int> remove_members;
     for (int i = 0; i < relation->getMemberCount(); ++i)
     {
-      ChangesetRelationMember& m = relation->getMember(i);
+      const ChangesetRelationMember& m = relation->getMember(i);
       if (m.getRef() < 0)
       {
         //  Mark for removal all nodes/ways/relations with negative IDs that don't exist
@@ -421,7 +421,7 @@ void XmlChangeset::fixMalformedInput()
     std::stack<int> remove_members;
     for (int i = 0; i < relation->getMemberCount(); ++i)
     {
-      ChangesetRelationMember& m = relation->getMember(i);
+      const ChangesetRelationMember& m = relation->getMember(i);
       //  Remove any self-referencing relation
       if (m.isRelation() && relation->id() == m.getRef())
         remove_members.push(i);
@@ -647,7 +647,7 @@ void XmlChangeset::moveOrRemoveNode(const ChangesetInfoPtr& source, const Change
   }
 }
 
-bool XmlChangeset::moveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node, bool /*failing*/) const
+bool XmlChangeset::moveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, const ChangesetNode* node, bool /*failing*/) const
 {
   //  Add the node to the destination and remove from the source
   destination->add(ElementType::Node, type, node->id());
@@ -655,7 +655,7 @@ bool XmlChangeset::moveNode(const ChangesetInfoPtr& source, const ChangesetInfoP
   return true;
 }
 
-bool XmlChangeset::canMoveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node)
+bool XmlChangeset::canMoveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, const ChangesetNode* node)
 {
   //  Deleting a node can only happen when all ways and relations referencing this node are in this changeset
   if (type == ChangesetType::TypeDelete)
@@ -803,7 +803,7 @@ void XmlChangeset::moveOrRemoveWay(const ChangesetInfoPtr& source, const Changes
   }
 }
 
-bool XmlChangeset::moveWay(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way, bool failing)
+bool XmlChangeset::moveWay(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, const ChangesetWay* way, bool failing)
 {
   //  Don't worry about the contents of a delete operation, unless it is failing
   if (type != ChangesetType::TypeDelete || failing)
@@ -846,7 +846,7 @@ bool XmlChangeset::moveWay(const ChangesetInfoPtr& source, const ChangesetInfoPt
   return true;
 }
 
-bool XmlChangeset::canMoveWay(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way)
+bool XmlChangeset::canMoveWay(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, const ChangesetWay* way)
 {
   //  Deleting a way will only work if the parent relation is there too
   if (type == ChangesetType::TypeDelete)
@@ -900,7 +900,7 @@ bool XmlChangeset::addRelation(const ChangesetInfoPtr& changeset, ChangesetType 
       //  Add any relation members that need to be added
       for (int i = 0; i < relation->getMemberCount(); ++i)
       {
-        ChangesetRelationMember& member = relation->getMember(i);
+        const ChangesetRelationMember& member = relation->getMember(i);
         //  Negative IDs are for added members
         if (member.getRef() < 0)
         {
@@ -923,16 +923,14 @@ bool XmlChangeset::addRelation(const ChangesetInfoPtr& changeset, ChangesetType 
               addWay(changeset, type, way);
             }
           }
-          else if (member.isRelation())
+          else if (member.isRelation() &&
+                   //  Make sure that the ID is negative (create) in the ID map
+                   _idMap.getId(ElementType::Relation, member.getRef()) < 0)
           {
-            //  Make sure that the ID is negative (create) in the ID map
-            if (_idMap.getId(ElementType::Relation, member.getRef()) < 0)
-            {
-              ChangesetRelation* relation_member = dynamic_cast<ChangesetRelation*>(_allRelations[member.getRef()].get());
-              //  Don't re-add self referencing relations
-              if (relation_member && relation->id() != relation_member->id())
-                addRelation(changeset, type, relation_member);
-            }
+            ChangesetRelation* relation_member = dynamic_cast<ChangesetRelation*>(_allRelations[member.getRef()].get());
+            //  Don't re-add self referencing relations
+            if (relation_member && relation->id() != relation_member->id())
+              addRelation(changeset, type, relation_member);
           }
         }
       }
@@ -1024,7 +1022,7 @@ bool XmlChangeset::moveRelation(const ChangesetInfoPtr& source, const ChangesetI
     //  Iterate all of the members that exist in the changeset and move them
     for (int i = 0; i < relation->getMemberCount(); ++i)
     {
-      ChangesetRelationMember& member = relation->getMember(i);
+      const ChangesetRelationMember& member = relation->getMember(i);
       long id = member.getRef();
       //  Each member type iterates the changeset types looking for this element, then moves it
       //  using the corresponding move function
@@ -1044,16 +1042,14 @@ bool XmlChangeset::moveRelation(const ChangesetInfoPtr& source, const ChangesetI
             moveWay(source, destination, (ChangesetType)current_type, dynamic_cast<ChangesetWay*>(_allWays[id].get()), failing);
         }
       }
-      else if (member.isRelation())
+      else if (member.isRelation() &&
+               //  Don't attempt to move circular relation references
+               id != relation->id())
       {
-        //  Don't attempt to move circular relation references
-        if (id != relation->id())
+        for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
         {
-          for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
-          {
-            if (source->contains(ElementType::Relation, (ChangesetType)current_type, id))
-              moveRelation(source, destination, (ChangesetType)current_type, dynamic_cast<ChangesetRelation*>(_allRelations[id].get()), failing);
-          }
+          if (source->contains(ElementType::Relation, (ChangesetType)current_type, id))
+            moveRelation(source, destination, (ChangesetType)current_type, dynamic_cast<ChangesetRelation*>(_allRelations[id].get()), failing);
         }
       }
     }
@@ -1087,13 +1083,13 @@ bool XmlChangeset::canMoveRelation(const ChangesetInfoPtr& source, const Changes
   return source->size() != count;
 }
 
-size_t XmlChangeset::getObjectCount(ChangesetNode* node, ElementCountSet& elements, bool countSent) const
+size_t XmlChangeset::getObjectCount(const ChangesetNode* node, ElementCountSet& elements, bool countSent) const
 {
   ChangesetInfoPtr empty;
   return getObjectCount(empty, node, elements, countSent);
 }
 
-size_t XmlChangeset::getObjectCount(ChangesetWay* way, ElementCountSet& elements, bool countSent)
+size_t XmlChangeset::getObjectCount(const ChangesetWay* way, ElementCountSet& elements, bool countSent)
 {
   ChangesetInfoPtr empty;
   return getObjectCount(empty, way, elements, countSent);
@@ -1105,7 +1101,7 @@ size_t XmlChangeset::getObjectCount(ChangesetRelation* relation, ElementCountSet
   return getObjectCount(empty, relation, elements, countSent);
 }
 
-size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& /*changeset*/, ChangesetNode* node, ElementCountSet& elements, bool countSent) const
+size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& /*changeset*/, const ChangesetNode* node, ElementCountSet& elements, bool countSent) const
 {
   //  Cannot count NULL nodes
   if (node == nullptr)
@@ -1122,7 +1118,7 @@ size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& /*changeset*/, Chang
   return 1;
 }
 
-size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, ChangesetWay* way, ElementCountSet& elements, bool countSent)
+size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, const ChangesetWay* way, ElementCountSet& elements, bool countSent)
 {
   if (way == nullptr)
     return 0;
@@ -1147,7 +1143,7 @@ size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, Changeset
       //  Do not recount this node
       if (!changeset || changeset->contains(ElementType::Node, (ChangesetType)current_type, id))
       {
-        ChangesetNode* node = nullptr;
+        const ChangesetNode* node = nullptr;
         if (_allNodes.find(id) != _allNodes.end())
           node = dynamic_cast<ChangesetNode*>(_allNodes[id].get());
         count += getObjectCount(changeset, node, elements);
@@ -1175,7 +1171,7 @@ size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, Changeset
   //  Iterate all of the relation elements
   for (int i = 0; i < relation->getMemberCount(); ++i)
   {
-    ChangesetRelationMember& member = relation->getMember(i);
+    const ChangesetRelationMember& member = relation->getMember(i);
     long id = member.getRef();
     //  Each member type iterates the changeset types looking for this element, then counts it
     if (member.isNode())
@@ -1184,7 +1180,7 @@ size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, Changeset
       {
         if (!changeset || changeset->contains(ElementType::Node, (ChangesetType)current_type, id))
         {
-          ChangesetNode* node = nullptr;
+          const ChangesetNode* node = nullptr;
           if (_allNodes.find(id) != _allNodes.end())
             node = dynamic_cast<ChangesetNode*>(_allNodes[id].get());
           count += getObjectCount(changeset, node, elements, countSent);
@@ -1197,7 +1193,7 @@ size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, Changeset
       {
         if (!changeset || changeset->contains(ElementType::Way, (ChangesetType)current_type, id))
         {
-          ChangesetWay* way = nullptr;
+          const ChangesetWay* way = nullptr;
           if (_allWays.find(id) != _allWays.end())
             way = dynamic_cast<ChangesetWay*>(_allWays[id].get());
           count += getObjectCount(changeset, way, elements, countSent);
@@ -1225,7 +1221,7 @@ size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, Changeset
   return count;
 }
 
-bool XmlChangeset::isSent(ChangesetElement* element) const
+bool XmlChangeset::isSent(const ChangesetElement* element) const
 {
   if (element == nullptr)
     return false;
@@ -1236,7 +1232,7 @@ bool XmlChangeset::isSent(ChangesetElement* element) const
            element->getStatus() == ChangesetElement::ElementStatus::Finalized;
 }
 
-bool XmlChangeset::canSend(ChangesetNode* node) const
+bool XmlChangeset::canSend(const ChangesetNode* node) const
 {
   //  Able to send means Available
   if (node == nullptr)
@@ -1245,7 +1241,7 @@ bool XmlChangeset::canSend(ChangesetNode* node) const
     return node->getStatus() == ChangesetElement::Available;
 }
 
-bool XmlChangeset::canSend(ChangesetWay* way)
+bool XmlChangeset::canSend(const ChangesetWay* way)
 {
   //  Able to send means Available
   if (way == nullptr)
@@ -1279,7 +1275,7 @@ bool XmlChangeset::canSend(ChangesetRelation* relation)
     //  All members have to be Available or Finalized
     for (int i = 0; i < relation->getMemberCount(); ++i)
     {
-      ChangesetRelationMember& member = relation->getMember(i);
+      const ChangesetRelationMember& member = relation->getMember(i);
       //  First check the member type, these are separated to reduce the comparisons
       //  since these are called frequently
       if (member.isNode())
@@ -1345,7 +1341,7 @@ bool XmlChangeset::calculateChangeset(ChangesetInfoPtr& changeset)
 {
   //  Create the changeset info object if there isn't one
   if (!changeset)
-    changeset.reset(new ChangesetInfo());
+    changeset = std::make_shared<ChangesetInfo>();
   changeset->clear();
   //  Build up the changeset to be around the MAX changeset push size
   ChangesetType type = ChangesetType::TypeCreate;
@@ -1413,7 +1409,7 @@ bool XmlChangeset::writeErrorFile()
 
 ChangesetInfoPtr XmlChangeset::splitChangeset(const ChangesetInfoPtr& changeset, const QString& splitHint)
 {
-  ChangesetInfoPtr split(new ChangesetInfo());
+  ChangesetInfoPtr split = std::make_shared<ChangesetInfo>();
   //  If there is only one element then splitting only marks that element as failed
   if (changeset->size() == 1)
   {
@@ -1578,13 +1574,13 @@ QString XmlChangeset::getFailedChangesetString()
   if (_failedCount == 0)
     return "";
   //  Create a changeset info object to hold all of the failed elements
-  ChangesetInfoPtr changeset(new ChangesetInfo());
+  ChangesetInfoPtr changeset = std::make_shared<ChangesetInfo>();
   for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
   {
     //  Iterate all of the nodes in the changeset looking for failed elements
     for (ChangesetElementMap::iterator it = _nodes[current_type].begin(); it != _nodes[current_type].end(); ++it)
     {
-      ChangesetNode* node = dynamic_cast<ChangesetNode*>(it->second.get());
+      const ChangesetNode* node = dynamic_cast<ChangesetNode*>(it->second.get());
       //  Add only the failed nodes
       if (node->getStatus() == ChangesetElement::ElementStatus::Failed)
         changeset->add(ElementType::Node, (ChangesetType)current_type, node->id());
@@ -1592,7 +1588,7 @@ QString XmlChangeset::getFailedChangesetString()
     //  Iterate all of the ways in the changeset looking for failed elements
     for (ChangesetElementMap::iterator it = _ways[current_type].begin(); it != _ways[current_type].end(); ++it)
     {
-      ChangesetWay* way = dynamic_cast<ChangesetWay*>(it->second.get());
+      const ChangesetWay* way = dynamic_cast<ChangesetWay*>(it->second.get());
       //  Add only the failed ways
       if (way->getStatus() == ChangesetElement::ElementStatus::Failed)
         changeset->add(ElementType::Way, (ChangesetType)current_type, way->id());
@@ -1600,7 +1596,7 @@ QString XmlChangeset::getFailedChangesetString()
     //  Iterate all of the relations in the changeset looking for failed elements
     for (ChangesetElementMap::iterator it = _relations[current_type].begin(); it != _relations[current_type].end(); ++it)
     {
-      ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(it->second.get());
+      const ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(it->second.get());
       //  Add only the failed relations
       if (relation->getStatus() == ChangesetElement::ElementStatus::Failed)
         changeset->add(ElementType::Relation, (ChangesetType)current_type, relation->id());
@@ -1961,7 +1957,7 @@ bool XmlChangeset::calculateRemainingChangeset(ChangesetInfoPtr& changeset)
 {
   //  Create the changeset info object if there isn't one
   if (!changeset)
-    changeset.reset(new ChangesetInfo());
+    changeset = std::make_shared<ChangesetInfo>();
   changeset->clear();
   //  This is the last changeset of the bunch because of the error state
   changeset->setFinished();
@@ -2057,12 +2053,12 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
     QSet<long> missingNodes;
     for (ChangesetElementMap::iterator it = _nodes[type].begin(); it != _nodes[type].end(); ++it)
     {
-      ChangesetNode* node = dynamic_cast<ChangesetNode*>(it->second.get());
+      const ChangesetNode* node = dynamic_cast<ChangesetNode*>(it->second.get());
       ChangesetElementMap::const_iterator found = changeset._nodes[type].find(node->id());
       if (found != changeset._nodes[type].end())
       {
         //  Compare the two nodes
-        ChangesetNode* node2 = dynamic_cast<ChangesetNode*>(found->second.get());
+        const ChangesetNode* node2 = dynamic_cast<ChangesetNode*>(found->second.get());
         QString output;
         if (!node->diff(*node2, output))
         {
@@ -2091,12 +2087,12 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
     QSet<long> missingWays;
     for (ChangesetElementMap::iterator it = _ways[type].begin(); it != _ways[type].end(); ++it)
     {
-      ChangesetWay* way = dynamic_cast<ChangesetWay*>(it->second.get());
+      const ChangesetWay* way = dynamic_cast<ChangesetWay*>(it->second.get());
       ChangesetElementMap::const_iterator found = changeset._ways[type].find(way->id());
       if (found != changeset._ways[type].end())
       {
         //  Compare the two ways
-        ChangesetWay* way2 = dynamic_cast<ChangesetWay*>(found->second.get());
+        const ChangesetWay* way2 = dynamic_cast<ChangesetWay*>(found->second.get());
         QString output;
         if (!way->diff(*way2, output))
         {
@@ -2125,12 +2121,12 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
     QSet<long> missingRelations;
     for (ChangesetElementMap::iterator it = _relations[changeset_type].begin(); it != _relations[changeset_type].end(); ++it)
     {
-      ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(it->second.get());
+      const ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(it->second.get());
       ChangesetElementMap::const_iterator found = changeset._relations[changeset_type].find(relation->id());
       if (found != changeset._relations[changeset_type].end())
       {
         //  Compare the two ways
-        ChangesetRelation* relation2 = dynamic_cast<ChangesetRelation*>(found->second.get());
+        const ChangesetRelation* relation2 = dynamic_cast<ChangesetRelation*>(found->second.get());
         QString output;
         if (!relation->diff(*relation2, output))
         {
@@ -2226,10 +2222,10 @@ ChangesetInfoPtr XmlChangeset::fixOrphanedNodesSplit(const ChangesetInfoPtr& cha
     }
   }
   //  Remove any of the nodes from the changeset so that they are blocked for upload later
-  ChangesetInfoPtr orphanedNodes(new ChangesetInfo());
+  ChangesetInfoPtr orphanedNodes = std::make_shared<ChangesetInfo>();
   for (set<long>::iterator n = nodes.begin(); n != nodes.end(); ++n)
   {
-    ChangesetElement* node = _allNodes[*n].get();
+    const ChangesetElement* node = _allNodes[*n].get();
     if (node)
     {
       changeset->remove(ElementType::Node, ChangesetType::TypeDelete, *n);
@@ -2283,7 +2279,7 @@ void XmlChangeset::insertElement(const ChangesetElementPtr& element, ChangesetTy
   }
 }
 
-bool XmlChangeset::fixPlaceholderFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
+bool XmlChangeset::fixPlaceholderFailure(ChangesetInfoPtr changeset, const ChangesetInfoPtr& split,
                                          long /*member_id*/, ElementType::Type /*member_type*/,
                                          long element_id, ElementType::Type element_type)
 {
@@ -2295,7 +2291,7 @@ bool XmlChangeset::fixPlaceholderFailure(ChangesetInfoPtr changeset, ChangesetIn
     {
       if (element_type == ElementType::Way)
       {
-        ChangesetWay* way = dynamic_cast<ChangesetWay*>(_allWays[element_id].get());
+        const ChangesetWay* way = dynamic_cast<ChangesetWay*>(_allWays[element_id].get());
         //  Add the way to the split and remove from the changeset
         if (current_type == ChangesetType::TypeCreate)
         {
@@ -2312,7 +2308,7 @@ bool XmlChangeset::fixPlaceholderFailure(ChangesetInfoPtr changeset, ChangesetIn
       }
       else if (element_type == ElementType::Relation)
       {
-        ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[element_id].get());
+        const ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[element_id].get());
         //  Add the relation to the split and remove from the changeset
         split->add(element_type, (ChangesetType)current_type, relation->id());
         changeset->remove(element_type, (ChangesetType)current_type, relation->id());
@@ -2325,7 +2321,7 @@ bool XmlChangeset::fixPlaceholderFailure(ChangesetInfoPtr changeset, ChangesetIn
   return false;
 }
 
-bool XmlChangeset::fixRelationFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
+bool XmlChangeset::fixRelationFailure(ChangesetInfoPtr changeset, const ChangesetInfoPtr& split,
                                       long element_id,
                                       long member_id, ElementType::Type member_type)
 {
@@ -2337,7 +2333,7 @@ bool XmlChangeset::fixRelationFailure(ChangesetInfoPtr changeset, ChangesetInfoP
     {
       if (changeset->contains(ElementType::Relation, (ChangesetType)current_type, element_id))
       {
-        ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[element_id].get());
+        const ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[element_id].get());
         //  Add the relation to the split and remove from the changeset
         split->add(ElementType::Relation, (ChangesetType)current_type, relation->id());
         changeset->remove(ElementType::Relation, (ChangesetType)current_type, relation->id());
@@ -2352,7 +2348,7 @@ bool XmlChangeset::fixRelationFailure(ChangesetInfoPtr changeset, ChangesetInfoP
     {
       for (ChangesetElementMap::iterator it = _relations[current_type].begin(); it != _relations[current_type].end(); ++it)
       {
-        ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(it->second.get());
+        const ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(it->second.get());
         //  Make sure that the changeset contains this relation and this relation contains the problematic element
         if (relation->hasMember(member_type, member_id) &&
             changeset->contains(ElementType::Relation, (ChangesetType)current_type, relation->id()))
@@ -2368,7 +2364,7 @@ bool XmlChangeset::fixRelationFailure(ChangesetInfoPtr changeset, ChangesetInfoP
   return false;
 }
 
-bool XmlChangeset::fixElementGoneDeletedFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& /*split*/,
+bool XmlChangeset::fixElementGoneDeletedFailure(ChangesetInfoPtr changeset, const ChangesetInfoPtr& /*split*/,
                                                 long element_id, ElementType::Type element_type)
 {
   //   The node with the id 12345 has already been deleted
@@ -2397,7 +2393,7 @@ bool XmlChangeset::fixElementGoneDeletedFailure(ChangesetInfoPtr changeset, Chan
   return false;
 }
 
-bool XmlChangeset::fixMultiElementFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
+bool XmlChangeset::fixMultiElementFailure(ChangesetInfoPtr changeset, const ChangesetInfoPtr& split,
                                           long element_id, ElementType::Type element_type,
                                           const std::vector<long>& /*member_ids*/, ElementType::Type /*member_type*/)
 {
@@ -2409,7 +2405,7 @@ bool XmlChangeset::fixMultiElementFailure(ChangesetInfoPtr changeset, ChangesetI
     {
       if (element_type == ElementType::Way)
       {
-        ChangesetWay* way = dynamic_cast<ChangesetWay*>(_allWays[element_id].get());
+        const ChangesetWay* way = dynamic_cast<ChangesetWay*>(_allWays[element_id].get());
         //  Creates and deletes of ways need to include any created or deleted nodes too
         if (current_type != ChangesetType::TypeModify)
         {
@@ -2460,7 +2456,7 @@ bool XmlChangeset::fixChangesetDeletePreconditionFailure(ChangesetInfoPtr change
   const ChangesetType type = ChangesetType::TypeDelete;
   if (changeset->contains(element_type, type, element_id))
   {
-    ChangesetInfoPtr temp_split(new ChangesetInfo());
+    ChangesetInfoPtr temp_split = std::make_shared<ChangesetInfo>();
     //  Add the offending change from the temp changeset
     temp_split->add(element_type, type, element_id);
     //  Check if the blocking element is part of this changeset, it could be
@@ -2506,7 +2502,7 @@ bool XmlChangeset::fixChangesetDeletePreconditionFailure(ChangesetInfoPtr change
     //  Don't send the element again if the blocking elements aren't in the split
     if (temp_split->size() != member_ids.size() + 1) //  +1 includes element reported
     {
-      ChangesetInfoPtr failing(new ChangesetInfo());
+      ChangesetInfoPtr failing = std::make_shared<ChangesetInfo>();
       //  Move the offending element (and its children if applicable) to the error changeset
       switch(element_type)
       {

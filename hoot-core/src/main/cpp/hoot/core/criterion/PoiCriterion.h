@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * A criterion that is only satisified with POIs.
+ * A criterion that is only satisfied by POIs
  */
 class PoiCriterion : public ConflatableElementCriterion
 {
@@ -46,11 +46,9 @@ public:
   ~PoiCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<PoiCriterion>(); }
 
   GeometryType getGeometryType() const override { return GeometryType::Point; }
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new PoiCriterion()); }
-
   bool supportsSpecificConflation() const override { return true; }
 
   QString getDescription() const override { return "Identifies POIs"; }

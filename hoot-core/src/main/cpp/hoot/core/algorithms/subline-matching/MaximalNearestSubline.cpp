@@ -53,16 +53,15 @@ Meters MaximalNearestSubline::_headingDelta = -1;
 MaximalNearestSubline::MaximalNearestSubline(
   const ConstOsmMapPtr& map, ConstWayPtr a, ConstWayPtr b, Meters minSplitSize,
   Meters maxRelevantDistance, Radians maxRelevantAngle, Meters headingDelta) :
-_a(a), _b(b),
+_a(a),
+_b(b),
 _aPtLocator(map, a),
-_map(map)
+_minSplitSize(minSplitSize),
+_map(map),
+_maxRelevantDistance(maxRelevantDistance),
+_maxRelevantAngle(maxRelevantAngle)
 {
-  _a = a;
-  _b = b;
   _maxInterval.resize(2);
-  _minSplitSize = minSplitSize;
-  _maxRelevantDistance = maxRelevantDistance;
-  _maxRelevantAngle = maxRelevantAngle;
   _headingDelta = headingDelta;
 }
 
@@ -79,9 +78,9 @@ Meters MaximalNearestSubline::_calculateIntervalLength()
   return result;
 }
 
-void MaximalNearestSubline::_expandInterval(WayLocation& loc)
+void MaximalNearestSubline::_expandInterval(const WayLocation& loc)
 {
-  // expand maximal interval if this point is outside it
+  // Expand maximal interval if this point is outside it.
   if (_maxInterval[0].isValid() == false || loc.compareTo(_maxInterval[0]) < 0)
   {
     _maxInterval[0] = loc;
@@ -288,13 +287,13 @@ vector<WayPtr> MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
   // c. ----x---x
   // d. x-------x
 
-  std::shared_ptr<FindNodesInWayFactory> nf(new FindNodesInWayFactory(_a));
+  std::shared_ptr<FindNodesInWayFactory> nf = std::make_shared<FindNodesInWayFactory>(_a);
 
   // if this is b or c
   if (start.getSegmentIndex() != 0 || start.getSegmentFraction() > 0.0)
   {
     WayLocation wl(map, _a, 0, 0.0);
-    WayPtr way1 = WaySubline(wl, start).toWay(map, nf.get());
+    WayPtr way1 = WaySubline(wl, start).toWay(map, nf);
 
     double l = ElementToGeometryConverter(map).convertToLineString(way1)->getLength();
     // if the way is too short, round to the first way.
@@ -311,8 +310,7 @@ vector<WayPtr> MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
   // if this is a or b
   if (end.getSegmentIndex() < (int)_a->getNodeCount() - 1 || end.getSegmentFraction() < 1.0)
   {
-    WayPtr way3 = WaySubline(end, WayLocation(map, _a, _a->getNodeCount() - 1, 0.0)).
-      toWay(map, nf.get());
+    WayPtr way3 = WaySubline(end, WayLocation(map, _a, _a->getNodeCount() - 1, 0.0)).toWay(map, nf);
 
     double l = ElementToGeometryConverter(map).convertToLineString(way3)->getLength();
     // if the way is too short, round to the first way.
@@ -326,8 +324,8 @@ vector<WayPtr> MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
     }
   }
 
-  // in all cases we add the middle line.
-  WayPtr way2 = WaySubline(start, end).toWay(map, nf.get());
+  // In all cases we add the middle line.
+  WayPtr way2 = WaySubline(start, end).toWay(map, nf);
   double l = ElementToGeometryConverter(map).convertToLineString(way2)->getLength();
   // if the way is big enough then add it on.
   if (l > _minSplitSize)

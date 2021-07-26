@@ -178,7 +178,7 @@ public:
 
   std::shared_ptr<BuildingMatch> createMatch(ElementId eid1, ElementId eid2) const
   {
-    return std::shared_ptr<BuildingMatch>(new BuildingMatch(_map, _rf, eid1, eid2, _mt));
+    return std::make_shared<BuildingMatch>(_map, _rf, eid1, eid2, _mt);
   }
 
   static bool isRelated(ConstElementPtr e1, ConstElementPtr e2)
@@ -258,13 +258,12 @@ public:
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
-      std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-      _index.reset(new HilbertRTree(mps, 2));
+      _index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
       // Only index elements that isMatchCandidate(e)
       std::function<bool (ConstElementPtr e)> f =
         std::bind(&BuildingMatchVisitor::isMatchCandidate, this, placeholders::_1);
-      std::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
+      std::shared_ptr<ArbitraryCriterion> pCrit = std::make_shared<ArbitraryCriterion>(f);
 
       // Instantiate our visitor
       SpatialIndexer v(_index,
@@ -302,8 +301,6 @@ private:
   int _elementsEvaluated;
   size_t _maxGroupSize;
   Meters _searchRadius;
-  /// reject any manipulation with a miss score >= _rejectScore
-  double _rejectScore;
 
   // Used for finding neighbors
   std::shared_ptr<HilbertRTree> _index;
@@ -428,7 +425,7 @@ MatchPtr BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
     if (BuildingMatchVisitor::isRelated(e1, e2))
     {
       // score each candidate and push it on the result vector
-      result.reset(new BuildingMatch(map, _getRf(), eid1, eid2, getMatchThreshold()));
+      result = std::make_shared<BuildingMatch>(map, _getRf(), eid1, eid2, getMatchThreshold());
     }
   }
   return result;
@@ -502,7 +499,7 @@ std::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
     }
     file.close();
 
-    _rf.reset(new BuildingRfClassifier());
+    _rf = std::make_shared<BuildingRfClassifier>();
     QDomElement docRoot = doc.elementsByTagName("RandomForest").at(0).toElement();
     _rf->import(docRoot);
   }
@@ -521,10 +518,10 @@ std::shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()
   if (!_matchThreshold.get())
   {
     LOG_VART(ConfigOptions().getBuildingMatchThreshold());
-    _matchThreshold.reset(
-      new MatchThreshold(
+    _matchThreshold =
+      std::make_shared<MatchThreshold>(
         ConfigOptions().getBuildingMatchThreshold(), ConfigOptions().getBuildingMissThreshold(),
-        ConfigOptions().getBuildingReviewThreshold()));
+        ConfigOptions().getBuildingReviewThreshold());
   }
   return _matchThreshold;
 }

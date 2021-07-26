@@ -51,24 +51,21 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  /**
-   * Set the probability that a tag will be removed.
-   */
-  void setProbability(double p) { _p = p; }
-
   void setRng(boost::minstd_rand& rng) override { _rng = &rng; }
 
   void visit(const std::shared_ptr<Element>& e) override;
 
+  QString getDescription() const override { return "Randomly modifies feature tags"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
   void setExemptTagKeys(const QStringList& keys) { _exemptTagKeys = keys; }
   void setReplacementTagKeys(const QStringList& keys) { _replacementTagKeys = keys; }
   void setReplacementTagValues(const QStringList& values) { _replacementTagValues = values; }
-
-  QString getDescription() const override { return "Randomly modifies feature tags"; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
+  /**
+   * Set the probability that a tag will be removed.
+   */
+  void setProbability(double p) { _p = p; }
 
 private:
 

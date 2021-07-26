@@ -52,9 +52,7 @@ public:
   ConstNodePtr calculateMedianNode() const;
 
   QString getDescription() const override { return "Calculates the median node"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

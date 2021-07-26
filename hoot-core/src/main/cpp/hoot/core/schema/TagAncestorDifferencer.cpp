@@ -50,7 +50,7 @@ bool TagAncestorDifferencer::_isValidTag(const SchemaVertex& sv) const
   {
     throw IllegalArgumentException("Please specify a valid ancestor tag.");
   }
-  return OsmSchema::getInstance().isAncestor(sv.name, _ancestor);
+  return OsmSchema::getInstance().isAncestor(sv.getName(), _ancestor);
 }
 
 void TagAncestorDifferencer::setConfiguration(const Settings& conf)

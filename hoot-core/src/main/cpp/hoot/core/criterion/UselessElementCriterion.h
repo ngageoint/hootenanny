@@ -55,8 +55,7 @@ public:
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new UselessElementCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<UselessElementCriterion>(); }
 
   QString getDescription() const override { return "Identifies elements that have no use"; }
   QString getName() const override { return className(); }

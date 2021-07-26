@@ -62,7 +62,7 @@ public:
   void writeDebugMap(OsmMapPtr map, int testNumber)
   {
     FileUtils::makeDir("tmp");
-    OsmMapPtr copy(new OsmMap(map));
+    OsmMapPtr copy = std::make_shared<OsmMap>(map);
 
     MapProjector::projectToWgs84(copy);
     conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
@@ -74,7 +74,7 @@ public:
   {
     NetworkVertex::reset();
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmMapReaderFactory::read(map, _inputPath + "ParitalEdgeMatch.osm",
       false, Status::Unknown1);
@@ -84,20 +84,24 @@ public:
 
     OsmNetworkExtractor one;
 
-    ElementCriterionPtr c1(new TagCriterion("name", QString("partialTest%1A").arg(testNumber)));
+    ElementCriterionPtr c1 =
+      std::make_shared<TagCriterion>("name", QString("partialTest%1A").arg(testNumber));
     one.setCriterion(c1);
     network1 = one.extractNetwork(map);
 
-    ElementCriterionPtr c2(new TagCriterion("name", QString("partialTest%1B").arg(testNumber)));
+    ElementCriterionPtr c2 =
+      std::make_shared<TagCriterion>("name", QString("partialTest%1B").arg(testNumber));
     one.setCriterion(c2);
     network2 = one.extractNetwork(map);
 
-    matchSet.reset(new IndexedEdgeMatchSet());
-    NetworkDetailsPtr details(new NetworkDetails(map, network1, network2));
+    matchSet = std::make_shared<IndexedEdgeMatchSet>();
+    NetworkDetailsPtr details = std::make_shared<NetworkDetails>(map, network1, network2);
     conf().set(ConfigOptions().getWaySublineMatcherKey(), "hoot::MaximalSublineMatcher");
-    conf().set(ConfigOptions().getConflateMatchHighwayClassifierKey(), "hoot::HighwayExpertClassifier");
+    conf().set(
+      ConfigOptions().getConflateMatchHighwayClassifierKey(), "hoot::HighwayExpertClassifier");
     details->setConfiguration(conf());
-    EdgeMatchSetFinderPtr uut(new EdgeMatchSetFinder(details, matchSet, network1, network2));
+    EdgeMatchSetFinderPtr uut =
+      std::make_shared<EdgeMatchSetFinder>(details, matchSet, network1, network2);
 
     return uut;
   }

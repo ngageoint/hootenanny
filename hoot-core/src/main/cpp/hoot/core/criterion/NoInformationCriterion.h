@@ -45,17 +45,14 @@ public:
 
   static QString className() { return "hoot::NoInformationCriterion"; }
 
-  NoInformationCriterion() { setConfiguration(conf()); }
-  NoInformationCriterion(bool treatReviewTagsAsMetadata) :
-    _treatReviewTagsAsMetadata(treatReviewTagsAsMetadata) { }
+  NoInformationCriterion();
+  NoInformationCriterion(bool treatReviewTagsAsMetadata);
   ~NoInformationCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  void setConfiguration(const Settings& conf) override;
-
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new NoInformationCriterion(_treatReviewTagsAsMetadata)); }
+  { return std::make_shared<NoInformationCriterion>(_treatReviewTagsAsMetadata); }
+  void setConfiguration(const Settings& conf) override;
 
   QString getDescription() const override
   { return "Identifies features with no useful information"; }

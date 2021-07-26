@@ -82,12 +82,10 @@ bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   LOG_VART(isPoi);
 
-  if (!isPoi && ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois())
+  if (!isPoi && ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois() &&
+      _addressParser.hasAddress(*std::dynamic_pointer_cast<const Node>(e)))
   {
-    if (_addressParser.hasAddress(*std::dynamic_pointer_cast<const Node>(e)))
-    {
-      isPoi = true;
-    }
+    isPoi = true;
   }
 
   return isPoi;

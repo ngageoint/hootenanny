@@ -52,14 +52,11 @@ public:
   void visit(const ElementPtr& e) override;
 
   QString getInitStatusMessage() const override { return "Removing duplicate relation members..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " duplicate relation members"; }
 
   QString getDescription() const override { return "Removes duplicate relation members"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 

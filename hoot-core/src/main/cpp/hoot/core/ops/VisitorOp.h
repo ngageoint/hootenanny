@@ -60,9 +60,7 @@ public:
   void apply(std::shared_ptr<OsmMap>& map) override;
 
   QString getDescription() const override { return ""; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

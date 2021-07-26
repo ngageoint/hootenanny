@@ -58,19 +58,16 @@ public:
 
   boost::any getData() const override { return _matchCandidateCountsByMatchCreator; }
 
-  QString getDescription() const override
-  { return "Counts all elements that are candidates for matches given a set of match creators"; }
-
   QString getInitStatusMessage() const override { return "Counting match candidates..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return "Counted " + StringUtils::formatLargeNumber(_totalCandidateCount) + " match candidates.";
   }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Counts all elements that are candidates for matches given a set of match creators"; }
 
 private:
 

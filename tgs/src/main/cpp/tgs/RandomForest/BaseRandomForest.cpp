@@ -61,8 +61,8 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::classifyVector(std::vector<double>& dataVector,
-    std::map<std::string, double>& scores) const
+  void BaseRandomForest::classifyVector(
+    const std::vector<double>& dataVector, std::map<std::string, double>& scores) const
   {
     try
     {
@@ -263,7 +263,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::importModel(QDomElement & e)
+  void BaseRandomForest::importModel(const QDomElement & e)
   {
     try
     {
@@ -299,7 +299,7 @@ namespace Tgs
 
             for (unsigned int fIdx = 0; fIdx < (unsigned int)factorList.size(); fIdx++)
             {
-              _factorLabels.push_back(factorList[fIdx].toLatin1().constData());
+              _factorLabels.emplace_back(factorList[fIdx].toLatin1().constData());
             }
           }
           else if (tag == "RANDOMTREES")
@@ -309,8 +309,7 @@ namespace Tgs
             for (unsigned int rIdx = 0; rIdx < (unsigned int)treeList.size(); rIdx++)
             {
               QDomElement treeElement = treeList.at(rIdx).toElement();
-
-              _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
+              _forest.push_back(std::make_shared<RandomTree>());
               _forest.back()->import(treeElement);
             }
           }

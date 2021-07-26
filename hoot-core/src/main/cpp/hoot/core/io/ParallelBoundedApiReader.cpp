@@ -46,7 +46,6 @@ ParallelBoundedApiReader::ParallelBoundedApiReader(bool useOsmApiBboxFormat, boo
     _threadCount(ConfigOptions().getReaderHttpBboxThreadCount()),
     _totalResults(0),
     _totalEnvelopes(0),
-    _bboxContinue(true),
     _maxGridSize(ConfigOptions().getReaderHttpBboxMaxDownloadSize()),
     _fatalError(false),
     _useOsmApiBboxFormat(useOsmApiBboxFormat),

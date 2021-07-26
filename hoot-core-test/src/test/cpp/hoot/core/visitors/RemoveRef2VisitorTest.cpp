@@ -61,10 +61,10 @@ public:
 
   void runToyTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "RemoveRef2VisitorInput.osm");
 
-    ElementCriterionPtr c(new PoiCriterion);
+    ElementCriterionPtr c = std::make_shared<PoiCriterion>();
     RemoveRef2Visitor v;
     v.addCriterion(c);
     map->visitRw(v);

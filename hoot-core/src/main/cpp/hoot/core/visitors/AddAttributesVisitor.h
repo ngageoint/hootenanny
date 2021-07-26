@@ -54,20 +54,17 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  void setAttributes(const QStringList attributes) { _attributes = attributes; }
-  void setAddOnlyIfEmpty(const bool addOnlyIfEmpty) { _addOnlyIfEmpty = addOnlyIfEmpty; }
-
-  QString getDescription() const override
-  { return "Adds one or more common OSM attributes to features"; }
-
   QString getInitStatusMessage() const override { return "Adding attributes..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Added " + QString::number(_numAffected) + " attributes"; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Adds one or more common OSM attributes to features"; }
+
+  void setAttributes(const QStringList attributes) { _attributes = attributes; }
+  void setAddOnlyIfEmpty(const bool addOnlyIfEmpty) { _addOnlyIfEmpty = addOnlyIfEmpty; }
 
 private:
 
@@ -77,7 +74,8 @@ private:
   //forces the visitor to only update features where the attribute has an empty (default) value
   bool _addOnlyIfEmpty;
 
-  ElementAttributeType::Type _getAttributeType(const QString& attribute, QString& attributeValue) const;
+  ElementAttributeType::Type _getAttributeType(
+    const QString& attribute, QString& attributeValue) const;
 };
 
 }

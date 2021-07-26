@@ -53,13 +53,11 @@ public:
    */
   void visit(const ElementPtr& e) override;
 
-  QString getDescription() const override { return "Adds unique ID tags"; }
-
   void setConfiguration(const Settings& conf) override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Adds unique ID tags"; }
 
 private:
 

@@ -102,13 +102,10 @@ QString ChangesetReplacementCreatorAbstract::_boundsInterpretationToString(
   {
     case BoundsInterpretation::Lenient:
       return "lenient";
-
     case BoundsInterpretation::Strict:
       return "strict";
-
     case BoundsInterpretation::Hybrid:
       return "hybrid";
-
     default:
       return "";
   }
@@ -120,7 +117,7 @@ void ChangesetReplacementCreatorAbstract::setChangesetOptions(
   LOG_VARD(printStats);
   LOG_VARD(statsOutputFile);
   LOG_VARD(osmApiDbUrl);
-  _changesetCreator.reset(new ChangesetCreator(printStats, statsOutputFile, osmApiDbUrl));
+  _changesetCreator = std::make_shared<ChangesetCreator>(printStats, statsOutputFile, osmApiDbUrl);
 }
 
 void ChangesetReplacementCreatorAbstract::_printJobDescription() const
@@ -202,12 +199,9 @@ void ChangesetReplacementCreatorAbstract::_validateInputs() const
       "GeoJSON inputs are not supported by replacement changeset derivation.");
   }
   QFile outputFile(_output);
-  if (outputFile.exists())
+  if (outputFile.exists() && !outputFile.remove())
   {
-    if (!outputFile.remove())
-    {
-      throw HootException("Unable to remove changeset output file: " + _output);
-    }
+    throw HootException("Unable to remove changeset output file: " + _output);
   }
 
   if (!ConfigOptions().getConvertOps().empty())
@@ -250,7 +244,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
     // automatically for us without reading all of the source data in.
     LOG_STATUS(
       "Loading " << mapName << " map from: ..." << FileUtils::toLogFormat(inputUrl, _maxFilePrintLength) << "...");
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     IoUtils::loadMap(map, inputUrl, useFileIds, status);
   }
   else
@@ -268,7 +262,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
       conf().set(ConfigOptions::getBoundsKey(), "");
 
       LOG_STATUS("Loading map from: ..." << FileUtils::toLogFormat(inputUrl, _maxFilePrintLength) << "...");
-      cachedMap.reset(new OsmMap());
+      cachedMap = std::make_shared<OsmMap>();
       cachedMap->setName(mapName);
       IoUtils::loadMap(cachedMap, inputUrl, useFileIds, status);
       // Restore it back to original.
@@ -277,7 +271,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
     LOG_STATUS(
       "Copying map of size: " << StringUtils::formatLargeNumber(cachedMap->size()) <<
       " from: " << cachedMap->getName() << "...");
-    map.reset(new OsmMap(cachedMap));
+    map = std::make_shared<OsmMap>(cachedMap);
   }
   // Formerly, we let ApiDbReader do the cropping and only if the crop options here were different
   // than the default. However, its been found that the way ApiDbReader returns relations can result
@@ -319,7 +313,8 @@ void ChangesetReplacementCreatorAbstract::_removeMetadataTags(const OsmMapPtr& m
   LOG_DEBUG(tagRemover.getCompletedStatusMessage());
 }
 
-void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(OsmMapPtr& map) const
+void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(
+  const OsmMapPtr& map) const
 {
   ReportMissingElementsVisitor elementMarker;
   // Originally, this was going to add reviews for this rather than tagging elements, but there was
@@ -339,7 +334,7 @@ void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(OsmMa
 }
 
 void ChangesetReplacementCreatorAbstract::_filterFeatures(
-  OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
+  const OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
   const GeometryTypeCriterion::GeometryType& /*geometryType*/, const Settings& config,
   const QString& debugFileName) const
 {
@@ -415,8 +410,8 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
       "Nothing to cut from dough map, so returning the empty dough map as the map after " <<
       "cutting: " << doughMap->getName() << "...");
     OsmMapWriterFactory::writeDebugMap(doughMap, className(), _changesetId + "-cookie-cut");
-    // copy here to avoid changing the ref map passed in as the dough map input
-    return OsmMapPtr(new OsmMap(doughMap));
+    // Copy here to avoid changing the ref map passed in as the dough map input.
+    return std::make_shared<OsmMap>(doughMap);
   }
   else if (cutterMapInputSize == 0)
   {
@@ -433,7 +428,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
         LOG_DEBUG(
           "Nothing in cutter map. Full replacement enabled, so returning an empty map " <<
           "as the map after cutting...");
-        return OsmMapPtr(new OsmMap());
+        return std::make_shared<OsmMap>();
       }
       else
       {
@@ -443,8 +438,8 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
           "Nothing in cutter map. Full replacement not enabled, so returning the entire dough " <<
           "map as the map after cutting: " << doughMap->getName() << "...");
         OsmMapWriterFactory::writeDebugMap(doughMap, className(), _changesetId + "-cookie-cut");
-        // copy here to avoid changing the ref map passed in as the dough map input
-        return OsmMapPtr(new OsmMap(doughMap));
+        // Copy here to avoid changing the ref map passed in as the dough map input.
+        return std::make_shared<OsmMap>(doughMap);
       }
     }
     else
@@ -458,7 +453,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
         LOG_DEBUG(
           "Nothing in cutter map for linear features. Full replacement and lenient bounds "
           "interpretation, so returning an empty map as the map after cutting...");
-        return OsmMapPtr(new OsmMap());
+        return std::make_shared<OsmMap>();
       }
       else if (_fullReplacement && _boundsInterpretation != BoundsInterpretation::Lenient )
       {
@@ -470,7 +465,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
           "Nothing in cutter map. Full replacement with strict bounds enabled, so cropping out " <<
           "the bounds area of the dough map to be the map after cutting: " <<
           doughMap->getName() << "...");
-        OsmMapPtr cookieCutMap(new OsmMap(doughMap));
+        OsmMapPtr cookieCutMap = std::make_shared<OsmMap>(doughMap);
         mapName = "cookie-cut";
         if (geometryType != GeometryTypeCriterion::Unknown)
         {
@@ -500,8 +495,8 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
           "Nothing in cutter map for linear features. Full replacement not enabled, so returning "
           "the entire dough map as the map after cutting: " << doughMap->getName() << "...");
         OsmMapWriterFactory::writeDebugMap(doughMap, className(), _changesetId + "-cookie-cut");
-        // copy here to avoid changing the ref map passed in as the dough map input
-        return OsmMapPtr(new OsmMap(doughMap));
+        // Copy here to avoid changing the ref map passed in as the dough map input.
+        return std::make_shared<OsmMap>(doughMap);
       }
     }
   }
@@ -511,7 +506,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
   OsmMapWriterFactory::writeDebugMap(doughMap, className(), _changesetId + "-dough-map");
   LOG_VART(MapProjector::toWkt(cutterMap->getProjection()));
 
-  OsmMapPtr cookieCutMap(new OsmMap(doughMap));
+  OsmMapPtr cookieCutMap = std::make_shared<OsmMap>(doughMap);
   mapName = "cookie-cut";
   if (geometryType != GeometryTypeCriterion::Unknown)
   {
@@ -574,7 +569,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
     LOG_DEBUG("Creating a cutter shape map transformation for point map...");
     // Make a copy here since we're making destructive changes to the geometry here for alpha shape
     // generation purposes only.
-    cutterMapToUse.reset(new OsmMap(cutterMap));
+    cutterMapToUse = std::make_shared<OsmMap>(cutterMap);
     PointsToPolysConverter pointConverter;
     LOG_INFO(pointConverter.getInitStatusMessage());
     pointConverter.apply(cutterMapToUse);
@@ -689,20 +684,18 @@ void ChangesetReplacementCreatorAbstract::_addChangesetDeleteExclusionTags(OsmMa
 
   SetTagValueVisitor addTagVis(MetadataTags::HootChangeExcludeDelete(), "yes");
   ChainCriterion addTagCrit(
-    std::shared_ptr<WayCriterion>(new WayCriterion()),
-    std::shared_ptr<TagKeyCriterion>(
-      new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds())));
+      std::make_shared<WayCriterion>(),
+      std::make_shared<TagKeyCriterion>(MetadataTags::HootConnectedWayOutsideBounds()));
   FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
   map->visitRw(deleteExcludeTagVis);
   LOG_DEBUG(addTagVis.getCompletedStatusMessage());
 
   // Add the changeset deletion exclusion tag to all children of those connected ways.
 
-  std::shared_ptr<ChainCriterion> childAddTagCrit(
-    new ChainCriterion(
-      std::shared_ptr<WayCriterion>(new WayCriterion()),
-      std::shared_ptr<TagKeyCriterion>(
-        new TagKeyCriterion(MetadataTags::HootChangeExcludeDelete()))));
+  std::shared_ptr<ChainCriterion> childAddTagCrit =
+    std::make_shared<ChainCriterion>(
+      std::make_shared<WayCriterion>(),
+      std::make_shared<TagKeyCriterion>(MetadataTags::HootChangeExcludeDelete()));
   RecursiveSetTagValueOp childDeletionExcludeTagOp(
     MetadataTags::HootChangeExcludeDelete(), "yes", childAddTagCrit);
   childDeletionExcludeTagOp.apply(map);
@@ -726,12 +719,13 @@ void ChangesetReplacementCreatorAbstract::_excludeFeaturesFromChangesetDeletion(
   // Exclude ways and all their children from deletion that are not entirely within the replacement
   // bounds.
 
-  std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion(_boundsOpts.inBoundsStrict));
+  std::shared_ptr<InBoundsCriterion> boundsCrit =
+    std::make_shared<InBoundsCriterion>(_boundsOpts.inBoundsStrict);
   boundsCrit->setBounds(_replacementBounds);
   boundsCrit->setOsmMap(map.get());
-  std::shared_ptr<NotCriterion> notInBoundsCrit(new NotCriterion(boundsCrit));
-  std::shared_ptr<ChainCriterion> elementCrit(
-    new ChainCriterion(std::shared_ptr<WayCriterion>(new WayCriterion()), notInBoundsCrit));
+  std::shared_ptr<NotCriterion> notInBoundsCrit = std::make_shared<NotCriterion>(boundsCrit);
+  std::shared_ptr<ChainCriterion> elementCrit =
+    std::make_shared<ChainCriterion>(std::make_shared<WayCriterion>(), notInBoundsCrit);
 
   RecursiveSetTagValueOp tagSetter(MetadataTags::HootChangeExcludeDelete(), "yes", elementCrit);
   tagSetter.apply(map);

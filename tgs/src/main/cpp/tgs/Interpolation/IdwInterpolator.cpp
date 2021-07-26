@@ -76,7 +76,7 @@ void IdwInterpolator::_buildModel()
 
   if (_p < 0.0)
   {
-    NelderMead optimizer(1, new IdwOptimizeFunction(*this), _stopDelta);
+    NelderMead optimizer(1, std::make_shared<IdwOptimizeFunction>(*this), _stopDelta);
     Vector result;
     result.prepare(1);
 

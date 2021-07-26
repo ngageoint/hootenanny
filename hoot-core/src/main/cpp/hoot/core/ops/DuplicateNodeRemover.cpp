@@ -95,7 +95,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   if (MapProjector::isGeographic(map))
   {
     wgs84 = map;
-    planar.reset(new OsmMap(map));
+    planar = std::make_shared<OsmMap>(map);
     MapProjector::projectToPlanar(planar);
   }
   else
@@ -234,7 +234,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
 }
 
 bool DuplicateNodeRemover::_passesLogMergeFilter(
-  const long nodeId1, const long nodeId2, OsmMapPtr& map) const
+  const long nodeId1, const long nodeId2, const OsmMapPtr& map) const
 {
   // can add various filtering criteria here for debugging purposes...
 
@@ -268,7 +268,7 @@ bool DuplicateNodeRemover::_passesLogMergeFilter(
 }
 
 void DuplicateNodeRemover::_logMergeResult(
-  const long nodeId1, const long nodeId2, OsmMapPtr& map, const bool replaced,
+  const long nodeId1, const long nodeId2, const OsmMapPtr& map, const bool replaced,
   const double distance, const double calcdDistance) const
 {
   if (_passesLogMergeFilter(nodeId1, nodeId2, map))

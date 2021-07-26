@@ -55,11 +55,16 @@ public:
   ~NameCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new NameCriterion(_names, _caseSensitive)); }
+  { return std::make_shared<NameCriterion>(_names, _caseSensitive); }
 
   void setConfiguration(const Settings& conf) override;
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override
+  { return "Identifies elements that contain a specified name"; }
 
   QStringList getNames() const { return _names; }
   bool getCaseSensitive() const { return _caseSensitive; }
@@ -67,12 +72,6 @@ public:
   void setNames(const QStringList& names) { _names = names; }
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
   void setPartialMatch(bool partialMatch) { _partialMatch = partialMatch; }
-
-  QString getName() const override { return className(); }
-  QString getClassName() const override { return className(); }
-  QString toString() const override { return className(); }
-  QString getDescription() const override
-  { return "Identifies elements that contain a specified name"; }
 
 private:
 

@@ -62,10 +62,10 @@ public:
    * @param elementType type of element to retrieve
    * @param pCrit criteria to satisfy
    * @return a collection of numerical element IDs
+   * @todo change this to take in ElementCriterionPtr instead?
    */
   static std::vector<long> findElements(const ConstOsmMapPtr& map, const ElementType& elementType,
                                         ElementCriterion* pCrit);
-
   /**
    * Retrieves the IDs of nodes satifying specified criteria and within a radius of a specified
    * location
@@ -75,10 +75,10 @@ public:
    * @param refCoord the point out from which to search
    * @param maxDistance the furthest distance away from the source point to search
    * @return a collection of numerical node IDs
+   * @todo change this to take in ElementCriterionPtr instead?
    */
-  static std::vector<long> findNodes(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+  static std::vector<long> findNodes(const ConstOsmMapPtr& map, const ElementCriterion* pCrit,
                                      const geos::geom::Coordinate& refCoord, Meters maxDistance);
-
   /**
    * Retrieves the IDs of elements of a given type having a specified tag
    *
@@ -91,7 +91,6 @@ public:
   static std::vector<long> findElementsByTag(const ConstOsmMapPtr& map,
                                              const ElementType& elementType, const QString& key,
                                              const QString& value);
-
   /**
    * Retrieves the IDs of all ways owning a specified node
    *
@@ -102,9 +101,7 @@ public:
   static std::vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
 
   QString getDescription() const override { return "Collects the element IDs visited"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:
@@ -117,7 +114,7 @@ private:
 
   static std::vector<long> _findCloseWays(const ConstOsmMapPtr& map, ConstWayPtr refWay,
                                           Meters maxDistance, bool addError);
-  static std::vector<long> _findElements(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+  static std::vector<long> _findElements(const ConstOsmMapPtr& map, const ElementCriterion* pCrit,
                                          const std::vector<long>& closeElementIds);
 };
 

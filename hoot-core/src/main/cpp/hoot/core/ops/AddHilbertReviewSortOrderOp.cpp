@@ -144,7 +144,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
       LOG_VART(env.get());
       if (env.get() == nullptr)
       {
-        env.reset(new Envelope(*te));
+        env = std::make_shared<Envelope>(*te);
       }
       else
       {
@@ -160,7 +160,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
 
   if (_mapEnvelope.get() == nullptr)
   {
-    _mapEnvelope.reset(new Envelope(CalculateMapBoundsVisitor::getGeosBounds(map)));
+    _mapEnvelope = std::make_shared<Envelope>(CalculateMapBoundsVisitor::getGeosBounds(map));
   }
 
   Coordinate center;

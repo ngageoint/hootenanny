@@ -243,13 +243,14 @@ ElementPtr OsmApiDbSqlChangesetFileWriter::_getChangeElement(ConstElementPtr ele
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      changeElement.reset(new Node(*std::dynamic_pointer_cast<const Node>(element)));
+      changeElement = std::make_shared<Node>(*std::dynamic_pointer_cast<const Node>(element));
       break;
     case ElementType::Way:
-      changeElement.reset(new Way(*std::dynamic_pointer_cast<const Way>(element)));
+      changeElement = std::make_shared<Way>(*std::dynamic_pointer_cast<const Way>(element));
       break;
    case ElementType::Relation:
-      changeElement.reset(new Relation(*std::dynamic_pointer_cast<const Relation>(element)));
+      changeElement =
+        std::make_shared<Relation>(*std::dynamic_pointer_cast<const Relation>(element));
       break;
     default:
       throw HootException("Unknown element type");
@@ -291,7 +292,7 @@ void OsmApiDbSqlChangesetFileWriter::_createNewElement(ConstElementPtr element)
   LOG_VART(changeElement->getVersion());
   QString commentStr = "/* create " + elementTypeStr + " " + QString::number(changeElement->getId());
   commentStr += "*/\n";
-  _outputSql.write((commentStr).toUtf8());
+  _outputSql.write(commentStr.toUtf8());
 
   const QString values = _getInsertValuesStr(changeElement);
   _outputSql.write(
@@ -391,7 +392,7 @@ void OsmApiDbSqlChangesetFileWriter::_updateExistingElement(ConstElementPtr elem
   LOG_VART(changeElement->getVersion());
   QString commentStr = "/* modify " + elementTypeStr + " " + QString::number(changeElement->getId());
   commentStr += "*/\n";
-  _outputSql.write((commentStr).toUtf8());
+  _outputSql.write(commentStr.toUtf8());
 
   // <element-name> table contains all version of all elements of that type in a history, so insert
   // into that table.
@@ -456,7 +457,7 @@ void OsmApiDbSqlChangesetFileWriter::_deleteExistingElement(ConstElementPtr elem
   LOG_VART(changeElement->getVersion());
   QString commentStr = "/* delete " + elementTypeStr + " " + QString::number(changeElement->getId());
   commentStr += "*/\n";
-  _outputSql.write((commentStr).toUtf8());
+  _outputSql.write(commentStr.toUtf8());
 
   //OSM API DB keeps history for all elements, so the existing element in the master table is not
   //modified and a new record is added with the updated version and visible set to false

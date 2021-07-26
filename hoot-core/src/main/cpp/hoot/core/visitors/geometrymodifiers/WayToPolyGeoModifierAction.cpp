@@ -135,8 +135,8 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
   if (isLoop)
   {
     // closed loop, creating a multipolygon
-    WayPtr pPoly0(new Way(Status::Unknown1, pMap->createNextWayId(), -1));
-    WayPtr pPoly1(new Way(Status::Unknown1, pMap->createNextWayId(), -1));
+    WayPtr pPoly0 = std::make_shared<Way>(Status::Unknown1, pMap->createNextWayId(), -1);
+    WayPtr pPoly1 = std::make_shared<Way>(Status::Unknown1, pMap->createNextWayId(), -1);
     for (long i = 0; i < nodeCount; i++)
     {
       addNodeToPoly(polyPositions[0][i], pMap, pPoly0);
@@ -156,10 +156,17 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
     pMap->addElement(pPoly1);
 
     // add relation for multipolygon
-    RelationPtr pRelation(new Relation(Status::Unknown1, pMap->createNextRelationId(), ElementData::CIRCULAR_ERROR_EMPTY, MetadataTags::RelationMultiPolygon()));
+    RelationPtr pRelation =
+      std::make_shared<Relation>(
+        Status::Unknown1, pMap->createNextRelationId(), ElementData::CIRCULAR_ERROR_EMPTY,
+        MetadataTags::RelationMultiPolygon());
     bool poly0isOuter = polyLen[0] > polyLen[1];
-    RelationData::Entry entry0(poly0isOuter ? MetadataTags::RelationOuter() : MetadataTags::RelationInner(), pPoly0->getElementId());
-    RelationData::Entry entry1(poly0isOuter ? MetadataTags::RelationInner() : MetadataTags::RelationOuter(), pPoly1->getElementId());
+    RelationData::Entry entry0(
+      poly0isOuter ? MetadataTags::RelationOuter() : MetadataTags::RelationInner(),
+      pPoly0->getElementId());
+    RelationData::Entry entry1(
+      poly0isOuter ? MetadataTags::RelationInner() : MetadataTags::RelationOuter(),
+      pPoly1->getElementId());
     vector<RelationData::Entry> members;
     members.push_back(entry0);
     members.push_back(entry1);
@@ -169,7 +176,7 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
   else
   {
     // create poly way and add it to map
-    WayPtr pPoly(new Way(Status::Unknown1, pMap->createNextWayId(), -1));
+    WayPtr pPoly = std::make_shared<Way>(Status::Unknown1, pMap->createNextWayId(), -1);
     for (long i = 0; i < nodeCount; i++) addNodeToPoly(polyPositions[0][i], pMap, pPoly);
     for (long i = nodeCount-1; i >= 0; i--) addNodeToPoly(polyPositions[1][i], pMap, pPoly);
 
@@ -186,11 +193,11 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
   return true;
 }
 
-void WayToPolyGeoModifierAction::addNodeToPoly(const CoordinateExt& pos, OsmMap* pMap, WayPtr pPoly) const
+void WayToPolyGeoModifierAction::addNodeToPoly(
+  const CoordinateExt& pos, OsmMap* pMap, WayPtr pPoly) const
 {
   long nodeId = pMap->createNextNodeId();
-  NodePtr pNode(new Node(Status::Unknown1, nodeId, pos));
-  pMap->addElement(pNode);
+  pMap->addElement(std::make_shared<Node>(Status::Unknown1, nodeId, pos));
   pPoly->addNode(nodeId);
 }
 

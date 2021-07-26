@@ -51,22 +51,21 @@ OsmMapPtr MapUtils::getMapSubset(const ConstOsmMapPtr& map, const ElementCriteri
 {
   CopyMapSubsetOp mapCopier(map, filter);
   mapCopier.setCopyChildren(copyChildren);
-  OsmMapPtr output(new OsmMap());
+  OsmMapPtr output = std::make_shared<OsmMap>();
   mapCopier.apply(output);
   return output;
 }
 
 bool MapUtils::mapIsPointsOnly(const OsmMapPtr& map)
 {
-  std::shared_ptr<PointCriterion> pointCrit(new PointCriterion());
+  std::shared_ptr<PointCriterion> pointCrit = std::make_shared<PointCriterion>();
   pointCrit->setOsmMap(map.get());
   return
     (int)FilteredVisitor::getStat(
-      pointCrit,
-      ElementVisitorPtr(new ElementCountVisitor()), map) == (int)map->getElementCount();
+      pointCrit, std::make_shared<ElementCountVisitor>(), map) == (int)map->getElementCount();
 }
 
-void MapUtils::combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes)
+void MapUtils::combineMaps(const OsmMapPtr& map1, const OsmMapPtr& map2, const bool throwOutDupes)
 {
   LOG_VART(map1.get());
   LOG_VART(map2.get());

@@ -55,7 +55,7 @@ public:
   void runCleanNoErrorsTest()
   {
     const QString testName = "runCleanNoErrorsTest";
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm");
     LOG_VARD(map->size());
 
@@ -88,7 +88,7 @@ public:
   void runCleanTest()
   {
     const QString testName = "runCleanTest";
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "/" + testName + "-in.osm");
     LOG_VARD(map->size());
 
@@ -126,7 +126,7 @@ public:
   void runCleanNoDetailTagsTest()
   {
     const QString testName = "runCleanNoDetailTagsTest";
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "/runCleanTest-in.osm");
     LOG_VARD(map->size());
 
@@ -164,7 +164,7 @@ public:
   void runCleanFileTest()
   {
     const QString testName = "runCleanFileTest";
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "/runCleanTest-in.osm");
     LOG_VARD(map->size());
 

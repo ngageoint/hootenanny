@@ -77,12 +77,12 @@ public:
       FileUtils::toLogFormat(output, 25) << "...");
 
     //  Load the tile map ignoring the file IDs
-    OsmMapPtr tile_map(new OsmMap());
+    OsmMapPtr tile_map = std::make_shared<OsmMap>();
     IoUtils::loadMap(tile_map, input1, false);
     //  Don't introduce source:datetime or source:ingest:datetime
     conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
     //  Load the actual map and use the file IDs
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     IoUtils::loadMap(map, input2, true, Status::Unknown1);
     //  Split the map up into smaller maps
     OsmMapSplitter mapSplitter(map, tile_map);

@@ -66,16 +66,8 @@ public:
 
   void setOsmMap(OsmMap* map) override;
 
-  /**
-    @see RdpWayGeneralizer::setEpsilon
-    */
-  void setEpsilon(double epsilon) { _epsilon = epsilon; }
-
-  QString getDescription() const override { return "Simplifies ways by removing nodes"; }
-
   QString getInitStatusMessage() const override
   { return "Generalizing ways..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Generalized " + StringUtils::formatLargeNumber(_numAffected) + " / " +
             StringUtils::formatLargeNumber(_numProcessed) + " ways. Removed " +
@@ -83,11 +75,15 @@ public:
 
   void addCriterion(const ElementCriterionPtr& crit) override;
 
-  void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Simplifies ways by removing nodes"; }
+
+  /**
+    @see RdpWayGeneralizer::setEpsilon
+    */
+  void setEpsilon(double epsilon) { _epsilon = epsilon; }
+  void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
 
 private:
 

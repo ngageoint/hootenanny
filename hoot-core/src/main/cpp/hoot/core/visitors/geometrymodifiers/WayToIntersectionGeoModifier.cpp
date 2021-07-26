@@ -107,12 +107,15 @@ bool WayToIntersectionGeoModifier::processElement(const ElementPtr& pElement, Os
   return true;
 }
 
-void WayToIntersectionGeoModifier::processIntersections(OsmMap* pMap, const WayPtr pWay, vector<IntersectionInfo>& inters) const
+void WayToIntersectionGeoModifier::processIntersections(
+  OsmMap* pMap, const WayPtr pWay, const vector<IntersectionInfo>& inters) const
 {
   for (IntersectionInfo intersInfo : inters)
   {
     // create new node with tags from original way
-    NodePtr pNode(new Node(Status::Unknown1, pMap->createNextNodeId(), intersInfo.intersectionPoint));
+    NodePtr pNode =
+      std::make_shared<Node>(
+        Status::Unknown1, pMap->createNextNodeId(), intersInfo.intersectionPoint);
     pNode->setTags(pWay->getTags());
     pMap->addNode(pNode);
   }

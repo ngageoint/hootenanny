@@ -69,7 +69,6 @@ public:
   virtual void finalize() { }
 
   virtual QList<NetworkEdgeScorePtr> getAllEdgeScores() const = 0;
-
   virtual QList<NetworkVertexScorePtr> getAllVertexScores() const = 0;
 
 protected:

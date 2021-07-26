@@ -52,7 +52,7 @@ _numBuildingPartsProcessed(0)
 void BuildingPartPreMergeCollector::setMap(ConstOsmMapPtr map)
 {
   _map = map;
-  _elementToGeomeryConverter.reset(new ElementToGeometryConverter(_map));
+  _elementToGeomeryConverter = std::make_shared<ElementToGeometryConverter>(_map);
 }
 
 void BuildingPartPreMergeCollector::run()

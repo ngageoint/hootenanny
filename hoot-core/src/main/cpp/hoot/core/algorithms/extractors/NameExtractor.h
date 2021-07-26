@@ -46,20 +46,16 @@ public:
 
   static QString className() { return "hoot::NameExtractor"; }
 
-  QString getClassName() const override { return className(); }
-
-  QString getName() const override;
-
   double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
-
   virtual double extract(const ConstElementPtr& target,
     const ConstElementPtr& candidate) const;
 
   void setStringDistance(const StringDistancePtr &sd) override { _d = sd; }
 
-  QString getDescription() const override
-  { return "Calculates name similarity between features"; }
+  QString getDescription() const override { return "Calculates name similarity between features"; }
+  QString getClassName() const override { return className(); }
+  QString getName() const override;
 
   long getNamesProcessed() const { return _namesProcessed; }
   bool getMatchAttemptMade() const { return _matchAttemptMade; }

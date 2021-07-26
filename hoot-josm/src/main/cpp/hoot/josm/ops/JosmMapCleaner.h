@@ -63,11 +63,6 @@ public:
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
-   * @see ApiEntityInfo
-   */
-  virtual QString getDescription() const { return "Cleans map data using JOSM"; }
-
-  /**
    * @see Configurable
    */
   virtual void setConfiguration(const Settings& conf);
@@ -83,9 +78,18 @@ public:
   void setAddDetailTags(const bool add) { _addDetailTags = add; }
   int getNumFailedCleaningOperations() const { return _numFailedCleaningOperations; }
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getName() const override { return className(); }
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getClassName() const override { return className(); }
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getDescription() const override { return "Cleans map data using JOSM"; }
 
 protected:
 

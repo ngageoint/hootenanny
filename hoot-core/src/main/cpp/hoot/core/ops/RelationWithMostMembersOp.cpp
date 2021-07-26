@@ -62,8 +62,8 @@ void RelationWithMostMembersOp::setCriterion(const QString& criterionClass, cons
   LOG_VARD(criterionClass);
   if (!criterionClass.trimmed().isEmpty())
   {
-    ElementCriterionPtr crit(
-      Factory::getInstance().constructObject<ElementCriterion>(criterionClass.trimmed()));
+    ElementCriterionPtr crit =
+      Factory::getInstance().constructObject<ElementCriterion>(criterionClass.trimmed());
     Configurable* c = dynamic_cast<Configurable*>(crit.get());
     if (c != nullptr)
     {
@@ -129,7 +129,7 @@ void RelationWithMostMembersOp::_setOutput(const long relationId, OsmMapPtr& out
 {
   std::set<ElementId> elementIds;
   elementIds.insert(ElementId(ElementType::Relation, relationId));
-  OsmMapPtr tmpMap(new OsmMap());
+  OsmMapPtr tmpMap = std::make_shared<OsmMap>();
   CopyMapSubsetOp mapCopier(outputMap, elementIds);
   mapCopier.apply(tmpMap);
   outputMap = tmpMap;
@@ -159,7 +159,7 @@ void RelationWithMostMembersOp::apply(std::shared_ptr<OsmMap>& map)
   else
   {
     // output an empty map since we didn't find a relation that satisifes the criteria
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
   }
   LOG_VARD(map->getElementCount());
 }

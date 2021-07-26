@@ -76,8 +76,10 @@ void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes) con
   ConvertUuidToRefVisitor convertUuidToRef;
   map->visitRw(convertUuidToRef);
 
-  // #5891 if the feature is marked as todo then there is no need to conflate & evaluate it.
-  std::shared_ptr<TagCriterion> isTodo(new TagCriterion(MetadataTags::Ref2(), "todo"));
+  // Redmine #5891: if the feature is marked as todo then there is no need to conflate & evaluate
+  // it.
+  std::shared_ptr<TagCriterion> isTodo =
+    std::make_shared<TagCriterion>(MetadataTags::Ref2(), "todo");
   RemoveElementsVisitor remover;
   remover.setRecursive(true);
   remover.addCriterion(isTodo);

@@ -54,16 +54,13 @@ public:
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
   QString getInitStatusMessage() const override
   { return "Updating building outlines..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Updated " + QString::number(_numAffected) + " building outlines"; }
 
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override
   { return "Updates multi-part building outlines"; }
 
@@ -79,7 +76,7 @@ private:
   std::shared_ptr<OsmMap> _map;
   ReviewMarker _reviewMarker;
 
-  void _createOutline(const RelationPtr& building);
+  void _createOutline(const RelationPtr& building) const;
   void _unionOutline(const RelationPtr& building, const ElementPtr& element,
                      std::shared_ptr<geos::geom::Geometry>& outline) const;
 

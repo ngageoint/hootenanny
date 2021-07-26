@@ -66,16 +66,13 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Marking roads that appear to be dual highways..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return "Marked " + StringUtils::formatLargeNumber(_numAffected) + " dual highways.";
   }
 
   QString getDescription() const override { return "Marks dual highways with a custom tag."; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   /**

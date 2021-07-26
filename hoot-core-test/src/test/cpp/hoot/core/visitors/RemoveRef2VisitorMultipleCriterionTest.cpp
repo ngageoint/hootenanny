@@ -62,13 +62,13 @@ public:
 
   void runToyTest1()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveRef2VisitorMultipleCriterionInput.osm");
 
-    ElementCriterionPtr poiCrit(new PoiCriterion);
-    ElementCriterionPtr buildingCrit(new BuildingCriterion(map));
-    ElementCriterionPtr chainCrit(new ChainCriterion(poiCrit, buildingCrit));
+    ElementCriterionPtr chainCrit =
+      std::make_shared<ChainCriterion>(
+        std::make_shared<PoiCriterion>(), std::make_shared<BuildingCriterion>(map));
     RemoveRef2VisitorMultipleCriterion v;
     v.addCriterion(chainCrit);
     map->visitRw(v);
@@ -85,13 +85,13 @@ public:
 
   void runToyTest2()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveRef2VisitorMultipleCriterionInput.osm");
 
-    ElementCriterionPtr poiCrit(new PoiCriterion);
-    ElementCriterionPtr buildingCrit(new BuildingCriterion(map));
-    ElementCriterionPtr chainCrit(new ChainCriterion(buildingCrit, poiCrit));
+    ElementCriterionPtr chainCrit =
+      std::make_shared<ChainCriterion>(
+        std::make_shared<BuildingCriterion>(map), std::make_shared<PoiCriterion>());
     RemoveRef2VisitorMultipleCriterion v;
     v.addCriterion(chainCrit);
     map->visitRw(v);

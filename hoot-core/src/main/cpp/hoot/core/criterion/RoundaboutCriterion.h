@@ -48,8 +48,7 @@ public:
   ~RoundaboutCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new RoundaboutCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<RoundaboutCriterion>(); }
 
   GeometryType getGeometryType() const override { return GeometryType::Line; }
 

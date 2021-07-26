@@ -50,7 +50,7 @@ void TagsJs::contains(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
 
-  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+  const Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
   QString key = toCpp<QString>(args[0]);
 
@@ -110,7 +110,7 @@ void TagsJs::get(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+  const Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
   QString key = str(args[0]->ToString(context).ToLocalChecked());
   if (t.contains(key))
@@ -128,7 +128,7 @@ void TagsJs::getInformationCount(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
 
-  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+  const Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
   args.GetReturnValue().Set(toV8(t.getInformationCount()));
 }
@@ -137,7 +137,7 @@ void TagsJs::getNames(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
 
-  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+  const Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
   args.GetReturnValue().Set(toV8(t.getNames()));
 }
@@ -159,7 +159,7 @@ void TagsJs::toDict(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
 
-  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+  const Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
   args.GetReturnValue().Set(toV8(t));
 }
@@ -168,7 +168,7 @@ void TagsJs::toString(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
 
-  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+  const Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
   args.GetReturnValue().Set(toV8(t.toString()));
 }

@@ -40,11 +40,13 @@ namespace Tgs
 {
   const float BaseRandomForestManager::RF_XML_VERSION = 2.0;
 
-  BaseRandomForestManager::BaseRandomForestManager() : _initialized(false), _trained(false)
+  BaseRandomForestManager::BaseRandomForestManager() :
+  _initialized(false),
+  _trained(false)
   {
     try
     {
-      _data = std::shared_ptr<DataFrame>(new DataFrame);
+      _data = std::make_shared<DataFrame>();
     }
     catch(const Exception & e)
     {
@@ -52,8 +54,8 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::addTrainingVector(std::string classLabel,
-    const std::vector<double>& trainVec) const
+  void BaseRandomForestManager::addTrainingVector(
+    const std::string& classLabel, const std::vector<double>& trainVec) const
   { 
     try
     {
@@ -65,8 +67,9 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::classifyTestVector(std::string objId, std::string objClass,
-    std::vector<double> & dataVector, std::map<std::string, double> & scores)
+  void BaseRandomForestManager::classifyTestVector(
+    const std::string& objId, const std::string& objClass,
+    const std::vector<double>& dataVector, std::map<std::string, double>& scores)
   {
     try
     {
@@ -101,8 +104,8 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::classifyVector(std::string objId,
-    std::vector<double> & dataVector, std::map<std::string, double> & scores)
+  void BaseRandomForestManager::classifyVector(const std::string& objId,
+    const std::vector<double>& dataVector, std::map<std::string, double>& scores)
   {
     try
     {
@@ -125,7 +128,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::exportModel(std::string outputFilePath)
+  void BaseRandomForestManager::exportModel(const std::string& outputFilePath)
   {
     try
     {
@@ -179,7 +182,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::generateRemappedReports(std::string reportName,
+  void BaseRandomForestManager::generateRemappedReports(std::string& reportName,
     std::map<std::string, std::vector<std::string>>& classMap)
   {
     try
@@ -201,7 +204,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::generateReports(std::string filename)
+  void BaseRandomForestManager::generateReports(std::string& filename)
   {
     try
     {
@@ -222,7 +225,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::generateResults(std::string filename)
+  void BaseRandomForestManager::generateResults(const std::string& filename)
   {
     try
     {
@@ -289,7 +292,7 @@ namespace Tgs
             confusionCount[_testClasses[j]][highestScoreName] += 1;
           }
 
-          //Output confusion matrix to file
+          // Output confusion matrix to file
           for (setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
           {
             confStream << * setItr;
@@ -302,7 +305,7 @@ namespace Tgs
 
           confStream.close();
 
-          //Output results to file
+          // Output results to file
           for (unsigned int j = 0; j < _results.size(); j++)
           {
             rsltStream << _testObjectIds[j] << "\t";
@@ -335,7 +338,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::generateTopFactors(std::string basefilename)
+  void BaseRandomForestManager::generateTopFactors(std::string& basefilename)
   {
     try
     {
@@ -391,7 +394,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::getFactorLabels(std::vector<std::string> & factors) const
+  void BaseRandomForestManager::getFactorLabels(std::vector<std::string>& factors) const
   {
     try
     {
@@ -403,7 +406,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::importModel(std::string sourceFile)
+  void BaseRandomForestManager::importModel(const std::string& sourceFile)
   {
     try
     {
@@ -505,8 +508,8 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::init(unsigned int modelMethod,
-    std::vector<std::string> & factorLabels)
+  void BaseRandomForestManager::init(
+    unsigned int modelMethod, const std::vector<std::string> & factorLabels)
   {
     try
     {
@@ -578,7 +581,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::setFactorLabels(std::vector<std::string> & factorLabels) const
+  void BaseRandomForestManager::setFactorLabels(const std::vector<std::string>& factorLabels) const
   {
     try
     {
@@ -674,8 +677,9 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::_classifyBinaryTestVector(std::string objId,
-    std::string objClass, std::vector<double> & dataVector, std::map<std::string, double> & scores)
+  void BaseRandomForestManager::_classifyBinaryTestVector(const std::string& objId,
+    const std::string& objClass, const std::vector<double>& dataVector,
+    std::map<std::string, double>& scores)
   {
     try
     {
@@ -741,8 +745,9 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::_classifyMultiClassTestVector(std::string objId,
-    std::string objClass, std::vector<double> & dataVector, std::map<std::string, double> & scores)
+  void BaseRandomForestManager::_classifyMultiClassTestVector(const std::string& objId,
+    const std::string& objClass, const std::vector<double>& dataVector,
+    std::map<std::string, double>& scores)
   {
     try
     {
@@ -782,8 +787,9 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::_classifyRoundRobinTestVector(std::string objId,
-    std::string objClass, std::vector<double> & dataVector, std::map<std::string, double> & scores)
+  void BaseRandomForestManager::_classifyRoundRobinTestVector(const std::string& objId,
+    const std::string& objClass, const std::vector<double>& dataVector,
+    std::map<std::string, double>& scores)
   {
     try
     {
@@ -832,8 +838,8 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::_classifyMultiClassVector(std::string objId,
-    std::vector<double> & dataVector, std::map<std::string, double> & scores)
+  void BaseRandomForestManager::_classifyMultiClassVector(const std::string& objId,
+    const std::vector<double>& dataVector, std::map<std::string, double>& scores)
   {
     try
     {
@@ -870,8 +876,8 @@ namespace Tgs
   }
 
 
-  void BaseRandomForestManager::_generateRemappedResults(std::string filename,
-    std::map<std::string, std::vector<std::string>> & classMap)
+  void BaseRandomForestManager::_generateRemappedResults(
+    const std::string& filename, std::map<std::string, std::vector<std::string>>& classMap)
   {
     try
     {
@@ -1055,8 +1061,6 @@ namespace Tgs
     try
     {
       std::set<std::string> classNames = _data->getClassLabels();
-      std::set<std::string>::iterator itr;
-      std::set<std::string>::iterator itr2;
 
       unsigned int numClasses = _data->getClassLabels().size();
 
@@ -1064,9 +1068,9 @@ namespace Tgs
       _rfList.resize(numClasses * (numClasses - 1) / 2);
 
       unsigned int itrCtr = 0;
-      for (itr = classNames.begin(); itr != classNames.end(); ++itr)
+      for (std::set<std::string>::iterator itr = classNames.begin(); itr != classNames.end(); ++itr)
       {
-        for (itr2 = itr; itr2 != classNames.end(); ++itr2)
+        for ( std::set<std::string>::iterator itr2 = itr; itr2 != classNames.end(); ++itr2)
         {
           std::string posClass = *itr;
           std::string negClass = *itr2;

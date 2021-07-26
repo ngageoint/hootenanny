@@ -315,9 +315,6 @@ private:
   QMultiHash<long, long> _relationIdsToWayMemberIdsNotPresent;
   QMultiHash<long, long> _relationIdsToRelationMemberIdsNotPresent;
 
-  int _missingNodeCount;
-  int _missingWayCount;
-
   //adds child refs to elements when they aren't present in the source data
   bool _addChildRefsWhenMissing;
   // determines whether missing elements trigger a warning

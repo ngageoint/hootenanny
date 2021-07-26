@@ -330,8 +330,8 @@ bool IoUtils::areValidStreamingOps(const QStringList& ops)
 
       if (Factory::getInstance().hasBase<ElementCriterion>(opName))
       {
-        ElementCriterionPtr criterion(
-          Factory::getInstance().constructObject<ElementCriterion>(opName));
+        ElementCriterionPtr criterion =
+          Factory::getInstance().constructObject<ElementCriterion>(opName);
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != nullptr)
         {
@@ -341,8 +341,8 @@ bool IoUtils::areValidStreamingOps(const QStringList& ops)
       }
       else if (Factory::getInstance().hasBase<ElementVisitor>(opName))
       {
-        ElementVisitorPtr vis(
-          Factory::getInstance().constructObject<ElementVisitor>(opName));
+        ElementVisitorPtr vis =
+          Factory::getInstance().constructObject<ElementVisitor>(opName);
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
         {
@@ -352,8 +352,8 @@ bool IoUtils::areValidStreamingOps(const QStringList& ops)
       }
       else if (Factory::getInstance().hasBase<ConstElementVisitor>(opName))
       {
-        ConstElementVisitorPtr vis(
-          Factory::getInstance().constructObject<ConstElementVisitor>(opName));
+        ConstElementVisitorPtr vis =
+          Factory::getInstance().constructObject<ConstElementVisitor>(opName);
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
         {
@@ -393,8 +393,8 @@ ElementInputStreamPtr IoUtils::getFilteredInputStream(
       if (Factory::getInstance().hasBase<ElementCriterion>(opName))
       {
         LOG_INFO("Initializing operation: " << opName << "...");
-        ElementCriterionPtr criterion(
-          Factory::getInstance().constructObject<ElementCriterion>(opName));
+        ElementCriterionPtr criterion =
+          Factory::getInstance().constructObject<ElementCriterion>(opName);
 
         std::shared_ptr<Configurable> critConfig;
         if (criterion.get())
@@ -407,12 +407,12 @@ ElementInputStreamPtr IoUtils::getFilteredInputStream(
           critConfig->setConfiguration(conf());
         }
 
-        streamToFilter.reset(new ElementCriterionInputStream(streamToFilter, criterion));
+        streamToFilter = std::make_shared<ElementCriterionInputStream>(streamToFilter, criterion);
       }
       else if (Factory::getInstance().hasBase<ElementVisitor>(opName))
       {
         LOG_INFO("Initializing operation: " << opName << "...");
-        ElementVisitorPtr visitor(Factory::getInstance().constructObject<ElementVisitor>(opName));
+        ElementVisitorPtr visitor = Factory::getInstance().constructObject<ElementVisitor>(opName);
 
         std::shared_ptr<Configurable> visConfig;
         if (visitor.get())
@@ -425,7 +425,7 @@ ElementInputStreamPtr IoUtils::getFilteredInputStream(
           visConfig->setConfiguration(conf());
         }
 
-        streamToFilter.reset(new ElementVisitorInputStream(streamToFilter, visitor));
+        streamToFilter = std::make_shared<ElementVisitorInputStream>(streamToFilter, visitor);
       }
       else
       {
@@ -525,11 +525,10 @@ void IoUtils::cropToBounds(
     LOG_INFO(tagger.getInitStatusMessage());
     tagger.apply(map);
     LOG_DEBUG(tagger.getCompletedStatusMessage());
-    inclusionCrit.reset(
-      new ChainCriterion(
-        std::shared_ptr<WayCriterion>(new WayCriterion()),
-        std::shared_ptr<TagKeyCriterion>(
-          new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
+    inclusionCrit =
+      std::make_shared<ChainCriterion>(
+        std::make_shared<WayCriterion>(),
+        std::make_shared<TagKeyCriterion>(MetadataTags::HootConnectedWayOutsideBounds()));
   }
   cropper.setInclusionCriterion(inclusionCrit);
 
@@ -553,11 +552,9 @@ std::shared_ptr<ElementVisitorInputStream> IoUtils::getVisitorInputStream(
   reader->initializePartial();
 
   return
-    std::shared_ptr<ElementVisitorInputStream>(
-      new ElementVisitorInputStream(
-        std::dynamic_pointer_cast<ElementInputStream>(reader),
-        ElementVisitorPtr(
-          Factory::getInstance().constructObject<ElementVisitor>(visitorClassName))));
+    std::make_shared<ElementVisitorInputStream>(
+      std::dynamic_pointer_cast<ElementInputStream>(reader),
+      ElementVisitorPtr(Factory::getInstance().constructObject<ElementVisitor>(visitorClassName)));
 }
 
 bool IoUtils::isUrl(const QString& str)

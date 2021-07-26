@@ -75,7 +75,7 @@ long SuperfluousWayRemover::removeWays(std::shared_ptr<OsmMap>& map)
   return wayRemover.getNumFeaturesAffected();
 }
 
-void SuperfluousWayRemover::_removeWays(std::shared_ptr<OsmMap>& map)
+void SuperfluousWayRemover::_removeWays(const std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
   _numExplicitlyExcluded = 0;

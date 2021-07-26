@@ -58,7 +58,7 @@ public:
     OsmMapWriterFactory::write(
       GeometryUtils::createMapFromBounds(bounds),
       _outputPath + "/runInBoundsStrictTest-bounds.osm");
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", true);
 
     InBoundsCriterion uut(true);
@@ -76,7 +76,7 @@ public:
     OsmMapWriterFactory::write(
       GeometryUtils::createMapFromBounds(bounds),
       _outputPath + "/runInBoundsLenientTest-bounds.osm");
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", true);
 
     InBoundsCriterion uut(false);
@@ -95,7 +95,7 @@ public:
     OsmMapWriterFactory::write(
       GeometryUtils::createMapFromBounds(bounds),
       _outputPath + "/runOutOfBoundsStrictTest-bounds.osm");
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", true);
 
     InBoundsCriterion uut(true);
@@ -114,7 +114,7 @@ public:
     OsmMapWriterFactory::write(
       GeometryUtils::createMapFromBounds(bounds),
       _outputPath + "/runOutOfBoundsLenientTest-bounds.osm");
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", true);
 
     InBoundsCriterion uut(false);

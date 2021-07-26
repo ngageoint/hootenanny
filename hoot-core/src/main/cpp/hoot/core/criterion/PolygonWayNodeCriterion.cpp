@@ -38,13 +38,13 @@ HOOT_FACTORY_REGISTER(ElementCriterion, PolygonWayNodeCriterion)
 PolygonWayNodeCriterion::PolygonWayNodeCriterion() :
 WayNodeCriterion()
 {
-  _parentCriterion.reset(new PolygonCriterion());
+  _parentCriterion = std::make_shared<PolygonCriterion>();
 }
 
 PolygonWayNodeCriterion::PolygonWayNodeCriterion(ConstOsmMapPtr map) :
 WayNodeCriterion(map)
 {
-  _parentCriterion.reset(new PolygonCriterion(_map));
+  _parentCriterion = std::make_shared<PolygonCriterion>(_map);
 }
 
 void PolygonWayNodeCriterion::setOsmMap(const OsmMap* map)
@@ -52,7 +52,7 @@ void PolygonWayNodeCriterion::setOsmMap(const OsmMap* map)
   _map = map->shared_from_this();
   if (_parentCriterion)
   {
-    _parentCriterion.reset(new PolygonCriterion(_map));
+    _parentCriterion = std::make_shared<PolygonCriterion>(_map);
   }
 }
 

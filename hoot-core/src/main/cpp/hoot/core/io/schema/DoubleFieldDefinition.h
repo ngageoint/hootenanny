@@ -49,17 +49,13 @@ public:
   QVariant getDefaultValue() const override;
 
   double getMaxValue() const { return _max; }
-
   double getMinValue() const { return _min; }
 
   bool hasDefaultValue() const override;
-
   bool hasEnumeratedValue(double v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
 
   void setDefaultValue(double v) { _defaultValue = v; }
-
   void setMaxValue(double max) { _max = max; }
-
   void setMinValue(double min) { _min = min; }
 
   QString toString() const override;

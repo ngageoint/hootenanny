@@ -110,7 +110,7 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
   _criteria.reset();
   if (!criteria.isEmpty())
   {
-    _criteria.reset(new OrCriterion());
+    _criteria = std::make_shared<OrCriterion>();
     for (int i = 0; i < criteria.size(); i++)
     {
       const QString critName = criteria.at(i).trimmed();
@@ -131,8 +131,7 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
         }
 
         ElementCriterionPtr crit =
-          std::shared_ptr<ElementCriterion>(
-            Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
+          Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed());
         LOG_VART(crit.get());
 
         std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
@@ -210,10 +209,10 @@ void RubberSheet::apply(std::shared_ptr<OsmMap>& map)
   }
   _numProcessed = map->getWayCount();
   //  Cache the rubbersheet for use later
-  map->setCachedRubberSheet(std::shared_ptr<RubberSheet>(this->clone()));
+  map->setCachedRubberSheet(this->clone());
 }
 
-bool RubberSheet::_calcAndApplyTransform(OsmMapPtr& map)
+bool RubberSheet::_calcAndApplyTransform(const OsmMapPtr& map)
 {
   LOG_INFO(
     "Rubber sheeting map having " <<
@@ -248,9 +247,9 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   std::shared_ptr<CopyMapSubsetOp> mapCopier;
 
   // copy out elements meeting the filter criteria into a map
-  OsmMapPtr toModify(new OsmMap());
+  OsmMapPtr toModify = std::make_shared<OsmMap>();
   LOG_VARD(_criteria->toString());
-  mapCopier.reset(new CopyMapSubsetOp(map, _criteria));
+  mapCopier = std::make_shared<CopyMapSubsetOp>(map, _criteria);
   mapCopier->apply(toModify);
   LOG_DEBUG(
     "Element count for map being modified: " <<
@@ -274,8 +273,8 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   OsmMapWriterFactory::writeDebugMap(toModify, className(), "to-modify");
 
   // copy out elements not meeting filter criteria into another map
-  OsmMapPtr toNotModify(new OsmMap());
-  mapCopier.reset(new CopyMapSubsetOp(map, NotCriterionPtr(new NotCriterion(_criteria))));
+  OsmMapPtr toNotModify = std::make_shared<OsmMap>();
+  mapCopier = std::make_shared<CopyMapSubsetOp>(map, std::make_shared<NotCriterion>(_criteria));
   mapCopier->apply(toNotModify);
   LOG_DEBUG(
     "Element count for map not being modified: " <<
@@ -307,7 +306,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   }
 }
 
-bool RubberSheet::applyTransform(std::shared_ptr<OsmMap>& map)
+bool RubberSheet::applyTransform(const OsmMapPtr& map)
 {
   LOG_DEBUG("Applying transform...");
 
@@ -367,12 +366,12 @@ bool RubberSheet::applyTransform(std::shared_ptr<OsmMap>& map)
 
 std::shared_ptr<DataFrame> RubberSheet::_buildDataFrame(Status s) const
 {
-  std::shared_ptr<DataFrame> df(new DataFrame());
+  std::shared_ptr<DataFrame> df = std::make_shared<DataFrame>();
   vector<string> labels;
-  labels.push_back("x");
-  labels.push_back("y");
-  labels.push_back("dx");
-  labels.push_back("dy");
+  labels.emplace_back("x");
+  labels.emplace_back("y");
+  labels.emplace_back("dx");
+  labels.emplace_back("dy");
   vector<int> types(4, DataFrame::Numerical);
   df->setFactorLabels(labels);
   df->setFactorTypes(types);
@@ -451,11 +450,11 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
     }
     candidate->setMaxAllowedPerLoopOptimizationIterations(maxOptIterations);
     vector<string> ind;
-    ind.push_back("x");
-    ind.push_back("y");
+    ind.emplace_back("x");
+    ind.emplace_back("y");
     vector<string> dep;
-    dep.push_back("dx");
-    dep.push_back("dy");
+    dep.emplace_back("dx");
+    dep.emplace_back("dy");
 
     candidate->setData(df);
     candidate->setIndependentColumns(ind);
@@ -480,12 +479,12 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
     throw HootException("Unable to determine rubber sheeting interpolation candidate.");
   }
 
-  LOG_DEBUG("Best candidate: " << bestCandidate->toString());
+  LOG_INFO("Using interpolator: " << bestCandidate->toString());
 
   return bestCandidate;
 }
 
-bool RubberSheet::calculateTransform(std::shared_ptr<OsmMap>& map)
+bool RubberSheet::calculateTransform(const OsmMapPtr& map)
 {
   LOG_DEBUG("Calculating transform...");
 
@@ -690,13 +689,13 @@ std::shared_ptr<Interpolator> RubberSheet::_readInterpolator(QIODevice& is)
   QDataStream ds(&is);
   QString projStr;
   ds >> projStr;
-  _projection.reset(new OGRSpatialReference());
+  _projection = std::make_shared<OGRSpatialReference>();
   _projection->importFromProj4(projStr.toUtf8().data());
 
   QString interpolatorClass;
   ds >> interpolatorClass;
-  std::shared_ptr<Interpolator> result;
-  result.reset(Factory::getInstance().constructObject<Interpolator>(interpolatorClass));
+  std::shared_ptr<Interpolator> result =
+    Factory::getInstance().constructObject<Interpolator>(interpolatorClass);
   result->readInterpolator(is);
   return result;
 }

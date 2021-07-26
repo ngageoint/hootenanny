@@ -47,7 +47,7 @@ namespace Tgs
 RStarTree::RStarTree(const std::shared_ptr<PageStore>& ps, int dimensions)
   : _store(dimensions, ps)
 {
-  RTreeNode* root;
+  const RTreeNode* root;
 
   if (ps->getPageCount() > 0)
   {
@@ -102,11 +102,6 @@ int RStarTree::_calculateNodeLevel(const RTreeNode* node) const
     node = _store.getNode(node->getParentId());
   }
   return level;
-}
-
-void RStarTree::cleanTree() const
-{
-  //_store.checkThresholdAndFlush();
 }
 
 void RStarTree::_chooseSplitAxis(BoxVector& boxes) const
@@ -195,7 +190,7 @@ RTreeNode* RStarTree::_chooseSubTree(const Box& b, int level)
     int id;
 
     // if the childpointers in N point to leaves
-    RTreeNode* firstChild = _store.getNode(N ->getChildNodeId(0));
+    const RTreeNode* firstChild = _store.getNode(N ->getChildNodeId(0));
     if (firstChild->isLeafNode())
     {
       // determine the minimum overlap cost
@@ -220,7 +215,7 @@ RTreeNode* RStarTree::_chooseSubTree(const Box& b, int level)
   return N ;
 }
 
-int RStarTree::_findLeastEnlargement(RTreeNode* node, const Box& b) const
+int RStarTree::_findLeastEnlargement(const RTreeNode* node, const Box& b) const
 {
   double minExpansion = DBL_MAX;
   int minId = -1;
@@ -236,7 +231,7 @@ int RStarTree::_findLeastEnlargement(RTreeNode* node, const Box& b) const
   return minId;
 }
 
-int RStarTree::_findLeastOverlapEnlargement(RTreeNode* node, const Box& b) const
+int RStarTree::_findLeastOverlapEnlargement(const RTreeNode* node, const Box& b) const
 {
   double minOverlapExpansion = DBL_MAX;
   int minId = -1;

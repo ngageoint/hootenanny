@@ -112,13 +112,13 @@ public:
     writer.setPreserveVersionOnInsert(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr n1(new Node(Status::Unknown1, -1, 0.0, 0.0, 10.0));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, -1, 0.0, 0.0, 10.0);
     n1->setTag("note", "n1',\n");
-    NodePtr n2(new Node(Status::Unknown2, -2, 0.1, 0.0, 11.0));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown2, -2, 0.1, 0.0, 11.0);
     n2->setTag("note", "n2\"");
-    NodePtr n3(new Node(Status::Conflated, -3, 0.2, 0.0, 12.0));
+    NodePtr n3 = std::make_shared<Node>(Status::Conflated, -3, 0.2, 0.0, 12.0);
     n3->setTag("note", "n3\\");
     map->addNode(n1);
     map->addNode(n2);
@@ -148,30 +148,31 @@ public:
     writer.setPreserveVersionOnInsert(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 10.0);
     n1->setTag("note", "n1");
-    NodePtr n2(new Node(Status::Unknown2, 2, 0.1, 0.0, 11.0));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0.1, 0.0, 11.0);
     n2->setTag("note", "n2");
-    NodePtr n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
+    NodePtr n3 = std::make_shared<Node>(Status::Conflated, 3, 0.2, 0.0, 12.0);
     n3->setTag("note", "n3");
     map->addNode(n1);
     map->addNode(n2);
     map->addNode(n3);
 
-    WayPtr w1(new Way(Status::Unknown1, 1, 13.0));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 13.0);
     w1->addNode(1);
     w1->addNode(2);
     w1->setTag("note", "w1");
-    WayPtr w2(new Way(Status::Unknown2, 2, 14.0));
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown2, 2, 14.0);
     w2->addNode(2);
     w2->addNode(3);
     w2->setTag("note", "w2");
     map->addWay(w1);
     map->addWay(w2);
 
-    RelationPtr r1(new Relation(Status::Unknown1, 1, 15.0, MetadataTags::RelationCollection()));
+    RelationPtr r1 =
+      std::make_shared<Relation>(Status::Unknown1, 1, 15.0, MetadataTags::RelationCollection());
     r1->addElement("n1", n1->getElementId());
     r1->addElement("w1", w1->getElementId());
     r1->setTag("note", "r1");
@@ -261,36 +262,38 @@ public:
     writer.setPreserveVersionOnInsert(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr n1(new Node(Status::Unknown1, -1, 0.0, 0.0, 10.0));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, -1, 0.0, 0.0, 10.0);
     n1->setTag("note", "n1");
-    NodePtr n2(new Node(Status::Unknown2, -2, 0.1, 0.0, 11.0));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown2, -2, 0.1, 0.0, 11.0);
     n2->setTag("note", "n2");
-    NodePtr n3(new Node(Status::Conflated, -3, 0.2, 0.0, 12.0));
+    NodePtr n3 = std::make_shared<Node>(Status::Conflated, -3, 0.2, 0.0, 12.0);
     n3->setTag("note", "n3");
     map->addNode(n1);
     map->addNode(n2);
     map->addNode(n3);
 
-    WayPtr w1(new Way(Status::Unknown1, -1, 13.0));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, -1, 13.0);
     w1->addNode(-1);
     w1->addNode(-2);
     w1->setTag("note", "w1");
-    WayPtr w2(new Way(Status::Unknown2, -2, 14.0));
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown2, -2, 14.0);
     w2->addNode(-2);
     w2->addNode(-3);
     w2->setTag("note", "w2");
     map->addWay(w1);
     map->addWay(w2);
 
-    RelationPtr r1(new Relation(Status::Unknown1, -1, 15.0, MetadataTags::RelationCollection()));
+    RelationPtr r1 =
+      std::make_shared<Relation>(Status::Unknown1, -1, 15.0, MetadataTags::RelationCollection());
     r1->addElement("n1", n1->getElementId());
     r1->addElement("w1", w1->getElementId());
     r1->setTag("note", "r1");
     map->addRelation(r1);
 
-    RelationPtr r2(new Relation(Status::Unknown1, -2, 15.0, MetadataTags::RelationCollection()));
+    RelationPtr r2 =
+      std::make_shared<Relation>(Status::Unknown1, -2, 15.0, MetadataTags::RelationCollection());
     r2->addElement("r1", r1->getElementId());
     r2->setTag("note", "r2");
     map->addRelation(r2);
@@ -362,8 +365,8 @@ public:
     writer.setIncludeDebug(true);
     writer.setPreserveVersionOnInsert(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    OsmMapPtr map(new OsmMap());
-    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 10.0);
     n1->setTag("note", "n1");
     map->addNode(n1);
     writer.write(map);
@@ -403,8 +406,8 @@ public:
     setUpTest("ServiceHootApiDbWriterTest-twoMapsSameNameSameUserOverwriteDisabledTest");
 
     // create a map
-    OsmMapPtr map1(new OsmMap());
-    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    OsmMapPtr map1 = std::make_shared<OsmMap>();
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 10.0);
     n1->setTag("note", "n1");
     map1->addNode(n1);
 
@@ -420,8 +423,8 @@ public:
     writer.close();
 
     //create a second map
-    OsmMapPtr map2(new OsmMap());
-    NodePtr n2(new Node(Status::Unknown1, 2, 0.0, 0.0, 10.0));
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0.0, 0.0, 10.0);
     n2->setTag("note", "n2");
     map2->addNode(n2);
 
@@ -451,8 +454,8 @@ public:
     setUpTest("ServiceHootApiDbWriterTest-twoMapsSameNameSameUserOverwriteEnabledTest");
 
     // create a map
-    OsmMapPtr map(new OsmMap());
-    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 10.0);
     n1->setTag("note", "n1");
     map->addNode(n1);
 
@@ -468,8 +471,8 @@ public:
     writer.close();
 
     //create a second map
-    OsmMapPtr map2(new OsmMap());
-    NodePtr n2(new Node(Status::Unknown1, 2, 0.0, 0.0, 10.0));
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0.0, 0.0, 10.0);
     n2->setTag("note", "n2");
     map2->addNode(n2);
 
@@ -512,8 +515,8 @@ public:
     db.close();
 
     // create a map
-    OsmMapPtr map(new OsmMap());
-    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 10.0);
     n1->setTag("note", "n1");
     map->addNode(n1);
 
@@ -570,33 +573,34 @@ public:
     writer.setPreserveVersionOnInsert(true);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 10.0);
     n1->setTag("note", "n1");
-    NodePtr n2(new Node(Status::Unknown2, 2, 0.1, 0.0, 11.0));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0.1, 0.0, 11.0);
     n2->setTag("note", "n2");
     n2->setVersion(2);
-    NodePtr n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
+    NodePtr n3 = std::make_shared<Node>(Status::Conflated, 3, 0.2, 0.0, 12.0);
     n3->setTag("note", "n3");
     n3->setVersion(1);
     map->addNode(n1);
     map->addNode(n2);
     map->addNode(n3);
 
-    WayPtr w1(new Way(Status::Unknown1, 1, 13.0));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 13.0);
     w1->addNode(1);
     w1->addNode(2);
     w1->setTag("note", "w1");
     w1->setVersion(3);
-    WayPtr w2(new Way(Status::Unknown2, 2, 14.0));
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown2, 2, 14.0);
     w2->addNode(2);
     w2->addNode(3);
     w2->setTag("note", "w2");
     map->addWay(w1);
     map->addWay(w2);
 
-    RelationPtr r1(new Relation(Status::Unknown1, 1, 15.0, MetadataTags::RelationCollection()));
+    RelationPtr r1 =
+      std::make_shared<Relation>(Status::Unknown1, 1, 15.0, MetadataTags::RelationCollection());
     r1->addElement("n1", n1->getElementId());
     r1->addElement("w1", w1->getElementId());
     r1->setTag("note", "r1");

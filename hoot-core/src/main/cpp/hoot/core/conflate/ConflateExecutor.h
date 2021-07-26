@@ -65,7 +65,7 @@ public:
    * @param input2 URL of second map to conflate
    * @param outputPath URL to write conflated output
    */
-  void conflate(const QString& input1, const QString& input2, QString& output);
+  void conflate(const QString& input1, const QString& input2, const QString& output);
 
   void setIsDiffConflate(bool isDiffConflate) { _isDiffConflate = isDiffConflate; }
   void setDiffConflateEnableTags(bool enable) { if (enable) _diffConflator.enableTags(); }
@@ -110,10 +110,11 @@ private:
 
   Tgs::Timer _taskTimer;
 
-  void _initConfig();
+  void _initConfig(const QString& output);
   void _updateConfigOptionsForAttributeConflation() const;
   void _updateConfigOptionsForDifferentialConflation() const;
   void _updateConfigOptionsForBounds() const;
+  void _updateTranslationDirection(const QString& output) const;
   void _disableRoundaboutRemoval() const;
   void _checkForTagValueTruncationOverride();
 
@@ -121,15 +122,15 @@ private:
   float _getJobPercentComplete(const int currentTaskNum) const;
   float _getTaskWeight() const;
 
-  void _load(const QString& input1, const QString& input2, OsmMapPtr& map,
-             const bool isChangesetOut);
+  void _load(
+    const QString& input1, const QString& input2, const OsmMapPtr& map, const bool isChangesetOut);
 
   void _runConflate(OsmMapPtr& map);
 
   void _runConflateOps(OsmMapPtr& map, const bool runPre);
 
-  void _writeOutput(OsmMapPtr& map, QString& output, const bool isChangesetOutput);
-  void _writeStats(OsmMapPtr& map, const CalculateStatsOp& input1Cso,
+  void _writeOutput(const OsmMapPtr& map, const QString& output, const bool isChangesetOutput);
+  void _writeStats(const OsmMapPtr& map, const CalculateStatsOp& input1Cso,
                    const CalculateStatsOp& input2Cso, const QString& outputFileName);
   void _writeChangesetStats();
 };

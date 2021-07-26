@@ -101,7 +101,7 @@ bool TagUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
 }
 
 bool TagUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
-                                     const std::set<ElementId>& elementIds, OsmMapPtr& map)
+                                     const std::set<ElementId>& elementIds, const OsmMapPtr& map)
 {
   std::vector<ElementPtr> elements;
   for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
@@ -112,7 +112,7 @@ bool TagUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
 }
 
 bool TagUtils::allElementsHaveAnyTagKey(const QStringList& tagKeys,
-                                        const std::set<ElementId>& elementIds, OsmMapPtr& map)
+                                        const std::set<ElementId>& elementIds, const OsmMapPtr& map)
 {
   std::vector<ElementPtr> elements;
   for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
@@ -123,7 +123,7 @@ bool TagUtils::allElementsHaveAnyTagKey(const QStringList& tagKeys,
 }
 
 bool TagUtils::anyElementsHaveAnyTagKey(const QStringList& tagKeys,
-                                        const std::set<ElementId>& elementIds, OsmMapPtr& map)
+                                        const std::set<ElementId>& elementIds, const OsmMapPtr& map)
 {
   std::vector<ElementPtr> elements;
   for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)

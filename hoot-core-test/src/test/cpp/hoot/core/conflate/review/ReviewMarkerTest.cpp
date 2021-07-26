@@ -58,10 +58,10 @@ public:
 
   void runNeedsReviewTest()
   {
-    OsmMapPtr map(new OsmMap());
-    ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
-    ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
-    ElementPtr n3(new Node(Status::Unknown2, 3, 0, 0, 0));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    ElementPtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
+    ElementPtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0, 0, 0);
+    ElementPtr n3 = std::make_shared<Node>(Status::Unknown2, 3, 0, 0, 0);
 
     // set the uuids so they don't change with each test
     n1->getTags().set("uuid", "n1");
@@ -90,9 +90,9 @@ public:
 
   void runSimpleTest()
   {
-    OsmMapPtr map(new OsmMap());
-    ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
-    ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    ElementPtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
+    ElementPtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0, 0, 0);
 
     // set the uuids so they don't change with each test
     n1->getTags().set("uuid", "n1");
@@ -120,11 +120,11 @@ public:
    */
   void runMultipleScoresTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     DisableLog dl;
 
-    ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
-    ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
+    ElementPtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
+    ElementPtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0, 0, 0);
 
     // set the uuids so they don't change with each test
     n1->getTags().set("uuid", "n1");
@@ -150,10 +150,10 @@ public:
 
   void runAddReviewTagsToFeaturesTest()
   {
-    OsmMapPtr map(new OsmMap());
-    ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
-    ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
-    ElementPtr n3(new Node(Status::Unknown2, 3, 0, 0, 0));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    ElementPtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
+    ElementPtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0, 0, 0);
+    ElementPtr n3 = std::make_shared<Node>(Status::Unknown2, 3, 0, 0, 0);
 
     // set the uuids so they don't change with each test
     n1->getTags().set("uuid", "n1");

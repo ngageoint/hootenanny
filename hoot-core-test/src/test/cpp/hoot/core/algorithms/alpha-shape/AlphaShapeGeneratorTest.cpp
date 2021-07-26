@@ -70,7 +70,7 @@ public:
   void runBasicTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", map);
 
@@ -88,7 +88,7 @@ public:
   void runBufferTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", map);
 
@@ -106,7 +106,7 @@ public:
   void runNegativeBufferTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", map);
 
@@ -125,7 +125,7 @@ public:
   void runAutoRetryTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "AlphaShapeGeneratorAutoRetryTest-in.osm", map);
 
@@ -143,7 +143,7 @@ public:
   void runManualCoverTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "AlphaShapeGeneratorManualCoverTest-in.osm", map);
 

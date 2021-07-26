@@ -46,24 +46,21 @@ public:
   static QString className() { return "hoot::JsFunctionCriterion"; }
 
   JsFunctionCriterion() = default;
+  JsFunctionCriterion(const v8::Persistent<v8::Function>& func)
+  { _func.Reset(v8::Isolate::GetCurrent(), func); }
   ~JsFunctionCriterion() = default;
 
   void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) override
   { _func.Reset(isolate, func); }
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new JsFunctionCriterion(_func)); }
+  ElementCriterionPtr clone() override { return std::make_shared<JsFunctionCriterion>(_func); }
 
   QString getDescription() const override { return ""; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
 
 private:
-
-  JsFunctionCriterion(v8::Persistent<v8::Function>& func)
-  { _func.Reset(v8::Isolate::GetCurrent(), func); }
 
   v8::Persistent<v8::Function> _func;
 };

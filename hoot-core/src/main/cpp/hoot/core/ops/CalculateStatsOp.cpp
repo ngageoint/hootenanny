@@ -58,7 +58,6 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, CalculateStatsOp)
 
 CalculateStatsOp::CalculateStatsOp(QString mapName, bool inputIsConflatedMapOutput) :
-  _pConf(&conf()),
   _mapName(mapName),
   _quick(false),
   _inputIsConflatedMapOutput(inputIsConflatedMapOutput),
@@ -70,13 +69,13 @@ CalculateStatsOp::CalculateStatsOp(QString mapName, bool inputIsConflatedMapOutp
   _numInterpretStatVisCacheHits(0),
   _numGenerateFeatureStatCalls(0)
 {
+  setConfiguration(conf());
   _initConflatableFeatureCounts();
   _readGenericStatsConfiguration();
 }
 
 CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapName,
                                    bool inputIsConflatedMapOutput) :
-  _pConf(&conf()),
   _criterion(criterion),
   _mapName(mapName),
   _quick(false),
@@ -88,24 +87,22 @@ CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapNam
   _numInterpretStatVisCacheHits(0),
   _numGenerateFeatureStatCalls(0)
 {
-  LOG_VART(_inputIsConflatedMapOutput);
-
+  setConfiguration(conf());
   _initConflatableFeatureCounts();
   _readGenericStatsConfiguration();
 }
 
 void CalculateStatsOp::setConfiguration(const Settings& conf)
 {
-  _pConf = &conf;
+  ConfigOptions opts = ConfigOptions(conf);
+  _statsFileName = opts.getStatsGenericDataFile();
 }
 
 void CalculateStatsOp::_readGenericStatsConfiguration()
 {
   // read generic stats from json file
-  ConfigOptions opts = ConfigOptions(*_pConf);
-  QString statsFileName = opts.getStatsGenericDataFile();
   bpt::ptree propPtree;
-  bpt::read_json(statsFileName.toLatin1().constData(), propPtree );
+  bpt::read_json(_statsFileName.toLatin1().constData(), propPtree );
 
   _quickStatData.clear();
   _slowStatData.clear();
@@ -131,7 +128,7 @@ void CalculateStatsOp::_readGenericStatsConfiguration()
     else
     {
       throw HootException(
-        "Invalid stats data list name '" + listType.first + "' in " + statsFileName.toStdString() +
+        "Invalid stats data list name '" + listType.first + "' in " + _statsFileName.toStdString() +
         ". Allowed: 'quick' or 'slow'.");
     }
 
@@ -159,14 +156,14 @@ void CalculateStatsOp::_readGenericStatsConfiguration()
           {
             throw HootException(
               "Invalid stats data field '" + val.toStdString() + "' in " +
-              statsFileName.toStdString());
+              _statsFileName.toStdString());
           }
         }
         else
         {
           throw HootException(
             "Invalid stats data field '" + val.toStdString() + "' in " +
-            statsFileName.toStdString());
+            _statsFileName.toStdString());
         }
       }
 
@@ -175,7 +172,7 @@ void CalculateStatsOp::_readGenericStatsConfiguration()
   }
 }
 
-shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
+shared_ptr<MatchCreator> CalculateStatsOp::_getMatchCreator(
   const vector<shared_ptr<MatchCreator>>& matchCreators, const QString& matchCreatorName,
   CreatorDescription::BaseFeatureType& featureType) const
 {
@@ -192,7 +189,7 @@ shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
       {
         featureType = descIt->getBaseFeatureType();
         LOG_VART(featureType);
-        return (*matchIt);
+        return *matchIt;
       }
     }
   }
@@ -352,16 +349,16 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     // they haven't been moved to the generic stats.
 
     const double featureCount =
-      _getApplyVisitor(new FeatureCountVisitor(), "Total Features");
+      _getApplyVisitor(std::make_shared<FeatureCountVisitor>(), "Total Features");
     _addStat("Total Features", featureCount);
 
     double conflatedFeatureCount =
       _applyVisitor(
-        new StatusCriterion(Status::Conflated), new FeatureCountVisitor(),
-        "Conflated Feature Count");
+        std::make_shared<StatusCriterion>(Status::Conflated),
+        std::make_shared<FeatureCountVisitor>(), "Conflated Feature Count");
 
     // We're tailoring the stats to whether the map being examined is the input to a conflation job
-    // or the output from a conflation job.  When the stats option is called from the conflate
+    // or the output from a conflation job. When the stats option is called from the conflate
     // command, this is accomplished by allowing the conflate command to notify this op which kind
     // of map is being examined. When the stats command is called by itself there is no mechanism
     // for doing that, so we're assuming if there are any conflated features in the map that the
@@ -378,12 +375,10 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     double conflatableFeatureCount =
       _applyVisitor(
         FilteredVisitor(
-          ChainCriterion(
-            ElementCriterionPtr(
-              new NotCriterion(new StatusCriterion(Status::Conflated))),
-            ElementCriterionPtr(
-              new NotCriterion(new NeedsReviewCriterion(_constMap)))),
-          ConstElementVisitorPtr(new MatchCandidateCountVisitor(matchCreators))),
+          std::make_shared<ChainCriterion>(
+            std::make_shared<NotCriterion>(std::make_shared<StatusCriterion>(Status::Conflated)),
+            std::make_shared<NotCriterion>(std::make_shared<NeedsReviewCriterion>(_constMap))),
+          std::make_shared<MatchCandidateCountVisitor>(matchCreators)),
         matchCandidateCountsData,
         "Conflatable Feature Count");
     LOG_VARD(matchCreators.size());
@@ -397,15 +392,18 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     {
       poisMergedIntoPolys =
         _getApplyVisitor(
-          new SumNumericTagsVisitor(QStringList(MetadataTags::HootPoiPolygonPoisMerged())),
+          std::make_shared<SumNumericTagsVisitor>(
+            QStringList(MetadataTags::HootPoiPolygonPoisMerged())),
           "POIs Merged Into Polygons");
       poisMergedIntoPolysFromMap1 =
         _getApplyVisitor(
-          new SumNumericTagsVisitor(QStringList(MetadataTags::HootPoiPolygonPoisMerged1())),
+          std::make_shared<SumNumericTagsVisitor>(
+            QStringList(MetadataTags::HootPoiPolygonPoisMerged1())),
           "Map 1 POIs Merged Into Polygons");
       poisMergedIntoPolysFromMap2 =
         _getApplyVisitor(
-          new SumNumericTagsVisitor(QStringList(MetadataTags::HootPoiPolygonPoisMerged2())),
+          std::make_shared<SumNumericTagsVisitor>(
+            QStringList(MetadataTags::HootPoiPolygonPoisMerged2())),
           "Map 2 POIs Merged Into Polygons");
       // We need to add any pois that may have been merged into polygons by poi/poly into the total
       // Conflated feature count.
@@ -420,17 +418,19 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     }
     _addStat("Total Conflatable Features", conflatableFeatureCount);
     _addStat("Percentage of Total Features Conflatable",
-             (conflatableFeatureCount / (double)featureCount) * 100.0);
+             (conflatableFeatureCount / featureCount) * 100.0);
     const double numFeaturesMarkedForReview =
       _applyVisitor(
-        new NeedsReviewCriterion(_constMap), new FeatureCountVisitor(), "Reviewable Feature Count");
+        std::make_shared<NeedsReviewCriterion>(_constMap), std::make_shared<FeatureCountVisitor>(),
+        "Reviewable Feature Count");
 
     const double numReviewsToBeMade =
-      _getApplyVisitor(new CountUniqueReviewsVisitor(), "Number of Reviews");
+      _getApplyVisitor(std::make_shared<CountUniqueReviewsVisitor>(), "Number of Reviews");
 
     const double untaggedFeatureCount =
       _applyVisitor(
-        new NoInformationCriterion(), new FeatureCountVisitor(), "No Information Feature Count");
+        std::make_shared<NoInformationCriterion>(), std::make_shared<FeatureCountVisitor>(),
+        "No Information Feature Count");
     _addStat("Untagged Features", untaggedFeatureCount);
     long unconflatableFeatureCount = -1.0;
     if (!_inputIsConflatedMapOutput)
@@ -446,7 +446,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     }
     _addStat("Total Unconflatable Features", unconflatableFeatureCount);
     _addStat("Percentage of Total Features Unconflatable",
-             ((double)unconflatableFeatureCount / (double)featureCount) * 100.0);
+             ((double)unconflatableFeatureCount / featureCount) * 100.0);
 
     _addStat("Match Creators", matchCreators.size());
 
@@ -461,7 +461,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       LOG_VARD(matchCreatorName);
       CreatorDescription::BaseFeatureType featureType = CreatorDescription::Unknown;
       /*shared_ptr<MatchCreator> matchCreator =*/
-        getMatchCreator(matchCreators, iterator.key(), featureType);
+        _getMatchCreator(matchCreators, iterator.key(), featureType);
 
       double conflatableFeatureCountForFeatureType = 0.0;
       if (!_inputIsConflatedMapOutput)
@@ -483,7 +483,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
           // instead of FeatureCountVisitor.
           conflatablePolyCount =
             _applyVisitor(
-              new PoiPolygonPolyCriterion(), new ElementCountVisitor(),
+              std::make_shared<PoiPolygonPolyCriterion>(), std::make_shared<ElementCountVisitor>(),
               "Conflatable Polygon Count");
         }
         _addStat("Polygons Conflatable by: " + matchCreatorName, conflatablePolyCount);
@@ -496,7 +496,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
           // instead of FeatureCountVisitor.
           conflatablePoiPolyPoiCount =
             _applyVisitor(
-              new PoiPolygonPoiCriterion(), new ElementCountVisitor(),
+              std::make_shared<PoiPolygonPoiCriterion>(), std::make_shared<ElementCountVisitor>(),
               "Conflatable POI/Polygon Count");
         }
         _addStat("POIs Conflatable by: " + matchCreatorName, conflatablePoiPolyPoiCount);
@@ -509,32 +509,32 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
     _addStat("Total Conflated Features", conflatedFeatureCount);
     _addStat("Percentage of Total Features Conflated",
-              (conflatedFeatureCount / (double)featureCount) * 100.0);
+              (conflatedFeatureCount / featureCount) * 100.0);
     _addStat("Total Features Marked for Review", numFeaturesMarkedForReview);
     _addStat("Percentage of Total Features Marked for Review",
-             (numFeaturesMarkedForReview / (double)featureCount) * 100.0);
+             (numFeaturesMarkedForReview / featureCount) * 100.0);
     _addStat("Total Reviews to be Made", numReviewsToBeMade);
     const double unconflatedFeatureCountFromMap1 =
       _applyVisitor(
-        new StatusCriterion(Status::Unknown1), new FeatureCountVisitor(),
-        "Unconflated Feature Count Map 1");
+        std::make_shared<StatusCriterion>(Status::Unknown1),
+        std::make_shared<FeatureCountVisitor>(), "Unconflated Feature Count Map 1");
     const double unconflatedFeatureCountFromMap2 =
       _applyVisitor(
-        new StatusCriterion(Status::Unknown2), new FeatureCountVisitor(),
-        "Unconflated Feature Count Map 2");
+        std::make_shared<StatusCriterion>(Status::Unknown2),
+        std::make_shared<FeatureCountVisitor>(), "Unconflated Feature Count Map 2");
     const double totalUnconflatedFeatureCount =
       _applyVisitor(
-        new NotCriterion(new StatusCriterion(Status::Conflated)), new FeatureCountVisitor(),
-        "Unconflated Feature Count");
+        std::make_shared<NotCriterion>(std::make_shared<StatusCriterion>(Status::Conflated)),
+        std::make_shared<FeatureCountVisitor>(), "Unconflated Feature Count");
     _addStat("Total Unmatched Features", totalUnconflatedFeatureCount);
     _addStat("Percentage of Total Features Unmatched",
-             (totalUnconflatedFeatureCount / (double)featureCount) * 100.0);
+             (totalUnconflatedFeatureCount / featureCount) * 100.0);
     _addStat("Total Unmatched Features From Map 1", unconflatedFeatureCountFromMap1);
     _addStat("Percentage of Total Features Unmatched From Map 1",
-             (unconflatedFeatureCountFromMap1 / (double)featureCount) * 100.0);
+             (unconflatedFeatureCountFromMap1 / featureCount) * 100.0);
     _addStat("Total Unmatched Features From Map 2", unconflatedFeatureCountFromMap2);
     _addStat("Percentage of Total Features Unmatched From Map 2",
-             (unconflatedFeatureCountFromMap2 / (double)featureCount) * 100.0);
+             (unconflatedFeatureCountFromMap2 / featureCount) * 100.0);
 
     for (QMap<CreatorDescription::BaseFeatureType, double>::const_iterator it =
            _conflatableFeatureCounts.begin(); it != _conflatableFeatureCounts.end(); ++it)
@@ -559,9 +559,9 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       if (!_schemaTranslator)
       {
         assert(!ConfigOptions().getStatsTranslateScript().isEmpty());
-        _schemaTranslator.reset(
+        _schemaTranslator =
           ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-            ConfigOptions().getStatsTranslateScript()));
+            ConfigOptions().getStatsTranslateScript());
         _schemaTranslator->setErrorTreatment(StrictOff);
       }
       SchemaTranslatedTagCountVisitor tcv(_schemaTranslator);
@@ -597,11 +597,6 @@ void CalculateStatsOp::_addStat(const QString& name, double value)
   _stats.append(SingleStat(name, value));
 }
 
-void CalculateStatsOp::_addStat(const char* name, double value)
-{
-  _stats.append(SingleStat(QString(name), value));
-}
-
 bool CalculateStatsOp::_statPassesFilter(const StatData& statData) const
 {
   return
@@ -609,7 +604,8 @@ bool CalculateStatsOp::_statPassesFilter(const StatData& statData) const
     _filter.contains(statData.getFilterCriterion());
 }
 
-void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, StatData& d)
+void CalculateStatsOp::_interpretStatData(
+  const shared_ptr<const OsmMap>& constMap, const StatData& d)
 {
   // Check against the applied filter to see whether this stat should be generated.
   LOG_VART(_filter);
@@ -639,10 +635,7 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       try
       {
         // create criterion
-        pCrit =
-          shared_ptr<ElementCriterion>(
-            Factory::getInstance().constructObject<ElementCriterion>(d.getCriterion()));
-
+        pCrit = Factory::getInstance().constructObject<ElementCriterion>(d.getCriterion());
         // make sure the map is set before we use it
         ConstOsmMapConsumer* pMapConsumer = dynamic_cast<ConstOsmMapConsumer*>(pCrit.get());
         if (pMapConsumer) pMapConsumer->setOsmMap(constMap.get());
@@ -672,9 +665,8 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       {
         // create visitor to set in FilteredVisitor
         pCriterionVisitor =
-          shared_ptr<ConstElementVisitor>(
-            static_cast<ConstElementVisitor *>(
-              Factory::getInstance().constructObject<ElementVisitor>(d.getVisitor())));
+          std::static_pointer_cast<ConstElementVisitor>(
+            Factory::getInstance().constructObject<ElementVisitor>(d.getVisitor()));
       }
       catch (...)
       {
@@ -688,9 +680,9 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
         if (!_schemaTranslator)
         {
           assert(!ConfigOptions().getStatsTranslateScript().isEmpty());
-          _schemaTranslator.reset(
+          _schemaTranslator =
             ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-              ConfigOptions().getStatsTranslateScript()));
+              ConfigOptions().getStatsTranslateScript());
           _schemaTranslator->setErrorTreatment(StrictOff);
         }
         shared_ptr<SchemaTranslatedTagCountVisitor> translatedVis =
@@ -725,9 +717,8 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
         try
         {
           pVisitor =
-            shared_ptr<ConstElementVisitor>(
-              static_cast<ConstElementVisitor *>(
-                Factory::getInstance().constructObject<ElementVisitor>(d.getVisitor())));
+            std::static_pointer_cast<ConstElementVisitor >(
+              Factory::getInstance().constructObject<ElementVisitor>(d.getVisitor()));
         }
         catch (...)
         {
@@ -742,14 +733,14 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
         _numInterpresetStatDataCalls++;
       }
 
-      val = GetRequestedStatValue(pVisitor.get(), d.getStatCall());
+      val = _getRequestedStatValue(pVisitor.get(), d.getStatCall());
     }
 
     _addStat(d.getName(), val);
   }
 }
 
-double CalculateStatsOp::GetRequestedStatValue(
+double CalculateStatsOp::_getRequestedStatValue(
   const ElementVisitor* pVisitor, StatData::StatCall call) const
 {
   if (call == StatData::StatCall::Stat)
@@ -784,8 +775,15 @@ bool CalculateStatsOp::_matchDescriptorCompare(
 }
 
 double CalculateStatsOp::_applyVisitor(
-  ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
+  const ElementCriterion& pCrit, ElementVisitor& pVis, const QString& statName,
   StatData::StatCall call)
+{
+  return _applyVisitor(FilteredVisitor(pCrit, pVis), statName, call);
+}
+
+double CalculateStatsOp::_applyVisitor(
+  const std::shared_ptr<ElementCriterion> pCrit, std::shared_ptr<ConstElementVisitor> pVis,
+  const QString& statName, StatData::StatCall call)
 {
   return _applyVisitor(FilteredVisitor(pCrit, pVis), statName, call);
 }
@@ -810,7 +808,7 @@ double CalculateStatsOp::_applyVisitor(
   shared_ptr<FilteredVisitor> critFv;
   if (_criterion)
   {
-    critFv.reset(new FilteredVisitor(*_criterion, *fv));
+    critFv = std::make_shared<FilteredVisitor>(*_criterion, *fv);
     fv = critFv.get();
   }
 
@@ -822,14 +820,32 @@ double CalculateStatsOp::_applyVisitor(
 
   _constMap->visitRo(*fv);
 
-  DataProducer* dataProducer = dynamic_cast<DataProducer*>(&childVisitor);
+  const DataProducer* dataProducer = dynamic_cast<DataProducer*>(&childVisitor);
   if (dataProducer != nullptr)
   {
     visitorData = dataProducer->getData();
   }
 
   _currentStatCalcIndex++;
-  return GetRequestedStatValue(&childVisitor, call);
+  return _getRequestedStatValue(&childVisitor, call);
+}
+
+void CalculateStatsOp::_applyVisitor(
+  std::shared_ptr<ConstElementVisitor> v, const QString& statName)
+{
+  LOG_STATUS(
+    "Calculating statistic: " << statName << " (" << _currentStatCalcIndex << "/" <<
+    _totalStatCalcs << ") ...");
+
+  shared_ptr<FilteredVisitor> critFv;
+  if (_criterion)
+  {
+    critFv = std::make_shared<FilteredVisitor>(*_criterion, *v);
+    v = critFv;
+  }
+  _constMap->visitRo(*v);
+
+  _currentStatCalcIndex++;
 }
 
 void CalculateStatsOp::_applyVisitor(ConstElementVisitor* v, const QString& statName)
@@ -841,7 +857,7 @@ void CalculateStatsOp::_applyVisitor(ConstElementVisitor* v, const QString& stat
   shared_ptr<FilteredVisitor> critFv;
   if (_criterion)
   {
-    critFv.reset(new FilteredVisitor(*_criterion, *v));
+    critFv = std::make_shared<FilteredVisitor>(*_criterion, *v);
     v = critFv.get();
   }
   _constMap->visitRo(*v);
@@ -849,11 +865,12 @@ void CalculateStatsOp::_applyVisitor(ConstElementVisitor* v, const QString& stat
   _currentStatCalcIndex++;
 }
 
-double CalculateStatsOp::_getApplyVisitor(ConstElementVisitor* v, const QString& statName)
+double CalculateStatsOp::_getApplyVisitor(
+  std::shared_ptr<ConstElementVisitor> v, const QString& statName)
 {
   _applyVisitor(v, statName);
-  const SingleStatistic* ss = dynamic_cast<const SingleStatistic*>(v);
-  if (v == nullptr)
+  std::shared_ptr<SingleStatistic> ss = std::dynamic_pointer_cast<SingleStatistic>(v);
+  if (!ss)
   {
     throw HootException(v->getName() + " does not implement SingleStatistic.");
   }
@@ -904,11 +921,11 @@ ConstElementVisitorPtr CalculateStatsOp::_getElementVisitorForFeatureType(
   {
     // Poi/poly doesn't have the restriction that an element have a tag information count > 0 to
     // be considered for conflation.
-    return ConstElementVisitorPtr(new ElementCountVisitor());
+    return std::make_shared<ElementCountVisitor>();
   }
   else
   {
-    return ConstElementVisitorPtr(new FeatureCountVisitor());
+    return std::make_shared<FeatureCountVisitor>();
   }
 }
 
@@ -942,8 +959,8 @@ void CalculateStatsOp::_generateFeatureStats(
   double conflatedFeatureCount =
     _applyVisitor(
       FilteredVisitor(
-        ChainCriterion(
-          new StatusCriterion(Status::Conflated), criterion->clone()),
+        std::make_shared<ChainCriterion>(
+          std::make_shared<StatusCriterion>(Status::Conflated), criterion->clone()),
       _getElementVisitorForFeatureType(featureType)), "Conflated Feature Count: " + description);
   LOG_VARD(conflatedFeatureCount);
   if (featureType == CreatorDescription::PoiPolygonPOI)
@@ -957,8 +974,8 @@ void CalculateStatsOp::_generateFeatureStats(
   const double featuresMarkedForReview =
     _applyVisitor(
       FilteredVisitor(
-        ChainCriterion(
-          new NeedsReviewCriterion(_constMap),
+        std::make_shared<ChainCriterion>(
+          std::make_shared<NeedsReviewCriterion>(_constMap),
           criterion->clone()),
       _getElementVisitorForFeatureType(featureType)), "Reviewable Feature Count: " + description);
   _addStat(QString("Conflated %1s").arg(description), conflatedFeatureCount);
@@ -967,15 +984,15 @@ void CalculateStatsOp::_generateFeatureStats(
     _applyVisitor(
        FilteredVisitor(
          criterion->clone(),
-         ConstElementVisitorPtr(new CountUniqueReviewsVisitor())),
+         std::make_shared<CountUniqueReviewsVisitor>()),
       "Reviews To Be Made Count: " + description);
   _addStat(QString("%1 Reviews to be Made").arg(description), numFeatureReviewsToBeMade);
 
   double unconflatedFeatureCountMap1 =
     _applyVisitor(
       FilteredVisitor(
-        ChainCriterion(
-          new StatusCriterion(Status::Unknown1),
+        std::make_shared<ChainCriterion>(
+          std::make_shared<StatusCriterion>(Status::Unknown1),
           criterion->clone()),
       _getElementVisitorForFeatureType(featureType)),
       "Unconflated Feature Count Map 1: " + description);
@@ -983,8 +1000,8 @@ void CalculateStatsOp::_generateFeatureStats(
   double unconflatedFeatureCountMap2 =
     _applyVisitor(
       FilteredVisitor(
-        ChainCriterion(
-          new StatusCriterion(Status::Unknown2),
+        std::make_shared<ChainCriterion>(
+          std::make_shared<StatusCriterion>(Status::Unknown2),
           criterion->clone()),
       _getElementVisitorForFeatureType(featureType)),
       "Unconflated Feature Count Map 2: " + description);
@@ -992,16 +1009,16 @@ void CalculateStatsOp::_generateFeatureStats(
   double totalUnconflatedFeatureCount =
     _applyVisitor(
       FilteredVisitor(
-        ChainCriterion(
-          new NotCriterion(new StatusCriterion(Status::Conflated)),
+        std::make_shared<ChainCriterion>(
+          std::make_shared<NotCriterion>(std::make_shared<StatusCriterion>(Status::Conflated)),
           criterion->clone()),
       _getElementVisitorForFeatureType(featureType)),
       "Total Unconflated Feature Count: " + description);
   LOG_VARD(totalUnconflatedFeatureCount);
   if (featureType == CreatorDescription::PoiPolygonPOI)
   {
-    //we need to subtract any pois that may have been merged into polygons by poi/poly from the
-    //unconflated feature count for this feature type
+    // We need to subtract any pois that may have been merged into polygons by poi/poly from the
+    // unconflated feature count for this feature type.
     totalUnconflatedFeatureCount -= poisMergedIntoPolys;
     LOG_VARD(totalUnconflatedFeatureCount);
     unconflatedFeatureCountMap1 -= poisMergedIntoPolysFromMap1;
@@ -1019,28 +1036,28 @@ void CalculateStatsOp::_generateFeatureStats(
       _applyVisitor(
         FilteredVisitor(
           criterion->clone(),
-          ConstElementVisitorPtr(new LengthOfWaysVisitor())),
+          std::make_shared<LengthOfWaysVisitor>()),
         "Total Meters: " + description));
     _addStat(QString("Meters of Conflated %1s").arg(description),
       _applyVisitor(
         FilteredVisitor(
-          ChainCriterion(
-            ElementCriterionPtr(new StatusCriterion(Status::Conflated)), criterion->clone()),
-          ConstElementVisitorPtr(new LengthOfWaysVisitor())),
+          std::make_shared<ChainCriterion>(
+            std::make_shared<StatusCriterion>(Status::Conflated), criterion->clone()),
+          std::make_shared<LengthOfWaysVisitor>()),
         "Meters Conflated: " + description));
     _addStat(QString("Meters of Unmatched %1s From Map 1").arg(description),
       _applyVisitor(
         FilteredVisitor(
-          ChainCriterion(
-            ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), criterion->clone()),
-          ConstElementVisitorPtr(new LengthOfWaysVisitor())),
+          std::make_shared<ChainCriterion>(
+            std::make_shared<StatusCriterion>(Status::Unknown1), criterion->clone()),
+          std::make_shared<LengthOfWaysVisitor>()),
         "Meters Unmatched Map 1: " + description));
     _addStat(QString("Meters of Unmatched %1s From Map 2").arg(description),
       _applyVisitor(
         FilteredVisitor(
-          ChainCriterion(
-            ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), criterion->clone()),
-          ConstElementVisitorPtr(new LengthOfWaysVisitor())),
+          std::make_shared<ChainCriterion>(
+            std::make_shared<StatusCriterion>(Status::Unknown2), criterion->clone()),
+          std::make_shared<LengthOfWaysVisitor>()),
         "Meters Unmatched Map 2: " + description));
     _numGenerateFeatureStatCalls++;
   }
@@ -1048,30 +1065,28 @@ void CalculateStatsOp::_generateFeatureStats(
   {
     _addStat(QString("Total Square Meters of %1s").arg(description),
       _applyVisitor(
-        FilteredVisitor(
-          criterion->clone(),
-          ConstElementVisitorPtr(new LengthOfWaysVisitor())),
+        FilteredVisitor(criterion->clone(), std::make_shared<LengthOfWaysVisitor>()),
         "Total Square Meters: " + description));
     _addStat(QString("Square Meters of Conflated %1s").arg(description),
       _applyVisitor(
         FilteredVisitor(
-          ChainCriterion(
-            ElementCriterionPtr(new StatusCriterion(Status::Conflated)), criterion->clone()),
-          ConstElementVisitorPtr(new CalculateAreaForStatsVisitor())),
+          std::make_shared<ChainCriterion>(
+            std::make_shared<StatusCriterion>(Status::Conflated), criterion->clone()),
+          std::make_shared<CalculateAreaForStatsVisitor>()),
         "Area Conflated: " + description));
     _addStat(QString("Square Meters of Unmatched %1s From Map 1").arg(description),
       _applyVisitor(
         FilteredVisitor(
-          ChainCriterion(
-            ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), criterion->clone()),
-          ConstElementVisitorPtr(new CalculateAreaForStatsVisitor())),
+          std::make_shared<ChainCriterion>(
+            std::make_shared<StatusCriterion>(Status::Unknown1), criterion->clone()),
+          std::make_shared<CalculateAreaForStatsVisitor>()),
         "Area Unmatched Map 1: " + description));
     _addStat(QString("Square Meters of Unmatched %1s From Map 2").arg(description),
       _applyVisitor(
         FilteredVisitor(
-          ChainCriterion(
-            ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), criterion->clone()),
-          ConstElementVisitorPtr(new CalculateAreaForStatsVisitor())),
+          std::make_shared<ChainCriterion>(
+            std::make_shared<StatusCriterion>(Status::Unknown2), criterion->clone()),
+          std::make_shared<CalculateAreaForStatsVisitor>()),
         "Area Unmatched Map 2: " + description));
     _numGenerateFeatureStatCalls++;
   }
@@ -1091,8 +1106,9 @@ void CalculateStatsOp::_generateFeatureStats(
     percentageOfTotalFeaturesMarkedForReview =
       (featuresMarkedForReview / totalFeatures) * 100.0;
   }
-  _addStat(QString("Percentage of %1s Marked for Review").arg(description),
-           percentageOfTotalFeaturesMarkedForReview);
+  _addStat(
+    QString("Percentage of %1s Marked for Review").arg(description),
+    percentageOfTotalFeaturesMarkedForReview);
   double percentageOfMap1FeaturesUnconflated = 0.0;
   if (totalFeatures > 0.0)
   {

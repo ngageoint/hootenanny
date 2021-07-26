@@ -67,7 +67,7 @@ public:
   {
     // empty manual match ids aren't allowed
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
 
     tags.set(MetadataTags::Ref1(), "");
@@ -106,7 +106,7 @@ public:
   {
     // can't have ref1 and ref2/review ids on the same element
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
@@ -142,7 +142,7 @@ public:
     // all ref2/review manual match ids, excluding todo's and none, have to have a corresponding
     // and matching ref1 id
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
@@ -198,7 +198,7 @@ public:
     // This makes ref1's corresponding to ref2/review effectively optional by logging warnings
     // instead of errors.
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator warningItr;
@@ -225,7 +225,7 @@ public:
   {
     // in backward compatibility mode, uuid's are allowed for all types of manual match ids
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
@@ -269,7 +269,7 @@ public:
 
   void runInvalidIdTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
@@ -396,7 +396,7 @@ public:
   {
     // a ref2 and a review can't have the same id on the same element
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
@@ -424,7 +424,7 @@ public:
     // data loaded with an Unknown1 status can't have any REF2 tags in it and data loaded with an
     // Unknown2 status can't have any REF1 tags in it
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
@@ -471,7 +471,7 @@ public:
   {
     // ref1 is always a single id
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
@@ -492,7 +492,7 @@ public:
   {
     // if a ref2/review has multiple ids, 'todo' and 'none' aren't valid entries
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
@@ -551,7 +551,7 @@ public:
   {
     // ref2/review can't have the same id duplicated within the same tag value
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
@@ -583,7 +583,7 @@ public:
 
   void runFullDebugOutputTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;

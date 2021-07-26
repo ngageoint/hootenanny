@@ -161,7 +161,7 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
           }
 
           // Copy it to be safe.
-          ElementPtr map2IdenticalElementCopy(map2IdenticalElement->clone());
+          ElementPtr map2IdenticalElementCopy = map2IdenticalElement->clone();
           map2IdenticalElementCopy->setId(map1IdenticalElement->getId());
           // need to use the ref map version
           map2IdenticalElementCopy->setVersion(map1IdenticalElement->getVersion());

@@ -53,7 +53,7 @@ public:
 
 private:
 
-  OsmMapOperationJs(OsmMapOperation *op) : _op(op) { }
+  OsmMapOperationJs(std::shared_ptr<OsmMapOperation> op);
 
     static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void apply(const v8::FunctionCallbackInfo<v8::Value>& args);

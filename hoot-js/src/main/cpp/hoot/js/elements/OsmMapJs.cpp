@@ -51,7 +51,7 @@ Persistent<Function> OsmMapJs::_constructor;
 
 OsmMapJs::OsmMapJs()
 {
-  _setMap(OsmMapPtr(new OsmMap()));
+  _setMap(std::make_shared<OsmMap>());
 }
 
 void OsmMapJs::Init(Local<Object> target)
@@ -128,11 +128,11 @@ void OsmMapJs::clone(const FunctionCallbackInfo<Value>& args)
   OsmMapPtr newMap;
   if (from->getConstMap())
   {
-    newConstMap.reset(new OsmMap(from->getConstMap()));
+    newConstMap = std::make_shared<OsmMap>(from->getConstMap());
   }
   else
   {
-    newMap.reset(new OsmMap(from->getMap()));
+    newMap = std::make_shared<OsmMap>(from->getMap());
   }
 
   const unsigned argc = 1;

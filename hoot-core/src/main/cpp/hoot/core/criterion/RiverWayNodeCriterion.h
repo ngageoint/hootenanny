@@ -43,8 +43,7 @@ public:
   RiverWayNodeCriterion(ConstOsmMapPtr map);
   ~RiverWayNodeCriterion() = default;
 
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new RiverWayNodeCriterion(_map)); }
+  ElementCriterionPtr clone() override { return std::make_shared<RiverWayNodeCriterion>(_map); }
 
   QString getDescription() const override
   { return "Identifies nodes belonging to linear bodies of water"; }

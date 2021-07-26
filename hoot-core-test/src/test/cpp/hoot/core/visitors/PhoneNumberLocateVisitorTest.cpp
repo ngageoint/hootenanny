@@ -54,7 +54,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map,
       "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
@@ -74,7 +74,7 @@ public:
 
   void runConfigurationTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map,
       "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",

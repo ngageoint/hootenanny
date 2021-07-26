@@ -85,7 +85,7 @@ public:
 
     LOG_STATUS("Calculating extent for ..." << FileUtils::toLogFormat(inputs, 25) << "...");
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     IoUtils::loadMaps(map, inputs, false, Status::Invalid);
 
     const QString bounds =

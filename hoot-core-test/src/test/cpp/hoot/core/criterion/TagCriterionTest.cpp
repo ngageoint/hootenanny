@@ -53,16 +53,16 @@ public:
     TagCriterion uut;
     uut.setKvps(kvps);
 
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set("amenity", "school");
     node1->getTags().set("poi", "yes");
     CPPUNIT_ASSERT(uut.isSatisfied(node1));
 
-    NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set("amenity", "school");
     CPPUNIT_ASSERT(uut.isSatisfied(node2));
 
-    NodePtr node3(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node3 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node3->getTags().set("highway", "road");
     CPPUNIT_ASSERT(!uut.isSatisfied(node3));
   }
@@ -93,7 +93,7 @@ public:
     uut.setCaseSensitive(false);
     uut.setKvps(QStringList("key=val"));
 
-    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node->getTags().set("key", "val");
     CPPUNIT_ASSERT(uut.isSatisfied(node));
 

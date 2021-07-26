@@ -60,22 +60,23 @@ public:
   static QString className() { return "hoot::CalculateStatsOp"; }
 
   CalculateStatsOp(QString mapName = "", bool inputIsConflatedMapOutput = false);
-  CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "",
-                   bool inputIsConflatedMapOutput = false);
+  CalculateStatsOp(
+    ElementCriterionPtr criterion, QString mapName = "", bool inputIsConflatedMapOutput = false);
   ~CalculateStatsOp() = default;
 
-  void apply(const OsmMapPtr& map) override;
-
-  QList<SingleStat> getStats() const { return _stats; }
   double getSingleStat(const QString& n) const;
   bool hasSingleStat(const QString& n) const;
   long indexOfSingleStat(const QString& n) const;
+
+  void apply(const OsmMapPtr& map) override;
 
   void setConfiguration(const Settings& conf) override;
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Calculates map statistics"; }
+
+  QList<SingleStat> getStats() const { return _stats; }
 
   void setFilter(const QSet<QString>& filter) { _filter = filter; }
   void setQuickSubset(bool quick) { _quick = quick; }
@@ -84,7 +85,6 @@ private:
 
   friend class CalculateStatsOpTest;
 
-  const Settings* _pConf;
   ElementCriterionPtr _criterion;
   // simple map name string for logging purposes
   QString _mapName;
@@ -94,6 +94,7 @@ private:
   // output of a conflation job.  Another option would be to refactor this class for both maps
   // meant to be input to a conflation job and those that are output from a conflation job.
   bool _inputIsConflatedMapOutput;
+  QString _statsFileName;
   QList<SingleStat> _stats;
   // list of GeometryTypeCriterion class names used to control which statistics are generated; see
   // ConflateExecutor and SuperfluousConflateOpRemover
@@ -125,11 +126,15 @@ private:
   void _initConflatableFeatureCounts();
   void _readGenericStatsConfiguration();
   void _addStat(const QString& name, double value);
-  void _addStat(const char* name, double value);
   bool _statPassesFilter(const StatData& statData) const;
   int _getNumStatsPassingFilter(const QList<StatData>& stats) const;
-  void _interpretStatData(std::shared_ptr<const OsmMap>& constMap, StatData& d);
-  double GetRequestedStatValue(const ElementVisitor* pVisitor, StatData::StatCall call) const;
+  void _interpretStatData(const std::shared_ptr<const OsmMap>& constMap, const StatData& d);
+  double _getRequestedStatValue(const ElementVisitor* pVisitor, StatData::StatCall call) const;
+  void _generateFeatureStats(
+    const CreatorDescription::BaseFeatureType& featureType, const float conflatableCount,
+    const CreatorDescription::FeatureCalcType& type, ElementCriterionPtr criterion,
+    const long poisMergedIntoPolys, const long poisMergedIntoPolysFromMap1,
+    const long poisMergedIntoPolysFromMap2);
 
   /**
    * @brief getMatchCreator finds the match creator (in the supplied vector) by name
@@ -138,9 +143,11 @@ private:
    * @param [out] featureType base feature type for the found matchCreator
    * @return ptr to match creator, if found, otherwise std::shared_ptr to null
    */
-  std::shared_ptr<MatchCreator> getMatchCreator(
+  std::shared_ptr<MatchCreator> _getMatchCreator(
     const std::vector<std::shared_ptr<MatchCreator>>& matchCreators,
     const QString &matchCreatorName, CreatorDescription::BaseFeatureType& featureType) const;
+  static bool _matchDescriptorCompare(
+    const CreatorDescription& m1, const CreatorDescription& m2);
 
   double _applyVisitor(
     const hoot::FilteredVisitor& v, const QString& statName,
@@ -149,20 +156,14 @@ private:
     const hoot::FilteredVisitor& v, boost::any& visitorData, const QString& statName,
     StatData::StatCall call = StatData::StatCall::Stat);
   double _applyVisitor(
-    ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
+    const ElementCriterion& pCrit, ElementVisitor& pVis, const QString& statName,
     StatData::StatCall call = StatData::StatCall::Stat);
+  double _applyVisitor(
+    const std::shared_ptr<ElementCriterion> pCrit, std::shared_ptr<ConstElementVisitor> pVis,
+    const QString& statName, StatData::StatCall call = StatData::StatCall::Stat);
+  void _applyVisitor(std::shared_ptr<ConstElementVisitor> v, const QString& statName);
   void _applyVisitor(ConstElementVisitor* v, const QString& statName);
-  double _getApplyVisitor(ConstElementVisitor* v, const QString& statName);
-
-  static bool _matchDescriptorCompare(
-    const CreatorDescription& m1, const CreatorDescription& m2);
-
-  void _generateFeatureStats(
-    const CreatorDescription::BaseFeatureType& featureType, const float conflatableCount,
-    const CreatorDescription::FeatureCalcType& type, ElementCriterionPtr criterion,
-    const long poisMergedIntoPolys, const long poisMergedIntoPolysFromMap1,
-    const long poisMergedIntoPolysFromMap2);
-
+  double _getApplyVisitor(std::shared_ptr<ConstElementVisitor> v, const QString& statName);
   ConstElementVisitorPtr _getElementVisitorForFeatureType(
     const CreatorDescription::BaseFeatureType& featureType) const;
 };

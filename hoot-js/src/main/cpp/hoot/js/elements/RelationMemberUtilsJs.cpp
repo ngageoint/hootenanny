@@ -171,8 +171,7 @@ void RelationMemberUtilsJs::isMemberOfRelationSatisfyingCriterion(
   LOG_VART(critClassName);
 
   ElementCriterionPtr crit =
-    std::shared_ptr<ElementCriterion>(
-      Factory::getInstance().constructObject<ElementCriterion>(critClassName.trimmed()));
+    Factory::getInstance().constructObject<ElementCriterion>(critClassName.trimmed());
   if (!crit)
   {
     throw IllegalArgumentException(

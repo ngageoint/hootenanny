@@ -52,8 +52,7 @@ public:
   ~WayEndNodeCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new WayEndNodeCriterion(_map)); }
+  ElementCriterionPtr clone() override { return std::make_shared<WayEndNodeCriterion>(_map); }
 
   QString getDescription() const override { return "Identifies way end nodes"; }
   QString toString() const override { return className(); }

@@ -53,15 +53,13 @@ public:
 
   void addCriterion(const ElementCriterionPtr& crit) override;
 
+  QString toString() const override;
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
   void setChainCriteria(bool chain) { _chainCriteria = chain; }
   void setNegateCriteria(bool negate) { _negateCriteria = negate; }
   void setConfigureChildren(bool configure) { _configureChildren = configure; }
-
-  QString toString() const override;
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 protected:
 

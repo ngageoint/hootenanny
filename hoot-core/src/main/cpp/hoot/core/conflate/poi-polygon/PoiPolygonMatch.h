@@ -70,50 +70,38 @@ public:
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>());
   ~PoiPolygonMatch() = default;
 
-  void setConfiguration(const Settings& conf) override;
-
   void calculateMatch(const ElementId& eid1, const ElementId& eid2);
 
-  const MatchClassification& getClassification() const override { return _class; }
-
-  MatchMembers getMatchMembers() const override
-  { return MatchMembers::Poi | MatchMembers::Polygon; }
-
-  QString getName() const override { return getPoiPolygonMatchName(); }
   static QString getPoiPolygonMatchName() { return MATCH_NAME; }
-  QString getClassName() const override { return className(); }
-
-  std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
-
-  double getProbability() const override { return _class.getMatchP(); }
-
-  // Is this the right implementation?
-  bool isConflicting(const ConstMatchPtr& /*other*/,
-                     const ConstOsmMapPtr& /*map*/,
-                     const QHash<QString, ConstMatchPtr>& /*matches*/) const override
-  { return false; }
-
-  bool isWholeGroup() const override { return true; }
-
-  QString toString() const override;
-
-  std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
 
   /**
    * Pass through to the same method in PoiPolygonDistanceTruthRecorder
    */
   static void printMatchDistanceInfo();
-
   /**
    * Pass through to the same method in PoiPolygonDistanceTruthRecorder
    */
   static void resetMatchDistanceInfo();
 
+  void setConfiguration(const Settings& conf) override;
+
+  const MatchClassification& getClassification() const override { return _class; }
+  MatchMembers getMatchMembers() const override
+  { return MatchMembers::Poi | MatchMembers::Polygon; }
+  std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
+  double getProbability() const override { return _class.getMatchP(); }
+  bool isConflicting(
+    const ConstMatchPtr& /*other*/, const ConstOsmMapPtr& /*map*/,
+    const QHash<QString, ConstMatchPtr>& /*matches*/) const override { return false; }
+  bool isWholeGroup() const override { return true; }
+  std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
   QString explain() const override { return _explainText; }
-
-  QString getDescription() const override { return "Matches POIs with polygons"; }
-
   MatchType getType() const override;
+
+  QString getName() const override { return getPoiPolygonMatchName(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override;
+  QString getDescription() const override { return "Matches POIs with polygons"; }
 
   void setMatchDistanceThreshold(const double distance);
   void setReviewDistanceThreshold(const double distance);
@@ -159,6 +147,8 @@ private:
   friend class PoiPolygonMatchTest;
 
   ConstOsmMapPtr _map;
+
+  PoiPolygonInfoCachePtr _infoCache;
 
   ConstNodePtr _poi;
   ConstElementPtr _poly;
@@ -230,8 +220,6 @@ private:
 
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
-
-  PoiPolygonInfoCachePtr _infoCache;
 
   int _timingThreshold;
 

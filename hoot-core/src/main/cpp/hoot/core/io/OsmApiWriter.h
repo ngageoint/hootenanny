@@ -89,7 +89,7 @@ public:
    * @brief containsFailed
    * @return true if there are failed changes in the changeset
    */
-  bool containsFailed() { return _changeset.hasFailedElements(); }
+  bool containsFailed() const { return _changeset.hasFailedElements(); }
   /**
    * @brief getFailedChangeset Creates a changeset will all elements that failed to push to API
    * @return Full .OSC changeset string

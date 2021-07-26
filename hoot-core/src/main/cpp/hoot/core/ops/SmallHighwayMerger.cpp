@@ -73,8 +73,7 @@ SmallHighwayMerger::SmallHighwayMerger(Meters threshold)
   {
     _threshold = opts.getSmallHighwayMergerThreshold();
   }
-  _diff.reset(
-    Factory::getInstance().constructObject<TagDifferencer>(opts.getSmallHighwayMergerDiff()));
+  _diff = Factory::getInstance().constructObject<TagDifferencer>(opts.getSmallHighwayMergerDiff());
   _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
 }
 

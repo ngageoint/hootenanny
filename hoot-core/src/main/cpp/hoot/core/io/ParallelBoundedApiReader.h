@@ -165,8 +165,6 @@ private:
   int _totalEnvelopes;
   /** Mutex guarding the bounding box list */
   std::mutex _bboxMutex;
-  /** Flag indicating that the _bboxes list is still being loaded, set to false when completely loaded */
-  bool _bboxContinue;
   /** Maximum size of an area that can be downloaded */
   double _maxGridSize;
   /** Processing thread pool */

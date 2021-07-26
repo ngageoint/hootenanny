@@ -159,7 +159,7 @@ Geometry* RelationToMultiPolygonConverter::_addHoles(
     tmpPolygons[i] = p;
   }
 
-  // create the final MultiPolygon
+  // create the final MultiPolygon; GeometryFactory takes ownership of these input parameters.
   return gf.createMultiPolygon(polygons);
 }
 
@@ -212,7 +212,7 @@ std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() 
     const RelationData::Entry& e = _r->getMembers()[i];
     LOG_VART(e.getElementId());
     if (e.getElementId().getType() == ElementType::Relation &&
-        (e.role == MetadataTags::RoleOuter() || e.role == MetadataTags::RolePart()))
+        (e.getRole() == MetadataTags::RoleOuter() || e.getRole() == MetadataTags::RolePart()))
     {
       ConstRelationPtr r = _provider->getRelation(e.getElementId().getId());
       if (r && (r->isMultiPolygon() || AreaCriterion().isSatisfied(r)))
@@ -237,8 +237,8 @@ std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() 
   return result;
 }
 
-QString RelationToMultiPolygonConverter::_findRelationship(LinearRing* ring1,
-                                                           LinearRing* ring2) const
+QString RelationToMultiPolygonConverter::_findRelationship(
+  const LinearRing* ring1, const LinearRing* ring2) const
 {
   QString result = "";
 
@@ -406,7 +406,7 @@ void RelationToMultiPolygonConverter::_createRings(
   for (size_t i = 0; i < elements.size(); i++)
   {
     const RelationData::Entry& e = elements[i];
-    if (e.getElementId().getType() == ElementType::Way && e.role == role)
+    if (e.getElementId().getType() == ElementType::Way && e.getRole() == role)
     {
       const ConstWayPtr& w = _provider->getWay(e.getElementId().getId());
       if (!w || w->getNodeCount() == 0)
@@ -534,7 +534,7 @@ void RelationToMultiPolygonConverter::_createSingleRing(
   }
 }
 
-bool RelationToMultiPolygonConverter::_isValidInner(LinearRing* innerRing) const
+bool RelationToMultiPolygonConverter::_isValidInner(const LinearRing* innerRing) const
 {
   if (innerRing->getNumPoints() > 0 && innerRing->getNumPoints() < 4)
   {
@@ -578,8 +578,8 @@ deque<ConstWayPtr> RelationToMultiPolygonConverter::_orderWaysForRing(
     // if the ways are start to start or end to end
     if (w->getNodeId(0) == firstId || w->getLastNodeId() == lastId)
     {
-      // this way needs to be reversed, but clone it first so we don't change any source data
-      WayPtr cloned = WayPtr(new Way(*partials[i]));
+      // This way needs to be reversed, but clone it first so we don't change any source data.
+      WayPtr cloned = std::make_shared<Way>(*partials[i]);
       cloned->reverseOrder();
       w = cloned;
     }

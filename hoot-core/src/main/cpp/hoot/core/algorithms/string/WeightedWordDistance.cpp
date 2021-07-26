@@ -52,17 +52,18 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, WeightedWordDistance)
 
-WeightedWordDistance::WeightedWordDistance(StringDistance* d, WordWeightDictionary* dictionary)
+WeightedWordDistance::WeightedWordDistance(
+  std::shared_ptr<StringDistance> d, std::shared_ptr<WordWeightDictionary> dictionary) :
+_d(d),
+_dictionary(dictionary)
 {
-  _d.reset(d);
-  _dictionary.reset(dictionary);
   setConfiguration(conf());
 }
 
-WeightedWordDistance::WeightedWordDistance()
+WeightedWordDistance::WeightedWordDistance() :
+_d(std::make_shared<LevenshteinDistance>(1.5))
 {
   QString dictPath;
-
   try
   {
     dictPath = ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary());
@@ -78,9 +79,8 @@ WeightedWordDistance::WeightedWordDistance()
     LOG_WARN("Using abridged dictionary. This may result in reduced conflation accuracy. " +
       dictPath);
   }
+  _dictionary = std::make_shared<SqliteWordWeightDictionary>(dictPath);
 
-  _dictionary.reset(new SqliteWordWeightDictionary(dictPath));
-  _d.reset(new LevenshteinDistance(1.5));
   setConfiguration(conf());
 }
 

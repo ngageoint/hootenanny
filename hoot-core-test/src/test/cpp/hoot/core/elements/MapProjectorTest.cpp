@@ -99,7 +99,7 @@ public:
 
     OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(wgs84.get(), srs.get()));
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     if (t == 0)
     {
@@ -127,7 +127,7 @@ public:
         Coordinate c1(x, y);
         Coordinate p1 = c1;
         success &= t->Transform(1, &p1.x, &p1.y);
-        NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), c1, 10));
+        NodePtr n1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), c1, 10);
         map->addNode(n1);
 
         Coordinate upc = GeometryUtils::calculateDestination(c1, 0.0, distance);
@@ -142,9 +142,9 @@ public:
 
           if (e->contains(c2))
           {
-            NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), c2, 10));
+            NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), c2, 10);
             map->addNode(n2);
-            WayPtr w(new Way(Status::Unknown1, map->createNextWayId(), 10));
+            WayPtr w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
             map->addWay(w);
             w->addNode(n1->getId());
             w->addNode(n2->getId());
@@ -204,20 +204,20 @@ public:
   void testRegion(const OGREnvelope& env, QString name)
   {
     std::shared_ptr<OGRSpatialReference> sinusoidal = MapProjector::createSinusoidalProjection(env);
-    std::shared_ptr<OGRSpatialReference> mollweide(new OGRSpatialReference());
+    std::shared_ptr<OGRSpatialReference> mollweide = std::make_shared<OGRSpatialReference>();
     if (mollweide->importFromEPSG(54009) != OGRERR_NONE)
     {
       throw HootException("Error creating mollweide projection.");
     }
     std::shared_ptr<OGRSpatialReference> orthographic = MapProjector::createOrthographic(env);
 
-    std::shared_ptr<OGRSpatialReference> eckertVI(new OGRSpatialReference());
+    std::shared_ptr<OGRSpatialReference> eckertVI = std::make_shared<OGRSpatialReference>();
     if (eckertVI->importFromEPSG(53010) != OGRERR_NONE)
     {
       throw HootException("Error creating mollweide projection.");
     }
 
-    std::shared_ptr<OGRSpatialReference> sphereBoone(new OGRSpatialReference());
+    std::shared_ptr<OGRSpatialReference> sphereBoone = std::make_shared<OGRSpatialReference>();
     if (sphereBoone->importFromEPSG(53024) != OGRERR_NONE)
     {
       throw HootException("Error creating mollweide projection.");

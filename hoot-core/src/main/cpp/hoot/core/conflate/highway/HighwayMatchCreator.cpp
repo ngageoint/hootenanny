@@ -194,9 +194,9 @@ public:
       if (tagAncestorDiff->diff(map, e1, e2) <= maxEnumDiff)
       {
         // score each candidate and push it on the result vector
-        result.reset(
-          new HighwayMatch(
-            classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold));
+        result =
+          std::make_shared<HighwayMatch>(
+            classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold);
         // if we're confident this is a miss
         if (result->getType() == MatchType::Miss)
         {
@@ -241,7 +241,7 @@ public:
     }
 
     _numElementsVisited++;
-    if (_numElementsVisited % (_taskStatusUpdateInterval /* 10*/) == 0)
+    if (_numElementsVisited % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_STATUS(
         "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
@@ -273,13 +273,12 @@ public:
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
-      std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-      _index.reset(new HilbertRTree(mps, 2));
+      _index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
       // Only index elements satisfy isMatchCandidate(e)
       std::function<bool (ConstElementPtr e)> f =
         std::bind(&HighwayMatchVisitor::isMatchCandidate, this, placeholders::_1);
-      std::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
+      std::shared_ptr<ArbitraryCriterion> pCrit = std::make_shared<ArbitraryCriterion>(f);
 
       SpatialIndexer v(
         _index, _indexToEid, pCrit,
@@ -311,11 +310,9 @@ private:
   int _neighborCountMax;
   int _neighborCountSum;
   int _elementsEvaluated;
-  size_t _maxGroupSize;
   Meters _searchRadius;
   ConstMatchThresholdPtr _threshold;
   std::shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
-  double _highwayMaxEnumDiff;
   ElementCriterionPtr _filter;
 
   // Used for finding neighbors
@@ -330,12 +327,12 @@ private:
 
 HighwayMatchCreator::HighwayMatchCreator()
 {
-  _classifier.reset(
+  _classifier =
     Factory::getInstance().constructObject<HighwayClassifier>(
-      ConfigOptions().getConflateMatchHighwayClassifier()));
+      ConfigOptions().getConflateMatchHighwayClassifier());
   _sublineMatcher =
     SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
-  _tagAncestorDiff = std::shared_ptr<TagAncestorDifferencer>(new TagAncestorDifferencer("highway"));
+  _tagAncestorDiff = std::make_shared<TagAncestorDifferencer>("highway");
 }
 
 MatchPtr HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
@@ -405,10 +402,10 @@ std::shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
-    _matchThreshold.reset(
-      new MatchThreshold(
+    _matchThreshold =
+      std::make_shared<MatchThreshold>(
         ConfigOptions().getHighwayMatchThreshold(), ConfigOptions().getHighwayMissThreshold(),
-        ConfigOptions().getHighwayReviewThreshold()));
+        ConfigOptions().getHighwayReviewThreshold());
   }
   return _matchThreshold;
 }

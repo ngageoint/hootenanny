@@ -77,19 +77,18 @@ private:
     // Make sure way in question does not already exist in map
     CPPUNIT_ASSERT_EQUAL(_map->containsWay(wayId), false );
 
-    WayPtr newWay(new Way(Status::Unknown1, wayId, 1.0));
+    WayPtr newWay = std::make_shared<Way>(Status::Unknown1, wayId, 1.0);
 
     // Make sure there are nodes to add
-    if ( startNodeId <= endNodeId )
+    if (startNodeId <= endNodeId)
     {
       // Create the nodes and and add them to the map, if necessary
-      for ( unsigned int i = startNodeId; i <= endNodeId; i++ )
+      for (unsigned int i = startNodeId; i <= endNodeId; i++)
       {
         // Make sure map does not already have node in question
-        if ( _map->containsNode(i) == false )
+        if (_map->containsNode(i) == false)
         {
-          std::shared_ptr<Node> createNode(new Node(Status::Unknown1, i, i * 1.0, i * 1.0, 1.0));
-          _map->addNode(createNode);
+          _map->addNode(std::make_shared<Node>(Status::Unknown1, i, i * 1.0, i * 1.0, 1.0));
         }
 
         // Add the node into the new way
@@ -117,7 +116,7 @@ private:
     int numNodes;
 
     // 0 nodes: no-op
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     startNode = 1;
     numNodes = 0;
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -135,7 +134,7 @@ private:
     }
 
     // 1 nodes: no-op
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     startNode = 5;
     numNodes = 1;
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -153,7 +152,7 @@ private:
     }
 
     // 2 nodes: no-op
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     startNode = 10;
     numNodes = 2;
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -171,7 +170,7 @@ private:
     }
 
     // N - 1 nodes: no-op
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     startNode = 1000;
     numNodes = splitVisitor.getMaxNumberOfNodes() - 1;
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -189,7 +188,7 @@ private:
     }
 
     // N nodes: no-op
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     startNode = 2001;
     numNodes = splitVisitor.getMaxNumberOfNodes();
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -216,7 +215,7 @@ private:
     int numWays;
 
     // N + 1 nodes: 2 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = splitVisitor.getMaxNumberOfNodes() + 1;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -230,7 +229,7 @@ private:
 
 
     // N + 2 nodes: 2 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = splitVisitor.getMaxNumberOfNodes() + 2;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -243,7 +242,7 @@ private:
     startNode += numNodes;
 
     // (2N) - 2 nodes: 2 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 2) - 2;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -257,7 +256,7 @@ private:
 
 
     // (2N) - 1 nodes: 2 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 2) - 1;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -271,7 +270,7 @@ private:
 
 
     // (2N) nodes: 2 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 2);
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -285,7 +284,7 @@ private:
 
 
     // (2N) + 1 nodes: 3 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 2) + 1;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -299,7 +298,7 @@ private:
 
 
     // (2N) + 2 nodes: 3 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 2) + 2;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -317,7 +316,7 @@ private:
     //    and primes are good at exposing problems
 
     // (541N) - 2 nodes: 541 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 541) - 2;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -329,7 +328,7 @@ private:
 
 
     // (541N) - 1 nodes: 541 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 541) - 1;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -341,7 +340,7 @@ private:
 
 
     // (541N) nodes: 541 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 541);
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -353,7 +352,7 @@ private:
 
 
     // (541N) + 1 nodes: 542 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 541) + 1;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -365,7 +364,7 @@ private:
 
 
     // (541N) + 2 nodes: 542 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 541) + 2;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);

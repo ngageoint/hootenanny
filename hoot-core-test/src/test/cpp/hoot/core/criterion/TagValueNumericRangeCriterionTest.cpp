@@ -48,7 +48,7 @@ public:
 
   void runInRangeTest()
   {
-    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node->getTags().set("key1", "5");
     node->getTags().set("key2", "5");
     node->getTags().set("key3", "6");
@@ -62,7 +62,7 @@ public:
 
   void runAboveRangeTest()
   {
-    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node->getTags().set("key1", "5");
     node->getTags().set("key2", "4");
     node->getTags().set("key3", "6");
@@ -76,7 +76,7 @@ public:
 
   void runBelowRangeTest()
   {
-    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node->getTags().set("key1", "8");
     node->getTags().set("key2", "4");
     node->getTags().set("key3", "6");
@@ -90,7 +90,7 @@ public:
 
   void runKeyDoesntExistTest()
   {
-    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node->getTags().set("key1", "8");
     node->getTags().set("key2", "4");
     node->getTags().set("key3", "6");
@@ -103,7 +103,7 @@ public:
 
   void runNonNumericValTest()
   {
-    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node->getTags().set("key1", "blah");
     node->getTags().set("key2", "5");
     node->getTags().set("key3", "6");

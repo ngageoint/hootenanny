@@ -48,9 +48,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RandomElementRenamer)
 
-RandomElementRenamer::RandomElementRenamer()
+RandomElementRenamer::RandomElementRenamer() :
+_localRng(std::make_shared<boost::minstd_rand>())
 {
-  _localRng.reset(new boost::minstd_rand());
   _rng = _localRng.get();
 }
 
@@ -85,6 +85,7 @@ QString RandomElementRenamer::permuteName(const QString& s)
           result[i] = result[pos];
           result[pos] = c1;
         } break;
+      default: break;
       }
     }
   }

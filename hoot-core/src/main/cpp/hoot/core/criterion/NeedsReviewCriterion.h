@@ -45,13 +45,11 @@ public:
   static QString className() { return "hoot::NeedsReviewCriterion"; }
 
   NeedsReviewCriterion() = default;
-  NeedsReviewCriterion(ConstOsmMapPtr& map) : _map(map) { }
+  NeedsReviewCriterion(const ConstOsmMapPtr& map);
   ~NeedsReviewCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new NeedsReviewCriterion(_map)); }
+  ElementCriterionPtr clone() override { return std::make_shared<NeedsReviewCriterion>(_map); }
 
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 

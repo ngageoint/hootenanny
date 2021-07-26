@@ -118,8 +118,9 @@ void ConflateCaseTest::_runConflateCmd()
 
 void ConflateCaseTest::_runMultiaryConflateCmd()
 {
-  BaseCommandPtr cmd(dynamic_cast<BaseCommand*>(
-    Factory::getInstance().constructObject<Command>(multiaryConflateClass)));
+  BaseCommandPtr cmd =
+    std::dynamic_pointer_cast<BaseCommand>(
+      Factory::getInstance().constructObject<Command>(multiaryConflateClass));
 
   if (QFileInfo(_d, "README.txt").exists() == false)
   {

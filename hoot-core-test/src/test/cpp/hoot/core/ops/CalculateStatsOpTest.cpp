@@ -100,13 +100,13 @@ private:
   std::shared_ptr<CalculateStatsOp> _calcStats(const QString& inputFile)
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseFileStatus(true);
     reader.setUseDataSourceIds(true);
     reader.read(inputFile, map);
 
-    std::shared_ptr<CalculateStatsOp> calcStatsOp(new CalculateStatsOp());
+    std::shared_ptr<CalculateStatsOp> calcStatsOp = std::make_shared<CalculateStatsOp>();
     // If we figure out the error messages logged by the script translator related stats are
     // invalid and fix them, then this log disablement can be removed.
     {

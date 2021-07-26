@@ -64,11 +64,12 @@ MultiaryPoiMergeCache::MultiaryPoiMergeCache(const ConstOsmMapPtr& map,
 {
 }
 
-MultiaryClusterPtr MultiaryPoiMergeCache::merge(const MultiaryClusterPtr& c1, const MultiaryClusterPtr& c2) const
+MultiaryClusterPtr MultiaryPoiMergeCache::merge(
+  const MultiaryClusterPtr& c1, const MultiaryClusterPtr& c2) const
 {
-  MultiaryClusterPtr result(new MultiaryCluster);
+  MultiaryClusterPtr result = std::make_shared<MultiaryCluster>();
 
-  // put all the elements from the two input clusters into our output cluster. These are the
+  // Pt all the elements from the two input clusters into our output cluster. These are the
   // original, unmerged elements.
   foreach (const ConstElementPtr& e, *c1)
   {
@@ -79,20 +80,20 @@ MultiaryClusterPtr MultiaryPoiMergeCache::merge(const MultiaryClusterPtr& c1, co
     result->append(e);
   }
 
-  // sort the elements so the first inputs come first.
+  // Sort the elements so the first inputs come first.
   qSort(result->begin(), result->end(), ElementOrder());
 
-  // create a match set that we can populate with the provided match creator.
+  // Create a match set that we can populate with the provided match creator.
   MatchSet ms;
 
   // go through the 2nd through the last element
   for (int i = 1; i < result->size(); ++i)
   {
-    // create a match between the ith element and the first element.
+    // Create a match between the ith element and the first element.
     MatchPtr m = _matchCreator->createMatch(_map, result->at(0)->getElementId(),
         result->at(i)->getElementId());
 
-    // if the match isn't valid then this isn't a valid cluster the merge.
+    // If the match isn't valid then this isn't a valid cluster the merge.
     if (!m)
     {
       throw InternalErrorException("Expected all elements in two clusters to have minimal matches "
@@ -105,7 +106,7 @@ MultiaryClusterPtr MultiaryPoiMergeCache::merge(const MultiaryClusterPtr& c1, co
   // create a merge vector
   std::vector<MergerPtr> mergers;
 
-  // create a merger with the provided merge creator.
+  // Create a merger with the provided merge creator.
   _mergerCreator->createMergers(ms, mergers);
 
   // This should only create a single merge operation. This way we get a single output merged
@@ -122,7 +123,7 @@ MultiaryClusterPtr MultiaryPoiMergeCache::merge(const MultiaryClusterPtr& c1, co
     eids.insert(e->getElementId());
   }
 
-  OsmMapPtr tmp(new OsmMap(_map->getProjection()));
+  OsmMapPtr tmp = std::make_shared<OsmMap>(_map->getProjection());
   CopyMapSubsetOp(_map, eids).apply(tmp);
 
   std::vector<std::pair<ElementId, ElementId>> replaced;
@@ -135,7 +136,7 @@ MultiaryClusterPtr MultiaryPoiMergeCache::merge(const MultiaryClusterPtr& c1, co
 
   // Record the newly merged element as a clone. By cloning we don't have to worry about assigning
   // this element to two maps and creating registerListener problems.
-  result->mergedElement.reset(tmp->getNodes().begin()->second->clone());
+  result->mergedElement = tmp->getNodes().begin()->second->clone();
 
   return result;
 }

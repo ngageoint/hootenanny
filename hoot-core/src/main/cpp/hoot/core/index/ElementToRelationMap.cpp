@@ -145,9 +145,8 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
   {
   public:
 
-    ContainsElementVisitor(const OsmMap& map, const ElementId& eid) :
-      _eid(eid),
-      _map(map)
+    ContainsElementVisitor(const OsmMap& /*map*/, const ElementId& eid) :
+      _eid(eid)
     {
       _found = false;
     }
@@ -170,7 +169,6 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
   private:
 
     ElementId _eid;
-    const OsmMap& _map;
     bool _found;
   };
 

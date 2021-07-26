@@ -58,8 +58,9 @@ _hasCriterionCache(CACHE_SIZE_DEFAULT),
 _numAddressesCache(CACHE_SIZE_DEFAULT),
 _conflatableElementCache(CACHE_SIZE_DEFAULT)
 {
-  _geometryCache.reset(
-    new Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>(CACHE_SIZE_DEFAULT));
+  _geometryCache =
+    std::make_shared<Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>>(
+      CACHE_SIZE_DEFAULT);
 }
 
 void ConflateInfoCache::setConfiguration(const Settings& conf)
@@ -72,8 +73,9 @@ void ConflateInfoCache::setConfiguration(const Settings& conf)
     _elementIntersectsCache.setMaxCost(maxCacheSize);
     _hasCriterionCache.setMaxCost(maxCacheSize);
     _numAddressesCache.setMaxCost(maxCacheSize);
-    _geometryCache.reset(
-      new Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>(maxCacheSize));
+    _geometryCache =
+      std::make_shared<Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>>(
+        maxCacheSize);
     _conflatableElementCache.setMaxCost(maxCacheSize);
   }
   else
@@ -334,7 +336,7 @@ bool ConflateInfoCache::elementsIntersect(
     key1 = element1->getElementId().toString() % ";" % element2->getElementId().toString();
     key2 = element2->getElementId().toString() % ";" % element1->getElementId().toString();
 
-    bool* cachedVal = _elementIntersectsCache[key1];
+    const bool* cachedVal = _elementIntersectsCache[key1];
     if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("intersects");
@@ -482,8 +484,7 @@ ElementCriterionPtr ConflateInfoCache::_getCrit(const QString& criterionClassNam
   }
 
   ElementCriterionPtr crit =
-    ElementCriterionPtr(
-      Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
+    Factory::getInstance().constructObject<ElementCriterion>(criterionClassName);
   if (!crit)
   {
     throw IllegalArgumentException(
@@ -512,7 +513,7 @@ bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(
   if (_cachingEnabled)
   {
     // Check the element can be conflated cache first.
-    bool* cachedVal = _conflatableElementCache[element->getElementId()];
+    const bool* cachedVal = _conflatableElementCache[element->getElementId()];
     if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("conflatable");

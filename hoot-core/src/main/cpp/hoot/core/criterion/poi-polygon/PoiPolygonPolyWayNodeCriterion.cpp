@@ -38,13 +38,13 @@ HOOT_FACTORY_REGISTER(ElementCriterion, PoiPolygonPolyWayNodeCriterion)
 PoiPolygonPolyWayNodeCriterion::PoiPolygonPolyWayNodeCriterion() :
 WayNodeCriterion()
 {
-  _parentCriterion.reset(new PoiPolygonPolyCriterion());
+  _parentCriterion = std::make_shared<PoiPolygonPolyCriterion>();
 }
 
 PoiPolygonPolyWayNodeCriterion::PoiPolygonPolyWayNodeCriterion(ConstOsmMapPtr map) :
 WayNodeCriterion(map)
 {
-  _parentCriterion.reset(new PoiPolygonPolyCriterion());
+  _parentCriterion = std::make_shared<PoiPolygonPolyCriterion>();
 }
 
 }

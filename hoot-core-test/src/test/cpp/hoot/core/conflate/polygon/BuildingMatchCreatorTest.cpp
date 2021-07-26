@@ -105,7 +105,7 @@ public:
   OsmMapPtr getTestMap(const bool targetWaysOnly = true)
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -140,7 +140,7 @@ public:
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
 
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
@@ -154,7 +154,7 @@ public:
     BuildingMatchCreator uut;
 
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     conf().set("building.address.match.enabled", "false");
 
@@ -167,7 +167,7 @@ public:
         map->getWay(
           ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "Panera Bread")[0]), map));
 
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);
@@ -197,7 +197,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
 
@@ -258,7 +258,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
@@ -287,7 +287,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
@@ -315,7 +315,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
 
     QString exceptionMsg("");
     try
@@ -338,7 +338,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
 
@@ -362,7 +362,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
 

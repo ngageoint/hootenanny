@@ -48,7 +48,7 @@ ChainCriterion(child1, child2)
 
 ElementCriterionPtr OrCriterion::clone()
 {
-  return ElementCriterionPtr(new OrCriterion(_criteria[0]->clone(), _criteria[1]->clone()));
+  return std::make_shared<OrCriterion>(_criteria[0]->clone(), _criteria[1]->clone());
 }
 
 bool OrCriterion::isSatisfied(const ConstElementPtr& e) const

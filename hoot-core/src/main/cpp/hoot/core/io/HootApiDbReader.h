@@ -59,7 +59,6 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   void open(const QString& urlStr) override;
-
   void read(const OsmMapPtr& map) override;
 
 protected:
@@ -70,7 +69,7 @@ protected:
 
   std::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
 
-  QString supportedFormats() { return MetadataTags::HootApiDbScheme() + "://"; }
+  QString supportedFormats() override { return MetadataTags::HootApiDbScheme() + "://"; }
 
 private:
 

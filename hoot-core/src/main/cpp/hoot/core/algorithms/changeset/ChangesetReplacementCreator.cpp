@@ -94,8 +94,8 @@ void ChangesetReplacementCreator::create(
 
   LOG_INFO("******************************************");
   _currentTask = 1;
-  _progress.reset(
-    new Progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running));
+  _progress =
+    std::make_shared<Progress>(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
   _progress->set(
     0.0, "Generating diff maps for changeset derivation with ID: " + _changesetId + "...");
 
@@ -191,7 +191,7 @@ void ChangesetReplacementCreator::create(
   _progress->set(_getJobPercentComplete(), "Combining maps...");
 
   // This remapper will remap the IDs of all the sec elements.
-  ElementIdRemapper secIdRemapper(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
+  ElementIdRemapper secIdRemapper(std::make_shared<StatusCriterion>(Status::Unknown2));
   if (ConfigOptions().getChangesetReplacementRetainReplacingDataIds())
   {
     // If we're configured to retain the sec IDs, we need to remap them here to avoid conflicts with
@@ -529,7 +529,8 @@ void ChangesetReplacementCreator::_snapUnconnectedPreChangesetMapCropping(OsmMap
 }
 
 void ChangesetReplacementCreator::_snapUnconnectedPostChangesetMapCropping(
-  OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays) const
+  const OsmMapPtr& refMap, OsmMapPtr& combinedMap,
+  const OsmMapPtr& immediatelyConnectedOutOfBoundsWays) const
 {
   QStringList snapWayStatuses;
   snapWayStatuses.append("Input2");
@@ -614,11 +615,10 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
     "Copying immediately connected out of bounds ways from: " << map->getName() <<
     " to new map: " << outputMapName << "...");
 
-  std::shared_ptr<ChainCriterion> copyCrit(
-    new ChainCriterion(
-      std::shared_ptr<WayCriterion>(new WayCriterion()),
-      std::shared_ptr<TagKeyCriterion>(
-        new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
+  std::shared_ptr<ChainCriterion> copyCrit =
+    std::make_shared<ChainCriterion>(
+      std::make_shared<WayCriterion>(),
+      std::make_shared<TagKeyCriterion>(MetadataTags::HootConnectedWayOutsideBounds()));
   OsmMapPtr connectedWays = MapUtils::getMapSubset(map, copyCrit);
   connectedWays->setName(outputMapName);
   LOG_VART(MapProjector::toWkt(connectedWays->getProjection()));
@@ -628,20 +628,18 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
 }
 
 void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBoundsWays(
-  OsmMapPtr& map) const
+  const OsmMapPtr& map) const
 {
   LOG_INFO(
     "Removing any immediately connected ways that were not previously snapped in: " <<
     map->getName() << "...");
 
   RemoveElementsVisitor removeVis;
-  removeVis.addCriterion(ElementCriterionPtr(new WayCriterion()));
+  removeVis.addCriterion(std::make_shared<WayCriterion>());
   removeVis.addCriterion(
-    ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds())));
+    std::make_shared<TagKeyCriterion>(MetadataTags::HootConnectedWayOutsideBounds()));
   removeVis.addCriterion(
-    ElementCriterionPtr(
-      new NotCriterion(
-        std::shared_ptr<TagKeyCriterion>(new TagKeyCriterion(MetadataTags::HootSnapped())))));
+    std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::HootSnapped())));
   removeVis.setChainCriteria(true);
   removeVis.setRecursive(true);
   map->visitRw(removeVis);
@@ -684,7 +682,8 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   LOG_DEBUG("Cropped map: " << map->getName() << " size: " << map->size());
 }
 
-void ChangesetReplacementCreator::_generateChangeset(OsmMapPtr& refMap, OsmMapPtr& combinedMap)
+void ChangesetReplacementCreator::_generateChangeset(
+  const OsmMapPtr& refMap, const OsmMapPtr& combinedMap)
 {
   LOG_STATUS(
     "Generating changeset for ref map of size: " <<

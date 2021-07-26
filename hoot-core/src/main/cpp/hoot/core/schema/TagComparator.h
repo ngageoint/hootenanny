@@ -54,7 +54,6 @@ public:
    */
   void averageTags(const Tags& t1, const Tags& t2, Tags& result, bool keepAllUnknownTags = false,
                    bool caseSensitive = true);
-
   /**
    * @param keepAllUnknownTags If this is set to true then all unknown tags will simply be
    *  concatenated using Tag lists.
@@ -62,13 +61,10 @@ public:
   void averageTags(const Tags& t1, double w1, const Tags& t2, double w2, Tags& result,
     bool keepAllUnknownTags = false, bool caseSensitive = true);
 
-  void compareEnumeratedTags(Tags t1, Tags t2, double& score, double& weight);
-
+  void compareEnumeratedTags(Tags t1, Tags t2, double& score, double& weight) const;
   void compareNames(const Tags& t1, const Tags& t2, double& score, double& weight,
                     bool strict = false) const;
-
-  double compareTags(const Tags& t1, const Tags& t2, bool strict = false);
-
+  double compareTags(const Tags& t1, const Tags& t2, bool strict = false) const;
   /**
    * Compares all non-name text tags and puts the score in score and weight in weight.
    */
@@ -101,6 +97,18 @@ public:
   void mergeNames(Tags& t1, Tags& t2, Tags& result,
                   const QStringList& overwriteExcludeTagKeys = QStringList(),
                   bool caseSensitive = true) const;
+  /**
+   * Merge tags of type text
+   *
+   * @param t1 first set of tags to merge
+   * @param t2 second set of tags to merge
+   * @param result merged tags
+   * @param overwriteExcludeTagKeys keys of tags which should not be overwritten in t2
+   * @param caseSensitive True for case sensitive merge names
+   */
+  void mergeText(
+    Tags& t1, Tags& t2, Tags& result, const QStringList& overwriteExcludeTagKeys = QStringList(),
+    bool caseSensitive = true) const;
 
   /**
    * Keep all names. If there is a conflict in tags between t1 and t2 then use the value in t1.
@@ -115,7 +123,6 @@ public:
   Tags overwriteMerge(Tags t1, Tags t2, const QStringList& overwriteExcludeTagKeys = QStringList(),
                       const QStringList& accumulateValuesTagKeys = QStringList(),
                       bool caseSensitive = true);
-
   /**
    * Replace all tags in t2 with those from t1
    *
@@ -125,8 +132,9 @@ public:
    * @param caseSensitive True for case sensitive merge names
    * @return merged tags
    */
-  Tags replaceMerge(const Tags& t1, const Tags& t2,
-                    const QStringList& overwriteExcludeTagKeys = QStringList(), bool caseSensitive = true);
+  Tags replaceMerge(
+    const Tags& t1, const Tags& t2, const QStringList& overwriteExcludeTagKeys = QStringList(),
+    bool caseSensitive = true);
 
   /**
    * Determines whether two tag sets have identical non-name, non-metadata tags.  Case sensitivity
@@ -140,22 +148,9 @@ public:
    */
   bool nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2, bool caseSensitive = true) const;
 
-  /**
-   * Merge tags of type text
-   *
-   * @param t1 first set of tags to merge
-   * @param t2 second set of tags to merge
-   * @param result merged tags
-   * @param overwriteExcludeTagKeys keys of tags which should not be overwritten in t2
-   * @param caseSensitive True for case sensitive merge names
-   */
-  void mergeText(Tags& t1, Tags& t2, Tags& result,
-                 const QStringList& overwriteExcludeTagKeys = QStringList(), bool caseSensitive = true) const;
-
 private:
 
   void _addDefaults(Tags& t) const;
-
   void _addAsDefault(Tags& t, const QString& key, const QString& value) const;
 
   /**
@@ -169,7 +164,6 @@ private:
    * treated as unordered lists.
    */
   void _mergeExactMatches(Tags& t1, Tags& t2, Tags& result) const;
-
   /**
    * Any tag that is unrecognized will be put into result. If the values differ then a list will
    * be created and the value will be a list in result.
@@ -184,7 +178,6 @@ private:
                                const QStringList& overwriteExcludeTagKeys = QStringList(),
                                const QStringList& accumulateValuesTagKeys = QStringList(),
                                bool caseSensitive = true) const;
-
   void _overwriteUnrecognizedTags(Tags& t1, Tags& t2, Tags& result) const;
 
   /**

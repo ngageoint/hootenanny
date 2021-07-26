@@ -37,8 +37,8 @@ namespace hoot
 
 int SchemaChecker::logWarnCount = 0;
 
-SchemaChecker::SchemaChecker(OsmSchema& osmSchema)
-  : _schemaVertexList(osmSchema.getAllTags())
+SchemaChecker::SchemaChecker(const OsmSchema& osmSchema) :
+_schemaVertexList(osmSchema.getAllTags())
 {
 }
 
@@ -51,7 +51,7 @@ void SchemaChecker::checkUnknownVertexType()
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {
-        LOG_WARN("Warning: unknown type. " << schemaVertex.name);
+        LOG_WARN("Warning: unknown type. " << schemaVertex.getName());
       }
       else if (logWarnCount == Log::getWarnMessageLimit())
       {

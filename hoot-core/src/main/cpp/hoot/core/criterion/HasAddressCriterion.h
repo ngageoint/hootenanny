@@ -50,8 +50,7 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new HasAddressCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<HasAddressCriterion>(); }
 
   QString getDescription() const override { return "Identifies features with addresses"; }
   QString getName() const override { return className(); }

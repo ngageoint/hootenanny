@@ -38,13 +38,13 @@ HOOT_FACTORY_REGISTER(ElementCriterion, TunnelWayNodeCriterion)
 TunnelWayNodeCriterion::TunnelWayNodeCriterion() :
 WayNodeCriterion()
 {
-  _parentCriterion.reset(new TunnelCriterion());
+  _parentCriterion = std::make_shared<TunnelCriterion>();
 }
 
 TunnelWayNodeCriterion::TunnelWayNodeCriterion(ConstOsmMapPtr map) :
 WayNodeCriterion(map)
 {
-  _parentCriterion.reset(new TunnelCriterion());
+  _parentCriterion = std::make_shared<TunnelCriterion>();
 }
 
 }

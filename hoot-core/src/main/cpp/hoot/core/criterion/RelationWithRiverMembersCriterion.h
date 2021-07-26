@@ -48,7 +48,7 @@ public:
   ~RelationWithRiverMembersCriterion() = default;
 
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new RelationWithRiverMembersCriterion()); }
+  { return std::make_shared<RelationWithRiverMembersCriterion>(); }
 
   QString getCriterion() const override;
 

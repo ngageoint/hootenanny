@@ -101,7 +101,7 @@ private:
   // are conflatable given the current configuration before modifying them.
   std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
-  void _removeWays(std::shared_ptr<OsmMap>& map);
+  void _removeWays(const std::shared_ptr<OsmMap>& map);
 };
 
 }
