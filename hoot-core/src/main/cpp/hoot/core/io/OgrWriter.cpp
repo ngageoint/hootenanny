@@ -112,6 +112,14 @@ _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
   _wgs84.SetWellKnownGeogCS("WGS84");
 }
 
+OgrWriter::~OgrWriter()
+{
+  // Clearing things out here helps keep a geopackage file write from crashing inside GDAL.
+  _ds.reset();
+  _layers.clear();
+  _projections.clear();
+}
+
 void OgrWriter::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
@@ -612,21 +620,25 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
     {
       options["FEATURE_DATASET"] = layer->getFdName();
     }
+
+    if (name == QString("GPKG"))
+    {
+      options["OVERWRITE"] = "YES";
+    }
   }
 
   QString layerName = _prependLayerName + layer->getName();
   poLayer = _ds->GetLayerByName(layerName.toStdString().c_str());
 
-  // We only want to add to a layer IFF the config option "ogr.append.data" set
+  // We only want to add to a layer if the config option "ogr.append.data" set.
   if (poLayer != nullptr && _appendData)
   {
     // Layer exists
     _layers[layer->getName()] = poLayer;
     // Loop through the fields making sure that they exist in the output. Print a warning if
-    // they don't exist
+    // they don't exist.
     OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
     std::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
-
 
     for (size_t i = 0; i < fd->getFieldCount(); i++)
     {
@@ -650,8 +662,8 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
   {
     LOG_DEBUG("Layer: " << layerName << " not found.  Creating layer...");
     std::shared_ptr<OGRSpatialReference> projection = MapProjector::createWgs84Projection();
-    poLayer = _ds->CreateLayer(layerName.toLatin1(), projection.get(),
-                  gtype, options.getCrypticOptions());
+    poLayer =
+      _ds->CreateLayer(layerName.toLatin1(), projection.get(), gtype, options.getCrypticOptions());
 
     if (poLayer == nullptr)
     {
@@ -688,7 +700,7 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
             .arg(f->getName()).arg(QString::number(errCode)));
       }
     }
-  } // End layer does not exist
+  }
 }
 
 OGRLayer* OgrWriter::_getLayer(const QString& layerName)
