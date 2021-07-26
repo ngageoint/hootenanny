@@ -2654,6 +2654,14 @@ trigger warning log messages.
 A list of map operations to be applied to a map for cleaning purposes, in order.
 'hoot info --operators' displays information about the available transforms.
 
+=== map.comparator.ignore.tag.keys
+
+* Data Type: list
+* Default Value: ``
+
+A list of tag keys that `MapComparator`, used by the `diff` command, will ignore when comparing
+maps.
+
 === map.comparator.print.full.mismatch.elements.on.map.size.diff
 
 * Data Type: bool

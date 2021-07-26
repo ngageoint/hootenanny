@@ -120,8 +120,8 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
     FileUtils::toLogFormat(output, _printLengthMax) + "...");
 
   // OGR format I/O is handled a little different compared to other formats, so we'll pick the
-  // most appropriate I/O logic path here based on the formats involved. This has been simplfied
-  // several times but there still seems to be some logic duplication, and this can probably still
+  // most appropriate I/O logic path here based on the formats involved. This has been simplified
+  // several times but there still seems to be some logic duplication, and it can probably still
   // be simplified more.
 
   // If we're writing to an OGR format and multi-threaded processing was specified or if both input
@@ -644,7 +644,7 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
   transThread.setFinishedTranslating(&finishedTranslating);
   transThread.setElementCache(pElementCache);
   transThread.start();
-  LOG_DEBUG("Translation Thread Started");
+  LOG_STATUS("Translation thread started...");
 
   // Setup & start our writer thread.
   OgrWriterThread writerThread;
@@ -655,7 +655,7 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
   writerThread.setTransFeaturesQueue(&transFeaturesQ);
   writerThread.setFinishedTranslating(&finishedTranslating);
   writerThread.start();
-  LOG_DEBUG("OGR Writer Thread Started");
+  LOG_STATUS("Writer thread started...");
 
   LOG_DEBUG("Waiting for writer to finish...");
   writerThread.wait();
