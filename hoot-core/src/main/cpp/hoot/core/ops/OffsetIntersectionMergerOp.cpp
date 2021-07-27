@@ -74,8 +74,6 @@ void OffsetIntersectionMergerOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
   //  Linear ways less than or equal to offset max
-//  ChainCriterion criterion(std::make_shared<LinearCriterion>(),
-//                           std::make_shared<WayLengthCriterion>(_offsetMax, NumericComparisonType::LessThanOrEqualTo, map));
   WayLengthCriterion criterion(_offsetMax, NumericComparisonType::LessThanOrEqualTo, map);
   const WayMap& ways = map->getWays();
   std::shared_ptr<NodeToWayMap> nodeToWays = map->getIndex().getNodeToWayMap();
