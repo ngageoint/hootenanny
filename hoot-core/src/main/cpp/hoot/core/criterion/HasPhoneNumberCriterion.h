@@ -58,7 +58,7 @@ public:
 
 private:
 
-  //PhoneNumberParser _phoneNumberParser;
+  PhoneNumberParser _phoneNumberParser;
 };
 
 }

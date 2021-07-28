@@ -50,9 +50,8 @@ class SuperfluousConflateOpRemoverJsTest : public HootTestFixture
   CPPUNIT_TEST(runOpFilter6Test);
   CPPUNIT_TEST(runOpFilter7Test);
   CPPUNIT_TEST(runOpFilter8Test);
-  // TODO: re-enable
-  //CPPUNIT_TEST(runOpFilter9Test);
-  //CPPUNIT_TEST(runOpFilterCombinedTest);
+  CPPUNIT_TEST(runOpFilter9Test);
+  CPPUNIT_TEST(runOpFilterCombinedTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

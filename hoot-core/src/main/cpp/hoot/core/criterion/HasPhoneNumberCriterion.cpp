@@ -36,15 +36,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, HasPhoneNumberCriterion)
 
-void HasPhoneNumberCriterion::setConfiguration(const Settings& /*conf*/)
+void HasPhoneNumberCriterion::setConfiguration(const Settings& conf)
 {
-  //_phoneNumberParser.setConfiguration(conf);
+  _phoneNumberParser.setConfiguration(conf);
 }
 
-bool HasPhoneNumberCriterion::isSatisfied(const ConstElementPtr& /*e*/) const
+bool HasPhoneNumberCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  // return _phoneNumberParser.hasPhoneNumber(*e);
-  return false;
+  return _phoneNumberParser.hasPhoneNumber(*e);
 }
 
 }

@@ -51,6 +51,10 @@ _numNormalized(0)
 
 void PhoneNumberNormalizer::setSearchInText(bool search)
 {
+//  if (search && _regionCode.isEmpty())
+//  {
+//    throw HootException("A region code must be set when searching for phone numbers in text.");
+//  }
   _searchInText = search;
 }
 

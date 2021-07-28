@@ -71,7 +71,7 @@ public:
 private:
 
   int _count;
-  //PhoneNumberParser _phoneNumberParser;
+  PhoneNumberParser _phoneNumberParser;
 };
 
 }

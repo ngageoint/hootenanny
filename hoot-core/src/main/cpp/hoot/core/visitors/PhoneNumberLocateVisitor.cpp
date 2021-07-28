@@ -37,33 +37,33 @@ _totalPhoneNumbersLocated(0)
 {
 }
 
-void PhoneNumberLocateVisitor::setConfiguration(const Settings& /*conf*/)
+void PhoneNumberLocateVisitor::setConfiguration(const Settings& conf)
 {
-  //_phoneNumberLocator.setConfiguration(conf);
+  _phoneNumberLocator.setConfiguration(conf);
 }
 
-void PhoneNumberLocateVisitor::visit(const ElementPtr& /*e*/)
+void PhoneNumberLocateVisitor::visit(const ElementPtr& e)
 {
-//  QList<ElementPhoneNumber> phoneNumbers = _phoneNumberParser.parsePhoneNumbers(*e);
-//  bool anyPhoneNumberLocated = false;
-//  for (QList<ElementPhoneNumber>::const_iterator phoneNumberItr = phoneNumbers.constBegin();
-//       phoneNumberItr != phoneNumbers.constEnd(); ++phoneNumberItr)
-//  {
-//    ElementPhoneNumber phoneNumber = *phoneNumberItr;
-//    const QString locationDescription =
-//      _phoneNumberLocator.getLocationDescription(phoneNumber.tagValue);
-//    if (!locationDescription.isEmpty())
-//    {
-//      e->getTags().set(phoneNumber.tagKey + ":location", locationDescription);
-//      _totalPhoneNumbersLocated++;
-//      anyPhoneNumberLocated = true;
-//    }
-//  }
+  QList<ElementPhoneNumber> phoneNumbers = _phoneNumberParser.parsePhoneNumbers(*e);
+  bool anyPhoneNumberLocated = false;
+  for (QList<ElementPhoneNumber>::const_iterator phoneNumberItr = phoneNumbers.constBegin();
+       phoneNumberItr != phoneNumbers.constEnd(); ++phoneNumberItr)
+  {
+    ElementPhoneNumber phoneNumber = *phoneNumberItr;
+    const QString locationDescription =
+      _phoneNumberLocator.getLocationDescription(phoneNumber.tagValue);
+    if (!locationDescription.isEmpty())
+    {
+      e->getTags().set(phoneNumber.tagKey + ":location", locationDescription);
+      _totalPhoneNumbersLocated++;
+      anyPhoneNumberLocated = true;
+    }
+  }
 
-//  if (anyPhoneNumberLocated)
-//  {
-//    _numAffected++;
-//  }
+  if (anyPhoneNumberLocated)
+  {
+    _numAffected++;
+  }
 }
 
 }

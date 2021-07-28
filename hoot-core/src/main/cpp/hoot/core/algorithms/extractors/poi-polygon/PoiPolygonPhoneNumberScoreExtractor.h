@@ -65,7 +65,7 @@ public:
   QString getDescription() const override
   { return "Scores phone number similarity for POI/Polygon conflation"; }
 
-  long getPhoneNumbersProcessed() const { return 0; /*return _phoneNumberParser.getPhoneNumbersProcessed();*/ }
+  long getPhoneNumbersProcessed() const { return _phoneNumberParser.getPhoneNumbersProcessed(); }
   bool getMatchAttemptMade() const { return _matchAttemptMade; }
 
 private:
@@ -75,7 +75,7 @@ private:
   mutable long _phoneNumbersProcessed;
   mutable bool _matchAttemptMade;
 
-  //PhoneNumberParser _phoneNumberParser;
+  PhoneNumberParser _phoneNumberParser;
 };
 
 }
