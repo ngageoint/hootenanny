@@ -38,9 +38,8 @@ namespace hoot
 class PhoneNumberLocateVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PhoneNumberLocateVisitorTest);
-  // TODO: re-enable
-  //CPPUNIT_TEST(runBasicTest);
-  //CPPUNIT_TEST(runConfigurationTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runConfigurationTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
