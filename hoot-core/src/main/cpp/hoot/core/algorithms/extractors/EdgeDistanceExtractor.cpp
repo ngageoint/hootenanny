@@ -91,7 +91,7 @@ public:
     {
       ConstWayPtr w(std::dynamic_pointer_cast<const Way>(e));
       Geometry* ls =
-        ElementToGeometryConverter(_map->shared_from_this()).convertToLineString(w)->clone();
+        ElementToGeometryConverter(_map->shared_from_this()).convertToLineString(w)->clone().release();
       _lines.push_back(ls);
     }
   }
@@ -188,7 +188,7 @@ std::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(
   }
   else
   {
-    result.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    result = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
   }
   return result;
 }

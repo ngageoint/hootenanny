@@ -469,18 +469,18 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   try
   {
     if (_invert)
-      g.reset(fg->difference(_bounds.get()));
+      g = fg->difference(_bounds.get());
     else
-      g.reset(fg->intersection(_bounds.get()));
+      g = fg->intersection(_bounds.get());
   }
   catch (const geos::util::GEOSException&)
   {
     // try cleaning up the geometry and try again.
     fg.reset(GeometryUtils::validateGeometry(fg.get()));
     if (_invert)
-      g.reset(fg->difference(_bounds.get()));
+      g = fg->difference(_bounds.get());
     else
-      g.reset(fg->intersection(_bounds.get()));
+      g = fg->intersection(_bounds.get());
   }
   LOG_VART(GeometryUtils::geometryTypeIdToString(g));
 
