@@ -45,8 +45,7 @@ bool JobQueue::empty()
 //  }
 //  else
 //  {
-//    std::cout << "Job queue: " << _name.toStdString() << " not empty. size: " << _jobs.size()
-//              << std::endl;
+//    std::cout << "Job queue " << _name.toStdString() << " size: " << _jobs.size() << std::endl;
 //  }
   _mutex.unlock();
   return e;

@@ -74,8 +74,8 @@ public:
     LOG_VARD(testLines);
     QSet<QString> launchedJobs;
     QSet<QString> completedJobs;
-    const QString launchedJobText = "launched job";
-    const QString completedJobText = "test ended";
+    const QString launchedJobText = "launched test";
+    const QString completedJobText = "test completed";
     for (int i = 0; i < testLines.length(); i++)
     {
       const QString line = testLines.at(i);

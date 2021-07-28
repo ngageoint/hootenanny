@@ -138,7 +138,7 @@ public:
 
   virtual void endTest(CppUnit::Test* test)
   {
-    //cout << "test ended: " << test->getName() << endl;
+    //cout << "test completed: " << test->getName() << endl;
 
     double elapsed = Tgs::Time::getTime() - _start;
     if (_showTestName)
