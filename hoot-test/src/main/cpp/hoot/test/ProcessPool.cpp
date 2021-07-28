@@ -39,6 +39,15 @@ bool JobQueue::empty()
 {
   _mutex.lock();
   bool e = _jobs.empty();
+//  if (e)
+//  {
+//    std::cout << "Job queue: " << _name.toStdString() << " empty. " << std::endl;
+//  }
+//  else
+//  {
+//    std::cout << "Job queue: " << _name.toStdString() << " not empty. size: " << _jobs.size()
+//              << std::endl;
+//  }
   _mutex.unlock();
   return e;
 }
@@ -61,6 +70,7 @@ QString JobQueue::pop()
     job = *_jobs.begin();
     _jobs.erase(_jobs.begin());
   }
+  //std::cout << "launched test: " << job.toStdString() << std::endl;
   _mutex.unlock();
   return job;
 }
@@ -242,27 +252,40 @@ ProcessPool::ProcessPool(int nproc, double waitTime,
 
 ProcessPool::~ProcessPool()
 {
+  //std::cout << "Shutting down process pool..." << std::endl;
   for (vector<ProcessThreadPtr>::size_type i = 0; i < _threads.size(); ++i)
   {
     _threads[i]->quit();
     _threads[i]->wait();
   }
+  //std::cout << "Process pool shut down." << std::endl;
 }
 
 void ProcessPool::startProcessing()
 {
   for (vector<ProcessThreadPtr>::size_type i = 0; i < _threads.size(); ++i)
+  {
+    //std::cout << "Starting thread: " << i << std::endl;
     _threads[i]->start();
+  }
+  //std::cout << "All threads started." << std::endl;
 }
 
 void ProcessPool::wait()
 {
   for (vector<ProcessThreadPtr>::size_type i = 0; i < _threads.size(); ++i)
+  {
+    //std::cout << "Waiting for thread: " << i << std::endl;
     _threads[i]->wait();
+  }
+  //std::cout << "Finished waiting." << std::endl;
 }
 
 void ProcessPool::addJob(const QString& test, bool parallel)
 {
+  _parallelJobs.setName("parallel"); // TODO: move this somewhere else?
+  _serialJobs.setName("serial");
+
   if (parallel && !_serialJobs.contains(test))
     _parallelJobs.push(test);
   else if (!parallel)

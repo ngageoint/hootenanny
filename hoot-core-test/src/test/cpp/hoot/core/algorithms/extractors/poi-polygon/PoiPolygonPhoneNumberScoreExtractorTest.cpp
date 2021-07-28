@@ -47,8 +47,8 @@ class PoiPolygonPhoneNumberScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(PoiPolygonPhoneNumberScoreExtractorTest);
   CPPUNIT_TEST(basicTest);
   CPPUNIT_TEST(regionValidationTest);
-  CPPUNIT_TEST(invalidNumberTest);
-  CPPUNIT_TEST(tagKeyTest);
+  //CPPUNIT_TEST(invalidNumberTest);
+  //CPPUNIT_TEST(tagKeyTest);
   CPPUNIT_TEST(invalidRegionCodeTest);
   CPPUNIT_TEST(additionalTagKeysTest);
   CPPUNIT_TEST(findInTextTest);
