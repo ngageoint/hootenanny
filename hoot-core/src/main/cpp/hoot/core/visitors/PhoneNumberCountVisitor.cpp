@@ -40,14 +40,14 @@ _count(0)
 {
 }
 
-void PhoneNumberCountVisitor::setConfiguration(const Settings& conf)
+void PhoneNumberCountVisitor::setConfiguration(const Settings& /*conf*/)
 {
-  _phoneNumberParser.setConfiguration(conf);
+  //_phoneNumberParser.setConfiguration(conf);
 }
 
-void PhoneNumberCountVisitor::visit(const ConstElementPtr& e)
+void PhoneNumberCountVisitor::visit(const ConstElementPtr& /*e*/)
 {
-  _count += _phoneNumberParser.numPhoneNumbers(*e);
+  //_count += _phoneNumberParser.numPhoneNumbers(*e);
 }
 
 }

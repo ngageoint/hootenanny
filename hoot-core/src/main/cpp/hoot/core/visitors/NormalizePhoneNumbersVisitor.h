@@ -56,8 +56,8 @@ public:
   QString getCompletedStatusMessage() const override
   {
     return
-      "Normalized " + QString::number(_phoneNumberNormalizer.getNumNormalized()) +
-      " phone numbers";
+      "Normalized "; //+ QString::number(_phoneNumberNormalizer.getNumNormalized()) +
+      //" phone numbers";
   }
 
   QString getName() const override { return className(); }
@@ -68,7 +68,7 @@ private:
 
   friend class NormalizePhoneNumbersVisitorTest;
 
-  PhoneNumberNormalizer _phoneNumberNormalizer;
+  //PhoneNumberNormalizer _phoneNumberNormalizer;
 };
 
 }

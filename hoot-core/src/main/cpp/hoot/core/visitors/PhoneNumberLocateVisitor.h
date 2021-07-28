@@ -78,8 +78,8 @@ private:
 
   friend class PhoneNumberLocateVisitorTest;
 
-  PhoneNumberParser _phoneNumberParser;
-  PhoneNumberLocator _phoneNumberLocator;
+  //PhoneNumberParser _phoneNumberParser;
+  //PhoneNumberLocator _phoneNumberLocator;
 
   int _totalPhoneNumbersLocated;
 };
