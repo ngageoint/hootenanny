@@ -323,7 +323,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   }
   else if (IoUtils::anyAreSupportedOgrFormats(inputs, true))
   {
-    _setFromOgrOptions(inputs);
+    _setFromOgrOptions();
   }
   else if (!_translationScript.trimmed().isEmpty())
   {
@@ -547,7 +547,7 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
   writerThread.wait();
 }
 
-void DataConverter::_setFromOgrOptions(const QStringList& /*inputs*/)
+void DataConverter::_setFromOgrOptions()
 {
   // The ordering for these added ops matters. Let's run them after any user specified convert ops
   // to avoid unnecessary processing time. Also, if any of these ops gets added here, then we never
@@ -586,6 +586,11 @@ void DataConverter::_setFromOgrOptions(const QStringList& /*inputs*/)
   {
     _translationScript = "translations/quick.js";
   }
+
+  // See similar note in _convertToOgr.
+  _convertOps.removeAll(SchemaTranslationOp::className());
+  _convertOps.removeAll(SchemaTranslationVisitor::className());
+  LOG_VARD(_convertOps);
 }
 
 void DataConverter::_setToOgrOptions(const QString& output)
