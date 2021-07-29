@@ -133,21 +133,21 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
   {
     _convertToOgr(inputs, output);
   }
-  // We need to run _convertFromOgr in order to handle layers correctly.
-  else if (IoUtils::areSupportedOgrFormats(inputs, true))
-  {
-    // We require that a translation be present when converting from OGR, since OgrReader is tightly
-    // coupled to the translation logic. If we have a gdb or a dir as input and no translation is
-    // present, we'll add a quick and dirty translation script here.
-    QStringList justPaths = inputs;
-    IoUtils::ogrPathsAndLayersToPaths(justPaths);
-    if (_translation.isEmpty() &&
-        (StringUtils::endsWithAny(justPaths, ".gdb") || FileUtils::anyAreDirs(justPaths)))
-    {
-      _translation = "translations/quick.js";
-    }
-    _convertFromOgr(inputs, output);
-  }
+//  // We need to run _convertFromOgr in order to handle layers correctly.
+//  else if (IoUtils::areSupportedOgrFormats(inputs, true))
+//  {
+//    // We require that a translation be present when converting from OGR, since OgrReader is tightly
+//    // coupled to the translation logic. If we have a gdb or a dir as input and no translation is
+//    // present, we'll add a quick and dirty translation script here.
+//    QStringList justPaths = inputs;
+//    IoUtils::ogrPathsAndLayersToPaths(justPaths);
+//    if (_translation.isEmpty() &&
+//        (StringUtils::endsWithAny(justPaths, ".gdb") || FileUtils::anyAreDirs(justPaths)))
+//    {
+//      _translation = "translations/quick.js";
+//    }
+//    _convertFromOgr(inputs, output);
+//  }
   // If none of the above conditions was satisfied, we'll call the generic convert routine. Note
   // that _convert may still be passed some OGR formats, which is a bit confusing and further
   // refactoring could change that.
@@ -324,98 +324,98 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
   }
 }
 
-void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& output)
-{
-  LOG_DEBUG("_convertFromOgr");
+//void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& output)
+//{
+//  LOG_DEBUG("_convertFromOgr");
 
-  QElapsedTimer timer;
-  timer.start();
+//  QElapsedTimer timer;
+//  timer.start();
 
-  // This code path has always assumed translation to OSM and never reads the direction, but let's
-  // warn callers that if they specified the opposite direction it won't be used.
-  if (conf().getString(ConfigOptions::getSchemaTranslationDirectionKey()) == "toogr")
-  {
-    LOG_INFO(
-      "Ignoring specified schema.translation.direction=toogr and using toosm to write to " <<
-      "OSM output...");
-  }
+//  // This code path has always assumed translation to OSM and never reads the direction, but let's
+//  // warn callers that if they specified the opposite direction it won't be used.
+//  if (conf().getString(ConfigOptions::getSchemaTranslationDirectionKey()) == "toogr")
+//  {
+//    LOG_INFO(
+//      "Ignoring specified schema.translation.direction=toogr and using toosm to write to " <<
+//      "OSM output...");
+//  }
 
-  _progress.set(0.0, "Loading maps: ..." + FileUtils::toLogFormat(inputs, _printLengthMax) + "...");
+//  _progress.set(0.0, "Loading maps: ..." + FileUtils::toLogFormat(inputs, _printLengthMax) + "...");
 
-  // See similar note in _convertToOgr.
-  _convertOps.removeAll(SchemaTranslationOp::className());
-  _convertOps.removeAll(SchemaTranslationVisitor::className());
-  LOG_VARD(_convertOps);
+//  // See similar note in _convertToOgr.
+//  _convertOps.removeAll(SchemaTranslationOp::className());
+//  _convertOps.removeAll(SchemaTranslationVisitor::className());
+//  LOG_VARD(_convertOps);
 
-  _setFromOgrOptions();
-  // Inclined to add _convertOps.removeDuplicates() here, but there could be some workflows where
-  // the same op needs to be called more than once.
-  LOG_VARD(_convertOps);
+//  _setFromOgrOptions();
+//  // Inclined to add _convertOps.removeDuplicates() here, but there could be some workflows where
+//  // the same op needs to be called more than once.
+//  LOG_VARD(_convertOps);
 
-  // The number of task steps here must be updated as you add/remove job steps in the logic.
-  int numTasks = 2;
-  if (!_convertOps.empty())
-  {
-    numTasks++;
-  }
+//  // The number of task steps here must be updated as you add/remove job steps in the logic.
+//  int numTasks = 2;
+//  if (!_convertOps.empty())
+//  {
+//    numTasks++;
+//  }
 
-  int currentTask = 1;
-  const float taskWeight = 1.0 / (float)numTasks;
+//  int currentTask = 1;
+//  const float taskWeight = 1.0 / (float)numTasks;
 
-  OsmMapPtr map = std::make_shared<OsmMap>();
-  for (int i = 0; i < inputs.size(); i++)
-  {
-    QString input = inputs[i].trimmed();
-    LOG_VARD(input);
+//  OsmMapPtr map = std::make_shared<OsmMap>();
+//  for (int i = 0; i < inputs.size(); i++)
+//  {
+//    QString input = inputs[i].trimmed();
+//    LOG_VARD(input);
 
-    if (input.trimmed().isEmpty())
-    {
-      LOG_WARN("Got an empty layer, skipping.");
-      continue;
-    }
+//    if (input.trimmed().isEmpty())
+//    {
+//      LOG_WARN("Got an empty layer, skipping.");
+//      continue;
+//    }
 
-    // Pass in the job and task info here so progress gets tracked.
-    IoUtils::loadMap(
-      map, input, ConfigOptions().getReaderUseDataSourceIds(),
-      Status::fromString(ConfigOptions().getReaderSetDefaultStatus()), _translation,
-      _ogrFeatureReadLimit, JOB_SOURCE, numTasks);
-  }
+//    // Pass in the job and task info here so progress gets tracked.
+//    IoUtils::loadMap(
+//      map, input, ConfigOptions().getReaderUseDataSourceIds(),
+//      Status::fromString(ConfigOptions().getReaderSetDefaultStatus()), _translation,
+//      _ogrFeatureReadLimit, JOB_SOURCE, numTasks);
+//  }
 
-  if (map->getNodes().size() == 0)
-  {
-    const QString msg = "After translation the map is empty. Aborting.";
-    _progress.set(1.0, Progress::JobState::Failed, msg);
-    throw HootException(msg);
-  }
+//  if (map->getNodes().size() == 0)
+//  {
+//    const QString msg = "After translation the map is empty. Aborting.";
+//    _progress.set(1.0, Progress::JobState::Failed, msg);
+//    throw HootException(msg);
+//  }
 
-  LOG_INFO(
-    "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-    " elements from input in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
-  currentTask++;
+//  LOG_INFO(
+//    "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
+//    " elements from input in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+//  currentTask++;
 
-  if (!_convertOps.empty())
-  {
-    QElapsedTimer timer2;
-    timer2.start();
-    OpExecutor convertOps(_convertOps);
-    convertOps.setProgress(
-      Progress(
-        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-        (float)(currentTask - 1) / (float)numTasks, taskWeight));
-    convertOps.apply(map);
-    currentTask++;
-    LOG_STATUS(
-      "Convert operations ran in " + StringUtils::millisecondsToDhms(timer2.elapsed()) <<
-      " total.");
-  }
+//  if (!_convertOps.empty())
+//  {
+//    QElapsedTimer timer2;
+//    timer2.start();
+//    OpExecutor convertOps(_convertOps);
+//    convertOps.setProgress(
+//      Progress(
+//        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+//        (float)(currentTask - 1) / (float)numTasks, taskWeight));
+//    convertOps.apply(map);
+//    currentTask++;
+//    LOG_STATUS(
+//      "Convert operations ran in " + StringUtils::millisecondsToDhms(timer2.elapsed()) <<
+//      " total.");
+//  }
 
-  _progress.set(
-    (float)(currentTask - 1) / (float)numTasks,
-    "Writing map: ..." + FileUtils::toLogFormat(output, _printLengthMax) + "...");
-  MapProjector::projectToWgs84(map);
-  IoUtils::saveMap(map, output);
-  currentTask++;
-}
+//  _progress.set(
+//    (float)(currentTask - 1) / (float)numTasks,
+//    "Writing map: ..." + FileUtils::toLogFormat(output, _printLengthMax) + "...");
+//  MapProjector::projectToWgs84(map);
+//  IoUtils::saveMap(map, output);
+//  currentTask++;
+//}
 
 void DataConverter::_convert(const QStringList& inputs, const QString& output)
 {
@@ -428,7 +428,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   // See note in convert. An OGR format could still be processed here.
   if (IoUtils::anyAreSupportedOgrFormats(inputs, true))
   {
-    _setFromOgrOptions();
+    _setFromOgrOptions(inputs);
   }
 
   // If the translation direction wasn't specified, try to guess it.
@@ -485,7 +485,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
     assert(!_shapeFileColumnsSpecified());
 
     // stream the i/o
-    ElementStreamer::stream(
+    ElementStreamer(_translation).stream(
       inputs, output, _convertOps,
       Progress(
         ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
@@ -661,7 +661,7 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
   writerThread.wait();
 }
 
-void DataConverter::_setFromOgrOptions()
+void DataConverter::_setFromOgrOptions(const QStringList& inputs)
 {
   // The ordering for these added ops matters. Let's run them after any user specified convert ops
   // to avoid unnecessary processing time. Also, if any of these ops gets added here, then we never
@@ -692,6 +692,17 @@ void DataConverter::_setFromOgrOptions()
     {
       _convertOps.append(BuildingOutlineUpdateOp::className());
     }
+  }
+
+  // We require that a translation be present when converting from OGR, since OgrReader is tightly
+  // coupled to the translation logic. If we have a gdb or a dir as input and no translation is
+  // present, we'll add a quick and dirty translation script here.
+  QStringList justPaths = inputs;
+  IoUtils::ogrPathsAndLayersToPaths(justPaths);
+  if (_translation.isEmpty() &&
+      (StringUtils::endsWithAny(justPaths, ".gdb") || FileUtils::anyAreDirs(justPaths)))
+  {
+    _translation = "translations/quick.js";
   }
 }
 

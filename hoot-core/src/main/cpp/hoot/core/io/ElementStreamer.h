@@ -36,8 +36,11 @@
 namespace hoot
 {
 
+class OgrReader;
+class ElementOutputStream;
+
 /**
- * Streams elements to output
+ * Streams elements from input to output
  */
 class ElementStreamer
 {
@@ -45,16 +48,22 @@ class ElementStreamer
 public:
 
   /**
+   * @brief ElementStreamer TODO
+   * @param translationScript
+   */
+  ElementStreamer(const QString& translationScript = "");
+
+  /**
    * Streams data sources from input to output.
    *
-   * Associated readers/writers must implemented the partial map interfaces
+   * Associated readers/writers must implemented the partial map interfaces.
    *
    * @param inputs data sources
    * @param out data destination
    * @param convertOps a list of map ops/visitors to perform against the data during conversion
    * @param progress optional for tracking I/O job progress
    */
-  static void stream(
+  void stream(
     const QStringList& inputs, const QString& out, const QStringList& convertOps = QStringList(),
     Progress progress = Progress());
 
@@ -68,9 +77,25 @@ public:
    * @param convertOps a list of map ops/visitors to perform against the data during conversion
    * @param progress optional for tracking I/O job progress
    */
-  static void stream(
+  void stream(
     const QString& input, const QString& out, const QStringList& convertOps = QStringList(),
     Progress progress = Progress());
+
+private:
+
+  QString _translationScript;
+
+  /**
+   * @brief _streamOgr TODO
+   * @param reader
+   * @param input
+   * @param writer
+   * @param convertOps
+   * @param progress
+   */
+  void _streamOgr(
+    const OgrReader& reader, QString& input, ElementOutputStream& writer,
+    const QStringList& convertOps = QStringList(), Progress progress = Progress());
 };
 
 }

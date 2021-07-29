@@ -182,10 +182,17 @@ public:
    * There are some ops that require the whole map be available in RAM (e.g. remove duplicate
    * nodes). These operations are not applicable for streaming.
    *
-   * @param ops
+   * @param ops TODO
    * @return
    */
   static bool areValidStreamingOps(const QStringList& ops);
+
+  /**
+   * @brief toStreamingOps TODO
+   * @param ops
+   * @return
+   */
+  static QList<ElementVisitorPtr> toStreamingOps(const QStringList& ops);
 
   /**
    * Determines if a URL points to a valid streamable input

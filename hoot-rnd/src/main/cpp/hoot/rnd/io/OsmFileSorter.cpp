@@ -141,7 +141,7 @@ std::shared_ptr<QTemporaryFile> OsmFileSorter::_ogrToPbfTemp(const QString& inpu
     throw HootException("Unable to open sort temp file: " + pbfTemp->fileName() + ".");
   }
 
-  ElementStreamer::stream(input, pbfTemp->fileName());
+  ElementStreamer().stream(input, pbfTemp->fileName());
 
   return pbfTemp;
 }
