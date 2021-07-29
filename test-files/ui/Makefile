@@ -54,7 +54,7 @@ else
 endif
 	# Running user interface tests...
 	TOMCAT_PORT=$(TOMCAT_PROXY_PORT) \
-	xvfb-run --server-args="-screen 0, 1024x768x24" bundle exec cucumber $(CUKE_OPTS) $(CUKE_FEATURES); \
+	xvfb-run --server-args="-screen 0 1280x1024x24" bundle exec cucumber $(CUKE_OPTS) $(CUKE_FEATURES); \
 	ret=$$?; \
 	(ps ux | grep nod[e] | grep proxy | awk "{print $$2}" | xargs kill >/dev/null 2>&1 || true); \
 	exit $$ret
