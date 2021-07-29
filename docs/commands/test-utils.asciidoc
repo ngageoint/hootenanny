@@ -1,0 +1,27 @@
+[[test-utils]]
+== test-utils
+
+=== Description
+
+The +test-utils+ command contains various utilities for debugging Hootenanny tests. The available 
+input parameters are:
+
+* +--log+ - Log file path
+
+=== Usage
+
+--------------------------------------
+hoot test-utils (--log) (logFilePath)
+--------------------------------------
+
+=== --log Option
+
+Using this option helps to figure out which tests never finish when multi-threaded tests are 
+launched, which causes the test command to hang. It parses the output of a log that tracks launched 
+test jobs to determine which ones completed. Before running this, uncomment the log lines 
+containing "launched job" in JobQueue::pop in ProcessPool.cpp and "test ended" in 
+HootTestListener::endTest in hoot-test/main.cpp. Then, redirect your HootTest command standard out 
+to a file. Pass that file path in with this command option. Normally, let HootTest run until you see 
+no active threads with CPU usage to ensure that all tests that are able to complete have finished. 
+However, sometimes threads may be hanging with CPU usage and you should kill HootTest after a 
+significant amount of time has passed with no tests ending.

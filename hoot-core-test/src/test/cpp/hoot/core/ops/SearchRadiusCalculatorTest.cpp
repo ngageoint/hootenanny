@@ -88,7 +88,7 @@ public:
 
     searchRadiusCalculator.apply(map);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      34.334710, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
+      34.334701, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
   }
 
   void runNotEnoughTiePointsTest()
@@ -141,7 +141,7 @@ public:
 
     searchRadiusCalculator.apply(map);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      32.675054, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
+      32.675050, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
   }
 
 };

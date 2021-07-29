@@ -27,12 +27,15 @@
 #ifndef PROCESS_POOL_H
 #define PROCESS_POOL_H
 
+#include <hoot/core/util/Log.h>
+
 //  Standard
 #include <memory>
 #include <set>
 #include <vector>
 
 //  QT
+#include <QString>
 #include <QMutex>
 #include <QProcess>
 #include <QThread>
@@ -49,6 +52,7 @@ using QProcessPtr = std::shared_ptr<QProcess>;
 class JobQueue
 {
 public:
+
   /** Standard constructor */
   JobQueue();
 
@@ -77,11 +81,18 @@ public:
    */
   void push(const QString& job);
 
+  QString getName() const { return _name; }
+
+  void setName(const QString& name) { _name = name; }
+
 private:
+
   /** Mutex for locking _jobs */
   QMutex _mutex;
   /** std::set of job names to be processed */
   std::set<QString> _jobs;
+  // job queue name
+  QString _name;
 };
 
 
@@ -105,6 +116,7 @@ public:
    *  that cannot be run in parallel but must be run serially
    */
   ProcessThread(bool showTestName, bool suppressFailureDetail, bool printDiff, double waitTime, QMutex* outMutex, JobQueue* parallelJobs, JobQueue* serialJobs = nullptr);
+  //~ProcessThread();
 
   /**
    * @brief run method for thread, called by ::start()
@@ -118,6 +130,7 @@ public:
   int getFailures();
 
 private:
+
   /**
    * @brief createProcess actually creates a HootTest process that is listening for tests on standard in to run
    * @return pointer to the process created, ownership is passed back

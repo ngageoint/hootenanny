@@ -67,7 +67,7 @@ std::shared_ptr<geos::geom::MultiLineString> MultiLineStringVisitor::createMulti
   {
     return
       std::shared_ptr<geos::geom::MultiLineString>(
-        GeometryFactory::getDefaultInstance()->createMultiLineString());
+        GeometryFactory::getDefaultInstance()->createMultiLineString().release());
   }
 }
 
@@ -98,7 +98,7 @@ void MultiLineStringVisitor::visit(const ConstWayPtr& w)
       // We'll pass ownership of this pointer off in createMultiLineString.
       _ls = new vector<Geometry*>();
     }
-    _ls->push_back(ElementToGeometryConverter(_provider).convertToLineString(w)->clone());
+    _ls->push_back(ElementToGeometryConverter(_provider).convertToLineString(w)->clone().release());
   }
 }
 

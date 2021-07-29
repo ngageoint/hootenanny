@@ -182,8 +182,8 @@ void AddMeasurementTagsVisitor::_calculateExtents(
   width = 0;
 
   // calculate minimum rectangle/aligned bounding box
-  const Geometry* pMinRect = MinimumDiameter::getMinimumRectangle(pGeometry);
-  const CoordinateSequence* pMinRectCoords = pMinRect->getCoordinates();
+  std::unique_ptr<Geometry> pMinRect = MinimumDiameter::getMinimumRectangle(pGeometry);
+  std::unique_ptr<CoordinateSequence> pMinRectCoords = pMinRect->getCoordinates();
 
   if (pMinRectCoords->getSize() > 2)
   {
