@@ -42,7 +42,7 @@ echo "PBF to SHP..."
 hoot convert $LOG_LEVEL $CONFIG test-files/ToyTestA.osm.pbf $OUTPUT_DIR/ToyTestA.shp
 
 echo "SHP to OSM..."
-# comparing shapefiles is kinda hard. We'll convert it to a .osm file first.
+# comparing shapefiles is kinda hard. We'll convert it to an .osm file first.
 hoot convert $LOG_LEVEL $CONFIG $OUTPUT_DIR/ToyTestA.shp $OUTPUT_DIR/ToyTestAShp.osm
 hoot diff $LOG_LEVEL $CONFIG $OUTPUT_DIR/ToyTestAShp.osm $OUTPUT_DIR/ToyTestAShp.osm
 

@@ -1041,7 +1041,7 @@ void OgrReaderInternal::_initTranslate()
   LOG_VART(_translatePath);
   LOG_VART(_translator.get());
 
-  if (_translatePath != "" && _translator.get() == nullptr)
+  if (_translatePath != "" && !_translator)
   {
     _translator = ScriptSchemaTranslatorFactory::getInstance().createTranslator(_translatePath);
     if (_translator.get() == nullptr)

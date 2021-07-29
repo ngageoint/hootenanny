@@ -61,11 +61,6 @@ void ElementStreamer::stream(
   QElapsedTimer timer;
   timer.start();
 
-  if (IoUtils::isSupportedOgrFormat(out))
-  {
-    throw IllegalArgumentException("TODO");
-  }
-
   std::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::createWriter(out);
   writer->open(out);
   std::shared_ptr<ElementOutputStream> streamWriter =
@@ -140,7 +135,7 @@ void ElementStreamer::_streamOgr(
 
   if (_translationScript.isEmpty())
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException("No translation script specified.");
   }
   reader.setSchemaTranslationScript(_translationScript);
 

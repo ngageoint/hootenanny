@@ -84,7 +84,7 @@ private:
 
   friend class DataConverterTest;
 
-  QString _translation;
+  QString _translationScript;
   QString _translationDirection;
   bool _translateMultithreaded;
   QStringList _shapeFileColumns;
@@ -99,18 +99,14 @@ private:
   // converts from any input to an OGR output; A translation is required and operations are memory
   // bound.
   void _convertToOgr(const QStringList& inputs, const QString& output);
-  // converts from an OGR input to any output; a translation is required
-  //void _convertFromOgr(const QStringList& inputs, const QString& output);
   /*
-   * This method handles all conversions including OGR conversions not done by _convertToOgr or
-   * _convertFromOgr. OGR conversions performed by this method will not be memory bound.
+   * This method handles all non OGR output conversions.
    */
   void _convert(const QStringList& inputs, const QString& output);
 
   // sets ogr options only for _convert
   void _setFromOgrOptions(const QStringList& inputs);
   void _setToOgrOptions(const QString& output);
-  // This handles configures translations options correctly for non-OGR outputs.
   void _handleNonOgrOutputTranslationOpts();
   QString _outputFormatToTranslationDirection(const QString& output) const;
 

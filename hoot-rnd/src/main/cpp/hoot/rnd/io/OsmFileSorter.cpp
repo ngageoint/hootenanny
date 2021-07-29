@@ -27,12 +27,12 @@
 #include "OsmFileSorter.h"
 
 // Hoot
+#include <hoot/core/io/DataConverter.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/GeoNamesReader.h>
-#include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
@@ -44,8 +44,8 @@ namespace hoot
 
 void OsmFileSorter::sort(const QString& input, const QString& output)
 {
-  //I believe Osmosis handles parallelization automatically, so this is to be passed to the Unix
-  //sort command used by the GeoNames format only.
+  // I believe Osmosis handles parallelization automatically, so this is to be passed to the Unix
+  // sort command used by the GeoNames format only.
   const int sortParallelCount = QThread::idealThreadCount();
 
   if (GeoNamesReader().isSupported(input))
@@ -90,8 +90,8 @@ void OsmFileSorter::sort(const QString& input, const QString& output)
       throw HootException("OGR files must be output to OSM PBF format during sorting.");
     }
 
-    //Unfortunately for now, sorting an OGR input is going to require an extra pass over the data
-    //to first write it to a sortable format.
+    // Unfortunately for now, sorting an OGR input is going to require an extra pass over the data
+    // to first write it to a sortable format.
     LOG_WARN("OGR inputs must be converted to the OSM format before sorting by node ID.");
     LOG_WARN("Converting input to OSM format...");
     _sortPbf(_ogrToPbfTemp(input)->fileName(), output);
@@ -141,7 +141,7 @@ std::shared_ptr<QTemporaryFile> OsmFileSorter::_ogrToPbfTemp(const QString& inpu
     throw HootException("Unable to open sort temp file: " + pbfTemp->fileName() + ".");
   }
 
-  ElementStreamer().stream(input, pbfTemp->fileName());
+  DataConverter().convert(input, pbfTemp->fileName());
 
   return pbfTemp;
 }

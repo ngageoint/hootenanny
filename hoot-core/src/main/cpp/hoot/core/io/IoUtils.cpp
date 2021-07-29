@@ -386,17 +386,19 @@ QList<ElementVisitorPtr> IoUtils::toStreamingOps(const QStringList& ops)
       if (!Factory::getInstance().hasBase<ElementVisitor>(opName) &&
           !Factory::getInstance().hasBase<ConstElementVisitor>(opName))
       {
-        throw IllegalArgumentException("TODO");
+        throw IllegalArgumentException(
+          "Streaming operations must be an ElementVisitor or a ConstElementVisitor.");
       }
 
+      // When streaming we can't provide a reliable OsmMap.
+      const QString osmMapConsumerErrorMsg = "A streaming operations may not be an OsmMapConsumer.";
       if (Factory::getInstance().hasBase<ElementVisitor>(opName))
       {
         ElementVisitorPtr vis =
           Factory::getInstance().constructObject<ElementVisitor>(opName);
-        // When streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
         {
-          throw IllegalArgumentException("TODO");
+          throw IllegalArgumentException(osmMapConsumerErrorMsg);
         }
         opsToReturn.append(vis);
       }
@@ -404,10 +406,9 @@ QList<ElementVisitorPtr> IoUtils::toStreamingOps(const QStringList& ops)
       {
         ConstElementVisitorPtr vis =
           Factory::getInstance().constructObject<ConstElementVisitor>(opName);
-        // When streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
         {
-          throw IllegalArgumentException("TODO");
+          throw IllegalArgumentException(osmMapConsumerErrorMsg);
         }
         opsToReturn.append(vis);
       }
