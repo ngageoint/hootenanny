@@ -90,13 +90,13 @@ public:
     ConstWayPtr w2 = map->getWay(r2[0]);
 
     EdgeDistanceExtractor uut(std::make_shared<MeanAggregator>(), 5.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(9.9833, uut.distance(*map, w1, w2), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(9.9471, uut.distance(*map, w1, w2), 0.01);
 
     EdgeDistanceExtractor uut2(std::make_shared<RmseAggregator>(), 5.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(15.5733, uut2.distance(*map, w1, w2), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(15.5265, uut2.distance(*map, w1, w2), 0.01);
 
     EdgeDistanceExtractor uut3(std::make_shared<MinAggregator>(), 5.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0227, uut3.distance(*map, w1, w2), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.2247, uut3.distance(*map, w1, w2), 0.01);
 
     EdgeDistanceExtractor uut4(std::make_shared<QuantileAggregator>(0.5), 5.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5.5029, uut4.distance(*map, w1, w2), 0.01);

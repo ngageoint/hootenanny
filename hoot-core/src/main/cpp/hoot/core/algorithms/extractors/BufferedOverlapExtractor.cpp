@@ -96,17 +96,17 @@ double BufferedOverlapExtractor::extract(const OsmMap& map, const ConstElementPt
   {
     // This buffer calc is a performance bottleneck for Area Conflation. Attempts to reduce the quad
     // segments option passed to the buffer operation have had no effect on performance so far.
-    g1.reset(g1->buffer(buffer));
-    g2.reset(g2->buffer(buffer));
-    overlap.reset(g1->intersection(g2.get()));
+    g1 = g1->buffer(buffer);
+    g2 = g2->buffer(buffer);
+    overlap = g1->intersection(g2.get());
   }
   catch (const geos::util::TopologyException&)
   {
     g1.reset(GeometryUtils::validateGeometry(g1.get()));
     g2.reset(GeometryUtils::validateGeometry(g2.get()));
-    g1.reset(g1->buffer(buffer));
-    g2.reset(g2->buffer(buffer));
-    overlap.reset(g2->intersection(g1.get()));
+    g1 = g1->buffer(buffer);
+    g2 = g2->buffer(buffer);
+    overlap = g2->intersection(g1.get());
   }
 
   double bufferedA1 = g1->getArea();

@@ -315,7 +315,7 @@ void OgrWriter::translateToFeatures(
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
       logWarnCount++;
-      g.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+      g = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
     }
 
     LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType());
@@ -809,7 +809,7 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
                                    const Geometry* g, OGRFeature* poFeature) const
 {
   std::string wkt = g->toString();
-  char* t = (char*)wkt.data();
+  const char* t = (char*)wkt.data();
   OGRGeometry* geom;
   int errCode = OGRGeometryFactory::createFromWkt(&t, layer->GetSpatialRef(), &geom) ;
   if (errCode != OGRERR_NONE)

@@ -124,9 +124,9 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
   }
   if (!_geometry)
   {
-    _geometry.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    _geometry = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
   }
-  _geometry.reset(_geometry->buffer(_buffer));
+  _geometry = _geometry->buffer(_buffer);
 
   // See _coverStragglers description. This is an add-on behavior that is separate from the original
   // Alpha Shape algorithm.
@@ -168,7 +168,7 @@ void AlphaShapeGenerator::_coverStragglers(const ConstOsmMapPtr& map)
     //  Merge the stragglers geometries
     GeometryPtr merged = GeometryMerger().mergeGeometries(_stragglers, *_geometry->getEnvelopeInternal());
     //  Join the original geometry with the stragglers geometry
-    _geometry.reset(_geometry->Union(merged.get()));
+    _geometry = _geometry->Union(merged.get());
   }
   LOG_VART(_geometry->getArea());
 }
@@ -205,7 +205,7 @@ void AlphaShapeGenerator::_coverStragglersWorker()
       {
         LOG_TRACE(
           "Point " << point->toString() << " not covered by alpha shape. Buffering and adding it...");
-        point.reset(point->buffer(_buffer));
+        point = point->buffer(_buffer);
         _stragglersMutex.lock();
         _stragglers.push_back(point);
         _stragglersMutex.unlock();

@@ -281,7 +281,7 @@ Coordinate WayAverager::_moveToLineAsCoordinate(
 
   // find the two closest points
   std::shared_ptr<CoordinateSequence> cs(
-    DistanceOp::closestPoints(point.get(), const_cast<LineString*>(ls)));
+    DistanceOp::nearestPoints(point.get(), const_cast<LineString*>(ls)));
 
   Coordinate result = Coordinate(cs->getAt(0).x * nWeight + cs->getAt(1).x * lWeight,
                                  cs->getAt(0).y * nWeight + cs->getAt(1).y * lWeight);

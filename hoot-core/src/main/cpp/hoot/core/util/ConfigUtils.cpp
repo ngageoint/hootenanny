@@ -109,8 +109,7 @@ std::shared_ptr<InBoundsCriterion> ConfigUtils::getBoundsFilter(const ConstOsmMa
       // The bounds is always in WGS84, so if our map isn't currently in WGS84 we need to reproject
       // the bounds.
       LOG_DEBUG("Reprojecting bounds: " << boundsStr << "...");
-      std::shared_ptr<OGRSpatialReference> srs84 = std::make_shared<OGRSpatialReference>();
-      srs84->SetWellKnownGeogCS("WGS84");
+      std::shared_ptr<OGRSpatialReference> srs84 = MapProjector::createWgs84Projection();
       MapProjector::project(bounds, srs84, map->getProjection());
     }
     boundsCrit->setBounds(bounds);
