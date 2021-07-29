@@ -91,8 +91,8 @@ bool WayBufferCriterion::isSatisfied(const ConstElementPtr& e) const
     {
       _bufferAccuracy = w->getCircularError() + _buffer;
 
-      _baseBuffered.reset(_baseLs->buffer(_bufferAccuracy, 3,
-                                          geos::operation::buffer::BufferOp::CAP_ROUND));
+      _baseBuffered = _baseLs->buffer(_bufferAccuracy, 3,
+                                      geos::operation::buffer::BufferOp::CAP_ROUND);
       _boundsPlus = *_baseBuffered->getEnvelopeInternal();
     }
 
@@ -106,7 +106,7 @@ bool WayBufferCriterion::isSatisfied(const ConstElementPtr& e) const
       {
         std::shared_ptr<Geometry> ls2Buffer(ls2->buffer(_bufferAccuracy, 3,
                                                    geos::operation::buffer::BufferOp::CAP_ROUND));
-        g.reset(ls2Buffer->intersection(_baseLs.get()));
+        g = ls2Buffer->intersection(_baseLs.get());
         double ls1IntersectLength = g->getLength();
 
         if (ls1IntersectLength / _baseLength >= _matchPercent)

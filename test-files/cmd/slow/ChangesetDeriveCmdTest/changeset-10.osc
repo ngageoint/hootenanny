@@ -183,11 +183,11 @@
             <tag k="test_key" v="test_val"/>
         </node>
         <way id="-1" version="0" timestamp="">
-            <nd ref="-13"/>
             <nd ref="-2"/>
             <nd ref="-1"/>
             <nd ref="-17"/>
             <nd ref="-13"/>
+            <nd ref="-2"/>
             <tag k="test_key" v="test_val"/>
             <tag k="name" v="Best Buy"/>
             <tag k="building" v="yes"/>

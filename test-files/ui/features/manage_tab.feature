@@ -98,7 +98,7 @@ Feature: Manage Tab
         When I press "big.loud" span with text "Import"
         Then I wait 30 "seconds" to not see "Import Type"
         # Rename dataset
-        Then I wait 2 seconds
+        Then I wait 5 seconds
         And I expand the "TestSubFolder" folder
         And I should see "dcpoi_clip_Cucumber_manage"
         And I click the "dcpoi_clip_Cucumber_manage" Dataset

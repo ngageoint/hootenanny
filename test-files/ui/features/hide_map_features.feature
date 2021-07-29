@@ -19,11 +19,13 @@ Feature: Toggle/hide map features of conflated layer in review mode
     Then I wait 30 "seconds" to see "Conflating …"
     Then I wait 5 "minutes" to see "HideMapFeaturesCucumber"
     Then I wait 30 "seconds" to see "Complete Review"
+    Then I wait 1 "minutes" to see "Exiting the review session"
     Then I context click "HideMapFeaturesCucumber"
     And I click the "div" with text "Zoom to Layer"
     Then I should see land use areas on the map
     And I should see service roads on the map
     And I should see paths on the map
+    Then I wait 1 "minutes" to not see "Exiting the review session"
     Then I click to expand Map Data
     Then I click the "Map Features" link
     Then I press span with text "Landuse Features"
