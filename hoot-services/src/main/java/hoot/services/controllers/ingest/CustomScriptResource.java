@@ -249,10 +249,9 @@ public class CustomScriptResource {
 
             filesList.addAll(getDefaultList(configFiles));
 
-            // sort the list
-            Map<String, JSONObject> sortedScripts = new TreeMap<>();
             for (Object o : filesList) {
                 JSONObject cO = (JSONObject) o;
+                cO.put("displayPath", cO.get("NAME"));
                 retList.add(cO);
             }
 
@@ -280,6 +279,7 @@ public class CustomScriptResource {
                 json.put("userId", translationRecord.get(translations.userId));
                 json.put("date", translationRecord.get(translations.createdAt).toString());
                 json.put("folderId", folderId);
+                json.put("displayPath", translationRecord.get(translationFolders.path) + File.separator + translationName);
 
                 if (parentFolderIsPublic == null) {
                     parentFolderIsPublic = true;
