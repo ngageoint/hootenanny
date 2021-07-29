@@ -473,8 +473,13 @@ When(/^I press span with text "([^"]*)"$/) do |txt|
 end
 
 And(/^I scroll "([^"]*)" into view$/) do |txt|
-    element = page.driver.browser.find_element(:xpath=>"//*[contains(text(), '" + txt + "')]")
-    page.driver.browser.execute_script("arguments[0].scrollIntoView(true)", element)
+  element = page.driver.browser.find_element(:xpath=>"//*[contains(text(), '" + txt + "')]")
+  page.driver.browser.execute_script("arguments[0].scrollIntoView(true)", element)
+end
+
+And(/^I scroll up "([^"]*)" into view$/) do |txt|
+  element = page.driver.browser.find_element(:xpath=>"//*[contains(text(), '" + txt + "')]")
+  page.driver.browser.execute_script("arguments[0].scrollIntoView(false)", element)
 end
 
 When(/^I scroll "([^"]*)" element into view and press it$/) do |txt|
