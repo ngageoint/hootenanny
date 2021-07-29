@@ -3,37 +3,45 @@
 [[DifferentialConflation]]
 == Differential Conflation
 
-Differential Conflation makes use of the Unifying conflation framework within Hootenanny, but attempts a much simpler 
-operation than "full" conflation. The idea is to allow a user to take two datasets, A and B, and generate a changeset from 
-them such that the changeset includes all of the data in set B that does not overlap (conflict, need merging, etc.) with set 
-A. The changeset can then be applied directly to dataset A, without generating any review items.
+Differential Conflation makes use of the Unifying conflation framework within Hootenanny, but 
+attempts a much simpler operation than "full" conflation. The idea is to allow a user to take two 
+datasets, A and B, and generate a changeset from them such that the changeset includes all of the 
+data in set B that does not overlap (conflict, need merging, etc.) with set A. The changeset can 
+then be applied directly to dataset A, without generating any review items.
 
-To re-iterate, Hootenanny will consider any conflatable feature type during differential conflation. Types that cannot 
-be conflated by Hootenanny (that is, types for which hootenanny does not have a matcher) will be removed from the 
-differential output. This is to prevent possible duplication of features when differential conflation is used in an 
-automated fashion to bulk-process data.
+To re-iterate, Hootenanny will consider any conflatable feature type during differential conflation. 
+Types that cannot be conflated by Hootenanny (that is, types for which hootenanny does not have a 
+matcher) will be removed from the differential output. This is to prevent possible duplication of 
+features when differential conflation is used in an automated fashion to bulk-process data.
 
-In a nutshell, the basic differential algorithm works like this: both inputs are loaded into a single map, with elements 
-marked "unknown1" and "unknown2", respectively. Matches are generated using all specified matchers, then all of the 
-elements involved in the matches are removed from the map. Next, all of the remaining elements from the first input 
-("unknown1") are removed. At this point, the only elements remaining in the map will be elements from the second input that 
-did not match any elements in the first input.
+In a nutshell, the basic differential algorithm works like this: both inputs are loaded into a 
+single map, with elements marked "unknown1" and "unknown2", respectively. Matches are generated 
+using all specified matchers, then all of the elements involved in the matches are removed from the 
+map. Next, all of the remaining elements from the first input ("unknown1") are removed. At this 
+point, the only elements remaining in the map will be elements from the second input that did not 
+match any elements in the first input.
 
-So now we have all of the "new" geometry from the second input isolated as output, but what if there were also new or 
-updated tags on some of the elements in the second input? How can we capture those new tags? If the --include-tags option 
-is enabled, we simply go back through the matches derived in the previous step, and compare the tags of the elements involved 
-in the match. If the element from the second input contains new tag keys, or tag values different from the first input 
-element, the tags are merged using an overwrite algorithm, where all key/value pairs are kept from the first input, all 
-key/value pairs from the second input are appended, and any keys that conflict are assigned the value from the second input, 
-as it is assumed that the second input contains updated information. The merged tag set is applied to the *original* 
-element geometry, and it is written out as a changeset "modify" directive.
+So now we have all of the "new" geometry from the second input isolated as output, but what if there 
+were also new or updated tags on some of the elements in the second input? How can we capture those 
+new tags? If the `--include-tags` option is enabled, we simply go back through the matches derived 
+in the previous step, and compare the tags of the elements involved in the match. If the element 
+from the second input contains new tag keys, or tag values different from the first input element, 
+the tags are merged using an overwrite algorithm, where all key/value pairs are kept from the first 
+input, all key/value pairs from the second input are appended, and any keys that conflict are 
+assigned the value from the second input, as it is assumed that the second input contains updated 
+information. The merged tag set is applied to the *original* element geometry, and it is written out 
+as a changeset "modify" directive.
 
-When using Differential Conflation against non-road linear features or road features with the Unifying Roads Algorithm, 
-it supports calculating a differential against partial linear feature matches. This generates a more granular differential
-for linear features than using whole feature matches. There may, however, be times when a less granular differential is desired
-and the behavior may be turned off by enabling the `differential.remove.linear.partial.matches.as.whole` configuration option. 
-By default when using the Unifying Roads Algorithm, partial match removal is enabled when conflating all linear feature 
-types except rivers. Differentials generated with river data do not seem to benefit from partial linear match removal.
+When using Differential Conflation against linear features other than rivers with the Unifying Roads 
+Algorithm, by default it calculates the differential against partial linear feature matches rather 
+than whole matches. This generally generates a more granular differential. Differentials generated 
+with river data, however, do not seem to benefit from partial linear match removal the majority of 
+the time. There may, however, be situations when a less granular differential is desired, and the 
+default behavior for linear non-river features may be turned off by enabling the `differential.remove.linear.partial.matches.as.whole` configuration option (enable "Remove features 
+involved in linear partial matches completely" option in the UI). To control river partial matching 
+with Differential Conflation, use the `differential.remove.river.partial.matches.as.whole` ("Remove 
+rivers involved in river partial matches completely" option in the UI).
 
-Differential Conflation can further be customized by modifying the +conf/core/DifferentialConflation.conf+ configuration 
-options file.
+
+Differential Conflation can further be customized by modifying the 
++conf/core/DifferentialConflation.conf+ configuration options file.
