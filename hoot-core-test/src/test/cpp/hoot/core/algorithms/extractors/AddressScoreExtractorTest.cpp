@@ -76,6 +76,7 @@ public:
   void runTagTest()
   {
     AddressScoreExtractor uut;
+    conf().set("address.match.enabled", "true");
     uut.setConfiguration(conf());
     // The cache needs to be disabled since its static and all of these tests will run as threads
     // within the same process, thus sharing the cache. If we weren't using the same element IDs
@@ -119,6 +120,7 @@ public:
   void runCombinedTagTest()
   {
     AddressScoreExtractor uut;
+    conf().set("address.match.enabled", "true");
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
@@ -147,6 +149,7 @@ public:
   void runRangeTest()
   {
     AddressScoreExtractor uut;
+    conf().set("address.match.enabled", "true");
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
@@ -185,6 +188,7 @@ public:
   void runAltFormatTest()
   {
     AddressScoreExtractor uut;
+    conf().set("address.match.enabled", "true");
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
@@ -221,6 +225,7 @@ public:
   void runSubLetterTest()
   {
     AddressScoreExtractor uut;
+    conf().set("address.match.enabled", "true");
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
@@ -244,6 +249,7 @@ public:
   void runIntersectionTest()
   {
     AddressScoreExtractor uut;
+    conf().set("address.match.enabled", "true");
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
 
@@ -343,6 +349,7 @@ public:
   void runWayTest()
   {
     AddressScoreExtractor uut;
+    conf().set("address.match.enabled", "true");
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
@@ -391,6 +398,7 @@ public:
   void runRelationTest()
   {
     AddressScoreExtractor uut;
+    conf().set("address.match.enabled", "true");
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
@@ -467,6 +475,7 @@ public:
   void translateTagValueTest()
   {
     AddressScoreExtractor uut;
+    conf().set("address.match.enabled", "true");
     Settings settings = conf();
     OsmMapPtr map = std::make_shared<OsmMap>();
 
@@ -509,6 +518,7 @@ public:
   void invalidFullAddressTest()
   {
     AddressScoreExtractor uut;
+    conf().set("address.match.enabled", "true");
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
 
@@ -544,6 +554,7 @@ public:
   void invalidComponentAddressTest()
   {
     AddressScoreExtractor uut;
+    conf().set("address.match.enabled", "true");
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
 
@@ -588,6 +599,7 @@ public:
     conf().set(ConfigOptions::getAddressAdditionalTagKeysKey(), additionalTagKeys);
 
     AddressScoreExtractor uut;
+    conf().set("address.match.enabled", "true");
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
 
@@ -624,6 +636,7 @@ public:
   void noStreetNumberTest()
   {
     AddressScoreExtractor uut;
+    conf().set("address.match.enabled", "true");
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
 
@@ -738,6 +751,7 @@ public:
   void partialMatchTest()
   {
     AddressScoreExtractor uut;
+    conf().set("address.match.enabled", "true");
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
 
@@ -796,5 +810,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AddressScoreExtractorTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AddressScoreExtractorTest, "serial");
 
 }

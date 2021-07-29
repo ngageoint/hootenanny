@@ -47,11 +47,13 @@ public:
     : HootTestFixture("test-files/visitors/NormalizeAddressesVisitorTest/",
                       "test-output/visitors/NormalizeAddressesVisitorTest/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAll);
   }
 
   void runBasicTest()
   {
+    conf().set("address.match.enabled", "true");
+
     OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map,
@@ -71,6 +73,7 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NormalizeAddressesVisitorTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NormalizeAddressesVisitorTest, "serial");
 
 }
 

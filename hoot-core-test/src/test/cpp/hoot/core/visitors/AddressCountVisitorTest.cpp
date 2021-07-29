@@ -46,10 +46,13 @@ public:
     : HootTestFixture("test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/",
                       UNUSED_PATH)
   {
+    setResetType(ResetAll);
   }
 
   void runBasicTest()
   {
+    conf().set("address.match.enabled", "true");
+
     OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map,
@@ -65,6 +68,7 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AddressCountVisitorTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AddressCountVisitorTest, "serial");
 
 }
 

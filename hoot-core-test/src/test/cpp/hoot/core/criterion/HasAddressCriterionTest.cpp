@@ -40,9 +40,15 @@ class HasAddressCriterionTest : public HootTestFixture
 
 public:
 
+  HasAddressCriterionTest()
+  {
+    setResetType(ResetAll);
+  }
+
   void runBasicTest()
   {
     HasAddressCriterion uut;
+    conf().set("address.match.enabled", "true");
     uut.setConfiguration(conf());
 
     NodePtr node1 =
@@ -61,5 +67,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HasAddressCriterionTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HasAddressCriterionTest, "serial");
 
 }

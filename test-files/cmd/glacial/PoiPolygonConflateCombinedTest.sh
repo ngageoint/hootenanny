@@ -16,7 +16,6 @@ hoot conflate -C UnifyingAlgorithm.conf \
   -C ReferenceConflation.conf \
   -C Testing.conf \
   -D uuid.helper.repeatable=true \
-  -D poi.polygon.address.match.enabled=true \
   -D address.scorer.enable.caching=true \
   $inputDir/PoiPolygon1.osm \
   $inputDir/PoiPolygon2.osm \

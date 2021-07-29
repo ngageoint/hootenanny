@@ -86,6 +86,13 @@ void AddressNormalizer::normalizeAddresses(const ElementPtr& e) const
 
 QSet<QString> AddressNormalizer::normalizeAddress(const QString& address) const
 {
+  if (!ConfigOptions().getAddressMatchEnabled())
+  {
+    QSet<QString> addresses;
+    addresses.insert(address);
+    return addresses;
+  }
+
   const QString addressToNormalize = address.trimmed().simplified();
   if (!Address::isStreetIntersectionAddress(addressToNormalize))
   {

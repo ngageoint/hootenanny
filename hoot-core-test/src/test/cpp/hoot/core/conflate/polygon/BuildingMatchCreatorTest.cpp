@@ -135,7 +135,7 @@ public:
   {
     OsmMapPtr map = getTestMap();
 
-    conf().set("building.address.match.enabled", "false");
+    conf().set("address.match.enabled", "false");
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
@@ -156,7 +156,7 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    conf().set("building.address.match.enabled", "false");
+    conf().set("address.match.enabled", "false");
 
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
@@ -193,7 +193,7 @@ public:
     conf().set("building.date.format", "yyyy-MM-ddTHH:mm");
     conf().set("building.date.tag.key", "source:date");
     conf().set("building.review.if.secondary.newer", "true");
-    conf().set("building.address.match.enabled", "false");
+    conf().set("address.match.enabled", "false");
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
@@ -251,7 +251,7 @@ public:
     MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("source:date", "2018-02-14T10:55");
 
-    conf().set("building.address.match.enabled", "false");
+    conf().set("address.match.enabled", "false");
     conf().set("building.date.format", "yyyy-MM-ddTHH:mm");
     conf().set("building.date.tag.key", "source:date");
     conf().set("building.review.if.secondary.newer", "true");
@@ -280,7 +280,7 @@ public:
     MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("date", "2018-02-14T10:55");
 
-    conf().set("building.address.match.enabled", "false");
+    conf().set("address.match.enabled", "false");
     conf().set("building.date.format", "yyyy-MM-ddTHH:mm");
     conf().set("building.date.tag.key", "source:date");
     conf().set("building.review.if.secondary.newer", "true");
@@ -308,7 +308,7 @@ public:
     MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("source:date", "2018-02-14T10:55");
 
-    conf().set("building.address.match.enabled", "false");
+    conf().set("address.match.enabled", "false");
     conf().set("building.date.format", "yyyy-MM-ddTHH:mm");
     conf().set("building.date.tag.key", "source:date");
     conf().set("building.review.if.secondary.newer", "true");
@@ -333,7 +333,7 @@ public:
   {
     OsmMapPtr map = getTestMap();
 
-    conf().set("building.address.match.enabled", "false");
+    conf().set("address.match.enabled", "false");
     conf().set("building.review.matches.other.than.one.to.one", "true");
 
     BuildingMatchCreator uut;
@@ -357,7 +357,7 @@ public:
 
     OsmMapPtr map = getTestMap(false);
 
-    conf().set("building.address.match.enabled", "false");
+    conf().set("address.match.enabled", "false");
     conf().set("building.review.matches.other.than.one.to.one", "true");
 
     BuildingMatchCreator uut;
