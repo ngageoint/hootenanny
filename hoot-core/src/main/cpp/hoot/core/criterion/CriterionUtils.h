@@ -75,6 +75,16 @@ public:
     QStringList& criteriaClassNames, const bool chainCriteria, const bool negate);
 
   /**
+   * @brief combineCriterion TODO
+   * @param criteria
+   * @param chain
+   * @param negate
+   * @return
+   */
+  static ElementCriterionPtr combineCriterion(
+    const QList<ElementCriterionPtr>& criteria, const bool chain = true, const bool negate = false);
+
+  /**
    * Determines whether a map contains a minimum or a fixed amount of elements matching the
    * criterion type. Only objects of type ElementCriterion are allowed, all others will return
    * false.

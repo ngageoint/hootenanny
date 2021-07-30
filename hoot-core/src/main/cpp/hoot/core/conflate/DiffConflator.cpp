@@ -31,8 +31,10 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/criterion/WayLengthCriterion.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -237,7 +239,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     {
       _removeRefData();
     }
-
+    _cleanSecData();
     if (!ConfigOptions().getWriterIncludeDebugTags())
     {
       _removeMetadataTags();
@@ -248,6 +250,43 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   // Free up any used resources.
   AbstractConflator::_reset();
+}
+
+void DiffConflator::_cleanSecData()
+{
+  QStringList featureCriteria = ConfigOptions().getDifferentialSecWayRemovalCriteria();
+  StringUtils::removeEmptyStrings(featureCriteria);
+  if (!featureCriteria.empty())
+  {
+    LOG_INFO("\tRemoving secondary ways by criteria...");
+
+    QList<ElementCriterionPtr> criteria;
+    ElementCriterionPtr secCrit = std::make_shared<TagKeyCriterion>(MetadataTags::Ref2());
+    criteria.append(secCrit);
+    ElementCriterionPtr notSnappedCrit =
+      std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::HootSnapped()));
+    criteria.append(notSnappedCrit);
+    ElementCriterionPtr featureCrit =
+      CriterionUtils::constructCriterion(featureCriteria, true, false);
+    criteria.append(featureCrit);
+    ElementCriterionPtr lengthCrit =
+      std::make_shared<WayLengthCriterion>(
+        ConfigOptions().getDifferentialSecWayRemovalLengthThreshold(),
+        NumericComparisonType::LessThanOrEqualTo, _map);
+    criteria.append(lengthCrit);
+    ElementCriterionPtr removalCrit = CriterionUtils::combineCriterion(criteria);
+
+    RemoveElementsVisitor removeRef1Visitor;
+    removeRef1Visitor.setRecursive(true);
+    removeRef1Visitor.addCriterion(removalCrit);
+    const int mapSizeBefore = _map->size();
+    _map->visitRw(removeRef1Visitor);
+    OsmMapWriterFactory::writeDebugMap(_map, className(), "after-cleaning-sec-elements");
+
+    LOG_DEBUG(
+      "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _map->size()) <<
+      " secondary ways...");
+  }
 }
 
 void DiffConflator::_discardUnconflatableElements()

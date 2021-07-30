@@ -57,8 +57,8 @@
             "snap.unconnected.ways.snap.tolerance": "Maximum distance (m) over which to allow snapping linear features to other linear features without snapping to a node",
             "snap.unconnected.ways.use.existing.way.nodes": "Reuse existing linear feature nodes when snapping unconnected linear features",
             "snap.unconnected.ways.existing.way.node.tolerance": "Maximum distance (m) to allow snapping linear features to linear feature nodes",
-            "differential.small.sec.way.removal.criteria": "Unsnapped secondary way feature types to remove from the output",
-            "differential.small.sec.way.removal.threshold": "Maximum size (m) an unsnapped secondary way can have and be removed",
+            "differential.sec.way.removal.criteria": "Unsnapped secondary way feature types to remove from the output",
+            "differential.sec.way.removal.length.threshold": "Maximum size (m) an unsnapped secondary way can have and be removed",
             "differential.treat.reviews.as.matches": "Treat reviews as matches and remove from the output"
         }
     },

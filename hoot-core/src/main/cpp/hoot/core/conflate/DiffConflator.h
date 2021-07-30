@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/algorithms/changeset/MemChangesetProvider.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/conflate/AbstractConflator.h>
 
@@ -250,6 +251,7 @@ private:
     const std::vector<ConstMatchPtr>& matches);
 
   void _removeRefData();
+  void _cleanSecData();
   /*
    * The element criteria that must be met in order for an element involved in a match to be
    * completely removed
