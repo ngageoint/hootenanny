@@ -58,7 +58,6 @@ public:
 private:
 
   friend class AddressConflateTest;
-  friend class AddressScoreExtractorTest;
 
   // See comments in PoiPolygonTypeScoreExtractor as to why this is static.
   static std::shared_ptr<ToEnglishTranslator> _translator;
