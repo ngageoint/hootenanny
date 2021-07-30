@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-87795' action='modify' lat='37.76964654089' lon='-122.42936158424' />
+  <node id='-87865' action='modify' lat='37.76990643893' lon='-122.42903848424'>
+    <tag k='REF1' v='002e73' />
+    <tag k='addr:housenumber' v='100' />
+    <tag k='addr:street' v='Church Street' />
+    <tag k='error:circular' v='15' />
+    <tag k='shop' v='thift_store' />
+  </node>
+  <node id='-87921' action='modify' lat='37.76995873853' lon='-122.42914778424'>
+    <tag k='REF1' v='000d15' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='local_ref' v='N Judah' />
+    <tag k='name' v='Duboce &amp; Church' />
+  </node>
+  <node id='-87923' action='modify' lat='37.76989813899' lon='-122.42921038424'>
+    <tag k='REF1' v='0011e0' />
+    <tag k='addr:street' v='Duboce Avenue' />
+    <tag k='amenity' v='social_facility' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='Maitri AIDS hospice' />
+    <tag k='social_facility:for' v='aids' />
+  </node>
+  <node id='-88116' action='modify' lat='37.76966304077' lon='-122.42901968424' />
+  <node id='-88127' action='modify' lat='37.76988993905' lon='-122.42938038424' />
+  <way id='-87948' action='modify'>
+    <nd ref='-87865' />
+    <nd ref='-88116' />
+    <nd ref='-87795' />
+    <nd ref='-88127' />
+    <nd ref='-87923' />
+    <nd ref='-87865' />
+    <tag k='REF1' v='009253' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+  </way>
+</osm>

@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <bounds minlat='38.8778584' minlon='-77.1246486' maxlat='38.8780636' maxlon='-77.1242873' origin='hootenanny' />
+  <node id='-21135350' timestamp='2019-09-04T13:12:06Z' visible='true' version='1' lat='38.87796345818' lon='-77.12459830596' />
+  <node id='-21135352' timestamp='2019-09-04T13:12:06Z' visible='true' version='1' lat='38.87795647813' lon='-77.12461618958' />
+  <node id='-21135354' timestamp='2019-09-04T13:12:06Z' visible='true' version='1' lat='38.87794381371' lon='-77.12464857699' />
+  <node id='-21135356' timestamp='2019-09-04T13:12:06Z' visible='true' version='1' lat='38.87785843236' lon='-77.12459407464' />
+  <node id='-21135358' timestamp='2019-09-04T13:12:06Z' visible='true' version='1' lat='38.87787806123' lon='-77.12454379298' />
+  <way id='-21135364' timestamp='2019-09-04T13:12:06Z' visible='true' version='1'>
+    <nd ref='-21135358' />
+    <nd ref='-21135356' />
+    <nd ref='-21135354' />
+    <nd ref='-21135352' />
+    <nd ref='-21135350' />
+    <nd ref='-21135358' />
+    <tag k='addr:city' v='Arlington' />
+    <tag k='addr:full' v='838 N FREDERICK ST' />
+    <tag k='addr:housenumber' v='838' />
+    <tag k='addr:postcode' v='22205' />
+    <tag k='addr:source:date' v='2019/02/20' />
+    <tag k='addr:street' v='N FREDERICK ST' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:ingest:datetime' v='2019-08-30T17:28:59.103Z' />
+  </way>
+</osm>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.56977775129999" minlon="-104.6701" maxlat="39.57019742739998" maxlon="-104.66938864653"/>
+    <node visible="true" id="-61611" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5698727081299921" lon="-104.6701000000000050"/>
+    <node visible="true" id="-61609" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5699153589299897" lon="-104.6701000000000050"/>
+    <node visible="true" id="701" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5701354157599994" lon="-104.6696514264099847"/>
+    <node visible="true" id="702" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5699984566799898" lon="-104.6695615957900003"/>
+    <node visible="true" id="703" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5700178368399946" lon="-104.6695122682800019"/>
+    <node visible="true" id="704" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5700398820699988" lon="-104.6694422665800062"/>
+    <node visible="true" id="705" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5700673735799953" lon="-104.6693886465299812"/>
+    <node visible="true" id="706" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5701974273999824" lon="-104.6694739503100067"/>
+    <node visible="true" id="707" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5701807765899929" lon="-104.6695163352499947"/>
+    <node visible="true" id="708" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5701743849299987" lon="-104.6695471655099965"/>
+    <node visible="true" id="709" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5701515089799827" lon="-104.6695321603299931"/>
+    <node visible="true" id="710" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5701407697699921" lon="-104.6695594909199940"/>
+    <node visible="true" id="711" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5701652317199972" lon="-104.6695755345200070"/>
+    <node visible="true" id="712" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5701397349199908" lon="-104.6696404350099954"/>
+    <node visible="true" id="748" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5700309431499946" lon="-104.6698591525599937"/>
+    <node visible="true" id="749" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5700201479599940" lon="-104.6698700376900035"/>
+    <node visible="true" id="750" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5699547524000010" lon="-104.6698268692699969"/>
+    <node visible="true" id="751" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5699658381099937" lon="-104.6697988340799981"/>
+    <node visible="true" id="752" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5699275725400028" lon="-104.6697735757499998"/>
+    <node visible="true" id="753" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5698813111699934" lon="-104.6697512941800028"/>
+    <node visible="true" id="754" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5698763409999827" lon="-104.6697405047700045"/>
+    <node visible="true" id="755" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5698953079999995" lon="-104.6696925320700018"/>
+    <node visible="true" id="756" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5698653327400010" lon="-104.6696727489599965"/>
+    <node visible="true" id="757" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5699071763400028" lon="-104.6695669184900055"/>
+    <node visible="true" id="758" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5699431497299940" lon="-104.6695906623999974"/>
+    <node visible="true" id="759" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5700554177100017" lon="-104.6696561208800063"/>
+    <node visible="true" id="760" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5700334203599979" lon="-104.6697117565099973"/>
+    <node visible="true" id="761" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5700235853599978" lon="-104.6697052637399992"/>
+    <node visible="true" id="762" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5700544210399983" lon="-104.6697345155599947"/>
+    <node visible="true" id="763" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5700497318900020" lon="-104.6697463768899894"/>
+    <node visible="true" id="764" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5700405518400018" lon="-104.6697695987699888"/>
+    <node visible="true" id="765" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5700610107199964" lon="-104.6697831035900066"/>
+    <node visible="true" id="766" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5700356282600012" lon="-104.6698473001600007"/>
+    <node visible="true" id="783" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5698318878399959" lon="-104.6700731011300007"/>
+    <node visible="true" id="784" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5698382653399960" lon="-104.6700569452600007"/>
+    <node visible="true" id="785" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5697777512999949" lon="-104.6700170714899940"/>
+    <node visible="true" id="786" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5697969457499994" lon="-104.6699684399700061"/>
+    <node visible="true" id="787" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5698185278599937" lon="-104.6698994923799830"/>
+    <node visible="true" id="788" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5698446668899919" lon="-104.6698428874999962"/>
+    <node visible="true" id="789" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5699757823900029" lon="-104.6699292843400002"/>
+    <node visible="true" id="790" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5699570626499906" lon="-104.6699767113499888"/>
+    <node visible="true" id="791" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5699497317899969" lon="-104.6700017010299888"/>
+    <node visible="true" id="792" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5699304991899865" lon="-104.6699890277599962"/>
+    <node visible="true" id="793" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5699187381499939" lon="-104.6700188250899828"/>
+    <node visible="true" id="794" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5699414835000027" lon="-104.6700338124099972"/>
+    <node visible="true" id="795" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186" lat="39.5699166599800023" lon="-104.6700967038199792"/>
+    <way visible="true" id="-61714" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="795"/>
+        <nd ref="794"/>
+        <nd ref="793"/>
+        <nd ref="792"/>
+        <nd ref="791"/>
+        <nd ref="790"/>
+        <nd ref="789"/>
+        <nd ref="788"/>
+        <nd ref="787"/>
+        <nd ref="786"/>
+        <nd ref="785"/>
+        <nd ref="784"/>
+        <nd ref="783"/>
+        <nd ref="-61611"/>
+        <nd ref="-61609"/>
+        <nd ref="795"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="addr:street" v="S BLACKSTONE PKWY"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
+        <tag k="addr:postcode" v="80016"/>
+        <tag k="building" v="Residential"/>
+        <tag k="addr:city" v="AURORA"/>
+        <tag k="addr:housenumber" v="8070"/>
+        <tag k="addr:full" v="8070 S BLACKSTONE PKWY"/>
+        <tag k="height" v="37"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="122" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186">
+        <nd ref="712"/>
+        <nd ref="711"/>
+        <nd ref="710"/>
+        <nd ref="709"/>
+        <nd ref="708"/>
+        <nd ref="707"/>
+        <nd ref="706"/>
+        <nd ref="705"/>
+        <nd ref="704"/>
+        <nd ref="703"/>
+        <nd ref="702"/>
+        <nd ref="701"/>
+        <nd ref="712"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="addr:street" v="S BLACKSTONE PKWY"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
+        <tag k="addr:postcode" v="80016"/>
+        <tag k="building" v="Residential"/>
+        <tag k="addr:city" v="AURORA"/>
+        <tag k="source:datetime" v="2017-10-22T16:59:54Z"/>
+        <tag k="addr:housenumber" v="8050"/>
+        <tag k="addr:full" v="8050 S BLACKSTONE PKWY"/>
+        <tag k="height" v="37"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="125" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186">
+        <nd ref="766"/>
+        <nd ref="765"/>
+        <nd ref="764"/>
+        <nd ref="763"/>
+        <nd ref="762"/>
+        <nd ref="761"/>
+        <nd ref="760"/>
+        <nd ref="759"/>
+        <nd ref="758"/>
+        <nd ref="757"/>
+        <nd ref="756"/>
+        <nd ref="755"/>
+        <nd ref="754"/>
+        <nd ref="753"/>
+        <nd ref="752"/>
+        <nd ref="751"/>
+        <nd ref="750"/>
+        <nd ref="749"/>
+        <nd ref="748"/>
+        <nd ref="766"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="addr:street" v="S BLACKSTONE PKWY"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
+        <tag k="addr:postcode" v="80016"/>
+        <tag k="building" v="Residential"/>
+        <tag k="addr:city" v="AURORA"/>
+        <tag k="source:datetime" v="2017-10-22T16:59:54Z"/>
+        <tag k="addr:housenumber" v="8060"/>
+        <tag k="addr:full" v="8060 S BLACKSTONE PKWY"/>
+        <tag k="height" v="32"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

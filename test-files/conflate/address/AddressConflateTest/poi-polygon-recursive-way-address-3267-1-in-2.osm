@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="37.76574018800945" minlon="-122.4030029455747" maxlat="37.76574018800945" maxlon="-122.4030029455747"/>
+    <node visible="true" id="-212085" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7657401880094454" lon="-122.4030029455747410">
+        <tag k="error:circular" v="15"/>
+        <tag k="REF2" v="none"/>
+        <tag k="REVIEW" v="009c5c"/>
+        <tag k="address" v="350 Rhode Island St"/>
+        <tag k="name" v="California Culinary Academy"/>
+    </node>
+</osm>

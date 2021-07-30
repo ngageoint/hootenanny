@@ -49,7 +49,8 @@ namespace hoot
  * Read the Hootenanny Developer Guide section entitled, "Testing with Address Data", to understand
  * why address related testing is done in this manner (single CPPUnit tests calling multiple test
  * functions). Note that not actually all of these tests are running conflation. The ones that do
- * need a full environment reset per test in order to allow for changing match/merger creators.
+ * need a full environment reset per test in order to allow for changing match/merger creators (they
+ * were ported over from conflate case tests).
  */
 class AddressConflateTest : public HootTestFixture
 {
@@ -935,13 +936,12 @@ private:
     conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::BuildingMatchCreator");
     conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::BuildingMergerCreator");
 
-    const QString inDir =
-      "test-files/cases/reference/unifying/building/building-3441-addresses-1.off";
-    const QString outFile = _outputPath + "/building-3441-addresses-1-out.osm";
+    const QString outFile = _outputPath + "building-3441-addresses-1-out.osm";
+    ConflateExecutor().conflate(
+      _inputPath + "building-3441-addresses-1-in-1.osm",
+      _inputPath + "building-3441-addresses-1-in-2.osm", outFile);
 
-    ConflateExecutor().conflate(inDir + "/Input1.osm", inDir + "/Input2.osm", outFile);
-
-    HOOT_FILE_EQUALS(inDir + "/Expected.osm", outFile);
+    HOOT_FILE_EQUALS(_inputPath + "building-3441-addresses-1-out.osm", outFile);
   }
 
   void _building3441Addresses2Test()
@@ -950,13 +950,12 @@ private:
     conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::BuildingMatchCreator");
     conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::BuildingMergerCreator");
 
-    const QString inDir =
-      "test-files/cases/reference/unifying/building/building-3441-addresses-2.off";
-    const QString outFile = _outputPath + "/building-3441-addresses-2-out.osm";
+    const QString outFile = _outputPath + "building-3441-addresses-2-out.osm";
+    ConflateExecutor().conflate(
+      _inputPath + "building-3441-addresses-2-in-1.osm",
+      _inputPath + "building-3441-addresses-2-in-2.osm", outFile);
 
-    ConflateExecutor().conflate(inDir + "/Input1.osm", inDir + "/Input2.osm", outFile);
-
-    HOOT_FILE_EQUALS(inDir + "/Expected.osm", outFile);
+    HOOT_FILE_EQUALS(_inputPath + "building-3441-addresses-2-out.osm", outFile);
   }
 
   void _poiPolygon10Test()
@@ -971,13 +970,11 @@ private:
     conf().set(ConfigOptions::getPoiPolygonMatchEvidenceThresholdKey(), 2);
     conf().set(ConfigOptions::getPoiPolygonPromotePointsWithAddressesToPoisKey(), true);
 
-    const QString inDir =
-      "test-files/cases/reference/unifying/poi-polygon/poi-polygon-10.off";
-    const QString outFile = _outputPath + "/poi-polygon-10-out.osm";
+    const QString outFile = _outputPath + "poi-polygon-10-out.osm";
+    ConflateExecutor().conflate(
+      _inputPath + "poi-polygon-10-in-1.osm", _inputPath + "poi-polygon-10-in-2.osm", outFile);
 
-    ConflateExecutor().conflate(inDir + "/Input1.osm", inDir + "/Input2.osm", outFile);
-
-    HOOT_FILE_EQUALS(inDir + "/Expected.osm", outFile);
+    HOOT_FILE_EQUALS(_inputPath + "poi-polygon-10-out.osm", outFile);
   }
 
   void _poiPolygonAutoMerge13Test()
@@ -989,16 +986,13 @@ private:
     conf().set(
       ConfigOptions::getMergerCreatorsKey(),
       "hoot::BuildingMergerCreator;hoot::PoiPolygonMergerCreator");
-    LOG_VARD(conf().getString(ConfigOptions::getMatchCreatorsKey()));
-    LOG_VARD(conf().getString(ConfigOptions::getMergerCreatorsKey()));
 
-    const QString inDir =
-      "test-files/cases/reference/unifying/poi-polygon/poi-polygon-auto-merge-13.off";
-    const QString outFile = _outputPath + "/poi-polygon-auto-merge-13-out.osm";
+    const QString outFile = _outputPath + "poi-polygon-auto-merge-13-out.osm";
+    ConflateExecutor().conflate(
+      _inputPath + "poi-polygon-auto-merge-13-in-1.osm",
+      _inputPath + "poi-polygon-auto-merge-13-in-2.osm", outFile);
 
-    ConflateExecutor().conflate(inDir + "/Input1.osm", inDir + "/Input2.osm", outFile);
-
-    HOOT_FILE_EQUALS(inDir + "/Expected.osm", outFile);
+    HOOT_FILE_EQUALS(_inputPath + "poi-polygon-auto-merge-13-out.osm", outFile);
   }
 
   void _poiPolygonAutoMerge14Test()
@@ -1009,13 +1003,12 @@ private:
       ConfigOptions::getMergerCreatorsKey(), "BuildingMergerCreator;PoiPolygonMergerCreator");
     conf().set(ConfigOptions::getPoiPolygonAutoMergeManyPoiToOnePolyMatchesKey(), true);
 
-    const QString inDir =
-      "test-files/cases/reference/unifying/poi-polygon/poi-polygon-auto-merge-14.off";
-    const QString outFile = _outputPath + "/poi-polygon-auto-merge-14-out.osm";
+    const QString outFile = _outputPath + "poi-polygon-auto-merge-14-out.osm";
+    ConflateExecutor().conflate(
+      _inputPath + "poi-polygon-auto-merge-14-in-1.osm",
+      _inputPath + "poi-polygon-auto-merge-14-in-2.osm", outFile);
 
-    ConflateExecutor().conflate(inDir + "/Input1.osm", inDir + "/Input2.osm", outFile);
-
-    HOOT_FILE_EQUALS(inDir + "/Expected.osm", outFile);
+    HOOT_FILE_EQUALS(_inputPath + "poi-polygon-auto-merge-14-out.osm", outFile);
   }
 
   void _poiPolygonRecursiveWayAddress3267_1Test()
@@ -1024,13 +1017,12 @@ private:
     conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::PoiPolygonMatchCreator");
     conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::PoiPolygonMergerCreator");
 
-    const QString inDir =
-      "test-files/cases/reference/unifying/poi-polygon/poi-polygon-recursive-way-address-3267-1.off";
-    const QString outFile = _outputPath + "/poi-polygon-recursive-way-address-3267-1-out.osm";
+    const QString outFile = _outputPath + "poi-polygon-recursive-way-address-3267-1-out.osm";
+    ConflateExecutor().conflate(
+      _inputPath + "poi-polygon-recursive-way-address-3267-1-in-1.osm",
+      _inputPath + "poi-polygon-recursive-way-address-3267-1-in-2.osm", outFile);
 
-    ConflateExecutor().conflate(inDir + "/Input1.osm", inDir + "/Input2.osm", outFile);
-
-    HOOT_FILE_EQUALS(inDir + "/Expected.osm", outFile);
+    HOOT_FILE_EQUALS(_inputPath + "poi-polygon-recursive-way-address-3267-1-out.osm", outFile);
   }
 
   void _poiPolygonReviewConflict4331_3Test()
@@ -1044,13 +1036,12 @@ private:
       "hoot::BuildingMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator");
     conf().set(ConfigOptions::getPoiPolygonNameStringComparerKey(), "KskipBigramDistance");
 
-    const QString inDir =
-      "test-files/cases/reference/unifying/poi-polygon/poi-polygon-review-conflict-4331-3.off";
-    const QString outFile = _outputPath + "/poi-polygon-review-conflict-4331-3-out.osm";
+    const QString outFile = _outputPath + "poi-polygon-review-conflict-4331-3-out.osm";
+    ConflateExecutor().conflate(
+      _inputPath + "poi-polygon-review-conflict-4331-3-in-1.osm",
+      _inputPath + "poi-polygon-review-conflict-4331-3-in-2.osm", outFile);
 
-    ConflateExecutor().conflate(inDir + "/Input1.osm", inDir + "/Input2.osm", outFile);
-
-    HOOT_FILE_EQUALS(inDir + "/Expected.osm", outFile);
+    HOOT_FILE_EQUALS(_inputPath + "poi-polygon-review-conflict-4331-3-out.osm", outFile);
   }
 };
 

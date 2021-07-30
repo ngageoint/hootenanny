@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="37.76964654089" minlon="-122.42938038424" maxlat="37.76995873853" maxlon="-122.42901968424"/>
+    <node visible="true" id="-88127" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7698899390499960" lon="-122.4293803842399910"/>
+    <node visible="true" id="-88116" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7696630407699985" lon="-122.4290196842400036"/>
+    <node visible="true" id="-87923" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7698981389900013" lon="-122.4292103842399797">
+        <tag k="amenity" v="social_facility"/>
+        <tag k="addr:street" v="Duboce Avenue"/>
+        <tag k="name" v="Maitri AIDS hospice"/>
+        <tag k="social_facility:for" v="aids"/>
+        <tag k="REF1" v="0011e0"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-87921" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7699587385300006" lon="-122.4291477842400013">
+        <tag k="highway" v="bus_stop"/>
+        <tag k="local_ref" v="N Judah"/>
+        <tag k="name" v="Duboce &amp; Church"/>
+        <tag k="REF1" v="000d15"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-87865" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7699064389300005" lon="-122.4290384842399817">
+        <tag k="addr:street" v="Church Street"/>
+        <tag k="shop" v="thift_store"/>
+        <tag k="REF1" v="002e73"/>
+        <tag k="addr:housenumber" v="100"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-87795" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7696465408900011" lon="-122.4293615842399845"/>
+    <way visible="true" id="-87948" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-87865"/>
+        <nd ref="-88116"/>
+        <nd ref="-87795"/>
+        <nd ref="-88127"/>
+        <nd ref="-87923"/>
+        <nd ref="-87865"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="009253"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-87923" role="reviewee"/>
+        <member type="way" ref="-87948" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-87865" role="reviewee"/>
+        <member type="way" ref="-87948" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="1"/>
+        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+</osm>
