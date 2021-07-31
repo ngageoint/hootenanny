@@ -235,10 +235,12 @@ void DiffConflator::apply(OsmMapPtr& map)
       MemoryUsageChecker::getInstance().check();
     }
 
+    // TODO
     if (ConfigOptions().getDifferentialRemoveReferenceData())
     {
       _removeRefData();
     }
+    // TODO
     _cleanSecData();
     if (!ConfigOptions().getWriterIncludeDebugTags())
     {

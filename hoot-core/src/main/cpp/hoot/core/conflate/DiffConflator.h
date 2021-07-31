@@ -250,7 +250,13 @@ private:
   QSet<ElementId> _getElementIdsInvolvedInOnlyIntraDatasetMatches(
     const std::vector<ConstMatchPtr>& matches);
 
+  /**
+   * @brief _removeRefData TODO
+   */
   void _removeRefData();
+  /**
+   * @brief _cleanSecData TODO
+   */
   void _cleanSecData();
   /*
    * The element criteria that must be met in order for an element involved in a match to be
