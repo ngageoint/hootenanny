@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="10.5015" minlon="-66.9226" maxlat="10.5099" maxlon="-66.9147"/>
+<<<<<<< HEAD
     <node visible="true" id="-5546" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5074142241028206" lon="-66.9203459448508795">
         <tag k="hoot:id" v="-5546"/>
         <tag k="hoot:status" v="3"/>
@@ -35,6 +36,42 @@
     </node>
     <node visible="true" id="-5526" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5062060467301990" lon="-66.9210552133851593">
         <tag k="hoot:id" v="-5526"/>
+=======
+    <node visible="true" id="-5585" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5074142241028206" lon="-66.9203459448508795">
+        <tag k="hoot:id" v="-5585"/>
+        <tag k="hoot:status" v="3"/>
+    </node>
+    <node visible="true" id="-5584" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5056196052129636" lon="-66.9198014733005522">
+        <tag k="hoot:id" v="-5584"/>
+        <tag k="hoot:status" v="3"/>
+    </node>
+    <node visible="true" id="-5578" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5086160844856167" lon="-66.9212423455392837">
+        <tag k="hoot:id" v="-5578"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-5577" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5068497419243787" lon="-66.9202780047381083">
+        <tag k="hoot:id" v="-5577"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-5576" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5075290291360819" lon="-66.9204847521438495">
+        <tag k="hoot:id" v="-5576"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-5568" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5081148352960092" lon="-66.9218327592600843">
+        <tag k="hoot:id" v="-5568"/>
+        <tag k="hoot:status" v="3"/>
+    </node>
+    <node visible="true" id="-5567" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5078900762447791" lon="-66.9219338990021981">
+        <tag k="hoot:id" v="-5567"/>
+        <tag k="hoot:status" v="3"/>
+    </node>
+    <node visible="true" id="-5566" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5063466190538026" lon="-66.9219127096315844">
+        <tag k="hoot:id" v="-5566"/>
+        <tag k="hoot:status" v="3"/>
+    </node>
+    <node visible="true" id="-5565" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5062060467301990" lon="-66.9210552133851593">
+        <tag k="hoot:id" v="-5565"/>
+>>>>>>> master
         <tag k="hoot:status" v="3"/>
     </node>
     <node visible="true" id="-999" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5067652497099999" lon="-66.9161491526400027">
@@ -3827,8 +3864,13 @@
         <tag k="hoot:id" v="426"/>
         <tag k="hoot:status" v="2"/>
     </node>
+<<<<<<< HEAD
     <way visible="true" id="-12169" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-5546"/>
+=======
+    <way visible="true" id="-12290" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-5585"/>
+>>>>>>> master
         <nd ref="-698"/>
         <nd ref="-699"/>
         <nd ref="-700"/>
@@ -3868,7 +3910,11 @@
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
         <tag k="highway" v="primary"/>
+<<<<<<< HEAD
         <tag k="hoot:id" v="-12169"/>
+=======
+        <tag k="hoot:id" v="-12290"/>
+>>>>>>> master
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="35"/>
         <tag k="lanes" v="3"/>
@@ -3887,13 +3933,22 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-12168" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-5545"/>
+=======
+    <way visible="true" id="-12289" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-5584"/>
+>>>>>>> master
         <nd ref="-694"/>
         <nd ref="-695"/>
         <nd ref="-696"/>
         <nd ref="-697"/>
+<<<<<<< HEAD
         <nd ref="-5546"/>
+=======
+        <nd ref="-5585"/>
+>>>>>>> master
         <tag k="alt_name" v="Av. Sucre"/>
         <tag k="attribution" v="osm"/>
         <tag k="bicycle" v="yes"/>
@@ -3901,7 +3956,11 @@
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
         <tag k="highway" v="primary"/>
+<<<<<<< HEAD
         <tag k="hoot:id" v="-12168"/>
+=======
+        <tag k="hoot:id" v="-12289"/>
+>>>>>>> master
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="6"/>
         <tag k="lanes" v="3"/>
@@ -3920,16 +3979,27 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-12167" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-303"/>
         <nd ref="-693"/>
         <nd ref="-5545"/>
+=======
+    <way visible="true" id="-12288" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-303"/>
+        <nd ref="-693"/>
+        <nd ref="-5584"/>
+>>>>>>> master
         <tag k="attribution" v="osm"/>
         <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
         <tag k="highway" v="primary"/>
+<<<<<<< HEAD
         <tag k="hoot:id" v="-12167"/>
+=======
+        <tag k="hoot:id" v="-12288"/>
+>>>>>>> master
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="lanes" v="3"/>
@@ -3948,8 +4018,13 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-12164" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-5538"/>
+=======
+    <way visible="true" id="-12285" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-5577"/>
+>>>>>>> master
         <nd ref="-755"/>
         <nd ref="-754"/>
         <nd ref="-753"/>
@@ -3958,7 +4033,11 @@
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
         <tag k="highway" v="primary"/>
+<<<<<<< HEAD
         <tag k="hoot:id" v="-12164"/>
+=======
+        <tag k="hoot:id" v="-12285"/>
+>>>>>>> master
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="4"/>
         <tag k="lanes" v="3"/>
@@ -3978,18 +4057,30 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-12163" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-5537"/>
         <nd ref="-757"/>
         <nd ref="-756"/>
         <nd ref="-5538"/>
+=======
+    <way visible="true" id="-12284" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-5576"/>
+        <nd ref="-757"/>
+        <nd ref="-756"/>
+        <nd ref="-5577"/>
+>>>>>>> master
         <tag k="attribution" v="osm"/>
         <tag k="bicycle" v="yes"/>
         <tag k="bridge" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
         <tag k="highway" v="primary"/>
+<<<<<<< HEAD
         <tag k="hoot:id" v="-12163"/>
+=======
+        <tag k="hoot:id" v="-12284"/>
+>>>>>>> master
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="4"/>
         <tag k="lanes" v="3"/>
@@ -4009,13 +4100,21 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-12162" timestamp="2019-01-17T19:50:06Z" version="1">
+=======
+    <way visible="true" id="-12283" timestamp="2019-01-17T19:50:06Z" version="1">
+>>>>>>> master
         <nd ref="-304"/>
         <nd ref="-753"/>
         <nd ref="426"/>
         <nd ref="-782"/>
         <nd ref="-781"/>
+<<<<<<< HEAD
         <nd ref="-5539"/>
+=======
+        <nd ref="-5578"/>
+>>>>>>> master
         <nd ref="-780"/>
         <nd ref="-779"/>
         <nd ref="-778"/>
@@ -4039,13 +4138,21 @@
         <nd ref="-760"/>
         <nd ref="-759"/>
         <nd ref="-758"/>
+<<<<<<< HEAD
         <nd ref="-5537"/>
+=======
+        <nd ref="-5576"/>
+>>>>>>> master
         <tag k="attribution" v="osm"/>
         <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
         <tag k="highway" v="primary"/>
+<<<<<<< HEAD
         <tag k="hoot:id" v="-12162"/>
+=======
+        <tag k="hoot:id" v="-12283"/>
+>>>>>>> master
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="30"/>
         <tag k="lanes" v="3"/>
@@ -4065,14 +4172,23 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-12159" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-5529"/>
+=======
+    <way visible="true" id="-12280" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-5568"/>
+>>>>>>> master
         <nd ref="-845"/>
         <nd ref="-846"/>
         <nd ref="-753"/>
         <tag k="attribution" v="osm"/>
         <tag k="highway" v="residential"/>
+<<<<<<< HEAD
         <tag k="hoot:id" v="-12159"/>
+=======
+        <tag k="hoot:id" v="-12280"/>
+>>>>>>> master
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="4"/>
         <tag k="lanes" v="2"/>
@@ -4088,6 +4204,7 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-12158" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-5528"/>
         <nd ref="-844"/>
@@ -4096,6 +4213,16 @@
         <tag k="attribution" v="osm"/>
         <tag k="highway" v="tertiary"/>
         <tag k="hoot:id" v="-12158"/>
+=======
+    <way visible="true" id="-12279" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-5567"/>
+        <nd ref="-844"/>
+        <nd ref="-5568"/>
+        <tag k="alt_name" v="Av. Oeste 4"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="hoot:id" v="-12279"/>
+>>>>>>> master
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="lanes" v="2"/>
@@ -4112,17 +4239,29 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-12157" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-5527"/>
+=======
+    <way visible="true" id="-12278" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-5566"/>
+>>>>>>> master
         <nd ref="-839"/>
         <nd ref="-840"/>
         <nd ref="-841"/>
         <nd ref="-842"/>
         <nd ref="-843"/>
+<<<<<<< HEAD
         <nd ref="-5528"/>
         <tag k="attribution" v="osm"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-12157"/>
+=======
+        <nd ref="-5567"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-12278"/>
+>>>>>>> master
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="7"/>
         <tag k="lanes" v="2"/>
@@ -4138,8 +4277,13 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-12156" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-5526"/>
+=======
+    <way visible="true" id="-12277" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-5565"/>
+>>>>>>> master
         <nd ref="-811"/>
         <nd ref="-812"/>
         <nd ref="-813"/>
@@ -4168,12 +4312,20 @@
         <nd ref="-836"/>
         <nd ref="-837"/>
         <nd ref="-838"/>
+<<<<<<< HEAD
         <nd ref="-5527"/>
+=======
+        <nd ref="-5566"/>
+>>>>>>> master
         <tag k="alt_name" v="Av. Oeste 4"/>
         <tag k="attribution" v="osm"/>
         <tag k="bridge" v="yes"/>
         <tag k="highway" v="tertiary"/>
+<<<<<<< HEAD
         <tag k="hoot:id" v="-12156"/>
+=======
+        <tag k="hoot:id" v="-12277"/>
+>>>>>>> master
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="30"/>
         <tag k="lanes" v="2"/>
@@ -4190,7 +4342,11 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-12155" timestamp="2019-01-17T19:50:06Z" version="1">
+=======
+    <way visible="true" id="-12276" timestamp="2019-01-17T19:50:06Z" version="1">
+>>>>>>> master
         <nd ref="-753"/>
         <nd ref="417"/>
         <nd ref="-788"/>
@@ -4216,10 +4372,17 @@
         <nd ref="-808"/>
         <nd ref="-809"/>
         <nd ref="-810"/>
+<<<<<<< HEAD
         <nd ref="-5526"/>
         <tag k="attribution" v="osm"/>
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:id" v="-12155"/>
+=======
+        <nd ref="-5565"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:id" v="-12276"/>
+>>>>>>> master
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="26"/>
         <tag k="lanes" v="2"/>
@@ -4235,7 +4398,11 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-228" timestamp="2019-01-17T19:50:06Z" version="1">
+=======
+    <way visible="true" id="-229" timestamp="2019-01-17T19:50:06Z" version="1">
+>>>>>>> master
         <nd ref="-203"/>
         <nd ref="-204"/>
         <nd ref="-205"/>
@@ -5059,11 +5226,19 @@
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-88" timestamp="2019-01-17T19:50:06Z" version="1">
+<<<<<<< HEAD
         <nd ref="-300"/>
         <nd ref="-301"/>
         <nd ref="-302"/>
         <nd ref="-303"/>
         <nd ref="-304"/>
+=======
+        <nd ref="-304"/>
+        <nd ref="-303"/>
+        <nd ref="-302"/>
+        <nd ref="-301"/>
+        <nd ref="-300"/>
+>>>>>>> master
         <tag k="alt_name" v="Av. Oeste 4"/>
         <tag k="attribution" v="osm"/>
         <tag k="bicycle" v="yes"/>
