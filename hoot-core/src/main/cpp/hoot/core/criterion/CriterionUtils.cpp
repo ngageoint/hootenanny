@@ -77,9 +77,11 @@ ElementCriterionPtr CriterionUtils::constructCriterion(
   }
 
   ElementCriterionPtr subCrit;
+  isStreamable = true;
   for (int i = 0; i < criteriaClassNames.size(); i++)
   {
     const QString criterionClassName = criteriaClassNames.at(i);
+    LOG_VART(criterionClassName);
     try
     {
       subCrit = Factory::getInstance().constructObject<ElementCriterion>(criterionClassName);
@@ -90,14 +92,12 @@ ElementCriterionPtr CriterionUtils::constructCriterion(
     }
 
     const OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(subCrit.get());
+    LOG_VART(omc == 0);
     if (omc)
     {
-      isStreamable = isStreamable && false;
+      isStreamable = false;
     }
-    else
-    {
-      isStreamable = isStreamable && true;
-    }
+    LOG_VART(isStreamable);
 
     if (negate)
     {
