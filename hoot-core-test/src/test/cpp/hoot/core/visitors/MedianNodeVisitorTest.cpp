@@ -63,7 +63,7 @@ public:
     map->visitRo(uut);
     NodePtr n = map->getNode(uut.calculateMedianNode()->getElementId());
     MapProjector::projectToWgs84(map);
-    HOOT_STR_EQUALS("-104.89970698747904 38.854167001890765", n->toCoordinate().toString());
+    HOOT_STR_EQUALS("-104.89970698747904 38.854167001890758", n->toCoordinate().toString());
   }
 };
 

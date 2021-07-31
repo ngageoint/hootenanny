@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="38.92149559999999" minlon="-77.0438362" maxlat="38.9223335" maxlon="-77.0435882"/>
-    <node visible="true" id="-916985" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9214955999999930" lon="-77.0438362000000012">
-        <tag k="source:ingest:datetime" v="2015-06-01T17:43:03.071Z"/>
-        <tag k="name" v="COLUMBIA ROAD APARTMENTS"/>
+    <bounds minlat="38.9214956" minlon="-77.0438362" maxlat="38.9223335" maxlon="-77.0435882"/>
+    <node visible="true" id="-916985" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9214956000000001" lon="-77.0438362000000012">
         <tag k="addr:full" v="1841 COLUMBIA ROAD NW"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="COLUMBIA ROAD APARTMENTS"/>
+        <tag k="source:ingest:datetime" v="2015-06-01T17:43:03.071Z"/>
     </node>
     <node visible="true" id="-916984" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9223335000000006" lon="-77.0435882000000021">
         <tag k="amenity" v="school"/>
-        <tag k="source:ingest:datetime" v="2015-06-01T19:33:35.298Z"/>
-        <tag k="name" v="Columbian School"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Columbian School"/>
+        <tag k="source:ingest:datetime" v="2015-06-01T19:33:35.298Z"/>
     </node>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-916984" role="reviewee"/>
         <member type="node" ref="-916985" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="0"/>
-        <tag k="hoot:review:note" v="Somewhat similar (96m) - similar names and generic type"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:note" v="Somewhat similar (95m) - similar names and generic type"/>
         <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="type" v="review"/>
     </relation>
 </osm>

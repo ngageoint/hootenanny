@@ -169,6 +169,8 @@ id_rsa.pub
 coverage/
 userfiles/
 test-files/cases/**/out
+.bundle/
+vendor/
 
 ###### hoot-services ignores
 hoot-services/.idea
