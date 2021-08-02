@@ -43,8 +43,9 @@ public:
   static QString className() { return "hoot::WayLengthCriterion"; }
 
   WayLengthCriterion();
-  WayLengthCriterion(const double comparisonLength,
-                     const NumericComparisonType& numericComparisonType, ConstOsmMapPtr map);
+  WayLengthCriterion(
+    const double comparisonLength, const NumericComparisonType& numericComparisonType,
+    ConstOsmMapPtr map);
   ~WayLengthCriterion() = default;
 
   /**

@@ -75,6 +75,17 @@ public:
     QStringList& criteriaClassNames, const bool chainCriteria, const bool negate);
 
   /**
+   * @brief combineCriterion combines multiple criterion into a single criteria
+   * @param criteria individual criterion to combine
+   * @param chain if true, logically AND's the criterion together; if false, logically OR's them
+   * together
+   * @param negate if true, the entire criteria is negated by adding a logical NOT to it
+   * @return an element criterion
+   */
+  static ElementCriterionPtr combineCriterion(
+    const QList<ElementCriterionPtr>& criteria, const bool chain = true, const bool negate = false);
+
+  /**
    * Determines whether a map contains a minimum or a fixed amount of elements matching the
    * criterion type. Only objects of type ElementCriterion are allowed, all others will return
    * false.

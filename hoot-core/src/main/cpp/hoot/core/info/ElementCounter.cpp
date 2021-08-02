@@ -76,12 +76,20 @@ void ElementCounter::setCriteria(QStringList& names)
   }
 }
 
+long ElementCounter::count(const OsmMapPtr& map) const
+{
+  LOG_STATUS(_getMemoryBoundStatusMessage(map));
+  return _countMemoryBound(map);
+}
+
 long ElementCounter::count(const QStringList& inputs)
 {
   if (inputs.empty())
   {
     throw IllegalArgumentException("No inputs available for element counting.");
   }
+
+  _total = 0;
 
   _checkForMissingInputs(inputs);
 
@@ -153,6 +161,18 @@ QString ElementCounter::_getMemoryBoundStatusMessage(const int inputsSize) const
   return msg;
 }
 
+QString ElementCounter::_getMemoryBoundStatusMessage(const OsmMapPtr& map) const
+{
+  const QString dataType = _countFeaturesOnly ? "features" : "elements";
+  QString msg = "Counting memory bound " + dataType;
+  if (_crit)
+  {
+    msg += " satisfying " + _crit->toString();
+  }
+  msg += " from map of size: " + QString::number(map->size()) + "...";
+  return msg;
+}
+
 std::shared_ptr<PartialOsmMapReader> ElementCounter::_getStreamingReader(const QString& input) const
 {
   std::shared_ptr<PartialOsmMapReader> reader =
@@ -205,14 +225,8 @@ ConstElementVisitorPtr ElementCounter::_getCountVis() const
   return countVis;
 }
 
-long ElementCounter::_countMemoryBound(const QStringList& inputs) const
+long ElementCounter::_countMemoryBound(const OsmMapPtr& map) const
 {
-  LOG_STATUS(_getMemoryBoundStatusMessage(inputs.size()));
-
-  OsmMapPtr map = std::make_shared<OsmMap>();
-  // Don't read in file IDs or duplicated elements across inputs won't be counted.
-  IoUtils::loadMaps(map, inputs, false);
-
   OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(_crit.get());
   if (omc)
   {
@@ -234,6 +248,17 @@ long ElementCounter::_countMemoryBound(const QStringList& inputs) const
   std::shared_ptr<SingleStatistic> counter =
     std::dynamic_pointer_cast<SingleStatistic>(countVis);
   return (long)counter->getStat();
+}
+
+long ElementCounter::_countMemoryBound(const QStringList& inputs) const
+{
+  LOG_STATUS(_getMemoryBoundStatusMessage(inputs.size()));
+
+  OsmMapPtr map = std::make_shared<OsmMap>();
+  // Don't read in file IDs or duplicated elements across inputs won't be counted.
+  IoUtils::loadMaps(map, inputs, false);
+
+  return _countMemoryBound(map);
 }
 
 long ElementCounter::_countStreaming(const QString& input) const

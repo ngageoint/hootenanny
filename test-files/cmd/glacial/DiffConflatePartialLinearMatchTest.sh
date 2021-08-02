@@ -9,12 +9,23 @@ LOG_LEVEL=--warn
 CONFIG="-C UnifyingAlgorithm.conf -C DifferentialConflation.conf -C Testing.conf -D match.creators=hoot::HighwayMatchCreator -D merger.creators=hoot::HighwayMergerCreator -D writer.include.debug.tags=true -D uuid.helper.repeatable=true"
 
 # This test illustrates that diff conflate is capable of not dropping sections from a diff for 
-# road features involved in a match with another feature only partially. The test is run two times, 
-# once removing partial matches partially and once removing partial matches completely to show the 
-# difference.
+# road features involved in a match with another feature only partially.
  
-hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.as.whole=false $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output-partial.osm --differential
+# Remove partial linear matches partially. This results in a more granular diff.
+hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.as.whole=false \
+  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output-partial.osm --differential
 hoot diff $LOG_LEVEL -C Testing.conf $INPUT_DIR/output-partial.osm $OUTPUT_DIR/output-partial.osm
 
-hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.as.whole=true $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output-complete.osm --differential
+# Remove partial linear matches completely. This results in a less granular diff.
+hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.as.whole=true \
+  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output-complete.osm --differential
 hoot diff $LOG_LEVEL -C Testing.conf $INPUT_DIR/output-complete.osm $OUTPUT_DIR/output-complete.osm
+
+# Remove partial linear matches partially and remove small secondary fragments from the diff to 
+# clean it up a little.
+hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.as.whole=false \
+  -D differential.sec.way.removal.criteria="HighwayCriterion" \
+  -D differential.sec.way.removal.length.threshold=15.0 $INPUT_DIR/input1.osm \
+  $INPUT_DIR/input2.osm $OUTPUT_DIR/output-partial-cleaned.osm --differential
+hoot diff $LOG_LEVEL -C Testing.conf \
+  $INPUT_DIR/output-partial-cleaned.osm $OUTPUT_DIR/output-partial-cleaned.osm
