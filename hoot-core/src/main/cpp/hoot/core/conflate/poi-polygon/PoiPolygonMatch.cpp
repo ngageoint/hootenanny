@@ -240,7 +240,7 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   LOG_VART(_matchEvidenceThreshold);
   LOG_VART(_reviewEvidenceThreshold);
 
-  _addressMatchEnabled = config.getPoiPolygonAddressMatchEnabled();
+  _addressMatchEnabled = config.getAddressMatchEnabled();
   if (_addressMatchEnabled)
   {
     _addressScorer.setConfiguration(conf);

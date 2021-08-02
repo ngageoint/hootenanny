@@ -948,12 +948,12 @@
         	"hoot_key":"address.allow.lenient.house.number.matching"
     	    },
             {
-        	"id":"poipolygon_address_match_enabled",
+        	"id":"address_match_enabled",
         	"elem_type":"bool",
         	"defaultvalue":"true",
-        	"description":"If true, POI/Polygon conflation will compare addresses as one of the criteria for matching features.  If the data being conflated is known to have poor address data, disabling this option may speed up conflation runtime performance.",
+        	"description":"If true, conflators that support address matching will compare addresses as one of the criteria for matching features.  If the data being conflated is known to have poor address data, disabling this option may speed up conflation runtime performance.",
         	"name":"Address Match Enabled",
-        	"hoot_key":"poi.polygon.address.match.enabled"
+        	"hoot_key":"address.match.enabled"
     	    },
             {
         	"id":"poipolygon_allow_cross_conflation_merging",

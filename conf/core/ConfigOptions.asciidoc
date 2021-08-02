@@ -127,6 +127,16 @@ file).  You can expand the tag keys searched by populating this list.
 If true, conflation that uses address matching will allow house number subletter mismatches for the
 addresses with the same house number.  e.g. when enabled, 23a Elm Street matches 23 Elm Street
 
+=== address.match.enabled
+
+* Data Type: bool
+* Default Value: `true`
+
+If disabled, conflators that support address matching will not match addresses. If the data being
+conflated is known to have poor address data, disabling this option may speed up conflation runtime
+performance. Address matching also incurs a small initial startup time (~5s) per conflate job, as
+well as the loading of a fairly large amount of address data.
+
 === address.scorer.enable.caching
 
 * Data Type: bool
@@ -521,13 +531,6 @@ are tagged with a custom tag. Must be used in conjunction with
 * Default Value: `0.1`
 
 The portion of the sqrt max of the area that the BufferedOverlapExtractor buffers object by.
-
-=== building.address.match.enabled
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, Building Conflation will use building addresses to resolve match conflicts.
 
 === building.adjoining.tag.score.threshold
 
@@ -3718,17 +3721,6 @@ total of which allows the features to be considered for match or review based on
 only. If a value of zero is specified, then only the feature circular error will factor into the
 search distance. Higher values for this option can cause large increases in conflation runtime for
 dense datasets.
-
-=== poi.polygon.address.match.enabled
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, POI/Polygon conflation will compare addresses as one of the criteria for matching features.
-If the data being conflated is known to have poor address data, disabling this option may speed up
-conflation runtime performance.  This option is left turned off by default due to the small startup
-time required to use libpostal (~5s), which would be wasteful for small datasets known to have no
-addresses in them.  The startup time is incurred only once per Hootenanny command invocation.
 
 === poi.polygon.allow.cross.conflation.merging
 

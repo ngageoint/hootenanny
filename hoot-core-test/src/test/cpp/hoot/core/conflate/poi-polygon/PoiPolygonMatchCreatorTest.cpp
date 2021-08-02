@@ -49,6 +49,63 @@ class PoiPolygonMatchCreatorTest : public HootTestFixture
   CPPUNIT_TEST(runIsCandidateTest);
   CPPUNIT_TEST_SUITE_END();
 
+public:
+
+  PoiPolygonMatchCreatorTest()
+  {
+    setResetType(ResetAll);
+  }
+
+  void basicTest()
+  {
+    // Poi/poly test output is based on this config for now, despite it being different than the
+    // default config.
+    conf().set(ConfigOptions::getAddressMatchEnabledKey(), "false");
+
+    OsmMapPtr map = getTestMap1();
+
+    {
+      PoiPolygonMatchCreator uut;
+      vector<ConstMatchPtr> matches;
+      std::shared_ptr<const MatchThreshold> threshold =
+        std::make_shared<MatchThreshold>(0.5, 0.5, 0.5);
+      uut.createMatches(map, matches, threshold);
+      HOOT_STR_EQUALS(2, matches.size());
+      HOOT_STR_EQUALS(
+        "PoiPolygonMatch: POI: Node(1), Poly: Way(-1), P: match: 1 miss: 0 review: 0, distance: 0, close match: 1, type score: 0, name score: 1, address score: -1",
+        matches[0]->toString());
+      HOOT_STR_EQUALS(
+        "PoiPolygonMatch: POI: Node(2), Poly: Way(-1), P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0, name score: 0, address score: 0",
+        matches[1]->toString());
+    }
+  }
+
+  void runIsCandidateTest()
+  {
+    // see corresponding note in basicTest
+    conf().set(ConfigOptions::getAddressMatchEnabledKey(), "false");
+
+    PoiPolygonMatchCreator uut;
+
+    OsmMapPtr map = getTestMap1();
+    CPPUNIT_ASSERT(
+      uut.isMatchCandidate(
+        map->getNode(
+          ElementIdsVisitor::findElementsByTag(map, ElementType::Node, "name", "foo")[0]), map));
+    CPPUNIT_ASSERT(
+      uut.isMatchCandidate(
+        map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "foo")[0]), map));
+
+    OsmXmlReader reader;
+    map = std::make_shared<OsmMap>();
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ToyTestA.osm", map);
+    MapProjector::projectToPlanar(map);
+    CPPUNIT_ASSERT(
+      !uut.isMatchCandidate(
+        map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "1")[0]), map));
+  }
+
 private:
 
   OsmMapPtr getTestMap1()
@@ -77,65 +134,8 @@ private:
     return map;
   }
 
-public:
-
-  PoiPolygonMatchCreatorTest()
-  {
-    setResetType(ResetAll);
-  }
-
-  void basicTest()
-  {
-    // Poi/poly test output is based on this config for now, despite it being different than the
-    // default config.
-    conf().set(ConfigOptions::getPoiPolygonAddressMatchEnabledKey(), "false");
-
-    OsmMapPtr map = getTestMap1();
-
-    {
-      PoiPolygonMatchCreator uut;
-      vector<ConstMatchPtr> matches;
-      std::shared_ptr<const MatchThreshold> threshold =
-        std::make_shared<MatchThreshold>(0.5, 0.5, 0.5);
-      uut.createMatches(map, matches, threshold);
-      HOOT_STR_EQUALS(2, matches.size());
-      HOOT_STR_EQUALS(
-        "PoiPolygonMatch: POI: Node(1), Poly: Way(-1), P: match: 1 miss: 0 review: 0, distance: 0, close match: 1, type score: 0, name score: 1, address score: -1",
-        matches[0]->toString());
-      HOOT_STR_EQUALS(
-        "PoiPolygonMatch: POI: Node(2), Poly: Way(-1), P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0, name score: 0, address score: 0",
-        matches[1]->toString());
-    }
-  }
-
-  void runIsCandidateTest()
-  {
-    // see corresponding note in basicTest
-    conf().set(ConfigOptions::getPoiPolygonAddressMatchEnabledKey(), "false");
-
-    PoiPolygonMatchCreator uut;
-
-    OsmMapPtr map = getTestMap1();
-    CPPUNIT_ASSERT(
-      uut.isMatchCandidate(
-        map->getNode(
-          ElementIdsVisitor::findElementsByTag(map, ElementType::Node, "name", "foo")[0]), map));
-    CPPUNIT_ASSERT(
-      uut.isMatchCandidate(
-        map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "foo")[0]), map));
-
-    OsmXmlReader reader;
-    map = std::make_shared<OsmMap>();
-    reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyTestA.osm", map);
-    MapProjector::projectToPlanar(map);
-    CPPUNIT_ASSERT(
-      !uut.isMatchCandidate(
-        map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "1")[0]), map));
-  }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonMatchCreatorTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonMatchCreatorTest, "quick");
 
 }

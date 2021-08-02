@@ -13,7 +13,6 @@ hoot conflate --warn -C UnifyingAlgorithm.conf \
   -D uuid.helper.repeatable=true \
   -D match.creators="hoot::PoiPolygonMatchCreator" \
   -D merger.creators="hoot::PoiPolygonMergerCreator" \
-  -D poi.polygon.address.match.enabled=true \
   -D address.scorer.enable.caching=true \
   $inputDir/PoiPolygon1.osm $inputDir/PoiPolygon2.osm $outputDir/output1.osm
 
