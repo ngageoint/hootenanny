@@ -20,8 +20,8 @@ Most Information Tags on a Feature	2	2	4
 Average Information Tags Per Feature	1.333333333333333	2	2.5	
 Features with Names	3	3	4	
 Multi-Use Features	0	0	0	
-Features with Addresses	1	0	1	
-Total Addresses	1	0	1	
+Features with Addresses	0	0	0	
+Total Addresses	0	0	0	
 Features with Phone Numbers	0	0	0	
 Total Phone Numbers	0	0	0	
 Total Features	3	3	4	
@@ -62,10 +62,10 @@ Percentage Difference Between Total Features in Output and Total Features in Inp
 Percentage of Number of Total Map 1 Features Matched With Map 2 Features			66.66666666666666	
 Percentage of Number of Total Map 1 Features Not Matched With Map 2 Features			33.33333333333333	
 Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features			33.33333333333333	
-Calculate Stats for Input 1 Time (sec)				4.097951173782349
-Calculate Stats for Input 2 Time (sec)				0.3060169219970703
-Apply Pre-Conflate Ops Time (sec)				0.000701904296875
-Apply Post-Conflate Ops Time (sec)				0.002758979797363281
-Calculate Stats for Output Time (sec)				0.3770780563354492
+Calculate Stats for Input 1 Time (sec)				0.7029299736022949
+Calculate Stats for Input 2 Time (sec)				0.3139841556549072
+Apply Pre-Conflate Ops Time (sec)				0.0007889270782470703
+Apply Post-Conflate Ops Time (sec)				0.003078937530517578
+Calculate Stats for Output Time (sec)				0.4956409931182861
 
-17:03:37.345 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:04 for reference map: ...test-files/dcpoi_clip.osm and secondary map: ...st-files/mapcruzinpoi_clip.osm and written to output: ...nflatePoiStatsTest/poi-out.osm
+23:10:54.787 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:01 for reference map: ...test-files/dcpoi_clip.osm and secondary map: ...st-files/mapcruzinpoi_clip.osm and written to output: ...nflatePoiStatsTest/poi-out.osm

@@ -22,58 +22,152 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/HasAddressCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/visitors/AddressCountVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
-using namespace geos::geom;
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/visitors/NormalizeAddressesVisitor.h>
+#include <hoot/core/conflate/ConflateExecutor.h>
 
 namespace hoot
 {
 
-/*
- * Its possible we might want to eventually create separate AddressParserTest and
- * AddressNormalizerTest tests.
+/**
+ * @brief The AddressConflateTest class is the single stop shop for any testing done with the
+ * address data that gets loaded by libpostal.
+ *
+ * Read the Hootenanny Developer Guide section entitled, "Testing with Address Data", to understand
+ * why address related testing is done in this manner (single CPPUnit tests calling multiple test
+ * functions). Note that not actually all of these tests are running conflation. The ones that do
+ * need a full environment reset per test in order to allow for changing match/merger creators (they
+ * were ported over from conflate case tests).
  */
-class AddressScoreExtractorTest : public HootTestFixture
+class AddressConflateTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(AddressScoreExtractorTest);
-  CPPUNIT_TEST(runTagTest);
-  CPPUNIT_TEST(runCombinedTagTest);
-  CPPUNIT_TEST(runRangeTest);
-  CPPUNIT_TEST(runAltFormatTest);
-  CPPUNIT_TEST(runSubLetterTest);
-  CPPUNIT_TEST(runIntersectionTest);
-  CPPUNIT_TEST(runWayTest);
-  CPPUNIT_TEST(runRelationTest);
-  CPPUNIT_TEST(translateTagValueTest);
-  CPPUNIT_TEST(invalidFullAddressTest);
-  CPPUNIT_TEST(invalidComponentAddressTest);
-  CPPUNIT_TEST(additionalTagsTest);
-  CPPUNIT_TEST(noStreetNumberTest);
-  CPPUNIT_TEST(partialMatchTest);
+  CPPUNIT_TEST_SUITE(AddressConflateTest);
+  CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  AddressScoreExtractorTest()
+  AddressConflateTest() :
+  HootTestFixture(
+    "test-files/conflate/address/AddressConflateTest/",
+    "test-output/conflate/address/AddressConflateTest/")
   {
     setResetType(ResetAll);
   }
 
-  void runTagTest()
+  void setUp() override
+  {
+    HootTestFixture::setUp();
+    conf().set(ConfigOptions::getAddressMatchEnabledKey(), true);
+    conf().set(ConfigOptions::getAddressScorerEnableCachingKey(), false);
+    conf().set(ConfigOptions::getUuidHelperRepeatableKey(), true);
+    conf().set(ConfigOptions::getPoiPolygonTagMergerKey(), "OverwriteTag2Merger");
+  }
+
+  void runTest()
+  {
+    _addressCountVisitorBasicTest();
+
+    _hasAddressCriterionBasicTest();
+
+    _normalizeAddressesVisitorBasicTest();
+
+    _addressScoreExtractorTagTest();
+    _addressScoreExtractorCombinedTagTest();
+    _addressScoreExtractorRangeTest();
+    _addressScoreExtractorAltFormatTest();
+    _addressScoreExtractorSubLetterTest();
+    _addressScoreExtractorIntersectionTest();
+    _addressScoreExtractorWayTest();
+    _addressScoreExtractorRelationTest();
+    _addressScoreExtractorTranslateTagValueTest();
+    _addressScoreExtractorInvalidFullAddressTest();
+    _addressScoreExtractorInvalidComponentAddressTest();
+    _addressScoreExtractorAdditionalTagsTest();
+    _addressScoreExtractorNoStreetNumberTest();
+    _addressScoreExtractorPartialMatchTest();
+
+    _building3441Addresses1Test();
+    _building3441Addresses2Test();
+
+    _poiPolygon10Test();
+    _poiPolygonAutoMerge13Test();
+    _poiPolygonAutoMerge14Test();
+    _poiPolygonRecursiveWayAddress3267_1Test();
+    _poiPolygonReviewConflict4331_3Test();
+  }
+
+private:
+
+  void _addressCountVisitorBasicTest()
+  {
+    conf().set(ConfigOptions::getAddressMatchEnabledKey(), true);
+
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
+      false,
+      Status::Unknown1);
+
+    AddressCountVisitor uut;
+    map->visitRo(uut);
+    CPPUNIT_ASSERT_EQUAL(28, (int)uut.getStat());
+  }
+
+  void _hasAddressCriterionBasicTest()
+  {
+    HasAddressCriterion uut;
+    uut.setConfiguration(conf());
+
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
+    CPPUNIT_ASSERT(uut.isSatisfied(node1));
+
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
+    way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "blah");
+    CPPUNIT_ASSERT(!uut.isSatisfied(way1));
+
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
+    way2->getTags().set("blah", "123 Main Street");
+    CPPUNIT_ASSERT(!uut.isSatisfied(way2));
+  }
+
+  void _normalizeAddressesVisitorBasicTest()
+  {
+    OsmMap::resetCounters();
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
+      false,
+      Status::Unknown1);
+
+    NormalizeAddressesVisitor uut;
+    map->visitRw(uut);
+
+    const QString outputFile = _outputPath + "normalizeAddressesVisitorBasicTest-out.osm";
+    OsmMapWriterFactory::write(map, outputFile);
+
+    CPPUNIT_ASSERT_EQUAL(21, uut._addressNormalizer.getNumNormalized());
+    HOOT_FILE_EQUALS(_inputPath + "normalizeAddressesVisitorBasicTest-out.osm", outputFile);
+  }
+
+  void _addressScoreExtractorTagTest()
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
@@ -83,7 +177,8 @@ public:
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     map->addNode(node1);
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
@@ -91,7 +186,8 @@ public:
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, -2, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     map->addNode(node2);
     WayPtr way2 = std::make_shared<Way>(Status::Unknown2, -2, 15.0);
@@ -99,7 +195,8 @@ public:
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node2, way2), 0.01);
 
-    NodePtr node3 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node3 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node3->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     map->addNode(node3);
     WayPtr way3 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
@@ -107,7 +204,8 @@ public:
     map->addWay(way3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node3, way3), 0.0);
 
-    NodePtr node4 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node4 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node4->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Avenue");
     map->addNode(node4);
     WayPtr way4 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
@@ -116,14 +214,15 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node4, way4), 0.0);
   }
 
-  void runCombinedTagTest()
+  void _addressScoreExtractorCombinedTagTest()
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node1);
@@ -133,7 +232,8 @@ public:
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, -2, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node2->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node2);
@@ -144,14 +244,15 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node2, way2), 0.01);
   }
 
-  void runRangeTest()
+  void _addressScoreExtractorRangeTest()
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123-125");
     node1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node1);
@@ -161,7 +262,8 @@ public:
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, -2, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123-125");
     node2->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node2);
@@ -171,7 +273,8 @@ public:
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node2, way2), 0.0);
 
-    NodePtr node3 = std::make_shared<Node>(Status::Unknown1, -3, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node3 =
+      std::make_shared<Node>(Status::Unknown1, -3, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node3->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123-125");
     node3->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node3);
@@ -182,14 +285,15 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node3, way3), 0.01);
   }
 
-  void runAltFormatTest()
+  void _addressScoreExtractorAltFormatTest()
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(
       AddressTagKeys::FULL_ADDRESS_TAG_NAME_2, "Main Street 123 20121 mytown");
     map->addNode(node1);
@@ -198,7 +302,8 @@ public:
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, -2, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set(
       AddressTagKeys::FULL_ADDRESS_TAG_NAME_2, "Main Street 123 20121 mytown");
     map->addNode(node2);
@@ -208,7 +313,8 @@ public:
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node2, way2), 0.01);
 
-    NodePtr node3 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node3 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node3->getTags().set(
       AddressTagKeys::FULL_ADDRESS_TAG_NAME_2, "ZENTRALLÄNDSTRASSE 40 81379 MÜNCHEN");
     map->addNode(node3);
@@ -218,14 +324,15 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node3, way3), 0.0);
   }
 
-  void runSubLetterTest()
+  void _addressScoreExtractorSubLetterTest()
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node1);
@@ -241,14 +348,15 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
 
-  void runIntersectionTest()
+  void _addressScoreExtractorIntersectionTest()
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     map->addNode(node1);
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     map->addWay(way1);
@@ -340,19 +448,21 @@ public:
     // the intersection split tokens, but maybe.
   }
 
-  void runWayTest()
+  void _addressScoreExtractorWayTest()
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node1);
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
-    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, -2, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node2->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
     map->addNode(node2);
@@ -360,12 +470,14 @@ public:
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    NodePtr node3 = std::make_shared<Node>(Status::Unknown1, -3, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node3 =
+      std::make_shared<Node>(Status::Unknown1, -3, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node3->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node3->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node3);
     WayPtr way2 = std::make_shared<Way>(Status::Unknown2, -2, 15.0);
-    NodePtr node4 = std::make_shared<Node>(Status::Unknown2, -4, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node4 =
+      std::make_shared<Node>(Status::Unknown2, -4, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node4->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "567");
     node4->getTags().set(AddressTagKeys::STREET_TAG_NAME, "first street");
     map->addNode(node4);
@@ -373,7 +485,8 @@ public:
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node3, way2), 0.01);
 
-    NodePtr node5 = std::make_shared<Node>(Status::Unknown1, -5, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node5 =
+      std::make_shared<Node>(Status::Unknown1, -5, geos::geom::Coordinate(0.0, 0.0), 15.0);
     map->addNode(node5);
     WayPtr way3 = std::make_shared<Way>(Status::Unknown2, -3, 15.0);
     way3->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
@@ -388,19 +501,21 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, way3, way4), 0.01);
   }
 
-  void runRelationTest()
+  void _addressScoreExtractorRelationTest()
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node1);
     RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown2, -1, 15.0);
-    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, -2, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node2->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
     map->addNode(node2);
@@ -408,12 +523,14 @@ public:
     map->addRelation(relation1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, relation1), 0.0);
 
-    NodePtr node4 = std::make_shared<Node>(Status::Unknown1, -4, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node4 =
+      std::make_shared<Node>(Status::Unknown1, -4, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node4->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node4->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node4);
     RelationPtr relation3 = std::make_shared<Relation>(Status::Unknown2, -3, 15.0);
-    NodePtr node5 = std::make_shared<Node>(Status::Unknown1, -5, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node5 =
+      std::make_shared<Node>(Status::Unknown1, -5, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node5->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "567");
     node5->getTags().set(AddressTagKeys::STREET_TAG_NAME, "first street");
     map->addNode(node5);
@@ -421,7 +538,8 @@ public:
     map->addRelation(relation3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node4, relation3), 0.01);
 
-    NodePtr node6 = std::make_shared<Node>(Status::Unknown1, -6, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node6 =
+      std::make_shared<Node>(Status::Unknown1, -6, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node6->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "567");
     node6->getTags().set(AddressTagKeys::STREET_TAG_NAME, "first street");
     map->addNode(node6);
@@ -434,7 +552,8 @@ public:
     map->addRelation(relation4);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node6, relation4), 0.01);
 
-    NodePtr node7 = std::make_shared<Node>(Status::Unknown1, -7, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node7 =
+      std::make_shared<Node>(Status::Unknown1, -7, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node7->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node7->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
     map->addNode(node7);
@@ -447,7 +566,8 @@ public:
     map->addRelation(relation5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node7, relation5), 0.01);
 
-    NodePtr node8 = std::make_shared<Node>(Status::Unknown1, -8, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node8 =
+      std::make_shared<Node>(Status::Unknown1, -8, geos::geom::Coordinate(0.0, 0.0), 15.0);
     map->addNode(node8);
     WayPtr way5 = std::make_shared<Way>(Status::Unknown2, -5, 15.0);
     map->addWay(way5);
@@ -464,7 +584,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, relation6, relation7), 0.01);
   }
 
-  void translateTagValueTest()
+  void _addressScoreExtractorTranslateTagValueTest()
   {
     AddressScoreExtractor uut;
     Settings settings = conf();
@@ -480,7 +600,8 @@ public:
         ToEnglishAddressTranslator::_translator);
     dictTranslator->setTokenizeInput(false);
 
-    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     map->addNode(node1);
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
@@ -489,7 +610,8 @@ public:
     map->addWay(way1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set(
       AddressTagKeys::FULL_ADDRESS_TAG_NAME_2, "Central Border Street 40 81379");
     map->addNode(node2);
@@ -506,14 +628,15 @@ public:
      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
 
-  void invalidFullAddressTest()
+  void _addressScoreExtractorInvalidFullAddressTest()
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     map->addNode(node1);
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     map->addWay(way1);
@@ -541,14 +664,15 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
   }
 
-  void invalidComponentAddressTest()
+  void _addressScoreExtractorInvalidComponentAddressTest()
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     map->addNode(node1);
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     map->addWay(way1);
@@ -580,7 +704,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
   }
 
-  void additionalTagsTest()
+  void _addressScoreExtractorAdditionalTagsTest()
   {
     QStringList additionalTagKeys;
     additionalTagKeys.append("note");
@@ -592,7 +716,8 @@ public:
     uut.setCacheEnabled(false);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     map->addNode(node1);
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     map->addWay(way1);
@@ -621,7 +746,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
   }
 
-  void noStreetNumberTest()
+  void _addressScoreExtractorNoStreetNumberTest()
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
@@ -630,7 +755,8 @@ public:
     {
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+      NodePtr node =
+        std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
       node->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Main Street");
       map->addNode(node);
 
@@ -644,7 +770,8 @@ public:
     {
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+      NodePtr node =
+        std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
       node->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
       map->addNode(node);
 
@@ -658,7 +785,8 @@ public:
     {
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+      NodePtr node =
+        std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
       node->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Main Street");
       map->addNode(node);
 
@@ -677,8 +805,10 @@ public:
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Hudson Street");
       map->addWay(way);
 
-      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
-      node->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Hudson Street, San Ignacio, Belize");
+      NodePtr node =
+        std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+      node->getTags().set(
+        AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Hudson Street, San Ignacio, Belize");
       map->addNode(node);
 
       CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node, way), 0.0);
@@ -694,7 +824,8 @@ public:
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addWay(way);
 
-      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+      NodePtr node =
+        std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
       node->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "462");
       node->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addNode(node);
@@ -712,7 +843,8 @@ public:
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addWay(way);
 
-      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+      NodePtr node =
+        std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
       node->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addNode(node);
 
@@ -727,7 +859,8 @@ public:
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addWay(way);
 
-      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+      NodePtr node =
+        std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
       node->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addNode(node);
 
@@ -735,7 +868,7 @@ public:
     }
   }
 
-  void partialMatchTest()
+  void _addressScoreExtractorPartialMatchTest()
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
@@ -746,7 +879,8 @@ public:
 
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+      NodePtr node =
+        std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
       node->getTags().set("address", "670 Brunswick");
       map->addNode(node);
 
@@ -763,7 +897,8 @@ public:
 
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+      NodePtr node =
+        std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
       node->getTags().set("name", "100 Whitney Young Circle");
       map->addNode(node);
 
@@ -780,7 +915,8 @@ public:
 
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
+      NodePtr node =
+        std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
       node->getTags().set("address", "150 Sutter Street");
       map->addNode(node);
 
@@ -793,8 +929,123 @@ public:
       CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, uut.extract(*map, node, way), 0.0);
     }
   }
+
+  void _building3441Addresses1Test()
+  {
+    setUp();
+    conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::BuildingMatchCreator");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::BuildingMergerCreator");
+
+    const QString outFile = _outputPath + "building-3441-addresses-1-out.osm";
+    ConflateExecutor().conflate(
+      _inputPath + "building-3441-addresses-1-in-1.osm",
+      _inputPath + "building-3441-addresses-1-in-2.osm", outFile);
+
+    HOOT_FILE_EQUALS(_inputPath + "building-3441-addresses-1-out.osm", outFile);
+  }
+
+  void _building3441Addresses2Test()
+  {
+    setUp();
+    conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::BuildingMatchCreator");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::BuildingMergerCreator");
+
+    const QString outFile = _outputPath + "building-3441-addresses-2-out.osm";
+    ConflateExecutor().conflate(
+      _inputPath + "building-3441-addresses-2-in-1.osm",
+      _inputPath + "building-3441-addresses-2-in-2.osm", outFile);
+
+    HOOT_FILE_EQUALS(_inputPath + "building-3441-addresses-2-out.osm", outFile);
+  }
+
+  void _poiPolygon10Test()
+  {
+    setUp();
+    conf().set(
+      ConfigOptions::getMatchCreatorsKey(),
+      "hoot::BuildingMatchCreator;hoot::PoiPolygonMatchCreator");
+    conf().set(
+      ConfigOptions::getMergerCreatorsKey(),
+      "hoot::BuildingMergerCreator;hoot::PoiPolygonMergerCreator");
+    conf().set(ConfigOptions::getPoiPolygonMatchEvidenceThresholdKey(), 2);
+    conf().set(ConfigOptions::getPoiPolygonPromotePointsWithAddressesToPoisKey(), true);
+
+    const QString outFile = _outputPath + "poi-polygon-10-out.osm";
+    ConflateExecutor().conflate(
+      _inputPath + "poi-polygon-10-in-1.osm", _inputPath + "poi-polygon-10-in-2.osm", outFile);
+
+    HOOT_FILE_EQUALS(_inputPath + "poi-polygon-10-out.osm", outFile);
+  }
+
+  void _poiPolygonAutoMerge13Test()
+  {
+    setUp();
+    conf().set(
+      ConfigOptions::getMatchCreatorsKey(),
+      "hoot::BuildingMatchCreator;hoot::PoiPolygonMatchCreator");
+    conf().set(
+      ConfigOptions::getMergerCreatorsKey(),
+      "hoot::BuildingMergerCreator;hoot::PoiPolygonMergerCreator");
+
+    const QString outFile = _outputPath + "poi-polygon-auto-merge-13-out.osm";
+    ConflateExecutor().conflate(
+      _inputPath + "poi-polygon-auto-merge-13-in-1.osm",
+      _inputPath + "poi-polygon-auto-merge-13-in-2.osm", outFile);
+
+    HOOT_FILE_EQUALS(_inputPath + "poi-polygon-auto-merge-13-out.osm", outFile);
+  }
+
+  void _poiPolygonAutoMerge14Test()
+  {
+    setUp();
+    conf().set(ConfigOptions::getMatchCreatorsKey(), "BuildingMatchCreator;PoiPolygonMatchCreator");
+    conf().set(
+      ConfigOptions::getMergerCreatorsKey(), "BuildingMergerCreator;PoiPolygonMergerCreator");
+    conf().set(ConfigOptions::getPoiPolygonAutoMergeManyPoiToOnePolyMatchesKey(), true);
+
+    const QString outFile = _outputPath + "poi-polygon-auto-merge-14-out.osm";
+    ConflateExecutor().conflate(
+      _inputPath + "poi-polygon-auto-merge-14-in-1.osm",
+      _inputPath + "poi-polygon-auto-merge-14-in-2.osm", outFile);
+
+    HOOT_FILE_EQUALS(_inputPath + "poi-polygon-auto-merge-14-out.osm", outFile);
+  }
+
+  void _poiPolygonRecursiveWayAddress3267_1Test()
+  {
+    setUp();
+    conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::PoiPolygonMatchCreator");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::PoiPolygonMergerCreator");
+
+    const QString outFile = _outputPath + "poi-polygon-recursive-way-address-3267-1-out.osm";
+    ConflateExecutor().conflate(
+      _inputPath + "poi-polygon-recursive-way-address-3267-1-in-1.osm",
+      _inputPath + "poi-polygon-recursive-way-address-3267-1-in-2.osm", outFile);
+
+    HOOT_FILE_EQUALS(_inputPath + "poi-polygon-recursive-way-address-3267-1-out.osm", outFile);
+  }
+
+  void _poiPolygonReviewConflict4331_3Test()
+  {
+    setUp();
+    conf().set(
+      ConfigOptions::getMatchCreatorsKey(),
+      "hoot::BuildingMatchCreator;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Poi.js");
+    conf().set(
+      ConfigOptions::getMergerCreatorsKey(),
+      "hoot::BuildingMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator");
+    conf().set(ConfigOptions::getPoiPolygonNameStringComparerKey(), "KskipBigramDistance");
+
+    const QString outFile = _outputPath + "poi-polygon-review-conflict-4331-3-out.osm";
+    ConflateExecutor().conflate(
+      _inputPath + "poi-polygon-review-conflict-4331-3-in-1.osm",
+      _inputPath + "poi-polygon-review-conflict-4331-3-in-2.osm", outFile);
+
+    HOOT_FILE_EQUALS(_inputPath + "poi-polygon-review-conflict-4331-3-out.osm", outFile);
+  }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AddressScoreExtractorTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AddressConflateTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AddressConflateTest, "serial");
 
 }
