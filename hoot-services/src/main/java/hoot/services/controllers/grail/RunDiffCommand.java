@@ -59,7 +59,7 @@ class RunDiffCommand extends GrailCommand {
                     Map<String, String> optionConfig = configOptions.get(option.getKey());
                     String optionValue = option.getValue();
 
-                    if (optionConfig.get("type").toLowerCase().equals("list")) {
+                    if (optionConfig.get("type").equalsIgnoreCase("list")) {
                         optionValue = optionValue.replaceAll("\\[|\\]", "").replaceAll(",", ";");
                     }
 
@@ -70,6 +70,11 @@ class RunDiffCommand extends GrailCommand {
             if (hoot2AdvOptions.get("RoadEngines") != null) {
                 algorithm = hoot2AdvOptions.get("RoadEngines") + "Algorithm.conf";
             }
+        }
+
+        if (params.getBounds() != null) {
+            //Add bounds
+            options.add("bounds=" + params.getBounds());
         }
 
         Map<String, Object> substitutionMap = new HashMap<>();
