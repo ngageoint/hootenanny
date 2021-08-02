@@ -104,12 +104,11 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstW
 
   for (size_t i = 0; i < v.size(); i++)
   {
-    Point* point(GeometryFactory::getDefaultInstance()->createPoint(v[i]));
-    LOG_VART(ls2->distance(point));
-    double d = ls2->distance(point);
+    std::shared_ptr<Point> point(GeometryFactory::getDefaultInstance()->createPoint(v[i]));
+    LOG_VART(ls2->distance(point.get()));
+    double d = ls2->distance(point.get());
     distanceSum += d;
     _dMax = max(d, _dMax);
-    delete point;
   }
 
   _dMax /= (circularError + w1->getCircularError());

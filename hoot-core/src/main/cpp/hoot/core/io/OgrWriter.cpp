@@ -179,13 +179,13 @@ void OgrWriter::openOutput(const QString& url)
   {
     _ds = OgrUtilities::getInstance().openDataSource(url, false);
   }
-  catch(const HootException& openException)
+  catch (const HootException& openException)
   {
     try
     {
       _ds = OgrUtilities::getInstance().createDataSource(url);
     }
-    catch(const HootException& createException)
+    catch (const HootException& createException)
     {
       throw HootException(QString("Error opening or creating data source. Opening error: \"%1\" "
         "Creating error: \"%2\"").arg(openException.what()).arg(createException.what()));
@@ -262,9 +262,9 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
   {
     _writePartial(provider, it->second);
   }
-  //Since relations may contain other relations, which were unavailable to write during the first
-  //pass, we're doing two write passes here.  We're only allowing two total passes for writing the
-  //relations, so fail if any get skipped during the second pass.
+  // Since relations may contain other relations, which were unavailable to write during the first
+  // pass, we're doing two write passes here.  We're only allowing two total passes for writing the
+  // relations, so fail if any get skipped during the second pass.
   _failOnSkipRelation = true;
   LOG_DEBUG("Writing second pass relations...");
   for (QList<long>::const_iterator relationIdIter = _unwrittenFirstPassRelationIds.begin();
@@ -277,11 +277,9 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
 void OgrWriter::translateToFeatures(
   const ElementProviderPtr& provider, const ConstElementPtr& e,
   std::shared_ptr<Geometry> &g, // output
-  std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> &tf) const // output
+  std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> &tf) const
 {
-  // TODO: maybe return a reference or something, to avoid a copy
-
-  if (_translator.get() == nullptr)
+  if (!_translator)
   {
     throw HootException("You must call open before attempting to write.");
   }
@@ -289,8 +287,8 @@ void OgrWriter::translateToFeatures(
   if (e->getTags().getInformationCount() > 0)
   {
     // There is probably a cleaner way of doing this.
-    // convertToGeometry calls  getGeometryType which will throw an exception if it gets a relation
-    // that it doesn't know about. E.g. "route", "superroute", " turnlanes:turns" etc
+    // convertToGeometry calls getGeometryType which will throw an exception if it gets a relation
+    // that it doesn't know about. E.g. "route", "superroute", "turnlanes:turns", etc
 
     try
     {
@@ -383,7 +381,7 @@ void OgrWriter::writePartial(const ConstWayPtr& way)
 
   /*
    * Make sure this way has any hope of working (i.e., are there enough spots in the cache
-   * for all its nodes?
+   * for all its nodes?)
    */
   if (way->getNodeCount() > _elementCache->getNodeCacheSize())
   {
