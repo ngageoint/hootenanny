@@ -49,7 +49,6 @@ public:
    * @brief ElementCache
    */
   ElementCache() = default;
-
   /**
    * @brief ~ElementCache
    */
@@ -60,7 +59,6 @@ public:
    * @return True if the cache does not contain any elements, else false
    */
   virtual bool isEmpty() const = 0;
-
   /**
    * @brief size
    * @return Total number of elements in the cache
@@ -105,7 +103,6 @@ public:
    * @note Nodes will be returned in order by ascending node ID
    */
   virtual ConstNodePtr getNextNode() = 0;
-
   /**
    * @brief getNextWay
    * @return Pointer to the next entry in cache's list of ways, or ConstWayPtr() if no more ways
@@ -113,7 +110,6 @@ public:
    * @note Ways will be returned in order by ascending way ID
    */
   virtual ConstWayPtr getNextWay() = 0;
-
   /**
    * @brief getNextRelation
    * @return Pointer to the next entry in cache's list of relations, or ConstRelationPtr() if no
@@ -125,15 +121,11 @@ public:
 
   // Cache-specific items
   virtual void removeElement(const ElementId& eid) = 0;
-
   virtual void removeElements(const ElementType::Type type) = 0;
 
-  virtual unsigned long getNodeCacheSize() = 0;
-
-  virtual unsigned long getWayCacheSize() = 0;
-
-  virtual unsigned long getRelationCacheSize() = 0;
-
+  virtual unsigned long getNodeCacheSize() const = 0;
+  virtual unsigned long getWayCacheSize() const = 0;
+  virtual unsigned long getRelationCacheSize() const = 0;
 };
 
 using ElementCachePtr = std::shared_ptr<ElementCache>;

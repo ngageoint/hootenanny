@@ -32,6 +32,7 @@
 // Hoot Includes
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/PbfConstants.h>
 #include <hoot/core/proto/FileFormat.pb.h>
@@ -635,24 +636,13 @@ vector<OsmPbfReader::BlobLocation> OsmPbfReader::loadOsmDataBlobOffsets(
     {
       long pos = _in->tellg();
       PROGRESS_STATUS(
-        QString("%1 / %2 - %3 MB/s                  ")
-          .arg(pos / 1.0e6, 0, 'g', 1)
-          .arg(length / 1.0e6, 0, 'g', 1)
+        QString("Loading blob offsets: %1 / %2 - %3 MB/s                  ")
+          .arg(StringUtils::formatLargeNumber(pos / 1e6))
+          .arg(StringUtils::formatLargeNumber(length / 1e6))
           .arg(((_in->tellg() - lastPos) / (t - last)) / 1.0e6, 0, 'g', 2));
       last = t;
       lastPos = _in->tellg();
     }
-  }
-
-  t = Tgs::Time::getTime();
-  if (t - start > 5)
-  {
-    // print the final summary
-    PROGRESS_STATUS(
-      QString("%1 / %2 - %3 MB/s                  ")
-        .arg(length / 1.0e6, 0, 'g', 1)
-        .arg(length / 1.0e6, 0, 'g', 1)
-        .arg((length / (t - start)) / 1.0e6, 0, 'g', 2));
   }
 
   return result;
@@ -1428,13 +1418,7 @@ void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t) const
 
 std::shared_ptr<OGRSpatialReference> OsmPbfReader::getProjection() const
 {
-  std::shared_ptr<OGRSpatialReference> wgs84 = std::make_shared<OGRSpatialReference>();
-  if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
-  {
-    throw HootException("Error creating EPSG:4326 projection.");
-  }
-
-  return wgs84;
+  return MapProjector::createWgs84Projection();
 }
 
 }

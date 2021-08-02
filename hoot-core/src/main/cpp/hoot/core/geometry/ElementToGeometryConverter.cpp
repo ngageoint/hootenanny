@@ -168,7 +168,7 @@ std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(
     size = 2;
   }
   CoordinateSequence* cs =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2);
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2).release();
 
   for (size_t i = 0; i < ids.size(); i++)
   {
@@ -243,14 +243,13 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
   }
 
   CoordinateSequence* cs =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2);
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2).release();
 
   size_t i;
   for (i = 0; i < ids.size(); i++)
   {
     LOG_VART(ids[i]);
     ConstNodePtr n = _constProvider->getNode(ids[i]);
-    //LOG_VART(n.get());
     if (!n.get())
     {
       if (logWarnCount < Log::getWarnMessageLimit())
@@ -294,7 +293,7 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
   }
 
   // an empty set of holes
-  vector<Geometry*>* holes = new vector<Geometry*>();
+  vector<LinearRing*>* holes = new vector<LinearRing*>();
   // create the outer line; GeometryFactory takes ownership of these input parameters.
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(cs);
 
