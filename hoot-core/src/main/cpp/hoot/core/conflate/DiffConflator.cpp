@@ -31,8 +31,11 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/criterion/WayLengthCriterion.h>
+#include <hoot/core/info/ElementCounter.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -233,11 +236,21 @@ void DiffConflator::apply(OsmMapPtr& map)
       MemoryUsageChecker::getInstance().check();
     }
 
+    // We only want the diff to have data from the secondary input not in the reference input, so
+    // remove the reference data from the diff.
     if (ConfigOptions().getDifferentialRemoveReferenceData())
     {
       _removeRefData();
     }
-
+    // When removing partial linear matches partially, sometimes the diff can be a little too
+    // granular. In that case, we allow filtering out some of the smaller secondary data.
+    QStringList secondaryBaseCriteria = ConfigOptions().getDifferentialSecWayRemovalCriteria();
+    StringUtils::removeEmptyStrings(secondaryBaseCriteria);
+    if (!secondaryBaseCriteria.empty())
+    {
+      _cleanSecData(
+        secondaryBaseCriteria, ConfigOptions().getDifferentialSecWayRemovalLengthThreshold());
+    }
     if (!ConfigOptions().getWriterIncludeDebugTags())
     {
       _removeMetadataTags();
@@ -248,6 +261,53 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   // Free up any used resources.
   AbstractConflator::_reset();
+}
+
+void DiffConflator::_cleanSecData(QStringList& baseCriteria, const double maxSize) const
+{
+  LOG_INFO("\tRemoving secondary ways by criteria...");
+
+  QList<ElementCriterionPtr> criteria;
+  ElementCounter counter;
+  counter.setCountFeaturesOnly(false);
+
+  ElementCriterionPtr secCrit = std::make_shared<StatusCriterion>(Status::Unknown2);
+  criteria.append(secCrit);
+  counter.setCriteria(secCrit);
+  LOG_VARD(counter.count(_map));
+
+  ElementCriterionPtr notSnappedCrit =
+    std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::HootSnapped()));
+  criteria.append(notSnappedCrit);
+  counter.setCriteria(notSnappedCrit);
+  LOG_VARD(counter.count(_map));
+
+  ElementCriterionPtr baseCrit = CriterionUtils::constructCriterion(baseCriteria, true, false);
+  criteria.append(baseCrit);
+  counter.setCriteria(baseCrit);
+  LOG_VARD(counter.count(_map));
+
+  ElementCriterionPtr lengthCrit =
+    std::make_shared<WayLengthCriterion>(maxSize, NumericComparisonType::LessThanOrEqualTo, _map);
+  criteria.append(lengthCrit);
+  counter.setCriteria(lengthCrit);
+  LOG_VARD(counter.count(_map));
+
+  ElementCriterionPtr removalCrit = CriterionUtils::combineCriterion(criteria);
+  LOG_VARD(removalCrit->toString());
+  counter.setCriteria(removalCrit);
+  LOG_VARD(counter.count(_map));
+
+  RemoveElementsVisitor removeRef1Visitor;
+  removeRef1Visitor.setRecursive(true);
+  removeRef1Visitor.addCriterion(removalCrit);
+  const int mapSizeBefore = _map->size();
+  _map->visitRw(removeRef1Visitor);
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-cleaning-sec-elements");
+
+  LOG_DEBUG(
+    "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _map->size()) <<
+    " secondary ways...");
 }
 
 void DiffConflator::_discardUnconflatableElements()
