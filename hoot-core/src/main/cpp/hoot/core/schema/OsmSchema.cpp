@@ -41,7 +41,6 @@
 #endif
 
 // Hoot
-#include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>

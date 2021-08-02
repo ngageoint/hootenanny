@@ -245,10 +245,10 @@ protected:
    *  @brief Constructor to set the paths to begin with $HOOT_HOME if used, default reset to none,
    *  and create the output path if needed
    */
-  HootTestFixture(const QString& inputPath = UNUSED_PATH, const QString& outputPath = UNUSED_PATH)
-    : _inputPath((inputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + inputPath : inputPath),
-      _outputPath((outputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + outputPath : outputPath),
-      _reset(ResetNone)
+  HootTestFixture(const QString& inputPath = UNUSED_PATH, const QString& outputPath = UNUSED_PATH) :
+  _inputPath((inputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + inputPath : inputPath),
+  _outputPath((outputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + outputPath : outputPath),
+  _reset(ResetNone)
   {
     if (outputPath != UNUSED_PATH)
       FileUtils::makeDir(_outputPath);
