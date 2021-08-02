@@ -75,11 +75,12 @@ public:
     QStringList& criteriaClassNames, const bool chainCriteria, const bool negate);
 
   /**
-   * @brief combineCriterion TODO
-   * @param criteria
-   * @param chain
-   * @param negate
-   * @return
+   * @brief combineCriterion combines multiple criterion into a single criteria
+   * @param criteria individual criterion to combine
+   * @param chain if true, logically AND's the criterion together; if false, logically OR's them
+   * together
+   * @param negate if true, the entire criteria is negated by adding a logical NOT to it
+   * @return an element criterion
    */
   static ElementCriterionPtr combineCriterion(
     const QList<ElementCriterionPtr>& criteria, const bool chain = true, const bool negate = false);

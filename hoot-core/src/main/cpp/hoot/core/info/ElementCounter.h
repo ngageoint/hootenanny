@@ -57,9 +57,9 @@ public:
   long count(const QStringList& inputs);
 
   /**
-   * @brief count TODO
-   * @param map
-   * @return
+   * @brief count counts the number of elements in a map
+   * @param map the map containing elements to count
+   * @return a count
    */
   long count(const OsmMapPtr& map) const;
 
