@@ -43,7 +43,7 @@ public:
 
   static QString className() { return "hoot::ElementCountVisitor"; }
 
-  ElementCountVisitor() : _count(0) { }
+  ElementCountVisitor();
   ~ElementCountVisitor() = default;
 
   double getStat() const override { return _count; }

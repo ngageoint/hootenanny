@@ -28,6 +28,7 @@
 #define ELEMENT_COUNTER_H
 
 // Hoot
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/io/ElementInputStream.h>
@@ -55,9 +56,17 @@ public:
    */
   long count(const QStringList& inputs);
 
+  /**
+   * @brief count TODO
+   * @param map
+   * @return
+   */
+  long count(const OsmMapPtr& map) const;
+
   void setCountFeaturesOnly(const bool countFeaturesOnly)
   { _countFeaturesOnly = countFeaturesOnly; }
   void setCriteria(QStringList& names);
+  void setCriteria(const ElementCriterionPtr& criteria) { _crit = criteria; }
 
 private:
 
@@ -75,6 +84,7 @@ private:
   void _checkForMissingInputs(const QStringList& inputs) const;
   QString _getStreamingStatusMessage(const QString& input) const;
   QString _getMemoryBoundStatusMessage(const int inputsSize) const;
+  QString _getMemoryBoundStatusMessage(const OsmMapPtr& map) const;
 
   std::shared_ptr<PartialOsmMapReader> _getStreamingReader(const QString& input) const;
   ElementInputStreamPtr _getFilteredInputStream(
@@ -82,6 +92,7 @@ private:
   ConstElementVisitorPtr _getCountVis() const;
 
   long _countMemoryBound(const QStringList& inputs) const;
+  long _countMemoryBound(const OsmMapPtr& map) const;
   long _countStreaming(const QString& input) const;
 };
 

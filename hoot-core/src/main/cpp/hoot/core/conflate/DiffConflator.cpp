@@ -35,6 +35,7 @@
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/WayLengthCriterion.h>
+#include <hoot/core/info/ElementCounter.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -263,20 +264,38 @@ void DiffConflator::_cleanSecData()
     LOG_INFO("\tRemoving secondary ways by criteria...");
 
     QList<ElementCriterionPtr> criteria;
-    ElementCriterionPtr secCrit = std::make_shared<TagKeyCriterion>(MetadataTags::Ref2());
+    ElementCounter counter;
+    counter.setCountFeaturesOnly(false);
+
+    ElementCriterionPtr secCrit = std::make_shared<StatusCriterion>(Status::Unknown2);
     criteria.append(secCrit);
+    counter.setCriteria(secCrit);
+    LOG_VARD(counter.count(_map));
+
     ElementCriterionPtr notSnappedCrit =
       std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::HootSnapped()));
     criteria.append(notSnappedCrit);
+    counter.setCriteria(notSnappedCrit);
+    LOG_VARD(counter.count(_map));
+
     ElementCriterionPtr featureCrit =
       CriterionUtils::constructCriterion(featureCriteria, true, false);
     criteria.append(featureCrit);
+    counter.setCriteria(featureCrit);
+    LOG_VARD(counter.count(_map));
+
     ElementCriterionPtr lengthCrit =
       std::make_shared<WayLengthCriterion>(
         ConfigOptions().getDifferentialSecWayRemovalLengthThreshold(),
         NumericComparisonType::LessThanOrEqualTo, _map);
     criteria.append(lengthCrit);
+    counter.setCriteria(lengthCrit);
+    LOG_VARD(counter.count(_map));
+
     ElementCriterionPtr removalCrit = CriterionUtils::combineCriterion(criteria);
+    LOG_VARD(removalCrit->toString());
+    counter.setCriteria(removalCrit);
+    LOG_VARD(counter.count(_map));
 
     RemoveElementsVisitor removeRef1Visitor;
     removeRef1Visitor.setRecursive(true);
