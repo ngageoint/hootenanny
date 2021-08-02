@@ -251,13 +251,17 @@ private:
     const std::vector<ConstMatchPtr>& matches);
 
   /**
-   * @brief _removeRefData TODO
+   * @brief _removeRefData removes reference data from the differential output.
    */
   void _removeRefData();
   /**
-   * @brief _cleanSecData TODO
+   * @brief _cleanSecData cleans secondary ways out of the differential output based on specified
+   * criteria.
+   * @param baseCriteria criteria for determining which secondary ways to remove; Generally, this
+   * would be a ConflatableElementCriterion (HighwayCriterion, etc.)
+   * @param maxSize only ways up to this size are removed
    */
-  void _cleanSecData();
+  void _cleanSecData(QStringList& baseCriteria, const double maxSize) const;
   /*
    * The element criteria that must be met in order for an element involved in a match to be
    * completely removed
