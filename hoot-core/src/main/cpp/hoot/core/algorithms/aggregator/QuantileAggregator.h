@@ -51,6 +51,9 @@ public:
 
   double aggregate(std::vector<double>& d) const override;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
   QString toString() const override

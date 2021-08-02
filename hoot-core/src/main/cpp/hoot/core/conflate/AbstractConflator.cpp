@@ -161,50 +161,50 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-whole-group-removal");
 
   // Globally optimize the set of matches to maximize the conflation score.
+
+  OptimalConstrainedMatches cm(_map);
+  std::vector<ConstMatchPtr> cmMatches;
+
+  if (ConfigOptions().getUnifyEnableOptimalConstrainedMatches())
   {
-    OptimalConstrainedMatches cm(_map);
-    std::vector<ConstMatchPtr> cmMatches;
-
-    if (ConfigOptions().getUnifyEnableOptimalConstrainedMatches())
+    cm.addMatches(matches.begin(), matches.end());
+    cm.setTimeLimit(ConfigOptions().getUnifyOptimizerTimeLimit());
+    double cmStart = Tgs::Time::getTime();
+    try
     {
-      cm.addMatches(matches.begin(), matches.end());
-      cm.setTimeLimit(ConfigOptions().getUnifyOptimizerTimeLimit());
-      double cmStart = Tgs::Time::getTime();
-      try
-      {
-        cmMatches = cm.calculateSubset();
-      }
-      catch (const Tgs::Exception& exp)
-      {
-        LOG_WARN(exp.what());
-      }
-      MemoryUsageChecker::getInstance().check();
-      LOG_TRACE("CM took: " << Tgs::Time::getTime() - cmStart << "s.");
-      LOG_DEBUG("CM Score: " << cm.getScore());
-      LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
+      cmMatches = cm.calculateSubset();
     }
-
-    GreedyConstrainedMatches gm(_map);
-    gm.addMatches(matches.begin(), matches.end());
-    double gmStart = Tgs::Time::getTime();
-    std::vector<ConstMatchPtr> gmMatches = gm.calculateSubset();
+    catch (const Tgs::Exception& exp)
+    {
+      LOG_WARN(exp.what());
+    }
     MemoryUsageChecker::getInstance().check();
-    LOG_TRACE("GM took: " << Tgs::Time::getTime() - gmStart << "s.");
-    LOG_DEBUG("GM Score: " << gm.getScore());
-
-    if (gm.getScore() > cm.getScore())
-    {
-      matches = gmMatches;
-      LOG_DEBUG("Using greedy matches with a higher score of: " << gm.getScore());
-    }
-    else
-    {
-      matches = cmMatches;
-      LOG_DEBUG(
-        "Using matches obtained by the an Integer Programming solution with a higher score of: " <<
-        cm.getScore());
-    }
+    LOG_TRACE("CM took: " << Tgs::Time::getTime() - cmStart << "s.");
+    LOG_DEBUG("CM Score: " << cm.getScore());
+    LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
   }
+
+  GreedyConstrainedMatches gm(_map);
+  gm.addMatches(matches.begin(), matches.end());
+  double gmStart = Tgs::Time::getTime();
+  std::vector<ConstMatchPtr> gmMatches = gm.calculateSubset();
+  MemoryUsageChecker::getInstance().check();
+  LOG_TRACE("GM took: " << Tgs::Time::getTime() - gmStart << "s.");
+  LOG_DEBUG("GM Score: " << gm.getScore());
+
+  if (gm.getScore() > cm.getScore())
+  {
+    matches = gmMatches;
+    LOG_DEBUG("Using greedy matches with a higher score of: " << gm.getScore());
+  }
+  else
+  {
+    matches = cmMatches;
+    LOG_DEBUG(
+      "Using matches obtained by the an Integer Programming solution with a higher score of: " <<
+      cm.getScore());
+  }
+
   double optimizeMatchesTime = _timer.getElapsedAndRestart();
   _stats.append(SingleStat("Optimize Matches Time (sec)", optimizeMatchesTime));
   _stats.append(SingleStat("Number of Optimized Matches", (double)matches.size()));
@@ -216,15 +216,15 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
   //LOG_VART(_matches);
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-match-optimization");
 
-  {
-    // Search the matches for groups (subgraphs) of matches. In other words, groups where all the
-    // matches are interrelated by element id
-    MatchGraph mg;
-    mg.addMatches(matches.begin(), matches.end());
-    std::vector<std::set<ConstMatchPtr, MatchPtrComparator>> tmpMatchSets = mg.findSubgraphs(_map);
-    matchSets.insert(matchSets.end(), tmpMatchSets.begin(), tmpMatchSets.end());
-    LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
-  }
+
+  // Search the matches for groups (subgraphs) of matches. In other words, groups where all the
+  // matches are interrelated by element id
+  MatchGraph mg;
+  mg.addMatches(matches.begin(), matches.end());
+  std::vector<std::set<ConstMatchPtr, MatchPtrComparator>> tmpMatchSets = mg.findSubgraphs(_map);
+  matchSets.insert(matchSets.end(), tmpMatchSets.begin(), tmpMatchSets.end());
+  LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
+
   LOG_DEBUG("Match sets count: " << matchSets.size());
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-match-optimization-2");
 

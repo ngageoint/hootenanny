@@ -132,4 +132,37 @@ ElementCriterionPtr CriterionUtils::constructCriterion(
   }
 }
 
+ElementCriterionPtr CriterionUtils::combineCriterion(
+  const QList<ElementCriterionPtr>& criteria, const bool chain, const bool negate)
+{
+  ElementCriterionPtr combinedCrit;
+
+  for (QList<ElementCriterionPtr>::const_iterator itr = criteria.begin(); itr != criteria.end();
+       ++itr)
+  {
+    if (!combinedCrit)
+    {
+      combinedCrit = (*itr)->clone();
+    }
+    else
+    {
+      if (chain)
+      {
+        combinedCrit = std::make_shared<ChainCriterion>(combinedCrit->clone(), *itr);
+      }
+      else
+      {
+        combinedCrit = std::make_shared<OrCriterion>(combinedCrit->clone(), *itr);
+      }
+    }
+  }
+
+  if (negate)
+  {
+    combinedCrit = std::make_shared<NotCriterion>(combinedCrit->clone());
+  }
+
+  return combinedCrit;
+}
+
 }
