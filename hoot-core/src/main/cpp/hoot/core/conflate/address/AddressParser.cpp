@@ -129,6 +129,11 @@ int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const O
 QList<Address> AddressParser::parseAddresses(const Element& element,
                                              const bool normalizeAddresses) const
 {
+  if (!ConfigOptions().getAddressMatchEnabled())
+  {
+    return QList<Address>();
+  }
+
   _parsedFromAddressTag = true;
   _isHouseNumRange = false;
   _isSubLetter = false;

@@ -38,6 +38,13 @@ namespace hoot
 
 LibPostalInit::LibPostalInit()
 {
+  // failsafe
+  if (!ConfigOptions().getAddressMatchEnabled())
+  {
+    throw IllegalArgumentException(
+      "libpostal cannot be initialized due to address matching being disabled.");
+  }
+
   // This init takes ~5 seconds normally.
   if (!libpostal_setup_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||
       !libpostal_setup_parser_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||

@@ -844,7 +844,6 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(
     start = Tgs::Time::getTime();
   }
 
-//  QScriptValue translated = _translateToOgrFunction->call(QScriptValue(), args);
   Local<Object> tObj = _gContext->getContext(current)->Global();
 
   // We assume this exists. we checked during Init.
