@@ -60,14 +60,12 @@ public:
   ElementCacheLRU(const unsigned long maxNodeCount,
                   const unsigned long maxWayCount,
                   const unsigned long maxRelationCount);
-
   /**
    * @brief ~ElementCache
    */
   ~ElementCacheLRU() = default;
 
   bool isEmpty() const override;
-
   unsigned long size() const override;
 
   unsigned long typeCount(const ElementType::Type typeToCount) const override;
@@ -83,9 +81,7 @@ public:
   void resetElementIterators() override;
 
   ConstNodePtr getNextNode() override;
-
   ConstWayPtr getNextWay() override;
-
   ConstRelationPtr getNextRelation() override;
 
   // Functions for ElementInputStream
@@ -102,37 +98,25 @@ public:
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   bool containsElement(const ElementId& eid) const override;
-
   ConstElementPtr getElement(const ElementId& id) const override;
-
   ConstNodePtr getNode(long id) const override;
-
   NodePtr getNode(long id) override;
-
   ConstRelationPtr getRelation(long id) const override;
-
   RelationPtr getRelation(long id) override;
-
   ConstWayPtr getWay(long id) const override;
-
   WayPtr getWay(long id) override;
 
   bool containsNode(long id) const override;
-
   bool containsRelation(long id) const override;
-
   bool containsWay(long id) const override;
 
   // Cache-specific items
   void removeElement(const ElementId& eid) override;
-
   void removeElements(const ElementType::Type type) override;
 
-  unsigned long getNodeCacheSize() override { return _maxNodeCount; }
-
-  unsigned long getWayCacheSize() override { return _maxWayCount; }
-
-  unsigned long getRelationCacheSize() override { return _maxRelationCount; }
+  unsigned long getNodeCacheSize() const override { return _maxNodeCount; }
+  unsigned long getWayCacheSize() const override { return _maxWayCount; }
+  unsigned long getRelationCacheSize() const override { return _maxRelationCount; }
 
   // For testing - gets a comma-seperated list of IDs of the Least Recently Used
   // cache items, from most recent to least recent.
@@ -148,36 +132,29 @@ private:
 
   // List used to keep track of least-recently used nodes
   std::list<long> _nodeList;
-
   // Nodes in the cache (key is node ID, then value is pair for node and its pos in the nodeList)
   std::map<long, std::pair<ConstNodePtr, std::list<long>::iterator>> _nodes;
-
   // Iterator used to walk nodes in cache
   std::map<long, std::pair<ConstNodePtr, std::list<long>::iterator>>::iterator _nodesIter;
 
   // List used to keep track of least-recently used nodes
   std::list<long> _wayList;
-
   // Ways in the cache (key is way ID, then value is pair for way and its pos in the wayList)
   std::map<long, std::pair<ConstWayPtr, std::list<long>::iterator>> _ways;
-
   // Iterator used to walk ways in cache
   std::map<long, std::pair<ConstWayPtr, std::list<long>::iterator>>::iterator _waysIter;
 
   // List used to keep track of least-recently used nodes
   std::list<long> _relationList;
-
   // Relations in the cache (key is relation ID, then value is pair for relation and access time)
   std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator>>  _relations;
-
   // Iterator used to walk relations in cache
   std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator>>::iterator _relationsIter;
 
   // Removes the least recently used item from the cache
   void _removeOldest(const ElementType::Type typeToRemove);
 
-  // These functions update the lists that keep the order of when items
-  // were last used/accessed
+  // These functions update the lists that keep the order of when items were last used/accessed.
   void _updateNodeAccess(long id);
   void _updateWayAccess(long id);
   void _updateRelationAccess(long id);

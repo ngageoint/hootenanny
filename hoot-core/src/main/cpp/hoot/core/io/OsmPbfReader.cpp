@@ -636,24 +636,13 @@ vector<OsmPbfReader::BlobLocation> OsmPbfReader::loadOsmDataBlobOffsets(
     {
       long pos = _in->tellg();
       PROGRESS_STATUS(
-        QString("%1 / %2 - %3 MB/s                  ")
-          .arg(pos / 1.0e6, 0, 'g', 1)
-          .arg(length / 1.0e6, 0, 'g', 1)
+        QString("Loading blob offsets: %1 / %2 - %3 MB/s                  ")
+          .arg(StringUtils::formatLargeNumber(pos / 1e6))
+          .arg(StringUtils::formatLargeNumber(length / 1e6))
           .arg(((_in->tellg() - lastPos) / (t - last)) / 1.0e6, 0, 'g', 2));
       last = t;
       lastPos = _in->tellg();
     }
-  }
-
-  t = Tgs::Time::getTime();
-  if (t - start > 5)
-  {
-    // print the final summary
-    PROGRESS_STATUS(
-      QString("%1 / %2 - %3 MB/s                  ")
-        .arg(length / 1.0e6, 0, 'g', 1)
-        .arg(length / 1.0e6, 0, 'g', 1)
-        .arg((length / (t - start)) / 1.0e6, 0, 'g', 2));
   }
 
   return result;

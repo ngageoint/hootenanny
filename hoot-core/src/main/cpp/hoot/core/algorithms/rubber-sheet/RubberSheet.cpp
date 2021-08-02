@@ -792,7 +792,7 @@ void RubberSheet::_writeInterpolator(
   char* projStr = nullptr;
   _projection->exportToProj4(&projStr);
   ds << QString(projStr);
-  delete [] projStr;
+  CPLFree(projStr);
 
   ds << interpolator->getName();
   interpolator->writeInterpolator(os);
