@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef STATEDESCRIPTION_H
 #define STATEDESCRIPTION_H
@@ -38,7 +38,7 @@ namespace Tgs
 class StateDescription
 {
 public:
-  StateDescription();
+  StateDescription() = default;
 
   void addVariable(ConstVariableDescriptionPtr v) { _variables.append(v); }
   void addVariable(VariableDescription* v) { _variables.append(VariableDescriptionPtr(v)); }
@@ -50,8 +50,8 @@ private:
 
 };
 
-typedef std::shared_ptr<StateDescription> StateDescriptionPtr;
-typedef std::shared_ptr<const StateDescription> ConstStateDescriptionPtr;
+using StateDescriptionPtr = std::shared_ptr<StateDescription>;
+using ConstStateDescriptionPtr = std::shared_ptr<const StateDescription>;
 
 }
 

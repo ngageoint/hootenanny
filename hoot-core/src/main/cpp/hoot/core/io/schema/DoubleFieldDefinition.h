@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef DOUBLEFIELDDEFINITION_H
 #define DOUBLEFIELDDEFINITION_H
@@ -40,31 +40,27 @@ class DoubleFieldDefinition : public FieldDefinition
 public:
 
   DoubleFieldDefinition();
-  virtual ~DoubleFieldDefinition() = default;
+  ~DoubleFieldDefinition() = default;
 
   void addEnumeratedValue(double v) { _enumeratedValues.insert(v); }
 
-  virtual QVariant::Type getType() const { return QVariant::Double; }
+  QVariant::Type getType() const override { return QVariant::Double; }
 
-  virtual QVariant getDefaultValue() const;
+  QVariant getDefaultValue() const override;
 
   double getMaxValue() const { return _max; }
-
   double getMinValue() const { return _min; }
 
-  virtual bool hasDefaultValue() const;
-
+  bool hasDefaultValue() const override;
   bool hasEnumeratedValue(double v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
 
   void setDefaultValue(double v) { _defaultValue = v; }
-
   void setMaxValue(double max) { _max = max; }
-
   void setMinValue(double min) { _min = min; }
 
-  virtual QString toString() const;
+  QString toString() const override;
 
-  virtual void validate(const QVariant& v, StrictChecking strict) const;
+  void validate(const QVariant& v, StrictChecking strict) const;
 
 private:
 

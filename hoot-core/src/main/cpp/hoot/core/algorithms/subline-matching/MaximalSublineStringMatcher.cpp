@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MaximalSublineStringMatcher.h"
 
@@ -66,16 +66,21 @@ void MaximalSublineStringMatcher::setConfiguration(const Settings& s)
   setMinSplitSize(co.getWayMergerMinSplitSize());
   setHeadingDelta(co.getWayMatcherHeadingDelta());
 
-  _sublineMatcher.reset(
-    Factory::getInstance().constructObject<SublineMatcher>(co.getWaySublineMatcher()));
+  _sublineMatcher =
+    Factory::getInstance().constructObject<SublineMatcher>(co.getWaySublineMatcher());
   _configureSublineMatcher();
   std::shared_ptr<MaximalSublineMatcher> maximalSublineMatcher =
     std::dynamic_pointer_cast<MaximalSublineMatcher>(_sublineMatcher);
   if (maximalSublineMatcher)
   {
-    // See MaximalSubline::__maxRecursions
+    // See MaximalSubline::_maxRecursions
     maximalSublineMatcher->setMaxRecursions(co.getMaximalSublineMaxRecursions());
   }
+
+  LOG_VART(_sublineMatcher->getName());
+  LOG_VART(_sublineMatcher->getMaxRelevantAngle());
+  LOG_VART(_sublineMatcher->getHeadingDelta());
+  LOG_VART(_sublineMatcher->getMinSplitSize());
 }
 
 void MaximalSublineStringMatcher::setMaxRelevantAngle(Radians r)
@@ -84,8 +89,9 @@ void MaximalSublineStringMatcher::setMaxRelevantAngle(Radians r)
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN("Max relevant angle is greaer than PI, did you specify the value in degrees instead "
-               "of radians?");
+      LOG_WARN(
+        "Max relevant angle is greaer than PI, did you specify the value in degrees instead "
+        "of radians?");
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {
@@ -117,7 +123,6 @@ void MaximalSublineStringMatcher::setSublineMatcher(const std::shared_ptr<Sublin
 vector<WayPtr> MaximalSublineStringMatcher::_changeMap(const vector<ConstWayPtr>& ways,
   OsmMapPtr map) const
 {
-  LOG_TRACE("Changing map...");
   vector<WayPtr> result;
   result.reserve(ways.size());
   for (size_t i = 0; i < ways.size(); ++i)
@@ -131,15 +136,16 @@ void MaximalSublineStringMatcher::_configureSublineMatcher()
 {
   if (!_sublineMatcher)
   {
-    _sublineMatcher.reset(new MaximalSublineMatcher());
+    _sublineMatcher = std::make_shared<MaximalSublineMatcher>();
   }
   _sublineMatcher->setMaxRelevantAngle(_maxAngle);
   _sublineMatcher->setMinSplitSize(_minSplitsize);
   _sublineMatcher->setHeadingDelta(_headingDelta);
 }
 
-WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPtr& map,
-  const ConstElementPtr& e1, const ConstElementPtr& e2, Meters maxRelevantDistance) const
+WaySublineMatchString MaximalSublineStringMatcher::findMatch(
+  const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2,
+  Meters maxRelevantDistance) const
 {
   LOG_VART(e1->getElementId());
   LOG_VART(e2->getElementId());
@@ -151,10 +157,11 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   }
   LOG_VART(maxRelevantDistance);
 
-  // Make sure the inputs are legit. If either element isn't legit then throw a
-  // NeedsReviewException.
-  _validateElement(map, e1->getElementId());
-  _validateElement(map, e2->getElementId());
+  // Make sure the inputs are legit. If either element isn't legit then skip matching.
+  if (!_isValid(map, e1->getElementId()) || !_isValid(map, e2->getElementId()))
+  {
+    return WaySublineMatchString();
+  }
 
   // Extract the ways from the elements. In most cases it will return a vector of 1, but
   // multilinestrings may contain multiple ways.
@@ -163,6 +170,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   LOG_VART(ways1.size());
   LOG_VART(ways2.size());
 
+  // TODO: move these values to a config
   if ((ways1.size() > 4 && ways2.size() > 4) || (ways1.size() + ways2.size() > 7))
   {
     throw NeedsReviewException(
@@ -181,8 +189,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   try
   {
     WaySublineMatchString result = scoredResult.matches;
-    // TODO: This likely shouldn't be necessary. See
-    // https://github.com/ngageoint/hootenanny/issues/157.
+    // TODO: This likely shouldn't be necessary. See issue #157.
     result.removeEmptyMatches();
     LOG_VART(result);
     return result;
@@ -207,7 +214,7 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
   set<ElementId> eids;
   _insertElementIds(ways1, eids);
   _insertElementIds(ways2, eids);
-  OsmMapPtr copiedMap(new OsmMap(map->getProjection()));
+  OsmMapPtr copiedMap = std::make_shared<OsmMap>(map->getProjection());
   CopyMapSubsetOp(map, eids).apply(copiedMap);
 
   vector<WayPtr> prep1 = _changeMap(ways1, copiedMap);
@@ -361,7 +368,7 @@ void MaximalSublineStringMatcher::_reverseWays(const vector<WayPtr>& ways,
   }
 }
 
-void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, ElementId eid) const
+bool MaximalSublineStringMatcher::_isValid(const ConstOsmMapPtr& map, ElementId eid) const
 {
   LOG_TRACE("Validating element " << eid << "...");
 
@@ -403,9 +410,10 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
 
     if (w->getNodeCount() <= 1)
     {
-      throw NeedsReviewException("Internal Error: Attempting to match against a zero length way.");
+      return false;
     }
   }
+  return true;
 }
 
 }

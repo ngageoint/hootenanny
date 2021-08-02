@@ -29,7 +29,7 @@ During the development of Hootenanny, we also worked with manipulations that ide
 
 === Imagery in Conflation
 
-There is an existing body of knowledge around feature extraction and conflating imagery with vector data sets; see (CC Chen, 2006) and (P Doucette, 2004) for examples. At the beginning of the investigation, some time was spent exploring imagery and vector conflation. Due to data constraints, the effort was dropped. We would like to re-explore using raster data to improve the overall accuracy of the geometries and flag individual features within the data sets with confidence values to aid in discovering erroneous entries. The technology and techniques in DigitalGlobe's RoadMatcher vector-to-raster conflation could also be leveraged to improve overall performance. Possible raster data sources include multi-spectral imagery and high resolution elevation models.
+There is an existing body of knowledge around feature extraction and conflating imagery with vector data sets; see (CC Chen, 2006) and (P Doucette, 2004) for examples. At the beginning of the investigation, some time was spent exploring imagery and vector conflation. Due to data constraints, the effort was dropped. We would like to re-explore using raster data to improve the overall accuracy of the geometries and flag individual features within the data sets with confidence values to aid in discovering erroneous entries. The technology and techniques in Maxar's RoadMatcher vector-to-raster conflation could also be leveraged to improve overall performance. Possible raster data sources include multi-spectral imagery and high resolution elevation models.
 
 [[ExplImproveDistrTiling]]
 === Improve Distributed Tiling

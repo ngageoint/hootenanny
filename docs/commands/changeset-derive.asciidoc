@@ -3,71 +3,175 @@
 
 === Description
 
-The +changeset-derive+ command creates an OSM changeset file that represents the difference between two input
-OSM datasets.  Alternatively, when only one dataset is input it generates a changeset file representing all
-the data in the input dataset. The output changeset file can later be applied to an OSM API database with
-the +changeset-apply+ command.
+The +changeset-derive+ command creates an OSM changeset file that represents the difference between two input OSM 
+datasets. When only one dataset is input it generates a changeset file representing all the data in the input dataset. 
+The output changeset file can later be applied to an OSM API database with the +changeset-apply+ command. 
 
-If deriving a changeset between two inputs from different dates, the first input should be the older
-dataset and the second should be the newer dataset.
-
-* +input1+            - OSM data input 1; may be any supported input format (e.g. .osm file).
-* +input2+            - OSM data input 2; may be any supported input format (e.g. .osm file or empty string ("") to derive changeset from one 
-                        input only).
-* +output+            - Output location; must be a changeset .osc or .osc.sql file.
-* +osmApiDatabaseUrl+ - Target OSM API database the derived changeset is to be applied, used to maintain element ID continuity. Required only 
-                        if the changeset output format is .osc.sql. 
-                        Used to maintain element ID continuity with the database target for a derived changeset. 
-* +--stats+           - Displays changeset statistics and may be optionally followed by an output JSON file name to write the statistics to. 
-                        Valid when writing the .osc changeset output format only.
-* +--write-bounds+    - If the `bounds` configuration option is specified, optionally outputs a file containing the input bounds.
-                        The location of the file is controlled via the `bounds.output.file` configuration option.
+* +input1+                - Input 1; may be any supported input format (e.g. .osm file).
+* +input2+                - Input 2; may be any supported input format (e.g. .osm file). Optionally, specify an empty 
+                            string ("") to derive changeset from one input only.
+* +output+                - Output; must be a changeset file (.osc or .osc.sql).
+* +--enable-way-snapping+ - Optionally snaps unconnected ways in the replacement data to the data being replaced. This option
+                            is only valid if the +--replacement+ option is used. This is generally used to smooth out ways 
+                            at the edge of the replacement boundary when the dataset used for replacement has very 
+                            different linear data than the data being replaced. This option is ignored when using the cut 
+                            only replacement workflow (no second input specified).
+* +--osmApiDatabaseUrl+   - Target OSM API database to which the derived changeset is to be applied, used to maintain 
+                            element ID continuity. Required only if the changeset output format is SQL (.osc.sql).
+* +--replacement+         - Causes data from input2 to completely replace data in input1. Leave input2 empty ("") to cut 
+                            data out of input1 while adding no replacement data from input2.
+* +--stats+               - Displays changeset statistics and optionally writes them to a JSON file (.json). Ignored if 
+                            the changeset output format is SQL (.osc.sql).
+* +--write-bounds+        - If the `bounds` configuration option is specified, this optionally outputs a file containing the 
+                            input bounds. The location of the file is controlled via the `bounds.output.file` 
+                            configuration option.
 
 === Usage
 
 --------------------------------------
-changeset-derive (input1) [input2] (output) [osmApiDatabaseUrl] [--stats filename] [--write-bounds]
+hoot changeset-derive (input1) [input2] (output) [--osmApiDatabaseUrl url] [--enable-way-snapping] [--replacement] \
+  [--stats filename] [--write-bounds]
 --------------------------------------
 
-=== Examples
-
---------------------------------------
-hoot changeset-derive inputData1.osm inputData2.osm outputChangeset.osc
-
-hoot changeset-derive -D convert.ops="op1;op2" inputData1.osm inputData2.osm outputChangeset.osc
-
-hoot changeset-derive inputData1.osm inputData2.osm outputChangeset.osc --stats
-
-hoot changeset-derive inputData1.osm inputData2.osm outputChangeset.osc --stats myStats.json
-
-hoot changeset-derive inputData.osm "" outputChangeset.osc
-
-hoot changeset-derive inputData.osm "" outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName
---------------------------------------
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[Examples]
 
 === Configuration Options
+
+The following describes operation of the command when the +--replacement+ option is omitted only:
 
 Changeset deriviation supports inline conversion operations with the `convert.ops` configuration option. See the https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc#conversion-operations[Conversion Operations] section of the `convert` command documentation for details.
 
 === Filtering Features Geographically
 
-If the configuration option, `bounds`, is set to a valid geographic bounds (see the configuration 
-option documentation for formats), changeset derivation will ignore data outside of the bounds when
-generating changeset statements. The `bounds.*` configuration options allow for further 
-customization of the bounds requirement. If you are generating a changeset with data generated by 
-the `conflate` command that used the `bounds` option, it is possible you will want to use the 
-`bounds` option when making the call to the `changeset-derive` command as well.
+If the configuration option, `bounds`, is set to a valid geographic bounds (see the configuration option documentation 
+for formats), changeset derivation will ignore data outside of the bounds when generating changeset statements. The 
+`bounds.*` configuration options allow for further customization of the bounds requirement. If you are generating a 
+changeset with data generated by the `conflate` command that used the `bounds` option, it is possible you will want to 
+use the `bounds` option when making the call to the `changeset-derive` command as well.
 
-=== Sorting
+=== Feature Sorting
 
-Element sorting, required by changeset derivation, is performed in memory by default. This may cause problems with larger datasets.  To perform 
-sorting in a non-memory bound fashion (to external disk), set the configuration option element.sorter.element.buffer.size to a value greater 
-than zero.
+Element sorting, required by changeset derivation, is performed in memory by default. This may cause problems with 
+larger datasets.  To perform sorting in a non-memory bound fashion (to external disk), set the configuration 
+option element.sorter.element.buffer.size to a value greater than zero.
 
-Also, if inline conversion operations are specified in `convert.ops` and any of them do not support streaming (either operations that are an 
-OsmMapOperation or an OsmMapConsumer), in-memory sorting will always occur.
+Also, if inline conversion operations are specified in `convert.ops` and any of them do not support streaming (either 
+operations that are an OsmMapOperation or an OsmMapConsumer), in-memory sorting will always occur.
+
+=== Replacement Operation
+
+The following describe operation of the command when the +--replacement+ option is used.
+
+The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two 
+OSM datasets within a specified bounds, where the data from the second specified input dataset (secondary layer) 
+completely replaces data in the first specified dataset (reference layer). Since the command replaces all data,
+inputs should be pre-filtered in situations where it is not desirable to replace all of the data.  
+
+The feature replacement algorithm used by this command allows for avoiding unnecessary clipping of features when 
+such modification are undesirable and also stitching up seams in the data when features must be clipped. The output 
+changeset file can be applied directly to an OSM API database via SQL or via the Rails Port API with the 
++changeset-apply+ command. 
+
+Generally, the reference data is sourced from an authoritative data store, such as an OSM API database, and the secondary 
+data is sourced from some non-authoritative data store containing superior data for enrichment. Element IDs in the 
+reference dataset are retained, while element IDs in the secondary data may or may not be retained depending on 
+the configuration (see `changeset.replacement.retain.replacing.data.ids`).
+
+==== Workflow
+
+The high level workflow for the command looks like the following:
+
+* Pre-filter input 1 reference map data to control what types of elements are replaced using the `convert` command (optional)
+* Pre-filter input 2 secondary map data to control what types of elements are added to the final output using the 
+  `convert` command (optional)
+* Load the input 1 reference map (data you are replacing) at the specified bounds
+* Load the input 2 secondary map (data you are using as replacement) at the specified bounds
+* Cut data out of the reference map for each feature geometry type being replaced. If performing full replacement, the 
+  shape cut out covers the entire specified bounds. If performing overlapping only replacement, the shape cut out is the 
+  shape of the secondary data used for replacement.
+* Combine the cut out reference data back with the replacement data from the secondary map
+* Snap replacement linear features that are disconnected at the specified bounds seam back to the reference data (optional)
+* Derive a difference changeset between the new map with replacement data added and the original reference map with removed data
+
+==== Input Data
+
+All inputs must support bounded reading. To list the Hootenanny input formats that support bounded reading:
+-----
+hoot info --formats --input-bounded
+-----
+
+If you wish to replace only a subset of your data (e.g. only buildings), both sets of input data should be filtered prior
+to using this command to perform the data replacement.
+
+Unless the reference data is being read from a direct connection to an OSM API database (osmapidb://), reference input 
+datasets containing linear data should be slightly larger than the replacement bounds, so as not to drop connected linear 
+out of bounds features in the changeset output. Reference inputs from a direction connection to an OSM API database automatically pull connected linear features outside of the specified bounds. The XML and JSON formats will pull in 
+connected linear features outside of the specified bounds, but can only do so if they are already present in the 
+reference file input data.
+
+GeoJSON output from the Overpass API is not supported as an input to this command, since it does not contain way nodes.
+
+==== Bounds Handling
+
+The handling of the specified replacement bounds is done in a lenient fashion when replacing one set of data with another. 
+This makes replacement of gridded task cells possible without corrupting reference data. This behavior affects the 
+different feature geometry types thusly:
+
+* Point features: N/A as boundary relationships are only handled in a strict fashion where no points outside of the bounds 
+  are modified.
+* Linear features either inside or overlapping the specified bounds are completely replaced.
+* Polygon features either inside or overlapping the specified bounds are completely replaced. Polygon features are never 
+  split but may be conflated at the specified boundary if conflation is enabled.
+
+Alternatively, when removing data without replacing it with new data (cut only workflow), the handling of the specified replacement bounds is done in a strict fashion. This behavior affects the different feature geometry types thusly:
+
+* Point features: Only point features completely inside the specified bounds are replaced.
+* Linear features: Only sections of linear features within the specified bounds are modified, and they may be cut where 
+  they cross the bounds and optionally joined back up with reference data via way snapping (see "Unconnected Way 
+  Snapping" section).
+* Polygon features: Only polygon features completely inside the specified bounds are replaced. Polygon features are never 
+  split.
+
+Currently, only rectangular bounding box or closed polygon shapes are supported for the bounds. Support for other geometries may be added going forward.
+
+===== Out of Bounds Connected Ways
+
+When performing replacement, a method is required to protect the reference linear features that fall outside of the 
+replacement bounds from deletion in the output changeset. The method to protect the ways is to tag them with the tag, hoot:change:exclude:delete=yes. This can either be done automatically by Hootenanny as part of this command's execution or 
+can be done before the call to this command. 
+
+Hootenanny will automatically add the +hoot:change:exclude:delete=yes+ tag to such reference ways for XML, JSON, OSM API database, and Hootenanny API database inputs only. To do so the reference input must be sufficiently larger than the replacement bounds. If this option is specified, Hootenanny will not automatically tag such ways, and the caller of this command is responsible for tagging such reference ways with the hoot:change:exclude:delete=yes+ tag. 
+
+==== Unconnected Way Snapping
+
+Unconnected way snapping is used to repair cut ways at the replacement boundary seams . The input data must be of a 
+slightly larger area than the replacement AOI in order for there to be any ways to snap back to. This is primarily useful 
+with roads but can be made to work with any linear data.
+
+Alternatively, marking snappable ways as needing review instead of snapping them can be performed to provide more control 
+over the changeset output. See the "Snap Unconnected Ways" section of the User Documentation for more detail.
+
+==== Missing Elements
+
+Changeset replacement derivation will not remove any references to missing children elements passed in the input data. If 
+any ways with references to missing way nodes or relations with references to missing elements are found in the inputs to changeset replacement derivation, they will be tagged with the custom tag, "hoot::missing_child=yes" (configurable; turn 
+off tagging with the +changeset.replacement.mark.elements.with.missing.children+ configuration option). This is due to the 
+fact that changeset replacement derivation may inadvertantly introduce duplicate/unwanted child elements into these 
+features since it is not aware of the existence of the missing children. This tag should be searched for after the 
+resulting changeset has been applied and features having it should be manually cleaned up, if necessary.
+
+If you are using this command with file based data sources and in conjunction with other hoot commands (`convert`, etc), 
+you need to use the following configuration options to properly manage references to missing child elements 
+(+changeset-derive+ with +--replacement+ sets these options automatically internally for itself):
+
+* +bounds.remove.missing.elements+=false
+* +map.reader.add.child.refs.when.missing+=true
+* +log.warnings.for.missing.elements+=false
 
 === See Also
 
 * `changeset.*` configuration options
+* `cookie.cutter.alpha.*` configuration options
+* "Snap Unconnected Ways" section of the User Documentation
+* `snap.unconnected.ways.*` configuration options
 * "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc

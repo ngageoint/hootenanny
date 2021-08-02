@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef DIRECT_SEQUENTIAL_SIMULATION_H
 #define DIRECT_SEQUENTIAL_SIMULATION_H
@@ -36,9 +36,6 @@
 namespace hoot
 {
 
-/**
- *
- */
 class DirectSequentialSimulation : public PermuteGridCalculator
 {
 public:
@@ -46,16 +43,16 @@ public:
   static QString className() { return "hoot::DirectSequentialSimulation"; }
 
   DirectSequentialSimulation() = default;
-  virtual ~DirectSequentialSimulation() = default;
+  ~DirectSequentialSimulation() = default;
 
   /**
    * @see PermuteGridCalculator
    */
-  virtual cv::Mat permute(geos::geom::Envelope env, int& pointRows, int& pointCols);
+  cv::Mat permute(const geos::geom::Envelope& env, int& pointRows, int& pointCols) override;
 
 private:
 
-  cv::Mat _gm2dPerturb2(geos::geom::Envelope env, Meters sigma, boost::minstd_rand& rng);
+  cv::Mat _gm2dPerturb2(geos::geom::Envelope env, Meters sigma, boost::minstd_rand& rng) const;
 };
 
 }

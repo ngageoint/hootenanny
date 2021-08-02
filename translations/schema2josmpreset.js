@@ -41,26 +41,24 @@ const objs = {
     },
 };
 
-function lookupType(geoms) {
-    var types = geoms.reduce((s, g) => {
-        switch(g) {
-            case 'Point':
-                s.add('node');
-                break;
-            case 'Line':
-                s.add('way');
-                s.add('closedway');
-                break;
-            case 'Area':
-                s.add('closedway');
-                s.add('multipolygon');
-                break;
-        }
-        return s;
+function lookupType(geom) {
+    let set = new Set();
 
-    }, new Set());
+    switch(geom) {
+        case 'Point':
+            set.add('node');
+            break;
+        case 'Line':
+            set.add('way');
+            set.add('closedway');
+            break;
+        case 'Area':
+            set.add('closedway');
+            set.add('multipolygon');
+            break;
+    }
 
-    return Array.from(types).join(',');
+    return Array.from(set).join(',');
 }
 
 Object.keys(objs).forEach(s => {
@@ -77,44 +75,38 @@ Object.keys(objs).forEach(s => {
     var presets = builder.create('presets');
 
     objs[s].schema.forEach(i => {
-        //Must de-dup the items and build up the geom array
-        if (items[i.desc]) {
-            items[i.desc].geoms.push(i.geom);
-        } else {
+        const itemKey = i.desc + ' - ' + i.geom;
 
-            items[i.desc] = {
-                fcode: i.fcode,
-                geoms: [i.geom],
-                columns: i.columns,
-                hashes: []
-            };
+        items[itemKey] = {
+            fcode: i.fcode,
+            geom: i.geom,
+            columns: i.columns,
+            hashes: []
+        };
 
-            //Build de-duped map of unique enumerations (list entry),
-            //combo and text elements keyed by hash
-            i.columns.forEach(col => {
-                let colHash = 'hash' + crypto.createHash('md5').update(JSON.stringify(col)).digest('hex').replace(/[0-9]/g, '');
-                items[i.desc].hashes.push(colHash);
+        //Build de-duped map of unique enumerations (list entry),
+        //combo and text elements keyed by hash
+        i.columns.forEach(col => {
+            let colHash = 'hash' + crypto.createHash('md5').update(JSON.stringify(col)).digest('hex').replace(/[0-9]/g, '');
+            items[itemKey].hashes.push(colHash);
 
-                if (col.type === 'enumeration') {
+            if (col.type === 'enumeration') {
 
-                    let key = 'hash' + crypto.createHash('md5').update(JSON.stringify(col.enumerations)).digest('hex').replace(/[0-9]/g, '');
+                let key = 'hash' + crypto.createHash('md5').update(JSON.stringify(col.enumerations)).digest('hex').replace(/[0-9]/g, '');
 
-                    if (!listEntries[key])
-                        listEntries[key] = col.enumerations;
+                if (!listEntries[key])
+                    listEntries[key] = col.enumerations;
 
-                    if (!combos[colHash]) {
-                        col.enumHash = key;
-                        combos[colHash] = col;
-                    }
-
-                } else {
-                    if (!texts[colHash])
-                        texts[colHash] = col;
+                if (!combos[colHash]) {
+                    col.enumHash = key;
+                    combos[colHash] = col;
                 }
-            });
 
-        }
-
+            } else {
+                if (!texts[colHash])
+                    texts[colHash] = col;
+            }
+        });
     });
 
     //Write the unique list entries out as chunks
@@ -193,11 +185,11 @@ Object.keys(objs).forEach(s => {
     });
 
     let usedGroups = new Set(); //Keep a list of used sub groups
-    Object.keys(items).forEach(i => {
+    Object.keys(items).sort().forEach(i => {
         //Get the right subgroup (two-letter) element to append to
         let code = items[i].fcode.slice(0,2);
 
-        let it = subGroupCodeElements[code].ele('item', {name: i, type: lookupType(items[i].geoms), preset_name_label: true});
+        let it = subGroupCodeElements[code].ele('item', {name: i, type: lookupType(items[i].geom), preset_name_label: true});
 
         usedGroups.add(code); //Sub-group
         usedGroups.add(code.charAt(0)); //Group

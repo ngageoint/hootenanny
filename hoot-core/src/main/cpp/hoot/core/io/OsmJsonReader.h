@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSM_JSON_READER_H
@@ -128,7 +128,7 @@ public:
    * @param url
    * @return
    */
-  virtual bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) override;
 
   /**
    * @brief open Specifies the URL to read from. Can be a file (file://some/path/to/a/file)
@@ -136,7 +136,7 @@ public:
    *    http://overpass-api.de/api/interpreter?data=[out:json];way(35.2097,-120.6207,35.2241,-120.5955);out;
    * @param url
    */
-  virtual void open(const QString& url) override;
+  void open(const QString& url) override;
 
   /**
    * @brief close close internal filehandle, if needed
@@ -149,21 +149,21 @@ public:
    *        will likely be closed after this call
    * @param map
    */
-  virtual void read(const OsmMapPtr& map) override;
+  void read(const OsmMapPtr& map) override;
 
   /**
    * @brief setDefaultStatus Sets the default status to use for elements
    *        in the map
    * @param status
    */
-  virtual void setDefaultStatus(Status status) override { _defaultStatus = status; }
+  void setDefaultStatus(Status status) override { _defaultStatus = status; }
 
   /**
    * @brief setUseDataSourceIds Sets whether the reader should use the element IDs
    *        from the data being read, or self-generate unique IDs
    * @param useDataSourceIds true to use source IDs
    */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) override
+  void setUseDataSourceIds(bool useDataSourceIds) override
   { _useDataSourceIds = useDataSourceIds; }
 
   /**
@@ -192,25 +192,25 @@ public:
    * @brief getVersion Overpass API version, if that's where JSON comes from
    * @return version string
    */
-  QString getVersion() { return _version; }
+  QString getVersion() const { return _version; }
 
   /**
    * @brief getGenerator Map generator name, if supplied in JSON
    * @return generator name string
    */
-  QString getGenerator() { return _generator; }
+  QString getGenerator() const { return _generator; }
 
   /**
    * @brief getTimestampBase OSM timestamp base, if supplied in JSON
    * @return timestamp base string
    */
-  QString getTimestampBase() { return _timestamp_base; }
+  QString getTimestampBase() const { return _timestamp_base; }
 
   /**
    * @brief getCopyright Copyright statement, if supplied in JSON
    * @return copyright string
    */
-  QString getCopyright() { return _copyright; }
+  QString getCopyright() const { return _copyright; }
 
   /**
    * @brief scrubQuotes Converts single quotes to double quotes, and escaped
@@ -227,12 +227,12 @@ public:
    */
   static void scrubBigInts(QString &jsonStr);
 
-  virtual QString supportedFormats() override { return ".json"; }
+  QString supportedFormats() override { return ".json"; }
 
   /**
    * Set the configuration for this object.
    */
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
@@ -248,20 +248,14 @@ protected:
 
   // the CE value used if no CE tag is found
   Meters _defaultCircErr;
-  // keys for tags containing CE data
-  QStringList _circularErrorTagKeys;
 
   // Our property tree that holds JSON
   boost::property_tree::ptree _propTree;
 
   // Store these items from overpass api
-  QString _version;
   QString _generator;
-  QString _timestamp_base;
-  QString _copyright;
 
   bool _isFile;
-  bool _isWeb;
   QFile _file;
 
   OsmMapPtr _map;
@@ -271,6 +265,39 @@ protected:
 
   /** List of JSON strings, one for each HTTP response */
   QStringList _results;
+
+  /**
+   * @brief _loadJSON Loads JSON into a boost property tree
+   * @param jsonStr String to load
+   */
+  void _loadJSON(const QString& jsonStr);
+
+  /**
+   * @brief _addTags Reads tags from the given ptree, and adds them to the
+   *        supplied map element
+   * @param item Property Tree (subtree)
+   * @param pElement Element to which we will add the tags
+   */
+  void _addTags(const boost::property_tree::ptree &item,
+                hoot::ElementPtr pElement) const;
+
+  /**
+   * @brief _readFromHttp Creates HTTP(S) connection and downloads JSON to the _results list or
+   *   spawns a thread pool to query bounding boxes
+   */
+  void _readFromHttp();
+
+private:
+
+  // keys for tags containing CE data
+  QStringList _circularErrorTagKeys;
+
+  // Store these items from overpass api
+  QString _version;
+  QString _timestamp_base;
+  QString _copyright;
+
+  bool _isWeb;
 
   // only valid is _bounds is not null
   bool _keepImmediatelyConnectedWaysOutsideBounds;
@@ -288,19 +315,10 @@ protected:
   QMultiHash<long, long> _relationIdsToWayMemberIdsNotPresent;
   QMultiHash<long, long> _relationIdsToRelationMemberIdsNotPresent;
 
-  int _missingNodeCount;
-  int _missingWayCount;
-
   //adds child refs to elements when they aren't present in the source data
   bool _addChildRefsWhenMissing;
   // determines whether missing elements trigger a warning
   bool _logWarningsForMissingElements;
-
-  /**
-   * @brief _loadJSON Loads JSON into a boost property tree
-   * @param jsonStr String to load
-   */
-  void _loadJSON(const QString& jsonStr);
 
   /**
    * @brief parseOverpassJson Traverses our property tree and adds elements to the map. Removes
@@ -329,21 +347,6 @@ protected:
    */
   void _parseOverpassRelation(const boost::property_tree::ptree &item);
 
-  /**
-   * @brief _addTags Reads tags from the given ptree, and adds them to the
-   *        supplied map element
-   * @param item Property Tree (subtree)
-   * @param pElement Element to which we will add the tags
-   */
-  void _addTags(const boost::property_tree::ptree &item,
-                hoot::ElementPtr pElement);
-
-  /**
-   * @brief _readFromHttp Creates HTTP(S) connection and downloads JSON to the _results list or
-   *   spawns a thread pool to query bounding boxes
-   */
-  void _readFromHttp();
-
   void _readToMap();
 
   long _getRelationId(long fileId);
@@ -354,7 +357,7 @@ protected:
    */
   void _updateChildRefs();
   void _updateWayChildRefs();
-  void _updateRelationChildRefs(const ElementType& childElementType);
+  void _updateRelationChildRefs(const ElementType& childElementType) const;
 
   void _reset();
   void _resetIds();

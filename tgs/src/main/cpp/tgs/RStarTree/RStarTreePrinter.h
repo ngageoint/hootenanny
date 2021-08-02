@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RSTARTREEPRINTER_H
@@ -39,20 +39,18 @@ namespace Tgs
 class RStarTreePrinter
 {
 public:
+
   RStarTreePrinter(const std::shared_ptr<const RStarTree>& tree);
 
   static void print(const std::shared_ptr<const RStarTree>& tree);
-
   void print();
-
   void print(const RTreeNode* node, int indent);
 
 private:
+
   std::shared_ptr<const RStarTree> _tree;
 
-  int _indent;
-
-  std::string _indentStr(int i);
+  std::string _indentStr(int i) const;
 };
 
 }

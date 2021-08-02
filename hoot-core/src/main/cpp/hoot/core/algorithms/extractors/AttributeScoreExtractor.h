@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ATTRIBUTESCOREEXTRACTOR_H
 #define ATTRIBUTESCOREEXTRACTOR_H
@@ -34,8 +34,7 @@ namespace hoot
 {
 
 /**
- * See exporatory funds report for details.
- * Calculates "distance" between tags using hoot::TagComparator
+ * @brief The AttributeScoreExtractor class calculates "distance" between tags using TagComparator.
  */
 class AttributeScoreExtractor : public WayFeatureExtractor, public Configurable
 {
@@ -44,20 +43,16 @@ public:
   static QString className() { return "hoot::AttributeScoreExtractor"; }
 
   AttributeScoreExtractor(ValueAggregatorPtr wayAgg, bool useWeight = false);
-
   AttributeScoreExtractor(bool useWeight = false);
-  virtual ~AttributeScoreExtractor() = default;
+  ~AttributeScoreExtractor() = default;
 
-  virtual QString getClassName() const override { return className(); }
-
-  virtual QString getName() const override;
-
-  virtual void setConfiguration(const Settings& conf);
-
-  void setUseWeight(const bool useWeight);
-
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates the similarity between two tag sets"; }
+  QString getClassName() const override { return className(); }
+  QString getName() const override;
+
+  void setConfiguration(const Settings& conf) override;
+  void setUseWeight(const bool useWeight);
 
 protected:
 

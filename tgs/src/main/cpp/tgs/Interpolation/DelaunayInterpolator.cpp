@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "DelaunayInterpolator.h"
 
@@ -71,9 +71,9 @@ void DelaunayInterpolator::_buildModel()
   // only supports 2 dimensions
   assert(_indColumns.size() == 2);
 
-  if (_dt.get() == 0)
+  if (_dt.get() == nullptr)
   {
-    _dt.reset(new DelaunayTriangulation());
+    _dt = std::make_shared<DelaunayTriangulation>();
 
     const DataFrame& df = *_df;
 
@@ -124,7 +124,7 @@ void DelaunayInterpolator::_buildModel()
 double DelaunayInterpolator::_calculateFoldError(int fold, const vector<size_t>& indexes) const
 {
   std::shared_ptr<const DataFrame> originalDf = _df;
-  std::shared_ptr<DataFrame> copiedDf(new DataFrame());
+  std::shared_ptr<DataFrame> copiedDf = std::make_shared<DataFrame>();
 
   copiedDf->setFactorLabels(_df->getFactorLabels());
   copiedDf->setFactorTypes(_df->getFactorTypes());

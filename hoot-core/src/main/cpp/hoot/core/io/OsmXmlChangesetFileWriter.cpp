@@ -19,24 +19,24 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmXmlChangesetFileWriter.h"
 
 // hoot
-#include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/DateTimeUtils.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
+#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/DateTimeUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QFile>
@@ -135,18 +135,18 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
   for (int i = 0; i < changesetProviders.size(); i++)
   {
     LOG_DEBUG(
-      "Deriving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
+      "Deriving changes with changeset provider: " << i + 1 << " of " << changesetProviders.size() <<
       "...");
 
     // Bounds checking requires a map. Grab the two input maps if they were passed in...one for
     // each dataset, before changes and after.
     ConstOsmMapPtr map1;
     ConstOsmMapPtr map2;
-    if (_map1List.size() > 0)
+    if (!_map1List.empty())
     {
       map1 = _map1List.at(i);
     }
-    if (_map2List.size() > 0)
+    if (!_map2List.empty())
     {
       map2 = _map2List.at(i);
     }
@@ -287,7 +287,7 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElemen
     _newElementIdMappings[ElementType::Node].insert(n->getId(), id);
   }
   writer.writeAttribute("id", QString::number(id));
-  long version = ElementData::VERSION_EMPTY;
+  long version;
   //  for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.getType() == Change::Create)
     version = 0;
@@ -344,7 +344,7 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElement
     _newElementIdMappings[ElementType::Way].insert(w->getId(), id);
   }
   writer.writeAttribute("id", QString::number(id));
-  long version = ElementData::VERSION_EMPTY;
+  long version;
   // for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.getType() == Change::Create)
     version = 0;
@@ -413,7 +413,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstEl
     _newElementIdMappings[ElementType::Relation].insert(r->getId(), id);
   }
   writer.writeAttribute("id", QString::number(id));
-  long version = ElementData::VERSION_EMPTY;
+  long version;
   //  for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.getType() == Change::Create)
     version = 0;
@@ -458,8 +458,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstEl
     }
     writer.writeAttribute("ref", QString::number(memberId));
     writer.writeAttribute(
-      "role",
-      _invalidCharacterHandler.removeInvalidCharacters(e.role));
+      "role", _invalidCharacterHandler.removeInvalidCharacters(e.getRole()));
     writer.writeEndElement();
   }
 

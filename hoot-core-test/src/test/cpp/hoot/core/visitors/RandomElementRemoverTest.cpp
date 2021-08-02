@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // boost
@@ -40,7 +40,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/RandomElementRemover.h>
@@ -60,7 +59,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -73,8 +72,8 @@ public:
 
     for (int i = 0; i < 100; i++)
     {
-      NodePtr n(new Node(Status::Unknown1, map->createNextNodeId(), uni(rng), uni(rng), 10));
-      map->addNode(n);
+      map->addNode(
+        std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), uni(rng), uni(rng), 10));
     }
 
     RandomElementRemover v;

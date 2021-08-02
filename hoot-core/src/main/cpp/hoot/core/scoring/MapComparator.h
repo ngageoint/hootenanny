@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MAPCOMPARATOR_H
 #define MAPCOMPARATOR_H
@@ -48,7 +48,7 @@ public:
    * Returns true if the maps are essentially the same. Minor differences in node locations are
    * ignored.
    */
-  bool isMatch(const std::shared_ptr<OsmMap>& ref, const std::shared_ptr<OsmMap>& test);
+  bool isMatch(const std::shared_ptr<OsmMap>& ref, const std::shared_ptr<OsmMap>& test) const;
 
   void setIgnoreUUID() { _ignoreUUID = true; }
   void setUseDateTime() { _useDateTime = true; }
@@ -62,7 +62,7 @@ private:
 
   void _printIdDiff(
     const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2,
-    const ElementType& elementType, const int limit = 5);
+    const ElementType& elementType, const int limit = 5) const;
 };
 
 }

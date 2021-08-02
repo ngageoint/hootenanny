@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "EdgeString.h"
 
@@ -62,26 +62,12 @@ bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2)
     }
   }
 
-//  bool strResult = es1->toString() == es2->toString();
-//  if (result != strResult)
-//  {
-//    LOG_VARE(result);
-//    LOG_VARE(strResult);
-//    LOG_VARE(es1);
-//    LOG_VARE(es2);
-//    throw HootException();
-//  }
-
   return result;
 }
 
 QString EdgeString::EdgeEntry::toString() const
 {
   return hoot::toString(_subline);
-}
-
-EdgeString::EdgeString()
-{
 }
 
 void EdgeString::addFirstEdge(const ConstNetworkEdgePtr& e)
@@ -100,7 +86,7 @@ void EdgeString::addFirstEdge(const ConstEdgeSublinePtr& subline)
 
 void EdgeString::appendEdge(const ConstNetworkEdgePtr& e)
 {
-  if (_edges.size() == 0)
+  if (_edges.empty())
   {
     addFirstEdge(e);
   }
@@ -124,14 +110,14 @@ void EdgeString::appendEdge(const ConstNetworkEdgePtr& e)
       throw HootException("Error attempting to append an edge that isn't connected.");
     }
 
-    _edges.append(ConstEdgeSublinePtr(new EdgeSubline(e, fromPortion, toPortion)));
+    _edges.append(std::make_shared<const EdgeSubline>(e, fromPortion, toPortion));
   }
   assert(validate());
 }
 
 void EdgeString::appendEdge(const ConstEdgeSublinePtr& subline)
 {
-  if (_edges.size() == 0)
+  if (_edges.empty())
   {
     addFirstEdge(subline);
   }
@@ -187,7 +173,7 @@ Meters EdgeString::calculateLength(const ConstElementProviderPtr& provider) cons
 
 std::shared_ptr<EdgeString> EdgeString::clone() const
 {
-  EdgeStringPtr result(new EdgeString());
+  EdgeStringPtr result = std::make_shared<EdgeString>();
   result->_edges = _edges;
   return result;
 }
@@ -246,6 +232,37 @@ bool EdgeString::contains(const ConstEdgeLocationPtr& el) const
   {
     if (ee.getSubline()->intersects(el))
     {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool EdgeString::overlaps(const std::shared_ptr<const EdgeString>& other) const
+{
+  for (int i = 0; i < _edges.size(); ++i)
+  {
+    if (other->overlaps(_edges[i].getSubline()))
+    {
+      LOG_TRACE("Overlaps; this edge: " << _edges[i].getSubline() << " other edge: " << other);
+      return true;
+    }
+  }
+  return false;
+}
+
+bool EdgeString::overlaps(const ConstNetworkEdgePtr& e) const
+{
+  return contains(e);
+}
+
+bool EdgeString::overlaps(const ConstEdgeSublinePtr& es) const
+{
+  for (int i = 0; i < _edges.size(); ++i)
+  {
+    if (_edges[i].getSubline()->overlaps(es))
+    {
+      LOG_TRACE("Overlaps; this subline: " << _edges[i].getSubline() << " other subline: " << es);
       return true;
     }
   }
@@ -378,47 +395,9 @@ bool EdgeString::isAtExtreme(const ConstNetworkVertexPtr& v) const
   return result;
 }
 
-bool EdgeString::overlaps(const std::shared_ptr<const EdgeString>& other) const
-{
-  for (int i = 0; i < _edges.size(); ++i)
-  {
-    if (other->overlaps(_edges[i].getSubline()))
-    {
-      LOG_TRACE("Overlaps; this edge: " << _edges[i].getSubline() << " other edge: " << other);
-      return true;
-    }
-  }
-  return false;
-}
-
-bool EdgeString::overlaps(const ConstNetworkEdgePtr& e) const
-{
-  for (int i = 0; i < _edges.size(); ++i)
-  {
-    if (_edges[i].getEdge() == e)
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
-bool EdgeString::overlaps(const ConstEdgeSublinePtr& es) const
-{
-  for (int i = 0; i < _edges.size(); ++i)
-  {
-    if (_edges[i].getSubline()->overlaps(es))
-    {
-      LOG_TRACE("Overlaps; this subline: " << _edges[i].getSubline() << " other subline: " << es);
-      return true;
-    }
-  }
-  return false;
-}
-
 void EdgeString::prependEdge(const ConstEdgeSublinePtr& subline)
 {
-  if (_edges.size() == 0)
+  if (_edges.empty())
   {
     addFirstEdge(subline);
   }
@@ -485,7 +464,8 @@ void EdgeString::snapExtremes(double epsilon)
     {
       p = 1.0;
     }
-    EdgeSublinePtr newEs(new EdgeSubline(es->getEdge(), p, es->getEnd()->getPortion()));
+    EdgeSublinePtr newEs =
+      std::make_shared<EdgeSubline>(es->getEdge(), p, es->getEnd()->getPortion());
     _edges[0].setSubline(newEs);
   }
   if (getTo()->isExtreme(epsilon))
@@ -500,7 +480,8 @@ void EdgeString::snapExtremes(double epsilon)
     {
       p = 1.0;
     }
-    EdgeSublinePtr newEs(new EdgeSubline(es->getEdge(), es->getStart()->getPortion(), p));
+    EdgeSublinePtr newEs =
+      std::make_shared<EdgeSubline>(es->getEdge(), es->getStart()->getPortion(), p);
     _edges.back().setSubline(newEs);
   }
 }
@@ -574,7 +555,7 @@ void EdgeString::trim(const ConstElementProviderPtr& provider, Meters newStartOf
   // handle this edge case early which simplifies the loop
   if (newStart->getEdge() == newEnd->getEdge())
   {
-    newEdges.append(EdgeEntry(ConstEdgeSublinePtr(new EdgeSubline(newStart, newEnd))));
+    newEdges.append(EdgeEntry(std::make_shared<const EdgeSubline>(newStart, newEnd)));
   }
   else
   {
@@ -586,11 +567,11 @@ void EdgeString::trim(const ConstElementProviderPtr& provider, Meters newStartOf
       if (s->getEdge() == newStart->getEdge() && newStart != s->getEnd())
       {
         assert(newEdges.size() == 0);
-        newEdges.append(EdgeEntry(ConstEdgeSublinePtr(new EdgeSubline(newStart, s->getEnd()))));
+        newEdges.append(EdgeEntry(std::make_shared<const EdgeSubline>(newStart, s->getEnd())));
       }
       else if (s->getEdge() == newEnd->getEdge() && s->getStart() != newEnd)
       {
-        newEdges.append(EdgeEntry(ConstEdgeSublinePtr(new EdgeSubline(s->getStart(), newEnd))));
+        newEdges.append(EdgeEntry(std::make_shared<const EdgeSubline>(s->getStart(), newEnd)));
         break;
       }
       else if (offset >= newStartOffset && offset + l <= newEndOffset)
@@ -648,7 +629,7 @@ bool EdgeString::validate() const
 
 bool EdgeString::isValid() const
 {
-  if (_edges.size() == 0)
+  if (_edges.empty())
   {
     return false;
   }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef VERTEXHAUSDORFFDISTANCE_H
 #define VERTEXHAUSDORFFDISTANCE_H
@@ -40,17 +40,16 @@ namespace hoot
 {
 
 /**
- * Implements algorithm for computing a distance metric
+ * @brief The VertexHausdorffDistance class implements algorithm for computing a distance metric
  * which can be thought of as the "Vertex Hausdorff Distance".
- * This is the Hausdorff distance restricted to vertices for
- * one of the geometries.
- * Also computes two points of the Geometries which are separated by the computed distance.
- * <p>
- * <b>NOTE: This algorithm does NOT compute the full Hausdorff distance correctly, but
- * an approximation that is correct for a large subset of useful cases.
- * One important part of this subset is Linestrings that are roughly parallel to each other,
- * and roughly equal in length - just what is needed for line matching.
- * </b>
+ *
+ * This is the Hausdorff distance restricted to vertices for one of the geometries. Also computes
+ * two points of the Geometries which are separated by the computed distance.
+ *
+ * NOTE: This algorithm does NOT compute the full Hausdorff distance correctly, but an approximation
+ * that is correct for a large subset of useful cases. One important part of this subset is
+ * Linestrings that are roughly parallel to each other, and roughly equal in length - just what is
+ * needed for line matching.
  *
  * @author RoadMatcher
  * @copyright GPL

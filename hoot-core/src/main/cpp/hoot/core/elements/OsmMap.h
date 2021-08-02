@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMMAP_H
 #define OSMMAP_H
@@ -34,8 +34,8 @@
 #include <geos/geom/Envelope.h>
 
 // Hoot
+#include <hoot/core/elements/ElementIterator.h>
 #include <hoot/core/elements/ElementProvider.h>
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/NodeMap.h>
 #include <hoot/core/elements/Relation.h>
@@ -44,19 +44,10 @@
 #include <hoot/core/elements/WayMap.h>
 #include <hoot/core/util/DefaultIdGenerator.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/elements/ElementIterator.h>
-
-#include <memory>
-
-namespace hoot
-{
-  namespace elements
-  {
-    class Tags;
-  }
-}
+#include <hoot/core/visitors/ElementVisitor.h>
 
 // Standard
+#include <memory>
 #include <vector>
 
 namespace hoot
@@ -74,44 +65,34 @@ class RubberSheet;
  * ways, relations and an index to access them efficiently. It also provides a number of methods
  * for CRUD.
  *
- *  In the long term it might be nice to remove the OsmIndex circular reference, but haven't
- *  figured out a good way to do that. Possibly refactor into an OsmMap class and OsmData class. The
- *  OsmMap class maintains pointers to OsmData and an OsmIndex where neither directly references the
- *  other.
+ * In the long term it might be nice to remove the OsmIndex circular reference, but haven't
+ * figured out a good way to do that. Possibly refactor into an OsmMap class and OsmData class. The
+ * OsmMap class maintains pointers to OsmData and an OsmIndex where neither directly references the
+ * other.
  */
 class OsmMap : public std::enable_shared_from_this<OsmMap>, public ElementProvider,
   public ElementIterator
 {
-  // Friend classes that need to modify private elements
-  friend class RemoveNodeByEid;
-  friend class RemoveWayByEid;
-  friend class RemoveRelationByEid;
-
 public:
 
   static QString className() { return "hoot::OsmMap"; }
 
   OsmMap();
-
   explicit OsmMap(const std::shared_ptr<const OsmMap>&);
   explicit OsmMap(const std::shared_ptr<OsmMap>&);
   explicit OsmMap(const std::shared_ptr<OGRSpatialReference>& srs);
-  OsmMap(const std::shared_ptr<const OsmMap>&, const std::shared_ptr<OGRSpatialReference>& srs);
-
   ~OsmMap() = default;
 
-  // GENERIC ELEMENT
+  ///////////////////////////////////////GENERIC ELEMENT////////////////////////////////////////////
 
   void addElement(const std::shared_ptr<Element>& e);
   template<class T>
   void addElements(T it, T end);
 
-  virtual ConstElementPtr getElement(const ElementId& id) const;
+  ConstElementPtr getElement(const ElementId& id) const override;
   ConstElementPtr getElement(ElementType type, long id) const;
   ElementPtr getElement(const ElementId& id);
   ElementPtr getElement(ElementType type, long id);
-
-  QSet<ElementId> getElementIds() const;
 
   size_t getElementCount() const;
   size_t size() const { return getElementCount(); }
@@ -120,7 +101,7 @@ public:
    * Returns true if an element with the specified type/id exists.
    * Throws an exception if the type is unrecognized.
    */
-  virtual bool containsElement(const ElementId& eid) const;
+  bool containsElement(const ElementId& eid) const override;
   bool containsElement(ElementType type, long id) const;
   bool containsElement(const std::shared_ptr<const Element>& e) const;
 
@@ -166,22 +147,21 @@ public:
    */
   void replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr>& to);
 
-  //NODE///////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////NODE//////////////////////////////////////////////
 
-  virtual const ConstNodePtr getNode(long id) const;
-  virtual const NodePtr getNode(long id);
+  ConstNodePtr getNode(long id) const override;
+  NodePtr getNode(long id) override;
   ConstNodePtr getNode(const ElementId& eid) const { return getNode(eid.getId()); }
-  const NodePtr getNode(const ElementId& eid) { return getNode(eid.getId()); }
+  NodePtr getNode(const ElementId& eid) { return getNode(eid.getId()); }
   const NodeMap& getNodes() const { return _nodes; }
   QSet<long> getNodeIds() const;
-  QSet<ElementId> getNodeElementIds() const;
 
   long getNodeCount() const { return _nodes.size(); }
 
   /**
    * Returns true if the node is in this map.
    */
-  virtual bool containsNode(long id) const { return _nodes.find(id) != _nodes.end(); }
+  bool containsNode(long id) const override { return _nodes.find(id) != _nodes.end(); }
 
   void addNode(const NodePtr& n);
   /**
@@ -200,19 +180,17 @@ public:
   long createNextNodeId() const { return _idGen->createNodeId(); }
 
   void visitNodesRo(ConstElementVisitor& visitor) const;
-  void visitNodesRw(ConstElementVisitor& visitor);
-  void visitNodesRw(ElementVisitor& visitor);
 
   int numNodesAppended() const { return _numNodesAppended; }
   int numNodesSkippedForAppending() const { return _numNodesSkippedForAppending; }
 
-  //WAY///////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////WAY////////////////////////////////////////////////
 
   /**
    * Return the way with the specified id or null if it doesn't exist.
    */
-  virtual const WayPtr getWay(long id);
-  const WayPtr getWay(ElementId eid);
+  WayPtr getWay(long id) override;
+  WayPtr getWay(ElementId eid);
   /**
    * Similar to above but const'd.
    *
@@ -220,44 +198,40 @@ public:
    * a copy. The copy would be a temporary variable if we returned a reference which creates some
    * weirdness and a warning.
    */
-  const ConstWayPtr getWay(long id) const;
-  const ConstWayPtr getWay(ElementId eid) const;
+  ConstWayPtr getWay(long id) const override;
+  ConstWayPtr getWay(ElementId eid) const;
   const WayMap& getWays() const { return _ways; }
   QSet<long> getWayIds() const;
-  QSet<ElementId> getWayElementIds() const;
   long getWayCount() const { return _ways.size(); }
 
   void addWay(const WayPtr& w);
 
-  virtual bool containsWay(long id) const { return _ways.find(id) != _ways.end(); }
+  bool containsWay(long id) const override { return _ways.find(id) != _ways.end(); }
 
   long createNextWayId() const { return _idGen->createWayId(); }
 
   void visitWaysRo(ConstElementVisitor& visitor) const;
-  void visitWaysRw(ConstElementVisitor& visitor);
   void visitWaysRw(ElementVisitor& visitor);
 
   int numWaysAppended() const { return _numWaysAppended; }
   int numWaysSkippedForAppending() const { return _numWaysSkippedForAppending; }
 
-  //RELATION///////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////RELATION/////////////////////////////////////////////////
 
-  virtual const ConstRelationPtr getRelation(long id) const;
-  virtual const RelationPtr getRelation(long id);
-  const ConstRelationPtr getRelation(ElementId eid) const;
+  ConstRelationPtr getRelation(long id) const override;
+  RelationPtr getRelation(long id) override;
+  ConstRelationPtr getRelation(ElementId eid) const;
   const RelationMap& getRelations() const { return _relations; }
   QSet<long> getRelationIds() const;
-  QSet<ElementId> getRelationElementIds() const;
   long getRelationCount() const { return _relations.size(); }
 
   void addRelation(const RelationPtr& r);
 
-  virtual bool containsRelation(long id) const { return _relations.find(id) != _relations.end(); }
+  bool containsRelation(long id) const override { return _relations.find(id) != _relations.end(); }
 
   long createNextRelationId() const { return _idGen->createRelationId(); }
 
   void visitRelationsRo(ConstElementVisitor& visitor) const;
-  void visitRelationsRw(ConstElementVisitor& visitor);
   void visitRelationsRw(ElementVisitor& visitor);
 
   int numRelationsAppended() const { return _numRelationsAppended; }
@@ -282,38 +256,8 @@ public:
    * appended from
    */
   void append(const std::shared_ptr<const OsmMap>& map, const bool throwOutDupes = false);
-
-  const std::vector<std::shared_ptr<OsmMapListener>>& getListeners() const { return _listeners; }
-
-  /**
-   * This returns an index of the OsmMap. Adding or removing ways from the map will make the index
-   * out of date and will require calling getIndex again.
-   */
-  const OsmMapIndex& getIndex() const { return *_index; }
-
-  std::set<ElementId> getParents(ElementId eid) const;
-
-  /**
-   * Returns the SRS for this map. The SRS should never be changed and defaults to WGS84.
-   */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const { return _srs; }
-
   void clear();
-
   bool isEmpty() const { return getElementCount() == 0; }
-
-  void registerListener(const std::shared_ptr<OsmMapListener>& l) { _listeners.push_back(l); }
-
-  /**
-   * Resets the way and node counters. This should ONLY BE CALLED BY UNIT TESTS.
-   */
-  static void resetCounters() { IdGenerator::getInstance()->reset(); }
-
-  const IdGenerator& getIdGenerator() const { return *_idGen; }
-  void setIdGenerator(const std::shared_ptr<IdGenerator>& gen)
-  { _idGen = gen;  }
-
-  void setProjection(const std::shared_ptr<OGRSpatialReference>& srs);
 
   /**
    * Validates the consistency of the map. Primarily this checks to make sure that all nodes
@@ -325,27 +269,56 @@ public:
    */
   bool validate(bool strict = true) const;
 
-  // Helps us handle roundabouts
-  void setRoundabouts(const std::vector<std::shared_ptr<Roundabout>>& rnd) { _roundabouts = rnd; }
-  std::vector<std::shared_ptr<Roundabout>> getRoundabouts() const { return _roundabouts; }
+  std::set<ElementId> getParents(ElementId eid) const;
 
-  //  Handle ID preservation swaps
-  void setIdSwap(const std::shared_ptr<IdSwap>& swap) { _idSwap = swap; }
-  std::shared_ptr<IdSwap> getIdSwap() const { return _idSwap; }
+  /**
+   * Returns the SRS for this map. The SRS should never be changed and defaults to WGS84.
+   */
+  std::shared_ptr<OGRSpatialReference> getProjection() const override { return _srs; }
 
-  QString getName() const { return _name; }
-  void setName(const QString& name) { _name = name; }
+  void registerListener(const std::shared_ptr<OsmMapListener>& l) { _listeners.push_back(l); }
 
-  QString getSource() const;
+  /**
+   * Resets the way and node counters. This should ONLY BE CALLED BY UNIT TESTS.
+   */
+  static void resetCounters() { IdGenerator::getInstance()->reset(); }
+
   void appendSource(const QString& url);
   void replaceSource(const QString& url);
 
-  void setEnableProgressLogging(bool enable) { _enableProgressLogging = enable; }
+  /**
+   * This returns an index of the OsmMap. Adding or removing ways from the map will make the index
+   * out of date and will require calling getIndex again.
+   */
+  const OsmMapIndex& getIndex() const { return *_index; }
+  const std::vector<std::shared_ptr<OsmMapListener>>& getListeners() const { return _listeners; }
+  const IdGenerator& getIdGenerator() const { return *_idGen; }
+  QString getSource() const;
+  std::vector<std::shared_ptr<Roundabout>> getRoundabouts() const { return _roundabouts; }
+  std::shared_ptr<IdSwap> getIdSwap() const { return _idSwap; }
+  QString getName() const { return _name; }
 
-  void setCachedRubberSheet(std::shared_ptr<RubberSheet> rubbersheet) { _cachedRubberSheet = rubbersheet; }
+  void setName(const QString& name) { _name = name; }
+  void setIdSwap(const std::shared_ptr<IdSwap>& swap) { _idSwap = swap; }
+  void setRoundabouts(const std::vector<std::shared_ptr<Roundabout>>& rnd) { _roundabouts = rnd; }
+  void setProjection(const std::shared_ptr<OGRSpatialReference>& srs);
+  void setEnableProgressLogging(bool enable) { _enableProgressLogging = enable; }
+  void setCachedRubberSheet(std::shared_ptr<RubberSheet> rubbersheet)
+  { _cachedRubberSheet = rubbersheet; }
   std::shared_ptr<RubberSheet> getCachedRubberSheet() const { return _cachedRubberSheet; }
+  void setIdGenerator(const std::shared_ptr<IdGenerator>& gen) { _idGen = gen;  }
 
 protected:
+
+  void _next() override;
+  void resetIterator() override;
+
+private:
+
+  // Friend classes that need to modify private elements
+  friend class RemoveNodeByEid;
+  friend class RemoveWayByEid;
+  friend class RemoveRelationByEid;
 
   mutable std::shared_ptr<IdGenerator> _idGen;
 
@@ -408,13 +381,10 @@ protected:
   void _replaceNodeInRelations(long oldId, long newId);
 
   void _initCounters();
-
-  virtual void _next();
-  virtual void resetIterator();
 };
 
-typedef std::shared_ptr<OsmMap> OsmMapPtr;
-typedef std::shared_ptr<const OsmMap> ConstOsmMapPtr;
+using OsmMapPtr = std::shared_ptr<OsmMap>;
+using ConstOsmMapPtr = std::shared_ptr<const OsmMap>;
 
 template<class T>
 void addElements(T it, T end)
@@ -426,7 +396,7 @@ void addElements(T it, T end)
   }
 }
 
-inline const NodePtr OsmMap::getNode(long id)
+inline NodePtr OsmMap::getNode(long id)
 {
   _tmpNodeMapIt = _nodes.find(id);
   if (_tmpNodeMapIt != _nodes.end())
@@ -439,7 +409,7 @@ inline const NodePtr OsmMap::getNode(long id)
   }
 }
 
-inline const ConstNodePtr OsmMap::getNode(long id) const
+inline ConstNodePtr OsmMap::getNode(long id) const
 {
   _tmpNodeMapIt = _nodes.find(id);
   if (_tmpNodeMapIt != _nodes.end())
@@ -452,7 +422,7 @@ inline const ConstNodePtr OsmMap::getNode(long id) const
   }
 }
 
-inline const ConstRelationPtr OsmMap::getRelation(long id) const
+inline ConstRelationPtr OsmMap::getRelation(long id) const
 {
   RelationMap::iterator it = _relations.find(id);
   if (it != _relations.end())
@@ -465,12 +435,12 @@ inline const ConstRelationPtr OsmMap::getRelation(long id) const
   }
 }
 
-inline const ConstRelationPtr OsmMap::getRelation(ElementId eid) const
+inline ConstRelationPtr OsmMap::getRelation(ElementId eid) const
 {
   return getRelation(eid.getId());
 }
 
-inline const RelationPtr OsmMap::getRelation(long id)
+inline RelationPtr OsmMap::getRelation(long id)
 {
   _tmpRelationIt = _relations.find(id);
   if (_tmpRelationIt != _relations.end())
@@ -483,7 +453,7 @@ inline const RelationPtr OsmMap::getRelation(long id)
   }
 }
 
-inline const ConstWayPtr OsmMap::getWay(long id) const
+inline ConstWayPtr OsmMap::getWay(long id) const
 {
   _tmpWayIt = _ways.find(id);
   if (_tmpWayIt != _ways.end())
@@ -496,12 +466,12 @@ inline const ConstWayPtr OsmMap::getWay(long id) const
   }
 }
 
-inline const ConstWayPtr OsmMap::getWay(ElementId eid) const
+inline ConstWayPtr OsmMap::getWay(ElementId eid) const
 {
   return getWay(eid.getId());
 }
 
-inline const WayPtr OsmMap::getWay(long id)
+inline WayPtr OsmMap::getWay(long id)
 {
   _tmpWayIt = _ways.find(id);
   if (_tmpWayIt != _ways.end())
@@ -514,11 +484,11 @@ inline const WayPtr OsmMap::getWay(long id)
   }
 }
 
-inline const WayPtr OsmMap::getWay(ElementId eid)
+inline WayPtr OsmMap::getWay(ElementId eid)
 {
   return getWay(eid.getId());
 }
 
 }
 
-#endif // OSMMAP_H
+#endif

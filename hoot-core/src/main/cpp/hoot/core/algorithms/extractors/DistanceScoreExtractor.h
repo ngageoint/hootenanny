@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef DISTANCESCOREEXTRACTOR_H
 #define DISTANCESCOREEXTRACTOR_H
@@ -33,7 +33,11 @@ namespace hoot
 {
 
 /**
- * Similar to Metric Distance as described in [1].
+ *
+ */
+/**
+ * @brief The DistanceScoreExtractor class is similar to Metric Distance as described in [1].
+ *
  * 1. Savary & Zeitouni, 2005
  */
 class DistanceScoreExtractor : public WayFeatureExtractor
@@ -42,16 +46,13 @@ public:
 
   static QString className() { return "hoot::DistanceScoreExtractor"; }
 
-  DistanceScoreExtractor(ValueAggregatorPtr wayAgg);
-
   DistanceScoreExtractor() = default;
-  virtual ~DistanceScoreExtractor() = default;
+  DistanceScoreExtractor(ValueAggregatorPtr wayAgg);
+  ~DistanceScoreExtractor() = default;
 
-  virtual QString getClassName() const override { return className(); }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getDescription() const
+  QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getDescription() const override
   { return "Calculates metric distance between features"; }
 
 protected:

@@ -19,16 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PowerLineCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/criterion/PowerLineWayNodeCriterion.h>
 
 namespace hoot
 {
@@ -47,6 +48,11 @@ bool PowerLineCriterion::isSatisfied(const ConstElementPtr& e) const
     }
   }
   return false;
+}
+
+QStringList PowerLineCriterion::getChildCriteria() const
+{
+  return QStringList(PowerLineWayNodeCriterion::className());
 }
 
 }

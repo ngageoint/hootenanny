@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -55,7 +55,7 @@ public:
     long pid1 = 1111;
     long pid2 = 2222;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     geos::geom::Coordinate w1[] =
     { geos::geom::Coordinate(0.0, 0.0), geos::geom::Coordinate(1.0, 10.0),
       geos::geom::Coordinate(-1.0, 20.0), geos::geom::Coordinate(0.0, 30.0),

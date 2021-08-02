@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef NETWORKDETAILS_H
 #define NETWORKDETAILS_H
@@ -59,7 +59,12 @@ public:
   static QString className() { return "hoot::NetworkDetails"; }
 
   NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
-  virtual ~NetworkDetails() = default;
+  ~NetworkDetails() = default;
+
+  /**
+   * @see Configurable
+   */
+  void setConfiguration(const Settings& conf) override;
 
   Meters calculateDistance(ConstEdgeLocationPtr el) const;
   /**
@@ -78,8 +83,8 @@ public:
    */
   Radians calculateHeadingAtVertex(ConstNetworkEdgePtr e, ConstNetworkVertexPtr v) const;
 
-  QList<EdgeSublineMatchPtr> calculateMatchingSublines(ConstNetworkEdgePtr e1,
-    ConstNetworkEdgePtr e2);
+  QList<EdgeSublineMatchPtr> calculateMatchingSublines(
+    ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
   /**
    * calculate the distance relative to the string start. This may be negative. An attempt will
@@ -94,9 +99,8 @@ public:
    * Run an experiment to see if a valid match is created by adding esm onto em. If a valid match
    * is created it will be returned. Otherwise a null is returned.
    */
-  EdgeMatchPtr extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkEdgePtr e1,
-    ConstNetworkEdgePtr e2) const;
-
+  EdgeMatchPtr extendEdgeMatch(
+    ConstEdgeMatchPtr em, ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
   /**
    * Extend edge string 'es' with 'e'. 'es' will be enlarged as necessary to include e. If e
    * cannot extend 'es' an exception will be thrown.
@@ -115,42 +119,32 @@ public:
   void calculateNearestLocation(ConstEdgeStringPtr string, ConstEdgeSublinePtr subline,
     ConstEdgeLocationPtr &elString, ConstEdgeLocationPtr &elSubline) const;
 
-  double getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
-
-  double getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2);
-
-  virtual geos::geom::Envelope getEnvelope(ConstNetworkEdgePtr e) const;
-
-  virtual geos::geom::Envelope getEnvelope(ConstNetworkVertexPtr v) const;
-
-  ConstOsmMapPtr getMap() const { return _map; }
-
-  ConstOsmNetworkPtr getNetwork1() const { return _n1; }
-
+  double getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
+  double getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2) const;
   double getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
-
-  Meters getSearchRadius(ConstNetworkEdgePtr e1) const;
-
-  Meters getSearchRadius(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
-
-  Meters getSearchRadius(ConstNetworkVertexPtr v1) const;
-
-  Meters getSearchRadius(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const;
-
-  Meters getSearchRadius(ConstWayStringPtr ws1, ConstWayStringPtr ws2) const;
-
-  Meters getSearchRadius(ConstWayPtr w1, ConstWayPtr w2) const;
-
   /**
    * Returns a score matching v1 to v2. This does not consider any neighboring vertices. 0 means
    * no match and larger scores are better.
    */
   double getVertexMatchScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 
+  geos::geom::Envelope getEnvelope(ConstNetworkEdgePtr e) const override;
+  geos::geom::Envelope getEnvelope(ConstNetworkVertexPtr v) const override;
+
+  ConstOsmMapPtr getMap() const { return _map; }
+
+  ConstOsmNetworkPtr getNetwork1() const { return _n1; }
+
+  Meters getSearchRadius(ConstNetworkEdgePtr e1) const override;
+  Meters getSearchRadius(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const override;
+  Meters getSearchRadius(ConstNetworkVertexPtr v1) const override;
+  Meters getSearchRadius(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const override;
+  Meters getSearchRadius(ConstWayStringPtr ws1, ConstWayStringPtr ws2) const;
+  Meters getSearchRadius(ConstWayPtr w1, ConstWayPtr w2) const;
+
   bool hasConfidentTiePoint(ConstNetworkVertexPtr v);
 
-  bool isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
-
+  bool isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
   bool isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 
   /**
@@ -176,14 +170,11 @@ public:
    * generally add too much noise.
    */
   bool isStringCandidate(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
-
   bool isStringCandidate(ConstEdgeStringPtr es, ConstEdgeSublinePtr esl) const;
 
   ConstWayPtr toWay(ConstNetworkEdgePtr e) const;
 
   WayStringPtr toWayString(ConstEdgeStringPtr e, const EidMapper& mapper = EidMapper()) const;
-
-  virtual void setConfiguration(const Settings& conf);
 
 private:
 
@@ -220,21 +211,23 @@ private:
    * @param v2 - vertex in e2
    * @return
    */
-  double _getEdgeAngleScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
-    ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
+  double _getEdgeAngleScore(
+    ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2, ConstNetworkEdgePtr e1,
+    ConstNetworkEdgePtr e2) const;
 
   const SublineCache& _getSublineCache(ConstWayPtr w1, ConstWayPtr w2);
 
   LegacyVertexMatcherPtr _getVertexMatcher();
 
-  EdgeSublinePtr _toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr);
+  EdgeSublinePtr _toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr) const;
 
-  void _trimEdgeString(ConstElementProviderPtr provider, EdgeStringPtr es, WayPtr w,
+  void _trimEdgeString(
+    ConstElementProviderPtr provider, EdgeStringPtr es, WayPtr w,
     const WaySublineCollection& ws) const;
 };
 
-typedef std::shared_ptr<NetworkDetails> NetworkDetailsPtr;
-typedef std::shared_ptr<const NetworkDetails> ConstNetworkDetailsPtr;
+using NetworkDetailsPtr = std::shared_ptr<NetworkDetails>;
+using ConstNetworkDetailsPtr = std::shared_ptr<const NetworkDetails>;
 
 // not implemented
 bool operator<(ConstNetworkDetailsPtr, ConstNetworkDetailsPtr);

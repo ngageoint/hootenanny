@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -51,10 +51,10 @@ public:
   void runTestSmall()
   {
     //  Load in the tile map
-    OsmMapPtr tiles(new OsmMap());
+    OsmMapPtr tiles = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(tiles, _inputPath + "OsmMapSplitterTestTiles_ToyTest.geojson");
     //  Load in the map to split
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyBuildingsTestA.osm");
 
     OsmMapSplitter splitter(map, tiles);
@@ -76,10 +76,10 @@ public:
   {
     Settings::getInstance().set("log.warn.message.limit", 100);
     //  Load in the tile map
-    OsmMapPtr tiles(new OsmMap());
+    OsmMapPtr tiles = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(tiles, _inputPath + "OsmMapSplitterTestTiles_Boston.geojson");
     //  Load in the map to split
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "OsmMapSplitterTestInput_Boston.osm");
 
     OsmMapSplitter splitter(map, tiles);
@@ -98,6 +98,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmMapSplitterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmMapSplitterTest, "slow");
 
 }

@@ -19,15 +19,15 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/auth/HootServicesLoginManager.h>
 
@@ -42,36 +42,38 @@ public:
 
   LoginCmd() = default;
 
-  virtual QString getName() const override { return "login"; }
-
-  virtual QString getDescription() const override
+  QString getName() const override { return "login"; }
+  QString getDescription() const override
   { return "Logs a user into the Hootenanny Web Services"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual QString getType() const { return "rnd"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
-    if (args.size() > 0)
+    if (!args.empty())
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes zero parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes zero parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     HootServicesLoginManager loginManager;
 
-    // get a request token and display the authorization url
+    // Get a request token and display the authorization url.
     QString authUrl;
     const QString requestToken = loginManager.getRequestToken(authUrl);
     std::cout << std::endl << "Authorization URL: " << authUrl << std::endl << std::endl;
 
-    // prompt user to auth through the 3rd party (OpenStreetMap, etc.)
+    // Prompt the user to auth through the 3rd party (OpenStreetMap, etc.).
     const QString verifier = loginManager.promptForAuthorizationVerifier();
 
-    // verify the user's login, create the user, and get their id and user name
+    // Verify the user's login, create the user, and get their id and user name.
     QString userName;
     const long userId = loginManager.verifyUserAndLogin(requestToken, verifier, userName);
 
-    // retrieve access tokens and display to the user
+    // Retrieve access tokens and display to the user.
     QString accessToken;
     QString accessTokenSecret;
     loginManager.getAccessTokens(userId, accessToken, accessTokenSecret);

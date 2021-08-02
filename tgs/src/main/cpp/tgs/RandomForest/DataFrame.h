@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __DATA_FRAME_H__
@@ -57,29 +57,28 @@ namespace Tgs
   {
   public:
 
-    typedef enum FactorType
+    enum FactorType
     {
       Numerical,
       Nominal
-    } FactorType;
+    };
 
-    typedef enum NullTreatment
+    enum NullTreatment
     {
       NullAsValue,
       NullAsMissingValue
-    } NullTreatment;
+    };
 
     /**
     * Constructor
     */
     DataFrame();
-
     DataFrame(const DataFrame& from);
 
     /**
     * Destructor
     */
-    virtual ~DataFrame();
+    virtual ~DataFrame() = default;
 
     /**
     * Appends a data vector to the end of the dataframe
@@ -88,13 +87,13 @@ namespace Tgs
     * @param dataItem the data vector to add
     * @param eventWeight the weight associated with the data vector
     */
-    void addDataVector(std::string label, const std::vector<double>& dataItem, double eventWeight = 1.);
-
+    void addDataVector(
+      const std::string& label, const std::vector<double>& dataItem, double eventWeight = 1.);
     /**
      * Similar to above, but the pointer to dataItem is assumed to be an array of a length equal to
      * getFactorTypes().size().
      */
-    void addDataVector(std::string label, const double* dataItem, double eventWeight = 1.);
+    void addDataVector(const std::string& label, const double* dataItem, double eventWeight = 1.);
 
     /**
     *  Resets all the internal data structures associated with data frame
@@ -123,12 +122,12 @@ namespace Tgs
     *
     * @param factor the factor to deactivate
     */
-    void deactivateFactor(std::string factor);
+    void deactivateFactor(const std::string& factor);
 
     /**
     *  @return true is DataFrame contains 0 data vectors
     */
-    bool empty(){return _data.empty();}
+    bool empty() const {return _data.empty();}
 
     /**
      * @brief exportData exports the data to an XML document
@@ -166,7 +165,7 @@ namespace Tgs
     *  @param populations the output map of class names to number of instances
     */
     void getClassPopulations(const std::vector<unsigned int>& indices, 
-      HashMap<std::string, int>& populations);
+      HashMap<std::string, int>& populations) const;
 
     /**
      *  Get the number of instances per class based on the subset of data
@@ -210,7 +209,7 @@ namespace Tgs
     *
     * @param factors a container to hold the factor labels
     */
-    const std::vector<std::string> getFactorLabels() const;
+    std::vector<std::string> getFactorLabels() const;
 
     const std::vector<int>& getFactorTypes() const { return _factorType; }
 
@@ -266,19 +265,19 @@ namespace Tgs
      * @brief getTrainingLabelList
      * @return the list of class labels corresponding to the training data vectors
      */
-    std::vector<std::string> getTrainingLabelList(){return _trainingLabels;}
+    std::vector<std::string> getTrainingLabelList() const {return _trainingLabels;}
 
     /**
      * @brief hasFactorTypes
      * @return true is factor types have been set
      */
-    bool hasFactorTypes(){return !_factorType.empty();}
+    bool hasFactorTypes() const {return !_factorType.empty();}
 
     /**
      * @brief hasNullTreatments
      * @return true if null treatment values have been set
      */
-    bool hasNullTreatments(){return !_nullTreatment.empty();}
+    bool hasNullTreatments() const {return !_nullTreatment.empty();}
 
     /**
     *  Import the data frame from the file stream
@@ -292,13 +291,13 @@ namespace Tgs
     *
     * @param e a QDomElement containing the contents of tag <DataFrame> from an XML file
     */
-    void import(QDomElement & e);
+    void import(const QDomElement & e);
 
     /**
     *  Checks to see if the data vectors belonging to the set of indices
     * are all of the same class
     */
-    bool isDataSetPure(std::vector<unsigned int> & indices);
+    bool isDataSetPure(const std::vector<unsigned int>& indices) const;
 
     /**
      * Returns true if the specified column is nominal.
@@ -334,7 +333,8 @@ namespace Tgs
     * @param bootstrap the output container to hold indices to data vectors for the bootstrap set
     * @param oob  the output container to hold indices to data vectors for the out of bag set
     */
-    void makeBalancedRoundRobinBootstrapAndOobSets(std::string className1, std::string className2, 
+    void makeBalancedRoundRobinBootstrapAndOobSets(
+      const std::string& className1, const std::string& className2,
       std::vector<unsigned int> & bootstrap, std::vector<unsigned int> & oob);
 
     /**
@@ -344,7 +344,7 @@ namespace Tgs
     * @param oob  the output container to hold indices to data vectors for the out of bag set
     */
     void makeBoostrapAndOobSets(std::vector<unsigned int> & bootstrap, 
-      std::vector<unsigned int> & oob);
+      std::vector<unsigned int> & oob) const;
 
     /**
      * Returns what DataFrame considers a null value (NaN in double land).
@@ -373,18 +373,6 @@ namespace Tgs
     * @param labelMap a map of the original class name to a new class name
     */
     void remapClassLabels(std::map<std::string, std::string> & labelMap);
-    
-    /**
-    * Partitions the dataframe into two parts based on the splitting idx
-    *
-    *
-    * NOT IMPLEMENTED
-    * @param splitIdx the data vector to split on
-    * @param leftSplit the data vectors indices on the left side of the split
-    * @param rightSplit the data vectors indices on the right side of the split
-    */
-//     void partition(unsigned int splitIdx, std::vector<unsigned int> & leftSplit, 
-//       std::vector<unsigned int> & rightSplit);
 
     /**
     * Restores the list of class labels from the backup (use after creating binary classes)
@@ -412,7 +400,7 @@ namespace Tgs
     *
     * @param posClass the positive class label
     */
-    void setBinaryClassLabels(std::string posClass);
+    void setBinaryClassLabels(const std::string& posClass);
 
     /**
      * Sets the value of a single data element.
@@ -462,7 +450,7 @@ namespace Tgs
     *
     * @param e a QDomElement containing the contents of child node within tag <DataVectors> from an XML file
     */
-    void _importDataVector(QDomElement & e);
+    void _importDataVector(const QDomElement & e);
 
     /**
     * Sorts a vector of indices to data vectors by the selected factor

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // GDAL
@@ -74,7 +74,7 @@ using namespace std;
 // Tgs
 #include <tgs/System/Time.h>
 
-typedef std::shared_ptr<CppUnit::Test> TestPtr;
+using TestPtr = std::shared_ptr<CppUnit::Test>;
 
 enum _TestType
 {
@@ -122,7 +122,7 @@ public:
       cout  << "  " << failure.sourceLine().fileName() << "(" <<
         failure.sourceLine().lineNumber() << ") ";
       CppUnit::Exception* e = failure.thrownException();
-      if (e != NULL && QString::fromStdString(e->message().details()).trimmed() != "")
+      if (e != nullptr && QString::fromStdString(e->message().details()).trimmed() != "")
       {
         cout << "  " << e->message().details();
       }
@@ -136,14 +136,10 @@ public:
     return _success;
   }
 
-//  virtual void startTest(CppUnit::Test* test)
-//  {
-//    // for debugging only
-//    cout << "Starting " << test->getName() << endl/* << flush*/;
-//  }
-
   virtual void endTest(CppUnit::Test* test)
   {
+    //cout << "test completed: " << test->getName() << endl;
+
     double elapsed = Tgs::Time::getTime() - _start;
     if (_showTestName)
     {
@@ -287,7 +283,7 @@ CppUnit::Test* findTest(CppUnit::Test* t, std::string name)
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 CppUnit::Test* findTest(std::vector<TestPtr> vTests, std::string name)
@@ -316,7 +312,7 @@ CppUnit::Test* findTest(std::vector<TestPtr> vTests, std::string name)
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 void getNames(vector<string>& names, CppUnit::Test* t)
@@ -414,7 +410,7 @@ void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
         new ScriptTestSuite(
           "test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests,
           suppressFailureDetail)));
-    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
+    vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases", hideDisableTests));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest()));
   }
   //  Add glacial tests if the bit flag is set
@@ -450,7 +446,7 @@ void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
 
   if (t == CASE_ONLY)
   {
-    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
+    vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases", hideDisableTests));
   }
 }
 
@@ -565,6 +561,14 @@ _TimeOutValue getTimeoutValue(_TestType type)
     return QUICK_WAIT;
 }
 
+void reportFailedTests(int failedTests, int totalTests)
+{
+  if (totalTests < 1 || failedTests > totalTests || failedTests == 0)
+    return;
+  //  Report the number of failed tests
+  cout << failedTests << " of " << totalTests << " tests failed" << endl;
+}
+
 int main(int argc, char* argv[])
 {
   // set the Qt hash seed to 0 for consistent test results
@@ -642,18 +646,20 @@ int main(int argc, char* argv[])
       }
       QString testName = args[i];
 
-      listener.reset(new HootTestListener(false, suppressFailureDetail, -1));
+      listener = std::make_shared<HootTestListener>(false, suppressFailureDetail, -1);
       result.addListener(listener.get());
-      Log::getInstance().setLevel(Log::Info);
+      Log::getInstance().setLevel(Log::Status);
       populateTests(ALL, vAllTests, printDiff, suppressFailureDetail, true);
       CppUnit::Test* t = findTest(vAllTests, testName.toStdString());
-      if (t == NULL)
+      if (t == nullptr)
       {
         cout << "Could not find the specified test: " << testName.toStdString() << endl;
         return -1;
       }
 
       runSingleTest(t, args, &result);
+      if (result.failures().size() == 0)
+        cout << endl;
       return result.failures().size() > 0 ? -1 : 0;
     }
     else if (args.contains("--listen"))
@@ -663,7 +669,7 @@ int main(int argc, char* argv[])
       if (i < args.size())
         slowTest = args[i].toDouble();
 
-      listener.reset(new HootTestListener(false, suppressFailureDetail, slowTest, false));
+      listener = std::make_shared<HootTestListener>(false, suppressFailureDetail, slowTest, false);
       if (args.contains("--names"))
         listener->showTestNames(true);
       result.addListener(listener.get());
@@ -694,11 +700,11 @@ int main(int argc, char* argv[])
       _TimeOutValue timeout = getTimeoutValue(type);
       if (type == CURRENT)
       {
-        listener.reset(new HootTestListener(true, suppressFailureDetail, timeout));
-        Log::getInstance().setLevel(Log::Info);
+        listener = std::make_shared<HootTestListener>(true, suppressFailureDetail, timeout);
+        Log::getInstance().setLevel(Log::Status);
       }
       else
-        listener.reset(new HootTestListener(false, suppressFailureDetail, timeout));
+        listener = std::make_shared<HootTestListener>(false, suppressFailureDetail, timeout);
       //  Populate the list of tests
       populateTests(type, vAllTests, printDiff, suppressFailureDetail);
 
@@ -767,6 +773,7 @@ int main(int argc, char* argv[])
       pool.wait();
 
       cout << endl;
+      reportFailedTests(pool.getFailures(), allNames.size());
       cout << "Elapsed: " << Tgs::Time::getTime() - start << endl;
       return pool.getFailures() > 0 ? -1 : 0;
     }
@@ -794,6 +801,7 @@ int main(int argc, char* argv[])
         vTestsToRun[i]->run(&result);
 
       cout << endl;
+      reportFailedTests(result.failures().size(), vTestsToRun.size());
       cout << "Elapsed: " << Tgs::Time::getTime() - start << endl;
       return result.failures().size() > 0 ? -1 : 0;
     }

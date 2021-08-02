@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef BUILDINGMATCHCREATOR_H
 #define BUILDINGMATCHCREATOR_H
@@ -30,15 +30,11 @@
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 
-namespace Tgs
-{
-class RandomForest;
-}
-
 namespace hoot
 {
 
 class BuildingRfClassifier;
+class RandomForest;
 
 class BuildingMatchCreator : public MatchCreator
 {
@@ -48,15 +44,14 @@ public:
   static QString className() { return "hoot::BuildingMatchCreator"; }
 
   BuildingMatchCreator();
-  virtual ~BuildingMatchCreator() = default;
+  ~BuildingMatchCreator() = default;
 
-  virtual MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) override;
+  MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) override;
 
-  virtual void createMatches(
-    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+  void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
     ConstMatchThresholdPtr threshold) override;
 
-  virtual std::vector<CreatorDescription> getAllCreators() const override;
+  std::vector<CreatorDescription> getAllCreators() const override;
 
   /**
    * Determines whether an element is a candidate for matching for this match creator
@@ -65,16 +60,16 @@ public:
    * @param map the map the element whose candidacy is being determined belongs to
    * @return true if the element is a match candidate; false otherwise
    */
-  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
+  bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
 
-  virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
+  std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
 private:
 

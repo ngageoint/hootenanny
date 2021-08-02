@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __MULTIARY_POI_MERGER_H__
 #define __MULTIARY_POI_MERGER_H__
@@ -47,39 +47,30 @@ public:
   static QString className() { return "hoot::MultiaryPoiMerger"; }
 
   MultiaryPoiMerger() = default;
-  virtual ~MultiaryPoiMerger() = default;
+  ~MultiaryPoiMerger() = default;
   /**
    * Construct with a subgraph of pairs. The links in the set of pairs are used to determine links
    * between elements so it is important that the pairs are represenetative of the matches.
    */
-  MultiaryPoiMerger(std::set<std::pair<ElementId, ElementId>>& pairs);
+  MultiaryPoiMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
 
   /**
    * See parent.
    */
-  virtual void apply(const OsmMapPtr& map,
-    std::vector<std::pair<ElementId, ElementId>>& replaced);
+  void apply(const OsmMapPtr& map,
+    std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
-  virtual QString toString() const { return "MultiaryPoiMerger"; }
+  QString toString() const override { return "MultiaryPoiMerger"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Merges POIs matched with Multiary Conflation (experimental)"; }
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
-
-protected:
-
-  virtual PairsSet& _getPairs() { return _pairs; }
-  virtual const PairsSet& _getPairs() const { return _pairs; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 
   std::shared_ptr<MatchCreator> _matchCreator;
   std::shared_ptr<MergerCreator> _mergerCreator;
-
-  std::set<std::pair<ElementId, ElementId>> _pairs;
 
   /**
    * @brief _createReviews Create review entries for each cluster review in the review list.
@@ -87,7 +78,7 @@ private:
    * @param reviews List of links that should be reviewed.
    */
   void _createReviews(const OsmMapPtr& map,
-    QList<MultiaryClusterAlgorithm::ClusterLinkPtr> reviews);
+    QList<MultiaryClusterAlgorithm::ClusterLinkPtr> reviews) const;
 
   /**
    * Merge all the elements that make up each of the clusters into a single element.
@@ -97,7 +88,7 @@ private:
    */
   void _mergeClusters(const OsmMapPtr& map,
     std::vector<std::pair<ElementId, ElementId>>& replaced,
-    MultiaryClusterAlgorithm::ClusterList clusters);
+    MultiaryClusterAlgorithm::ClusterList clusters) const;
 };
 
 }

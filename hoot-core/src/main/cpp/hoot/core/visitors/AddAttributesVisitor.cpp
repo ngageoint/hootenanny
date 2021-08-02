@@ -19,19 +19,19 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "AddAttributesVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementAttributeType.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DateTimeUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Settings.h>
 
 namespace hoot
 {
@@ -60,7 +60,7 @@ void AddAttributesVisitor::setConfiguration(const Settings& conf)
   _addOnlyIfEmpty = configOptions.getAddAttributesVisitorAddOnlyIfEmpty();
   LOG_VARD(_addOnlyIfEmpty);
 
-  _negateCriteria = configOptions.getElementCriterionNegate();
+  _negateCriteria = configOptions.getElementCriteriaNegate();
   _chainCriteria = configOptions.getAddAttributesVisitorChainElementCriteria();
   const QStringList critNames = configOptions.getAddAttributesVisitorElementCriteria();
   LOG_VART(critNames);
@@ -72,7 +72,7 @@ void AddAttributesVisitor::setConfiguration(const Settings& conf)
     {
       ElementCriterionPtr crit = *it;
       Configurable* c = dynamic_cast<Configurable*>(crit.get());
-      if (c != 0)
+      if (c != nullptr)
       {
         c->setConfiguration(conf);
       }
@@ -82,7 +82,7 @@ void AddAttributesVisitor::setConfiguration(const Settings& conf)
 
 void AddAttributesVisitor::visit(const std::shared_ptr<Element>& e)
 {
-  if (_criteria.size() > 0 && !_criteriaSatisfied(e))
+  if (!_criteria.empty() && !_criteriaSatisfied(e))
   {
     LOG_TRACE("Element did not satisfy criteria: " << e->getElementId() << ". Skipping...");
     return;
@@ -162,7 +162,7 @@ void AddAttributesVisitor::visit(const std::shared_ptr<Element>& e)
 }
 
 ElementAttributeType::Type AddAttributesVisitor::_getAttributeType(const QString& attribute,
-                                                                   QString& attributeValue)
+                                                                   QString& attributeValue) const
 {
   LOG_VART(attribute);
   const QStringList attributeParts = attribute.split("=");

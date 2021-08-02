@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "StatsAreaCriterion.h"
@@ -70,7 +70,7 @@ bool StatsAreaCriterion::isSatisfied(const ConstElementPtr& e) const
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
   {
     const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
-    uint16_t g = tv.geometries;
+    uint16_t g = tv.getGeometries();
     if (g & OsmGeometries::Area && !(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay)))
     {
       result = true;

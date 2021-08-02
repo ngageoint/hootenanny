@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WAYMAPPING_H
 #define WAYMAPPING_H
@@ -33,7 +33,8 @@ namespace hoot
 {
 
 /**
- * Given a WaySublineMatchString, produce a mapping from one way string to the other.
+ * @brief The WayMapping class given a WaySublineMatchString, produces a mapping from one way string
+ * to the other.
  */
 class WayMapping
 {
@@ -42,12 +43,14 @@ public:
   virtual ~WayMapping();
 
   /**
-   * Given a point on subline string 1, return the corresponding point on subline string 2.
+   * @brief map1to2 given a point on subline string 1, returns the corresponding point on subline
+   * string 2.
    */
   virtual WayLocationPtr map1to2(ConstWayLocationPtr wl1) const = 0;
 
   /**
-   * Given a point on subline string 2, return the corresponding point on subline string 1.
+   * @brief map2to1 given a point on subline string 2, returns the corresponding point on subline
+   * string 1.
    */
   virtual WayLocationPtr map2to1(ConstWayLocationPtr wl1) const = 0;
 };

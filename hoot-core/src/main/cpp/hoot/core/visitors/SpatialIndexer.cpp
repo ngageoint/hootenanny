@@ -19,22 +19,22 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "SpatialIndexer.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 // TGS
 #include <tgs/RStarTree/IntersectionIterator.h>
@@ -54,7 +54,7 @@ int SpatialIndexer::logWarnCount = 0;
 SpatialIndexer::SpatialIndexer(
   std::shared_ptr<HilbertRTree>& index, deque<ElementId>& indexToEid,
   const std::shared_ptr<ElementCriterion>& criterion,
-  std::function<Meters (const ConstElementPtr& e)> getSearchRadius, ConstOsmMapPtr pMap) :
+  const std::function<Meters (const ConstElementPtr& e)>& getSearchRadius, ConstOsmMapPtr pMap) :
 _criterion(criterion),
 _getSearchRadius(getSearchRadius),
 _index(index),
@@ -75,7 +75,7 @@ void SpatialIndexer::addCriterion(const ElementCriterionPtr& e)
   _criterion = e;
 }
 
-void SpatialIndexer::finalizeIndex()
+void SpatialIndexer::finalizeIndex() const
 {
   QElapsedTimer timer;
   timer.start();
@@ -92,10 +92,10 @@ void SpatialIndexer::finalizeIndex()
 
 void SpatialIndexer::visit(const ConstElementPtr& e)
 {
-  if (e)
-  {
-    LOG_VART(e->getElementId());
-  }
+  //  Ignore NULL elements
+  if (!e && !_map) return;
+
+  LOG_VART(e->getElementId());
   if (e && (!_criterion || _criterion->isSatisfied(e)))
   {
     LOG_TRACE("is satisfied: " << e->getElementId());
@@ -103,7 +103,6 @@ void SpatialIndexer::visit(const ConstElementPtr& e)
     Box b(2);
     Meters searchRadius = _getSearchRadius(e);
     LOG_VART(searchRadius);
-    LOG_VART(_map == 0);
     std::shared_ptr<Envelope> env(e->getEnvelope(_map->shared_from_this()));
     if (!env->isNull())
     {
@@ -119,6 +118,7 @@ void SpatialIndexer::visit(const ConstElementPtr& e)
       _numAffected++;
     }
   }
+  _numProcessed++;
 }
 
 set<ElementId> SpatialIndexer::findNeighbors(
@@ -153,9 +153,9 @@ set<ElementId> SpatialIndexer::findNeighbors(
         // Check for relations that contain this element
         const set<long>& relations =
           pMap->getIndex().getElementToRelationMap()->getRelationByElement(eid);
-        for (set<long>::const_iterator it = relations.begin(); it != relations.end(); ++it)
+        for (set<long>::const_iterator relation_it = relations.begin(); relation_it != relations.end(); ++relation_it)
         {
-          neighborIds.insert(ElementId(ElementType::Relation, *it));
+          neighborIds.insert(ElementId(ElementType::Relation, *relation_it));
         }
       }
     }

@@ -21,10 +21,10 @@
  #* The following copyright notices are generated automatically. If you
  #* have a new notice to add, please use the format:
  #* " * @copyright Copyright ..."
- #* This will properly maintain the copyright information. DigitalGlobe
+ #* This will properly maintain the copyright information. Maxar
  #* copyrights will be updated automatically.
  #*
- #* @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ #* @copyright Copyright (C) 2019 Maxar (http://www.maxar.com/)
  #*/
 
 
@@ -234,10 +234,10 @@ default_list = {
     'Double':'-999999.0',
     'Enumeration':'-999999',
     'IcaoLocIndStrucText':'noInformation',
-    'LexicalText':'No Information',
-    # 'Local specification':'No Information',
+    'LexicalText':'noInformation',
+    # 'Local specification':'noInformation',
     'LongInteger':'-999999',
-    'NonlexicalText':'No Information',
+    'NonlexicalText':'noInformation',
     'PropertyDfddAccessorStrucText':'noInformation',
     'ResClassificationStrucText':'noInformation',
     'ResDissemControlsStrucText':'noInformation',
@@ -287,28 +287,31 @@ def addImgAttrs(schema):
         # schema[featureName]['columns']['fName'] = {'name':'AEI'.encode('utf8'),
         #                                         'desc':'Acquisition Event Identifier'.encode('utf8'),
         #                                         'type':'String',
-        #                                         'defValue':'No Information'.encode('utf8'),
+        #                                         'defValue':'noInformation'.encode('utf8'),
         #                                         'length':'256'.encode('utf8'),
         #                                         'optional':'R'
         #                                         }
-        schema[featureName]['columns']['AEI'] = {}
-        schema[featureName]['columns']['AEI'] = {'name':'AEI','desc':'Acquisition Event Identifier','type':'String',
-                                                'defValue':'No Information','length':'254','optional':'R'}
+        schema[featureName]['columns']['image_id'] = {}
+        schema[featureName]['columns']['image_id'] = {'name':'image_id','desc':'Image Id','type':'String',
+                                                'defValue':'noInformation','length':'254','optional':'R'}
+        schema[featureName]['columns']['legacy_id'] = {}
+        schema[featureName]['columns']['legacy_id'] = {'name':'legacy_id','desc':'Legacy Image Id','type':'String',
+                                                'defValue':'noInformation','length':'254','optional':'R'}
         schema[featureName]['columns']['early_date'] = {}
         schema[featureName]['columns']['early_date'] = {'name':'early_date','desc':'Earliest image date in mosaic','type':'String',
-                                                'defValue':'No Information','length':'20','optional':'R'}
+                                                'defValue':'noInformation','length':'20','optional':'R'}
         schema[featureName]['columns']['late_date'] = {}
         schema[featureName]['columns']['late_date'] = {'name':'late_date','desc':'Latest image date in mosaic','type':'String',
-                                                'defValue':'No Information','length':'20','optional':'R'}
+                                                'defValue':'noInformation','length':'20','optional':'R'}
         schema[featureName]['columns']['img_layer'] = {}
         schema[featureName]['columns']['img_layer'] = {'name':'img_layer','desc':'Imagery Layer Name','type':'String',
-                                                'defValue':'No Information','length':'254','optional':'R'}
+                                                'defValue':'noInformation','length':'254','optional':'R'}
         schema[featureName]['columns']['img_mosaic'] = {}
         schema[featureName]['columns']['img_mosaic'] = {'name':'img_mosaic','desc':'Image Mosaic','type':'String',
                                                 'defValue':'no','length':'3','optional':'R'}
         schema[featureName]['columns']['PFI'] = {}
         schema[featureName]['columns']['PFI'] = {'name':'PFI','desc':'Acquisition Platform Identifier','type':'String',
-                                                'defValue':'No Information','length':'15','optional':'R'}
+                                                'defValue':'noInformation','length':'15','optional':'R'}
 
         if 'ZI001_SRT' not in schema[featureName]['columns']:
             schema[featureName]['columns']['ZI001_SRT'] = {}
@@ -332,7 +335,7 @@ def addImgAttrs(schema):
             schema[featureName]['columns']['ZI001_SDP'] = {}
             schema[featureName]['columns']['ZI001_SDP'] = {'name':'ZI001_SDP','desc':'Source Information : Source Description',
                                                 'type':'String',
-                                                'defValue':'No Information','optional':'R'}
+                                                'defValue':'noInformation','optional':'R'}
 
     return schema
 # End addImgAttrs

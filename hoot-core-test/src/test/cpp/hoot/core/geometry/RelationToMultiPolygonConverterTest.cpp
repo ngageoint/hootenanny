@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // geos
@@ -75,11 +75,12 @@ public:
    */
   void runBadOuterRingsTest()
   {
-    OsmMapPtr map(new OsmMap());
-    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon()));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    RelationPtr uut =
+      std::make_shared<Relation>(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon());
     WayPtr w;
     // way #1
-    w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
+    w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
     map->addWay(w);
     addPoint(map, w, 5, 6);
     addPoint(map, w, 8, 11);
@@ -87,7 +88,7 @@ public:
     uut->addElement(MetadataTags::RoleOuter(), w);
 
     // way #2
-    w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
+    w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
     map->addWay(w);
     addPoint(map, w, 5, 6);
     addPoint(map, w, 8, 2);
@@ -106,10 +107,11 @@ public:
    */
   void runMultiPolygonExample1Test()
   {
-    OsmMapPtr map(new OsmMap());
-    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon()));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    RelationPtr uut =
+      std::make_shared<Relation>(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon());
     WayPtr w;
-    w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
+    w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
     map->addWay(w);
     addPoint(map, w, 8, 2);
     addPoint(map, w, 5, 6);
@@ -119,7 +121,7 @@ public:
     closeWay(w);
     uut->addElement(MetadataTags::RoleOuter(), w);
 
-    w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
+    w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
     map->addWay(w);
     addPoint(map, w, 9, 5);
     addPoint(map, w, 7, 6);
@@ -140,10 +142,11 @@ public:
    */
   void runMultiPolygonExample7Test()
   {
-    OsmMapPtr map(new OsmMap());
-    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon()));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    RelationPtr uut =
+      std::make_shared<Relation>(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon());
     WayPtr w;
-    w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
+    w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
     map->addWay(w);
     addPoint(map, w, 9, 1);
     addPoint(map, w, 2, 6);
@@ -153,7 +156,7 @@ public:
     closeWay(w);
     uut->addElement(MetadataTags::RoleOuter(), w);
 
-    w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
+    w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
     map->addWay(w);
     addPoint(map, w, 10, 2);
     addPoint(map, w, 5, 6);
@@ -162,7 +165,7 @@ public:
     closeWay(w);
     uut->addElement(MetadataTags::RoleInner(), w);
 
-    w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
+    w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
     map->addWay(w);
     addPoint(map, w, 9, 5);
     addPoint(map, w, 7, 6);
@@ -183,11 +186,12 @@ public:
    */
   void runMultipleWaysFormingARing()
   {
-    OsmMapPtr map(new OsmMap());
-    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon()));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    RelationPtr uut =
+      std::make_shared<Relation>(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon());
     WayPtr w;
     // way #1
-    w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
+    w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
     map->addWay(w);
     addPoint(map, w, 5, 6);
     addPoint(map, w, 8, 11);
@@ -195,7 +199,7 @@ public:
     uut->addElement(MetadataTags::RoleOuter(), w);
 
     // way #2
-    w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
+    w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
     map->addWay(w);
     addPoint(map, w, 5, 6);
     addPoint(map, w, 8, 2);
@@ -204,7 +208,7 @@ public:
     uut->addElement(MetadataTags::RoleOuter(), w);
 
     // way #3
-    w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
+    w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
     map->addWay(w);
     addPoint(map, w, 7, 6);
     addPoint(map, w, 8, 8);

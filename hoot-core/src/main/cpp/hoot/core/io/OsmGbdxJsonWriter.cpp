@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmGbdxJsonWriter.h"
 
@@ -39,7 +39,6 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
@@ -72,12 +71,9 @@ void OsmGbdxJsonWriter::open(const QString& path)
   _outputDir = fi.absoluteDir();
   _outputFileName = fi.baseName();
 
-  if (_outputDir.exists() == false)
+  if (!_outputDir.exists() && !FileUtils::makeDir(_outputDir.path()))
   {
-    if (FileUtils::makeDir(_outputDir.path()) == false)
-    {
-      throw HootException("Error creating directory for writing.");
-    }
+    throw HootException("Error creating directory for writing.");
   }
 }
 
@@ -119,9 +115,7 @@ void OsmGbdxJsonWriter::write(const ConstOsmMapPtr& map)
   _map = map;
 
   _writeNodes();
-
   _writeWays();
-
   _writeRelations();
 
   // This will move out of here eventually.
@@ -139,7 +133,7 @@ void OsmGbdxJsonWriter::_writeGeometry(ConstWayPtr w)
 {
   const vector<long>& nodes = w->getNodeIds();
   const bool isPolygon = AreaCriterion().isSatisfied(w) || nodes[0] == nodes[nodes.size() - 1];
-  _writeGeometry(nodes, (isPolygon) ? "Polygon" : "LineString");
+  _writeGeometry(nodes, isPolygon ? "Polygon" : "LineString");
 }
 
 void OsmGbdxJsonWriter::_writeGeometry(ConstRelationPtr r)
@@ -154,7 +148,7 @@ void OsmGbdxJsonWriter::_writeGeometry(ConstRelationPtr r)
   for (vector<RelationData::Entry>::iterator it = members.begin(); it != members.end(); ++it)
   {
     ConstElementPtr e = _map->getElement(it->getElementId());
-    if (e.get() == NULL)
+    if (e.get() == nullptr)
       continue;
     if (first)
       first = false;
@@ -191,7 +185,7 @@ void OsmGbdxJsonWriter::_writeGeometry(const vector<long> &nodes, string type)
   vector<long> temp_nodes;
   for (vector<long>::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    if (_map->getNode(*it).get() != NULL)
+    if (_map->getNode(*it).get() != nullptr)
       temp_nodes.push_back(*it);
   }
   if (temp_nodes.size() < 2 && type.compare("Point") != 0)
@@ -263,7 +257,7 @@ void OsmGbdxJsonWriter::_writeNodes()
 
 void OsmGbdxJsonWriter::_writeNode(ConstNodePtr node)
 {
-  if (node.get() == NULL)
+  if (node.get() == nullptr)
     return;
   _write("{");
   _writeFeature(node);
@@ -283,9 +277,9 @@ void OsmGbdxJsonWriter::_writeWays()
     ConstWayPtr w = it->second;
     //  Skip any ways that have parents
     set<ElementId> parents = _map->getParents(w->getElementId());
-    if (parents.size() > 0)
+    if (!parents.empty())
       continue;
-    if (w.get() == NULL)
+    if (w.get() == nullptr)
       continue;
 
     //  Make sure that building ways are "complete"
@@ -296,7 +290,7 @@ void OsmGbdxJsonWriter::_writeWays()
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
       {
         ConstNodePtr node = _map->getNode(*nodeIt);
-        if (node.get() == NULL)
+        if (node.get() == nullptr)
         {
           valid = false;
           break;
@@ -314,7 +308,7 @@ void OsmGbdxJsonWriter::_writeWays()
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
       {
         ConstNodePtr node = _map->getNode(*nodeIt);
-        if (node.get() != NULL)
+        if (node.get() != nullptr)
         {
           _newOutputFile();
           _writeNode(node);
@@ -326,7 +320,7 @@ void OsmGbdxJsonWriter::_writeWays()
 
 void OsmGbdxJsonWriter::_writeWay(ConstWayPtr way)
 {
-  if (way.get() == NULL)
+  if (way.get() == nullptr)
     return;
   //  Write out the way in geojson
   _write("{");
@@ -379,7 +373,7 @@ string OsmGbdxJsonWriter::_buildRoles(ConstRelationPtr r, bool& first)
   for (vector<RelationData::Entry>::const_iterator it = members.begin(); it != members.end(); ++it)
   {
     ConstElementPtr e = _map->getElement(it->getElementId());
-    if (e.get() == NULL)
+    if (e.get() == nullptr)
       continue;
     if (first)
       first = false;
@@ -388,7 +382,7 @@ string OsmGbdxJsonWriter::_buildRoles(ConstRelationPtr r, bool& first)
     ss << it->getRole();
     //  Recursively get the roles of the sub-relation that is valid
     if (it->getElementId().getType() == ElementType::Relation &&
-        _map->getRelation(it->getElementId().getId()).get() != NULL)
+        _map->getRelation(it->getElementId().getId()).get() != nullptr)
     {
       ss << ";" << _buildRoles(_map->getRelation(it->getElementId().getId()), first);
     }

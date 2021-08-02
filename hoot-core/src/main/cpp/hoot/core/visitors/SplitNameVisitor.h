@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SPLITNAMEVISITOR_H
 #define SPLITNAMEVISITOR_H
@@ -45,34 +45,31 @@ public:
   static QString className() { return "hoot::SplitNameVisitor"; }
 
   SplitNameVisitor();
-  virtual ~SplitNameVisitor() = default;
-
-  void setMaxSize(int s) { _maxSize = s; }
+  ~SplitNameVisitor() = default;
 
   void visit(const std::shared_ptr<Element>& e) override;
 
-  QString getDescription() const override
-  { return QString("Splits name tags over %1 characters").arg(_maxSize); }
-
   QString getInitStatusMessage() const override
   { return "..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " building outlines"; }
 
   void setConfiguration(const Settings& conf) override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return QString("Splits name tags over %1 characters").arg(_maxSize); }
 
-  virtual QString getClassName() const override { return className(); }
+  void setMaxSize(int s) { _maxSize = s; }
 
 private:
 
   int _maxSize;
 
-  void _addExtraNames(Tags& t, const QStringList& extraNames);
+  void _addExtraNames(Tags& t, const QStringList& extraNames) const;
 
-  int _getNextNameId(const Tags& t, int lastId);
+  int _getNextNameId(const Tags& t, int lastId) const;
 
   /**
    * Given a name list greater than a certain character size, split the names up so that the result
@@ -81,7 +78,7 @@ private:
    * If a name is greater than the character max size, it is cropped down to the max size minus
    * three plus "..." at the end.
    */
-  QStringList _splitNames(const QString& v, QStringList& extras);
+  QStringList _splitNames(const QString& v, QStringList& extras) const;
 };
 
 }

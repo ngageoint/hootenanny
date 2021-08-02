@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ElementGeometryUtils.h"
@@ -102,75 +102,6 @@ bool ElementGeometryUtils::haveGeometricRelationship(
   return haveRelationship;
 }
 
-bool ElementGeometryUtils::haveGeometricRelationship(
-  const ConstElementPtr& element, const std::shared_ptr<geos::geom::Geometry>& bounds,
-  const GeometricRelationship& relationship, ConstOsmMapPtr map)
-{
-  if (!element)
-  {
-    throw IllegalArgumentException("The input element is null.");
-  }
-  if (!bounds)
-  {
-    throw IllegalArgumentException("The input bounds is null.");
-  }
-  if (!map)
-  {
-    throw IllegalArgumentException("The input map is null.");
-  }
-  LOG_VART(bounds->toString());
-  LOG_VART(relationship.toString())
-
-  std::shared_ptr<geos::geom::Geometry> elementGeom = _getGeometry(element, map);
-  LOG_VART(elementGeom.get());
-  bool haveRelationship = false;
-  if (elementGeom)
-  {
-    LOG_VART(elementGeom->toString());
-    switch (relationship.getEnum())
-    {
-      case GeometricRelationship::Contains:
-        haveRelationship = bounds->contains(elementGeom.get());
-        break;
-      case GeometricRelationship::Covers:
-        haveRelationship = bounds->covers(elementGeom.get());
-        break;
-      case GeometricRelationship::Crosses:
-        haveRelationship = elementGeom->crosses(bounds.get());
-        break;
-      case GeometricRelationship::DisjointWith:
-        haveRelationship = bounds->disjoint(elementGeom.get());
-        break;
-      case GeometricRelationship::Equals:
-        haveRelationship = bounds->equals(elementGeom.get());
-        break;
-      case GeometricRelationship::Intersects:
-        haveRelationship = elementGeom->intersects(bounds.get());
-        break;
-      case GeometricRelationship::IsWithin:
-        haveRelationship = elementGeom->within(bounds.get());
-        break;
-      case GeometricRelationship::Overlaps:
-        haveRelationship = elementGeom->overlaps(bounds.get());
-        break;
-      case GeometricRelationship::Touches:
-        haveRelationship = elementGeom->touches(bounds.get());
-        break;
-      default:
-        throw IllegalArgumentException("Unsupported geometry relationship type.");
-    }
-  }
-  else
-  {
-    LOG_TRACE(
-      "Unable to calculate geometric relationship: " << relationship.toString() << " for: " <<
-      element->getElementId() << " and: " << QString::fromStdString(bounds->toString()).right(50) <<
-      ".");
-  }
-  LOG_VART(haveRelationship);
-  return haveRelationship;
-}
-
 std::shared_ptr<geos::geom::Geometry> ElementGeometryUtils::_getGeometry(
   const ConstElementPtr& element, ConstOsmMapPtr map)
 {
@@ -181,7 +112,7 @@ std::shared_ptr<geos::geom::Geometry> ElementGeometryUtils::_getGeometry(
 
   std::shared_ptr<geos::geom::Geometry> newGeom;
   QString errorMsg =
-    "Feature passed to OsmUtils caused topology exception on conversion to a geometry: ";
+    "Feature passed to ElementGeometryUtils caused topology exception on conversion to a geometry: ";
   try
   {
     newGeom = ElementToGeometryConverter(map).convertToGeometry(element);
@@ -205,7 +136,8 @@ std::shared_ptr<geos::geom::Geometry> ElementGeometryUtils::_getGeometry(
     }
   }
   if (newGeom.get() &&
-      QString::fromStdString(newGeom->toString()).toUpper().contains("EMPTY"))
+      (newGeom->isEmpty() ||
+       QString::fromStdString(newGeom->toString()).toUpper().contains("EMPTY")))
   {
     if (_badGeomCount <= Log::getWarnMessageLimit())
     {
@@ -217,58 +149,8 @@ std::shared_ptr<geos::geom::Geometry> ElementGeometryUtils::_getGeometry(
   return newGeom;
 }
 
-GeometryTypeCriterion::GeometryType ElementGeometryUtils::geometryTypeForElement(
-  const ConstElementPtr& element, ConstOsmMapPtr map)
-{
-  const ElementType type = element->getElementType();
-  if (type == ElementType::Node)
-  {
-    return GeometryTypeCriterion::GeometryType::Point;
-  }
-  else if (type == ElementType::Way)
-  {
-    if (PolygonCriterion(map).isSatisfied(element))
-    {
-      return GeometryTypeCriterion::GeometryType::Polygon;
-    }
-    else
-    {
-      return GeometryTypeCriterion::GeometryType::Line;
-    }
-  }
-  else if (type == ElementType::Relation)
-  {
-    if (!map)
-    {
-      throw IllegalArgumentException(
-        "A map must be set when determining the geometry type of relations.");
-    }
-    // using the strict definition only here
-    if (RelationWithLinearMembersCriterion(map).isSatisfied(element))
-    {
-      return GeometryTypeCriterion::GeometryType::Point;
-    }
-    else if (RelationWithPolygonMembersCriterion(map).isSatisfied(element))
-    {
-      return GeometryTypeCriterion::GeometryType::Polygon;
-    }
-    else if (RelationWithLinearMembersCriterion(map).isSatisfied(element))
-    {
-      return GeometryTypeCriterion::GeometryType::Line;
-    }
-    else
-    {
-      return GeometryTypeCriterion::GeometryType::Unknown;
-    }
-  }
-  else
-  {
-    throw IllegalArgumentException("Invalid element type.");
-  }
-}
-
-Meters ElementGeometryUtils::calculateLength(const ConstElementPtr& e,
-                                             const ConstElementProviderPtr& constProvider)
+Meters ElementGeometryUtils::calculateLength(
+  const ConstElementPtr& e, const ConstElementProviderPtr& constProvider)
 {
   // Doing length/distance calcs only make sense if we've projected down onto a flat surface
   if (!MapProjector::isPlanar(constProvider))
@@ -284,7 +166,13 @@ Meters ElementGeometryUtils::calculateLength(const ConstElementPtr& e,
   {
     // TODO: optimize - we don't really need to convert first, we can just loop through the nodes
     // and sum up the distance.
-    return ElementToGeometryConverter(constProvider).convertToGeometry(e)->getLength();
+    std::shared_ptr<geos::geom::Geometry> geom =
+      ElementToGeometryConverter(constProvider).convertToGeometry(e);
+    if (!geom || !geom->isValid())
+    {
+      return 0;
+    }
+    return geom->getLength();
   }
   else
   {

@@ -19,16 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/HootApiDbWriter.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -47,25 +48,34 @@ public:
 
   DbDeleteCmd() = default;
 
-  virtual QString getName() const override { return "db-delete"; }
-
-  virtual QString getDescription() const override
+  QString getName() const override { return "db-delete"; }
+  QString getDescription() const override
   { return "Deletes a map from the Hootenanny Web Services database"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
+    if (args.size() < 1)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least one parameter. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
+    }
+
     QElapsedTimer timer;
     timer.start();
 
-    if (args.size() != 1)
+    const QStringList inputs = args;
+    for (int i = 0; i < inputs.size(); i++)
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes one parameter.").arg(getName()));
+      LOG_STATUS("Deleting ..." << FileUtils::toLogFormat(inputs.at(i), 25) << "...");
+      HootApiDbWriter().deleteMap(inputs.at(i));
     }
 
-    HootApiDbWriter().deleteMap(args[0]);
-
-    LOG_STATUS("Map deleted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    LOG_STATUS(
+      "Map(s) deleted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

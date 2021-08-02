@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RoadCrossingPolyRule.h"
@@ -92,7 +92,7 @@ QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rules
   }
 
   QList<RoadCrossingPolyRule> rules;
-  for (boost::property_tree::ptree::value_type& ruleProp : propTree.get_child("rules"))
+  for (const boost::property_tree::ptree::value_type& ruleProp : propTree.get_child("rules"))
   {
     const QString ruleName =
       QString::fromStdString(ruleProp.second.get<std::string>("name", "")).trimmed();
@@ -185,7 +185,7 @@ ElementCriterionPtr RoadCrossingPolyRule::polyRuleFilterStringsToFilter(
   std::shared_ptr<OrCriterion> polyCriteriaFilter;
   if (!polyCriteriaFilterStr.isEmpty())
   {
-    polyCriteriaFilter.reset(new OrCriterion());
+    polyCriteriaFilter = std::make_shared<OrCriterion>();
 
     const QStringList critStrParts = polyCriteriaFilterStr.split(";");
     LOG_VART(critStrParts.size());
@@ -202,8 +202,7 @@ ElementCriterionPtr RoadCrossingPolyRule::polyRuleFilterStringsToFilter(
       else
       {
         polyCriteriaFilter->addCriterion(
-          ElementCriterionPtr(
-            Factory::getInstance().constructObject<ElementCriterion>(critPart.trimmed())));
+          Factory::getInstance().constructObject<ElementCriterion>(critPart.trimmed()));
       }
     }
   }
@@ -227,8 +226,8 @@ ElementCriterionPtr RoadCrossingPolyRule::polyRuleFilterStringsToFilter(
 
   if (polyCriteriaFilter && polyTagFilter)
   {
-    // logically AND the type and tag filters together to get the final poly filter
-    return std::shared_ptr<ChainCriterion>(new ChainCriterion(polyCriteriaFilter, polyTagFilter));
+    // Logically AND the type and tag filters together to get the final poly filter.
+    return std::make_shared<ChainCriterion>(polyCriteriaFilter, polyTagFilter);
   }
   else if (polyCriteriaFilter)
   {
@@ -256,7 +255,7 @@ ElementCriterionPtr RoadCrossingPolyRule::tagRuleStringToFilter(const QString& k
     throw IllegalArgumentException(kvpFormatErrMsg);
   }
 
-  std::shared_ptr<OrCriterion> crit(new OrCriterion());
+  std::shared_ptr<OrCriterion> crit = std::make_shared<OrCriterion>();
 
   const QStringList kvpStrParts = kvpStr.split(";");
   LOG_VART(kvpStrParts.size());
@@ -282,12 +281,12 @@ ElementCriterionPtr RoadCrossingPolyRule::tagRuleStringToFilter(const QString& k
 
     if (val == "*")
     {
-      // this allows for wildcard values (not keys)
-      crit->addCriterion(std::shared_ptr<ElementCriterion>(new TagKeyCriterion(key)));
+      // This allows for wildcard values (not keys).
+      crit->addCriterion(std::make_shared<TagKeyCriterion>(key));
     }
     else
     {
-      crit->addCriterion(std::shared_ptr<ElementCriterion>(new TagCriterion(key, val)));
+      crit->addCriterion(std::make_shared<TagCriterion>(key, val));
     }
   }
 
@@ -303,13 +302,12 @@ void RoadCrossingPolyRule::createIndex()
 
   // No tuning was done, I just copied these settings from OsmMapIndex.
   // 10 children - 368 - see #3054
-  std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
-  _index.reset(new Tgs::HilbertRTree(mps, 2));
+  _index = std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
 
-  // Only index elements satisfy isMatchCandidate
+  // Only index elements that satisfy isMatchCandidate.
   std::function<bool (ConstElementPtr e)> f =
     std::bind(&RoadCrossingPolyRule::_isMatchCandidate, this, std::placeholders::_1);
-  std::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
+  std::shared_ptr<ArbitraryCriterion> pCrit = std::make_shared<ArbitraryCriterion>(f);
 
   SpatialIndexer v(
     _index, _indexToEid, pCrit,
@@ -327,7 +325,7 @@ Meters RoadCrossingPolyRule::_getSearchRadius(const ConstElementPtr& e) const
   return e->getCircularError();
 }
 
-bool RoadCrossingPolyRule::_isMatchCandidate(ConstElementPtr element)
+bool RoadCrossingPolyRule::_isMatchCandidate(ConstElementPtr element) const
 {
   LOG_VART(element->getElementId());
 

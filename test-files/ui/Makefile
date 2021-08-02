@@ -1,6 +1,7 @@
 
 SHELL=/bin/bash
 
+HOOT_OPTS=--status
 # If the silent flag is passed to make then make hoot quiet too.
 ifneq (,$(findstring s,$(MAKEFLAGS)))
   HOOT_OPTS=--warn
@@ -53,7 +54,7 @@ else
 endif
 	# Running user interface tests...
 	TOMCAT_PORT=$(TOMCAT_PROXY_PORT) \
-	xvfb-run --server-args="-screen 0, 1024x768x24" cucumber $(CUKE_OPTS) $(CUKE_FEATURES); \
+	xvfb-run --server-args="-screen 0 1280x1024x24" bundle exec cucumber $(CUKE_OPTS) $(CUKE_FEATURES); \
 	ret=$$?; \
 	(ps ux | grep nod[e] | grep proxy | awk "{print $$2}" | xargs kill >/dev/null 2>&1 || true); \
 	exit $$ret
@@ -179,5 +180,5 @@ load-data: clean
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestB.osm $(DB_URL)/ToyTestBCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestCauseReview.osm $(DB_URL)/TTCauseReviewCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/Merged_Brazil_daba15e4.osm $(DB_URL)/BrazilMergedCucumber
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/cmd/slow/DiffConflateCmdTest/input1.osm $(DB_URL)/DiffInput1Cucumber
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/cmd/slow/DiffConflateCmdTest/input2.osm $(DB_URL)/DiffInput2Cucumber
+	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/cmd/glacial/DiffConflateCmdTest/input1.osm $(DB_URL)/DiffInput1Cucumber
+	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/cmd/glacial/DiffConflateCmdTest/input2.osm $(DB_URL)/DiffInput2Cucumber

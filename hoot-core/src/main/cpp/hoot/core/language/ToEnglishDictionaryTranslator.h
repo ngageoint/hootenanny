@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef TO_ENGLISH_DICTIONARY_TRANSLATOR_H
@@ -58,17 +58,17 @@ public:
   static QString className() { return "hoot::ToEnglishDictionaryTranslator"; }
 
   ToEnglishDictionaryTranslator();
-  virtual ~ToEnglishDictionaryTranslator() = default;
+  ~ToEnglishDictionaryTranslator() = default;
 
   /**
    * Translates the given input string into a translation & transliteration of the input.
    */
-  QString toEnglish(const QString& input, const bool tokenize = true);
+  QString toEnglish(const QString& input, const bool tokenize = true) const;
 
   /**
    * @see ToEnglishTranslator; wraps call to toEnglish
    */
-  virtual QString translate(const QString& textToTranslate) override;
+  QString translate(const QString& textToTranslate) override;
 
   /**
    * Converts the given input string into all possible known translations. E.g.
@@ -85,21 +85,21 @@ public:
    */
   QStringList toEnglishAll(const QStringList& l);
 
-  QString toTitleCase(const QString& input);
+  QString toTitleCase(const QString& input) const;
 
-  QString transliterateToLatin(const QString& input);
+  QString transliterateToLatin(const QString& input) const;
 
-  QString translateStreet(const QString& input);
+  QString translateStreet(const QString& input) const;
 
-  virtual QStringList getSourceLanguages() const override { return QStringList(); }
-  virtual void setSourceLanguages(const QStringList& /*langCodes*/) override {}
-  virtual QString getDetectedLanguage() const override { return ""; }
+  QStringList getSourceLanguages() const override { return QStringList(); }
+  void setSourceLanguages(const QStringList& /*langCodes*/) override { }
+  QString getDetectedLanguage() const override { return ""; }
 
-  virtual void setConfiguration(const Settings& /*conf*/) {}
+  void setConfiguration(const Settings& /*conf*/) override { }
 
   void setTokenizeInput(bool tokenize) { _tokenizeInput = tokenize; }
 
-  virtual void setId(const QString& /*id*/) override {}
+  void setId(const QString& /*id*/) override { }
 
 private:
 

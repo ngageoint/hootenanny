@@ -19,31 +19,32 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmApiChangeset.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/scoring/MapComparator.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/util/StringUtils.h>
-
-using namespace std;
 
 // Qt
 #include <QDir>
 #include <QFileInfo>
 #include <QElapsedTimer>
+
+using namespace std;
 
 namespace hoot
 {
@@ -56,12 +57,11 @@ public:
 
   DiffCmd() = default;
 
-  virtual QString getName() const override { return "diff"; }
-
-  virtual QString getDescription() const override
+  QString getName() const override { return "diff"; }
+  QString getDescription() const override
   { return "Calculates the difference between two maps or changesets"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
@@ -99,8 +99,12 @@ public:
 
     if (args.size() != 2)
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     // We always want to know if there are duplicate nodes during comparison.
@@ -109,9 +113,13 @@ public:
     QString pathname1 = args[0];
     QString pathname2 = args[1];
 
+    LOG_STATUS(
+      "Comparing ..." << FileUtils::toLogFormat(pathname1, 25) << " and ..." <<
+      FileUtils::toLogFormat(pathname2, 25) << "...");
+
     int result = 1;
-    //  Compare changesets differently than all other types
-    if (pathIsChangeset(pathname1) && pathIsChangeset(pathname2))
+    //  Compare changesets differently than all other types.
+    if (_pathIsChangeset(pathname1) && _pathIsChangeset(pathname2))
     {
       XmlChangeset changeset1(pathname1);
       XmlChangeset changeset2(pathname2);
@@ -129,11 +137,11 @@ public:
       if (setErrorLimit)
         mapCompare.setErrorLimit(errorLimit);
 
-      OsmMapPtr map1(new OsmMap());
+      OsmMapPtr map1 = std::make_shared<OsmMap>();
       IoUtils::loadMap(map1, pathname1, true, Status::Unknown1);
-      //  Some maps that don't have IDs cooked in will fail comparison if the IDs aren't reset
+      //  Some maps that don't have IDs cooked in will fail comparison if the IDs aren't reset.
       OsmMap::resetCounters();
-      OsmMapPtr map2(new OsmMap());
+      OsmMapPtr map2 = std::make_shared<OsmMap>();
       IoUtils::loadMap(map2, pathname2, true, Status::Unknown1);
 
       if (mapCompare.isMatch(map1, map2))
@@ -147,7 +155,9 @@ public:
     return result;
   }
 
-  bool pathIsChangeset(const QString& path)
+private:
+
+  bool _pathIsChangeset(const QString& path) const
   {
     QFileInfo fi(path);
     //  .osc files

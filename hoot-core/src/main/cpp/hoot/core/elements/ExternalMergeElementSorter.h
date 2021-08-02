@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef EXTERNAL_MERGE_ELEMENT_SORTER_H
@@ -45,14 +45,15 @@ namespace hoot
 struct PqElement
 {
   ConstElementPtr element;
-  //the index of the temporary file this element resides in needed when combining multiple sorted
-  //files into a single file
+  // the index of the temporary file this element resides in needed when combining multiple sorted
+  // files into a single file
   int fileIndex;
 };
 
 struct ElementComparePq
 {
-  //The priority queue expects the reverse element sorting priority that we use with vector sorting.
+  // The priority queue expects the reverse element sorting priority that we use with vector
+  // sorting.
   bool operator()(const PqElement& e1, const PqElement& e2) const
   {
     const ElementType::Type type1 = e1.element->getElementType().getEnum();
@@ -68,8 +69,8 @@ struct ElementComparePq
   }
 };
 
-typedef std::priority_queue<PqElement,
-                            std::vector<PqElement>, ElementComparePq> ElementPriorityQueue;
+using ElementPriorityQueue =
+  std::priority_queue<PqElement, std::vector<PqElement>, ElementComparePq>;
 
 /**
   This performs element sorting outside of main memory on disk and serves the sorted results up
@@ -83,7 +84,7 @@ class ExternalMergeElementSorter : public ElementInputStream
 public:
 
   ExternalMergeElementSorter();
-  virtual ~ExternalMergeElementSorter();
+  ~ExternalMergeElementSorter();
 
   /**
    * Sorts elements first by type, then increasing by ID
@@ -95,22 +96,22 @@ public:
   /**
    * @see ElementInputStream
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @see ElementInputStream
    */
-  virtual void close();
+  void close() override;
 
   /**
    * @see ElementInputStream
    */
-  virtual bool hasMoreElements();
+  bool hasMoreElements() override;
 
   /**
    * @see ElementInputStream
    */
-  virtual ElementPtr readNextElement() override;
+  ElementPtr readNextElement() override;
 
   void setMaxElementsPerFile(long max) { _maxElementsPerFile = max; }
   void setRetainTempFiles(bool retain) { _retainTempFiles = retain; }
@@ -164,15 +165,15 @@ private:
    * Adds the first member from each temp file to the priority queue
    */
   ElementPriorityQueue _getInitializedPriorityQueue(
-    QList<std::shared_ptr<PartialOsmMapReader>>& readers);
+    QList<std::shared_ptr<PartialOsmMapReader>>& readers) const;
 
   void _mergeSortedElements(ElementPriorityQueue& priorityQueue,
                             std::shared_ptr<PartialOsmMapWriter> writer,
-                            QList<std::shared_ptr<PartialOsmMapReader>> readers);
+                            QList<std::shared_ptr<PartialOsmMapReader>> readers) const;
 
   std::shared_ptr<PartialOsmMapWriter> _getFinalOutputWriter();
 
-  void _printPriorityQueue(ElementPriorityQueue priorityQueue);
+  void _printPriorityQueue(ElementPriorityQueue priorityQueue) const;
 };
 
 }

@@ -1,10 +1,7 @@
 [
     {
         "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": [ "node", "area" ],
         "influence": 1,
         "isA": "poi",
         "name": "shop",
@@ -21,10 +18,7 @@
         "isA": "shop",
         "name": "shop=accessories",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=department_store",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "shop=department_store", "weight": 0.9 }
     },
     {
         "#": "Count in tag info is 23165 on 2015-09-01",
@@ -33,14 +27,8 @@
         "name": "shop=alcohol",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=wine",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=pub",
-                "weight": 0.7
-            }
+            { "name": "shop=wine", "weight": 0.7 },
+            { "name": "amenity=pub", "weight": 0.7 }
         ]
     },
     {
@@ -49,20 +37,14 @@
         "isA": "shop",
         "name": "shop=anime",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=hobby",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=hobby", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 112 on 2015-09-01",
         "isA": "shop",
         "name": "shop=antique",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=antiques",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=antiques", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 2345 on 2015-09-01",
@@ -70,10 +52,7 @@
         "isA": "shop",
         "name": "shop=antiques",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=second_hand",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=second_hand", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 274 on 2015-09-01",
@@ -81,14 +60,8 @@
         "name": "shop=appliance",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=vacuum_cleaner",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=doityourself",
-                "weight": 0.7
-            }
+            { "name": "shop=vacuum_cleaner", "weight": 0.7 },
+            { "name": "shop=doityourself", "weight": 0.7 }
         ]
     },
     {
@@ -97,10 +70,7 @@
         "isA": "shop",
         "name": "shop=art",
         "objectType": "tag",
-        "similarTo": {
-            "name": "amenity=studio",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "amenity=studio", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 1419 on 2015-09-01",
@@ -109,18 +79,9 @@
         "name": "shop=baby_goods",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=chemist",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=home_goods",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=clothes",
-                "weight": 0.7
-            }
+            { "name": "shop=chemist", "weight": 0.7 },
+            { "name": "shop=home_goods", "weight": 0.7 },
+            { "name": "shop=clothes", "weight": 0.7 }
         ]
     },
     {
@@ -129,10 +90,7 @@
         "isA": "shop",
         "name": "shop=bag",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=department_store",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=department_store", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 89471 on 2015-09-01",
@@ -140,10 +98,7 @@
         "isA": "shop",
         "name": "shop=bakery",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=supermarket",
-            "weight": 0.6
-        }
+        "similarTo": { "name": "shop=supermarket", "weight": 0.6 }
     },
     {
         "#": "Count in tag info is 109 on 2015-09-01",
@@ -151,14 +106,8 @@
         "name": "shop=bathroom",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=doityourself",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=home_goods",
-                "weight": 0.7
-            }
+            { "name": "shop=doityourself", "weight": 0.7 },
+            { "name": "shop=home_goods", "weight": 0.7 }
         ]
     },
     {
@@ -167,10 +116,7 @@
         "isA": "shop",
         "name": "shop=bathroom_furnishing",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=houseware",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=houseware", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 18634 on 2015-09-01",
@@ -178,10 +124,7 @@
         "isA": "shop",
         "name": "shop=beauty",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=salon",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=salon", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 1959 on 2015-09-01",
@@ -189,10 +132,7 @@
         "isA": "shop",
         "name": "shop=bed",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=houseware",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "shop=houseware", "weight": 0.9 }
     },
     {
         "#": "Count in tag info is 251 on 2015-09-01",
@@ -201,26 +141,11 @@
         "name": "shop=betting",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=bookmaker",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=lottery",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=casino",
-                "weight": 0.7
-            },
-            {
-                "name": "leisure=amusement_arcade",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=gambling",
-                "weight": 0.7
-            }
+            { "name": "shop=bookmaker", "weight": 0.7 },
+            { "name": "shop=lottery", "weight": 0.7 },
+            { "name": "amenity=casino", "weight": 0.7 },
+            { "name": "leisure=amusement_arcade", "weight": 0.7 },
+            { "name": "amenity=gambling", "weight": 0.7 }
         ]
     },
     {
@@ -228,14 +153,9 @@
         "description": "Shop focused on selling alcoholic and non-alcoholic beverages.",
         "isA": "shop",
         "name": "shop=beverages",
-        "aliases": [
-            "shop=beverage"
-        ],
+        "aliases": [ "shop=beverage" ],
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=alcohol",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=alcohol", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 24272 on 2015-09-01",
@@ -243,10 +163,7 @@
         "isA": "shop",
         "name": "shop=bicycle",
         "objectType": "tag",
-        "similarTo": {
-            "name": "amenity=bicycle_repair_station",
-            "weight": 0.3
-        }
+        "similarTo": { "name": "amenity=bicycle_repair_station", "weight": 0.3 }
     },
     {
         "#": "Count in tag info is 155 on 2015-09-01",
@@ -254,14 +171,8 @@
         "name": "shop=boat",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=sports",
-                "weight": 0.8
-            },
-            {
-                "name": "shop=car",
-                "weight": 0.4
-            }
+            { "name": "shop=sports", "weight": 0.8 },
+            { "name": "shop=car", "weight": 0.4 }
         ]
     },
     {
@@ -270,10 +181,7 @@
         "isA": "shop",
         "name": "shop=bookmaker",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=books",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "shop=books", "weight": 0.9 }
     },
     {
         "#": "Count in tag info is 21999 on 2015-09-01",
@@ -288,10 +196,7 @@
         "isA": "shop",
         "name": "shop=boutique",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=department_store",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=department_store", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 151 on 2015-09-01",
@@ -299,14 +204,8 @@
         "name": "shop=builder",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=doityourself",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=construction",
-                "weight": 0.8
-            }
+            { "name": "shop=doityourself", "weight": 0.7 },
+            { "name": "amenity=construction", "weight": 0.8 }
         ]
     },
     {
@@ -315,14 +214,8 @@
         "name": "shop=building_materials",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=doityourself",
-                "weight": 0.8
-            },
-            {
-                "name": "shop=builder",
-                "weight": 0.8
-            }
+            { "name": "shop=doityourself", "weight": 0.8 },
+            { "name": "shop=builder", "weight": 0.8 }
         ]
     },
     {
@@ -331,10 +224,7 @@
         "isA": "shop",
         "name": "shop=butcher",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=supermarket",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 114 on 2015-09-01",
@@ -342,14 +232,8 @@
         "name": "shop=cafe",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "amenity=cafe",
-                "weight": 0.8
-            },
-            {
-                "name": "shop=coffee",
-                "weight": 0.8
-            }
+            { "name": "amenity=cafe", "weight": 0.8 },
+            { "name": "shop=coffee", "weight": 0.8 }
         ]
     },
     {
@@ -358,10 +242,7 @@
         "isA": "shop",
         "name": "shop=camera",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=photo",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=photo", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 115 on 2015-09-01",
@@ -369,18 +250,9 @@
         "name": "shop=candy",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=supermarket",
-                "weight": 0.6
-            },
-            {
-                "name": "shop=gift",
-                "weight": 0.6
-            },
-            {
-                "name": "shop=confectionery",
-                "weight": 0.8
-            }
+            { "name": "shop=supermarket", "weight": 0.6 },
+            { "name": "shop=gift", "weight": 0.6 },
+            { "name": "shop=confectionery", "weight": 0.8 }
         ]
     },
     {
@@ -390,34 +262,20 @@
         "name": "shop=car",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "amenity=car_wash",
-                "weight": 0.3
-            },
-            {
-                "name": "amenity=car_rental",
-                "weight": 0.3
-            }
+            { "name": "amenity=car_wash", "weight": 0.3 },
+            { "name": "amenity=car_rental", "weight": 0.3 }
         ]
     },
     {
         "#": "Count in tag info is 11802 on 2015-09-01",
-        "aliases": [
-            "shop=auto_parts"
-        ],
+        "aliases": [ "shop=auto_parts" ],
         "description": "A place selling auto parts, auto accessories, motor oil, car chemicals, etc.",
         "isA": "shop",
         "name": "shop=car_parts",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=doityourself",
-                "weight": 0.6
-            },
-            {
-                "name": "shop=car",
-                "weight": 0.7
-            }
+            { "name": "shop=doityourself", "weight": 0.6 },
+            { "name": "shop=car", "weight": 0.7 }
         ]
     },
     {
@@ -427,26 +285,11 @@
         "name": "shop=car_repair",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=car",
-                "weight": 0.8
-            },
-            {
-                "name": "amenity=motor_vehicle_station",
-                "weight": 0.8
-            },
-            {
-                "name": "amenity=vehicle_inspection",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=road_assistance",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=car_repair",
-                "weight": 0.9
-            }
+            { "name": "shop=car", "weight": 0.8 },
+            { "name": "amenity=motor_vehicle_station", "weight": 0.8 },
+            { "name": "amenity=vehicle_inspection", "weight": 0.7 },
+            { "name": "amenity=road_assistance", "weight": 0.7 },
+            { "name": "amenity=car_repair", "weight": 0.9 }
         ]
     },
     {
@@ -455,14 +298,8 @@
         "name": "shop=car_service",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=car_repair",
-                "weight": 0.9
-            },
-            {
-                "name": "shop=car",
-                "weight": 0.7
-            }
+            { "name": "shop=car_repair", "weight": 0.9 },
+            { "name": "shop=car", "weight": 0.7 }
         ]
     },
     {
@@ -477,10 +314,7 @@
         "isA": "shop",
         "name": "shop=catalogue",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=books",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=books", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 2493 on 2015-09-01",
@@ -488,10 +322,7 @@
         "isA": "shop",
         "name": "shop=charity",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=second_hand",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=second_hand", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 712 on 2015-09-01",
@@ -499,10 +330,7 @@
         "isA": "shop",
         "name": "shop=cheese",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=supermarket",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=supermarket", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 14487 on 2015-09-01",
@@ -510,10 +338,7 @@
         "isA": "shop",
         "name": "shop=chemist",
         "objectType": "tag",
-        "similarTo": {
-            "name": "amenity=pharmacy",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "amenity=pharmacy", "weight": 0.9 }
     },
     {
         "#": "Count in tag info is 522 on 2015-09-01",
@@ -521,18 +346,9 @@
         "name": "shop=chocolate",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=food",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=confectionery",
-                "weight": 0.8
-            },
-            {
-                "name": "shop=candy",
-                "weight": 0.8
-            }
+            { "name": "shop=food", "weight": 0.7 },
+            { "name": "shop=confectionery", "weight": 0.8 },
+            { "name": "shop=candy", "weight": 0.8 }
         ]
     },
     {
@@ -549,18 +365,9 @@
         "name": "shop=coffee",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=tea",
-                "weight": 0.8
-            },
-            {
-                "name": "shop=beverages",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=cafe",
-                "weight": 0.7
-            }
+            { "name": "shop=tea", "weight": 0.8 },
+            { "name": "shop=beverages", "weight": 0.7 },
+            { "name": "amenity=cafe", "weight": 0.7 }
         ]
     },
     {
@@ -568,10 +375,7 @@
         "isA": "shop",
         "name": "shop=communication",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=stationery",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=stationery", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 11487 on 2015-09-01",
@@ -579,10 +383,7 @@
         "isA": "shop",
         "name": "shop=computer",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=electronics",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=electronics", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 10806 on 2015-09-01",
@@ -590,10 +391,7 @@
         "isA": "shop",
         "name": "shop=confectionery",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=bakery",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=bakery", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 233103 on 2015-09-01",
@@ -602,18 +400,9 @@
         "name": "shop=convenience",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=supermarket",
-                "weight": 0.6
-            },
-            {
-                "name": "shop=kiosk",
-                "weight": 0.6
-            },
-            {
-                "name": "shop=alcohol",
-                "weight": 0.8
-            }
+            { "name": "shop=supermarket", "weight": 0.6 },
+            { "name": "shop=kiosk", "weight": 0.6 },
+            { "name": "shop=alcohol", "weight": 0.8 }
         ]
     },
     {
@@ -622,30 +411,21 @@
         "isA": "shop",
         "name": "shop=copyshop",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=stationery",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=stationery", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 1608 on 2015-09-01",
         "isA": "shop",
         "name": "shop=cosmetics",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=chemist",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=chemist", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 1349 on 2015-09-01",
         "isA": "shop",
         "name": "shop=craft",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=art",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=art", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 1267 on 2015-09-01",
@@ -653,10 +433,7 @@
         "isA": "shop",
         "name": "shop=curtain",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=houseware",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=houseware", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 490 on 2015-09-01",
@@ -665,14 +442,8 @@
         "name": "shop=dairy",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=farm",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=supermarket",
-                "weight": 0.7
-            }
+            { "name": "shop=farm", "weight": 0.7 },
+            { "name": "shop=supermarket", "weight": 0.7 }
         ]
     },
     {
@@ -681,10 +452,7 @@
         "isA": "shop",
         "name": "shop=deli",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=department_store",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=department_store", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 112 on 2015-09-01",
@@ -692,62 +460,27 @@
         "name": "shop=delicatessen",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=deli",
-                "weight": 0.8
-            },
-            {
-                "name": "amenity=restaurant",
-                "weight": 0.8
-            },
-            {
-                "name": "cuisine=sandwich",
-                "weight": 0.8
-            },
-            {
-                "name": "cuisine=sub",
-                "weight": 0.8
-            }
+            { "name": "shop=deli", "weight": 0.8 },
+            { "name": "amenity=restaurant", "weight": 0.8 },
+            { "name": "cuisine=sandwich", "weight": 0.8 },
+            { "name": "cuisine=sub", "weight": 0.8 }
         ]
     },
     {
         "#": "Count in tag info is 19446 on 2015-09-01",
         "description": "A large store with multiple '''clothing''' and other general merchandise departments.",
-        "categories": [
-            "multiuse"
-        ],
+        "categories": [ "multiuse" ],
         "isA": "shop",
         "name": "shop=department_store",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=shoes",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=mall",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=clothes",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=electronics",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=jewelry",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=chemist",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=sports",
-                "weight": 0.7
-            }
+            { "name": "shop=shoes", "weight": 0.7 },
+            { "name": "shop=mall", "weight": 0.7 },
+            { "name": "shop=clothes", "weight": 0.7 },
+            { "name": "shop=electronics", "weight": 0.7 },
+            { "name": "shop=jewelry", "weight": 0.7 },
+            { "name": "shop=chemist", "weight": 0.7 },
+            { "name": "shop=sports", "weight": 0.7 }
         ]
     },
     {
@@ -756,18 +489,9 @@
         "name": "shop=discount",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=wholesale",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=second_hand",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=variety_store",
-                "weight": 0.8
-            }
+            { "name": "shop=wholesale", "weight": 0.7 },
+            { "name": "shop=second_hand", "weight": 0.7 },
+            { "name": "amenity=variety_store", "weight": 0.8 }
         ]
     },
     {
@@ -775,10 +499,7 @@
         "isA": "shop",
         "name": "shop=disused",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=vacant",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=vacant", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 36202 on 2015-09-01",
@@ -793,10 +514,7 @@
         "isA": "shop",
         "name": "shop=dry_cleaning",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=laundry",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=laundry", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 338 on 2015-09-01",
@@ -804,10 +522,7 @@
         "isA": "shop",
         "name": "shop=e-cigarette",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=tobacco",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=tobacco", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 249 on 2015-09-01",
@@ -816,10 +531,7 @@
         "name": "shop=electrical",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=electronics",
-                "weight": 0.9
-            }
+            { "name": "shop=electronics", "weight": 0.9 }
         ]
     },
     {
@@ -842,14 +554,8 @@
         "name": "shop=erotic",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "amenity=brothel",
-                "weight": 0.6
-            },
-            {
-                "name": "amenity=stripclub",
-                "weight": 0.6
-            }
+            { "name": "amenity=brothel", "weight": 0.6 },
+            { "name": "amenity=stripclub", "weight": 0.6 }
         ]
     },
     {
@@ -872,10 +578,7 @@
         "isA": "shop",
         "name": "shop=fabric",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=clothes",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=clothes", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 4109 on 2015-09-01",
@@ -884,14 +587,8 @@
         "name": "shop=farm",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=supermarket",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=farm",
-                "weight": 0.7
-            }
+            { "name": "shop=supermarket", "weight": 0.7 },
+            { "name": "amenity=farm", "weight": 0.7 }
         ]
     },
     {
@@ -901,14 +598,8 @@
         "name": "shop=fashion",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=clothes",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=boutique",
-                "weight": 0.7
-            }
+            { "name": "shop=clothes", "weight": 0.7 },
+            { "name": "shop=boutique", "weight": 0.7 }
         ]
     },
     {
@@ -917,10 +608,7 @@
         "isA": "shop",
         "name": "shop=fish",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=seafood",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "shop=seafood", "weight": 0.9 }
     },
     {
         "#": "Count in tag info is 637 on 2015-09-01",
@@ -928,10 +616,7 @@
         "isA": "shop",
         "name": "shop=fishing",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=sports",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=sports", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 2130 on 2015-09-01",
@@ -939,10 +624,7 @@
         "isA": "shop",
         "name": "shop=fishmonger",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=seafood",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "shop=seafood", "weight": 0.9 }
     },
     {
         "#": "Count in tag info is 160 on 2015-09-01",
@@ -956,14 +638,8 @@
         "name": "shop=flooring",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=doityourself",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=carpet",
-                "weight": 0.8
-            }
+            { "name": "shop=doityourself", "weight": 0.7 },
+            { "name": "shop=carpet", "weight": 0.8 }
         ]
     },
     {
@@ -972,10 +648,7 @@
         "isA": "shop",
         "name": "shop=florist",
         "objectType": "tag",
-        "similarTo": {
-            "name": "amenity=florist",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "amenity=florist", "weight": 0.9 }
     },
     {
         "#": "Count in tag info is 1162 on 2015-09-01",
@@ -983,10 +656,7 @@
         "isA": "shop",
         "name": "shop=food",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=supermarket",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 1242 on 2015-09-01",
@@ -994,10 +664,7 @@
         "isA": "shop",
         "name": "shop=frame",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=art",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=art", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 317 on 2015-09-01",
@@ -1005,10 +672,7 @@
         "isA": "shop",
         "name": "shop=frozen_food",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=food",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=food", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 4689 on 2015-09-01",
@@ -1017,18 +681,9 @@
         "name": "shop=funeral_directors",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "amenity=mortuary",
-                "weight": 0.8
-            },
-            {
-                "name": "amenity=crematorium",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=cemetary",
-                "weight": 0.5
-            }
+            { "name": "amenity=mortuary", "weight": 0.8 },
+            { "name": "amenity=crematorium", "weight": 0.7 },
+            { "name": "amenity=cemetary", "weight": 0.5 }
         ]
     },
     {
@@ -1037,10 +692,7 @@
         "isA": "shop",
         "name": "shop=furnace",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=doityourself",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=doityourself", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 25383 on 2015-09-01",
@@ -1048,20 +700,14 @@
         "isA": "shop",
         "name": "shop=furniture",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=home_goods",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=home_goods", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 164 on 2015-09-01",
         "isA": "shop",
         "name": "shop=gallery",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=art",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=art", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 156 on 2015-09-01",
@@ -1070,26 +716,11 @@
         "name": "shop=gambling",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=bookmaker",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=lottery",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=casino",
-                "weight": 0.7
-            },
-            {
-                "name": "leisure=amusement_arcade",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=gambling",
-                "weight": 0.7
-            }
+            { "name": "shop=bookmaker", "weight": 0.7 },
+            { "name": "shop=lottery", "weight": 0.7 },
+            { "name": "amenity=casino", "weight": 0.7 },
+            { "name": "leisure=amusement_arcade", "weight": 0.7 },
+            { "name": "amenity=gambling", "weight": 0.7 }
         ]
     },
     {
@@ -1097,10 +728,7 @@
         "isA": "shop",
         "name": "shop=games",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=hobby",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=hobby", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 12339 on 2015-09-01",
@@ -1109,18 +737,9 @@
         "name": "shop=garden_centre",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=doityourself",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=landscaping_service",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=garden",
-                "weight": 0.3
-            }
+            { "name": "shop=doityourself", "weight": 0.7 },
+            { "name": "amenity=landscaping_service", "weight": 0.7 },
+            { "name": "amenity=garden", "weight": 0.3 }
         ]
     },
     {
@@ -1130,18 +749,9 @@
         "name": "shop=gas",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=convenience",
-                "weight": 0.8
-            },
-            {
-                "name": "amenity=charging_station",
-                "weight": 0.8
-            },
-            {
-                "name": "shop=car",
-                "weight": 0.3
-            }
+            { "name": "shop=convenience", "weight": 0.8 },
+            { "name": "amenity=charging_station", "weight": 0.8 },
+            { "name": "shop=car", "weight": 0.3 }
         ]
     },
     {
@@ -1151,18 +761,9 @@
         "name": "shop=general",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=convenience",
-                "weight": 0.8
-            },
-            {
-                "name": "shop=department_store",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=mall",
-                "weight": 0.7
-            }
+            { "name": "shop=convenience", "weight": 0.8 },
+            { "name": "shop=department_store", "weight": 0.7 },
+            { "name": "shop=mall", "weight": 0.7 }
         ]
     },
     {
@@ -1177,10 +778,7 @@
         "isA": "shop",
         "name": "shop=glass",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=windows",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=windows", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 758 on 2015-09-01",
@@ -1188,10 +786,7 @@
         "isA": "shop",
         "name": "shop=glaziery",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=doityourself",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=doityourself", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 15061 on 2015-09-01",
@@ -1199,10 +794,7 @@
         "isA": "shop",
         "name": "shop=greengrocer",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=supermarket",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 719 on 2015-09-01",
@@ -1210,14 +802,8 @@
         "name": "shop=grocery",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=supermarket",
-                "weight": 0.8
-            },
-            {
-                "name": "shop=food",
-                "weight": 0.8
-            }
+            { "name": "shop=supermarket", "weight": 0.8 },
+            { "name": "shop=food", "weight": 0.8 }
         ]
     },
     {
@@ -1225,10 +811,7 @@
         "isA": "shop",
         "name": "shop=haberdashery",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=clothes",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=clothes", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 88572 on 2015-09-01",
@@ -1236,10 +819,7 @@
         "isA": "shop",
         "name": "shop=hairdresser",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=beauty",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=beauty", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 20177 on 2015-09-01",
@@ -1247,30 +827,21 @@
         "isA": "shop",
         "name": "shop=hardware",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=doityourself",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=doityourself", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 153 on 2015-09-01",
         "isA": "shop",
         "name": "shop=health",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=chemist",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=chemist", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 141 on 2015-09-01",
         "isA": "shop",
         "name": "shop=health_food",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=supermarket",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 1568 on 2015-09-01",
@@ -1279,14 +850,8 @@
         "name": "shop=hearing_aids",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=chemist",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=electronics",
-                "weight": 0.7
-            }
+            { "name": "shop=chemist", "weight": 0.7 },
+            { "name": "shop=electronics", "weight": 0.7 }
         ]
     },
     {
@@ -1295,10 +860,7 @@
         "isA": "shop",
         "name": "shop=herbalist",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=chemist",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=chemist", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 5916 on 2015-09-01",
@@ -1306,30 +868,21 @@
         "isA": "shop",
         "name": "shop=hifi",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=electronics",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=electronics", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 220 on 2015-09-01",
         "isA": "shop",
         "name": "shop=hobby",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=craft",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=craft", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 337 on 2015-09-01",
         "isA": "shop",
         "name": "shop=household",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=houseware",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=houseware", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 1263 on 2015-09-01",
@@ -1344,10 +897,7 @@
         "isA": "shop",
         "name": "shop=hunting",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=sports",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=sports", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 1045 on 2015-09-01",
@@ -1355,10 +905,7 @@
         "isA": "shop",
         "name": "shop=ice_cream",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=convenience",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=convenience", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 559 on 2015-09-01",
@@ -1378,21 +925,13 @@
         "name": "shop=interior_decoration",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=boutique",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=home_goods",
-                "weight": 0.8
-            }
+            { "name": "shop=boutique", "weight": 0.7 },
+            { "name": "shop=home_goods", "weight": 0.8 }
         ]
     },
     {
         "#": "Count in tag info is 18046 on 2015-09-01",
-        "aliases": [
-            "shop=jewellery"
-        ],
+        "aliases": [ "shop=jewellery" ],
         "description": "Shop that sells rings, necklaces, earrings, watches, etc.",
         "isA": "shop",
         "name": "shop=jewelry",
@@ -1412,14 +951,8 @@
         "name": "shop=kitchen",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=builder",
-                "weight": 0.8
-            },
-            {
-                "name": "shop=doityourself",
-                "weight": 0.7
-            }
+            { "name": "shop=builder", "weight": 0.8 },
+            { "name": "shop=doityourself", "weight": 0.7 }
         ]
     },
     {
@@ -1435,10 +968,7 @@
         "isA": "shop",
         "name": "shop=leather",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=clothes",
-            "weight": 0.4
-        }
+        "similarTo": { "name": "shop=clothes", "weight": 0.4 }
     },
     {
         "#": "Count in tag info is 266 on 2015-09-01",
@@ -1446,10 +976,7 @@
         "isA": "shop",
         "name": "shop=lighting",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=doityourself",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=doityourself", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 901 on 2015-09-01",
@@ -1457,10 +984,7 @@
         "isA": "shop",
         "name": "shop=locksmith",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=doityourself",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=doityourself", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 1472 on 2015-09-01",
@@ -1468,10 +992,7 @@
         "isA": "shop",
         "name": "shop=lottery",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=convenience",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=convenience", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 30943 on 2015-09-01",
@@ -1483,20 +1004,14 @@
         "isA": "shop",
         "name": "shop=mall",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=marketplace",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=marketplace", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 233 on 2015-09-01",
         "isA": "shop",
         "name": "shop=market",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=supermarket",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 237 on 2015-09-01",
@@ -1510,10 +1025,7 @@
         "isA": "shop",
         "name": "shop=massage",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=erotic",
-            "weight": 0.5
-        }
+        "similarTo": { "name": "shop=erotic", "weight": 0.5 }
     },
     {
         "#": "Count in tag info is 135 on 2015-09-01",
@@ -1522,30 +1034,12 @@
         "name": "shop=medical",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=medical_supply",
-                "weight": 0.8
-            },
-            {
-                "name": "shop=herbalist",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=chemist",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=dentist",
-                "weight": 0.6
-            },
-            {
-                "name": "amenity=doctors",
-                "weight": 0.6
-            },
-            {
-                "name": "amenity=clinic",
-                "weight": 0.6
-            }
+            { "name": "shop=medical_supply", "weight": 0.8 },
+            { "name": "shop=herbalist", "weight": 0.7 },
+            { "name": "shop=chemist", "weight": 0.7 },
+            { "name": "amenity=dentist", "weight": 0.6 },
+            { "name": "amenity=doctors", "weight": 0.6 },
+            { "name": "amenity=clinic", "weight": 0.6 }
         ]
     },
     {
@@ -1554,10 +1048,7 @@
         "isA": "shop",
         "name": "shop=medical_supply",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=chemist",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=chemist", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 17356 on 2015-09-01",
@@ -1565,20 +1056,14 @@
         "isA": "shop",
         "name": "shop=mobile_phone",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=electronics",
-            "weight": 0.6
-        }
+        "similarTo": { "name": "shop=electronics", "weight": 0.6 }
     },
     {
         "#": "Count in tag info is 702 on 2015-09-01",
         "isA": "shop",
         "name": "shop=money_lender",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=pawnbroker",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=pawnbroker", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 8034 on 2015-09-01",
@@ -1587,14 +1072,8 @@
         "name": "shop=motorcycle",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=car",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=car_parts",
-                "weight": 0.8
-            }
+            { "name": "shop=car", "weight": 0.7 },
+            { "name": "shop=car_parts", "weight": 0.8 }
         ]
     },
     {
@@ -1603,10 +1082,7 @@
         "isA": "shop",
         "name": "shop=motorcycle_repair",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=car_repair",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=car_repair", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 3099 on 2015-09-01",
@@ -1615,14 +1091,8 @@
         "name": "shop=music",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=art",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=music_venue",
-                "weight": 0.3
-            }
+            { "name": "shop=art", "weight": 0.7 },
+            { "name": "amenity=music_venue", "weight": 0.3 }
         ]
     },
     {
@@ -1631,10 +1101,7 @@
         "isA": "shop",
         "name": "shop=musical_instrument",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=music",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=music", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 9715 on 2015-09-01",
@@ -1642,10 +1109,7 @@
         "isA": "shop",
         "name": "shop=newsagent",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=convenience",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=convenience", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 2491 on 2015-09-01",
@@ -1659,10 +1123,7 @@
         "isA": "shop",
         "name": "shop=office_supplies",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=stationery",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "shop=stationery", "weight": 0.9 }
     },
     {
         "#": "Count in tag info is 17100 on 2015-09-01",
@@ -1670,10 +1131,7 @@
         "isA": "shop",
         "name": "shop=optician",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=chemist",
-            "weight": 0.6
-        }
+        "similarTo": { "name": "shop=chemist", "weight": 0.6 }
     },
     {
         "#": "Count in tag info is 993 on 2015-09-01",
@@ -1681,10 +1139,7 @@
         "isA": "shop",
         "name": "shop=organic",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=supermarket",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 213 on 2015-09-01",
@@ -1698,10 +1153,7 @@
         "isA": "shop",
         "name": "shop=outdoor",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=sports",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=sports", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 2679 on 2015-09-01",
@@ -1710,14 +1162,8 @@
         "name": "shop=paint",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=art",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=doityourself",
-                "weight": 0.7
-            }
+            { "name": "shop=art", "weight": 0.7 },
+            { "name": "shop=doityourself", "weight": 0.7 }
         ]
     },
     {
@@ -1725,10 +1171,7 @@
         "isA": "shop",
         "name": "shop=party",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=department_store",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=department_store", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 487 on 2015-09-01",
@@ -1736,10 +1179,7 @@
         "isA": "shop",
         "name": "shop=pastry",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=bakery",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=bakery", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 2071 on 2015-09-01",
@@ -1747,20 +1187,14 @@
         "isA": "shop",
         "name": "shop=pawnbroker",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=second_hand",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "shop=second_hand", "weight": 0.9 }
     },
     {
         "#": "Count in tag info is 171 on 2015-09-01",
         "isA": "shop",
         "name": "shop=perfume",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=boutique",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=boutique", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 423 on 2015-09-01",
@@ -1768,10 +1202,7 @@
         "isA": "shop",
         "name": "shop=perfumery",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=chemist",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=chemist", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 8473 on 2015-09-01",
@@ -1780,18 +1211,9 @@
         "name": "shop=pet",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "amenity=animal_boarding",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=animal_shelter",
-                "weight": 0.8
-            },
-            {
-                "name": "amenity=veterinary",
-                "weight": 0.4
-            }
+            { "name": "amenity=animal_boarding", "weight": 0.7 },
+            { "name": "amenity=animal_shelter", "weight": 0.8 },
+            { "name": "amenity=veterinary", "weight": 0.4 }
         ]
     },
     {
@@ -1799,10 +1221,7 @@
         "isA": "shop",
         "name": "shop=pharmacy",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=chemist",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=chemist", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 3271 on 2015-09-01",
@@ -1811,14 +1230,8 @@
         "name": "shop=photo",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "amenity=photo_booth",
-                "weight": 0.4
-            },
-            {
-                "name": "shop=video",
-                "weight": 0.6
-            }
+            { "name": "amenity=photo_booth", "weight": 0.4 },
+            { "name": "shop=video", "weight": 0.6 }
         ]
     },
     {
@@ -1827,20 +1240,14 @@
         "isA": "shop",
         "name": "shop=photo_studio",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=photo",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=photo", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 137 on 2015-09-01",
         "isA": "shop",
         "name": "shop=photography",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=photo",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=photo", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 115 on 2015-09-01",
@@ -1848,14 +1255,8 @@
         "name": "shop=plumber",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=doityourself",
-                "weight": 0.8
-            },
-            {
-                "name": "shop=builder",
-                "weight": 0.7
-            }
+            { "name": "shop=doityourself", "weight": 0.8 },
+            { "name": "shop=builder", "weight": 0.7 }
         ]
     },
     {
@@ -1863,10 +1264,7 @@
         "isA": "shop",
         "name": "shop=pottery",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=home_goods",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=home_goods", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 178 on 2015-09-01",
@@ -1874,30 +1272,21 @@
         "isA": "shop",
         "name": "shop=printing",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=stationery",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=stationery", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 133 on 2015-09-01",
         "isA": "shop",
         "name": "shop=provisions",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=sports",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=sports", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 574 on 2015-09-01",
         "isA": "shop",
         "name": "shop=radiotechnics",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=electronics",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=electronics", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 282 on 2015-09-01",
@@ -1905,10 +1294,7 @@
         "isA": "shop",
         "name": "shop=religion",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=books",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=books", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 166 on 2015-09-01",
@@ -1916,14 +1302,8 @@
         "name": "shop=rental",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "amenity=car_sharing",
-                "weight": 0.8
-            },
-            {
-                "name": "amenity=bicycle_rental",
-                "weight": 0.5
-            }
+            { "name": "amenity=car_sharing", "weight": 0.8 },
+            { "name": "amenity=bicycle_rental", "weight": 0.5 }
         ]
     },
     {
@@ -1931,10 +1311,7 @@
         "isA": "shop",
         "name": "shop=salon",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=hairdresser",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=hairdresser", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 361 on 2015-09-01",
@@ -1942,10 +1319,7 @@
         "isA": "shop",
         "name": "shop=scuba_diving",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=sports",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=sports", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 3291 on 2015-09-01",
@@ -1954,14 +1328,8 @@
         "name": "shop=seafood",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=butcher",
-                "weight": 0.8
-            },
-            {
-                "name": "shop=supermarket",
-                "weight": 0.8
-            }
+            { "name": "shop=butcher", "weight": 0.8 },
+            { "name": "shop=supermarket", "weight": 0.8 }
         ]
     },
     {
@@ -1970,30 +1338,21 @@
         "isA": "shop",
         "name": "shop=second_hand",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=clothes",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=clothes", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 181 on 2015-09-01",
         "isA": "shop",
         "name": "shop=sewing",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=craft",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=craft", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 441 on 2015-09-01",
         "isA": "shop",
         "name": "shop=shoe_repair",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=shoes",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "shop=shoes", "weight": 0.9 }
     },
     {
         "#": "Count in tag info is 22610 on 2015-09-01",
@@ -2008,30 +1367,21 @@
         "isA": "shop",
         "name": "shop=shopping_centre",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=supermarket",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=supermarket", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 347 on 2015-09-01",
         "isA": "shop",
         "name": "shop=solarium",
         "objectType": "tag",
-        "similarTo": {
-            "name": "amenity=greenhouse",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "amenity=greenhouse", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 223 on 2015-09-01",
         "isA": "shop",
         "name": "shop=souvenir",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=gift",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=gift", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 11705 on 2015-09-01",
@@ -2039,10 +1389,7 @@
         "isA": "shop",
         "name": "shop=sports",
         "objectType": "tag",
-        "similarTo": {
-            "name": "amenity=exercise_point",
-            "weight": 0.5
-        }
+        "similarTo": { "name": "amenity=exercise_point", "weight": 0.5 }
     },
     {
         "#": "Count in tag info is 10637 on 2015-09-01",
@@ -2050,44 +1397,30 @@
         "isA": "shop",
         "name": "shop=stationery",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=department_store",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=department_store", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 106 on 2015-09-01",
         "isA": "shop",
         "name": "shop=storage_units",
         "objectType": "tag",
-        "similarTo": {
-            "name": "amenity=storage",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "amenity=storage", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 347 on 2015-09-01",
         "isA": "shop",
         "name": "shop=street_vendor",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=kiosk",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=kiosk", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 220938 on 2015-09-01",
         "description": "A large store for groceries and other goods.",
-        "categories": [
-            "building"
-        ],
+        "categories": [ "building" ],
         "isA": "shop",
         "name": "shop=supermarket",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=marketplace",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=marketplace", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 3560 on 2015-09-01",
@@ -2095,20 +1428,14 @@
         "isA": "shop",
         "name": "shop=tailor",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=clothes",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=clothes", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 134 on 2015-09-01",
         "isA": "shop",
         "name": "shop=tanning",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=salon",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "shop=salon", "weight": 0.8 }
     },
     {
         "#": "Count in tag info is 1983 on 2015-09-01",
@@ -2124,23 +1451,14 @@
         "name": "shop=tea",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=supermarket",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=beverages",
-                "weight": 0.7
-            }
+            { "name": "shop=supermarket", "weight": 0.7 },
+            { "name": "shop=beverages", "weight": 0.7 }
         ]
     },
     {
         "#": "Count in tag info is 2406 on 2015-09-01",
         "description": "A shop selling tickets for concerts, events, public transport, ...",
-         "geometries": [
-            "node",
-            "area"
-        ],
+         "geometries": [ "node", "area" ],
         "categories": [
             "use",
             "poi"
@@ -2153,14 +1471,8 @@
         ],
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "amenity=concert_hall",
-                "weight": 0.4
-            },
-            {
-                "name": "amenity=ticket_validator",
-                "weight": 0.3
-            }
+            { "name": "amenity=concert_hall", "weight": 0.4 },
+            { "name": "amenity=ticket_validator", "weight": 0.3 }
         ]
     },
     {
@@ -2169,14 +1481,8 @@
         "name": "shop=tiles",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=flooring",
-                "weight": 0.8
-            },
-            {
-                "name": "shop=doityourself",
-                "weight": 0.8
-            }
+            { "name": "shop=flooring", "weight": 0.8 },
+            { "name": "shop=doityourself", "weight": 0.8 }
         ]
     },
     {
@@ -2186,14 +1492,8 @@
         "name": "shop=tobacco",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=convenience",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=alcohol",
-                "weight": 0.7
-            }
+            { "name": "shop=convenience", "weight": 0.7 },
+            { "name": "shop=alcohol", "weight": 0.7 }
         ]
     },
     {
@@ -2202,10 +1502,7 @@
         "isA": "shop",
         "name": "shop=toys",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=department_store",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=department_store", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 2539 on 2015-09-01",
@@ -2227,14 +1524,8 @@
         "name": "shop=tyres",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=car",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=car_parts",
-                "weight": 0.8
-            }
+            { "name": "shop=car", "weight": 0.7 },
+            { "name": "shop=car_parts", "weight": 0.8 }
         ]
     },
     {
@@ -2256,18 +1547,9 @@
         "name": "shop=vacuum_cleaner",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=department_store",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=electronics",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=vacuum_cleaner",
-                "weight": 0.5
-            }
+            { "name": "shop=department_store", "weight": 0.7 },
+            { "name": "shop=electronics", "weight": 0.7 },
+            { "name": "amenity=vacuum_cleaner", "weight": 0.5 }
         ]
     },
     {
@@ -2283,10 +1565,7 @@
         "isA": "shop",
         "name": "shop=video",
         "objectType": "tag",
-        "similarTo": {
-            "name": "amenity=cinema",
-            "weight": 0.3
-        }
+        "similarTo": { "name": "amenity=cinema", "weight": 0.3 }
     },
     {
         "#": "Count in tag info is 1010 on 2015-09-01",
@@ -2295,14 +1574,8 @@
         "name": "shop=video_games",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=electronics",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=department_store",
-                "weight": 0.7
-            }
+            { "name": "shop=electronics", "weight": 0.7 },
+            { "name": "shop=department_store", "weight": 0.7 }
         ]
     },
     {
@@ -2311,14 +1584,8 @@
         "name": "shop=watch",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=jewelry",
-                "weight": 0.8
-            },
-            {
-                "name": "shop=electronics",
-                "weight": 0.8
-            }
+            { "name": "shop=jewelry", "weight": 0.8 },
+            { "name": "shop=electronics", "weight": 0.8 }
         ]
     },
     {
@@ -2326,20 +1593,14 @@
         "isA": "shop",
         "name": "shop=watches",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=electronics",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=electronics", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 153 on 2015-09-01",
         "isA": "shop",
         "name": "shop=water",
         "objectType": "tag",
-        "similarTo": {
-            "name": "amenity=drinking_water",
-            "weight": 0.4
-        }
+        "similarTo": { "name": "amenity=drinking_water", "weight": 0.4 }
     },
     {
         "#": "Count in tag info is 214 on 2015-09-01",
@@ -2347,20 +1608,14 @@
         "isA": "shop",
         "name": "shop=weapons",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=sports",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=sports", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 104 on 2015-09-01",
         "isA": "shop",
         "name": "shop=wedding",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=boutique",
-            "weight": 0.5
-        }
+        "similarTo": { "name": "shop=boutique", "weight": 0.5 }
     },
     {
         "#": "Count in tag info is 358 on 2015-09-01",
@@ -2368,10 +1623,7 @@
         "isA": "shop",
         "name": "shop=wholesale",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=supermarket",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=supermarket", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 180 on 2015-09-01",
@@ -2380,14 +1632,8 @@
         "name": "shop=window_blind",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=home_goods",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=glaziery",
-                "weight": 0.8
-            }
+            { "name": "shop=home_goods", "weight": 0.7 },
+            { "name": "shop=glaziery", "weight": 0.8 }
         ]
     },
     {
@@ -2397,18 +1643,9 @@
         "name": "shop=windows",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "shop=window_blind",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=doityourself",
-                "weight": 0.7
-            },
-            {
-                "name": "shop=glaziery",
-                "weight": 0.8
-            }
+            { "name": "shop=window_blind", "weight": 0.7 },
+            { "name": "shop=doityourself", "weight": 0.7 },
+            { "name": "shop=glaziery", "weight": 0.8 }
         ]
     },
     {
@@ -2418,18 +1655,9 @@
         "name": "shop=wine",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "amenity=bar",
-                "weight": 0.7
-            },
-            {
-                "name": "amenity=restaurant",
-                "weight": 0.4
-            },
-            {
-                "name": "amenity=winery",
-                "weight": 0.7
-            }
+            { "name": "amenity=bar", "weight": 0.7 },
+            { "name": "amenity=restaurant", "weight": 0.4 },
+            { "name": "amenity=winery", "weight": 0.7 }
         ]
     },
     {
@@ -2437,20 +1665,14 @@
         "isA": "shop",
         "name": "shop=winery",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=wine",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "shop=wine", "weight": 0.9 }
     },
     {
         "#": "Count in tag info is 110 on 2015-09-01",
         "isA": "shop",
         "name": "shop=wood",
         "objectType": "tag",
-        "similarTo": {
-            "name": "shop=doityourself",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "shop=doityourself", "weight": 0.7 }
     },
     {
         "#": "Count in tag info is 40873 on 2015-09-01",

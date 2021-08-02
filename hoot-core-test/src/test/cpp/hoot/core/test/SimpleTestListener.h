@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SIMPLETESTLISTENER_H
 #define SIMPLETESTLISTENER_H
@@ -34,7 +34,8 @@ namespace hoot
 {
 
 /**
- * Wrapper around CPPUnit test listener for test failure notification purposes
+ * @brief The SimpleTestListener class is a wrapper around CPPUnit test listener for test failure
+ * notification purposes
  */
 class SimpleTestListener : public CppUnit::TestListener
 {

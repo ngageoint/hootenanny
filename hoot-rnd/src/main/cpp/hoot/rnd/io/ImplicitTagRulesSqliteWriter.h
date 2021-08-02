@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef IMPLICITTAGRULESSQLITEWRITER_H
 #define IMPLICITTAGRULESSQLITEWRITER_H
@@ -55,7 +55,7 @@ public:
    * @param outputUrl output database location
    * @return true if the output location is supported; false otherwise
    */
-  bool isSupported(const QString& outputUrl);
+  bool isSupported(const QString& outputUrl) const;
 
   /**
    * Opens the output rules database
@@ -96,13 +96,13 @@ private:
 
   long _statusUpdateInterval;
 
-  void _createTables();
+  void _createTables() const;
   void _prepareQueries();
 
   long _insertWord(const QString& word);
   long _insertTag(const QString& kvp);
   void _insertRule(const long wordId, const long tagId, const long tagOccurrenceCount);
-  void _createIndexes();
+  void _createIndexes() const;
 };
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "WeightedWordDistance.h"
 
@@ -52,17 +52,18 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, WeightedWordDistance)
 
-WeightedWordDistance::WeightedWordDistance(StringDistance* d, WordWeightDictionary* dictionary)
+WeightedWordDistance::WeightedWordDistance(
+  std::shared_ptr<StringDistance> d, std::shared_ptr<WordWeightDictionary> dictionary) :
+_d(d),
+_dictionary(dictionary)
 {
-  _d.reset(d);
-  _dictionary.reset(dictionary);
   setConfiguration(conf());
 }
 
-WeightedWordDistance::WeightedWordDistance()
+WeightedWordDistance::WeightedWordDistance() :
+_d(std::make_shared<LevenshteinDistance>(1.5))
 {
   QString dictPath;
-
   try
   {
     dictPath = ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary());
@@ -78,9 +79,8 @@ WeightedWordDistance::WeightedWordDistance()
     LOG_WARN("Using abridged dictionary. This may result in reduced conflation accuracy. " +
       dictPath);
   }
+  _dictionary = std::make_shared<SqliteWordWeightDictionary>(dictPath);
 
-  _dictionary.reset(new SqliteWordWeightDictionary(dictPath));
-  _d.reset(new LevenshteinDistance(1.5));
   setConfiguration(conf());
 }
 

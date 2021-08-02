@@ -19,26 +19,26 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "WayUtils.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/NodeUtils.h>
-#include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/elements/NodeUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 // GEOS
 #include <geos/geom/Coordinate.h>
@@ -54,9 +54,8 @@ QString WayUtils::getWayNodesDetailedString(const ConstWayPtr& way, const ConstO
   return NodeUtils::nodeCoordsToString(NodeUtils::nodeIdsToNodes(way->getNodeIds(), map));
 }
 
-std::set<long> WayUtils::getContainingWayIdsByNodeId(const long nodeId,
-                                                     const ConstOsmMapPtr& map,
-                                                     const ElementCriterionPtr& wayCriterion)
+std::set<long> WayUtils::getContainingWayIds(
+  const long nodeId, const ConstOsmMapPtr& map, const ElementCriterionPtr& wayCriterion)
 {
   LOG_VART(nodeId);
   std::set<long> containingWayIds;
@@ -92,12 +91,12 @@ std::set<long> WayUtils::getContainingWayIdsByNodeId(const long nodeId,
   return containingWayIds;
 }
 
-std::vector<ConstWayPtr> WayUtils::getContainingWaysByNodeId(
+std::vector<ConstWayPtr> WayUtils::getContainingWaysConst(
   const long nodeId, const ConstOsmMapPtr& map,
   const ElementCriterionPtr& wayCriterion)
 {
   std::vector<ConstWayPtr> containingWays;
-  const std::set<long> containingWayIds = getContainingWayIdsByNodeId(nodeId, map, wayCriterion);
+  const std::set<long> containingWayIds = getContainingWayIds(nodeId, map, wayCriterion);
   for (std::set<long>::const_iterator containingWayIdsItr = containingWayIds.begin();
        containingWayIdsItr != containingWayIds.end(); ++containingWayIdsItr)
   {
@@ -110,11 +109,24 @@ std::vector<ConstWayPtr> WayUtils::getContainingWaysByNodeId(
   return containingWays;
 }
 
-std::set<QString> WayUtils::getContainingWaysMostSpecificTypesByNodeId(
+std::vector<WayPtr> WayUtils::getContainingWays(
+  const long nodeId, const ConstOsmMapPtr& map,
+  const ElementCriterionPtr& wayCriterion)
+{
+  std::vector<WayPtr> waysToReturn;
+  std::vector<ConstWayPtr> ways = getContainingWaysConst(nodeId, map, wayCriterion);
+  for (std::vector<ConstWayPtr>::const_iterator itr = ways.begin(); itr != ways.end(); ++itr)
+  {
+    waysToReturn.push_back(std::const_pointer_cast<Way>(*itr));
+  }
+  return waysToReturn;
+}
+
+std::set<QString> WayUtils::getContainingWaysMostSpecificTypes(
   const long nodeId, const ConstOsmMapPtr& map)
 {
   std::set<QString> uniqueTypes;
-  std::vector<ConstWayPtr> containingWays = getContainingWaysByNodeId(nodeId, map);
+  std::vector<ConstWayPtr> containingWays = getContainingWaysConst(nodeId, map);
   std::sort(containingWays.begin(), containingWays.end());
   OsmSchema& schema = OsmSchema::getInstance();
   for (std::vector<ConstWayPtr>::const_iterator containingWaysItr = containingWays.begin();
@@ -129,11 +141,11 @@ std::set<QString> WayUtils::getContainingWaysMostSpecificTypesByNodeId(
   return uniqueTypes;
 }
 
-std::set<QString> WayUtils::getContainingWaysMostSpecificTypeKeysByNodeId(
+std::set<QString> WayUtils::getContainingWaysMostSpecificTypeKeys(
   const long nodeId, const ConstOsmMapPtr& map)
 {
   std::set<QString> uniqueTypeKeys;
-  const std::set<QString> uniqueTypes = getContainingWaysMostSpecificTypesByNodeId(nodeId, map);
+  const std::set<QString> uniqueTypes = getContainingWaysMostSpecificTypes(nodeId, map);
   for (std::set<QString>::const_iterator uniqueTypesItr = uniqueTypes.begin();
        uniqueTypesItr != uniqueTypes.end(); ++uniqueTypesItr)
   {
@@ -149,16 +161,21 @@ QSet<long> WayUtils::getConnectedWays(const long wayId, const ConstOsmMapPtr& ma
   ConstWayPtr way = map->getWay(wayId);
   if (way)
   {
+    LOG_VART(way->getElementId());
     const std::vector<long>& wayNodeIds = way->getNodeIds();
     for (size_t i = 0; i < wayNodeIds.size(); i++)
     {
       const long wayNodeId = wayNodeIds.at(i);
+      LOG_VART(wayNodeId);
       const QSet<long>& idsOfWaysContainingNode =
         CollectionUtils::stdSetToQSet(map->getIndex().getNodeToWayMap()->getWaysByNode(wayNodeId));
-      connectedWayIds = connectedWayIds.unite(idsOfWaysContainingNode);
+      connectedWayIds.unite(idsOfWaysContainingNode);
     }
   }
 
+  // Don't include the way we're examining.
+  connectedWayIds.remove(wayId);
+  LOG_VART(connectedWayIds);
   return connectedWayIds;
 }
 
@@ -172,9 +189,8 @@ bool WayUtils::hasConnectedWays(const long wayId, const ConstOsmMapPtr& map)
   return getNumberOfConnectedWays(wayId, map) > 0;
 }
 
-bool WayUtils::endWayNodeIsCloserToNodeThanStart(const ConstNodePtr& node,
-                                                 const ConstWayPtr& way,
-                                                 const ConstOsmMapPtr& map)
+bool WayUtils::endWayNodeIsCloserToNodeThanStart(
+  const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map)
 {
   if (way->isSimpleLoop())
   {
@@ -199,8 +215,8 @@ geos::geom::Coordinate WayUtils::closestWayCoordToNode(
     return geos::geom::Coordinate();
   }
 
-  // add the first and last coords in (one or both could already be there, but it won't hurt if
-  // they're duplicated)
+  // Add the first and last coords in. One or both could already be there, but it won't hurt if
+  // they're duplicated.
   ConstNodePtr firstNode = map->getNode(way->getFirstNodeId());
   ConstNodePtr lastNode = map->getNode(way->getLastNodeId());
   if (!firstNode || !lastNode)
@@ -248,8 +264,8 @@ geos::geom::Coordinate WayUtils::closestWayCoordToNode(
   return closestWayCoordToNode;
 }
 
-long WayUtils::closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPtr& way,
-                                      const ConstOsmMapPtr& map)
+long WayUtils::closestWayNodeIdToNode(
+  const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map)
 {
   double shortestDistance = DBL_MAX;
   long closestWayNodeId = 0;
@@ -347,15 +363,15 @@ bool WayUtils::nodesAreContainedInTheSameWay(const long nodeId1, const long node
     std::inserter(commonNodesBetweenWayGroups, commonNodesBetweenWayGroups.begin()));
   LOG_VART(commonNodesBetweenWayGroups);
 
-  return commonNodesBetweenWayGroups.size() != 0;
+  return !commonNodesBetweenWayGroups.empty();
 }
 
 bool WayUtils::nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& map)
 {
-  return map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).size() > 0;
+  return !map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).empty();
 }
 
-bool WayUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long> wayIds,
+bool WayUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long>& wayIds,
                                      const ConstOsmMapPtr& map)
 {
   std::set<long> waysContainingNode = map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId);
@@ -363,7 +379,7 @@ bool WayUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long> way
   std::set_intersection(
     waysContainingNode.begin(), waysContainingNode.end(), wayIds.begin(), wayIds.end(),
     std::inserter(commonWayIds, commonWayIds.begin()));
-  return commonWayIds.size() > 0;
+  return !commonWayIds.empty();
 }
 
 bool WayUtils::nodeContainedByMoreThanOneWay(const long nodeId, const ConstOsmMapPtr& map)
@@ -371,9 +387,50 @@ bool WayUtils::nodeContainedByMoreThanOneWay(const long nodeId, const ConstOsmMa
   return map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).size() > 1;
 }
 
+std::vector<long> WayUtils::getIntersectingWayIds(const long wayId, const OsmMapPtr& map)
+{
+  std::vector<long> intersectingWayIds;
+  WayPtr way = map->getWay(wayId);
+  if (way)
+  {
+    std::vector<long> nearbyWayIds = map->getIndex().findWays(way->getEnvelopeInternal(map));
+    for (std::vector<long>::const_iterator it = nearbyWayIds.begin(); it != nearbyWayIds.end();
+         ++it)
+    {
+      const long otherWayId = *it;
+      if (otherWayId != wayId)
+      {
+        WayPtr otherWay = map->getWay(otherWayId);
+        if (otherWay && way->hasSharedNode(*otherWay))
+        {
+          intersectingWayIds.push_back(otherWay->getId());
+        }
+      }
+    }
+  }
+  return intersectingWayIds;
+}
+
 std::vector<WayPtr> WayUtils::getIntersectingWays(const long wayId, const OsmMapPtr& map)
 {
   std::vector<WayPtr> intersectingWays;
+  const std::vector<long> intersectingWayIds = getIntersectingWayIds(wayId, map);
+  for (std::vector<long>::const_iterator itr = intersectingWayIds.begin();
+       itr != intersectingWayIds.end(); ++itr)
+  {
+    const long intersectingWayId = *itr;
+    WayPtr way = map->getWay(intersectingWayId);
+    if (way)
+    {
+      intersectingWays.push_back(way);
+    }
+  }
+  return intersectingWays;
+}
+
+std::vector<long> WayUtils::getIntersectingWayIdsConst(const long wayId, const ConstOsmMapPtr& map)
+{
+  std::vector<long> intersectingWayIds;
   ConstWayPtr way = map->getWay(wayId);
   if (way)
   {
@@ -382,11 +439,32 @@ std::vector<WayPtr> WayUtils::getIntersectingWays(const long wayId, const OsmMap
          ++it)
     {
       const long otherWayId = *it;
-      WayPtr otherWay = map->getWay(otherWayId);
-      if (otherWay && way->hasSharedNode(*otherWay))
+      if (otherWayId != wayId)
       {
-        intersectingWays.push_back(otherWay);
+        ConstWayPtr otherWay = map->getWay(otherWayId);
+        if (otherWay && way->hasSharedNode(*otherWay))
+        {
+          intersectingWayIds.push_back(otherWay->getId());
+        }
       }
+    }
+  }
+  return intersectingWayIds;
+}
+
+std::vector<ConstWayPtr> WayUtils::getIntersectingWaysConst(
+  const long wayId, const ConstOsmMapPtr& map)
+{
+  std::vector<ConstWayPtr> intersectingWays;
+  const std::vector<long> intersectingWayIds = getIntersectingWayIdsConst(wayId, map);
+  for (std::vector<long>::const_iterator itr = intersectingWayIds.begin();
+       itr != intersectingWayIds.end(); ++itr)
+  {
+    const long intersectingWayId = *itr;
+    ConstWayPtr way = map->getWay(intersectingWayId);
+    if (way)
+    {
+      intersectingWays.push_back(way);
     }
   }
   return intersectingWays;
@@ -402,17 +480,14 @@ bool WayUtils::nodeContainedByWaySharingNodesWithAnotherWay(
   }
 
   const std::vector<ConstWayPtr> waysContainingNode =
-    getContainingWaysByNodeId(nodeId, map);
+    getContainingWaysConst(nodeId, map);
   for (std::vector<ConstWayPtr>::const_iterator containingWayItr = waysContainingNode.begin();
        containingWayItr != waysContainingNode.end(); ++containingWayItr)
   {
     ConstWayPtr containingWay = *containingWayItr;
-    if (containingWay)
+    if (containingWay && containingWay->hasSharedNode(*way))
     {
-      if (containingWay->hasSharedNode(*way))
-      {
-        return true;
-      }
+      return true;
     }
   }
   return false;

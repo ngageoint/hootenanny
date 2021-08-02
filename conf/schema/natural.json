@@ -21,6 +21,12 @@
         "objectType": "tag"
     },
     {
+        "geometries": ["node", "area"],
+        "isA": "poi",
+        "name": "beach_landing_site=yes",
+        "objectType": "tag"
+    },
+    {
         "geometries": ["area"],
         "isA": "natural",
         "name": "natural=desert",
@@ -60,12 +66,21 @@
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "linestring"
-        ],
+        "geometries": ["node", "linestring"],
         "isA": "natural",
         "name": "natural=cliff",
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["area", "linestring"],
+        "isA": "natural",
+        "name": "natural=crevice",
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["area", "linestring"],
+        "isA": "natural",
+        "name": "natural=crevasse",
         "objectType": "tag"
     },
     {

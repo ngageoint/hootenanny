@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef FEATUREEXTRACTOR_JS_H
 #define FEATUREEXTRACTOR_JS_H
@@ -47,9 +47,9 @@ class FeatureExtractorJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
-  FeatureExtractorPtr getFeatureExtractor() { return _fe; }
+  FeatureExtractorPtr getFeatureExtractor() const { return _fe; }
 
   virtual ~FeatureExtractorJs() = default;
 
@@ -59,32 +59,10 @@ private:
 
   static void extract(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getName(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   QString _className;
   FeatureExtractorPtr _fe;
 };
-
-inline void toCpp(v8::Handle<v8::Value> v, FeatureExtractorPtr& p)
-{
-  if (!v->IsObject())
-  {
-    throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
-  }
-
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
-  FeatureExtractorJs* fej = 0;
-  fej = node::ObjectWrap::Unwrap<FeatureExtractorJs>(obj);
-  if (fej)
-  {
-    p = fej->getFeatureExtractor();
-  }
-  else
-  {
-    throw IllegalArgumentException("Expected a FeatureExtractorJs, got: (" + toJson(v) + ")");
-  }
-}
-
 
 }
 

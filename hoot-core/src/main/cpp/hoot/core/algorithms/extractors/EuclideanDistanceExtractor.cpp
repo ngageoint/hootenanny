@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "EuclideanDistanceExtractor.h"
 
@@ -65,7 +65,7 @@ double EuclideanDistanceExtractor::distance(
   g1.reset(GeometryUtils::validateGeometry(g1.get()));
   g2.reset(GeometryUtils::validateGeometry(g2.get()));
 
-  if (g1.get() == 0 || g2.get() == 0)
+  if (g1.get() == nullptr || g2.get() == nullptr)
   {
     return nullValue();
   }
@@ -96,7 +96,7 @@ double EuclideanDistanceExtractor::distance(
   g1.reset(GeometryUtils::validateGeometry(g1.get()));
   g2.reset(GeometryUtils::validateGeometry(g2.get()));
 
-  if (g1.get() == 0 || g2.get() == 0)
+  if (g1.get() == nullptr || g2.get() == nullptr)
   {
     return nullValue();
   }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "DelaunayTriangulation.h"
@@ -30,11 +30,12 @@
 // Standard
 #include <algorithm>
 #include <sstream>
-using namespace std;
 
 // Tgs
 #include <tgs/HashMap.h>
 #include <tgs/TgsException.h>
+
+using namespace std;
 
 namespace Tgs
 {
@@ -52,8 +53,9 @@ private:
   Point2d *data;
 public:
   InternalEdge()
+    : next(nullptr),
+      data(nullptr)
   {
-    data = 0;
   }
 
   InternalEdge *Rot();
@@ -95,18 +97,18 @@ double Edge::getOriginY() const { return _ie->Org2d().y; }
 double Edge::getDestinationX() const { return _ie->Dest2d().x; }
 double Edge::getDestinationY() const { return _ie->Dest2d().y; }
 
-const Edge Edge::getOriginNext() const { return _ie->Onext(); }
-const Edge Edge::getOriginPrevious() const { return _ie->Oprev(); }
-const Edge Edge::getDestinationNext() const { return _ie->Dnext(); }
-const Edge Edge::getDestinationPrevious() const { return _ie->Dprev(); }
+Edge Edge::getOriginNext() const { return _ie->Onext(); }
+Edge Edge::getOriginPrevious() const { return _ie->Oprev(); }
+Edge Edge::getDestinationNext() const { return _ie->Dnext(); }
+Edge Edge::getDestinationPrevious() const { return _ie->Dprev(); }
 
-const Edge Edge::getLeftNext() const { return _ie->Lnext(); }
-const Edge Edge::getLeftPrevious() const { return _ie->Lprev(); }
+Edge Edge::getLeftNext() const { return _ie->Lnext(); }
+Edge Edge::getLeftPrevious() const { return _ie->Lprev(); }
 
-const Edge Edge::getReverse() const { return _ie->Sym(); }
+Edge Edge::getReverse() const { return _ie->Sym(); }
 
-const Edge Edge::getRightNext() const { return _ie->Rnext(); }
-const Edge Edge::getRightPrevious() const { return _ie->Rprev(); }
+Edge Edge::getRightNext() const { return _ie->Rnext(); }
+Edge Edge::getRightPrevious() const { return _ie->Rprev(); }
 
 inline double distance(double x1, double x2, double y1, double y2)
 {
@@ -173,7 +175,7 @@ std::string Edge::toString() const
 {
   std::stringstream strm;
 
-  if (_ie == 0)
+  if (_ie == nullptr)
   {
     strm << "(null)" << endl;
   }
@@ -189,6 +191,7 @@ std::string Edge::toString() const
 class Subdivision
 {
 public:
+
   Subdivision(const Point2d &, const Point2d &, const Point2d &);
   virtual ~Subdivision();
   void InsertSite(const Point2d &);
@@ -205,6 +208,7 @@ public:
   InternalEdge *Locate(const Point2d &);
 
 private:
+
   InternalEdge * startingEdge;
 
   set<QuadEdge*> _edges;
@@ -214,6 +218,7 @@ private:
 class QuadEdge
 {
 public:
+
   QuadEdge();
   // should only be used by MakeEdge
   InternalEdge e[4];
@@ -339,15 +344,16 @@ Point2d* Subdivision::MakePoint(const Point2d& pt)
 }
 
 void Splice(InternalEdge * a, InternalEdge * b)
-// This operator affects the two edge rings around the origins of a and b,
-// and, independently, the two edge rings around the left faces of a and b.
-// In each case, (i) if the two rings are distinct, Splice will combine
-// them into one; (ii) if the two are the same ring, Splice will break it
-// into two separate pieces.
-// Thus, Splice can be used both to attach the two edges together, and
-// to break them apart. See Guibas and Stolfi (1985) p.96 for more details
-// and illustrations.
 {
+  // This operator affects the two edge rings around the origins of a and b,
+  // and, independently, the two edge rings around the left faces of a and b.
+  // In each case, (i) if the two rings are distinct, Splice will combine
+  // them into one; (ii) if the two are the same ring, Splice will break it
+  // into two separate pieces.
+  // Thus, Splice can be used both to attach the two edges together, and
+  // to break them apart. See Guibas and Stolfi (1985) p.96 for more details
+  // and illustrations.
+
   InternalEdge *alpha = a->Onext()->Rot();
   InternalEdge *beta = b->Onext()->Rot();
   InternalEdge *t1 = b->Onext();
@@ -438,17 +444,17 @@ int ccw(const Point2d & a, const Point2d & b, const Point2d & c)
   return (TriArea2(a, b, c) > 0);
 }
 
-int RightOf(const Point2d & x, InternalEdge * e)
+int RightOf(const Point2d & x, const InternalEdge * e)
 {
   return ccw(x, e->Dest2d(), e->Org2d());
 }
 
-int LeftOf(const Point2d & x, InternalEdge * e)
+int LeftOf(const Point2d & x, const InternalEdge * e)
 {
   return ccw(x, e->Org2d(), e->Dest2d());
 }
 
-int OnEdge(const Point2d & x, InternalEdge * e)
+int OnEdge(const Point2d & x, const InternalEdge * e)
 // A predicate that determines if the point x is on the edge e.
 // The point is considered on if it is in the EPS-neighborhood
 // of the edge.
@@ -585,11 +591,10 @@ void Subdivision::InsertSite(const Point2d & x)
   while (e->Lnext() != startingEdge);
 
   looping = 0;
-  // Examine suspect edges to ensure that the Delaunay condition
-  // is satisfied.
+  // Examine suspect edges to ensure that the Delaunay condition is satisfied.
   do
   {
-    InternalEdge *t = e->Oprev();
+    const InternalEdge *t = e->Oprev();
     if (RightOf(t->Dest2d(), e) && InCircle(e->Org2d(), t->Dest2d(), e->Dest2d(), x))
     {
       Swap(e);
@@ -622,7 +627,7 @@ EdgeIterator::EdgeIterator(const set<QuadEdge *> &edges)
   operator++(0);
 }
 
-Edge EdgeIterator::operator*()
+Edge EdgeIterator::operator*() const
 {
   return _e;
 }
@@ -636,20 +641,20 @@ Edge EdgeIterator::operator++(int)
 
 Edge& EdgeIterator::operator++()
 {
-  while (_todo.size() == 0 && _it != _edges->end())
+  while (_todo.empty() && _it != _edges->end())
   {
     QuadEdge* qe = *_it;
     ++_it;
     for (int i = 0; i < 4; i++)
     {
-      if (qe->getInternalEdge(i).Org() != 0)
+      if (qe->getInternalEdge(i).Org() != nullptr)
       {
         _todo.push_back(&qe->getInternalEdge(i));
       }
     }
   }
 
-  if (_todo.size() == 0 && _it == _edges->end())
+  if (_todo.empty() && _it == _edges->end())
   {
     _atEnd = true;
     return _e;
@@ -659,11 +664,6 @@ Edge& EdgeIterator::operator++()
   _todo.pop_front();
 
   return _e;
-}
-
-Face::Face(Face& other)
-{
-  *this = other;
 }
 
 Face::Face(const Face& other)
@@ -785,7 +785,6 @@ std::string Face::toString() const
   return strm.str();
 }
 
-
 FaceIterator::FaceIterator(const FaceIterator& from)
   : _it(from._it),
     _end(from._end),
@@ -795,7 +794,7 @@ FaceIterator::FaceIterator(const FaceIterator& from)
   _f = new Face(*_it);
 }
 
-FaceIterator::FaceIterator(EdgeIterator it, EdgeIterator end)
+FaceIterator::FaceIterator(const EdgeIterator& it, const EdgeIterator& end)
   : _f(new Face(*it)),
     _it(it),
     _end(end),
@@ -812,7 +811,7 @@ FaceIterator::~FaceIterator()
   }
 }
 
-const Face& FaceIterator::operator*()
+const Face& FaceIterator::operator*() const
 {
   return *_f;
 }
@@ -859,7 +858,7 @@ Face& FaceIterator::operator++()
 }
 
 DelaunayTriangulation::DelaunayTriangulation()
-  : _subdivision(NULL),
+  : _subdivision(nullptr),
     _x{0.0, 0.0, 0.0},
     _y{0.0, 0.0, 0.0},
     _pointCount(0)
@@ -900,7 +899,7 @@ EdgeIterator DelaunayTriangulation::getEdgeIterator() const
 
 const vector<Face>& DelaunayTriangulation::getFaces()
 {
-  if (_faces.size() == 0)
+  if (_faces.empty())
   {
     for (FaceIterator fi = getFaceIterator(); fi != getFaceEnd(); ++fi)
     {
@@ -915,7 +914,7 @@ FaceIterator DelaunayTriangulation::getFaceIterator() const
   return FaceIterator(getEdgeIterator(), getEdgeEnd());
 }
 
-const Edge DelaunayTriangulation::getStartingEdge() const
+Edge DelaunayTriangulation::getStartingEdge() const
 {
   if (_pointCount < 3)
   {

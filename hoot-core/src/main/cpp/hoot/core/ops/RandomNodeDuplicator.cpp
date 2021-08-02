@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RandomNodeDuplicator.h"
 
@@ -45,10 +45,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RandomNodeDuplicator)
 
-RandomNodeDuplicator::RandomNodeDuplicator()
+RandomNodeDuplicator::RandomNodeDuplicator() :
+_localRng(std::make_shared<boost::minstd_rand>())
 {
-  _localRng.reset(new boost::minstd_rand());
-  _rng = _localRng.get();
+  _rng =_localRng.get();
 }
 
 void RandomNodeDuplicator::apply(OsmMapPtr& map)
@@ -88,8 +88,8 @@ void RandomNodeDuplicator::duplicateNode(const NodePtr& n, const OsmMapPtr& map)
   double x = n->getX() + N() * sigma * _moveMultiplier;
   double y = n->getY() + N() * sigma * _moveMultiplier;
 
-  NodePtr newNode(
-    new Node(n->getStatus(), map->createNextNodeId(), x, y, n->getCircularError()));
+  NodePtr newNode =
+    std::make_shared<Node>(n->getStatus(), map->createNextNodeId(), x, y, n->getCircularError());
   map->addNode(newNode);
 
   _numAffected++;

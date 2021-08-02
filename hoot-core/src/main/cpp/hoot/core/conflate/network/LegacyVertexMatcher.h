@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef LEGACYVERTEXMATCHER_H
 #define LEGACYVERTEXMATCHER_H
 
 // hoot
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
-#include <hoot/core/elements/OsmMap.h>
 
 // Qt
 #include <QList>
@@ -77,7 +77,7 @@ public:
     }
   };
 
-  typedef std::shared_ptr<TiePointScore> TiePointScorePtr;
+  using TiePointScorePtr = std::shared_ptr<TiePointScore>;
 
   LegacyVertexMatcher(ConstOsmMapPtr map);
 
@@ -89,13 +89,13 @@ public:
    * Returns false if we're confident this is not a tie point, otherwise returns true.
    */
   bool isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
-    SearchRadiusProvider& srp);
+    const SearchRadiusProvider& srp);
 
   /**
    * Process n1 and n2 to identify candidate and confident tie points.
    */
   void identifyVertexMatches(ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2,
-    SearchRadiusProvider& srp);
+    const SearchRadiusProvider& srp);
 
   /**
    * Returns true if this is a confident tie point. If this is true then scoreTiePoint should return
@@ -128,14 +128,14 @@ private:
 
   double _confidentThreshold;
 
-  Tgs::IntersectionIterator _createIterator(geos::geom::Envelope env);
+  Tgs::IntersectionIterator _createIterator(const geos::geom::Envelope& env) const;
 
-  void _createVertexIndex(const OsmNetwork::VertexMap& vm, SearchRadiusProvider &srp);
+  void _createVertexIndex(const OsmNetwork::VertexMap& vm, const SearchRadiusProvider &srp);
 
   /**
    * Returns the sum of all scores that involve either of the vertices in tie.
    */
-  double _denominatorForTie(TiePointScorePtr tie);
+  double _denominatorForTie(TiePointScorePtr tie) const;
 
   NodeMatcherPtr _getNodeMatcher();
 
@@ -171,8 +171,8 @@ inline uint qHash(const LegacyVertexMatcher::TiePointScorePtr& t)
   return qHash(std::pair<ElementId, ElementId>(t->v1->getElementId(), t->v2->getElementId()));
 }
 
-typedef std::shared_ptr<LegacyVertexMatcher> LegacyVertexMatcherPtr;
-typedef std::shared_ptr<const LegacyVertexMatcher> ConstLegacyVertexMatcherPtr;
+using LegacyVertexMatcherPtr = std::shared_ptr<LegacyVertexMatcher>;
+using ConstLegacyVertexMatcherPtr = std::shared_ptr<const LegacyVertexMatcher>;
 
 // not implemented
 bool operator<(ConstLegacyVertexMatcherPtr, ConstLegacyVertexMatcherPtr);

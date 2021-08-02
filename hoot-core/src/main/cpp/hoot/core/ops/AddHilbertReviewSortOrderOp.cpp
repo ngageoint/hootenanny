@@ -19,19 +19,19 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "AddHilbertReviewSortOrderOp.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Tgs
@@ -92,7 +92,7 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
       const set<ElementId> eids = ReviewMarker::getReviewElements(map, r->getElementId());
       LOG_VART(eids.size());
       LOG_VART(eids);
-      if (eids.size() > 0)
+      if (!eids.empty())
       {
         int64_t hv = _calculateHilbertValue(map, eids);
         if (hv != -1)
@@ -132,7 +132,7 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
 }
 
 int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
-  const ConstOsmMapPtr& map, const set<ElementId> eids)
+  const ConstOsmMapPtr& map, const std::set<ElementId>& eids)
 {
   std::shared_ptr<Envelope> env;
   for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); ++it)
@@ -142,9 +142,9 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
     {
       std::unique_ptr<Envelope> te(element->getEnvelope(map));
       LOG_VART(env.get());
-      if (env.get() == 0)
+      if (env.get() == nullptr)
       {
-        env.reset(new Envelope(*te));
+        env = std::make_shared<Envelope>(*te);
       }
       else
       {
@@ -158,9 +158,9 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
   }
   LOG_VART(env->toString());
 
-  if (_mapEnvelope.get() == 0)
+  if (_mapEnvelope.get() == nullptr)
   {
-    _mapEnvelope.reset(new Envelope(CalculateMapBoundsVisitor::getGeosBounds(map)));
+    _mapEnvelope = std::make_shared<Envelope>(CalculateMapBoundsVisitor::getGeosBounds(map));
   }
 
   Coordinate center;

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef NOINFORMATIONELEMENTREMOVER_H
@@ -37,8 +37,11 @@ namespace hoot
 
 /**
  * Recursively removes all elements that do not contain any information and are not in use by
-   another element (e.g. only contains UUID and source, but not FCODE equivalent or other
-   informative tags).
+ * another element (e.g. only contains UUID and source, but not FCODE equivalent or other
+ * informative tags).
+ *
+ * No need to implement FilteredByGeometryTypeCriteria or ElementConflatableCheck here, as this op
+ * only works against elements with no type.
  */
 class NoInformationElementRemover : public OsmMapOperation
 {
@@ -47,27 +50,24 @@ public:
   static QString className() { return "hoot::NoInformationElementRemover"; }
 
   NoInformationElementRemover() = default;
-  virtual ~NoInformationElementRemover() = default;
+  ~NoInformationElementRemover() = default;
 
   /**
     @see OsmMapOperation
   */
-  void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing elements with no information tags..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " elements with no information tags"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Removes elements containing no information in tags"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
-
-protected:
+private:
 
   std::shared_ptr<OsmMap> _map;
 };

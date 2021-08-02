@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "SchemaUtils.h"
@@ -31,7 +31,10 @@
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/criterion/HasTypeCriterion.h>
-#include <hoot/core/criterion/NoInformationCriterion.h>
+#include <hoot/core/io/IoUtils.h>
+
+// Qt
+#include <QFileInfo>
 
 namespace hoot
 {
@@ -40,8 +43,39 @@ bool SchemaUtils::anyElementsHaveType(const ConstOsmMapPtr& map)
 {
   return
     (int)FilteredVisitor::getStat(
-      ElementCriterionPtr(new HasTypeCriterion()),
-      ElementVisitorPtr(new ElementCountVisitor()), map) > 0;
+      std::make_shared<HasTypeCriterion>(), std::make_shared<ElementCountVisitor>(), map) > 0;
+}
+
+void SchemaUtils::validateTranslationUrl(const QString& url)
+{
+  QFileInfo fileInfo(url);
+  if (!fileInfo.exists())
+  {
+    throw IllegalArgumentException("Translation file does not exist: " + url);
+  }
+  else if (!url.endsWith(".js") && !url.endsWith(".py"))
+  {
+    throw IllegalArgumentException("Invalid translation file format: " + url);
+  }
+}
+
+QString SchemaUtils::outputFormatToTranslationDirection(const QString& output)
+{
+  if (IoUtils::isSupportedOgrFormat(output, true))
+  {
+    LOG_INFO("No translation direction specified. Assuming 'toogr' based on output format...");
+    return "toogr";
+  }
+  else if (IoUtils::isSupportedOsmFormat(output))
+  {
+    LOG_INFO("No translation direction specified. Assuming 'toosm' based on output format...");
+    return "toosm";
+  }
+  else
+  {
+    LOG_INFO("No translation direction specified. Using 'toosm'...");
+    return "toosm";
+  }
 }
 
 }

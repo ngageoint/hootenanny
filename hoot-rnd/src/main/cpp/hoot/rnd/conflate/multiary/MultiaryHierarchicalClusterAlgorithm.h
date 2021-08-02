@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTIARYHIERARCHICALCLUSTERALGORITHM_H
 #define MULTIARYHIERARCHICALCLUSTERALGORITHM_H
@@ -45,7 +45,7 @@ class MultiaryHierarchicalClusterAlgorithm : public MultiaryClusterAlgorithm
 {
 public:
 
-  virtual ~MultiaryHierarchicalClusterAlgorithm() = default;
+  ~MultiaryHierarchicalClusterAlgorithm() = default;
 
   /**
    * Constructor.
@@ -59,15 +59,16 @@ public:
   /**
    * See parent class.
    */
-  virtual ClusterList calculateClusters(OsmMapPtr map,
-    std::set<std::pair<ElementId, ElementId>> &pairs);
+  ClusterList calculateClusters(OsmMapPtr map,
+    std::set<std::pair<ElementId, ElementId>> &pairs) override;
 
   /**
    * See parent class.
    */
-  virtual QList<ClusterLinkPtr> takeReviews();
+  QList<ClusterLinkPtr> takeReviews() override;
 
-protected:
+private:
+
   MatchThreshold _matchThreshold;
 
   /**
@@ -82,9 +83,7 @@ protected:
    * @param map Map that contains the pairs.
    * @param pairs Pairs that represent links in the subgraph.
    */
-  void _initializeClusters(OsmMapPtr map,
-    std::set<std::pair<ElementId, ElementId>>& pairs);
-
+  void _initializeClusters(OsmMapPtr map, const std::set<std::pair<ElementId, ElementId>>& pairs);
 };
 
 }

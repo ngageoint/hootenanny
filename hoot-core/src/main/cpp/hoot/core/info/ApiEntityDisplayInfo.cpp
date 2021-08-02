@@ -19,37 +19,38 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ApiEntityDisplayInfo.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/info/SingleStatistic.h>
-#include <hoot/core/info/NumericStatistic.h>
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/visitors/ElementVisitor.h>
-#include <hoot/core/algorithms/extractors/FeatureExtractor.h>
-#include <hoot/core/conflate/matching/MatchCreator.h>
-#include <hoot/core/conflate/merging/MergerCreator.h>
-#include <hoot/core/schema/TagMerger.h>
-#include <hoot/core/algorithms/string/StringDistance.h>
+#include <hoot/core/algorithms/WayJoiner.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
-#include <hoot/core/info/ApiEntityInfo.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/algorithms/extractors/FeatureExtractor.h>
+#include <hoot/core/algorithms/string/StringDistance.h>
 #include <hoot/core/algorithms/subline-matching/SublineMatcher.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/conflate/merging/Merger.h>
-#include <hoot/core/algorithms/WayJoiner.h>
+#include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/info/ApiEntityInfo.h>
+#include <hoot/core/info/NumericStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/schema/TagMerger.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 //  Qt
 #include <QTextStream>
@@ -57,7 +58,7 @@
 namespace hoot
 {
 
-const int ApiEntityDisplayInfo::MAX_NAME_SIZE = 45;
+const int ApiEntityDisplayInfo::MAX_NAME_SIZE = 48;
 const int ApiEntityDisplayInfo::MAX_TYPE_SIZE = 18;
 
 template<typename ApiEntity>
@@ -65,9 +66,9 @@ class ApiEntityNameComparator
 {
 public:
 
-  ApiEntityNameComparator() {}
+  ApiEntityNameComparator() = default;
 
-  bool operator()(const QString& name1, const QString& name2)
+  bool operator()(const QString& name1, const QString& name2) const
   {
     QString name1Temp = name1;
     QString name2Temp = name2;
@@ -110,15 +111,15 @@ QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName)
     // :-( this is messy...
     if (Factory::getInstance().hasBase<OsmMapOperation>(className))
     {
-      std::shared_ptr<OsmMapOperation> apiEntity(
-        Factory::getInstance().constructObject<OsmMapOperation>(className));
+      std::shared_ptr<OsmMapOperation> apiEntity =
+        Factory::getInstance().constructObject<OsmMapOperation>(className);
       apiEntityInfo = std::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
       singleStat = std::dynamic_pointer_cast<SingleStatistic>(apiEntity);
     }
     else if (Factory::getInstance().hasBase<ElementVisitor>(className))
     {
-      std::shared_ptr<ElementVisitor> apiEntity(
-        Factory::getInstance().constructObject<ElementVisitor>(className));
+      std::shared_ptr<ElementVisitor> apiEntity =
+        Factory::getInstance().constructObject<ElementVisitor>(className);
       apiEntityInfo = std::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
       singleStat = std::dynamic_pointer_cast<SingleStatistic>(apiEntity);
     }
@@ -148,6 +149,7 @@ QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName)
 
 QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
 {
+  // The log must be disabled for this to display things correctly. Disable it for debugging only.
   DisableLog dl;
   QString msg = " (prepend 'hoot::' before using";
   QString buffer;
@@ -269,6 +271,12 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
       _getApiEntities<WayJoiner, WayJoiner>(
         WayJoiner::className(), "way joiner", false, MAX_NAME_SIZE - 10);
   }
+  else if (apiEntityType == "way-snap-criteria")
+  {
+    // For this one we're just print a list of class names, rather than the descriptions as well, as
+    // that's all that's needed right now.
+    ts << _getWaySnapCriteria() << endl;
+  }
   else if (apiEntityType == "conflatable-criteria")
   {
     msg += "):";
@@ -284,8 +292,14 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     msg.prepend("Criterion Consumers");
     ts << msg << endl;
     ts <<
-      _getApiEntities<ElementCriterionConsumer, ElementCriterionConsumer>(
-        ElementCriterionConsumer::className(), "criterion consumer", false, MAX_NAME_SIZE - 10);
+      _getApiEntities<OsmMapOperation, ElementCriterionConsumer>(
+        OsmMapOperation::className(), "criterion consumer", false, MAX_NAME_SIZE - 10);
+    ts <<
+      _getApiEntities<ElementVisitor, ElementCriterionConsumer>(
+        ElementVisitor::className(), "criterion consumer", false, MAX_NAME_SIZE - 10);
+    ts <<
+      _getApiEntities<ElementCriterion, ElementCriterionConsumer>(
+        ElementCriterion::className(), "criterion consumer", false, MAX_NAME_SIZE - 10);
   }
   else if (apiEntityType == "geometry-type-criteria")
   {
@@ -303,8 +317,8 @@ template<typename ApiEntity, typename ApiEntityChild>
 QString ApiEntityDisplayInfo::_getApiEntities(
   const QString& apiEntityBaseClassName, const QString& apiEntityType,
   const bool displayType,
-  //the size of the longest names plus a 3 space buffer; the value passed in
-  //here by callers may have to be adjusted over time for some entity types
+  // the size of the longest names plus a 3 space buffer; the value passed in
+  // here by callers may have to be adjusted over time for some entity types
   const int maxNameSize)
 {
   LOG_VARD(apiEntityBaseClassName);
@@ -321,8 +335,8 @@ QString ApiEntityDisplayInfo::_getApiEntities(
     QString className = classNames[i];
     LOG_VARD(className);
 
-    std::shared_ptr<ApiEntity> apiEntity(
-      Factory::getInstance().constructObject<ApiEntity>(className));
+    std::shared_ptr<ApiEntity> apiEntity =
+      Factory::getInstance().constructObject<ApiEntity>(className);
 
     std::shared_ptr<ApiEntityInfo> apiEntityInfo =
       std::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
@@ -361,7 +375,7 @@ QString ApiEntityDisplayInfo::_getApiEntities(
       }
 
       QString name = className.replace("hoot::", "");
-      //append '*' to the names of visitors that support the SingleStatistic interface
+      // append '*' to the names of visitors that support the SingleStatistic interface
       if (supportsNumericStat)
       {
         name += "**";
@@ -393,7 +407,7 @@ template<typename ApiEntity>
 QString ApiEntityDisplayInfo::_getApiEntitiesForMatchMergerCreators(
   const QString& apiEntityClassName)
 {
-  //the size of the longest names plus a 3 space buffer
+  // the size of the longest names plus a 3 space buffer
   const int maxNameSize = 48;
 
   std::vector<QString> names = Factory::getInstance().getObjectNamesByBase(apiEntityClassName);
@@ -404,8 +418,8 @@ QString ApiEntityDisplayInfo::_getApiEntitiesForMatchMergerCreators(
   for (size_t i = 0; i < names.size(); i++)
   {
     // get all names known by this creator
-    std::shared_ptr<ApiEntity> mc(
-      Factory::getInstance().constructObject<ApiEntity>(names[i]));
+    std::shared_ptr<ApiEntity> mc =
+      Factory::getInstance().constructObject<ApiEntity>(names[i]);
     std::vector<CreatorDescription> creators = mc->getAllCreators();
     LOG_VARD(creators.size());
 
@@ -414,15 +428,15 @@ QString ApiEntityDisplayInfo::_getApiEntitiesForMatchMergerCreators(
     {
       CreatorDescription description = *itr;
       LOG_VARD(description);
-      const QString name = description.className.replace("hoot::", "");
+      const QString name = description.getClassName().replace("hoot::", "");
       LOG_VARD(name);
       //this suppresses test and auxiliary rules files
       if (!name.endsWith("Test.js") && !name.endsWith("Rules.js"))
       {
         const int indentAfterName = maxNameSize - name.size();
         QString line = "  " + name + QString(indentAfterName, ' ');
-        line += description.description;
-        if (description.experimental)
+        line += description.getDescription();
+        if (description.getExperimental())
           line += " (experimental)";
         LOG_VARD(line);
         output.append(line);
@@ -453,6 +467,28 @@ QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString& classNam
     return "visitor";
   }
   return "";
+}
+
+QString ApiEntityDisplayInfo::_getWaySnapCriteria()
+{
+  QStringList filteredCritClassNames;
+  const QStringList linearCritClassNames =
+    ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
+      GeometryTypeCriterion::GeometryType::Line);
+  LOG_VARD(linearCritClassNames);
+  const QSet<QString> matchCreatorCritClassNames =
+    SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits();
+  LOG_VARD(matchCreatorCritClassNames);
+  for (QSet<QString>::const_iterator itr = matchCreatorCritClassNames.begin();
+       itr != matchCreatorCritClassNames.end(); ++itr)
+  {
+    if (linearCritClassNames.contains(*itr))
+    {
+      filteredCritClassNames.append(*itr);
+    }
+  }
+  qSort(filteredCritClassNames);
+  return filteredCritClassNames.join(";");
 }
 
 }

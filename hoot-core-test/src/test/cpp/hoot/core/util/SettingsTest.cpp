@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -133,20 +133,25 @@ public:
     CPPUNIT_ASSERT_EQUAL(false, uut.getBool("uuid.helper.repeatable"));
     //  Default value before change in AttributeConflation.conf
     HOOT_STR_EQUALS("hoot::OverwriteTag2Merger", uut.getString("tag.merger.default"));
-    CPPUNIT_ASSERT_EQUAL(false, uut.getBool("highway.merge.tags.only"));
+    HOOT_STR_EQUALS(
+      "hoot::LinearSnapMerger", uut.getString("geometry.linear.merger.default"));
     //  Default value before change in NetworkAlgorithm.conf
     HOOT_STR_EQUALS("hoot::HighwayRfClassifier", uut.getString("conflate.match.highway.classifier"));
-    HOOT_STR_EQUALS("hoot::MaximalNearestSublineMatcher", uut.getString("way.subline.matcher"));
+    HOOT_STR_EQUALS(
+      "hoot::MaximalNearestSublineMatcher", uut.getString("way.subline.matcher"));
 
-    uut.loadFromString("{ \"base.config\": \"AttributeConflation.conf,NetworkAlgorithm.conf\", \"uuid.helper.repeatable\": \"true\" }");
+    uut.loadFromString(
+      "{ \"base.config\": \"AttributeConflation.conf,NetworkAlgorithm.conf\", \"uuid.helper.repeatable\": \"true\" }");
     //  From the JSON
     CPPUNIT_ASSERT_EQUAL(true, uut.getBool("uuid.helper.repeatable"));
     //  From AttributeConflation.conf
     HOOT_STR_EQUALS("hoot::OverwriteTag1Merger", uut.getString("tag.merger.default"));
-    CPPUNIT_ASSERT_EQUAL(true, uut.getBool("highway.merge.tags.only"));
+    HOOT_STR_EQUALS(
+      "hoot::LinearTagOnlyMerger", uut.getString("geometry.linear.merger.default"));
     //  From NetworkAlgorithm.conf
-    HOOT_STR_EQUALS("hoot::HighwayExpertClassifier", uut.getString("conflate.match.highway.classifier"));
-    HOOT_STR_EQUALS("hoot::MaximalSublineMatcher", uut.getString("way.subline.matcher"));
+    HOOT_STR_EQUALS(
+      "hoot::HighwayExpertClassifier", uut.getString("conflate.match.highway.classifier"));
+    HOOT_STR_EQUALS("hoot::MaximalSublineMatcher", uut.getString("highway.subline.matcher"));
   }
 
   void invalidOptionNameTest()
@@ -181,6 +186,7 @@ public:
       BuildingCriterion::className() + ";" +
       // fails; only ops, vis, and crits are valid
       Node::className());
+    exceptionMsg = "";
     try
     {
       Settings::parseCommonArguments(args);
@@ -198,8 +204,9 @@ public:
     args.append(
       ConfigOptions::getConvertOpsKey() + "=" +
       ReplaceElementOp::className() + ";" +
-      // fails; visitor is missing namespace
+      // This should not fail, as the namespace gets automatically added to the visitor.
       RemoveElementsVisitor::className().replace("hoot::", ""));
+    exceptionMsg = "";
     try
     {
       Settings::parseCommonArguments(args);
@@ -208,10 +215,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    expectedErrorMessage =
-      "Invalid option operator class name: " +
-      RemoveElementsVisitor::className().replace("hoot::", "");
-    CPPUNIT_ASSERT_EQUAL(expectedErrorMessage.toStdString(), exceptionMsg.toStdString());
+    CPPUNIT_ASSERT(exceptionMsg.isEmpty());
 
     args.clear();
     args.append("-D");

@@ -19,17 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTIARY_INGEST_CHANGESET_READER_H
 #define MULTIARY_INGEST_CHANGESET_READER_H
 
 // hoot
-#include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
+#include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
 
 // Qt
@@ -48,29 +48,29 @@ public:
 
   MultiaryIngestChangesetReader();
 
-  virtual ~MultiaryIngestChangesetReader();
+  ~MultiaryIngestChangesetReader();
 
   /**
    * @see ChangesetProvider
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   void open(QString fileName);
 
   /**
    * @see ChangesetProvider
    */
-  virtual void close();
+  void close() override;
 
   /**
    * @see ChangesetProvider
    */
-  virtual bool hasMoreChanges();
+  bool hasMoreChanges() override;
 
   /**
    * @see ChangesetProvider
    */
-  virtual Change readNextChange();
+  Change readNextChange() override;
 
 private:
 

@@ -19,17 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "WayMatchStringSplitter.h"
 
 // hoot
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
-#include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
+#include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/Log.h>
 
 using namespace std;
@@ -42,13 +42,9 @@ QString WayMatchStringSplitter::_overlyAggressiveMergeReviewText =
   "Please review the length of the review for overly aggressive merges and manually merge features "
   "using input data/imagery. There may also be one or more zero length ways at intersections.";
 
-WayMatchStringSplitter::WayMatchStringSplitter()
-{
-}
-
 void WayMatchStringSplitter::applySplits(OsmMapPtr map,
   vector<pair<ElementId, ElementId>> &replaced,
-  QList<WayMatchStringMerger::SublineMappingPtr> mappings)
+  QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
 {
   LOG_TRACE("Applying way splits...");
   _splitWay(WayNumber::Way1, map, replaced, mappings);
@@ -77,7 +73,7 @@ QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> WayMatchStringSplitte
 
 void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
                                        vector<pair<ElementId, ElementId>> &replaced,
-                                       QList<WayMatchStringMerger::SublineMappingPtr> mappings)
+                                       QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
 {
   LOG_TRACE(QString("Splitting way %1...").arg((int)wn));
 
@@ -135,18 +131,17 @@ void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
     if (w && ElementGeometryUtils::calculateLength(w, map) > 0.0)
     {
       newWays.append(w);
-      replaced.push_back(pair<ElementId, ElementId>(way->getElementId(), w->getElementId()));
+      replaced.emplace_back(way->getElementId(), w->getElementId());
     }
 
     for (int i = 0; i < sm.size(); ++i)
     {
-      WayPtr w;
       w = splits[c++];
       if (!w)
         throw NeedsReviewException(_overlyAggressiveMergeReviewText);
 
       sm.at(i)->setNewWay(wn, w);
-      replaced.push_back(pair<ElementId, ElementId>(way->getElementId(), w->getElementId()));
+      replaced.emplace_back(way->getElementId(), w->getElementId());
       newWays.append(w);
 
       w = splits[c++];
@@ -158,7 +153,7 @@ void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
           throw InternalErrorException("Only the last split should be empty.");
 
         newWays.append(w);
-        replaced.push_back(pair<ElementId, ElementId>(way->getElementId(), w->getElementId()));
+        replaced.emplace_back(way->getElementId(), w->getElementId());
       }
     }
 

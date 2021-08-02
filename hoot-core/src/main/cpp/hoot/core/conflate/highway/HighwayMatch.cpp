@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "HighwayMatch.h"
 
@@ -43,7 +43,6 @@
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/elements/ElementId.h>
-#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
@@ -60,16 +59,13 @@ const QString HighwayMatch::MATCH_NAME = "Highway";
 QString HighwayMatch::_noMatchingSubline = "No valid matching subline found.";
 
 HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
-  const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
-  const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
-  ConstMatchThresholdPtr mt) :
-  Match(mt),
-  _classifier(classifier),
-  _eid1(eid1),
-  _eid2(eid2),
-  _sublineMatcher(sublineMatcher),
-  _minSplitSize(0.0),
-  _score(0.0)
+  const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const ConstOsmMapPtr& map,
+  const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt) :
+Match(mt, eid1, eid2),
+_classifier(classifier),
+_score(0.0),
+_sublineMatcher(sublineMatcher),
+_minSplitSize(0.0)
 {
   assert(_eid1 != _eid2);
 
@@ -78,8 +74,6 @@ HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
 
   LOG_VART(_eid1);
   LOG_VART(_eid2);
-  //OsmUtils::logElementDetail(e1, map, Log::Trace, "HighwayMatch: e1");
-  //OsmUtils::logElementDetail(e2, map, Log::Trace, "HighwayMatch: e2");
 
   try
   {
@@ -126,10 +120,9 @@ HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
   LOG_VART(_explainText);
 }
 
-void HighwayMatch::_updateNonMatchDescriptionBasedOnGeometricProperties(QStringList& description,
-                                                                        const ConstOsmMapPtr& map,
-                                                                        const ConstElementPtr e1,
-                                                                        const ConstElementPtr e2)
+void HighwayMatch::_updateNonMatchDescriptionBasedOnGeometricProperties(
+  QStringList& description, const ConstOsmMapPtr& map, const ConstElementPtr e1,
+  const ConstElementPtr e2) const
 {
   //  Check the Angle Histogram
   double angle = AngleHistogramExtractor().extract(*map, e1, e2);
@@ -139,19 +132,13 @@ void HighwayMatch::_updateNonMatchDescriptionBasedOnGeometricProperties(QStringL
   else                        description.append("Highway orientation not similar.");
 
   //  Use the average of the edge distance extractors
-  double edge = (EdgeDistanceExtractor(
-                   ValueAggregatorPtr(new RmseAggregator())).extract(*map, e1, e2) +
-                 EdgeDistanceExtractor(
-                   ValueAggregatorPtr(new SigmaAggregator())).extract(*map, e1, e2)) / 2.0;
+  double edge =
+    (EdgeDistanceExtractor(std::make_shared<RmseAggregator>()).extract(*map, e1, e2) +
+     EdgeDistanceExtractor(std::make_shared<SigmaAggregator>()).extract(*map, e1, e2)) / 2.0;
 
   if (edge >= 90)             description.append("Highway edges very close to each other.");
   else if (edge >= 70)        description.append("Highway edges somewhat close to each other.");
   else                        description.append("Highway edges not very close to each other.");
-}
-
-QString HighwayMatch::explain() const
-{
-  return _explainText;
 }
 
 map<QString, double> HighwayMatch::getFeatures(const ConstOsmMapPtr& m) const
@@ -167,7 +154,7 @@ map<QString, double> HighwayMatch::getFeatures(const ConstOsmMapPtr& m) const
 set<pair<ElementId, ElementId>> HighwayMatch::getMatchPairs() const
 {
   set<pair<ElementId, ElementId>> result;
-  result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
+  result.emplace(_eid1, _eid2);
   return result;
 }
 
@@ -182,7 +169,7 @@ bool HighwayMatch::isConflicting(
 {
   const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(other.get());
   // if the other match isn't a highway match then this is a conflict.
-  if (hm == 0)
+  if (hm == nullptr)
   {
     return true;
   }
@@ -264,14 +251,14 @@ bool HighwayMatch::isConflicting(
   }
 }
 
-bool HighwayMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
-  ElementId other1, ElementId other2) const
+bool HighwayMatch::_isOrderedConflicting(
+  const ConstOsmMapPtr& map, ElementId sharedEid, ElementId other1, ElementId other2) const
 {
   set<ElementId> eids;
   eids.insert(sharedEid);
   eids.insert(other1);
   eids.insert(other2);
-  OsmMapPtr copiedMap(new OsmMap(map->getProjection()));
+  OsmMapPtr copiedMap = std::make_shared<OsmMap>(map->getProjection());
   CopyMapSubsetOp(map, eids).apply(copiedMap);
 
   WaySublineMatchString match(_sublineMatch, copiedMap);

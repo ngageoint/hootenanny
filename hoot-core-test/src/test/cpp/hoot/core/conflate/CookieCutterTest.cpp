@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -68,10 +68,10 @@ public:
   {
     OsmXmlReader reader;
     OsmSchema::getInstance().loadDefault();
-    OsmMapPtr doughMap(new OsmMap());
+    OsmMapPtr doughMap = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
-    OsmMapPtr cutShapeMap(new OsmMap());
+    OsmMapPtr cutShapeMap = std::make_shared<OsmMap>();
     reader.read(
       "test-files/algorithms/alpha-shape/AlphaShapeGeneratorTest/AlphaShapeGeneratorNegativeBufferTest-out.osm",
       cutShapeMap);
@@ -91,10 +91,10 @@ public:
   void runCropTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr doughMap(new OsmMap());
+    OsmMapPtr doughMap = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
-    OsmMapPtr cutShapeMap(new OsmMap());
+    OsmMapPtr cutShapeMap = std::make_shared<OsmMap>();
     reader.read(
       "test-files/algorithms/alpha-shape/AlphaShapeGeneratorTest/AlphaShapeGeneratorNegativeBufferTest-out.osm",
       cutShapeMap);
@@ -114,10 +114,10 @@ public:
   void runBufferTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr doughMap(new OsmMap());
+    OsmMapPtr doughMap = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
-    OsmMapPtr cutShapeMap(new OsmMap());
+    OsmMapPtr cutShapeMap = std::make_shared<OsmMap>();
     reader.read(
       "test-files/algorithms/alpha-shape/AlphaShapeGeneratorTest/AlphaShapeGeneratorNegativeBufferTest-out.osm",
       cutShapeMap);
@@ -137,10 +137,10 @@ public:
   void runNegativeBufferTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr doughMap(new OsmMap());
+    OsmMapPtr doughMap = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
-    OsmMapPtr cutShapeMap(new OsmMap());
+    OsmMapPtr cutShapeMap = std::make_shared<OsmMap>();
     reader.read(
       "test-files/algorithms/alpha-shape/AlphaShapeGeneratorTest/AlphaShapeGeneratorNegativeBufferTest-out.osm",
       cutShapeMap);
@@ -160,10 +160,10 @@ public:
   void runCropAndBufferTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr doughMap(new OsmMap());
+    OsmMapPtr doughMap = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
-    OsmMapPtr cutShapeMap(new OsmMap());
+    OsmMapPtr cutShapeMap = std::make_shared<OsmMap>();
     reader.read(
       "test-files/algorithms/alpha-shape/AlphaShapeGeneratorTest/AlphaShapeGeneratorNegativeBufferTest-out.osm",
       cutShapeMap);

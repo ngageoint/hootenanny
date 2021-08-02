@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MATCH_H
 #define MATCH_H
@@ -44,12 +44,12 @@ class MatchType;
 class MatchClassification;
 class Match;
 
-typedef std::shared_ptr<Match> MatchPtr;
-typedef std::shared_ptr<const Match> ConstMatchPtr;
+using MatchPtr = std::shared_ptr<Match>;
+using ConstMatchPtr = std::shared_ptr<const Match>;
 
 /**
- * Describes a specific match between two sets of elements. For example the match between two
- * buildings, or the match between an intersection and a round-a-bout.
+ * Describes a specific match between two sets of elements. e.g. the match between two
+ * buildings or the match between an intersection and a round-a-bout.
  *
  * This class is not re-entrant or thread safe.
  */
@@ -63,7 +63,7 @@ public:
   virtual ~Match() = default;
 
   virtual QString explain() const;
-  virtual void setExplain(const QString& /*explainText*/){ }
+  virtual void setExplain(const QString& /*explainText*/) {}
 
   /**
    * Classifies the match and returns a classification object.
@@ -77,12 +77,7 @@ public:
   virtual MatchMembers getMatchMembers() const { return MatchMembers::None; }
 
   /**
-   * Return the name of this kind of match. This is used when tagging the types of reviews. This
-   * typically just returns the name of the feature being reviewed. (e.g. Building or Highway)
-   *
-   * Since this is likely the same name returned over and over it is suggested you use a static
-   * QString to return the name. This avoid constructing multiple duplicate QStrings (possibly
-   * lots of duplicates).
+   * TODO: This already exists in ApiEntityInfo
    */
   virtual QString getName() const = 0;
 
@@ -120,8 +115,8 @@ public:
    * in the whole group will be taken together and not optimized.
    *
    * This is most handy when defining features that should be reviewed if a conflict exists. This
-   * is not a good idea with highly connecte features such as roads. Current experimentation with
-   * this is occuring in POIs and buildings. #3003
+   * is not a good idea with highly connected features such as roads. Experimentation with
+   * this has occurred with POIs and buildings (redmine #3003).
    */
   virtual bool isWholeGroup() const { return false; }
 
@@ -148,14 +143,6 @@ public:
   virtual MatchType getType() const;
 
   /**
-   * Determines if this matches equals another match
-   *
-   * @param other the match being compared with
-   * @return true if this matches matches the comparision match; false otherwise
-   */
-  bool operator==(const Match& other) const;
-
-  /**
    * Returns a collection of matches indexed by the IDs of the elements involved
    *
    * @param matches the matches to index
@@ -173,16 +160,14 @@ public:
   static QString matchPairsToString(
     const std::set<std::pair<ElementId, ElementId>>& matchPairs);
 
+  /**
+   * TODO: This already exists in ApiEntityInfo
+   */
   virtual QString toString() const = 0;
 
-protected:
+  std::shared_ptr<const MatchThreshold> getThreshold() const { return _threshold; }
 
-  /*
-   * All of this order silliness maintains a consistent ordering of matches when they're placed
-   * into a set as pointers.
-   */
-  Match(const std::shared_ptr<const MatchThreshold>& threshold) :
-    _order(_orderCount++), _threshold(threshold) {}
+protected:
 
   friend class MatchPtrComparator;
 
@@ -190,6 +175,13 @@ protected:
   long _order;
 
   const std::shared_ptr<const MatchThreshold> _threshold;
+
+  ElementId _eid1, _eid2;
+
+  Match(const std::shared_ptr<const MatchThreshold>& threshold);
+  Match(
+    const std::shared_ptr<const MatchThreshold>& threshold, const ElementId& eid1,
+    const ElementId& eid2);
 };
 
 inline std::ostream& operator<<(std::ostream & o, ConstMatchPtr m)

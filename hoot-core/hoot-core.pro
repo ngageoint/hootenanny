@@ -21,6 +21,8 @@ INCLUDEPATH += \
   $${DEPENDPATH} \
   ../local/include/ \
 
+QMAKE_CXXFLAGS = -I/usr/include/node -I/usr/local/include/node $$QMAKE_CXXFLAGS
+
 CONFIG += rtti \
     debug \
     precompile_header
@@ -37,6 +39,7 @@ OTHER_FILES = \
     ../conf/core/ConfigOptions.asciidoc \
     ../scripts/jenkins/Jenkinsfile \
     $$files(../scripts/copyright/*, true) \
+    $$files(../scripts/sonar/*, true) \
     ../sonar-project.properties \
     $$files(../Vagrant*)
 

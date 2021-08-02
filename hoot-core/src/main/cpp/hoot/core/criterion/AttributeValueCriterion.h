@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ATTRIBUTE_VALUE_CRITERION_H
 #define ATTRIBUTE_VALUE_CRITERION_H
@@ -44,38 +44,36 @@ public:
   static QString className() { return "hoot::AttributeValueCriterion"; }
 
   AttributeValueCriterion();
-  AttributeValueCriterion(const ElementAttributeType& attributeType,
-                          const QString& comparisonVal,
-                          const TextComparisonType& comparisonType);
-  AttributeValueCriterion(const ElementAttributeType& attributeType,
-                          const double comparisonVal,
-                          const NumericComparisonType& comparisonType);
-  virtual ~AttributeValueCriterion() = default;
+  AttributeValueCriterion(
+    const ElementAttributeType& attributeType, const QString& comparisonVal,
+    const TextComparisonType& comparisonType);
+  AttributeValueCriterion(
+    const ElementAttributeType& attributeType, const double comparisonVal,
+    const NumericComparisonType& comparisonType);
+  ~AttributeValueCriterion() = default;
 
   /**
    * @see ElementCriterion
    */
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<AttributeValueCriterion>(); }
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AttributeValueCriterion()); }
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * @see ApiEntityInfo
    */
-  virtual QString getDescription() const { return "Identifies element attributes by value"; }
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Identifies element attributes by value"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
 private:
 
-  static int logWarnCount;
+  static int _logWarnCount;
 
   // attribute to examine
   ElementAttributeType _attributeType;

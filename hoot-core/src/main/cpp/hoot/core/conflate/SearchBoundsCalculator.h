@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SEARCHBOUNDSCALCULATOR_H
 #define SEARCHBOUNDSCALCULATOR_H
@@ -38,7 +38,8 @@ namespace hoot
 {
 
 /**
- * Given a POI in WGS84, calculate the search bounds in decimal degrees.
+ * @brief The SearchBoundsCalculator class given a POI in WGS84, calculate the search bounds in
+ * decimal degrees.
  *
  * Bad things may happen at the anti-meridian and poles.
  */
@@ -56,7 +57,7 @@ private:
   std::shared_ptr<SearchRadiusProvider> _radiusProvider;
 };
 
-typedef std::shared_ptr<SearchBoundsCalculator> SearchBoundsCalculatorPtr;
+using SearchBoundsCalculatorPtr = std::shared_ptr<SearchBoundsCalculator>;
 
 }
 

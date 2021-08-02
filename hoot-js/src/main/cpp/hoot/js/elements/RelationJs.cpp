@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RelationJs.h"
 
@@ -48,43 +48,43 @@ HOOT_JS_REGISTER(RelationJs)
 
 Persistent<Function> RelationJs::_constructor;
 
-void RelationJs::Init(Handle<Object> target)
+void RelationJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, Relation::className().toStdString().data()));
+  tpl->SetClassName(String::NewFromUtf8(current, Relation::className().toStdString().data()).ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   ElementJs::_addBaseFunctions(tpl);
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "replaceElement"),
-      FunctionTemplate::New(current, replaceElement));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getType"),
-      FunctionTemplate::New(current, getType));
+  tpl->PrototypeTemplate()->Set(current, "getType", FunctionTemplate::New(current, getType));
 
-  _constructor.Reset(current, tpl->GetFunction());
-  target->Set(String::NewFromUtf8(current, "Relation"), ToLocal(&_constructor));
+  _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
+  target->Set(context, toV8("Relation"), ToLocal(&_constructor));
 }
 
-Handle<Object> RelationJs::New(ConstRelationPtr relation)
+Local<Object> RelationJs::New(ConstRelationPtr relation)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   RelationJs* from = ObjectWrap::Unwrap<RelationJs>(result);
   from->_setRelation(relation);
 
   return scope.Escape(result);
 }
 
-Handle<Object> RelationJs::New(RelationPtr relation)
+Local<Object> RelationJs::New(RelationPtr relation)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   RelationJs* from = ObjectWrap::Unwrap<RelationJs>(result);
   from->_setRelation(relation);
 
@@ -103,28 +103,6 @@ void RelationJs::New(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(args.This());
 }
 
-void RelationJs::replaceElement(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  try
-  {
-    RelationJs* obj = ObjectWrap::Unwrap<RelationJs>(args.This());
-
-    ConstElementPtr e1 = toCpp<ConstElementPtr>(args[0]->ToObject());
-    ConstElementPtr e2 = toCpp<ConstElementPtr>(args[1]->ToObject());
-
-    obj->getRelation()->replaceElement(e1, e2);
-
-    args.GetReturnValue().SetUndefined();
-  }
-  catch (const HootException& e)
-  {
-    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
-  }
-}
-
 void RelationJs::getType(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
@@ -132,7 +110,7 @@ void RelationJs::getType(const FunctionCallbackInfo<Value>& args)
 
   ConstRelationPtr relation = ObjectWrap::Unwrap<RelationJs>(args.This())->getConstRelation();
 
-  args.GetReturnValue().Set(String::NewFromUtf8(current, relation->getType().toUtf8().data()));
+  args.GetReturnValue().Set(String::NewFromUtf8(current, relation->getType().toUtf8().data()).ToLocalChecked());
 }
 
 }

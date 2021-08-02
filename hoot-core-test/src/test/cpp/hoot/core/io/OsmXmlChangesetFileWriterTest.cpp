@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -53,7 +53,8 @@ public:
 
   void runSimpleTest()
   {
-    std::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
+    std::shared_ptr<ChangesetProvider> changesetProvider =
+      std::make_shared<TestOsmChangesetProvider>(false);
     OsmXmlChangesetFileWriter uut;
     uut.setConfiguration(conf());
     uut.write(_outputPath + "changeset.osc", changesetProvider);

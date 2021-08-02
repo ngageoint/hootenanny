@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef DIRECTEDGRAPH_H
@@ -44,6 +44,7 @@ public:
   class Edge
   {
   public:
+
     Edge(long from, long to, double weight)
     {
       this->from = from;
@@ -56,9 +57,9 @@ public:
     double weight;
   };
 
-  DirectedGraph();
+  DirectedGraph() = default;
 
-  virtual ~DirectedGraph() {}
+  virtual ~DirectedGraph() = default;
 
   void addEdge(long from, long to, double weight);
 
@@ -73,15 +74,15 @@ public:
   /**
    * Determine the cost of a way in cost per meter.
    */
-  virtual double determineCost(const std::shared_ptr<Way>& way);
+  virtual double determineCost(const std::shared_ptr<Way>& way) const;
 
   virtual bool isOneWay(const std::shared_ptr<Way>& way);
 
-protected:
+private:
 
   QMultiHash<long, Edge> _edges;
 
-  double _mphToSecondsPerMeter(double mph) { return 2.23694 / mph; }
+  double _mphToSecondsPerMeter(double mph) const { return 2.23694 / mph; } 
 };
 
 }

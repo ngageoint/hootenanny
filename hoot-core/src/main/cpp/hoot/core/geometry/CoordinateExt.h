@@ -19,17 +19,15 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef COORDINATEEXT_H
 #define COORDINATEEXT_H
 
 #include <geos/geom/Coordinate.h>
-
-using namespace geos::geom;
 
 namespace hoot
 {
@@ -37,13 +35,13 @@ namespace hoot
 /*
  * Helper for 2D vector math with Coordinates
  */
-class CoordinateExt : public Coordinate
+class CoordinateExt : public geos::geom::Coordinate
 {
 public:
 
-  CoordinateExt(Coordinate c) : Coordinate(c) {}
-  CoordinateExt(double xNew = 0.0, double yNew = 0.0, double zNew = DoubleNotANumber)
-    : Coordinate( xNew, yNew, zNew ) {}
+  CoordinateExt(geos::geom::Coordinate c) : geos::geom::Coordinate(c) { }
+  CoordinateExt(double xNew = 0.0, double yNew = 0.0, double zNew = geos::DoubleNotANumber)
+    : Coordinate( xNew, yNew, zNew ) { }
 
   double length() const
   {
@@ -63,12 +61,12 @@ public:
     y /= len;
   }
 
-  double dotProduct(CoordinateExt val)
+  double dotProduct(CoordinateExt val) const
   {
     return x * val.x + y * val.y;
   }
 
-  double crossProduct(CoordinateExt val)
+  double crossProduct(CoordinateExt val) const
   {
       return x * val.y - y * val.x;
   }

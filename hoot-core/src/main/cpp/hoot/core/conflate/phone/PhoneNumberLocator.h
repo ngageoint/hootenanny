@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef PHONE_NUMBER_LOCATOR_H
@@ -49,10 +49,9 @@ class PhoneNumberLocator : public Configurable
 public:
 
   PhoneNumberLocator();
-  PhoneNumberLocator(const QString& regionCode);
-  virtual ~PhoneNumberLocator() = default;
+  ~PhoneNumberLocator() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Returns an admin level address string for a given phone number
@@ -68,7 +67,7 @@ public:
 
 private:
 
-  //two digit location code required to validate phone numbers; see ConfigOptions
+  // two digit location code required to validate phone numbers; see ConfigOptions
   QString _regionCode;
   i18n::phonenumbers::PhoneNumberOfflineGeocoder _geocoder;
   mutable int _numLocated;

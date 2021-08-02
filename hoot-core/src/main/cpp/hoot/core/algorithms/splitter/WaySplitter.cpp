@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "WaySplitter.h"
@@ -46,29 +46,29 @@ using namespace std;
 namespace hoot
 {
 
-WaySplitter::WaySplitter(const OsmMapPtr& map, WayPtr a) :
-  _map(map)
+WaySplitter::WaySplitter(const OsmMapPtr& map, WayPtr way) :
+_map(map),
+_way(way),
+_nf(std::make_shared<FindNodesInWayFactory>(_way))
 {
-  _a = a;
-  _nf.reset(new FindNodesInWayFactory(a));
 }
 
-vector<WayPtr> WaySplitter::createSplits(const vector<WayLocation>& wl)
+vector<WayPtr> WaySplitter::createSplits(const vector<WayLocation>& wl) const
 {
   vector<WayPtr> result;
-  WayLocation last = WayLocation(_map, _a, 0, 0.0);
+  WayLocation last = WayLocation(_map, _way, 0, 0.0);
 
   result.resize(wl.size() + 1);
 
   for (size_t i = 0; i < wl.size(); i++)
   {
-    assert(wl[i].getWay() == _a);
+    assert(wl[i].getWay() == _way);
     WayLocation curr = wl[i];
 
     if (last.compareTo(curr) != 0)
     {
-      result[i] = WaySubline(last, curr).toWay(_map, _nf.get());
-      result[i]->setPid(_a->getId());
+      result[i] = WaySubline(last, curr).toWay(_map, _nf);
+      result[i]->setPid(_way->getId());
       if (result[i]->getNodeCount() == 0)
       {
         result[i].reset();
@@ -77,18 +77,18 @@ vector<WayPtr> WaySplitter::createSplits(const vector<WayLocation>& wl)
     last = curr;
   }
 
-  WayLocation end(_map, _a, _a->getNodeCount() - 1, 0.0);
+  WayLocation end(_map, _way, _way->getNodeCount() - 1, 0.0);
   if (last.compareTo(end) != 0)
   {
-    WayPtr w = WaySubline(last, end).toWay(_map, _nf.get());
-    w->setPid(_a->getId());
+    WayPtr w = WaySubline(last, end).toWay(_map, _nf);
+    w->setPid(_way->getId());
     result[result.size() - 1] = w;
   }
 
   return result;
 }
 
-WayPtr WaySplitter::createSubline(const WaySubline& subline, vector<WayPtr>& scraps)
+WayPtr WaySplitter::createSubline(const WaySubline& subline, vector<WayPtr>& scraps) const
 {
   vector<WayLocation> wls;
   wls.push_back(subline.getStart());
@@ -112,9 +112,9 @@ WayPtr WaySplitter::createSubline(const WaySubline& subline, vector<WayPtr>& scr
   return splits[1];
 }
 
-vector<WayPtr> WaySplitter::split(const OsmMapPtr& map, WayPtr a, WayLocation& splitPoint)
+vector<WayPtr> WaySplitter::split(const OsmMapPtr& map, WayPtr way, const WayLocation& splitPoint)
 {
-  WaySplitter s(map, a);
+  WaySplitter s(map, way);
   return s.split(splitPoint);
 }
 
@@ -136,32 +136,31 @@ void WaySplitter::split(const OsmMapPtr& map, const WayPtr& w, double maxSize)
   }
 }
 
-vector<WayPtr> WaySplitter::split(WayLocation& splitPoint)
+vector<WayPtr> WaySplitter::split(const WayLocation& splitPoint) const
 {
   vector<WayPtr> result;
 
   if (splitPoint.isFirst() || splitPoint.isLast())
   {
-    result.push_back(_a);
+    result.push_back(_way);
   }
   else
   {
-    WayLocation first(_map, _a, 0, 0.0);
-    WayLocation last(_map, _a, _a->getNodeCount() - 1, 0.0);
+    WayLocation first(_map, _way, 0, 0.0);
+    WayLocation last(_map, _way, _way->getNodeCount() - 1, 0.0);
 
-    result.push_back(WaySubline(first, splitPoint).toWay(_map, _nf.get(), true));
-    result.push_back(WaySubline(splitPoint, last).toWay(_map, _nf.get(), false));
+    result.push_back(WaySubline(first, splitPoint).toWay(_map, _nf, true));
+    result.push_back(WaySubline(splitPoint, last).toWay(_map, _nf, false));
 
     //  Record the parent id for the way joiner
-    result[1]->setPid(_a->getId());
+    result[1]->setPid(_way->getId());
 
-    RemoveWayByEid::removeWay(_map, _a->getId());
+    RemoveWayByEid::removeWay(_map, _way->getId());
     _map->addWay(result[0]);
     _map->addWay(result[1]);
   }
 
   return result;
 }
-
 
 }

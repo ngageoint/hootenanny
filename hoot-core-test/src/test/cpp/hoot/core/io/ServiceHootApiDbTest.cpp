@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -405,7 +405,7 @@ public:
           " WHERE id=:id "
           "ORDER BY longitude",
           "38;-104;true;1329332431;1",
-          NULL,
+          nullptr,
           (qlonglong)nodeId);
 
 
@@ -419,7 +419,7 @@ public:
           " WHERE id=:id "
           "ORDER BY longitude",
           "3.1415;2.71828;true;3222453693;1",
-          NULL,
+          nullptr,
           (qlonglong)nodeId);
   }
 
@@ -567,7 +567,7 @@ public:
 
     database.commit();
 
-    return std::shared_ptr<QList<long>>(new QList<long>(ids));
+    return std::make_shared<QList<long>>(ids);
   }
 
   const std::shared_ptr<QList<long>> insertTestMap2(HootApiDb& database)
@@ -623,7 +623,7 @@ public:
 
     database.commit();
 
-    return std::shared_ptr<QList<long>>(new QList<long>(ids));
+    return std::make_shared<QList<long>>(ids);
   }
 
   const std::shared_ptr<QList<long>> insertTestMapWithCustomTags(HootApiDb& database)
@@ -654,9 +654,8 @@ public:
 
     database.commit();
 
-    return std::shared_ptr<QList<long>>(new QList<long>(ids));
+    return std::make_shared<QList<long>>(ids);
   }
-
 };
 
 #ifdef HOOT_HAVE_SERVICES

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MultiLineStringVisitor.h"
 
@@ -46,20 +46,28 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, MultiLineStringVisitor)
 
 MultiLineStringVisitor::MultiLineStringVisitor() :
-_provider(),
-_ls(0)
+_ls(nullptr)
 {
 }
 
-MultiLineString* MultiLineStringVisitor::createMultiLineString()
+std::shared_ptr<geos::geom::MultiLineString> MultiLineStringVisitor::createMultiLineString()
 {
-  if (_ls != 0)
+  if (_ls != nullptr)
   {
-    return GeometryFactory::getDefaultInstance()->createMultiLineString(_ls);
+    // GeometryFactory takes ownership of _ls here. It seems like there is a potential memory leak
+    // here. If this method never gets called, then ownership of _ls is never transferred and the
+    // memory is never deleted (which fortunately we're not doing anywhere currently). Tried
+    // tracking the ownership transfer and deleting in the destructor, but that causes a test to
+    // hang.
+    return
+      std::shared_ptr<geos::geom::MultiLineString>(
+        GeometryFactory::getDefaultInstance()->createMultiLineString(_ls));
   }
   else
   {
-    return GeometryFactory::getDefaultInstance()->createMultiLineString();
+    return
+      std::shared_ptr<geos::geom::MultiLineString>(
+        GeometryFactory::getDefaultInstance()->createMultiLineString().release());
   }
 }
 
@@ -72,8 +80,7 @@ void MultiLineStringVisitor::visit(const ConstElementPtr& e)
 
   if (e->getElementType() == ElementType::Way)
   {
-    ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
-    visit(w);
+    visit(std::dynamic_pointer_cast<const Way>(e));
   }
 }
 
@@ -86,13 +93,12 @@ void MultiLineStringVisitor::visit(const ConstWayPtr& w)
 
   if (w->getNodeCount() >= 2)
   {
-    if (_ls == 0)
+    if (_ls == nullptr)
     {
+      // We'll pass ownership of this pointer off in createMultiLineString.
       _ls = new vector<Geometry*>();
     }
-
-    Geometry* g = ElementToGeometryConverter(_provider).convertToLineString(w)->clone();
-    _ls->push_back(g);
+    _ls->push_back(ElementToGeometryConverter(_provider).convertToLineString(w)->clone().release());
   }
 }
 

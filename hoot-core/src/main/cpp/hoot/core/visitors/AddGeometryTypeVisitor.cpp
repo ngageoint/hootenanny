@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "AddGeometryTypeVisitor.h"
 
@@ -48,11 +48,15 @@ void AddGeometryTypeVisitor::visit(const std::shared_ptr<Element>& e)
     }
     else
     {
-      QString type =
-        QString::fromStdString(
-          ElementToGeometryConverter(_map->shared_from_this())
-          .convertToGeometry(e)->getGeometryType());
-      e->getTags()["geometry_type"] = type;
+      std::shared_ptr<geos::geom::Geometry> geometry =
+        ElementToGeometryConverter(_map->shared_from_this())
+          .convertToGeometry(e);
+      LOG_VART(geometry->isEmpty());
+      if (geometry && !geometry->isEmpty())
+      {
+        const QString type = QString::fromStdString(geometry->getGeometryType());
+        e->getTags()["geometry_type"] = type;
+      }
     }
   }
 }

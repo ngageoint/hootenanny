@@ -19,23 +19,24 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RubberSheetApplier.h"
 
 // Hoot
+#include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
-#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/util/Settings.h>
 
 // Qt
@@ -44,13 +45,14 @@
 namespace hoot
 {
 
-RubberSheetApplier::RubberSheetApplier()
+void RubberSheetApplier::apply(
+  const QString& transform, const QString& input, const QString& output) const
 {
-}
+  LOG_STATUS(
+    "Applying alignment transform from ..." << FileUtils::toLogFormat(input, 25) << " to " <<
+    FileUtils::toLogFormat(output, 25) << "...");
 
-void RubberSheetApplier::apply(const QString& transform, const QString& input, const QString& output)
-{
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   IoUtils::loadMap(map, input, true, Status::Unknown1);
 
   // make sure rubber sheeting isn't applied during cleaning.

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmChangeWriterFactory.h"
 
@@ -44,7 +44,7 @@ OsmChangeWriterFactory& OsmChangeWriterFactory::getInstance()
 }
 
 std::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(
-  const QString& url, const QString& elementPayloadFormat)
+  const QString& url, const QString& elementPayloadFormat) const
 {
   LOG_VART(url);
   LOG_VART(elementPayloadFormat);
@@ -55,7 +55,7 @@ std::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
     LOG_VART(names[i]);
-    writer.reset(Factory::getInstance().constructObject<OsmChangeWriter>(names[i]));
+    writer = Factory::getInstance().constructObject<OsmChangeWriter>(names[i]);
     if (writer->isSupported(url))
     {
       writer->setElementPayloadFormat(elementPayloadFormat);
@@ -75,7 +75,7 @@ std::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(
   return writer;
 }
 
-bool OsmChangeWriterFactory::isSupported(const QString& output)
+bool OsmChangeWriterFactory::isSupported(const QString& output) const
 {
   return output.endsWith(".xml") || output.endsWith(".json");
 }

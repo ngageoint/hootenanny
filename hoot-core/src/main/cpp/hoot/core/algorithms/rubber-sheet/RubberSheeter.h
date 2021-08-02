@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RUBBERSHEETER_H
@@ -35,22 +35,21 @@ namespace hoot
 {
 
 /**
- * Rubber sheets two inputs together
+ * @brief The RubberSheeter class rubber sheets two inputs together.
  */
 class RubberSheeter
 {
 public:
 
-  RubberSheeter();
+  RubberSheeter() = default;
 
   /**
-   * Rubber sheets two inputs together
-   *
+   * @brief rubberSheet rubber sheets two inputs together.
    * @param input1 the first input to rubber sheet
    * @param input2 the second input to rubber sheet
    * @param output the rubber sheeted combined output
    */
-  void rubberSheet(const QString& input1, const QString& input2, const QString& output);
+  void rubberSheet(const QString& input1, const QString& input2, const QString& output) const;
 };
 
 }

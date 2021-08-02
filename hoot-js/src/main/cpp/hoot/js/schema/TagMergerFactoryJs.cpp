@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "TagMergerFactoryJs.h"
 
@@ -38,22 +38,25 @@ namespace hoot
 
 HOOT_JS_REGISTER(TagMergerFactoryJs)
 
-void TagMergerFactoryJs::Init(Handle<Object> exports)
+void TagMergerFactoryJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> tagMergerFactory = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "TagMergerFactory"), tagMergerFactory);
-  tagMergerFactory->Set(String::NewFromUtf8(current, "mergeTags"),
-    FunctionTemplate::New(current, mergeTags)->GetFunction());
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> tagMergerFactory = Object::New(current);
+  exports->Set(context, toV8("TagMergerFactory"), tagMergerFactory);
+  tagMergerFactory->Set(context, toV8("mergeTags"),
+    FunctionTemplate::New(current, mergeTags)->GetFunction(context).ToLocalChecked());
 }
 
 void TagMergerFactoryJs::mergeTags(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope(args.GetIsolate());
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  Tags t1 = toCpp<Tags>(args[0]->ToObject());
-  Tags t2 = toCpp<Tags>(args[1]->ToObject());
+  Tags t1 = toCpp<Tags>(args[0]->ToObject(context).ToLocalChecked());
+  Tags t2 = toCpp<Tags>(args[1]->ToObject(context).ToLocalChecked());
 
   args.GetReturnValue().Set(TagsJs::New(TagMergerFactory::mergeTags(t1, t2, ElementType::Unknown)));
 }

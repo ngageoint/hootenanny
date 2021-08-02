@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -46,12 +46,10 @@ public:
 
   OptimizeConflateTestSettingsCmd() { }
 
-  virtual QString getName() const { return "optimize-network-conf"; }
-
-  virtual QString getDescription() const
-  { return "Determines an optimal road conflation configuration for the Network Algorithm"; }
-
-  virtual QString getType() const { return "rnd"; }
+  QString getName() const override { return "optimize-network-conf"; }
+  QString getDescription() const override
+  { return "Determines an optimal configuration for the Network conflation algorithm"; }
+  QString getType() const override { return "rnd"; }
 
   virtual int runSimple(QStringList& args)
   {
@@ -89,15 +87,15 @@ public:
     std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction;
     if (testType == "case")
     {
-      fitnessFunction.reset(new CaseTestFitnessFunction(testsDir, configFilePath));
+      fitnessFunction = std::make_shared<CaseTestFitnessFunction>(testsDir, configFilePath);
     }
     else if (testType == "release")
     {
-      fitnessFunction.reset(new ReleaseTestFitnessFunction(testsDir, configFilePath));
+      fitnessFunction = std::make_shared<ReleaseTestFitnessFunction>(testsDir, configFilePath);
     }
     else
     {
-      fitnessFunction.reset(new PertyTestFitnessFunction(testsDir, configFilePath));
+      fitnessFunction = std::make_shared<PertyTestFitnessFunction>(testsDir, configFilePath);
     }
 
     ConflateTestSettingsOptimizer(verbose).runOptimization(

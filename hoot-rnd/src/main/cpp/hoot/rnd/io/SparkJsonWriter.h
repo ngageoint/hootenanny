@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SPARKJSONWRITER_H
 #define SPARKJSONWRITER_H
@@ -51,45 +51,45 @@ public:
   static QString className() { return "hoot::SparkJsonWriter"; }
 
   SparkJsonWriter();
-  virtual ~SparkJsonWriter() = default;
+  ~SparkJsonWriter() = default;
 
   /**
    * @see OsmMapWriter
    */
-  virtual void close() override { if (_fp.get()) { _fp->close(); _fp.reset(); } }
+  void close() override { if (_fp.get()) { _fp->close(); _fp.reset(); } }
 
   /**
    * @see PartialOsmMapWriter
    */
-  virtual void finalizePartial() override { close(); }
+  void finalizePartial() override { close(); }
 
   /**
    * @see OsmMapWriter
    */
-  virtual bool isSupported(const QString& url) override { return url.endsWith(".spark"); }
+  bool isSupported(const QString& url) override { return url.endsWith(".spark"); }
 
   /**
    * Open the specified filename for writing.
    */
-  virtual void open(const QString& fileName) override;
+  void open(const QString& fileName) override;
 
   /**
    * @see PartialOsmMapWriter
    */
-  virtual void writePartial(const ConstNodePtr& n) override;
+  void writePartial(const ConstNodePtr& n) override;
 
   /**
    * @see PartialOsmMapWriter
    */
-  virtual void writePartial(const ConstWayPtr&) override { throw NotImplementedException(); }
+  void writePartial(const ConstWayPtr&) override { throw NotImplementedException(); }
 
   /**
    * @see PartialOsmMapWriter
    */
-  virtual void writePartial(const ConstRelationPtr&) override { throw NotImplementedException(); }
+  void writePartial(const ConstRelationPtr&) override { throw NotImplementedException(); }
 
   //no point in showing this in the format list at this point, since its not actively maintained
-  virtual QString supportedFormats() override { return ""; }
+  QString supportedFormats() override { return ""; }
 
 private:
 

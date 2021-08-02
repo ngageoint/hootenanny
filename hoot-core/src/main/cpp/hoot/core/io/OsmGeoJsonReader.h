@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSM_GEOJSON_READER_H
@@ -48,7 +48,7 @@
 namespace hoot
 {
 
-typedef std::vector<geos::geom::Coordinate> JsonCoordinates;
+using JsonCoordinates = std::vector<geos::geom::Coordinate>;
 
 /**
  * This class is intended to create an OsmMap from a given GeoJSON string.
@@ -64,7 +64,7 @@ public:
   static QString className() { return "hoot::OsmGeoJsonReader"; }
 
   OsmGeoJsonReader() = default;
-  virtual ~OsmGeoJsonReader() = default;
+  ~OsmGeoJsonReader() = default;
 
   /**
    * @brief isSupported returns true if the URL is likely supported. This isn't
@@ -73,7 +73,7 @@ public:
    * @param url
    * @return
    */
-  virtual bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) override;
 
   /**
    * @brief read Reads the data specified by the last call to open(...)
@@ -81,7 +81,7 @@ public:
    *        will likely be closed after this call
    * @param map
    */
-  virtual void read(const OsmMapPtr& map) override;
+  void read(const OsmMapPtr& map) override;
 
   /**
    * @brief loadFromString - Builds a map from the JSON string. Throws a
@@ -90,7 +90,7 @@ public:
    * @param jsonStr - input string, map - the map to load the JSON into
    * @return
    */
-  virtual void loadFromString(const QString& jsonStr, const OsmMapPtr& map);
+  void loadFromString(const QString& jsonStr, const OsmMapPtr& map) override;
 
   /**
    * @brief loadFromFile - Reads the whole file as a string, passes it
@@ -98,23 +98,26 @@ public:
    * @param path - Path to file
    * @return Smart pointer to the OSM map
    */
-  virtual OsmMapPtr loadFromFile(const QString& path);
+  OsmMapPtr loadFromFile(const QString& path) override;
 
-  virtual QString supportedFormats() override { return ".geojson"; }
+  QString supportedFormats() override { return ".geojson"; }
 
 private:
+
+  /**
+   * @brief _roles List of roles for the current relation, saved for recursive relations
+   */
+  std::queue<std::string> _roles;
 
   /**
    * @brief parseOverpassJson Traverses our property tree and adds
    *        elements to the map
    */
   void _parseGeoJson();
-
   /**
    * @brief _parseGeoJsonFeature Parse a feature and add it to a map
    */
   void _parseGeoJsonFeature(const boost::property_tree::ptree &feature);
-
   /**
    * @brief _parseGeoJsonNode Reads node info out of the property tree and
    *        builds a Node object. Adds the node to the map.
@@ -125,7 +128,6 @@ private:
   void _parseGeoJsonNode(const std::string& id,
                          const boost::property_tree::ptree& properties,
                          const boost::property_tree::ptree& geometry);
-
   /**
    * @brief _parseGeoJsonWay Reads way info out of the property tree and
    *        builds a Way object. Adds the way to the map.
@@ -136,7 +138,6 @@ private:
   void _parseGeoJsonWay(const std::string& id,
                         const boost::property_tree::ptree& properties,
                         const boost::property_tree::ptree& geometry);
-
   /**
    * @brief _parseGeoJsonRelation Reads relation info out of the property tree
    *        and builds a Relation object. Adds relation to the map.
@@ -153,7 +154,7 @@ private:
    * @param geometry Tree of simple geometry in JSON format
    * @return Vector of coordinates
    */
-  JsonCoordinates _parseGeometry(const boost::property_tree::ptree& geometry);
+  JsonCoordinates _parseGeometry(const boost::property_tree::ptree& geometry) const;
 
   /**
    * @brief _parseMulti*Geometry Parse the multi geometries into a vector of coordinates
@@ -161,26 +162,26 @@ private:
    * @param geometry Tree of multi-geometry in JSON format
    * @param relation OSM relation to represent the multi-geometry that all elements are added to
    */
-  void _parseMultiPointGeometry(const boost::property_tree::ptree& geometry,
-                                const RelationPtr& relation);
-  void _parseMultiLineGeometry(const boost::property_tree::ptree& geometry,
-                               const RelationPtr& relation);
-  void _parseMultiPolygonGeometry(const boost::property_tree::ptree& geometry,
-                                  const RelationPtr& relation);
-
+  void _parseMultiPointGeometry(
+    const boost::property_tree::ptree& geometry, const RelationPtr& relation) const;
+  void _parseMultiLineGeometry(
+    const boost::property_tree::ptree& geometry, const RelationPtr& relation) const;
+  void _parseMultiPolygonGeometry(
+    const boost::property_tree::ptree& geometry, const RelationPtr& relation) const;
   /**
    * @brief _parseMultiGeometry Parse "Multi" geometry object into a vector of vectors of coordiantes
    * @param geometry Three of "multi" geometry in JSON format
    * @return Vector of vectors of coordinates
    */
-  std::vector<JsonCoordinates> _parseMultiGeometry(const boost::property_tree::ptree& geometry);
+  std::vector<JsonCoordinates> _parseMultiGeometry(
+    const boost::property_tree::ptree& geometry) const;
 
   /**
    * @brief _parseBbox Parse the bounding box array in JSON format into Geos Envelope
    * @param bbox Tree of bounding box JSON array
    * @return Bounding box as a usable Envelope
    */
-  geos::geom::Envelope _parseBbox(const boost::property_tree::ptree& bbox);
+  geos::geom::Envelope _parseBbox(const boost::property_tree::ptree& bbox) const;
 
   /**
    * @brief _addTags Reads tags or properties from the given ptree, and adds them to the
@@ -189,7 +190,6 @@ private:
    * @param element Element to which we will add the tags
    */
   void _addTags(const boost::property_tree::ptree &item, const ElementPtr& element);
-
   /**
    * @brief _parseSubTags Reads tags that are objects or arrays into a JSON string
    * @param item Property Tree (subtree)
@@ -197,12 +197,8 @@ private:
    */
   std::string _parseSubTags(const boost::property_tree::ptree &item);
 
-  /**
-   * @brief _roles List of roles for the current relation, saved for recursive relations
-   */
-  std::queue<std::string> _roles;
-
-  std::shared_ptr<geos::geom::Coordinate> ReadCoordinate(const boost::property_tree::ptree& coordsIt);
+  std::shared_ptr<geos::geom::Coordinate> _readCoordinate(
+    const boost::property_tree::ptree& coordsIt) const;
 
   /*
    * For use with older data not necessarily in WGS84.

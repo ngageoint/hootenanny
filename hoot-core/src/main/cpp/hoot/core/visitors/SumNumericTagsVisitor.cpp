@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "SumNumericTagsVisitor.h"
 
@@ -31,8 +31,6 @@
 
 namespace hoot
 {
-
-int SumNumericTagsVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementVisitor, SumNumericTagsVisitor)
 
@@ -72,17 +70,9 @@ void SumNumericTagsVisitor::visit(const ConstElementPtr& e)
       }
       else
       {
-        if (logWarnCount < Log::getWarnMessageLimit())
-        {
-          LOG_WARN(
-            "Unsuccessfully attempted to convert tag with key: " << key << " and value: " <<
-            strValue << " to number.");
-        }
-        else if (logWarnCount == Log::getWarnMessageLimit())
-        {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-        }
-        logWarnCount++;
+        LOG_TRACE(
+          "Unsuccessfully attempted to convert tag with key: " << key << " and value: " <<
+          strValue << " to number.");
       }
     }
   }

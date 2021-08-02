@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SERVICESDBTESTUTILS_H
 #define SERVICESDBTESTUTILS_H
@@ -43,45 +43,46 @@ namespace hoot
 {
 
 /**
-General utilities that can be shared between the services database related unit tests
-*/
+ * @brief The ServicesDbTestUtils class contains general utilities that can be shared between the
+ * services database related unit tests
+ */
 class ServicesDbTestUtils
 {
 
 public:
 
   /**
-   * Run a specified query and compare the results against the expected results.
+   * @brief compareRecords Runs a specified query and compare the results against the expected
+   * results.
    */
-  static void compareRecords(QString sql, QString expected, QString testName = NULL,
+  static void compareRecords(QString sql, QString expected, QString testName = nullptr,
                              QVariant v1 = QVariant(), QVariant v2 = QVariant());
 
   /**
-   * Retrieves a URL used to modify services database data
+   * @brief getDbModifyUrl retrieves a URL used to modify services database data.
    */
   static QUrl getDbModifyUrl(const QString& mapName = "testMap");
 
   /**
-   * Retrieves a URL used to read services database data
+   * @brief getDbReadUrl retrieves a URL used to read services database data.
    */
   static QUrl getDbReadUrl(const long mapId);
 
   static QUrl getDbReadUrl(const long mapId, const long elemId, const QString& elemType);
 
   /**
-   * Retrieves URL for OSM API database
-   *
+   * @brief getOsmApiDbUrl retrieves URL for OSM API database.
    * @return URL for OSM API database
    */
   static QUrl getOsmApiDbUrl();
 
   /**
-   * Delete the user with the specified email from the services database
+   * @brief deleteUser deletes the user with the specified email from the services database.
    */
   static void deleteUser(QString email);
 
   /**
-   * Find a match in the test key list and return the index
+   * @brief findIndex Finds a match in the test key list and returns the index.
    */
   static int findIndex(const QList<QString>& keys, const QString& key);
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmPbfReader.h"
@@ -32,18 +32,17 @@
 // Hoot Includes
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/PbfConstants.h>
 #include <hoot/core/proto/FileFormat.pb.h>
 #include <hoot/core/proto/OsmFormat.pb.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
-
-using namespace hoot::pb;
 
 // Standard Includes
 #include <fstream>
@@ -62,6 +61,7 @@ using namespace hoot::pb;
 #include <zlib.h>
 
 using namespace geos::geom;
+using namespace hoot::pb;
 using namespace std;
 
 namespace hoot
@@ -74,6 +74,7 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmPbfReader)
 class OsmPbfReaderData
 {
 public:
+
   Blob blob;
   BlobHeader blobHeader;
   HeaderBlock headerBlock;
@@ -102,12 +103,12 @@ OsmPbfReader::OsmPbfReader(const QString& urlString)
 
 void OsmPbfReader::_init(bool useFileId)
 {
-  _d = new OsmPbfReaderData();
+  _d = std::make_shared<OsmPbfReaderData>();
   _useFileId = useFileId;
   _status = hoot::Status::Invalid;
   _useFileStatus = false;
   _permissive = true;
-  _in = NULL;
+  _in.reset();
   _needToCloseInput = false;
   _typeThenId = false;
 
@@ -120,7 +121,6 @@ void OsmPbfReader::_init(bool useFileId)
 
 OsmPbfReader::~OsmPbfReader()
 {
-  delete _d;
   if (_needToCloseInput == true)
   {
     close();
@@ -137,8 +137,8 @@ void OsmPbfReader::setConfiguration(const Settings &conf)
   _circularErrorTagKeys = ConfigOptions().getCircularErrorTagKeys();
 }
 
-void OsmPbfReader::_addTag(const std::shared_ptr<Element>& e, const QString& key,
-                           const QString& value)
+void OsmPbfReader::_addTag(
+  const std::shared_ptr<Element>& e, const QString& key, const QString& value) const
 {
   QString k = key.trimmed();
   QString v = value.trimmed();
@@ -221,17 +221,17 @@ void OsmPbfReader::_addTag(const std::shared_ptr<Element>& e, const QString& key
   }
 }
 
-double OsmPbfReader::_convertLon(long lon)
+double OsmPbfReader::_convertLon(long lon) const
 {
   return .000000001 * (_lonOffset + (_granularity * lon));
 }
 
-double OsmPbfReader::_convertLat(long lat)
+double OsmPbfReader::_convertLat(long lat) const
 {
   return .000000001 * (_latOffset + (_granularity * lat));
 }
 
-ElementId OsmPbfReader::_convertToElementId(long id, int memberType)
+ElementId OsmPbfReader::_convertToElementId(long id, int memberType) const
 {
   ElementType t;
   switch (memberType)
@@ -515,7 +515,7 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
   double x = _convertLon(n.lon());
   double y = _convertLat(n.lat());
 
-  std::shared_ptr<hoot::Node> newNode(new hoot::Node(_status, newId, x, y, _defaultCircularError));
+  std::shared_ptr<hoot::Node> newNode = Node::newSp(_status, newId, x, y, _defaultCircularError);
 
   for (int i = 0; i < n.keys().size() && i < n.vals().size(); i++)
   {
@@ -594,19 +594,19 @@ void OsmPbfReader::_loadOsmData()
   _latOffset = _d->primitiveBlock.lat_offset();
   _dateGranularity = _d->primitiveBlock.date_granularity();
 
+  // We don't handle changesets.
   _loadNodes();
   _loadDenseNodes();
   _loadWays();
   _loadRelations();
-  // we don't handle change sets
-  // _loadChangeSets();
 }
 
-vector<OsmPbfReader::BlobLocation> OsmPbfReader::loadOsmDataBlobOffsets(istream& strm)
+vector<OsmPbfReader::BlobLocation> OsmPbfReader::loadOsmDataBlobOffsets(
+  std::shared_ptr<istream> strm)
 {
   vector<BlobLocation> result;
 
-  _in = &strm;
+  _in = strm;
 
   _in->seekg (0, ios::end);
   long length = _in->tellg();
@@ -632,26 +632,17 @@ vector<OsmPbfReader::BlobLocation> OsmPbfReader::loadOsmDataBlobOffsets(istream&
     }
     _in->seekg(_d->blobHeader.datasize(), ios_base::cur);
     t = Tgs::Time::getTime();
-    if (Log::getInstance().getLevel() <= Log::Info && t - start > 5 && t - last >= 2)
+    if (t - start > 5 && t - last >= 2)
     {
       long pos = _in->tellg();
-      PROGRESS_INFO(QString("%1 / %2 - %3 MB/s                  ")
-                    .arg(pos / 1.0e6, 0, 'g', 1)
-                    .arg(length / 1.0e6, 0, 'g', 1)
-                    .arg(((_in->tellg() - lastPos) / (t - last)) / 1.0e6, 0, 'g', 2));
+      PROGRESS_STATUS(
+        QString("Loading blob offsets: %1 / %2 - %3 MB/s                  ")
+          .arg(StringUtils::formatLargeNumber(pos / 1e6))
+          .arg(StringUtils::formatLargeNumber(length / 1e6))
+          .arg(((_in->tellg() - lastPos) / (t - last)) / 1.0e6, 0, 'g', 2));
       last = t;
       lastPos = _in->tellg();
     }
-  }
-
-  t = Tgs::Time::getTime();
-  if (t - start > 5)
-  {
-    // print the final summary
-    LOG_INFO(QString("%1 / %2 - %3 MB/s                  ")
-             .arg(length / 1.0e6, 0, 'g', 1)
-             .arg(length / 1.0e6, 0, 'g', 1)
-             .arg((length / (t - start)) / 1.0e6, 0, 'g', 2));
   }
 
   return result;
@@ -661,8 +652,8 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
 {
   long newId = _createRelationId(r.id());
 
-  std::shared_ptr<hoot::Relation> newRelation(
-    new hoot::Relation(_status, newId, _defaultCircularError));
+  std::shared_ptr<hoot::Relation> newRelation =
+    std::make_shared<Relation>(_status, newId, _defaultCircularError);
 
   if (r.roles_sid_size() != r.memids_size() || r.roles_sid_size() != r.types_size())
   {
@@ -813,7 +804,7 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
 {
   long newId = _createWayId(w.id());
 
-  std::shared_ptr<hoot::Way> newWay(new hoot::Way(_status, newId, _defaultCircularError));
+  std::shared_ptr<hoot::Way> newWay = std::make_shared<Way>(_status, newId, _defaultCircularError);
 
   // if the cached envelope is valid
   if (w.has_bbox())
@@ -934,12 +925,14 @@ void OsmPbfReader::_loadWays()
   }
 }
 
-void OsmPbfReader::parseBlob(BlobLocation& bl, istream* strm, const OsmMapPtr& map)
+void OsmPbfReader::parseBlob(
+  const BlobLocation& bl, std::shared_ptr<istream> strm, const OsmMapPtr& map)
 {
   parseBlob(bl.headerOffset, strm, map);
 }
 
-void OsmPbfReader::parseBlob(long headerOffset, istream* strm, const OsmMapPtr& map)
+void OsmPbfReader::parseBlob(
+  long headerOffset, std::shared_ptr<istream> strm, const OsmMapPtr& map)
 {
   _in = strm;
   _map = map;
@@ -996,7 +989,7 @@ void OsmPbfReader::_parseBlobHeader()
   _d->blobHeader.ParseFromArray(_buffer.data(), size);
 }
 
-void OsmPbfReader::parseElements(istream* strm, const OsmMapPtr& map)
+void OsmPbfReader::parseElements(std::shared_ptr<istream> strm, const OsmMapPtr& map)
 {
   _map = map;
   _in = strm;
@@ -1019,12 +1012,12 @@ void OsmPbfReader::parseElements(QByteArray bytes, const OsmMapPtr& map)
 {
   // this could be made more efficient by reading directly into the buffer, but that comes at the
   // expense of complexity.
-  std::stringstream ss;
-  ss.str(std::string(bytes.data(), bytes.size()));
-  parseElements(&ss, map);
+  std::shared_ptr<std::stringstream> ss = std::make_shared<std::stringstream>();
+  ss->str(std::string(bytes.data(), bytes.size()));
+  parseElements(ss, map);
 }
 
-int OsmPbfReader::_parseInt(const QString& s)
+int OsmPbfReader::_parseInt(const QString& s) const
 {
   bool ok;
   int result = s.toInt(&ok);
@@ -1072,7 +1065,7 @@ void OsmPbfReader::_parseOsmHeader()
   _osmHeaderRead = true;
 }
 
-uint32_t OsmPbfReader::_readUInt32()
+uint32_t OsmPbfReader::_readUInt32() const
 {
   uint32_t buf = 0xFFFFFFFF;
   _in->read((char*)&buf, 4);
@@ -1088,11 +1081,11 @@ uint32_t OsmPbfReader::_readUInt32()
   return ntohl(buf);
 }
 
-Status OsmPbfReader::_parseStatus(const QString& s)
+Status OsmPbfReader::_parseStatus(const QString& s) const
 {
   Status result;
 
-  result = (Status::Type)_parseInt(s);
+  result = _parseInt(s);
   if (result.getEnum() < Status::Invalid || result.getEnum() > Status::Conflated)
   {
     throw HootException(QObject::tr("Invalid status value: %1").arg(s));
@@ -1101,7 +1094,7 @@ Status OsmPbfReader::_parseStatus(const QString& s)
   return result;
 }
 
-void OsmPbfReader::parse(istream* strm, const OsmMapPtr& map)
+void OsmPbfReader::parse(std::shared_ptr<istream> strm, const OsmMapPtr& map)
 {
   _in = strm;
   _map = map;
@@ -1171,14 +1164,13 @@ void OsmPbfReader::read(const QString& path, const OsmMapPtr& map)
 
 void OsmPbfReader::_readFile(const QString& path, const OsmMapPtr& map)
 {
-  fstream input(path.toUtf8().constData(), ios::in | ios::binary);
-
-  if (input.good() == false)
+  std::shared_ptr<fstream> input =
+    std::make_shared<fstream>(path.toUtf8().constData(), ios::in | ios::binary);
+  if (input->good() == false)
   {
     throw HootException(QString("Error reading %1").arg(path));
   }
-
-  parse(&input, map);
+  parse(input, map);
 }
 
 void OsmPbfReader::read(const OsmMapPtr& map)
@@ -1201,7 +1193,6 @@ bool OsmPbfReader::isSupported(const QString& urlStr)
   QFileInfo fileInfo(urlStr);
   if (fileInfo.isDir())
   {
-    LOG_TRACE("Can't handle dirs with partial read yet.");
     return false;
   }
 
@@ -1237,11 +1228,11 @@ bool OsmPbfReader::isSorted(const QString& file)
 void OsmPbfReader::open(const QString& urlStr)
 {
   OsmMapReader::open(urlStr);
-  fstream* fp = new fstream();
+  std::shared_ptr<fstream> fp = std::make_shared<fstream>();
   fp->open(urlStr.toUtf8().data(), ios::in | ios::binary);
   if (fp->is_open() == false)
   {
-    delete fp;
+    fp.reset();
     throw HootException("Error opening " + urlStr + " for reading.");
   }
   _in = fp;
@@ -1255,7 +1246,7 @@ void OsmPbfReader::initializePartial()
 {
   _permissive = true;
 
-  _map.reset(new OsmMap());
+  _map = std::make_shared<OsmMap>();
   _blobIndex = 0;
 
   _elementsRead = 0;
@@ -1265,19 +1256,19 @@ void OsmPbfReader::initializePartial()
   _firstPartialReadCompleted = false;
 
   // If nothing's been opened yet, this needs to be a no-op to be safe
-  if (_in != NULL)
+  if (_in)
   {
-    _blobs = loadOsmDataBlobOffsets(*_in);
-    _in->seekg (0, ios::end);
+    _blobs = loadOsmDataBlobOffsets(_in);
+    _in->seekg(0, ios::end);
     _fileLength = _in->tellg();
-    _in->seekg (0, ios::beg);
+    _in->seekg(0, ios::beg);
   }
 }
 
 bool OsmPbfReader::hasMoreElements()
 {
   // If we've closed/finalized, definitely no
-  if (_in == NULL)
+  if (!_in)
   {
     return false;
   }
@@ -1366,13 +1357,13 @@ std::shared_ptr<Element> OsmPbfReader::readNextElement()
   }
   else if (_partialWaysRead < int(_map->getWays().size()))
   {
-    element.reset(new Way(*_waysItr->second.get()));
+    element = std::make_shared<Way>(*_waysItr->second.get());
     ++_waysItr;
     _partialWaysRead++;
   }
   else if (_partialRelationsRead < int(_map->getRelations().size()))
   {
-    element.reset(new Relation(*_relationsItr->second.get()));
+    element = std::make_shared<Relation>(*_relationsItr->second.get());
     ++_relationsItr;
     _partialRelationsRead++;
   }
@@ -1401,43 +1392,33 @@ void OsmPbfReader::close()
   {
     // Deleting fstream objects invokes the istream destructor, who in turn calls istream::close as
     // part of its contract
-    delete _in;
     _needToCloseInput = false;
   }
 
   // Either path, drop our pointer to the stream
-  _in = NULL;
+  _in.reset();
 }
 
-void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
+void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t) const
 {
-  if (_addSourceDateTime && t.getInformationCount() > 0) // Make sure we actually have attributes
+  if (_addSourceDateTime &&
+      // Make sure we actually have attributes.
+      t.getInformationCount() > 0 &&
+      info.has_timestamp())
   {
-    if (info.has_timestamp())
+    long timestamp = info.timestamp() * _dateGranularity;
+    if (timestamp != 0)
     {
-      long timestamp = info.timestamp() * _dateGranularity;
-
-      if (timestamp != 0)
-      {
-        //QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
-        QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
-        QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
-
-        t.set(MetadataTags::SourceDateTime(), dts);
-      }
+      QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
+      QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
+      t.set(MetadataTags::SourceDateTime(), dts);
     }
   }
 }
 
 std::shared_ptr<OGRSpatialReference> OsmPbfReader::getProjection() const
 {
-  std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
-  if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
-  {
-    throw HootException("Error creating EPSG:4326 projection.");
-  }
-
-  return wgs84;
+  return MapProjector::createWgs84Projection();
 }
 
 }

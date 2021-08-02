@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "DebugNetworkMapCreator.h"
 
@@ -39,7 +39,7 @@ _matchThreshold(ConfigOptions().getNetworkMatchThreshold())
 }
 
 void DebugNetworkMapCreator::addDebugElements(OsmMapPtr map, QList<NetworkEdgeScorePtr> edgeScores,
-  QList<NetworkVertexScorePtr> vertexScores)
+  QList<NetworkVertexScorePtr> vertexScores) const
 {
 
   for (int i = 0; i < edgeScores.size(); ++i)
@@ -53,14 +53,16 @@ void DebugNetworkMapCreator::addDebugElements(OsmMapPtr map, QList<NetworkEdgeSc
   }
 }
 
-void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edgeScore)
+void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edgeScore) const
 {
   if (edgeScore->getScore() >= 1e-4)
   {
     ConstNodePtr n1 = _getMedianNode(map, edgeScore->getEdgeMatch()->getString1()->getMembers());
     ConstNodePtr n2 = _getMedianNode(map, edgeScore->getEdgeMatch()->getString2()->getMembers());
 
-    WayPtr w(new Way(Status::Invalid, map->createNextWayId(), ElementData::CIRCULAR_ERROR_EMPTY));
+    WayPtr w =
+      std::make_shared<Way>(
+        Status::Invalid, map->createNextWayId(), ElementData::CIRCULAR_ERROR_EMPTY);
     w->addNode(n1->getId());
     w->addNode(n2->getId());
     Tags tags;
@@ -70,9 +72,9 @@ void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edg
     tags.set(MetadataTags::HootEdgeId(), edgeScore->getEdgeMatch()->getUid());
     tags.set(MetadataTags::HootEdge(), edgeScore->toString());
 
-    RelationPtr r(
-      new Relation(
-        Status::Invalid, map->createNextRelationId(), ElementData::CIRCULAR_ERROR_EMPTY, "match"));
+    RelationPtr r =
+      std::make_shared<Relation>(
+        Status::Invalid, map->createNextRelationId(), ElementData::CIRCULAR_ERROR_EMPTY, "match");
     r->setTags(tags);
     r->addElement("visual", w);
 
@@ -111,14 +113,15 @@ void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edg
   }
 }
 
-void DebugNetworkMapCreator::_addVertexLink(OsmMapPtr map, NetworkVertexScorePtr vertexScore)
+void DebugNetworkMapCreator::_addVertexLink(OsmMapPtr map, NetworkVertexScorePtr vertexScore) const
 {
   ConstNodePtr n1 = _getMedianNode(map, vertexScore->getV1()->getElement());
   ConstNodePtr n2 = _getMedianNode(map, vertexScore->getV2()->getElement());
 
   if (vertexScore->getScore() >= 0.001)
   {
-    WayPtr w(new Way(Status::Invalid, map->createNextWayId(), ElementData::CIRCULAR_ERROR_EMPTY));
+    WayPtr w =
+      std::make_shared<Way>(Status::Invalid, map->createNextWayId(), ElementData::CIRCULAR_ERROR_EMPTY);
     w->addNode(n1->getId());
     w->addNode(n2->getId());
     w->getTags().set(MetadataTags::HootVertexScore12(), vertexScore->getScore12());
@@ -138,19 +141,18 @@ void DebugNetworkMapCreator::_addVertexLink(OsmMapPtr map, NetworkVertexScorePtr
   }
 }
 
-ConstNodePtr DebugNetworkMapCreator::_getMedianNode(ConstOsmMapPtr map, QList<ConstElementPtr> e)
+ConstNodePtr DebugNetworkMapCreator::_getMedianNode(
+  ConstOsmMapPtr map, QList<ConstElementPtr> e) const
 {
   MedianNodeVisitor v;
-
   for (int i = 0; i < e.size(); ++i)
   {
     e[i]->visitRo(*map, v);
   }
-
   return v.calculateMedianNode();
 }
 
-ConstNodePtr DebugNetworkMapCreator::_getMedianNode(ConstOsmMapPtr map, ConstElementPtr e)
+ConstNodePtr DebugNetworkMapCreator::_getMedianNode(ConstOsmMapPtr map, ConstElementPtr e) const
 {
   QList<ConstElementPtr> l;
   l.append(e);

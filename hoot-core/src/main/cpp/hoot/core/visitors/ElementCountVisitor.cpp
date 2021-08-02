@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ElementCountVisitor.h"
 
@@ -34,8 +34,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ElementCountVisitor)
 
-void ElementCountVisitor::visit(const ConstElementPtr& /*e*/)
+void ElementCountVisitor::visit(const ConstElementPtr& e)
 {
+  LOG_VART(e->getElementId());
   _count++;
 }
 

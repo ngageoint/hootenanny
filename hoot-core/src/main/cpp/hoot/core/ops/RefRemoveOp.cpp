@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RefRemoveOp.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
@@ -46,11 +46,11 @@ class GetRefVisitor : public ElementConstOsmMapVisitor
 public:
 
   GetRefVisitor(ElementCriterionPtr c) : _criterion(c) { }
-  virtual ~GetRefVisitor() = default;
+  ~GetRefVisitor() = default;
 
   const set<QString>& getRefs() const { return _refs; }
 
-  virtual void visit(const std::shared_ptr<const Element>& e)
+  void visit(const std::shared_ptr<const Element>& e) override
   {
     if (e->getTags().contains(MetadataTags::Ref1()) && _criterion->isSatisfied(e))
     {
@@ -58,9 +58,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 
@@ -73,20 +73,20 @@ class RefRemoveVisitor : public ElementOsmMapVisitor
 public:
 
   RefRemoveVisitor(ElementCriterionPtr c) : _criterion(c) { }
-  virtual ~RefRemoveVisitor() = default;
+  ~RefRemoveVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e)
+  void visit(const std::shared_ptr<Element>& e) override
   {
     if (_criterion->isSatisfied(e))
     {
-      NotCriterion nc(_criterion);
-      RecursiveElementRemover(e->getElementId(), &nc).apply(_map->shared_from_this());
+      NotCriterionPtr nc = std::make_shared<NotCriterion>(_criterion);
+      RecursiveElementRemover(e->getElementId(), false, nc).apply(_map->shared_from_this());
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 
@@ -98,9 +98,9 @@ class UpdateRefVisitor : public ElementOsmMapVisitor
 public:
 
   UpdateRefVisitor(const set<QString>& refs) : _refs(refs) { }
-  virtual ~UpdateRefVisitor() = default;
+  ~UpdateRefVisitor() = default;
 
-  QStringList _removeRef1(QStringList refs)
+  QStringList _removeRef1(QStringList refs) const
   {
     QStringList result;
     for (int i = 0; i < refs.size(); i++)
@@ -114,16 +114,16 @@ public:
     return result;
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual void visit(const std::shared_ptr<Element>& e)
+  void visit(const std::shared_ptr<Element>& e) override
   {
     if (e->getTags().contains(MetadataTags::Ref2()))
     {
       QStringList ref2 = _removeRef1(e->getTags().getList(MetadataTags::Ref2()));
-      if (ref2.size() == 0)
+      if (ref2.empty())
       {
         e->getTags().set(MetadataTags::Ref2(), "none");
       }

@@ -19,15 +19,15 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmNetworkExtractor.h"
 
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/LinearCriterion.h>
@@ -46,16 +46,16 @@ class OsmNetworkExtractorVisitor : public ConstElementVisitor
 public:
 
   OsmNetworkExtractorVisitor(OsmNetworkExtractor& parent) : _parent(parent) { }
-  virtual ~OsmNetworkExtractorVisitor() = default;
+  ~OsmNetworkExtractorVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     _parent._visit(e);
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 
@@ -63,22 +63,22 @@ private:
 };
 
 void OsmNetworkExtractor::_addEdge(ConstElementPtr from, ConstElementPtr to,
-  QList<ConstElementPtr> members, bool directed)
+  QList<ConstElementPtr> members, bool directed) const
 {
   ConstNetworkVertexPtr v1 = _network->getSingleVertex(from->getElementId());
   if (!v1.get())
   {
-    v1.reset(new NetworkVertex(from));
+    v1 = std::make_shared<NetworkVertex>(from);
     _network->addVertex(v1);
   }
   ConstNetworkVertexPtr v2 = _network->getSingleVertex(to->getElementId());
   if (!v2.get())
   {
-    v2.reset(new NetworkVertex(to));
+    v2 = std::make_shared<NetworkVertex>(to);
     _network->addVertex(v2);
   }
 
-  NetworkEdgePtr edge(new NetworkEdge(v1, v2, directed));
+  NetworkEdgePtr edge = std::make_shared<NetworkEdge>(v1, v2, directed);
   edge->setMembers(members);
 
   _network->addEdge(edge);
@@ -86,7 +86,7 @@ void OsmNetworkExtractor::_addEdge(ConstElementPtr from, ConstElementPtr to,
 
 OsmNetworkPtr OsmNetworkExtractor::extractNetwork(ConstOsmMapPtr map)
 {
-  _network.reset(new OsmNetwork());
+  _network = std::make_shared<OsmNetwork>();
 
   _map = map;
   // go through all the elements.
@@ -117,10 +117,9 @@ bool OsmNetworkExtractor::_isContiguous(const ConstRelationPtr& r, long& lastNod
     if (eid.getType() == ElementType::Way)
     {
       ConstWayPtr w = _map->getWay(eid);
-      if (i > 0)
+      if (i > 0 && w->getFirstNodeId() != lastNode)
       {
-        if (w->getFirstNodeId() != lastNode)
-          return false;
+        return false;
       }
       lastNode = w->getLastNodeId();
     }
@@ -178,7 +177,7 @@ void OsmNetworkExtractor::_getFirstLastNodes(const ConstRelationPtr& r, ElementI
   }
 }
 
-bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e)
+bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e) const
 {
   bool result = true;
   if (e->getElementType() == ElementType::Node)
@@ -253,17 +252,19 @@ void OsmNetworkExtractor::_visit(const ConstElementPtr& e)
       }
       else
       {
-        // if this is a bad multi-linestring then don't include it in the network.
+        // If this is a bad multi-linestring, then don't include it in the network.
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN(
+          // Moving this to trace for now, since it happens a fair amount and as been going on
+          // awhile.
+          LOG_TRACE(
             "Found a non-contiguous relation when extracting a network. Ignoring: " <<
             e->getElementId());
           LOG_TRACE("Non-contiguous relation: " << e);
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          LOG_TRACE(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
         logWarnCount++;
         return;

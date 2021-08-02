@@ -19,14 +19,15 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 //  Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/algorithms/NonIntersectionWayJoiner.h>
 #include <hoot/core/algorithms/WayJoinerAdvanced.h>
 #include <hoot/core/algorithms/WayJoinerBasic.h>
 #include <hoot/core/algorithms/splitter/HighwayCornerSplitter.h>
@@ -34,7 +35,7 @@
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
@@ -47,15 +48,16 @@ class WayJoinerTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(WayJoinerTest);
   CPPUNIT_TEST(runSimpleTest);
   CPPUNIT_TEST(runCornerSplitterTest);
-  CPPUNIT_TEST(runIntersectionSplitterTest);
+  CPPUNIT_TEST(runIntersectionSplitTest);
   CPPUNIT_TEST(runConflateTest);
   CPPUNIT_TEST(runAdvancedConflateTest);
+  CPPUNIT_TEST(runNonIntersectionJoinerTest);
   CPPUNIT_TEST_SUITE_END();
 public:
 
   WayJoinerTest()
-    : HootTestFixture("test-files/algorithms/wayjoiner/",
-                      "test-output/algorithms/wayjoiner/")
+    : HootTestFixture("test-files/algorithms/WayJoinerTest/",
+                      "test-output/algorithms/WayJoinerTest/")
   {
     setResetType(ResetAll);
   }
@@ -63,7 +65,7 @@ public:
   void runSimpleTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "WayJoinerSimpleInput.osm", map);
 
@@ -82,7 +84,7 @@ public:
   void runCornerSplitterTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "WayJoinerCornerSplitterInput.osm", map);
 
@@ -98,10 +100,10 @@ public:
                      _inputPath + "WayJoinerCornerSplitterExpected.osm");
   }
 
-  void runIntersectionSplitterTest()
+  void runIntersectionSplitTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "WayJoinerIntersectionSplitterInput.osm", map);
 
@@ -120,18 +122,18 @@ public:
   void runConflateTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/ToyTestB.osm", map);
 
-    NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
+    OpExecutor(ConfigOptions().getConflatePreOps()).apply(map);
 
     UnifyingConflator conflator;
     conflator.apply(map);
 
-    NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
+    OpExecutor(ConfigOptions().getConflatePostOps()).apply(map);
     MapProjector::projectToWgs84(map);
 
     RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
@@ -150,22 +152,21 @@ public:
   void runAdvancedConflateTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/ToyTestB.osm", map);
 
-    NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
+    OpExecutor(ConfigOptions().getConflatePreOps()).apply(map);
 
     UnifyingConflator conflator;
     Settings conf;
     //  Use the Advanced way joiner
     conf.set(ConfigOptions::getWayJoinerKey(), WayJoinerAdvanced::className());
-    conflator.setConfiguration(conf);
     conflator.apply(map);
 
-    NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
+    OpExecutor(ConfigOptions().getConflatePostOps()).apply(map);
     MapProjector::projectToWgs84(map);
 
     RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
@@ -179,6 +180,25 @@ public:
 
     HOOT_FILE_EQUALS(_outputPath + "WayJoinerAdvancedConflateOutput.osm",
                      _inputPath + "WayJoinerAdvancedConflateExpected.osm");
+  }
+
+  void runNonIntersectionJoinerTest()
+  {
+    OsmXmlReader reader;
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.setUseDataSourceIds(true);
+    reader.read(_inputPath + "NonIntersectionWayJoinerInput.osm", map);
+
+    NonIntersectionWayJoiner::joinWays(map);
+
+    OsmXmlWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.write(map, _outputPath + "NonIntersectionWayJoinerOutput.osm");
+
+    HOOT_FILE_EQUALS(_outputPath + "NonIntersectionWayJoinerOutput.osm",
+                     _inputPath + "NonIntersectionWayJoinerExpected.osm");
+
   }
 
 };

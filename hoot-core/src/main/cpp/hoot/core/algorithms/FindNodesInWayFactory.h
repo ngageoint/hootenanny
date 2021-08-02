@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef FINDNODESINWAYFACTORY_H
 #define FINDNODESINWAYFACTORY_H
@@ -33,9 +33,10 @@ namespace hoot
 {
 
 /**
- * Used by the GeometryUtils class to create a new way using only nodes from the old way, or by
- * creating new nodes. If new nodes are created then they are also used before creating another
- * node.
+ * @brief The FindNodesInWayFactory class is used by the GeometryUtils class to create a new way
+ * using only nodes from the old way, or by creating new nodes.
+ *
+ * If new nodes are created then they are also used before creating another node.
  */
 class FindNodesInWayFactory : public GeometryToElementConverter::NodeFactory
 {
@@ -45,12 +46,12 @@ public:
 
   FindNodesInWayFactory() = default;
   FindNodesInWayFactory(const ConstWayPtr& w);
-  virtual ~FindNodesInWayFactory() = default;
+  ~FindNodesInWayFactory() = default;
 
   void addWay(const ConstWayPtr& w);
 
-  virtual NodePtr createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c,
-    Status s, double circularError) override;
+  NodePtr createNode(
+    const OsmMapPtr& map, const geos::geom::Coordinate& c, Status s, double circularError) override;
 
 private:
 

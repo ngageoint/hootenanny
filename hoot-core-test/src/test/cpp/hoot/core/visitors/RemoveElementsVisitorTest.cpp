@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // hoot
@@ -62,12 +62,12 @@ public:
 
   void runTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorInput.osm");
 
     RemoveElementsVisitor removeElementsVisitor(false);
     removeElementsVisitor.setRecursive(false);
-    removeElementsVisitor.addCriterion(ElementCriterionPtr(new PoiCriterion()));
+    removeElementsVisitor.addCriterion(std::make_shared<PoiCriterion>());
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
@@ -79,12 +79,12 @@ public:
 
   void runRecursiveTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorInput.osm");
 
     RemoveElementsVisitor removeElementsVisitor(false);
     removeElementsVisitor.setRecursive(true);
-    removeElementsVisitor.addCriterion(ElementCriterionPtr(new HighwayCriterion(map)));
+    removeElementsVisitor.addCriterion(std::make_shared<HighwayCriterion>(map));
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
@@ -96,12 +96,12 @@ public:
 
   void runNegatedFilterTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorInput.osm");
 
     RemoveElementsVisitor removeElementsVisitor(true);
     removeElementsVisitor.setRecursive(false);
-    removeElementsVisitor.addCriterion(ElementCriterionPtr(new PoiCriterion()));
+    removeElementsVisitor.addCriterion(std::make_shared<PoiCriterion>());
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
@@ -113,12 +113,12 @@ public:
 
   void runReviewRelationTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorTest-reviewRelationTest.osm");
 
     RemoveElementsVisitor removeElementsVisitor(false);
     removeElementsVisitor.setRecursive(false);
-    removeElementsVisitor.addCriterion(ElementCriterionPtr(new ReviewRelationCriterion()));
+    removeElementsVisitor.addCriterion(std::make_shared<ReviewRelationCriterion>());
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
@@ -130,13 +130,13 @@ public:
 
   void runMultipleCriteriaTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorInput.osm");
 
     RemoveElementsVisitor removeElementsVisitor(false);
     removeElementsVisitor.setRecursive(false);
-    removeElementsVisitor.addCriterion(ElementCriterionPtr(new PoiCriterion()));
-    removeElementsVisitor.addCriterion(ElementCriterionPtr(new HighwayCriterion(map)));
+    removeElementsVisitor.addCriterion(std::make_shared<PoiCriterion>());
+    removeElementsVisitor.addCriterion(std::make_shared<HighwayCriterion>(map));
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);

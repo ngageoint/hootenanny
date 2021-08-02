@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "FindIntersectionsOp.h"
 
@@ -31,7 +31,9 @@
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementIdCriterion.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/NodeCriterion.h>
+#include <hoot/core/criterion/WayCriterion.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
@@ -57,14 +59,15 @@ void FindIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
 {
   // remove all relations
   LOG_INFO(QString("%1 Relations found.").arg(map->getRelations().size()));
-  std::shared_ptr<RemoveElementsVisitor> removeRelationsVis(new RemoveElementsVisitor());
-  removeRelationsVis->addCriterion(ElementCriterionPtr(new RelationCriterion));
+  std::shared_ptr<RemoveElementsVisitor> removeRelationsVis =
+    std::make_shared<RemoveElementsVisitor>();
+  removeRelationsVis->addCriterion(std::make_shared<RelationCriterion>());
   VisitorOp(removeRelationsVis).apply(map);
   LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelations().size()));
 
   // pragmatically remove "bad" data in OSM afghanistan
   // TODO: this really shouldn't be here
-  std::shared_ptr<TagCriterion> pCrit(new TagCriterion("source", "AIMS"));
+  std::shared_ptr<TagCriterion> pCrit = std::make_shared<TagCriterion>("source", "AIMS");
   RemoveElementsVisitor::removeWays(map, pCrit);
 
   // reproject into a planar projection centered in the middle of bounding box.
@@ -84,20 +87,21 @@ void FindIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
   LOG_INFO(QString("%1 Intersections found.").arg(v->getIntersections().size()));
 
   // remove all ways first
-  std::shared_ptr<RemoveElementsVisitor> removeWaysVis(new RemoveElementsVisitor());
-  removeWaysVis->addCriterion(ElementCriterionPtr(new WayCriterion()));
+  std::shared_ptr<RemoveElementsVisitor> removeWaysVis =
+    std::make_shared<RemoveElementsVisitor>();
+  removeWaysVis->addCriterion(std::make_shared<WayCriterion>());
   VisitorOp(removeWaysVis).apply(map);
 
   // remove anything that is not a node and in the list of intersections found
   std::vector<long> intersectionIds = v->getIntersections();
   std::set<long> intersectionIdsSet(intersectionIds.begin(), intersectionIds.end());
-  std::shared_ptr<NotCriterion> intersectionCrit(
-    new NotCriterion(
-      new ChainCriterion(
-        std::shared_ptr<ElementIdCriterion>(
-          new ElementIdCriterion(ElementType::Node, intersectionIdsSet)),
-        std::shared_ptr<NodeCriterion>(new NodeCriterion()))));
-  std::shared_ptr<RemoveElementsVisitor> removeIntersectionsVis(new RemoveElementsVisitor());
+  std::shared_ptr<NotCriterion> intersectionCrit =
+    std::make_shared<NotCriterion>(
+      std::make_shared<ChainCriterion>(
+        std::make_shared<ElementIdCriterion>(ElementType::Node, intersectionIdsSet),
+        std::make_shared<NodeCriterion>()));
+  std::shared_ptr<RemoveElementsVisitor> removeIntersectionsVis =
+    std::make_shared<RemoveElementsVisitor>();
   removeIntersectionsVis->addCriterion(intersectionCrit);
   VisitorOp(removeIntersectionsVis).apply(map);
 
@@ -106,14 +110,12 @@ void FindIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
 
 std::shared_ptr<FindIntersectionsVisitor> FindHighwayIntersectionsOp::createVisitor()
 {
-  //  Create a visitor to find all highway intersections
-  return std::shared_ptr<FindIntersectionsVisitor>(new FindHighwayIntersectionsVisitor());
+  return std::make_shared<FindHighwayIntersectionsVisitor>();
 }
 
 std::shared_ptr<FindIntersectionsVisitor> FindRailwayIntersectionsOp::createVisitor()
 {
-  //  Create a visitor to find all railway intersections
-  return std::shared_ptr<FindIntersectionsVisitor>(new FindRailwayIntersectionsVisitor());
+  return std::make_shared<FindRailwayIntersectionsVisitor>();
 }
 
 }

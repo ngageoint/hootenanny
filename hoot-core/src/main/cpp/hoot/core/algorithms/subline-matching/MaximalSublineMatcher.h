@@ -19,59 +19,47 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MAXIMALSUBLINEMATCHER_H
 #define MAXIMALSUBLINEMATCHER_H
 
 #include <hoot/core/algorithms/subline-matching/SublineMatcher.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
 /**
- * A SublineMatcher facade for MaximalSubline.
+ * @brief The MaximalSublineMatcher class is a SublineMatcher facade for MaximalSubline.
  */
-class MaximalSublineMatcher : public SublineMatcher, public Configurable
+class MaximalSublineMatcher : public SublineMatcher
 {
 public:
 
   static QString className() { return "hoot::MaximalSublineMatcher"; }
 
   MaximalSublineMatcher();
-  virtual ~MaximalSublineMatcher() = default;
+  ~MaximalSublineMatcher() = default;
 
   /**
    * @param maxRelevantDistance This value is set on a per match basis because it tends to vary
    *  based on the CE of the inputs. If set to -1 then the value is derived based on the CE of the
    *  input ways.
    */
-  virtual WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
+  WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
     const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const override;
-
-  virtual void setConfiguration(const Settings &conf);
-
-  virtual void setMaxRelevantAngle(Radians r) override { _maxAngle = r; }
-  virtual void setMinSplitSize(Meters minSplitSize) override { _minSplitSize = minSplitSize; }
-  virtual void setHeadingDelta(Meters /*headingDelta*/) override {}
 
   void setMaxRecursions(int maxRecursions) { _maxRecursions = maxRecursions; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Matches lines based on the longest matching subline found"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
-
-  Radians _maxAngle;
-  Meters _minSplitSize;
 
   // See MaximalSubline::__maxRecursions
   int _maxRecursions;

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef IMPLICITTYPETAGGERBASE_H
 #define IMPLICITTYPETAGGERBASE_H
@@ -52,19 +52,19 @@ public:
    *
    * @param e element to add derived tags to
    */
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
   void setTranslateNamesToEnglish(bool translate) { _translateNamesToEnglish = translate; }
   void setMatchEndOfNameSingleTokenFirst(bool match) { _matchEndOfNameSingleTokenFirst = match; }
   void setAllowTaggingSpecificFeatures(bool allow) { _allowTaggingSpecificFeatures = allow; }
-  void setAddTopTagOnly(bool add) { _ruleReader->setAddTopTagOnly(add); }
-  void setAllowWordsInvolvedInMultipleRules(bool allow)
+  void setAddTopTagOnly(bool add) const { _ruleReader->setAddTopTagOnly(add); }
+  void setAllowWordsInvolvedInMultipleRules(bool allow) const
   { _ruleReader->setAllowWordsInvolvedInMultipleRules(allow); }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 
@@ -117,7 +117,7 @@ private:
 
   QStringList _getNameTokens(const QStringList& names) const;
   QStringList _getTranslatedNames(const QStringList& names, const Tags& tags);
-  QStringList _cleanNames(Tags& tags);
+  QStringList _cleanNames(Tags& tags) const;
   QString _getEndOfNameToken(const QString& name, const QStringList& nameTokensList) const;
 
   void _addImplicitTags(const ElementPtr& e, const Tags& tagsToAdd,
@@ -126,16 +126,16 @@ private:
   /*
    * Ensure a tag with less specificity than tags the element already contained are not added.
    */
-  void _ensureCorrectTagSpecificity(const ElementPtr& e, Tags& tagsToAdd);
+  void _ensureCorrectTagSpecificity(const ElementPtr& e, Tags& tagsToAdd) const;
 
   void _getImplicitlyDerivedTagsFromMultipleNameTokens(
     const QStringList& names, const QStringList& nameTokensList, const Tags& elementTags,
-    Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules);
+    Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules) const;
 
   void _getImplicitlyDerivedTagsFromSingleNameTokens(const QStringList& names,
     QStringList& nameTokensList, const Tags& elementTags, Tags& implicitlyDerivedTags,
     QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules, bool& namesContainBuilding,
-    bool& namesContainOffice);
+    bool& namesContainOffice) const;
 
   Tags _applyCustomRules(const ElementPtr& e, const QStringList& filteredNames);
 };

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "EdgeSubline.h"
 
@@ -34,7 +34,6 @@ namespace hoot
 bool operator==(const ConstEdgeSublinePtr& es1, const ConstEdgeSublinePtr& es2)
 {
   bool result = false;
-
   if (es1.get() == es2.get())
   {
     result = true;
@@ -43,17 +42,6 @@ bool operator==(const ConstEdgeSublinePtr& es1, const ConstEdgeSublinePtr& es2)
   {
     result = true;
   }
-
-//  bool strResult = es1->toString() == es2->toString();
-//  if (result != strResult)
-//  {
-//    LOG_VARE(result);
-//    LOG_VARE(strResult);
-//    LOG_VARE(es1);
-//    LOG_VARE(es2);
-//    throw HootException();
-//  }
-
   return result;
 }
 
@@ -64,16 +52,9 @@ EdgeSubline::EdgeSubline(const ConstEdgeLocationPtr& start, const ConstEdgeLocat
   assert(_start->getEdge() == _end->getEdge());
 }
 
-EdgeSubline::EdgeSubline(const EdgeLocationPtr& start, const EdgeLocationPtr& end) :
-  _start(start),
-  _end(end)
-{
-  assert(start->getEdge() == _end->getEdge());
-}
-
 EdgeSubline::EdgeSubline(const ConstNetworkEdgePtr& e, double start, double end) :
-  _start(new EdgeLocation(e, start)),
-  _end(new EdgeLocation(e, end))
+  _start(std::make_shared<const EdgeLocation>(e, start)),
+  _end(std::make_shared<const EdgeLocation>(e, end))
 {
 }
 
@@ -85,7 +66,7 @@ Meters EdgeSubline::calculateLength(const ConstElementProviderPtr& provider) con
 
 EdgeSublinePtr EdgeSubline::clone() const
 {
-  return EdgeSublinePtr(new EdgeSubline(_start, _end));
+  return std::make_shared<EdgeSubline>(_start, _end);
 }
 
 bool EdgeSubline::contains(const ConstNetworkVertexPtr& v) const
@@ -107,15 +88,11 @@ bool EdgeSubline::contains(const ConstNetworkVertexPtr& v) const
 bool EdgeSubline::contains(const ConstEdgeSublinePtr& es) const
 {
   bool result = false;
-
-  if (es->getEdge() == getEdge())
+  if (es->getEdge() == getEdge() && getFormer() <= es->getFormer() &&
+      getLatter() >= es->getLatter())
   {
-    if (getFormer() <= es->getFormer() && getLatter() >= es->getLatter())
-    {
-      result = true;
-    }
+    result = true;
   }
-
   return result;
 }
 
@@ -126,7 +103,7 @@ bool EdgeSubline::contains(const ConstEdgeLocationPtr& el) const
 
 EdgeSublinePtr EdgeSubline::createFullSubline(const ConstNetworkEdgePtr& e)
 {
-  return EdgeSublinePtr(new EdgeSubline(e, 0.0, 1.0));
+  return std::make_shared<EdgeSubline>(e, 0.0, 1.0);
 }
 
 bool EdgeSubline::intersects(const ConstEdgeSublinePtr& other) const
@@ -227,15 +204,13 @@ std::shared_ptr<EdgeSubline> EdgeSubline::unionSubline(const ConstEdgeSublinePtr
     throw IllegalArgumentException("Expected 'other' go in the same direction.");
   }
 
-  EdgeSublinePtr result(new EdgeSubline(
-    std::min(getFormer(), other->getFormer()),
-    std::max(getLatter(), other->getLatter())));
-
+  EdgeSublinePtr result =
+    std::make_shared<EdgeSubline>(
+      std::min(getFormer(), other->getFormer()), std::max(getLatter(), other->getLatter()));
   if (isBackwards())
   {
     result->reverse();
   }
-
   return result;
 }
 

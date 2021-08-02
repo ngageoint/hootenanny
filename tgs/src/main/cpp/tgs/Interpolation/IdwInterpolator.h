@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef IDWINTERPOLATOR_H
 #define IDWINTERPOLATOR_H
@@ -51,41 +51,40 @@ public:
    * evaluation.
    */
   IdwInterpolator(double p = -1.0);
+  ~IdwInterpolator() = default;
 
-  virtual ~IdwInterpolator();
+  QString getName() const override { return className(); }
 
-  virtual QString getName() const { return className(); }
-
-  virtual const std::vector<double>& interpolate(const std::vector<double>& point) const;
+  const std::vector<double>& interpolate(const std::vector<double>& point) const override;
 
   void setP(double p) { _p = p; }
-
   /**
    * Stop looking for a sigma when sigma is within this distance of "optimal".
    */
   void setStopDelta(double stopDelta) { _stopDelta = stopDelta; }
 
-  virtual QString toString() const;
+  QString toString() const override;
 
 protected:
+
+  void _readInterpolator(QIODevice& is) override;
+  void _writeInterpolator(QIODevice& os) const override;
+
+  double _estimateError(unsigned int index) const override;
+
+private:
 
   double _p;
   double _stopDelta;
 
-  virtual void _buildModel();
+  void _buildModel() override;
 
   double _calculateWeight(double d) const;
-
-  virtual double _estimateError(unsigned int index) const;
 
   /**
    * The ignoreId is used to ignore a specific point when doing hold one back error estimation.
    */
-  virtual const std::vector<double>& _interpolate(const std::vector<double>& point, int ignoreId) const;
-
-  virtual void _readInterpolator(QIODevice& is);
-
-  virtual void _writeInterpolator(QIODevice& os) const;
+  const std::vector<double>& _interpolate(const std::vector<double>& point, int ignoreId) const;
 };
 
 }

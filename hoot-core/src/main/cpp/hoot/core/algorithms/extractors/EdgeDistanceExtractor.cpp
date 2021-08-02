@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "EdgeDistanceExtractor.h"
 
@@ -33,13 +33,13 @@
 #include <geos/geom/Point.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 using namespace geos::geom;
@@ -56,7 +56,7 @@ class DiscretizeWaysVisitor : public ElementConstOsmMapVisitor
 public:
 
   DiscretizeWaysVisitor(double spacing, vector<Coordinate>& v) : _spacing(spacing), _result(v) { }
-  virtual ~DiscretizeWaysVisitor() = default;
+  ~DiscretizeWaysVisitor() = default;
 
   void visit(const ConstElementPtr& e) override
   {
@@ -67,9 +67,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const override { return ""; }
-  virtual QString getName() const override { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 
@@ -83,7 +83,7 @@ class LinesWaysVisitor : public ElementConstOsmMapVisitor
 public:
 
   LinesWaysVisitor(vector<Geometry*>& lines) : _lines(lines) { }
-  virtual ~LinesWaysVisitor() = default;
+  ~LinesWaysVisitor() = default;
 
   void visit(const ConstElementPtr& e) override
   {
@@ -91,14 +91,14 @@ public:
     {
       ConstWayPtr w(std::dynamic_pointer_cast<const Way>(e));
       Geometry* ls =
-        ElementToGeometryConverter(_map->shared_from_this()).convertToLineString(w)->clone();
+        ElementToGeometryConverter(_map->shared_from_this()).convertToLineString(w)->clone().release();
       _lines.push_back(ls);
     }
   }
 
-  virtual QString getDescription() const override { return ""; }
-  virtual QString getName() const override { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 
@@ -109,13 +109,13 @@ EdgeDistanceExtractor::EdgeDistanceExtractor(ValueAggregatorPtr a, Meters spacin
 _aggregator(a)
 {
   if (!_aggregator)
-    _aggregator.reset(new MeanAggregator());
+    _aggregator = std::make_shared<MeanAggregator>();
   setSpacing(spacing);
 }
 
 EdgeDistanceExtractor::EdgeDistanceExtractor(Meters spacing)
 {
-  _aggregator.reset(new MeanAggregator());
+  _aggregator = std::make_shared<MeanAggregator>();
   setSpacing(spacing);
 }
 
@@ -164,7 +164,7 @@ double EdgeDistanceExtractor::_oneDistance(
     std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(points[i]));
     distances.push_back(g->distance(p.get()));
   }
-  if (distances.size() == 0)
+  if (distances.empty())
   {
     return -1;
   }
@@ -183,11 +183,12 @@ std::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(
     LinesWaysVisitor v(*lines);
     v.setOsmMap(&map);
     e->visitRo(map, v);
+    // GeometryFactory takes ownership of these input parameters.
     result.reset(GeometryFactory::getDefaultInstance()->createMultiLineString(lines));
   }
   else
   {
-    result.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    result = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
   }
   return result;
 }

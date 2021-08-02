@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "MetadataExport.h"
@@ -51,8 +51,7 @@ void MetadataExport::_apply()
   // create cells
   _createCells();
 
-  // gather all potential source elements for metadata tags and
-  // create node location lookup
+  // gather all potential source elements for metadata tags and create node location lookup
   _gatherProcessElements();
 
   // apply tags from elements to the dataset
@@ -100,7 +99,7 @@ void MetadataExport::_createCells()
   {
     for (double y = minY; y < maxY; y += gridY)
     {
-      WayPtr pGrid(new Way(Status::Unknown1, _pMap->createNextWayId(), -1));
+      WayPtr pGrid = std::make_shared<Way>(Status::Unknown1, _pMap->createNextWayId(), -1);
 
       // create grid poly
       long startId = _addNodeToPoly(x ,y, pGrid);
@@ -185,11 +184,10 @@ void MetadataExport::_exportMetadataFromElements()
   _numAffected = _modifiedDatasets.length();
 }
 
-long MetadataExport::_addNodeToPoly(double x, double y, WayPtr& pPoly)
+long MetadataExport::_addNodeToPoly(double x, double y, const WayPtr& pPoly) const
 {
   long nodeId = _pMap->createNextNodeId();
-  NodePtr pNode(new Node(Status::Unknown1, nodeId, Coordinate(x,y)));
-  _pMap->addElement(pNode);
+  _pMap->addElement(std::make_shared<Node>(Status::Unknown1, nodeId, Coordinate(x, y)));
   pPoly->addNode(nodeId);
   return nodeId;
 }

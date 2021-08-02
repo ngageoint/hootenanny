@@ -19,19 +19,19 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "SetTagValueVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
@@ -98,7 +98,7 @@ void SetTagValueVisitor::setConfiguration(const Settings& conf)
   _appendToExistingValue = configOptions.getSetTagValueVisitorAppendToExistingValue();
   _overwriteExistingTag = configOptions.getSetTagValueVisitorOverwrite();
 
-  _negateCriteria = configOptions.getElementCriterionNegate();
+  _negateCriteria = configOptions.getElementCriteriaNegate();
   _chainCriteria = configOptions.getSetTagValueVisitorChainElementCriteria();
   const QStringList critNames = configOptions.getSetTagValueVisitorElementCriteria();
   LOG_VART(critNames);
@@ -110,7 +110,7 @@ void SetTagValueVisitor::setConfiguration(const Settings& conf)
     {
       ElementCriterionPtr crit = *it;
       Configurable* c = dynamic_cast<Configurable*>(crit.get());
-      if (c != 0)
+      if (c != nullptr)
       {
         c->setConfiguration(conf);
       }
@@ -132,7 +132,7 @@ void SetTagValueVisitor::_setTag(const ElementPtr& e, const QString& k, const QS
 
   LOG_VART(e->getElementId());
 
-  if (_criteria.size() > 0 && !_criteriaSatisfied(e))
+  if (!_criteria.empty() && !_criteriaSatisfied(e))
   {
     return;
   }

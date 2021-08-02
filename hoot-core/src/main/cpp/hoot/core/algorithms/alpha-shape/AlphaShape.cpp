@@ -19,21 +19,21 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "AlphaShape.h"
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/geometry/GeometryMerger.h>
 #include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 // GEOS
@@ -43,7 +43,6 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Point.h>
 #include <geos/util/IllegalArgumentException.h>
-using namespace geos::geom;
 
 // Qt
 #include <QString>
@@ -52,13 +51,15 @@ using namespace geos::geom;
 #include <stdlib.h>
 #include <limits>
 #include <queue>
-using namespace std;
 
 // TGS
 #include <tgs/DelaunayTriangulation/DelaunayTriangulation.h>
 #include <tgs/DisjointSet/DisjointSet.h>
 #include <tgs/RStarTree/HilbertCurve.h>
 #include <tgs/Statistics/Random.h>
+
+using namespace geos::geom;
+using namespace std;
 using namespace Tgs;
 
 namespace hoot
@@ -80,7 +81,7 @@ public:
     _children.insert(child);
   }
 
-  int getId() { return _id; }
+  int getId() const { return _id; }
 
 private:
 
@@ -95,15 +96,15 @@ AlphaShape::AlphaShape(double alpha)
     _sizeX(0.0),
     _sizeY(0.0)
 {
-  LOG_VARD(_alpha);
-  _pDelauneyTriangles.reset(new Tgs::DelaunayTriangulation);
+  LOG_VART(_alpha);
+  _pDelauneyTriangles = std::make_shared<Tgs::DelaunayTriangulation>();
 }
 
 GeometryPtr AlphaShape::_convertFaceToPolygon(const Face& face) const
 {
   GeometryPtr result;
   CoordinateSequence* cs =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(4, 2);
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(4, 2).release();
   LinearRing* lr;
 
   Coordinate c;
@@ -123,7 +124,8 @@ GeometryPtr AlphaShape::_convertFaceToPolygon(const Face& face) const
   cs->setAt(c, p++);
 
   lr = GeometryFactory::getDefaultInstance()->createLinearRing(cs);
-  std::vector<Geometry*>* holes = new std::vector<Geometry*>();
+  std::vector<LinearRing*>* holes = new std::vector<LinearRing*>();
+  // GeometryFactory takes ownership of these input parameters.
   result.reset(GeometryFactory::getDefaultInstance()->createPolygon(lr, holes));
 
   return result;
@@ -230,7 +232,7 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
     if (i % ConfigOptions().getTaskStatusUpdateInterval() == 0)
     {
       PROGRESS_INFO(
-        "Added " << StringUtils::formatLargeNumber(i) << " / " <<
+        "Added " << StringUtils::formatLargeNumber(i) << " of " <<
         StringUtils::formatLargeNumber(randomized.size() - 1) << " points.");
     }
     _pDelauneyTriangles->insert(randomized[i].first, randomized[i].second);
@@ -238,13 +240,13 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
   LOG_VARD(_pDelauneyTriangles->getFaces().size());
   //  Report the final progress
   PROGRESS_INFO(
-    "Added " << StringUtils::formatLargeNumber(randomized.size() - 1) << " / " <<
+    "Added " << StringUtils::formatLargeNumber(randomized.size() - 1) << " of " <<
     StringUtils::formatLargeNumber(randomized.size() - 1) << " points.");
 }
 
 OsmMapPtr AlphaShape::_toOsmMap()
 {
-  OsmMapPtr result(new OsmMap());
+  OsmMapPtr result = std::make_shared<OsmMap>();
   GeometryToElementConverter(result).convertGeometryToElement(toGeometry().get(), Status::Unknown1, -1);
   const RelationMap& rm = result->getRelations();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
@@ -255,7 +257,7 @@ OsmMapPtr AlphaShape::_toOsmMap()
   return result;
 }
 
-double AlphaShape::_collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, Envelope& e)
+double AlphaShape::_collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, Envelope& e) const
 {
   double preUnionArea = 0.0;
   for (FaceIterator fi = _pDelauneyTriangles->getFaceIterator();
@@ -324,7 +326,7 @@ GeometryPtr AlphaShape::toGeometry()
   vector<GeometryPtr> faces;
   Envelope e;
   double preUnionArea = 0.0;
-  double alpha = -1;
+  double alpha = -1.0;
 
   bool calculateAlpha = _alpha < 0.0;
   std::vector<double> alpha_options;
@@ -344,7 +346,7 @@ GeometryPtr AlphaShape::toGeometry()
     for (EdgeIterator it = _pDelauneyTriangles->getEdgeIterator(); it != _pDelauneyTriangles->getEdgeEnd(); ++it)
     {
       //  Multiply by scale and convert it to a whole number for deduplication in the set
-      long length = (*it).getLength() * scale;
+      long length = static_cast<long>((*it).getLength() * scale);
       if (length > 0 && length > _alpha)
         alpha_values.insert(length);
     }
@@ -353,14 +355,13 @@ GeometryPtr AlphaShape::toGeometry()
       alpha_options.push_back((*it) / scale);
     //  Iterate the alpha values searching for one that uses at least
     //  90% of the Delauney triangle faces
-    double alpha = -1.0;
     bool success = _searchAlpha(alpha, faces, e, preUnionArea, faceCount, alpha_options, 0, alpha_options.size() - 1);
     LOG_VARD(e);
     LOG_DEBUG("Area: " << (long)preUnionArea);
     LOG_VARD(faces.size());
 
     // if the result is an empty geometry
-    if (faces.size() == 0 || !success)
+    if (faces.empty() || !success)
     {
       throw IllegalArgumentException(
         "Unable to find alpha value to create alpha shape.");
@@ -375,7 +376,7 @@ GeometryPtr AlphaShape::toGeometry()
     alpha_options.push_back(_alpha);
     alpha_options.push_back(getLongestFaceEdge());
     //  Iterate both options for the alpha value
-    while (faces.size() < 1 && alpha_options.size() > 0)
+    while (faces.size() < 1 && !alpha_options.empty())
     {
       //  Clear out any previous faces that may exist
       faces.clear();
@@ -390,7 +391,7 @@ GeometryPtr AlphaShape::toGeometry()
     LOG_VARD(faces.size());
 
     // if the result is an empty geometry
-    if (faces.size() == 0)
+    if (faces.empty())
     {
       throw IllegalArgumentException(
         "Unable to create alpha shape with alpha value of: " + QString::number(_alpha) + ".");
@@ -403,7 +404,7 @@ GeometryPtr AlphaShape::toGeometry()
   LOG_DEBUG("Creating output geometry...");
 
   if (!result || result->isEmpty())
-    result.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    result = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
 
   LOG_DEBUG("Validating output geometry...");
   //  Validate the resulting geometry
@@ -429,7 +430,7 @@ GeometryPtr AlphaShape::toGeometry()
   return result;
 }
 
-QString AlphaShape::toString()
+QString AlphaShape::toString() const
 {
   QString result;
   Edge start = _pDelauneyTriangles->getStartingEdge();

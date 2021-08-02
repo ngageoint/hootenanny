@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "LinearCriterion.h"
@@ -33,6 +33,7 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/criterion/LinearWayNodeCriterion.h>
 
 namespace hoot
 {
@@ -47,6 +48,17 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     return false;
   }
+  else if (e->getElementType() == ElementType::Way)
+  {
+    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
+    if (way->isClosedArea())
+    {
+      LOG_TRACE("Way is a closed area, so fails LinearCriterion.");
+      return false;
+    }
+    LOG_TRACE(e->getElementId() << " passes LinearCriterion.");
+    return true;
+  }
   else if (e->getElementType() == ElementType::Relation)
   {
     ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
@@ -56,44 +68,6 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
       return true;
     }
   }
-  else if (e->getElementType() == ElementType::Way)
-  {
-    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
-
-    if (way->isClosedArea())
-    {
-      LOG_TRACE("Way is a closed area, so fails LinearCriterion.");
-      return false;
-    }
-
-    LOG_TRACE(e->getElementId() << " passes LinearCriterion.");
-    return true;
-  }
-
-  // As part of #4137, we're allowing all types to be conflatable, so no schema checks are required.
-  // This relation only check has been left in to appease
-  // ServiceChangesetReplacementOutOfSpecRelationTest. #4149 should fix the problem, and this code
-  // block can then be removed.
-  if (e->getElementType() == ElementType::Relation)
-  {
-    const Tags& t = e->getTags();
-    for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
-    {
-      const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
-      uint16_t g = tv.geometries;
-
-      LOG_VART(g & OsmGeometries::LineString);
-      LOG_VART(g & OsmGeometries::Area);
-
-      // We don't want to fail here if the associated schema type supports both a line and a poly.
-      // We only care by this point that it does support a line. The previous closed area check will
-      // take care of weeding out any polys.
-      if (g & OsmGeometries::LineString)
-      {
-        return true;
-      }
-    }
-  }
 
   LOG_TRACE(e->getElementId() << " fails LinearCriterion.");
   return false;
@@ -101,12 +75,45 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
 
 bool LinearCriterion::isLinearRelation(const ConstRelationPtr& relation)
 {
-  return relation->getType() == MetadataTags::RelationMultilineString() ||
-         relation->getType() == MetadataTags::RelationRoute() ||
-         relation->getType() == MetadataTags::RelationBoundary() ||
-         relation->getType() == MetadataTags::RelationRouteMaster() ||
-         relation->getType() == MetadataTags::RelationSuperRoute() ||
-         relation->getType() == MetadataTags::RelationRestriction();
+  // As an opt, we're first checking a static list of types of relations that are known to contain
+  // linear features and then consulting the schema if the relation doesn't match one of the types.
+  if (relation->getType() == MetadataTags::RelationMultilineString() ||
+      relation->getType() == MetadataTags::RelationRoute() ||
+      relation->getType() == MetadataTags::RelationBoundary() ||
+      relation->getType() == MetadataTags::RelationRouteMaster() ||
+      relation->getType() == MetadataTags::RelationSuperRoute() ||
+      relation->getType() == MetadataTags::RelationRestriction())
+  {
+    return true;
+  }
+
+  // In case its a relation whose type we don't know about or it has an invalid type, let's sift
+  // through the members to make a final determination or not whether it should be treated as being
+  // linear.
+  const Tags& tags = relation->getTags();
+  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+  {
+    const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
+    uint16_t g = tv.getGeometries();
+
+    LOG_VART(g & OsmGeometries::LineString);
+    LOG_VART(g & OsmGeometries::Area);
+
+    // We don't want to fail here if the associated schema type supports both a line and a poly.
+    // We only care by this point that it does support a line. The previous closed area check
+    // will take care of weeding out any polys.
+    if (g & OsmGeometries::LineString)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+QStringList LinearCriterion::getChildCriteria() const
+{
+  return QStringList(LinearWayNodeCriterion::className());
 }
 
 }

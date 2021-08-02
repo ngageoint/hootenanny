@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -70,7 +70,7 @@ public:
 
   void runAddAttributesTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
@@ -91,7 +91,7 @@ public:
 
   void runAddAttributesOnlyIfEmptyTest1()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "AddAttributesVisitorTest2.osm", false, Status::Unknown1);
 
@@ -115,7 +115,7 @@ public:
 
   void runAddAttributesOnlyIfEmptyTest2()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "AddAttributesVisitorTest3.osm", false, Status::Unknown1);
 
@@ -139,7 +139,7 @@ public:
 
   void runAddInvalidAttributeKeyTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
@@ -162,7 +162,7 @@ public:
 
   void runAddMissingAttributeValueTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
@@ -185,7 +185,7 @@ public:
 
   void runAddEmptyAttributeValueTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
@@ -208,7 +208,7 @@ public:
 
   void runAddInvalidValueTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
@@ -276,7 +276,7 @@ public:
 
   void runNegatedFilterTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveElementsVisitorTest/RemoveElementsVisitorInput.osm");
 
@@ -287,7 +287,7 @@ public:
     attributesToAdd.append("uid=550560");
     attributesToAdd.append("user=Seandebasti");
     AddAttributesVisitor visitor(attributesToAdd, true);
-    visitor.addCriterion(ElementCriterionPtr(new PoiCriterion()));
+    visitor.addCriterion(std::make_shared<PoiCriterion>());
     map->visitRw(visitor);
 
     OsmMapWriterFactory::write(map, _outputPath + "runNegatedFilterTest.osm");
@@ -298,7 +298,7 @@ public:
 
   void runMultipleCriteriaTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveElementsVisitorTest/RemoveElementsVisitorInput.osm");
 
@@ -309,8 +309,8 @@ public:
     attributesToAdd.append("uid=550560");
     attributesToAdd.append("user=Seandebasti");
     AddAttributesVisitor visitor(attributesToAdd);
-    visitor.addCriterion(ElementCriterionPtr(new PoiCriterion()));
-    visitor.addCriterion(ElementCriterionPtr(new HighwayCriterion(map)));
+    visitor.addCriterion(std::make_shared<PoiCriterion>());
+    visitor.addCriterion(std::make_shared<HighwayCriterion>(map));
     map->visitRw(visitor);
 
     OsmMapWriterFactory::write(map, _outputPath + "runMultipleCriteriaTest.osm");

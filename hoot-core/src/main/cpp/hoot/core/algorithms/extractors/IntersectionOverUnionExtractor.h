@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef INTERSECTION_OVER_UNION_EXTRACTOR_H
 #define INTERSECTION_OVER_UNION_EXTRACTOR_H
@@ -37,10 +37,10 @@ namespace hoot
 class OsmMap;
 
 /**
- * Calculates Intersection over Union (IoU) for polygons
+ * @brief The IntersectionOverUnionExtractor class calculates Intersection over Union (IoU) for
+ * polygons.
  *
  * https://stackoverflow.com/questions/28723670/intersection-over-union-between-two-detections
- *
  * https://www.pyimagesearch.com/2016/11/07/intersection-over-union-iou-for-object-detection/
  */
 class IntersectionOverUnionExtractor : public FeatureExtractorBase
@@ -50,26 +50,28 @@ public:
   static QString className() { return "hoot::IntersectionOverUnionExtractor"; }
 
   IntersectionOverUnionExtractor() = default;
-  virtual ~IntersectionOverUnionExtractor() = default;
+  ~IntersectionOverUnionExtractor() = default;
 
   /**
    * @see FeatureExtractor
    */
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * @see FeatureExtractor
    */
-  virtual double extract(const OsmMap& map, const ConstElementPtr& target,
+  double extract(const OsmMap& map, const ConstElementPtr& target,
     const ConstElementPtr& candidate) const override;
 
   /**
    * @see ApiEntityInfo
    */
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates Intersection over Union (IoU) for polygons"; }
-
-  virtual QString getName() const { return className(); }
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getName() const override { return className(); }
 };
 
 }

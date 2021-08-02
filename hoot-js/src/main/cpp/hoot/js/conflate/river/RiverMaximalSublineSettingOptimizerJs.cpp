@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RiverMaximalSublineSettingOptimizerJs.h"
 
@@ -41,14 +41,15 @@ namespace hoot
 
 HOOT_JS_REGISTER(RiverMaximalSublineSettingOptimizerJs)
 
-void RiverMaximalSublineSettingOptimizerJs::Init(Handle<Object> exports)
+void RiverMaximalSublineSettingOptimizerJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> thisObj = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "RiverMaximalSublineSettingOptimizer"), thisObj);
-  thisObj->Set(String::NewFromUtf8(current, "getFindBestMatchesMaxRecursions"),
-               FunctionTemplate::New(current, getFindBestMatchesMaxRecursions)->GetFunction());
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> thisObj = Object::New(current);
+  exports->Set(context, toV8("RiverMaximalSublineSettingOptimizer"), thisObj);
+  thisObj->Set(context, toV8("getFindBestMatchesMaxRecursions"),
+               FunctionTemplate::New(current, getFindBestMatchesMaxRecursions)->GetFunction(context).ToLocalChecked());
 }
 
 void RiverMaximalSublineSettingOptimizerJs::getFindBestMatchesMaxRecursions(
@@ -56,8 +57,9 @@ void RiverMaximalSublineSettingOptimizerJs::getFindBestMatchesMaxRecursions(
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
   const int maxRecursions =
     RiverMaximalSublineSettingOptimizer().getFindBestMatchesMaxRecursions(mapJs->getConstMap());
   LOG_VARD(maxRecursions);

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -36,6 +36,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -52,11 +53,10 @@ public:
 
   SortCmd() = default;
 
-  virtual QString getName() const override { return "sort"; }
+  QString getName() const override { return "sort"; }
+  QString getDescription() const override { return "Sorts a map to the OSM standard"; }
 
-  virtual QString getDescription() const override { return "Sorts a map to the OSM standard"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
@@ -64,13 +64,23 @@ public:
     if (args.size() != 2)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes at two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     const QString input = args[0];
     const QString output = args[1];
-    LOG_VARD(input);
-    LOG_VARD(output);
+    const bool sortingInMemory =
+      !(IoUtils::isStreamableInput(input) &&
+        ConfigOptions().getElementSorterElementBufferSize() != -1);
+    const QString sortingStr = sortingInMemory ? " in memory" : " externally";
+
+    LOG_STATUS(
+      "Sorting maps ..." << FileUtils::toLogFormat(input, 25) << sortingInMemory <<
+      " and writing output to ..." << FileUtils::toLogFormat(output, 25) << "...");
 
     if (_inputIsSorted(input))
     {
@@ -78,8 +88,7 @@ public:
       return 0;
     }
 
-    if (OsmMapReaderFactory::hasElementInputStream(input) &&
-        ConfigOptions().getElementSorterElementBufferSize() != -1)
+    if (!sortingInMemory)
     {
       _sortExternally(input, output);
     }
@@ -100,15 +109,15 @@ private:
     return OsmPbfReader().isSupported(input) && OsmPbfReader().isSorted(input);
   }
 
-  void _sortInMemory(const QString& input, const QString& output)
+  void _sortInMemory(const QString& input, const QString& output) const
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     IoUtils::loadMap(map, input, true, Status::Unknown1);
-    InMemoryElementSorterPtr(new InMemoryElementSorter(map));
+    /*InMemoryElementSorterPtr sorter =*/ std::make_shared<InMemoryElementSorter>(map);
     IoUtils::saveMap(map, output);
   }
 
-  void _sortExternally(const QString& input, const QString& output)
+  void _sortExternally(const QString& input, const QString& output) const
   {
     std::shared_ptr<PartialOsmMapReader> reader =
       std::dynamic_pointer_cast<PartialOsmMapReader>(
@@ -117,7 +126,8 @@ private:
     reader->open(input);
     reader->initializePartial();
 
-    std::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
+    std::shared_ptr<ExternalMergeElementSorter> sorted =
+      std::make_shared<ExternalMergeElementSorter>();
     sorted->sort(std::dynamic_pointer_cast<ElementInputStream>(reader));
 
     reader->finalizePartial();

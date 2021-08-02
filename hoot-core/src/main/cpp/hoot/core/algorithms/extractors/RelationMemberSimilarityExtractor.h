@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef RELATION_MEMBER_SIMILARITY_EXTRACTOR_H
 #define RELATION_MEMBER_SIMILARITY_EXTRACTOR_H
@@ -36,11 +36,12 @@ namespace hoot
 {
 
 /**
- * Uses a Jaccard index to score how similar the members of two relations are in the range of 0.0
- * to 1.0.
+ * @brief The RelationMemberSimilarityExtractor class scores how similar the members of two
+ * relations are.
  *
- * Since relations may have similar members with different element IDs between reference and
- * secondary layers, the comparisons ignore element IDs and look at the member elements directly.
+ * It uses a Jaccard index which calculates a score in the range of 0.0 to 1.0. Since relations may
+ * have similar members with different element IDs between reference and secondary layers, the
+ * comparisons ignore element IDs and look at the member elements directly.
  *
  * https://en.wikipedia.org/wiki/Jaccard_index
  * https://www.statisticshowto.datasciencecentral.com/jaccard-index/
@@ -50,19 +51,17 @@ class RelationMemberSimilarityExtractor : public FeatureExtractorBase
 public:
 
   RelationMemberSimilarityExtractor() = default;
-  virtual ~RelationMemberSimilarityExtractor() = default;
+  ~RelationMemberSimilarityExtractor() = default;
 
   static QString className() { return "hoot::RelationMemberSimilarityExtractor"; }
 
-  virtual QString getClassName() const { return className(); }
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+    const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const;
-
-  virtual QString getDescription() const
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
   { return "Scores the similarity between two sets of relation members"; }
-
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 };
 
 }

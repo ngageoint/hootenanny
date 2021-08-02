@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef TEXTFILEWORDWEIGHTDICTIONARY_H
@@ -41,9 +41,10 @@ namespace hoot
 {
 
 /**
- * @brief The TextFileWordWeightDictionary class
+ * @brief The TextFileWordWeightDictionary class performs a lazy read of a sorted word weight
+ * dictionary file.
  *
- * Performs a lazy read of a sorted file where the format is:
+ * The file format is:
  *
  * Total word count: 787892387
  *
@@ -64,14 +65,15 @@ namespace hoot
 class TextFileWordWeightDictionary : public WordWeightDictionary
 {
 public:
+
   TextFileWordWeightDictionary(const QString& filePath);
-  virtual ~TextFileWordWeightDictionary() = default;
+  ~TextFileWordWeightDictionary() = default;
 
-  virtual double getMinWeight() const override { return 1.0 / (double)_count; }
-
-  virtual double getWeight(const QString& word) const override;
+  double getMinWeight() const override { return 1.0 / (double)_count; }
+  double getWeight(const QString& word) const override;
 
 private:
+
   // some white box testing.
   friend class TextFileWordWeightDictionaryTest;
 
@@ -85,7 +87,7 @@ private:
   // ** Using this one, fast, low memory and I don't have to worry about int overflow **
   // HashMap<QString, long>   1.069GB   19.4sec
   // HashMap<QString, int>    1.069GB   19.2sec
-  typedef HashMap<QString, long> WeightHash;
+  using WeightHash = HashMap<QString, long>;
   WeightHash _weights;
   long _count;
   QRegExp _nonWord;

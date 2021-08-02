@@ -19,32 +19,35 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "NetworkDetails.h"
 
 // hoot
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/algorithms/subline-matching/MaximalSublineMatcher.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
-#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/algorithms/WayHeading.h>
-#include <hoot/core/algorithms/WayMatchStringMerger.h>
-#include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
-#include <hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.h>
-#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
-#include <hoot/core/conflate/highway/HighwayClassifier.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcherFactory.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/HausdorffDistanceExtractor.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
+#include <hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+
+#include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace geos::geom;
 using namespace std;
@@ -57,10 +60,10 @@ int NetworkDetails::logWarnCount = 0;
 static double min(double a, double b, double c) { return std::min(a, std::min(b, c)); }
 
 NetworkDetails::NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2) :
-  _map(map),
-  _n1(n1),
-  _n2(n2),
-  _maxStubLength(ConfigOptions().getNetworkMaxStubLength())
+_map(map),
+_n1(n1),
+_n2(n2),
+_maxStubLength(ConfigOptions().getNetworkMaxStubLength())
 {
   setConfiguration(conf());
 }
@@ -68,19 +71,16 @@ NetworkDetails::NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstO
 void NetworkDetails::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
-  _sublineMatcher.reset(
-    Factory::getInstance().constructObject<SublineStringMatcher>(
-      opts.getHighwaySublineStringMatcher()));
-  _classifier.reset(
+  _sublineMatcher =
+    SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
+  _classifier =
     Factory::getInstance().constructObject<HighwayClassifier>(
-      opts.getConflateMatchHighwayClassifier()));
+      opts.getConflateMatchHighwayClassifier());
 }
 
 Meters NetworkDetails::calculateDistance(ConstEdgeLocationPtr el) const
 {
-  Meters l = calculateLength(el->getEdge());
-
-  return (el->getPortion()) * l;
+  return (el->getPortion()) * calculateLength(el->getEdge());
 }
 
 Meters NetworkDetails::calculateDistance(ConstEdgeStringPtr s, ConstEdgeLocationPtr el) const
@@ -92,7 +92,7 @@ Meters NetworkDetails::calculateDistance(ConstEdgeStringPtr s, ConstEdgeLocation
   {
     LOG_VART(s);
     LOG_VART(el);
-    throw IllegalArgumentException("el isn't close enough to s to provide a distance.");
+    throw IllegalArgumentException("Edge location isn't close enough to s to provide a distance.");
   }
   else if (d < 0)
   {
@@ -116,8 +116,8 @@ Radians NetworkDetails::calculateHeading(ConstEdgeLocationPtr el) const
   return WayHeading::calculateHeading(wl);
 }
 
-Radians NetworkDetails::calculateHeadingAtVertex(ConstNetworkEdgePtr e,
-                                                 ConstNetworkVertexPtr v) const
+Radians NetworkDetails::calculateHeadingAtVertex(
+  ConstNetworkEdgePtr e, ConstNetworkVertexPtr v) const
 {  
   // Is it possible if e is a relation and has one way member, then we should use that for the way
   // here? Haven't seen evidence of that yet, so not implementing it.
@@ -169,8 +169,8 @@ Meters NetworkDetails::calculateLength(ConstEdgeStringPtr e) const
   return l;
 }
 
-QList<EdgeSublineMatchPtr> NetworkDetails::calculateMatchingSublines(ConstNetworkEdgePtr e1,
-  ConstNetworkEdgePtr e2)
+QList<EdgeSublineMatchPtr> NetworkDetails::calculateMatchingSublines(
+  ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
 {
   LOG_TRACE("Calculating matching sublines...");
 
@@ -193,17 +193,16 @@ QList<EdgeSublineMatchPtr> NetworkDetails::calculateMatchingSublines(ConstNetwor
     {
       subline2->reverse();
     }
-    EdgeSublineMatchPtr m(new EdgeSublineMatch(_toEdgeSubline(wsm.getSubline1(), e1), subline2));
-    result.append(m);
+    result.append(
+      std::make_shared<EdgeSublineMatch>(_toEdgeSubline(wsm.getSubline1(), e1), subline2));
   }
 
   return result;
 }
 
-void NetworkDetails::calculateNearestLocation(ConstEdgeStringPtr string,
-                                              ConstEdgeSublinePtr subline,
-                                              ConstEdgeLocationPtr& elString,
-                                              ConstEdgeLocationPtr& elSubline) const
+void NetworkDetails::calculateNearestLocation(
+  ConstEdgeStringPtr string, ConstEdgeSublinePtr subline, ConstEdgeLocationPtr& elString,
+  ConstEdgeLocationPtr& elSubline) const
 {
   LOG_DEBUG("Calculating nearest location...");
 
@@ -347,9 +346,8 @@ double NetworkDetails::calculateStringLocation(ConstEdgeStringPtr es, ConstEdgeL
   return numeric_limits<double>::max();
 }
 
-NetworkDetails::SublineCache NetworkDetails::_calculateSublineScore(ConstOsmMapPtr map,
-                                                                    ConstWayPtr w1,
-                                                                    ConstWayPtr w2) const
+NetworkDetails::SublineCache NetworkDetails::_calculateSublineScore(
+  ConstOsmMapPtr map, ConstWayPtr w1, ConstWayPtr w2) const
 {
   LOG_TRACE("Calculating subline score...");
 
@@ -358,27 +356,26 @@ NetworkDetails::SublineCache NetworkDetails::_calculateSublineScore(ConstOsmMapP
   Meters searchRadiusHighway = ConfigOptions().getSearchRadiusHighway();
   double searchRadius = searchRadiusHighway <= 0.0 ? getSearchRadius(w1, w2) : searchRadiusHighway;
 
-  // Gonna round this up to the nearest whole
-  // If this doesn't work out, consider adding some rounding or slop or whatever to
-  // WayLocation::move(Meters distance) [which is, like, 7 layers deeper in the onion]
+  // Gonna round this up to the nearest whole. If this doesn't work out, consider adding some
+  // rounding or slop or whatever to WayLocation::move(Meters distance) [which is, like, 7 layers
+  // deeper in the onion].
   searchRadius = ceil(searchRadius);
   LOG_VART(searchRadiusHighway);
   LOG_VART(searchRadius);
 
-  //_sublineMatcher->setMinSplitSize(sr / 2.0);
-  // calculated the shared sublines
+  // Calculate the shared sublines.
   WaySublineMatchString sublineMatch = _sublineMatcher->findMatch(map, w1, w2, searchRadius);
   LOG_VART(sublineMatch);
 
   MatchClassification c;
   if (sublineMatch.isValid())
   {
-    // calculate the match score
+    // Calculate the match score.
     c = _classifier->classify(map, w1->getElementId(), w2->getElementId(), sublineMatch);
   }
 
   result.p = c.getMatchP();
-  result.matches = WaySublineMatchStringPtr(new WaySublineMatchString(sublineMatch));
+  result.matches = std::make_shared<WaySublineMatchString>(sublineMatch);
 
   LOG_VART(result);
   return result;
@@ -390,7 +387,7 @@ QList<ConstNetworkVertexPtr> NetworkDetails::getCandidateMatches(ConstNetworkVer
 }
 
 double NetworkDetails::_getEdgeAngleScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
-  ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
+  ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const
 {
   double score = 1.0;
 
@@ -421,8 +418,8 @@ double NetworkDetails::_getEdgeAngleScore(ConstNetworkVertexPtr v1, ConstNetwork
   return score;
 }
 
-EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkEdgePtr e1,
-                                             ConstNetworkEdgePtr e2) const
+EdgeMatchPtr NetworkDetails::extendEdgeMatch(
+  ConstEdgeMatchPtr em, ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const
 {
   LOG_TRACE("Extending edge match...");
 
@@ -447,7 +444,7 @@ EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkE
 
   // calculate the subline match with the new em
   // - convert the edge strings into ways
-  OsmMapPtr map(new OsmMap(_map->getProjection()));
+  OsmMapPtr map = std::make_shared<OsmMap>(_map->getProjection());
 
   WayPtr w1 = toWayString(es1)->copySimplifiedWayIntoMap(*_map, map);
   WayPtr w2 = toWayString(es2)->copySimplifiedWayIntoMap(*_map, map);
@@ -483,7 +480,7 @@ EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkE
         tmp1->contains(e1) && tmp2->contains(e2) &&
         tmp1->touches(em->getString1()) && tmp2->touches(em->getString2()))
     {
-      result.reset(new EdgeMatch(tmp1, tmp2));
+      result = std::make_shared<EdgeMatch>(tmp1, tmp2);
       LOG_TRACE("Successful edge match extension: " << result);
       return result;
     }
@@ -511,15 +508,15 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
 
     if (sub->isBackwards())
     {
-      elEnd.reset(new EdgeLocation(sub->getEdge(), 0));
+      elEnd = std::make_shared<EdgeLocation>(sub->getEdge(), 0);
     }
     else
     {
-      elEnd.reset(new EdgeLocation(sub->getEdge(), 1));
+      elEnd = std::make_shared<EdgeLocation>(sub->getEdge(), 1);
     }
 
     es->removeLast();
-    es->appendEdge(ConstEdgeSublinePtr(new EdgeSubline(elStart, elEnd)));
+    es->appendEdge(std::make_shared<const EdgeSubline>(elStart, elEnd));
     foundEnd = true;
   }
 
@@ -535,15 +532,15 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
 
     if (sub->isBackwards())
     {
-      elStart.reset(new EdgeLocation(sub->getEdge(), 1));
+      elStart = std::make_shared<EdgeLocation>(sub->getEdge(), 1);
     }
     else
     {
-      elStart.reset(new EdgeLocation(sub->getEdge(), 0));
+      elStart = std::make_shared<EdgeLocation>(sub->getEdge(), 0);
     }
 
     es->removeFirst();
-    es->prependEdge(ConstEdgeSublinePtr(new EdgeSubline(elStart, elEnd)));
+    es->prependEdge(std::make_shared<const EdgeSubline>(elStart, elEnd));
     foundEnd = true;
   }
 
@@ -560,7 +557,7 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
     if (es->getFrom()->isExtreme() &&
         (es->getFromVertex() == e->getTo() || es->getFromVertex() == e->getFrom()))
     {
-      es->prependEdge(EdgeSublinePtr(new EdgeSubline(e, 0, 1)));
+      es->prependEdge(std::make_shared<EdgeSubline>(e, 0, 1));
     }
     else if (es->getTo()->isExtreme() &&
              (es->getToVertex() == e->getTo() || es->getToVertex() == e->getFrom()))
@@ -574,7 +571,7 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
   }
 }
 
-double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
+double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const
 {
   assert(e1->getMembers().size() == 1);
   assert(e2->getMembers().size() == 1);
@@ -596,7 +593,7 @@ double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdg
   return result;
 }
 
-double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2)
+double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2) const
 {
   double result;
 
@@ -658,9 +655,11 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
     }
     else
     {
-      RelationPtr r1(new Relation(Status::Unknown1, _map->createNextRelationId(), 15));
+      RelationPtr r1 =
+        std::make_shared<Relation>(Status::Unknown1, _map->createNextRelationId(), 15);
       r1->setType(MetadataTags::RelationMultilineString());
-      RelationPtr r2(new Relation(Status::Unknown1, _map->createNextRelationId(), 15));
+      RelationPtr r2 =
+        std::make_shared<Relation>(Status::Unknown1, _map->createNextRelationId(), 15);
       r2->setType(MetadataTags::RelationMultilineString());
 
       // create a set of all the way IDs
@@ -679,17 +678,17 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
       wids.insert(wids.begin(), widSet.begin(), widSet.end());
 
       // create a copy of the map for experimentation
-      OsmMapPtr mapCopy(new OsmMap(_map->getProjection()));
+      OsmMapPtr mapCopy = std::make_shared<OsmMap>(_map->getProjection());
       CopyMapSubsetOp(_map, wids).apply(mapCopy);
-      // we don't want to impact the global IDs with our little test.
+      // We don't want to impact the global IDs with our little test.
       mapCopy->setIdGenerator(_map->getIdGenerator().clone());
       mapCopy->addElement(r1);
       mapCopy->addElement(r2);
 
-      WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(ws1, ws2));
-      // convert from a mapping to a WaySublineMatchString
+      WayMatchStringMappingPtr mapping = std::make_shared<NaiveWayMatchStringMapping>(ws1, ws2);
+      // Convert from a mapping to a WaySublineMatchString.
       WaySublineMatchStringPtr matchString =
-          WayMatchStringMappingConverter().toWaySublineMatchString(mapping);
+        WayMatchStringMappingConverter().toWaySublineMatchString(mapping);
 
       MatchClassification c;
       // calculate the match score
@@ -770,12 +769,12 @@ double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNet
     LOG_VART(w1.get());
     LOG_VART(w2.get());
 
-    //Not sure why this is happening...
+    // Not sure why this is happening...
     if (!w1.get() || !w2.get())
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {
-        LOG_WARN("Unable to retrieve partial match score.  One or more ways is null.");
+        LOG_WARN("Unable to retrieve partial match score. One or more ways is null.");
         if (!w1.get())
         {
           LOG_DEBUG("Way 1 is null.");
@@ -919,7 +918,7 @@ LegacyVertexMatcherPtr NetworkDetails::_getVertexMatcher()
   if (!_vertexMatcher)
   {
     LOG_TRACE("Creating vertex matcher...");
-    _vertexMatcher.reset(new LegacyVertexMatcher(_map));
+    _vertexMatcher = std::make_shared<LegacyVertexMatcher>(_map);
     _vertexMatcher->identifyVertexMatches(_n1, _n2, *this);
   }
   return _vertexMatcher;
@@ -930,7 +929,7 @@ bool NetworkDetails::hasConfidentTiePoint(ConstNetworkVertexPtr v)
   return _getVertexMatcher()->hasConfidentTiePoint(v);
 }
 
-bool NetworkDetails::isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
+bool NetworkDetails::isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const
 {
   Meters ce = getSearchRadius(e1, e2);
 
@@ -1076,14 +1075,13 @@ bool NetworkDetails::isStringCandidate(ConstEdgeStringPtr es, ConstEdgeSublinePt
   return true;
 }
 
-EdgeSublinePtr NetworkDetails::_toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr e)
+EdgeSublinePtr NetworkDetails::_toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr e) const
 {
   EdgeSublinePtr result;
-
   Meters l = ElementGeometryUtils::calculateLength(ws.getWay(), _map);
-  result.reset(new EdgeSubline(e, ws.getStart().calculateDistanceOnWay() / l,
-    ws.getEnd().calculateDistanceOnWay() / l));
-
+  result =
+    std::make_shared<EdgeSubline>(
+      e, ws.getStart().calculateDistanceOnWay() / l, ws.getEnd().calculateDistanceOnWay() / l);
   return result;
 }
 
@@ -1107,21 +1105,21 @@ ConstWayPtr NetworkDetails::toWay(ConstNetworkEdgePtr e) const
 WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& mapper) const
 {
   const QList<EdgeString::EdgeEntry>& edges = e->getAllEdges();
-  WayStringPtr ws(new WayString());
+  WayStringPtr ws = std::make_shared<WayString>();
 
   for (int i = 0; i < edges.size(); ++i)
   {
-    ConstNetworkEdgePtr e = edges[i].getEdge();
+    ConstNetworkEdgePtr edge = edges[i].getEdge();
     const ConstEdgeSublinePtr& subline = edges[i].getSubline();
     // ignore stubs while building way strings.
-    if (e->isStub() == false)
+    if (edge->isStub() == false)
     {
-      if (e->getMembers().size() != 1 || e->getMembers()[0]->getElementType() != ElementType::Way)
+      if (edge->getMembers().size() != 1 || edge->getMembers()[0]->getElementType() != ElementType::Way)
       {
-        LOG_VART(e);
+        LOG_VART(edge);
         throw IllegalArgumentException("Expected a network edge with exactly 1 way.");
       }
-      ElementId eid = mapper.mapEid(e->getMembers()[0]->getElementId());
+      ElementId eid = mapper.mapEid(edge->getMembers()[0]->getElementId());
 
       ConstWayPtr w = std::dynamic_pointer_cast<const Way>(_map->getWay(eid));
       if (!w)
@@ -1130,7 +1128,7 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& 
         throw IllegalArgumentException("Way: " + eid.toString() + " does not exist in the map.");
       }
 
-      Meters l = calculateLength(e);
+      Meters l = calculateLength(edge);
       double startP = subline->getStart()->getPortion();
       double endP = subline->getEnd()->getPortion();
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -135,13 +135,14 @@ public:
 
   OsmMapPtr createMapForCopyTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
-    RelationPtr r(new Relation(Status::Unknown1, -1, 10, MetadataTags::RelationMultiPolygon()));
+    RelationPtr r =
+      std::make_shared<Relation>(Status::Unknown1, -1, 10, MetadataTags::RelationMultiPolygon());
     r->addElement(MetadataTags::RoleOuter(), ElementId::way(-1669799));
     map->addRelation(r);
 
@@ -155,7 +156,7 @@ public:
   void runCopyTest()
   {
     OsmMapPtr map = createMapForCopyTest();
-    OsmMapPtr copy = OsmMapPtr(new OsmMap(map));
+    OsmMapPtr copy = std::make_shared<OsmMap>(map);
 
     QString nodePreChange = copy->getNode(-1669793)->toString();
     QString wayPreChange = copy->getWay(-1669801)->toString();
@@ -170,7 +171,7 @@ public:
 
     // now change the copy
     map = createMapForCopyTest();
-    copy = OsmMapPtr(new OsmMap(map));
+    copy = std::make_shared<OsmMap>(map);
     changeMapForCopyTest(copy);
 
     HOOT_STR_EQUALS(nodePreChange, map->getNode(-1669793)->toString());
@@ -184,11 +185,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     mapA->append(mapB);
@@ -206,17 +207,17 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
 
     // Since the element is an exact duplicate with the same ID, the map will skip appending it.
-    ElementPtr duplicateNode(mapA->getNode(-1669765)->clone());
+    ElementPtr duplicateNode  = mapA->getNode(-1669765)->clone();
     mapB->addElement(duplicateNode);
 
     mapA->append(mapB);
@@ -230,17 +231,17 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
 
     // Since the element is an exact duplicate with the same ID, the map will skip appending it.
-    ElementPtr duplicateWay(mapA->getWay(-1669801)->clone());
+    ElementPtr duplicateWay = mapA->getWay(-1669801)->clone();
     mapB->addElement(duplicateWay);
 
     mapA->append(mapB);
@@ -254,21 +255,21 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
-    RelationPtr relation(new Relation(Status::Unknown1, -1, 15.0));
+    RelationPtr relation = std::make_shared<Relation>(Status::Unknown1, -1, 15.0);
     relation->addElement(
       "", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
     mapA->addRelation(relation);
 
     const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
 
-    ElementPtr duplicatedRelation(mapA->getRelation(relation->getId())->clone());
+    ElementPtr duplicatedRelation = mapA->getRelation(relation->getId())->clone();
     mapB->addElement(duplicatedRelation);
 
     mapA->append(mapB);
@@ -282,16 +283,16 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     // Since the element is not an exact duplicate and has the same ID, no appending will occur
     // and an error will be thrown.
-    ElementPtr nearDuplicateNode(mapA->getNode(-1669765)->clone());
+    ElementPtr nearDuplicateNode = mapA->getNode(-1669765)->clone();
     nearDuplicateNode->getTags().set("runAppendDifferentNodeSameIdTest", true);
     mapB->addElement(nearDuplicateNode);
 
@@ -313,16 +314,16 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     // Since the element is not an exact duplicate and has the same ID, no appending will occur
     // and an error will be thrown.
-    ElementPtr nearDuplicateWay(mapA->getWay(-1669801)->clone());
+    ElementPtr nearDuplicateWay = mapA->getWay(-1669801)->clone();
     nearDuplicateWay->getTags().set("runAppendDifferentWaySameIdTest", true);
     mapB->addElement(nearDuplicateWay);
 
@@ -344,21 +345,21 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
-    RelationPtr relation(new Relation(Status::Unknown1, -1, 15.0));
+    RelationPtr relation = std::make_shared<Relation>(Status::Unknown1, -1, 15.0);
     relation->addElement(
       "", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
     mapA->addRelation(relation);
 
     // Since the element is not an exact duplicate and has the same ID, no appending will occur
     // and an error will be thrown.
-    ElementPtr nearDuplicateRelation(mapA->getRelation(relation->getId())->clone());
+    ElementPtr nearDuplicateRelation = mapA->getRelation(relation->getId())->clone();
     nearDuplicateRelation->getTags().set("runAppendDifferentRelationSameIdTest", true);
     mapB->addElement(nearDuplicateRelation);
 
@@ -380,18 +381,18 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
 
     // Since the element is not an exact duplicate, has the same ID, and the throwOutDupes option is
     // enabled, the element will be skipped for appending and no error will be thrown.
-    ElementPtr nearDuplicateNode(mapA->getNode(-1669765)->clone());
+    ElementPtr nearDuplicateNode = mapA->getNode(-1669765)->clone();
     nearDuplicateNode->getTags().set("runAppendDifferentWaySameIdTest", true);
     mapB->addElement(nearDuplicateNode);
 
@@ -406,18 +407,18 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
 
     // Since the element is not an exact duplicate, has the same ID, and the throwOutDupes option is
     // enabled, the element will be skipped for appending and no error will be thrown.
-    ElementPtr nearDuplicateWay(mapA->getWay(-1669801)->clone());
+    ElementPtr nearDuplicateWay = mapA->getWay(-1669801)->clone();
     nearDuplicateWay->getTags().set("runAppendDifferentWaySameIdTest", true);
     mapB->addElement(nearDuplicateWay);
 
@@ -432,14 +433,14 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
-    RelationPtr relation(new Relation(Status::Unknown1, -1, 15.0));
+    RelationPtr relation = std::make_shared<Relation>(Status::Unknown1, -1, 15.0);
     relation->addElement(
       "", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
     mapA->addRelation(relation);
@@ -448,7 +449,7 @@ public:
 
     // Since the element is not an exact duplicate, has the same ID, and the throwOutDupes option is
     // enabled, the element will be skipped for appending and no error will be thrown.
-    ElementPtr nearDuplicateRelation(mapA->getRelation(relation->getId())->clone());
+    ElementPtr nearDuplicateRelation = mapA->getRelation(relation->getId())->clone();
     nearDuplicateRelation->getTags().set("runAppendDifferentRelationSameIdTest", true);
     mapB->addElement(nearDuplicateRelation);
 
@@ -463,7 +464,7 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     QString exceptionMsg = "<wrong>";
@@ -484,11 +485,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     MapProjector::projectToPlanar(mapB);
@@ -514,7 +515,7 @@ public:
 
     LOG_INFO("Reading file...");
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
@@ -567,7 +568,7 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
@@ -596,7 +597,7 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
@@ -627,11 +628,11 @@ public:
    */
   void runReplaceListTest1()
   {
-    OsmMapPtr map(new OsmMap());
-    RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
-    WayPtr w1(new Way(Status::Unknown1, 1, 15));
-    WayPtr w2(new Way(Status::Unknown1, 2, 15));
-    WayPtr w3(new Way(Status::Unknown1, 3, 15));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    RelationPtr r1 = std::make_shared<Relation>(Status::Unknown1, 1, 15);
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 15);
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown1, 2, 15);
+    WayPtr w3 = std::make_shared<Way>(Status::Unknown1, 3, 15);
     map->addElement(r1);
     map->addElement(w1);
     map->addElement(w2);
@@ -662,11 +663,11 @@ public:
    */
   void runReplaceListTest2()
   {
-    OsmMapPtr map(new OsmMap());
-    WayPtr w1(new Way(Status::Unknown1, 1, 15));
-    NodePtr n1(new Node(Status::Unknown1, 1, 0, 0, 15));
-    NodePtr n2(new Node(Status::Unknown1, 2, 0, 0, 15));
-    NodePtr n3(new Node(Status::Unknown1, 3, 0, 0, 15));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 15);
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 15);
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0, 0, 15);
+    NodePtr n3 = std::make_shared<Node>(Status::Unknown1, 3, 0, 0, 15);
     map->addElement(w1);
     map->addElement(n1);
 
@@ -693,12 +694,12 @@ public:
    */
   void runReplaceListTest3()
   {
-    OsmMapPtr map(new OsmMap());
-    WayPtr w1(new Way(Status::Unknown1, 1, 15));
-    WayPtr w2(new Way(Status::Unknown1, 2, 15));
-    NodePtr n1(new Node(Status::Unknown1, 1, 0, 0, 15));
-    NodePtr n2(new Node(Status::Unknown1, 2, 0, 0, 15));
-    NodePtr n3(new Node(Status::Unknown1, 3, 0, 0, 15));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 15);
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown1, 2, 15);
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 15);
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0, 0, 15);
+    NodePtr n3 = std::make_shared<Node>(Status::Unknown1, 3, 0, 0, 15);
     map->addElement(w1);
     map->addElement(n1);
 
@@ -737,18 +738,18 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
     // Sample data does not have any relations, have to add some with nodes in them
     RelationPtr relations[5] =
     {
-      RelationPtr(new Relation(Status::Unknown1, 100, 3.0, "relationtype0")),
-      RelationPtr(new Relation(Status::Unknown1, 101, 4.1, "relationtype1")),
-      RelationPtr(new Relation(Status::Unknown1, 102, 5.2, "relationtype2")),
-      RelationPtr(new Relation(Status::Unknown1, 103, 6.3, "relationtype3")),
-      RelationPtr(new Relation(Status::Unknown1, 104, 7.4, "relationtype4")),
+      std::make_shared<Relation>(Status::Unknown1, 100, 3.0, "relationtype0"),
+      std::make_shared<Relation>(Status::Unknown1, 101, 4.1, "relationtype1"),
+      std::make_shared<Relation>(Status::Unknown1, 102, 5.2, "relationtype2"),
+      std::make_shared<Relation>(Status::Unknown1, 103, 6.3, "relationtype3"),
+      std::make_shared<Relation>(Status::Unknown1, 104, 7.4, "relationtype4"),
     };
 
     // Add relations to the map

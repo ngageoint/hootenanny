@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -84,10 +84,10 @@ public:
       Log::getInstance().setLevel(Log::Debug);
     }
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     if (_inputMapCache.contains(inputFile))
     {
-      map.reset(new OsmMap(_inputMapCache[inputFile]));
+      map = std::make_shared<OsmMap>(_inputMapCache[inputFile]);
     }
     else
     {
@@ -97,7 +97,7 @@ public:
       reader.read(inputFile, map);
       if (!_inputMapCache.contains(inputFile))
       {
-        OsmMapPtr newMap(new OsmMap(map));
+        OsmMapPtr newMap = std::make_shared<OsmMap>(map);
         _inputMapCache[inputFile] = newMap;
       }
     }

@@ -3,42 +3,39 @@
 
 === Description
 
-The +compare+ command compares a map (uut, Unit Under Test) to one or two test maps (base1 & base2) and prints out three
-score metrics. This operation is most commonly used to compare manually conflated data to the automatically conflated data.
-The scores provided give an idea of similarity between maps. A score of 1000 means they're exactly the same. A score of
-0 means the maps are very different.
+The +compare+ command compares a map to one or two test maps and prints out three score metrics. 
 
-* +base1+ - The first map file to compare; may be any supported input format.
-* +base2+ - (optional) The second base map file to compare; may be any supported input format.
-* +uut+   - The map file being evaluated; may be any supported input format.
+This operation is most commonly used to compare manually conflated data to automatically conflated data. The scores provided 
+give an idea of similarity between maps. A score of 1000 means they're exactly the same. A score of 0 means the maps are 
+very different.
 
-The following variables are provided in the score result:
+* +base1+                 - The first map file to compare against; may be any supported input format (e.g. .osm file).
+* +base2+                 - Optional second base map file to compare against; may be any supported input format 
+                            (e.g. .osm file).
+* +uut+                   - The map input being evaluated; may be any supported input format (e.g. .osm file).
+* +--criteria+            - Optional filtering criteria for the inputs; May be one or more class names inheriting 
+                            from `ElementCriterion`. By default, multiple criteria are logically OR'd together. Set 
+                            the `element.counter.chain.element.criteria` option to true to have the criteria logically 
+                            AND'd together. The criteria can be negated with the option `element.criteria.negate`. Use 
+                            the +info --operators+ command to obtain a list of available criteria.
+* +--disable-<scoreType>+ - Allows for disabling any of the score types. e.g. `--disable-attribute`.
 
-* Raster Score (AKA Location & Completeness) - A metric describing how complete the data is and how close the features are together
-* Graph Score (AKA Routing)                  - A metric describing how close similar the maps would be if used to perform routing analytics
+The following types of scores are provided in the score result:
+
 * Attribute Score                            - A metric describing how similar the attributes are between the two maps
+* Raster Score (AKA Location & Completeness) - A metric describing how complete the data is and how close the features 
+                                               are together
+* Graph Score (AKA Routing)                  - A metric describing how similar the maps would be if used to perform 
+                                               routing analytics
 
 === Usage
 
 --------------------------------------
-compare (base1) [base2] (uut)
+hoot compare (base1) [base2] (uut) [--criteria "criterion1;criterion2..."] \
+  (--disable-attribute | --disable-raster> | --disable-graph)
 --------------------------------------
 
-=== Example
-
---------------------------------------
-hoot compare manual1.osm manual2.osm conflated.osm
-Attribute Score 1: 981 +/-5
-Attribute Score 2: 993 +/-3
-Attribute Score: 987 +/-4 (983 to 991)
-Raster Score 1: 982
-Raster Score 2: 989
-Raster Score: 986
-Graph Score 1: 944 +/-19 (925 to 963)
-Graph Score 2: 996 +/-0 (996 to 996)
-Graph Score: 970 +/-10 (960 to 980)
-Overall: 981 +/-4 (977 to 985)
---------------------------------------
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#comparison[Examples]
 
 === See Also
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MaximalSublineMatcher.h"
 
@@ -40,8 +40,6 @@ namespace hoot
 HOOT_FACTORY_REGISTER(SublineMatcher, MaximalSublineMatcher)
 
 MaximalSublineMatcher::MaximalSublineMatcher() :
-_maxAngle(-1.0),
-_minSplitSize(-1.0),
 _maxRecursions(-1)
 {
 }
@@ -54,10 +52,10 @@ WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr& map
     maxRelevantDistance;
   LOG_VART(maxRelevantDistance);
   LOG_VART(_minSplitSize);
-  LOG_VART(_maxAngle);
+  LOG_VART(_maxRelevantAngle);
 
-  MaximalSubline::ThresholdMatchCriteria* threshold =
-    new MaximalSubline::ThresholdMatchCriteria(mrd, _maxAngle);
+  std::shared_ptr<MaximalSubline::ThresholdMatchCriteria> threshold =
+    std::make_shared<MaximalSubline::ThresholdMatchCriteria>(mrd, _maxRelevantAngle);
   // This should use _minSplitSize rather than mrd, but that causes some tests to fail. We should
   // look into the problem and solve it. See redmine #6159.
   MaximalSubline ms(threshold, mrd);
@@ -68,14 +66,6 @@ WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr& map
   vector<WaySublineMatch> matches = ms.findAllMatches(map, way1, way2, score);
   LOG_VART(ms.getBestMatchesRecursionCount());
   return WaySublineMatchString(matches);
-}
-
-void MaximalSublineMatcher::setConfiguration(const Settings &conf)
-{
-  ConfigOptions co(conf);
-  _maxAngle = toRadians(co.getWayMatcherMaxAngle());
-  _minSplitSize = co.getWayMergerMinSplitSize();
-  _maxRecursions = co.getMaximalSublineMaxRecursions();
 }
 
 }

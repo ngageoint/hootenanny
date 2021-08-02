@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "IdSwapOp.h"
 
@@ -37,6 +37,16 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, IdSwapOp)
+
+IdSwapOp::IdSwapOp(const IdSwapPtr& idSwap) :
+_idSwap(idSwap)
+{
+}
+
+IdSwapOp::IdSwapOp(ElementId e1, ElementId e2) :
+_idSwap(std::make_shared<IdSwap>(e1, e2))
+{
+}
 
 void IdSwapOp::apply(const std::shared_ptr<hoot::OsmMap>& map)
 {
@@ -67,8 +77,8 @@ void IdSwapOp::apply(const std::shared_ptr<hoot::OsmMap>& map)
     {
       //  This is tricky because element1a has replaced element1 as the actual object
       //  Create a copy of element elements
-      ElementPtr element1a(element1->clone());
-      ElementPtr element2a(element2->clone());
+      ElementPtr element1a = element1->clone();
+      ElementPtr element2a = element2->clone();
       //  Replace element 2 with an empty ID temporarily
       element2a->setId(0);
       map->replace(element2, element2a);
@@ -113,7 +123,7 @@ void IdSwapOp::apply(const std::shared_ptr<hoot::OsmMap>& map)
   }
 }
 
-void IdSwapOp::swapNodeIdInWay(const std::shared_ptr<OsmMap>& map, long nodeId, long swapId)
+void IdSwapOp::swapNodeIdInWay(const std::shared_ptr<OsmMap>& map, long nodeId, long swapId) const
 {
   std::shared_ptr<NodeToWayMap> nodeToWayMap = map->getIndex().getNodeToWayMap();
   std::set<long> ways = nodeToWayMap->getWaysByNode(nodeId);

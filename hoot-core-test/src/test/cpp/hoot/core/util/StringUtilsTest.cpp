@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -72,8 +72,7 @@ public:
       StringUtils::jsonStringToPropTree(jsonInput);
     std::stringstream outputStrStream;
     boost::property_tree::json_parser::write_json(outputStrStream, *propTree);
-    QString outputStr = QString::fromStdString(outputStrStream.str()).simplified();
-    outputStr.replace("\\/", "/").trimmed();
+    QString outputStr = QString::fromStdString(outputStrStream.str()).simplified().replace("\\/", "/").trimmed();
     HOOT_STR_EQUALS(jsonInput, outputStr);
   }
 };

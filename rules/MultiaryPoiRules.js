@@ -12,7 +12,8 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
-exports.searchRadius = -1.0;;
+exports.searchRadius = -1.0;
+exports.matchCandidateCriterion = "hoot::PoiCriterion";
 
 var soundexExtractor = new hoot.NameExtractor(
     new hoot.Soundex());
@@ -122,13 +123,10 @@ exports.getSearchRadius = function(e) {
  * Returns true if e is a candidate for a match. Implementing this method is
  * optional, but may dramatically increase speed if you can cull some features
  * early on. E.g. no need to check nodes for a polygon to polygon match.
- *
- * exports.matchCandidateCriterion takes precedence over this function and must
- * be commented out before using it.
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isPoi(e);
+  return hoot.OsmSchema.isPoi(e);
 };
 
 /**
@@ -181,9 +179,9 @@ function additiveScore(map, e1, e2) {
     var reason = result.reasons;
 
     var ignoreType = false;
-    hoot.trace("hasName(e1): " + hasName(e1));
-    hoot.trace("hasName(e2): " + hasName(e2));
-    if (hoot.get("poi.ignore.type.if.name.present") == 'true' && hasName(e1) && hasName(e2))
+    hoot.trace("hasName(e1): " + hoot.OsmSchema.hasName(e1));
+    hoot.trace("hasName(e2): " + hoot.OsmSchema.hasName(e2));
+    if (hoot.get("poi.ignore.type.if.name.present") == 'true' && hoot.OsmSchema.hasName(e1) && hoot.OsmSchema.hasName(e2))
     {
       ignoreType = true;
     }

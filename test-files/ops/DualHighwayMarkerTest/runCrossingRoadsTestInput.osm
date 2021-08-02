@@ -1,0 +1,928 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="12.0504" minlon="8.476460547520594" maxlat="12.0526" maxlon="8.479200000000001"/>
+    <node visible="true" id="-7208" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0517314238882562" lon="8.4792000000000005"/>
+    <node visible="true" id="-7207" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0508128422929008" lon="8.4792000000000005"/>
+    <node visible="true" id="-7206" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0526000000000000" lon="8.4775417582934480"/>
+    <node visible="true" id="-7205" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0526000000000000" lon="8.4783928709998424"/>
+    <node visible="true" id="-7204" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0524742990452367" lon="8.4792000000000005"/>
+    <node visible="true" id="-7203" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0526000000000000" lon="8.4788837830471007"/>
+    <node visible="true" id="-7202" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0526000000000000" lon="8.4765211802345153"/>
+    <node visible="true" id="-7201" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0503999999999998" lon="8.4778979749123859"/>
+    <node visible="true" id="-7200" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0503999999999998" lon="8.4768209875657341"/>
+    <node visible="true" id="-7199" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0503999999999998" lon="8.4766853951423666"/>
+    <node visible="true" id="-7198" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0503999999999998" lon="8.4779331042469721"/>
+    <node visible="true" id="-7197" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0503999999999998" lon="8.4780679115529676"/>
+    <node visible="true" id="-7196" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0503999999999998" lon="8.4785800319845617"/>
+    <node visible="true" id="-7195" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0506571960419357" lon="8.4792000000000005"/>
+    <node visible="true" id="-7194" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0518350062077264" lon="8.4792000000000005"/>
+    <node visible="true" id="-7193" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0526000000000000" lon="8.4766390918989778"/>
+    <node visible="true" id="-6839" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521926384497267" lon="8.4767643746637518"/>
+    <node visible="true" id="-6838" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521857155272407" lon="8.4767517708185718"/>
+    <node visible="true" id="-6837" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0520644625247151" lon="8.4768445322482293"/>
+    <node visible="true" id="-6836" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0518376884922915" lon="8.4765898228634526"/>
+    <node visible="true" id="-6835" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0517822523881470" lon="8.4764609540837412"/>
+    <node visible="true" id="-6834" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0520120545961387" lon="8.4768586529309573"/>
+    <node visible="true" id="-6833" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0518880628967366" lon="8.4769626348828258"/>
+    <node visible="true" id="-6832" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0516647904356446" lon="8.4771032587491248"/>
+    <node visible="true" id="-6831" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521929067957103" lon="8.4769073697335671"/>
+    <node visible="true" id="-6830" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0516953784597192" lon="8.4772265680524974"/>
+    <node visible="true" id="-6829" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0515933485348459" lon="8.4772688229738016"/>
+    <node visible="true" id="-6828" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521958196671708" lon="8.4784620908602601"/>
+    <node visible="true" id="-6827" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0518869062736798" lon="8.4778178059261826"/>
+    <node visible="true" id="-6826" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0520310300306885" lon="8.4781483796709391"/>
+    <node visible="true" id="-6825" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521891092374815" lon="8.4785630419053053"/>
+    <node visible="true" id="-6824" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0520594768781653" lon="8.4786025458681173"/>
+    <node visible="true" id="-6823" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0516458997343694" lon="8.4788052200539283"/>
+    <node visible="true" id="-6822" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521968288711960" lon="8.4790018273240921"/>
+    <node visible="true" id="-6821" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0519885948328636" lon="8.4790681191175761"/>
+    <node visible="true" id="-6816" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0518093768843695" lon="8.4791553835847004"/>
+    <node visible="true" id="-6809" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0514962311375111" lon="8.4784606379535994"/>
+    <node visible="true" id="-6808" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0514741273324049" lon="8.4784466614939582"/>
+    <node visible="true" id="-6807" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0517255563519061" lon="8.4771311794078787"/>
+    <node visible="true" id="-6806" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0516731589211545" lon="8.4771509076543605"/>
+    <node visible="true" id="-6805" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0516537989761403" lon="8.4771285144953676"/>
+    <node visible="true" id="-6804" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0519919893208041" lon="8.4764605475205936"/>
+    <node visible="true" id="-6803" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0518844769887323" lon="8.4765224402265655"/>
+    <node visible="true" id="-6802" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0515572832027598" lon="8.4771679549432353"/>
+    <node visible="true" id="-6801" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0513753482490067" lon="8.4772776563683543"/>
+    <node visible="true" id="-6800" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0510335925445471" lon="8.4775166427489310"/>
+    <node visible="true" id="-6799" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0511883244112035" lon="8.4790920932331115"/>
+    <node visible="true" id="-6798" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0511716666868143" lon="8.4790388526762719"/>
+    <node visible="true" id="-6797" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0510640700555332" lon="8.4775810717376725"/>
+    <node visible="true" id="-6796" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0510060691311889" lon="8.4775559495127446"/>
+    <node visible="true" id="-6795" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0512900972383026" lon="8.4774376394350544"/>
+    <node visible="true" id="-6794" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0512569966394452" lon="8.4774461149524623"/>
+    <node visible="true" id="-6793" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0513066869515058" lon="8.4774544302953068"/>
+    <node visible="true" id="-6792" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0512764196162081" lon="8.4775021538917539"/>
+    <node visible="true" id="-6791" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0513107070571888" lon="8.4781273408355897"/>
+    <node visible="true" id="-6790" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0513281021620511" lon="8.4771011067508333"/>
+    <node visible="true" id="-6789" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0511703207920231" lon="8.4768462641778122"/>
+    <node visible="true" id="-6788" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0510288552223965" lon="8.4764624144386627"/>
+    <node visible="true" id="-6787" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0512922366198172" lon="8.4771067838373835"/>
+    <node visible="true" id="-6786" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0511544988938066" lon="8.4772388302385728"/>
+    <node visible="true" id="-6785" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0510889808790633" lon="8.4776202770913507"/>
+    <node visible="true" id="-6784" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0506617582362932" lon="8.4779042891089169"/>
+    <node visible="true" id="-6783" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0510913105757158" lon="8.4788651705445393"/>
+    <node visible="true" id="-6782" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0509805505024552" lon="8.4786663127909403"/>
+    <node visible="true" id="-6781" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0508641187897005" lon="8.4783861553188391"/>
+    <node visible="true" id="-6780" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0509947045447792" lon="8.4773821344740750"/>
+    <node visible="true" id="-6779" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0509368192273651" lon="8.4774186961648290"/>
+    <node visible="true" id="-6778" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0506996481722659" lon="8.4775060734392724"/>
+    <node visible="true" id="-6777" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0510139383296391" lon="8.4773372360898360"/>
+    <node visible="true" id="-6776" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0509725376178025" lon="8.4773345123796489"/>
+    <node visible="true" id="-6775" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0509087964867980" lon="8.4771916408032908"/>
+    <node visible="true" id="-6774" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0511329732865455" lon="8.4790080852323406"/>
+    <node visible="true" id="-6772" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0505644702979229" lon="8.4790063779632749"/>
+    <node visible="true" id="-6770" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0505956409982016" lon="8.4779661009233731"/>
+    <node visible="true" id="-6769" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0508848578418597" lon="8.4776711406585292"/>
+    <node visible="true" id="-6768" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0508958020770240" lon="8.4776206506993699"/>
+    <node visible="true" id="-6767" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0508075548029652" lon="8.4776544672200078"/>
+    <node visible="true" id="-6766" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0506866528332726" lon="8.4764630777176571"/>
+    <node visible="true" id="-6765" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0507394976403699" lon="8.4766816732434673"/>
+    <node visible="true" id="-6762" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0506360332612559" lon="8.4774304933760281"/>
+    <node visible="true" id="-6761" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0504444310781729" lon="8.4768000052180543"/>
+    <node visible="true" id="-6759" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0504881020379582" lon="8.4780139736618896"/>
+    <node visible="true" id="-6752" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0505458509465768" lon="8.4779045131444466"/>
+    <node visible="true" id="-6751" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0505293190130196" lon="8.4779185641898991"/>
+    <node visible="true" id="-6750" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0505376821029948" lon="8.4779634091193081"/>
+    <node visible="true" id="-6749" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0505072991829518" lon="8.4779494487487117"/>
+    <node visible="true" id="-6748" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0504135009684106" lon="8.4779664529344991"/>
+    <node visible="true" id="-805" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0523940607804505" lon="8.4789551835155947"/>
+    <node visible="true" id="-801" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0522581278924754" lon="8.4785769278323695"/>
+    <node visible="true" id="-798" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0522108106267982" lon="8.4768891101272050"/>
+    <node visible="true" id="-797" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521998191896014" lon="8.4769143659333466"/>
+    <node visible="true" id="-790" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0524862434873761" lon="8.4766025851454874"/>
+    <node visible="true" id="-789" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0522105580587127" lon="8.4767545265234645"/>
+    <node visible="true" id="-788" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521995613716655" lon="8.4767769785095943"/>
+    <node visible="true" id="-786" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0525956388293967" lon="8.4775444631631469"/>
+    <way visible="true" id="-10098" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6816"/>
+        <nd ref="-7208"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="20.190000000000001"/>
+        <tag k="length_m" v="157.94812323923031"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.841Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-10097" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6774"/>
+        <nd ref="-7207"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="7.2460000000000004"/>
+        <tag k="length_m" v="56.690129542109702"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.844Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-10096" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7206"/>
+        <nd ref="-786"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="2.3279999999999998"/>
+        <tag k="length_m" v="18.213651503482925"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:39.228Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-10095" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7205"/>
+        <nd ref="-801"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="12.045999999999999"/>
+        <tag k="length_m" v="94.241184665598837"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:39.227Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-10094" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7204"/>
+        <nd ref="-805"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="5.5999999999999996"/>
+        <tag k="length_m" v="43.80901729156016"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:39.226Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-10093" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7203"/>
+        <nd ref="-805"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="11.513999999999999"/>
+        <tag k="length_m" v="90.077626437659688"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:39.225Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-10092" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7202"/>
+        <nd ref="-790"/>
+        <nd ref="-789"/>
+        <nd ref="-788"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source" v="Bing"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="45"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="travel_time_s" v="1.1319999999999999"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="length_m" v="22.78042074665019"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:39.228Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+        <tag k="ref" v="A2"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-10091" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6805"/>
+        <nd ref="-6802"/>
+        <nd ref="-6801"/>
+        <nd ref="-6800"/>
+        <nd ref="-6796"/>
+        <nd ref="-6768"/>
+        <nd ref="-6767"/>
+        <nd ref="-7201"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source" v="Bing"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="45"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="travel_time_s" v="0.73199999999999998"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="length_m" v="14.732691239789832"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.842Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+        <tag k="ref" v="A2"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-10090" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6761"/>
+        <nd ref="-7200"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="6.774"/>
+        <tag k="length_m" v="52.991201299330562"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.847Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-10089" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6761"/>
+        <nd ref="-7199"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="4.9139999999999997"/>
+        <tag k="length_m" v="38.444777505977505"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.846Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-10088" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6750"/>
+        <nd ref="-6749"/>
+        <nd ref="-6748"/>
+        <nd ref="-7198"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="highway" v="road"/>
+        <tag k="travel_time_s" v="1.081"/>
+        <tag k="length_m" v="16.908813857363647"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.846Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-10087" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7197"/>
+        <nd ref="-6759"/>
+        <nd ref="-6750"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="45"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="travel_time_s" v="0.31900000000000001"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="length_m" v="6.4159533816121099"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.846Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+        <tag k="ref" v="A2"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-10086" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7195"/>
+        <nd ref="-6772"/>
+        <nd ref="-7196"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="16.364000000000001"/>
+        <tag k="length_m" v="128.01953163738258"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.844Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-10085" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7194"/>
+        <nd ref="-6816"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="travel_time_s" v="6.4299999999999997"/>
+        <tag k="length_m" v="50.306841682563515"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.841Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-10084" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-797"/>
+        <nd ref="-798"/>
+        <nd ref="-7193"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source" v="Bing"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="travel_time_s" v="4.923"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="length_m" v="77.022305548146662"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:39.227Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+        <tag k="ref" v="A2"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-4186" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6839"/>
+        <nd ref="-6838"/>
+        <nd ref="-6837"/>
+        <nd ref="-6834"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="45"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="travel_time_s" v="1.1319999999999999"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="length_m" v="22.78042074665019"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.840Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+        <tag k="ref" v="A2"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-4184" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6834"/>
+        <nd ref="-6833"/>
+        <nd ref="-6832"/>
+        <nd ref="-6805"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="travel_time_s" v="3.1960000000000002"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="length_m" v="50.011780198099501"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.840Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+        <tag k="ref" v="A2"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-4182" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6785"/>
+        <nd ref="-6792"/>
+        <nd ref="-6793"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="travel_time_s" v="1.958"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="length_m" v="30.629807589268886"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.843Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+        <tag k="ref" v="A2"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-4181" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6805"/>
+        <nd ref="-6829"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="highway" v="road"/>
+        <tag k="travel_time_s" v="0.81899999999999995"/>
+        <tag k="length_m" v="12.810114661923098"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.840Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4179" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6826"/>
+        <nd ref="-6827"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="5.0410000000000004"/>
+        <tag k="length_m" v="39.440011061763819"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.840Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4178" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6826"/>
+        <nd ref="-6809"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="8.7349999999999994"/>
+        <tag k="length_m" v="68.338592091365797"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.840Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4176" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6816"/>
+        <nd ref="-6823"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="travel_time_s" v="5.3920000000000003"/>
+        <tag k="length_m" v="42.182756086637752"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.841Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4175" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6823"/>
+        <nd ref="-6809"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="travel_time_s" v="5.2610000000000001"/>
+        <tag k="length_m" v="41.156307036750491"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.841Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4174" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6823"/>
+        <nd ref="-6798"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="7.4820000000000002"/>
+        <tag k="length_m" v="58.532686542686037"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.841Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4173" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-805"/>
+        <nd ref="-6822"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="2.653"/>
+        <tag k="length_m" v="20.754196943449166"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:39.228Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4166" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6809"/>
+        <nd ref="-6808"/>
+        <nd ref="-6791"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="travel_time_s" v="5.4009999999999998"/>
+        <tag k="length_m" v="42.250531315736147"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.842Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4165" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6807"/>
+        <nd ref="-6806"/>
+        <nd ref="-6805"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="45"/>
+        <tag k="highway" v="road"/>
+        <tag k="travel_time_s" v="0.47499999999999998"/>
+        <tag k="length_m" v="9.546698502818133"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.842Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4164" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6804"/>
+        <nd ref="-6803"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="road"/>
+        <tag k="travel_time_s" v="1.7470000000000001"/>
+        <tag k="length_m" v="13.664925034384197"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.842Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4162" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6798"/>
+        <nd ref="-6774"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="road"/>
+        <tag k="travel_time_s" v="0.69499999999999995"/>
+        <tag k="length_m" v="5.4335003097176191"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.842Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4161" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6799"/>
+        <nd ref="-6798"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="road"/>
+        <tag k="travel_time_s" v="0.77700000000000002"/>
+        <tag k="length_m" v="6.0805843643156106"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.842Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4159" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6785"/>
+        <nd ref="-6797"/>
+        <nd ref="-6796"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="highway" v="road"/>
+        <tag k="travel_time_s" v="0.82699999999999996"/>
+        <tag k="length_m" v="12.937532924597129"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.843Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4158" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6793"/>
+        <nd ref="-6795"/>
+        <nd ref="-6794"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="highway" v="road"/>
+        <tag k="travel_time_s" v="0.40699999999999997"/>
+        <tag k="length_m" v="6.3643183137140209"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.843Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4157" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6793"/>
+        <nd ref="-6829"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="travel_time_s" v="1.958"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="length_m" v="30.629807589268886"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.840Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+        <tag k="ref" v="A2"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-4156" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6791"/>
+        <nd ref="-6785"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="travel_time_s" v="7.4980000000000002"/>
+        <tag k="length_m" v="58.658959518519623"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.843Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4154" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6790"/>
+        <nd ref="-6787"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="road"/>
+        <tag k="travel_time_s" v="0.51300000000000001"/>
+        <tag k="length_m" v="4.0139607046889738"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.843Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4153" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6787"/>
+        <nd ref="-6789"/>
+        <nd ref="-6788"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="9.7249999999999996"/>
+        <tag k="length_m" v="76.081313504050001"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.843Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4152" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6787"/>
+        <nd ref="-6786"/>
+        <nd ref="-6777"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="road"/>
+        <tag k="travel_time_s" v="5.0899999999999999"/>
+        <tag k="length_m" v="39.818366159968683"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.843Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4151" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6770"/>
+        <nd ref="-6784"/>
+        <nd ref="-6785"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="travel_time_s" v="4.1589999999999998"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="length_m" v="65.075083015069524"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.844Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+        <tag k="ref" v="A2"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-4149" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6774"/>
+        <nd ref="-6783"/>
+        <nd ref="-6782"/>
+        <nd ref="-6781"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="9.5050000000000008"/>
+        <tag k="length_m" v="74.356868851419208"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.844Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4148" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6777"/>
+        <nd ref="-6780"/>
+        <nd ref="-6779"/>
+        <nd ref="-6778"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="road"/>
+        <tag k="travel_time_s" v="5.2530000000000001"/>
+        <tag k="length_m" v="41.093009783803417"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.844Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4143" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6768"/>
+        <nd ref="-6769"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="highway" v="road"/>
+        <tag k="travel_time_s" v="0.35999999999999999"/>
+        <tag k="length_m" v="5.6271633648764636"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.845Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4141" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6765"/>
+        <nd ref="-6766"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="3.1320000000000001"/>
+        <tag k="length_m" v="24.499742842314362"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.845Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-4135" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6750"/>
+        <nd ref="-6770"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="45"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="travel_time_s" v="0.31900000000000001"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="length_m" v="6.4159533816121099"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.845Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+        <tag k="ref" v="A2"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-4131" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6752"/>
+        <nd ref="-6751"/>
+        <nd ref="-6750"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="45"/>
+        <tag k="highway" v="road"/>
+        <tag k="travel_time_s" v="0.36499999999999999"/>
+        <tag k="length_m" v="7.3514008400245565"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.846Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-659" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-801"/>
+        <nd ref="-6828"/>
+        <nd ref="-6826"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="1.671"/>
+        <tag k="length_m" v="13.072209803848526"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.840Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-658" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-805"/>
+        <nd ref="-801"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="5.4699999999999998"/>
+        <tag k="length_m" v="42.793646163314556"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:39.227Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="-656" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6829"/>
+        <nd ref="-6830"/>
+        <nd ref="-6831"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source" v="Bing"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="travel_time_s" v="4.923"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="length_m" v="77.022305548146662"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.840Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+        <tag k="ref" v="A2"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-649" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6822"/>
+        <nd ref="-6821"/>
+        <nd ref="-6816"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="2.653"/>
+        <tag k="length_m" v="20.754196943449166"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.841Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="289750624" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6791"/>
+        <nd ref="-6781"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="7.2770000000000001"/>
+        <tag k="length_m" v="56.932750887839717"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.843Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="289754517" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6781"/>
+        <nd ref="-6770"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="6.9939999999999998"/>
+        <tag k="length_m" v="54.717817750332756"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.844Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="289754525" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6825"/>
+        <nd ref="-6824"/>
+        <nd ref="-6823"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="8.4139999999999997"/>
+        <tag k="length_m" v="65.824541143028"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.841Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="290408966" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6762"/>
+        <nd ref="-6761"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="9.1859999999999999"/>
+        <tag k="length_m" v="71.86666271762482"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.845Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="290408967" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6777"/>
+        <nd ref="-6776"/>
+        <nd ref="-6775"/>
+        <nd ref="-6765"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="10.257"/>
+        <tag k="length_m" v="80.239933397577914"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.844Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="560702487" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6765"/>
+        <nd ref="-6761"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="4.5110000000000001"/>
+        <tag k="length_m" v="35.293991432686688"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.845Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+    <way visible="true" id="560711818" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6834"/>
+        <nd ref="-6836"/>
+        <nd ref="-6835"/>
+        <tag k="hoot:layername" v="2012-12-04_1050410000E48600"/>
+        <tag k="source:datetime" v="2012-12-04T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="highway" v="residential"/>
+        <tag k="travel_time_s" v="6.4690000000000003"/>
+        <tag k="length_m" v="50.610660487788969"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:38.840Z"/>
+        <tag k="source:imagery" v="2012-12-04_1050410000E48600"/>
+    </way>
+</osm>

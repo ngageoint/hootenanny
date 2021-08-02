@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -40,6 +40,7 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/TagCountVisitor.h>
 
 // Tgs
 #include <tgs/HashMap.h>
@@ -53,13 +54,15 @@ class NodeTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(NodeTest);
   CPPUNIT_TEST(runCopyTest);
   CPPUNIT_TEST(runSetTest);
+  CPPUNIT_TEST(runClearTest);
+  CPPUNIT_TEST(runVisitTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   void runCopyTest()
   {
-    NodePtr n(new Node(Status::Unknown1, 123, 1.2, 2.3, 3.14));
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, 123, 1.2, 2.3, 3.14);
     n->setTag("foo", "bar");
 
     HOOT_STR_EQUALS(Status::Unknown1, (Status::TypeEnum)n->getStatus().getEnum());
@@ -69,7 +72,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.14, n->getCircularError(), 1e-3);
     HOOT_STR_EQUALS(QString("bar"), n->getTags()["foo"]);
 
-    NodePtr n2(new Node(*n));
+    NodePtr n2 = std::make_shared<Node>(*n);
     HOOT_STR_EQUALS(Status::Unknown1, (Status::TypeEnum)n2->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(123l, n2->getId());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.2, n2->getX(), 1e-3);
@@ -80,9 +83,9 @@ public:
 
   void runSetTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr n(new Node(Status::Unknown1, 123, 1.2, 2.3, 3.14));
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, 123, 1.2, 2.3, 3.14);
     n->setTag("foo", "bar");
 
     HOOT_STR_EQUALS(Status::Unknown1, (Status::TypeEnum)n->getStatus().getEnum());
@@ -106,9 +109,32 @@ public:
     HOOT_STR_EQUALS(QString("cheese"), n->getTags()["foo"]);
   }
 
+  void runClearTest()
+  {
+    NodePtr uut =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    uut->setTag("foo", "bar");
+
+    uut->clear();
+
+    CPPUNIT_ASSERT_EQUAL(0, uut->getTagCount());
+  }
+
+  void runVisitTest()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    NodePtr uut =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    uut->setTag("foo", "bar");
+    map->addNode(uut);
+
+    TagCountVisitor vis;
+    uut->visitRw(*map, vis);
+
+    CPPUNIT_ASSERT_EQUAL(1.0, vis.getStat());
+  }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NodeTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NodeTest, "quick");
 
 }

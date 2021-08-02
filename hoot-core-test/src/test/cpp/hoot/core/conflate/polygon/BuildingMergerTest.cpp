@@ -19,17 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -98,9 +99,9 @@ public:
       }
     }
 
-    virtual QString getDescription() const {return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const { return ""; }
+    QString getDescription() const override {return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
   private:
 
@@ -111,7 +112,7 @@ public:
   void runMatchTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -143,7 +144,7 @@ public:
   void runTagTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -182,7 +183,7 @@ public:
 
   void runKeepMoreComplexGeometryWhenAutoMergingTest1()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     set<pair<ElementId, ElementId>> pairs = getPairsForComplexAutoMergingTests(map);
 
     BuildingMerger bm(pairs);
@@ -201,7 +202,7 @@ public:
 
   void runKeepMoreComplexGeometryWhenAutoMergingTest2()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     set<pair<ElementId, ElementId>> pairs = getPairsForComplexAutoMergingTests(map);
 
     BuildingMerger bm(pairs);
@@ -219,7 +220,7 @@ public:
 
   void runManyToManyMergeTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmXmlReader reader;
     const QString inputPath =
       "test-files/cases/attribute/unifying/building/building-3136-many-to-many-auto-merge-1";
@@ -253,15 +254,15 @@ public:
     set<pair<ElementId, ElementId>> pairs;
     vector<pair<ElementId, ElementId>> replaced;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map,
       "test-files/algorithms/extractors/IntersectionOverUnionExtractorTest/IntersectionOverUnionExtractorTest-in.osm");
 
     pairs.clear();
     replaced.clear();
-    ConstElementPtr building7 = TestUtils::getElementWithTag(map, "name", "Building 7");
-    ConstElementPtr building8 = TestUtils::getElementWithTag(map, "name", "Building 8");
+    ConstElementPtr building7 = MapUtils::getFirstElementWithTag(map, "name", "Building 7");
+    ConstElementPtr building8 = MapUtils::getFirstElementWithTag(map, "name", "Building 8");
     pairs.insert(pair<ElementId, ElementId>(building7->getElementId(), building8->getElementId()));
     uut._pairs = pairs;
     uut.apply(map, replaced);
@@ -270,8 +271,8 @@ public:
 
     pairs.clear();
     replaced.clear();
-    ConstElementPtr building3 = TestUtils::getElementWithTag(map, "name", "Building 3");
-    ConstElementPtr building4 = TestUtils::getElementWithTag(map, "name", "Building 4");
+    ConstElementPtr building3 = MapUtils::getFirstElementWithTag(map, "name", "Building 3");
+    ConstElementPtr building4 = MapUtils::getFirstElementWithTag(map, "name", "Building 4");
     pairs.insert(pair<ElementId, ElementId>(building3->getElementId(), building4->getElementId()));
     uut._pairs = pairs;
     uut.apply(map, replaced);
@@ -282,8 +283,8 @@ public:
     // wouldn't be passed to the merger. However, using them to test the IoU = 0 case.
     pairs.clear();
     replaced.clear();
-    ConstElementPtr building9 = TestUtils::getElementWithTag(map, "name", "Building 9");
-    ConstElementPtr building10 = TestUtils::getElementWithTag(map, "name", "Building 10");
+    ConstElementPtr building9 = MapUtils::getFirstElementWithTag(map, "name", "Building 9");
+    ConstElementPtr building10 = MapUtils::getFirstElementWithTag(map, "name", "Building 10");
     pairs.insert(pair<ElementId, ElementId>(building9->getElementId(), building10->getElementId()));
     uut._pairs = pairs;
     uut.apply(map, replaced);

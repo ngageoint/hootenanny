@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.osm.map;
 
@@ -38,7 +38,7 @@ import java.text.SimpleDateFormat;
 
 public class FolderRecord {
     private long id;
-    private long parentId;
+    private Long parentId;
     private String name;
     private long userId;
     private boolean isPublic;
@@ -57,11 +57,11 @@ public class FolderRecord {
         this.id = id;
     }
 
-    public long getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(long parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 

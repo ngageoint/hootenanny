@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTVISITOR_H
 #define ELEMENTVISITOR_H
@@ -37,15 +37,38 @@ namespace hoot
 {
 
 /**
- * Visits elements in a collection in a way that they can be modified.
+ * Visits elements in a manner in which they can be modified.
  *
- * This allows for streaming I/O if not combined with an OsmMapConsumer.  Favor this over
- * OsmMapOperation when you do not need the entire input map in memory at once (visitor logic
- * does not require it and you are not running in the conflate pipeline where all map data must
- * be read into memory).
+ * This allows for streaming I/O during data conversions if not combined with an OsmMapConsumer.
+ * Favor this over OsmMapOperation when you do not need the entire input map in memory at once
+ * (visitor logic does not require it and you are not running in the conflate pipeline where all map
+ * data must be read into memory).
  *
- * We could eventually remove the default empty string implementations of OperationStatus
- * methods and require them to be implemented in children.
+ * Most ElementVisitors added to the conflate pipeline (conflate.pre.ops and conflate.post.ops)
+ * should either:
+ *
+ * 1) override the default implementation of FilteredByGeometryTypeCriteria::getCriteria or
+ * 2) implement the ConflateInfoCacheConsumer interface (doing both is ok).
+ *
+ * To implement FilteredByGeometryTypeCriteria::getCriteria, return a list of supported element
+ * criteria the visitor operates on (e.g. for roads, return HighwayCriterion). If the visitor
+ * operates on elements whose types maps to a conflate matcher, then the
+ * SuperfluousConflateOpRemover will ensure the visitor is not run in the conflate pipeline if that
+ * matcher isn't part of the configuration.
+ *
+ * Alternatively, if the visitor only operates generically on elements that may have multiple
+ * feature types (e.g. operates on all ways and FilteredByGeometryTypeCriteria::getCriteria returns
+ * LinearCriterion), ConflateInfoCacheConsumer should be implemented and the info in the cache be
+ * used to ensure that only elements that are conflatable in the current conflation configuration
+ * are modified (see ConflateInfoCache::elementCanBeConflatedByActiveMatcher and
+ * DuplicateNameRemover as an example implementation). An example of a visitor that doesn't need to
+ * implement either interface is RemoveMissingElementsVisitor, due to the fact that we always want
+ * to remove references to all missing elements regardless of whether they are conflatable in the
+ * current configuration or not.
+ *
+ * We could eventually remove the default empty string implementations of OperationStatus methods
+ * and require them to be implemented in children. If we ever have multiple inheritance issues via
+ * inheritance from the OperationStatus, we can change it to be a proper interface.
  */
 class ElementVisitor : public ApiEntityInfo, public FilteredByGeometryTypeCriteria,
   public OperationStatus
@@ -54,7 +77,7 @@ public:
 
   static QString className() { return "hoot::ElementVisitor"; }
 
-  ElementVisitor() : _numAffected(0), _numProcessed(0) { }
+  ElementVisitor() = default;
   virtual ~ElementVisitor() = default;
 
   /**
@@ -67,43 +90,27 @@ public:
   /**
    * @see OperationStatus
    */
-  long getNumFeaturesAffected() const override { return _numAffected; }
+  QString getInitStatusMessage() const override { return ""; }
 
   /**
    * @see OperationStatus
    */
-  long getNumFeaturesProcessed() const override { return _numProcessed; }
-
-  /**
-   * @see OperationStatus
-   */
-  virtual QString getInitStatusMessage() const override { return ""; }
-
-  /**
-   * @see OperationStatus
-   */
-  virtual QString getCompletedStatusMessage() const override { return ""; }
+  QString getCompletedStatusMessage() const override { return ""; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    *
-   * An empty list returned here means that the visitor is associated no specific criteria and
-   * can be run against any feature type. Any visitors that want to control which feature types
-   * they are run against during conflation should populate this list. The list is treated in a
-   * logical OR fashion.
+   * An empty list returned here means that the visitor is associated with no specific element type
+   * criteria and can be run against any feature type. Any visitors that want to control which
+   * feature types they are run against during conflation should populate this list. The list is
+   * treated in a logical OR fashion.
    */
-  virtual QStringList getCriteria() const override { return QStringList(); }
+  QStringList getCriteria() const override { return QStringList(); }
 
-  virtual QString toString() const override { return ""; }
-
-protected:
-
-  // These will only be used by those implementing OperationStatus.
-  long _numAffected;    // how many elements the operation actually counted or did something to
-  long _numProcessed;   // how many elements the operation processed total
+  QString toString() const override { return ""; }
 };
 
-typedef std::shared_ptr<ElementVisitor> ElementVisitorPtr;
+using ElementVisitorPtr = std::shared_ptr<ElementVisitor>;
 
 }
 

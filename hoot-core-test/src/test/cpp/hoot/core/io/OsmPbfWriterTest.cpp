@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -60,9 +60,7 @@ class OsmPbfWriterTest : public HootTestFixture
 
 public:
 
-  OsmPbfWriterTest()
-    : HootTestFixture("test-files/io/",
-                      "test-output/io/")
+  OsmPbfWriterTest() : HootTestFixture("test-files/io/", "test-output/io/")
   {
     setResetType(ResetBasic);
   }
@@ -71,15 +69,13 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", map);
 
     OsmPbfWriter writer;
     writer.write(map, _outputPath + "OsmPbfWriterTest.pbf");
 
-    HOOT_FILE_EQUALS( _inputPath + "OsmPbfWriterTest.pbf",
-                     _outputPath + "OsmPbfWriterTest.pbf");
-
+    HOOT_FILE_EQUALS(_inputPath + "OsmPbfWriterTest.pbf", _outputPath + "OsmPbfWriterTest.pbf");
   }
 
   void runWriteNodeTest()
@@ -88,12 +84,10 @@ public:
 
     OsmPbfWriter writer;
 
-    NodePtr n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, 72, 42.0, 3.14159, 7.1);
     n->setTag("hello", "world");
     n->setTag("note", "test tag");
     writer.writePb(n, &ss);
-
-    //TestUtils::dumpString(ss.str());
 
     const unsigned char data[] = {
         0,   0,   0, 101,  10,  69,  10,   0,  10,   4, 110, 111, 116, 101,  10,   8, 116, 101,
@@ -117,8 +111,8 @@ public:
 
     OsmPbfWriter writer;
 
-    OsmMapPtr map(new OsmMap());
-    RelationPtr r(new Relation(Status::Unknown1, 42, 1.7, "foo"));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    RelationPtr r = std::make_shared<Relation>(Status::Unknown1, 42, 1.7, "foo");
     r->addElement("s", ElementId::node(1));
     r->addElement("t", ElementId::node(2));
     r->addElement("u", ElementId::node(3));
@@ -156,8 +150,8 @@ public:
 
     OsmPbfWriter writer;
 
-    OsmMapPtr map(new OsmMap());
-    WayPtr w(new Way(Status::Unknown1, 42, 1.7));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    WayPtr w = std::make_shared<Way>(Status::Unknown1, 42, 1.7);
     vector<long> nodes;
     nodes.push_back(1);
     nodes.push_back(3);
@@ -196,14 +190,14 @@ public:
     OsmPbfWriter writer;
     // makes for a consistent output.
     writer.setCompressionLevel(0);
-    writer.includVersion(false);
+    writer.setIncludeVersion(false);
 
-    OsmMapPtr map(new OsmMap());
-    NodePtr n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, 72, 42.0, 3.14159, 7.1);
     n->setTag("hello", "world");
     n->setTag("note", "test tag");
     map->addNode(n);
-    WayPtr w(new Way(Status::Unknown1, 42, 1.7));
+    WayPtr w = std::make_shared<Way>(Status::Unknown1, 42, 1.7);
     vector<long> nodes;
     nodes.push_back(1);
     nodes.push_back(3);
@@ -220,9 +214,9 @@ public:
 
     map->clear();
 
-    n.reset(new Node(Status::Unknown1, 73, 20, 30, 15));
+    n = std::make_shared<Node>(Status::Unknown1, 73, 20, 30, 15);
     map->addNode(n);
-    w.reset(new Way(Status::Unknown1, 43, 1.7));
+    w = std::make_shared<Way>(Status::Unknown1, 43, 1.7);
     nodes.clear();
     nodes.push_back(73);
     w->addNodes(nodes);

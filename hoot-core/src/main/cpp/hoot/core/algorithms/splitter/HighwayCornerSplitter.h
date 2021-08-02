@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef HIGHWAYCORNERSPLITTER_H
@@ -45,8 +45,10 @@ class OsmMap;
 class Way;
 
 /**
- * Given an OsmMap, ways are split at sharp (or rounded, if desired) corners. This can help
- * when conflating data that is mostly major roads with data that contains a lot of
+ * @brief The HighwayCornerSplitter class given an OsmMap, splits ways at sharp (or rounded, if
+ * desired) corners.
+ *
+ * This can help when conflating data that is mostly major roads with data that contains a lot of
  * neighborhood-level data.
  */
 class HighwayCornerSplitter : public OsmMapOperation, public Configurable
@@ -57,42 +59,41 @@ public:
 
   HighwayCornerSplitter();
   HighwayCornerSplitter(const std::shared_ptr<OsmMap>& map);
-  virtual ~HighwayCornerSplitter() = default;
+  ~HighwayCornerSplitter() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   static void splitCorners(const std::shared_ptr<OsmMap>& map);
-
   void splitCorners();
 
-  virtual QString getDescription() const override { return "Splits sharp road corners"; }
   /**
    * Set the configuration for this object.
    */
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getInitStatusMessage() const { return "Splitting sharp road corners..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getInitStatusMessage() const override { return "Splitting sharp road corners..."; }
+  QString getCompletedStatusMessage() const override
   { return "Split " + QString::number(_numAffected) + " road corners"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Splits sharp road corners"; }
 
 private:
 
   /**
-   * @brief _splitRoundedCorners Split rounded corners in the middle just like a non-rounded corner
+   * @brief _splitRoundedCorners splits rounded corners in the middle just like a non-rounded
+   * corner.
    */
   void _splitRoundedCorners();
   /**
-   * @brief _splitWay Split the way at the given node, using the WaySplitter, then process the results
+   * @brief _splitWay splits the way at the given node, using the WaySplitter, then process the
+   * results.
    * @param wayId Index of way to split
    * @param nodeIdx Index of node to split at
    * @param nodeId ID of the node to split at

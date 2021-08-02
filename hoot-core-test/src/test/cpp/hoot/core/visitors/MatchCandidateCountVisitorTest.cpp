@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -74,7 +74,7 @@ public:
   void runBuildingMatchCandidateCountTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -98,7 +98,7 @@ public:
   void runHighwayMatchCandidateCountTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -122,7 +122,7 @@ public:
   void runCombinedMatchCandidateCountTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -155,7 +155,7 @@ public:
     // used by the visitor are the correct ones that were specified in the configuration.
 
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -180,7 +180,7 @@ public:
   void runMultipleScriptMatchCreatorTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -207,7 +207,7 @@ public:
   void runDualPoiScriptMatchCreatorTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -231,9 +231,11 @@ public:
 
   void runFilteredPoiMatchCreatorTest()
   {
-    OsmMapPtr map(new OsmMap());
-    NodePtr node1(new Node(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    NodePtr node2(new Node(Status::Unknown2, 2, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown2, 2, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node1->getTags().clear();
     node1->getTags().set("poi", "yes");
@@ -251,26 +253,26 @@ public:
     const QString poiTagFilter = "{ \"must\": [ { \"tag\": \"poi=yes\" } ] }";
 
     MatchFactory::getInstance().reset();
-    MatchFactory::getInstance()._setTagFilter(poiTagFilter);
+    MatchFactory::getInstance()._setTagFilterJson(poiTagFilter);
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
-    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    uut = std::make_shared<MatchCandidateCountVisitor>(MatchFactory::getInstance().getCreators());
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)2, (int)uut->getStat());
 
     const QString restaurantTagFilter = "{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }";
 
     MatchFactory::getInstance().reset();
-    MatchFactory::getInstance()._setTagFilter(restaurantTagFilter);
+    MatchFactory::getInstance()._setTagFilterJson(restaurantTagFilter);
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
-    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    uut = std::make_shared<MatchCandidateCountVisitor>(MatchFactory::getInstance().getCreators());
     node1->getTags().set("amenity", "restaurant");
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)1, (int)uut->getStat());
 
     MatchFactory::getInstance().reset();
-    MatchFactory::getInstance()._setTagFilter(restaurantTagFilter);
+    MatchFactory::getInstance()._setTagFilterJson(restaurantTagFilter);
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
-    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    uut = std::make_shared<MatchCandidateCountVisitor>(MatchFactory::getInstance().getCreators());
     node2->getTags().set("amenity", "restaurant");
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)2, (int)uut->getStat());
@@ -279,7 +281,7 @@ public:
   void runFilteredMultipleMatchCreatorTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -292,30 +294,32 @@ public:
     std::shared_ptr<MatchCandidateCountVisitor> uut;
 
     MatchFactory::getInstance().reset();
-    MatchFactory::getInstance()._setTagFilter("");
+    MatchFactory::getInstance()._setTagFilterJson("");
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
-    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    uut = std::make_shared<MatchCandidateCountVisitor>(MatchFactory::getInstance().getCreators());
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)39, (int)uut->getStat());
 
     MatchFactory::getInstance().reset();
-    MatchFactory::getInstance()._setTagFilter("{ \"must\": [ { \"tag\": \"building=yes\" } ] }");
+    MatchFactory::getInstance()._setTagFilterJson(
+      "{ \"must\": [ { \"tag\": \"building=yes\" } ] }");
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
-    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    uut = std::make_shared<MatchCandidateCountVisitor>(MatchFactory::getInstance().getCreators());
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)17, (int)uut->getStat());
 
     MatchFactory::getInstance().reset();
-    MatchFactory::getInstance()._setTagFilter("{ \"must\": [ { \"tag\": \"poi=yes\" } ] }");
+    MatchFactory::getInstance()._setTagFilterJson("{ \"must\": [ { \"tag\": \"poi=yes\" } ] }");
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
-    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    uut = std::make_shared<MatchCandidateCountVisitor>(MatchFactory::getInstance().getCreators());
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)21, (int)uut->getStat());
 
     MatchFactory::getInstance().reset();
-    MatchFactory::getInstance()._setTagFilter("{ \"must\": [ { \"tag\": \"name=Starbucks\" } ] }");
+    MatchFactory::getInstance()._setTagFilterJson(
+      "{ \"must\": [ { \"tag\": \"name=Starbucks\" } ] }");
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
-    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    uut = std::make_shared<MatchCandidateCountVisitor>(MatchFactory::getInstance().getCreators());
     map->visitRo(*uut);
     CPPUNIT_ASSERT_EQUAL((int)12, (int)uut->getStat());
   }

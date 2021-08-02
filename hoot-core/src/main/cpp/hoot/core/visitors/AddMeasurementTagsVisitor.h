@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ADDMEASUREMENTTAGSVISITOR_H
 #define ADDMEASUREMENTTAGSVISITOR_H
@@ -58,22 +58,19 @@ public:
   AddMeasurementTagsVisitor() = default;
   AddMeasurementTagsVisitor(bool area, bool length, bool width) :
     _addArea(area), _addLength(length), _addWidth(width) { }
-  virtual ~AddMeasurementTagsVisitor() = default;
+  ~AddMeasurementTagsVisitor() = default;
 
-  // ElementVisitor
   static QString className() { return "hoot::AddMeasurementTagsVisitor"; }
-  QString getDescription() const { return "Modifies map geometry as specified"; }
 
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
-  // OperationStatus
-  virtual QString getInitStatusMessage() const { return "Adding measurement tags..."; }
-  virtual QString getCompletedStatusMessage() const
+  QString getInitStatusMessage() const override { return "Adding measurement tags..."; }
+  QString getCompletedStatusMessage() const override
   { return "Added tags to " + QString::number(_numAffected) + " elements"; }
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Modifies map geometry as specified"; }
 
 private:
 
@@ -81,12 +78,12 @@ private:
   bool _addLength = true;
   bool _addWidth = true;
 
-  void processRelation(const RelationPtr pRelation );
-  void processWay(const WayPtr pWay);
+  void _processRelation(const RelationPtr pRelation );
+  void _processWay(const WayPtr pWay);
 
-  void calculateExtents(geos::geom::Geometry* pGeometry, double& length, double &width);
+  void _calculateExtents(geos::geom::Geometry* pGeometry, double& length, double &width) const;
 };
 
-} // namespace hoot
+}
 
 #endif // ADDMEASUREMENTTAGSVISITOR_H

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef RMSEAGGREGATOR_H
 #define RMSEAGGREGATOR_H
@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * This class assumes that the values d are the error values.
+ * @brief The RmseAggregator class assumes that the values d are the error values.
  */
 class RmseAggregator : public ValueAggregator
 {
@@ -45,18 +45,15 @@ public:
   static QString className() { return "hoot::RmseAggregator"; }
 
   RmseAggregator() = default;
-  virtual ~RmseAggregator() = default;
+  ~RmseAggregator() = default;
 
-  virtual double aggregate(std::vector<double>& d) const;
+  double aggregate(std::vector<double>& d) const override;
 
-  virtual QString toString() const { return "RmseAggregator"; }
-
-  virtual QString getDescription() const
+  QString toString() const override { return "RmseAggregator"; }
+  QString getDescription() const override
   { return "Aggregates data based on the Root Mean Square Deviation value"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

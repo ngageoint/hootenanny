@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ADDBBOXVISITOR_H
 #define ADDBBOXVISITOR_H
@@ -39,16 +39,14 @@ public:
   static QString className() { return "hoot::AddBboxVisitor"; }
 
   AddBboxVisitor() = default;
-  virtual ~AddBboxVisitor() = default;
+  ~AddBboxVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e) override;
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Adds a bounding box tag to applicable elements"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

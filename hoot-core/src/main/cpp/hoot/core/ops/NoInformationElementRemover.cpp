@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "NoInformationElementRemover.h"
@@ -47,9 +47,10 @@ void NoInformationElementRemover::apply(std::shared_ptr<OsmMap>& map)
   _numAffected = 0;
   _map = map;
 
-  std::shared_ptr<NoInformationCriterion> pNoInfoCrit(new NoInformationCriterion());
-  std::shared_ptr<UselessElementCriterion> pUselessCrit(new UselessElementCriterion(map));
-  std::shared_ptr<ChainCriterion> pCrit(new ChainCriterion(pNoInfoCrit, pUselessCrit));
+  std::shared_ptr<ChainCriterion> pCrit(
+    std::make_shared<ChainCriterion>(
+      std::make_shared<NoInformationCriterion>(),
+      std::make_shared<UselessElementCriterion>(map)));
   RemoveElementsVisitor removeElementsVisitor;
   removeElementsVisitor.setRecursive(false);
   removeElementsVisitor.addCriterion(pCrit);

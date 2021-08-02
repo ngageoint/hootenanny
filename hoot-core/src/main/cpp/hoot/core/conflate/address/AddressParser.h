@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ADDRESS_PARSER_H
 #define ADDRESS_PARSER_H
@@ -49,7 +49,7 @@ class ElementId;
 class Relation;
 
 /**
- * Parses element address tags into addresses
+ * @brief The AddressParser class parses element address tags into addresses.
  *
  * Address normalization and translation is handled by libpostal, which uses ML trained on OSM
  * data.  There is also an option to do language pre-translation with a custom translator.
@@ -59,21 +59,18 @@ class AddressParser : public Configurable
 public:
 
   AddressParser();
-  virtual ~AddressParser() = default;
+  ~AddressParser() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
-   * Parse all addresses from an element
-   *
+   * @brief parseAddresses parses all addresses from an element.
    * @param element the element to parse addresses from
    * @return a collection of addresses
    */
   QList<Address> parseAddresses(const Element& element, const bool normalizeAddresses = true) const;
-
   /**
-   * Parse all addresses from a way's nodes
-   *
+   * @brief parseAddressesFromWayNodes parses all addresses from a way's nodes.
    * @param way the way to parse addresses from
    * @param map the map the way belongs to
    * @param skipElementId no addresses from elements with this ID will be parsed
@@ -81,38 +78,27 @@ public:
    */
   QList<Address> parseAddressesFromWayNodes(const Way& way, const OsmMap& map,
                                             const ElementId& skipElementId = ElementId()) const;
-
   /**
-   * Parses all addresses from a relation's members
-   *
+   * @brief parseAddressesFromRelationMembers parses all addresses from a relation's members.
    * @param relation the relation to parse addresses from
    * @param map the map the relation belongs to
    * @param skipElementId no addresses from elements with this ID will be parsed
    * @return a collection of addresses
    */
-  QList<Address> parseAddressesFromRelationMembers(const Relation& relation, const OsmMap& map,
-                                                   const ElementId& skipElementId = ElementId()) const;
+  QList<Address> parseAddressesFromRelationMembers(
+    const Relation& relation, const OsmMap& map,
+    const ElementId& skipElementId = ElementId()) const;
 
   /**
-   * Determines if an element has an address
-   *
+   * @brief hasAddress determines if an element has an address.
    * @param element the element to examine for an address
    * @return true if the element has an address; false otherwise
    * @note This could be made more efficient, if necessary, by only counting the first address.
    */
   bool hasAddress(const Element& element) const;
-
   /**
-   * Counts the number of address an element contains
-   *
-   * @param element the element to examine for an address
-   * @return the number of addresses the element contains
-   */
-  int numAddresses(const Element& element) const;
-
-  /**
-   * Determines if an element and any elements it contains has an address
-   *
+   * @brief hasAddressRecursive determines if an element and any elements it contains has an
+   * address.
    * @param element the element to examine for an address
    * @param map map the element being examined belongs to
    * @return true if the element or its children have an address; false otherwise
@@ -121,9 +107,15 @@ public:
   bool hasAddressRecursive(const ConstElementPtr& element, const OsmMap& map) const;
 
   /**
-   * Counts the number of address an element contains, as well as the addresses of any contained
-   * elements
+   * @brief Counts the number of address an element contains
    *
+   * @param element the element to examine for an address
+   * @return the number of addresses the element contains
+   */
+  int numAddresses(const Element& element) const;
+  /**
+   * @brief numAddressesRecursive counts the number of address an element contains, as well as the
+   * addresses of any contained elements.
    * @param element the element to examine for addresses
    * @param map map the element being examined belongs to
    * @return the number of addresses the element and its children contain
@@ -131,10 +123,10 @@ public:
   int numAddressesRecursive(const ConstElementPtr& element, const OsmMap& map) const;
 
   /**
-   * Determines whether two addresses match despite house number subletter differences
+   * @brief addressesMatchDespiteSubletterDiffs determines whether two addresses match despite house
+   * number subletter differences.
    *
    * So, allow "34 elm street" to match "34a elm street".
-   *
    * @param address1 first address to compare
    * @param address2 second address to compare
    * @return true if the address match despite subletter differences; false otherwise

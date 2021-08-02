@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -65,17 +65,17 @@ public:
 
   void matchTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     n1->getTags()["name"] = "United Kingdom";
     map->addNode(n1);
@@ -83,7 +83,7 @@ public:
     {
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -103,7 +103,7 @@ public:
     {
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -120,15 +120,15 @@ public:
 
   void missTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("building", true);
-    NodePtr n1(new Node(Status::Unknown1, 1, -1, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, -1, 10, 5);
     map->addNode(n1);
     w1->getTags().set("name", "foo");
     n1->getTags().set("name", "bar");
@@ -137,7 +137,7 @@ public:
     {
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -157,7 +157,7 @@ public:
     {
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -174,15 +174,15 @@ public:
 
   void reviewTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("building", true);
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     map->addNode(n1);
     w1->getTags().set("name", "foo");
     n1->getTags().set("name", "bar");
@@ -191,7 +191,7 @@ public:
     {
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -210,7 +210,7 @@ public:
     {
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -230,7 +230,7 @@ public:
     {
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -248,17 +248,17 @@ public:
   void reviewIfMatchedTypedTest()
   {
     //we let the user specify a custom list of types that always force a review if a match was found
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     n1->getTags().set("building", "yes");
     n1->getTags()["name"] = "United Kingdom";
@@ -267,7 +267,7 @@ public:
     {
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -289,7 +289,7 @@ public:
     {
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -311,7 +311,7 @@ public:
     {
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -335,7 +335,7 @@ public:
     OsmMapPtr map;
     PoiPolygonMatch uut(
       map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-      PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+      std::make_shared<PoiPolygonInfoCache>(map));
 
     QString exceptionMsg1("");
     try
@@ -367,7 +367,7 @@ public:
     OsmMapPtr map;
     PoiPolygonMatch uut(
       map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-      PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+      std::make_shared<PoiPolygonInfoCache>(map));
 
     QString exceptionMsg1("");
     try
@@ -399,7 +399,7 @@ public:
     OsmMapPtr map;
     PoiPolygonMatch uut(
       map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-      PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+      std::make_shared<PoiPolygonInfoCache>(map));
 
     QString exceptionMsg1("");
     try
@@ -431,7 +431,7 @@ public:
     OsmMapPtr map;
     PoiPolygonMatch uut(
       map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-      PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+      std::make_shared<PoiPolygonInfoCache>(map));
 
     QString exceptionMsg1("");
     try
@@ -463,7 +463,7 @@ public:
     OsmMapPtr map;
     PoiPolygonMatch uut(
       map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-      PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+      std::make_shared<PoiPolygonInfoCache>(map));
 
     QString exceptionMsg1("");
     QStringList badKvp1;
@@ -532,17 +532,17 @@ public:
 
   void exactSourceMatchDisableConflationTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     n1->getTags()["name"] = "United Kingdom";
     map->addNode(n1);
@@ -553,7 +553,7 @@ public:
 
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -576,7 +576,7 @@ public:
 
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -596,17 +596,17 @@ public:
 
   void sourceMatchTagKeyPrefixOnlyDisableConflationTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     n1->getTags()["name"] = "United Kingdom";
     map->addNode(n1);
@@ -617,7 +617,7 @@ public:
 
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -640,7 +640,7 @@ public:
 
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -660,17 +660,17 @@ public:
 
   void sourceTagKeyMismatchDisableConflationTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     n1->getTags()["name"] = "United Kingdom";
     map->addNode(n1);
@@ -681,7 +681,7 @@ public:
 
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -701,17 +701,17 @@ public:
 
   void missingSourceTagTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     n1->getTags()["name"] = "United Kingdom";
     n1->getTags()["source"] = "mySource:a";
@@ -720,7 +720,7 @@ public:
     {
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -740,7 +740,7 @@ public:
     {
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-       PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+       std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -760,19 +760,19 @@ public:
 
   void multiUseBuildingTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
 
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     map->addNode(n1);
 
     PoiPolygonMatch uut(
       map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-      PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+      std::make_shared<PoiPolygonInfoCache>(map));
     uut.setConfiguration(conf());
     uut.setEnableReviewReduction(true);
     uut.setMatchDistanceThreshold(0.0);
@@ -787,7 +787,7 @@ public:
     {
       n1->getTags()["name"] = "Staunton Elementary";
 
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Staunton Elementary";
       w1->getTags().set("building", "yes");
       w1->getTags().set("building:use", "multipurpose");
@@ -803,7 +803,7 @@ public:
     {
       n1->getTags()["name"] = "Staunton Elementary";
 
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Staunton Elementary";
       w1->getTags().set("amenity", "school");
       w1->getTags().set("building:use", "multipurpose");
@@ -820,7 +820,7 @@ public:
       n1->getTags()["name"] = "Honey Creek Mall";
       n1->getTags()["shop"] = "mall";
 
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Honey Creek Mall";
       w1->getTags().set("building", "yes");
       w1->getTags().set("shop", "mall");
@@ -841,7 +841,7 @@ public:
       n1->getTags()["name"] = "Honey Creek Mall";
       n1->getTags()["shop"] = "mall";
 
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Honey Creek Mall";
       w1->getTags().set("shop", "mall");
 
@@ -856,7 +856,7 @@ public:
     {
       n1->getTags()["name"] = "Staunton Elementary";
 
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Staunton Elementary";
       w1->getTags().set("amenity", "school");
       w1->getTags().set("building:use", "multipurpose");
@@ -872,7 +872,7 @@ public:
     {
       n1->getTags()["name"] = "Staunton Elementary";
 
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Staunton Elementary";
       w1->getTags().set("building", "yes");
 
@@ -887,7 +887,7 @@ public:
     {
       n1->getTags()["name"] = "Staunton Elementary";
 
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Staunton Elementary";
       w1->getTags().set("amenity", "school");
 
@@ -902,7 +902,7 @@ public:
     {
       n1->getTags()["name"] = "Staunton Elementary";
 
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Staunton Elementary";
       w1->getTags().set("area", "yes");
       w1->getTags().set("building:use", "multipurpose");
@@ -918,17 +918,17 @@ public:
 
   void disableIntradatasetConflationTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     n1->getTags()["name"] = "United Kingdom";
     map->addNode(n1);
@@ -940,7 +940,7 @@ public:
 
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -963,7 +963,7 @@ public:
 
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -986,7 +986,7 @@ public:
 
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -1009,7 +1009,7 @@ public:
 
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
-        PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map)));
+        std::make_shared<PoiPolygonInfoCache>(map));
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);

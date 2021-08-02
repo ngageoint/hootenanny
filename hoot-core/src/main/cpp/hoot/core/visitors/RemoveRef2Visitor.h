@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVEREF2VISITOR_H
 #define REMOVEREF2VISITOR_H
@@ -51,7 +51,7 @@ class RemoveRef2Visitor : public ElementVisitor, public ConstOsmMapConsumer,
 
 public:
 
-  typedef QMap<QString, ElementId> Ref1ToEid;
+  using Ref1ToEid = QMap<QString, ElementId>;
 
   static QString className() { return "hoot::RemoveRef2Visitor"; }
 
@@ -60,22 +60,20 @@ public:
   RemoveRef2Visitor();
   virtual ~RemoveRef2Visitor() = default;
 
-  virtual void addCriterion(const ElementCriterionPtr& e);
+  void addCriterion(const ElementCriterionPtr& e) override;
 
-  virtual void setOsmMap(OsmMap* map);
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
+  void setOsmMap(OsmMap* map) override;
+  void setOsmMap(const OsmMap* /*map*/) override { assert(false); }
 
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
   virtual bool ref1CriterionSatisfied(const ConstElementPtr& e) const;
   virtual bool ref2CriterionSatisfied(const ConstElementPtr& e) const;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Removes REF2 tags when a criterion is met for both REF1 and REF2 elements"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 
@@ -87,7 +85,6 @@ private:
   Ref1ToEid _ref1ToEid;
   static QStringList _ref2Keys;
   static QMutex _mutex;
-  bool _errorOnMissingRef1;
 
   bool _hasRef2Tag(ElementPtr e) const;
   void _checkAndDeleteRef2(ElementPtr e, QString ref);

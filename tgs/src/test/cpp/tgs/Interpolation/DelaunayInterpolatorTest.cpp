@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit Includes
@@ -61,10 +61,10 @@ public:
 
   std::shared_ptr<DelaunayInterpolator> buildRandom()
   {
-    std::shared_ptr<DelaunayInterpolator> result(new DelaunayInterpolator);
+    std::shared_ptr<DelaunayInterpolator> result = std::make_shared<DelaunayInterpolator>();
     DelaunayInterpolator& uut = *result;
 
-    std::shared_ptr<DataFrame> dfPtr(new DataFrame());
+    std::shared_ptr<DataFrame> dfPtr = std::make_shared<DataFrame>();
     DataFrame& df = *dfPtr;
     vector<string> labels;
     labels.push_back("x");
@@ -187,7 +187,7 @@ public:
     Tgs::Random::instance()->seed(0);
     DelaunayInterpolator uut;
 
-    std::shared_ptr<DataFrame> dfPtr(new DataFrame());
+    std::shared_ptr<DataFrame> dfPtr = std::make_shared<DataFrame>();
     DataFrame& df = *dfPtr;
     vector<string> labels;
     labels.push_back("x");

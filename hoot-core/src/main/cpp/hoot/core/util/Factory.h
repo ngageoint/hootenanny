@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef _HOOT_FACTORY_H
@@ -50,7 +50,6 @@ class ObjectCreator
 public:
 
   ObjectCreator() = default;
-
   virtual ~ObjectCreator() = default;
 
   virtual boost::any create() = 0;
@@ -68,11 +67,10 @@ class ObjectCreatorTemplate : public ObjectCreator
 {
 public:
 
-  ObjectCreatorTemplate(QString baseName, QString name)
-    : _name(name), _baseName(baseName)
+  ObjectCreatorTemplate(QString baseName, QString name) :
+  _name(name), _baseName(baseName)
   {
   }
-
   virtual ~ObjectCreatorTemplate() = default;
 
   /**
@@ -80,17 +78,17 @@ public:
    */
   boost::any create() override
   {
-    Base* b = new T();
-    return dynamic_cast<Base*>(b);
+    std::shared_ptr<Base> b = std::make_shared<T>();
+    return std::dynamic_pointer_cast<Base>(b);
   }
 
   QString getBaseName() const override { return _baseName; }
-
   QString getName() const override { return _name; }
 
 private:
 
-  QString _name, _baseName;
+  QString _name;
+  QString _baseName;
 };
 
 /**
@@ -101,6 +99,20 @@ class Factory
 public:
 
   static Factory& getInstance();
+
+  boost::any constructObject(const QString& name);
+  template<class T>
+  std::shared_ptr<T> constructObject(const QString& name)
+  {
+    return boost::any_cast<std::shared_ptr<T>>(constructObject(name));
+  }
+  /**
+   * Register an object creator.
+   *
+   * @param baseClass If set to true, then the object creator may implement the base class. This is
+   * very unusual, but accidentally forgetting to implement "string className()" is quite common.
+   */
+  void registerCreator(const std::shared_ptr<ObjectCreator>& oc, bool baseClass = false);
 
   /**
    * Returns true if the specified class has the ExpectedBase.
@@ -121,6 +133,7 @@ public:
     }
     return true;
   }
+  bool hasClass(const QString& name) const;
 
   /**
    * Checks to make sure the class works as expected. Nice for error checking.
@@ -140,25 +153,7 @@ public:
     }
   }
 
-  boost::any constructObject(const QString& name);
-
-  template<class T>
-  T* constructObject(const QString& name)
-  {
-    return boost::any_cast<T*>(constructObject(name));
-  }
-
   std::vector<QString> getObjectNamesByBase(const QString& baseName);
-
-  bool hasClass(const QString& name);
-
-  /**
-   * Register an object creator.
-   *
-   * @param baseClass If set to true, then the object creator may implement the base class. This is
-   *  very unusual, but accidentally forgetting to implement "string className()" is quite common.
-   */
-  void registerCreator(const std::shared_ptr<ObjectCreator>& oc, bool baseClass = false);
 
 private:
 
@@ -184,15 +179,13 @@ public:
   AutoRegister(QString baseName, QString name, bool baseClass = false)
   {
     Factory::getInstance().registerCreator(
-      std::shared_ptr<ObjectCreatorTemplate<Base, T>>(
-        new ObjectCreatorTemplate<Base, T>(baseName, name)), baseClass);
+      std::make_shared<ObjectCreatorTemplate<Base, T>>(baseName, name), baseClass);
   }
 };
 
 #define HOOT_FACTORY_REGISTER(Base, ClassName)      \
   static hoot::AutoRegister<Base, ClassName> ClassName##AutoRegister(Base::className(), \
     ClassName::className());
-
 /**
  * It is very unusual to register the base class, so you have to call this method to do it.
  * Otherwise you'll get a nasty exception.

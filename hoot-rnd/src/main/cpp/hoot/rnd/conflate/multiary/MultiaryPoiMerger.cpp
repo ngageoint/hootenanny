@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MultiaryPoiMerger.h"
 
 // hoot
-#include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -41,8 +41,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, MultiaryPoiMerger)
 
-MultiaryPoiMerger::MultiaryPoiMerger(std::set<std::pair<ElementId, ElementId>>& pairs) :
-_pairs(pairs)
+MultiaryPoiMerger::MultiaryPoiMerger(const std::set<std::pair<ElementId, ElementId>>& pairs) :
+MergerBase(pairs)
 {
 }
 
@@ -73,14 +73,15 @@ void MultiaryPoiMerger::apply(const OsmMapPtr& map,
   {
     // ugh. Magic string. To work around this we'll need to link against hoot-js, or find another
     // way to add that dep.
-    if (d.className == "hoot::ScriptMergerCreator")
+    if (d.getClassName() == "hoot::ScriptMergerCreator")
     {
-      _mergerCreator.reset(Factory::getInstance().constructObject<MergerCreator>(d.className));
+      _mergerCreator = Factory::getInstance().constructObject<MergerCreator>(d.getClassName());
     }
   }
 
-  MultiaryScoreCachePtr score(new MultiaryScoreCache(map, _matchCreator));
-  MultiaryPoiMergeCachePtr merge(new MultiaryPoiMergeCache(map, _matchCreator, _mergerCreator));
+  MultiaryScoreCachePtr score = std::make_shared<MultiaryScoreCache>(map, _matchCreator);
+  MultiaryPoiMergeCachePtr merge =
+    std::make_shared<MultiaryPoiMergeCache>(map, _matchCreator, _mergerCreator);
   MultiaryHierarchicalClusterAlgorithm clusterer(merge, score,
     _matchCreator->getMatchThreshold()->getMissThreshold());
 
@@ -93,7 +94,7 @@ void MultiaryPoiMerger::apply(const OsmMapPtr& map,
 }
 
 void MultiaryPoiMerger::_createReviews(const OsmMapPtr& map,
-  QList<MultiaryClusterAlgorithm::ClusterLinkPtr> reviews)
+  QList<MultiaryClusterAlgorithm::ClusterLinkPtr> reviews) const
 {
   ReviewMarker reviewMarker;
   foreach (MultiaryClusterAlgorithm::ClusterLinkPtr link, reviews)
@@ -111,7 +112,7 @@ void MultiaryPoiMerger::_createReviews(const OsmMapPtr& map,
 
 void MultiaryPoiMerger::_mergeClusters(const OsmMapPtr& map,
   std::vector<std::pair<ElementId, ElementId>>& replaced,
-  MultiaryClusterAlgorithm::ClusterList clusters)
+  MultiaryClusterAlgorithm::ClusterList clusters) const
 {
   foreach (MultiaryClusterPtr mc, clusters)
   {
@@ -120,14 +121,13 @@ void MultiaryPoiMerger::_mergeClusters(const OsmMapPtr& map,
       if (e->getElementId() != mc->mergedElement->getElementId())
       {
         RecursiveElementRemover(e->getElementId()).apply(map);
-        replaced.push_back(
-          std::pair<ElementId, ElementId>(
+        replaced.emplace_back(
             e->getElementId(),
-            mc->mergedElement->getElementId()));
+            mc->mergedElement->getElementId());
       }
     }
     // Copy mergedElement so we know this is the only map that contains the element.
-    ElementPtr newE(mc->mergedElement->clone());
+    ElementPtr newE = mc->mergedElement->clone();
     // this will replace the old entry.
     map->addElement(newE);
   }

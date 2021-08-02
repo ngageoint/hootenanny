@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "BuildingOutlineRemoveOp.h"
 
@@ -71,9 +71,9 @@ void BuildingOutlineRemoveOp::_removeOutline(const std::shared_ptr<Relation>& bu
   const vector<RelationData::Entry> entries = building->getMembers();
   for (size_t i = 0; i < entries.size(); i++)
   {
-    if (entries[i].role == MetadataTags::RoleOutline())
+    if (entries[i].getRole() == MetadataTags::RoleOutline())
     {
-      building->removeElement(entries[i].role, entries[i].getElementId());
+      building->removeElement(entries[i].getRole(), entries[i].getElementId());
       RecursiveElementRemover(entries[i].getElementId()).apply(_map);
       _numAffected++;
     }

@@ -19,26 +19,27 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CALCULATEMAPBOUNDSVISITOR_H
 #define CALCULATEMAPBOUNDSVISITOR_H
 
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
-/**
- * A visitor for finding the bounds of a map, based on the old OsmMap::calculateBounds
- * method. As with the original function, this uses map nodes to generate
- * the envelope.
- */
 namespace hoot
 {
 
+/**
+ * @brief The CalculateMapBoundsVisitor class is a visitor for finding the bounds of a map, based on
+ * the old OsmMap::calculateBounds method.
+ *
+ * As with the original function, this uses map nodes to generate the envelope.
+ */
 class CalculateMapBoundsVisitor : public ConstElementVisitor
 {
 public:
@@ -46,12 +47,12 @@ public:
   static QString className() { return "hoot::CalculateMapBoundsVisitor"; }
 
   CalculateMapBoundsVisitor() = default;
-  virtual ~CalculateMapBoundsVisitor() = default;
+  ~CalculateMapBoundsVisitor() = default;
 
-  OGREnvelope getBounds() { return _envelope; }
+  OGREnvelope getBounds() const { return _envelope; }
 
   // Note: should only visit nodes when calculating bounds
-  virtual void visit(const std::shared_ptr<const Element>& e);
+  void visit(const std::shared_ptr<const Element>& e) override;
 
   // Convenient way to get bounds
   static OGREnvelope getBounds(const OsmMapPtr& map);
@@ -59,11 +60,9 @@ public:
   static geos::geom::Envelope getGeosBounds(const OsmMapPtr& map);
   static geos::geom::Envelope getGeosBounds(const ConstOsmMapPtr& map);
 
-  virtual QString getDescription() const { return "Calculates the extent of a map"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Calculates the extent of a map"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

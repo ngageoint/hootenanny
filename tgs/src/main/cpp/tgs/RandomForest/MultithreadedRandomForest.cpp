@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MultithreadedRandomForest.h"
 
@@ -68,8 +68,8 @@ namespace Tgs
   }
 
   void MultithreadedRandomForest::trainBinary(const std::shared_ptr<DataFrame>& /*data*/,
-    unsigned int /*numTrees*/, unsigned int /*numFactors*/, std::string /*posClass*/, unsigned int /*nodeSize*/,
-    double /*retrain*/, bool /*balanced*/)
+    unsigned int /*numTrees*/, unsigned int /*numFactors*/, const std::string& /*posClass*/,
+    unsigned int /*nodeSize*/, double /*retrain*/, bool /*balanced*/)
   {
     try
     {
@@ -112,7 +112,7 @@ namespace Tgs
         QList<std::shared_ptr<RandomTree>> mapTrees;
         for (unsigned int i = 0; i < numTrees; i++)
         {
-          mapTrees.append(std::shared_ptr<RandomTree>(new RandomTree()));
+          mapTrees.append(std::make_shared<RandomTree>());
         }
 
         QList<std::shared_ptr<RandomTree>> forestList =
@@ -175,7 +175,7 @@ namespace Tgs
           QList<std::shared_ptr<RandomTree>> mapRetrainingTrees;
           for (unsigned int i = 0; i < numTrees; i++)
           {
-             mapRetrainingTrees.append(std::shared_ptr<RandomTree>(new RandomTree()));
+            mapRetrainingTrees.append(std::make_shared<RandomTree>());
           }
 
           QList<std::shared_ptr<RandomTree>> forestRetrainList =
@@ -201,8 +201,9 @@ namespace Tgs
   }
 
   void MultithreadedRandomForest::trainRoundRobin(const std::shared_ptr<DataFrame>& /*data*/,
-    unsigned int /*numTrees*/, unsigned int /*numFactors*/, std::string /*posClass*/, std::string /*negClass*/,
-    unsigned int /*nodeSize*/, double /*retrain*/, bool /*balanced*/)
+    unsigned int /*numTrees*/, unsigned int /*numFactors*/, const std::string& /*posClass*/,
+    const std::string& /*negClass*/, unsigned int /*nodeSize*/, double /*retrain*/,
+    bool /*balanced*/)
   {
     try
     {

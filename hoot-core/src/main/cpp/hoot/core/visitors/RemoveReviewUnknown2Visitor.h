@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVE_REVIEW_UKNOWN2_VISITOR_H
 #define REMOVE_REVIEW_UKNOWN2_VISITOR_H
@@ -44,26 +44,23 @@ public:
   static QString className() { return "hoot::RemoveReviewUnknown2Visitor"; }
 
   RemoveReviewUnknown2Visitor() = default;
-  virtual ~RemoveReviewUnknown2Visitor() = default;
+  ~RemoveReviewUnknown2Visitor() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e) override;
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const override
-  { return "Removes review relations and their UNKNOWN2 elements"; }
-
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing relations..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Removed " + QString::number(_numAffected) + " review relations and their " +
       QString::number(_numElements) + " UNKNOWN2 elements.";
   }
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Removes review relations and their UNKNOWN2 elements"; }
 
 private:
 

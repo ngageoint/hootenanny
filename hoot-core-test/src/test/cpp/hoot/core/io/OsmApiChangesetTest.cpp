@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 //  Hoot
@@ -63,7 +63,7 @@ public:
 
     QString expectedText = FileUtils::readFully(_inputPath + "ToyTestAChangeset1.osc");
 
-    ChangesetInfoPtr info(new ChangesetInfo());
+    ChangesetInfoPtr info = std::make_shared<ChangesetInfo>();
     changeset.calculateChangeset(info);
 
     HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 1));
@@ -76,7 +76,7 @@ public:
 
     QString expectedText = FileUtils::readFully(_inputPath + "DjiboutiNonAsciiTestExpected.osc");
 
-    ChangesetInfoPtr info(new ChangesetInfo());
+    ChangesetInfoPtr info = std::make_shared<ChangesetInfo>();
     changeset.calculateChangeset(info);
 
     HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 1));
@@ -90,7 +90,7 @@ public:
 
     QString expectedText = FileUtils::readFully(_inputPath + "ChangesetMergeExpected.osc");
 
-    ChangesetInfoPtr info(new ChangesetInfo());
+    ChangesetInfoPtr info = std::make_shared<ChangesetInfo>();
     changeset.calculateChangeset(info);
 
     HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 1));
@@ -101,7 +101,7 @@ public:
     XmlChangeset changeset;
     changeset.loadChangeset(_inputPath + "ToyTestAInput.osc");
 
-    ChangesetInfoPtr info(new ChangesetInfo());
+    ChangesetInfoPtr info = std::make_shared<ChangesetInfo>();
     changeset.calculateChangeset(info);
 
     QString update =
@@ -150,7 +150,7 @@ public:
     int index = 0;
     while (!changeset.isDone())
     {
-      info.reset(new ChangesetInfo());
+      info = std::make_shared<ChangesetInfo>();
       changeset.calculateChangeset(info);
 
       QString expectedText = FileUtils::readFully(expectedFiles[index]);
@@ -182,7 +182,7 @@ public:
 
     QString expectedText = FileUtils::readFully(_inputPath + "ChangesetSplitWayExpected.osc");
 
-    ChangesetInfoPtr info(new ChangesetInfo());
+    ChangesetInfoPtr info = std::make_shared<ChangesetInfo>();
     changeset.calculateChangeset(info);
 
     HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 1));
@@ -197,7 +197,7 @@ public:
 
     QString expectedText = FileUtils::readFully(_inputPath + "ChangesetErrorFixExpected.osc");
 
-    ChangesetInfoPtr info(new ChangesetInfo());
+    ChangesetInfoPtr info = std::make_shared<ChangesetInfo>();
     changeset.calculateChangeset(info);
 
     QString change = changeset.getChangesetString(info, 1);
@@ -233,12 +233,12 @@ public:
     int index = 0;
     while (!changeset.isDone())
     {
-      ChangesetInfoPtr info1(new ChangesetInfo());
+      ChangesetInfoPtr info1 = std::make_shared<ChangesetInfo>();
       changeset.calculateChangeset(info1);
       QString expectedText1 = FileUtils::readFully(expectedFiles[index]);
       HOOT_STR_EQUALS(expectedText1, changeset.getChangesetString(info1, index + 1));
 
-      ChangesetInfoPtr info2(new ChangesetInfo());
+      ChangesetInfoPtr info2 = std::make_shared<ChangesetInfo>();
       changeset.calculateChangeset(info2);
       QString expectedText2 = FileUtils::readFully(expectedFiles[index + 1]);
       HOOT_STR_EQUALS(expectedText2, changeset.getChangesetString(info2, index + 2));
@@ -279,7 +279,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1UL, changeset._relations[ChangesetType::TypeModify].size());
     CPPUNIT_ASSERT_EQUAL(0UL, changeset._relations[ChangesetType::TypeDelete].size());
     //  Instead of calculating the changeset, use all elements
-    ChangesetInfoPtr info(new ChangesetInfo());
+    ChangesetInfoPtr info = std::make_shared<ChangesetInfo>();
     for (ChangesetType type = ChangesetType::TypeCreate; type != ChangesetType::TypeMax; type = static_cast<ChangesetType>(type + 1))
     {
       for (ChangesetElementMap::iterator it = changeset._nodes[type].begin(); it != changeset._nodes[type].end(); ++it)

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTVISITORINPUTSTREAM_H
 #define ELEMENTVISITORINPUTSTREAM_H
@@ -44,33 +44,33 @@ public:
    * @param elementSource source of the element stream
    * @param visitor an element visitor to filter the stream with
    */
-  ElementVisitorInputStream(const ElementInputStreamPtr& elementSource,
-                            const ElementVisitorPtr& visitor);
-  virtual ~ElementVisitorInputStream() = default;
+  ElementVisitorInputStream(
+    const ElementInputStreamPtr& elementSource, const ElementVisitorPtr& visitor);
+  ~ElementVisitorInputStream() = default;
 
   /**
    * @brief close
    * Invokes the close function on the source element input stream
    */
-  virtual void close() { _elementSource->close(); }
+  void close() override { _elementSource->close(); }
 
   /**
    * Returns the source's projection.
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @brief hasMoreElements
    * @return return value from call to source ElementInputStream's hasMoreElements() method
    */
-  virtual bool hasMoreElements() { return _elementSource->hasMoreElements(); }
+  bool hasMoreElements() override { return _elementSource->hasMoreElements(); }
 
   /**
    * @brief readNextElement
    * @return Pointer to an elemement which will have been read from the source elementinputstream
    *    AND had the visitor's visit method applied to it before it is returned
    */
-  virtual ElementPtr readNextElement();
+  ElementPtr readNextElement() override;
 
   ElementVisitorPtr getVisitor() const { return _visitor; }
 

@@ -179,6 +179,15 @@ echo ""
 hoot info $CONFIG --way-joiners | grep "WayJoinerAdvanced"
 echo ""
 
+# WAY SNAP CRITERIA
+echo "Listing way snap criteria..."
+echo ""
+# Check against the default conflate config.
+hoot info $CONFIG --way-snap-criteria
+# Check against a custom conflate config. Note that the config option goes before --way-snap-criteria.
+hoot info $CONFIG -D match.creators="hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,River.js" --way-snap-criteria
+echo ""
+
 # CONFLATABLE CRITERIA
 echo "Listing conflatable criteria..."
 echo ""
@@ -189,4 +198,28 @@ echo ""
 echo "Listing filters..."
 echo ""
 hoot info $CONFIG --filters | grep "NonBuildingAreaCriterion"
+echo ""
+
+# CRITERION CONSUMERS
+echo "Listing criterion consumers..."
+echo ""
+hoot info $CONFIG --criterion-consumers | grep "CopyMapSubsetOp"
+echo ""
+
+# STRING COMPARATORS
+echo "Listing string comparators..."
+echo ""
+hoot info $CONFIG --string-comparators | grep "ExactStringDistance"
+echo ""
+
+# GEOMETRY TYPE CRITERIA
+echo "Listing geometry type criteria..."
+echo ""
+hoot info $CONFIG --geometry-type-criteria | grep "TunnelCriterion"
+echo ""
+
+# VALUE AGGREGATORS
+echo "Listing value aggregators..."
+echo ""
+hoot info $CONFIG --value-aggregators | grep "MinAggregator"
 echo ""

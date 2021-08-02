@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -41,6 +41,7 @@
 #include <hoot/core/algorithms/subline-matching/MaximalSubline.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -88,7 +89,7 @@ public:
 
   void addEndNode(OsmMapPtr map, Coordinate c, QString note)
   {
-    NodePtr n(new Node(Status::Unknown1, map->createNextNodeId(), c, 10));
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), c, 10);
     n->getTags()["note"] = note;
     map->addNode(n);
   }
@@ -106,9 +107,9 @@ public:
 
   OsmMapPtr createMap()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMap::resetCounters();
-    std::shared_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
+    std::shared_ptr<OGREnvelope> env = GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1));
     MapProjector::projectToPlanar(map, *env);
 
     return map;
@@ -124,7 +125,7 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.read(_inputPath + "MaximalSublineCircleTestIn.osm", map);
 
     double score;
@@ -137,7 +138,8 @@ public:
       WayPtr w2 =
         map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "2")[0]);
 
-      MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(10.0, M_PI / 2.0), 10.0);
+      MaximalSubline uut(
+        std::make_shared<MaximalSubline::ThresholdMatchCriteria>(10.0, M_PI / 2.0), 10.0);
 
       vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
       // @todo this may need a little more thinking. Rather than finding the simplest match between
@@ -154,7 +156,8 @@ public:
         map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "2")[0]);
       w1->reverseOrder();
 
-      MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(40.0, M_PI / 2.0), 40.0);
+      MaximalSubline uut(
+        std::make_shared<MaximalSubline::ThresholdMatchCriteria>(40.0, M_PI / 2.0), 40.0);
 
       vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
       HOOT_STR_EQUALS(0, m.size());
@@ -165,7 +168,7 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "MaximalSublineTestIn.osm", map);
 
@@ -174,7 +177,8 @@ public:
     std::vector<long> wids =
       ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "trail");
 
-    MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(40.0, M_PI / 1.0), 40.0);
+    MaximalSubline uut(
+      std::make_shared<MaximalSubline::ThresholdMatchCriteria>(40.0, M_PI / 1.0), 40.0);
 
     WayPtr w1 = map->getWay(wids[0]);
     WayPtr w2 = map->getWay(wids[1]);
@@ -197,12 +201,13 @@ public:
      * w1 ---------
      */
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 10.0, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 10.0);
 
     Coordinate c2[] = { Coordinate(10.0, 10.0), Coordinate(30.0, 10.0), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 10.0, "w2");
+    WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 10.0);
 
-    MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(40.0, M_PI / 1.0), 40.0);
+    MaximalSubline uut(
+      std::make_shared<MaximalSubline::ThresholdMatchCriteria>(40.0, M_PI / 1.0), 40.0);
 
     double score;
     vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
@@ -225,12 +230,13 @@ public:
      *      \/
      */
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(-15.0, 50.0), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 10.0, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 10.0);
 
     Coordinate c2[] = { Coordinate(0.0, 0.0), Coordinate(15.0, 50.0), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 10.0, "w2");
+    WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 10.0);
 
-    MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(40.0, M_PI / 1.0), 40.0);
+    MaximalSubline uut(
+      std::make_shared<MaximalSubline::ThresholdMatchCriteria>(40.0, M_PI / 1.0), 40.0);
 
     double score;
     vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
@@ -244,40 +250,39 @@ public:
 
   void runRealWorld3Test()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/conflate/highway/HighwayMatchRealWorld3Test.osm",
       false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 
-    WayPtr w52 = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-52"));
-    WayPtr w812 = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-812"));
+    WayPtr w52 = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, "-52"));
+    WayPtr w812 = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, "-812"));
 
-    MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(25.08, 1.0471975511965976), 5);
+    MaximalSubline uut(
+      std::make_shared<MaximalSubline::ThresholdMatchCriteria>(25.08, 1.0471975511965976), 5);
 
     double bestScore;
     vector<WaySublineMatch> m = uut.findAllMatches(map, w52, w812, bestScore);
     HOOT_STR_EQUALS(
-      "[1]{subline 1: start: way(-1) index: 2 fraction: 0.440972029007195 end: way(-1) index: 2 fraction: 0.553077810038132\n"
+      "[1]{subline 1: start: way(-1) index: 2 fraction: 0.44151598466472 end: way(-1) index: 2 fraction: 0.553667817034221\n"
       "subline 2: start: way(-2) index: 2 fraction: 0 end: way(-2) index: 3 fraction: 0}",
       m);
   }
-
 
   /**
    * See #5408
    */
   void runRealWorld4Test()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/conflate/waterway/RealWorld4Test.osm",
       false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 
-    WayPtr w1 = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1"));
-    WayPtr w2 = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "2"));
+    WayPtr w1 = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, "1"));
+    WayPtr w2 = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, "2"));
 
-    //MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(36, 1.57079632679), 5);
-    MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(46, 1.5708), 5);
+    MaximalSubline uut(std::make_shared<MaximalSubline::ThresholdMatchCriteria>(46, 1.5708), 5);
 
     double bestScore;
     vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, bestScore);
@@ -300,12 +305,13 @@ public:
        * w1 ---------
        */
       Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0), Coordinate::getNull() };
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 10.0, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 10.0);
 
       Coordinate c2[] = { Coordinate(2.1, 0.0), Coordinate(100.0, 0.0), Coordinate::getNull() };
-      WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 10.0, "w2");
+      WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 10.0);
 
-      MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(0.5, M_PI / 1.0), 0.5);
+      MaximalSubline uut(
+        std::make_shared<MaximalSubline::ThresholdMatchCriteria>(0.5, M_PI / 1.0), 0.5);
 
       double score;
       vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
@@ -326,12 +332,13 @@ public:
        * w1 ---------
        */
       Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0), Coordinate::getNull() };
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 10.0, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 10.0);
 
       Coordinate c2[] = { Coordinate(0.0, 0.0), Coordinate(97.9, 0.0), Coordinate::getNull() };
-      WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 10.0, "w2");
+      WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 10.0);
 
-      MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(0.5, M_PI / 1.0), 0.5);
+      MaximalSubline uut(
+        std::make_shared<MaximalSubline::ThresholdMatchCriteria>(0.5, M_PI / 1.0), 0.5);
 
       double score;
       vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
@@ -352,15 +359,16 @@ public:
        * w1 ---------
        */
       Coordinate c1[] = { Coordinate(60.0, 5.0), Coordinate(100.0, 5.0), Coordinate::getNull() };
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 10.0, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 10.0);
 
       Coordinate c2[] = { Coordinate(0.0, 0.0),
                           Coordinate(50, 0.0),
                           Coordinate(100, 0.0),
                           Coordinate::getNull() };
-      WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 10.0, "w2");
+      WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 10.0);
 
-      MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(10, M_PI / 1.0), 10);
+      MaximalSubline uut(
+        std::make_shared<MaximalSubline::ThresholdMatchCriteria>(10, M_PI / 1.0), 10);
 
       double score;
       vector<WaySublineMatch> m = uut.findAllMatches(map, w2, w1, score);
@@ -386,15 +394,16 @@ public:
                           Coordinate(120.0, 5.0),
                           Coordinate(180.0, 5.0),
                           Coordinate::getNull() };
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 10.0, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 10.0);
 
       Coordinate c2[] = { Coordinate(0.0, 0.0),
                           Coordinate(50, 0.0),
                           Coordinate(100, 0.0),
                           Coordinate::getNull() };
-      WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 10.0, "w2");
+      WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 10.0);
 
-      MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(10, M_PI / 1.0), 10);
+      MaximalSubline uut(
+        std::make_shared<MaximalSubline::ThresholdMatchCriteria>(10, M_PI / 1.0), 10);
 
       double score;
       vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
@@ -410,7 +419,7 @@ public:
   void runToyTest()
   {
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       OsmXmlReader reader;
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/ToyTestA.osm", map);
@@ -423,14 +432,15 @@ public:
           map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "0")[0]);
         WayPtr w2 = map->getWay(-6);
 
-        MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(10, M_PI / 2.0), 10);
+        MaximalSubline uut(
+          std::make_shared<MaximalSubline::ThresholdMatchCriteria>(10, M_PI / 2.0), 10);
 
         double score;
         vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
 
         HOOT_STR_EQUALS(1, m.size());
         HOOT_STR_EQUALS(
-          "subline 1: start: way(-3) index: 0 fraction: 0 end: way(-3) index: 10 fraction: 0.834339910124657\n"
+          "subline 1: start: way(-3) index: 0 fraction: 0 end: way(-3) index: 10 fraction: 0.843082410522636\n"
           "subline 2: start: way(-6) index: 0 fraction: 0 end: way(-6) index: 17 fraction: 0",
           m[0].toString());
       }
@@ -441,7 +451,8 @@ public:
           map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "2")[0]);
         WayPtr w2 = map->getWay(-7);
 
-        MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(10, M_PI / 2), 10);
+        MaximalSubline uut(
+          std::make_shared<MaximalSubline::ThresholdMatchCriteria>(10, M_PI / 2), 10);
 
         double score;
         vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
@@ -467,15 +478,16 @@ public:
       Coordinate c1[] = { Coordinate(0 + err, 0 + err), Coordinate(100 + err, 0 + err),
                           Coordinate(100 + err, 10 + err), Coordinate(0 + err, 10 + err),
                           Coordinate::getNull() };
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 20.0, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 20.0);
 
       err = 20;
       Coordinate c2[] = { Coordinate(0 + err, 0 + err), Coordinate(100 + err, 0 + err),
                           Coordinate(100 + err, 10 + err), Coordinate(0 + err, 10 + err),
                           Coordinate::getNull() };
-      WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 20.0, "w2");
+      WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 20.0);
 
-      MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(40, M_PI / 1.0), 40);
+      MaximalSubline uut(
+        std::make_shared<MaximalSubline::ThresholdMatchCriteria>(40, M_PI / 1.0), 40);
 
       double score;
       vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
@@ -503,14 +515,15 @@ public:
       Coordinate c1[] = { Coordinate(0 + err, 0 + err), Coordinate(100 + err, 0 + err),
                           Coordinate(100 + err, 10 + err), Coordinate(0 + err, 10 + err),
                           Coordinate::getNull() };
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 20.0, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 20.0);
 
       err = 0;
       Coordinate c2[] = { Coordinate(100 + err, 10 + err), Coordinate(0 + err, 10 + err),
                           Coordinate::getNull() };
-      WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 20.0, "w2");
+      WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 20.0);
 
-      MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(40, M_PI / 1.0), 40);
+      MaximalSubline uut(
+        std::make_shared<MaximalSubline::ThresholdMatchCriteria>(40, M_PI / 1.0), 40);
 
       double score;
       vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
@@ -525,7 +538,8 @@ public:
 
   double splitLines(const OsmMapPtr& map, long wid1, long wid2)
   {
-    MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(15.0, M_PI / 4.0), 15);
+    MaximalSubline uut(
+      std::make_shared<MaximalSubline::ThresholdMatchCriteria>(15.0, M_PI / 4.0), 15);
 
     WayPtr w1 = map->getWay(wid1);
     WayPtr w2 = map->getWay(wid2);

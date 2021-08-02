@@ -19,15 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/schema/TagInfo.h>
 #include <hoot/core/util/StringUtils.h>
@@ -49,19 +50,15 @@ public:
 
   TagInfoCmd() = default;
 
-  virtual QString getName() const override { return "tag-info"; }
+  QString getName() const override { return "tag-info"; }
+  QString getDescription() const override { return "Displays tag information for a map"; }
 
-  virtual QString getDescription() const override { return "Displays tag information for a map"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
-
     if (args.size() < 1)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes at least one parameter.").arg(getName()));
+      throw IllegalArgumentException(QString("%1 takes at least one parameter.").arg(getName()));
     }
 
     int tagValuesPerKeyLimit = INT_MAX;
@@ -77,7 +74,6 @@ public:
       }
       args.removeAt(limitIndex + 1);
       args.removeAt(limitIndex);
-      LOG_VART(args);
     }
 
     QStringList keys;
@@ -87,7 +83,6 @@ public:
       keys = args.at(keysIndex + 1).trimmed().split(";");
       args.removeAt(keysIndex + 1);
       args.removeAt(keysIndex);
-      LOG_VART(args);
     }
 
     bool keysOnly = false;
@@ -95,7 +90,6 @@ public:
     {
       keysOnly = true;
       args.removeAt(args.indexOf("--keys-only"));
-      LOG_VART(args);
     }
 
     bool caseSensitive = true;
@@ -103,7 +97,6 @@ public:
     {
       caseSensitive = false;
       args.removeAt(args.indexOf("--case-insensitive"));
-      LOG_VART(args);
     }
 
     bool exactKeyMatch = true;
@@ -111,19 +104,52 @@ public:
     {
       exactKeyMatch = false;
       args.removeAt(args.indexOf("--partial-key-match"));
-      LOG_VART(args);
     }
 
-    // everything left is an input
-    QStringList inputs;
-    for (int i = 0; i < args.size(); i++)
+    bool delimitedTextOutput = false;
+    if (args.contains("--delimited-text"))
     {
-      inputs.append(args[i]);
+      if (!keysOnly)
+      {
+        throw IllegalArgumentException(
+          QString("%1 --delimited-text option is only valid when used with --keys-only.")
+            .arg(getName()));
+      }
+      delimitedTextOutput = true;
+      args.removeAt(args.indexOf("--delimited-text"));
     }
 
-    TagInfo tagInfo(tagValuesPerKeyLimit, keys, keysOnly, caseSensitive, exactKeyMatch);
-    cout << tagInfo.getInfo(inputs) << endl;
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
 
+    if (args.size() < 1)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least one parameter. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
+    }
+
+    // Everything left is an input.
+    QStringList inputs;
+    if (!recursive)
+    {
+      inputs = args;
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
+    }
+
+    QElapsedTimer timer;
+    timer.start();
+
+    LOG_STATUS("Displaying tag information for " << inputs.size() << "inputs...");
+    TagInfo tagInfo(
+      tagValuesPerKeyLimit, keys, keysOnly, caseSensitive, exactKeyMatch, delimitedTextOutput);
+    cout << tagInfo.getInfo(inputs) << endl;
     LOG_STATUS(
       "Tag information collected in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
       " total.");

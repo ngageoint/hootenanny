@@ -19,38 +19,37 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "BuildingMatchCreator.h"
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/extractors/OverlapExtractor.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/visitors/SpatialIndexer.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/CollectionUtils.h>
-#include <hoot/core/algorithms/extractors/OverlapExtractor.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/util/Settings.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
 
 // Standard
 #include <fstream>
 #include <functional>
-using namespace std;
 
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
@@ -62,6 +61,7 @@ using namespace std;
 #include <QElapsedTimer>
 
 using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -111,20 +111,19 @@ public:
     _memoryCheckUpdateInterval = opts.getMemoryUsageCheckerInterval();
   }
 
-  virtual ~BuildingMatchVisitor()
+  ~BuildingMatchVisitor()
   {
     LOG_TRACE("neighbor counts, max: " << _neighborCountMax << " mean: " <<
               (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
     LOG_VART(e->getElementId());
-    //LOG_VART(e);
 
     std::shared_ptr<Envelope> env(e->getEnvelope(_map));
     env->expandBy(e->getCircularError());
@@ -176,14 +175,14 @@ public:
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
 
-  std::shared_ptr<BuildingMatch> createMatch(ElementId eid1, ElementId eid2)
+  std::shared_ptr<BuildingMatch> createMatch(ElementId eid1, ElementId eid2) const
   {
-    return std::shared_ptr<BuildingMatch>(new BuildingMatch(_map, _rf, eid1, eid2, _mt));
+    return std::make_shared<BuildingMatch>(_map, _rf, eid1, eid2, _mt);
   }
 
   static bool isRelated(ConstElementPtr e1, ConstElementPtr e2)
   {
-    BuildingCriterion buildingCrit(false);
+    BuildingCriterion buildingCrit;
     if (e1->getStatus() != e2->getStatus() && e1->isUnknown() && e2->isUnknown() &&
         buildingCrit.isSatisfied(e1) && buildingCrit.isSatisfied(e2))
     {
@@ -210,7 +209,7 @@ public:
     return searchRadius;
   }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getStatus() == _matchStatus && isMatchCandidate(e))
     {
@@ -230,8 +229,8 @@ public:
     _numElementsVisited++;
     if (_numElementsVisited % (_taskStatusUpdateInterval * 100) == 0)
     {
-      PROGRESS_INFO(
-        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
+      PROGRESS_STATUS(
+        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
         StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
         " elements.");
     }
@@ -241,7 +240,7 @@ public:
     }
   }
 
-  bool isMatchCandidate(ConstElementPtr element)
+  bool isMatchCandidate(ConstElementPtr element) const
   {
     if (_filter && !_filter->isSatisfied(element))
     {
@@ -258,13 +257,12 @@ public:
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
-      std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-      _index.reset(new HilbertRTree(mps, 2));
+      _index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
       // Only index elements that isMatchCandidate(e)
       std::function<bool (ConstElementPtr e)> f =
         std::bind(&BuildingMatchVisitor::isMatchCandidate, this, placeholders::_1);
-      std::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
+      std::shared_ptr<ArbitraryCriterion> pCrit = std::make_shared<ArbitraryCriterion>(f);
 
       // Instantiate our visitor
       SpatialIndexer v(_index,
@@ -284,7 +282,7 @@ public:
     return _index;
   }
 
-  ConstOsmMapPtr getMap() { return _map; }
+  ConstOsmMapPtr getMap() const { return _map; }
 
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
 
@@ -302,8 +300,6 @@ private:
   int _elementsEvaluated;
   size_t _maxGroupSize;
   Meters _searchRadius;
-  /// reject any manipulation with a miss score >= _rejectScore
-  double _rejectScore;
 
   // Used for finding neighbors
   std::shared_ptr<HilbertRTree> _index;
@@ -314,8 +310,8 @@ private:
   int _taskStatusUpdateInterval;
   int _memoryCheckUpdateInterval;
 
-  void _markNonOneToOneMatchesAsReview(std::vector<MatchPtr>& matches)
-  {      
+  void _markNonOneToOneMatchesAsReview(std::vector<MatchPtr>& matches) const
+  {
     for (std::vector<MatchPtr>::iterator it = matches.begin(); it != matches.end(); ++it)
     {
       MatchPtr match = *it;
@@ -328,7 +324,7 @@ private:
     }
   }
 
-  void _adjustForOverlappingAdjoiningBuildingMatches(std::vector<MatchPtr>& matches)
+  void _adjustForOverlappingAdjoiningBuildingMatches(std::vector<MatchPtr>& matches) const
   {
     // If we have matches or reviews between adjoining houses (building=terrace; townhouses and
     // the like), check for many to one relationships. From the many to one, keep only the match
@@ -428,7 +424,7 @@ MatchPtr BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
     if (BuildingMatchVisitor::isRelated(e1, e2))
     {
       // score each candidate and push it on the result vector
-      result.reset(new BuildingMatch(map, _getRf(), eid1, eid2, getMatchThreshold()));
+      result = std::make_shared<BuildingMatch>(map, _getRf(), eid1, eid2, getMatchThreshold());
     }
   }
   return result;
@@ -474,12 +470,11 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
 std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const
 {
   std::vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates matchers that match buildings",
-      CreatorDescription::Building,
-      false));
+  result.emplace_back(
+    className(),
+    "Generates matchers that match buildings",
+    CreatorDescription::Building,
+    false);
   return result;
 }
 
@@ -501,10 +496,9 @@ std::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
       file.close();
       throw HootException("Error opening file: " + path);
     }
-    //LOG_VARD(doc.toString());
     file.close();
 
-    _rf.reset(new BuildingRfClassifier());
+    _rf = std::make_shared<BuildingRfClassifier>();
     QDomElement docRoot = doc.elementsByTagName("RandomForest").at(0).toElement();
     _rf->import(docRoot);
   }
@@ -522,10 +516,11 @@ std::shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
-    ConfigOptions config;
-    _matchThreshold.reset(
-      new MatchThreshold(config.getBuildingMatchThreshold(), config.getBuildingMissThreshold(),
-                         config.getBuildingReviewThreshold()));
+    LOG_VART(ConfigOptions().getBuildingMatchThreshold());
+    _matchThreshold =
+      std::make_shared<MatchThreshold>(
+        ConfigOptions().getBuildingMatchThreshold(), ConfigOptions().getBuildingMissThreshold(),
+        ConfigOptions().getBuildingReviewThreshold());
   }
   return _matchThreshold;
 }

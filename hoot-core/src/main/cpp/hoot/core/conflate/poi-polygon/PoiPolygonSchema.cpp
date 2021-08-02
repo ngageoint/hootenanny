@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonSchema.h"
 
@@ -43,39 +43,43 @@ namespace hoot
 QMultiHash<QString, QString> PoiPolygonSchema::_typeToNames;
 QSet<QString> PoiPolygonSchema::_allTypeKeys;
 
-PoiPolygonSchema::PoiPolygonSchema()
+QMultiHash<QString, QString> PoiPolygonSchema::_getTypeToNames()
 {
-  _readTypeToNames();
-}
-
-void PoiPolygonSchema::_readTypeToNames()
-{
-  // see related note in ImplicitTagUtils::_modifyUndesirableTokens
   if (_typeToNames.isEmpty())
   {
-    const QStringList typeToNamesRaw =
-      FileUtils::readFileToList(ConfigOptions().getPoiPolygonTypeToNamesFile());
-    for (int i = 0; i < typeToNamesRaw.size(); i++)
+    _typeToNames = _readTypeToNames();
+  }
+  return _typeToNames;
+}
+
+QMultiHash<QString, QString> PoiPolygonSchema::_readTypeToNames()
+{
+  // see related note in ImplicitTagUtils::_modifyUndesirableTokens
+
+  QMultiHash<QString, QString> typeToNames;
+  const QStringList typeToNamesRaw =
+    FileUtils::readFileToList(ConfigOptions().getPoiPolygonTypeToNamesFile());
+  for (int i = 0; i < typeToNamesRaw.size(); i++)
+  {
+    const QString typeToNamesRawEntry = typeToNamesRaw.at(i);
+    const QStringList typeToNamesRawEntryParts = typeToNamesRawEntry.split(";");
+    if (typeToNamesRawEntryParts.size() != 2)
     {
-      const QString typeToNamesRawEntry = typeToNamesRaw.at(i);
-      const QStringList typeToNamesRawEntryParts = typeToNamesRawEntry.split(";");
-      if (typeToNamesRawEntryParts.size() != 2)
-      {
-        throw HootException("Invalid POI/Polygon type to names entry: " + typeToNamesRawEntry);
-      }
-      const QString kvp = typeToNamesRawEntryParts.at(0);
-      const QStringList names = typeToNamesRawEntryParts.at(1).split(",");
-      for (int j = 0; j < names.size(); j++)
-      {
-        _typeToNames.insert(kvp, names.at(j));
-      }
+      throw HootException("Invalid POI/Polygon type to names entry: " + typeToNamesRawEntry);
+    }
+    const QString kvp = typeToNamesRawEntryParts.at(0);
+    const QStringList names = typeToNamesRawEntryParts.at(1).split(",");
+    for (int j = 0; j < names.size(); j++)
+    {
+      typeToNames.insert(kvp, names.at(j));
     }
   }
+  return typeToNames;
 }
 
 bool PoiPolygonSchema::_typeHasName(const QString& kvp, const QString& name)
 {
-  const QStringList typeNames =_typeToNames.values(kvp);
+  const QStringList typeNames = _getTypeToNames().values(kvp);
   for (int i = 0; i < typeNames.size(); i++)
   {
     if (name.contains(typeNames.at(i)))
@@ -88,7 +92,7 @@ bool PoiPolygonSchema::_typeHasName(const QString& kvp, const QString& name)
 
 QString PoiPolygonSchema::_getMatchingTypeName(const QString& kvp, const QString& name)
 {
-  const QStringList typeNames =_typeToNames.values(kvp);
+  const QStringList typeNames = _getTypeToNames().values(kvp);
   for (int i = 0; i < typeNames.size(); i++)
   {
     const QString typeName = typeNames.at(i);
@@ -114,12 +118,12 @@ bool PoiPolygonSchema::isSchool(const ConstElementPtr& element)
   return amenityStr == QLatin1String("school") || amenityStr == QLatin1String("university");
 }
 
-// Schools are the only example of the concept of trying to reduce reviews between features of the
-// same type when their names indicate they are actually different types.  If this concept proves
-// useful with other types, the code could be abstracted to handle them.
-
 bool PoiPolygonSchema::isSpecificSchool(const ConstElementPtr& element)
 {
+  // Schools are the only example of the concept of trying to reduce reviews between features of the
+  // same type when their names indicate they are actually different types.  If this concept proves
+  // useful with other types, the code could be abstracted to handle them.
+
   if (!isSchool(element))
   {
     return false;
@@ -207,7 +211,7 @@ bool PoiPolygonSchema::hasMoreThanOneType(const ConstElementPtr& element)
 {
   int typeCount = 0;
   QStringList typesParsed;
-  if (_allTypeKeys.size() == 0)
+  if (_allTypeKeys.empty())
   {
     _allTypeKeys = OsmSchema::getInstance().getAllTypeKeys();
   }

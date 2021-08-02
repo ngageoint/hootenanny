@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -53,20 +53,20 @@ public:
     NetworkVertex::reset();
 
     // Setup some vertexes and edges
-    NodePtr pN1(new Node(Status::Unknown1, -100, Coordinate(1.0, 1.0), 10.0));
-    NodePtr pN2(new Node(Status::Unknown1, -200, Coordinate(2.0, 2.0), 10.0));
-    WayPtr  pW1(new Way(Status::Unknown1, -1000, 10));
-    NodePtr pN3(new Node(Status::Unknown1, -300, Coordinate(1.0, 2.0), 10.0));
-    NodePtr pN4(new Node(Status::Unknown1, -400, Coordinate(2.0, 1.0), 10.0));
-    WayPtr  pW2(new Way(Status::Unknown1, -1001, 10));
-    ConstNetworkVertexPtr pNV1(new NetworkVertex(pN1));
-    ConstNetworkVertexPtr pNV2(new NetworkVertex(pN2));
-    ConstNetworkVertexPtr pNV3(new NetworkVertex(pN3));
-    ConstNetworkVertexPtr pNV4(new NetworkVertex(pN4));
+    NodePtr pN1 = std::make_shared<Node>(Status::Unknown1, -100, Coordinate(1.0, 1.0), 10.0);
+    NodePtr pN2 = std::make_shared<Node>(Status::Unknown1, -200, Coordinate(2.0, 2.0), 10.0);
+    WayPtr  pW1 = std::make_shared<Way>(Status::Unknown1, -1000, 10);
+    NodePtr pN3 = std::make_shared<Node>(Status::Unknown1, -300, Coordinate(1.0, 2.0), 10.0);
+    NodePtr pN4 = std::make_shared<Node>(Status::Unknown1, -400, Coordinate(2.0, 1.0), 10.0);
+    WayPtr  pW2 = std::make_shared<Way>(Status::Unknown1, -1001, 10);
+    ConstNetworkVertexPtr pNV1 = std::make_shared<NetworkVertex>(pN1);
+    ConstNetworkVertexPtr pNV2 = std::make_shared<NetworkVertex>(pN2);
+    ConstNetworkVertexPtr pNV3 = std::make_shared<NetworkVertex>(pN3);
+    ConstNetworkVertexPtr pNV4 = std::make_shared<NetworkVertex>(pN4);
 
-    NetworkEdgePtr pEdge1(new NetworkEdge(pNV1, pNV2, true));
+    NetworkEdgePtr pEdge1 = std::make_shared<NetworkEdge>(pNV1, pNV2, true);
     pEdge1->addMember(pW1);
-    NetworkEdgePtr pEdge2(new NetworkEdge(pNV3, pNV4, true));
+    NetworkEdgePtr pEdge2 = std::make_shared<NetworkEdge>(pNV3, pNV4, true);
     pEdge2->addMember(pW2);
 
     // Test addVertex

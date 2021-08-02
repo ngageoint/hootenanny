@@ -5,23 +5,19 @@
 
 The +is-sorted+ command determines whether data has been sorted by element type and ID.
 
-This operation is fast for OSM PBF file, since their headers can simply be checked to see if the file is sorted.  For all other formats, the
-data is read in one feature at a time and negative result is returned as soon as an unsorted element is found.  If the data is sorted, but
-entire contents of the input will be read through.
+This operation is fast for OSM PBF file, since their headers can simply be checked to see if the file is sorted. For all 
+other formats, the data is read in one feature at a time and a negative result is returned as soon as an unsorted element 
+is found. If the data is sorted, the entire contents of the input will be read before a positive verification.
 
-* +input+ - Input; may be any supported input format (e.g. OSM file).
+* +input+ - Input; may be any supported input format (e.g. .osm file).
 
 === Usage
 
 --------------------------------------
-is-sorted (input)
+hoot is-sorted (input)
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot is-sorted myInput.osm.pbf
---------------------------------------
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#determine-if-a-map-is-sorted-to-the-osm-standard[Examples]
 
 === See Also
 

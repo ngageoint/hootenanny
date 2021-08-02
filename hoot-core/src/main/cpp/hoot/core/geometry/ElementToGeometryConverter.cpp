@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ElementToGeometryConverter.h"
@@ -40,18 +40,18 @@
 #include <geos/geom/Polygon.h>
 
 // hoot
-#include <hoot/core/geometry/RelationToMultiPolygonConverter.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/StatsAreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/CollectionRelationCriterion.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/geometry/RelationToMultiPolygonConverter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 
 // Qt
 #include <QString>
@@ -142,14 +142,12 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(
     MultiLineStringVisitor v;
     v.setElementProvider(_constProvider);
     e->visitRo(*_constProvider, v);
-    std::shared_ptr<Geometry> result(v.createMultiLineString());
-    return result;
+    return v.createMultiLineString();
   }
   else
   {
-    // we don't recognize this geometry type.
-    std::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
-    return g;
+    // We don't recognize this geometry type.
+    return std::shared_ptr<Geometry>(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
   }
 }
 
@@ -161,6 +159,8 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const Re
 std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(
   const ConstWayPtr& w) const
 {
+  LOG_TRACE("Converting " << w->getElementId() << " to line string...");
+
   const std::vector<long>& ids = w->getNodeIds();
   int size = ids.size();
   if (size == 1)
@@ -168,7 +168,7 @@ std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(
     size = 2;
   }
   CoordinateSequence* cs =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2);
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2).release();
 
   for (size_t i = 0; i < ids.size(); i++)
   {
@@ -187,6 +187,7 @@ std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(
         }
         logWarnCount++;
       }
+      LOG_TRACE("Missing node: " << ids[i] << ". Not creating line string...");
       return std::shared_ptr<LineString>();
     }
     cs->setAt(n->toCoordinate(), i);
@@ -210,6 +211,7 @@ std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(
         }
         logWarnCount++;
       }
+      LOG_TRACE("Missing node: " << ids[0] << ". Not creating line string...");
       return std::shared_ptr<LineString>();
     }
     cs->setAt(n->toCoordinate(), 1);
@@ -230,7 +232,7 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
   }
 
   // if the first and last nodes aren't the same.
-  if (ids.size() > 0 && ids[0] != ids[ids.size() - 1])
+  if (!ids.empty() && ids[0] != ids[ids.size() - 1])
   {
     size++;
   }
@@ -241,14 +243,13 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
   }
 
   CoordinateSequence* cs =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2);
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2).release();
 
   size_t i;
   for (i = 0; i < ids.size(); i++)
   {
     LOG_VART(ids[i]);
     ConstNodePtr n = _constProvider->getNode(ids[i]);
-    //LOG_VART(n.get());
     if (!n.get())
     {
       if (logWarnCount < Log::getWarnMessageLimit())
@@ -292,8 +293,8 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
   }
 
   // an empty set of holes
-  vector<Geometry*>* holes = new vector<Geometry*>();
-  // create the outer line
+  vector<LinearRing*>* holes = new vector<LinearRing*>();
+  // create the outer line; GeometryFactory takes ownership of these input parameters.
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(cs);
 
   std::shared_ptr<Polygon> result(
@@ -306,9 +307,6 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
   const ConstElementPtr& e, bool throwError, const bool statsFlag,
   const bool requireAreaForPolygonConversion)
 {
-  // This is used to pass the relation type back to the exception handler
-  QString relationType = "";
-
   ElementType t = e->getElementType();
 
   switch (t.getEnum())
@@ -330,11 +328,11 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
       ElementCriterionPtr areaCrit;
       if (statsFlag)
       {
-        areaCrit.reset(new StatsAreaCriterion());
+        areaCrit = std::make_shared<StatsAreaCriterion>();
       }
       else
       {
-        areaCrit.reset(new AreaCriterion());
+        areaCrit = std::make_shared<AreaCriterion>();
       }
 
       // Hootenanny by default requires that an polygon element be an area in the schema in order
@@ -361,7 +359,8 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
 
       if (statsFlag)
       {
-        if (r->isMultiPolygon() || StatsAreaCriterion().isSatisfied(r))
+        if (r->isMultiPolygon() || r->getType() == MetadataTags::RelationSite() ||
+            StatsAreaCriterion().isSatisfied(r))
           return GEOS_MULTIPOLYGON;
         else if (linearCrit.isSatisfied(r))
           return GEOS_MULTILINESTRING;
@@ -369,7 +368,7 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
       else
       {
         if (r->isMultiPolygon() ||
-            // relation type=site was added to fix BadMatchPairTest crashing in Polygon.js.
+            // Relation type=site was added to fix BadMatchPairTest crashing in Polygon.js.
             r->getType() == MetadataTags::RelationSite() ||
             AreaCriterion().isSatisfied(r))
           return GEOS_MULTIPOLYGON;
@@ -387,37 +386,57 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
         else if (linearCrit.isSatisfied(r))
           return GEOS_MULTILINESTRING;
         // an empty geometry, pass back a collection
-        else if (r->getMembers().size() == 0 || CollectionRelationCriterion().isSatisfied(r))
+        else if (r->getMembers().empty() || RelationCriterion().isSatisfied(r))
           return GEOS_GEOMETRYCOLLECTION;
       }
 
+      QString errorMsg;
       // We are going to throw an error so we save the type of relation
-      relationType = r->getType();
+      QString relationType = r->getType().trimmed();
+      if (relationType != "")
+      {
+        errorMsg =
+          "Unknown geometry type for " + e->getElementId().toString() + " with type=" +
+          relationType;
+      }
+      else
+      {
+        errorMsg =
+          "Unknown geometry type for " + e->getElementId().toString() + " with missing type.";
+      }
+      if (throwError)
+      {
+        throw IllegalArgumentException(errorMsg);
+      }
+      else
+      {
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN(errorMsg);
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
+      }
       break;
-
     }
 
   default:
-    LOG_ERROR("Element was not a node, way, or relation");
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Element was not a node, way, or relation");
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     break;
   }
 
-  if (throwError)
-  {
-    if (relationType != "")
-    {
-      throw IllegalArgumentException(
-        "Unknown geometry type: relation type = " + relationType + "; relation: " + e->toString());
-    }
-    else
-    {
-      throw IllegalArgumentException("Unknown geometry type for: " + e->toString());
-    }
-  }
-  else
-  {
-    return GeometryTypeId(UNKNOWN_GEOMETRY);
-  }
+  return GeometryTypeId(UNKNOWN_GEOMETRY);
 }
 
 }

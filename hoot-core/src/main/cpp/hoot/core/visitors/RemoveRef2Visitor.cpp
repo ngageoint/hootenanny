@@ -19,19 +19,19 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RemoveRef2Visitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -51,11 +51,11 @@ class Ref1ToEidVisitor : public ConstElementVisitor
 public:
 
   Ref1ToEidVisitor() = default;
-  virtual ~Ref1ToEidVisitor() = default;
+  ~Ref1ToEidVisitor() = default;
 
   const RemoveRef2Visitor::Ref1ToEid& getRef1ToEid() const { return _ref1ToEid; }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getTags().contains(MetadataTags::Ref1()))
     {
@@ -64,22 +64,21 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 
   RemoveRef2Visitor::Ref1ToEid _ref1ToEid;
 };
 
-RemoveRef2Visitor::RemoveRef2Visitor() :
-_errorOnMissingRef1(false)
+RemoveRef2Visitor::RemoveRef2Visitor()
 {
   // make sure we're re-entrant.
   QMutexLocker ml(&_mutex);
 
-  if (_ref2Keys.size() == 0)
+  if (_ref2Keys.empty())
   {
     _ref2Keys << MetadataTags::Ref2();
     _ref2Keys << "REVIEW";
@@ -131,20 +130,20 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
       }
       logWarnCount++;
       refs.removeAll(r);
-      if (refs.size() == 0 && key == MetadataTags::Ref2())
+      if (refs.empty() && key == MetadataTags::Ref2())
       {
         refs.append("none");
       }
     }
     else
     {
-      ElementPtr e = _map->getElement(eid);
+      ElementPtr element = _map->getElement(eid);
       // if the REF1 element meets the criterion.
-      if (ref1CriterionSatisfied(e))
+      if (ref1CriterionSatisfied(element))
       {
         // remove the specified REF2 from the appropriate REF2 field.
         refs.removeAll(r);
-        if (refs.size() == 0 && key == MetadataTags::Ref2())
+        if (refs.empty() && key == MetadataTags::Ref2())
         {
           refs.append("none");
         }
@@ -152,7 +151,7 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
     }
   }
 
-  if (refs.size() > 0)
+  if (!refs.empty())
   {
     e->getTags().setList(key, refs);
   }
@@ -205,6 +204,7 @@ void RemoveRef2Visitor::visit(const ElementPtr& e)
     {
       _checkAndDeleteRef2(e, _ref2Keys[i]);
     }
+    _numProcessed++;
   }
 }
 

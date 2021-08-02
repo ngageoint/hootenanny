@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef POIPOLYGONDISTANCETRUTHRECORDER_H
 #define POIPOLYGONDISTANCETRUTHRECORDER_H
@@ -68,7 +68,7 @@ public:
   /**
    * Prints all recorded information
    */
-  static void printMatchDistanceInfo();
+  static QString getMatchDistanceInfo();
 
 private:
 
@@ -77,8 +77,8 @@ private:
   static QMultiMap<QString, double> _polyMatchRefIdsToDistances;
   static QMultiMap<QString, double> _polyReviewRefIdsToDistances;
 
-  static void _printMatchDistanceInfo(const QString &matchType,
-                                      const QMultiMap<QString, double>& distanceInfo);
+  static QString _getMatchDistanceInfo(const QString &matchType,
+                                       const QMultiMap<QString, double>& distanceInfo);
 
 };
 

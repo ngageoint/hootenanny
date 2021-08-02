@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef NODE_DENSITY_TASK_GRID_GENERATOR_H
 #define NODE_DENSITY_TASK_GRID_GENERATOR_H
@@ -39,8 +39,8 @@ namespace hoot
 {
 
 /**
- * Uses the node density of a map to create a task grid made up of potentially irregularly sized
- * rectangles.
+ * @brief The NodeDensityTaskGridGenerator class uses the node density of a map to create a task
+ * grid made up of potentially irregularly sized rectangles.
  *
  * Node density calc requires reading in all of the replacement node data, so may not be feasible
  * when replacing extremely large amounts of data.
@@ -58,7 +58,7 @@ public:
   /**
    * @see TaskGridGenerator
    */
-  virtual TaskGrid generateTaskGrid();
+  TaskGrid generateTaskGrid() override;
 
   void setReadInputFullThenCrop(const bool readInputFullThenCrop)
   { _readInputFullThenCrop = readInputFullThenCrop; }

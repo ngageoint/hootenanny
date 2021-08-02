@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -143,9 +143,9 @@ class ElementMergerJsTest : public HootTestFixture
 
 public:
 
-  ElementMergerJsTest()
-    : HootTestFixture("test-files/js/conflate/ElementMergerJsTest/",
-                      "test-output/js/conflate/ElementMergerJsTest/")
+  ElementMergerJsTest() :
+  HootTestFixture(
+    "test-files/js/conflate/ElementMergerJsTest/", "test-output/js/conflate/ElementMergerJsTest/")
   {
     setResetType(ResetAll);
   }
@@ -164,7 +164,7 @@ public:
     QString exceptionMsg("");
     try
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       OsmMapReaderFactory::read(map, true, true, _inputPath + inFileName);
 
       ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
@@ -178,13 +178,20 @@ public:
     }
     LOG_VART(exceptionMsg);
 
-    if (expectedExceptionMsgContains.isEmpty())
+    if (!exceptionMsg.isEmpty())
     {
-      HOOT_FILE_EQUALS(_inputPath + outFileName, _outputPath + outFileName);
+      if (!expectedExceptionMsgContains.isEmpty())
+      {
+        CPPUNIT_ASSERT(exceptionMsg.contains(expectedExceptionMsgContains));
+      }
+      else
+      {
+        throw HootException(exceptionMsg);
+      }
     }
     else
     {
-      CPPUNIT_ASSERT(exceptionMsg.contains(expectedExceptionMsgContains));
+      HOOT_FILE_EQUALS(_inputPath + outFileName, _outputPath + outFileName);
     }
   }
 
@@ -260,13 +267,13 @@ public:
 
   void poiToPolyPolyInputWithConflatedStatusTest()
   {
-    testMerge("poi-poly-way-poly-conflated-1-in.osm", "poi-poly-way-poly-out.osm");
+    testMerge("poi-poly-way-poly-conflated-1-in.osm", "poi-poly-poly-input-conflated-out.osm");
   }
 
   void poiToPolyPoiInputWithConflatedStatusTest()
   {
     testMerge(
-      "poi-poly-way-poly-conflated-2-in.osm", "poi-poly-way-poly-out.osm");
+      "poi-poly-way-poly-conflated-2-in.osm", "poi-poly-poi-input-conflated-out.osm");
   }
 
   //POI TO POI
@@ -518,7 +525,9 @@ public:
 
   void buildingToBuildingInputWithConflatedStatusTest()
   {
-    testMerge("building-two-ways-conflated-in.osm", "building-two-ways-out.osm");
+    testMerge(
+      "building-two-ways-conflated-in.osm", "building-two-ways-out.osm",
+      "Elements being merged must have an Unknown1 or Unknown2 status.");
   }
 
   //MISC
@@ -554,5 +563,7 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementMergerJsTest, "quick");
+// This needs to be run serially since output file names are shared across tests.
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementMergerJsTest, "serial");
 
 }

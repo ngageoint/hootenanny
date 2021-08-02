@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 package hoot.services;
 
@@ -42,6 +42,7 @@ import javax.servlet.ServletContextListener;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
+import hoot.services.controllers.ingest.CustomScriptResource;
 import hoot.services.controllers.nodejs.ElementMergeServiceResource;
 import hoot.services.controllers.nodejs.TranslationServiceResource;
 
@@ -60,6 +61,8 @@ public class HootServletContext implements ServletContextListener {
         TranslationServiceResource.startTranslationService();
 
         ElementMergeServiceResource.startElementMergeService();
+
+        CustomScriptResource.scanTranslations();
     }
 
     @Override

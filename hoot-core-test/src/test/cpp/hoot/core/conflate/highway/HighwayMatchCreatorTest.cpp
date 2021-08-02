@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -64,7 +64,7 @@ public:
     HighwayMatchCreator uut;
 
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
@@ -75,7 +75,7 @@ public:
         map->getWay(
           ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "Panera Bread")[0]), map));
 
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);

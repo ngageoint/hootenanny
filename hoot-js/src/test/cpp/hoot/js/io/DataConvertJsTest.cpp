@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -82,8 +82,7 @@ public:
     QVariant v = toCpp<QVariant>(fromJson(fixQ("[1,2]")));
     HOOT_STR_EQUALS(QVariant::List, v.type());
 
-    // todo continue here.
-    // Finish QVariantList tests
+    // TODO: finish QVariantList tests
 
     QVariantMap m;
     m.insert("one",fixQ("[3,4,5]"));

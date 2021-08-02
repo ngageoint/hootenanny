@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef SCHEMA_UTILS_H
@@ -50,6 +50,22 @@ public:
    * @return true if at least one feature has a type recognized by the schema; false otherwise
    */
   static bool anyElementsHaveType(const ConstOsmMapPtr& map);
+
+  /**
+   * Validates the path to a translation script.
+   *
+   * @param url URL pointing to a translation script
+   * @throws IllegalArgumentException if the script at the URL does not exist or is an unsupported
+   * format
+   */
+  static void validateTranslationUrl(const QString& url);
+
+  /**
+   * @brief Attempts to determine the direction of schema translation based on an output file format
+   * @param output output path for the data to be translated
+   * @return a schema translation direction of 'toosm' or 'toogr'
+   */
+  static QString outputFormatToTranslationDirection(const QString& output);
 };
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -32,12 +32,11 @@
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QElapsedTimer>
-
-using namespace std;
 
 namespace hoot
 {
@@ -51,52 +50,53 @@ public:
 
   ExtentCmd() = default;
 
-  virtual QString getName() const override { return "extent"; }
+  QString getName() const override { return "extent"; }
+  QString getDescription() const override { return "Calculates the bounds of a map"; }
 
-  virtual QString getDescription() const override { return "Calculates the bounds of a map"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
 
-    if (args.size() < 1 || args.size() > 2)
+    if (args.size() < 1)
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes one or two parameters.").arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least one parameter. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
-
-    bool verbose = true;
-    if (args.size() == 2 && args[1].toLower() == "false")
-    {
-      verbose = false;
-    }
-    LOG_VARD(verbose);
 
     conf().set(ConfigOptions::getWriterPrecisionKey(), 9);
 
-    const QString input = args[0];
-    LOG_VARD(input);
-    OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, input, true, Status::Invalid);
-
-    const QString bounds =
-      GeometryUtils::envelopeToString(CalculateMapBoundsVisitor::getGeosBounds(map));
-    if (verbose)
+    QStringList inputs;
+    if (!recursive)
     {
-      cout << "Map extent (minx,miny,maxx,maxy): " << bounds << endl;
+      inputs = args;
     }
     else
     {
-      cout << bounds << endl;
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
     }
+
+    QElapsedTimer timer;
+    timer.start();
+
+    LOG_STATUS("Calculating extent for ..." << FileUtils::toLogFormat(inputs, 25) << "...");
+
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    IoUtils::loadMaps(map, inputs, false, Status::Invalid);
+
+    const QString bounds =
+      GeometryUtils::envelopeToString(CalculateMapBoundsVisitor::getGeosBounds(map));
+    std::cout << "Map extent (minx,miny,maxx,maxy): " << bounds << std::endl;
 
     LOG_STATUS(
       "Map extent calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }
-
 };
 
 HOOT_FACTORY_REGISTER(Command, ExtentCmd)

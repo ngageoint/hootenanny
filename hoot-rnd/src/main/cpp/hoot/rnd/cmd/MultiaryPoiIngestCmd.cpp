@@ -19,16 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/rnd/io/MultiaryIngester.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -43,14 +44,12 @@ public:
 
   static QString className() { return "hoot::MultiaryPoiIngestCmd"; }
 
-  virtual QString getName() const override { return "multiary-poi-ingest"; }
+  QString getName() const override { return "multiary-poi-ingest"; }
+  QString getDescription() const override
+  { return "Ingests POIs for use by multiary-poi-conflate (experimental) "; }
+  QString getType() const override { return "rnd"; }
 
-  virtual QString getDescription() const override
-  { return "Ingests POIs for use by Multiary POI Conflation (experimental) "; }
-
-  virtual QString getType() const override { return "rnd"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
@@ -58,11 +57,24 @@ public:
     if (args.size() != 4)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes four parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes four parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
-    MultiaryIngester().ingest(args[0], args[1], args[2], args[3]);
+    const QString input = args[0];
+    const QString translation = args[1];
+    const QString output = args[2];
+    const QString changesetOutput = args[3];
 
+    LOG_STATUS(
+      "Ingesting multiary POI data from ..." << FileUtils::toLogFormat(input, 25) <<
+      " using translation ..." << FileUtils::toLogFormat(translation, 25) <<
+      " and writing output to ..." << FileUtils::toLogFormat(output, 25) <<
+      " and changeset output to ..." << FileUtils::toLogFormat(changesetOutput, 25) << "...");
+    MultiaryIngester().ingest(input, translation, output, changesetOutput);
     LOG_STATUS(
       "Ingest completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 

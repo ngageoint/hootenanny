@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PertyTestRunner.h"
 
@@ -63,10 +63,75 @@ _returnTestScores(false)
   setGenerateMapStats(configOptions.getPertyTestGenerateMapStats());
 }
 
-void PertyTestRunner::_writeStatsForOutputFiles(const QString& inputMapPath, const QString& sep)
+void PertyTestRunner::setNumTestRuns(int numRuns)
+{
+  if (numRuns < 1)
+  {
+    throw HootException("Invalid number of test runs: " + QString::number(numRuns));
+  }
+  _numTestRuns = numRuns;
+}
+
+void PertyTestRunner::setNumTestSimulations(int numSimulations)
+{
+  if (numSimulations < 1)
+  {
+    throw HootException("Invalid number of test simulations: " + QString::number(numSimulations));
+  }
+  _numTestSimulations = numSimulations;
+}
+
+void PertyTestRunner::setDynamicVariables(const QStringList& dynamicVariables)
+{
+  _dynamicVariables.clear();
+  foreach (QString var, dynamicVariables)
+  {
+    //this isn't the best check, since not all perty.* vars are numeric but will do for now
+    if (var.trimmed() != "")
+    {
+      if (!var.startsWith("perty."))
+      {
+        throw HootException("Only PERTY variables may be manipulated during a PERTY test (config options = perty.*");
+      }
+      _dynamicVariables.append(var);
+    }
+  }
+}
+
+void PertyTestRunner::setExpectedScores(const QStringList& scores)
+{
+  if (scores.size() < 1)
+  {
+    throw HootException("Invalid number of expected scores: " + scores.size());
+  }
+  QList<double> expectedScores;
+  for (int i = 0; i < scores.size(); i++)
+  {
+    bool ok;
+    expectedScores.append(scores[i].toDouble(&ok)) ;
+    if (!ok)
+    {
+      throw HootException("Error parsing expected score value: " + scores[i]);
+    }
+  }
+  _expectedScores = expectedScores;
+}
+
+void PertyTestRunner::setAllowedScoreVariance(double scoreVariance)
+{
+  if (scoreVariance > 1.0 || scoreVariance < 0.0)
+  {
+    throw HootException("Invalid allowed score variance: " + QString::number(scoreVariance));
+  }
+  _allowedScoreVariance = scoreVariance;
+}
+
+void PertyTestRunner::_writeStatsForOutputFiles(const QString& inputMapPath, const QString& sep) const
 {
   QString statsOutputPath = inputMapPath;
   statsOutputPath = statsOutputPath.replace(".osm", "-stats");
+  // We could add stats filtering here at some point to make the stats calculated correspond to the
+  // conflate matchers configured.
   MapStatsWriter().writeStats(inputMapPath, statsOutputPath, sep);
 }
 
@@ -92,6 +157,8 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
     QFileInfo inputFileInfo(referenceMapInputPath);
     QString statsOutputPath = outputPath + "/" + inputFileInfo.fileName();
     statsOutputPath = statsOutputPath.replace(".osm", "-stats");
+    // We could add stats filtering here at some point to make the stats calculated correspond to the
+    // conflate matchers configured.
     MapStatsWriter().writeStats(referenceMapInputPath, statsOutputPath, sep);
   }
 
@@ -103,7 +170,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
 
   QList<std::shared_ptr<const PertyTestRunResult>> testRunResults;
   double dynamicVariableValue = _dynamicVariableStartValue;
-  _matchScorer.reset(new PertyMatchScorer());
+  _matchScorer = std::make_shared<PertyMatchScorer>();
   int testScoreCtr = 0;
   for (int i = 0; i < _numTestRuns; i++)
   {
@@ -122,7 +189,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
       LOG_INFO(
         "Running test run #" << QString::number(i + 1) << ", simulation #" <<
         QString::number(j + 1));
-      if (_dynamicVariables.size() > 0)
+      if (!_dynamicVariables.empty())
       {
         LOG_INFO(" with dynamic variables: " << _dynamicVariables << " having value: " <<
                  dynamicVariableValue);
@@ -158,16 +225,16 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
       LOG_VARD(scoreSum);
     }
 
-    const double avgScore = (double)scoreSum / (double)_numTestSimulations;
+    const double avgScore = scoreSum / (double)_numTestSimulations;
     LOG_VARD(avgScore);
     const double scoreVariance = abs(_expectedScores[i] - avgScore);
     LOG_VARD(scoreVariance);
 
-    std::shared_ptr<const PertyTestRunResult> testRunResult(
-      new PertyTestRunResult(
-         referenceMapInputPath, outputPath, i + 1, simulationScores, avgScore, _expectedScores[i],
-          scoreVariance, _allowedScoreVariance, _failOnBetterScore, _dynamicVariables,
-          _dynamicVariableStartValue, _dynamicVariableIncrement, dynamicVariableValue));
+    std::shared_ptr<const PertyTestRunResult> testRunResult =
+      std::make_shared<PertyTestRunResult>(
+        referenceMapInputPath, outputPath, i + 1, simulationScores, avgScore, _expectedScores[i],
+        scoreVariance, _allowedScoreVariance, _failOnBetterScore, _dynamicVariables,
+        _dynamicVariableStartValue, _dynamicVariableIncrement, dynamicVariableValue);
     testRunResults.append(testRunResult);
     const QString testRunResultStr = testRunResult->toString();
 
@@ -193,7 +260,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
   }
   _testScores.clear();
 
-  if (_dynamicVariables.size() > 0)
+  if (!_dynamicVariables.empty())
   {
     _writePlotFile(outputPath, testRunResults);
   }
@@ -202,7 +269,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
 }
 
 void PertyTestRunner::_writePlotFile(const QString& outputPath,
-                                     const QList<std::shared_ptr<const PertyTestRunResult>>& testRunResults)
+                                     const QList<std::shared_ptr<const PertyTestRunResult>>& testRunResults) const
 {
   QFile plotFile(outputPath + "/results-plot.dat");
   if (plotFile.exists())

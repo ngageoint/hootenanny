@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -61,7 +61,7 @@ public:
   {
     OsmXmlReader uut;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     uut.read("test-files/ToyTestA.osm", map);
 
     CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodes().size());
@@ -72,7 +72,7 @@ public:
   {
     OsmXmlReader uut;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     uut.setUseDataSourceIds(true);
     uut.read("test-files/ToyTestA.osm", map);
 
@@ -102,7 +102,7 @@ public:
   {
     OsmXmlReader uut;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     uut.setUseDataSourceIds(true);
     uut.setUseFileStatus(true);
     uut.setDefaultStatus(Status::Invalid);
@@ -145,7 +145,7 @@ public:
     }
 
     OsmXmlReader uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     uut.setUseDataSourceIds(true);
 
     // Excercise the code
@@ -167,7 +167,7 @@ public:
 
     OsmXmlReader uut;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     uut.read(_inputPath + "runDecodeCharsTest.osm", map);
 
     int wayCtr = 0;
@@ -204,7 +204,7 @@ public:
 
     OsmXmlReader uut;
     uut.setBounds(geos::geom::Envelope(-104.8996,-104.8976,38.8531,38.8552));
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     uut.read("test-files/ToyTestA.osm", map);
     uut.close();
 
@@ -227,7 +227,7 @@ public:
     conf().set(ConfigOptions::getBoundsKeepEntireFeaturesCrossingBoundsKey(), false);
     conf().set(ConfigOptions::getBoundsKeepOnlyFeaturesInsideBoundsKey(), true);
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     uut.read("test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger/in.osm", map);
     uut.close();
     OsmMapWriterFactory::write(map, _outputPath + testFileName, false, true);
@@ -247,7 +247,7 @@ public:
     OsmXmlReader uut;
     uut.setIgnoreDuplicates(true);
     uut.setUseDataSourceIds(true);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     uut.read(_inputPath + "IgnoreDuplicateMergeTest-1.osm", map);
     uut.read(_inputPath + "IgnoreDuplicateMergeTest-2.osm", map);
     uut.close();

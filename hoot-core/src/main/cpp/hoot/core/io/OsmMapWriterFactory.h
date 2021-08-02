@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMMAPWRITERFACTORY_H
 #define OSMMAPWRITERFACTORY_H
@@ -57,35 +57,39 @@ public:
 
   static bool hasElementOutputStream(const QString& url);
 
-  static void write(const std::shared_ptr<OsmMap>& map, const QString& url,
-                    const bool silent = false, const bool is_debug = false);
+  static void write(
+    const std::shared_ptr<OsmMap>& map, const QString& url, const bool silent = false,
+    const bool is_debug = false);
 
   static QString getWriterName(const QString& url);
-
-  static bool isSupportedFormat(const QString& url);
 
   /**
    * Writes a map useful for debugging
    *
    * @param map the map to write
-   * @param title a descriptive title
+   * @param callingClass name of the class calling this method for the map output file
+   * @param title a descriptive title for the map output file
    * @param matcher If the Network conflation algorithm was used to generate the input data, pass
    * in the matcher used to write additional debugging information.
    */
-  static void writeDebugMap(const std::shared_ptr<const OsmMap>& map, const QString& title = "",
-                            NetworkMatcherPtr matcher = NetworkMatcherPtr());
+  static void writeDebugMap(
+    const std::shared_ptr<const OsmMap>& map, const QString& callingClass,
+    const QString& title, NetworkMatcherPtr matcher = NetworkMatcherPtr());
 
   /**
    * Writes a feature geometry useful for debugging
    *
    * @param geometry the geometry to write
-   * @param title a descriptive title
+   * @param spatRef the spatial reference the geometry being written is in
+   * @param callingClass name of the class calling this method for the map output file
+   * @param title a descriptive title for the output map file
    * @param matcher If the Network conflation algorithm was used to generate the input data, pass
    * in the matcher used to write additional debugging information.
    */
-  static void writeDebugMap(const std::shared_ptr<geos::geom::Geometry>& geometry,
-                            std::shared_ptr<OGRSpatialReference> spatRef, const QString& title = "",
-                            NetworkMatcherPtr matcher = NetworkMatcherPtr());
+  static void writeDebugMap(
+    const std::shared_ptr<geos::geom::Geometry>& geometry,
+    std::shared_ptr<OGRSpatialReference> spatRef, const QString& callingClass,
+    const QString& title, NetworkMatcherPtr matcher = NetworkMatcherPtr());
 
   /**
    * Reset the debug map count for output file naming purposes; useful in unit tests that

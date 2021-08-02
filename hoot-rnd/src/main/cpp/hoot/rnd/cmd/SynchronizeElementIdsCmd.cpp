@@ -19,18 +19,19 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/elements/ElementIdSynchronizer.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -38,36 +39,29 @@
 namespace hoot
 {
 
-/*
- * @todo needs command line test
- */
 class SynchronizeElementIdsCmd : public BaseCommand
 {
 public:
 
   static QString className() { return "hoot::SynchronizeElementIdsCmd"; }
 
-  SynchronizeElementIdsCmd()
+  SynchronizeElementIdsCmd() = default;
+
+  QString getName() const override { return "sync-element-ids"; }
+  QString getDescription() const override
+  { return "Copies IDs for identical elements from one map to another (experimental)"; }
+  QString getType() const override { return "rnd"; }
+
+  int runSimple(QStringList& args) override
   {
-  }
-
-  virtual QString getName() const override { return "sync-element-ids"; }
-
-  virtual QString getDescription() const override
-  { return "Copies element IDs from one map to another for identical elements (experimental)"; }
-
-  virtual QString getType() const { return "rnd"; }
-
-  virtual int runSimple(QStringList& args) override
-  {
-    QElapsedTimer timer;
-    timer.start();
-
     if (args.size() != 3)
     {
-      LOG_VAR(args);
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes three parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     const QString input1 = args[0].trimmed();
@@ -77,13 +71,16 @@ public:
     LOG_VARD(input2);
     LOG_VARD(output);
 
-    LOG_STATUS(
-      "Synchronizing element IDs between ..." << input1.right(25) << " and ..." <<
-      input2.right(25) << " to ..." << output.right(25) << "...");
+    QElapsedTimer timer;
+    timer.start();
 
-    OsmMapPtr input1Map(new OsmMap());
+    LOG_STATUS(
+      "Synchronizing element IDs between ..." << FileUtils::toLogFormat(input1, 25) << " and ..." <<
+      FileUtils::toLogFormat(input2, 25) << " to ..." << FileUtils::toLogFormat(output, 25) << "...");
+
+    OsmMapPtr input1Map = std::make_shared<OsmMap>();
     IoUtils::loadMap(input1Map, input1, true, Status::Unknown1);
-    OsmMapPtr input2Map(new OsmMap());
+    OsmMapPtr input2Map = std::make_shared<OsmMap>();
     IoUtils::loadMap(input2Map, input2, true, Status::Unknown2);
 
     ElementIdSynchronizer idSynchronizer;
@@ -93,8 +90,9 @@ public:
 
     LOG_STATUS(
       "Synchronized " << idSynchronizer.getNumTotalFeatureIdsSynchronized() <<
-      " element IDs from ..." << input1.right(25) << " to ..." << input2.right(25) <<
-      " and wrote them to ..." << output.right(25) << ".");
+      " element IDs from ..." << FileUtils::toLogFormat(input1, 25) <<
+      " to ..." << FileUtils::toLogFormat(input2, 25) <<
+      " and wrote them to ..." << FileUtils::toLogFormat(output, 25) << ".");
     LOG_STATUS("\t" << idSynchronizer.getNumNodeIdsSynchronized() << " nodes");
     LOG_STATUS("\t" << idSynchronizer.getNumWayIdsSynchronized() << " ways");
     LOG_STATUS("\t" << idSynchronizer.getNumRelationIdsSynchronized() << " relations");

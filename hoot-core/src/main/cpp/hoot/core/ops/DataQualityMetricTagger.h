@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef _DATA_QUALITY_METRIC_TAGGER_H_
 #define _DATA_QUALITY_METRIC_TAGGER_H_
@@ -50,26 +50,23 @@ public:
   static QString className() { return "hoot::DataQualityMetricTagger"; }
 
   DataQualityMetricTagger();
-  virtual ~DataQualityMetricTagger() = default;
+  ~DataQualityMetricTagger() = default;
 
   /**
    * Calculates select data quality metrics for a map and tags features with issues
    */
-  virtual void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
-
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Calculating data quality metrics..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return "Calculated data quality metrics.";
   }
 
-  virtual QString getDescription() const
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
   { return "Calculates select data quality metrics for a map and tags features with issues"; }
 
   int getNumOrphanedNodes() const { return _orphanedNodes; }
@@ -82,7 +79,9 @@ private:
 
   // the number of orphaned nodes found in the final output if _tagQualityIssues=true
   int _orphanedNodes;
-  // the number of disconnected ways found in the final output if _tagQualityIssues=true
+  // the number of disconnected ways found in the final output if _tagQualityIssues=true; Clearly,
+  // disconnected ways can be valid features. Monitoring a sudden increase of them in output can
+  // indicate the presence of a new conflate problem.
   int _disconnectedWays;
   // the number of empty ways found in the final output if _tagQualityIssues=true
   int _emptyWays;

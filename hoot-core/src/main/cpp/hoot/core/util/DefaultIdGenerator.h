@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef DEFAULTIDGENERATOR_H
@@ -41,19 +41,19 @@ public:
 
   DefaultIdGenerator() { reset(); }
 
-  virtual ~DefaultIdGenerator() = default;
+  ~DefaultIdGenerator() = default;
 
-  virtual IdGeneratorPtr clone() const;
+  IdGeneratorPtr clone() const override;
 
-  virtual long createNodeId() { return --_nodeId; }
-  virtual long createRelationId() { return --_relationId; }
-  virtual long createWayId() { return --_wayId; }
+  long createNodeId() override { return --_nodeId; }
+  long createRelationId() override { return --_relationId; }
+  long createWayId() override { return --_wayId; }
 
-  void ensureNodeBounds(long nid) { _nodeId = std::min(nid, _nodeId); }
-  void ensureRelationBounds(long rid) { _relationId = std::min(rid, _relationId); }
-  void ensureWayBounds(long wid) { _wayId = std::min(wid, _wayId); }
+  void ensureNodeBounds(long nid) override { _nodeId = std::min(nid, _nodeId); }
+  void ensureRelationBounds(long rid) override { _relationId = std::min(rid, _relationId); }
+  void ensureWayBounds(long wid) override { _wayId = std::min(wid, _wayId); }
 
-  void reset();
+  void reset() override;
 
 private:
 

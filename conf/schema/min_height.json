@@ -1,10 +1,7 @@
 [
     {
         "dataType": "real",
-        "geometries": [
-            "linestring",
-            "relation"
-        ],
+        "geometries": [ "linestring", "relation" ],
         "name": "min_height",
         "objectType": "tag"
     }

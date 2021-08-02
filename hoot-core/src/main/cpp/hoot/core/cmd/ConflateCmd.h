@@ -19,21 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CONFLATECMD_H
 #define CONFLATECMD_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/cmd/BoundedCommand.h>
-
-// Standard
-#include <fstream>
 
 // Qt
 #include <QString>
@@ -44,10 +40,7 @@ namespace hoot
 class SingleStat;
 
 /**
- * Executes conflation
- *
- * @todo move the input parsing to a separate method and assign the parsed inputs to member
- * variables
+ * @brief The ConflateCmd class executes conflation.
  */
 class ConflateCmd : public BoundedCommand
 {
@@ -56,32 +49,14 @@ public:
 
   static QString className() { return "hoot::ConflateCmd"; }
 
-  static const QString JOB_SOURCE;
+  ConflateCmd() = default;
 
-  ConflateCmd();
+  QString getName() const override { return "conflate"; }
+  QString getDescription() const override { return "Conflates two maps into a single map"; }
 
-  virtual QString getName() const override { return "conflate"; }
-
-  virtual QString getDescription() const override
-  { return "Conflates two maps into a single map"; }
-
-  virtual int runSimple(QStringList& args) override;
-
-  void setFilterOps(bool filter) { _filterOps = filter; }
+  int runSimple(QStringList& args) override;
 
 private:
-
-  int _numTotalTasks;
-  bool _filterOps;
-
-  void _updateConfigOptionsForAttributeConflation();
-  void _updateConfigOptionsForDifferentialConflation();
-  void _updateConfigOptionsForBounds();
-  void _disableRoundaboutRemoval();
-  void _checkForTagValueTruncationOverride();
-
-  float _getJobPercentComplete(const int currentTaskNum) const;
-  float _getTaskWeight() const;
 
   friend class TestUtils;
 };

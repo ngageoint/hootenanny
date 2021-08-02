@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -31,6 +31,7 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -104,7 +105,7 @@ public:
   OsmMapPtr getTestMap(const bool targetWaysOnly = true)
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -139,7 +140,7 @@ public:
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
 
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
@@ -153,7 +154,7 @@ public:
     BuildingMatchCreator uut;
 
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     conf().set("building.address.match.enabled", "false");
 
@@ -166,7 +167,7 @@ public:
         map->getWay(
           ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "Panera Bread")[0]), map));
 
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);
@@ -183,10 +184,10 @@ public:
     //set date tags on a primary and ref feature that will match, making the date on the secondary
     //feature newer - should trigger a review
     //ref feature
-    TestUtils::getElementWithTag(map, "name", "Target")->getTags()
+    MapUtils::getFirstElementWithTag(map, "name", "Target")->getTags()
       .appendValue("source:date", "2018-02-14T10:55");
     //secondary feature
-    TestUtils::getElementWithTag(map, "name", "Target Pharmacy")->getTags()
+    MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("source:date", "2018-02-14T10:56");
 
     conf().set("building.date.format", "yyyy-MM-ddTHH:mm");
@@ -196,7 +197,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
 
@@ -244,10 +245,10 @@ public:
     //set date tags on a primary and ref feature that will match, making the date on the ref
     //feature newer - should not trigger a review
     //ref feature
-    TestUtils::getElementWithTag(map, "name", "Target")->getTags()
+    MapUtils::getFirstElementWithTag(map, "name", "Target")->getTags()
       .appendValue("source:date", "2018-02-14T10:56");
     //secondary feature
-    TestUtils::getElementWithTag(map, "name", "Target Pharmacy")->getTags()
+    MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("source:date", "2018-02-14T10:55");
 
     conf().set("building.address.match.enabled", "false");
@@ -257,7 +258,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
@@ -273,10 +274,10 @@ public:
     //make the date tag added to one of the features have a different key than what is expected -
     //should not trigger a review
     //ref feature
-    TestUtils::getElementWithTag(map, "name", "Target")->getTags()
+    MapUtils::getFirstElementWithTag(map, "name", "Target")->getTags()
       .appendValue("source:date", "2018-02-14T10:56");
     //secondary feature
-    TestUtils::getElementWithTag(map, "name", "Target Pharmacy")->getTags()
+    MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("date", "2018-02-14T10:55");
 
     conf().set("building.address.match.enabled", "false");
@@ -286,7 +287,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
@@ -301,10 +302,10 @@ public:
 
     //make the date tag added to one of the features have a date format that is unexpected
     //ref feature
-    TestUtils::getElementWithTag(map, "name", "Target")->getTags()
+    MapUtils::getFirstElementWithTag(map, "name", "Target")->getTags()
       .appendValue("source:date", "2018-02-14T10:56:00");
     //secondary feature
-    TestUtils::getElementWithTag(map, "name", "Target Pharmacy")->getTags()
+    MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("source:date", "2018-02-14T10:55");
 
     conf().set("building.address.match.enabled", "false");
@@ -314,7 +315,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
 
     QString exceptionMsg("");
     try
@@ -337,7 +338,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
 
@@ -361,7 +362,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold = std::make_shared<MatchThreshold>(0.6, 0.6);
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
 

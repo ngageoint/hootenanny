@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ExternalMergeElementSorter.h"
@@ -159,10 +159,10 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
 
       LOG_DEBUG("Writing elements to temp file...");
 
-      std::shared_ptr<QTemporaryFile> tempOutputFile(
-        new QTemporaryFile(
+      std::shared_ptr<QTemporaryFile> tempOutputFile =
+        std::make_shared<QTemporaryFile>(
           ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME +
-          ".osm"));
+          ".osm");
       tempOutputFile->setAutoRemove(!_retainTempFiles);
       if (!tempOutputFile->open())
       {
@@ -197,7 +197,7 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
       tempOutputFile->close();
     }
   }
-  //caller should close the input
+  // The caller should close the input.
 
   LOG_DEBUG("Finished writing sorted file outputs.");
   LOG_VART(elementCtr);
@@ -231,7 +231,7 @@ void ExternalMergeElementSorter::_mergeSortedFiles()
 
 void ExternalMergeElementSorter::_mergeSortedElements(ElementPriorityQueue& priorityQueue,
                                               std::shared_ptr<PartialOsmMapWriter> writer,
-                                              QList<std::shared_ptr<PartialOsmMapReader>> readers)
+                                              QList<std::shared_ptr<PartialOsmMapReader>> readers) const
 {
   LOG_DEBUG("Iterating through remaining elements in sorted order...");
 
@@ -300,7 +300,7 @@ void ExternalMergeElementSorter::_mergeSortedElements(ElementPriorityQueue& prio
   LOG_VART(pushesToPriorityQueue);
 }
 
-void ExternalMergeElementSorter::_printPriorityQueue(ElementPriorityQueue priorityQueue)
+void ExternalMergeElementSorter::_printPriorityQueue(ElementPriorityQueue priorityQueue) const
 {
   QString str;
   while (!priorityQueue.empty())
@@ -318,7 +318,7 @@ std::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutput
 
   const QString tempFile =
     ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME + ".osm";
-  _sortFinalOutput.reset(new QTemporaryFile(tempFile));
+  _sortFinalOutput = std::make_shared<QTemporaryFile>(tempFile);
   _sortFinalOutput->setAutoRemove(!_retainTempFiles);
   if (!_sortFinalOutput->open())
   {
@@ -339,7 +339,7 @@ std::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutput
 }
 
 ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(
-  QList<std::shared_ptr<PartialOsmMapReader>>& readers)
+  QList<std::shared_ptr<PartialOsmMapReader>>& readers) const
 {
   LOG_DEBUG("Writing initial records from each temp file to priority queue...");
 

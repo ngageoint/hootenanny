@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "NonEnglishLanguageDetectionVisitor.h"
@@ -79,7 +79,7 @@ QString NonEnglishLanguageDetectionVisitor::getCompletedStatusMessage() const
   return _detectionSummary;
 }
 
-void NonEnglishLanguageDetectionVisitor::_printDetailedSummary()
+void NonEnglishLanguageDetectionVisitor::_printDetailedSummary() const
 {
   LOG_DEBUG("");
   LOG_DEBUG(getCompletedStatusMessage());
@@ -103,18 +103,17 @@ void NonEnglishLanguageDetectionVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
 
-  _infoClient.reset(
+  _infoClient =
     Factory::getInstance().constructObject<LanguageInfoProvider>(
-      opts.getLanguageInfoProvider()));
+      opts.getLanguageInfoProvider());
   _infoClient->setConfiguration(conf);
   _langCodesToLangs =
     HootServicesLanguageInfoResponseParser::getLangCodesToLangs(
       _infoClient->getAvailableLanguages("detectable"));
   LOG_VART(_langCodesToLangs.size());
 
-  _langDetector.reset(
-    Factory::getInstance().constructObject<LanguageDetector>(
-      opts.getLanguageDetectionDetector()));
+  _langDetector =
+    Factory::getInstance().constructObject<LanguageDetector>(opts.getLanguageDetectionDetector());
   _langDetector->setConfiguration(conf);
 
   _tagKeys = opts.getLanguageTagKeys().toSet();
@@ -165,8 +164,8 @@ void NonEnglishLanguageDetectionVisitor::visit(const std::shared_ptr<Element>& e
 
   const Tags& tags = e->getTags();
   bool elementProcessed = false;
-  for (QSet<QString>::const_iterator tagKeysItr = _tagKeys.begin();
-       tagKeysItr != _tagKeys.end(); ++tagKeysItr)
+  for (QSet<QString>::const_iterator tagKeysItr = _tagKeys.begin(); tagKeysItr != _tagKeys.end();
+       ++tagKeysItr)
   {
     const QString tagKey = *tagKeysItr;
     if (tags.contains(tagKey))
@@ -207,8 +206,8 @@ void NonEnglishLanguageDetectionVisitor::visit(const std::shared_ptr<Element>& e
           if (_numTagDetectionsMade % _taskStatusUpdateInterval == 0)
           {
             PROGRESS_INFO(
-              _numTagDetectionsMade << " / " << _numProcessedTags << " tag language detections " <<
-               "made on  " << _numProcessedElements << " / " << _numTotalElements << " elements.");
+              _numTagDetectionsMade << " of " << _numProcessedTags << " tag language detections " <<
+               "made on  " << _numProcessedElements << " of " << _numTotalElements << " elements.");
           }
         }
 

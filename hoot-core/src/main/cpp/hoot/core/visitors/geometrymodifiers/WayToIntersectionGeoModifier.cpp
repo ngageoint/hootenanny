@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "WayToIntersectionGeoModifier.h"
@@ -99,7 +99,7 @@ bool WayToIntersectionGeoModifier::processElement(const ElementPtr& pElement, Os
     }
   }
 
-  if (allIntersections.size() > 0)
+  if (!allIntersections.empty())
   {
     processIntersections(pMap, pMyWay, allIntersections);
   }
@@ -107,12 +107,15 @@ bool WayToIntersectionGeoModifier::processElement(const ElementPtr& pElement, Os
   return true;
 }
 
-void WayToIntersectionGeoModifier::processIntersections(OsmMap* pMap, const WayPtr pWay, vector<IntersectionInfo>& inters)
+void WayToIntersectionGeoModifier::processIntersections(
+  OsmMap* pMap, const WayPtr pWay, const vector<IntersectionInfo>& inters) const
 {
   for (IntersectionInfo intersInfo : inters)
   {
     // create new node with tags from original way
-    NodePtr pNode(new Node(Status::Unknown1, pMap->createNextNodeId(), intersInfo.intersectionPoint));
+    NodePtr pNode =
+      std::make_shared<Node>(
+        Status::Unknown1, pMap->createNextNodeId(), intersInfo.intersectionPoint);
     pNode->setTags(pWay->getTags());
     pMap->addNode(pNode);
   }
@@ -137,12 +140,12 @@ void WayToIntersectionGeoModifier::processIntersections(OsmMap* pMap, const WayP
   }
 }
 
-bool WayToIntersectionGeoModifier::assignToAdjacentWay(OsmMap* pMap, const std::shared_ptr<NodeToWayMap>& n2w, long myWayId, const vector<long>& nodesToAttach)
+bool WayToIntersectionGeoModifier::assignToAdjacentWay(OsmMap* pMap, const std::shared_ptr<NodeToWayMap>& n2w, long myWayId, const vector<long>& nodesToAttach) const
 {
   long nodeId = nodesToAttach[0];
   const set<long>& wayIds = n2w->getWaysByNode(nodeId);
 
-  if (wayIds.size() > 0)
+  if (!wayIds.empty())
   {
     for (long wayId : wayIds)
     {

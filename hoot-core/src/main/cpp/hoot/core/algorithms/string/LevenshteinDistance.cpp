@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "LevenshteinDistance.h"
@@ -74,6 +74,26 @@ void LevenshteinDistance::setAlpha(double alpha)
 void LevenshteinDistance::setConfiguration(const Settings& conf)
 {
   setAlpha(ConfigOptions(conf).getLevenshteinDistanceAlpha());
+}
+
+double LevenshteinDistance::score(const char* s1, const char* s2)
+{
+  return score(QString::fromUtf8(s1), QString::fromUtf8(s2));
+}
+
+double LevenshteinDistance::score(const QString& s1, const QString& s2)
+{
+  return score<QString>(s1, s2);
+}
+
+unsigned int LevenshteinDistance::distance(const QString& s1, const QString& s2)
+{
+  return distance<QString>(s1.toLower(), s2.toLower());
+}
+
+unsigned int LevenshteinDistance::distance(const char* s1, const char* s2)
+{
+  return distance(QString(s1), QString(s2));
 }
 
 }

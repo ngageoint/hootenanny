@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef JSREGISTRAR_H
 #define JSREGISTRAR_H
@@ -44,9 +44,10 @@ public:
 
   virtual ~ClassInitializer() = default;
 
-  virtual void Init(v8::Handle<v8::Object> exports) = 0;
+  virtual void Init(v8::Local<v8::Object> exports) = 0;
 
 private:
+
   ClassInitializer(const ClassInitializer& oc);
   ClassInitializer& operator=(const ClassInitializer& oc);
 };
@@ -58,9 +59,9 @@ public:
 
   ClassInitializerTemplate() = default;
 
-  virtual ~ClassInitializerTemplate() = default;
+  ~ClassInitializerTemplate() = default;
 
-  virtual void Init(v8::Handle<v8::Object> exports) override
+  void Init(v8::Local<v8::Object> exports) override
   {
     T::Init(exports);
   }
@@ -75,9 +76,9 @@ public:
 
   static JsRegistrar& getInstance();
 
-  static void Init(v8::Handle<v8::Object> exports);
+  static void Init(v8::Local<v8::Object> exports);
 
-  void initAll(v8::Handle<v8::Object> exports);
+  void initAll(v8::Local<v8::Object> exports);
 
   void registerInitializer(const std::shared_ptr<ClassInitializer>& ci);
 
@@ -102,14 +103,12 @@ public:
    */
   AutoJsRegister()
   {
-    std::shared_ptr<ClassInitializerTemplate<T>> p(new ClassInitializerTemplate<T>());
-    JsRegistrar::getInstance().registerInitializer(p);
+    JsRegistrar::getInstance().registerInitializer(std::make_shared<ClassInitializerTemplate<T>>());
   }
 };
 
 #define HOOT_JS_REGISTER(ClassName)      \
   static hoot::AutoJsRegister<ClassName> ClassName##AutoJsRegister;
-
 
 }
 

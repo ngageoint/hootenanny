@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef POIPOLYGONNAMESCOREEXTRACTOR_H
 #define POIPOLYGONNAMESCOREEXTRACTOR_H
@@ -38,7 +38,8 @@ namespace hoot
 {
 
 /**
- * Scores element name similarity
+ * @brief The PoiPolygonNameScoreExtractor class scores element name similarity for POI to Polygon
+ * conflation.
  */
 class PoiPolygonNameScoreExtractor : public FeatureExtractorBase, public Configurable
 {
@@ -47,11 +48,7 @@ public:
   static QString className() { return "hoot::PoiPolygonNameScoreExtractor"; }
 
   PoiPolygonNameScoreExtractor();
-  virtual ~PoiPolygonNameScoreExtractor() = default;
-
-  virtual QString getClassName() const { return PoiPolygonNameScoreExtractor::className(); }
-
-  virtual QString getName() const { return className(); }
+  ~PoiPolygonNameScoreExtractor() = default;
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1
@@ -61,25 +58,27 @@ public:
    * @param poly the second element to examine
    * @return a name score
    */
-  virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
-                         const ConstElementPtr& poly) const;
+  double extract(const OsmMap& map, const ConstElementPtr& poi,
+                 const ConstElementPtr& poly) const override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
+
+  QString getDescription() const override
+  { return "Scores name similarity for POI/Polygon conflation"; }
+  QString getClassName() const override { return PoiPolygonNameScoreExtractor::className(); }
+  QString getName() const override { return className(); }
 
   double getNameScoreThreshold() const { return _nameScoreThreshold; }
-  void setNameScoreThreshold(double threshold) { _nameScoreThreshold = threshold; }
-
   double getLevDist() const { return _levDist; }
-  void setLevDist(double dist) { _levDist = dist; }
-
   bool getTranslateTagValuesToEnglish() const { return _translateTagValuesToEnglish; }
-  void setTranslateTagValuesToEnglish(bool translate) { _translateTagValuesToEnglish = translate; }
-
-  virtual QString getDescription() const
-  { return "Scores name similarity for POI/Polygon conflation"; }
-
   long getNamesProcessed() const { return _namesProcessed; }
   bool getMatchAttemptMade() const { return _matchAttemptMade; }
+
+  void setNameScoreThreshold(double threshold) { _nameScoreThreshold = threshold; }
+  void setLevDist(double dist) { _levDist = dist; }
+  void setTranslateTagValuesToEnglish(bool translate) { _translateTagValuesToEnglish = translate; }
+
+
 
 private:
 

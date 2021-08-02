@@ -19,17 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ARBITRARYCRITERION_H
 #define ARBITRARYCRITERION_H
 
 // hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -47,26 +47,24 @@ public:
 
   static QString className() { return "hoot::ArbitraryCriterion"; }
 
-  explicit ArbitraryCriterion(std::function<bool (ConstElementPtr e)> f)
+  explicit ArbitraryCriterion(const std::function<bool (ConstElementPtr e)>& f)
     : _f(f) { }
-  explicit ArbitraryCriterion(std::function<bool (const std::shared_ptr<const Element> &e)> f)
+  explicit ArbitraryCriterion(const std::function<bool (const std::shared_ptr<const Element> &e)>& f)
     : _f(f) { }
-  virtual ~ArbitraryCriterion() = default;
+  ~ArbitraryCriterion() = default;
 
-  virtual bool isSatisfied(const std::shared_ptr<const Element>& e) const
+  bool isSatisfied(const std::shared_ptr<const Element>& e) const override
   {
     const bool result = _f(e);
     LOG_VART(result);
     return result;
   }
+  ElementCriterionPtr clone() override { return std::make_shared<ArbitraryCriterion>(_f); }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ArbitraryCriterion(_f)); }
-
-  virtual QString getDescription() const { return ""; }
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
 private:
 

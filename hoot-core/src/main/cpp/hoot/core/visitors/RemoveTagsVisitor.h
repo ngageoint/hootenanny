@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVETAGSVISITOR_H
 #define REMOVETAGSVISITOR_H
@@ -30,8 +30,8 @@
 // hoot
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 // Qt
 #include <QRegExp>
@@ -55,29 +55,26 @@ public:
   explicit RemoveTagsVisitor(const QStringList& keys);
   virtual ~RemoveTagsVisitor()  = default;
 
-  virtual void addCriterion(const ElementCriterionPtr& e);
+  void addCriterion(const ElementCriterionPtr& e) override;
 
-  void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const { return "Removes tags by key"; }
-
-  void setNegateCriterion(bool negate) { _negateCriterion = negate; }
-
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing tags..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Removed " + StringUtils::formatLargeNumber(_numTagsRemoved) + " tags from " +
       StringUtils::formatLargeNumber(_numAffected) + " different elements";
   }
 
-  virtual QString getName() const { return className(); }
+  QString getDescription() const override { return "Removes tags by key"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  void setNegateCriterion(bool negate) { _negateCriterion = negate; }
 
 protected:
 
@@ -87,12 +84,12 @@ protected:
   // Criterion the element whose tags are to be remove must match
   std::shared_ptr<ElementCriterion> _criterion;
 
-  // This allows for negating the criterion as an option sent in from the command line.
-  bool _negateCriterion;
-
   long _numTagsRemoved;
 
 private:
+
+  // This allows for negating the criterion as an option sent in from the command line.
+  bool _negateCriterion;
 
   void _setCriterion(const QString& criterionName);
   void _setKeys(const QStringList& keys);

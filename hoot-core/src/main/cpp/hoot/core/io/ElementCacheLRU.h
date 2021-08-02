@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTCACHELRU_H
 #define ELEMENTCACHELRU_H
@@ -32,8 +32,8 @@
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-#include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/ElementType.h>
 #include <hoot/core/io/ElementCache.h>
 
 #include <ogr_spatialref.h>
@@ -60,17 +60,15 @@ public:
   ElementCacheLRU(const unsigned long maxNodeCount,
                   const unsigned long maxWayCount,
                   const unsigned long maxRelationCount);
-
   /**
    * @brief ~ElementCache
    */
-  virtual ~ElementCacheLRU() = default;
+  ~ElementCacheLRU() = default;
 
-  virtual bool isEmpty() const;
+  bool isEmpty() const override;
+  unsigned long size() const override;
 
-  virtual unsigned long size() const;
-
-  virtual unsigned long typeCount(const ElementType::Type typeToCount) const;
+  unsigned long typeCount(const ElementType::Type typeToCount) const override;
 
   /**
    * @brief addElement
@@ -78,61 +76,47 @@ public:
    * @note The last access time for an element added to the cache will be initialized to the
    *    current time
    */
-  virtual void addElement(ConstElementPtr& newElement);
+  void addElement(ConstElementPtr& newElement) override;
 
-  virtual void resetElementIterators();
+  void resetElementIterators() override;
 
-  virtual ConstNodePtr getNextNode();
-
-  virtual ConstWayPtr getNextWay();
-
-  virtual ConstRelationPtr getNextRelation();
+  ConstNodePtr getNextNode() override;
+  ConstWayPtr getNextWay() override;
+  ConstRelationPtr getNextRelation() override;
 
   // Functions for ElementInputStream
-  virtual void close();
-  virtual bool hasMoreElements();
+  void close() override;
+  bool hasMoreElements() override;
 
-  virtual ElementPtr readNextElement();
+  ElementPtr readNextElement() override;
 
   // Functions for ElementOutputStream
-  virtual void writeElement(ElementPtr& element);
+  void writeElement(ElementPtr& element) override;
 
   // Functions for ElementProvider
 
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
-  virtual bool containsElement(const ElementId& eid) const;
+  bool containsElement(const ElementId& eid) const override;
+  ConstElementPtr getElement(const ElementId& id) const override;
+  ConstNodePtr getNode(long id) const override;
+  NodePtr getNode(long id) override;
+  ConstRelationPtr getRelation(long id) const override;
+  RelationPtr getRelation(long id) override;
+  ConstWayPtr getWay(long id) const override;
+  WayPtr getWay(long id) override;
 
-  virtual ConstElementPtr getElement(const ElementId& id) const;
-
-  virtual const ConstNodePtr getNode(long id) const;
-
-  virtual const NodePtr getNode(long id);
-
-  virtual const ConstRelationPtr getRelation(long id) const;
-
-  virtual const RelationPtr getRelation(long id);
-
-  virtual const ConstWayPtr getWay(long id) const;
-
-  virtual const WayPtr getWay(long id);
-
-  virtual bool containsNode(long id) const;
-
-  virtual bool containsRelation(long id) const;
-
-  virtual bool containsWay(long id) const;
+  bool containsNode(long id) const override;
+  bool containsRelation(long id) const override;
+  bool containsWay(long id) const override;
 
   // Cache-specific items
-  virtual void removeElement(const ElementId& eid);
+  void removeElement(const ElementId& eid) override;
+  void removeElements(const ElementType::Type type) override;
 
-  virtual void removeElements(const ElementType::Type type);
-
-  virtual unsigned long getNodeCacheSize() { return _maxNodeCount; }
-
-  virtual unsigned long getWayCacheSize() { return _maxWayCount; }
-
-  virtual unsigned long getRelationCacheSize() { return _maxRelationCount; }
+  unsigned long getNodeCacheSize() const override { return _maxNodeCount; }
+  unsigned long getWayCacheSize() const override { return _maxWayCount; }
+  unsigned long getRelationCacheSize() const override { return _maxRelationCount; }
 
   // For testing - gets a comma-seperated list of IDs of the Least Recently Used
   // cache items, from most recent to least recent.
@@ -148,42 +132,35 @@ private:
 
   // List used to keep track of least-recently used nodes
   std::list<long> _nodeList;
-
   // Nodes in the cache (key is node ID, then value is pair for node and its pos in the nodeList)
   std::map<long, std::pair<ConstNodePtr, std::list<long>::iterator>> _nodes;
-
   // Iterator used to walk nodes in cache
   std::map<long, std::pair<ConstNodePtr, std::list<long>::iterator>>::iterator _nodesIter;
 
   // List used to keep track of least-recently used nodes
   std::list<long> _wayList;
-
   // Ways in the cache (key is way ID, then value is pair for way and its pos in the wayList)
   std::map<long, std::pair<ConstWayPtr, std::list<long>::iterator>> _ways;
-
   // Iterator used to walk ways in cache
   std::map<long, std::pair<ConstWayPtr, std::list<long>::iterator>>::iterator _waysIter;
 
   // List used to keep track of least-recently used nodes
   std::list<long> _relationList;
-
   // Relations in the cache (key is relation ID, then value is pair for relation and access time)
   std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator>>  _relations;
-
   // Iterator used to walk relations in cache
   std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator>>::iterator _relationsIter;
 
   // Removes the least recently used item from the cache
   void _removeOldest(const ElementType::Type typeToRemove);
 
-  // These functions update the lists that keep the order of when items
-  // were last used/accessed
+  // These functions update the lists that keep the order of when items were last used/accessed.
   void _updateNodeAccess(long id);
   void _updateWayAccess(long id);
   void _updateRelationAccess(long id);
 };
 
-typedef std::shared_ptr<ElementCacheLRU> ElementCacheLRUPtr;
+using ElementCacheLRUPtr = std::shared_ptr<ElementCacheLRU>;
 
 }
 

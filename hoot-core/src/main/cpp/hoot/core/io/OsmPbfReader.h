@@ -19,17 +19,14 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSMPBFREADER_H
 #define OSMPBFREADER_H
-
-// GDAL
-class OGRSpatialReference;
 
 // Qt
 #include <QHash>
@@ -46,6 +43,9 @@ class OGRSpatialReference;
 
 // tgs
 #include <tgs/BigContainers/BigMap.h>
+
+// GDAL
+class OGRSpatialReference;
 
 namespace hoot
 {
@@ -84,38 +84,45 @@ public:
 
   OsmPbfReader();
   OsmPbfReader(bool useFileId);
-
   /**
    * Constructor that immediately attempts to open URL
    *
    * @param urlString URL of file to immediately attempt to open
    */
   OsmPbfReader(const QString& urlString);
+  ~OsmPbfReader();
 
-  virtual ~OsmPbfReader();
+  void setConfiguration(const Settings &conf) override;
 
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
+
+  bool isSupported(const QString& urlStr) override;
+  void open(const QString& urlStr) override;
+  void initializePartial() override;
   /**
-   * @see ElementInputStream
+   * The read command called after open.
    */
-  virtual OsmPbfReader* clone() const { return new OsmPbfReader(*this); }
+  void read(const OsmMapPtr& map) override;
+  bool hasMoreElements() override;
+  std::shared_ptr<Element> readNextElement() override;
+  void finalizePartial() override;
+  void close() override;
+  /**
+   * Determines the reader's default element status
+   */
+  void setDefaultStatus(Status status) override { _status = status; }
+  /**
+   * Determines whether the reader should use the element id's from the file being read
+   */
+  void setUseDataSourceIds(bool useDataSourceIds) override { _useFileId = useDataSourceIds; }
+  void setUseFileStatus(bool useFileStatus) override { _useFileStatus = useFileStatus; }
+  QString supportedFormats() override { return ".osm.pbf"; }
 
   /**
    * Scan through the file and calculate the offsets of every blob. This is handy when
    * distributing the processing of the file.
    */
-  std::vector<BlobLocation> loadOsmDataBlobOffsets(std::istream& strm);
-
-  /**
-   * Determines the reader's default element status
-   */
-  virtual void setDefaultStatus(Status status) override { _status = status; }
-
-  /**
-   * Determines whether the reader should use the element id's from the file being read
-   */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) override { _useFileId = useDataSourceIds; }
-
-  virtual void setUseFileStatus(bool useFileStatus) override { _useFileStatus = useFileStatus; }
+  std::vector<BlobLocation> loadOsmDataBlobOffsets(std::shared_ptr<std::istream> strm);
 
   /**
    * If the input is a directory then the underlying files are read in turn, otherwise readFile
@@ -125,49 +132,15 @@ public:
    */
   void read(const QString& path, const OsmMapPtr& map);
 
-  void parse(std::istream* strm, const OsmMapPtr& map);
-
-  void parseBlob(BlobLocation& bl, std::istream* strm, const OsmMapPtr& map);
-
-  void parseBlob(long headerOffset, std::istream* strm, const OsmMapPtr& map);
-
+  void parse(std::shared_ptr<std::istream> strm, const OsmMapPtr& map);
+  void parseBlob(const BlobLocation& bl, std::shared_ptr<std::istream> strm, const OsmMapPtr& map);
+  void parseBlob(long headerOffset, std::shared_ptr<std::istream> strm, const OsmMapPtr& map);
   /**
    * Reads a uint32 in network order from the stream to determine the PBF size, then reads the
    * PrimitiveBlock from the stream specified into the provided map.
    */
-  void parseElements(std::istream* strm, const OsmMapPtr& map);
+  void parseElements(std::shared_ptr<std::istream> strm, const OsmMapPtr& map);
   void parseElements(QByteArray bytes, const OsmMapPtr& map);
-
-  /**
-   * Allows loading of data that isn't complete such as unknown node IDs in a way.
-   */
-  void setPermissive(bool permissive) { _permissive = permissive; }
-
-  virtual bool isSupported(const QString& urlStr) override;
-
-  virtual void open(const QString& urlStr) override;
-
-  virtual void initializePartial();
-  /**
-   * The read command called after open.
-   */
-  virtual void read(const OsmMapPtr& map) override;
-
-  virtual bool hasMoreElements() override;
-
-  virtual std::shared_ptr<Element> readNextElement() override;
-
-  virtual void finalizePartial() override;
-
-  void close();
-
-  virtual void setConfiguration(const Settings &conf) override;
-
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
-
-  bool getSortedTypeThenId() { return _typeThenId; }
-
-  void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }
 
   /**
    * Checks to see if an input is sorted
@@ -177,7 +150,13 @@ public:
    */
   bool isSorted(const QString& file);
 
-  virtual QString supportedFormats() { return ".osm.pbf"; }
+  bool getSortedTypeThenId() const { return _typeThenId; }
+
+  /**
+   * Allows loading of data that isn't complete such as unknown node IDs in a way.
+   */
+  void setPermissive(bool permissive) { _permissive = permissive; }
+  void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }
 
 private:
 
@@ -189,22 +168,22 @@ private:
   QStringList _circularErrorTagKeys;
 
   std::string _buffer;
-  std::istream* _in;
+  std::shared_ptr<std::istream> _in;
   bool _needToCloseInput;
 
   std::vector<std::shared_ptr<hoot::Node>> _denseNodeTmp;
 
-  /// The last position of the pointer while reading data.
+  // The last position of the pointer while reading data.
   long _lastPosition;
-  /// The last time we reported speed
+  // The last time we reported speed
   double _lastReadTime;
-  /// When we started reading data
+  // When we started reading data
   double _startReadTime;
   long _fileLength;
 
   std::string _inflated;
   // Bend over backwards to keep the PBF headers out of the normal build. They're quite large.
-  OsmPbfReaderData* _d;
+  std::shared_ptr<OsmPbfReaderData> _d;
   std::vector<QString> _strings;
 
   OsmMapPtr _map;
@@ -245,16 +224,13 @@ private:
 
   void _init(bool useFileId);
 
-  void _addTag(const std::shared_ptr<Element>& n, const QString& k, const QString& v);
+  void _addTag(const std::shared_ptr<Element>& n, const QString& k, const QString& v) const;
 
-  double _convertLon(long lon);
-
-  double _convertLat(long lat);
-
-  ElementId _convertToElementId(long id, int memberType);
+  double _convertLon(long lon) const;
+  double _convertLat(long lat) const;
+  ElementId _convertToElementId(long id, int memberType) const;
 
   long _createRelationId(long fromFile);
-
   long _createWayId(long fromFile);
 
   char* _getBuffer(size_t size);
@@ -264,40 +240,26 @@ private:
   const char* _inflate(const std::string& compressed, size_t rawSize);
 
   void _loadDenseNodes();
-
   void _loadDenseNodes(const hoot::pb::DenseNodes& dn);
-
   void _loadNode(const hoot::pb::Node& n);
-
   void _loadNodes();
-
   void _loadOsmData();
-
   void _loadRelation(const hoot::pb::Relation& r);
-
   void _loadRelations();
-
   void _loadStrings();
-
   void _loadWay(const hoot::pb::Way& w);
-
   void _loadWays();
 
   void _parseBlob();
-
   void _parseBlobHeader();
-
-  int _parseInt(const QString& s);
-
+  int _parseInt(const QString& s) const;
   void _parseOsmData();
-
   void _parseOsmHeader();
+  Status _parseStatus(const QString& s) const;
 
-  Status _parseStatus(const QString& s);
+  void _parseTimestamp(const hoot::pb::Info& info, Tags& t) const;
 
-  void _parseTimestamp(const hoot::pb::Info& info, Tags& t);
-
-  uint32_t _readUInt32();
+  uint32_t _readUInt32() const;
 
 };
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef TAGCATEGORYDIFFERENCER_H
 #define TAGCATEGORYDIFFERENCER_H
@@ -45,15 +45,17 @@ public:
 
   TagCategoryDifferencer() = default;
   TagCategoryDifferencer(OsmSchemaCategory category);
-  virtual ~TagCategoryDifferencer() = default;
+  ~TagCategoryDifferencer() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
 protected:
 
-  OsmSchemaCategory _category;
+  bool _isValidTag(const SchemaVertex& sv) const override;
 
-  virtual bool isValidTag(const SchemaVertex& sv) const;
+private:
+
+  OsmSchemaCategory _category;
 };
 
 }

@@ -19,16 +19,15 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MultiaryIngestChangesetReader.h"
 
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 
@@ -107,7 +106,7 @@ Change MultiaryIngestChangesetReader::readNextChange()
   LOG_VART(changeType);
 
   LOG_VART(lineParts[1]);
-  OsmMapPtr tmpMap(new OsmMap());
+  OsmMapPtr tmpMap = std::make_shared<OsmMap>();
   if (lineParts[1].startsWith("{"))
   {
     //json - don't use this until #1772 is fixed

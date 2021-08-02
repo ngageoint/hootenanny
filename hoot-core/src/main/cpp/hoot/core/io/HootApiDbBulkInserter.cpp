@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "HootApiDbBulkInserter.h"
@@ -101,7 +101,8 @@ void HootApiDbBulkInserter::open(const QString& url)
   LOG_VART(_database.getMapId());
 
   _sectionNames = _createSectionNameList();
-  _sqlFormatter.reset(new HootApiDbSqlStatementFormatter(_outputDelimiter, _database.getMapId()));
+  _sqlFormatter =
+    std::make_shared<HootApiDbSqlStatementFormatter>(_outputDelimiter, _database.getMapId());
 }
 
 void HootApiDbBulkInserter::_getOrCreateMap()
@@ -131,14 +132,6 @@ void HootApiDbBulkInserter::_getOrCreateMap()
   const QStringList pList = QUrl(_outputUrl).path().split("/");
   const QString mapName = pList[2];
   LOG_VARD(mapName);
-
-//  LOG_VARD(_overwriteMap);
-//  if (!_overwriteMap && _database.currentUserHasMapWithName(mapName))
-//  {
-//    throw HootException(
-//      "User with ID: " + QString::number(_database.getCurrentUserId()) +
-//      " already has map with name: " + mapName);
-//  }
 
   const long mapId = _database.getMapIdByNameForCurrentUser(mapName);
   LOG_VART(mapId);
@@ -233,8 +226,8 @@ void HootApiDbBulkInserter::_writeDataToDbPsql()
   //sql file, so no need doing the extra work to handle buffering the sql read manually and
   //applying it to a QSqlQuery.
   LOG_VART(_outputUrl);
-  LOG_VART(HootApiDb::removeLayerName(_outputUrl));
-  ApiDb::execSqlFile(HootApiDb::removeLayerName(_outputUrl), _sqlOutputCombinedFile->fileName());
+  LOG_VART(HootApiDb::removeTableName(_outputUrl));
+  ApiDb::execSqlFile(HootApiDb::removeTableName(_outputUrl), _sqlOutputCombinedFile->fileName());
 
   LOG_INFO(
     "SQL execution complete.  Time elapsed: " << StringUtils::millisecondsToDhms(_timer->elapsed()));
@@ -262,7 +255,7 @@ void HootApiDbBulkInserter::_writeCombinedSqlFile()
   {
     outputFile.remove();
   }
-  _sqlOutputCombinedFile.reset(new QFile(dest));
+  _sqlOutputCombinedFile = std::make_shared<QFile>(dest);
   if (!_sqlOutputCombinedFile->open(QIODevice::WriteOnly))
   {
     throw HootException("Could not open file for SQL output: " + dest);
@@ -383,14 +376,14 @@ void HootApiDbBulkInserter::writePartial(const ConstNodePtr& node)
 {
   if (_writeStats.nodesWritten == 0)
   {
-    _timer.reset(new QElapsedTimer());
+    _timer = std::make_shared<QElapsedTimer>();
     _timer->start();
     _fileDataPassCtr++;
     LOG_INFO(
       "Streaming elements from input to file outputs.  (data pass #" <<
       _fileDataPassCtr << " of " << _numberOfFileDataPasses() << ")...");
     _createNodeOutputFiles();
-    _idMappings.nodeIdMap.reset(new Tgs::BigMap<long, unsigned long>(_stxxlMapMinSize));
+    _idMappings.nodeIdMap = std::make_shared<Tgs::BigMap<long, unsigned long>>(_stxxlMapMinSize);
   }
 
   LOG_VART(node);
@@ -446,7 +439,7 @@ void HootApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   if (_writeStats.waysWritten == 0)
   {
     _createWayOutputFiles();
-    _idMappings.wayIdMap.reset(new Tgs::BigMap<long, unsigned long>(_stxxlMapMinSize));
+    _idMappings.wayIdMap = std::make_shared<Tgs::BigMap<long, unsigned long>>(_stxxlMapMinSize);
   }
 
   // Do we already know about this way?
@@ -493,7 +486,8 @@ void HootApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   if (_writeStats.relationsWritten == 0)
   {
     _createRelationOutputFiles();
-    _idMappings.relationIdMap.reset(new Tgs::BigMap<long, unsigned long>(_stxxlMapMinSize));
+    _idMappings.relationIdMap =
+      std::make_shared<Tgs::BigMap<long, unsigned long>>(_stxxlMapMinSize);
   }
 
   //  Do we already know about this node?

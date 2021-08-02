@@ -19,16 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ArffWriter.h"
 
 // Hoot
 #include <hoot/core/conflate/matching/MatchType.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -50,13 +51,12 @@ _useNulls(useNulls)
 
 ArffWriter::ArffWriter(QString path, bool useNulls) :
 _path(path),
+_autoStrm(std::make_shared<std::fstream>()),
 _useNulls(useNulls)
 {
-  fstream* fs = new fstream();
-  fs->exceptions(fstream::failbit | fstream::badbit);
-  fs->open(path.toUtf8().data(), ios_base::out);
-  _autoStrm.reset(fs);
-  _strm = fs;
+  _autoStrm->exceptions(fstream::failbit | fstream::badbit);
+  _autoStrm->open(path.toUtf8().data(), ios_base::out);
+  _strm = _autoStrm.get();
 }
 
 void ArffWriter::_w(const QString& s)
@@ -69,7 +69,7 @@ void ArffWriter::write(const vector<Sample> &samples)
   QString msg = "Writing attribute-relation model file";
   if (!_path.isEmpty())
   {
-    msg += " to " + _path.right(50);
+    msg += " to " + FileUtils::toLogFormat(_path, 50);
   }
   msg += "...";
   LOG_INFO(msg);

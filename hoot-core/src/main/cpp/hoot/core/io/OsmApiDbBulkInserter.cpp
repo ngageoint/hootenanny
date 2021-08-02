@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiDbBulkInserter.h"
@@ -62,7 +62,7 @@ _includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
   _reset();
   _sectionNames = _createSectionNameList();
   setConfiguration(conf());
-  _sqlFormatter.reset(new OsmApiDbSqlStatementFormatter(_outputDelimiter));
+  _sqlFormatter = std::make_shared<OsmApiDbSqlStatementFormatter>(_outputDelimiter);
 }
 
 OsmApiDbBulkInserter::~OsmApiDbBulkInserter()
@@ -122,7 +122,7 @@ void OsmApiDbBulkInserter::_verifyChangesetUserId()
   }
 }
 
-void OsmApiDbBulkInserter::_verifyFileOutputs()
+void OsmApiDbBulkInserter::_verifyFileOutputs() const
 {
   QString finalOutput = _outputUrl;
   if (_destinationIsDatabase() && !_outputFilesCopyLocation.isEmpty())
@@ -184,7 +184,7 @@ void OsmApiDbBulkInserter::_verifyStartingIds()
   }
 }
 
-void OsmApiDbBulkInserter::_verifyDependencies()
+void OsmApiDbBulkInserter::_verifyDependencies() const
 {
   if (system(QString("psql --version > /dev/null").toStdString().c_str()) != 0)
   {
@@ -192,7 +192,7 @@ void OsmApiDbBulkInserter::_verifyDependencies()
   }
 }
 
-void OsmApiDbBulkInserter::_verifyOutputCopySettings()
+void OsmApiDbBulkInserter::_verifyOutputCopySettings() const
 {
   if (_destinationIsDatabase() && !_outputFilesCopyLocation.isEmpty())
   {
@@ -244,7 +244,7 @@ void OsmApiDbBulkInserter::_closeOutputFiles()
   }
 }
 
-void OsmApiDbBulkInserter::_logStats(const bool debug)
+void OsmApiDbBulkInserter::_logStats(const bool debug) const
 {
   QStringList messages;
   messages.append(
@@ -504,7 +504,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
   {
     outputFile.remove();
   }
-  _sqlOutputCombinedFile.reset(new QFile(dest));
+  _sqlOutputCombinedFile = std::make_shared<QFile>(dest);
   if (!_sqlOutputCombinedFile->open(QIODevice::WriteOnly))
   {
     throw HootException("Could not open file for SQL output: " + dest);
@@ -599,7 +599,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
             //care that much right now, since the changeset count is far outnumbered by the
             //size of the rest of the data
             PROGRESS_INFO(
-              "Parsed " << StringUtils::formatLargeNumber(recordCtr) << " / " <<
+              "Parsed " << StringUtils::formatLargeNumber(recordCtr) << " of " <<
               StringUtils::formatLargeNumber(
                 _getTotalRecordsWritten() - _changesetData.changesetsWritten) <<
               " SQL file lines.");
@@ -643,7 +643,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
 }
 
 void OsmApiDbBulkInserter::_updateRecordLineWithIdOffset(const QString& tableName,
-                                                         QString& recordLine)
+                                                         QString& recordLine) const
 {
   LOG_TRACE("Updating ID offset for line: " << recordLine.left(25));
   LOG_VART(tableName);
@@ -792,14 +792,14 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
 {
   if (_writeStats.nodesWritten == 0)
   {
-    _timer.reset(new QElapsedTimer());
+    _timer = std::make_shared<QElapsedTimer>();
     _timer->start();
     _fileDataPassCtr++;
     LOG_INFO(
       "Streaming elements from input to file outputs.  (data pass #" <<
       _fileDataPassCtr << " of " << _numberOfFileDataPasses() << ")...");
     _createNodeOutputFiles();
-    _idMappings.nodeIdMap.reset(new Tgs::BigMap<long, unsigned long>(_stxxlMapMinSize));
+    _idMappings.nodeIdMap = std::make_shared<Tgs::BigMap<long, unsigned long>>(_stxxlMapMinSize);
   }
 
   LOG_VART(node);
@@ -857,7 +857,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   if (_writeStats.waysWritten == 0)
   {
     _createWayOutputFiles();
-    _idMappings.wayIdMap.reset(new Tgs::BigMap<long, unsigned long>(_stxxlMapMinSize));
+    _idMappings.wayIdMap = std::make_shared<Tgs::BigMap<long, unsigned long>>(_stxxlMapMinSize);
   }
 
   // Do we already know about this way?
@@ -906,7 +906,8 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   if (_writeStats.relationsWritten == 0)
   {
     _createRelationOutputFiles();
-    _idMappings.relationIdMap.reset(new Tgs::BigMap<long, unsigned long>(_stxxlMapMinSize));
+    _idMappings.relationIdMap =
+      std::make_shared<Tgs::BigMap<long, unsigned long>>(_stxxlMapMinSize);
   }
 
   // Do we already know about this node?
@@ -1330,8 +1331,9 @@ void OsmApiDbBulkInserter::_createOutputFile(const QString& tableName, const QSt
   msg += "...";
   LOG_DEBUG(msg);
 
-  _outputSections[tableName].reset(
-    new QTemporaryFile(_tempDir + "/ApiDbBulkInserter-" + tableName + "-temp-XXXXXX.sql"));
+  _outputSections[tableName] =
+    std::make_shared<QTemporaryFile>(
+      _tempDir + "/ApiDbBulkInserter-" + tableName + "-temp-XXXXXX.sql");
   if (!_outputSections[tableName]->open())
   {
     throw HootException(
@@ -1405,7 +1407,8 @@ void OsmApiDbBulkInserter::_writeChangeset()
   if (!_outputSections[ApiDb::getChangesetsTableName()])
   {
     _createOutputFile(
-      ApiDb::getChangesetsTableName(), _sqlFormatter->getChangesetSqlHeaderString());
+      ApiDb::getChangesetsTableName(),
+      OsmApiDbSqlStatementFormatter::getChangesetSqlHeaderString());
   }
 
   _outputSections[ApiDb::getChangesetsTableName()]->write(
@@ -1418,7 +1421,7 @@ void OsmApiDbBulkInserter::_writeChangeset()
 
 void OsmApiDbBulkInserter::_writeSequenceUpdates(long changesetId, const unsigned long nodeId,
                                                  const unsigned long wayId,
-                                                 const unsigned long relationId, QString& outputStr)
+                                                 const unsigned long relationId, QString& outputStr) const
 {
   LOG_DEBUG("Writing sequence updates stream...");
 

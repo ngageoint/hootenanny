@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ConflictsNetworkMatcher.h"
 
@@ -30,9 +30,9 @@
 #include <hoot/core/algorithms/FrechetDistance.h>
 #include <hoot/core/conflate/network/EdgeMatch.h>
 #include <hoot/core/conflate/network/EdgeMatchSetFinder.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -49,27 +49,32 @@ HOOT_FACTORY_REGISTER(NetworkMatcher, ConflictsNetworkMatcher)
 
 const double ConflictsNetworkMatcher::EPSILON = 1e-6;
 
-ConflictsNetworkMatcher::ConflictsNetworkMatcher()
+ConflictsNetworkMatcher::ConflictsNetworkMatcher() :
+_edgeMatches(std::make_shared<IndexedEdgeMatchSet>()),
+_partialHandicap(ConfigOptions().getNetworkConflictsPartialHandicap()),
+_stubHandicap(ConfigOptions().getNetworkConflictsStubHandicap()),
+_aggression(ConfigOptions().getNetworkConflictsAggression()),
+_stubThroughWeighting(ConfigOptions().getNetworkConflictsStubThroughWeighting()),
+_weightInfluence(ConfigOptions().getNetworkConflictsWeightInfluence()),
+_outboundWeighting(ConfigOptions().getNetworkConflictsOutboundWeighting()),
+_sanityCheckMinSeparationDistance(
+   ConfigOptions().getNetworkConflictsSanityCheckMinSeparationDistance()),
+_sanityCheckSeparationDistanceMultiplier(
+  ConfigOptions().getNetworkConflictsSanityCheckSeparationDistanceMultiplier()),
+_conflictingScoreThresholdModifier(
+  ConfigOptions().getNetworkConflictsConflictingScoreThresholdModifier()),
+_matchThreshold(ConfigOptions().getNetworkConflictsMatcherThreshold())
 {
-  _edgeMatches.reset(new IndexedEdgeMatchSet());
-
-  ConfigOptions conf;
-  _partialHandicap = conf.getNetworkConflictsPartialHandicap();
-  _stubHandicap = conf.getNetworkConflictsStubHandicap();
-  _aggression = conf.getNetworkConflictsAggression();
-  _weightInfluence = conf.getNetworkConflictsWeightInfluence();
-  _outboundWeighting = conf.getNetworkConflictsOutboundWeighting();
-  _stubThroughWeighting = conf.getNetworkConflictsStubThroughWeighting();
-  _sanityCheckMinSeparationDistance = conf.getNetworkConflictsSanityCheckMinSeparationDistance();
-  _sanityCheckSeparationDistanceMultiplier =
-    conf.getNetworkConflictsSanityCheckSeparationDistanceMultiplier();
-  _conflictingScoreThresholdModifier = conf.getNetworkConflictsConflictingScoreThresholdModifier();
-  _matchThreshold = conf.getNetworkConflictsMatcherThreshold();
+  if (_matchThreshold <= 0.0 || _matchThreshold > 1.0)
+  {
+    throw IllegalArgumentException(
+      "Invalid conflicts match threshold: " + QString::number(_matchThreshold) +
+      ". Must be greater than 0.0 and less than 1.0.");
+  }
 }
 
-double ConflictsNetworkMatcher::_aggregateScores(QList<double> pairs)
+double ConflictsNetworkMatcher::_aggregateScores(QList<double> pairs) const
 {
-  //qSort(pairs.begin(), pairs.end(), greaterThan);
   qSort(pairs);
 
   // this quick little method makes the scores decrease with each matching pair
@@ -95,10 +100,10 @@ QList<NetworkVertexScorePtr> ConflictsNetworkMatcher::getAllVertexScores() const
 
 std::shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcher::create()
 {
-  return std::shared_ptr<ConflictsNetworkMatcher>(new ConflictsNetworkMatcher());
+  return std::make_shared<ConflictsNetworkMatcher>();
 }
 
-void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb)
+void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb) const
 {
   LOG_TRACE("Creating stub edges...");
 
@@ -138,7 +143,7 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
     if (createStub)
     {
       // Create stub
-      NetworkEdgePtr newStub(new NetworkEdge(va, va, false));
+      NetworkEdgePtr newStub = std::make_shared<NetworkEdge>(va, va, false);
       newStub->addMember(va->getElement());
       LOG_TRACE("Adding new edge: " << newStub);
       na->addEdge(newStub);
@@ -146,7 +151,7 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
   }
 }
 
-Meters ConflictsNetworkMatcher::_getMatchSeparation(ConstEdgeMatchPtr pMatch)
+Meters ConflictsNetworkMatcher::_getMatchSeparation(ConstEdgeMatchPtr pMatch) const
 {
   // convert the EdgeStrings into WaySublineStrings
   WayStringPtr str1 = _details->toWayString(pMatch->getString1());
@@ -155,7 +160,7 @@ Meters ConflictsNetworkMatcher::_getMatchSeparation(ConstEdgeMatchPtr pMatch)
   if (str1->getSize() > 0 && str2->getSize() > 0)
   {
     //  Create a temp map, and add the ways
-    OsmMapPtr tempMap(new OsmMap());
+    OsmMapPtr tempMap = std::make_shared<OsmMap>();
     tempMap->setProjection(_details->getMap()->getProjection());
     WayPtr pWay1 = str1->copySimplifiedWayIntoMap(*(_details->getMap()), tempMap);
     WayPtr pWay2 = str2->copySimplifiedWayIntoMap(*(_details->getMap()), tempMap);
@@ -213,7 +218,7 @@ void ConflictsNetworkMatcher::_sanityCheckRelationships()
     if (ctr % 100 == 0)
     {
       PROGRESS_INFO(
-        "Sanity checked " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Sanity checked " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(total) << " relationships. " <<
         StringUtils::formatLargeNumber(matchesRemoved) << " matches removed.");
     }
@@ -302,15 +307,15 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     // Conflicts
     foreach (ConstEdgeMatchPtr other, conflict)
     {
-      _matchRelationships[em].append(ConstMatchRelationshipPtr(new MatchRelationship(other, true)));
+      _matchRelationships[em].append(std::make_shared<const MatchRelationship>(other, true));
     }
 
     foreach (ConstEdgeMatchPtr other, support)
     {
-      MatchRelationshipPtr mr(new MatchRelationship(other, false));
+      MatchRelationshipPtr mr = std::make_shared<MatchRelationship>(other, false);
       QSet<ConstEdgeMatchPtr> connectingStubs = _edgeMatches->getConnectingStubs(em, other);
       QSet<ConstEdgeMatchPtr> nonConflictingStubs = connectingStubs - conflict;
-      if (connectingStubs.size() == 0 || nonConflictingStubs.size() >= 1)
+      if (connectingStubs.empty() || nonConflictingStubs.size() >= 1)
       {
         mr->setThroughStubs(_edgeMatches->getConnectingStubs(em, other));
         // if this edge supports through a stub, then record the stub that is used to support it.
@@ -331,7 +336,7 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     if (count % 1000 == 0)
     {
       PROGRESS_INFO(
-        StringUtils::formatLargeNumber(count) << " / " <<
+        StringUtils::formatLargeNumber(count) << " of " <<
         StringUtils::formatLargeNumber(_edgeMatches->getAllMatches().size()) <<
         " match relationships processed.");
     }
@@ -346,13 +351,12 @@ QList<NetworkEdgeScorePtr> ConflictsNetworkMatcher::getAllEdgeScores() const
   QList<NetworkEdgeScorePtr> result;
   foreach (ConstEdgeMatchPtr em, _scores.keys())
   {
-    NetworkEdgeScorePtr p(new NetworkEdgeScore(em, _scores[em], _scores[em]));
-    result.append(p);
+    result.append(std::make_shared<NetworkEdgeScore>(em, _scores[em], _scores[em]));
   }
   return result;
 }
 
-QList<ConstNetworkEdgePtr> ConflictsNetworkMatcher::_getEdgesOnVertex(ConstNetworkVertexPtr v)
+QList<ConstNetworkEdgePtr> ConflictsNetworkMatcher::_getEdgesOnVertex(ConstNetworkVertexPtr v) const
 {
   QList<ConstNetworkEdgePtr> r1 = _n1->getEdgesFromVertex(v);
   QList<ConstNetworkEdgePtr> r2 = _n2->getEdgesFromVertex(v);
@@ -449,6 +453,7 @@ void ConflictsNetworkMatcher::_iterateRank()
       relationCount = max(1, relationCount);
 
       //s = s / (double)supportCount;
+      LOG_VART(supportCount);
       s = s / (double)relationCount;
 
       if (r->isConflict() == false)
@@ -558,6 +563,8 @@ void ConflictsNetworkMatcher::_iterateSimple()
       supportCount = max(1, supportCount);
       relationCount = max(1, relationCount);
 
+      LOG_VART(supportCount);
+
       s = s * _weights[r->getEdge()];
       LOG_VART(s);
 
@@ -601,7 +608,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
     if (count % 1000 == 0)
     {
       PROGRESS_INFO(
-        StringUtils::formatLargeNumber(count) << " / " << StringUtils::formatLargeNumber(total) <<
+        StringUtils::formatLargeNumber(count) << " of " << StringUtils::formatLargeNumber(total) <<
         " matches processed.");
     }
   }
@@ -621,7 +628,7 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
 {
   _n1 = n1;
   _n2 = n2;
-  _details.reset(new NetworkDetails(map, n1, n2));
+  _details = std::make_shared<NetworkDetails>(map, n1, n2);
 
   // Add stub edges to both networks.
   // if both vertices on an edge match a single vertex (v2)
@@ -631,7 +638,7 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
 
   // create empty stub edges can change the map, recreate the details so the indexes are
   // reinitialized.
-  _details.reset(new NetworkDetails(map, n1, n2));
+  _details = std::make_shared<NetworkDetails>(map, n1, n2);
 
   // create a spatial index of n2 vertices & edges.
   _createEdge2Index();
@@ -666,7 +673,9 @@ void ConflictsNetworkMatcher::finalize()
     count++;
     if (count % 100 == 0)
     {
-      PROGRESS_INFO(count << " / " << total << " edge matches finalized.");
+      PROGRESS_INFO(
+        StringUtils::formatLargeNumber(count) << " of " << StringUtils::formatLargeNumber(total) <<
+        " edge matches finalized.");
     }
   }
 }
@@ -719,7 +728,7 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
       // added here...why is that?; update 10/11/19: even with StringUtils removed here, I'm still
       // seeing multiple lines logged...why?
       PROGRESS_INFO(
-        StringUtils::formatLargeNumber(count) << " / " <<
+        StringUtils::formatLargeNumber(count) << " of " <<
         StringUtils::formatLargeNumber(em.size()) << " edge match scores processed for " <<
         StringUtils::formatLargeNumber(totalNumIntersections) << " total intersections. " <<
         StringUtils::formatLargeNumber(finder.getNumSimilarEdgeMatches()) <<
@@ -730,7 +739,7 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
   _printEdgeMatches();
 }
 
-void ConflictsNetworkMatcher::_printEdgeMatches()
+void ConflictsNetworkMatcher::_printEdgeMatches() const
 {
   if (Log::getInstance().getLevel() <= Log::Trace)
   {

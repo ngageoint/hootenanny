@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -68,8 +68,8 @@ public:
 
   OsmMapPtr createMap()
   {
-    OsmMapPtr map(new OsmMap());
-    std::shared_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    std::shared_ptr<OGREnvelope> env = GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1));
     MapProjector::projectToPlanar(map, *env);
 
     return map;
@@ -89,7 +89,7 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
+    WayPtr w1 = TestUtils::createWay(map, w1c);
 
     WaySublineCollection string;
     string.addSubline(WaySubline(WayLocation(map, w1, 30), WayLocation(map, w1, 70)));
@@ -112,9 +112,11 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr way1 = TestUtils::createWay(map, Status::Unknown1, w1c);
-    RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
-      way1->getCircularError(), MetadataTags::RelationMultilineString()));
+    WayPtr way1 = TestUtils::createWay(map, w1c);
+    RelationPtr relation =
+      std::make_shared<Relation>(
+      way1->getStatus(), map->createNextRelationId(), way1->getCircularError(),
+      MetadataTags::RelationMultilineString());
     relation->addElement("", way1->getElementId());
     map->addElement(relation);
 

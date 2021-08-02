@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "HootApiDbReader.h"
 
@@ -46,7 +46,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapReader, HootApiDbReader)
 
 HootApiDbReader::HootApiDbReader() :
-_database(new HootApiDb())
+_database(std::make_shared<HootApiDb>())
 {
   setConfiguration(conf());
 }
@@ -150,14 +150,11 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
   QDateTime dt = resultIterator.value(ApiDb::WAYS_TIMESTAMP).toDateTime();
   dt.setTimeSpec(Qt::UTC);
 
-  WayPtr way(
-    new Way(
-      _status,
-      newWayId,
-      _defaultCircularError,
+  WayPtr way =
+    std::make_shared<Way>(
+      _status, newWayId, _defaultCircularError,
       resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
-      resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
-      dt.toMSecsSinceEpoch() / 1000));
+      resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(), dt.toMSecsSinceEpoch() / 1000);
 
   way->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::WAYS_TAGS)));
   _updateMetadataOnElement(way);
@@ -170,7 +167,7 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
   LOG_VART(way->getStatus());
   LOG_VART(way->getVersion());
 
-  // these maybe could be read out in batch at the same time the element results are read...
+  // These maybe could be read out in batch at the same time the element results are read.
   vector<long> nodeIds = _database->selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
@@ -187,19 +184,16 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
   const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
   LOG_TRACE("Reading relation with ID: " << newRelationId);
 
-  // Timestamp
   QDateTime dt = resultIterator.value(ApiDb::RELATIONS_TIMESTAMP).toDateTime();
   dt.setTimeSpec(Qt::UTC);
 
-  RelationPtr relation(
-    new Relation(
-      _status,
-      newRelationId,
-      _defaultCircularError,
-      "",/*MetadataTags::RelationCollection()*/ //services db doesn't support relation "type" yet
+  RelationPtr relation =
+    std::make_shared<Relation>(
+      _status, newRelationId, _defaultCircularError,
+      "", //services db doesn't support relation "type" yet
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
-      dt.toMSecsSinceEpoch() / 1000));
+      dt.toMSecsSinceEpoch() / 1000);
 
   relation->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::RELATIONS_TAGS)));
   _updateMetadataOnElement(relation);

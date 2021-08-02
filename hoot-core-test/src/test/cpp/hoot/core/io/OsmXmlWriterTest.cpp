@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -55,19 +55,19 @@ public:
   {
     OsmXmlWriter uut;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags1;
     tags1.set("note", "1 & 2");
-    TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags1);
+    TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags1);
     Tags tags2;
     tags2.set("note", "\"3\"");
-    TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags2);
+    TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags2);
     Tags tags3;
     tags3.set("note", "0\n");
-    TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags3);
+    TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags3);
     Tags tags4;
     tags4.set("note", "<2>");
-    TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags4);
+    TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags4);
 
     const QString output = _outputPath + "runEncodeCharsTest-out.osm";
     uut.write(map, output);
@@ -78,15 +78,15 @@ public:
   {
     OsmXmlWriter uut;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags1;
     tags1.set("Note", "Node1");
-    NodePtr node1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags1);
+    NodePtr node1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags1);
     node1->setChangeset(10);
 
     Tags tags2;
     tags2.set("Note", "Node2");
-    NodePtr node2 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags2);
+    NodePtr node2 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags2);
     node2->setId(10);
     node2->setChangeset(10);
 

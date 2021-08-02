@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef GEOMETRIC_RELATIONSHIP_H
 #define GEOMETRIC_RELATIONSHIP_H
@@ -48,7 +48,7 @@ class GeometricRelationship
 
 public:
 
-  typedef enum Type
+  enum Type
   {
     Contains = 0,
     Covers,
@@ -60,10 +60,10 @@ public:
     Overlaps,
     Touches,
     Invalid
-  } Type;
+  };
 
-  GeometricRelationship() : _type(Contains) {}
-  GeometricRelationship(Type type) : _type(type) {}
+  GeometricRelationship() : _type(Contains) { }
+  GeometricRelationship(Type type) : _type(type) { }
 
   bool operator==(GeometricRelationship t) const { return t._type == _type; }
   bool operator!=(GeometricRelationship t) const { return t._type != _type; }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -61,9 +61,7 @@ public:
   OptimalConstrainedFakeMatch() : Match(std::shared_ptr<MatchThreshold>()) {}
   OptimalConstrainedFakeMatch(ElementId eid1, ElementId eid2, double p,
     ConstMatchThresholdPtr threshold) :
-    Match(threshold),
-    _eid1(eid1),
-    _eid2(eid2),
+    Match(threshold, eid1, eid2),
     _p(p)
   {}
 
@@ -80,9 +78,8 @@ public:
     return _c;
   }
 
-  virtual QString getName() const override { return "Fake Match"; }
-
-  virtual QString getClassName() const { return ""; }
+  QString getName() const override { return "Fake Match"; }
+  QString getClassName() const override { return ""; }
 
   virtual double getProbability() const override { return _p; }
 
@@ -112,12 +109,11 @@ public:
     return QString::fromStdString(ss.str());
   }
 
-  virtual QString getDescription() const override { return ""; }
+  QString getDescription() const override { return ""; }
 
 private:
 
   mutable MatchClassification _c;
-  ElementId _eid1, _eid2;
   double _p;
   MatchSet _conflicts;
 };
@@ -155,7 +151,7 @@ public:
   void runFindSubgraphsTest()
   {
     // See this for a visual.
-    // https://insightcloud.digitalglobe.com/redmine/attachments/download/1638/Hootenanny%20-%20Graph%20Based%20Conflation%20-%202013-06-21.pptx
+    // Hootenanny-Graph Based Conflation-2013-06-21.pptx on Redmine
     ElementId a1 = ElementId::way(1);
     ElementId a2 = ElementId::way(2);
     ElementId a3 = ElementId::way(3);
@@ -166,12 +162,12 @@ public:
     ElementId b2 = ElementId::way(5);
     ElementId b3 = ElementId::way(6);
 
-    MatchThresholdPtr mt(new MatchThreshold(0.5, 0.5));
+    MatchThresholdPtr mt = std::make_shared<MatchThreshold>(0.5, 0.5);
     vector<std::shared_ptr<OptimalConstrainedFakeMatch>> fm(4);
-    fm[0].reset(new OptimalConstrainedFakeMatch(a1, b1, 0.8, mt));
-    fm[1].reset(new OptimalConstrainedFakeMatch(a2, b1, 1.0, mt));
-    fm[2].reset(new OptimalConstrainedFakeMatch(a2, b2, 0.9, mt));
-    fm[3].reset(new OptimalConstrainedFakeMatch(a3, b3, 0.9, mt));
+    fm[0] = std::make_shared<OptimalConstrainedFakeMatch>(a1, b1, 0.8, mt);
+    fm[1] = std::make_shared<OptimalConstrainedFakeMatch>(a2, b1, 1.0, mt);
+    fm[2] = std::make_shared<OptimalConstrainedFakeMatch>(a2, b2, 0.9, mt);
+    fm[3] = std::make_shared<OptimalConstrainedFakeMatch>(a3, b3, 0.9, mt);
 
     fm[0]->addConflict(fm[1]);
     fm[1]->addConflict(fm[2]);
@@ -195,8 +191,7 @@ public:
   virtual void setUp()
   {
     MergerFactory::getInstance().reset();
-    MergerFactory::getInstance().registerCreator(
-          MergerCreatorPtr(new OptimalConstrainedFakeCreator()));
+    MergerFactory::getInstance().registerCreator(std::make_shared<OptimalConstrainedFakeCreator>());
   }
 
   virtual void tearDown()
@@ -206,7 +201,6 @@ public:
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OptimalConstrainedMatchesTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OptimalConstrainedMatchesTest, "quick");
 
 }

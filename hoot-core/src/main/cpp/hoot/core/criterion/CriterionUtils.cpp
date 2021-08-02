@@ -19,47 +19,117 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
-
 #include "CriterionUtils.h"
 
-// Hoot
+// hoot
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
-bool CriterionUtils::hasCriterion(const ConstElementPtr& element, const QString& criterionClassName)
+ElementCriterionPtr CriterionUtils::constructCriterion(
+  QStringList& criteriaClassNames, const bool chainCriteria, const bool negate)
 {
-  if (!element || criterionClassName.trimmed().isEmpty())
-  {
-    throw IllegalArgumentException(
-      "The input element is null or the criterion class name is empty.");
-  }
-
-  return _getCrit(criterionClassName)->isSatisfied(element);
+  bool isStreamable = false; // This gets ignored.
+  return constructCriterion(criteriaClassNames, chainCriteria, negate, isStreamable);
 }
 
-ElementCriterionPtr CriterionUtils::_getCrit(const QString& criterionClassName)
+ElementCriterionPtr CriterionUtils::constructCriterion(
+  QStringList& criteriaClassNames, const bool chainCriteria, const bool negate,
+  bool& isStreamable)
 {
-  if (criterionClassName.trimmed().isEmpty())
+  if (criteriaClassNames.isEmpty())
   {
-    throw IllegalArgumentException("The criterion class name is empty.");
+    isStreamable = true;
+    return ElementCriterionPtr();
   }
 
-  ElementCriterionPtr crit =
-    ElementCriterionPtr(
-      Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
-  if (!crit)
+  for (int i = 0; i < criteriaClassNames.size(); i++)
   {
-    throw IllegalArgumentException(
-      "Invalid criterion passed to PoiPolygonInfoCache::hasCriterion: " + criterionClassName);
+    if (!criteriaClassNames.at(i).startsWith(MetadataTags::HootNamespacePrefix()))
+    {
+      QString className = criteriaClassNames[i];
+      className.prepend(MetadataTags::HootNamespacePrefix());
+      criteriaClassNames[i] = className;
+    }
   }
-  return crit;
+
+  ChainCriterionPtr crit;
+
+  if (criteriaClassNames.size() > 1)
+  {
+    if (chainCriteria)
+    {
+      crit = std::make_shared<ChainCriterion>();
+    }
+    else
+    {
+      crit = std::make_shared<OrCriterion>();
+    }
+  }
+
+  ElementCriterionPtr subCrit;
+  isStreamable = true;
+  for (int i = 0; i < criteriaClassNames.size(); i++)
+  {
+    const QString criterionClassName = criteriaClassNames.at(i);
+    LOG_VART(criterionClassName);
+    try
+    {
+      subCrit = Factory::getInstance().constructObject<ElementCriterion>(criterionClassName);
+    }
+    catch (const boost::bad_any_cast&)
+    {
+      throw IllegalArgumentException("Invalid criterion: " + criterionClassName);
+    }
+
+    const OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(subCrit.get());
+    LOG_VART(omc == 0);
+    if (omc)
+    {
+      isStreamable = false;
+    }
+    LOG_VART(isStreamable);
+
+    if (negate)
+    {
+      subCrit = std::make_shared<NotCriterion>(subCrit);
+    }
+    LOG_VART(subCrit.get());
+
+    std::shared_ptr<Configurable> critConfig;
+    if (subCrit.get())
+    {
+      critConfig = std::dynamic_pointer_cast<Configurable>(subCrit);
+    }
+    LOG_VART(critConfig.get());
+    if (critConfig.get())
+    {
+      critConfig->setConfiguration(conf());
+    }
+
+    if (crit)
+    {
+      crit->addCriterion(subCrit);
+    }
+  }
+
+  if (criteriaClassNames.size() == 1)
+  {
+    return subCrit;
+  }
+  else
+  {
+    return crit;
+  }
 }
 
 }

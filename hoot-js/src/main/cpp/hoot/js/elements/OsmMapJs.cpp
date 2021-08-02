@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #define BUILDING_NODE_EXTENSION
 
@@ -51,68 +51,52 @@ Persistent<Function> OsmMapJs::_constructor;
 
 OsmMapJs::OsmMapJs()
 {
-  _setMap(OsmMapPtr(new OsmMap()));
+  _setMap(std::make_shared<OsmMap>());
 }
 
-OsmMapJs::OsmMapJs(OsmMapPtr map)
-{
-  _setMap(map);
-}
-
-void OsmMapJs::Init(Handle<Object> target)
+void OsmMapJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, "OsmMap"));
+  tpl->SetClassName(String::NewFromUtf8(current, "OsmMap").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
   // Prototype
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "clone"),
-      FunctionTemplate::New(current, clone));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElement"),
-      FunctionTemplate::New(current, getElement));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElementCount"),
-      FunctionTemplate::New(current, getElementCount));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getParents"),
-      FunctionTemplate::New(current, getParents));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "removeElement"),
-      FunctionTemplate::New(current, removeElement));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "visit"),
-      FunctionTemplate::New(current, visit));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setIdGenerator"),
-      FunctionTemplate::New(current, setIdGenerator));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "copyProjection"),
-      FunctionTemplate::New(current, copyProjection));
+  tpl->PrototypeTemplate()->Set(current, "clone", FunctionTemplate::New(current, clone));
+  tpl->PrototypeTemplate()->Set(current, "getElement", FunctionTemplate::New(current, getElement));
+  tpl->PrototypeTemplate()->Set(current, "getElementCount", FunctionTemplate::New(current, getElementCount));
+  tpl->PrototypeTemplate()->Set(current, "visit", FunctionTemplate::New(current, visit));
 
-  tpl->PrototypeTemplate()->Set(
-    PopulateConsumersJs::baseClass(),
-    String::NewFromUtf8(current, OsmMap::className().toStdString().data()));
+  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(), toV8(OsmMap::className()));
 
-  _constructor.Reset(current, tpl->GetFunction());
-  target->Set(String::NewFromUtf8(current, "OsmMap"), ToLocal(&_constructor));
+  _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
+  target->Set(context, toV8("OsmMap"), ToLocal(&_constructor));
 }
 
-Handle<Object> OsmMapJs::create(ConstOsmMapPtr map)
+Local<Object> OsmMapJs::create(ConstOsmMapPtr map)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   OsmMapJs* from = ObjectWrap::Unwrap<OsmMapJs>(result);
   from->_setMap(map);
 
   return scope.Escape(result);
 }
 
-Handle<Object> OsmMapJs::create(OsmMapPtr map)
+Local<Object> OsmMapJs::create(OsmMapPtr map)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   OsmMapJs* from = ObjectWrap::Unwrap<OsmMapJs>(result);
   from->_setMap(map);
 
@@ -134,23 +118,42 @@ void OsmMapJs::clone(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   OsmMapJs* from = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
-  OsmMapPtr newMap(new OsmMap(from->getMap()));
+  // The const map always takes precedence over the non-const map. If we have a const map populated
+  // on our js object, then the map is treated as const.
+  ConstOsmMapPtr newConstMap;
+  OsmMapPtr newMap;
+  if (from->isConst())
+  {
+    newConstMap = std::make_shared<OsmMap>(from->getConstMap());
+  }
+  else
+  {
+    newMap = std::make_shared<OsmMap>(from->getMap());
+  }
 
   const unsigned argc = 1;
-  Handle<Value> argv[argc] = { args[0] };
-  Local<Object> result = ToLocal(&_constructor)->NewInstance(argc, argv);
+  Local<Value> argv[argc] = { args[0] };
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context, argc, argv).ToLocalChecked();
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(result);
-  obj->_map = newMap;
+  if (newConstMap)
+  {
+    obj->_setMap(newConstMap);
+  }
+  else
+  {
+    obj->_setMap(newMap);
+  }
 
   args.GetReturnValue().Set(result);
 }
 
 OsmMapPtr& OsmMapJs::getMap()
 {
-  if (_map.get() == 0 && _constMap.get())
+  if (_map.get() == nullptr && _constMap.get())
   {
     throw IllegalArgumentException("This map is const and may not be modified.");
   }
@@ -193,41 +196,11 @@ void OsmMapJs::getElementCount(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(Number::New(current, obj->getConstMap()->getElementCount()));
 }
 
-void OsmMapJs::getParents(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  try
-  {
-    OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-    ElementId eid = toCpp<ElementId>(args[0]->ToObject());
-
-    args.GetReturnValue().Set(toV8(obj->getConstMap()->getParents(eid)));
-  }
-  catch (const HootException& e)
-  {
-    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
-  }
-}
-
-void OsmMapJs::removeElement(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-  ElementId eid = toCpp<ElementId>(args[0]);
-
-  RemoveElementByEid::removeElement(obj->getMap(), eid);
-
-  args.GetReturnValue().SetUndefined();
-}
-
 void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   try
   {
@@ -235,7 +208,7 @@ void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
 
     if (args[0]->IsFunction())
     {
-      Local<Function> func(Handle<Function>::Cast(args[0]));
+      Local<Function> func(Local<Function>::Cast(args[0]));
 
       JsFunctionVisitor v;
       v.addFunction(current, func);
@@ -245,7 +218,7 @@ void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
     else
     {
       std::shared_ptr<ElementVisitor> v =
-        ObjectWrap::Unwrap<ElementVisitorJs>(args[0]->ToObject())->getVisitor();
+        ObjectWrap::Unwrap<ElementVisitorJs>(args[0]->ToObject(context).ToLocalChecked())->getVisitor();
 
       map->getMap()->visitRw(*v);
     }
@@ -256,37 +229,6 @@ void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
     LOG_VARE(err.getWhat());
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
   }
-}
-
-void OsmMapJs::setIdGenerator(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-  if (obj->getMap())
-  {
-    obj->getMap()->setIdGenerator(toCpp<std::shared_ptr<IdGenerator>>(args[0]));
-  }
-
-  args.GetReturnValue().SetUndefined();
-}
-
-void OsmMapJs::copyProjection(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-  if (obj->getMap())
-  {
-    ConstOsmMapPtr mapToCopyFrom = toCpp<ConstOsmMapPtr>(args[0]);
-    obj->getMap()->setProjection(
-      std::shared_ptr<OGRSpatialReference>(
-        new OGRSpatialReference(*mapToCopyFrom->getProjection())));
-  }
-
-  args.GetReturnValue().SetUndefined();
 }
 
 }

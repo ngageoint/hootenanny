@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -33,7 +33,7 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -64,7 +64,7 @@ public:
 
   void runRelationTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, true, true, "test-files/ops/ElementIdToVersionMapper/runBasicTest-in.osm");
 
@@ -77,7 +77,7 @@ public:
 
     // Write two tags to the relation and its members only.
 
-    RecursiveSetTagValueOp uut(keys, values, ElementCriterionPtr(new RelationCriterion()));
+    RecursiveSetTagValueOp uut(keys, values, std::make_shared<RelationCriterion>());
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -88,7 +88,7 @@ public:
 
   void runNoCritTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, true, true, "test-files/ops/ElementIdToVersionMapper/runBasicTest-in.osm");
 

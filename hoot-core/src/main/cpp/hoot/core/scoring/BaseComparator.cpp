@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "BaseComparator.h"
@@ -32,15 +32,14 @@
 #include <geos/geom/Point.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/operation/distance/DistanceOp.h>
-using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/geometry/GeometryPainter.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/OpenCv.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
@@ -49,16 +48,19 @@ using namespace geos::operation::distance;
 #include <QPainter>
 
 using namespace geos::geom;
+using namespace geos::operation::distance;
 
 namespace hoot
 {
 
-BaseComparator::BaseComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2)
+BaseComparator::BaseComparator(
+  const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2) :
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _init(map1, map2);
 }
 
-void BaseComparator::_calculateColor(double v, double max, QRgb& c)
+void BaseComparator::_calculateColor(double v, double max, QRgb& c) const
 {
   if (v >= 0.0)
   {
@@ -68,17 +70,17 @@ void BaseComparator::_calculateColor(double v, double max, QRgb& c)
     }
     if (v < max / 3.0)
     {
-      int r = v / (max / 3.0) * 255.0;
+      int r = (int)((v / (max / 3.0) * 255.0));
       c = qRgb(r, 0, 0);
     }
     else if (v < max * 2.0 / 3.0)
     {
-      int r = (v - (max / 3.0)) / (max / 3.0) * 255.0;
+      int r = (int)((v - (max / 3.0)) / (max / 3.0) * 255.0);
       c = qRgb(255, r, 0);
     }
     else if (v <= max)
     {
-      int r = (v - (max * 2.0 / 3.0)) / (max / 3.0) * 255.0;
+      int r = (int)((v - (max * 2.0 / 3.0)) / (max / 3.0) * 255.0);
       c = qRgb(255, 255, r);
     }
     else
@@ -92,7 +94,7 @@ void BaseComparator::_calculateColor(double v, double max, QRgb& c)
   }
 }
 
-double BaseComparator::_calculateError(const cv::Mat& image1, const cv::Mat& image2)
+double BaseComparator::_calculateError(const cv::Mat& image1, const cv::Mat& image2) const
 {
   double errorSum = 0.0;
   double image1Sum = 0.0;
@@ -106,14 +108,12 @@ double BaseComparator::_calculateError(const cv::Mat& image1, const cv::Mat& ima
     image1Sum += image1Data[i];
     image2Sum += image2Data[i];
   }
-
   return errorSum / (image1Sum + image2Sum);
 }
 
-void BaseComparator::_calculateRingColor(double v, double, QRgb& c)
+void BaseComparator::_calculateRingColor(double v, double, QRgb& c) const
 {
   double m = v / 60.0;
-  //double m = v / 2.7;
   if (v >= 0.0)
   {
     if (m >= 0.0 && m <= 10.0)
@@ -143,22 +143,21 @@ void BaseComparator::_calculateRingColor(double v, double, QRgb& c)
   }
 }
 
-Coordinate BaseComparator::_findNearestPointOnFeature(const std::shared_ptr<OsmMap>& map, const Coordinate& c)
+Coordinate BaseComparator::_findNearestPointOnFeature(
+  const std::shared_ptr<OsmMap>& map, const Coordinate& c)
 {
   Coordinate result;
 
-  // find the nearest feature
+  // Find the nearest feature.
   long wId = map->getIndex().findNearestWay(c);
   WayPtr w = map->getWay(wId);
 
-  // find the nearest point on that feature.
+  // Find the nearest point on that feature.
   std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
   std::shared_ptr<LineString> ls = ElementToGeometryConverter(map).convertToLineString(w);
-  CoordinateSequence* cs = DistanceOp::closestPoints(p.get(), ls.get());
+  std::unique_ptr<CoordinateSequence> cs = DistanceOp::nearestPoints(p.get(), ls.get());
 
   cs->getAt(0, result);
-
-  delete cs;
 
   return result;
 }
@@ -175,34 +174,43 @@ void BaseComparator::_init(const std::shared_ptr<OsmMap>& map1, const std::share
   _worldBounds.Merge(CalculateMapBoundsVisitor::getBounds(_map1));
   _worldBounds.Merge(CalculateMapBoundsVisitor::getBounds(_map2));
 
-  _mapP1.reset(new OsmMap(_map1));
+  _mapP1 = std::make_shared<OsmMap>(_map1);
   MapProjector::projectToOrthographic(_mapP1, _worldBounds);
-  _mapP2.reset(new OsmMap(_map2));
+  _mapP2 = std::make_shared<OsmMap>(_map2);
   MapProjector::projectToOrthographic(_mapP2, _worldBounds);
 }
 
-void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool gradient)
+void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool gradient) const
 {
   if (max <= 0.0)
   {
+    int pixelCtr = 0;
     for (int y = 0; y < _height; y++)
     {
-      float* row = image.ptr<float>(y);
+      const float* row = image.ptr<float>(y);
       for (int x = 0; x < _width; x++)
       {
         max = std::max((double)row[x], max);
+
+        pixelCtr++;
+        if (pixelCtr % (_taskStatusUpdateInterval * 1000) == 0)
+        {
+          PROGRESS_STATUS(
+            "Calculated maximum value for " << StringUtils::formatLargeNumber(pixelCtr) << " of " <<
+            StringUtils::formatLargeNumber(_height * _width) << " pixels.");
+        }
       }
     }
   }
 
   QImage qImage(_width, _height, QImage::Format_ARGB32);
-
   QRgb rgb = 0;
   if (max > 0.0)
   {
+    int pixelCtr = 0;
     for (int y = 0; y < _height; y++)
     {
-      float* row = image.ptr<float>(y);
+      const float* row = image.ptr<float>(y);
       for (int x = 0; x < _width; x++)
       {
         if (gradient)
@@ -214,6 +222,14 @@ void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool g
           _calculateRingColor(row[x], max, rgb);
         }
         qImage.setPixel(x, y, rgb);
+
+        pixelCtr++;
+        if (pixelCtr % (_taskStatusUpdateInterval * 1000) == 0)
+        {
+          PROGRESS_STATUS(
+            "Wrote " << StringUtils::formatLargeNumber(pixelCtr) << " of " <<
+            StringUtils::formatLargeNumber(_height * _width) << " pixels.");
+        }
       }
     }
   }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmSchemaLoaderFactory.h"
@@ -43,13 +43,13 @@ OsmSchemaLoaderFactory& OsmSchemaLoaderFactory::getInstance()
   return instance;
 }
 
-std::shared_ptr<OsmSchemaLoader> OsmSchemaLoaderFactory::createLoader(QString url)
+std::shared_ptr<OsmSchemaLoader> OsmSchemaLoaderFactory::createLoader(QString url) const
 {
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmSchemaLoader::className());
   for (size_t i = 0; i < names.size(); ++i)
   {
-    std::shared_ptr<OsmSchemaLoader> l(
-      Factory::getInstance().constructObject<OsmSchemaLoader>(names[i]));
+    std::shared_ptr<OsmSchemaLoader> l =
+      Factory::getInstance().constructObject<OsmSchemaLoader>(names[i]);
 
     if (l->isSupported(url))
     {

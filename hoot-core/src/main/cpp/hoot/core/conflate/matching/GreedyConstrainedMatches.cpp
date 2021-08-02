@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "GreedyConstrainedMatches.h"
 
@@ -48,7 +48,7 @@ public:
 
   MatchComparator(const vector<ConstMatchPtr>& matches) : _matches(matches) { }
 
-  bool operator()(size_t i, size_t j)
+  bool operator()(size_t i, size_t j) const
   {
     return _matches[i]->getScore() > _matches[j]->getScore();
   }
@@ -63,7 +63,7 @@ vector<ConstMatchPtr> GreedyConstrainedMatches::calculateSubset()
   _score = -1;
   vector<ConstMatchPtr> result;
 
-  if (_matches.size() == 0)
+  if (_matches.empty())
   {
     LOG_DEBUG("No match conflicts found.");
     return result;

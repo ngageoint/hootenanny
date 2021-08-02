@@ -29,8 +29,8 @@ unix:QMAKE_CXXFLAGS += -Wno-deprecated
 unix:QT -= gui
 UI_DIR = tmp/ui
 MOC_DIR = tmp/moc
-release:OBJECTS_DIR = tmp/obj/release
-else:OBJECTS_DIR = tmp/obj/debug
+release:OBJECTS_DIR = tmp/release
+else:OBJECTS_DIR = tmp/debug
 DEPENDPATH += ./src/main/cpp/
 INCLUDEPATH += $${DEPENDPATH}
 win32:INCLUDEPATH += $${PWD}/../../
@@ -45,19 +45,8 @@ win32 {
 }
 MISC_FILES += Tgs.pro
 
-newmat {
-HEADERS += \
-    src/main/cpp/tgs/FeatureReduction/Jacobi.h \
-    src/main/cpp/tgs/FeatureReduction/PrincipalComponentsAnalysis.h \
-
-SOURCES += \
-    src/main/cpp/tgs/FeatureReduction/Jacobi.cpp \
-    src/main/cpp/tgs/FeatureReduction/PrincipalComponentsAnalysis.cpp \
-
-cppunit:SOURCES += \
-    src/test/cpp/tgs/FeatureReduction/PrincipalComponentsAnalysisTest.cpp \
-
-}
+# When this list of classes is updated, also update docs/CoreAPI.dox. Maybe eventually we can
+# automate the process. Fortunately, what we use from tgs/tbs doesn't change very often.
 
 HEADERS += \
     src/main/cpp/tgs/HashMap.h \
@@ -81,7 +70,6 @@ HEADERS += \
     src/main/cpp/tgs/Interpolation/IdwInterpolator.h \
     src/main/cpp/tgs/Interpolation/Interpolator.h \
     src/main/cpp/tgs/Interpolation/KernelEstimationInterpolator.h \
-    src/main/cpp/tgs/Io/StdIoDevice.h \
     src/main/cpp/tgs/Optimization/FitnessFunction.h \
     src/main/cpp/tgs/Optimization/NelderMead.h \
     src/main/cpp/tgs/Optimization/SimulatedAnnealing.h \
@@ -103,12 +91,9 @@ HEADERS += \
     src/main/cpp/tgs/RandomForest/RandomForestThread.h \
     src/main/cpp/tgs/RandomForest/RandomForestUtilities.h \
     src/main/cpp/tgs/RasterOps/Image.hpp \
-    src/main/cpp/tgs/RasterOps/MaxChannelCombiner.h \
     src/main/cpp/tgs/RStarTree/Box.h \
-    src/main/cpp/tgs/RStarTree/DistanceIterator.h \
     src/main/cpp/tgs/RStarTree/HilbertCurve.h \
     src/main/cpp/tgs/RStarTree/HilbertRTree.h \
-    src/main/cpp/tgs/RStarTree/InternalRStarTreeWrapper.h \
     src/main/cpp/tgs/RStarTree/IntersectionIterator.h \
     src/main/cpp/tgs/RStarTree/Iterator.h \
     src/main/cpp/tgs/RStarTree/KnnIterator.h \
@@ -118,12 +103,10 @@ HEADERS += \
     src/main/cpp/tgs/RStarTree/PageStore.h \
     src/main/cpp/tgs/RStarTree/RStarTree.h \
     src/main/cpp/tgs/RStarTree/RStarTreePrinter.h \
-    src/main/cpp/tgs/RStarTree/RStarTreeWrapper.h \
     src/main/cpp/tgs/RStarTree/RTreeNode.h \
     src/main/cpp/tgs/RStarTree/RTreeNodeStore.h \
     src/main/cpp/tgs/Statistics/Normal.h \
     src/main/cpp/tgs/Statistics/Random.h \
-    src/main/cpp/tgs/System/DisableCerr.h \
     src/main/cpp/tgs/System/DisableCout.h \
     src/main/cpp/tgs/System/SystemInfo.h \
     src/main/cpp/tgs/System/Time.h \
@@ -131,26 +114,18 @@ HEADERS += \
 
 win32:HEADERS += \
     src/main/cpp/tgs/RStarTree/FilePageStore.h \
-    src/main/cpp/tgs/SpinImage/GroundPlaneRemover.h \
-    src/main/cpp/tgs/SpinImage/NormalEstimator.h \
 
 SOURCES += \
     src/main/cpp/tgs/StreamUtils.cpp \
     src/main/cpp/tgs/Version.cpp \
-    src/main/cpp/tgs/BigContainers/BigMap.cpp \
-    src/main/cpp/tgs/BigContainers/BasicBloomFilter.cpp \
     src/main/cpp/tgs/BigContainers/Stxxl.cpp \
     src/main/cpp/tgs/DelaunayTriangulation/DelaunayTriangulation.cpp \
-    src/main/cpp/tgs/DisjointSet/DisjointSet.cpp \
     src/main/cpp/tgs/Interpolation/BaseInterpolator.cpp \
     src/main/cpp/tgs/Interpolation/DelaunayInterpolator.cpp \
     src/main/cpp/tgs/Interpolation/IdwInterpolator.cpp \
     src/main/cpp/tgs/Interpolation/KernelEstimationInterpolator.cpp \
-    src/main/cpp/tgs/Io/StdIoDevice.cpp \
-    src/main/cpp/tgs/Optimization/NelderMead.cpp \
     src/main/cpp/tgs/Optimization/SimulatedAnnealing.cpp \
     src/main/cpp/tgs/Optimization/State.cpp \
-    src/main/cpp/tgs/Optimization/StateDescription.cpp \
     src/main/cpp/tgs/Optimization/VariableDescription.cpp \
     src/main/cpp/tgs/ProbablePath/ProbablePathCalculator.cpp \
     src/main/cpp/tgs/RandomForest/DataFrame.cpp \
@@ -165,11 +140,8 @@ SOURCES += \
     src/main/cpp/tgs/RandomForest/MultithreadedRandomForestManager.cpp \
     src/main/cpp/tgs/RandomForest/RandomForestThread.cpp \
     src/main/cpp/tgs/RandomForest/RandomForestUtilities.cpp \
-    src/main/cpp/tgs/RasterOps/MaxChannelCombiner.cpp \
     src/main/cpp/tgs/RStarTree/Box.cpp \
-    src/main/cpp/tgs/RStarTree/DistanceIterator.cpp \
     src/main/cpp/tgs/RStarTree/HilbertRTree.cpp \
-    src/main/cpp/tgs/RStarTree/InternalRStarTreeWrapper.cpp \
     src/main/cpp/tgs/RStarTree/IntersectionIterator.cpp \
     src/main/cpp/tgs/RStarTree/KnnIterator.cpp \
     src/main/cpp/tgs/RStarTree/KnnIteratorNd.cpp \
@@ -177,16 +149,13 @@ SOURCES += \
     src/main/cpp/tgs/RStarTree/Page.cpp \
     src/main/cpp/tgs/RStarTree/RStarTree.cpp \
     src/main/cpp/tgs/RStarTree/RStarTreePrinter.cpp \
-    src/main/cpp/tgs/RStarTree/RStarTreeWrapper.cpp \
     src/main/cpp/tgs/RStarTree/RTreeNode.cpp \
     src/main/cpp/tgs/RStarTree/RTreeNodeStore.cpp \
     src/main/cpp/tgs/Statistics/Normal.cpp \
     src/main/cpp/tgs/Statistics/Random.cpp \
-    src/main/cpp/tgs/System/DisableCerr.cpp \
     src/main/cpp/tgs/System/DisableCout.cpp \
     src/main/cpp/tgs/System/SystemInfo.cpp \
     src/main/cpp/tgs/System/Time.cpp \
-
 
 cppunit:SOURCES += \
     src/test/cpp/tgs/LruCacheTest.cpp \
@@ -198,7 +167,6 @@ cppunit:SOURCES += \
     src/test/cpp/tgs/DisjointSet/DisjointSetMapTest.cpp \
     src/test/cpp/tgs/Interpolation/KernelEstimationInterpolatorTest.cpp \
     src/test/cpp/tgs/Interpolation/DelaunayInterpolatorTest.cpp \
-    src/test/cpp/tgs/Io/StdIoDeviceTest.cpp \
     src/test/cpp/tgs/Optimization/NelderMeadTest.cpp \
     src/test/cpp/tgs/Optimization/SimulatedAnnealingTest.cpp \
     src/test/cpp/tgs/ProbablePath/ProbablePathCalculatorTest.cpp \
@@ -208,7 +176,6 @@ cppunit:SOURCES += \
     src/test/cpp/tgs/RandomForest/RandomTreeTest.cpp \
     src/test/cpp/tgs/RStarTree/HilbertRTreeTest.cpp \
     src/test/cpp/tgs/RStarTree/RTreeNodeStoreTest.cpp \
-    src/test/cpp/tgs/RStarTree/DistanceIteratorTest.cpp \
     src/test/cpp/tgs/RStarTree/RTreeNodeTest.cpp \
     src/test/cpp/tgs/RStarTree/RStarTreeTest.cpp \
     src/test/cpp/tgs/RStarTree/BoxTest.cpp \

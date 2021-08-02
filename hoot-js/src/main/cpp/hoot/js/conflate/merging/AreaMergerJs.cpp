@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "AreaMergerJs.h"
 
@@ -53,17 +53,18 @@ void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Iso
   LOG_INFO("Merging areas...");
 
   // instantiate the script merger
-  std::shared_ptr<PluginContext> script(new PluginContext());
-  v8::HandleScope handleScope(current);
-  v8::Context::Scope context_scope(script->getContext(current));
+  std::shared_ptr<PluginContext> script = std::make_shared<PluginContext>();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(script->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
   script->loadScript(ConfPath::search("Area.js", "rules"), "plugin");
-  v8::Handle<v8::Object> global = script->getContext(current)->Global();
-  if (global->Has(String::NewFromUtf8(current, "plugin")) == false)
+  Local<Object> global = script->getContext(current)->Global();
+  if (global->Has(context, toV8("plugin")).ToChecked() == false)
   {
     throw IllegalArgumentException("Expected the script to have exports.");
   }
-  Handle<Value> pluginValue = global->Get(String::NewFromUtf8(current, "plugin"));
-  Persistent<Object> plugin(current, Handle<Object>::Cast(pluginValue));
+  Local<Value> pluginValue = global->Get(context, toV8("plugin")).ToLocalChecked();
+  Persistent<Object> plugin(current, Local<Object>::Cast(pluginValue));
   if (plugin.IsEmpty() || ToLocal(&plugin)->IsObject() == false)
   {
     throw IllegalArgumentException("Expected plugin to be a valid object.");
@@ -84,7 +85,7 @@ void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Iso
       LOG_TRACE("Merging way area: " << way << " into " << mergeTargetId);
 
       std::set<std::pair<ElementId, ElementId>> matches;
-      matches.insert(std::pair<ElementId,ElementId>(mergeTargetId, ElementId::way(way->getId())));
+      matches.emplace(mergeTargetId, ElementId::way(way->getId()));
       // apply script merging
       ScriptMerger merger(script, plugin, matches);
       std::vector<std::pair<ElementId, ElementId>> replacedWays;
@@ -106,8 +107,7 @@ void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Iso
       LOG_TRACE("Merging relation area: " << relation << " into " << mergeTargetId);
 
       std::set<std::pair<ElementId, ElementId>> matches;
-      matches.insert(
-        std::pair<ElementId,ElementId>(mergeTargetId, ElementId::relation(relation->getId())));
+      matches.emplace(mergeTargetId, ElementId::relation(relation->getId()));
       // apply script merging
       ScriptMerger merger(script, plugin, matches);
       std::vector<std::pair<ElementId, ElementId>> replacedRelations;

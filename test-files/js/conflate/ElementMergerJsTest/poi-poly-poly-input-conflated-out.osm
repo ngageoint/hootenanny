@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-0.364455754" minlon="42.543979803" maxlat="-0.363626616" maxlon="42.544178957"/>
+    <node visible="true" id="-253457425" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3644557540000000" lon="42.5441231329999994"/>
+    <node visible="true" id="-253457424" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3644458630000000" lon="42.5441787890000001"/>
+    <node visible="true" id="-253457423" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3643228170000000" lon="42.5441571639999978"/>
+    <node visible="true" id="-253457422" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3643189610000000" lon="42.5441789569999997"/>
+    <node visible="true" id="-253457421" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3636266160000000" lon="42.5440572520000018"/>
+    <node visible="true" id="-253457420" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3636403620000000" lon="42.5439798029999992"/>
+    <way visible="true" id="-251423316" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-253457420"/>
+        <nd ref="-253457421"/>
+        <nd ref="-253457422"/>
+        <nd ref="-253457423"/>
+        <nd ref="-253457424"/>
+        <nd ref="-253457425"/>
+        <nd ref="-253457420"/>
+        <tag k="amenity" v="prison"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="note" v="poi1;building1"/>
+    </way>
+</osm>

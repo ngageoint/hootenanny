@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -44,7 +44,6 @@
 // Tgs
 #include <tgs/System/Time.h>
 
-
 using namespace hoot::hybrid;
 using namespace std;
 
@@ -54,6 +53,7 @@ namespace hoot
 class FqDummyData
 {
 public:
+
   FqDummyData() {}
   FqDummyData(const FqDummyData& dd) : _str(dd._str) {}
   FqDummyData(const char* s) : _str(s) {}
@@ -232,7 +232,7 @@ public:
 
   void runRandomQueryTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmPbfReader(true).read("test-files/index/metric-hybrid/TinyGeoNamesOrg.osm.pbf", map);
 
     set<QString> bag;

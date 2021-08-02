@@ -1,0 +1,9 @@
+{"version": 0.6,"generator": "Hootenanny","elements": [
+{"type":"node","id":-5,"lat":0.4999999999845325,"lon":0.5004491746307691},
+{"type":"node","id":-4,"lat":0.49999999993813,"lon":0.500898349261566},
+{"type":"node","id":-3,"lat":0.5,"lon":0.5},
+{"type":"node","id":-2,"lat":0.5000452184238038,"lon":0.5004491746338422},
+{"type":"node","id":-1,"lat":0.5000452184392712,"lon":0.5},
+{"type":"way","id":-6,"nodes":[-2,-4],"tags":{"highway":"footway","uuid":"r","error:circular":"15"}},
+{"type":"way","id":-4,"nodes":[-1,-2],"tags":{"highway":"road","uuid":"w1;r","error:circular":"15"}}]
+}

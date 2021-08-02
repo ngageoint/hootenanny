@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ConnectedRelationMemberFinder.h"
@@ -54,13 +54,10 @@ bool ConnectedRelationMemberFinder::haveConnectedWayMembers(
         {
           ConstWayPtr way1 = _map->getWay(elementId1);
           ConstWayPtr way2 = _map->getWay(elementId1);
-          if (way1 && way2)
+          if (way1 && way2 && SharedWayNodeFinder::waysShareEndNode(way1, way2, true))
           {
-            if (SharedWayNodeFinder::waysShareEndNode(way1, way2, true))
-            {
-              LOG_TRACE("Found shared end node.");
-              return true;
-            }
+            LOG_TRACE("Found shared end node.");
+            return true;
           }
         }
       }

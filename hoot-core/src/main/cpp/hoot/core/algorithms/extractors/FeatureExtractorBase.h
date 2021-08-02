@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef FEATUREEXTRACTORBASE_H
 #define FEATUREEXTRACTORBASE_H
@@ -33,7 +33,8 @@ namespace hoot
 {
 
 /**
- * Base class for feature extractors, which compare two feature and provide a metric score
+ * @brief The FeatureExtractorBase class is the base class for feature extractors, which compare two
+ * feature and provide a metric score.
  */
 class FeatureExtractorBase : public FeatureExtractor
 {
@@ -47,13 +48,12 @@ public:
   static double nullValue() { return -999999999; }
 
   /**
-   * Returns the factor type for this feature/factor (Nominal or Numeric).
+   * @see FeatureExtractor
    */
   Tgs::DataFrame::FactorType getFactorType() const override
   { return Tgs::DataFrame::Numerical; }
-
   /**
-   * Returns the null treatment for this feature/factor (NullAsValue or NullAsMissingValue).
+   * @see FeatureExtractor
    */
   Tgs::DataFrame::NullTreatment getNullTreatment() const override
   {

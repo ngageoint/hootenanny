@@ -19,29 +19,28 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "SparkJsonWriter.h"
 
 // geos
 #include <geos/geom/Envelope.h>
 
-using namespace geos::geom;
-
 // hoot
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 
 // Qt
 #include <QStringBuilder>
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -57,7 +56,7 @@ void SparkJsonWriter::open(const QString& fileName)
 {
   close();
 
-  _fp.reset(new QFile());
+  _fp = std::make_shared<QFile>();
   _fp->setFileName(fileName);
   if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {
@@ -77,7 +76,7 @@ void SparkJsonWriter::open(const QString& fileName)
       }
       else
       {
-        _bounds.reset(new SearchBoundsCalculator(sbc));
+        _bounds = std::make_shared<SearchBoundsCalculator>(sbc);
       }
     }
   }

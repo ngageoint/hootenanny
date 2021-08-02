@@ -19,16 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "WayJoiner.h"
 
 //  Hoot
 #include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/BridgeCriterion.h>
+#include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -65,24 +67,24 @@ void WayJoiner::join(const OsmMapPtr& map)
 
   //  Join back any ways with parent ids
   _joinParentChild();
-  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-parent-child-1");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-join-parent-child-1");
 
   //  Join any siblings that have the same parent id but the parent isn't connected
   _joinSiblings();
-  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-siblings");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-join-siblings");
 
   //  Rejoin any ways that are now connected to their parents
   _joinParentChild();
-  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-parent-child-2");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-join-parent-child-2");
 
   //  Run one last join on ways that share a node and have a parent id
   _joinAtNode();
-  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-at-node");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-join-at-node");
 
   if (_writePidToChildId)
   {
     _writeParentIdsToChildIds();
-    OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-write-parent-ids-to-child-ids");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-write-parent-ids-to-child-ids");
   }
 
   LOG_VARD(_leavePid);
@@ -90,7 +92,7 @@ void WayJoiner::join(const OsmMapPtr& map)
   {
     //  Clear out any remaining unjoined parent ids
     _resetParents();
-    OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-remove-parent-ids");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-remove-parent-ids");
   }
 }
 
@@ -209,9 +211,9 @@ void WayJoiner::_joinAtNode()
       //  Find all ways connected to this node
       const set<long>& way_ids = nodeToWayMap->getWaysByNode(*e);
       LOG_VART(way_ids);
-      for (set<long>::const_iterator ways = way_ids.begin(); ways != way_ids.end(); ++ways)
+      for (set<long>::const_iterator w = way_ids.begin(); w != way_ids.end(); ++w)
       {
-        WayPtr child = _map->getWay(*ways);
+        WayPtr child = _map->getWay(*w);
         if (child && way->getId() != child->getId() && _areJoinable(way, child))
         {
           LOG_VART(child->getElementId());
@@ -257,7 +259,7 @@ bool WayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2) const
     //  What isn't joinable is one is UNKNOWN1 and the other is UNKNOWN2 or vice-a-versa
 }
 
-void WayJoiner::_writeParentIdsToChildIds()
+void WayJoiner::_writeParentIdsToChildIds() const
 {
   WayMap ways = _map->getWays();
   QSet<long> pidsUsed;
@@ -272,7 +274,7 @@ void WayJoiner::_writeParentIdsToChildIds()
       LOG_TRACE(
         "Setting parent ID: " << ElementId(ElementType::Way, pid) << " on: " <<
         way->getElementId());
-      ElementPtr newWay(way->clone());
+      ElementPtr newWay = way->clone();
       newWay->setId(pid);
       if (newWay->hasTag(MetadataTags::HootId()))
       {
@@ -284,7 +286,7 @@ void WayJoiner::_writeParentIdsToChildIds()
   }
 }
 
-void WayJoiner::_resetParents()
+void WayJoiner::_resetParents() const
 {
   WayMap ways = _map->getWays();
   //  Find all ways that have a split parent id and reset them
@@ -434,7 +436,7 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
   vector<long> parent_nodes = parent->getNodeIds();
 
   //  Make sure that there are nodes in the ways
-  if (parent_nodes.size() == 0 || child_nodes.size() == 0)
+  if (parent_nodes.empty() || child_nodes.empty())
   {
     LOG_TRACE(
       "One or more of the ways: " << parent->getElementId() << " and " << child->getElementId() <<
@@ -442,7 +444,7 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
     return false;
   }
 
-  //  First make sure that they begin or end at the same node
+  //  First, make sure that they begin or end at the same node.
   bool parentFirst;
   if (child_nodes[0] == parent_nodes[parent_nodes.size() - 1])
     parentFirst = true;
@@ -457,6 +459,21 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
   }
   LOG_VART(parentFirst);
 
+  //  Don't join bridges and non-bridges
+  std::vector<ConstElementPtr> elements;
+  elements.push_back(parent);
+  elements.push_back(child);
+  const bool onlyOneIsABridge =
+    CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, OsmMapPtr(), 1, true);
+  if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() &&
+      onlyOneIsABridge)
+  {
+    LOG_TRACE(
+      "Only one of the features: " << parent->getElementId() << " and " <<
+      child->getElementId() << " to be joined is a bridge. Skipping join.");
+    return false;
+  }
+
   // Don't join area ways; moved this to here, as its a little more expensive than the calcs done
   // above
   AreaCriterion areaCrit;
@@ -468,7 +485,6 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
     return false;
   }
 
-
   //  Remove the split parent id
   child->resetPid();
 
@@ -476,6 +492,7 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
   Tags pTags = parent->getTags();
   Tags cTags = child->getTags();
   Tags tags = TagMergerFactory::mergeTags(pTags, cTags, ElementType::Way);
+  LOG_VART(tags);
   parent->setTags(tags);
 
   //  Remove the duplicate node id of the overlap

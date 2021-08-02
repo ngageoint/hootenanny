@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // GEOS
@@ -74,15 +74,16 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read(_inputPath + "MaximalNearestSubline.osm", map);
 
-    OsmMapPtr map2(new OsmMap(map->getProjection()));
+    OsmMapPtr map2 = std::make_shared<OsmMap>(map->getProjection());
 
     std::shared_ptr<OGRSpatialReference> srs =
         MapProjector::createAeacProjection(CalculateMapBoundsVisitor::getBounds(map));
+    srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     MapProjector::project(map, srs);
 
     stringstream ss;
@@ -123,7 +124,7 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "MaximalNearestSubline2.osm", map);
 
@@ -147,13 +148,13 @@ public:
     left->setTag("name", "right");
     map->addWay(right);
 
-    WayPtr w = WayAverager::average(map, right, left);
+    WayPtr w = WayAverager::replaceWaysWithAveragedWay(map, right, left);
     w->setStatus(Status::Conflated);
     w->setTag("name", "average");
     map->addWay(w);
 
     {
-      OsmMapPtr wgs84(new OsmMap(map));
+      OsmMapPtr wgs84 = std::make_shared<OsmMap>(map);
       MapProjector::projectToWgs84(wgs84);
       OsmXmlWriter writer;
       writer.setIncludeCompatibilityTags(false);
@@ -162,16 +163,15 @@ public:
       writer.write(wgs84, _outputPath + "MaximalNearestSubline2TestOutput.osm");
     }
 
-    HOOT_FILE_EQUALS( _inputPath + "MaximalNearestSubline2TestOutput.osm",
+    HOOT_FILE_EQUALS(_inputPath + "MaximalNearestSubline2TestOutput.osm",
                      _outputPath + "MaximalNearestSubline2TestOutput.osm");
   }
-
 
   void oneShortTest()
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "MaximalNearestSubline2.osm", map);
 
@@ -197,34 +197,24 @@ public:
     right->setTag("name", "right");
     map->addWay(right);
 
-    WayPtr w = WayAverager::average(map, right, left);
+    WayPtr w = WayAverager::replaceWaysWithAveragedWay(map, right, left);
     w->setStatus(Status::Conflated);
     w->setTag("name", "average");
     map->addWay(w);
 
     {
-      OsmMapPtr wgs84(new OsmMap(map));
+      OsmMapPtr wgs84 = std::make_shared<OsmMap>(map);
       MapProjector::projectToWgs84(wgs84);
       OsmXmlWriter writer;
       QString fn = QString(_outputPath + "MaximalNearestSublineOneShortTestOutput.osm");
       writer.write(wgs84, fn);
     }
 
-//    QFile fp("test-files/algorithms/MaximalNearestSublineOneShortTestOutput.osm");
-//    fp.open(QIODevice::ReadOnly);
-//    QString s1 = fp.readAll();
-
-//    QFile fp2("test-output/algorithms/MaximalNearestSublineOneShortTestOutput.osm");
-//    fp2.open(QIODevice::ReadOnly);
-//    QString s2 = fp2.readAll();
-
-//    CPPUNIT_ASSERT_EQUAL(s1.toStdString(), s2.toStdString());
-
+    HOOT_FILE_EQUALS(_inputPath + "MaximalNearestSublineOneShortTestOutput.osm",
+                     _outputPath + "MaximalNearestSublineOneShortTestOutput.osm");
   }
 };
 
-
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MaximalNearestSublineTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MaximalNearestSublineTest, "quick");
 
 }

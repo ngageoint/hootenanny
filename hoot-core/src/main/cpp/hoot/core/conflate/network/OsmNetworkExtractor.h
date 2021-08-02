@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMNETWORKEXTRACTOR_H
 #define OSMNETWORKEXTRACTOR_H
@@ -48,7 +48,7 @@ public:
   static QString className() { return "hoot::OsmNetworkExtractor"; }
 
   OsmNetworkExtractor() = default;
-  virtual ~OsmNetworkExtractor() = default;
+  ~OsmNetworkExtractor() = default;
 
   OsmNetworkPtr extractNetwork(ConstOsmMapPtr map);
 
@@ -71,7 +71,7 @@ private:
   OsmNetworkPtr _network;
 
   void _addEdge(ConstElementPtr from, ConstElementPtr to, QList<ConstElementPtr> members,
-    bool directed);
+    bool directed) const;
 
   /**
    * This is a very strict definition of contiguous. We're looking to make sure that the first
@@ -83,7 +83,7 @@ private:
 
   void _getFirstLastNodes(const ConstRelationPtr& r, ElementId& first, ElementId& last);
 
-  bool _isValidElement(const ConstElementPtr& e);
+  bool _isValidElement(const ConstElementPtr& e) const;
 
   void _visit(const ConstElementPtr& e);
 };

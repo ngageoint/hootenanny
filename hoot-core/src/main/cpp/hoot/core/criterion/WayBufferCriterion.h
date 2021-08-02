@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef WAYBUFFERCRITERION_H
@@ -48,40 +48,31 @@ public:
   static QString className() { return "hoot::WayBufferCriterion"; }
 
   WayBufferCriterion() = default;
-  virtual ~WayBufferCriterion() = default;
-
+  ~WayBufferCriterion() = default;
   /**
    * Buffer is the buffer in meters to put around the way. The circular
    * error of the base way and the way being evaluated will automatically
    * be added to to the buffer on evaluation.
    */
-  WayBufferCriterion(ConstOsmMapPtr map,
-                     ConstWayPtr baseWay,
-                     Meters buffer,
-                     double matchPercent);
-
+  WayBufferCriterion(ConstOsmMapPtr map, ConstWayPtr baseWay, Meters buffer, double matchPercent);
   /**
    * Buffer is the buffer in meters to put around the way. The circular
    * error of the the way being evaluated will automatically be added
    * to to the buffer on evaluation.
    * @param circularError circular error of baseLine
    */
-  WayBufferCriterion(ConstOsmMapPtr map,
-                     std::shared_ptr<geos::geom::LineString> baseLine,
-                     Meters buffer,
-                     Meters circularError,
-                     double matchPercent);
+  WayBufferCriterion(
+    ConstOsmMapPtr map, std::shared_ptr<geos::geom::LineString> baseLine, Meters buffer,
+    Meters circularError, double matchPercent);
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override
+  { return std::make_shared<WayBufferCriterion>(_map, _baseLs, _buffer, 0, _matchPercent); }
 
-  virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new WayBufferCriterion(_map, _baseLs, _buffer, 0, _matchPercent)); }
-
-  virtual QString getDescription() const { return "Allows for operations on ways with buffers"; }
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Allows for operations on ways with buffers"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
 private:
 
@@ -89,7 +80,7 @@ private:
   mutable std::shared_ptr<geos::geom::Geometry> _baseBuffered;
   std::shared_ptr<geos::geom::LineString> _baseLs;
 
-  // Anything outside the given bounds cannot be within maxDistance
+  // Anything outside the given bounds cannot be within the max distance.
   mutable geos::geom::Envelope _boundsPlus;
   mutable Meters _baseLength;
   mutable Meters _bufferAccuracy;

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "HootApiDbWriter.h"
 
@@ -66,7 +66,7 @@ HootApiDbWriter::~HootApiDbWriter()
   close();
 }
 
-void HootApiDbWriter::_addElementTags(const std::shared_ptr<const Element>& e, Tags& t)
+void HootApiDbWriter::_addElementTags(const std::shared_ptr<const Element>& e, Tags& t) const
 {
   LOG_TRACE("Adding element tags to: " << e->getElementId());
   if (!t.contains(MetadataTags::HootStatus()))
@@ -376,40 +376,40 @@ void HootApiDbWriter::writeChange(const Change& change)
 
 void HootApiDbWriter::_createElement(const ConstElementPtr& element)
 {
-  switch (element->getElementType().getEnum())
+  if (element->getElementType() == ElementType::Node)
   {
-    case ElementType::Node:
-      _hootdb.insertNode(std::dynamic_pointer_cast<const Node>(element));
-      break;
-    //only supporting nodes for now
-    default:
-      throw HootException("Unsupported element type");
+    _hootdb.insertNode(std::dynamic_pointer_cast<const Node>(element));
+  }
+  else
+  {
+    // only supporting nodes for now
+    throw HootException("Unsupported element type");
   }
 }
 
 void HootApiDbWriter::_modifyElement(const ConstElementPtr& element)
 {
-  switch (element->getElementType().getEnum())
+  if (element->getElementType() == ElementType::Node)
   {
-    case ElementType::Node:
-      _hootdb.updateNode(std::dynamic_pointer_cast<const Node>(element));
-      break;
-    //only supporting nodes for now
-    default:
-      throw HootException("Unsupported element type");
+    _hootdb.updateNode(std::dynamic_pointer_cast<const Node>(element));
+  }
+  else
+  {
+    // only supporting nodes for now
+    throw HootException("Unsupported element type");
   }
 }
 
 void HootApiDbWriter::_deleteElement(const ConstElementPtr& element)
 {
-  switch (element->getElementType().getEnum())
+  if (element->getElementType() == ElementType::Node)
   {
-    case ElementType::Node:
-      _hootdb.deleteNode(std::dynamic_pointer_cast<const Node>(element));
-      break;
-    //only supporting nodes for now
-    default:
-      throw HootException("Unsupported element type");
+    _hootdb.deleteNode(std::dynamic_pointer_cast<const Node>(element));
+  }
+  else
+  {
+    // only supporting nodes for now
+    throw HootException("Unsupported element type");
   }
 }
 
@@ -557,7 +557,7 @@ void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
     }
 
     _hootdb.insertRelationMember(relationId, relationMemberElementId.getType(),
-                                 relationMemberElementId.getId(), e.role, i);
+                                 relationMemberElementId.getId(), e.getRole(), i);
   }
 
   LOG_TRACE("All members added to relation " << QString::number(relationId));

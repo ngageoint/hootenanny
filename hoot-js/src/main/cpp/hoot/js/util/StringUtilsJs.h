@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef STRINGUTILSJS_H
 #define STRINGUTILSJS_H
@@ -33,9 +33,13 @@
 namespace hoot
 {
 
-inline QString str(v8::Handle<v8::Value> ls)
+inline QString str(v8::Local<v8::Value> ls)
 {
-  v8::String::Utf8Value param(ls->ToString());
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
+
+  v8::String::Utf8Value param(current, ls->ToString(context).ToLocalChecked());
   return QString::fromUtf8(*param);
 }
 

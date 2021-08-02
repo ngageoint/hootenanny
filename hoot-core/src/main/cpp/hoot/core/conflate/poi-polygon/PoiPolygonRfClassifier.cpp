@@ -19,19 +19,14 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonRfClassifier.h"
 
 // hoot
-//#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
-//#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonAlphaShapeDistanceExtractor.h>
-//#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonDistanceExtractor.h>
-//#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
-//#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
 #include <hoot/core/util/Factory.h>
 
 using namespace std;
@@ -47,19 +42,10 @@ PoiPolygonRfClassifier::PoiPolygonRfClassifier()
 void PoiPolygonRfClassifier::_createExtractors()
 {
   _extractors.clear();
-
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new PoiPolygonDistanceExtractor()));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(
-//    new PoiPolygonAlphaShapeDistanceExtractor()));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new PoiPolygonNameScoreExtractor()));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new PoiPolygonTypeScoreExtractor()));
-//  std::shared_ptr<AddressScoreExtractor> addressExtractor1(new AddressScoreExtractor());
-//  addressExtractor1->setConfiguration(conf());
-//  _extractors.push_back(addressExtractor1);
 }
 
-map<QString, double> PoiPolygonRfClassifier::getFeatures(const ConstOsmMapPtr& m,
-  ElementId eid1, ElementId eid2) const
+map<QString, double> PoiPolygonRfClassifier::getFeatures(
+  const ConstOsmMapPtr& m, ElementId eid1, ElementId eid2) const
 {
   map<QString, double> result;
 

@@ -19,24 +19,20 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
+#include <hoot/core/TestUtils.h>
 
 namespace hoot
 {
@@ -50,9 +46,10 @@ class IntersectionSplitterTest : public HootTestFixture
 
 public:
 
-  IntersectionSplitterTest()
-    : HootTestFixture("test-files/algorithms/splitter/",
-                      "test-output/algorithms/splitter/")
+  IntersectionSplitterTest() :
+  HootTestFixture(
+    "test-files/algorithms/splitter/IntersectionSplitterTest/",
+    "test-output/algorithms/splitter/IntersectionSplitterTest/")
   {
     setResetType(ResetBasic);
   }
@@ -60,7 +57,7 @@ public:
   void runTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "IntersectionSplitter.osm", map);
 
@@ -70,14 +67,14 @@ public:
     writer.setIncludeCompatibilityTags(false);
     writer.write(map, _outputPath + "IntersectionSplitterTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "IntersectionSplitterOut.osm",
+    HOOT_FILE_EQUALS(_inputPath + "IntersectionSplitterOut.osm",
                      _outputPath + "IntersectionSplitterTest.osm");
   }
 
   void runTestSimple()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "SimpleSplitter.osm", map);
 
@@ -87,11 +84,9 @@ public:
     writer.setIncludeCompatibilityTags(false);
     writer.write(map, _outputPath + "SimpleSplitterOutput.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "SimpleSplitterExpected.osm",
+    HOOT_FILE_EQUALS(_inputPath + "SimpleSplitterExpected.osm",
                      _outputPath + "SimpleSplitterOutput.osm");
-
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(IntersectionSplitterTest, "quick");

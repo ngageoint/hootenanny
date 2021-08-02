@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSMMAPLISTENER_H
@@ -37,7 +37,7 @@ class OsmMapListener
 {
 public:
 
-  virtual ~OsmMapListener() {}
+  virtual ~OsmMapListener() = default;
 
   virtual std::shared_ptr<OsmMapListener> clone() const = 0;
 

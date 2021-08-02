@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MatchConflicts.h"
 
@@ -74,7 +74,7 @@ MatchConflicts::EidIndexMap MatchConflicts::_calculateEidIndexMap(
 }
 
 void MatchConflicts::calculateMatchConflicts(
-  const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts)
+  const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts) const
 {
   QElapsedTimer timer;
   timer.start();
@@ -110,8 +110,10 @@ void MatchConflicts::calculateMatchConflicts(
     eidToMatchCount++;
     if (eidToMatchCount % 10 == 0)
     {
+      // TODO: would like this to be status, but it logs a separate line for each statement
+      // for some reason unfortunately.
       PROGRESS_INFO(
-        "Processed matches for " << StringUtils::formatLargeNumber(eidToMatchCount) << " / " <<
+        "Processed matches for " << StringUtils::formatLargeNumber(eidToMatchCount) << " of " <<
         StringUtils::formatLargeNumber(eidToMatches.size()) << " elements. Found " <<
         StringUtils::formatLargeNumber(conflicts.size()) << " match conflicts.");
     }
@@ -126,7 +128,7 @@ void MatchConflicts::calculateMatchConflicts(
 
 void MatchConflicts::_calculateSubsetConflicts(
   const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts, const vector<int>& matchSet,
-  const QHash<QString, ConstMatchPtr>& idIndexedMatches)
+  const QHash<QString, ConstMatchPtr>& idIndexedMatches) const
 {
   LOG_TRACE("Calculating subset conflicts...");
   LOG_VART(matches.size());

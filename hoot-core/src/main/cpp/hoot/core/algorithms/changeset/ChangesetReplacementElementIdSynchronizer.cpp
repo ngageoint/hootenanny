@@ -19,23 +19,23 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ChangesetReplacementElementIdSynchronizer.h"
 
 // Hoot
+#include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
+#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/ElementHashVisitor.h>
-#include <hoot/core/elements/WayUtils.h>
-#include <hoot/core/util/CollectionUtils.h>
-#include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/visitors/ElementHashVisitor.h>
 
 namespace hoot
 {
@@ -45,9 +45,8 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(
 {
   // This is convoluted, but we're going to run the ID synchronization in multiple stages. Its
   // possible eventually that it could be run in a single stage if improvements are made to
-  // ElementHashVisitor (also see ElementHashOp). Since we don't allow any single element ID to
-  // synchronize more than once, this allows for syncing the IDs at different levels of node
-  // coordinate precision granularity.
+  // ElementHashVisitor. Since we don't allow any single element ID to synchronize more than once,
+  // this allows for syncing the IDs at different levels of node coordinate precision granularity.
 
   // First run at a higher precision than what we're configured for with by default for C&R. This
   // will prevent some bad syncs, like for way nodes in completely different unconnected ways.
@@ -137,14 +136,14 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
         // find all ways each node belong to
         QSet<long> containingWayIds1 =
           CollectionUtils::stdSetToQSet(
-            WayUtils::getContainingWayIdsByNodeId(map1IdenticalElement->getId(), _map1));
+            WayUtils::getContainingWayIds(map1IdenticalElement->getId(), _map1));
         QSet<long> containingWayIds2 =
           CollectionUtils::stdSetToQSet(
-            WayUtils::getContainingWayIdsByNodeId(map2IdenticalElement->getId(), _map2));
+            WayUtils::getContainingWayIds(map2IdenticalElement->getId(), _map2));
         // If any of them match, we'll proceed to copy the element ID of the first map over to the
         // second map element and be sure to keep the second map element's tags (nodes matched only
         // on coordinate, so that will be the same between the two).
-        if (containingWayIds1.intersect(containingWayIds2).size() > 0 &&
+        if (!containingWayIds1.intersect(containingWayIds2).empty() &&
             !_map2->containsElement(map1IdenticalElement->getElementId()))
         {
           // Due to our lapsing of the coord comparison sensitivity, we'll actually do a distance
@@ -162,7 +161,7 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
           }
 
           // Copy it to be safe.
-          ElementPtr map2IdenticalElementCopy(map2IdenticalElement->clone());
+          ElementPtr map2IdenticalElementCopy = map2IdenticalElement->clone();
           map2IdenticalElementCopy->setId(map1IdenticalElement->getId());
           // need to use the ref map version
           map2IdenticalElementCopy->setVersion(map1IdenticalElement->getVersion());

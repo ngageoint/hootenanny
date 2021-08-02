@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -34,6 +34,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QStringList>
@@ -53,47 +54,143 @@ public:
 
   CropCmd() = default;
 
-  virtual QString getName() const override { return "crop"; }
+  QString getName() const override { return "crop"; }
+  QString getDescription() const override { return "Crops a map to a bounds"; }
 
-  virtual QString getDescription() const override { return "Crops a map to a bounds"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
-    if (args.size() < 3 || args.size() > 4)
+    bool separateOutput = false;
+    if (args.contains("--separate-output"))
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
+      separateOutput = true;
+      args.removeAt(args.indexOf("--separate-output"));
+    }
+
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
+    if (!separateOutput && args.size() < 3)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
+    }
+    else if (separateOutput && args.size() < 2)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
+    }
+
+    int boundsIndex;
+    if (args.contains("--write-bounds"))
+    {
+      boundsIndex = args.size() - 2;
+    }
+    else
+    {
+      boundsIndex = args.size() - 1;
+    }
+    _env = GeometryUtils::boundsFromString(args.at(boundsIndex));
+    args.removeAt(boundsIndex);
+    // This has to be done after we get the envelope.
+    BoundedCommand::runSimple(args);
+
+    QString output;
+    if (!separateOutput)
+    {
+      output = args.last();
+      args.removeLast();
+    }
+
+    // Everything left is an input.
+    QStringList inputs;
+    if (!recursive)
+    {
+      inputs = args;
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
     }
 
     QElapsedTimer timer;
     timer.start();
-    QString in = args[0];
-    QString out = args[1];
 
-    BoundedCommand::runSimple(args);
+    LOG_STATUS(
+      "Cropping ..." << FileUtils::toLogFormat(inputs, 25) << " and writing output to ..." <<
+      FileUtils::toLogFormat(output, 25) << "...");
 
-    _env = GeometryUtils::boundsFromString(args[2]);
-
-    OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, in, true);
-
-    MapCropper cropper;
-    cropper.setBounds(_env);
-    cropper.setConfiguration(Settings::getInstance());
-    cropper.apply(map);
-
-    IoUtils::saveMap(map, out);
+    if (!separateOutput)
+    {
+      // combines all inputs and writes them to the same output
+      _crop(inputs, output);
+    }
+    else
+    {
+      // writes a separate output for each input
+      _cropSeparateOutput(inputs);
+    }
 
     LOG_STATUS("Map cropped in: " << StringUtils::millisecondsToDhms(timer.elapsed()) + " total.");
 
     return 0;
   }
 
-protected:
+private:
 
   std::shared_ptr<geos::geom::Geometry> _env;
 
-  virtual void _writeBoundsFile() override
+  void _crop(const QStringList& inputs, const QString& output) const
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    if (inputs.size() == 1)
+    {
+      IoUtils::loadMap(map, inputs.at(0), true);
+    }
+    else
+    {
+      // Avoid ID conflicts across multiple inputs.
+      IoUtils::loadMaps(map, inputs, false);
+    }
+
+    _crop(map);
+
+    IoUtils::saveMap(map, output);
+  }
+
+  void _cropSeparateOutput(const QStringList& inputs) const
+  {
+    for (int i = 0; i < inputs.size(); i++)
+    {
+      const QString input = inputs.at(i);
+
+      OsmMapPtr map = std::make_shared<OsmMap>();
+      IoUtils::loadMap(map, input, true);
+
+      _crop(map);
+
+      // Write the output to a similarly named path as the input with some text appended to the
+      // input name.
+      IoUtils::saveMap(map, IoUtils::getOutputUrlFromInput(input, "-cropped"));
+    }
+  }
+
+  void _crop(OsmMapPtr& map) const
+  {
+    MapCropper cropper;
+    cropper.setBounds(_env);
+    cropper.setConfiguration(conf());
+    cropper.apply(map);
+  }
+
+  void _writeBoundsFile() override
   {
     OsmMapWriterFactory::write(
       GeometryUtils::createMapFromBounds(*(_env->getEnvelopeInternal())),

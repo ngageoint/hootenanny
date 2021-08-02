@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef BASERANDOMFORESTMANAGER_H
 #define BASERANDOMFORESTMANAGER_H
@@ -46,12 +46,13 @@ namespace Tgs
     /**
      * @brief ~BaseRandomForestManager destructor
      */
-    virtual ~BaseRandomForestManager();
+    virtual ~BaseRandomForestManager() = default;
 
     /**
     *  Adds a training vector to the random forest training set
     */
-    void addTrainingVector(std::string classLabel, const std::vector<double>& trainVec);
+    void addTrainingVector(
+      const std::string& classLabel, const std::vector<double>& trainVec) const;
 
     /**
     * Classifies a test data vector against a generated random forest. This method is used
@@ -65,8 +66,9 @@ namespace Tgs
     * @param dataVector a single data vector of size N where N is the number of factors
     * @param scores a map to hold the classification results as class name mapped to probability
     */
-    void classifyTestVector(std::string objId, std::string objClass, std::vector<double> & dataVector,
-      std::map<std::string, double> & scores);
+    void classifyTestVector(const std::string& objId, const std::string& objClass,
+      const std::vector<double>& dataVector,
+      std::map<std::string, double>& scores);
 
     /**
     * Classifies a data vector against a generated random forest.
@@ -78,21 +80,21 @@ namespace Tgs
     * @param dataVector a single data vector of size N where N is the number of factors
     * @param scores a map to hold the classification results as class name mapped to probability
     */
-    void classifyVector(std::string objId, std::vector<double> & dataVector,
+    void classifyVector(const std::string& objId, const std::vector<double>& dataVector,
       std::map<std::string, double> & scores);
 
     /**
      * @brief exportModel exports the model an XML file
      * @param outputFile the target file path/name
      */
-    void exportModel(std::string outputFilePath);
+    void exportModel(const std::string& outputFilePath);
 
     /**
     *  Exports the random forest model and data to a file
     *
     * @param fileStream the file stream to export the model
     */
-    void exportModel(std::ostream & fileStream);
+    void exportModel(std::ostream& fileStream);
 
     /**
     * Exports the currently loaded training data
@@ -100,7 +102,7 @@ namespace Tgs
     * @param fileStream the file stream to export the forest
     * @param tabDepth set of tabs to indent the exported content
     */
-    void exportTrainingData(std::fstream & fileStream);
+    void exportTrainingData(std::fstream & fileStream) const;
 
     /**
     * This convenience method is used after the classification of labeled test vectors
@@ -111,8 +113,8 @@ namespace Tgs
     * describing the report (_confusion or _results) and .txt will be appended to the name
     * @param classMap a map of the original class to new classes
     */
-    void generateRemappedReports(std::string reportName, std::map<std::string,
-      std::vector<std::string>> & classMap);
+    void generateRemappedReports(
+      std::string& reportName, std::map<std::string, std::vector<std::string>>& classMap);
 
     /**
     * Generates a set of text files for the results of the classification including:
@@ -128,7 +130,7 @@ namespace Tgs
     * @param basefilename the name of the file to write the top factors
     *  without file suffix
     */
-    void generateReports(std::string basefilename);
+    void generateReports(std::string& basefilename);
 
     /**
     * Generates text files for the results of the classification as a list of probabilities by
@@ -139,7 +141,7 @@ namespace Tgs
     *
     * @param basefilename the name of the output file without file suffix
     */
-    void generateResults(std::string basefilename);
+    void generateResults(const std::string& basefilename);
 
     /**
     *  Generates a text file output from the generated top factors
@@ -149,7 +151,7 @@ namespace Tgs
     *  @param basefilename the name of the file to write the top factors
     *  without file suffix
     */
-    void generateTopFactors(std::string basefilename);
+    void generateTopFactors(std::string& basefilename);
 
     /**
     *  Gets the class labels unique to the training data set mapped to a
@@ -157,7 +159,7 @@ namespace Tgs
     *
     * @return the class labels
     */
-    std::set<std::string> getClassLabels(){return _data->getClassLabels();}
+    std::set<std::string> getClassLabels() const { return _data->getClassLabels(); }
 
     /**
     *  Gets the factor importance as generated by the random forest
@@ -165,20 +167,20 @@ namespace Tgs
     *  @param factorImportance a container to hold the results as a list of pairs
     *  of factor name to importance value
     */
-    void getFactorImportance(std::vector<std::pair<std::string, double>> & factorImportance);
+    void getFactorImportance(std::vector<std::pair<std::string, double>>& factorImportance);
 
     /**
     * Gets the list of factor labels
     *
     * @param factors a container to hold the factor labels
     */
-    void getFactorLabels(std::vector<std::string> & factors);
+    void getFactorLabels(std::vector<std::string> & factors) const;
 
     /**
      * @brief import import the random forest from a file
      * @param sourceFile the path to the source XML file
      */
-    void importModel(std::string sourceFile);
+    void importModel(const std::string& sourceFile);
 
     /**
     * Initializes the state of the InternalRandomForestManager
@@ -187,7 +189,7 @@ namespace Tgs
     * 2 = Binary 1 to All, 3 = Round Robin class to class)
     * @param factorLabels the list of factor labels (order in parallel with data vector use)
     */
-    void init(unsigned int modelMethod, std::vector<std::string> & factorLabels);
+    void init(unsigned int modelMethod, const std::vector<std::string>& factorLabels);
 
     /**
      * @brief replaceMissingData
@@ -196,7 +198,7 @@ namespace Tgs
      *
      * @param missingDataValue the missing data value
      */
-    void replaceMissingData(double missingDataValue);
+    void replaceMissingData(double missingDataValue) const;
 
     /**
     *  Clears the forest and the results
@@ -216,7 +218,7 @@ namespace Tgs
     *
     * @param factorLabels the list of factor labels
     */
-    void setFactorLabels(std::vector<std::string> & factorLabels);
+    void setFactorLabels(const std::vector<std::string>& factorLabels) const;
 
     /**
      * @brief toXml converts the model to an XML formatted string
@@ -246,73 +248,6 @@ namespace Tgs
     static const float RF_XML_VERSION;
 
   protected:
-    /**
-    * Classifies a data vector against a set of binary generated random forests.
-    *
-    * The vector is classified against each tree in the forest and the final classification is the
-    * result of majority vote for each tree.
-    *
-    * @param objId the global id of the object being classified
-    * @param objClass the known object class label
-    * @param dataVector a single data vector of size N where N is the number of factors
-    * @param scores a map to hold the classification results as class name mapped to probability
-    */
-    virtual void _classifyBinaryTestVector(std::string objId, std::string objClass,
-      std::vector<double> & dataVector, std::map<std::string, double> & scores);
-
-    /**
-    * Classifies a data vector against a single multi-class generated random forest.
-    *
-    * The vector is classified against each tree in the forest and the final classification is the
-    * result of majority vote for each tree.
-    *
-    * @param objId the global id of the object being classified
-    * @param objClass the known object class label
-    * @param dataVector a single data vector of size N where N is the number of factors
-    * @param scores a map to hold the classification results as class name mapped to probability
-    */
-    virtual void _classifyMultiClassTestVector(std::string objId, std::string objClass,
-      std::vector<double> & dataVector, std::map<std::string, double> & scores);
-
-    /**
-    * Classifies a data vector against a set of pairwise generated random forest.
-    *
-    * The vector is classified against each tree in the forest and the final classification is the
-    * result of majority vote for each tree.
-    *
-    * @param objId the global id of the object being classified
-    * @param objClass the known object class label
-    * @param dataVector a single data vector of size N where N is the number of factors
-    * @param scores a map to hold the classification results as class name mapped to probability
-    */
-    virtual void _classifyRoundRobinTestVector(std::string objId, std::string objClass,
-      std::vector<double> & dataVector, std::map<std::string, double> & scores);
-
-    /**
-    * Classifies a data vector against a single multi-class generated random forest.
-    *
-    * The vector is classified against each tree in the forest and the final classification is the
-    * result of majority vote for each tree.
-    *
-    * @param objId the global id of the object being classified
-    * @param dataVector a single data vector of size N where N is the number of factors
-    * @param scores a map to hold the classification results as class name mapped to probability
-    */
-    virtual void _classifyMultiClassVector(std::string objId, std::vector<double> & dataVector,
-      std::map<std::string, double> & scores);
-
-    /**
-    * Generates text files for the results of the classification as a list of probabilities by
-    * class and the resulting confusion matrix
-    *
-    *  The base input file name will be appended with "_results.txt" and
-    *  "_confusion.txt" for the output file names
-    *
-    * @param basefilename the name of the output file without file suffix
-    * @param map of stuff
-    */
-    void _generateRemappedResults(std::string basefilename,
-      std::map<std::string, std::vector<std::string>> & classMap);
 
     /**
      * @brief _initForests initializes the list of random forests
@@ -363,8 +298,11 @@ namespace Tgs
       double retrain, bool balanced);
 
     std::shared_ptr<DataFrame> _data;
+    std::vector<std::shared_ptr<BaseRandomForest>> _rfList;  ///The base forest
 
-    ///These three containers are parallel indexed
+  private:
+
+    /// These three containers are parallel indexed
     std::vector<std::string> _testObjectIds;  //The object ids of the data object being classified
     std::vector<std::string> _testClasses;  //The true class labels for the testing objects
     std::vector<std::map<std::string, double>> _results;  ///A container to hold classification results
@@ -373,7 +311,70 @@ namespace Tgs
     bool _initialized;
     bool _trained;
 
-    std::vector<std::shared_ptr<BaseRandomForest>> _rfList;  ///The base forest
+    /**
+    * Classifies a data vector against a set of binary generated random forests.
+    *
+    * The vector is classified against each tree in the forest and the final classification is the
+    * result of majority vote for each tree.
+    *
+    * @param objId the global id of the object being classified
+    * @param objClass the known object class label
+    * @param dataVector a single data vector of size N where N is the number of factors
+    * @param scores a map to hold the classification results as class name mapped to probability
+    */
+    void _classifyBinaryTestVector(const std::string& objId, const std::string& objClass,
+      const std::vector<double>& dataVector, std::map<std::string, double>& scores);
+    /**
+    * Classifies a data vector against a single multi-class generated random forest.
+    *
+    * The vector is classified against each tree in the forest and the final classification is the
+    * result of majority vote for each tree.
+    *
+    * @param objId the global id of the object being classified
+    * @param objClass the known object class label
+    * @param dataVector a single data vector of size N where N is the number of factors
+    * @param scores a map to hold the classification results as class name mapped to probability
+    */
+    void _classifyMultiClassTestVector(const std::string& objId, const std::string& objClass,
+      const std::vector<double> & dataVector, std::map<std::string, double> & scores);
+    /**
+    * Classifies a data vector against a set of pairwise generated random forest.
+    *
+    * The vector is classified against each tree in the forest and the final classification is the
+    * result of majority vote for each tree.
+    *
+    * @param objId the global id of the object being classified
+    * @param objClass the known object class label
+    * @param dataVector a single data vector of size N where N is the number of factors
+    * @param scores a map to hold the classification results as class name mapped to probability
+    */
+    void _classifyRoundRobinTestVector(const std::string& objId, const std::string& objClass,
+      const std::vector<double>& dataVector, std::map<std::string, double>& scores);
+    /**
+    * Classifies a data vector against a single multi-class generated random forest.
+    *
+    * The vector is classified against each tree in the forest and the final classification is the
+    * result of majority vote for each tree.
+    *
+    * @param objId the global id of the object being classified
+    * @param dataVector a single data vector of size N where N is the number of factors
+    * @param scores a map to hold the classification results as class name mapped to probability
+    */
+    void _classifyMultiClassVector(const std::string& objId, const std::vector<double>& dataVector,
+      std::map<std::string, double>& scores);
+
+    /**
+    * Generates text files for the results of the classification as a list of probabilities by
+    * class and the resulting confusion matrix
+    *
+    *  The base input file name will be appended with "_results.txt" and
+    *  "_confusion.txt" for the output file names
+    *
+    * @param basefilename the name of the output file without file suffix
+    * @param map of stuff
+    */
+    void _generateRemappedResults(
+      const std::string& basefilename, std::map<std::string, std::vector<std::string>>& classMap);
   };
 }
 

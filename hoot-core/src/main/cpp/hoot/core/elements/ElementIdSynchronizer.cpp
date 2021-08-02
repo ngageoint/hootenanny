@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ElementIdSynchronizer.h"
@@ -38,7 +38,6 @@
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/ops/ElementHashOp.h>
 
 namespace hoot
 {
@@ -50,15 +49,6 @@ _updatedNodeCtr(0),
 _updatedWayCtr(0),
 _updatedRelationCtr(0)
 {
-}
-
-void ElementIdSynchronizer::clear()
-{
-  _map1HashesToElementIds.clear();
-  _map1ElementIdsToHashes.clear();
-  _map2HashesToElementIds.clear();
-  _map2ElementIdsToHashes.clear();
-  _syncedElementIds.clear();
 }
 
 void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
@@ -143,7 +133,7 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
           !_syncedElementIds.contains(map1IdenticalElement->getElementId()))
       {
         // Copy it to be safe.
-        ElementPtr map1IdenticalElementCopy(map1IdenticalElement->clone());
+        ElementPtr map1IdenticalElementCopy = map1IdenticalElement->clone();
         LOG_VART(map1IdenticalElementCopy->getElementId());
         // Get the element with matching hash from the sec map.
         ElementPtr map2IdenticalElement = _map2->getElement(_map2HashesToElementIds[identicalHash]);
@@ -227,10 +217,10 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
 
   // get the ways that contain each.
   const std::vector<ConstWayPtr> containingWays1 =
-    WayUtils::getContainingWaysByNodeId(element1->getId(), _map1);
+    WayUtils::getContainingWaysConst(element1->getId(), _map1);
   LOG_VART(containingWays1.size());
   const std::vector<ConstWayPtr> containingWays2 =
-    WayUtils::getContainingWaysByNodeId(element2->getId(), _map2);
+    WayUtils::getContainingWaysConst(element2->getId(), _map2);
   LOG_VART(containingWays2.size())
 
   // See if any of the ways between the two have a matching type.
@@ -248,7 +238,7 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
       // type comparison, since many different types of ways could be part of an admin boundary.
       // This may not end up being the best way to deal with this.
       if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
-            _map1, way1->getElementId(), adminBoundsCrit))
+            way1->getElementId(), adminBoundsCrit, _map1))
       {
         return false;
       }
@@ -262,7 +252,7 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
           LOG_VART(way2->getElementId());
 
           if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
-                _map2, way2->getElementId(), adminBoundsCrit))
+                way2->getElementId(), adminBoundsCrit, _map2))
           {
             return false;
           }
@@ -305,14 +295,12 @@ bool ElementIdSynchronizer::_areWayNodesWithoutAWayInCommon(
     return false;
   }
 
-  // get the ways that contain each.
+  // Get the ways that contain each.
   const QSet<long> containingWayIds1 =
-    CollectionUtils::stdSetToQSet(
-      WayUtils::getContainingWayIdsByNodeId(element1->getId(), _map1));
+    CollectionUtils::stdSetToQSet(WayUtils::getContainingWayIds(element1->getId(), _map1));
   LOG_VART(containingWayIds1);
   const QSet<long> containingWayIds2 =
-    CollectionUtils::stdSetToQSet(
-      WayUtils::getContainingWayIdsByNodeId(element2->getId(), _map2));
+    CollectionUtils::stdSetToQSet(WayUtils::getContainingWayIds(element2->getId(), _map2));
   LOG_VART(containingWayIds2);
 
   for (QSet<long>::const_iterator containingWays1Itr = containingWayIds1.begin();
@@ -329,16 +317,14 @@ bool ElementIdSynchronizer::_areWayNodesWithoutAWayInCommon(
         const QString way2Hash =
           _map2ElementIdsToHashes[ElementId(ElementType::Way, *containingWays2Itr)];
         LOG_VART(way2Hash);
-        if (!way2Hash.trimmed().isEmpty())
+        if (!way2Hash.trimmed().isEmpty() &&
+            // If any of the ways between the two are identical, then they share a parent way.
+            way1Hash == way2Hash)
         {
-          // If any of the ways between the two are identical, then they share a parent way.
-          if (way1Hash == way2Hash)
-          {
-            LOG_TRACE(
-              "Found common way node for " << element1->getElementId() << " and " <<
-              element2->getElementId() << ".");
-            return false;
-          }
+          LOG_TRACE(
+            "Found common way node for " << element1->getElementId() << " and " <<
+            element2->getElementId() << ".");
+          return false;
         }
       }
     }
@@ -349,24 +335,17 @@ bool ElementIdSynchronizer::_areWayNodesWithoutAWayInCommon(
 
 void ElementIdSynchronizer::_calcElementHashes(
   const OsmMapPtr& map, QMap<QString, ElementId>& hashesToElementIds,
-  QMap<ElementId, QString>& elementIdsToHashes)
+  QMap<ElementId, QString>& elementIdsToHashes) const
 {
   LOG_DEBUG("Calculating " << map->getName() << " element hashes...");
 
   ElementHashVisitor hashVis;
-  // This exists as an option to use, since its capable of comparing way nodes better. However, it
-  // ends up preventing some id syncs against real world data.
-  //ElementHashOp hashVis;
-
   hashVis.setWriteHashes(false);
   hashVis.setCollectHashes(true);
   hashVis.setUseNodeTags(_useNodeTagsForHash);
   hashVis.setCoordinateComparisonSensitivity(_coordinateComparisonSensitivity);
-
   hashVis.setOsmMap(map.get());
   map->visitRw(hashVis);
-  //hashVis.setAddParentToWayNodes(true);
-  //hashVis.apply(map);
 
   hashesToElementIds = hashVis.getHashesToElementIds();
   elementIdsToHashes = hashVis.getElementIdsToHashes();

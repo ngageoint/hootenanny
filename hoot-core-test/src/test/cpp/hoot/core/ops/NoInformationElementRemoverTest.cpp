@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -67,14 +67,16 @@ public:
 
   void runWayWithInfoOneNodeWithoutInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     nodes.append(node1);
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
 
@@ -95,13 +97,15 @@ public:
 
   void runStandAloneNodesWithAndWithoutInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     map->addNode(node1);
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     map->addNode(node2);
 
@@ -121,14 +125,16 @@ public:
 
   void runWayWithoutInfoOneNodeWithInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     nodes.append(node1);
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
 
@@ -145,17 +151,19 @@ public:
 
   void runEmptyWayOrphanNodesTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     nodes.append(node1);
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
-    WayPtr way1(new Way(Status::Unknown1, 15, 15));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 15, 15);
     way1->getTags().appendValue("hoot:test", "test3");
     map->addWay(way1);
 
@@ -170,13 +178,15 @@ public:
 
   void runWayWithoutInfoAllNodesWithoutInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     WayPtr way1 = TestUtils::createWay(map, nodes);
@@ -192,17 +202,19 @@ public:
 
   void runRelationWithInfoOneElementWithoutInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<ElementPtr> elements;
 
     QList<NodePtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     node1->getTags().appendValue("test", "test2");
     nodes.append(node2);
@@ -232,17 +244,19 @@ public:
 
   void runRelationWithoutInfoOneNodeElementWithInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<ElementPtr> elements;
 
     QList<NodePtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     node1->getTags().appendValue("test", "test2");
     nodes.append(node2);
@@ -269,17 +283,19 @@ public:
 
   void runRelationWithoutInfoOneWayElementWithInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<ElementPtr> elements;
 
     QList<NodePtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     elements.append(node2);
@@ -306,17 +322,19 @@ public:
 
   void runEmptyRelationWithoutInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<ElementPtr> elements;
 
     QList<NodePtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     elements.append(node2);
@@ -330,7 +348,7 @@ public:
     way2->getTags().appendValue("hoot:test", "test2");
     elements.append(way2);
 
-    RelationPtr relation1(new Relation(Status::Unknown1, 15, 15));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 15, 15);
     map->addRelation(relation1);
     relation1->getTags().appendValue("hoot:test", "test");
 
@@ -344,23 +362,25 @@ public:
 
   void runRelationWithoutInfoAllElementsWithoutInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
 
-    WayPtr way1(new Way(Status::Unknown1, 15, 15));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 15, 15);
     way1->getTags().appendValue("hoot:test", "test3");
     map->addWay(way1);
 
-    WayPtr way2(new Way(Status::Unknown1, 15, 15));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, 15, 15);
     way2->getTags().appendValue("hoot:test", "test4");
     map->addWay(way2);
 
-    RelationPtr relation1(new Relation(Status::Unknown1, 15, 15));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 15, 15);
     map->addRelation(relation1);
     relation1->getTags().appendValue("hoot:test", "test");
 
@@ -374,30 +394,32 @@ public:
 
   void runUnrelatedElementsWithInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("name", "red house");
     map->addNode(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     node2->getTags().appendValue("name", "blue house");
     map->addNode(node2);
 
-    WayPtr way1(new Way(Status::Unknown1, 15, 15));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 15, 15);
     way1->getTags().appendValue("hoot:test", "test3");
     way1->getTags().appendValue("name", "some way");
     map->addWay(way1);
 
-    WayPtr way2(new Way(Status::Unknown1, 16, 15));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, 16, 15);
     way2->getTags().appendValue("hoot:test", "test4");
     way2->getTags().appendValue("name", "some other way");
     map->addWay(way2);
 
 
-    RelationPtr relation1(new Relation(Status::Unknown1, 15, 15));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 15, 15);
     map->addRelation(relation1);
     relation1->getTags().appendValue("hoot:test", "test");
     relation1->getTags().appendValue("name", "some relation");
@@ -412,7 +434,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NoInformationElementRemoverTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NoInformationElementRemoverTest, "current");
 
 }
 

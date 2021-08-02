@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2016, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // hoot
@@ -62,13 +62,13 @@ public:
 
   void runToyTest1()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveRef2VisitorMultipleCriterionInput.osm");
 
-    ElementCriterionPtr poiCrit(new PoiCriterion);
-    ElementCriterionPtr buildingCrit(new BuildingCriterion(map));
-    ElementCriterionPtr chainCrit(new ChainCriterion(poiCrit, buildingCrit));
+    ElementCriterionPtr chainCrit =
+      std::make_shared<ChainCriterion>(
+        std::make_shared<PoiCriterion>(), std::make_shared<BuildingCriterion>(map));
     RemoveRef2VisitorMultipleCriterion v;
     v.addCriterion(chainCrit);
     map->visitRw(v);
@@ -85,13 +85,13 @@ public:
 
   void runToyTest2()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveRef2VisitorMultipleCriterionInput.osm");
 
-    ElementCriterionPtr poiCrit(new PoiCriterion);
-    ElementCriterionPtr buildingCrit(new BuildingCriterion(map));
-    ElementCriterionPtr chainCrit(new ChainCriterion(buildingCrit, poiCrit));
+    ElementCriterionPtr chainCrit =
+      std::make_shared<ChainCriterion>(
+        std::make_shared<BuildingCriterion>(map), std::make_shared<PoiCriterion>());
     RemoveRef2VisitorMultipleCriterion v;
     v.addCriterion(chainCrit);
     map->visitRw(v);

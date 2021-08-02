@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // hoot
@@ -38,6 +38,7 @@ class PhoneNumberCountVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PhoneNumberCountVisitorTest);
   CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runConfigureTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -46,22 +47,36 @@ public:
     : HootTestFixture("test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/",
                       UNUSED_PATH)
   {
+    setResetType(ResetAll);
   }
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(
-      map,
-      _inputPath + "PoiPolygon2.osm",
-      false,
-      Status::Unknown1);
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, _inputPath + "PoiPolygon2.osm", false, Status::Unknown1);
 
     PhoneNumberCountVisitor uut;
     map->visitRo(uut);
+
     CPPUNIT_ASSERT_EQUAL(12, (int)uut.getStat());
   }
 
+  void runConfigureTest()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, _inputPath + "PoiPolygon2.osm", false, Status::Unknown1);
+
+    PhoneNumberCountVisitor uut;
+    Settings settings;
+    settings.set(ConfigOptions::getPhoneNumberRegionCodeKey(), "US");
+    settings.set(ConfigOptions::getPhoneNumberAdditionalTagKeysKey(), QStringList());
+    settings.set(ConfigOptions::getPhoneNumberSearchInTextKey(), false);
+    uut.setConfiguration(conf());
+
+    map->visitRo(uut);
+
+    CPPUNIT_ASSERT_EQUAL(12, (int)uut.getStat());
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PhoneNumberCountVisitorTest, "quick");

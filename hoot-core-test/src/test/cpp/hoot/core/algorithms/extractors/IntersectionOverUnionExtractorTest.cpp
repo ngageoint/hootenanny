@@ -19,16 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 
 // CPP Unit
@@ -59,53 +60,53 @@ public:
 
   void runTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "IntersectionOverUnionExtractorTest-in.osm");
     IntersectionOverUnionExtractor uut;
 
-    ConstElementPtr building1 = TestUtils::getElementWithTag(map, "name", "Building 1");
-    ConstElementPtr building2 = TestUtils::getElementWithTag(map, "name", "Building 2");
+    ConstElementPtr building1 = MapUtils::getFirstElementWithTag(map, "name", "Building 1");
+    ConstElementPtr building2 = MapUtils::getFirstElementWithTag(map, "name", "Building 2");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.02, uut.extract(*map, building1, building2), 1e-3);
 
-    ConstElementPtr building3 = TestUtils::getElementWithTag(map, "name", "Building 3");
-    ConstElementPtr building4 = TestUtils::getElementWithTag(map, "name", "Building 4");
+    ConstElementPtr building3 = MapUtils::getFirstElementWithTag(map, "name", "Building 3");
+    ConstElementPtr building4 = MapUtils::getFirstElementWithTag(map, "name", "Building 4");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.764, uut.extract(*map, building3, building4), 1e-3);
 
-    ConstElementPtr building5 = TestUtils::getElementWithTag(map, "name", "Building 5");
-    ConstElementPtr building6 = TestUtils::getElementWithTag(map, "name", "Building 6");
+    ConstElementPtr building5 = MapUtils::getFirstElementWithTag(map, "name", "Building 5");
+    ConstElementPtr building6 = MapUtils::getFirstElementWithTag(map, "name", "Building 6");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.978, uut.extract(*map, building5, building6), 1e-3);
 
-    ConstElementPtr building7 = TestUtils::getElementWithTag(map, "name", "Building 7");
-    ConstElementPtr building8 = TestUtils::getElementWithTag(map, "name", "Building 8");
+    ConstElementPtr building7 = MapUtils::getFirstElementWithTag(map, "name", "Building 7");
+    ConstElementPtr building8 = MapUtils::getFirstElementWithTag(map, "name", "Building 8");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.185, uut.extract(*map, building7, building8), 1e-3);
 
-    ConstElementPtr building9 = TestUtils::getElementWithTag(map, "name", "Building 9");
-    ConstElementPtr building10 = TestUtils::getElementWithTag(map, "name", "Building 10");
+    ConstElementPtr building9 = MapUtils::getFirstElementWithTag(map, "name", "Building 9");
+    ConstElementPtr building10 = MapUtils::getFirstElementWithTag(map, "name", "Building 10");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, building9, building10), 1e-1);
   }
 
   void runUnsupportedGeometriesTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "IntersectionOverUnionExtractorTest-in.osm");
     IntersectionOverUnionExtractor uut;
 
-    ConstElementPtr way1 = TestUtils::getElementWithTag(map, "name", "Way 1");
-    ConstElementPtr way2 = TestUtils::getElementWithTag(map, "name", "Way 2");
+    ConstElementPtr way1 = MapUtils::getFirstElementWithTag(map, "name", "Way 1");
+    ConstElementPtr way2 = MapUtils::getFirstElementWithTag(map, "name", "Way 2");
     CPPUNIT_ASSERT_EQUAL(
       IntersectionOverUnionExtractor::nullValue(), uut.extract(*map, way1, way2));
 
-    ConstElementPtr way3 = TestUtils::getElementWithTag(map, "name", "Way 3");
-    ConstElementPtr way4 = TestUtils::getElementWithTag(map, "name", "Way 4");
+    ConstElementPtr way3 = MapUtils::getFirstElementWithTag(map, "name", "Way 3");
+    ConstElementPtr way4 = MapUtils::getFirstElementWithTag(map, "name", "Way 4");
     CPPUNIT_ASSERT_EQUAL(
       IntersectionOverUnionExtractor::nullValue(), uut.extract(*map, way3, way4));
 
     map->clear();
-    NodePtr point1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    NodePtr point1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0);
     map->addNode(point1);
-    NodePtr point2 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    NodePtr point2 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0);
     map->addNode(point2);
     CPPUNIT_ASSERT_EQUAL(
       IntersectionOverUnionExtractor::nullValue(), uut.extract(*map, point1, point2));

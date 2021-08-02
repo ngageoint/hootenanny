@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -75,7 +75,7 @@ public:
    */
   void runSimpleIntersectionTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -84,12 +84,12 @@ public:
     MapProjector::projectToOrthographic(map, env);
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1);
 
     Coordinate w2c[] = { Coordinate(50, 50), Coordinate(50, -50), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
-    std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    std::shared_ptr<HighwayExpertClassifier> classifier = std::make_shared<HighwayExpertClassifier>();
 
     WaySublineMatch match(WaySubline(WayLocation(map, w1, 0, 0.0), WayLocation(map, w1, 1, 0.0)),
                           WaySubline(WayLocation(map, w2, 0, 0.0), WayLocation(map, w2, 1, 0.0)));
@@ -108,7 +108,7 @@ public:
    */
   void runSimpleOverlapTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -117,12 +117,12 @@ public:
     MapProjector::projectToOrthographic(map, env);
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1);
 
     Coordinate w2c[] = { Coordinate(0, 5), Coordinate(100, 5), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
-    std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    std::shared_ptr<HighwayExpertClassifier> classifier = std::make_shared<HighwayExpertClassifier>();
 
     WaySublineMatch match(WaySubline(WayLocation(map, w1, 0, 0.0), WayLocation(map, w1, 1, 0.0)),
                           WaySubline(WayLocation(map, w2, 0, 0.0), WayLocation(map, w2, 1, 0.0)));
@@ -141,7 +141,7 @@ public:
    */
   void runSmallOverlapTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -150,12 +150,12 @@ public:
     MapProjector::projectToOrthographic(map, env);
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1);
 
     Coordinate w2c[] = { Coordinate(90, 5), Coordinate(190, 5), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
-    std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    std::shared_ptr<HighwayExpertClassifier> classifier = std::make_shared<HighwayExpertClassifier>();
 
     WaySublineMatch match(WaySubline(WayLocation(map, w1, 0, 0.0), WayLocation(map, w1, 1, 0.0)),
                           WaySubline(WayLocation(map, w2, 0, 0.0), WayLocation(map, w2, 1, 0.0)));

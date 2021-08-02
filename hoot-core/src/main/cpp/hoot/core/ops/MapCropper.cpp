@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "MapCropper.h"
@@ -37,30 +37,29 @@
 #include <geos/util/GEOSException.h>
 
 // Hoot
+#include <hoot/core/algorithms/FindNodesInWayFactory.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/ops/RemoveNodeByEid.h>
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/FindNodesInWayFactory.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/ops/SuperfluousWayRemover.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/util/Validate.h>
-#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/WayUtils.h>
-#include <hoot/core/elements/ElementIdUtils.h>
-#include <hoot/core/ops/SuperfluousWayRemover.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/util/Validate.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // Standard
 #include <limits>
@@ -218,7 +217,7 @@ void MapCropper::apply(OsmMapPtr& map)
   LOG_VARD(_invert);
   LOG_VARD(_keepEntireFeaturesCrossingBounds);
   LOG_VARD(_keepOnlyFeaturesInsideBounds);
-  LOG_VART(_bounds->toString());
+  LOG_VARD(_bounds->toString());
   LOG_VARD(_inclusionCrit.get());
 
   // go through all the ways
@@ -285,7 +284,7 @@ void MapCropper::apply(OsmMapPtr& map)
       _numWaysOutOfBounds++;
       _numAffected++;
     }
-    //  For whatever reason, the inside check against an envelope only causes no problems, but
+    // For whatever reason, the inside check against an envelope only causes no problems, but
     // checking against just the geometry yields test failures.
     else if (_isWhollyInside(wayEnv))
     {
@@ -323,11 +322,12 @@ void MapCropper::apply(OsmMapPtr& map)
     if (wayCtr % _statusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Cropped " << StringUtils::formatLargeNumber(wayCtr) << " / " <<
+        "Cropped " << StringUtils::formatLargeNumber(wayCtr) << " of " <<
         StringUtils::formatLargeNumber(ways.size()) << " ways.");
     }
   }
   LOG_VARD(map->size());
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-way-removal");
 
   std::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
 
@@ -346,17 +346,16 @@ void MapCropper::apply(OsmMapPtr& map)
     bool nodeInside = false;
 
     LOG_VART(_explicitlyIncludedWayIds.size());
-    if (_explicitlyIncludedWayIds.size() > 0)
+    if (!_explicitlyIncludedWayIds.empty())
     {
       LOG_VART(WayUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map));
     }
-    if (_inclusionCrit && _explicitlyIncludedWayIds.size() > 0 &&
+    if (!_inclusionCrit && _explicitlyIncludedWayIds.empty() &&
         WayUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map))
     {
       LOG_TRACE(
         "Skipping delete for: " << node->getElementId() <<
         " belonging to explicitly included way(s)...");
-      nodeInside = true;
     }
     else
     {
@@ -378,19 +377,17 @@ void MapCropper::apply(OsmMapPtr& map)
       }
       LOG_VART(nodeInside);
 
-      // if the node is outside
-      if (!nodeInside)
+      // If the node is outside,
+      if (!nodeInside &&
+          // the node is within the limiting bounds, and the node is not part of a way,
+          n2w->find(it->first) == n2w->end())
       {
-        // If the node is within the limiting bounds, and the node is not part of a way,
-        if (n2w->find(it->first) == n2w->end())
-        {
-          // remove the node.
-          LOG_TRACE(
-            "Removing node with coords: " << it->second->getX() << " : " << it->second->getY());
-          RemoveNodeByEid::removeNodeNoCheck(map, it->second->getId());
-          nodesRemoved++;
-          _numAffected++;
-        }
+        // remove the node.
+        LOG_TRACE(
+          "Removing node with coords: " << it->second->getX() << " : " << it->second->getY());
+        RemoveNodeByEid::removeNodeNoCheck(map, it->second->getId());
+        nodesRemoved++;
+        _numAffected++;
       }
     }
 
@@ -399,11 +396,12 @@ void MapCropper::apply(OsmMapPtr& map)
     if (nodeCtr % _statusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Cropped " << StringUtils::formatLargeNumber(nodeCtr) << " / " <<
+        "Cropped " << StringUtils::formatLargeNumber(nodeCtr) << " of " <<
         StringUtils::formatLargeNumber(nodes.size()) << " nodes.");
     }
   }
   LOG_VARD(map->size());
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-node-removal");
 
   // Remove dangling features here now, which used to be done in CropCmd only.
   long numSuperfluousWaysRemoved = 0;
@@ -411,9 +409,9 @@ void MapCropper::apply(OsmMapPtr& map)
   if (_removeSuperfluousFeatures)
   {
     numSuperfluousWaysRemoved = SuperfluousWayRemover::removeWays(map);
-    OsmMapWriterFactory::writeDebugMap(map, "cropper-after-superfluous-way-removal");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-superfluous-way-removal");
     numSuperfluousNodesRemoved = SuperfluousNodeRemover::removeNodes(map);
-    OsmMapWriterFactory::writeDebugMap(map, "cropper-after-superfluous-node-removal");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-superfluous-node-removal");
   }
 
   // Most of the time we want to remove missing refs in order for the output to be clean. In some
@@ -429,7 +427,7 @@ void MapCropper::apply(OsmMapPtr& map)
     map->visitRw(missingElementsRemover);
     LOG_DEBUG("\t" << missingElementsRemover.getCompletedStatusMessage());
     LOG_VARD(map->size());
-    OsmMapWriterFactory::writeDebugMap(map, "cropper-after-missing-elements-removal");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-missing-elements-removal");
 
     // This will remove any relations that were already empty or became empty after the previous
     // step.
@@ -438,7 +436,7 @@ void MapCropper::apply(OsmMapPtr& map)
     LOG_INFO("\t" << emptyRelationRemover.getInitStatusMessage());
     emptyRelationRemover.apply(map);
     LOG_DEBUG("\t" << emptyRelationRemover.getCompletedStatusMessage());
-    OsmMapWriterFactory::writeDebugMap(map, "cropper-after-empty-relations-removal");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-empty-relations-removal");
   }
 
   LOG_VARD(_numAffected);
@@ -461,28 +459,32 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   std::shared_ptr<Geometry> fg =
     ElementToGeometryConverter(map, _logWarningsForMissingElements).convertToGeometry(way);
   LOG_VART(GeometryUtils::geometryTypeIdToString(fg));
+  if (!fg || fg->isEmpty())
+  {
+    return;
+  }
 
   // perform the intersection with the geometry
   std::shared_ptr<Geometry> g;
   try
   {
     if (_invert)
-      g.reset(fg->difference(_bounds.get()));
+      g = fg->difference(_bounds.get());
     else
-      g.reset(fg->intersection(_bounds.get()));
+      g = fg->intersection(_bounds.get());
   }
   catch (const geos::util::GEOSException&)
   {
     // try cleaning up the geometry and try again.
     fg.reset(GeometryUtils::validateGeometry(fg.get()));
     if (_invert)
-      g.reset(fg->difference(_bounds.get()));
+      g = fg->difference(_bounds.get());
     else
-      g.reset(fg->intersection(_bounds.get()));
+      g = fg->intersection(_bounds.get());
   }
   LOG_VART(GeometryUtils::geometryTypeIdToString(g));
 
-  std::shared_ptr<FindNodesInWayFactory> nodeFactory(new FindNodesInWayFactory(way));
+  std::shared_ptr<FindNodesInWayFactory> nodeFactory = std::make_shared<FindNodesInWayFactory>(way);
   GeometryToElementConverter gc(map);
   gc.setNodeFactory(nodeFactory);
   ElementPtr e = gc.convertGeometryToElement(g.get(), way->getStatus(), way->getCircularError());
@@ -502,7 +504,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
     return;
   }
 
-  if (e == 0)
+  if (e == nullptr)
   {
     LOG_TRACE("Removing way during crop check: " << way->getElementId() << "...");
     RemoveWayByEid::removeWayFully(map, way->getId());
@@ -554,7 +556,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   }
 }
 
-bool MapCropper::_isWhollyInside(const Envelope& e)
+bool MapCropper::_isWhollyInside(const Envelope& e) const
 {
   bool result = false;;
   if (_invert)
@@ -575,7 +577,7 @@ bool MapCropper::_isWhollyInside(const Envelope& e)
   return result;
 }
 
-bool MapCropper::_isWhollyInside(const Geometry& e)
+bool MapCropper::_isWhollyInside(const Geometry& e) const
 {
   bool result = false;
   if (_invert)
@@ -596,7 +598,7 @@ bool MapCropper::_isWhollyInside(const Geometry& e)
   return result;
 }
 
-bool MapCropper::_isWhollyOutside(const Envelope& e)
+bool MapCropper::_isWhollyOutside(const Envelope& e) const
 {
   bool result = false;
   if (!_invert)
@@ -618,7 +620,7 @@ bool MapCropper::_isWhollyOutside(const Envelope& e)
   return result;
 }
 
-bool MapCropper::_isWhollyOutside(const Geometry& e)
+bool MapCropper::_isWhollyOutside(const Geometry& e) const
 {
   bool result = false;
   if (!_invert)

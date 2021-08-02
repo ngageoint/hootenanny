@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ToEnglishTranslateDictionary.h"
@@ -50,8 +50,9 @@ _transliterationCachingEnabled(false)
 {
   if (ConfigOptions().getTransliterationMaxCacheSize() != -1)
   {
-    _transliterationCache.reset(
-      new Tgs::LruCache<QString, QString>(ConfigOptions().getTransliterationMaxCacheSize()));
+    _transliterationCache =
+      std::make_shared<Tgs::LruCache<QString, QString>>(
+        ConfigOptions().getTransliterationMaxCacheSize());
     _transliterationCachingEnabled = true;
   }
   LOG_VARD(_transliterationCachingEnabled);
@@ -59,7 +60,7 @@ _transliterationCachingEnabled(false)
   UErrorCode error = U_ZERO_ERROR;
 
   _titler.reset(Transliterator::createInstance("Any-Title", UTRANS_FORWARD, error));
-  if (_titler == NULL || error != U_ZERO_ERROR)
+  if (_titler == nullptr || error != U_ZERO_ERROR)
   {
     LOG_ERROR("transliterator error code: " << error);
     throw HootException("transliterator error");
@@ -67,7 +68,7 @@ _transliterationCachingEnabled(false)
 
   _transliterator.reset(
     Transliterator::createInstance("Any-Latin; Latin-ASCII", UTRANS_FORWARD, error));
-  if (_transliterator == NULL || error != U_ZERO_ERROR)
+  if (_transliterator == nullptr || error != U_ZERO_ERROR)
   {
     LOG_ERROR("transliterator error code: " << error);
     throw HootException("transliterator error");
@@ -84,13 +85,13 @@ ToEnglishTranslateDictionary& ToEnglishTranslateDictionary::getInstance()
 }
 
 bool ToEnglishTranslateDictionary::getFromTransliterationCache(const QString& originalText,
-                                                      QString& transliteratedText)
+                                                      QString& transliteratedText) const
 {
   return _transliterationCache->get(originalText, transliteratedText);
 }
 
 void ToEnglishTranslateDictionary::insertIntoTransliterationCache(const QString& originalText,
-                                                         const QString& transliteratedText)
+                                                         const QString& transliteratedText) const
 {
   _transliterationCache->insert(originalText, transliteratedText);
 }

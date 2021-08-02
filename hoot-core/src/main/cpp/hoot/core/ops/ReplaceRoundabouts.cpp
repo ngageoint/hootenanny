@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ReplaceRoundabouts.h"
@@ -69,7 +69,7 @@ void ReplaceRoundabouts::replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap)
     // This could be very expensive...enable for debugging only.
     //OsmMapWriterFactory::writeDebugMap(pMap, "after-replacing-roundabout-" + QString::number(i + 1));
   }
-  OsmMapWriterFactory::writeDebugMap(pMap, "after-replacing-roundabouts-1");
+  OsmMapWriterFactory::writeDebugMap(pMap, className(), "after-replacing-roundabouts-1");
 
   // We may have lost track of some of the connectors b/c of ID changes, so let's do another pass
   // at removing them.
@@ -82,7 +82,7 @@ void ReplaceRoundabouts::replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap)
     LOG_TRACE("Removing center node: " << id << "...");
     RemoveWayByEid::removeWayFully(pMap, id);
   }
-  OsmMapWriterFactory::writeDebugMap(pMap, "after-replacing-roundabouts-2");
+  OsmMapWriterFactory::writeDebugMap(pMap, className(), "after-replacing-roundabouts-2");
 
   //  Clean up any roundabout centers that didn't clean themselves up earlier
   std::vector<long> centers =
@@ -94,7 +94,7 @@ void ReplaceRoundabouts::replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap)
     LOG_TRACE("Removing center node: " << id << "...");
     RemoveNodeByEid::removeNode(pMap, id, true);
   }
-  OsmMapWriterFactory::writeDebugMap(pMap, "roundabout-replacement-after-removing-center-nodes");
+  OsmMapWriterFactory::writeDebugMap(pMap, className(), "after-removing-center-nodes");
 }
 
 void ReplaceRoundabouts::apply(std::shared_ptr<OsmMap>& pMap)

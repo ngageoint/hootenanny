@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -45,7 +45,7 @@ public:
   void runTest()
   {
     TagKeyContainsCriterion uut;
-    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node->getTags().set("source:phone", "blah");
     node->getTags().set("key2", "blah");
 

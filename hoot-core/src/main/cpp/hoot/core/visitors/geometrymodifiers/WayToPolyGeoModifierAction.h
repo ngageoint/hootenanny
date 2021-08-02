@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WAYTOPOLYGEOMODIFIERACTION_H
 #define WAYTOPOLYGEOMODIFIERACTION_H
@@ -48,13 +48,14 @@ public:
   static QString className() { return "hoot::WayToPolyGeoModifierAction"; }
 
   WayToPolyGeoModifierAction() = default;
-  virtual ~WayToPolyGeoModifierAction() = default;
+  ~WayToPolyGeoModifierAction() = default;
 
-  virtual QString getCommandName() const override { return "way_to_poly"; }
-  virtual QList<QString> getParameterNames() const override { return QList<QString>( { WIDTH_TAG_PARAM, DEFAULT_WIDTH_PARAM } ); }
+  QString getCommandName() const override { return "way_to_poly"; }
+  QList<QString> getParameterNames() const override
+  { return QList<QString>( { WIDTH_TAG_PARAM, DEFAULT_WIDTH_PARAM } ); }
 
-  virtual void parseArguments(const QHash<QString, QString>& arguments) override;
-  virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
+  void parseArguments(const QHash<QString, QString>& arguments) override;
+  bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
 
 private:
 
@@ -62,7 +63,7 @@ private:
   double _width = DEFAULT_WIDTH;  
   QString _widthTag = QString();
 
-  void addNodeToPoly( const CoordinateExt& pos, OsmMap* pMap, WayPtr pPoly );
+  void addNodeToPoly( const CoordinateExt& pos, OsmMap* pMap, WayPtr pPoly ) const;
 };
 
 }

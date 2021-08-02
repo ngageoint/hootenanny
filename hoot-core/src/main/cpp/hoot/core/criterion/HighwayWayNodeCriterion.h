@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef HIGHWAY_WAY_NODE_CRITERION_H
 #define HIGHWAY_WAY_NODE_CRITERION_H
@@ -41,18 +41,16 @@ public:
 
   HighwayWayNodeCriterion();
   HighwayWayNodeCriterion(ConstOsmMapPtr map);
-  virtual ~HighwayWayNodeCriterion() = default;
+  ~HighwayWayNodeCriterion() = default;
 
-  virtual void setOsmMap(const OsmMap* map) override;
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new HighwayWayNodeCriterion(_map)); }
+  ElementCriterionPtr clone() override { return std::make_shared<HighwayWayNodeCriterion>(_map); }
 
-  virtual QString getDescription() const { return "Identifies highway nodes"; }
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Identifies highway nodes"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 }

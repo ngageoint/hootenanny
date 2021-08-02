@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CLOSEPOINTHASH_H
@@ -62,7 +62,7 @@ public:
    * Returns the ids of the current match during iteration. This may have more ids than actually
    * match.
    */
-  const std::vector<long>& getMatch();
+  const std::vector<long>& getMatch() const;
 
   // Returns all potential matches for a specific id, works outside of the iteration method.
   std::vector<long> getMatchesFor(long id);
@@ -102,7 +102,7 @@ private:
 
   HashMap<long, std::vector<int64_t>> _idTobin;
 
-  int64_t _toBin(double x, double y);
+  int64_t _toBin(double x, double y) const;
 };
 
 }

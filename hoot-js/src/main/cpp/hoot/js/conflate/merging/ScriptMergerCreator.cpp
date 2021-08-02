@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ScriptMergerCreator.h"
 
@@ -56,47 +56,46 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
   Persistent<Object> plugin;
   QStringList matchType;
 
-  // go through all the matches
+  // Go through all the matches.
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    ConstMatchPtr m = *it;
-    //LOG_VART(m->toString());
-    std::shared_ptr<const ScriptMatch> sm = dynamic_pointer_cast<const ScriptMatch>(m);
-    // check to make sure all the input matches are script matches
-    if (sm == 0)
+    ConstMatchPtr match = *it;;
+    std::shared_ptr<const ScriptMatch> scriptMatch = dynamic_pointer_cast<const ScriptMatch>(match);
+    // Check to make sure all the input matches are script matches.
+    if (scriptMatch == nullptr)
     {
-      // return an empty result
-      LOG_TRACE("Match invalid; skipping merge: " << m->toString());
+      // Return an empty result.
+      LOG_TRACE("Match invalid; skipping merge: " << match->toString());
       return false;
     }
-    // add all the element to element pairs to a set
+    // Add all the element to element pairs to a set.
     else
     {
-      script = sm->getScript();
+      script = scriptMatch->getScript();
 
       Isolate* current = v8::Isolate::GetCurrent();
       HandleScope handleScope(current);
       Context::Scope context_scope(script->getContext(current));
 
-      plugin.Reset(current, sm->getPlugin());
-      set<pair<ElementId, ElementId>> s = sm->getMatchPairs();
+      plugin.Reset(current, scriptMatch->getPlugin());
+      set<pair<ElementId, ElementId>> s = scriptMatch->getMatchPairs();
       eids.insert(s.begin(), s.end());
-      if (matchType.contains(sm->getName()) == false)
+      if (matchType.contains(scriptMatch->getName()) == false)
       {
-        matchType.append(sm->getName());
+        matchType.append(scriptMatch->getName());
       }
     }
   }
   LOG_VART(eids);
 
-  std::shared_ptr<ScriptMerger> sm(new ScriptMerger(script, plugin, eids));
-  sm->setMatchType(matchType.join(";"));
-  // only add the merger if there are elements to merge
-  if (sm->hasFunction("mergeSets"))
+  std::shared_ptr<ScriptMerger> scriptMerger = std::make_shared<ScriptMerger>(script, plugin, eids);
+  scriptMerger->setMatchType(matchType.join(";"));
+  // Only add the merger if there are elements to merge.
+  if (scriptMerger->hasFunction("mergeSets"))
   {
     if (eids.size() >= 1)
     {
-      mergers.push_back(sm);
+      mergers.push_back(scriptMerger);
       result = true;
     }
   }
@@ -104,14 +103,15 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
   {
     if (eids.size() == 1)
     {
-      mergers.push_back(sm);
+      mergers.push_back(scriptMerger);
       result = true;
     }
     else if (eids.size() > 1)
     { 
       LOG_TRACE("Overlapping matches:\n" << eids << "\nmatch types: " << matchType.join(";"));
       mergers.push_back(
-        MergerPtr(new MarkForReviewMerger(eids, "Overlapping matches", matchType.join(";"), 1.0)));
+        std::make_shared<MarkForReviewMerger>(
+          eids, "Overlapping matches", matchType.join(";"), 1.0));
       result = true;
     }
   }
@@ -124,9 +124,9 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
 vector<CreatorDescription> ScriptMergerCreator::getAllCreators() const
 {
   CreatorDescription d;
-  d.className = className();
-  d.description = "Generates mergers used in Generic Conflation";
-  d.experimental = false;
+  d.setClassName(className());
+  d.setDescription("Generates mergers used in Generic Conflation");
+  d.setExperimental(false);
   vector<CreatorDescription> result;
   result.push_back(d);
 

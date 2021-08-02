@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "HootNetworkRequest.h"
@@ -66,9 +66,11 @@ void HootNetworkRequest::setOAuthKeys(const QString& consumer_key, const QString
                                       const QString& request_token, const QString& request_secret)
 {
   //  Initialize the consumer key
-  _consumer.reset(new OAuth::Consumer(consumer_key.toStdString(), consumer_secret.toStdString()));
+  _consumer =
+    std::make_shared<OAuth::Consumer>(consumer_key.toStdString(), consumer_secret.toStdString());
   //  Initialize the request token
-  _tokenRequest.reset(new OAuth::Token(request_token.toStdString(), request_secret.toStdString()));
+  _tokenRequest =
+    std::make_shared<OAuth::Token>(request_token.toStdString(), request_secret.toStdString());
   //  Set the OAuth flag
   _useOAuth = true;
 }
@@ -101,7 +103,7 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
   _error.clear();
   _timedOut = false;
   //  Do HTTP request
-  std::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
+  std::shared_ptr<QNetworkAccessManager> pNAM = std::make_shared<QNetworkAccessManager>();
   QNetworkRequest request(url);
 
   if (tempUrl.scheme().toLower() == "https")
@@ -131,7 +133,7 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
     pNAM->setCookieJar(_cookies.get());
     // don't want to take ownership of these cookies so they could potentially be shared across
     // different requests made by the same caller
-    _cookies->setParent(0);
+    _cookies->setParent(nullptr);
   }
   //  Setup the OAuth header on the request object
   if (_useOAuth && _consumer && _tokenRequest)
@@ -140,7 +142,7 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
   QEventLoop loop;
   QTimer timeoutTimer;
   //  Call the correct function on the network access manager
-  QNetworkReply* reply = NULL;
+  QNetworkReply* reply = nullptr;
   switch (http_op)
   {
   case QNetworkAccessManager::GetOperation:
@@ -213,9 +215,9 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
   return true;
 }
 
-int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply)
+int HootNetworkRequest::_getHttpResponseCode(const QNetworkReply* reply) const
 {
-  if (reply != NULL)
+  if (reply != nullptr)
   {
     //  Get the status code
     QVariant status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
@@ -226,7 +228,7 @@ int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply)
   return 0;
 }
 
-void HootNetworkRequest::_setOAuthHeader(QNetworkAccessManager::Operation http_op, QNetworkRequest& request)
+void HootNetworkRequest::_setOAuthHeader(QNetworkAccessManager::Operation http_op, QNetworkRequest& request) const
 {
   //  Convert the operation format
   OAuth::Http::RequestType op;
@@ -251,7 +253,7 @@ void HootNetworkRequest::removeIpFromUrlString(QString& endpointUrl, const QUrl&
     endpointUrl.replace(url.host(), "<host-ip>");
 }
 
-void HootNetworkRequest::logConnectionError()
+void HootNetworkRequest::logConnectionError() const
 {
   if (_status < 0)
   {

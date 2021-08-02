@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMSCHEMA_JS_H
 #define OSMSCHEMA_JS_H
@@ -40,7 +40,7 @@ class OsmSchemaJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
   virtual ~OsmSchemaJs() = default;
 
@@ -52,7 +52,6 @@ private:
   static void getCategories(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getChildTagsAsVertices(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getSimilarTagsAsVertices(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getTagByCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getTagVertex(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isAncestor(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isGeneric(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -64,23 +63,19 @@ private:
   static void scoreTypes(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void scoreOneWay(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  // Even thoughthe logic for some of these methods have been moved from OsmSchema to criterion,
-  // decided to leave this interface intact, as it will be simpler to access from js.
+  // Even though the logic for all of these is* methods has been moved from OsmSchema to individual
+  // ElementCriterion classes, decided to leave this interface intact as it will be simpler to
+  // access from js.
 
   // All of these methods can go away if #3047 is completed.
-  static void isArea(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPoint(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPolygon(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void isBuilding(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isLinear(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void isLinearWaterway(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isRiver(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPowerLine(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void isMetaData(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isRailway(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void isHighway(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isNonBuildingArea(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void isCollectionRelation(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   /**
    * See description in rules/HootLib.js isSpecificallyConflatable method
@@ -90,10 +85,12 @@ private:
   static void hasName(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
-inline v8::Handle<v8::Value> toV8(const SchemaVertex& tv)
+inline v8::Local<v8::Value> toV8(const SchemaVertex& tv)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
-  v8::Handle<v8::Object> result = v8::Object::New(current);
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
+  v8::Local<v8::Object> result = v8::Object::New(current);
 
   if (tv.isEmpty())
   {
@@ -101,18 +98,18 @@ inline v8::Handle<v8::Value> toV8(const SchemaVertex& tv)
   }
   else
   {
-    result->Set(toV8("name"), toV8(tv.name));
-    result->Set(toV8("description"), toV8(tv.description));
-    result->Set(toV8("key"), toV8(tv.key));
-    result->Set(toV8("value"), toV8(tv.value));
-    result->Set(toV8("influence"), toV8(tv.influence));
-    result->Set(toV8("childWeight"), toV8(tv.childWeight));
-    result->Set(toV8("mismatchScore"), toV8(tv.mismatchScore));
+    result->Set(context, toV8("name"), toV8(tv.getName()));
+    result->Set(context, toV8("description"), toV8(tv.getDescription()));
+    result->Set(context, toV8("key"), toV8(tv.getKey()));
+    result->Set(context, toV8("value"), toV8(tv.getValue()));
+    result->Set(context, toV8("influence"), toV8(tv.getInfluence()));
+    result->Set(context, toV8("childWeight"), toV8(tv.getChildWeight()));
+    result->Set(context, toV8("mismatchScore"), toV8(tv.getMismatchScore()));
     // need to create a string conversion for this if we want to use it. Unused for now.
     //result->Set(toV8("valueType"), toV8(tv.valueType), None);
-    result->Set(toV8("aliases"), toV8(tv.aliases));
-    result->Set(toV8("categories"), toV8(tv.categories));
-    result->Set(toV8("geometries"), toV8(tv.geometries));
+    result->Set(context, toV8("aliases"), toV8(tv.getAliases()));
+    result->Set(context, toV8("categories"), toV8(tv.getCategories()));
+    result->Set(context, toV8("geometries"), toV8(tv.getGeometries()));
   }
 
   return result;

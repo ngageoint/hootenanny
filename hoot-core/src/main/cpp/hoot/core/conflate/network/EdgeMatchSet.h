@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __EDGE_MATCH_SET_H__
 #define __EDGE_MATCH_SET_H__
@@ -42,11 +42,10 @@ public:
   virtual bool contains(const ConstEdgeMatchPtr &em) const = 0;
 
   virtual QString toString() const = 0;
-
 };
 
-typedef std::shared_ptr<EdgeMatchSet> EdgeMatchSetPtr;
-typedef std::shared_ptr<const EdgeMatchSet> ConstEdgeMatchSetPtr;
+using EdgeMatchSetPtr = std::shared_ptr<EdgeMatchSet>;
+using ConstEdgeMatchSetPtr = std::shared_ptr<const EdgeMatchSet>;
 
 // not implemented
 bool operator<(ConstEdgeMatchSetPtr, ConstEdgeMatchSetPtr);

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTCRITERIONVISITORINPUTSTREAM_H
 #define ELEMENTCRITERIONVISITORINPUTSTREAM_H
@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/visitors/ElementVisitor.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 
 // Qt
@@ -69,31 +69,31 @@ public:
                                      const ElementCriterionPtr& criterion,
                                      const QList<ElementVisitorPtr>& visitors);
 
-  virtual ~ElementCriterionVisitorInputStream();
+  ~ElementCriterionVisitorInputStream();
 
   /**
    * @brief close
    * Invokes the close function on the source element input stream
    */
-  virtual void close();
+  void close() override;
 
   /**
    * Returns the source's projection.
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @brief hasMoreElements
    * @return return value from call to source ElementInputStream's hasMoreElements() method
    */
-  virtual bool hasMoreElements();
+  bool hasMoreElements() override;
 
   /**
    * @brief readNextElement
    * @return Pointer to an elemement that is read from elementSource and is satisfied by the
    *    criterion.
    */
-  virtual ElementPtr readNextElement() override;
+  ElementPtr readNextElement() override;
 
   long getNumFeaturesTotal() const { return _numFeaturesTotal; }
 

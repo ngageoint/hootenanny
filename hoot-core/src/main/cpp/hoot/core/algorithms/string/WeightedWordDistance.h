@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WEIGHTEDWORDDISTANCE_H
 #define WEIGHTEDWORDDISTANCE_H
@@ -40,7 +40,8 @@ namespace hoot
 {
 
 /**
- * Returns the max (best) pairwise word comparison within two sets of words.
+ * @brief The WeightedWordDistance class returns the max (best) pairwise word comparison within two
+ * sets of words.
  */
 class WeightedWordDistance : public StringDistance, public StringDistanceConsumer,
   public Configurable
@@ -49,23 +50,21 @@ public:
 
   static QString className() { return "hoot::WeightedWordDistance"; }
 
-  WeightedWordDistance(StringDistance* d, WordWeightDictionary* dictionary);
+  WeightedWordDistance(
+    std::shared_ptr<StringDistance> d, std::shared_ptr<WordWeightDictionary> dictionary);
   WeightedWordDistance();
-  virtual ~WeightedWordDistance() = default;
+  ~WeightedWordDistance() = default;
 
-  virtual double compare(const QString& s1, const QString& s2) const override;
+  double compare(const QString& s1, const QString& s2) const override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual void setStringDistance(const StringDistancePtr& sd) { _d = sd; }
+  void setStringDistance(const StringDistancePtr& sd) override { _d = sd; }
 
-  virtual QString toString() const override { return "WeightedWordDistance " + _d->toString(); }
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
-
-  virtual QString getDescription() const override
+  QString toString() const override { return "WeightedWordDistance " + _d->toString(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
   { return "Returns a score based on the best pairwise comparison within two sets of words"; }
 
 private:

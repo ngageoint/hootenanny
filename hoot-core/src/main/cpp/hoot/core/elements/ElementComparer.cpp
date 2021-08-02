@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ElementComparer.h"
 
@@ -66,21 +66,21 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
   // different types?
   if (e1->getElementType() != e2->getElementType())
   {
-    LOG_TRACE("compare failed on type: " << e1->getElementId() << ", " << e2->getElementId());
+    LOG_TRACE("Compare failed on type: " << e1->getElementId() << ", " << e2->getElementId());
     return false;
   }
 
   // different IDs?
   if (!_ignoreElementId && (e1->getElementId() != e2->getElementId()))
   {
-    LOG_TRACE("compare failed on ID: " << e1->getElementId() << ", " << e2->getElementId());
+    LOG_TRACE("Compare failed on ID: " << e1->getElementId() << ", " << e2->getElementId());
     return false;
   }
 
   // different versions?
   if (!_ignoreVersion && (e1->getVersion() != e2->getVersion()))
   {
-    LOG_TRACE("compare failed on version: " << e1->getElementId() << ", " << e2->getElementId());
+    LOG_TRACE("Compare failed on version: " << e1->getElementId() << ", " << e2->getElementId());
     return false;
   }
 
@@ -229,7 +229,7 @@ bool ElementComparer::_compareRelation(ElementPtr re, ElementPtr e) const
 
     for (size_t i = 0; i < rr->getMembers().size(); i++)
     {
-      if (rr->getMembers()[i].role != r->getMembers()[i].role ||
+      if (rr->getMembers()[i].getRole() != r->getMembers()[i].getRole() ||
           rr->getMembers()[i].getElementId() != r->getMembers()[i].getElementId())
       {
         LOG_TRACE(

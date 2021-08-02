@@ -19,32 +19,33 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RubberSheet.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -109,16 +110,28 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
   _criteria.reset();
   if (!criteria.isEmpty())
   {
-    _criteria.reset(new OrCriterion());
+    _criteria = std::make_shared<OrCriterion>();
     for (int i = 0; i < criteria.size(); i++)
     {
       const QString critName = criteria.at(i).trimmed();
       if (!critName.isEmpty())
       {
         LOG_VART(critName);
+
+        // Element criteria are used to control what gets rubbersheeted at conflate time. An
+        // additional check is done here against the conflate configuration to ensure we don't
+        // rubbersheet any elements we're not conflating.
+        if (_conflateInfoCache &&
+            !_conflateInfoCache->elementCriterionInUseByActiveMatcher(critName))
+        {
+          LOG_TRACE(
+            "Excluding " << critName << " filter due it not being in use by an active conflate " <<
+            "matcher.");
+          continue;
+        }
+
         ElementCriterionPtr crit =
-          std::shared_ptr<ElementCriterion>(
-            Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
+          Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed());
         LOG_VART(crit.get());
 
         std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
@@ -132,6 +145,7 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
           throw IllegalArgumentException(
             "RubberSheet ElementCrition must be a ConflatableElementCriterion or WayNodeCriterion.");
         }
+
         if (conflatableCrit)
         {
           const GeometryTypeCriterion::GeometryType geometryType =
@@ -159,66 +173,6 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
         _criteria->addCriterion(crit);
       }
     }
-  }
-}
-
-void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
-{
-  NodePtr from = _map->getNode(nid);
-  LOG_VART(from->getElementId());
-  // the status type we're searching for
-  Status s;
-  if (from->getStatus() == Status::Unknown1)
-  {
-    s = Status::Unknown2;
-  }
-  else if (from->getStatus() == Status::Unknown2)
-  {
-    s = Status::Unknown1;
-  }
-  else
-  {
-    throw HootException("Expected either Unknown1 or Unknown2.");
-  }
-  LOG_VART(s);
-
-  std::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
-  double sum = 0.0;
-  list<Match>& matches = _matches[nid];
-  LOG_VART(matches.size());
-  vector<long> neighbors = _map->getIndex().findNodes(from->toCoordinate(), _searchRadius);
-  for (size_t i = 0; i < neighbors.size(); ++i)
-  {
-    NodePtr aNeighbor = _map->getNode(neighbors[i]);
-    LOG_VART(aNeighbor->getElementId());
-    NodeToWayMap::const_iterator it = n2w->find(neighbors[i]);
-    if (aNeighbor->getStatus() == s && it != n2w->end() && it->second.size() >= 2)
-    {
-      double score = _nm.scorePair(nid, neighbors[i]);
-      LOG_VART(QString::number(score, 'g', 10));
-
-      if (score > 0.0)
-      {
-        Match m;
-        m.nid1 = nid;
-        m.nid2 = neighbors[i];
-        m.score = score;
-        matches.push_back(m);
-        sum += m.score;
-      }
-    }
-  }
-  LOG_VART(matches.size());
-
-  // don't go any lower than 1.0, that would scale the values up and made it look unrealistically
-  // confident if there was only one intersection in a region.
-  sum = max(1.0, sum);
-  LOG_VART(sum);
-
-  for (list<Match>::iterator it = matches.begin(); it != matches.end(); ++it)
-  {
-    it->p = it->score / sum;
-    LOG_VART(it->p);
   }
 }
 
@@ -255,27 +209,27 @@ void RubberSheet::apply(std::shared_ptr<OsmMap>& map)
   }
   _numProcessed = map->getWayCount();
   //  Cache the rubbersheet for use later
-  map->setCachedRubberSheet(std::shared_ptr<RubberSheet>(this->clone()));
+  map->setCachedRubberSheet(this->clone());
 }
 
-bool RubberSheet::_calcAndApplyTransform(OsmMapPtr& map)
+bool RubberSheet::_calcAndApplyTransform(const OsmMapPtr& map)
 {
   LOG_INFO(
     "Rubber sheeting map having " <<
     StringUtils::formatLargeNumber(map->getWayCount()) << " ways out of a " <<
     StringUtils::formatLargeNumber(_maxAllowedWays) << " maximum allowed for rubber sheeting.");
-  OsmMapWriterFactory::writeDebugMap(map, "rubbersheet-before-transform-calc");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "before-transform-calc");
 
   std::shared_ptr<OGRSpatialReference> oldSrs = _projection;
   bool success = calculateTransform(map);
   _projection = oldSrs;
-  OsmMapWriterFactory::writeDebugMap(map, "rubbersheet-after-calculate-transform");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-calculate-transform");
 
   if (success)
   {
     success = applyTransform(map);
     _numAffected = map->getWayCount();
-    OsmMapWriterFactory::writeDebugMap(map, "rubbersheet-after-apply-transform");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-apply-transform");
   }
 
   return success;
@@ -286,16 +240,16 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   // Potentially filtering out potentially multiple feature types here. Not sure if it would be
   // beneficial to rubbersheet each criterion separately...
   LOG_DEBUG("Filtering map before rubbersheeting...");
-  OsmMapWriterFactory::writeDebugMap(map, "rubbersheet-before-filtering");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "before-filtering");
 
   _projection = map->getProjection();
 
   std::shared_ptr<CopyMapSubsetOp> mapCopier;
 
   // copy out elements meeting the filter criteria into a map
-  OsmMapPtr toModify(new OsmMap());
+  OsmMapPtr toModify = std::make_shared<OsmMap>();
   LOG_VARD(_criteria->toString());
-  mapCopier.reset(new CopyMapSubsetOp(map, _criteria));
+  mapCopier = std::make_shared<CopyMapSubsetOp>(map, _criteria);
   mapCopier->apply(toModify);
   LOG_DEBUG(
     "Element count for map being modified: " <<
@@ -316,16 +270,16 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
     return;
   }
 
-  OsmMapWriterFactory::writeDebugMap(toModify, "rubbersheet-to-modify");
+  OsmMapWriterFactory::writeDebugMap(toModify, className(), "to-modify");
 
   // copy out elements not meeting filter criteria into another map
-  OsmMapPtr toNotModify(new OsmMap());
-  mapCopier.reset(new CopyMapSubsetOp(map, NotCriterionPtr(new NotCriterion(_criteria))));
+  OsmMapPtr toNotModify = std::make_shared<OsmMap>();
+  mapCopier = std::make_shared<CopyMapSubsetOp>(map, std::make_shared<NotCriterion>(_criteria));
   mapCopier->apply(toNotModify);
   LOG_DEBUG(
     "Element count for map not being modified: " <<
     StringUtils::formatLargeNumber(toNotModify->getElementCount()));
-  OsmMapWriterFactory::writeDebugMap(toNotModify, "rubbersheet-to-not-modify");
+  OsmMapWriterFactory::writeDebugMap(toNotModify, className(), "to-not-modify");
 
   // run the rubbersheeting on just the elements we want to modify
   if (_calcAndApplyTransform(toModify))
@@ -334,13 +288,13 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
     std::vector<std::shared_ptr<Roundabout>> roundabouts = map->getRoundabouts();
     map.reset(); // reduce some unnecessary memory consumption
 
-    if (_projection.get() != 0)
+    if (_projection.get() != nullptr)
     {
       MapProjector::project(toNotModify, _projection);
       MapProjector::project(toModify, _projection);
     }
-    OsmMapWriterFactory::writeDebugMap(toNotModify, "rubbersheet-to-not-modify-after-reproject");
-    OsmMapWriterFactory::writeDebugMap(toModify, "rubbersheet-to-modify-after-reproject");
+    OsmMapWriterFactory::writeDebugMap(toNotModify, className(), "to-not-modify-after-reproject");
+    OsmMapWriterFactory::writeDebugMap(toModify, className(), "to-modify-after-reproject");
 
     // append what we rubbersheeted back to what we didn't rubbersheet to become the final map
     toNotModify->append(toModify, true);
@@ -348,11 +302,11 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
     map->setRoundabouts(roundabouts);
     LOG_DEBUG(
       "Element count for result map: " << StringUtils::formatLargeNumber(map->getElementCount()));
-    OsmMapWriterFactory::writeDebugMap(map, "rubbersheet-result-map");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "result-map");
   }
 }
 
-bool RubberSheet::applyTransform(std::shared_ptr<OsmMap>& map)
+bool RubberSheet::applyTransform(const OsmMapPtr& map)
 {
   LOG_DEBUG("Applying transform...");
 
@@ -373,7 +327,7 @@ bool RubberSheet::applyTransform(std::shared_ptr<OsmMap>& map)
     return false;
   }
 
-  if (_projection.get() != 0)
+  if (_projection.get() != nullptr)
   {
     MapProjector::project(_map, _projection);
   }
@@ -402,7 +356,7 @@ bool RubberSheet::applyTransform(std::shared_ptr<OsmMap>& map)
     if (ctr % 1000 == 0)
     {
       PROGRESS_INFO(
-        "Applied rubber sheet transform to " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Applied rubber sheet transform to " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(nm.size()) << " nodes...");
     }
   }
@@ -412,12 +366,12 @@ bool RubberSheet::applyTransform(std::shared_ptr<OsmMap>& map)
 
 std::shared_ptr<DataFrame> RubberSheet::_buildDataFrame(Status s) const
 {
-  std::shared_ptr<DataFrame> df(new DataFrame());
+  std::shared_ptr<DataFrame> df = std::make_shared<DataFrame>();
   vector<string> labels;
-  labels.push_back("x");
-  labels.push_back("y");
-  labels.push_back("dx");
-  labels.push_back("dy");
+  labels.emplace_back("x");
+  labels.emplace_back("y");
+  labels.emplace_back("dx");
+  labels.emplace_back("dy");
   vector<int> types(4, DataFrame::Numerical);
   df->setFactorLabels(labels);
   df->setFactorTypes(types);
@@ -479,7 +433,7 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
     QElapsedTimer timer;
     timer.start();
     LOG_INFO(
-      "Running rubber sheet interpolator: (" << (i + 1) << " / " <<
+      "Running rubber sheet interpolator: (" << (i + 1) << " of " <<
       candidates.size() << "): " << candidates[i] << "...");
 
     std::shared_ptr<Interpolator> candidate(
@@ -496,11 +450,11 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
     }
     candidate->setMaxAllowedPerLoopOptimizationIterations(maxOptIterations);
     vector<string> ind;
-    ind.push_back("x");
-    ind.push_back("y");
+    ind.emplace_back("x");
+    ind.emplace_back("y");
     vector<string> dep;
-    dep.push_back("dx");
-    dep.push_back("dy");
+    dep.emplace_back("dx");
+    dep.emplace_back("dy");
 
     candidate->setData(df);
     candidate->setIndependentColumns(ind);
@@ -520,17 +474,17 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
       StringUtils::millisecondsToDhms(timer.elapsed()) << " total for: " << candidates[i] << ".");
   }
 
-  if (bestCandidate.get() == 0)
+  if (bestCandidate.get() == nullptr)
   {
     throw HootException("Unable to determine rubber sheeting interpolation candidate.");
   }
 
-  LOG_DEBUG("Best candidate: " << bestCandidate->toString());
+  LOG_INFO("Using interpolator: " << bestCandidate->toString());
 
   return bestCandidate;
 }
 
-bool RubberSheet::calculateTransform(std::shared_ptr<OsmMap>& map)
+bool RubberSheet::calculateTransform(const OsmMapPtr& map)
 {
   LOG_DEBUG("Calculating transform...");
 
@@ -571,7 +525,7 @@ bool RubberSheet::_findTies()
     if (ctr % 1000 == 0)
     {
       PROGRESS_INFO(
-        "Processed intersections for " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Processed intersections for " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(n2w->size()) << " nodes...");
     }
   }
@@ -603,7 +557,7 @@ bool RubberSheet::_findTies()
     if (ctr % 100 == 0)
     {
       PROGRESS_INFO(
-        "Processed paired intersections for " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Processed paired intersections for " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(_matches.size()) << " matches...");
     }
   }
@@ -651,7 +605,7 @@ bool RubberSheet::_findTies()
     if (ctr % 100 == 0)
     {
       PROGRESS_INFO(
-        "Potential tie points processed: " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Potential tie points processed: " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(_finalPairs.size()));
     }
   }
@@ -736,12 +690,13 @@ std::shared_ptr<Interpolator> RubberSheet::_readInterpolator(QIODevice& is)
   QString projStr;
   ds >> projStr;
   _projection.reset(new OGRSpatialReference());
+  _projection->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   _projection->importFromProj4(projStr.toUtf8().data());
 
   QString interpolatorClass;
   ds >> interpolatorClass;
-  std::shared_ptr<Interpolator> result;
-  result.reset(Factory::getInstance().constructObject<Interpolator>(interpolatorClass));
+  std::shared_ptr<Interpolator> result =
+    Factory::getInstance().constructObject<Interpolator>(interpolatorClass);
   result->readInterpolator(is);
   return result;
 }
@@ -765,6 +720,66 @@ Coordinate RubberSheet::_translate(const Coordinate& c, Status s)
   return Coordinate(c.x + (*delta)[0], c.y + (*delta)[1]);
 }
 
+void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
+{
+  NodePtr from = _map->getNode(nid);
+  LOG_VART(from->getElementId());
+  // the status type we're searching for
+  Status s;
+  if (from->getStatus() == Status::Unknown1)
+  {
+    s = Status::Unknown2;
+  }
+  else if (from->getStatus() == Status::Unknown2)
+  {
+    s = Status::Unknown1;
+  }
+  else
+  {
+    throw HootException("Expected either Unknown1 or Unknown2.");
+  }
+  LOG_VART(s);
+
+  std::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
+  double sum = 0.0;
+  list<Match>& matches = _matches[nid];
+  LOG_VART(matches.size());
+  vector<long> neighbors = _map->getIndex().findNodes(from->toCoordinate(), _searchRadius);
+  for (size_t i = 0; i < neighbors.size(); ++i)
+  {
+    NodePtr aNeighbor = _map->getNode(neighbors[i]);
+    LOG_VART(aNeighbor->getElementId());
+    NodeToWayMap::const_iterator it = n2w->find(neighbors[i]);
+    if (aNeighbor->getStatus() == s && it != n2w->end() && it->second.size() >= 2)
+    {
+      double score = _nm.scorePair(nid, neighbors[i]);
+      LOG_VART(QString::number(score, 'g', 10));
+
+      if (score > 0.0)
+      {
+        Match m;
+        m.nid1 = nid;
+        m.nid2 = neighbors[i];
+        m.score = score;
+        matches.push_back(m);
+        sum += m.score;
+      }
+    }
+  }
+  LOG_VART(matches.size());
+
+  // don't go any lower than 1.0, that would scale the values up and made it look unrealistically
+  // confident if there was only one intersection in a region.
+  sum = max(1.0, sum);
+  LOG_VART(sum);
+
+  for (list<Match>::iterator it = matches.begin(); it != matches.end(); ++it)
+  {
+    it->p = it->score / sum;
+    LOG_VART(it->p);
+  }
+}
+
 void RubberSheet::_writeInterpolator(
   const std::shared_ptr<const Interpolator>& interpolator, QIODevice& os) const
 {
@@ -774,10 +789,10 @@ void RubberSheet::_writeInterpolator(
     throw HootException("An invalid interpolator was specified. Too few tie points?");
   }
   QDataStream ds(&os);
-  char* projStr = 0;
+  char* projStr = nullptr;
   _projection->exportToProj4(&projStr);
   ds << QString(projStr);
-  delete [] projStr;
+  CPLFree(projStr);
 
   ds << interpolator->getName();
   interpolator->writeInterpolator(os);
@@ -785,7 +800,7 @@ void RubberSheet::_writeInterpolator(
 
 vector<double> RubberSheet::calculateTiePointDistances()
 {
-  if (_ties.size() == 0)
+  if (_ties.empty())
   {
     throw HootException("No tie points have been generated.");
   }

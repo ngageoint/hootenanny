@@ -19,19 +19,19 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/rnd/language/LanguageInfoProvider.h>
-#include <hoot/rnd/language/HootServicesLanguageInfoResponseParser.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/rnd/language/HootServicesLanguageInfoResponseParser.h>
+#include <hoot/rnd/language/LanguageInfoProvider.h>
 
 // Qt
 #include <QUrl>
@@ -47,14 +47,12 @@ public:
 
   InfoRndCmd() = default;
 
-  virtual QString getName() const override { return "info-rnd"; }
-
-  virtual QString getDescription() const override
+  QString getName() const override { return "info-rnd"; }
+  QString getDescription() const override
   { return "Displays information about capabilities specific to the hoot-rnd module"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual QString getType() const override { return "rnd"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     // only allowing one option per command
     const QStringList supportedOpts = _getSupportedOptions();
@@ -62,14 +60,14 @@ public:
     for (int i = 0; i < args.size(); i++)
     {
       const QString arg = args.at(i);
-      if (specifiedOpts.contains(arg) || (supportedOpts.contains(arg) && specifiedOpts.size() > 0))
+      if (specifiedOpts.contains(arg) || (supportedOpts.contains(arg) && !specifiedOpts.empty()))
       {
         std::cout << getHelp() << std::endl << std::endl;
         throw IllegalArgumentException(QString("%1 takes a single option.").arg(getName()));
       }
       specifiedOpts.append(arg);
     }
-    if (specifiedOpts.size() == 0)
+    if (specifiedOpts.empty())
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(QString("%1 takes a single option.").arg(getName()));
@@ -87,35 +85,34 @@ public:
       }
 
       // only allowing one option per command
-      const QStringList supportedOpts = _getSupportedLanguageOptions();
-      QStringList specifiedOpts;
+      const QStringList supportedLangOpts = _getSupportedLanguageOptions();
+      QStringList specifiedLangOpts;
       for (int i = 0; i < args.size(); i++)
       {
         const QString arg = args.at(i);
-        if (specifiedOpts.contains(arg) ||
-            (supportedOpts.contains(arg) && specifiedOpts.size() > 0))
+        if (specifiedLangOpts.contains(arg) ||
+            (supportedLangOpts.contains(arg) && !specifiedLangOpts.empty()))
         {
           std::cout << getHelp() << std::endl << std::endl;
           throw IllegalArgumentException(QString("%1 takes a single option.").arg(getName()));
         }
-        specifiedOpts.append(arg);
+        specifiedLangOpts.append(arg);
       }
-      if (specifiedOpts.size() == 0)
+      if (specifiedLangOpts.empty())
       {
         std::cout << getHelp() << std::endl << std::endl;
         throw IllegalArgumentException(
           QString("%1 with the --languages option takes a single option.").arg(getName()));
       }
-      LOG_VARD(specifiedOpts.size());
+      LOG_VARD(specifiedLangOpts.size());
 
       ConfigOptions opts = ConfigOptions(conf());
 
       try
       {
-        std::shared_ptr<LanguageInfoProvider> client;
-        client.reset(
+        std::shared_ptr<LanguageInfoProvider> client =
           Factory::getInstance().constructObject<LanguageInfoProvider>(
-            opts.getLanguageInfoProvider()));
+            opts.getLanguageInfoProvider());
         client->setConfiguration(conf());
 
         const QString type = args[0].replace("--", "").toLower();

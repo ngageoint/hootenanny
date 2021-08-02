@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include <hoot/core/HootConfig.h>
@@ -66,7 +66,6 @@
 // Standard
 #include <iostream>
 #include <fstream>
-using namespace std;
 
 // TGS
 #include <tgs/HashMap.h>
@@ -75,10 +74,12 @@ using namespace std;
 #error Bundle support is required.
 #endif
 
+using namespace std;
+
 namespace hoot
 {
 
-typedef boost::adjacency_list<
+using TagGraph = boost::adjacency_list<
   // Use listS for storing VertexList -- faster, but not as space efficient (no biggie)
   boost::listS,
   // use vecS for storing OutEdgeList -- faster for traversal, but slower to build (no biggie)
@@ -87,12 +88,12 @@ typedef boost::adjacency_list<
   boost::directedS,
   SchemaVertex,
   TagEdge
-> TagGraph;
+>;
 
-typedef boost::graph_traits<TagGraph>::vertex_descriptor VertexId;
-typedef boost::graph_traits<TagGraph>::edge_descriptor EdgeId;
+using VertexId = boost::graph_traits<TagGraph>::vertex_descriptor;
+using EdgeId = boost::graph_traits<TagGraph>::edge_descriptor;
 
-SchemaVertex empty;
+const SchemaVertex empty;
 
 struct AverageKey
 {
@@ -141,7 +142,7 @@ namespace hoot
 
 struct AverageResult
 {
-  AverageResult() {}
+  AverageResult() = default;
 
   AverageResult(VertexId vid, double score)
   {
@@ -157,9 +158,9 @@ class SimilarToOnly
 {
 public:
 
-  SimilarToOnly() : _graph(0) {}
+  SimilarToOnly() : _graph(nullptr) { }
 
-  SimilarToOnly(TagGraph& graph) : _graph(&graph) {}
+  SimilarToOnly(TagGraph& graph) : _graph(&graph) { }
 
   bool operator()(const EdgeId& edge_id) const
   {
@@ -176,11 +177,11 @@ class VertexNameComparator
 {
 public:
 
-  VertexNameComparator(const TagGraph& graph) : _graph(graph) {}
+  VertexNameComparator(const TagGraph& graph) : _graph(graph) { }
 
-  bool operator()(VertexId v1, VertexId v2)
+  bool operator() (VertexId v1, VertexId v2) const
   {
-    return _graph[v1].name < _graph[v2].name;
+    return _graph[v1].getName() < _graph[v2].getName();
   }
 
 private:
@@ -313,7 +314,7 @@ public:
       if (it != _cachedAverages.end())
       {
         score = it->second.score;
-        result = _graph[it->second.vid].name;
+        result = _graph[it->second.vid].getName();
       }
       else
       {
@@ -321,7 +322,7 @@ public:
 
         _cachedAverages[key] = AverageResult(avgVid, score);
 
-        result = _graph[avgVid].name;
+        result = _graph[avgVid].getName();
       }
     }
 
@@ -333,12 +334,12 @@ public:
   {
     SchemaVertex v;
     v.setType(SchemaVertex::Tag);
-    v.influence = 1;
-    v.key = "highway";
-    v.name = "highway=road";
-    v.valueType = Enumeration;
-    v.value = "road";
-    v.categories.append("transportation");
+    v.setInfluence(1);
+    v.setKey("highway");
+    v.setName("highway=road");
+    v.setValueType(Enumeration);
+    v.setValue("road");
+    v.addCategory("transportation");
     _addVertex(v);
 
     TagEdge isA;
@@ -346,23 +347,23 @@ public:
     isA.averageWeight = epsilon;
     isA.type = IsA;
 
-    v.name = "highway=primary";
-    v.value = "primary";
+    v.setName("highway=primary");
+    v.setValue("primary");
     VertexId highwayPrimary = _addVertex(v);
     addIsA("highway=primary", "highway=road");
 
-    v.name = "highway=secondary";
-    v.value = "secondary";
+    v.setName("highway=secondary");
+    v.setValue("secondary");
     VertexId highwaySecondary = _addVertex(v);
     addIsA("highway=secondary", "highway=road");
 
-    v.name = "highway=residential";
-    v.value = "residential";
+    v.setName("highway=residential");
+    v.setValue("residential");
     VertexId highwayResidential = _addVertex(v);
     addIsA("highway=residential", "highway=road");
 
-    v.name = "highway=service";
-    v.value = "service";
+    v.setName("highway=service");
+    v.setValue("service");
     VertexId highwayService = _addVertex(v);
     addIsA("highway=service", "highway=road");
 
@@ -385,54 +386,54 @@ public:
     add_edge(highwayService, highwayResidential, similarTo, _graph);
 
     // create some text types.
-    v.influence = 2.0;
-    v.key = "abstract_name";
-    v.name = "abstract_name";
-    v.value.clear();
-    v.valueType = Text;
-    v.categories = QStringList("name");
+    v.setInfluence(2.0);
+    v.setKey("abstract_name");
+    v.setName("abstract_name");
+    v.setValue("");
+    v.setValueType(Text);
+    v.setCategories(QStringList("name"));
     _addVertex(v);
 
-    v.key = "name";
-    v.name = "name";
+    v.setKey("name");
+    v.setName("name");
     _addVertex(v);
     addIsA("name", "abstract_name");
 
     ////
-    // create a match all type
+    /// create a match all type
     ////
-    v.key = "poi";
-    v.name = "poi";
-    v.valueType = Enumeration;
-    v.geometries = OsmGeometries::Node | OsmGeometries::Area;
-    v.categories = QStringList();
+    v.setKey("poi");
+    v.setName("poi");
+    v.setValueType(Enumeration);
+    v.setGeometries(OsmGeometries::Node | OsmGeometries::Area);
+    v.setCategories(QStringList());
     _addVertex(v);
 
-    v.key = "poi";
-    v.value = "yes";
-    v.name = "poi=yes";
-    v.categories = QStringList("poi");
+    v.setKey("poi");
+    v.setValue("yes");
+    v.setName("poi=yes");
+    v.setCategories(QStringList("poi"));
     VertexId poiYes = _addVertex(v);
     addIsA("poi=yes", "poi");
 
-    v.key = "leisure";
-    v.value = "";
-    v.name = "leisure";
+    v.setKey("leisure");
+    v.setValue("");
+    v.setName("leisure");
     VertexId leisure = _addVertex(v);
     add_edge(leisure, poiYes, isA, _graph);
     addIsA("leisure", "poi=yes");
 
-    v.key = "leisure";
-    v.value = "*";
-    v.name = "leisure=*";
-    v.geometries = OsmGeometries::Node | OsmGeometries::Area;
+    v.setKey("leisure");
+    v.setValue("*");
+    v.setName("leisure=*");
+    v.setGeometries(OsmGeometries::Node | OsmGeometries::Area);
     _addVertex(v);
     addIsA("leisure=*", "poi=yes");
 
-    v.key = "leisure";
-    v.value = "track";
-    v.name = "leisure=track";
-    v.geometries = OsmGeometries::Node | OsmGeometries::Way;
+    v.setKey("leisure");
+    v.setValue("track");
+    v.setName("leisure=track");
+    v.setGeometries(OsmGeometries::Node | OsmGeometries::Way);
     _addVertex(v);
     addIsA("leisure=track", "leisure=*");
   }
@@ -447,9 +448,9 @@ public:
     else
     {
       SchemaVertex v;
-      v.influence = -1;
-      v.name = str;
-      v.valueType = Unknown;
+      v.setInfluence(-1);
+      v.setName(str);
+      v.setValueType(Unknown);
 
       vid = _addVertex(v);
     }
@@ -611,7 +612,7 @@ public:
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
       const SchemaVertex& tv = _graph[*vi];
-      if (OsmSchemaCategory::fromStringList(tv.categories).contains(c))
+      if (OsmSchemaCategory::fromStringList(tv.getCategories()).contains(c))
       {
         result.push_back(tv);
       }
@@ -688,7 +689,7 @@ public:
    * then that is substituted. E.g. addr:housenumber=123 would be converted to addr:housenumber=*.
    * If neither of those situations matches then an empty string is returned.
    */
-  QString normalizeEnumeratedKvp(const QString& kvp)
+  QString normalizeEnumeratedKvp(const QString& kvp) const
   {
     QString result = _normalizeEnumeratedKvp(kvp);
     if (result.isEmpty())
@@ -750,7 +751,7 @@ public:
         // mismatch score. E.g. addr:housenumber=12 vs. addr:housenumber=56
         if (kvpn1.endsWith("=*"))
         {
-          result = getTagVertex(kvpn1).mismatchScore;
+          result = getTagVertex(kvpn1).getMismatchScore();
         }
         // if this is an alias match
         else
@@ -805,14 +806,14 @@ public:
     for (int i = 0; i < orderedVertexes.size(); i++)
     {
       VertexId vid = orderedVertexes[i];
-      QString label = _graph[vid].name;
+      QString label = _graph[vid].getName();
       QString vStr = QString("\"%1\"").arg(label);
       vertexIndex[vid] = i;
 
       label = label.replace("{", "\\}").replace("}", "\\}");
-      if (_graph[vid].childWeight > 0)
+      if (_graph[vid].getChildWeight() > 0)
       {
-        label = QString("%1\\nchildWeight = %2").arg(label).arg(_graph[vid].childWeight);
+        label = QString("%1\\nchildWeight = %2").arg(label).arg(_graph[vid].getChildWeight());
       }
       result += QString("  %1 [shape=record,label=\"%2\"];\n").arg(vStr).arg(label);
     }
@@ -828,13 +829,13 @@ public:
       VertexId src = source(*ei, _graph);
       VertexId trg = target(*ei, _graph);
 
-      if (_graph[trg].name == _graph[src].name)
+      if (_graph[trg].getName() == _graph[src].getName())
       {
         throw IllegalArgumentException("Unexpected vertices with the same name. " +
-          _graph[src].name);
+          _graph[src].getName());
       }
 
-      if (_graph[trg].name < _graph[src].name)
+      if (_graph[trg].getName() < _graph[src].getName())
       {
         swap(src, trg);
       }
@@ -843,16 +844,13 @@ public:
 
       if (used.find(p) == used.end())
       {
-//        QString srcStr = QString("v%1").arg(vertexIndex[src]);
-//        QString trgStr = QString("v%1").arg(vertexIndex[trg]);
-
-        QString srcStr = _graph[src].name;
-        QString trgStr = _graph[trg].name;
+        QString srcStr = _graph[src].getName();
+        QString trgStr = _graph[trg].getName();
 
         // only show is a relationships for legit tags. No need w/ things like "amenity" or "poi",
         // it just clutters the graph.
         if (_graph[*ei].type == IsA &&
-          (_graph[src].name.contains("=") && _graph[trg].name.contains("=")))
+          (_graph[src].getName().contains("=") && _graph[trg].getName().contains("=")))
         {
           orderedEdges.push_back(
             QString("\"%1\" -> \"%2\" [arrowhead=normal,color=blue2,weight=1,label=\"%3\"];\n").
@@ -879,14 +877,14 @@ public:
 
   void updateOrCreateVertex(const SchemaVertex& tv)
   {
-    VertexId vid = createOrGetVertex(tv.name);
+    VertexId vid = createOrGetVertex(tv.getName());
 
     const SchemaVertex& v = _graph[vid];
     if (v.isValid())
     {
       if (_logWarnCount < Log::getWarnMessageLimit())
       {
-        LOG_WARN(tv.name << " was specified multiple times in the schema file.");
+        LOG_WARN(tv.getName() << " was specified multiple times in the schema file.");
       }
       else if (_logWarnCount == Log::getWarnMessageLimit())
       {
@@ -919,7 +917,7 @@ private:
   HashMap<VertexId, VertexId> _parents;
   QList<pair<QRegExp, VertexId>> _regexKeys;
   HashMap<pair<VertexId, VertexId>, bool> _isAncestorCache;
-  typedef HashMap<VertexId, vector<pair<VertexId, double>>> VertexToScoreCache;
+  using VertexToScoreCache = HashMap<VertexId, vector<pair<VertexId, double>>>;
   VertexToScoreCache _vertexToScoresCache;
 
   TagGraph _graph;
@@ -979,7 +977,7 @@ private:
     double bestScore = -1.0;
     VertexId bestVid = vid1;
     boost::graph_traits<TagGraph>::vertex_iterator vi, vend;
-    LOG_TRACE("from " << _graph[vid1].name << " to " << _graph[vid2].name);
+    LOG_TRACE("from " << _graph[vid1].getName() << " to " << _graph[vid2].getName());
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
       // The best minimum score is generally the average.
@@ -988,7 +986,7 @@ private:
       double s = std::min(d1[*vi], d2[*vi] + 1e-6) +
         std::max(d1[*vi], d2[*vi]) / 1e6;
       if (s > 0)
-       LOG_TRACE("  " << _graph[*vi].name << " : " << d1[*vi] << " " << d2[*vi] <<
+       LOG_TRACE("  " << _graph[*vi].getName() << " : " << d1[*vi] << " " << d2[*vi] <<
        " (" << s << ")");
 
       if (s > bestScore)
@@ -998,7 +996,7 @@ private:
       }
     }
 
-    LOG_TRACE("  best vid: " << bestVid << " " << _graph[bestVid].name.toStdString());
+    LOG_TRACE("  best vid: " << bestVid << " " << _graph[bestVid].getName().toStdString());
 
     score = bestScore;
     return bestVid;
@@ -1039,8 +1037,8 @@ private:
   {
     const SchemaVertex& sv = _graph[vid];
 
-    QMultiHash<QString, VertexId>::const_iterator it = _name2CompoundVertex.find(sv.name);
-    while (it != _name2CompoundVertex.end() && it.key() == sv.name)
+    QMultiHash<QString, VertexId>::const_iterator it = _name2CompoundVertex.find(sv.getName());
+    while (it != _name2CompoundVertex.end() && it.key() == sv.getName())
     {
       compoundTags.insert(it.value());
       ++it;
@@ -1154,7 +1152,7 @@ private:
     return vid != numeric_limits<VertexId>::max();
   }
 
-  QString _normalizeEnumeratedKvp(const QString& kvp)
+  QString _normalizeEnumeratedKvp(const QString& kvp) const
   {
     static QString equalStar = "=*";
     if (_name2Vertex.contains(kvp))
@@ -1189,7 +1187,7 @@ private:
     else if (_name2Vertex.contains(key))
     {
       const SchemaVertex& v = _graph[_name2Vertex[key]];
-      if (v.valueType == Text || v.valueType == Int)
+      if (v.getValueType() == Text || v.getValueType() == Int)
       {
         return key;
       }
@@ -1208,7 +1206,7 @@ private:
         if (re.exactMatch(key))
         {
           VertexId vid = it->second;
-          return _graph[vid].key;
+          return _graph[vid].getKey();
         }
       }
 
@@ -1221,14 +1219,14 @@ private:
     boost::graph_traits<TagGraph>::vertex_iterator vi, vend;
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
-      if (_graph[*vi].childWeight > 0.0)
+      if (_graph[*vi].getChildWeight() > 0.0)
       {
         set<VertexId> children;
         _getChildTags(*vi, children);
         for (set<VertexId>::const_iterator it = children.begin(); it != children.end(); ++it)
         {
-          pair<EdgeId, EdgeId> p = addSimilarTo(_graph[*it].name, _graph[*vi].name,
-                                                _graph[*vi].childWeight);
+          pair<EdgeId, EdgeId> p = addSimilarTo(_graph[*it].getName(), _graph[*vi].getName(),
+                                                _graph[*vi].getChildWeight());
           _graph[p.first].show = false;
           _graph[p.second].show = false;
         }
@@ -1277,54 +1275,54 @@ private:
     if (_isValid(parent))
     {
       _updateInheritance(parent);
-      SchemaVertex& parentTv = _graph[parent];
+      const SchemaVertex& parentTv = _graph[parent];
 
-      if (childTv.geometries == 0)
+      if (childTv.getGeometries() == 0)
       {
-        childTv.geometries = parentTv.geometries;
+        childTv.setGeometries(parentTv.getGeometries());
       }
-      if (childTv.influence == -1.0)
+      if (childTv.getInfluence() == -1.0)
       {
-        childTv.influence = parentTv.influence;
+        childTv.setInfluence(parentTv.getInfluence());
       }
-      if (childTv.valueType == Unknown)
+      if (childTv.getValueType() == Unknown)
       {
-        childTv.valueType = parentTv.valueType;
+        childTv.setValueType(parentTv.getValueType());
       }
-      if (childTv.mismatchScore == -1.0)
+      if (childTv.getMismatchScore() == -1.0)
       {
-        childTv.mismatchScore = parentTv.mismatchScore;
+        childTv.setMismatchScore(parentTv.getMismatchScore());
       }
       // add any categories that are assigned to the parent to the child.
-      for (int i = 0; i < parentTv.categories.size(); i++)
+      for (int i = 0; i < parentTv.getCategories().size(); i++)
       {
-        QString c = parentTv.categories[i];
-        if (childTv.categories.contains(c) == false)
+        QString c = parentTv.getCategories()[i];
+        if (childTv.getCategories().contains(c) == false)
         {
-          childTv.categories.append(c);
+          childTv.addCategory(c);
         }
       }
     }
     else
     {
-      if (childTv.influence == -1.0)
+      if (childTv.getInfluence() == -1.0)
       {
         if (_logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN("Influence for " << childTv.name << " has not been specified.");
+          LOG_WARN("Influence for " << childTv.getName() << " has not been specified.");
         }
         else if (_logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
         _logWarnCount++;
-        childTv.influence = 1.0;
+        childTv.setInfluence(1.0);
       }
-      if (childTv.valueType == Unknown)
+      if (childTv.getValueType() == Unknown)
       {
         if (_logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN("Value type for " << childTv.name << " has not been specified.");
+          LOG_WARN("Value type for " << childTv.getName() << " has not been specified.");
         }
         else if (_logWarnCount == Log::getWarnMessageLimit())
         {
@@ -1337,16 +1335,16 @@ private:
 
   VertexId _updateVertex(VertexId vid, const SchemaVertex& v)
   {
-    _name2Vertex[v.name] = vid;
+    _name2Vertex[v.getName()] = vid;
     _graph[vid] = v;
 
-    if (v.name.startsWith("regex?"))
+    if (v.getName().startsWith("regex?"))
     {
       if (v.getType() == SchemaVertex::Compound)
       {
         throw HootException("Compound tags can not have regex names.");
       }
-      QRegExp re(v.name.mid(6));
+      QRegExp re(v.getName().mid(6));
       _regexKeys.append(pair<QRegExp, VertexId>(re, vid));
     }
 
@@ -1369,76 +1367,70 @@ private:
     }
 
     // add in the list of aliases.
-    for (int i = 0; i < v.aliases.size(); i++)
+    for (int i = 0; i < v.getAliases().size(); i++)
     {
-      if (_name2Vertex.contains(v.aliases[i]))
+      if (_name2Vertex.contains(v.getAliases()[i]))
       {
         throw HootException(QString("Alias is being used multiple times. Please only reference an "
           "alias once or use the base tag. (offending tag: %1, offending alias: %2)").
-          arg(v.name).arg(v.aliases[i]));
+          arg(v.getName()).arg(v.getAliases()[i]));
       }
-      _name2Vertex[v.aliases[i]] = vid;
+      _name2Vertex[v.getAliases()[i]] = vid;
     }
 
     return vid;
   }
 };
 
-std::shared_ptr<OsmSchema> OsmSchema::_theInstance = NULL;
+std::shared_ptr<OsmSchema> OsmSchema::_theInstance = nullptr;
 
-QStringList _genericKvps;
-
-OsmSchema::OsmSchema()
+OsmSchema::OsmSchema() :
+_d(std::make_shared<OsmSchemaData>())
 {
-  d = new OsmSchemaData();
 }
 
-OsmSchema::~OsmSchema()
+void OsmSchema::addAssociatedWith(const QString& name1, const QString& name2) const
 {
-  delete d;
+  _d->addAssociatedWith(name1, name2);
 }
 
-void OsmSchema::addAssociatedWith(const QString& name1, const QString& name2)
+void OsmSchema::addIsA(const QString& name1, const QString& name2) const
 {
-  d->addAssociatedWith(name1, name2);
+  _d->addIsA(name1, name2);
 }
 
-void OsmSchema::addIsA(const QString& name1, const QString& name2)
+void OsmSchema::addSimilarTo(
+  const QString& name1, const QString& name2, double weight, bool oneway) const
 {
-  d->addIsA(name1, name2);
+  _d->addSimilarTo(name1, name2, weight, oneway);
 }
 
-void OsmSchema::addSimilarTo(const QString& name1, const QString& name2, double weight, bool oneway)
+QString OsmSchema::average(const QString& kvp1, const QString& kvp2, double& score) const
 {
-  d->addSimilarTo(name1, name2, weight, oneway);
-}
-
-QString OsmSchema::average(const QString& kvp1, const QString& kvp2, double& score)
-{
-  return d->average(kvp1, 1.0, kvp2, 1.0, score);
+  return _d->average(kvp1, 1.0, kvp2, 1.0, score);
 }
 
 QString OsmSchema::average(const QString& kvp1, double w1, const QString& kvp2, double w2,
-                           double& score)
+                           double& score) const
 {
-  return d->average(kvp1, w1, kvp2, w2, score);
+  return _d->average(kvp1, w1, kvp2, w2, score);
 }
 
-void OsmSchema::createTestingGraph()
+void OsmSchema::createTestingGraph() const
 {
-  d->createTestingGraph();
+  _d->createTestingGraph();
 }
 
-vector<SchemaVertex> OsmSchema::getAllTags()
+vector<SchemaVertex> OsmSchema::getAllTags() const
 {
-  return d->getAllTags();
+  return _d->getAllTags();
 }
 
 QSet<QString> OsmSchema::getAllTagKeys()
 {
   if (_allTagKeysCache.isEmpty())
   {
-    _allTagKeysCache = d->getAllTagKeys();
+    _allTagKeysCache = _d->getAllTagKeys();
   }
   return _allTagKeysCache;
 }
@@ -1447,7 +1439,7 @@ QSet<QString> OsmSchema::getAllTypeKeys()
 {
   if (_allTypeKeysCache.isEmpty())
   {  
-    QSet<QString> allTypeKeysCacheTemp = d->getAllTagKeys();
+    QSet<QString> allTypeKeysCacheTemp = _d->getAllTagKeys();
     for (QSet<QString>::const_iterator typeKeyItr = allTypeKeysCacheTemp.constBegin();
          typeKeyItr != allTypeKeysCacheTemp.constEnd(); ++typeKeyItr)
     {
@@ -1495,9 +1487,9 @@ Tags OsmSchema::getAssociatedTags(const Tags& tags)
   return tagsToReturn;
 }
 
-vector<SchemaVertex> OsmSchema::getAssociatedTagsAsVertices(const QString& name)
+vector<SchemaVertex> OsmSchema::getAssociatedTagsAsVertices(const QString& name) const
 {
-  return d->getAssociatedTags(name);
+  return _d->getAssociatedTags(name);
 }
 
 OsmSchemaCategory OsmSchema::getCategories(const Tags& t) const
@@ -1508,9 +1500,9 @@ OsmSchemaCategory OsmSchema::getCategories(const Tags& t) const
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
   {
     const SchemaVertex& tv = getTagVertex(toKvp(it.key(), it.value()));
-    for (int i = 0; i < tv.categories.size(); i++)
+    for (int i = 0; i < tv.getCategories().size(); i++)
     {
-      result = result | OsmSchemaCategory::fromString(tv.categories[i]);
+      result = result | OsmSchemaCategory::fromString(tv.getCategories()[i]);
     }
   }
 
@@ -1527,17 +1519,17 @@ OsmSchemaCategory OsmSchema::getCategories(const QString& kvp) const
   OsmSchemaCategory result;
 
   const SchemaVertex& tv = getTagVertex(kvp);
-  for (int i = 0; i < tv.categories.size(); i++)
+  for (int i = 0; i < tv.getCategories().size(); i++)
   {
-    result = result | OsmSchemaCategory::fromString(tv.categories[i]);
+    result = result | OsmSchemaCategory::fromString(tv.getCategories()[i]);
   }
 
   return result;
 }
 
-vector<SchemaVertex> OsmSchema::getChildTagsAsVertices(const QString& name)
+vector<SchemaVertex> OsmSchema::getChildTagsAsVertices(const QString& name) const
 {
-  return d->getChildTags(name);
+  return _d->getChildTags(name);
 }
 
 Tags OsmSchema::getChildTags(const Tags& tags)
@@ -1561,24 +1553,24 @@ Tags OsmSchema::getChildTags(const Tags& tags)
 Tags OsmSchema::getAliasTags(const Tags& tags)
 {
   Tags tagsToReturn;
-  const std::vector<SchemaVertex> schemaVertices = d->getSchemaVertices(tags);
+  const std::vector<SchemaVertex> schemaVertices = _d->getSchemaVertices(tags);
   for (std::vector<SchemaVertex>::const_iterator itr = schemaVertices.begin();
        itr != schemaVertices.end(); ++itr)
   {
     SchemaVertex vertex = *itr;
-    tagsToReturn.add(Tags::kvpListToTags(vertex.aliases));
+    tagsToReturn.add(Tags::kvpListToTags(vertex.getAliases()));
   }
   return tagsToReturn;
 }
 
-const SchemaVertex& OsmSchema::getFirstCommonAncestor(const QString& kvp1, const QString& kvp2)
+const SchemaVertex& OsmSchema::getFirstCommonAncestor(const QString& kvp1, const QString& kvp2) const
 {
-  return d->getFirstCommonAncestor(kvp1, kvp2);
+  return _d->getFirstCommonAncestor(kvp1, kvp2);
 }
 
 OsmSchema& OsmSchema::getInstance()
 {
-  if (_theInstance == NULL)
+  if (_theInstance == nullptr)
   {
     _theInstance.reset(new OsmSchema());
     _theInstance->loadDefault();
@@ -1611,49 +1603,49 @@ OsmSchema& OsmSchema::getInstance()
 
 double OsmSchema::getIsACost() const
 {
-  return d->getIsACost();
+  return _d->getIsACost();
 }
 
 vector<SchemaVertex> OsmSchema::getSchemaVertices(const Tags& tags) const
 {
-  return d->getSchemaVertices(tags);
+  return _d->getSchemaVertices(tags);
 }
 
-vector<SchemaVertex> OsmSchema::getSimilarTagsAsVertices(const QString& name, double minimumScore)
+vector<SchemaVertex> OsmSchema::getSimilarTagsAsVertices(const QString& name, double minimumScore) const
 {
   if (minimumScore <= 0)
   {
     throw IllegalArgumentException("minimumScore must be > 0");
   }
-  return d->getSimilarTags(name, minimumScore);
+  return _d->getSimilarTags(name, minimumScore);
 }
 
 Tags OsmSchema::getSimilarTags(const QString& name, double minimumScore)
 {
   Tags tags;
-  const vector<SchemaVertex> vertices = d->getSimilarTags(name, minimumScore);
+  const vector<SchemaVertex> vertices = _d->getSimilarTags(name, minimumScore);
   for (std::vector<SchemaVertex>::const_iterator itr = vertices.begin();
        itr != vertices.end(); ++itr)
   {
     SchemaVertex vertex = *itr;
-    tags.appendValue(vertex.key, vertex.value);
+    tags.appendValue(vertex.getKey(), vertex.getValue());
   }
   return tags;
 }
 
 vector<SchemaVertex> OsmSchema::getTagByCategory(const OsmSchemaCategory& c) const
 {
-  return d->getTagByCategory(c);
+  return _d->getTagByCategory(c);
 }
 
 const SchemaVertex& OsmSchema::getTagVertex(const QString& kvp) const
 {
-  return d->getTagVertex(kvp);
+  return _d->getTagVertex(kvp);
 }
 
 vector<SchemaVertex> OsmSchema::getUniqueSchemaVertices(const Tags& tags) const
 {
-  return d->getUniqueSchemaVertices(tags);
+  return _d->getUniqueSchemaVertices(tags);
 }
 
 bool OsmSchema::hasAnyCategory(const QString& key, const QString& val) const
@@ -1672,8 +1664,8 @@ bool OsmSchema::hasCategory(const Tags& t, const QString& category) const
     {
       const SchemaVertex& tv = getTagVertex(it.key() + "=" + it.value());
       LOG_VART(tv);
-      LOG_VART(tv.categories);
-      if (tv.categories.contains(category))
+      LOG_VART(tv.getCategories());
+      if (tv.getCategories().contains(category))
       {
         result = true;
         LOG_VART(result);
@@ -1688,7 +1680,7 @@ bool OsmSchema::hasCategory(const Tags& t, const QString& category) const
 bool OsmSchema::hasCategory(const QString& kvp, const QString& category) const
 {
   const SchemaVertex& tv = getTagVertex(kvp);
-  return tv.categories.contains(category);
+  return tv.getCategories().contains(category);
 }
 
 bool OsmSchema::hasCategory(const Tags& t, const OsmSchemaCategory& category) const
@@ -1701,9 +1693,9 @@ bool OsmSchema::hasCategory(const QString& kvp, const OsmSchemaCategory& categor
   return hasCategory(kvp, category.toString());
 }
 
-bool OsmSchema::isAncestor(const QString& childKvp, const QString& parentKvp)
+bool OsmSchema::isAncestor(const QString& childKvp, const QString& parentKvp) const
 {
-  return d->isAncestor(childKvp, parentKvp);
+  return _d->isAncestor(childKvp, parentKvp);
 }
 
 bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList& tagList) const
@@ -1725,10 +1717,10 @@ bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList& tagList
 }
 
 bool OsmSchema::allowsFor(const Tags& t, const ElementType& /*type*/,
-                          OsmGeometries::Type geometries)
+                          OsmGeometries::Type geometries) const
 {
   //  Empty tags shouldn't allow for anything
-  if (t.size() == 0)
+  if (t.empty())
     return false;
   int usableTags = 0;
   OsmGeometries::Type value = OsmGeometries::All;
@@ -1736,9 +1728,10 @@ bool OsmSchema::allowsFor(const Tags& t, const ElementType& /*type*/,
   {
     const SchemaVertex& tv = getTagVertex(it.key() + "=" + it.value());
     //  Unknown vertex types aren't usable tags
-    if (tv.getType() != SchemaVertex::UnknownVertexType && tv.geometries != OsmGeometries::Empty)
+    if (tv.getType() != SchemaVertex::UnknownVertexType &&
+        tv.getGeometries() != OsmGeometries::Empty)
     {
-      value = static_cast<OsmGeometries::Type>(value & tv.geometries);
+      value = static_cast<OsmGeometries::Type>(value & tv.getGeometries());
       usableTags++;
     }
   }
@@ -1749,7 +1742,7 @@ bool OsmSchema::allowsFor(const Tags& t, const ElementType& /*type*/,
   return (value & geometries) != OsmGeometries::Empty;
 }
 
-bool OsmSchema::allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries)
+bool OsmSchema::allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries) const
 {
   return allowsFor(e->getTags(), e->getElementType(), geometries);
 }
@@ -1780,14 +1773,14 @@ bool OsmSchema::isMetaData(const QString& key, const QString& /*value*/)
   }
 }
 
-bool OsmSchema::isTextTag(const QString& key)
+bool OsmSchema::isTextTag(const QString& key) const
 {
-  return getTagVertex(key).valueType == Text;
+  return getTagVertex(key).getValueType() == Text;
 }
 
-bool OsmSchema::isNumericTag(const QString& key)
+bool OsmSchema::isNumericTag(const QString& key) const
 {
-  TagValueType valueType = getTagVertex(key).valueType;
+  TagValueType valueType = getTagVertex(key).getValueType();
   return valueType == Real || valueType == Int;
 }
 
@@ -1795,26 +1788,25 @@ void OsmSchema::loadDefault()
 {
   QString path = ConfPath::search("schema.json");
 
-  delete d;
-  d = new OsmSchemaData();
+  _d = std::make_shared<OsmSchemaData>();
 
   LOG_DEBUG("Loading translation files...");
   OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
   LOG_DEBUG("Translation files loaded.");
 }
 
-double OsmSchema::score(const QString& kvp1, const QString& kvp2)
+double OsmSchema::score(const QString& kvp1, const QString& kvp2) const
 {
-  // I tried using a LruCache here to speed up scoring, but it had a negative impact. :(
-  return std::max(d->score(kvp1, kvp2), d->score(kvp2, kvp1));
+  // Tried using a LruCache here to speed up scoring, but it had a negative impact. :(
+  return std::max(_d->score(kvp1, kvp2), _d->score(kvp2, kvp1));
 }
 
-double OsmSchema::score(const SchemaVertex& v1, const SchemaVertex& v2)
+double OsmSchema::score(const SchemaVertex& v1, const SchemaVertex& v2) const
 {
-  return score(v1.name, v2.name);
+  return score(v1.getName(), v2.getName());
 }
 
-double OsmSchema::score(const QString& kvp, const Tags& tags)
+double OsmSchema::score(const QString& kvp, const Tags& tags) const
 {
   double maxScore = 0.0;
   for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
@@ -1844,7 +1836,7 @@ bool OsmSchema::isGeneric(const Tags& tags)
     StringUtils::containsAny(tags.toKvps(), getGenericKvps().toList());
 }
 
-bool OsmSchema::isGenericKvp(const QString& kvp)
+bool OsmSchema::isGenericKvp(const QString& kvp) const
 {
   return getGenericKvps().contains(kvp);
 }
@@ -1869,10 +1861,13 @@ QString OsmSchema::getFirstType(const Tags& tags, const bool allowGeneric)
   {
     const QString key = keys.at(i);
     const QString val = tags[key];
-    const QString kvp = toKvp(key, val);
-    if (isTypeKey(key) && (allowGeneric || !isGenericKvp(kvp)))
+    if (!val.trimmed().isEmpty())
     {
-      return kvp;
+      const QString kvp = toKvp(key, val);
+      if (isTypeKey(key) && (allowGeneric || !isGenericKvp(kvp)))
+      {
+        return kvp;
+      }
     }
   }
   return "";
@@ -2087,19 +2082,19 @@ bool OsmSchema::isTypeKey(const QString& key)
   return getAllTypeKeys().contains(key);
 }
 
-double OsmSchema::scoreOneWay(const QString& kvp1, const QString& kvp2)
+double OsmSchema::scoreOneWay(const QString& kvp1, const QString& kvp2) const
 {
-  return d->score(kvp1, kvp2);
+  return _d->score(kvp1, kvp2);
 }
 
-void OsmSchema::setIsACost(double cost)
+void OsmSchema::setIsACost(double cost) const
 {
-  d->setIsACost(cost);
+  _d->setIsACost(cost);
 }
 
 QString OsmSchema::toGraphvizString() const
 {
-  return d->toGraphvizString();
+  return _d->toGraphvizString();
 }
 
 QString OsmSchema::toKvp(const QString& key, const QString& value)
@@ -2114,17 +2109,17 @@ QString OsmSchema::toKvp(const QString& key, const QString& value)
   }
 }
 
-void OsmSchema::update()
+void OsmSchema::update() const
 {
-  d->update();
+  _d->update();
 }
 
-void OsmSchema::updateOrCreateVertex(const SchemaVertex& tv)
+void OsmSchema::updateOrCreateVertex(const SchemaVertex& tv) const
 {
-  d->updateOrCreateVertex(tv);
+  _d->updateOrCreateVertex(tv);
 }
 
-QString OsmSchema::getParentKvp(const QString& kvp1, const QString& kvp2)
+QString OsmSchema::getParentKvp(const QString& kvp1, const QString& kvp2) const
 {
   if (isAncestor(kvp1, kvp2))
   {

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ValueAggregatorJs.h"
 
@@ -45,10 +45,12 @@ HOOT_JS_REGISTER(ValueAggregatorJs)
 
 Persistent<Function> ValueAggregatorJs::_constructor;
 
-void ValueAggregatorJs::Init(Handle<Object> target)
+void ValueAggregatorJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
+
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(ValueAggregator::className());
 
@@ -59,17 +61,13 @@ void ValueAggregatorJs::Init(Handle<Object> target)
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
-        FunctionTemplate::New(current, toString));
-    tpl->PrototypeTemplate()->Set(
-      PopulateConsumersJs::baseClass(),
-      String::NewFromUtf8(current, ValueAggregator::className().toStdString().data()));
+    tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(), toV8(ValueAggregator::className()));
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
+    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
+    target->Set(context, toV8(n), ToLocal(&constructor));
   }
 }
 
@@ -80,24 +78,14 @@ void ValueAggregatorJs::New(const FunctionCallbackInfo<Value>& args)
 
   const QString className = "hoot::" + str(args.This()->GetConstructorName());
 
-  ValueAggregator* c = Factory::getInstance().constructObject<ValueAggregator>(className);
-  ValueAggregatorJs* obj = new ValueAggregatorJs(ValueAggregatorPtr(c));
+  ValueAggregatorPtr c = Factory::getInstance().constructObject<ValueAggregator>(className);
+  ValueAggregatorJs* obj = new ValueAggregatorJs(c);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
   PopulateConsumersJs::populateConsumers<ValueAggregator>(c, args);
 
   args.GetReturnValue().Set(args.This());
-}
-
-void ValueAggregatorJs::toString(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  ValueAggregatorPtr sd = toCpp<ValueAggregatorPtr>(args.This());
-
-  args.GetReturnValue().Set(toV8(sd->toString()));
 }
 
 }

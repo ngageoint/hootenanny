@@ -1,0 +1,20 @@
+{"version": 0.6,"generator": "Hootenanny","elements": [
+{"type":"node","id":-13,"lat":0.4999999999777267,"lon":0.5005390095569255},
+{"type":"node","id":-12,"lat":0.4999999999975251,"lon":0.5001796698523061},
+{"type":"node","id":-11,"lat":0.5000452183774013,"lon":0.500898349267712},
+{"type":"node","id":-6,"lat":0.49999999993813,"lon":0.500898349261566},
+{"type":"node","id":-5,"lat":0.4999999999944318,"lon":0.4997304952215403},
+{"type":"node","id":-4,"lat":0.5000452183000639,"lon":0.5013475239016371},
+{"type":"node","id":-3,"lat":0.5000452184169981,"lon":0.5005390095606131},
+{"type":"node","id":-2,"lat":0.5000452184169981,"lon":0.5005390095606131},
+{"type":"node","id":-1,"lat":0.5000452184367965,"lon":0.5001796698535353},
+{"type":"way","id":-17,"nodes":[-5,-1],"tags":{"highway":"path","uuid":"w3","error:circular":"15"}},
+{"type":"way","id":-14,"nodes":[-11,-4],"tags":{"barrier":"wall","uuid":"wall","error:circular":"15"}},
+{"type":"way","id":-13,"nodes":[-3,-11],"tags":{"barrier":"wall","uuid":"wall","error:circular":"15"}},
+{"type":"way","id":-12,"nodes":[-1,-2],"tags":{"uuid":"w1","error:circular":"15"}},
+{"type":"relation","id":-2,"members":[
+{"type":"way","ref":-14,"role":""}],"tags":{"hoot:multilinestring":"yes","highway":"footway","uuid":"r","error:circular":"15"}},
+{"type":"relation","id":-1,"members":[
+{"type":"way","ref":-12,"role":""},
+{"type":"way","ref":-13,"role":""}],"tags":{"highway":"footway","uuid":"r;w3","error:circular":"15"}}]
+}

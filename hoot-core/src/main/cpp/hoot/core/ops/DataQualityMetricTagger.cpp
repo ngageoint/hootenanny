@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "DataQualityMetricTagger.h"
 
@@ -66,12 +66,12 @@ void DataQualityMetricTagger::apply(OsmMapPtr& map)
   // fixed until its replaced. So, restrict each of these quality checks to be in the replacement
   // AOI.
 
-  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootSuperfluous(), "yes"));
-  crit.reset(
-    new ElementIdCriterion(
+  tagVis = std::make_shared<SetTagValueVisitor>(MetadataTags::HootSuperfluous(), "yes");
+  crit =
+    std::make_shared<ElementIdCriterion>(
       ElementType::Node,
-      SuperfluousNodeRemover::collectSuperfluousNodeIds(map, false, _bounds)));
-  filteredVis.reset(new FilteredVisitor(crit, tagVis));
+      SuperfluousNodeRemover::collectSuperfluousNodeIds(map, false, _bounds));
+  filteredVis = std::make_shared<FilteredVisitor>(crit, tagVis);
   map->visitRo(*filteredVis);
   _orphanedNodes = tagVis->getNumFeaturesAffected();
   LOG_STATUS(
@@ -80,32 +80,33 @@ void DataQualityMetricTagger::apply(OsmMapPtr& map)
   // SuperfluousNodeRemover took in a bounds above, but the remaining quality checks do not, so
   // combine their criteria with an InBoundsCriterion to make sure we only count elements within the
   // replacement bounds.
-  std::shared_ptr<InBoundsCriterion> inBoundsCrit(new InBoundsCriterion(true));
+  std::shared_ptr<InBoundsCriterion> inBoundsCrit = std::make_shared<InBoundsCriterion>(true);
   inBoundsCrit->setBounds(_bounds);
   inBoundsCrit->setOsmMap(map.get());
   inBoundsCrit->setTreatWayNodesAsPartOfWays(false);
 
-  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootDisconnected(), "yes"));
-  crit.reset(
-    new ChainCriterion(ElementCriterionPtr(new DisconnectedWayCriterion(map)), inBoundsCrit));
-  filteredVis.reset(new FilteredVisitor(crit, tagVis));
+  tagVis = std::make_shared<SetTagValueVisitor>(MetadataTags::HootDisconnected(), "yes");
+  crit =
+    std::make_shared<ChainCriterion>(std::make_shared<DisconnectedWayCriterion>(map), inBoundsCrit);
+  filteredVis = std::make_shared<FilteredVisitor>(crit, tagVis);
   map->visitRo(*filteredVis);
   _disconnectedWays = tagVis->getNumFeaturesAffected();
   LOG_STATUS(
     "Tagged " << StringUtils::formatLargeNumber(_disconnectedWays) <<
     " disconnected ways in output.");
 
-  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootEmptyWay(), "yes"));
-  crit.reset(new ChainCriterion(ElementCriterionPtr(new EmptyWayCriterion()), inBoundsCrit));
-  filteredVis.reset(new FilteredVisitor(crit, tagVis));
+  tagVis = std::make_shared<SetTagValueVisitor>(MetadataTags::HootEmptyWay(), "yes");
+  crit = std::make_shared<ChainCriterion>(std::make_shared<EmptyWayCriterion>(), inBoundsCrit);
+  filteredVis = std::make_shared<FilteredVisitor>(crit, tagVis);
   map->visitRo(*filteredVis);
   _emptyWays = tagVis->getNumFeaturesAffected();
   LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_emptyWays) << " empty ways in output.");
 
-  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootWayEndNode(), "yes"));
-  crit.reset(
-    new ChainCriterion(ElementCriterionPtr(new WayEndNodeCriterion(map, false)), inBoundsCrit));
-  filteredVis.reset(new FilteredVisitor(crit, tagVis));
+  tagVis = std::make_shared<SetTagValueVisitor>(MetadataTags::HootWayEndNode(), "yes");
+  crit =
+    std::make_shared<ChainCriterion>(std::make_shared<WayEndNodeCriterion>(map, false),
+    inBoundsCrit);
+  filteredVis = std::make_shared<FilteredVisitor>(crit, tagVis);
   map->visitRo(*filteredVis);
   _numWayEndNodes = tagVis->getNumFeaturesAffected();
   LOG_STATUS(

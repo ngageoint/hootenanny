@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmApiDb.h"
 
@@ -97,7 +97,7 @@ void OsmApiDb::close()
   _db.close();
 }
 
-void OsmApiDb::deleteData()
+void OsmApiDb::deleteData() const
 {
   LOG_TRACE("Deleting all data...");
 
@@ -329,22 +329,13 @@ vector<long> OsmApiDb::selectNodeIdsForWay(long wayId)
   return ApiDb::selectNodeIdsForWay(wayId, sql);
 }
 
-std::shared_ptr<QSqlQuery> OsmApiDb::selectNodesForWay(long wayId)
-{
-  QString sql =  QString("SELECT node_id, latitude, longitude FROM %1 INNER JOIN %2 ON "
-                         "%1.node_id=%2.id AND way_id = :wayId ORDER BY sequence_id")
-                         .arg(ApiDb::getCurrentWayNodesTableName())
-                         .arg(ApiDb::getCurrentNodesTableName());
-  return ApiDb::selectNodesForWay(wayId, sql);
-}
-
 vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
 {
   vector<RelationData::Entry> result;
 
   if (!_selectMembersForRelation)
   {
-    _selectMembersForRelation.reset(new QSqlQuery(_db));
+    _selectMembersForRelation = std::make_shared<QSqlQuery>(_db);
     _selectMembersForRelation->setForwardOnly(true);
     _selectMembersForRelation->prepare(
       "SELECT member_type, member_id, member_role FROM " + getCurrentRelationMembersTableName() +
@@ -400,7 +391,7 @@ std::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)
 {
   if (!_selectTagsForRelation)
   {
-    _selectTagsForRelation.reset(new QSqlQuery(_db));
+    _selectTagsForRelation = std::make_shared<QSqlQuery>(_db);
     _selectTagsForRelation->setForwardOnly(true);
     QString sql =
       "SELECT relation_id, k, v FROM " + ApiDb::getCurrentRelationTagsTableName() +
@@ -424,7 +415,7 @@ std::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForWay(long wayId)
 {
   if (!_selectTagsForWay)
   {
-    _selectTagsForWay.reset(new QSqlQuery(_db));
+    _selectTagsForWay = std::make_shared<QSqlQuery>(_db);
     _selectTagsForWay->setForwardOnly(true);
     QString sql =  "SELECT way_id, k, v FROM " + ApiDb::getCurrentWayTagsTableName() + " WHERE way_id = :wayId";
     _selectTagsForWay->prepare( sql );
@@ -446,7 +437,7 @@ std::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
 {
   if (!_selectTagsForNode)
   {
-    _selectTagsForNode.reset(new QSqlQuery(_db));
+    _selectTagsForNode = std::make_shared<QSqlQuery>(_db);
     _selectTagsForNode->setForwardOnly(true);
     QString sql =
       "SELECT node_id, k, v FROM " + ApiDb::getCurrentNodeTagsTableName() + " WHERE node_id = :nodeId";
@@ -465,7 +456,7 @@ std::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
   return _selectTagsForNode;
 }
 
-QString OsmApiDb::extractTagFromRow(const std::shared_ptr<QSqlQuery>& row, ElementType::Type type)
+QString OsmApiDb::extractTagFromRow(const std::shared_ptr<QSqlQuery>& row, ElementType::Type type) const
 {
   QString tag = "";
   int pos = -1;
@@ -510,9 +501,9 @@ long OsmApiDb::_getIdFromSequence(const ElementType& elementType, const QString&
 long OsmApiDb::_getIdFromSequence(const QString& tableName, const QString& sequenceType)
 {
   long result;
-  if (_seqQueries[tableName].get() == 0)
+  if (_seqQueries[tableName].get() == nullptr)
   {
-    _seqQueries[tableName].reset(new QSqlQuery(_db));
+    _seqQueries[tableName] = std::make_shared<QSqlQuery>(_db);
     _seqQueries[tableName]->setForwardOnly(true);
     //valid sequence types are "next" and "current"
     QString sql =

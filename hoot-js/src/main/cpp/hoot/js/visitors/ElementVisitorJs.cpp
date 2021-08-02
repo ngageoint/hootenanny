@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ElementVisitorJs.h"
 
@@ -47,10 +47,16 @@ namespace hoot
 
 HOOT_JS_REGISTER(ElementVisitorJs)
 
-void ElementVisitorJs::Init(Handle<Object> target)
+ElementVisitorJs::ElementVisitorJs(std::shared_ptr<ElementVisitor> v) :
+_v(v)
+{
+}
+
+void ElementVisitorJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(ElementVisitor::className());
 
@@ -61,15 +67,15 @@ void ElementVisitorJs::Init(Handle<Object> target)
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
     tpl->PrototypeTemplate()->Set(
        PopulateConsumersJs::baseClass(),
-       String::NewFromUtf8(current, ElementVisitor::className().toStdString().data()));
+       String::NewFromUtf8(current, ElementVisitor::className().toStdString().data()).ToLocalChecked());
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
+    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
+    target->Set(context, toV8(n), ToLocal(&constructor));
   }
 }
 
@@ -80,7 +86,8 @@ void ElementVisitorJs::New(const FunctionCallbackInfo<Value>& args)
 
   const QString className = "hoot::" + str(args.This()->GetConstructorName());
   LOG_VART(className);
-  ElementVisitor* vis = Factory::getInstance().constructObject<ElementVisitor>(className);
+  std::shared_ptr<ElementVisitor> vis =
+    Factory::getInstance().constructObject<ElementVisitor>(className);
   ElementVisitorJs* obj = new ElementVisitorJs(vis);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());

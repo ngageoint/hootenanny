@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CONFLATE_UTILS_H
@@ -30,13 +30,14 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
 
 /**
- * General utilities to be used with conflation
+ * @brief The ConflateUtils class contains general utilities to be used with conflation.
  */
 class ConflateUtils
 {
@@ -44,39 +45,32 @@ class ConflateUtils
 public:
 
   /**
-   * Writes any data that cannot be conflated
-   *
+   * @brief writeNonConflatable writes any data that cannot be conflated.
    * @param map the map to examine
    * @param output the URL to write the data to
+   * @param ignoreGenericConflators if enabled, elements conflatable only by generic conflators
+   * (point, line, poly, etc.) are always considered not conflatable
    * @return the number of features written
    */
-  static int writeNonConflatable(const ConstOsmMapPtr& map, const QString& output);
+  static int writeNonConflatable(
+    const ConstOsmMapPtr& map, const QString& output, const bool ignoreGenericConflators = false);
 
   /**
-   * Writes the differential between to maps
-   *
+   * @brief writeDiff writes the differential between two maps.
    * @param mapUrl1 map 1 URL
    * @param mapUrl2 map 2 URL
    * @param bounds the area over which to calculate the differential
    * @param output the URL to write the data to
    */
-  static void writeDiff(const QString& mapUrl1, const QString& mapUrl2,
-                        const geos::geom::Envelope& bounds, const QString& output);
+  static void writeDiff(
+    const QString& mapUrl1, const QString& mapUrl2, const geos::geom::Envelope& bounds,
+    const QString& output);
 
   /**
-   * Checks to see if an element can be conflated by any of the configured matchers for conflation.
-   *
-   * @param element element to examine
-   * @param map map containing the element
-   * @return true if the conflate matchers are configured with at least one matcher that
-   * can conflate the input element; false otherwise
+   * @brief isNetworkConflate determines if the Network road conflate algorithm is activated.
+   * @return true if Network road conflation is enabled; false otherwise
    */
-  static bool elementCanBeConflatedByActiveMatcher(
-    const ConstElementPtr& element, const ConstOsmMapPtr& map);
-
-private:
-
-  static QMap<QString, ElementCriterionPtr> _critCache;
+  static bool isNetworkConflate();
 };
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef HOOTEXCEPTIONJS_H
 #define HOOTEXCEPTIONJS_H
@@ -47,14 +47,14 @@ class HootExceptionJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
-  static v8::Handle<v8::Object> create(const HootException& e) { return create(std::shared_ptr<HootException>(e.clone())); }
-  static v8::Handle<v8::Object> create(const std::shared_ptr<HootException>& e);
+  static v8::Local<v8::Object> create(const HootException& e) { return create(std::shared_ptr<HootException>(e.clone())); }
+  static v8::Local<v8::Object> create(const std::shared_ptr<HootException>& e);
 
   std::shared_ptr<HootException> getException() const { return _e; }
 
-  static bool isHootException(v8::Handle<v8::Value> v);
+  static bool isHootException(v8::Local<v8::Value> v);
 
   /**
    * A convenience function for checking the result of a V8 call. This will throw an appropriate
@@ -63,14 +63,14 @@ public:
    * @param result Result of the V8 function call.
    * @param tc Try catch object. Must be instantiated before the V8 function is called.
    */
-  static void checkV8Exception(v8::Handle<v8::Value> result, v8::TryCatch& tc);
+  static void checkV8Exception(v8::Local<v8::Value> result, const v8::TryCatch& tc);
 
   /**
    * This will throw an appropriate HootException based on the contents of tc.
    *
    * @param tc Try catch object. Must be instantiated before the V8 function is called.
    */
-  static void throwAsHootException(v8::TryCatch& tc);
+  static void throwAsHootException(const v8::TryCatch& tc);
 
   virtual ~HootExceptionJs() = default;
 
@@ -83,17 +83,15 @@ private:
   static v8::Persistent<v8::Function> _constructor;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void toJSON(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
-
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, std::shared_ptr<HootException>& e)
+inline void toCpp(v8::Local<v8::Value> v, std::shared_ptr<HootException>& e)
 {
   if (HootExceptionJs::isHootException(v))
   {
-    v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
-    HootExceptionJs* ex = node::ObjectWrap::Unwrap<HootExceptionJs>(obj);
+    v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
+    const HootExceptionJs* ex = node::ObjectWrap::Unwrap<HootExceptionJs>(obj);
 
     e = ex->getException();
   }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SCOREMATRIX_H
 #define SCOREMATRIX_H
@@ -57,7 +57,7 @@ class ScoreMatrix
 {
 public:
 
-  ScoreMatrix() { }
+  ScoreMatrix() = default;
   ScoreMatrix(int width, int height) { resize(width, height); }
 
   void resize(size_t i, size_t j);
@@ -130,7 +130,7 @@ public:
    */
   _type sumCells() const;
 
-  void setLabels(const std::vector<QString>& labelRows, std::vector<QString>& labelCols)
+  void setLabels(const std::vector<QString>& labelRows, const std::vector<QString>& labelCols)
   {
     _labelRows = labelRows;
     _labelCols = labelCols;
@@ -203,10 +203,8 @@ void ScoreMatrix<_type>::resize(size_t rows, size_t cols)
 {
   _v.resize(rows);
 
-  for (int i = 0; i < rows; i++)
-  {
+  for (size_t i = 0; i < rows; i++)
     _v[i].resize(cols, (_type)0.0);
-  }
 }
 
 template<typename _type>

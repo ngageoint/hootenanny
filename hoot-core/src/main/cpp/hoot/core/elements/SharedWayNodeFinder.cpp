@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "SharedWayNodeFinder.h"
@@ -41,11 +41,6 @@ QSet<long> SharedWayNodeFinder::getSharedWayNodes(const ConstWayPtr& way1, const
   const QSet<long> nodeIdsSet2 =
     QList<long>::fromVector(QVector<long>::fromStdVector(way2->getNodeIds())).toSet();
   return nodeIdsSet1.intersect(nodeIdsSet2);
-}
-
-bool SharedWayNodeFinder::waysShareNode(const ConstWayPtr& way1, const ConstWayPtr& way2)
-{
-  return getSharedWayNodes(way1, way2).size() > 0;
 }
 
 bool SharedWayNodeFinder::waysShareEndNode(const ConstWayPtr& way1, const ConstWayPtr& way2,

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "AlphaShapeGenerator.h"
@@ -61,7 +61,7 @@ AlphaShapeGenerator::AlphaShapeGenerator(const double alpha, const double buffer
 OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
 {
   LOG_DEBUG("Generating map...");
-  OsmMapWriterFactory::writeDebugMap(inputMap, "alpha-shape-input-map");
+  OsmMapWriterFactory::writeDebugMap(inputMap, className(), "alpha-shape-input-map");
 
   std::shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
   if (cutterShape->getArea() == 0.0)
@@ -70,10 +70,10 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
     // clients who are expecting the alpha shape to be generated
     throw HootException("Alpha Shape area is zero. Try increasing the buffer size and/or alpha.");
   }
-  OsmMapWriterFactory::writeDebugMap(cutterShape, inputMap->getProjection(), "cutter-shape-map");
+  OsmMapWriterFactory::writeDebugMap(
+    cutterShape, inputMap->getProjection(), className(), "cutter-shape-map");
 
-  OsmMapPtr result;
-  result.reset(new OsmMap(inputMap->getProjection()));
+  OsmMapPtr result = std::make_shared<OsmMap>(inputMap->getProjection());
   result->appendSource(inputMap->getSource());
   GeometryToElementConverter(result)
     .convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);
@@ -86,7 +86,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   }
 
   LOG_VART(MapProjector::toWkt(result->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(result, "alpha-shape-result-map");
+  OsmMapWriterFactory::writeDebugMap(result, className(), "alpha-shape-result-map");
 
   return result;
 }
@@ -124,9 +124,9 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
   }
   if (!_geometry)
   {
-    _geometry.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    _geometry = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
   }
-  _geometry.reset(_geometry->buffer(_buffer));
+  _geometry = _geometry->buffer(_buffer);
 
   // See _coverStragglers description. This is an add-on behavior that is separate from the original
   // Alpha Shape algorithm.
@@ -161,14 +161,14 @@ void AlphaShapeGenerator::_coverStragglers(const ConstOsmMapPtr& map)
   for (int i = 0; i < _maxThreads; ++i)
     threads[i].join();
 
-  if (_stragglers.size() > 0)
+  if (!_stragglers.empty())
   {
     LOG_DEBUG("Adding " << StringUtils::formatLargeNumber(_stragglers.size())
               << " point stragglers to alpha shape.");
     //  Merge the stragglers geometries
     GeometryPtr merged = GeometryMerger().mergeGeometries(_stragglers, *_geometry->getEnvelopeInternal());
     //  Join the original geometry with the stragglers geometry
-    _geometry.reset(_geometry->Union(merged.get()));
+    _geometry = _geometry->Union(merged.get());
   }
   LOG_VART(_geometry->getArea());
 }
@@ -205,7 +205,7 @@ void AlphaShapeGenerator::_coverStragglersWorker()
       {
         LOG_TRACE(
           "Point " << point->toString() << " not covered by alpha shape. Buffering and adding it...");
-        point.reset(point->buffer(_buffer));
+        point = point->buffer(_buffer);
         _stragglersMutex.lock();
         _stragglers.push_back(point);
         _stragglersMutex.unlock();

@@ -19,17 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "WayFeatureExtractor.h"
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
-#include <hoot/core/criterion/CollectionRelationCriterion.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 
 using namespace std;
 
@@ -40,12 +40,12 @@ WayFeatureExtractor::WayFeatureExtractor(ValueAggregatorPtr agg):
   _agg(agg)
 {
   if (!_agg)
-    _agg.reset(new MeanAggregator());
+    _agg = std::make_shared<MeanAggregator>();
 }
 
 WayFeatureExtractor::WayFeatureExtractor()
 {
-  _agg.reset(new MeanAggregator());
+  _agg = std::make_shared<MeanAggregator>();
 }
 
 double WayFeatureExtractor::extract(
@@ -66,10 +66,8 @@ double WayFeatureExtractor::extract(
     ConstRelationPtr r1 = std::dynamic_pointer_cast<const Relation>(target);
     ConstRelationPtr r2 = std::dynamic_pointer_cast<const Relation>(candidate);
 
-    CollectionRelationCriterion collectionCrit;
-    if (/*r1->getType() == MetadataTags::RelationMultilineString() &&
-        r2->getType() == MetadataTags::RelationMultilineString() &&*/
-        collectionCrit.isSatisfied(r1) && collectionCrit.isSatisfied(r2) &&
+    RelationCriterion crit;
+    if (crit.isSatisfied(r1) && crit.isSatisfied(r2) &&
         // These have to be of the same size for the way by way comparison score to have any
         // meaning.
         r1->getMembers().size() == r2->getMembers().size())

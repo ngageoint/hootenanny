@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "AreaWayNodeCriterion.h"
 
@@ -38,13 +38,13 @@ HOOT_FACTORY_REGISTER(ElementCriterion, AreaWayNodeCriterion)
 AreaWayNodeCriterion::AreaWayNodeCriterion() :
 WayNodeCriterion()
 {
-  _parentCriterion.reset(new AreaCriterion());
+  _parentCriterion = std::make_shared<AreaCriterion>();
 }
 
 AreaWayNodeCriterion::AreaWayNodeCriterion(ConstOsmMapPtr map) :
 WayNodeCriterion(map)
 {
-  _parentCriterion.reset(new AreaCriterion(_map));
+  _parentCriterion = std::make_shared<AreaCriterion>(_map);
 }
 
 void AreaWayNodeCriterion::setOsmMap(const OsmMap* map)
@@ -52,7 +52,7 @@ void AreaWayNodeCriterion::setOsmMap(const OsmMap* map)
   _map = map->shared_from_this();
   if (_parentCriterion)
   {
-    _parentCriterion.reset(new AreaCriterion(_map));
+    _parentCriterion = std::make_shared<AreaCriterion>(_map);
   }
 }
 

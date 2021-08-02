@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef SHAPEFILEWRITER_H
@@ -57,59 +57,52 @@ public:
   static QString className() { return "hoot::ShapefileWriter"; }
 
   ShapefileWriter();
-  virtual ~ShapefileWriter() = default;
+  ~ShapefileWriter() = default;
 
-  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".shp"); }
+  /**
+   * Set the configuration for this object.
+   */
+  void setConfiguration(const Settings& conf) override;
 
-  virtual void open(const QString& url) override;
-
-  QStringList getColumns(ConstOsmMapPtr map, ElementType type) const;
-
-  void setColumns(QStringList columns) { _columns = columns; }
-
+  bool isSupported(const QString& url) override { return url.toLower().endsWith(".shp"); }
+  void open(const QString& url) override;
   /**
    * Will write out up to three files:
    * path + "Points.shp"
    * path + "Lines.shp"
    * path + "Polygons.shp"
    */
-  virtual void write(const ConstOsmMapPtr& map) override;
+  void write(const ConstOsmMapPtr& map) override;
+  QString supportedFormats() override { return ".shp"; }
 
   /**
    * @deprecated Use open and write instead.
    */
   void write(const ConstOsmMapPtr& map, const QString& path);
-
   void writeLines(const ConstOsmMapPtr& map, const QString& path);
-
   void writePoints(const ConstOsmMapPtr& map, const QString& path);
-
   void writePolygons(const ConstOsmMapPtr& map, const QString& path);
 
-  virtual QString supportedFormats() override { return ".shp"; }
+  QStringList getColumns(ConstOsmMapPtr map, ElementType type) const;
 
-  /**
-   * Set the configuration for this object.
-   */
-  virtual void setConfiguration(const Settings& conf) override;
+  void setColumns(QStringList columns) { _columns = columns; }
 
-protected:
+private:
 
   QStringList _columns;
   bool _includeCircularError;
   QDir _outputDir;
   int _circularErrorIndex;
 
-  void _removeShapefile(const QString& path);
+  void _removeShapefile(const QString& path) const;
 
   void _writeRelationPolygon(const ConstOsmMapPtr& map, const RelationPtr& relation,
-    OGRLayer* poLayer, const QStringList& columns, const QStringList& shpColumns);
-
+    OGRLayer* poLayer, const QStringList& columns, const QStringList& shpColumns) const;
   void _writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& way, OGRLayer *poLayer,
-    const QStringList& columns, const QStringList &shpColumns);
+    const QStringList& columns, const QStringList &shpColumns) const;
 };
 
-} // hoot
+}
 
 
 #endif // SHAPEFILEWRITER_H

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonMatch.h"
 
@@ -40,7 +40,6 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
 
 // Qt
-#include <QElapsedTimer>
 #include <QStringBuilder>
 
 using namespace std;
@@ -74,12 +73,13 @@ Match(threshold)
 {
 }
 
-PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
-                                 std::shared_ptr<const PoiPolygonRfClassifier> rf,
-                                 PoiPolygonInfoCachePtr infoCache,
-                                 const set<ElementId>& polyNeighborIds) :
+PoiPolygonMatch::PoiPolygonMatch(
+  const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
+  std::shared_ptr<const PoiPolygonRfClassifier> rf, PoiPolygonInfoCachePtr infoCache,
+  const set<ElementId>& polyNeighborIds) :
 Match(threshold),
 _map(map),
+_infoCache(infoCache),
 _e1IsPoi(false),
 _matchEvidenceThreshold(3),
 _reviewEvidenceThreshold(1),
@@ -88,6 +88,7 @@ _matchDistanceThreshold(-1.0),
 _reviewDistanceThreshold(-1.0),
 _reviewDistancePlusCe(-1.0),
 _closeDistanceMatch(false),
+_typeScorer(std::make_shared<PoiPolygonTypeScoreExtractor>(_infoCache)),
 _typeScore(-1.0),
 _typeScoreThreshold(-1.0),
 _reviewIfMatchedTypes(QStringList()),
@@ -108,12 +109,8 @@ _disableIntradatasetConflation2(false),
 _reviewMultiUseBuildings(false),
 _rf(rf),
 _explainText(""),
-_infoCache(infoCache),
 _timingThreshold(1000000)    // nanoseconds
 {
-  LOG_VART(_infoCache.get());
-
-  _typeScorer.reset(new PoiPolygonTypeScoreExtractor(_infoCache));
 }
 
 void PoiPolygonMatch::setMatchDistanceThreshold(double distance)
@@ -250,7 +247,7 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   }
   if (!_typeScorer)
   {
-    _typeScorer.reset(new PoiPolygonTypeScoreExtractor(_infoCache));
+    _typeScorer = std::make_shared<PoiPolygonTypeScoreExtractor>(_infoCache);
   }
   _typeScorer->setConfiguration(conf);
   _nameScorer.setConfiguration(conf);
@@ -388,7 +385,6 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 //  const bool oneElementIsRelation =
 //    e1->getElementType() == ElementType::Relation ||
 //    e2->getElementType() == ElementType::Relation;
-  //QElapsedTimer timer;
   matchesProcessed++;
   _explainText = "";
   _class.setMiss();
@@ -593,7 +589,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
 }
 
 unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi,
-                                                             ConstElementPtr poly)
+                                                             ConstElementPtr poly) const
 {
   LOG_TRACE("Retrieving convex poly distance evidence...");
 
@@ -627,7 +623,7 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
     noTypeFoundCount++;
   }
 
-  if (_typeScorer->getFailedMatchRequirements().size() > 0)
+  if (!_typeScorer->getFailedMatchRequirements().empty())
   {
     QString failedMatchTypes;
     for (int i = 0; i < _typeScorer->getFailedMatchRequirements().size(); i++)
@@ -712,11 +708,6 @@ unsigned int PoiPolygonMatch::_getPhoneNumberEvidence(ConstElementPtr poi, Const
 
 unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  //LOG_VART(poi);
-  //LOG_VART(poly);
-
-  //QElapsedTimer timer;
-
   unsigned int evidence = 0;
 
   evidence += _getDistanceEvidence(poi, poly);
@@ -736,25 +727,13 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   // the review reducer, so have since disabled. It also causes some regression tests to fail.
 
   evidence += _getTypeEvidence(poi, poly);
-//  if (evidence >= _matchEvidenceThreshold)
-//  {
-//    return evidence;
-//  }
   if (_addressMatchEnabled)
   {
     evidence += _getAddressEvidence(poi, poly);
-//    if (evidence >= _matchEvidenceThreshold)
-//    {
-//      return evidence;
-//    }
   }
   if (_phoneNumberMatchEnabled)
   {
     evidence += _getPhoneNumberEvidence(poi, poly);
-//    if (evidence >= _matchEvidenceThreshold)
-//    {
-//      return evidence;
-//    }
   }
 
   // We only want to run this if the previous match distance calculation was too large.
@@ -767,10 +746,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
       _infoCache->hasCriterion(poly, BuildingCriterion::className()))
   {
     evidence += _getConvexPolyDistanceEvidence(poi, poly);
-//    if (evidence >= _matchEvidenceThreshold)
-//    {
-//      return evidence;
-//    }
   }
 
   LOG_VART(evidence);
@@ -779,7 +754,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 
 void PoiPolygonMatch::printMatchDistanceInfo()
 {
-  PoiPolygonDistanceTruthRecorder::printMatchDistanceInfo();
+  LOG_VAR(PoiPolygonDistanceTruthRecorder::getMatchDistanceInfo());
 }
 
 void PoiPolygonMatch::resetMatchDistanceInfo()
@@ -792,13 +767,9 @@ set<pair<ElementId, ElementId>> PoiPolygonMatch::getMatchPairs() const
   set<pair<ElementId, ElementId>> result;
   // arbitrarily adding poi id first for consistency
   if (_e1IsPoi)
-  {
-    result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
-  }
+    result.emplace(_eid1, _eid2);
   else
-  {
-    result.insert(pair<ElementId, ElementId>(_eid2, _eid1));
-  }
+    result.emplace(_eid2, _eid1);
   return result;
 }
 
@@ -842,7 +813,7 @@ QString PoiPolygonMatch::toString() const
   }
 }
 
-void PoiPolygonMatch::_clearCache()
+void PoiPolygonMatch::_clearCache() const
 {
   if (_infoCache)
   {

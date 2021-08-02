@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTILINESTRINGVISITOR_H
 #define MULTILINESTRINGVISITOR_H
@@ -31,7 +31,7 @@
 #include <geos/geom/MultiLineString.h>
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementProvider.h>
 
 // standard
@@ -55,33 +55,28 @@ public:
   MultiLineStringVisitor();
   virtual ~MultiLineStringVisitor() = default;
 
-  void setElementProvider(const ConstElementProviderPtr& provider ) { _provider = provider; }
-
   /**
-   * Retrieves the multi line string created by this visitor. The caller retains ownership. If the
-   * method is called multiple times the first call will create a multi line string for the elements
-   * visited and clear any history. If it is called again (without visiting) it will return a valid
-   * but empty geometry.
+   * Retrieves the multiline string created by this visitor. If the method is called multiple times
+   * the first call will create a multi line string for the elements visited and clear any history.
+   * If it is called again (without visiting) it will return a valid but empty geometry.
    */
-  geos::geom::MultiLineString* createMultiLineString();
+  std::shared_ptr<geos::geom::MultiLineString> createMultiLineString();
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
+  void visit(const ConstWayPtr& w);
 
-  virtual void visit(const ConstWayPtr& w);
-
-  virtual QString getDescription() const { return "Creates a multi-linestring out of ways"; }
-
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Creating multi-linestrings..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Created " + QString::number(_numAffected) + " multi-line strings"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Creates a multi-linestring out of ways"; }
 
-  virtual QString getClassName() const override { return className(); }
+  void setElementProvider(const ConstElementProviderPtr& provider ) { _provider = provider; }
 
-protected:
+private:
 
   ConstElementProviderPtr _provider;
   std::vector<geos::geom::Geometry*>* _ls;

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -45,12 +45,12 @@ public:
 
   void basicTest()
   {
-    OsmMapPtr map(new OsmMap());
-    ConstNetworkVertexPtr vertex1(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
-    ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    ConstNetworkVertexPtr vertex1 =
+      std::make_shared<NetworkVertex>(TestUtils::createNode(map, "", Status::Unknown1, 0, 0));
+    ConstNetworkVertexPtr vertex2 =
+      std::make_shared<NetworkVertex>(TestUtils::createNode(map, "", Status::Unknown1, 10, 0));
+    ConstNetworkEdgePtr edge = std::make_shared<NetworkEdge>(vertex1, vertex2, true);
 
     EdgeLocation edgeLoc(edge, 0.5);
     ConstNetworkEdgePtr outputEdge = edgeLoc.getEdge();
@@ -85,12 +85,12 @@ public:
 
   void invalidTest()
   {
-    OsmMapPtr map(new OsmMap());
-    ConstNetworkVertexPtr vertex1(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
-    ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    ConstNetworkVertexPtr vertex1 =
+      std::make_shared<NetworkVertex>(TestUtils::createNode(map, "", Status::Unknown1, 0, 0));
+    ConstNetworkVertexPtr vertex2 =
+      std::make_shared<NetworkVertex>(TestUtils::createNode(map, "", Status::Unknown1, 10, 0));
+    ConstNetworkEdgePtr edge = std::make_shared<NetworkEdge>(vertex1, vertex2, true);
 
     EdgeLocation edgeLoc(edge, -0.1);
 
@@ -99,16 +99,16 @@ public:
 
   void operatorTests()
   {
-    OsmMapPtr map(new OsmMap());
-    ConstNetworkVertexPtr vertex1(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
-    ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    ConstNetworkVertexPtr vertex1 =
+      std::make_shared<NetworkVertex>(TestUtils::createNode(map, "", Status::Unknown1, 0, 0));
+    ConstNetworkVertexPtr vertex2 =
+      std::make_shared<NetworkVertex>(TestUtils::createNode(map, "", Status::Unknown1, 10, 0));
+    ConstNetworkEdgePtr edge = std::make_shared<NetworkEdge>(vertex1, vertex2, true);
 
-    ConstEdgeLocationPtr edgeLoc1(new EdgeLocation(edge, 0.5));
-    ConstEdgeLocationPtr edgeLoc2(new EdgeLocation(edge, 0.5));
-    ConstEdgeLocationPtr edgeLoc3(new EdgeLocation(edge, 0.3));
+    ConstEdgeLocationPtr edgeLoc1 = std::make_shared<EdgeLocation>(edge, 0.5);
+    ConstEdgeLocationPtr edgeLoc2 = std::make_shared<EdgeLocation>(edge, 0.5);
+    ConstEdgeLocationPtr edgeLoc3 = std::make_shared<EdgeLocation>(edge, 0.3);
 
     CPPUNIT_ASSERT(edgeLoc1 == edgeLoc2);
     CPPUNIT_ASSERT(edgeLoc1 <= edgeLoc2);
@@ -119,14 +119,14 @@ public:
 
   void hashTest()
   {
-    OsmMapPtr map(new OsmMap());
-    ConstNetworkVertexPtr vertex1(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
-    ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
-    ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    ConstNetworkVertexPtr vertex1 =
+      std::make_shared<NetworkVertex>(TestUtils::createNode(map, "", Status::Unknown1, 0, 0));
+    ConstNetworkVertexPtr vertex2 =
+      std::make_shared<NetworkVertex>(TestUtils::createNode(map, "", Status::Unknown1, 10, 0));
+    ConstNetworkEdgePtr edge = std::make_shared<NetworkEdge>(vertex1, vertex2, true);
 
-    EdgeLocationPtr edgeLoc(new EdgeLocation(edge, 0.5));
+    EdgeLocationPtr edgeLoc = std::make_shared<EdgeLocation>(edge, 0.5);
 
     QHash<EdgeLocationPtr, QString> edgeLocs;
     edgeLocs.insert(edgeLoc, "test");

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVEMISSINGELEMENTSVISITOR_H
 #define REMOVEMISSINGELEMENTSVISITOR_H
@@ -45,29 +45,26 @@ public:
 
   RemoveMissingElementsVisitor(const Log::WarningLevel& logLevel = Log::Trace,
                                const int maxReport = Log::getWarnMessageLimit());
-  virtual ~RemoveMissingElementsVisitor() = default;
+  ~RemoveMissingElementsVisitor() = default;
 
-  virtual void setOsmMap(OsmMap* map) { _v->setOsmMap(map);}
-  virtual void setOsmMap(const OsmMap* /*map*/)
+  void setOsmMap(OsmMap* map) override { _v->setOsmMap(map);}
+  void setOsmMap(const OsmMap* /*map*/) const
   { throw NotImplementedException("Set Map with const is not supported"); }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing references to elements that do not exist..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Removed " + StringUtils::formatLargeNumber(_numAffected) +
       " missing element child references"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Removes references to any elements that do not exist"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmFileSorter.h"
 
@@ -130,10 +130,10 @@ void OsmFileSorter::_sortPbf(const QString& input, const QString& output)
 
 std::shared_ptr<QTemporaryFile> OsmFileSorter::_ogrToPbfTemp(const QString& input)
 {
-  std::shared_ptr<QTemporaryFile> pbfTemp(
-    new QTemporaryFile(
+  std::shared_ptr<QTemporaryFile> pbfTemp =
+    std::make_shared<QTemporaryFile>(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
-      "/multiary-ingest-sort-temp-XXXXXX.osm.pbf"));
+      "/multiary-ingest-sort-temp-XXXXXX.osm.pbf");
   //for debugging only
   //pbfTemp->setAutoRemove(false);
   if (!pbfTemp->open())

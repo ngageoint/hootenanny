@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef APIDBREADER_H
 #define APIDBREADER_H
@@ -58,7 +58,7 @@ public:
   ApiDbReader();
   virtual ~ApiDbReader() = default;
 
-  virtual bool isSupported(const QString& urlStr) override;
+  bool isSupported(const QString& urlStr) override;
 
   void setBoundingBox(const QString& bbox);
   void setOverrideBoundingBox(const QString& bbox);
@@ -69,12 +69,12 @@ public:
    * Determines the reader's default element status. By default this is Invalid which specifies that
    * the file's status will be used.
    */
-  virtual void setDefaultStatus(Status status) override { _status = status; }
+  void setDefaultStatus(Status status) override { _status = status; }
 
   /**
    * Determines whether the reader should use the element id's from the file being read
    */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) override
+  void setUseDataSourceIds(bool useDataSourceIds) override
   { _useDataSourceIds = useDataSourceIds; }
 
   void setUserEmail(const QString& email) { _email = email; }
@@ -82,34 +82,34 @@ public:
   /**
    * @see PartialOsmMapReader
    */
-  virtual void initializePartial() override;
+  void initializePartial() override;
 
   /**
    * The read command called after open.
    */
-  virtual void read(const OsmMapPtr& map) override;
+  void read(const OsmMapPtr& map) override;
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual void finalizePartial() override;
+  void finalizePartial() override;
 
-  void close();
-
-  /**
-   * @see PartialOsmMapReader
-   */
-  virtual bool hasMoreElements() override;
+  void close() override;
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual std::shared_ptr<Element> readNextElement() override;
+  bool hasMoreElements() override;
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
+  std::shared_ptr<Element> readNextElement() override;
+
+  /**
+   * @see PartialOsmMapReader
+   */
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
@@ -154,26 +154,24 @@ protected:
    * Reads the entire dataset into a map
    */
   void _fullRead(OsmMapPtr map);
-
   /*
    * Reads a portion of the dataset into a map over the specified bounds. Note that this fully
    * hydrates relations, so extra filtering may need to be done after the fact to prevent conflating
    * features outside of the bounds.
    */
   void _readByBounds(OsmMapPtr map, const geos::geom::Envelope& bounds);
-
   /*
    * Reads a portion of the dataset into a map over the specified bounds. This reads the entire
    * dataset in and then crops it after the fact. See the description of the
    * apidb.reader.read.full.then.crop.on.bounded configuration option for more information.
    */
   void _readByBounds2(OsmMapPtr map, const geos::geom::Envelope& bounds);
-
   void _readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds, QSet<QString>& wayIds,
                           QSet<QString>& additionalNodeIds, long& nodeCount, long& wayCount);
-  void _updateMetadataOnElement(ElementPtr element);
 
-  bool _hasBounds();
+  void _updateMetadataOnElement(ElementPtr element) const;
+
+  bool _hasBounds() const;
 
 private:
 

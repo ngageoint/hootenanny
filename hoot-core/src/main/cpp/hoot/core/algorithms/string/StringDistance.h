@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef STRINGDISTANCE_H
 #define STRINGDISTANCE_H
@@ -40,7 +40,7 @@ namespace hoot
 {
 
 /**
- * An interface to determining the similarity of two strings.
+ * @brief The StringDistance class is an interface to determining the similarity of two strings.
  */
 class StringDistance : public ApiEntityInfo
 {
@@ -52,15 +52,13 @@ public:
   virtual ~StringDistance() = default;
 
   /**
-   * Returns a value from 1 (very similar) to 0 (very dissimilar) describing the distance between
-   * two strings.
+   * @brief compare returns a value from 1 (very similar) to 0 (very dissimilar) describing the
+   * distance between two strings.
    */
   virtual double compare(const QString& s1, const QString& s2) const = 0;
-
-  virtual QString toString() const = 0;
 };
 
-typedef std::shared_ptr<StringDistance> StringDistancePtr;
+using StringDistancePtr = std::shared_ptr<StringDistance>;
 
 }
 

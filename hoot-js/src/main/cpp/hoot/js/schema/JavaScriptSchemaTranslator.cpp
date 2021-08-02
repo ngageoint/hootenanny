@@ -19,33 +19,32 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "JavaScriptSchemaTranslator.h"
 
 // hoot
-#include <hoot/core/util/Exception.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/io/schema/DoubleFieldDefinition.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/io/schema/FeatureDefinition.h>
-#include <hoot/core/io/schema/DoubleFieldDefinition.h>
 #include <hoot/core/io/schema/IntegerFieldDefinition.h>
-#include <hoot/core/io/schema/LongIntegerFieldDefinition.h>
-#include <hoot/core/io/schema/StringFieldDefinition.h>
 #include <hoot/core/io/schema/Layer.h>
+#include <hoot/core/io/schema/LongIntegerFieldDefinition.h>
 #include <hoot/core/io/schema/Schema.h>
+#include <hoot/core/io/schema/StringFieldDefinition.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/js/PluginContext.h>
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
-#include <hoot/js/PluginContext.h>
 
 // Qt
 #include <QCoreApplication>
@@ -73,12 +72,6 @@ int JavaScriptSchemaTranslator::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ScriptSchemaTranslator, JavaScriptSchemaTranslator)
 
-// Return the current time
-void jsGetTimeNow(const FunctionCallbackInfo<Value>& args)
-{
-  args.GetReturnValue().Set(toV8(Tgs::Time::getTime()));
-}
-
 JavaScriptSchemaTranslator::JavaScriptSchemaTranslator()
 {
   setConfiguration(conf());
@@ -91,7 +84,7 @@ void JavaScriptSchemaTranslator::setConfiguration(const Settings& conf)
 
 JavaScriptSchemaTranslator::~JavaScriptSchemaTranslator()
 {
-  if (_timing.size() != 0)
+  if (!_timing.empty())
   {
     tbs::SampleStats stats(_timing);
     LOG_TRACE("Translation script run time (ms): " << stats.toString());
@@ -100,7 +93,7 @@ JavaScriptSchemaTranslator::~JavaScriptSchemaTranslator()
 }
 
 vector<JavaScriptSchemaTranslator::TranslatedFeature> JavaScriptSchemaTranslator::_createAllFeatures(
-  const QVariantList& list)
+  const QVariantList& list) const
 {
   vector<TranslatedFeature> result;
   result.reserve(list.size());
@@ -119,7 +112,7 @@ vector<JavaScriptSchemaTranslator::TranslatedFeature> JavaScriptSchemaTranslator
 }
 
 std::shared_ptr<Feature> JavaScriptSchemaTranslator::_createFeature(const QVariantMap& vm,
-                                                              QString &tableName)
+                                                              QString &tableName) const
 {
   if (vm.contains("attrs") == false)
   {
@@ -133,7 +126,7 @@ std::shared_ptr<Feature> JavaScriptSchemaTranslator::_createFeature(const QVaria
   tableName = vm["tableName"].toString();
   if (tableName.length() < 1)
   {
-    LOG_WARN("_createFeature: Empty tableName");
+    LOG_TRACE("_createFeature: Empty tableName");
     return std::shared_ptr<Feature>(); // Null feature
   }
 
@@ -149,7 +142,7 @@ std::shared_ptr<Feature> JavaScriptSchemaTranslator::_createFeature(const QVaria
     }
   }
 
-  if (layer == 0)
+  if (layer == nullptr)
   {
     strictError("Table name: " + tableName + " not found in schema.");
   }
@@ -162,8 +155,7 @@ std::shared_ptr<Feature> JavaScriptSchemaTranslator::_createFeature(const QVaria
 
   QVariantMap attrs = vm["attrs"].toMap();
 
-  std::shared_ptr<Feature> result(new Feature(layer->getFeatureDefinition()));
-
+  std::shared_ptr<Feature> result = std::make_shared<Feature>(layer->getFeatureDefinition());
 
   for (QVariantMap::const_iterator it = attrs.begin(); it != attrs.end(); ++it)
   {
@@ -201,13 +193,14 @@ void JavaScriptSchemaTranslator::_finalize()
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_gContext->getContext(current));
+    Local<Context> context = current->GetCurrentContext();
 
-    Handle<Object> tObj = _gContext->getContext(current)->Global();
+    Local<Object> tObj = _gContext->getContext(current)->Global();
 
-    if (tObj->Has(String::NewFromUtf8(current, "finalize")))
+    if (tObj->Has(context, toV8("finalize")).ToChecked())
     {
-      TryCatch trycatch;
-      Handle<Value> finalize = _gContext->call(tObj,"finalize");
+      TryCatch trycatch(current);
+      Local<Value> finalize = _gContext->call(tObj,"finalize");
       HootExceptionJs::checkV8Exception(finalize, trycatch);
     }
   }
@@ -215,34 +208,17 @@ void JavaScriptSchemaTranslator::_finalize()
   _initialized = false;
 }
 
-int JavaScriptSchemaTranslator::getLogCount(const QString& log)
-{
-  int result;
-
-  if (_logs.contains(log) == false)
-  {
-    _logs[log] = 1;
-    result = 1;
-  }
-  else
-  {
-    result = _logs[log] + 1;
-    _logs[log] = result;
-  }
-
-  return result;
-}
-
 void JavaScriptSchemaTranslator::_init()
 {
-  //This can be a costly operation, hence putting it at INFO for runtime awareness purposes.
+  // This can be a costly operation, hence putting it at INFO for runtime awareness purposes.
   LOG_INFO("Loading translation script: " << _scriptPath << "...");
 
   _error = false;
-  _gContext.reset(new PluginContext());
+  _gContext = std::make_shared<PluginContext>();
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
 
   if (_scriptPath.isEmpty())
   {
@@ -261,53 +237,32 @@ void JavaScriptSchemaTranslator::_init()
   }
 
   // Less typing
-  Handle<Object> tObj = _gContext->getContext(current)->Global();
-
-  // Set up a small function
-  tObj->Set(
-    String::NewFromUtf8(current, "timeNow"),
-    FunctionTemplate::New(current, jsGetTimeNow)->GetFunction());
+  Local<Object> tObj = _gContext->getContext(current)->Global();
 
   // Run Initialize, if it exists
-  if (tObj->Has(String::NewFromUtf8(current, "initialize")))
+  if (tObj->Has(context, toV8("initialize")).ToChecked())
   {
-    TryCatch trycatch;
-    Handle<Value> initial = _gContext->call(tObj,"initialize");
+    TryCatch trycatch(current);
+    Local<Value> initial = _gContext->call(tObj,"initialize");
     HootExceptionJs::checkV8Exception(initial, trycatch);
   }
 
   // Sort out what the toOsm function is called
-  if (tObj->Has(String::NewFromUtf8(current, "translateToOsm")))
+  if (tObj->Has(context, toV8("translateToOsm")).ToChecked())
   {
     _toOsmFunctionName = "translateToOsm";
   }
-  else if (tObj->Has(String::NewFromUtf8(current, "translateAttributes")))
+  else if (tObj->Has(context, toV8("translateAttributes")).ToChecked())
   {
     _toOsmFunctionName = "translateAttributes";
   }
-//  else
-//  {
-//    throw HootException("A 'translateToOsm' function must be defined.");
-//  }
-
-  // Debug Stuff - Dump the object properties
-//  Handle<Object> hoot = tObj->Get(toV8("hoot"))->ToObject();
-
-//  cout << endl;
-//  cout << "JSTrans:" << endl;
-//  cout << "tObj Properties: " << tObj->GetPropertyNames() << endl;
-//  cout << endl;
-//  cout << "Hoot Properties: " << hoot->GetPropertyNames() << endl;
-//  cout << endl;
-//  cout << "End: JSTrans:" << endl;
-//  cout << endl;
 
   LOG_DEBUG("Translation script loaded.");
   _initialized = true;
 }
 
 // Use the layerNameFilter function to get the filter string (regexp)
-const QString JavaScriptSchemaTranslator::getLayerNameFilter()
+QString JavaScriptSchemaTranslator::getLayerNameFilter()
 {
   // Just making sure
   if (!_initialized)
@@ -318,11 +273,12 @@ const QString JavaScriptSchemaTranslator::getLayerNameFilter()
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> tObj = _gContext->getContext(current)->Global();
+  Local<Object> tObj = _gContext->getContext(current)->Global();
 
   LOG_TRACE("Getting layer name filter...");
-  if (tObj->Has(String::NewFromUtf8(current, "layerNameFilter")))
+  if (tObj->Has(context, toV8("layerNameFilter")).ToChecked())
   {
     return toCpp<QString>(_gContext->call(tObj,"layerNameFilter"));
   }
@@ -330,15 +286,6 @@ const QString JavaScriptSchemaTranslator::getLayerNameFilter()
   {
     return ScriptSchemaTranslator::getLayerNameFilter();
   }
-}
-
-QVariant& JavaScriptSchemaTranslator::_getMapValue(QVariantMap& map, const QString& key)
-{
-  if (map.contains(key) == false)
-  {
-    throw HootException("Expected to find key: " + key);
-  }
-  return map[key];
 }
 
 bool JavaScriptSchemaTranslator::isValidScript()
@@ -370,21 +317,11 @@ bool JavaScriptSchemaTranslator::isValidScript()
   return result;
 }
 
-void JavaScriptSchemaTranslator::_featureWarn(const QString& message, const QString& fileName,
-                                              const QString& functionName, int lineNumber)
-{
-//  stringstream ss;
-//  LOG_INFO(_tags);
-//  ss << message << " Input tags: " << *_tags;
-  Log::getInstance().log(Log::Warn, message.toStdString(), fileName.toStdString(),
-                         functionName.toStdString(), lineNumber);
-}
-
 std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
 {
   LOG_TRACE("Started getOgrOutputSchema");
 
-  if (_schema == 0)
+  if (_schema == nullptr)
   {
     if (!_initialized)
     {
@@ -394,20 +331,21 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_gContext->getContext(current));
+    Local<Context> context = current->GetCurrentContext();
 
-    Handle<Object> tObj = _gContext->getContext(current)->Global();
+    Local<Object> tObj = _gContext->getContext(current)->Global();
 
-    if (!tObj->Has(String::NewFromUtf8(current, "getDbSchema")))
+    if (!tObj->Has(context, toV8("getDbSchema")).ToChecked())
     {
       throw HootException("This translation file does not support converting to OGR. "
                           "(Missing schema)");
     }
 
-    Handle<Value> schemaJs(_gContext->call(tObj,"getDbSchema"));
+    Local<Value> schemaJs(_gContext->call(tObj,"getDbSchema"));
 
     if (schemaJs->IsArray())
     {
-      std::shared_ptr<Schema> schema(new Schema());
+      std::shared_ptr<Schema> schema = std::make_shared<Schema>();
       QVariantList schemaV = toCpp<QVariant>(schemaJs).toList();
 
       for (int i = 0; i < schemaV.size(); ++i)
@@ -419,16 +357,15 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
     }
     else
     {
-      throw Exception("Expected a valid schema array to be returned.");
+      throw HootException("Expected a valid schema array to be returned.");
     }
   }
 
   return _schema;
 }
 
-void JavaScriptSchemaTranslator::_parseEnumerations(DoubleFieldDefinition* fd,
-                                                    QVariant& enumerations)
-  const
+void JavaScriptSchemaTranslator::_parseEnumerations(
+  std::shared_ptr<DoubleFieldDefinition> fd, const QVariant& enumerations) const
 {
   if (enumerations.canConvert(QVariant::List) == false)
   {
@@ -469,9 +406,8 @@ void JavaScriptSchemaTranslator::_parseEnumerations(DoubleFieldDefinition* fd,
   }
 }
 
-void JavaScriptSchemaTranslator::_parseEnumerations(IntegerFieldDefinition *fd,
-                                                    QVariant& enumerations)
-  const
+void JavaScriptSchemaTranslator::_parseEnumerations(
+  std::shared_ptr<IntegerFieldDefinition> fd, const QVariant& enumerations) const
 {
   if (enumerations.canConvert(QVariant::List) == false)
   {
@@ -512,9 +448,8 @@ void JavaScriptSchemaTranslator::_parseEnumerations(IntegerFieldDefinition *fd,
   }
 }
 
-void JavaScriptSchemaTranslator::_parseEnumerations(LongIntegerFieldDefinition* fd,
-                                                    QVariant& enumerations)
-  const
+void JavaScriptSchemaTranslator::_parseEnumerations(
+  std::shared_ptr<LongIntegerFieldDefinition> fd, const QVariant& enumerations) const
 {
   if (enumerations.canConvert(QVariant::List) == false)
   {
@@ -575,8 +510,7 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
 
   if (type == "string")
   {
-    StringFieldDefinition* fd = new StringFieldDefinition();
-    result.reset(fd);
+    std::shared_ptr<StringFieldDefinition> fd = std::make_shared<StringFieldDefinition>();
 
     if (map.contains("defValue"))
     {
@@ -593,11 +527,12 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     {
       fd->setWidth(_toInt32(map["length"]));
     }
+
+    result = fd;
   }
   else if (type == "double" || type == "real")
   {
-    DoubleFieldDefinition* fd = new DoubleFieldDefinition();
-    result.reset(fd);
+    std::shared_ptr<DoubleFieldDefinition> fd = std::make_shared<DoubleFieldDefinition>();
 
     if (map.contains("defValue"))
     {
@@ -623,11 +558,12 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     {
       _parseEnumerations(fd, map["enumerations"]);
     }
+
+    result = fd;
   }
   else if (type == "enumeration" || type == "integer")
   {
-    IntegerFieldDefinition* fd = new IntegerFieldDefinition();
-    result.reset(fd);
+    std::shared_ptr<IntegerFieldDefinition> fd = std::make_shared<IntegerFieldDefinition>();
 
     if (map.contains("defValue"))
     {
@@ -653,11 +589,12 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     {
       _parseEnumerations(fd, map["enumerations"]);
     }
+
+    result = fd;
   }
   else if (type == "long integer")
   {
-    LongIntegerFieldDefinition* fd = new LongIntegerFieldDefinition();
-    result.reset(fd);
+    std::shared_ptr<LongIntegerFieldDefinition> fd = std::make_shared<LongIntegerFieldDefinition>();
 
     if (map.contains("defValue"))
     {
@@ -682,6 +619,8 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
     {
       _parseEnumerations(fd, map["enumerations"]);
     }
+
+    result = fd;
   }
   else
   {
@@ -715,7 +654,7 @@ std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefiniti
 
 std::shared_ptr<Layer> JavaScriptSchemaTranslator::_parseLayer(const QVariant& layer) const
 {
-  std::shared_ptr<Layer> newLayer(new Layer());
+  std::shared_ptr<Layer> newLayer = std::make_shared<Layer>();
 
   if (layer.canConvert(QVariant::Map) == false)
   {
@@ -724,14 +663,14 @@ std::shared_ptr<Layer> JavaScriptSchemaTranslator::_parseLayer(const QVariant& l
 
   QVariantMap map = layer.toMap();
 
-  // parse out the name of the layer.
+  // Parse out the name of the layer.
   if (map.contains("name") == false)
   {
     throw HootException("Expected layer to contain a name.");
   }
   newLayer->setName(map["name"].toString());
 
-  // parse out the geometry portion of the layer.
+  // Parse out the geometry portion of the layer.
   if (map.contains("geom") == false)
   {
     throw HootException(QString("Expected layer (%1) to contain a geom.").arg(newLayer->getName()));
@@ -769,7 +708,7 @@ std::shared_ptr<Layer> JavaScriptSchemaTranslator::_parseLayer(const QVariant& l
   }
   set<QString> names;
   QVariantList columns = columnsV.toList();
-  std::shared_ptr<FeatureDefinition> dfd(new FeatureDefinition());
+  std::shared_ptr<FeatureDefinition> dfd = std::make_shared<FeatureDefinition>();
   for (int i = 0; i < columns.size(); i++)
   {
     std::shared_ptr<FieldDefinition> fd = _parseFieldDefinition(columns[i]);
@@ -857,24 +796,25 @@ vector<Tags> JavaScriptSchemaTranslator::translateToOgrTags(Tags& tags, ElementT
   return result;
 }
 
-QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
-  ElementType elementType, geos::geom::GeometryTypeId geometryType)
+QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(
+  Tags& tags, ElementType elementType, geos::geom::GeometryTypeId geometryType)
 {
   _tags = &tags;
 
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> v8tags = Object::New(current);
+  Local<Object> v8tags = Object::New(current);
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    v8tags->Set(toV8(it.key()), toV8(it.value()));
+    v8tags->Set(context, toV8(it.key()), toV8(it.value()));
   }
 
   // Hardcoded to 3 arguments
   //  args << tagsJs << elementTypeJs << geometryTypeJs;
-  Handle<Value> args[3];
+  Local<Value> args[3];
   args[0] = v8tags;
   args[1] = toV8(elementType.toString());
 
@@ -882,18 +822,18 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
   {
   case GEOS_POINT:
   case GEOS_MULTIPOINT:
-    args[2] = String::NewFromUtf8(current, "Point");
+    args[2] = toV8("Point");
     break;
   case GEOS_LINESTRING:
   case GEOS_MULTILINESTRING:
-    args[2] = String::NewFromUtf8(current, "Line");
+    args[2] = toV8("Line");
     break;
   case GEOS_POLYGON:
   case GEOS_MULTIPOLYGON:
-    args[2] = String::NewFromUtf8(current, "Area");
+    args[2] = toV8("Area");
     break;
   case GEOS_GEOMETRYCOLLECTION:
-    args[2] = String::NewFromUtf8(current, "Collection");
+    args[2] = toV8("Collection");
     break;
   default:
     throw InternalErrorException("Unexpected geometry type.");
@@ -905,12 +845,11 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
     start = Tgs::Time::getTime();
   }
 
-//  QScriptValue translated = _translateToOgrFunction->call(QScriptValue(), args);
-  Handle<Object> tObj = _gContext->getContext(current)->Global();
+  Local<Object> tObj = _gContext->getContext(current)->Global();
 
   // We assume this exists. we checked during Init.
-  Handle<Function> tFunc =
-    Handle<Function>::Cast(tObj->Get(String::NewFromUtf8(current, "translateToOgr")));
+  Local<Function> tFunc =
+    Local<Function>::Cast(tObj->Get(context, toV8("translateToOgr")).ToLocalChecked());
 
   // Make sure we have a translation function. No easy way to do this earlier than now
   if (tFunc->IsUndefined())
@@ -919,9 +858,15 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
                         "(Missing translateToOgr)");
   }
 
-  TryCatch trycatch;
+  TryCatch trycatch(current);
   // Hardcoded to 3 arguments
-  Handle<Value> translated = tFunc->Call(tObj, 3, args);
+  MaybeLocal<Value> maybe_translated = tFunc->Call(context, tObj, 3, args);
+
+  if (maybe_translated.IsEmpty())
+    HootExceptionJs::throwAsHootException(trycatch);
+
+  Local<Value> translated = maybe_translated.ToLocalChecked();
+
   HootExceptionJs::checkV8Exception(translated, trycatch);
 
   if (Log::getInstance().getLevel() <= Log::Debug)
@@ -949,14 +894,14 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
   }
   else
   {
-    throw Exception("convert: Expected either a null or an object as the result.");
+    throw HootException("convert: Expected either a null or an object as the result.");
   }
 
   return result;
 }
 
-void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName,
-                                                 const char* geomType)
+void JavaScriptSchemaTranslator::_translateToOsm(
+  Tags& t, const char* layerName, const char* geomType)
 {
   LOG_VART(_toOsmFunctionName);
   LOG_VART(layerName);
@@ -967,28 +912,33 @@ void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName,
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> tags = Object::New(current);
+  Local<Object> tags = Object::New(current);
   for (Tags::const_iterator it = t.begin(); it != t.end(); ++it)
   {
     LOG_VART(it.key());
     LOG_VART(it.value());
-    tags->Set(toV8(it.key()), toV8(it.value()));
+    tags->Set(context, toV8(it.key()), toV8(it.value()));
   }
 
-  Handle<Value> args[3];
+  Local<Value> args[3];
   args[0] = tags;
   args[1] = toV8(layerName);
   args[2] = toV8(geomType);
 
-  Handle<Object> tObj = _gContext->getContext(current)->Global();
+  Local<Object> tObj = _gContext->getContext(current)->Global();
 
   // This has a variable since we don't know if it will be "translateToOsm" or "translateAttributes"
-  Handle<Function> tFunc = Handle<Function>::Cast(tObj->Get(toV8(_toOsmFunctionName)));
-  TryCatch trycatch;
+  Local<Function> tFunc = Local<Function>::Cast(tObj->Get(context, toV8(_toOsmFunctionName)).ToLocalChecked());
+  TryCatch trycatch(current);
 
   // NOTE: the "3" here is the number of arguments
-  Handle<Value> newTags = tFunc->Call(tObj, 3, args);
+  MaybeLocal<Value> maybe_newTags = tFunc->Call(context, tObj, 3, args);
+  if (maybe_newTags.IsEmpty())
+    HootExceptionJs::throwAsHootException(trycatch);
+
+  Local<Value> newTags = maybe_newTags.ToLocalChecked();
   HootExceptionJs::checkV8Exception(newTags, trycatch);
 
   double start = 0.00; // to stop warnings
@@ -1014,26 +964,26 @@ void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName,
   else if (newTags->IsObject())
   {
     // Either do this or a cast. Not sure what is better/faster
-    // Handle<Object> obj = Handle<Object>::Cast(newTags);
-    Handle<Object> obj = newTags->ToObject();
+    // Local<Object> obj = Local<Object>::Cast(newTags);
+    Local<Object> obj = newTags->ToObject(context).ToLocalChecked();
 
-    Local<Array> arr = obj->GetPropertyNames();
+    Local<Array> arr = obj->GetPropertyNames(context).ToLocalChecked();
 
     for (uint32_t i = 0; i < arr->Length(); i++)
     {
-      Local<Value> v(obj->Get(arr->Get(i)));
+      Local<Value> v(obj->Get(context, arr->Get(context, i).ToLocalChecked()).ToLocalChecked());
 
       // Need to make sure the "Value" is not undefined or else "Bad Things Happen"
       if (v != Undefined(current))
       {
-        t.insert(toCpp<QString>(arr->Get(i)), toCpp<QString>(v));
+        t.insert(toCpp<QString>(arr->Get(context, i).ToLocalChecked()), toCpp<QString>(v));
       }
       LOG_VART(t);
     }
   }
   else
   {
-    throw Exception("convert: Expected either a null or an object as the result.");
+    throw HootException("convert: Expected either a null or an object as the result.");
   }
 }
 

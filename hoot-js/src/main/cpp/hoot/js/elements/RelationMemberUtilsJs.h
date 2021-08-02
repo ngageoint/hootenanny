@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef RELATION_MEMBER_UTILS_JS_H
 #define RELATION_MEMBER_UTILS_JS_H
@@ -38,18 +38,17 @@ class RelationMemberUtilsJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
   virtual ~RelationMemberUtilsJs() = default;
 
-  static void isMemberOfRelationType(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isMemberOfRelationWithType(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMemberOfRelationInCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMemberOfRelationWithTagKey(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getNumRelationMemberNodes(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void relationsHaveConnectedWayMembers(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMemberOfRelationSatisfyingCriterion(
     const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void relationHasConflatableMember(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
 

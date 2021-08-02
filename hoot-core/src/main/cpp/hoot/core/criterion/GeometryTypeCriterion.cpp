@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "GeometryTypeCriterion.h"
 
@@ -35,11 +35,6 @@
 namespace hoot
 {
 
-QStringList GeometryTypeCriterion::getCriterionClassNames()
-{
-  return getCriterionClassNamesByGeometryType(GeometryType::Unknown);
-}
-
 QStringList GeometryTypeCriterion::getCriterionClassNamesByGeometryType(const GeometryType& type)
 {
   QStringList classNamesByType;
@@ -49,8 +44,8 @@ QStringList GeometryTypeCriterion::getCriterionClassNamesByGeometryType(const Ge
   {
     const QString className = classNames[i];
 
-    ElementCriterionPtr crit(
-      Factory::getInstance().constructObject<ElementCriterion>(className));
+    ElementCriterionPtr crit =
+      Factory::getInstance().constructObject<ElementCriterion>(className);
     std::shared_ptr<GeometryTypeCriterion> geometryTypeCrit =
       std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
     if (geometryTypeCrit &&
@@ -97,22 +92,6 @@ GeometryTypeCriterion::GeometryType GeometryTypeCriterion::typeFromString(
   else
   {
     return GeometryType::Unknown;
-  }
-}
-
-ElementCriterionPtr GeometryTypeCriterion::getBaseGeometryCriterion(
-  const GeometryType& geometryType, const ConstOsmMapPtr& map)
-{
-  switch (geometryType)
-  {
-    case GeometryType::Point:
-      return ElementCriterionPtr(new PointCriterion(map));
-    case GeometryType::Line:
-      return ElementCriterionPtr(new LinearCriterion());
-    case GeometryType::Polygon:
-      return ElementCriterionPtr(new PolygonCriterion(map));
-    default:
-      return ElementCriterionPtr();
   }
 }
 

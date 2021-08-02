@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "HighwayImpliedDividedMarker.h"
@@ -52,7 +52,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, HighwayImpliedDividedMarker)
 
-bool HighwayImpliedDividedMarker::_dividerSandwich(const std::shared_ptr<Way>& w)
+bool HighwayImpliedDividedMarker::_dividerSandwich(const std::shared_ptr<Way>& w) const
 {
   long firstNodeId = w->getNodeId(0);
   long lastNodeId = w->getLastNodeId();
@@ -68,7 +68,7 @@ bool HighwayImpliedDividedMarker::_dividerSandwich(const std::shared_ptr<Way>& w
   }
 }
 
-bool HighwayImpliedDividedMarker::_hasDividerConnected(long nodeId, long excludedWayId)
+bool HighwayImpliedDividedMarker::_hasDividerConnected(long nodeId, long excludedWayId) const
 {
   const set<long>& wayIds = (*_n2w)[nodeId];
 
@@ -97,15 +97,15 @@ std::shared_ptr<OsmMap> HighwayImpliedDividedMarker::markDivided(
 std::shared_ptr<OsmMap> HighwayImpliedDividedMarker::markDivided()
 {
   _numAffected = 0;
-  std::shared_ptr<OsmMap> result(new OsmMap(_inputMap));
+  std::shared_ptr<OsmMap> result = std::make_shared<OsmMap>(_inputMap);
   _result = result;
 
   // create a map from nodes to ways
-  _n2w.reset(new NodeToWayMap(*_inputMap));
+  _n2w = std::make_shared<NodeToWayMap>(*_inputMap);
 
   // find all the tunnels & bridges
-  std::shared_ptr<TagCriterion> tunnelCrit(new TagCriterion("tunnel", "yes"));
-  std::shared_ptr<TagCriterion> bridgeCrit(new TagCriterion("bridge", "yes"));
+  std::shared_ptr<TagCriterion> tunnelCrit = std::make_shared<TagCriterion>("tunnel", "yes");
+  std::shared_ptr<TagCriterion> bridgeCrit = std::make_shared<TagCriterion>("bridge", "yes");
   ChainCriterion chain(tunnelCrit, bridgeCrit);
   vector<long> wayIds = ElementIdsVisitor::findElements(_result, ElementType::Way, &chain);
 

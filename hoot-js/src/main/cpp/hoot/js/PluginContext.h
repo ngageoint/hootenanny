@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef PLUGINCONTEXT_H
 #define PLUGINCONTEXT_H
@@ -49,7 +49,7 @@ public:
   static const double UNSPECIFIED_DEFAULT;
 
   PluginContext();
-  ~PluginContext();
+  ~PluginContext() = default;
 
   /**
    * Method that simplifies calling a function.
@@ -58,18 +58,13 @@ public:
    * @param args - List of arguments to the function. Converted using "toValue"
    */
   v8::Local<v8::Value> call(
-    v8::Handle<v8::Object> obj, QString name, QList<QVariant> args = QList<QVariant>());
+    v8::Local<v8::Object> obj, QString name, QList<QVariant> args = QList<QVariant>());
 
   v8::Local<v8::Value> eval(QString e);
 
   v8::Local<v8::Context> getContext(v8::Isolate* isolate);
 
   bool hasFunction(QString name);
-
-  /**
-   * Returns true if the object v contains the key specified.
-   */
-  bool hasKey(v8::Handle<v8::Value> v, QString key);
 
   v8::Local<v8::Object> loadScript(QString filename, QString loadInto = "");
 
@@ -81,9 +76,9 @@ public:
    * the key doesn't exist. If you need to use UNSPECIFIED_DEFAULT as the default value, use
    * another method :P.
    */
-  double toNumber(v8::Handle<v8::Value> v, QString key, double defaultValue = UNSPECIFIED_DEFAULT);
+  double toNumber(v8::Local<v8::Value> v, QString key, double defaultValue = UNSPECIFIED_DEFAULT) const;
 
-  v8::Local<v8::Value> toValue(QVariant v);
+  v8::Local<v8::Value> toValue(QVariant v) const;
 
 private:
 

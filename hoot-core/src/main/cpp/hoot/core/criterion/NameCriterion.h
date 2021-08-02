@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef NAME_CRITERION_H
 #define NAME_CRITERION_H
@@ -52,17 +52,19 @@ public:
   NameCriterion();
   NameCriterion(const QStringList& names, const bool caseSensitive = false,
                 const bool partialMatch = false);
-  virtual ~NameCriterion() = default;
+  ~NameCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override
+  { return std::make_shared<NameCriterion>(_names, _caseSensitive); }
 
-  virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new NameCriterion(_names, _caseSensitive)); }
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getDescription() const
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override
   { return "Identifies elements that contain a specified name"; }
-
-  virtual void setConfiguration(const Settings& conf);
 
   QStringList getNames() const { return _names; }
   bool getCaseSensitive() const { return _caseSensitive; }
@@ -70,10 +72,6 @@ public:
   void setNames(const QStringList& names) { _names = names; }
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
   void setPartialMatch(bool partialMatch) { _partialMatch = partialMatch; }
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
 
 private:
 

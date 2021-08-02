@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "BaseRandomForest.h"
 
@@ -61,8 +61,8 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::classifyVector(std::vector<double>& dataVector,
-    std::map<std::string, double>& scores) const
+  void BaseRandomForest::classifyVector(
+    const std::vector<double>& dataVector, std::map<std::string, double>& scores) const
   {
     try
     {
@@ -263,7 +263,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::importModel(QDomElement & e)
+  void BaseRandomForest::importModel(const QDomElement & e)
   {
     try
     {
@@ -278,39 +278,38 @@ namespace Tgs
 
         if (childList.at(i).isElement())
         {
-          QDomElement e = childList.at(i).toElement(); // try to convert the node to an element.
+          QDomElement element = childList.at(i).toElement(); // try to convert the node to an element.
 
-          QString tag = e.tagName().toUpper();
+          QString tag = element.tagName().toUpper();
 
           bool parseOkay = true;
 
           if (tag == "NUMTREES")
           {
-            unsigned int numTrees = e.text().toUInt(&parseOkay);
+            unsigned int numTrees = element.text().toUInt(&parseOkay);
             _forest.reserve(numTrees);
           }
           else if (tag == "NUMSPLITFACTORS")
           {
-            _numSplitFactors = e.text().toUInt(&parseOkay);
+            _numSplitFactors = element.text().toUInt(&parseOkay);
           }
           else if (tag == "FACTORLABELS")
           {
-            QStringList factorList = e.text().split(" ");
+            QStringList factorList = element.text().split(" ");
 
             for (unsigned int fIdx = 0; fIdx < (unsigned int)factorList.size(); fIdx++)
             {
-              _factorLabels.push_back(factorList[fIdx].toLatin1().constData());
+              _factorLabels.emplace_back(factorList[fIdx].toLatin1().constData());
             }
           }
           else if (tag == "RANDOMTREES")
           {
-            QDomNodeList treeList = e.childNodes();
+            QDomNodeList treeList = element.childNodes();
 
             for (unsigned int rIdx = 0; rIdx < (unsigned int)treeList.size(); rIdx++)
             {
               QDomElement treeElement = treeList.at(rIdx).toElement();
-
-              _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
+              _forest.push_back(std::make_shared<RandomTree>());
               _forest.back()->import(treeElement);
             }
           }
@@ -331,9 +330,9 @@ namespace Tgs
         }
       }
     }
-    catch(const Exception & e)
+    catch(const Exception & ex)
     {
-      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, ex);
     }
   }
 }

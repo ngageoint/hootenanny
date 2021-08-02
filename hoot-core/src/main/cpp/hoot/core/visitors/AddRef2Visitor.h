@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ADDREF2VISITOR_H
 #define ADDREF2VISITOR_H
@@ -41,21 +41,19 @@ public:
   static QString className() { return "hoot::AddRef2Visitor"; }
 
   AddRef2Visitor();
-  virtual ~AddRef2Visitor() = default;
+  ~AddRef2Visitor() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Adds a REF2 tag with a "todo" to all valid elements. If the Tags::getNonDebugCount() is greater
    * than zero then the element is tagged with a REF2.
    */
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Adds REF2 tags"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Adds REF2 tags"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __POLYGON_COMPARE_H__
@@ -48,15 +48,14 @@ class PolygonCompare
 {
 public:
 
-  PolygonCompare(geos::geom::Envelope e);
-  PolygonCompare(const PolygonCompare& other);
+  PolygonCompare(const geos::geom::Envelope& e);
 
   bool operator()(const std::shared_ptr<geos::geom::Geometry>& p1,
-                  const std::shared_ptr<geos::geom::Geometry>& p2);
+                  const std::shared_ptr<geos::geom::Geometry>& p2) const;
 
 private:
 
-  PolygonCompare();
+  PolygonCompare() = default;
   PolygonCompare& operator=(PolygonCompare& other);
 
   geos::geom::Envelope _e;

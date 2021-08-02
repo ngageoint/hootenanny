@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGE_H
 #define CHANGE_H
@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * Represents an individual OSM change in a changeset
+ * @brief The Change class represents an individual OSM change in a changeset.
  */
 class Change
 {
@@ -63,8 +63,6 @@ public:
   ConstElementPtr getElement() const { return _element; }
   void clearElement() { _element.reset(); }
   ConstElementPtr getPreviousElement() const { return _previousElement; }
-
-  bool operator==(const Change& other) const;
 
 private:
 

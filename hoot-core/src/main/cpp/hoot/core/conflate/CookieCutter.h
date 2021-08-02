@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef COOKIECUTTER_H
@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Cuts a shape out of a dough map
+ * @brief The CookieCutter class cuts a shape out of a dough map.
  */
 class CookieCutter
 {
@@ -47,12 +47,11 @@ public:
                bool keepOnlyFeaturesInsideBounds = false, bool removeMissingElements = true);
 
   /**
-   * Uses an input map geometry to cut the shape out of another map
-   *
+   * @brief cut uses an input map geometry to cut the shape out of another map.
    * @param cutterShapeOutlineMap the input geometry use for cutting
    * @param doughMap the map to be cut from
    */
-  void cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap);
+  void cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap) const;
 
 private:
 

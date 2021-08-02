@@ -19,24 +19,24 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "PoiPolygonInvalidReviewNodeRemover.h"
 
 // Hoot
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/RemoveNodeByEid.h>
-#include <hoot/core/ops/RemoveRelationByEid.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
-#include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
 
 namespace hoot
 {
@@ -82,7 +82,7 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
           if (element)
           {
             LOG_VART(map->getElement(member.getElementId())->getTags().size());
-            if (map->getElement(member.getElementId())->getTags().size() == 0)
+            if (map->getElement(member.getElementId())->getTags().empty())
             {
               LOG_TRACE("Marking " << member.getElementId() << " for removal...");
               _nodesToRemove.insert(member.getElementId().getId());
@@ -108,7 +108,7 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
   }
   LOG_VART(_nodesToRemove.size());
 
-  if (_nodesToRemove.size() == 0)
+  if (_nodesToRemove.empty())
   {
     return;
   }
@@ -142,7 +142,7 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
     }
   }
 
-  // make a copy here, since we may be removing some of these nodes
+  // Make a copy here, since we may be removing some of these nodes.
   const NodeMap nodes = map->getNodes();
   _numProcessed = 0;
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
@@ -177,8 +177,8 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
 QStringList PoiPolygonInvalidReviewNodeRemover::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(PoiCriterion::className());
-  criteria.append(BuildingCriterion::className());
+  criteria.append(PoiPolygonPoiCriterion::className());
+  criteria.append(PoiPolygonPolyCriterion::className());
   return criteria;
 }
 

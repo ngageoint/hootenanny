@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -56,13 +56,11 @@ public:
   {
     NetworkVertex::reset();
 
-    OsmMapPtr map(new OsmMap());
-
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "ToyInput.osm");
 
-    ElementCriterionPtr c(new HighwayCriterion(map));
     OsmNetworkExtractor uut;
-    uut.setCriterion(c);
+    uut.setCriterion(std::make_shared<HighwayCriterion>(map));
     OsmNetworkPtr network = uut.extractNetwork(map);
 
     //LOG_VAR(TestUtils::toQuotedString(network->toString()));

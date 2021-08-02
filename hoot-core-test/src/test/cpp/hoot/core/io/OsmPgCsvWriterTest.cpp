@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include <hoot/core/elements/OsmMap.h>
@@ -59,7 +59,7 @@ public:
   void runBasic()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ScoreMatchRef1.osm", map);
 
@@ -84,7 +84,7 @@ public:
   void runString()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/UndividedHighwayPreSplit.osm", map);
 
@@ -95,22 +95,24 @@ public:
 
   void runEscapeTags()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Coordinate coords[] = { Coordinate(0, 0), Coordinate(0, 1), Coordinate(1, 1), Coordinate(1, 0), Coordinate::getNull() };
     Tags tags;
     tags.set("note", "<2>");
     tags.set("aerialway", "t-bar");
     tags.set("first name", "first name goes here");
     tags.set("full_name", "\"Hacksaw\" Jim Duggan");
-    WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+    WayPtr way = TestUtils::createWay(map, coords);
     way->setTags(tags);
 
     QList<ElementPtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.1), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.1), 15);
     node1->getTags().appendValue("name", "test1");
     nodes.append(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.1, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.1, 0.0), 15);
     node2->getTags().appendValue("name", "test2");
     nodes.append(node2);
 
@@ -118,8 +120,8 @@ public:
     relation->setType("review");
     relation->getTags().appendValue("name", "Test Review");
     std::vector<RelationData::Entry> members = relation->getMembers();
-    members[0].role = "reviewee";
-    members[1].role = "reviewee";
+    members[0].setRole("reviewee");
+    members[1].setRole("reviewee");
     relation->setMembers(members);
 
     QString output = OsmPgCsvWriter::toString(map);

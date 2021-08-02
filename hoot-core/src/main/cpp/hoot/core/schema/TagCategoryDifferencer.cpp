@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "TagCategoryDifferencer.h"
 
@@ -42,14 +42,14 @@ TagCategoryDifferencer::TagCategoryDifferencer(OsmSchemaCategory category) :
   }
 }
 
-bool TagCategoryDifferencer::isValidTag(const SchemaVertex& sv) const
+bool TagCategoryDifferencer::_isValidTag(const SchemaVertex& sv) const
 {
   if (_category.getEnum() == OsmSchemaCategory::Empty)
   {
     throw IllegalArgumentException("You must specify exactly one category to the "
       "TagCategoryDifferencer.");
   }
-  return sv.categories.contains(_category.toString());
+  return sv.getCategories().contains(_category.toString());
 }
 
 void TagCategoryDifferencer::setConfiguration(const Settings& conf)

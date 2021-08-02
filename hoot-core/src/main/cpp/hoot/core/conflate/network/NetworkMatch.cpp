@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "NetworkMatch.h"
 
@@ -41,12 +41,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Match, NetworkMatch)
 
-NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
-  double score, ConstMatchThresholdPtr mt, double scoringFunctionMax,
-  double scoringFunctionCurveMidpointX, double scoringFunctionCurveSteepness) :
-  Match(mt),
-  _details(details),
-  _edgeMatch(edgeMatch)
+NetworkMatch::NetworkMatch(
+  const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch, double score,
+  ConstMatchThresholdPtr mt, double scoringFunctionMax, double scoringFunctionCurveMidpointX,
+  double scoringFunctionCurveSteepness) :
+Match(mt),
+_details(details),
+_edgeMatch(edgeMatch)
 {
   double p;
 
@@ -108,7 +109,7 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
     ElementId element2Id =
       _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId();
     LOG_VART(element2Id);
-    _pairs.insert(pair<ElementId, ElementId>(element1Id, element2Id));
+    _pairs.emplace(element1Id, element2Id);
 
     d1 += string1->getEdge(i)->calculateLength(map);
 
@@ -117,7 +118,7 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
     element2Id =
       _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId();
     LOG_VART(element2Id);
-    _pairs.insert(pair<ElementId, ElementId>(element1Id, element2Id));
+    _pairs.emplace(element1Id, element2Id);
   }
 
   Meters d2 = 0.0;
@@ -128,7 +129,7 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
     LOG_VART(element1Id);
     ElementId element2Id = _toElement(string2->getEdge(i))->getElementId();
     LOG_VART(element2Id);
-    _pairs.insert(pair<ElementId, ElementId>(element1Id, element2Id));
+    _pairs.emplace(element1Id, element2Id);
 
     d2 += string2->getEdge(i)->calculateLength(map);
 
@@ -137,7 +138,7 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
     LOG_VART(element1Id);
     element2Id = _toElement(string2->getEdge(i))->getElementId();
     LOG_VART(element2Id);
-    _pairs.insert(pair<ElementId, ElementId>(element1Id, element2Id));
+    _pairs.emplace(element1Id, element2Id);
   }
 
   LOG_VART(_pairs);

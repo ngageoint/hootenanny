@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "GeometryMerger.h"
@@ -92,7 +92,7 @@ GeometryPtr GeometryMerger::mergeGeometries(std::vector<GeometryPtr> geometries,
     _geometryStackMutex.lock();
     _geometryStack.empty();
     for (size_t i = 0; i < geometries.size() - 1; i += 2)
-      _geometryStack.push(GeometryPair(geometries[i], geometries[i + 1]));
+      _geometryStack.emplace(geometries[i], geometries[i + 1]);
     _geometryStackMutex.unlock();
     //  Reset finished threads to zero each round of merges
     _finishedThreads = 0;
@@ -105,7 +105,7 @@ GeometryPtr GeometryMerger::mergeGeometries(std::vector<GeometryPtr> geometries,
     //  Now that we have everything from geometries, clear it before the swap
     geometries.clear();
     //  Don't start the next round of pairings until all threads are done processing pairs
-    while (_geometryStack.size() > 0 || _finishedThreads < _maxThreads)
+    while (!_geometryStack.empty() || _finishedThreads < _maxThreads)
       std::this_thread::sleep_for(std::chrono::milliseconds(10));
     //  Add the extra geometry on to the end
     if (extra)
@@ -121,7 +121,7 @@ GeometryPtr GeometryMerger::mergeGeometries(std::vector<GeometryPtr> geometries,
     threads[i].join();
   //  Report the final progress
   PROGRESS_INFO(
-    "Merged " << StringUtils::formatLargeNumber(_counter + 1) << " / " <<
+    "Merged " << StringUtils::formatLargeNumber(_counter + 1) << " of " <<
     StringUtils::formatLargeNumber(_geometryCount) << " geometries.");
   //  Return the merged geometry
   return geometries[0];
@@ -140,7 +140,7 @@ void GeometryMerger::mergeGeometryThread()
     //  Lock the mutex and try to get a geometry pair to union
     GeometryPair pair;
     _geometryStackMutex.lock();
-    if (_geometryStack.size() > 0)
+    if (!_geometryStack.empty())
     {
       pair = _geometryStack.top();
       _geometryStack.pop();
@@ -157,7 +157,7 @@ void GeometryMerger::mergeGeometryThread()
       {
         //  Attempt the first union operation on the two geometries
         double area = pair.first->getArea() + pair.second->getArea();
-        g.reset(pair.first->Union(pair.second.get()));
+        g = pair.first->Union(pair.second.get());
         if (g->isEmpty() || fabs(g->getArea() - area) > 0.1)
           cleanAndRetry = true;
       }
@@ -173,7 +173,7 @@ void GeometryMerger::mergeGeometryThread()
         pair.second.reset(GeometryUtils::validateGeometry(pair.second.get()));
         try
         {
-          g.reset(pair.first->Union(pair.second.get()));
+          g = pair.first->Union(pair.second.get());
         }
         // if the cleaning didn't fix the problem
         catch(const geos::util::GEOSException& e)
@@ -199,7 +199,7 @@ void GeometryMerger::mergeGeometryThread()
         if (_geometryCount - _counter < _updateInterval && _updateInterval > 10)
           _updateInterval = _updateInterval / 10;
         PROGRESS_INFO(
-          "Merged " << StringUtils::formatLargeNumber(_counter) << " / " <<
+          "Merged " << StringUtils::formatLargeNumber(_counter) << " of " <<
           StringUtils::formatLargeNumber(_geometryCount) << " geometries.");
       }
     }

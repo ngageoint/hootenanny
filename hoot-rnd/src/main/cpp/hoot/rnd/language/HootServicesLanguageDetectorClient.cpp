@@ -19,25 +19,25 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "HootServicesLanguageDetectorClient.h"
 
 // hoot
-#include <hoot/rnd/auth/HootServicesLoginManager.h>
 #include <hoot/core/io/HootNetworkRequest.h>
-#include <hoot/core/io/NetworkIoUtils.h>
-#include <hoot/rnd/language/LanguageUtils.h>
+#include <hoot/rnd/io/NetworkIoUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/rnd/auth/HootServicesLoginManager.h>
+#include <hoot/rnd/language/LanguageUtils.h>
 
 // Qt
 #include <QByteArray>
@@ -86,7 +86,7 @@ HootServicesLanguageDetectorClient::~HootServicesLanguageDetectorClient()
     LOG_DEBUG("Language detection cache size: " << _cacheSize);
     LOG_DEBUG("Language detection cache max possible size: " << _cacheMaxSize);
   }
-  if (_langCodesWithNoLangNamesAvailable.size() > 0)
+  if (!_langCodesWithNoLangNamesAvailable.empty())
   {
     LOG_INFO(_getUnvailableLangNamesStr());
   }
@@ -94,7 +94,7 @@ HootServicesLanguageDetectorClient::~HootServicesLanguageDetectorClient()
   {
     LOG_INFO("No language codes returned without language names.");
   }
-  if (_confidenceCounts.size() > 0)
+  if (!_confidenceCounts.empty())
   {
     LOG_INFO(_getCountsStr("Detection confidence counts", _confidenceCounts));
   }
@@ -123,7 +123,7 @@ void HootServicesLanguageDetectorClient::setConfiguration(const Settings& conf)
   _cacheMaxSize = opts.getLanguageMaxCacheSize();
   if (_cacheMaxSize != -1)
   {
-    _cache.reset(new QCache<QString, DetectionResult>(_cacheMaxSize));
+    _cache = std::make_shared<QCache<QString, DetectionResult>>(_cacheMaxSize);
   }
 
   if (_useCookies)
@@ -206,7 +206,6 @@ QString HootServicesLanguageDetectorClient::detect(const QString& text)
       "Text for language being detected determined to already be in English.  Skipping " <<
       "language detection for text: " << text);
     _numEnglishTextsSkipped++;
-    englishTextSkipped = true;
     return "";
   }
 
@@ -345,10 +344,10 @@ QString HootServicesLanguageDetectorClient::_parseResponse(
 QString HootServicesLanguageDetectorClient::_getLangFromCache(const QString& text)
 {
   QString detectedLangCode = "";
-  DetectionResult* cachedDetection = _cache->object(text.toLower());
-  if (cachedDetection != 0)
+  const DetectionResult* cachedDetection = _cache->object(text.toLower());
+  if (cachedDetection != nullptr)
   {
-    const QString detectedLangCode = cachedDetection->detectedLangCode;
+    detectedLangCode = cachedDetection->detectedLangCode;
     LOG_TRACE("Found cached detection: " << detectedLangCode << " for: " << text);
     _cacheHits++;
 
@@ -369,6 +368,7 @@ QString HootServicesLanguageDetectorClient::_getLangFromCache(const QString& tex
 void HootServicesLanguageDetectorClient::_insertLangIntoCache(const QString& text,
                                                               const QString& detectedLangCode)
 {
+  // The cache takes ownership of this object.
   DetectionResult* detectionResult = new DetectionResult();
   detectionResult->detectedLangCode = detectedLangCode;
   detectionResult->sourceText = text;

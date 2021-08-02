@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RandomWayGeneralizer.h"
 
@@ -44,10 +44,10 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, RandomWayGeneralizer)
 
 RandomWayGeneralizer::RandomWayGeneralizer() :
+_localRng(std::make_shared<boost::minstd_rand>()),
 _epsilon(1.0),
 _removeNodesSharedByWays(false)
 {
-  _localRng.reset(new boost::minstd_rand());
   _rng = _localRng.get();
 }
 
@@ -74,7 +74,7 @@ void RandomWayGeneralizer::setOsmMap(OsmMap* map)
   MapProjector::projectToPlanar(_map->shared_from_this());
 
   assert(_epsilon != -1.0);
-  _generalizer.reset(new RdpWayGeneralizer(_epsilon));
+  _generalizer = std::make_shared<RdpWayGeneralizer>(_epsilon);
   _generalizer->setOsmMap(_map);
   _generalizer->setRemoveNodesSharedByWays(_removeNodesSharedByWays);
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ELEMENT_ID_SYNCHRONIZER_H
@@ -60,11 +60,6 @@ public:
    */
   virtual void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
                            const ElementType& elementType = ElementType::Unknown);
-
-  /**
-   * Clears the underlying hash and synchronized element ID data
-   */
-  void clear();
 
   int getNumNodeIdsSynchronized() const { return _updatedNodeCtr; }
   int getNumWayIdsSynchronized() const { return _updatedWayCtr; }
@@ -104,7 +99,7 @@ protected:
    */
   void _calcElementHashes(
     const OsmMapPtr& map, QMap<QString, ElementId>& hashesToElementIds,
-    QMap<ElementId, QString>& elementIdsToHashes);
+    QMap<ElementId, QString>& elementIdsToHashes) const;
 
   /*
    * Determines if two elements (one from each input map) are way nodes which don't have a way

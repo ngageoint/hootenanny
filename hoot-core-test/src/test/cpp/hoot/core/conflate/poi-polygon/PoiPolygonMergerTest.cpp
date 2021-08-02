@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -73,23 +73,23 @@ public:
 
   void basicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags()["name"] = "foo";
     w1->getTags()["amenity"] = "bar";
-    NodePtr n1(new Node(Status::Unknown2, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown2, 1, 10, 10, 5);
     n1->getTags()["name"] = "bar";
     n1->getTags()["amenity"] = "cafe";
     map->addNode(n1);
 
     {
-      OsmMapPtr map2(new OsmMap(map));
+      OsmMapPtr map2 = std::make_shared<OsmMap>(map);
       set<pair<ElementId, ElementId>> s;
       s.insert(pair<ElementId, ElementId>(w1->getElementId(), n1->getElementId()));
       PoiPolygonMerger uut(s);
@@ -110,7 +110,7 @@ public:
     {
       w1->setStatus(Status::Unknown2);
       n1->setStatus(Status::Unknown1);
-      OsmMapPtr map2(new OsmMap(map));
+      OsmMapPtr map2 = std::make_shared<OsmMap>(map);
       set<pair<ElementId, ElementId>> s;
       s.insert(pair<ElementId, ElementId>(w1->getElementId(), n1->getElementId()));
       PoiPolygonMerger uut(s);
@@ -128,6 +128,164 @@ public:
       HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
     }
   }
+
+  void toyScenario1Test()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/poi-polygon/PoiBuildingB.osm", false, Status::Unknown2);
+
+    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 1", map);
+
+    PoiPolygonMerger uut(s);
+    vector<pair<ElementId, ElementId>> replaced;
+    uut.apply(map, replaced);
+    HOOT_STR_EQUALS("[6]{(Way(-22), Relation(-1)), (Way(-21), Relation(-1)), (Way(-20), Relation(-1)), (Way(-19), Relation(-1)), (Way(-6), Relation(-1)), (Node(-145), Relation(-1))}",
+                    replaced);
+
+    const QString testFileName = "toyScenario1Test.json";
+    OsmJsonWriter writer(4);
+    writer.setIncludeCompatibilityTags(false);
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
+  }
+
+  void toyScenario2Test()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/poi-polygon/PoiBuildingB.osm", false, Status::Unknown2);
+
+    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 2", map);
+
+    PoiPolygonMerger uut(s);
+    vector<pair<ElementId, ElementId>> replaced;
+    uut.apply(map, replaced);
+    HOOT_STR_EQUALS("[6]{(Way(-18), Relation(-1)), (Way(-17), Relation(-1)), (Way(-16), Relation(-1)), (Way(-15), Relation(-1)), (Way(-5), Relation(-1)), (Node(-120), Relation(-1))}",
+                    replaced);
+
+    const QString testFileName = "toyScenario2Test.json";
+    OsmJsonWriter writer(4);
+    writer.setIncludeCompatibilityTags(false);
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
+  }
+
+  void toyScenario3Test()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/poi-polygon/PoiBuildingB.osm", false, Status::Unknown2);
+
+    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 3", map);
+
+    PoiPolygonMerger uut(s);
+    vector<pair<ElementId, ElementId>> replaced;
+    uut.apply(map, replaced);
+    HOOT_STR_EQUALS("[7]{(Way(-14), Relation(-1)), (Way(-13), Relation(-1)), (Way(-12), Relation(-1)), (Way(-11), Relation(-1)), (Way(-4), Relation(-1)), (Node(-38), Relation(-1)), (Node(-83), Relation(-1))}",
+                    replaced);
+
+    const QString testFileName = "toyScenario3Test.json";
+    OsmJsonWriter writer(4);
+    writer.setIncludeCompatibilityTags(false);
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
+  }
+
+  void toyScenario4Test()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/poi-polygon/PoiBuildingB.osm", false, Status::Unknown2);
+
+    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 4", map);
+
+    PoiPolygonMerger uut(s);
+    vector<pair<ElementId, ElementId>> replaced;
+    uut.apply(map, replaced);
+    HOOT_STR_EQUALS("[6]{(Way(-10), Relation(-1)), (Way(-9), Relation(-1)), (Way(-8), Relation(-1)), (Way(-3), Relation(-1)), (Node(-13), Relation(-1)), (Node(-82), Relation(-1))}",
+                    replaced);
+
+    const QString testFileName = "toyScenario4Test.json";
+    OsmJsonWriter writer(4);
+    writer.setIncludeCompatibilityTags(false);
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
+  }
+
+  void toyScenario5Test()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/poi-polygon/PoiBuildingB.osm", false, Status::Unknown2);
+
+    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 5", map);
+    // remove the dummy road that is in the test. This isn't getting merged.
+    s.erase(pair<ElementId, ElementId>(ElementId::way(-2), ElementId::way(-7)));
+
+    PoiPolygonMerger uut(s);
+    vector<pair<ElementId, ElementId>> replaced;
+    uut.apply(map, replaced);
+    HOOT_STR_EQUALS("[1]{(Node(-81), Way(-2))}", replaced);
+
+    const QString testFileName = "toyScenario5Test.json";
+    OsmJsonWriter writer(4);
+    writer.setIncludeCompatibilityTags(false);
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
+  }
+
+  void toyScenario6Test()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/poi-polygon/PoiBuildingB.osm", false, Status::Unknown2);
+
+    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 6", map);
+
+    PoiPolygonMerger uut(s);
+    vector<pair<ElementId, ElementId>> replaced;
+    uut.apply(map, replaced);
+    HOOT_STR_EQUALS("[1]{(Node(-75), Way(-1))}", replaced);
+
+    const QString testFileName = "toyScenario6Test.json";
+    OsmJsonWriter writer(4);
+    writer.setIncludeCompatibilityTags(false);
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
+  }
+
+private:
 
   class AddPairsVisitor : public ConstElementVisitor
   {
@@ -172,9 +330,9 @@ public:
       }
     }
 
-    virtual QString getDescription() const {return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const { return ""; }
+    QString getDescription() const override {return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
   private:
 
@@ -189,162 +347,6 @@ public:
     AddPairsVisitor v(map, scenario);
     map->visitRw(v);
     return v.getPairs();
-  }
-
-  void toyScenario1Test()
-  {
-    OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(
-      map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
-    OsmMapReaderFactory::read(
-      map, "test-files/conflate/poi-polygon/PoiBuildingB.osm", false, Status::Unknown2);
-
-    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 1", map);
-
-    PoiPolygonMerger uut(s);
-    vector<pair<ElementId, ElementId>> replaced;
-    uut.apply(map, replaced);
-    HOOT_STR_EQUALS("[6]{(Way(-22), Relation(-1)), (Way(-21), Relation(-1)), (Way(-20), Relation(-1)), (Way(-19), Relation(-1)), (Way(-6), Relation(-1)), (Node(-145), Relation(-1))}",
-                    replaced);
-
-    const QString testFileName = "toyScenario1Test.json";
-    OsmJsonWriter writer(4);
-    writer.setIncludeCompatibilityTags(false);
-    writer.open(_outputPath + testFileName);
-    MapProjector::projectToWgs84(map);
-    writer.write(map);
-    writer.close();
-    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
-  }
-
-  void toyScenario2Test()
-  {
-    OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(
-      map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
-    OsmMapReaderFactory::read(
-      map, "test-files/conflate/poi-polygon/PoiBuildingB.osm", false, Status::Unknown2);
-
-    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 2", map);
-
-    PoiPolygonMerger uut(s);
-    vector<pair<ElementId, ElementId>> replaced;
-    uut.apply(map, replaced);
-    HOOT_STR_EQUALS("[6]{(Way(-18), Relation(-1)), (Way(-17), Relation(-1)), (Way(-16), Relation(-1)), (Way(-15), Relation(-1)), (Way(-5), Relation(-1)), (Node(-120), Relation(-1))}",
-                    replaced);
-
-    const QString testFileName = "toyScenario2Test.json";
-    OsmJsonWriter writer(4);
-    writer.setIncludeCompatibilityTags(false);
-    writer.open(_outputPath + testFileName);
-    MapProjector::projectToWgs84(map);
-    writer.write(map);
-    writer.close();
-    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
-  }
-
-  void toyScenario3Test()
-  {
-    OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(
-      map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
-    OsmMapReaderFactory::read(
-      map, "test-files/conflate/poi-polygon/PoiBuildingB.osm", false, Status::Unknown2);
-
-    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 3", map);
-
-    PoiPolygonMerger uut(s);
-    vector<pair<ElementId, ElementId>> replaced;
-    uut.apply(map, replaced);
-    HOOT_STR_EQUALS("[7]{(Way(-14), Relation(-1)), (Way(-13), Relation(-1)), (Way(-12), Relation(-1)), (Way(-11), Relation(-1)), (Way(-4), Relation(-1)), (Node(-38), Relation(-1)), (Node(-83), Relation(-1))}",
-                    replaced);
-
-    const QString testFileName = "toyScenario3Test.json";
-    OsmJsonWriter writer(4);
-    writer.setIncludeCompatibilityTags(false);
-    writer.open(_outputPath + testFileName);
-    MapProjector::projectToWgs84(map);
-    writer.write(map);
-    writer.close();
-    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
-  }
-
-  void toyScenario4Test()
-  {
-    OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(
-      map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
-    OsmMapReaderFactory::read(
-      map, "test-files/conflate/poi-polygon/PoiBuildingB.osm", false, Status::Unknown2);
-
-    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 4", map);
-
-    PoiPolygonMerger uut(s);
-    vector<pair<ElementId, ElementId>> replaced;
-    uut.apply(map, replaced);
-    HOOT_STR_EQUALS("[6]{(Way(-10), Relation(-1)), (Way(-9), Relation(-1)), (Way(-8), Relation(-1)), (Way(-3), Relation(-1)), (Node(-13), Relation(-1)), (Node(-82), Relation(-1))}",
-                    replaced);
-
-    const QString testFileName = "toyScenario4Test.json";
-    OsmJsonWriter writer(4);
-    writer.setIncludeCompatibilityTags(false);
-    writer.open(_outputPath + testFileName);
-    MapProjector::projectToWgs84(map);
-    writer.write(map);
-    writer.close();
-    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
-  }
-
-  void toyScenario5Test()
-  {
-    OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(
-      map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
-    OsmMapReaderFactory::read(
-      map, "test-files/conflate/poi-polygon/PoiBuildingB.osm", false, Status::Unknown2);
-
-    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 5", map);
-    // remove the dummy road that is in the test. This isn't getting merged.
-    s.erase(pair<ElementId, ElementId>(ElementId::way(-2), ElementId::way(-7)));
-
-    PoiPolygonMerger uut(s);
-    vector<pair<ElementId, ElementId>> replaced;
-    uut.apply(map, replaced);
-    HOOT_STR_EQUALS("[1]{(Node(-81), Way(-2))}", replaced);
-
-    const QString testFileName = "toyScenario5Test.json";
-    OsmJsonWriter writer(4);
-    writer.setIncludeCompatibilityTags(false);
-    writer.open(_outputPath + testFileName);
-    MapProjector::projectToWgs84(map);
-    writer.write(map);
-    writer.close();
-    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
-  }
-
-  void toyScenario6Test()
-  {
-    OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(
-      map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
-    OsmMapReaderFactory::read(
-      map, "test-files/conflate/poi-polygon/PoiBuildingB.osm", false, Status::Unknown2);
-
-    set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 6", map);
-
-    PoiPolygonMerger uut(s);
-    vector<pair<ElementId, ElementId>> replaced;
-    uut.apply(map, replaced);
-    HOOT_STR_EQUALS("[1]{(Node(-75), Way(-1))}", replaced);
-
-    const QString testFileName = "toyScenario6Test.json";
-    OsmJsonWriter writer(4);
-    writer.setIncludeCompatibilityTags(false);
-    writer.open(_outputPath + testFileName);
-    MapProjector::projectToWgs84(map);
-    writer.write(map);
-    writer.close();
-    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 };
 

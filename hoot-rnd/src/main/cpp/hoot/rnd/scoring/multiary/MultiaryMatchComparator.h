@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTIARYMATCHCOMPARATOR_H
 #define MULTIARYMATCHCOMPARATOR_H
@@ -62,9 +62,11 @@ public:
 
   static int logWarnCount;
 
-  typedef QMap<QString, ElementId> IdToEid;
+  using IdToEid = QMap<QString, ElementId>;
 
   MultiaryMatchComparator();
+
+  virtual ~MultiaryMatchComparator() = default;
 
   /**
    * Compares the maps and stores the confusion matrix.
@@ -147,8 +149,8 @@ public:
 private:
 
   /// a cluster of IDs.
-  typedef QSet<QString> IdCluster;
-  typedef std::shared_ptr<IdCluster> IdClusterPtr;
+  using IdCluster = QSet<QString>;
+  using IdClusterPtr = std::shared_ptr<IdCluster>;
 
   /// Provides indexed access to a set of elements that need to be reviewed.
   class ReviewClusterIndex : public QMap<QString, IdClusterPtr>
@@ -168,12 +170,12 @@ private:
      * Return the cluster that contains id. If the cluster doesn't exist an empty cluster is
      * returned.
      */
-    IdClusterPtr getCluster(QString id)
+    IdClusterPtr getCluster(QString id) const
     {
       IdClusterPtr result = value(id);
       if (!result.get())
       {
-        result.reset(new IdCluster());
+        result = std::make_shared<IdCluster>();
       }
       return result;
     }
@@ -188,7 +190,7 @@ private:
       }
       else
       {
-        c.reset(new IdCluster());
+        c = std::make_shared<IdCluster>();
         insert(fromId, c);
       }
 
@@ -214,7 +216,7 @@ private:
   QHash<QString, IdClusterPtr> _expectedMatchGroups;
   ReviewClusterIndex _expectedReviews;
 
-  typedef QHash<int, QHash<int, int>> ConfusionTable;
+  using ConfusionTable = QHash<int, QHash<int, int>>;
 
   /**
    * Confusion matrix with [actual][expected]

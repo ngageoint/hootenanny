@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmGeoJsonWriterJs.h"
 
@@ -39,25 +39,13 @@ namespace hoot
 
 HOOT_JS_REGISTER(OsmGeoJsonWriterJs)
 
-void OsmGeoJsonWriterJs::Init(Handle<Object> exports)
+void OsmGeoJsonWriterJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> writer = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "OsmGeoJsonWriter"), writer);
-  writer->Set(String::NewFromUtf8(current, "toString"),
-              FunctionTemplate::New(current, toString)->GetFunction());
-}
-
-void OsmGeoJsonWriterJs::toString(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[0]);
-
-  OsmGeoJsonWriter writer;
-
-  args.GetReturnValue().Set(toV8(writer.toString(map)));
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> writer = Object::New(current);
+  exports->Set(context, toV8("OsmGeoJsonWriter"), writer);
 }
 
 }

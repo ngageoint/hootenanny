@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "TDistribution.h"
@@ -34,12 +34,12 @@
 // Standard
 #include <iostream>
 #include <math.h>
-using namespace std;
 
 // tbs
 #include <tbs/optimization/GoldenSectionSearch.h>
 
 using namespace cv;
+using namespace std;
 
 namespace tbs
 {
@@ -56,7 +56,7 @@ public:
 
   }
 
-  virtual double operator()(double x)
+  double operator()(double x) override
   {
     double y = _td->_calculateTCost(x, _EH, _ELogH);
     return y;
@@ -68,18 +68,12 @@ private:
   const vector<double>& _ELogH;
 };
 
-
-TDistribution::TDistribution()
-{
-
-}
-
 TDistribution::TDistribution(const Mat& m)
 {
   initialize(m);
 }
 
-double TDistribution::_calculateDataLogLikelihood(const Mat& m, double v)
+double TDistribution::_calculateDataLogLikelihood(const Mat& m, double v) const
 {
   vector<double> delta(m.rows);
 
@@ -102,7 +96,6 @@ double TDistribution::_calculateDataLogLikelihood(const Mat& m, double v)
 
   Mat L = l1 - l2 - l3 - l4 - l5;
 
-  //cout << "L: " << L << endl;
   return L.at<double>(0);
 }
 
@@ -137,14 +130,13 @@ void TDistribution::_calculateNewV(const Mat& m, const vector<double>& EH, const
 }
 
 double TDistribution::_calculateTCost(double v, const vector<double>& EH,
-  const vector<double>& ELogH)
+  const vector<double>& ELogH) const
 {
 // This gives results much closer to expected.
 //  return _calculateDataLogLikelihood(m, v);
 
   double sum = 0.0;
 
-  //cout << "v: " << v << endl;
   for (size_t i = 0; i < EH.size(); i++)
   {
     double d1 = v / 2.0 * log(v / 2.0);
@@ -156,9 +148,6 @@ double TDistribution::_calculateTCost(double v, const vector<double>& EH,
 
     double d = d1 + d2 - d3 + d4;
 
-    //if (i < 2)
-    //cout << "d1: " << d1 << " d2: " << d2 << " d3: " << d3 << " d4: " << d4 << " d: " << d << endl;
-
     sum += d;
   }
 
@@ -169,14 +158,6 @@ double TDistribution::_calculateTCost(double v, const vector<double>& EH,
 
 double TDistribution::getLikelihood(const Mat& p) const
 {
-//  // Frequently fails w/ overflow problems when v is large.
-//  double n1 = boost::math::tgamma((_v + _D) / 2.0, 0.0);
-//  double d1 = pow(_v * M_PI, _D / 2.0);
-//  double d2 = pow(determinant(_sigma), 0.5) * boost::math::tgamma(_v / 2.0, 0.0);
-//  Mat n2 = (p - _mu) * _sigma.inv() * (p - _mu).t();
-//  cout << n2 << endl;
-//  double result = (n1 / (d1 * d2)) * pow(1 + n2.at<double>(0) / _v, -(_v + _D) / 2.0);
-
   return exp(getLogLikelihood(p));
 }
 
@@ -222,40 +203,23 @@ void TDistribution::initialize(const Mat& m)
     // Expectation Step
     for (int i = 0; i < m.rows; i++)
     {
-      //cout << m.row(i) - _mu << endl;
-      //cout << (m.row(i) - _mu).t() << endl;
       Mat t = (m.row(i) - _mu).t();
-      //cout << t.rows << " x " << t.cols << endl;
-      //cout << _sigma.inv() << endl;
-      //cout << (m.row(i) - _mu) * _sigma.inv() << endl;
-// possible problem, had to swap the order of transpose to work w/ multiple dimensions.
+      // possible problem, had to swap the order of transpose to work w/ multiple dimensions.
       Mat d = (m.row(i) - _mu) * _sigma.inv() * (m.row(i) - _mu).t();
       delta[i] = d.at<double>(0);
       EH[i] = (_v + _D) / (_v + delta[i]);
       ELogH[i] = boost::math::digamma<double>(_v / 2.0 + _D / 2.0) - log(_v / 2.0 + delta[i] / 2.0);
-//      if (i < 5)
-//      {
-//        cout << "delta[" << i << "]: " << delta[i] << endl;
-//        cout << "EH[" << i << "]: " << EH[i] << endl;
-//        cout << "EHLogH[" << i << "]: " << ELogH[i] << endl;
-//      }
     }
 
     // Maximization Step
 
     // calculate new mu and sigma
     _calculateNewMuAndSigma(EH, m);
-    //cout << "new mu: " << _mu << endl;
-    //cout << "new sigma: " << _sigma << endl;
     // calculate new v
     _calculateNewV(m, EH, ELogH);
-    //_v = 1.0;
-    //cout << "new v: " << _v << endl;
 
     // Compute data log likelihood
     double L = _calculateDataLogLikelihood(m, _v);
-    //cout << endl;
-
     if (abs(oldL - L) < 0.1)
     {
       done = true;
@@ -265,11 +229,10 @@ void TDistribution::initialize(const Mat& m)
   }
 }
 
-Mat TDistribution::_log(const Mat& m)
+Mat TDistribution::_log(const Mat& m) const
 {
   Mat result;
   log(m, result);
-  //result = result / log(2.0);
   return result;
 }
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "AddMeasurementTagsVisitor.h"
@@ -67,20 +67,23 @@ void AddMeasurementTagsVisitor::visit(const ElementPtr& pElement)
   if (pElement->getElementType() == ElementType::Relation)
   {
     const RelationPtr& pRelation = std::dynamic_pointer_cast<Relation>(pElement);
-    processRelation(pRelation);
+    _processRelation(pRelation);
     _numAffected++;
   }
 
   if (pElement->getElementType() == ElementType::Way)
   {
     const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pElement);
-    processWay(pWay);
+    _processWay(pWay);
     _numAffected++;
   }
 }
 
-void AddMeasurementTagsVisitor::processRelation(const RelationPtr pRelation)
+void AddMeasurementTagsVisitor::_processRelation(const RelationPtr pRelation)
 {
+  //  Ignore NULL elements
+  if (!pRelation) return;
+
   // for length/width combine all way member polygons
   std::shared_ptr<Geometry> pCombined = std::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
   ElementToGeometryConverter ElementToGeometryConverter(_map->shared_from_this());
@@ -124,7 +127,7 @@ void AddMeasurementTagsVisitor::processRelation(const RelationPtr pRelation)
   double polyLength = 0;
   double polyWidth = 0;
 
-  calculateExtents(pCombined.get(), polyLength, polyWidth);
+  _calculateExtents(pCombined.get(), polyLength, polyWidth);
 
   // write to tags
   Tags& tags = pRelation->getTags();
@@ -133,8 +136,11 @@ void AddMeasurementTagsVisitor::processRelation(const RelationPtr pRelation)
   if (_addArea) tags["area"] = QString::number(totalArea);
 }
 
-void AddMeasurementTagsVisitor::processWay(const WayPtr pWay)
+void AddMeasurementTagsVisitor::_processWay(const WayPtr pWay)
 {
+  //  Ignore NULL elements
+  if (!pWay) return;
+
   Tags& tags = pWay->getTags();
 
   ElementToGeometryConverter ElementToGeometryConverter(_map->shared_from_this());
@@ -153,7 +159,7 @@ void AddMeasurementTagsVisitor::processWay(const WayPtr pWay)
     }
     else
     {
-      calculateExtents(pPoly.get(), polyLength, polyWidth);
+      _calculateExtents(pPoly.get(), polyLength, polyWidth);
     }
 
     if (_addLength) tags["length"] = QString::number(polyLength);
@@ -168,15 +174,16 @@ void AddMeasurementTagsVisitor::processWay(const WayPtr pWay)
   }
 }
 
-void AddMeasurementTagsVisitor::calculateExtents(Geometry* pGeometry, double& length, double &width)
+void AddMeasurementTagsVisitor::_calculateExtents(
+  Geometry* pGeometry, double& length, double &width) const
 {
   // calculate polygon length and width
   length = 0;
   width = 0;
 
   // calculate minimum rectangle/aligned bounding box
-  Geometry* pMinRect = MinimumDiameter::getMinimumRectangle(pGeometry);
-  CoordinateSequence* pMinRectCoords = pMinRect->getCoordinates();
+  std::unique_ptr<Geometry> pMinRect = MinimumDiameter::getMinimumRectangle(pGeometry);
+  std::unique_ptr<CoordinateSequence> pMinRectCoords = pMinRect->getCoordinates();
 
   if (pMinRectCoords->getSize() > 2)
   {

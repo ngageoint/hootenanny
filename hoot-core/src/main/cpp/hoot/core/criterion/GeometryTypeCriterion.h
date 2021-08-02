@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef GEOMETRY_TYPE_CRITERION_H
 #define GEOMETRY_TYPE_CRITERION_H
@@ -60,13 +60,6 @@ public:
   virtual GeometryType getGeometryType() const = 0;
 
   /**
-   * Returns all GeometryTypeCriterion class names
-   *
-   * @return a list of class names
-   */
-  static QStringList getCriterionClassNames();
-
-  /**
    * Returns all GeometryTypeCriterion class names for a given geometry type or all
    * GeometryTypeCriterion class names if GeometryType::Unknown is passed in as the geometry type
    *
@@ -90,19 +83,9 @@ public:
    * @return a geometry type
    */
   static GeometryType typeFromString(const QString& geometryTypeStr);
-
-  /**
-   * Returns the most generic geometry type criterion for a given geometry type
-   *
-   * @param geometryType the geometry type to return the criterion for
-   * @param map the map need to initialize the criterion
-   * @return an element criterion
-   */
-  static ElementCriterionPtr getBaseGeometryCriterion(const GeometryType& geometryType,
-                                                      const ConstOsmMapPtr& map);
 };
 
-typedef std::shared_ptr<GeometryTypeCriterion> GeometryTypeCriterionPtr;
+using GeometryTypeCriterionPtr = std::shared_ptr<GeometryTypeCriterion>;
 
 }
 

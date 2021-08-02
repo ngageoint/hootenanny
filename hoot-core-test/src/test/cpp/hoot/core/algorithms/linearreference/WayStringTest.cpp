@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -58,7 +58,7 @@ public:
 
   OsmMapPtr createMap()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -79,14 +79,14 @@ public:
                          Coordinate(20, 0),
                          Coordinate(30, 0),
                          Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c, 1, "");
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1, 1);
     w1->setTag("name", "w1");
 
     Coordinate w2c[] = { Coordinate(40, 0),
                          Coordinate(50, 0),
                          Coordinate(60, 0),
                          Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, w2c, 2, "");
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown1, 2);
     w2->setTag("name", "w2");
     w1->addNode(w2->getFirstNodeId());
 
@@ -94,7 +94,7 @@ public:
                          Coordinate(70, 20),
                          Coordinate(70, 30),
                          Coordinate::getNull() };
-    WayPtr w3 = TestUtils::createWay(map, Status::Unknown1, w3c, 3, "");
+    WayPtr w3 = TestUtils::createWay(map, w3c, "", Status::Unknown1, 3);
     w3->setTag("name", "w3");
     w2->addNode(w3->getFirstNodeId());
 
@@ -103,7 +103,7 @@ public:
     map->addWay(w3);
 
     // WayString::append
-    WayStringPtr wstring(new WayString());
+    WayStringPtr wstring = std::make_shared<WayString>();
     WaySubline w1subline(WayLocation(map, w1, 0), WayLocation::createAtEndOfWay(map, w1));
     wstring->append(w1subline);
     WaySubline w2subline(WayLocation(map, w2, 0), WayLocation::createAtEndOfWay(map, w2));
@@ -160,21 +160,21 @@ public:
                          Coordinate(20, 0),
                          Coordinate(30, 0),
                          Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c, 1, "");
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1, 1);
     w1->setTag("name", "w1");
 
     Coordinate w2c[] = { Coordinate(40, 0),
                          Coordinate(50, 0),
                          Coordinate(60, 0),
                          Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, w2c, 2, "");
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown1, 2);
     w2->setTag("name", "w2");
 
     Coordinate w3c[] = { Coordinate(70, 10),
                          Coordinate(70, 20),
                          Coordinate(70, 30),
                          Coordinate::getNull() };
-    WayPtr w3 = TestUtils::createWay(map, Status::Unknown1, w3c, 3, "");
+    WayPtr w3 = TestUtils::createWay(map, w3c, "", Status::Unknown1, 3);
     w3->setTag("name", "w3");
 
     map->addWay(w1);
@@ -186,7 +186,7 @@ public:
     bool exThrown = false;
     try
     {
-      WayStringPtr wstring(new WayString());
+      WayStringPtr wstring = std::make_shared<WayString>();
       WaySubline w1subline(WayLocation(map, w1, 0.0), WayLocation(map, w1, 10.0));
       wstring->append(w1subline);
       WaySubline w2subline(WayLocation(map, w1, 11.0), WayLocation(map, w1, 15.0));
@@ -204,7 +204,7 @@ public:
     exThrown = false;
     try
     {
-      WayStringPtr wstring(new WayString());
+      WayStringPtr wstring = std::make_shared<WayString>();
       WaySubline w1subline(WayLocation(map, w1, 0.0), WayLocation::createAtEndOfWay(map, w1));
       wstring->append(w1subline);
       WaySubline w2subline(WayLocation(map, w2, 10.0), WayLocation::createAtEndOfWay(map, w2));
@@ -220,11 +220,11 @@ public:
 
     // Try to create a waystring with sublines with different ways that are not
     // consecutive
-    // re-enable this as part of #1312
+    // TODO: re-enable this as part of #1312
 //    exThrown = false;
 //    try
 //    {
-//      WayStringPtr wstring(new WayString());
+//      WayStringPtr wstring = std::make_shared<WayString>();
 //      WaySubline w1subline(WayLocation(map, w1, 0), WayLocation::createAtEndOfWay(map, w1));
 //      wstring->append(w1subline);
 //      WaySubline w2subline(WayLocation(map, w2, 0), WayLocation::createAtEndOfWay(map, w2));
@@ -252,14 +252,14 @@ public:
                          Coordinate(30, 0),
                          Coordinate(70, 0),
                          Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c, 1, "");
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1, 1);
     w1->setTag("name", "w1");
 
     Coordinate w2c[] = { Coordinate(150, 0),
                          Coordinate(100, 0),
                          Coordinate(90, 0),
                          Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, w2c, 1, "");
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown1, 1);
     w2->setTag("name", "w2");
 
     vector<long> nodes = w2->getNodeIds();
@@ -274,7 +274,7 @@ public:
     map->addWay(w1);
     map->addWay(w2);
 
-    WayStringPtr ws(new WayString());
+    WayStringPtr ws = std::make_shared<WayString>();
     ws->append(WaySubline(WayLocation(map, w1, 0), WayLocation::createAtEndOfWay(map, w1)));
     ws->append(WaySubline(WayLocation::createAtEndOfWay(map, w2), WayLocation(map, w2, 0.0)));
 
@@ -302,12 +302,12 @@ public:
                          Coordinate(30, 0),
                          Coordinate(70, 0),
                          Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c, 1, "");
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1, 1);
     w1->setTag("name", "w1");
 
     map->addWay(w1);
 
-    WayStringPtr ws(new WayString());
+    WayStringPtr ws = std::make_shared<WayString>();
     ws->append(WaySubline(WayLocation(map, w1, 0), WayLocation(map, w1, 40)));
 
     WayPtr wayCopy = ws->copySimplifiedWayIntoMap(*map, map);
@@ -337,20 +337,20 @@ public:
     Coordinate w1c[] = { Coordinate(0, 0),
                          Coordinate(0, 50),
                          Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c, 1, "");
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1, 1);
     w1->setTag("name", "w1");
 
     Coordinate w2c[] = { Coordinate(0, 50),
                          Coordinate(0, 100),
                          Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, w2c, 1, "");
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown1, 1);
     w2->setTag("name", "w2");
     w1->addNode(w2->getFirstNodeId());
 
     map->addWay(w1);
     map->addWay(w2);
 
-    WayStringPtr ws(new WayString());
+    WayStringPtr ws = std::make_shared<WayString>();
     WaySubline w1subline(WayLocation(map, w1, 0), WayLocation::createAtEndOfWay(map, w1));
     WaySubline w2subline(WayLocation(map, w2, 0), WayLocation(map, w2, 1, 0.75));
 

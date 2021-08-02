@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -49,18 +49,18 @@ public:
    */
   void runMeanLevenshteinTest()
   {
-    NodePtr n1(new Node(Status::Invalid, -1, 0, 0, 0));
+    NodePtr n1 = std::make_shared<Node>(Status::Invalid, -1, 0, 0, 0);
     n1->setTag("name", "Sheraton Sana'a Hotel");
     n1->setTag("alt_name", QString::fromUtf8("Funduq Shiratun;Funduq Shīrātūn;Hotel Sheraton San`a';Hotel Sheraton San‘ā’;fndq shyratwn;فندق شيراتون"));
 
-    NodePtr n2(new Node(Status::Invalid, -2, 0, 0, 0));
+    NodePtr n2 = std::make_shared<Node>(Status::Invalid, -2, 0, 0, 0);
     n2->setTag("name", QString::fromUtf8("شيراتون"));
     n2->setTag("name:ar", QString::fromUtf8("شيراتون"));
     n2->setTag("name:en", "Sheraton hotel");
     n2->setTag("alt_name", QString::fromUtf8("فندق شيراتون"));
 
-    NameExtractor uut(StringDistancePtr(new MeanWordSetDistance(
-                      StringDistancePtr(new LevenshteinDistance(1.5)))));
+    NameExtractor uut(
+      std::make_shared<MeanWordSetDistance>(std::make_shared<LevenshteinDistance>(1.5)));
 
     HOOT_STR_EQUALS(1, uut.extract(n1, n2));
   }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MultiLineStringSplitter.h"
 
@@ -61,9 +61,8 @@ std::shared_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFacto
     ways.insert(string.getSublines()[i].getWay());
   }
 
-  nfPtr.reset(new FindNodesInWayFactory());
-
-  // add all the ways to the FindNodesInWayFactory
+  nfPtr = std::make_shared<FindNodesInWayFactory>();
+  // Add all the ways to the FindNodesInWayFactory/
   for (set<ConstWayPtr, WayPtrCompare>::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     nfPtr->addWay(*it);
@@ -74,7 +73,7 @@ std::shared_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFacto
 
 ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   const WaySublineCollection& string, const vector<bool>& reverse,
-  GeometryToElementConverter::NodeFactory* nf) const
+  std::shared_ptr<GeometryToElementConverter::NodeFactory> nf) const
 {
   assert(reverse.size() == string.getSublines().size());
   LOG_VART(string.getSublines().size());
@@ -82,14 +81,12 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   ElementPtr result;
   vector<WayPtr> matches;
 
-  std::shared_ptr<FindNodesInWayFactory> nfPtr;
-  if (nf == 0)
+  if (!nf)
   {
-    nfPtr = _createNodeFactory(string);
-    nf = nfPtr.get();
+    nf = _createNodeFactory(string);
   }
 
-  // extract all the sublines into ways.
+  // Extract all the sublines into ways.
   for (size_t i = 0; i < string.getSublines().size(); i++)
   {
     const WaySubline& subline = string.getSublines()[i];
@@ -110,17 +107,18 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   }
   LOG_VART(matches.size());
 
-  // if there was one match then just return the way.
+  // If there was one match then just return the way.
   if (matches.size() == 1)
   {
     result = matches[0];
   }
-  // if there were multiple matches then create a relation to contain the matches.
+  // If there were multiple matches then create a relation to contain the matches.
   else if (matches.size() > 1)
   {
-    RelationPtr r(
-      new Relation(matches[0]->getStatus(), map->createNextRelationId(),
-      matches[0]->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr r =
+      std::make_shared<Relation>(
+        matches[0]->getStatus(), map->createNextRelationId(), matches[0]->getCircularError(),
+        MetadataTags::RelationMultilineString());
     for (size_t i = 0; i < matches.size(); i++)
     {
       LOG_TRACE(
@@ -143,27 +141,25 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
 
 void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollection& string,
   const vector<bool>& reverse, ElementPtr& match, ElementPtr& scraps,
-  GeometryToElementConverter::NodeFactory* nf) const
+  std::shared_ptr<GeometryToElementConverter::NodeFactory> nf) const
 {
   LOG_TRACE("Splitting " << string.toString().left(100) << "...");
 
-  std::shared_ptr<FindNodesInWayFactory> nfPtr;
-  if (nf == 0)
+  if (!nf)
   {
-    nfPtr = _createNodeFactory(string);
-    nf = nfPtr.get();
+    nf = _createNodeFactory(string);
   }
 
-  // rename the matches to the positive subline string
+  // Rename the matches to the positive subline string.
   const WaySublineCollection& positive = string;
-  // create an inversion of the WaySublineCollection
+  // Create an inversion of the WaySublineCollection.
   WaySublineCollection negative = string.invert();
 
-  // create all the sublines that fall within the positive WaySublineCollection and put them into
+  // Create all the sublines that fall within the positive WaySublineCollection and put them into
   // the match element.
   match = createSublines(map, positive, reverse, nf);
 
-  // create all the sublines that fall within the negative WaySublineCollection and put them into
+  // Create all the sublines that fall within the negative WaySublineCollection and put them into
   // the scraps element.
   vector<bool> reverseNegative(negative.getSublines().size(), false);
   scraps = createSublines(map, negative, reverseNegative, nf);

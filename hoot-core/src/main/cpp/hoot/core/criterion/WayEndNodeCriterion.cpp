@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "WayEndNodeCriterion.h"
 
@@ -64,7 +64,7 @@ bool WayEndNodeCriterion::isSatisfied(const ConstElementPtr& e) const
   assert(e->getElementType() == ElementType::Node);
 
   // Get all the ways this node belongs to.
-  const std::set<long> containingWayIds = WayUtils::getContainingWayIdsByNodeId(e->getId(), _map);
+  const std::set<long> containingWayIds = WayUtils::getContainingWayIds(e->getId(), _map);
   assert(containingWayIds.size() >= 1);
   // If we're not allowing the way node to be shared, then return false if more than one way
   // contains it.

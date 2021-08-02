@@ -563,14 +563,6 @@
                                 "hoot_key":"merger.creators"
                             },
                             {
-            	              "id":"highway_merge_tags_only",
-                              "elem_type":"bool",
-                              "defaultvalue":"false",
-                              "description":"If true, road conflation will merge tags only and not geometries.",
-                              "name":"Merge Road Tags Only",
-                              "hoot_key":"highway.merge.tags.only"
-                            },
-                            {
                                 "id":"highway_matcher_heading_delta",
                                 "minvalue":"0.0",
                                 "elem_type":"double",
@@ -656,12 +648,12 @@
         "name":"Differential Conflation Options",
         "members":[
             {
-            	"id":"differential_snap_unconnected_roads",
+            	"id":"differential_snap_unconnected_features",
                 "elem_type":"bool",
                 "defaultvalue":"false",
-                "description":"If true, when running Differential Conflation the Unconnected Way Snapper will snap unconnected secondary road endpoint nodes to the nearest reference road.",
+                "description":"If true, when running Differential Conflation the Unconnected Way Snapper will snap unconnected secondary feature endpoint nodes to the nearest reference feature.",
                 "name":"Snap Unconnected Roads",
-                "hoot_key":"differential.snap.unconnected.roads"
+                "hoot_key":"differential.snap.unconnected.features"
             },
             {
             	"id":"differential_road_remove_reference_data",
@@ -672,9 +664,9 @@
                 "hoot_key":"differential.remove.reference.data"
             },
             {
-            	"id":"differential_road_snap_tolerance",
+            	"id":"differential_feature_snap_tolerance",
                 "elem_type":"double",
-                "description":"Maximum distance, in meters, allowed between an unconnected road and a neighboring road for the unconnected road to be snapped to the closest section of the neighboring road.",
+                "description":"Maximum distance, in meters, allowed between an unconnected linear feature and a neighboring linear feature for the unconnected feature to be snapped to the closest section of the neighboring linear feature.",
                 "name":"Road Snap Tolerance",
                 "defaultvalue":"5.0",
                 "minvalue":"0.01",
@@ -682,17 +674,17 @@
                 "hoot_key":"snap.unconnected.ways.snap.tolerance"
             },
             {
-            	"id":"differential_road_snap_use_existing_road_nodes",
+            	"id":"differential_feature_snap_use_existing_feature_nodes",
                 "elem_type":"bool",
                 "defaultvalue":"true",
-                "description":"If true, when road nodes are snapped to neighboring roads, Hootenanny will attempt to snap to existing road nodes on instead of adding new ones.",
+                "description":"If true, when feature nodes are snapped to neighboring features, Hootenanny will attempt to snap to existing feature nodes on instead of adding new ones.",
                 "name":"Use Existing Road Nodes When Snapping Roads",
                 "hoot_key":"snap.unconnected.ways.use.existing.way.nodes"
             },
             {
-            	"id":"differential_road_snap_existing_road_node_tolerance",
+            	"id":"differential_feature_snap_existing_feature_node_tolerance",
                 "elem_type":"double",
-                "description":"Maximum distance, in meters, allowed between an unconnected road and a neighboring road for the road node to be snapped directly to the existing road node.",
+                "description":"Maximum distance, in meters, allowed between an unconnected feature and a neighboring feature for the feature node to be snapped directly to the existing feature node.",
                 "name":"Name Score Threshold",
                 "defaultvalue":"0.5",
                 "minvalue":"0.01",
@@ -1288,24 +1280,24 @@
       ]
     },
     {
-        "id":"hoot_waterway_options",
+        "id":"hoot_river_options",
         "elem_type":"group",
-        "description":"Hootenanny Waterway options",
-        "name":"Waterway Options",
+        "description":"Hootenanny River options",
+        "name":"River Options",
         "members":[
             {
-                "id":"hoot_enable_waterway_options",
+                "id":"hoot_enable_river_options",
                 "elem_type":"checkbox",
                 "override":{
                     "elem_type":"checkbox"
                 },
-                "description":"Enable waterway options",
+                "description":"Enable river options",
                 "name":"Enabled",
                 "defaultvalue":"true",
                 "onchange":"true"
             },
             {
-                "id":"waterway_match_creator",
+                "id":"river_match_creator",
                 "elem_type":"string",
                 "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                 "name":"Match Creator",
@@ -1317,7 +1309,7 @@
                 "hoot_key":"match.creators"
             },
             {
-                "id":"waterway_merger_creator",
+                "id":"river_merger_creator",
                 "elem_type":"string",
                 "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                 "name":"Merger Creator",
@@ -1329,84 +1321,84 @@
                 "hoot_key":"merger.creators"
             },
             {
-                "id":"waterway_way_angle_sample_distance",
+                "id":"river_way_angle_sample_distance",
                 "minvalue":"0.01",
                 "elem_type":"double",
                 "description":"Distance, in meters, used for sampling during angle histogram extraction with the SampledAngleHistogramExtractor",
                 "maxvalue":"",
-                "name":"Waterway Angle Sample Distance",
+                "name":"River Angle Sample Distance",
                 "defaultvalue":"20.0",
-                "hoot_key":"waterway.angle.sample.distance"
+                "hoot_key":"river.angle.sample.distance"
             },
             {
-                "id":"waterway_auto_calc_search_radius",
+                "id":"river_way_auto_calc_search_radius",
                 "elem_type":"bool",
-                "description":"Automatically calculates the search radius to be used during conflation of waterways using rubber sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a pre-conflation operation on the input data to be conflated.",
-                "name":"Waterway Auto Calculate Search Radius",
+                "description":"Automatically calculates the search radius to be used during conflation of rivers using rubber sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a pre-conflation operation on the input data to be conflated.",
+                "name":"River Auto Calculate Search Radius",
                 "defaultvalue":"true",
                 "disabled":"false",
-                "hoot_key":"waterway.auto.calc.search.radius",
+                "hoot_key":"river.auto.calc.search.radius",
                 "onchange":"true"
             },
             {
-                "id":"waterway_rubber_sheet_ref",
+                "id":"river_rubber_sheet_ref",
                 "elem_type":"bool",
                 "description":"When auto-calculating a search radius, if this configuration setting is set to true then the first layer is treated as the reference layer and will not be moved. If set to false, the two layers will be moved towards each other. The weighting is determined based on the circular error.  This is separate from the global Rubber Sheeting Ref option.",
-                "name":"Waterway Auto-Search Radius Calculation Rubber Sheet Ref",
+                "name":"River Auto-Search Radius Calculation Rubber Sheet Ref",
                 "defaultvalue":"true",
-                "hoot_key":"waterway.rubber.sheet.ref"
+                "hoot_key":"river.rubber.sheet.ref"
             },
             {
-                "id":"waterway_rubber_sheet_minimum_ties",
+                "id":"river_rubber_sheet_minimum_ties",
                 "minvalue":"0",
                 "elem_type":"int",
                 "description":"Sets the minimum number of rubber sheet tie points that will be used when auto-calculating a search radius.  This is separate from the global Rubber Sheeting Minimum Ties option.",
                 "maxvalue":"",
-                "name":"Waterway Auto-Search Radius Minimum Ties Required",
+                "name":"River Auto-Search Radius Minimum Ties Required",
                 "defaultvalue":"5",
-                "hoot_key":"waterway.rubber.sheet.minimum.ties"
+                "hoot_key":"river.rubber.sheet.minimum.ties"
             },
             {
-                "id":"waterway_way_matcher_heading_delta",
+                "id":"river_way_matcher_heading_delta",
                 "minvalue":"0.0",
                 "elem_type":"double",
                 "description":"The distance around a point on a way to look when calculating the heading. A larger value will smooth out the heading values on a line. A smaller value will make the heading values correspond directly to the heading on the way at that point. This is primarily used in subline matching. Values are in meters.",
                 "maxvalue":"360.0",
-                "name":"Waterway Matcher Heading Delta",
+                "name":"River Matcher Heading Delta",
                 "defaultvalue":"150.0",
-                "hoot_key":"waterway.matcher.heading.delta"
+                "hoot_key":"river.matcher.heading.delta"
             },
             {
-                "id":"waterway_matcher_max_angle",
+                "id":"river_matcher_max_angle",
                 "minvalue":"0.0",
                 "elem_type":"double",
-                "description":"Sets that maximum angle that is still considered a waterway match. Units in degrees.",
+                "description":"Sets that maximum angle that is still considered a river match. Units in degrees.",
                 "maxvalue":"360.0",
-                "name":"Waterway Matcher Max Angle",
+                "name":"River Matcher Max Angle",
                 "defaultvalue":"90.0",
-                "hoot_key":"waterway.matcher.max.angle"
+                "hoot_key":"river.matcher.max.angle"
             },
             {
-                "id":"search_radius_waterway",
+                "id":"search_radius_river",
                 "minvalue":"-1",
                 "elem_type":"double",
-                "description":"The search radius to use when conflating waterways. If two features are within the search radius then they will be considered for conflation. If the value is -1 then the circular error will be used to calculate an appropriate search radius.",
+                "description":"The search radius to use when conflating rivers. If two features are within the search radius then they will be considered for conflation. If the value is -1 then the circular error will be used to calculate an appropriate search radius.",
                 "maxvalue":"",
-                "name":"Waterway Search Radius",
+                "name":"River Search Radius",
                 "defaultvalue":"-1",
                 "disabled":"true",
                 "override":{
                     "defaultvalue":"-1"
                 },
-                "hoot_key":"search.radius.waterway"
+                "hoot_key":"search.radius.river"
             },
             {
-                "id":"waterway_way_subline_matcher",
+                "id":"river_way_subline_matcher",
                 "elem_type":"string",
                 "description":"The way subline matcher to use when determining matching sublines.",
-                "name":"Waterway Subline Matcher",
+                "name":"River Subline Matcher",
                 "defaultvalue":"hoot::MaximalSublineMatcher",
-                "hoot_key":"waterway.subline.matcher",
+                "hoot_key":"river.subline.matcher",
                 "required":"true"
             }
         ]

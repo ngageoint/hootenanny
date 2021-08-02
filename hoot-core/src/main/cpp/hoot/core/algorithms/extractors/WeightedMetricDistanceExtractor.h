@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WEIGHTEDMETRICDISTANCEEXTRACTOR_H
 #define WEIGHTEDMETRICDISTANCEEXTRACTOR_H
@@ -34,7 +34,9 @@ namespace hoot
 {
 
 /**
- * Similar to Metric Distance as described in [1].
+ * @brief The WeightedMetricDistanceExtractor class is similar to Metric Distance as described in
+ * [1].
+ *
  * 1. Savary & Zeitouni, 2005
  */
 class WeightedMetricDistanceExtractor : public WayFeatureExtractor, public Configurable
@@ -45,28 +47,22 @@ public:
 
   WeightedMetricDistanceExtractor(ValueAggregatorPtr wayAgg, ValueAggregatorPtr pointAgg,
                                   Meters searchRadius = -1);
-
-  // Get point aggregator from ConfigOptions()
   WeightedMetricDistanceExtractor(Meters searchRadius = -1);
+  ~WeightedMetricDistanceExtractor() = default;
 
-  virtual ~WeightedMetricDistanceExtractor() = default;
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getClassName() const override { return className(); }
-
-  virtual QString getName() const override;
-
-  virtual void setConfiguration(const Settings& conf);
+  QString getClassName() const override { return className(); }
+  QString getName() const override;
+  QString getDescription() const override
+  { return "Calculates weighted metric distance between features"; }
 
   void setPointAggregator(const QString& aggregator);
-
   void setSearchRadius(const double radius);
-
-  virtual QString getDescription() const
-  { return "Calculates weighted metric distance between features"; }
 
 protected:
 
-  double _extract(const OsmMap& /*map*/, const ConstWayPtr& w1, const ConstWayPtr& w2) const override;
+  double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const override;
 
   std::shared_ptr<ValueAggregator> _pointAgg;
   Meters _searchRadius;

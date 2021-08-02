@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef SINGLEASSIGNMENTPROBLEMSOLVER_H
@@ -39,8 +39,8 @@ namespace hoot
 {
 
 /**
- * This is a form of the assignment problem [1], but I couldn't find a specific form of the
- * assignment problem that is an exact match.
+ * @brief The SingleAssignmentProblemSolver class is a form of the assignment problem [1], but I
+ * couldn't find a specific form of the assignment problem that is an exact match.
  *
  * In this case we have a set of actors and tasks. Each actor can be assigned to only one task and
  * each task can have up to 1 actor. We're attempting to maximize the sum of the costs of assigning
@@ -59,13 +59,14 @@ public:
   class CostFunction
   {
   public:
+
     /**
-     * Returns the cost associated with assigning actor a to task t.
+     * @brief cost returns the cost associated with assigning actor a to task t.
      */
     virtual double cost(const Actor* a, const Task* t) const = 0;
   };
 
-  typedef struct ResultPair
+  struct ResultPair
   {
     const Actor* actor;
     const Task* task;
@@ -75,7 +76,7 @@ public:
       return (actor ? actor->toString() : QString("null")) + " " +
              (task ? task->toString() : QString("null"));
     }
-  } ResultPair;
+  };
 
   SingleAssignmentProblemSolver(CostFunction& costFunction) : _costFunction(costFunction) { }
 
@@ -83,9 +84,10 @@ public:
   void addTask(const Task* t) { _tasks.push_back(t); }
 
   /**
-   * Calculate one of the optimal pairings. All the actors that are not paired will be placed into
-   * a result pair w/ a null task. All the tasks that are not paired will be placed into a result
-   * pair w/ a null actor.
+   * @brief calculatePairing calculates one of the optimal pairings.
+   *
+   * All the actors that are not paired will be placed into a result pair w/ a null task. All the
+   * tasks that are not paired will be placed into a result pair w/ a null actor.
    */
   std::vector<ResultPair> calculatePairing() const
   {
@@ -121,7 +123,7 @@ public:
       {
         ResultPair r;
         r.actor = _actors[i];
-        r.task = 0;
+        r.task = nullptr;
         result.push_back(r);
       }
     }
@@ -131,7 +133,7 @@ public:
       if (usedTasks.find(_tasks[i]) == usedTasks.end())
       {
         ResultPair r;
-        r.actor = 0;
+        r.actor = nullptr;
         r.task = _tasks[i];
         result.push_back(r);
       }

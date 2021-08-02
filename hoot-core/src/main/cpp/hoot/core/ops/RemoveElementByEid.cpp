@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RemoveElementByEid.h"
@@ -35,27 +35,10 @@
 namespace hoot
 {
 
-RemoveElementByEid::RemoveElementByEid(bool doCheck) :
-_doCheck(doCheck),
-_removeNodeFully(true),
-_removeOnlyUnusedNodes(false)
-{
-}
-
 RemoveElementByEid::RemoveElementByEid(ElementId eId, bool doCheck) :
 _eIdToRemove(eId),
 _doCheck(doCheck),
 _removeNodeFully(true),
-_removeOnlyUnusedNodes(false)
-{
-  LOG_VART(_eIdToRemove);
-  LOG_VART(_doCheck);
-}
-
-RemoveElementByEid::RemoveElementByEid(ElementId eId, bool doCheck, bool removeNodeFully) :
-_eIdToRemove(eId),
-_doCheck(doCheck),
-_removeNodeFully(removeNodeFully),
 _removeOnlyUnusedNodes(false)
 {
   LOG_VART(_eIdToRemove);
@@ -96,14 +79,6 @@ void RemoveElementByEid::removeElement(OsmMapPtr map, ElementId eId)
 void RemoveElementByEid::removeElementNoCheck(OsmMapPtr map, ElementId eId)
 {
   RemoveElementByEid elementRemover(eId, false);
-  elementRemover.apply(map);
-}
-
-void RemoveElementByEid::removeUnusedElementsOnly(OsmMapPtr map, ElementId eId)
-{
-  RemoveElementByEid elementRemover(eId, true);
-  elementRemover.setRemoveNodeFully(false);
-  elementRemover.setRemoveOnlyUnusedNodes(true);
   elementRemover.apply(map);
 }
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "AddressParser.h"
 
@@ -328,6 +328,10 @@ bool AddressParser::_isSubLetterAddress(const QString& houseNum) const
 bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QString& street,
                                        const bool requireStreetTypeInIntersection) const
 {
+  if (address.trimmed().isEmpty())
+  {
+    return false;
+  }
   LOG_VART(address);
 
   // use libpostal to break down the address string
@@ -487,7 +491,7 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
        tagItr != additionalTagKeys.end(); ++tagItr)
   {
     const QString tagKey = *tagItr;
-    QString tagVal = tags.get(tagKey);
+    QString tagVal = tags.get(tagKey).trimmed();
     if (!tagVal.isEmpty() && _isValidAddressStr(tagVal, houseNum, street))
     {
       parsedAddress = tagVal;
@@ -496,13 +500,13 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
     }
   }
 
-  additionalTagKeys = QSet<QString>::fromList(tags.getNameKeys());
+  additionalTagKeys = QSet<QString>::fromList(Tags::getNameKeys());
   LOG_VART(additionalTagKeys);
   for (QSet<QString>::const_iterator tagItr = additionalTagKeys.begin();
        tagItr != additionalTagKeys.end(); ++tagItr)
   {
     const QString tagKey = *tagItr;
-    QString tagVal = tags.get(tagKey);
+    QString tagVal = tags.get(tagKey).trimmed();
     if (!tagVal.isEmpty() && _isValidAddressStr(tagVal, houseNum, street, true))
     {
       parsedAddress = tagVal;

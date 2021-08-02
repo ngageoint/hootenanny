@@ -19,21 +19,21 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef DUPLICATE_NODE_REMOVER_H
 #define DUPLICATE_NODE_REMOVER_H
 
 // hoot
-#include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // GEOS
 #include <geos/geom/Envelope.h>
@@ -43,31 +43,24 @@ namespace hoot
 
 /**
  * Merges together nodes that are within a small configurable distance of each other and don't have
- * differing tags (outside of metadata tags).
- *
- * Due to how Way::replaceNode is being called, we could end up with some duplicate way nodes, so
- * its best to put RemoveDuplicateWayNodesVisitor in the cleaning chain immediately after this runs.
- *
- * This class works with four pass conflation as long as distance is less than the four pass buffer.
- * The input map can be in either a planar or geographic projection.
+ * differing tags (outside of metadata tags). Due to how Way::replaceNode is being called, we could
+ * end up with some duplicate way nodes, so its best to put RemoveDuplicateWayNodesVisitor in the
+ * cleaning chain immediately after this runs.
  *
  * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map
- * with no nodes.
+ * with no nodes. ConflateInfoCacheConsumer does need to be implemented here to prevent removal of a
+ * conflatable node or a node belonging to a conflatable way/relation.
  */
-class DuplicateNodeRemover : public OsmMapOperation, public Boundable
+class DuplicateNodeRemover : public OsmMapOperation, public ConflateInfoCacheConsumer
 {
 public:
 
   static QString className() { return "hoot::DuplicateNodeRemover"; }
 
   DuplicateNodeRemover(Meters distanceThreshold = -1.0);
-  virtual ~DuplicateNodeRemover() = default;
+  ~DuplicateNodeRemover() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map);
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * Removes duplicate nodes from a map
@@ -76,23 +69,39 @@ public:
    * @param distanceThreshold the distance threshold under which nodes are considered duplicates
    * based on proximity
    */
-  static void removeNodes(std::shared_ptr<OsmMap> map, Meters distanceThreshold = -1);
+  static void removeNodes(
+    std::shared_ptr<OsmMap> map, Meters distanceThreshold = -1, const bool ignoreStatus = false);
 
-  virtual QString getDescription() const override { return "Removes duplicate nodes"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Removes duplicate nodes"; }
 
-  virtual QString getInitStatusMessage() const override { return "Removing duplicate nodes..."; }
-
-  virtual QString getCompletedStatusMessage() const override
+  QString getInitStatusMessage() const override { return "Removing duplicate nodes..."; }
+  QString getCompletedStatusMessage() const override
   { return "Merged " + StringUtils::formatLargeNumber(_numAffected) + " node pairs."; }
 
-protected:
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
+  { _conflateInfoCache = cache; }
+
+  void setIgnoreStatus(bool ignore) { _ignoreStatus = ignore; }
+
+private:
 
   std::shared_ptr<OsmMap> _map;
-  Meters _distance;
 
-  void _logMergeResult(const long nodeId1, const long nodeId2, OsmMapPtr& map, const bool replaced,
-                       const double distance = -1.0, const double calcdDistance = -1.0);
-  bool _passesLogMergeFilter(const long nodeId1, const long nodeId2, OsmMapPtr& map) const;
+  // the maximum distance allowed between removed nodes
+  Meters _distance;
+  // allows for removing nodes with different statuses
+  bool _ignoreStatus;
+
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
+
+  void _logMergeResult(
+    const long nodeId1, const long nodeId2, const OsmMapPtr& map, const bool replaced,
+    const double distance = -1.0, const double calcdDistance = -1.0) const;
+  bool _passesLogMergeFilter(const long nodeId1, const long nodeId2, const OsmMapPtr& map) const;
 };
 
 }

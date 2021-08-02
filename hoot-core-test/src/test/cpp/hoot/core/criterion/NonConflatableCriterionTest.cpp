@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -44,7 +44,7 @@ public:
   {
     NonConflatableCriterion uut;
     uut.setIgnoreGenericConflators(false);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     geos::geom::Coordinate wayCoords[] = {
       geos::geom::Coordinate(0.0, 0.0),
       geos::geom::Coordinate(1.0, 0.0),
@@ -57,24 +57,24 @@ public:
 
     CPPUNIT_ASSERT(
       !uut.isSatisfied(
-        TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, Tags("poi", "yes"))));
+        TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, Tags("poi", "yes"))));
 
     CPPUNIT_ASSERT(
       !uut.isSatisfied(
-        TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("building", "yes"))));
+        TestUtils::createWay(map, wayCoords, "", Status::Unknown1, 15.0, Tags("building", "yes"))));
 
     // Untyped feature are now conflatable by default, if NonConflatableCriterion is set to consider
     // the generic geometry conflate scripts.
     CPPUNIT_ASSERT(
       !uut.isSatisfied(
-        TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("blah", "blah"))));
+        TestUtils::createWay(map, wayCoords, "", Status::Unknown1, 15.0, Tags("blah", "blah"))));
 
     // If its set to ignore the generic geometry scripts, then an untyped feature won't be
     // confltable.
     uut.setIgnoreGenericConflators(true);
     CPPUNIT_ASSERT(
       uut.isSatisfied(
-        TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("blah", "blah"))));
+        TestUtils::createWay(map, wayCoords, "", Status::Unknown1, 15.0, Tags("blah", "blah"))));
   }
 };
 

@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2012 Sebastian Morr <sebastian@morr.cc>
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef NELDERMEAD_H
 #define NELDERMEAD_H
@@ -55,16 +55,9 @@ namespace Tgs
 class Vector
 {
 public:
-    Vector()
-    {
-    }
 
-    ~Vector()
-    {
-      //cout << "~Vector()" << endl << flush;
-    }
-
-    Vector(const Vector& v) : coords(v.coords) { }
+    Vector() = default;
+    ~Vector() = default;
 
     Vector(double c0)
     {
@@ -81,12 +74,6 @@ public:
         coords.push_back(c0);
         coords.push_back(c1);
         coords.push_back(c2);
-    }
-
-    Vector& operator=(const Vector& v)
-    {
-      coords = v.coords;
-      return *this;
     }
 
     // add more constructors when N gets > 3
@@ -200,7 +187,7 @@ public:
         return pow(sum, 0.5);
     }
 
-    const std::vector<double>& getVector() { return coords; }
+    const std::vector<double>& getVector() const { return coords; }
 
 private:
 
@@ -211,7 +198,8 @@ private:
 class ValueDB
 {
 public:
-  ValueDB() { }
+
+  ValueDB() = default;
 
   double lookup(Vector vec)
   {
@@ -237,6 +225,7 @@ public:
   }
 
 private:
+
   // not implemented.
   ValueDB(const ValueDB&);
   ValueDB& operator=(const ValueDB&);
@@ -251,12 +240,13 @@ public:
   class VectorSort
   {
   public:
-    VectorSort(NelderMead* nm) : _nm(nm) {}
+
+    VectorSort(NelderMead* nm) : _nm(nm) { }
 
     // used in `step` to sort the vectors
     bool operator()(const Vector& a, const Vector& b)
     {
-        return _nm->f(a) < _nm->f(b);
+      return _nm->f(a) < _nm->f(b);
     }
 
     NelderMead* _nm;
@@ -268,7 +258,8 @@ public:
   class Function
   {
   public:
-    virtual ~Function() {}
+
+    virtual ~Function() = default;
 
     virtual double f(Vector v) = 0;
   };
@@ -276,24 +267,22 @@ public:
   /**
    * Takes ownership of the function object.
    */
-  NelderMead(size_t dimension, Function* function, double termination_distance=0.001)
+  NelderMead(
+    size_t dimensionSize, std::shared_ptr<Function> function,
+    double terminationDistance = 0.001) :
+  _function(function),
+  dimension(dimensionSize),
+  alpha(1),
+  gamma(2),
+  rho(-0.5),
+  sigma(0.5),
+  termination_distance(terminationDistance),
+  _bestDistance(std::numeric_limits<double>::max()),
+  _noChange(0),
+  _maxNoChange(4)
   {
-    _function.reset(function);
-    this->dimension = dimension;
-    alpha = 1;
-    gamma = 2;
-    rho = -0.5;
-    sigma = 0.5;
-    this->termination_distance = termination_distance;
-    _bestDistance = std::numeric_limits<double>::max();
-    _noChange = 0;
-    _maxNoChange = 4;
   }
-
-  ~NelderMead()
-  {
-    //cout << "~NelderMead()" << endl << flush;
-  }
+  ~NelderMead() = default;
 
   // termination criteria: each pair of vectors in the simplex has to
   // have a distance of at most `termination_distance`
@@ -418,20 +407,21 @@ public:
     }
     else
     {
-        // as long as we don't have enough vectors, request random ones,
-        // with coordinates between 0 and 1. If you want other start vectors,
-        // simply ignore these and use `step` on the vectors you want.
-        Vector result;
-        result.prepare(dimension);
-        for (size_t i = 0; i<dimension; ++i)
-        {
-            result[i] = 0.001*(Tgs::Random::instance()->generateInt(1000));
-        }
-        return result;
+      // as long as we don't have enough vectors, request random ones,
+      // with coordinates between 0 and 1. If you want other start vectors,
+      // simply ignore these and use `step` on the vectors you want.
+      Vector result;
+      result.prepare(dimension);
+      for (size_t i = 0; i<dimension; ++i)
+      {
+        result[i] = 0.001 * (Tgs::Random::instance()->generateInt(1000));
+      }
+      return result;
     }
   }
 
 private:
+
   // not implememnted
   NelderMead();
   NelderMead(const NelderMead&);

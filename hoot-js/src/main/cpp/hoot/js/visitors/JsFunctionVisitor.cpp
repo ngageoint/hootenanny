@@ -19,20 +19,20 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "JsFunctionVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
 
 using namespace v8;
 
@@ -45,16 +45,17 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
-  Context::Scope context_scope(current->GetCallingContext());
+  Context::Scope context_scope(current->GetCurrentContext());
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Value> jsArgs[3];
+  Local<Value> jsArgs[3];
 
   if (_func.IsEmpty())
   {
     throw IllegalArgumentException("JsFunctionVisitor must have a valid function.");
   }
 
-  Handle<Object> elementObj;
+  Local<Object> elementObj;
   if (_map)
   {
     ElementPtr nonConst = _map->getElement(e->getElementId());
@@ -68,17 +69,17 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
   int argc = 0;
   jsArgs[argc++] = elementObj;
 
-  TryCatch trycatch;
-  Handle<Value> funcResult =
-    ToLocal(&_func)->Call(current->GetCallingContext()->Global(), argc, jsArgs);
+  TryCatch trycatch(current);
+  MaybeLocal<Value> funcResult =
+    ToLocal(&_func)->Call(context, current->GetCurrentContext()->Global(), argc, jsArgs);
 
   if (funcResult.IsEmpty())
   {
     Local<Value> exception = trycatch.Exception();
     if (HootExceptionJs::isHootException(exception))
     {
-      std::shared_ptr<HootException> e = toCpp<std::shared_ptr<HootException>>(exception);
-      HootExceptionThrower::getInstance().rethrowPointer(e);
+      std::shared_ptr<HootException> ex = toCpp<std::shared_ptr<HootException>>(exception);
+      HootExceptionThrower::getInstance().rethrowPointer(ex);
     }
     else
     {

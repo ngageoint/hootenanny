@@ -19,22 +19,22 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MapStatsWriter.h"
 
 // hoot
-#include <hoot/core/ops/CalculateStatsOp.h>
-#include <hoot/core/info/SingleStat.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/util/Settings.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/info/SingleStat.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Settings.h>
 
 //Qt
 #include <QFile>
@@ -51,7 +51,7 @@ using namespace std;
 
 namespace hoot
 {
-void MapStatsWriter::_appendUnique(QList<SingleStat>& stats, QStringList& names)
+void MapStatsWriter::_appendUnique(QList<SingleStat>& stats, QStringList& names) const
 {
   for (int i = 0; i < stats.size(); i++)
   {
@@ -62,8 +62,8 @@ void MapStatsWriter::_appendUnique(QList<SingleStat>& stats, QStringList& names)
   }
 }
 
-void MapStatsWriter::writeStatsToJson(QList<QList<SingleStat>>& stats,
-                                      const QString& statsOutputFilePath)
+void MapStatsWriter::writeStatsToJson(
+  QList<QList<SingleStat>>& stats, const QString& statsOutputFilePath) const
 {
   try
   {
@@ -72,7 +72,7 @@ void MapStatsWriter::writeStatsToJson(QList<QList<SingleStat>>& stats,
     for (int i = 0; i < allStats.size(); i++)
     {
       QStringList statrow = allStats.at(i).split("\t");
-      if (statrow.size() > 0 && !statrow[0].isEmpty())
+      if (!statrow.empty() && !statrow[0].isEmpty())
       {
         QStringList tmpValues;
         //filter out empty values, first one in array is key, so the loop starts with 1
@@ -112,8 +112,8 @@ void MapStatsWriter::writeStatsToJson(QList<QList<SingleStat>>& stats,
   }
 }
 
-void MapStatsWriter::writeStatsToText(QList<QList<SingleStat>> &stats,
-                                      const QString &statsOutputFilePath)
+void MapStatsWriter::writeStatsToText(
+  QList<QList<SingleStat>>& stats, const QString &statsOutputFilePath) const
 {
   LOG_INFO("Writing stats to file: " << statsOutputFilePath);
 
@@ -135,19 +135,19 @@ void MapStatsWriter::writeStatsToText(QList<QList<SingleStat>> &stats,
   }
 }
 
-void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& statsOutputFilePath,
-                                QString sep)
+void MapStatsWriter::writeStats(
+  const QString& mapInputPath, const QString& statsOutputFilePath, QString sep) const
 {
   LOG_INFO("Writing stats for map in file: " << mapInputPath << " to file: " << statsOutputFilePath);
 
   // read the conflation status from the file.
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   IoUtils::loadMap(map, mapInputPath, true, Status::Invalid);
   MapProjector::projectToPlanar(map);
 
   QList<QList<SingleStat>> allStats;
-  std::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
+  std::shared_ptr<CalculateStatsOp> cso = std::make_shared<CalculateStatsOp>();
   cso->apply(map);
   allStats.append(cso->getStats());
 
@@ -169,7 +169,7 @@ void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& stat
   }
 }
 
-QString MapStatsWriter::statsToString(QList<QList<SingleStat>>& stats, QString sep)
+QString MapStatsWriter::statsToString(QList<QList<SingleStat>>& stats, QString sep) const
 {
   QStringList allStatNames;
 

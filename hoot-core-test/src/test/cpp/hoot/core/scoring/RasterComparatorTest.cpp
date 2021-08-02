@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -58,18 +58,18 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.read(_inputPath + "ToyTestA.osm", map);
 
-    OsmMapPtr map2(new OsmMap());
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
     reader.read(_inputPath + "ToyTestB.osm", map2);
 
     RasterComparator uut(map, map2);
     uut.setPixelSize(3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.891, uut.compareMaps(), 0.0025);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.895, uut.compareMaps(), 0.0025);
 
     uut.setPixelSize(2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.896, uut.compareMaps(), 0.002);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.892, uut.compareMaps(), 0.002);
 
     uut.setPixelSize(1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.894, uut.compareMaps(), 0.002);

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "GeometryModifierOp.h"
@@ -51,7 +51,8 @@ GeometryModifierOp::GeometryModifierOp(): _pConf(&conf())
   LOG_DEBUG( "Available Geometry Modifiers:")
   for (QString availType : availableActionTypes)
   {
-    std::shared_ptr<GeometryModifierAction> pAction(Factory::getInstance().constructObject<GeometryModifierAction>(availType));
+    std::shared_ptr<GeometryModifierAction> pAction =
+      Factory::getInstance().constructObject<GeometryModifierAction>(availType);
     _actions.append(pAction);
     LOG_DEBUG( "class: " << availType << " command: " << pAction->getCommandName());
   }
@@ -151,7 +152,7 @@ QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
   return actionDescs;
 }
 
-void GeometryModifierOp::_parseFilter(GeometryModifierActionDesc& actionDesc, bpt::ptree ptree)
+void GeometryModifierOp::_parseFilter(GeometryModifierActionDesc& actionDesc, bpt::ptree ptree) const
 {
   // turn the filter part of the rules file entry back to a json string
   std::stringstream stringStream;
@@ -170,7 +171,7 @@ void GeometryModifierOp::_parseFilter(GeometryModifierActionDesc& actionDesc, bp
   }
 }
 
-void GeometryModifierOp::_parseArguments(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree)
+void GeometryModifierOp::_parseArguments(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree) const
 {
   QList<QString> availableParameters = actionDesc.pAction->getParameterNames();
 

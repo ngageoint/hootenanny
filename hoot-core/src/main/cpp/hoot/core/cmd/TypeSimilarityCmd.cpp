@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -43,21 +43,26 @@ public:
 
   TypeSimilarityCmd() = default;
 
-  virtual QString getName() const override { return "type-similarity"; }
-
-  virtual QString getDescription() const override
+  QString getName() const override { return "type-similarity"; }
+  QString getDescription() const override
   { return "Calculates a similarity score between two type tags"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     if (args.size() != 2)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw IllegalArgumentException(QString("%1 takes two parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     const QString tag1 = args[0];
     const QString tag2 = args[1];
+
+    LOG_STATUS("Calculating type similarity score for " << tag1 << " and " << tag2 << "...");
 
     const QString invalidKvpMsg = "is not a valid key/value pair of the form: key=value.";
     if (!Tags::isValidKvp(tag1))

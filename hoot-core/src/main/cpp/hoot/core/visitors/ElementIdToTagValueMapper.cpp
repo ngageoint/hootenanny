@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ElementIdToTagValueMapper.h"
 
@@ -35,11 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ElementIdToTagValueMapper)
 
-void ElementIdToTagValueMapper::addCriterion(const ElementCriterionPtr& e)
-{
-  _crit = e;
-}
-
 void ElementIdToTagValueMapper::visit(const ConstElementPtr& e)
 {
   if (_tagKey.trimmed().isEmpty())
@@ -47,7 +42,7 @@ void ElementIdToTagValueMapper::visit(const ConstElementPtr& e)
     throw IllegalArgumentException("No keys specified for ElementIdToTagValueMapper.");
   }
 
-  if (e->getTags().contains(_tagKey) && (!_crit || _crit->isSatisfied(e)))
+  if (e->getTags().contains(_tagKey))
   {
     LOG_TRACE(e->getElementId() << ";" << e->getTags()[_tagKey]);
     _idToTagValueMappings[e->getElementId()] = e->getTags()[_tagKey];

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2018 Maxar (http://www.maxar.com/)
  */
 
 //
@@ -42,7 +42,7 @@ ufd = {
     ['F_CODE','AA050','man_made','well'], // Well - NFDD BH230
     ['F_CODE','AC000','facility','yes'], // Processing/Treatment Plant - NFDD AL010
     ['F_CODE','AE010','facility','yes'], // Assembly Plant - NFDD AL010
-    ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
+    ['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
     ['F_CODE','AK190','man_made','recreational_pier'], // Fishing Pier/Promenade Pier - NFDD BB081
     ['F_CODE','AL015',undefined,undefined], // Building - NFDD AL013 - To Stop Warnings
     ['F_CODE','AL045',undefined,undefined], // Complex Outline - No FCODE. Converted to landuse
@@ -1007,23 +1007,23 @@ ufd = {
     ['GUG','Unguyed','guyed','no'], // Unguyed
 
     // HFC - Hydrologic Form Category
-    ['HFC','0','waterway','yes'],
-    ['HFC','1','waterway','stream'],
+    // ['HFC','0','waterway','yes'],
+    ['HFC','1','channel:type','channelized_stream'],
     ['HFC','Channelized Stream','waterway','stream'],
-    ['HFC','2','waterway','disappearing'], // Disappearing
-    ['HFC','Disappearing','waterway','disappearing'], // Disappearing
+    ['HFC','2','channel:type','disappearing'], // Disappearing
+    ['HFC','Disappearing','channel:type','disappearing'], // Disappearing
     ['HFC','8','waterway','river'],
     ['HFC','Normal Channel','waterway','river'],
-    ['HFC','14','waterway','braided_stream'],
-    ['HFC','Braided','waterway','braided_stream'],
-    ['HFC','16','waterway','dissipating'],
-    ['HFC','Dissipating','waterway','dissipating'],
-    ['HFC','19','waterway','gorge'],
-    ['HFC','Gorge','waterway','gorge'],
-    ['HFC','21','waterway','wadi'],
-    ['HFC','Wadi/Wash','waterway','wadi'],
-    ['HFC','999','waterway','other'],
-    ['HFC','Other','waterway','other'],
+    ['HFC','14','channel:type','braided_stream'],
+    ['HFC','Braided','channel:type','braided_stream'],
+    ['HFC','16','channel:type','dissipating'],
+    ['HFC','Dissipating','channel:type','dissipating'],
+    ['HFC','19','channel:type','gorge'],
+    ['HFC','Gorge','channel:type','gorge'],
+    ['HFC','21','wadi','yes'],
+    ['HFC','Wadi/Wash','wadi','yes'],
+    ['HFC','999','channel:type','other'],
+    ['HFC','Other','channel:type','other'],
 
     // HWT - House of Worship Type
     ['HWT','0',undefined,undefined],
@@ -1869,7 +1869,6 @@ ufd = {
     ['RGC','3','gauge:type','standard'],
     ['RGC','Normal (Country Specific)','gauge:type','standard'],
     ['RGC','6','railway','monorail'], // Gauge = 0.5?
-    ['RGC','6','railway','monorail'], // Gauge = 0.5?
     ['RGC','997',undefined,undefined], // In data, not in spec
 
     // RIT - Road Interchange Type
@@ -1918,7 +1917,7 @@ ufd = {
     ['RRC','3','railway','monorail'],
     ['RRC','6','railway','subway'],
     ['RRC','8','railway','logging'],
-    ['RRC','11','railway','rapid_transit'],
+    ['RRC','11','rapid_transit','yes'],
     ['RRC','14','railway','tram'],
     ['RRC','15','railway','funicular'],
     ['RRC','16','railway','rail'],
@@ -1926,7 +1925,7 @@ ufd = {
     ['RRC','18','usage','main'], // Main Line/Branch Line
     ['RRC','21','railway:in_road','yes'], // Railroad in Road
     ['RRC','31','railway','magnetic_levitation'], // Magnetic Levitation
-    ['RRC','32','railway','automated_transit_system'],
+    ['RRC','32','automated_transit_system','yes'],
     ['RRC','33','railway','longhaul'],
     ['RRC','999','railway','other'],
     ['RRC','Unknown','railway','rail'],
@@ -1934,7 +1933,7 @@ ufd = {
     ['RRC','Monorail','railway','monorail'],
     ['RRC','Subway','railway','subway'],
     ['RRC','Logging','railway','logging'],
-    ['RRC','Rapid Transit Route - Rail','railway','rapid_transit'],
+    ['RRC','Rapid Transit Route - Rail','rapid_transit','yes'],
     ['RRC','Tram','railway','tram'],
     ['RRC','Funicular','railway','funicular'],
     ['RRC','Main Line','railway','rail'],
@@ -3595,6 +3594,18 @@ ufd = {
         }
         break;
 
+      case 'AH050': // Fortification
+        // Castles are not Bunkers but they get stored in the same layer
+        if (tags.military == 'bunker' && tags.historic == 'castle')
+        {
+          delete tags.military;
+        }
+        else if (!tags.building)
+        {
+          tags.building = 'bunker';
+        }
+        break;
+
       // Amusement Park Attractions
       // Artificial Mountain can be in multiple F_CODES
       case'AK020':
@@ -3686,15 +3697,20 @@ ufd = {
         break;
 
       case 'BH140': // River/Stream
-        if (geometryType == 'Area')
-        {
-          tags.waterway = 'river_bank';
-        }
-        else
-        {
-          tags.waterway = 'river';
-        }
+      // Different translation for area rivers
+      if (geometryType == 'Area')
+      {
+        if (!tags.natural) tags.natural = 'water';
+        if (!tags.water) tags.water = 'river';
+        delete tags.waterway;
         break;
+      }
+      if (geometryType == 'Line')
+      {
+        if (tags.natural == 'water') delete tags.natural;
+        if (tags.water == 'river') delete tags.water;
+      }
+      break;
 
       case 'FA020': // Armistice Line
         tags.historic='armistice_line';

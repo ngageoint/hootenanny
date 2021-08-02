@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RelationWithMostMembersOp.h"
@@ -62,10 +62,10 @@ void RelationWithMostMembersOp::setCriterion(const QString& criterionClass, cons
   LOG_VARD(criterionClass);
   if (!criterionClass.trimmed().isEmpty())
   {
-    ElementCriterionPtr crit(
-      Factory::getInstance().constructObject<ElementCriterion>(criterionClass.trimmed()));
+    ElementCriterionPtr crit =
+      Factory::getInstance().constructObject<ElementCriterion>(criterionClass.trimmed());
     Configurable* c = dynamic_cast<Configurable*>(crit.get());
-    if (c != 0)
+    if (c != nullptr)
     {
       c->setConfiguration(conf);
     }
@@ -125,11 +125,11 @@ long RelationWithMostMembersOp::getIdOfRelationWithMaxCritSatisfactions(const Co
   return idOfRelationWithMaxCritSatisfactions;
 }
 
-void RelationWithMostMembersOp::_setOutput(const long relationId, OsmMapPtr& outputMap)
+void RelationWithMostMembersOp::_setOutput(const long relationId, OsmMapPtr& outputMap) const
 {
   std::set<ElementId> elementIds;
   elementIds.insert(ElementId(ElementType::Relation, relationId));
-  OsmMapPtr tmpMap(new OsmMap());
+  OsmMapPtr tmpMap = std::make_shared<OsmMap>();
   CopyMapSubsetOp mapCopier(outputMap, elementIds);
   mapCopier.apply(tmpMap);
   outputMap = tmpMap;
@@ -159,7 +159,7 @@ void RelationWithMostMembersOp::apply(std::shared_ptr<OsmMap>& map)
   else
   {
     // output an empty map since we didn't find a relation that satisifes the criteria
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
   }
   LOG_VARD(map->getElementCount());
 }

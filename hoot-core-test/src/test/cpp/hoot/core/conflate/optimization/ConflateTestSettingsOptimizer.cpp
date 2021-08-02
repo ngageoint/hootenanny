@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ConflateTestSettingsOptimizer.h"
 
@@ -76,7 +76,7 @@ Tgs::StateDescriptionPtr ConflateTestSettingsOptimizer::_initStateDescription(co
     throw HootException("Error parsing JSON " + reason);
   }
 
-  Tgs::StateDescriptionPtr stateDescription(new Tgs::StateDescription());
+  Tgs::StateDescriptionPtr stateDescription = std::make_shared<Tgs::StateDescription>();
   for (boost::property_tree::ptree::value_type& setting : propTree.get_child("settings"))
   {
     const QString settingName = QString::fromStdString(setting.second.get<std::string>("name", ""));
@@ -85,12 +85,12 @@ Tgs::StateDescriptionPtr ConflateTestSettingsOptimizer::_initStateDescription(co
     {
       throw HootException("Invalid setting: " + settingName);
     }
-    Tgs::ConstVariableDescriptionPtr var(
-      new Tgs::VariableDescription(
+    Tgs::ConstVariableDescriptionPtr var =
+      std::make_shared<Tgs::VariableDescription>(
         settingName,
         Tgs::VariableDescription::Real,
         setting.second.get<double>("min", DBL_MIN),
-        setting.second.get<double>("max", DBL_MAX)));
+        setting.second.get<double>("max", DBL_MAX));
     LOG_VART(var->toString());
     stateDescription->addVariable(var);
   }

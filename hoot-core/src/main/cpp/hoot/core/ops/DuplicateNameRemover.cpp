@@ -19,15 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "DuplicateNameRemover.h"
 
 // Hoot
+#include <hoot/core/conflate/ConflateUtils.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Factory.h>
@@ -40,11 +41,12 @@
 
 // TGS
 #include <tgs/StreamUtils.h>
+
 using namespace Tgs;
+using namespace std;
 
 namespace hoot
 {
-  using namespace std;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DuplicateNameRemover)
 
@@ -71,11 +73,23 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     const WayPtr& w = it->second;
+    _numProcessed++;
     if (!w)
     {
       continue;
     }
-    LOG_VART(w);
+    // Since this class operates on elements with generic types, an additional check must be
+    // performed here during conflation to enure we don't modify any element not associated with
+    // an active conflate matcher in the current conflation configuration.
+    else if (_conflateInfoCache &&
+             !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
+    {
+      LOG_TRACE(
+        "Skipping processing of " << w->getElementId() << ", as it cannot be conflated by any " <<
+        "actively configured conflate matcher.");
+      continue;
+    }
+    LOG_VART(w->getElementId());
 
     // If we have a name that is not an alt name, let's record it here so we can preserve it
     // as the main name later on.
@@ -133,7 +147,7 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
 
     _numAffected = list.size() - filtered.size();
 
-    if (filtered.size() > 0)
+    if (!filtered.empty())
     {
       if (filtered.size() != list.size())
       {
@@ -150,7 +164,7 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
           filtered.pop_front();
         }
         LOG_VART(filtered);
-        if (filtered.size() > 0)
+        if (!filtered.empty())
         {
           // If there are additional names, put them in alt_name.
           w->getTags().insert("alt_name", QStringList(filtered).join(";"));
@@ -166,7 +180,7 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
   }
 }
 
-QString DuplicateNameRemover::_getBestName(const QString& n1, const QString& n2)
+QString DuplicateNameRemover::_getBestName(const QString& n1, const QString& n2) const
 {
   // Here we assume that a name that has mixed case is better than all upper or all lower. E.g.
   // Walnut Street (better)

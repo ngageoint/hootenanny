@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef GEOMETRYMODIFIEROP_H
@@ -61,29 +61,26 @@ namespace hoot
   public:
 
     GeometryModifierOp();
-    virtual ~GeometryModifierOp() = default;
+    ~GeometryModifierOp() = default;
 
-    // OsmMapOperation
     static QString className() { return "hoot::GeometryModifierOp"; }
-    QString getDescription() const { return "Modifies map geometry as specified"; }
 
     // applies all actions specified in the rules file '_rulesFileName' to the map.
     // runs through each action in the sequence they appear in the rules file
-    void apply(std::shared_ptr<OsmMap>& map);
+    void apply(std::shared_ptr<OsmMap>& map) override;
 
-    // OperationStatus
-    virtual QString getInitStatusMessage() const { return "Modifying geometry..."; }
-    virtual QString getCompletedStatusMessage() const
+    QString getInitStatusMessage() const override { return "Modifying geometry..."; }
+    QString getCompletedStatusMessage() const override
     { return "Modified " + QString::number(_numAffected) + " elements"; }
 
-    // Configurable
-    virtual void setConfiguration(const Settings& conf);
+    void setConfiguration(const Settings& conf) override;
 
-    virtual QString getName() const { return className(); }
-
-    virtual QString getClassName() const override { return className(); }
+    QString getDescription() const override { return "Modifies map geometry as specified"; }
+    QString getName() const override { return className(); }
+    QString getClassName() const override { return className(); }
 
   private:
+
     // json rules file name
     QString _rulesFileName;
 
@@ -96,10 +93,10 @@ namespace hoot
     QList<GeometryModifierActionDesc> _readJsonRules();
 
     // json filter parser
-    void _parseFilter(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree);
+    void _parseFilter(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree) const;
 
     // json action arguments parser
-    void _parseArguments(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree);
+    void _parseArguments(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree) const;
 
     const Settings* _pConf;
   };

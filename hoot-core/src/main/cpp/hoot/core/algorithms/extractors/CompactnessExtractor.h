@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef COMPACTNESSEXTRACTOR_H
 #define COMPACTNESSEXTRACTOR_H
@@ -56,23 +56,21 @@ class CompactnessExtractor : public FeatureExtractorBase
 public:
 
   CompactnessExtractor() = default;
-  virtual ~CompactnessExtractor() = default;
+  ~CompactnessExtractor() = default;
 
   static QString className() { return "hoot::CompactnessExtractor"; }
 
-  virtual QString getClassName() const override { return className(); }
-
-  virtual QString getName() const { return className(); }
-
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates the compactness of a shape where circles score the highest"; }
+  QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
 
 private:
 
-  double characteristic(geos::geom::Geometry* g) const;
+  double characteristic(const geos::geom::Geometry* g) const;
 };
 
 }

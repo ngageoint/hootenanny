@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __PROBABLE_PATH_CALCULATOR_H__
@@ -56,16 +56,18 @@ namespace Tgs
 
     PpPoint();
 
-    PpPoint(int row, int col) : row(row), col(col) { }
+    PpPoint(int row, int col)
+      : row(row), col(col), cost(0.0f) { }
 
-    PpPoint(int row, int col, std::string name) : row(row), col(col), name(name) { }
+    PpPoint(int row, int col, const std::string& name)
+      : row(row), col(col), name(name), cost(0.0f) { }
 
-    bool operator!=(const PpPoint& p)
+    bool operator!=(const PpPoint& p) const
     {
       return row != p.row || col != p.col;
     }
 
-    bool operator==(const PpPoint& p)
+    bool operator==(const PpPoint& p) const
     {
       return row == p.row && col == p.col;
     }
@@ -103,7 +105,7 @@ namespace Tgs
     ProbablePathCalculator();
     ProbablePathCalculator(const RandomPtr& random);
 
-    virtual ~ProbablePathCalculator();
+    virtual ~ProbablePathCalculator() = default;
 
     /**
      * Calculates the most probable paths with the specified number of iterations.
@@ -223,7 +225,7 @@ namespace Tgs
      */
     void _checkForInconsistency(const PpPoint& p, MyHeap& q);
 
-    float _calculateDistance(const PpPoint& p1, const PpPoint& p2);
+    float _calculateDistance(const PpPoint& p1, const PpPoint& p2) const;
 
     /**
      * Calculates the shortest path from the given source to all the _remainingDestinations.
@@ -237,7 +239,7 @@ namespace Tgs
 
     void _calculateWithoutWaypoints(int iterations);
 
-    void _checkBounds(const PpPoint& p);
+    void _checkBounds(const PpPoint& p) const;
 
     float _heuristic(int start);
 

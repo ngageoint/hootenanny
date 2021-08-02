@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __CASETESTFITNESSFUNCTION_H__
@@ -38,7 +38,8 @@ namespace hoot
 {
 
 /**
- * Fitness function which optimizes against Hootenanny conflate case test data
+ * @brief the CaseTestFitnessFunction class Fitness function which optimizes against Hootenanny
+ * conflate case test data
  *
  * This class uses the error log setting to allow for more easily viewing the results of the
  * optimization without having to view conflation log clutter...there may be a better way to
@@ -52,20 +53,16 @@ public:
   CaseTestFitnessFunction(QString dir, QString configFile);
 
   /**
-   * Fitness function that determines the performance based on the test output
-   *
-   * @param s a simulated annealing state
-   * @return a fitness value (lower is better)
+   * see Tgs::FitnessFunction
    */
   virtual double f(const Tgs::ConstStatePtr& s);
 
   /**
-   * Executes just before the test runs
+   * @see AbstractTestFitnessFunction
    */
   virtual void initTest(Settings& testSettings);
-
   /**
-   * Executes just after the test runs
+   * @see AbstractTestFitnessFunction
    */
   virtual void afterTestRun();
 

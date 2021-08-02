@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CONSTOSMMAPOPERATION_H
 #define CONSTOSMMAPOPERATION_H
@@ -46,8 +46,7 @@ public:
   ConstOsmMapOperation() = default;
   virtual ~ConstOsmMapOperation() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map)
-  { apply((const std::shared_ptr<OsmMap>&)map); }
+  void apply(std::shared_ptr<OsmMap>& map) override { apply((const std::shared_ptr<OsmMap>&)map); }
 
   /**
    * This guarantees that we won't actually change the map pointer, although the map itself may
@@ -55,7 +54,7 @@ public:
    */
   virtual void apply(const std::shared_ptr<OsmMap>& map) = 0;
 
-  virtual QString getDescription() const { return ""; }
+  QString getDescription() const override { return ""; }
 };
 
 }

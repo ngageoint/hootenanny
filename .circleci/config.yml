@@ -3,9 +3,9 @@ version: 2
 
 jobs:
   archive-create:
-    working_directory: '/rpmbuild/hootenanny'
+    working_directory: /rpmbuild/hootenanny
     docker:
-      - image: hootenanny/rpmbuild-hoot-release@sha256:dd8d865531c034aa66daf763dc7068f0a08745f5d63a7766ad69e0b5fd8cf10b
+      - image: hootenanny/rpmbuild-hoot-release@sha256:ad0c8631c9d18ca23b635dbfe5051d01d9ebede04590b8e6b24ab6cab714d7cd
     steps:
       - checkout
       - run:
@@ -17,7 +17,7 @@ jobs:
           name: 'Make Hootenanny Archive'
           command: |
             su-exec postgres pg_ctl -D $PGDATA -s start
-            su-exec rpmbuild bash -c "mkdir -p /rpmbuild/.m2 && curl -sSL https://hoot-maven.s3.amazonaws.com/m2-cache-2018-12-06.tar.gz | tar -C /rpmbuild/.m2 -xzf -"
+            su-exec rpmbuild bash -c "mkdir -p /rpmbuild/.m2 && curl -sSL https://hoot-maven.s3.amazonaws.com/m2-cache-2021-07-12.tar.gz | tar -C /rpmbuild/.m2 -xzf -"
             su-exec rpmbuild ./scripts/ci/archive.sh
             su-exec rpmbuild bash -c "mkdir -p archives && mv -v hootenanny-[0-9]*.tar.gz archives"
       - persist_to_workspace:
@@ -25,9 +25,9 @@ jobs:
           paths:
             - hootenanny-*.tar.gz
   archive-upload:
-    working_directory: '/rpmbuild/hootenanny'
+    working_directory: /rpmbuild/hootenanny
     docker:
-      - image: hootenanny/rpmbuild-repo@sha256:8717a75726db4a38977977f08344510bd15515aba4e344fd51f96f39b4f9fa75
+      - image: hootenanny/rpmbuild-repo@sha256:31678e77444090d0d2bdd6cfc3d19d957ffd3a494cfed05e005abb24adc8f2d6
         user: rpmbuild
     steps:
       - attach_workspace:
@@ -37,19 +37,18 @@ jobs:
           command: |
             find archives -type f -exec aws s3 cp {} s3://hoot-archives/circle/$CIRCLE_BRANCH/ \;
   copyright:
-    working_directory: '/rpmbuild/hootenanny'
+    working_directory: /rpmbuild/hootenanny
     docker:
-      - image: hootenanny/rpmbuild-generic@sha256:5c563f129e7802029cf6ecc1f3cd50668c53fcca532895fce615de9f4337c951
+      - image: hootenanny/rpmbuild-generic@sha256:f7edd81b449c7fe3957d238488dc9edd6773639bb0272c603c096f6ff7baadb8
         user: rpmbuild
         environment:
-          HOOT_HOME: '/rpmbuild/hootenanny'
+          HOOT_HOME: /rpmbuild/hootenanny
     steps:
       - checkout
       - run:
           name: 'Check Copyright Headers'
           command: ./scripts/copyright/UpdateAllCopyrightHeaders.sh
   lint:
-    working_directory: '/tmp/hootenanny'
     machine:
       image: ubuntu-1604:202007-01
     steps:

@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "UuidHelper.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QCryptographicHash>
@@ -37,10 +37,6 @@ namespace hoot
 {
 
 int UuidHelper::_repeatableKey;
-
-UuidHelper::UuidHelper()
-{
-}
 
 QUuid UuidHelper::createUuid()
 {

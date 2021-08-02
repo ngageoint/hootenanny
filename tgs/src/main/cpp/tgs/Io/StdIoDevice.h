@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef STDIODEVICE_H
 #define STDIODEVICE_H
@@ -42,28 +42,29 @@ namespace Tgs
 class StdIoDevice : public QIODevice
 {
 public:
+
   /**
    * Constructs the device and assume ownership of in.
    */
   StdIoDevice(std::istream& in);
+  ~StdIoDevice() = default;
 
-  virtual ~StdIoDevice();
+  bool atEnd() const override;
 
-  virtual bool atEnd() const;
+  bool open(QIODevice::OpenMode mode) override { QIODevice::open(mode); return true; }
 
-  virtual bool open(QIODevice::OpenMode mode) { QIODevice::open(mode); return true; }
+  void close() override { delete _in; _in = nullptr; }
 
-  virtual void close() { delete _in; _in = 0; }
+  void flush() { }
 
-  virtual void flush() { }
+  qint64 readData(char* data, qint64 maxlen) override;
 
-  virtual qint64 readData(char* data, qint64 maxlen);
+  qint64 writeData(const char *data, qint64 len) override;
 
-  virtual qint64 writeData(const char *data, qint64 len);
-
-  virtual bool getChar(char* c) { return readData(c, 1) == 1; }
+  bool getChar(char* c) { return readData(c, 1) == 1; }
 
 private:
+
   std::istream* _in;
 };
 

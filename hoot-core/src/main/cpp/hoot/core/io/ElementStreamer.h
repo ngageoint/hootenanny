@@ -19,16 +19,15 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTSTREAMER_H
 #define ELEMENTSTREAMER_H
 
 // Hoot
-#include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/util/Progress.h>
 
 // Qt
@@ -55,8 +54,9 @@ public:
    * @param convertOps a list of map ops/visitors to perform against the data during conversion
    * @param progress optional for tracking I/O job progress
    */
-  static void stream(const QStringList& inputs, const QString& out,
-                     const QStringList& convertOps = QStringList(), Progress progress = Progress());
+  static void stream(
+    const QStringList& inputs, const QString& out, const QStringList& convertOps = QStringList(),
+    Progress progress = Progress());
 
   /**
    * Streams a data source from input to output.
@@ -68,49 +68,9 @@ public:
    * @param convertOps a list of map ops/visitors to perform against the data during conversion
    * @param progress optional for tracking I/O job progress
    */
-  static void stream(const QString& input, const QString& out,
-                     const QStringList& convertOps = QStringList(), Progress progress = Progress());
-
-  /**
-   * Determines whether both input and output are streamable data sources (associated
-   * readers/writers must implemented the partial map interfaces)
-   *
-   * @param input data source
-   * @param output data destination
-   * @return true if both formats are streamable; false otherwise
-   */
-  static bool isStreamableIo(const QString& input, const QString& output);
-
-  /**
-   * Determines whether both inputs and output are streamable data sources (associated
-   * readers/writers must implemented the partial map interfaces)
-   *
-   * @param inputs data sources
-   * @param output data destination
-   * @return true if all formats are streamable; false otherwise
-   */
-  static bool areStreamableIo(const QStringList& inputs, const QString& output);
-
-  /**
-   * Return true if all the specified operations are valid streaming operations.
-   *
-   * There are some ops that require the whole map be available in RAM (e.g. remove duplicate
-   * nodes). These operations are not applicable for streaming.
-   *
-   * @param ops
-   * @return
-   */
-  static bool areValidStreamingOps(const QStringList& ops);
-
-  /**
-   * Get an input stream set up to be filtered by operations
-   *
-   * @param streamToFilter the stream to be filtered
-   * @param ops a list of Hoot operation class names to use for inline filtering on the input stream
-   * @return an input stream
-   */
-  static ElementInputStreamPtr getFilteredInputStream(
-    ElementInputStreamPtr streamToFilter, const QStringList& ops);
+  static void stream(
+    const QString& input, const QString& out, const QStringList& convertOps = QStringList(),
+    Progress progress = Progress());
 };
 
 }

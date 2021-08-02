@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "BuildingMatch.h"
 
@@ -60,14 +60,12 @@ BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map,
                              const std::shared_ptr<const BuildingRfClassifier>& rf,
                              const ElementId& eid1, const ElementId& eid2,
                              const ConstMatchThresholdPtr& mt) :
-Match(mt),
-_eid1(eid1),
-_eid2(eid2),
+Match(mt, eid1, eid2),
 _rf(rf),
 _explainText(""),
 _dateTagKey(ConfigOptions().getBuildingDateTagKey()),
 _dateFormat(ConfigOptions().getBuildingDateFormat())
-{  
+{
   ConstElementPtr element1 = map->getElement(_eid1);
   ConstElementPtr element2 = map->getElement(_eid2);
   LOG_TRACE("BuildingMatch: e1\n" << OsmUtils::getElementDetailString(element1, map));
@@ -234,7 +232,7 @@ QStringList BuildingMatch::_getNonMatchDescription(const ConstOsmMapPtr& map, co
     _p.setReviewP(1.0);
     description.append("Unmatched buildings are overlapping.");
   }
-  //  Add extra explanation text to reviews
+  //  Add extra explanation text to reviews.
   else if (type == MatchType::Review)
   {
     //  Deal with the overlap first
@@ -243,7 +241,7 @@ QStringList BuildingMatch::_getNonMatchDescription(const ConstOsmMapPtr& map, co
     else if (overlap >= 0.25)   description.append("Small building overlap.");
     else                        description.append("Very little building overlap.");
 
-    //  Next check the Angle Histogram
+    //  Next check the Angle Histogram.
     const double angle = AngleHistogramExtractor(0.0).extract(*map, element1, element2);
     LOG_VART(angle);
     if (angle >= 0.75)          description.append("Very similar building orientation.");
@@ -251,10 +249,10 @@ QStringList BuildingMatch::_getNonMatchDescription(const ConstOsmMapPtr& map, co
     else if (angle >= 0.25)     description.append("Semi-similar building orientation.");
     else                        description.append("Building orientation not similar.");
 
-    //  Finally, the edge distance
+    //  Finally, check edge distance.
     const double edge =
       EdgeDistanceExtractor(
-        ValueAggregatorPtr(new QuantileAggregator(0.4))).extract(*map, element1, element2);
+        std::make_shared<QuantileAggregator>(0.4)).extract(*map, element1, element2);
     LOG_VART(edge);
     if (edge >= 90)             description.append("Building edges very close to each other.");
     else if (edge >= 70)        description.append("Building edges somewhat close to each other.");
@@ -272,7 +270,7 @@ map<QString, double> BuildingMatch::getFeatures(const ConstOsmMapPtr& m) const
 set<pair<ElementId, ElementId>> BuildingMatch::getMatchPairs() const
 {
   set<pair<ElementId, ElementId>> result;
-  result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
+  result.emplace(_eid1, _eid2);
   return result;
 }
 
@@ -285,14 +283,7 @@ bool BuildingMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapP
                                   const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(other.get());
-  if (bm == 0)
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  return (bm == nullptr);
 }
 
 QString BuildingMatch::toString() const

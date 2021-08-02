@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef DUPLICATEWAYREMOVER_H
@@ -30,8 +30,8 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 namespace hoot
 {
@@ -45,21 +45,37 @@ namespace hoot
  *
  * Area ways are ignored.
  */
-class DuplicateWayRemover : public OsmMapOperation
+class DuplicateWayRemover : public OsmMapOperation, public ConflateInfoCacheConsumer
 {
 public:
 
   static QString className() { return "hoot::DuplicateWayRemover"; }
 
   DuplicateWayRemover();
-  virtual ~DuplicateWayRemover() = default;
+  ~DuplicateWayRemover() = default;
 
-  void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
   /**
    * Remove parts of ways that are duplicates.
    */
   static void removeDuplicates(OsmMapPtr map);
+
+  QString getInitStatusMessage() const override { return "Removing duplicate ways..."; }
+  QString getCompletedStatusMessage() const override
+  { return "Removed " + QString::number(_numAffected) + " duplicate ways"; }
+
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  QStringList getCriteria() const override;
+
+  QString getDescription() const override { return "Removes duplicate ways from a map"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
+  { _conflateInfoCache = cache; }
 
   /**
    * see duplicate.way.remover.strict.tag.matching
@@ -74,35 +90,21 @@ public:
     _strictTagMatching = strictTagMatching;
   }
 
-  virtual QString getInitStatusMessage() const { return "Removing duplicate ways..."; }
-
-  virtual QString getCompletedStatusMessage() const
-  { return "Removed " + QString::number(_numAffected) + " duplicate ways"; }
-
-  virtual QString getDescription() const { return "Removes duplicate ways from a map"; }
-
-  /**
-   * @see FilteredByGeometryTypeCriteria
-   */
-  virtual QStringList getCriteria() const;
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
-
-protected:
+private:
 
   OsmMapPtr _map;
 
+  bool _strictTagMatching;
+
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
+
   bool _isCandidateWay(const ConstWayPtr& w) const;
   void _splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1 = false, bool rev2 = false);
-  std::vector<WayPtr> _splitWay(WayPtr w, int start, int length, bool newIds = false);
-  WayPtr _getUpdatedWay(WayPtr way, const std::vector<long>& nodes, bool newIds);
+  std::vector<WayPtr> _splitWay(WayPtr w, int start, int length, bool newIds = false) const;
+  WayPtr _getUpdatedWay(WayPtr way, const std::vector<long>& nodes, bool newIds) const;
   void _replaceMultiple(const ConstWayPtr& oldWay, const std::vector<WayPtr>& ways);
-
- private:
-
-  bool _strictTagMatching;
 };
 
 }

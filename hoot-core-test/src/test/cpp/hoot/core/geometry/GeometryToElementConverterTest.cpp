@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -54,8 +54,8 @@ public:
 
   void emptyWayTest()
   {
-    OsmMapPtr map(new OsmMap());
-    ElementPtr w(new Way(Status::Unknown1, -1, 0));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    ElementPtr w = std::make_shared<Way>(Status::Unknown1, -1, 0);
     w->getTags()["building"] = "yes";
 
     ElementToGeometryConverter uut(map);

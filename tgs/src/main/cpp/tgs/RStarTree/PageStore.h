@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __TGS__PAGE_STORE_H__
@@ -49,7 +49,7 @@ public:
   /**
    * All page shared pointers should be freed before the PageStore is destroyed.
    */
-  virtual ~PageStore() {}
+  virtual ~PageStore() = default;
 
   /**
    * Creates a new page w/ a new id and returns the page. All page shared pointers should be
@@ -66,12 +66,10 @@ public:
    * Returns the page with the given id.
    */
   virtual std::shared_ptr<Page> getPage(int id) = 0;
-
   /**
    * Returns the number of pages in this page store
    */
   virtual int getPageCount() const = 0;
-
   /**
    * Returns the size of the pages in bytes.
    */
@@ -86,7 +84,7 @@ protected:
 
   Page* _createPage(PageStore* parent, int id, char* data, int size)
   { return new Page(parent, id, data, size); }
-  void _setPageClean(Page * p){p->_setClean();}
+  void _setPageClean(Page * p) const {p->_setClean();}
 
 private:
 

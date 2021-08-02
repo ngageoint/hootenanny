@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ShapefileWriter.h"
@@ -33,14 +33,13 @@
 // GEOS
 #include <geos/geom/LineString.h>
 #include <geos/geom/Polygon.h>
-using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/criterion/AreaCriterion.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
@@ -54,6 +53,8 @@ using namespace geos::geom;
 #include <QHash>
 #include <QMap>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -64,9 +65,9 @@ class ColumnVisitor : public ElementConstOsmMapVisitor
 public:
 
   ColumnVisitor(ElementType type) : _type(type) { }
-  virtual ~ColumnVisitor() = default;
+  ~ColumnVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<const Element>& e)
+  void visit(const std::shared_ptr<const Element>& e) override
   {
     if (e->getElementType() == _type || _type == ElementType::Unknown)
     {
@@ -90,9 +91,9 @@ public:
     return result;
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 
@@ -108,7 +109,7 @@ ShapefileWriter::ShapefileWriter()
 
 QStringList ShapefileWriter::getColumns(ConstOsmMapPtr map, ElementType type) const
 {
-  if (_columns.size() != 0)
+  if (!_columns.empty())
   {
     return _columns;
   }
@@ -148,7 +149,7 @@ void ShapefileWriter::setConfiguration(const Settings& conf)
   _includeCircularError = ConfigOptions(conf).getWriterIncludeCircularErrorTags();
 }
 
-void ShapefileWriter::_removeShapefile(const QString& path)
+void ShapefileWriter::_removeShapefile(const QString& path) const
 {
   QFileInfo fi(path);
 
@@ -191,13 +192,13 @@ void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
 
   const char* pszDriverName = "ESRI Shapefile";
   GDALDriver* poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
-  if (poDriver == NULL)
+  if (poDriver == nullptr)
   {
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
-  GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, NULL);
-  if (poDS == NULL)
+  GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, nullptr);
+  if (poDS == nullptr)
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
   }
@@ -212,7 +213,7 @@ void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
   poLayer = poDS->CreateLayer(layerName.toLatin1(),
                               map->getProjection().get(), wkbLineString,
                               options.getCrypticOptions());
-  if (poLayer == NULL)
+  if (poLayer == nullptr)
   {
     throw HootException(QString("Layer creation failed. %1").arg(path));
   }
@@ -270,7 +271,7 @@ void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
 
       // convert the geometry.
       std::string wkt = ElementToGeometryConverter(map).convertToLineString(way)->toString();
-      char* t = (char*)wkt.data();
+      const char* t = (char*)wkt.data();
       OGRGeometry* geom;
       if (OGRGeometryFactory::createFromWkt(&t, poLayer->GetSpatialRef(), &geom) != OGRERR_NONE)
       {
@@ -302,13 +303,13 @@ void ShapefileWriter::writePoints(const ConstOsmMapPtr& map, const QString& path
 
   const char* pszDriverName = "ESRI Shapefile";
   GDALDriver* poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
-  if (poDriver == NULL)
+  if (poDriver == nullptr)
   {
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
-  GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, NULL);
-  if (poDS == NULL)
+  GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, nullptr);
+  if (poDS == nullptr)
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
   }
@@ -322,7 +323,7 @@ void ShapefileWriter::writePoints(const ConstOsmMapPtr& map, const QString& path
   layerName = QFileInfo(path).baseName();
   poLayer = poDS->CreateLayer(layerName.toLatin1(),
                               map->getProjection().get(), wkbPoint, options.getCrypticOptions());
-  if (poLayer == NULL)
+  if (poLayer == nullptr)
   {
     throw HootException(QString("Layer creation failed. %1").arg(path));
   }
@@ -379,7 +380,7 @@ void ShapefileWriter::writePoints(const ConstOsmMapPtr& map, const QString& path
       }
 
       // convert the geometry.
-      std::shared_ptr<OGRGeometry> geom(new OGRPoint(node->getX(), node->getY()));
+      std::shared_ptr<OGRGeometry> geom = std::make_shared<OGRPoint>(node->getX(), node->getY());
 
       if (poFeature->SetGeometry(geom.get()) != OGRERR_NONE)
       {
@@ -406,13 +407,13 @@ void ShapefileWriter::writePolygons(const ConstOsmMapPtr& map, const QString& pa
 
   const char* pszDriverName = "ESRI Shapefile";
   GDALDriver* poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
-  if (poDriver == NULL)
+  if (poDriver == nullptr)
   {
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
-  GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, NULL);
-  if (poDS == NULL)
+  GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, nullptr);
+  if (poDS == nullptr)
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
   }
@@ -427,7 +428,7 @@ void ShapefileWriter::writePolygons(const ConstOsmMapPtr& map, const QString& pa
   poLayer = poDS->CreateLayer(layerName.toLatin1(),
                               map->getProjection().get(), wkbMultiPolygon,
                               options.getCrypticOptions());
-  if (poLayer == NULL)
+  if (poLayer == nullptr)
   {
     throw HootException(QString("Layer creation failed. %1").arg(path));
   }
@@ -486,7 +487,7 @@ void ShapefileWriter::writePolygons(const ConstOsmMapPtr& map, const QString& pa
 
 void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
   const RelationPtr& relation, OGRLayer* poLayer, const QStringList& columns,
-  const QStringList& shpColumns)
+  const QStringList& shpColumns) const
 {
   OGRFeature* poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
   // set all the column values.
@@ -507,8 +508,14 @@ void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
 
   // convert the geometry.
   const ConstRelationPtr& r = relation;
-  std::string wkt = ElementToGeometryConverter(map).convertToGeometry(r)->toString();
-  char* t = (char*)wkt.data();
+  std::shared_ptr<geos::geom::Geometry> geometry =
+    ElementToGeometryConverter(map).convertToGeometry(r);
+  if (!geometry.get() || geometry->isEmpty())
+  {
+    throw HootException(QString("Error converting geometry"));
+  }
+  std::string wkt = geometry->toString();
+  const char* t = (char*)wkt.data();
   OGRGeometry* geom;
   if (OGRGeometryFactory::createFromWkt(&t, poLayer->GetSpatialRef(), &geom) != OGRERR_NONE)
   {
@@ -529,7 +536,7 @@ void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
 }
 
 void ShapefileWriter::_writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& way,
-  OGRLayer* poLayer, const QStringList& columns, const QStringList &shpColumns)
+  OGRLayer* poLayer, const QStringList& columns, const QStringList &shpColumns) const
 {
   OGRFeature* poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
   // set all the column values.
@@ -556,7 +563,7 @@ void ShapefileWriter::_writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& 
                                  toString(p->getGeometryType()));
   }
   std::string wkt = p->toString();
-  char* t = (char*)wkt.data();
+  const char* t = (char*)wkt.data();
   OGRGeometry* geom;
   if (OGRGeometryFactory::createFromWkt(&t, poLayer->GetSpatialRef(), &geom) != OGRERR_NONE)
   {

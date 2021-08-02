@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __INFO_GAIN_CALCULATOR_H__
@@ -40,15 +40,16 @@ namespace Tgs
   class TGS_EXPORT InfoGainCalculator
   {
   public:
+
     /**
     *  Constructor
     */
-    InfoGainCalculator();
+    InfoGainCalculator() = default;
 
     /**
     *  Destructor
     */
-    ~InfoGainCalculator();
+    ~InfoGainCalculator() = default;
 
     /**
     *  Computes the entropy of a dataset based only on the class label
@@ -56,7 +57,8 @@ namespace Tgs
     *  @param df the source data set
     *  @param indices a list of data vector indices in the data set
     */
-    double computeEntropyByClass(DataFrame & df, std::vector<unsigned int> & indices);
+    double computeEntropyByClass(
+      const DataFrame& df, const std::vector<unsigned int>& indices) const;
 
     /**
     * Using the list of data vector indices as input this method
@@ -72,9 +74,9 @@ namespace Tgs
     * @param purityDelta the contribution of the data split in increasing the info gain
     * @return false if a split is not possible (all factor values are same across all factors)
     */
-    bool findDataSplit(DataFrame & df, std::vector<unsigned int> & fIndices, 
+    bool findDataSplit(const DataFrame & df, std::vector<unsigned int> & fIndices,
       std::vector<unsigned int> & dIndices, unsigned int & splitIdx, unsigned int & fIdx,
-      double & splitVal, double & purityDelta);
+      double & splitVal, double & purityDelta) const;
 
     /**
     * This method looks at a single factor and computes the maximum gain against
@@ -88,8 +90,8 @@ namespace Tgs
     * @param bestSplit the index for the split in indices corresponding to the max gain
     * @return the information gain corresponding to bestSplit
     */
-    double getMaxInfoGainByFactor(DataFrame & df, std::vector<unsigned int> & indices, 
-      unsigned int fIdx, double totalEntropy, unsigned int & bestSplit);
+    double getMaxInfoGainByFactor(const DataFrame& df, std::vector<unsigned int> & indices,
+      unsigned int fIdx, double totalEntropy, unsigned int & bestSplit) const;
 
     /**
     * This method looks at a single factor and computes the maximum gain ratio against
@@ -103,14 +105,15 @@ namespace Tgs
     * @param bestSplit the index for the split in indices corresponding to the max gain
     * @return the information gain ratio corresponding to bestSplit
     */
-    double getMaxInfoGainRatioByFactor(DataFrame & df, std::vector<unsigned int> & indices, 
-      unsigned int fIdx, double totalEntropy, unsigned int & bestSplit);
+    double getMaxInfoGainRatioByFactor(const DataFrame & df, std::vector<unsigned int> & indices,
+      unsigned int fIdx, double totalEntropy, unsigned int & bestSplit) const;
 
   private:
+
     /**
     *  Computes the entropy function -n * log2(n)
     */
-    double _calcLogFunc(double n);
+    double _calcLogFunc(double n) const;
 
     /**
     * This methods takes a subset of data vectors held by indices and finds
@@ -122,9 +125,8 @@ namespace Tgs
     * @param fIdx the factor index in the data vectors
     * @param splits the potential splits in the data to consider 
     */
-    void _findCandidateSplits(DataFrame & df, std::vector<unsigned int> & indices, 
-      unsigned int fIdx, std::vector<unsigned int> & splits);
-
+    void _findCandidateSplits(const DataFrame& df, std::vector<unsigned int>& indices,
+      unsigned int fIdx, std::vector<unsigned int>& splits) const;
   };
 }  //End Namespace
 #endif 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // hoot
@@ -55,11 +55,11 @@ public:
   void runInvalidMemberCountTest()
   {
     //add some nodes to a map
-    OsmMapPtr map(new OsmMap());
-    ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
-    ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
-    ElementPtr n3(new Node(Status::Unknown1, 3, 0, 0, 0));
-    ElementPtr n4(new Node(Status::Unknown2, 4, 0, 0, 0));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    ElementPtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
+    ElementPtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0, 0, 0);
+    ElementPtr n3 = std::make_shared<Node>(Status::Unknown1, 3, 0, 0, 0);
+    ElementPtr n4 = std::make_shared<Node>(Status::Unknown2, 4, 0, 0, 0);
     map->addElement(n1);
     map->addElement(n2);
     map->addElement(n3);
@@ -102,11 +102,11 @@ public:
   void runEmptyRelationNoMemberCountTagTest()
   {
     //add some nodes to a map
-    OsmMapPtr map(new OsmMap());
-    ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
-    ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
-    ElementPtr n3(new Node(Status::Unknown1, 3, 0, 0, 0));
-    ElementPtr n4(new Node(Status::Unknown2, 4, 0, 0, 0));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    ElementPtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
+    ElementPtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0, 0, 0);
+    ElementPtr n3 = std::make_shared<Node>(Status::Unknown1, 3, 0, 0, 0);
+    ElementPtr n4 = std::make_shared<Node>(Status::Unknown2, 4, 0, 0, 0);
     map->addElement(n1);
     map->addElement(n2);
     map->addElement(n3);

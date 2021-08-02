@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REPLACE_TAG_MERGER_H
 #define REPLACE_TAG_MERGER_H
@@ -46,22 +46,21 @@ public:
    * If swap is set to true then t1 will be overwritten with t2 values.
    */
   ReplaceTagMerger(bool swap = false);
-
   virtual ~ReplaceTagMerger() = default;
 
-  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
+  Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
   // leave empty to avoid duplicate tag mergers displayed by the info command
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setOverwriteExcludeTagKeys(const QStringList& overwriteExcludeTagKeys)
   { _overwriteExcludeTagKeys = overwriteExcludeTagKeys; }
 
-protected:
+private:
 
   bool _swap;
   // keys of tags not to be overwritten
@@ -79,17 +78,15 @@ public:
   static QString className() { return "hoot::ReplaceTag2Merger"; }
 
   ReplaceTag2Merger() : ReplaceTagMerger(false) { }
-  virtual ~ReplaceTag2Merger() = default;
+  ~ReplaceTag2Merger() = default;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   {
     return
       "Completely replaces tags in the secondary feature with those from the reference feature";
   }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 /**
@@ -103,17 +100,15 @@ public:
   static QString className() { return "hoot::ReplaceTag1Merger"; }
 
   ReplaceTag1Merger() : ReplaceTagMerger(true) { }
-  virtual ~ReplaceTag1Merger() = default;
+  ~ReplaceTag1Merger() = default;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   {
     return
       "Completely replaces tags in the reference feature with those from the secondary feature";
   }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

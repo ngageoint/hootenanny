@@ -19,24 +19,23 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmXmlWriter.h"
 
 // Hoot
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
@@ -119,12 +118,12 @@ QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
 
 void OsmXmlWriter::open(const QString& url)
 {
-  QFile* f = new QFile();
-  _fp.reset(f);
+  std::shared_ptr<QFile> f = std::make_shared<QFile>();
   f->setFileName(url);
+  _fp = f;
   if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {
-    throw Exception(QObject::tr("Error opening %1 for writing").arg(url));
+    throw HootException(QObject::tr("Error opening %1 for writing").arg(url));
   }
 
   _initWriter();
@@ -154,9 +153,9 @@ QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml)
 
   OsmXmlWriter writer;
   writer.setFormatXml(formatXml);
-  // this will be deleted by the _fp std::shared_ptr
-  QBuffer* buf = new QBuffer();
-  writer._fp.reset(buf);
+  // This will be deleted by the _fp std::shared_ptr.
+  std::shared_ptr<QBuffer> buf = std::make_shared<QBuffer>();
+  writer._fp = buf;
   if (!writer._fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {
     throw InternalErrorException(QObject::tr("Error opening QBuffer for writing. Odd."));
@@ -182,7 +181,7 @@ QString OsmXmlWriter::_typeName(ElementType e)
 
 void OsmXmlWriter::_initWriter()
 {
-  _writer.reset(new QXmlStreamWriter(_fp.get()));
+  _writer = std::make_shared<QXmlStreamWriter>(_fp.get());
   _writer->setCodec("UTF-8");
 
   if (_formatXml)
@@ -218,7 +217,7 @@ void OsmXmlWriter::write(const ConstOsmMapPtr& map)
   }
 
   //  Debug maps get a bunch of debug settings setup here
-  LOG_VARD(getIsDebugMap());
+  LOG_VART(getIsDebugMap());
   if (getIsDebugMap())
     _overrideDebugSettings();
 
@@ -254,7 +253,7 @@ void OsmXmlWriter::write(const ConstOsmMapPtr& map)
   close();
 }
 
-void OsmXmlWriter::_writeMetadata(const Element* e)
+void OsmXmlWriter::_writeMetadata(const Element* e) const
 {
   if (_includeCompatibilityTags)
   {
@@ -268,8 +267,8 @@ void OsmXmlWriter::_writeMetadata(const Element* e)
   }
   else
   {
-    //This comparison seems to be still unequal when I set an element's timestamp to
-    //ElementData::TIMESTAMP_EMPTY.  See RemoveAttributesVisitor
+    // This comparison seems to be still unequal when I set an element's timestamp to
+    // ElementData::TIMESTAMP_EMPTY.  See RemoveAttributesVisitor
     if (e->getTimestamp() != ElementData::TIMESTAMP_EMPTY)
     {
       _writer->writeAttribute("timestamp", DateTimeUtils::toTimeString(e->getTimestamp()));
@@ -280,7 +279,7 @@ void OsmXmlWriter::_writeMetadata(const Element* e)
     }
   }
   if (e->getChangeset() != ElementData::CHANGESET_EMPTY &&
-      e->getId() > 0) //  Negative IDs are considered "new" elements and shouldn't have a changeset
+      e->getId() > 0) //  Negative IDs are considered "new" elements and shouldn't have a changeset.
   {
     _writer->writeAttribute("changeset", QString::number(e->getChangeset()));
   }
@@ -296,7 +295,7 @@ void OsmXmlWriter::_writeMetadata(const Element* e)
 
 void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
 {
-  ElementPtr elementClone(element->clone());
+  ElementPtr elementClone = element->clone();
   _addExportTagsVisitor.visit(elementClone);
 
   const ElementType type = elementClone->getElementType();
@@ -350,7 +349,7 @@ void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map)
     nids.append(it->first);
   }
 
-  // sort the values to give consistent results.
+  // Sort the values to give consistent results.
   if (nids.size() > 100000)
   {
     LOG_INFO("Sorting nodes...");
@@ -413,7 +412,7 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map)
   }
 }
 
-void OsmXmlWriter::_writeBounds(const Envelope& bounds)
+void OsmXmlWriter::_writeBounds(const Envelope& bounds) const
 {
   _writer->writeStartElement("bounds");
   _writer->writeAttribute("minlat", QString::number(bounds.getMinY(), 'g', _precision));
@@ -446,12 +445,16 @@ void OsmXmlWriter::writePartial(const ConstNodePtr& n)
   _numWritten++;
   if (_numWritten % _statusUpdateInterval == 0)
   {
-    PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+    PROGRESS_STATUS(
+      "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
   }
 }
 
 void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map)
 {
+  //  Ignore NULL elements
+  if (!w) return;
+
   LOG_TRACE("Writing " << w->getElementId() << "...");
 
   _writer->writeStartElement("way");
@@ -521,7 +524,8 @@ void OsmXmlWriter::writePartial(const ConstWayPtr& w)
   _numWritten++;
   if (_numWritten % _statusUpdateInterval == 0)
   {
-    PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+    PROGRESS_STATUS(
+      "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
   }
 }
 
@@ -542,7 +546,7 @@ void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
     _writer->writeStartElement("member");
     _writer->writeAttribute("type", _typeName(e.getElementId().getType()));
     _writer->writeAttribute("ref", QString::number(e.getElementId().getId()));
-    _writer->writeAttribute("role", removeInvalidCharacters(e.role));
+    _writer->writeAttribute("role", removeInvalidCharacters(e.getRole()));
     _writer->writeEndElement();
   }
 
@@ -553,7 +557,8 @@ void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
   _numWritten++;
   if (_numWritten % _statusUpdateInterval == 0)
   {
-    PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+    PROGRESS_STATUS(
+      "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
   }
 }
 

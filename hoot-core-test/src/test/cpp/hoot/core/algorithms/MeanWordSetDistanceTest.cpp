@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -56,7 +56,7 @@ public:
 
   void runTest()
   {
-    MeanWordSetDistance uut(StringDistancePtr(new ExactStringDistance()));
+    MeanWordSetDistance uut(std::make_shared<ExactStringDistance>());
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1, uut.compare("Hello world", "hello World"), 0.01);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1, uut.compare("world", "hello World"), 0.01);
@@ -67,7 +67,7 @@ public:
 
   void runLevenshteinTest()
   {
-    MeanWordSetDistance uut(StringDistancePtr(new LevenshteinDistance(1.5)));
+    MeanWordSetDistance uut(std::make_shared<LevenshteinDistance>(1.5));
 
     Settings s;
     s.set("token.separator", "[\\s-,';]+");
@@ -75,10 +75,8 @@ public:
 
     HOOT_STR_EQUALS(1, uut.compare("Sheraton hotel", "Sheraton Sana'a Hotel"));
   }
-
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MeanWordSetDistanceTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MeanWordSetDistanceTest, "quick");
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __RANDOM_FOREST_MANAGER_H__
@@ -47,29 +47,29 @@ namespace Tgs
   class TGS_EXPORT RandomForestManager : public BaseRandomForestManager
   {
   public:
+
     /**
     *  Constructor
     */
-    RandomForestManager();
-
+    RandomForestManager() = default;
     /**
     *  Destructor
     */
-    virtual ~RandomForestManager();
+    ~RandomForestManager() = default;
 
   protected:
+
     /**
      * @brief _initForests initializes the list of random forests
      * @param numForests the number of forests to create
      */
-    virtual void _initForests(int numForests);
+    void _initForests(int numForests) override;
 
     /**
      * @brief _parseXmlForestNodes loads the XML form of a fores
      * @param forestsNode the list of <RandomForest> DOM nodes
      */
-    virtual void _parseXmlForestNodes(QDomNodeList & forestNodes);
-
+    void _parseXmlForestNodes(QDomNodeList & forestNodes) override;
   };
 }
 #endif

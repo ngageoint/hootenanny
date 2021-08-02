@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "NonConflatableElementRemover.h"
@@ -41,15 +41,18 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, NonConflatableElementRemover)
 void NonConflatableElementRemover::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
+  _numProcessed = 0;
   _map = map;
 
   RemoveElementsVisitor removeElementsVisitor;
   removeElementsVisitor.setRecursive(true);
   // RemoveElementsVisitor will auto handle setting the config on this crit.
-  removeElementsVisitor.addCriterion(
-    std::shared_ptr<NonConflatableCriterion>(new NonConflatableCriterion()));
+  removeElementsVisitor.addCriterion(std::make_shared<NonConflatableCriterion>());
   removeElementsVisitor.setConfiguration(conf());
   _map->visitRw(removeElementsVisitor);
+
+  _numAffected = removeElementsVisitor.getNumFeaturesAffected();
+  _numProcessed = removeElementsVisitor.getNumFeaturesProcessed();
 }
 
 }

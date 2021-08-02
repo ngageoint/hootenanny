@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MATCHCOMPARATOR_H
 #define MATCHCOMPARATOR_H
@@ -55,7 +55,7 @@ public:
 
   static QString className() { return "hoot::MatchComparator"; }
 
-  typedef QMultiMap<QString, ElementId> UuidToEid;
+  using UuidToEid = QMultiMap<QString, ElementId>;
 
   MatchComparator();
   virtual ~MatchComparator() = default;
@@ -118,7 +118,7 @@ private:
 
   static int logWarnCount;
 
-  typedef std::pair<QString, QString> UuidPair;
+  using UuidPair = std::pair<QString, QString>;
 
   std::set<UuidPair> _actual;
   std::set<UuidPair> _expected;
@@ -145,18 +145,16 @@ private:
 
   QMap<ElementType::Type, long> _elementWrongCounts;
 
-  ReviewMarker _reviewMarker;
-
   int _statusUpdateInterval;
 
   void _addWrong(const Tags& t1, const Tags& t2);
 
   void _clearCache();
   void _createMatches(const std::set<QString>& uuids1, const std::set<QString>& uuids2,
-                      std::set<UuidPair>& matches, Tgs::DisjointSetMap<QString>& groups);
+                      std::set<UuidPair>& matches, Tgs::DisjointSetMap<QString>& groups) const;
 
   bool _debugLog(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& in,
-    const ConstOsmMapPtr& conflated);
+    const ConstOsmMapPtr& conflated) const;
 
   void _findActualMatches(const ConstOsmMapPtr& in, const ConstOsmMapPtr& conflated);
   void _findExpectedMatches(const ConstOsmMapPtr& in);
@@ -164,7 +162,7 @@ private:
   /**
    * Returns true if both these uuids are marked with needs review.
    */
-  bool _isNeedsReview(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& conflated);
+  bool _isNeedsReview(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& conflated) const;
 
   void _tagError(const OsmMapPtr& map, const QString &uuid, const QString& value);
   void _tagWrong(const OsmMapPtr &map, const QString &uuid);

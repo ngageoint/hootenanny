@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "DefaultIdGenerator.h"
@@ -38,13 +38,10 @@ HOOT_FACTORY_REGISTER(IdGenerator, DefaultIdGenerator)
 
 IdGeneratorPtr DefaultIdGenerator::clone() const
 {
-  DefaultIdGenerator* copy = new DefaultIdGenerator();
-  IdGeneratorPtr result(copy);
-
-  copy->_nodeId = _nodeId;
-  copy->_wayId = _wayId;
-  copy->_relationId = _relationId;
-
+  std::shared_ptr<DefaultIdGenerator> result = std::make_shared<DefaultIdGenerator>();
+  result->_nodeId = _nodeId;
+  result->_wayId = _wayId;
+  result->_relationId = _relationId;
   return result;
 }
 

@@ -19,15 +19,25 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "UniqueTagValuesVisitor.h"
 
 namespace hoot
 {
+
+// This isn't being factory registered, since there's no standard way to retrieve a set of strings
+// from a visitor
+
+UniqueTagValuesVisitor::UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split) :
+_key(key),
+_bag(bag),
+_split(split)
+{
+}
 
 void UniqueTagValuesVisitor::visit(const ConstElementPtr& e)
 {

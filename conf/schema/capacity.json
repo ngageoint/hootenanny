@@ -1,11 +1,7 @@
 [
     {
         "dataType": "text",
-        "geometries": [                                                         
-	    "node",
-            "linestring",                                                       
-            "area"                                                              
-        ],                                                                      
+        "geometries": ["node","linestring","area"],                                                                      
         "name": "capacity",
         "objectType": "tag"
     }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // hoot
@@ -56,16 +56,16 @@ public:
 
   void runInvalidWayTest1()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
     map->addNode(node1);
-    NodePtr node2(new Node(Status::Unknown1, 2, 0, 0, 0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, 2, 0, 0, 0);
     map->addNode(node2);
-    NodePtr node3(new Node(Status::Unknown1, 3, 0, 0, 0));
+    NodePtr node3 = std::make_shared<Node>(Status::Unknown1, 3, 0, 0, 0);
     map->addNode(node3);
 
-    WayPtr way(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     std::vector<long> nodeIds;
     nodeIds.push_back(1);
     nodeIds.push_back(2);
@@ -91,16 +91,16 @@ public:
 
   void runInvalidWayTest2()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
     map->addNode(node1);
-    NodePtr node2(new Node(Status::Unknown1, 2, 0, 0, 0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, 2, 0, 0, 0);
     map->addNode(node2);
-    NodePtr node3(new Node(Status::Unknown1, 3, 0, 0, 0));
+    NodePtr node3 = std::make_shared<Node>(Status::Unknown1, 3, 0, 0, 0);
     map->addNode(node3);
 
-    WayPtr way(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     std::vector<long> nodeIds;
     nodeIds.push_back(1);
     nodeIds.push_back(1); //invalid
@@ -126,12 +126,12 @@ public:
 
   void runInvalidWayTest3()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
     map->addNode(node1);
 
-    WayPtr way(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     std::vector<long> nodeIds;
     nodeIds.push_back(1);
     nodeIds.push_back(1); //invalid
@@ -150,16 +150,16 @@ public:
 
   void runValidStartAndEndNodeSameTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
     map->addNode(node1);
-    NodePtr node2(new Node(Status::Unknown1, 2, 0, 0, 0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, 2, 0, 0, 0);
     map->addNode(node2);
-    NodePtr node3(new Node(Status::Unknown1, 3, 0, 0, 0));
+    NodePtr node3 = std::make_shared<Node>(Status::Unknown1, 3, 0, 0, 0);
     map->addNode(node3);
 
-    WayPtr way(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     std::vector<long> nodeIds;
     nodeIds.push_back(1);
     nodeIds.push_back(2);
@@ -185,18 +185,18 @@ public:
 
   void runValidUnclosedWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
     map->addNode(node1);
-    NodePtr node2(new Node(Status::Unknown1, 2, 0, 0, 0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, 2, 0, 0, 0);
     map->addNode(node2);
-    NodePtr node3(new Node(Status::Unknown1, 3, 0, 0, 0));
+    NodePtr node3 = std::make_shared<Node>(Status::Unknown1, 3, 0, 0, 0);
     map->addNode(node3);
-    NodePtr node4(new Node(Status::Unknown1, 4, 0, 0, 0));
+    NodePtr node4 = std::make_shared<Node>(Status::Unknown1, 4, 0, 0, 0);
     map->addNode(node4);
 
-    WayPtr way(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     std::vector<long> nodeIds;
     nodeIds.push_back(1);
     nodeIds.push_back(2);
@@ -223,7 +223,7 @@ public:
 
   void runValidLoopTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     IoUtils::loadMap(
       map, _inputPath + "RemoveDuplicateWayNodesVisitorTest-runValidLoopTest.osm", true);
 

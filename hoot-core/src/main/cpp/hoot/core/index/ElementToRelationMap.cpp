@@ -19,27 +19,23 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ElementToRelationMap.h"
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Relation.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 using namespace std;
 
 namespace hoot
 {
-
-ElementToRelationMap::ElementToRelationMap()
-{
-}
 
 void ElementToRelationMap::addRelation(const OsmMap& map,
                                        const std::shared_ptr<const Relation>& r)
@@ -53,9 +49,9 @@ void ElementToRelationMap::addRelation(const OsmMap& map,
       _rid = rid;
       LOG_VART(_rid);
     }
-    virtual ~AddMemberVisitor() = default;
+    ~AddMemberVisitor() = default;
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       ElementId eid = e->getElementId();
       LOG_VART(eid);
@@ -66,11 +62,12 @@ void ElementToRelationMap::addRelation(const OsmMap& map,
       }
     }
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
-  protected:
+  private:
+
     HashMap<ElementId, set<long>>& _mapping;
     long _rid;
   };
@@ -115,18 +112,18 @@ void ElementToRelationMap::removeRelation(const OsmMap& map,
     {
       _rid = rid;
     }
-    virtual ~RemoveMemberVisitor() = default;
+    ~RemoveMemberVisitor() = default;
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       ElementId ep(e->getElementType(), e->getId());
       set<long>& relations = _mapping[ep];
       relations.erase(_rid);
-      if (relations.size() == 0)
+      if (relations.empty())
       {
         _mapping.erase(ep);
       }
@@ -148,19 +145,18 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
   {
   public:
 
-    ContainsElementVisitor(const OsmMap& map, const ElementId& eid) :
-      _eid(eid),
-      _map(map)
+    ContainsElementVisitor(const OsmMap& /*map*/, const ElementId& eid) :
+      _eid(eid)
     {
       _found = false;
     }
-    virtual ~ContainsElementVisitor() = default;
+    ~ContainsElementVisitor() = default;
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       if (e->getElementId() == _eid)
       {
@@ -173,7 +169,6 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
   private:
 
     ElementId _eid;
-    const OsmMap& _map;
     bool _found;
   };
 
@@ -188,20 +183,20 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     {
       _good = true;
     }
-    virtual ~CheckVisitor() = default;
+    ~CheckVisitor() = default;
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
-    bool containsRecursive(const ConstRelationPtr& r, ElementId eid)
+    bool containsRecursive(const ConstRelationPtr& r, ElementId eid) const
     {
       ContainsElementVisitor v(_map, eid);
       r->visitRo(_map, v);
       return v.isFound();
     }
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       ElementType type = e->getElementType();
       long id = e->getId();

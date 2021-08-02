@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTIARY_INGEST_CHANGESET_WRITER_H
 #define MULTIARY_INGEST_CHANGESET_WRITER_H
@@ -50,31 +50,31 @@ public:
 
   MultiaryIngestChangesetWriter();
 
-  virtual ~MultiaryIngestChangesetWriter();
+  ~MultiaryIngestChangesetWriter();
 
-  void close() { if (_fp.get()) { _fp->close(); _fp.reset(); } }
+  void close() override { if (_fp.get()) { _fp->close(); _fp.reset(); } }
 
   /**
    * @see OsmChangeWriter
    *
    * "mic" stands for "multiary ingest changeset"
    */
-  virtual bool isSupported(const QString& url) override { return url.endsWith(".mic"); }
+  bool isSupported(const QString& url) override { return url.endsWith(".mic"); }
 
   /**
    * Open the specified filename for writing.
    */
-  virtual void open(const QString& fileName) override;
+  void open(const QString& fileName) override;
 
   /**
    * @see OsmChangeWriter
    */
-  virtual void writeChange(const Change& change) override;
+  void writeChange(const Change& change) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   QString getElementPayloadFormat() const { return _elementPayloadFormat; }
-  virtual void setElementPayloadFormat(const QString& format) override;
+  void setElementPayloadFormat(const QString& format) override;
 
 private:
 

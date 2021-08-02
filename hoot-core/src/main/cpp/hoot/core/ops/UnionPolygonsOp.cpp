@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "UnionPolygonsOp.h"
 
@@ -45,9 +45,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, UnionPolygonsOp)
 
-UnionPolygonsOp::UnionPolygonsOp()
+UnionPolygonsOp::UnionPolygonsOp() :
+_combiner(std::make_shared<UnionPolygonsVisitor>())
 {
-  _combiner.reset(new UnionPolygonsVisitor());
 }
 
 void UnionPolygonsOp::apply(std::shared_ptr<OsmMap>& map)
@@ -58,11 +58,11 @@ void UnionPolygonsOp::apply(std::shared_ptr<OsmMap>& map)
   std::shared_ptr<Geometry> g = _combiner->getUnion();
   LOG_VART(g.get());
 
-  OsmMapPtr result(new OsmMap());
+  OsmMapPtr result = std::make_shared<OsmMap>();
   GeometryToElementConverter(result).convertGeometryToElement(
     g.get(), Status::Unknown1, WorstCircularErrorVisitor::getWorstCircularError(map));
 
-  map.reset(new OsmMap(result));
+  map = std::make_shared<OsmMap>(result);
   LOG_VART(map.get());
 }
 

@@ -19,25 +19,21 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmApiDbSqlChangesetApplier.h"
 
 // hoot
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
-#include <QtSql/QSqlDatabase>
 #include <QUrl>
-#include <QSqlError>
-#include <QDateTime>
 
 using namespace geos::geom;
 
@@ -132,7 +128,7 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
       elementSqlStatements += sqlStatement + ";";
 
       // The sql changeset is made up of one or more sql statements for each changeset operation
-      // type. Each operation starts with a comment header (e.g. /* node create 1 */), which can be
+      // type. Each operation starts with a comment header (e.g. 'node create 1'), which can be
       // used to determine its type.
       if (sqlStatement.startsWith("\n/*"))
       {
@@ -157,9 +153,9 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
         if (pos > -1)
         {
           // first capture is the whole string...skip it
-          for (int i = 1; i < 5; i++)
+          for (int j = 1; j < 5; j++)
           {
-            const QString oldCoordStr = captures.at(i);
+            const QString oldCoordStr = captures.at(j);
             const double newCoord = OsmApiDb::fromOsmApiDbCoord(oldCoordStr.toLong());
             _changesetDetailsStr=
               _changesetDetailsStr.replace(
@@ -252,50 +248,6 @@ QString OsmApiDbSqlChangesetApplier::getChangesetStatsSummary() const
     "Total Creations: " + StringUtils::formatLargeNumber(_changesetStats[TOTAL_CREATE_KEY]) + "\n" +
     "Total Modifications: " + StringUtils::formatLargeNumber(_changesetStats[TOTAL_MODIFY_KEY]) + "\n" +
     "Total Deletions: " + StringUtils::formatLargeNumber(_changesetStats[TOTAL_DELETE_KEY]) + "\n";
-}
-
-bool OsmApiDbSqlChangesetApplier::conflictExistsInTarget(const QString& boundsStr,
-                                                         const QString& timeStr)
-{
-  LOG_DEBUG("Checking for OSM API DB conflicts for " << ApiDb::getChangesetsTableName() <<
-           " within " << boundsStr << " and created after " << timeStr << "...");
-
-  const Envelope bounds = GeometryUtils::envelopeFromString(boundsStr);
-  LOG_VARD(bounds.toString());
-
-  const QDateTime time = QDateTime::fromString(timeStr, OsmApiDb::TIME_FORMAT);
-  LOG_VARD(time);
-  if (!time.isValid())
-  {
-    throw HootException(
-      "Invalid timestamp: " + time.toString() + ".  Should be of the form " + OsmApiDb::TIME_FORMAT);
-  }
-
-  std::shared_ptr<QSqlQuery> changesetItr = _db.getChangesetsCreatedAfterTime(timeStr);
-  while (changesetItr->next())
-  {
-    LOG_VARD(changesetItr->value(0).toLongLong());
-    LOG_VARD(changesetItr->value(1).toLongLong());
-    LOG_VARD(changesetItr->value(2).toLongLong());
-    LOG_VARD(changesetItr->value(3).toLongLong());
-    Envelope changesetBounds(
-      changesetItr->value(0).toLongLong() / (double)ApiDb::COORDINATE_SCALE,
-      changesetItr->value(1).toLongLong() / (double)ApiDb::COORDINATE_SCALE,
-      changesetItr->value(2).toLongLong() / (double)ApiDb::COORDINATE_SCALE,
-      changesetItr->value(3).toLongLong() / (double)ApiDb::COORDINATE_SCALE);
-    LOG_VARD(changesetBounds.toString());
-    if (changesetBounds.intersects(bounds))
-    {
-      // logging as info instead of error since I couldn't get the log output disabled in the test
-      // with the log disabler
-      LOG_INFO(
-        "Conflict exists at bounds " << changesetBounds.toString() << "for input bounds " <<
-        boundsStr << " and input time " << timeStr);
-      return true;
-    }
-  }
-  LOG_DEBUG("No conflicts exist for input bounds " << boundsStr << " and input time " << timeStr);
-  return false;
 }
 
 }

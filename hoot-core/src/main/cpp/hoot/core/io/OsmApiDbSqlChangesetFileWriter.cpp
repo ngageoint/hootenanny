@@ -19,21 +19,21 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmApiDbSqlChangesetFileWriter.h"
 
 // hoot
+#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/elements/ElementType.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/ElementType.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QSqlError>
@@ -107,18 +107,18 @@ void OsmApiDbSqlChangesetFileWriter::write(
   for (int i = 0; i < changesetProviders.size(); i++)
   {
     LOG_DEBUG(
-      "Deriving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
+      "Deriving changes with changeset provider: " << i + 1 << " of " << changesetProviders.size() <<
       "...");
 
     // Bounds checking requires a map. Grab the two input maps if they were passed in...one for
     // each dataset, before changes and after.
     ConstOsmMapPtr map1;
     ConstOsmMapPtr map2;
-    if (_map1List.size() > 0)
+    if (!_map1List.empty())
     {
       map1 = _map1List.at(i);
     }
-    if (_map2List.size() > 0)
+    if (!_map2List.empty())
     {
       map2 = _map2List.at(i);
     }
@@ -237,19 +237,20 @@ void OsmApiDbSqlChangesetFileWriter::_createChangeSet()
     .toUtf8());
 }
 
-ElementPtr OsmApiDbSqlChangesetFileWriter::_getChangeElement(ConstElementPtr element)
+ElementPtr OsmApiDbSqlChangesetFileWriter::_getChangeElement(ConstElementPtr element) const
 {
   ElementPtr changeElement;
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      changeElement.reset(new Node(*std::dynamic_pointer_cast<const Node>(element)));
+      changeElement = std::make_shared<Node>(*std::dynamic_pointer_cast<const Node>(element));
       break;
     case ElementType::Way:
-      changeElement.reset(new Way(*std::dynamic_pointer_cast<const Way>(element)));
+      changeElement = std::make_shared<Way>(*std::dynamic_pointer_cast<const Way>(element));
       break;
    case ElementType::Relation:
-      changeElement.reset(new Relation(*std::dynamic_pointer_cast<const Relation>(element)));
+      changeElement =
+        std::make_shared<Relation>(*std::dynamic_pointer_cast<const Relation>(element));
       break;
     default:
       throw HootException("Unknown element type");
@@ -291,7 +292,7 @@ void OsmApiDbSqlChangesetFileWriter::_createNewElement(ConstElementPtr element)
   LOG_VART(changeElement->getVersion());
   QString commentStr = "/* create " + elementTypeStr + " " + QString::number(changeElement->getId());
   commentStr += "*/\n";
-  _outputSql.write((commentStr).toUtf8());
+  _outputSql.write(commentStr.toUtf8());
 
   const QString values = _getInsertValuesStr(changeElement);
   _outputSql.write(
@@ -391,7 +392,7 @@ void OsmApiDbSqlChangesetFileWriter::_updateExistingElement(ConstElementPtr elem
   LOG_VART(changeElement->getVersion());
   QString commentStr = "/* modify " + elementTypeStr + " " + QString::number(changeElement->getId());
   commentStr += "*/\n";
-  _outputSql.write((commentStr).toUtf8());
+  _outputSql.write(commentStr.toUtf8());
 
   // <element-name> table contains all version of all elements of that type in a history, so insert
   // into that table.
@@ -456,7 +457,7 @@ void OsmApiDbSqlChangesetFileWriter::_deleteExistingElement(ConstElementPtr elem
   LOG_VART(changeElement->getVersion());
   QString commentStr = "/* delete " + elementTypeStr + " " + QString::number(changeElement->getId());
   commentStr += "*/\n";
-  _outputSql.write((commentStr).toUtf8());
+  _outputSql.write(commentStr.toUtf8());
 
   //OSM API DB keeps history for all elements, so the existing element in the master table is not
   //modified and a new record is added with the updated version and visible set to false

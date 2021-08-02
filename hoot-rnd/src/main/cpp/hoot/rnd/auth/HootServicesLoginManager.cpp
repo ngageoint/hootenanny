@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "HootServicesLoginManager.h"
@@ -86,7 +86,7 @@ QString HootServicesLoginManager::_getLogoutUrl()
 QString HootServicesLoginManager::getRequestToken(QString& authUrlStr)
 {
   HootNetworkRequest requestTokenRequest;
-  _cookies.reset(new HootNetworkCookieJar());
+  _cookies = std::make_shared<HootNetworkCookieJar>();
   requestTokenRequest.setCookies(_cookies);
   try
   {
@@ -128,7 +128,7 @@ QString HootServicesLoginManager::promptForAuthorizationVerifier() const
 }
 
 long HootServicesLoginManager::verifyUserAndLogin(const QString& requestToken,
-                                                  const QString& verifier, QString& userName)
+                                                  const QString& verifier, QString& userName) const
 {
   QUrl loginUrl;
   HootNetworkRequest loginRequest = _getLoginRequest(requestToken, verifier, loginUrl);
@@ -191,7 +191,7 @@ long HootServicesLoginManager::_parseLoginResponse(const QString& response) cons
 }
 
 void HootServicesLoginManager::getAccessTokens(const long userId, QString& accessToken,
-                                               QString& accessTokenSecret)
+                                               QString& accessTokenSecret) const
 {
   HootApiDb db;
   LOG_VARD(HootApiDb::getBaseUrl());
@@ -212,7 +212,7 @@ void HootServicesLoginManager::getAccessTokens(const long userId, QString& acces
 }
 
 bool HootServicesLoginManager::logout(const QString& userName, const QString& accessToken,
-                                      const QString& accessTokenSecret)
+                                      const QString& accessTokenSecret) const
 {
   HootApiDb db;
   //hoot db requires a layer to open, but we don't need one here...so put anything in

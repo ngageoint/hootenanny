@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "FilteredVisitor.h"
 
@@ -38,27 +38,23 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, FilteredVisitor)
 
-FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisitor& visitor) :
-  _criterion(&criterion),
-  _visitor(&visitor)
+FilteredVisitor::FilteredVisitor() :
+_criterion(nullptr),
+_visitor(nullptr)
 {
 }
 
-FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisitorPtr visitor) :
+FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisitor& visitor) :
   _criterion(&criterion),
-  _visitor(visitor.get())
+  _visitor(&visitor),
+  _map(nullptr)
 {
 }
 
 FilteredVisitor::FilteredVisitor(ElementCriterionPtr criterion, ElementVisitorPtr visitor) :
   _criterion(criterion.get()),
-  _visitor(visitor.get())
-{
-}
-
-FilteredVisitor::FilteredVisitor(ElementCriterion* criterion, ElementVisitor* visitor) :
-  _criterion(criterion),
-  _visitor(visitor)
+  _visitor(visitor.get()),
+  _map(nullptr)
 {
 }
 
@@ -83,7 +79,7 @@ void FilteredVisitor::addVisitor(const ElementVisitorPtr& v)
 void FilteredVisitor::setOsmMap(OsmMap* map)
 {
   ConstOsmMapConsumer* c = dynamic_cast<ConstOsmMapConsumer*>(_visitor);
-  if (c != 0)
+  if (c != nullptr)
   {
     c->setOsmMap(map);
   }
@@ -93,7 +89,7 @@ void FilteredVisitor::setOsmMap(OsmMap* map)
 void FilteredVisitor::setOsmMap(const OsmMap* map)
 {
   ConstOsmMapConsumer* c = dynamic_cast<ConstOsmMapConsumer*>(_visitor);
-  if (c != 0)
+  if (c != nullptr)
   {
     c->setOsmMap(map);
   }
@@ -105,7 +101,9 @@ void FilteredVisitor::visit(const ConstElementPtr& e)
   LOG_VART(e->getElementId());
   if (_criterion->isSatisfied(e))
   {
-    LOG_TRACE("crit: " << _criterion->toString() << " satisfied for: " << e->getElementId());
+    LOG_TRACE(
+      "crit: " << _criterion->toString() << " satisfied for: " << e->getElementId() <<
+      ". Calling visitor: " << _visitor->getName());
     // This is bad. Making this change was the result of a cascading set of const correctness
     // changes necessary in order to be able to call ElementVisitor from js files and not just
     // ConstElementVisitor (#2831). We may need some re-design.
@@ -121,8 +119,8 @@ double FilteredVisitor::getStat(ElementCriterionPtr criterion, ElementVisitorPtr
                                 const ConstOsmMapPtr& map)
 {
   FilteredVisitor filteredVisitor(criterion, visitor);
-  SingleStatistic* stat = dynamic_cast<SingleStatistic*>(&filteredVisitor.getChildVisitor());
-  if (stat == 0)
+  const SingleStatistic* stat = dynamic_cast<SingleStatistic*>(&filteredVisitor.getChildVisitor());
+  if (stat == nullptr)
   {
     throw HootException("Visitor does not implement SingleStatistic.");
   }
@@ -134,15 +132,15 @@ double FilteredVisitor::getStat(ElementCriterionPtr criterion, ElementVisitorPtr
 double FilteredVisitor::getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
                                 const ConstOsmMapPtr& map, const ElementPtr& element)
 {
-  return getStat(criterion.get(), visitor.get(), map, element);
+  return getStat(*criterion, *visitor, map, element);
 }
 
-double FilteredVisitor::getStat(ElementCriterion* criterion, ElementVisitor* visitor,
+double FilteredVisitor::getStat(const ElementCriterion& criterion, ElementVisitor& visitor,
                                 const ConstOsmMapPtr& map, const ElementPtr& element)
 {
   FilteredVisitor filteredVisitor(criterion, visitor);
-  SingleStatistic* stat = dynamic_cast<SingleStatistic*>(&filteredVisitor.getChildVisitor());
-  if (stat == 0)
+  const SingleStatistic* stat = dynamic_cast<SingleStatistic*>(&filteredVisitor.getChildVisitor());
+  if (stat == nullptr)
   {
     throw HootException("Visitor does not implement SingleStatistic.");
   }

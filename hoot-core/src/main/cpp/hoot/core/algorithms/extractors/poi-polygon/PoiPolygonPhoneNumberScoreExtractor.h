@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef POIPOLYGONPHONENUMBERSCOREEXTRACTOR_H
@@ -43,7 +43,8 @@ class OsmMap;
 class Element;
 
 /**
- * Scores phone number similarity between features.
+ * @brief The PoiPolygonPhoneNumberScoreExtractor class scores phone number similarity between
+ * features for POI to Polygon conflation.
  */
 class PoiPolygonPhoneNumberScoreExtractor : public FeatureExtractorBase, public Configurable
 {
@@ -52,18 +53,16 @@ public:
   static QString className() { return "hoot::PoiPolygonPhoneNumberScoreExtractor"; }
 
   PoiPolygonPhoneNumberScoreExtractor();
-  virtual ~PoiPolygonPhoneNumberScoreExtractor() = default;
+  ~PoiPolygonPhoneNumberScoreExtractor() = default;
 
-  virtual QString getClassName() const override { return className(); }
+  double extract(const OsmMap& map, const ConstElementPtr& poi,
+                 const ConstElementPtr& poly) const override;
 
-  virtual QString getName() const { return className(); }
+  void setConfiguration(const Settings& conf) override;
 
-  virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
-                         const ConstElementPtr& poly) const;
-
-  virtual void setConfiguration(const Settings& conf);
-
-  virtual QString getDescription() const
+  QString getClassName() const override { return className(); }
+  QString getName() const  override{ return className(); }
+  QString getDescription() const override
   { return "Scores phone number similarity for POI/Polygon conflation"; }
 
   long getPhoneNumbersProcessed() const { return _phoneNumberParser.getPhoneNumbersProcessed(); }

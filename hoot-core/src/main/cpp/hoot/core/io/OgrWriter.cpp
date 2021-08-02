@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OgrWriter.h"
 
@@ -63,6 +63,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Settings.h>
@@ -95,377 +96,20 @@ static OGRFieldType toOgrFieldType(QVariant::Type t)
 }
 
 OgrWriter::OgrWriter():
-  _elementCache(
-    new ElementCacheLRU(
-      ConfigOptions().getElementCacheSizeNode(),
-      ConfigOptions().getElementCacheSizeWay(),
-      ConfigOptions().getElementCacheSizeRelation())),
-  _wgs84(),
-  _failOnSkipRelation(false)
+_elementCache(
+  std::make_shared<ElementCacheLRU>(
+    ConfigOptions().getElementCacheSizeNode(),
+    ConfigOptions().getElementCacheSizeWay(),
+    ConfigOptions().getElementCacheSizeRelation())),
+_wgs84(),
+_failOnSkipRelation(false),
+_numWritten(0),
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
 {
   setConfiguration(conf());
 
   _maxFieldWidth = -1; // We set this if we really need to.
   _wgs84.SetWellKnownGeogCS("WGS84");
-}
-
-void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f,
-                            const std::shared_ptr<Geometry>& g)
-{
-  OGRFeature* poFeature = OGRFeature::CreateFeature( layer->GetLayerDefn() );
-
-  // set all the column values.
-  const QVariantMap& vm = f->getValues();
-
-  for (QVariantMap::const_iterator it = vm.constBegin(); it != vm.constEnd(); ++it)
-  {
-    const QVariant& v = it.value();
-    QByteArray ba = it.key().toUtf8();
-
-    // If the field DOESN'T exist in the output layer, skip it.
-    if (poFeature->GetFieldIndex(ba.constData()) == -1)
-    {
-      continue;
-    }
-
-    switch (v.type())
-    {
-    case QVariant::Invalid:
-      poFeature->UnsetField(poFeature->GetFieldIndex(ba.constData()));
-      break;
-    case QVariant::Int:
-      poFeature->SetField(ba.constData(), v.toInt());
-      break;
-    case QVariant::LongLong:
-      poFeature->SetField(ba.constData(), v.toLongLong());
-      break;
-    case QVariant::Double:
-      poFeature->SetField(ba.constData(), v.toDouble());
-      break;
-    case QVariant::String:
-    {
-      QByteArray vba = v.toString().toUtf8();
-
-      int fieldWidth =
-        poFeature->GetFieldDefnRef(poFeature->GetFieldIndex(ba.constData()))->GetWidth();
-
-      if (vba.length() > fieldWidth && fieldWidth > 0)
-      {
-        if (logWarnCount < Log::getWarnMessageLimit())
-        {
-          LOG_WARN(
-            "Truncating the " << it.key() << " attribute (" << vba.length() <<
-            " characters) to the output field width (" << fieldWidth << " characters).");
-        }
-        else if (logWarnCount == Log::getWarnMessageLimit())
-        {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-        }
-        logWarnCount++;
-
-        vba.truncate(fieldWidth);
-      }
-
-      poFeature->SetField(ba.constData(), vba.constData());
-      break;
-    }
-    default:
-      strictError("Can't convert the provided value into an OGR value. (" + v.toString() + ")");
-      return;
-    }
-  }
-
-  // convert the geometry.
-  std::shared_ptr<GeometryCollection> gc = std::dynamic_pointer_cast<GeometryCollection>(g);
-  if (gc.get() != 0)
-  {
-    for (size_t i = 0; i < gc->getNumGeometries(); i++)
-    {
-      const Geometry* child = gc->getGeometryN(i);
-      _addFeatureToLayer(layer, f, child, poFeature);
-    }
-  }
-  else
-  {
-    _addFeatureToLayer(layer, f, g.get(), poFeature);
-  }
-
-  OGRFeature::DestroyFeature(poFeature);
-}
-
-void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Feature>& f,
-                                   const Geometry* g, OGRFeature* poFeature)
-{
-  std::string wkt = g->toString();
-  char* t = (char*)wkt.data();
-  OGRGeometry* geom;
-  int errCode = OGRGeometryFactory::createFromWkt(&t, layer->GetSpatialRef(), &geom) ;
-  if (errCode != OGRERR_NONE)
-  {
-    throw HootException(
-      QString("Error parsing WKT (%1).  OGR Error Code: (%2)")
-        .arg(QString::fromStdString(wkt))
-        .arg(QString::number(errCode)));
-  }
-
-  errCode = poFeature->SetGeometryDirectly(geom);
-  if (errCode != OGRERR_NONE)
-  {
-    throw HootException(
-      QString("Error setting geometry - OGR Error Code: (%1)  Geometry: (%2)")
-        .arg(QString::number(errCode)).arg(QString::fromStdString(g->toString())));
-  }
-
-  // Unsetting the FID with SetFID(-1) before calling CreateFeature() to avoid reusing the same
-  // feature object for sequential insertions
-  poFeature->SetFID(-1);
-
-  errCode = layer->CreateFeature(poFeature);
-  if (errCode != OGRERR_NONE)
-  {
-    throw HootException(
-      QString("Error creating feature - OGR Error Code: (%1) \nFeature causing error: (%2)")
-        .arg(QString::number(errCode)).arg(f->toString()));
-  }
-}
-
-void OgrWriter::close()
-{
-  _layers.clear();
-  _ds->FlushCache();
-  _ds.reset();
-}
-
-void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
-{
-  OGRLayer *poLayer;
-
-  OGRwkbGeometryType gtype;
-  switch(layer->getGeometryType())
-  {
-  case GEOS_POINT:
-    gtype = wkbPoint;
-    break;
-  case GEOS_LINESTRING:
-    gtype = wkbLineString;
-    break;
-  case GEOS_POLYGON:
-    gtype = wkbPolygon;
-    break;
-  default:
-    throw HootException("Unexpected geometry type.");
-  }
-
-  OgrOptions options;
-  if (_ds->GetDriver())
-  {
-    QString name = _ds->GetDriverName();
-    // if this is a CSV file
-    if (name == QString("CSV"))
-    {
-      // if we're exporting point data, then export with x/y at the front
-      if (gtype == wkbPoint)
-      {
-        options["GEOMETRY"] = "AS_XY";
-      }
-      // if we're exporting other geometries then export w/ WKT at the front.
-      else
-      {
-        options["GEOMETRY"] = "AS_WKT";
-      }
-      options["CREATE_CSVT"] = "YES";
-    }
-
-    if (name == QString("ESRI Shapefile"))
-    {
-      options["ENCODING"] = "UTF-8";
-      _maxFieldWidth = 254; // Shapefile DBF limit
-    }
-
-    // Add a Feature Dataset to a ESRI File GeoDatabase if requested
-    if (name == QString("FileGDB"))
-    {
-      if (layer->getFdName() != "")
-      {
-        options["FEATURE_DATASET"] = layer->getFdName();
-        // speed up bulk inserts.
-        // NOTE: Seems to be depreciated in GDAL 2.0+
-        //options["FGDB_BULK_LOAD"] = "YES";
-      }
-    }
-  }
-
-  QString layerName = _prependLayerName + layer->getName();
-  poLayer = _ds->GetLayerByName(layerName.toStdString().c_str());
-
-  // We only want to add to a layer IFF the config option "ogr.append.data" set
-  if (poLayer != NULL && _appendData)
-  {
-    // Layer exists
-    _layers[layer->getName()] = poLayer;
-    // Loop through the fields making sure that they exist in the output. Print a warning if
-    // they don't exist
-    OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
-    std::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
-
-
-    for (size_t i = 0; i < fd->getFieldCount(); i++)
-    {
-      std::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
-
-      if (poFDefn->GetFieldIndex(f->getName().toLatin1()) == -1)
-      {
-        if (logWarnCount < Log::getWarnMessageLimit())
-        {
-          LOG_WARN("Unable to find field: " << QString(f->getName()) << " in layer " << layerName);
-        }
-        else if (logWarnCount == Log::getWarnMessageLimit())
-        {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-        }
-        logWarnCount++;
-      }
-    }
-  }
-  else
-  {
-    LOG_DEBUG("Layer: " << layerName << " not found.  Creating layer...");
-    std::shared_ptr<OGRSpatialReference> projection = MapProjector::createWgs84Projection();
-    poLayer = _ds->CreateLayer(layerName.toLatin1(), projection.get(),
-                  gtype, options.getCrypticOptions());
-
-    if (poLayer == NULL)
-    {
-      throw HootException(QString("Layer creation failed. %1").arg(layerName));
-    }
-    _layers[layer->getName()] = poLayer;
-    _projections[layer->getName()] = projection;
-
-    std::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
-    for (size_t i = 0; i < fd->getFieldCount(); i++)
-    {
-      std::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
-      OGRFieldDefn oField(f->getName().toLatin1(), toOgrFieldType(f->getType()));
-
-      // Fix the field length but only for Strings
-      if (oField.GetType() == OFTString)
-      {
-        // If the schema sets a field width then use it.
-        if (f->getWidth() > 0)
-        {
-          oField.SetWidth(f->getWidth());
-        }
-        else if (_maxFieldWidth > 0) // Looking at you Shapefile.....
-        {
-          oField.SetWidth(_maxFieldWidth);
-        }
-      }
-
-      int errCode = poLayer->CreateField(&oField);
-      if (errCode != OGRERR_NONE)
-      {
-        throw HootException(
-          QString("Error creating field (%1)  OGR Error Code: (%2).")
-            .arg(f->getName()).arg(QString::number(errCode)));
-      }
-    }
-  } // End layer does not exist
-}
-
-OGRLayer* OgrWriter::_getLayer(const QString& layerName)
-{
-  if (!_layers.contains(layerName))
-  {
-    if (!_schema->hasLayer(layerName))
-    {
-      strictError("Layer specified is not part of the schema. (" + layerName + ")");
-      return 0;
-    }
-    else
-    {
-      _createLayer(_schema->getLayer(layerName));
-    }
-  }
-
-  return _layers[layerName];
-}
-
-bool OgrWriter::isSupported(const QString& url)
-{
-  if (_scriptPath.isEmpty())
-  {
-    return false;
-  }
-  return OgrUtilities::getInstance().isReasonableUrl(url);
-}
-
-void OgrWriter::initTranslator()
-{
-  if (_scriptPath.isEmpty())
-  {
-    throw HootException("A script path must be set before the output data source is opened.");
-  }
-
-  if (_translator == 0)
-  {
-    // Great bit of code taken from TranslatedTagDifferencer.cpp
-    std::shared_ptr<ScriptSchemaTranslator> st(
-      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_scriptPath));
-    st->setErrorTreatment(_strictChecking);
-    _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
-  }
-
-  if (!_translator)
-  {
-    throw HootException("Error allocating translator, the translation script must support "
-                        "converting to OGR.");
-  }
-
-  _schema = _translator->getOgrOutputSchema();
-}
-
-void OgrWriter::createAllLayers()
-{
-  if (_createAllLayers)
-  {
-    LOG_INFO("Creating all layers...");
-    for (size_t i = 0; i < _schema->getLayerCount(); ++i)
-    {
-      _createLayer(_schema->getLayer(i));
-    }
-  }
-}
-
-void OgrWriter::openOutput(const QString& url)
-{
-  try
-  {
-    _ds = OgrUtilities::getInstance().openDataSource(url, false);
-  }
-  catch(const HootException& openException)
-  {
-    try
-    {
-      _ds = OgrUtilities::getInstance().createDataSource(url);
-    }
-    catch(const HootException& createException)
-    {
-      throw HootException(QString("Error opening or creating data source. Opening error: \"%1\" "
-        "Creating error: \"%2\"").arg(openException.what()).arg(createException.what()));
-    }
-  }
-}
-
-void OgrWriter::open(const QString& url)
-{
-  // Initialize our translator - this will load the schema
-  initTranslator();
-
-  // Open output dataset
-  openOutput(url);
-
-  // Create all layers if _createAllLayers flag
-  createAllLayers();
 }
 
 void OgrWriter::setConfiguration(const Settings& conf)
@@ -493,48 +137,17 @@ void OgrWriter::setConfiguration(const Settings& conf)
   {
     throw HootException("Error setting strict checking. Expected on/off/warn. got: " + strictStr);
   }
+
+  _statusUpdateInterval = configOptions.getTaskStatusUpdateInterval() * 10;
 }
 
-std::shared_ptr<Geometry> OgrWriter::_toMulti(const std::shared_ptr<Geometry>& from)
+void OgrWriter::setCacheCapacity(const unsigned long maxNodes, const unsigned long maxWays,
+                                 const unsigned long maxRelations)
 {
-  std::shared_ptr<Geometry> result;
-
-  switch (from->getGeometryTypeId())
-  {
-  case GEOS_POINT:
-  {
-    vector<Geometry*> v;
-    v.push_back(from.get());
-    result.reset(GeometryFactory::getDefaultInstance()->createMultiPoint(v));
-    break;
-  }
-  case GEOS_LINESTRING:
-  {
-    vector<Geometry*> v;
-    v.push_back(from.get());
-    result.reset(GeometryFactory::getDefaultInstance()->createMultiLineString(v));
-    break;
-  }
-  case GEOS_POLYGON:
-  {
-    vector<Geometry*> v;
-    v.push_back(from.get());
-    result.reset(GeometryFactory::getDefaultInstance()->createMultiPolygon(v));
-    break;
-  }
-  case GEOS_MULTIPOINT:
-  case GEOS_MULTILINESTRING:
-  case GEOS_MULTIPOLYGON:
-    result = from;
-    break;
-  default:
-    throw HootException("Unexpected geometry type: " + from->getGeometryType());
-  }
-
-  return result;
+  _elementCache = std::make_shared<ElementCacheLRU>(maxNodes, maxWays, maxRelations);
 }
 
-void OgrWriter::strictError(const QString& warning)
+void OgrWriter::_strictError(const QString& warning) const
 {
   if (_strictChecking == StrictOn)
   {
@@ -546,8 +159,86 @@ void OgrWriter::strictError(const QString& warning)
   }
 }
 
+void OgrWriter::open(const QString& url)
+{
+  _numWritten = 0;
+
+  // Initialize our translator - this will load the schema
+  initTranslator();
+
+  // Open output dataset
+  openOutput(url);
+
+  // Create all layers if _createAllLayers flag
+  createAllLayers();
+}
+
+void OgrWriter::openOutput(const QString& url)
+{
+  try
+  {
+    _ds = OgrUtilities::getInstance().openDataSource(url, false);
+  }
+  catch (const HootException& openException)
+  {
+    try
+    {
+      _ds = OgrUtilities::getInstance().createDataSource(url);
+    }
+    catch (const HootException& createException)
+    {
+      throw HootException(QString("Error opening or creating data source. Opening error: \"%1\" "
+        "Creating error: \"%2\"").arg(openException.what()).arg(createException.what()));
+    }
+  }
+}
+
+void OgrWriter::close()
+{
+  _layers.clear();
+  _ds->FlushCache();
+  _ds.reset();
+}
+
+bool OgrWriter::isSupported(const QString& url)
+{
+  LOG_VARD(_scriptPath.isEmpty());
+  if (_scriptPath.isEmpty())
+  {
+    return false;
+  }
+  LOG_VARD(OgrUtilities::getInstance().isReasonableUrl(url));
+  return OgrUtilities::getInstance().isReasonableUrl(url);
+}
+
+void OgrWriter::initTranslator()
+{
+  if (_scriptPath.isEmpty())
+  {
+    throw HootException("A script path must be set before the output data source is opened.");
+  }
+
+  if (_translator == nullptr)
+  {
+    // Great bit of code taken from TranslatedTagDifferencer.cpp
+    std::shared_ptr<ScriptSchemaTranslator> st =
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_scriptPath);
+    st->setErrorTreatment(_strictChecking);
+    _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
+  }
+
+  if (!_translator)
+  {
+    throw HootException("Error allocating translator, the translation script must support "
+                        "converting to OGR.");
+  }
+
+  _schema = _translator->getOgrOutputSchema();
+}
+
 void OgrWriter::write(const ConstOsmMapPtr& map)
 {
+  _numWritten = 0;
   ElementProviderPtr provider(std::const_pointer_cast<ElementProvider>(
     std::dynamic_pointer_cast<const ElementProvider>(map)));
 
@@ -571,9 +262,9 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
   {
     _writePartial(provider, it->second);
   }
-  //Since relations may contain other relations, which were unavailable to write during the first
-  //pass, we're doing two write passes here.  We're only allowing two total passes for writing the
-  //relations, so fail if any get skipped during the second pass.
+  // Since relations may contain other relations, which were unavailable to write during the first
+  // pass, we're doing two write passes here.  We're only allowing two total passes for writing the
+  // relations, so fail if any get skipped during the second pass.
   _failOnSkipRelation = true;
   LOG_DEBUG("Writing second pass relations...");
   for (QList<long>::const_iterator relationIdIter = _unwrittenFirstPassRelationIds.begin();
@@ -583,14 +274,12 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
   }
 }
 
-// Todo.. maybe return a reference or something, to avoid a copy
- void OgrWriter::translateToFeatures(
-          ElementProviderPtr& provider,
-          const ConstElementPtr& e,
-          std::shared_ptr<Geometry> &g, // output
-          std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> &tf) // output
+void OgrWriter::translateToFeatures(
+  const ElementProviderPtr& provider, const ConstElementPtr& e,
+  std::shared_ptr<Geometry> &g, // output
+  std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> &tf) const
 {
-  if (_translator.get() == 0)
+  if (!_translator)
   {
     throw HootException("You must call open before attempting to write.");
   }
@@ -598,8 +287,8 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
   if (e->getTags().getInformationCount() > 0)
   {
     // There is probably a cleaner way of doing this.
-    // convertToGeometry calls  getGeometryType which will throw an exception if it gets a relation
-    // that it doesn't know about. E.g. "route", "superroute", " turnlanes:turns" etc
+    // convertToGeometry calls getGeometryType which will throw an exception if it gets a relation
+    // that it doesn't know about. E.g. "route", "superroute", "turnlanes:turns", etc
 
     try
     {
@@ -616,10 +305,10 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
       logWarnCount++;
-      g.reset((GeometryFactory::getDefaultInstance()->createEmptyGeometry()));
+      g = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
     }
 
-    LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType() );
+    LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType());
 
     Tags t = e->getTags();
     for (Tags::const_iterator it = t.begin(); it != t.end(); ++it)
@@ -643,7 +332,7 @@ void OgrWriter::writeTranslatedFeature(
   {
     LOG_TRACE("Writing feature " + QString::number(i) + "  to " + QString(tf[i].tableName));
     OGRLayer* layer = _getLayer(tf[i].tableName);
-    if (layer != 0)
+    if (layer != nullptr)
     {
       _addFeature(layer, tf[i].feature, g);
     }
@@ -655,18 +344,25 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
   std::shared_ptr<Geometry> g;
   vector<ScriptToOgrSchemaTranslator::TranslatedFeature> tf;
 
-  ElementPtr elementClone(element->clone());
+  ElementPtr elementClone = element->clone();
   _addExportTagsVisitor.visit(elementClone);
 
   translateToFeatures(provider, elementClone, g, tf);
   writeTranslatedFeature(g, tf);
+
+  _numWritten++;
+  if (_numWritten % _statusUpdateInterval == 0)
+  {
+    PROGRESS_STATUS(
+      "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+  }
 }
 
 void OgrWriter::finalizePartial()
 {
 }
 
-void OgrWriter::writePartial(const std::shared_ptr<const hoot::Node>& newNode)
+void OgrWriter::writePartial(const ConstNodePtr& newNode)
 {
   LOG_TRACE("Writing node " << newNode->getId());
 
@@ -679,51 +375,51 @@ void OgrWriter::writePartial(const std::shared_ptr<const hoot::Node>& newNode)
   _writePartial(cacheProvider, newNode);
 }
 
-void OgrWriter::writePartial(const std::shared_ptr<const hoot::Way>& newWay)
+void OgrWriter::writePartial(const ConstWayPtr& way)
 {
-  LOG_TRACE("Writing way " << newWay->getId() );
+  LOG_TRACE("Writing way " << way->getId() );
 
   /*
    * Make sure this way has any hope of working (i.e., are there enough spots in the cache
-   * for all its nodes?
+   * for all its nodes?)
    */
-  if ((unsigned long)newWay->getNodeCount() > _elementCache->getNodeCacheSize())
+  if (way->getNodeCount() > _elementCache->getNodeCacheSize())
   {
-    throw HootException("Cannot do partial write of Way ID " + QString::number(newWay->getId()) +
-      " as it contains " + QString::number(newWay->getNodeCount()) + " nodes, but our cache can " +
+    throw HootException("Cannot do partial write of Way ID " + QString::number(way->getId()) +
+      " as it contains " + QString::number(way->getNodeCount()) + " nodes, but our cache can " +
       " only hold " + QString::number(_elementCache->getNodeCacheSize()) + ".  If you have enough " +
       " memory to load this way, you can increase the element.cache.size.node setting to " +
-      " an appropriate value larger than " + QString::number(newWay->getNodeCount()) +
+      " an appropriate value larger than " + QString::number(way->getNodeCount()) +
       " to allow for loading it.");
   }
 
   // Make sure all the nodes in the way are in our cache
-  const std::vector<long> wayNodeIds = newWay->getNodeIds();
+  const std::vector<long> wayNodeIds = way->getNodeIds();
   std::vector<long>::const_iterator nodeIdIterator;
 
   for (nodeIdIterator = wayNodeIds.begin(); nodeIdIterator != wayNodeIds.end(); ++nodeIdIterator)
   {
     if (_elementCache->containsNode(*nodeIdIterator) == false)
     {
-      throw HootException("Way " + QString::number(newWay->getId()) + " contains node " +
+      throw HootException("Way " + QString::number(way->getId()) + " contains node " +
         QString::number(*nodeIdIterator) + ", which is not present in the cache.  If you have the " +
           "memory to support this number of nodes, you can increase the element.cache.size.node " +
           "setting above: " + QString::number(_elementCache->getNodeCacheSize()) + ".");
     }
-    LOG_TRACE("Way " << newWay->getId() << " contains node " << *nodeIdIterator <<
+    LOG_TRACE("Way " << way->getId() << " contains node " << *nodeIdIterator <<
                  ": " << _elementCache->getNode(*nodeIdIterator)->getX() << ", " <<
                 _elementCache->getNode(*nodeIdIterator)->getY() );
   }
 
   // Add to the element cache
-  ConstElementPtr constWay(newWay);
+  ConstElementPtr constWay(way);
   _elementCache->addElement(constWay);
 
   ElementProviderPtr cacheProvider(_elementCache);
-  _writePartial(cacheProvider, newWay);
+  _writePartial(cacheProvider, way);
 }
 
-void OgrWriter::writePartial(const std::shared_ptr<const hoot::Relation>& newRelation)
+void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
 {
   LOG_TRACE("Writing relation " << newRelation->getId());
 
@@ -833,11 +529,6 @@ void OgrWriter::writePartial(const std::shared_ptr<const hoot::Relation>& newRel
 
 void OgrWriter::writeElement(ElementPtr &element)
 {
-  writeElement(element, false);
-}
-
-void OgrWriter::writeElement(ElementPtr &element, bool debug)
-{
   //  Do not attempt to write empty elements
   if (!element)
     return;
@@ -853,20 +544,287 @@ void OgrWriter::writeElement(ElementPtr &element, bool debug)
   // Now that all the empties are gone, update our element
   element->setTags(destTags);
 
-  if (debug == true)
-  {
-    LOG_TRACE(element->toString());
-  }
-
   PartialOsmMapWriter::writePartial(element);
 }
 
-void OgrWriter::setCacheCapacity(const unsigned long maxNodes, const unsigned long maxWays,
-                                 const unsigned long maxRelations)
+void OgrWriter::createAllLayers()
 {
-  _elementCache.reset();
-  _elementCache =
-    std::shared_ptr<ElementCache>(new ElementCacheLRU(maxNodes, maxWays, maxRelations));
+  if (_createAllLayers)
+  {
+    LOG_INFO("Creating all layers...");
+    for (size_t i = 0; i < _schema->getLayerCount(); ++i)
+    {
+      _createLayer(_schema->getLayer(i));
+    }
+  }
+}
+
+void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
+{
+  OGRLayer *poLayer;
+
+  OGRwkbGeometryType gtype;
+  switch(layer->getGeometryType())
+  {
+  case GEOS_POINT:
+    gtype = wkbPoint;
+    break;
+  case GEOS_LINESTRING:
+    gtype = wkbLineString;
+    break;
+  case GEOS_POLYGON:
+    gtype = wkbPolygon;
+    break;
+  default:
+    throw HootException("Unexpected geometry type.");
+  }
+
+  OgrOptions options;
+  if (_ds->GetDriver())
+  {
+    QString name = _ds->GetDriverName();
+    // if this is a CSV file
+    if (name == QString("CSV"))
+    {
+      // if we're exporting point data, then export with x/y at the front
+      if (gtype == wkbPoint)
+      {
+        options["GEOMETRY"] = "AS_XY";
+      }
+      // if we're exporting other geometries then export w/ WKT at the front.
+      else
+      {
+        options["GEOMETRY"] = "AS_WKT";
+      }
+      options["CREATE_CSVT"] = "YES";
+    }
+
+    if (name == QString("ESRI Shapefile"))
+    {
+      options["ENCODING"] = "UTF-8";
+      _maxFieldWidth = 254; // Shapefile DBF limit
+    }
+
+    // Add a Feature Dataset to a ESRI File GeoDatabase if requested
+    if (name == QString("FileGDB") && layer->getFdName() != "")
+    {
+      options["FEATURE_DATASET"] = layer->getFdName();
+    }
+  }
+
+  QString layerName = _prependLayerName + layer->getName();
+  poLayer = _ds->GetLayerByName(layerName.toStdString().c_str());
+
+  // We only want to add to a layer IFF the config option "ogr.append.data" set
+  if (poLayer != nullptr && _appendData)
+  {
+    // Layer exists
+    _layers[layer->getName()] = poLayer;
+    // Loop through the fields making sure that they exist in the output. Print a warning if
+    // they don't exist
+    OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
+    std::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
+
+
+    for (size_t i = 0; i < fd->getFieldCount(); i++)
+    {
+      std::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
+
+      if (poFDefn->GetFieldIndex(f->getName().toLatin1()) == -1)
+      {
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN("Unable to find field: " << QString(f->getName()) << " in layer " << layerName);
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
+      }
+    }
+  }
+  else
+  {
+    LOG_DEBUG("Layer: " << layerName << " not found.  Creating layer...");
+    std::shared_ptr<OGRSpatialReference> projection = MapProjector::createWgs84Projection();
+    poLayer = _ds->CreateLayer(layerName.toLatin1(), projection.get(),
+                  gtype, options.getCrypticOptions());
+
+    if (poLayer == nullptr)
+    {
+      throw HootException(QString("Layer creation failed. %1").arg(layerName));
+    }
+    _layers[layer->getName()] = poLayer;
+    _projections[layer->getName()] = projection;
+
+    std::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
+    for (size_t i = 0; i < fd->getFieldCount(); i++)
+    {
+      std::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
+      OGRFieldDefn oField(f->getName().toLatin1(), toOgrFieldType(f->getType()));
+
+      // Fix the field length but only for Strings
+      if (oField.GetType() == OFTString)
+      {
+        // If the schema sets a field width then use it.
+        if (f->getWidth() > 0)
+        {
+          oField.SetWidth(f->getWidth());
+        }
+        else if (_maxFieldWidth > 0) // Looking at you Shapefile.....
+        {
+          oField.SetWidth(_maxFieldWidth);
+        }
+      }
+
+      int errCode = poLayer->CreateField(&oField);
+      if (errCode != OGRERR_NONE)
+      {
+        throw HootException(
+          QString("Error creating field (%1)  OGR Error Code: (%2).")
+            .arg(f->getName()).arg(QString::number(errCode)));
+      }
+    }
+  } // End layer does not exist
+}
+
+OGRLayer* OgrWriter::_getLayer(const QString& layerName)
+{
+  if (!_layers.contains(layerName))
+  {
+    if (!_schema->hasLayer(layerName))
+    {
+      _strictError("Layer specified is not part of the schema. (" + layerName + ")");
+      return nullptr;
+    }
+    else
+    {
+      _createLayer(_schema->getLayer(layerName));
+    }
+  }
+
+  return _layers[layerName];
+}
+
+void OgrWriter::_addFeature(
+  OGRLayer* layer, const std::shared_ptr<Feature>& f, const std::shared_ptr<Geometry>& g) const
+{
+  OGRFeature* poFeature = OGRFeature::CreateFeature( layer->GetLayerDefn() );
+
+  // set all the column values.
+  const QVariantMap& vm = f->getValues();
+
+  for (QVariantMap::const_iterator it = vm.constBegin(); it != vm.constEnd(); ++it)
+  {
+    const QVariant& v = it.value();
+    QByteArray ba = it.key().toUtf8();
+
+    // If the field DOESN'T exist in the output layer, skip it.
+    if (poFeature->GetFieldIndex(ba.constData()) == -1)
+    {
+      continue;
+    }
+
+    switch (v.type())
+    {
+    case QVariant::Invalid:
+      poFeature->UnsetField(poFeature->GetFieldIndex(ba.constData()));
+      break;
+    case QVariant::Int:
+      poFeature->SetField(ba.constData(), v.toInt());
+      break;
+    case QVariant::LongLong:
+      poFeature->SetField(ba.constData(), v.toLongLong());
+      break;
+    case QVariant::Double:
+      poFeature->SetField(ba.constData(), v.toDouble());
+      break;
+    case QVariant::String:
+    {
+      QByteArray vba = v.toString().toUtf8();
+
+      int fieldWidth =
+        poFeature->GetFieldDefnRef(poFeature->GetFieldIndex(ba.constData()))->GetWidth();
+
+      if (vba.length() > fieldWidth && fieldWidth > 0)
+      {
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN(
+            "Truncating the " << it.key() << " attribute (" << vba.length() <<
+            " characters) to the output field width (" << fieldWidth << " characters).");
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
+
+        vba.truncate(fieldWidth);
+      }
+
+      poFeature->SetField(ba.constData(), vba.constData());
+      break;
+    }
+    default:
+      _strictError("Can't convert the provided value into an OGR value. (" + v.toString() + ")");
+      return;
+    }
+  }
+
+  // convert the geometry.
+  std::shared_ptr<GeometryCollection> gc = std::dynamic_pointer_cast<GeometryCollection>(g);
+  if (gc.get() != nullptr)
+  {
+    for (size_t i = 0; i < gc->getNumGeometries(); i++)
+    {
+      const Geometry* child = gc->getGeometryN(i);
+      _addFeatureToLayer(layer, f, child, poFeature);
+    }
+  }
+  else
+  {
+    _addFeatureToLayer(layer, f, g.get(), poFeature);
+  }
+
+  OGRFeature::DestroyFeature(poFeature);
+}
+
+void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Feature>& f,
+                                   const Geometry* g, OGRFeature* poFeature) const
+{
+  std::string wkt = g->toString();
+  const char* t = (char*)wkt.data();
+  OGRGeometry* geom;
+  int errCode = OGRGeometryFactory::createFromWkt(&t, layer->GetSpatialRef(), &geom) ;
+  if (errCode != OGRERR_NONE)
+  {
+    throw HootException(
+      QString("Error parsing WKT (%1).  OGR Error Code: (%2)")
+        .arg(QString::fromStdString(wkt))
+        .arg(QString::number(errCode)));
+  }
+
+  errCode = poFeature->SetGeometryDirectly(geom);
+  if (errCode != OGRERR_NONE)
+  {
+    throw HootException(
+      QString("Error setting geometry - OGR Error Code: (%1)  Geometry: (%2)")
+        .arg(QString::number(errCode)).arg(QString::fromStdString(g->toString())));
+  }
+
+  // Unsetting the FID with SetFID(-1) before calling CreateFeature() to avoid reusing the same
+  // feature object for sequential insertions
+  poFeature->SetFID(-1);
+
+  errCode = layer->CreateFeature(poFeature);
+  if (errCode != OGRERR_NONE)
+  {
+    throw HootException(
+      QString("Error creating feature - OGR Error Code: (%1) \nFeature causing error: (%2)")
+        .arg(QString::number(errCode)).arg(f->toString()));
+  }
 }
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef FIND_STREET_INTERSECTIONS_BY_NAME_H
 #define FIND_STREET_INTERSECTIONS_BY_NAME_H
@@ -51,48 +51,38 @@ public:
   static QString className() { return "hoot::FindStreetIntersectionsByName"; }
 
   FindStreetIntersectionsByName() = default;
-  virtual ~FindStreetIntersectionsByName() = default;
+  ~FindStreetIntersectionsByName() = default;
 
-  virtual void apply(OsmMapPtr& map) override;
+  void apply(OsmMapPtr& map) override;
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * @see ApiEntityInfo
    */
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Locates street intersections by street name"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * @see OperationStatus
    */
-  virtual QString getInitStatusMessage() const { return "Locating street intersections..."; }
-
+  QString getInitStatusMessage() const override { return "Locating street intersections..."; }
   /**
    * @see OperationStatus
    */
-  virtual QString getCompletedStatusMessage() const
-  {
-    return
-      "Located " + StringUtils::formatLargeNumber(_numAffected) +
-      " street intersections for inputs: " + _nameCrit->getNames()[0] + " and " +
-      _nameCrit->getNames()[1] + " out of " + StringUtils::formatLargeNumber(_numProcessed) +
-      " streets.";
-  }
+  QString getCompletedStatusMessage() const override;
 
 private:
 
   std::shared_ptr<NameCriterion> _nameCrit;
 
   OsmMapPtr _filterRoadsByStreetName(
-    const QString& name, const Status& status, const ConstOsmMapPtr& map);
+    const QString& name, const Status& status, const ConstOsmMapPtr& map) const;
 };
 
 }

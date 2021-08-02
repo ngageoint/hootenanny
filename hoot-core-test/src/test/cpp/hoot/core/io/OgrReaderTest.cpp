@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -54,9 +54,7 @@ class OgrReaderTest : public HootTestFixture
 
 public:
 
-    OgrReaderTest()
-      : HootTestFixture("test-files/",
-                        UNUSED_PATH)
+    OgrReaderTest() : HootTestFixture("test-files/", UNUSED_PATH)
     {
     }
 
@@ -64,7 +62,7 @@ public:
     {
       OgrReader uut;
 
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
 
       CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
@@ -96,7 +94,7 @@ public:
         // resulting bounding box is
         // 19403.28m wide
         // 111385.6m tall
-        HOOT_STR_EQUALS("Env[-9701.64:9701.64,-55659:55726.6]",
+        HOOT_STR_EQUALS("Env[-9734.03:9734.03,-55842.4:55911]",
           uut.getBoundingBoxFromConfig(s, ortho1.get())->toString());
       }
 
@@ -114,7 +112,7 @@ public:
     {
       OgrReader uut;
 
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       uut.setSchemaTranslationScript("translations/cloudmade.js");
       uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
 
@@ -143,7 +141,7 @@ public:
     {
       OgrReader uut;
 
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       uut.setSchemaTranslationScript("cloudmade");
       uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
 
@@ -172,18 +170,18 @@ public:
     {
       OgrReader reader1;
 
-      // If we haven't opened a file, it best not be ready to read
+      // If we haven't opened a file, it best not be ready to read.
       CPPUNIT_ASSERT_EQUAL(reader1.hasMoreElements(), false);
 
-      // Try to open invalid file
+      // Try to open an invalid file.
       OgrReader reader2(_inputPath + "totalgarbage.osm.pbf");
       CPPUNIT_ASSERT_EQUAL(reader2.hasMoreElements(), false);
 
-      // Open valid file
+      // Open a valid file.
       OgrReader reader3(_inputPath + "jakarta_raya_coastline.shp");
       CPPUNIT_ASSERT_EQUAL(reader3.hasMoreElements(), true);
 
-      // Close file and check again
+      // Close the file and check again.
       reader3.close();
       CPPUNIT_ASSERT_EQUAL(reader3.hasMoreElements(), false);
     }
@@ -192,7 +190,7 @@ public:
     {
       OgrReader reader(_inputPath + "jakarta_raya_coastline.shp");
 
-      // Iterate through all items
+      // Iterate through all items.
       int numberOfElements(0);
       while (reader.hasMoreElements() == true)
       {

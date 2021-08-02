@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef APIDB_H
 #define APIDB_H
@@ -95,7 +95,7 @@ public:
   /**
    * This value should be updated after the DB is upgraded and all tests run successfully.
    */
-  static QString expectedHootDbVersion() { return "31:brandon.witham"; }
+  static QString expectedHootDbVersion() { return "33:bobby.simic"; }
   static int maximumChangeSetEdits() { return 50000; }
 
   static const Status DEFAULT_ELEMENT_STATUS;
@@ -159,8 +159,8 @@ public:
    * dealing with very large record sets
    * @return a result iterator to the elements
    */
-  virtual std::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
-                                                      const long minId = 0);
+  virtual std::shared_ptr<QSqlQuery> selectElements(
+    const ElementType& elementType, const long minId = 0);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -168,13 +168,6 @@ public:
   virtual std::vector<long> selectNodeIdsForWay(long wayId) = 0;
 
   std::vector<long> selectNodeIdsForWay(long wayId, const QString& sql);
-
-  /**
-   * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
-   */
-  virtual std::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) = 0;
-
-  std::shared_ptr<QSqlQuery> selectNodesForWay(long wayId, const QString& sql);
 
   /**
    * Returns a vector with all the relation members for a given relation
@@ -249,8 +242,8 @@ public:
    * @param tableType the type of database table to query
    * @return a SQL results iterator
    */
-  std::shared_ptr<QSqlQuery> selectElementsByElementIdList(const QSet<QString>& elementIds,
-                                                             const TableType& tableType);
+  std::shared_ptr<QSqlQuery> selectElementsByElementIdList(
+    const QSet<QString>& elementIds, const TableType& tableType);
 
   /**
    * Returns all the IDs of all nodes owned by the input way IDs
@@ -267,8 +260,8 @@ public:
    * @param memberElementType the element type of the associated relation member
    * @return a SQL results iterator
    */
-  std::shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
-                                                          const ElementType& memberElementType);
+  std::shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(
+    const QSet<QString>& memberIds, const ElementType& memberElementType);
 
   virtual QString tableTypeToTableName(const TableType& tableType) const = 0;
 
@@ -280,14 +273,6 @@ public:
    * @return a SQL results iterator
    */
   std::shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString& timeStr);
-
-  /**
-   * Gets the next sequence ID for the given element type
-   *
-   * @param elementType element type
-   * @return an element ID
-   */
-  virtual long getNextId(const ElementType& elementType) = 0;
 
   /**
    * Returns the number of elements of the given type in the database
@@ -386,14 +371,6 @@ public:
    */
   static void execSqlFile(const QString& dbUrl, const QString& sqlFile);
 
-  /**
-   * Converts an API database URL into the format needed by libpq
-   *
-   * @param url URL to convert
-   * @return a libpq command string
-   */
-  static QString getPqString(const QString& url);
-
   static Settings readDbConfig();
 
   static void readDbConfig(Settings& settings, const QString& config_path);
@@ -463,8 +440,9 @@ protected:
 
   long _maxElementsPerPartialMap;
 
-  QSqlQuery _exec(const QString& sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
-                  QVariant v3 = QVariant()) const;
+  QSqlQuery _exec(
+    const QString& sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
+    QVariant v3 = QVariant()) const;
 
   static void _unescapeString(QString& s);
 

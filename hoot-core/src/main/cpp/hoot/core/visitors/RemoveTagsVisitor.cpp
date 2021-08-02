@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RemoveTagsVisitor.h"
 
@@ -45,8 +45,8 @@ _numTagsRemoved(0)
 }
 
 RemoveTagsVisitor::RemoveTagsVisitor(const QStringList& keys) :
-_negateCriterion(false),
-_numTagsRemoved(0)
+_numTagsRemoved(0),
+_negateCriterion(false)
 {
   _setKeys(keys);
 }
@@ -55,16 +55,21 @@ void RemoveTagsVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   _setKeys(configOptions.getTagFilterKeys());
-  _negateCriterion = configOptions.getElementCriterionNegate();
+  _negateCriterion = configOptions.getElementCriteriaNegate();
   _setCriterion(configOptions.getTagFilterElementCriterion());
 }
 
 void RemoveTagsVisitor::_setKeys(const QStringList& keys)
 {
+  QSet<QString> keysParsed;
   for (int i = 0; i < keys.size(); i++)
   {
     const QString key = keys.at(i);
-    _keyRegexs.append(QRegExp(key, Qt::CaseInsensitive, QRegExp::Wildcard));
+    if (!keysParsed.contains(key))
+    {
+      keysParsed.insert(key);
+      _keyRegexs.append(QRegExp(key, Qt::CaseInsensitive, QRegExp::Wildcard));
+    }
   }
 }
 
@@ -76,7 +81,7 @@ void RemoveTagsVisitor::addCriterion(const ElementCriterionPtr& e)
   }
   else
   {
-    _criterion.reset(new NotCriterion(e));
+    _criterion = std::make_shared<NotCriterion>(e);
   }
 }
 
@@ -86,8 +91,7 @@ void RemoveTagsVisitor::_setCriterion(const QString& criterionName)
   {
     LOG_VART(criterionName);
     addCriterion(
-      std::shared_ptr<ElementCriterion>(
-        Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed())));
+      Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed()));
   }
 }
 

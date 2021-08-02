@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "AddBboxVisitor.h"
 
@@ -40,21 +40,17 @@ HOOT_FACTORY_REGISTER(ElementVisitor, AddBboxVisitor)
 
 void AddBboxVisitor::visit(const std::shared_ptr<Element>& e)
 {
-  if (e->getTags().getNonDebugCount() > 0)
+  if (e->getTags().getNonDebugCount() > 0 &&
+      e->getElementType() != ElementType::Node)
   {
-    // Skip nodes
-    if (e->getElementType() != ElementType::Node)
+    std::shared_ptr<geos::geom::Envelope> bounds(e->getEnvelope(_map->shared_from_this()));
+    if (bounds)
     {
-      std::shared_ptr<geos::geom::Envelope> bounds(e->getEnvelope(_map->shared_from_this()));
-
-      if (bounds)
-      {
-        e->getTags()["hoot:bbox"] =
-          QString("%1,%2,%3,%4").arg(QString::number(bounds->getMinX(), 'g', 10))
-            .arg(QString::number(bounds->getMinY(), 'g', 10))
-            .arg(QString::number(bounds->getMaxX(), 'g', 10))
-            .arg(QString::number(bounds->getMaxY(), 'g', 10));
-      }
+      e->getTags()["hoot:bbox"] =
+        QString("%1,%2,%3,%4").arg(QString::number(bounds->getMinX(), 'g', 10))
+          .arg(QString::number(bounds->getMinY(), 'g', 10))
+          .arg(QString::number(bounds->getMaxX(), 'g', 10))
+          .arg(QString::number(bounds->getMaxY(), 'g', 10));
     }
   }
 }

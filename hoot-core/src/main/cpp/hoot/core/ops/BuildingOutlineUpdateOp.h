@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef BUILDINGOUTLINEUPDATEOP_H
 #define BUILDINGOUTLINEUPDATEOP_H
@@ -50,27 +50,24 @@ public:
   static QString className() { return "hoot::BuildingOutlineUpdateOp"; }
 
   BuildingOutlineUpdateOp() = default;
-  virtual ~BuildingOutlineUpdateOp() = default;
+  ~BuildingOutlineUpdateOp() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
-
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Updating building outlines..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Updated " + QString::number(_numAffected) + " building outlines"; }
 
-  virtual QString getDescription() const override
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
   { return "Updates multi-part building outlines"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
 private:
 
@@ -79,16 +76,16 @@ private:
   std::shared_ptr<OsmMap> _map;
   ReviewMarker _reviewMarker;
 
-  void _createOutline(const RelationPtr& building);
+  void _createOutline(const RelationPtr& building) const;
   void _unionOutline(const RelationPtr& building, const ElementPtr& element,
-                     std::shared_ptr<geos::geom::Geometry>& outline);
+                     std::shared_ptr<geos::geom::Geometry>& outline) const;
 
   /**
    * Match nodes in change to nodes in reference. If there is an exact node match then change
    * "changed" by replacing the nodes with the equivalent nodes in reference.
    */
   void _mergeNodes(const std::shared_ptr<Element>& changed,
-                   const RelationPtr& reference);
+                   const RelationPtr& reference) const;
 };
 
 }

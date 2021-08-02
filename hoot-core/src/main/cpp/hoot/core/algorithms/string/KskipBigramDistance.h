@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef KSKIPBIGRAMDISTANCE_H
@@ -41,24 +41,27 @@
 namespace hoot
 {
 
-/** Work based on:
+/**
+ * @brief The KskipBigramDistance class compares two strings using K-skip bigram distance.
+ *
+ * This is a work based on:
  *  A Closer Look at Skip-gram Modelling
  *  David Guthrie, Ben Allison, Wei Liu, Louise Guthrie, Yorick Wilks
  *  http://homepages.inf.ed.ac.uk/ballison/pdf/lrec_skipgrams.pdf
  *
- *  NOTE: This algorithm isn't being used anywhere because tests on Geonames data showed
- *   that the Levenshtein distance outperformed or was equal to Skip-grams in 98.3% of the
- *   test cases.  The test were run as follows, Geonames data was used from four countries
- *   AF, AR, RU and US (http://download.geonames.org/export/dump/).  The test cases used only
- *   geonames POIs that contained alternate names to compare the original name against.  The
- *   first tests were run solely Skip-grams vs. Levenshtein and Skip-grams fared better on
- *   its own but when combined with other distance classes (ToEnglishTranslateStringDistance and
- *   MeanWordSetDistance) those results dropped off tremendously.  Since the Random Forest
- *   extractors apply both of those distances to Levenshtein, the test had to include them
- *   thus degrading and already degraded results.  So the ToEnglishTranslateStringDistance and
- *   MeanWordSetDistance classes were applied to both algorithms, counted, averaged, and
- *   reported.  Below is a sample of the data both before the two distance algorithms were
- *   applied and after:
+ *  This algorithm isn't being used anywhere because tests on Geonames data showed
+ *  that the Levenshtein distance outperformed or was equal to Skip-grams in 98.3% of the
+ *  test cases.  The test were run as follows, Geonames data was used from four countries
+ *  AF, AR, RU and US (http://download.geonames.org/export/dump/).  The test cases used only
+ *  geonames POIs that contained alternate names to compare the original name against.  The
+ *  first tests were run solely Skip-grams vs. Levenshtein and Skip-grams fared better on
+ *  its own but when combined with other distance classes (ToEnglishTranslateStringDistance and
+ *  MeanWordSetDistance) those results dropped off tremendously.  Since the Random Forest
+ *  extractors apply both of those distances to Levenshtein, the test had to include them
+ *  thus degrading and already degraded results.  So the ToEnglishTranslateStringDistance and
+ *  MeanWordSetDistance classes were applied to both algorithms, counted, averaged, and
+ *  reported.  Below is a sample of the data both before the two distance algorithms were
+ *  applied and after:
  *
  *  RESULTS:
  *                                         | Algorithms     | Algorithms          |
@@ -72,7 +75,6 @@ namespace hoot
  *
  *    ** - Only 1.77% of the time did Skip-grams give a better result on training data
  *         than did Levenshtein
- *
  */
 class KskipBigramDistance : public StringDistance
 {
@@ -81,28 +83,24 @@ public:
   static QString className() { return "hoot::KskipBigramDistance"; }
 
   KskipBigramDistance(int k = 2);
-  virtual ~KskipBigramDistance() = default;
+  ~KskipBigramDistance() = default;
 
   void setK(int k);
 
   /**
-   * Returns a value from 1 (very similar) to 0 (very dissimilar) describing the distance between
-   * two strings based on their k-skip bi-grams
+   * @see StringDistance
    */
-  virtual double compare(const QString& s1, const QString& s2) const override { return score(s1, s2); }
+  double compare(const QString& s1, const QString& s2) const override { return score(s1, s2); }
 
   QSet<QString> getBigrams(const QString& str) const;
 
   double score(const QString& s1, const QString& s2) const;
 
   QString toString() const override { return QString("%1-skip bi-gram").arg(_k); }
-
-  virtual QString getDescription() const override
-  { return "Returns a string comparison score derived using Skip-gram modelling"; }
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Returns a string comparison score derived using Skip-gram modeling"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
   /**

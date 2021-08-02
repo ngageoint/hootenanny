@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMXMLCHANGESETFILEWRITER_H
 #define OSMXMLCHANGESETFILEWRITER_H
@@ -57,33 +57,33 @@ public:
   static QString className() { return "hoot::OsmXmlChangesetFileWriter"; }
 
   OsmXmlChangesetFileWriter();
-  virtual ~OsmXmlChangesetFileWriter() = default;
+  ~OsmXmlChangesetFileWriter() = default;
 
   /**
    * @see ChangesetFileWriter
    */
-  virtual void write(const QString& path, const ChangesetProviderPtr& changesetProvider);
+  void write(const QString& path, const ChangesetProviderPtr& changesetProvider) override;
 
   /**
    * @see ChangesetFileWriter
    */
-  virtual void write(const QString& path, const QList<ChangesetProviderPtr>& changesetProviders);
+  void write(const QString& path, const QList<ChangesetProviderPtr>& changesetProviders) override;
 
   /**
    * @see ChangesetFileWriter
    */
-  virtual QString getStatsTable(
-    const ChangesetStatsFormat& format = ChangesetStatsFormat::Text) const;
+  QString getStatsTable(
+    const ChangesetStatsFormat& format = ChangesetStatsFormat::Text) const override;
 
-  virtual void setMap1List(const QList<ConstOsmMapPtr>& mapList) { _map1List = mapList; }
-  virtual void setMap2List(const QList<ConstOsmMapPtr>& mapList) { _map2List = mapList; }
+  void setMap1List(const QList<ConstOsmMapPtr>& mapList) override { _map1List = mapList; }
+  void setMap2List(const QList<ConstOsmMapPtr>& mapList) override { _map2List = mapList; }
 
   /**
    * @see ChangesetFileWriter
    */
-  virtual bool isSupported(const QString& output) const { return output.endsWith(".osc"); }
+  bool isSupported(const QString& output) const override { return output.endsWith(".osc"); }
 
-  virtual void setConfiguration(const Settings &conf);
+  void setConfiguration(const Settings &conf) override;
 
 private:
 

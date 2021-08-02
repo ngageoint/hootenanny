@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -55,10 +55,10 @@ public:
     NetworkVertex::reset();
 
     // Test the non-const stuff...
-    NodePtr pN1(new Node(Status::Unknown1, -100, Coordinate(1.0, 1.0), 10.0));
-    NodePtr pN2(new Node(Status::Unknown1, -200, Coordinate(2.0, 2.0), 10.0));
-    NetworkVertexPtr pNV1(new NetworkVertex(pN1));
-    NetworkVertexPtr pNV2(new NetworkVertex(pN2));
+    NodePtr pN1 = std::make_shared<Node>(Status::Unknown1, -100, Coordinate(1.0, 1.0), 10.0);
+    NodePtr pN2 = std::make_shared<Node>(Status::Unknown1, -200, Coordinate(2.0, 2.0), 10.0);
+    NetworkVertexPtr pNV1 = std::make_shared<NetworkVertex>(pN1);
+    NetworkVertexPtr pNV2 = std::make_shared<NetworkVertex>(pN2);
 
     // getElement
     CPPUNIT_ASSERT_EQUAL(reinterpret_cast<const Element*>(pN1.get()),
@@ -79,10 +79,10 @@ public:
     CPPUNIT_ASSERT_EQUAL(99u, qHash(pNV1));
 
     // Test the const stuff
-    NodePtr pN3(new Node(Status::Unknown1, -300, Coordinate(3.0, 3.0), 10.0));
-    NodePtr pN4(new Node(Status::Unknown1, -400, Coordinate(4.0, 4.0), 10.0));
-    ConstNetworkVertexPtr cNV3(new NetworkVertex(pN3));
-    ConstNetworkVertexPtr cNV4(new NetworkVertex(pN4));
+    NodePtr pN3 = std::make_shared<Node>(Status::Unknown1, -300, Coordinate(3.0, 3.0), 10.0);
+    NodePtr pN4 = std::make_shared<Node>(Status::Unknown1, -400, Coordinate(4.0, 4.0), 10.0);
+    ConstNetworkVertexPtr cNV3 = std::make_shared<NetworkVertex>(pN3);
+    ConstNetworkVertexPtr cNV4 = std::make_shared<NetworkVertex>(pN4);
 
     // Less than
     CPPUNIT_ASSERT(cNV4 < cNV3);

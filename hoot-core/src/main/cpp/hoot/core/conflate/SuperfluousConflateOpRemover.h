@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SUPERFLUOUS_CONFLATE_OP_REMOVER_H
 #define SUPERFLUOUS_CONFLATE_OP_REMOVER_H
@@ -34,22 +34,42 @@ namespace hoot
 {
 
 /**
- * This is used to weed down the list of conflate pre/post ops to only those needed given the
- * matchers being run for the conflate job.
+ * @brief The SuperfluousConflateOpRemover class is used to weed down the list of conflate pre/post
+ * ops to only those needed given the matchers being run for the conflate job, which helps with both
+ * runtime performance and conflated output quality.
  *
  * So for instance, you don't try to split road intersections if you're only conflating buildings.
  * Only GeometryTypeCriterion are checked via FilteredByGeometryTypeCriteria. Not sure if this can
  * be extended to check supported matchers for given other types of criteria.
+ *
+ * The match creator related methods here may more appropriately reside in ConflateUtils.
  */
 class SuperfluousConflateOpRemover
 {
 public:
 
   /**
-   * Changes the global state of conflate pre/post ops by removing any that are unnecessary for the
-   * current conflate configuration
+   * @brief removeSuperfluousOps changes the global state of conflate pre/post ops by removing any
+   * that are unnecessary for the current conflate configuration.
    */
   static void removeSuperfluousOps();
+
+  /**
+   * @brief getMatchCreatorGeometryTypeCrits determines GeometryTypeCriterion compatible with
+   * conflate matchers for the current configuration.
+   * @param addParents if true, ancestor geometry types are included in the output; e.g.
+   * PolygonCriterion will be included along with BuildingCriterion
+   * @return a list of GeometryTypeCriterion class names
+   * @todo This belongs in a more generic utility class rather than in this one.
+   */
+  static QSet<QString> getMatchCreatorGeometryTypeCrits(const bool addParents = true);
+
+  /**
+   * @brief linearMatcherPresent determines if a matcher capable of matching a linear feature is
+   * present in the current configuration.
+   * @return true if a linear matcher has been configured; false otherwise
+   */
+  static bool linearMatcherPresent();
 
 private:
 
@@ -69,12 +89,6 @@ private:
    */
   static QStringList _filterOutUnneededOps(
     const QSet<QString>& geometryTypeCrits, const QStringList& ops, QSet<QString>& removedOps);
-
-  /*
-   * Returns a list of GeometryTypeCriterion class names that match up with those supported by the
-   * current matcher config
-   */
-  static QSet<QString> _getMatchCreatorGeometryTypeCrits();
 
   static bool _isGeometryTypeCrit(const QString& className);
 };

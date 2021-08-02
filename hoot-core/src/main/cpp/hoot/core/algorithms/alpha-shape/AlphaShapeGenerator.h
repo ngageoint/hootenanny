@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ALPHASHAPEGENERATOR_H
@@ -39,8 +39,7 @@ namespace hoot
 {
 
 /**
- * Generates an alpha shape
- *
+ * @brief The AlphaShapeGenerator class generates an alpha shape.
  * @see AlphaShape
  */
 class AlphaShapeGenerator
@@ -50,30 +49,28 @@ public:
   static QString className() { return "hoot::AlphaShapeGenerator"; }
 
   /**
-   * Constructor
-   *
+   * @brief AlphaShapeGenerator Constructor
    * @param alpha tuning parameter used to calculate the alpha shape
    * @param buffer how far out from the calculated alpha shape the output shape should be buffered
    */
   AlphaShapeGenerator(const double alpha, const double buffer = 0.0);
 
   /**
-   * Generates an alpha shape as a map based on the geometry of some input map
-   *
+   * @brief generateMap generates an alpha shape as a map based on the geometry of some input map.
    * @param inputMap the map to use for generating the alpha shape
    * @return a map containing the alpha shape's points
    */
   OsmMapPtr generateMap(OsmMapPtr inputMap);
 
   /**
-   * Generates an alpha shape as a geometry based on the geometry of some input map
-   *
+   * @brief generateGeometry generates an alpha shape as a geometry based on the geometry of some
+   * input map.
    * @param inputMap the map to use for generating the alpha shape
    * @return a geometry containing the alpha shape's points
    */
   std::shared_ptr<geos::geom::Geometry> generateGeometry(OsmMapPtr inputMap);
   /**
-   * @brief setManuallyCoverSmallPointClusters Update the "stragglers" flag
+   * @brief setManuallyCoverSmallPointClusters updates the "stragglers" flag.
    * @param cover New value for cover flag
    */
   void setManuallyCoverSmallPointClusters(bool cover) { _manuallyCoverSmallPointClusters = cover; }
@@ -86,10 +83,6 @@ private:
   double _buffer;
   /** Flag to trigger _coverStragglers (read description). */
   bool _manuallyCoverSmallPointClusters;
-  /** The maximum number of alpha values retries to.
-   * Right now this is hardcoded to 2 as that's all that has ever been needed.
-   */
-  bool _maxTries;
   /**
    * @brief _coverStragglers This is a bit of hack to the alg, if you will, that will alow for covering
    * small groups of features when a smaller alpha value is selected. This is desirable in certain

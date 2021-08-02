@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SMALLEROVERLAPEXTRACTOR_H
 #define SMALLEROVERLAPEXTRACTOR_H
@@ -38,13 +38,12 @@ namespace hoot
 class Element;
 
 /**
- * Based on the JCS OverlapExtractor.
+ * @brief The SmallerOverlapExtractor class uses the feature with more overlap to calculate the
+ * percentage overlap.
  *
- * This extractor uses the feature with more overlap to calculate the percentage overlap. For
- * instance if you have a small feature contained within a larger feature, the result will be 1.0.
- *
- * If either feature has an area of zero, then zero is returned.
- *
+ * It is based on the JCS OverlapExtractor. For instance if you have a small feature contained
+ * within a larger feature, the result will be 1.0. If either feature has an area of zero, then
+ * zero is returned.
  * @author RoadMatcher
  * @copyright GPL
  * http://www.vividsolutions.com/products.asp?catg=spaapp&code=roadmatcher
@@ -56,24 +55,22 @@ class SmallerOverlapExtractor : public FeatureExtractorBase, public Configurable
 public:
 
   SmallerOverlapExtractor();
-  virtual ~SmallerOverlapExtractor() = default;
+  ~SmallerOverlapExtractor() = default;
 
   static QString className() { return "hoot::SmallerOverlapExtractor"; }
 
-  virtual QString getClassName() const override { return className(); }
-
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
-
-  virtual QString getDescription() const
-  { return "Determines the overlap between two features focusing on the feature with more overlap"; }
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getName() const { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getDescription() const override
+  { return "Determines the overlap between two features focusing on the feature with more overlap"; }
 
 private:
 

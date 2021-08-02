@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "SchemaVertex.h"
@@ -36,14 +36,14 @@ using namespace std;
 namespace hoot
 {
 
-SchemaVertex::SchemaVertex()
+SchemaVertex::SchemaVertex() :
+_type(UnknownVertexType),
+_influence(-1.0),
+_childWeight(-1.0),
+_mismatchScore(-1.0),
+_valueType(Unknown),
+_geometries(0)
 {
-  influence = -1.0;
-  valueType = Unknown;
-  childWeight = -1.0;
-  mismatchScore = -1.0;
-  geometries = 0;
-  _type = UnknownVertexType;
 }
 
 void SchemaVertex::addCompoundRule(const CompoundRule& rule)
@@ -96,7 +96,7 @@ bool SchemaVertex::isMatch(const CompoundRule& rule, const Tags& t)
   return matchCount == rule.size();
 }
 
-void SchemaVertex::setType(VertexType t)
+void SchemaVertex::setType(const VertexType& t)
 {
   if (t == Tag)
   {
@@ -105,12 +105,7 @@ void SchemaVertex::setType(VertexType t)
   _type = t;
 }
 
-void SchemaVertex::setName(QString n)
-{
-  name = n;
-}
-
-void SchemaVertex::setNameKvp(QString n)
+void SchemaVertex::setNameKvp(const QString& n)
 {
   int equalsPos = n.indexOf('=');
   if (equalsPos == 0)
@@ -119,34 +114,34 @@ void SchemaVertex::setNameKvp(QString n)
   }
   else if (equalsPos > 0)
   {
-    key = n.left(equalsPos);
-    value = n.mid(equalsPos + 1);
+    _key = n.left(equalsPos);
+    _value = n.mid(equalsPos + 1);
   }
   else
   {
-    key = n;
-    value.clear();
+    _key = n;
+    _value.clear();
   }
-  name = n;
+  _name = n;
 }
 
-void SchemaVertex::setValueTypeString(QString t)
+void SchemaVertex::setValueTypeString(const QString& t)
 {
   if (t == "enumeration")
   {
-    valueType = Enumeration;
+    _valueType = Enumeration;
   }
   else if (t == "text")
   {
-    valueType = Text;
+    _valueType = Text;
   }
   else if (t == "int")
   {
-    valueType = Int;
+    _valueType = Int;
   }
   else if (t == "real")
   {
-    valueType = Real;
+    _valueType = Real;
   }
   else
   {
@@ -156,16 +151,17 @@ void SchemaVertex::setValueTypeString(QString t)
 
 QString SchemaVertex::toString() const
 {
-  QString result = QString("name: %1\n").arg(name)
-      + QString("key: %1\n").arg(key)
-      + QString("value: %1\n").arg(value)
-      + QString("influence: %1\n").arg(influence)
-      + QString("childWeight: %1\n").arg(childWeight)
-      + QString("mismatchScore: %1\n").arg(mismatchScore)
-      + QString("valueType: %1\n").arg(valueType)
-      + QString("aliases: %1\n").arg(hoot::toString(aliases))
-      + QString("geometries: %1\n").arg(geometries)
-      + QString("categories: %1\n").arg(hoot::toString(categories));
+  QString result =
+      QString("name: %1\n").arg(_name)
+      + QString("key: %1\n").arg(_key)
+      + QString("value: %1\n").arg(_value)
+      + QString("influence: %1\n").arg(_influence)
+      + QString("childWeight: %1\n").arg(_childWeight)
+      + QString("mismatchScore: %1\n").arg(_mismatchScore)
+      + QString("valueType: %1\n").arg(_valueType)
+      + QString("aliases: %1\n").arg(hoot::toString(_aliases))
+      + QString("geometries: %1\n").arg(_geometries)
+      + QString("categories: %1\n").arg(hoot::toString(_categories));
 
   if (_type == Compound)
   {

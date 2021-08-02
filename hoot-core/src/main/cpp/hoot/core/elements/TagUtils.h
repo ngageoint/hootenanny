@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef TAG_UTILS_H
@@ -79,6 +79,19 @@ public:
                                     const std::vector<ElementPtr>& elements);
 
   /**
+   * Determines if any elements in a specified collection have any tag key/value pair from a
+   * specified set of kvps
+   *
+   * @param kvps the tag key/value pairs to search for
+   * @param elementIds IDs of the elements to examine
+   * @param map the map containing the elements
+   * @return true if any elements from the input collection of elements contain at least one of the
+   * key/value pairs specified in kvps; false otherwise
+   */
+  static bool anyElementsHaveAnyKvp(const QStringList& kvps,
+                                    const std::set<ElementId>& elementIds, const OsmMapPtr& map);
+
+  /**
    * Determines if all elements in a specified collection have any tag key from a specified set of
    * keys
    *
@@ -89,7 +102,7 @@ public:
    * tag keys specified in tagKeys; false otherwise
    */
   static bool allElementsHaveAnyTagKey(const QStringList& tagKeys,
-                                       const std::set<ElementId>& elementIds, OsmMapPtr& map);
+                                       const std::set<ElementId>& elementIds, const OsmMapPtr& map);
 
   /**
    * Determines if any elements in a specified collection have any tag key from a specified set of
@@ -102,20 +115,7 @@ public:
    * tag keys specified in tagKeys; false otherwise
    */
   static bool anyElementsHaveAnyTagKey(const QStringList& tagKeys,
-                                       const std::set<ElementId>& elementIds, OsmMapPtr& map);
-
-  /**
-   * Determines if any elements in a specified collection have any tag key/value pair from a
-   * specified set of kvps
-   *
-   * @param kvps the tag key/value pairs to search for
-   * @param elementIds IDs of the elements to examine
-   * @param map the map containing the elements
-   * @return true if any elements from the input collection of elements contain at least one of the
-   * key/value pairs specified in kvps; false otherwise
-   */
-  static bool anyElementsHaveAnyKvp(const QStringList& kvps,
-                                    const std::set<ElementId>& elementIds, OsmMapPtr& map);
+                                       const std::set<ElementId>& elementIds, const OsmMapPtr& map);
 
   /**
    * Determines if two elements have conflicting name tags

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ADDRESS_NORMALIZER_H
@@ -39,7 +39,8 @@ namespace hoot
 {
 
 /**
- * Normalizes address tag values to a standard format using libpostal
+ * @brief The AddressNormalizer class normalizes address tag values to a standard format using
+ * libpostal.
  */
 class AddressNormalizer
 {
@@ -48,24 +49,20 @@ public:
   AddressNormalizer();
 
   /**
-   * Normalizes the values of all address tags on an element
-   *
+   * @brief normalizeAddresses normalizes the values of all address tags on an element.
    * @param e the element to normalize the addresses of
    */
-  void normalizeAddresses(const ElementPtr& e);
-
+  void normalizeAddresses(const ElementPtr& e) const;
   /**
-   * Normalizes address strings
+   * @brief normalizeAddress normalizes address strings.
    *
-   * Also translates addresses to English
-   *
+   * It also translates addresses to English.
    * @param address the address to normalize
    * @return a collection of normalized addresses
    */
   QSet<QString> normalizeAddress(const QString& address) const;
 
   int getNumNormalized() const { return _numNormalized; }
-
   AddressTagKeysPtr getAddressTagKeys() const { return _addressTagKeys; }
 
 private:

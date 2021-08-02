@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RandomForest.h"
@@ -43,9 +43,9 @@ using namespace std;
 namespace Tgs
 {
 
-void RandomForest::trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
-  unsigned int numFactors, std::string posClass, unsigned int nodeSize, double retrain,
-  bool balanced)
+void RandomForest::trainBinary(
+  const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
+  const std::string& posClass, unsigned int nodeSize, double retrain, bool balanced)
 {
   try
   {
@@ -63,9 +63,9 @@ void RandomForest::trainBinary(const std::shared_ptr<DataFrame>& data, unsigned 
 
       for (unsigned int i = 0; i < numTrees; i++)
       {
-        _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
+        _forest.push_back(std::make_shared<RandomTree>());
         _forest.back()->trainBinary(data, numFactors, posClass, nodeSize, true);
-        std::cout << "Trained Tree # " << i + 1 << " / " << numTrees << "     \r";
+        std::cout << "Trained Tree # " << i + 1 << " of " << numTrees << "     \r";
         std::cout.flush();
       }
       std::cout << std::endl;
@@ -81,7 +81,8 @@ void RandomForest::trainBinary(const std::shared_ptr<DataFrame>& data, unsigned 
 
         std::vector<std::string> badFactors;
 
-        unsigned int cutOffIdx = topFactors.size() - (unsigned int)((double)topFactors.size() * retrain);
+        unsigned int cutOffIdx =
+          (unsigned int)(topFactors.size() - (unsigned int)((double)topFactors.size() * retrain));
 
         std::multimap<double, std::string> sortedFactors;
         std::multimap<double, std::string>::iterator mMapItr;
@@ -96,7 +97,7 @@ void RandomForest::trainBinary(const std::shared_ptr<DataFrame>& data, unsigned 
 
         for (mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
         {
-          if (cutOffCtr <  cutOffIdx)
+          if (cutOffCtr < cutOffIdx)
           {
             badFactors.push_back(mMapItr->second);
             cutOffCtr++;
@@ -118,7 +119,7 @@ void RandomForest::trainBinary(const std::shared_ptr<DataFrame>& data, unsigned 
 
         for (unsigned int i = 0; i < numTrees; i++)
         {
-          _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
+          _forest.push_back(std::make_shared<RandomTree>());
           _forest.back()->trainBinary(data,
             (unsigned int)sqrt((double)(topFactors.size() - cutOffIdx)), posClass, 1 , balanced);
         }
@@ -159,9 +160,9 @@ void RandomForest::trainMulticlass(const std::shared_ptr<DataFrame>& data, unsig
 
       for (unsigned int i = 0; i < numTrees; i++)
       {
-        _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
+        _forest.push_back(std::make_shared<RandomTree>());
         _forest.back()->trainMulticlass(data, numFactors, nodeSize, true);
-        std::cout << "Trained Tree # " << i + 1 << " / " << numTrees << "     \r";
+        std::cout << "Trained Tree # " << i + 1 << " of " << numTrees << "     \r";
         std::cout.flush();
       }
       std::cout << std::endl;
@@ -178,7 +179,7 @@ void RandomForest::trainMulticlass(const std::shared_ptr<DataFrame>& data, unsig
         std::vector<std::string> badFactors;
 
         unsigned int cutOffIdx =
-          topFactors.size() - (unsigned int)((double)topFactors.size() * retrain);
+          (unsigned int)((topFactors.size() - (unsigned int)((double)topFactors.size() * retrain)));
 
         std::multimap<double, std::string> sortedFactors;
         std::multimap<double, std::string>::iterator mMapItr;
@@ -215,7 +216,7 @@ void RandomForest::trainMulticlass(const std::shared_ptr<DataFrame>& data, unsig
 
         for (unsigned int i = 0; i < numTrees; i++)
         {
-          _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
+          _forest.push_back(std::make_shared<RandomTree>());
           _forest.back()->trainMulticlass(data,
             (unsigned int)sqrt((double)(topFactors.size() - cutOffIdx)), 1, balanced);
         }
@@ -235,8 +236,8 @@ void RandomForest::trainMulticlass(const std::shared_ptr<DataFrame>& data, unsig
 }
 
 void RandomForest::trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
-  unsigned int numFactors, std::string posClass, std::string negClass, unsigned int nodeSize,
-  double retrain, bool balanced)
+  unsigned int numFactors, const std::string& posClass, const std::string& negClass,
+  unsigned int nodeSize, double retrain, bool balanced)
 {
   try
   {
@@ -252,9 +253,9 @@ void RandomForest::trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsig
 
       for (unsigned int i = 0; i < numTrees; i++)
       {
-        _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
+        _forest.push_back(std::make_shared<RandomTree>());
         _forest.back()->trainRoundRobin(data, numFactors, posClass, negClass, nodeSize, true);
-        std::cout << "Trained Tree # " << i + 1 << " / " << numTrees << "     \r";
+        std::cout << "Trained Tree # " << i + 1 << " of " << numTrees << "     \r";
         std::cout.flush();
       }
       std::cout << std::endl;
@@ -270,7 +271,7 @@ void RandomForest::trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsig
 
         std::vector<std::string> badFactors;
 
-        unsigned int cutOffIdx =
+        unsigned long cutOffIdx =
           topFactors.size() - (unsigned int)((double)topFactors.size() * retrain);
 
         std::multimap<double, std::string> sortedFactors;
@@ -308,7 +309,7 @@ void RandomForest::trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsig
 
         for (unsigned int i = 0; i < numTrees; i++)
         {
-          _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
+          _forest.push_back(std::make_shared<RandomTree>());
           _forest.back()->trainMulticlass(data,
             (unsigned int)sqrt((double)(topFactors.size() - cutOffIdx)), 1, balanced);
         }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -63,7 +63,7 @@ public:
 
   NodePtr createNode(double x, double y)
   {
-    NodePtr n(new Node(Status::Unknown1, _map->createNextNodeId(), x, y, 10.0));
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, _map->createNextNodeId(), x, y, 10.0);
     _map->addNode(n);
     return n;
   }
@@ -71,17 +71,17 @@ public:
   void runRoadsTest()
   {
     //test highway (linestring)
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     _map = map;
 
-    WayPtr w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 13.0);
     w1->setTag("highway", "track");
     w1->setTag("name", "w1");
     w1->addNode(createNode(0, 0)->getId());
     w1->addNode(createNode(10, 0)->getId());
     _map->addWay(w1);
 
-    WayPtr w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 13.0);
     w2->setTag("highway", "road");
     w2->setTag("name", "w2");
     w2->addNode(createNode(-1, 1)->getId());

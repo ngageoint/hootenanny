@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REPLACEELEMENTOP_H
 #define REPLACEELEMENTOP_H
@@ -40,12 +40,12 @@ namespace hoot
 {
 
 /**
- * Replaces all instances of one element with another element. In some cases we may not be able
+ * Replaces all instances of one element with another element. In some cases, we may not be able
  * to replace all instances of the "from" element. E.g. if "from" is a node and "to" is a way. If
  * "from" is part of a way, then we can't do the replacement. In this case it won't be replaced and
  * will still be part of the parent way.
  *
- * In many cases you may want to follow this call by clearing tags and then attempting to remove
+ * In many cases, you may want to follow this call by clearing tags and then attempting to remove
  * "from". E.g.
  *
  *    ReplaceElementOp(from, to).apply(map);
@@ -59,41 +59,52 @@ public:
   static QString className() { return "hoot::ReplaceElementOp"; }
 
   /**
-   * @param from Replace this element.
-   * @param to Use this to replace the specified element.
-   * @param clearAndRemove If set to true then the element will be cleared of attributes and then
-   *    a removal will be attempted. In some cases (e.g. replace can't be complete if you're
-   *    replacing a node with a way and the node is in a way) the element won't be removed, if this
-   *    happens then all tags will be cleared.
-   */
-  ReplaceElementOp(ElementId from, ElementId to, bool clearAndRemove = false);
-
-  /**
+   * Constructor
+   *
    * It is expected that the eid will be populated with addElement after construction. addElement
    * must be called exactly two times.
    */
   ReplaceElementOp();
-  virtual ~ReplaceElementOp() = default;
+  /**
+   * Constructor
+   *
+   * @param from Replace this element.
+   * @param to Use this to replace the specified element.
+   * @param clearAndRemove If set to true, then the element will be cleared of all attributes and a
+   * removal will be attempted. In some cases (e.g. replace can't be complete if you're replacing a
+   * node with a way and the node is in a way), the element won't be removed. If this happens, then
+   * all tags will be cleared.
+   * @param removeParentRefs If true, removes all references in parent relations or ways to the
+   * element being removed before trying to remove it. If false and clearAndRemove=true, and the
+   * element being removed has memberships in a relation or way, the element will not be removed.
+   */
+  ReplaceElementOp(
+    ElementId from, ElementId to, bool clearAndRemove = false, bool removeParentRefs = false);
+  ~ReplaceElementOp() = default;
 
   /**
-   * If the elements aren't specified in the constructor this must be called exactly two times. Once
+   * If the elements aren't specified in the constructor this must be called exactly two times, once
    * for 'from' and a second time for 'to'.
    */
-  virtual void addElement(const ConstElementPtr& e) override;
+  void addElement(const ConstElementPtr& e) override;
 
-  virtual void apply(const OsmMapPtr& map) override;
+  /**
+   * @see ConstOsmMapOperation
+   */
+  void apply(const OsmMapPtr& map) override;
 
-  virtual QString getDescription() const override { return "Replaces one element with another"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Replaces one element with another"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 
   ElementId _from;
   ElementId _to;
+  // removes an element after it has been replaced
   bool _clearAndRemove;
+  // removes all references in parent elements to the element being removed before removing it
+  bool _removeParentRefs;
 };
 
 }

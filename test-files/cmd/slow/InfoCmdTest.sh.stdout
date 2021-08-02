@@ -3595,7 +3595,7 @@ match, with 0.0 being the least similar and 1.0 being the most similar.
 
 Listing all option names...
 
-  SampledAngleHistogramExtractor               Calculates the angle of each line segment in a sampled fashion and adds it to a histogram
+  SampledAngleHistogramExtractor                  Calculates the angle of each line segment in a sampled fashion and adds it to a histogram
 
 Listing a format that is both input and output...
 
@@ -3675,65 +3675,86 @@ Listing a script merger creator...
 
 Listing a matcher...
 
-  HighwayMatch                                 Matches roads with the 2nd Generation (Unifying) Algorithm
+  HighwayMatch                                    Matches roads with the 2nd Generation (Unifying) Algorithm
 
 Listing a script matcher...
 
-  ScriptMatch                                  Matches elements with Generic Conflation
+  ScriptMatch                                     Matches elements using Generic Conflation via Javascript
 
 Listing a merger...
 
-  PoiPolygonMerger                             Merges POIs into polygons
+  PoiPolygonMerger                                Merges POIs into polygons
 
 Listing a script merger...
 
-  ScriptMerger                                 Merges elements matched with Generic Conflation
+  ScriptMerger                                    Merges elements matched with Generic Conflation
 
 Listing an op...
 
-  DuplicateNameRemover                         operation         Removes duplicate name tags from a feature
+  DuplicateNameRemover                            operation         Removes duplicate name tags from a feature
 
 Listing a visitor...
 
-  RemoveEmptyAreasVisitor                      visitor           Removes empty areas
+  RemoveEmptyAreasVisitor                         visitor           Removes empty areas
 
 Listing a criterion...
 
-  NonBuildingAreaCriterion                     criterion         Identifies features that are areas but not buildings
+  NonBuildingAreaCriterion                        criterion         Identifies features that are areas but not buildings
 
 Listing a tag merger...
 
-  AverageTagMerger                   Keeps tags from both features and overlapping tags are averaged together
+  AverageTagMerger                      Keeps tags from both features and overlapping tags are averaged together
 
 Listing cleaning operations...
 
-  DuplicateWayRemover                          operation         Removes duplicate ways from a map
+  DuplicateWayRemover                             operation         Removes duplicate ways from a map
 
 Listing subline matchers...
 
-  FrechetSublineMatcher         Matches lines based on the Frechet Distance algorithm
+  FrechetSublineMatcher            Matches lines based on the Frechet Distance algorithm
 
 Listing subline string matchers...
 
-  MaximalSublineStringMatcher   Matches lines based on the maximal subline string found
+  MaximalSublineStringMatcher      Matches lines based on the maximal subline string found
 
 Listing pre-conflation operations...
 
-  MapCleaner                                   operation         Cleans map data
+  MapCleaner                                      operation         Cleans map data
 
 Listing post-conflation operations...
 
-  SuperfluousNodeRemover                       operation         Removes all nodes not part of a way
+  SuperfluousNodeRemover                          operation         Removes all nodes not part of a way
 
 Listing way joiners...
 
-  WayJoinerAdvanced                  Extends WayJoinerBasic with additional join pre-conditions.
+  WayJoinerAdvanced                     Extends WayJoinerBasic with additional join pre-conditions.
+
+Listing way snap criteria...
+
+hoot::HighwayCriterion;hoot::LinearCriterion;hoot::PowerLineCriterion;hoot::RailwayCriterion;hoot::RiverCriterion
+hoot::HighwayCriterion;hoot::LinearCriterion;hoot::RiverCriterion
 
 Listing conflatable criteria...
 
-  BuildingCriterion                  Identifies buildings
+  BuildingCriterion                     Identifies buildings
 
 Listing filters...
 
-  NonBuildingAreaCriterion                     criterion         Identifies features that are areas but not buildings
+  NonBuildingAreaCriterion                        criterion         Identifies features that are areas but not buildings
+
+Listing criterion consumers...
+
+  CopyMapSubsetOp                       Copies a subset of the map into a new map
+
+Listing string comparators...
+
+  ExactStringDistance              Returns a matching string comparison score only if the strings match exactly (ignoring case)
+
+Listing geometry type criteria...
+
+  TunnelCriterion                       Identifies tunnels
+
+Listing value aggregators...
+
+  MinAggregator                         Aggregates data based on the minimum value
 

@@ -1,0 +1,14 @@
+{"version": 0.6,"generator": "Hootenanny","elements": [
+{"type":"node","id":-8,"lat":0.5000452184169981,"lon":0.5005390095606131},
+{"type":"node","id":-7,"lat":0.5000452184293721,"lon":0.5003593397070725},
+{"type":"node","id":-4,"lat":0.4999999999777267,"lon":0.5005390095569255},
+{"type":"node","id":-3,"lat":0.4999999999901008,"lon":0.500359339704614},
+{"type":"node","id":-2,"lat":0.5000452183774013,"lon":0.500898349267712},
+{"type":"node","id":-1,"lat":0.5000452184392712,"lon":0.5},
+{"type":"way","id":-6,"nodes":[-8,-2],"tags":{"error:circular":"15"}},
+{"type":"way","id":-5,"nodes":[-1,-7],"tags":{"error:circular":"15"}},
+{"type":"way","id":-1,"nodes":[-7,-8],"tags":{"highway":"road","uuid":"w1;w2","error:circular":"15"}},
+{"type":"relation","id":-1,"members":[
+{"type":"way","ref":-5,"role":""},
+{"type":"way","ref":-6,"role":""}],"tags":{"hoot:multilinestring":"yes","highway":"road","uuid":"w1","error:circular":"15"}}]
+}

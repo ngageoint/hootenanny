@@ -19,17 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OptionsValidator.h"
 
 // hoot
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -67,7 +67,7 @@ void OptionsValidator::fixMisc()
   LOG_VART(matchCreators);
   LOG_VART(mergerCreators);
 
-  if ((matchCreators.size() == 0 || mergerCreators.size() == 0))
+  if (matchCreators.empty() || mergerCreators.empty())
   {
     LOG_WARN("Match or merger creators empty.  Setting to defaults.");
     matchCreators = ConfigOptions::getMatchCreatorsDefaultValue();
@@ -109,24 +109,24 @@ void OptionsValidator::fixMisc()
   LOG_VART(matchCreators);
   LOG_VART(mergerCreators);
 
-  //fix way subline matcher options - https://github.com/ngageoint/hootenanny-ui/issues/970
+  // fix way subline matcher options - https://github.com/ngageoint/hootenanny-ui/issues/970
   if (matchCreators.contains("hoot::NetworkMatchCreator") &&
-      ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
-      ConfigOptions().getWaySublineMatcher() != "hoot::MaximalSublineMatcher")
+      ConfigOptions().getHighwaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
+      ConfigOptions().getHighwaySublineMatcher() != "hoot::MaximalSublineMatcher")
   {
-    LOG_TRACE("Temp fixing way.subline.matcher...");
-    conf().set("way.subline.matcher", "hoot::MaximalSublineMatcher");
+    LOG_TRACE("Temp fixing highway.subline.matcher...");
+    conf().set("highway.subline.matcher", "hoot::MaximalSublineMatcher");
   }
   else if (matchCreators.contains("hoot::HighwayMatchCreator") &&
-           ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
-           ConfigOptions().getWaySublineMatcher() != "hoot::MaximalNearestSublineMatcher")
+           ConfigOptions().getHighwaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
+           ConfigOptions().getHighwaySublineMatcher() != "hoot::MaximalNearestSublineMatcher")
   {
-    LOG_TRACE("Temp fixing way.subline.matcher...");
-    conf().set("way.subline.matcher", "hoot::MaximalNearestSublineMatcher");
+    LOG_TRACE("Temp fixing highway.subline.matcher...");
+    conf().set("highway.subline.matcher", "hoot::MaximalNearestSublineMatcher");
   }
-  LOG_VART(ConfigOptions().getWaySublineMatcher());
+  LOG_VART(ConfigOptions().getHighwaySublineMatcher());
 
-  //fix highway classifier - https://github.com/ngageoint/hootenanny-ui/issues/971
+  // fix highway classifier - https://github.com/ngageoint/hootenanny-ui/issues/971
   if (matchCreators.contains("hoot::NetworkMatchCreator") &&
       ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayExpertClassifier")
   {

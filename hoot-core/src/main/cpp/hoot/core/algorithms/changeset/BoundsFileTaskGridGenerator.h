@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef BOUNDS_FILE_TASK_GRID_GENERATOR_H
 #define BOUNDS_FILE_TASK_GRID_GENERATOR_H
@@ -37,7 +37,8 @@ namespace hoot
 {
 
 /**
- * Generates a rectangular task grid from one or more rectangular bounds file inputs
+ * @brief The BoundsFileTaskGridGenerator class generates a rectangular task grid from one or more
+ * rectangular bounds file inputs.
  */
 class BoundsFileTaskGridGenerator : public TaskGridGenerator
 {
@@ -45,8 +46,7 @@ class BoundsFileTaskGridGenerator : public TaskGridGenerator
 public:
 
   /**
-   * Constructor
-   *
+   * @brief BoundsFileTaskGridGenerator Constructor
    * @param inputs one or more bounds file inputs
    */
   BoundsFileTaskGridGenerator(const QStringList& inputs);
@@ -55,7 +55,7 @@ public:
   /**
    * @see TaskGridGenerator
    */
-  virtual TaskGrid generateTaskGrid();
+  TaskGrid generateTaskGrid() override;
 
 private:
 

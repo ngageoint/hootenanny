@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -46,7 +46,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 /**
- * Used to construct a changeset-derive-replacement command
+ * Used to construct a changeset-derive command with the --replace option
  */
 class DeriveChangesetReplacementCommand extends GrailCommand {
 
@@ -55,7 +55,7 @@ class DeriveChangesetReplacementCommand extends GrailCommand {
     static {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            TypeReference<?> schema = new TypeReference<Map<String, String>>(){};
+            TypeReference<Map<String, String>> schema = new TypeReference<Map<String, String>>(){};
             // get json of advanced options
             String file = FileUtils.readFileToString(new File(HOME_FOLDER, CHANGESET_OPTION_KEYS), Charset.defaultCharset());
             advOptionKeys = mapper.readValue(file, schema);
@@ -96,7 +96,7 @@ class DeriveChangesetReplacementCommand extends GrailCommand {
         substitutionMap.put("ADV_OPTIONS", advancedOptions);
         substitutionMap.put("STATS_FILE", new File(params.getWorkDir(), "stats.json").getPath());
 
-        String command = "hoot.bin changeset-derive-replacement --${DEBUG_LEVEL} -C DeriveChangeset.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${BOUNDS} ${OSC_FILE} ${ADV_OPTIONS} --stats ${STATS_FILE}";
+        String command = "hoot.bin changeset-derive --${DEBUG_LEVEL} -C DeriveChangeset.conf ${HOOT_OPTIONS} -D bounds=${BOUNDS} ${INPUT1} ${INPUT2} ${OSC_FILE} ${ADV_OPTIONS} --stats ${STATS_FILE} --replacement";
 
         super.configureCommand(command, substitutionMap, caller);
     }

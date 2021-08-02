@@ -19,21 +19,21 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiWriter.h"
 
 //  Hootenanny
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/info/VersionDefines.h>
 #include <hoot/core/io/OsmApiChangeset.h>
 #include <hoot/core/io/OsmApiChangesetElement.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/Log.h>
@@ -192,7 +192,7 @@ bool OsmApiWriter::apply()
     if (queueSize < QUEUE_SIZE_MULTIPLIER * _maxWriters)
     {
       //  Divide up the changes into atomic changesets
-      ChangesetInfoPtr changeset_info(new ChangesetInfo());
+      ChangesetInfoPtr changeset_info = std::make_shared<ChangesetInfo>();
       //  Repeat divide until all changes have been committed
       _changesetMutex.lock();
       bool newChangeset = _changeset.calculateChangeset(changeset_info);
@@ -209,16 +209,16 @@ bool OsmApiWriter::apply()
         //  all of the threads are idle and not waiting for something to come back
         //  There are two things that can be done here, first is to put everything that is
         //  "ready to send" in a changeset and send it OR move everything to the error state
-/*
+
         //  Option #1: Get all of the remaining elements as a single changeset
-        _changesetMutex.lock();
-        _changeset.calculateRemainingChangeset(changeset_info);
-        _changesetMutex.unlock();
+        //_changesetMutex.lock();
+        //_changeset.calculateRemainingChangeset(changeset_info);
+        //_changesetMutex.unlock();
         //  Push that changeset
-        _pushChangesets(changeset_info);
+        //_pushChangesets(changeset_info);
         //  Let the threads know that the remaining changeset is the "remaining" changeset
-        _threadsCanExit = true;
-*/
+        //_threadsCanExit = true;
+
         LOG_STATUS("Apply Changeset: Remaining elements unsendable...");
         //  Option #2: Move everything to the error state and exit
         _changesetMutex.lock();
@@ -469,28 +469,41 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             //  Loop back around to work on the next changeset
             continue;
           }
-          //  Fall through here to split the changeset and retry
-          //  This includes when the changeset is too big, i.e.:
-          //    The changeset <id> was closed at <dtg> UTC
+          //  Split the changeset and retry
+          if (!_splitChangeset(workInfo, info->response) &&
+              !workInfo->getAttemptedResolveChangesetIssues())
+          {
+            //  Set the attempt issues resolved flag
+            workInfo->setAttemptedResolveChangesetIssues(true);
+            //  Try to automatically resolve certain issues, like out of date version
+            if (_resolveIssues(request, workInfo))
+            {
+              _pushChangesets(workInfo);
+            }
+            else
+            {
+              //  Set the element in the changeset to failed because the issues couldn't be resolved
+              _changeset.updateFailedChangeset(workInfo);
+            }
+          }
+          break;
         case HttpResponseCode::HTTP_BAD_REQUEST:          //  Placeholder ID is missing or not unique
         case HttpResponseCode::HTTP_NOT_FOUND:            //  Diff contains elements where the given ID could not be found
         case HttpResponseCode::HTTP_PRECONDITION_FAILED:  //  Precondition Failed, Relation with id cannot be saved due to other member
-          if (!_splitChangeset(workInfo, info->response))
+          if (!_splitChangeset(workInfo, info->response) &&
+              !workInfo->getAttemptedResolveChangesetIssues())
           {
-            if (!workInfo->getAttemptedResolveChangesetIssues())
+            //  Set the attempt issues resolved flag
+            workInfo->setAttemptedResolveChangesetIssues(true);
+            //  Try to automatically resolve certain issues, like out of date version
+            if (_resolveIssues(request, workInfo))
             {
-              //  Set the attempt issues resolved flag
-              workInfo->setAttemptedResolveChangesetIssues(true);
-              //  Try to automatically resolve certain issues, like out of date version
-              if (_resolveIssues(request, workInfo))
-              {
-                _pushChangesets(workInfo);
-              }
-              else
-              {
-                //  Set the element in the changeset to failed because the issues couldn't be resolved
-                _changeset.updateFailedChangeset(workInfo);
-              }
+              _pushChangesets(workInfo);
+            }
+            else
+            {
+              //  Set the element in the changeset to failed because the issues couldn't be resolved
+              _changeset.updateFailedChangeset(workInfo);
             }
           }
           break;
@@ -499,12 +512,12 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           if (workInfo->size() == 1)
             workInfo->setAttemptedResolveChangesetIssues(true);
           //  Attempt to split the changeset
-          if (!_splitChangeset(workInfo, info->response))
+          if (!_splitChangeset(workInfo, info->response) &&
+              //  For HTTP_GONE, it could come back false if the element that is gone is removed
+              //  successfully and the rest of the changeset needs to be processed
+              workInfo->size() > 0)
           {
-            //  For HTTP_GONE, it could come back false if the element that is gone is removed
-            //  successfully and the rest of the changeset needs to be processed
-            if (workInfo->size() > 0)
-              _pushChangesets(workInfo);
+            _pushChangesets(workInfo);
           }
           break;
         case HttpResponseCode::HTTP_INTERNAL_SERVER_ERROR:  //  Internal Server Error, could be caused by the database being saturated
@@ -610,7 +623,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
     _updateThreadStatus(index, ThreadStatus::Completed);
 }
 
-void OsmApiWriter::_yield(int milliseconds)
+void OsmApiWriter::_yield(int milliseconds) const
 {
   //  Sleep for the specified number of milliseconds
   if (milliseconds != 10)
@@ -619,7 +632,7 @@ void OsmApiWriter::_yield(int milliseconds)
     std::this_thread::yield();
 }
 
-void OsmApiWriter::_yield(int minimum_ms, int maximum_ms)
+void OsmApiWriter::_yield(int minimum_ms, int maximum_ms) const
 {
   //  Yield for a random amount of time between minimum_ms and maximum_ms
   _yield(minimum_ms + Tgs::Random::instance()->generateInt(maximum_ms - minimum_ms));
@@ -647,7 +660,7 @@ void OsmApiWriter::setConfiguration(const Settings& conf)
   _timeout = options.getChangesetApidbTimeout();
 }
 
-bool OsmApiWriter::isSupported(const QUrl &url)
+bool OsmApiWriter::isSupported(const QUrl &url) const
 {
   if (url.isEmpty() ||
       url.isLocalFile() ||
@@ -687,7 +700,7 @@ bool OsmApiWriter::queryCapabilities(HootNetworkRequestPtr request)
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_permissions:_GET_.2Fapi.2F0.6.2Fpermissions
-bool OsmApiWriter::validatePermissions(HootNetworkRequestPtr request)
+bool OsmApiWriter::validatePermissions(HootNetworkRequestPtr request) const
 {
   bool success = false;
   try
@@ -705,7 +718,7 @@ bool OsmApiWriter::validatePermissions(HootNetworkRequestPtr request)
   return success;
 }
 
-bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request)
+bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request) const
 {
   bool cgimap = false;
   try
@@ -723,14 +736,14 @@ bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request)
     QRegExp regex("generator=(\"|')CGImap", Qt::CaseInsensitive);
     cgimap = responseXml.contains(regex);
   }
-  catch (HootException& ex)
+  catch (const HootException& ex)
   {
     LOG_WARN(ex.what());
   }
   return cgimap;
 }
 
-OsmApiCapabilites OsmApiWriter::_parseCapabilities(const QString& capabilites)
+OsmApiCapabilites OsmApiWriter::_parseCapabilities(const QString& capabilites) const
 {
   OsmApiCapabilites caps;
   QXmlStreamReader reader(capabilites);
@@ -768,7 +781,7 @@ OsmApiCapabilites OsmApiWriter::_parseCapabilities(const QString& capabilites)
   return caps;
 }
 
-OsmApiStatus OsmApiWriter::_parseStatus(const QString& status)
+OsmApiStatus OsmApiWriter::_parseStatus(const QString& status) const
 {
   if (status == "online")
     return OsmApiStatus::ONLINE;
@@ -778,7 +791,7 @@ OsmApiStatus OsmApiWriter::_parseStatus(const QString& status)
     return OsmApiStatus::OFFLINE;
 }
 
-bool OsmApiWriter::_parsePermissions(const QString& permissions)
+bool OsmApiWriter::_parsePermissions(const QString& permissions) const
 {
   QXmlStreamReader reader(permissions);
 
@@ -793,10 +806,10 @@ bool OsmApiWriter::_parsePermissions(const QString& permissions)
     {
       QStringRef name = reader.name();
       QXmlStreamAttributes attributes = reader.attributes();
-      if (name == "permission" && attributes.hasAttribute("name"))
+      if (name == "permission" && attributes.hasAttribute("name") &&
+          attributes.value("name") == "allow_write_api")
       {
-        if (attributes.value("name") == "allow_write_api")
-          return true;
+        return true;
       }
     }
   }
@@ -808,7 +821,7 @@ long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
                                     const QString& description,
                                     const QString& source,
                                     const QString& hashtags,
-                                    int& http_status)
+                                    int& http_status) const
 {
   try
   {
@@ -908,9 +921,9 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset
  *  When a relation has elements that do not exist or are not visible:
  *   "Relation with id #{id} cannot be saved due to #{element} with id #{element.id}"
  */
-OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset)
+OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset) const
 {
-  OsmApiFailureInfoPtr info(new OsmApiFailureInfo());
+  OsmApiFailureInfoPtr info = std::make_shared<OsmApiFailureInfo>();
   //  Don't even attempt if the ID is bad
   if (id < 1)
     return info;
@@ -993,7 +1006,7 @@ bool OsmApiWriter::_fixConflict(HootNetworkRequestPtr request, ChangesetInfoPtr 
   return success;
 }
 
-bool OsmApiWriter::_changesetClosed(const QString &conflictExplanation)
+bool OsmApiWriter::_changesetClosed(const QString &conflictExplanation) const
 {
   return _changeset.getFailureCheck().matchesChangesetClosedFailure(conflictExplanation);
 }
@@ -1031,7 +1044,7 @@ bool OsmApiWriter::_resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPt
   return success;
 }
 
-QString OsmApiWriter::_getNode(HootNetworkRequestPtr request, long id)
+QString OsmApiWriter::_getNode(HootNetworkRequestPtr request, long id) const
 {
   //  Check for a valid ID to query against
   if (id < 1)
@@ -1040,7 +1053,7 @@ QString OsmApiWriter::_getNode(HootNetworkRequestPtr request, long id)
   return _getElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("node").arg(id));
 }
 
-QString OsmApiWriter::_getWay(HootNetworkRequestPtr request, long id)
+QString OsmApiWriter::_getWay(HootNetworkRequestPtr request, long id) const
 {
   //  Check for a valid ID to query against
   if (id < 1)
@@ -1049,7 +1062,7 @@ QString OsmApiWriter::_getWay(HootNetworkRequestPtr request, long id)
   return _getElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("way").arg(id));
 }
 
-QString OsmApiWriter::_getRelation(HootNetworkRequestPtr request, long id)
+QString OsmApiWriter::_getRelation(HootNetworkRequestPtr request, long id) const
 {
   //  Check for a valid ID to query against
   if (id < 1)
@@ -1058,7 +1071,7 @@ QString OsmApiWriter::_getRelation(HootNetworkRequestPtr request, long id)
   return _getElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("relation").arg(id));
 }
 
-QString OsmApiWriter::_getElement(HootNetworkRequestPtr request, const QString& endpoint)
+QString OsmApiWriter::_getElement(HootNetworkRequestPtr request, const QString& endpoint) const
 {
   //  Don't follow an uninitialized URL or empty endpoint
   if (endpoint == OsmApiEndpoints::API_PATH_GET_ELEMENT || endpoint == "")
@@ -1080,13 +1093,13 @@ QString OsmApiWriter::_getElement(HootNetworkRequestPtr request, const QString& 
   return "";
 }
 
-HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentication)
+HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentication) const
 {
   HootNetworkRequestPtr request;
   if (!requiresAuthentication)
   {
     //  When the call doesn't require authentication, don't pass in OAuth credentials
-    request.reset(new HootNetworkRequest());
+    request = std::make_shared<HootNetworkRequest>();
   }
   else if (!_consumerKey.isEmpty() &&
       !_consumerSecret.isEmpty() &&
@@ -1094,12 +1107,14 @@ HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentica
       !_secretToken.isEmpty())
   {
     //  When OAuth credentials are present and authentication is requested, pass OAuth crendentials
-    request.reset(new HootNetworkRequest(_consumerKey, _consumerSecret, _accessToken, _secretToken));
+    request =
+      std::make_shared<HootNetworkRequest>(
+        _consumerKey, _consumerSecret, _accessToken, _secretToken);
   }
   else
   {
     //  No OAuth credentials are present, so authentication must be by username/password
-    request.reset(new HootNetworkRequest());
+    request = std::make_shared<HootNetworkRequest>();
   }
   return request;
 }
@@ -1149,7 +1164,7 @@ bool OsmApiWriter::_splitChangeset(const ChangesetInfoPtr& workInfo, const QStri
   return false;
 }
 
-void OsmApiWriter::_writeDebugFile(const QString& type, const QString& data, int file_id, long changeset_id, int status)
+void OsmApiWriter::_writeDebugFile(const QString& type, const QString& data, int file_id, long changeset_id, int status) const
 {
   //  Setup the path including the changeset and file IDs, type and HTTP status
   QString path = QString("%1/OsmApiWriter-%2-%3-%4-%5.osc")
@@ -1238,7 +1253,7 @@ bool OsmApiWriter::_hasFailedThread()
   return false;
 }
 
-void OsmApiWriter::_statusMessage(OsmApiFailureInfoPtr info, long changesetId)
+void OsmApiWriter::_statusMessage(OsmApiFailureInfoPtr info, long changesetId) const
 {
   //  Log the error as a status message
   switch (info->status)

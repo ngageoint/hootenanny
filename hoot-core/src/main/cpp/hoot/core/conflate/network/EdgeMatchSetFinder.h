@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef EDGEMATCHSETFINDER_H
 #define EDGEMATCHSETFINDER_H
@@ -40,7 +40,7 @@ struct EdgeMatchScore
 };
 
 // Stores a set of edge matches, keyed by a similarity string; see EdgeMatch::isVerySimilarTo
-typedef QHash<QString, EdgeMatchScore> EdgeMatchSimilarity;
+using EdgeMatchSimilarity = QHash<QString, EdgeMatchScore>;
 
 class EdgeMatchSetFinder
 {
@@ -91,12 +91,6 @@ private:
     QSet<ConstNetworkEdgePtr> neighbors2Set);
 
   /**
-   * Finds which subline match between e1 and e2 and then appends those sublines to em as
-   * appropriate.
-   */
-  void _appendMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
-
-  /**
    * Returns all the edges that intersect the given location. If the location isn't on a vertex
    * then an empty set is returned.
    */
@@ -107,30 +101,19 @@ private:
   bool _isCandidateMatch(ConstEdgeLocationPtr l1, ConstEdgeLocationPtr l2) const;
 
   /**
-   * Finds which subline match between e1 and e2 and then prepends those sublines to em as
-   * appropriate.
-   */
-  void _prependMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
-
-  /**
    * Record the match if the score threshold is met.
    */
   bool _recordMatch(ConstEdgeMatchPtr em);
 
   double _scoreMatch(ConstEdgeMatchPtr em) const;
 
-  ConstEdgeSublinePtr _snapSublineToString(ConstEdgeStringPtr str, ConstEdgeSublinePtr sub) const;
-
-  EdgeMatchPtr _trimFromEdge(ConstEdgeMatchPtr em);
-  EdgeMatchPtr _trimToEdge(ConstEdgeMatchPtr em);
-
-  void _addReverseMatch(ConstEdgeMatchPtr edgeMatch, const double score);
+  void _addReverseMatch(ConstEdgeMatchPtr edgeMatch, const double score) const;
 
   void _resetEdgeMatchSimilarities();
 };
 
-typedef std::shared_ptr<EdgeMatchSetFinder> EdgeMatchSetFinderPtr;
-typedef std::shared_ptr<const EdgeMatchSetFinder> ConstEdgeMatchSetFinderPtr;
+using EdgeMatchSetFinderPtr = std::shared_ptr<EdgeMatchSetFinder>;
+using ConstEdgeMatchSetFinderPtr = std::shared_ptr<const EdgeMatchSetFinder>;
 
 }
 

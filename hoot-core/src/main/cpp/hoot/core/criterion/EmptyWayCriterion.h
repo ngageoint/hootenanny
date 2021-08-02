@@ -19,49 +19,43 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef EMPTY_WAY_CRITERION_H
 #define EMPTY_WAY_CRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/WayNodeCountCriterion.h>
 
 namespace hoot
 {
 
 /**
- * Ways with no nodes; will see this from time to time as a result of cut and replace, since we
- * allow element references point to missing elements to persist
+ * Identifies ways with no nodes. Convenience wrapper around WayNodeCountCriterion.
+ *
+ * This is seen from time to time as a result of cut and replace, since we allow element references
+ * point to missing elements to persist.
  *
  * @todo implement OperationStatus
  */
-class EmptyWayCriterion : public ElementCriterion
+class EmptyWayCriterion : public WayNodeCountCriterion
 {
 public:
 
   static QString className() { return "hoot::EmptyWayCriterion"; }
 
   EmptyWayCriterion();
-  virtual ~EmptyWayCriterion() = default;
+  ~EmptyWayCriterion() = default;
 
-  /**
-   * @see ElementCriterion
-   */
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<EmptyWayCriterion>(); }
 
-  virtual ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new EmptyWayCriterion()); }
-
-  virtual QString getDescription() const override
-  { return "Identifies ways with no nodes"; }
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Identifies ways with no nodes"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMNETWORK_H
 #define OSMNETWORK_H
@@ -57,11 +57,11 @@ class OsmNetwork
 {
 public:
 
-  typedef QMultiHash<ElementId, ConstNetworkVertexPtr> VertexMap;
-  typedef QMultiHash<ElementId, ConstNetworkEdgePtr> EdgeMap;
-  typedef QMultiHash<ConstNetworkVertexPtr, ConstNetworkEdgePtr> VertexToEdgeMap;
+  using VertexMap = QMultiHash<ElementId, ConstNetworkVertexPtr>;
+  using EdgeMap = QMultiHash<ElementId, ConstNetworkEdgePtr>;
+  using VertexToEdgeMap = QMultiHash<ConstNetworkVertexPtr, ConstNetworkEdgePtr>;
 
-  OsmNetwork();
+  OsmNetwork() = default;
 
   void addEdge(NetworkEdgePtr edge);
 
@@ -96,8 +96,8 @@ private:
   VertexToEdgeMap _vertexToEdge;
 };
 
-typedef std::shared_ptr<OsmNetwork> OsmNetworkPtr;
-typedef std::shared_ptr<const OsmNetwork> ConstOsmNetworkPtr;
+using OsmNetworkPtr = std::shared_ptr<OsmNetwork>;
+using ConstOsmNetworkPtr = std::shared_ptr<const OsmNetwork>;
 
 // not implemented
 bool operator<(ConstOsmNetworkPtr, ConstOsmNetworkPtr);

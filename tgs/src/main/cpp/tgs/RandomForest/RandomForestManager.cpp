@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RandomForestManager.h"
@@ -35,34 +35,16 @@
 
 namespace Tgs
 {
-  RandomForestManager::RandomForestManager()
-  {
-    try
-    {
-
-    }
-    catch(const Exception & e)
-    {
-      throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
-    }
-
-  }
-
-  RandomForestManager::~RandomForestManager()
-  {
-
-  }
-
   void RandomForestManager::_initForests(int numForests)
   {
     try
     {
       for (unsigned int i = 0; i < (unsigned int)numForests; i++)
       {
-        _rfList.push_back(std::shared_ptr<RandomForest>(new RandomForest()));
+        _rfList.push_back(std::make_shared<RandomForest>());
       }
     }
-    catch(const Exception & e)
+    catch (const Exception & e)
     {
       throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
     }
@@ -77,8 +59,7 @@ namespace Tgs
       for (unsigned int fIdx = 0; fIdx < (unsigned int)forestNodes.size(); fIdx++)
       {
         QDomElement forestElement = forestNodes.at(fIdx).toElement();
-        _rfList.push_back(
-          std::shared_ptr<RandomForest>(new RandomForest()));
+        _rfList.push_back(std::make_shared<RandomForest>());
         _rfList.back()->importModel(forestElement);
       }
     }
@@ -87,5 +68,4 @@ namespace Tgs
       throw Tgs::Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
     }
   }
-
-}  //End namespace
+}

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVEWAYBYEID_H
 #define REMOVEWAYBYEID_H
@@ -35,48 +35,35 @@ namespace hoot
 {
 
 /**
- * @brief The RemoveWayByEid class is used to remove ways from an OsmMap
+ * Removes ways from an map
  */
 class RemoveWayByEid : public OsmMapOperation
 {
 public:
 
-  /**
-   * @brief className gets the name of the class as a string
-   * @return class name
-   */
   static QString className() { return "hoot::RemoveWayByEid"; }
-  virtual QString getName() const { return className(); }
-  virtual QString getClassName() const override { return className(); }
 
   /**
-   * @brief RemoveWayByEid is used to remove ways from maps
-   * @param removeFully if true, way is removed from all relations in the map, then
-   *                    removed from the map's way collection.
+   * Constructor
+   *
+   * @param removeFully if true, way is removed from all relations in the map, then removed from the
+   * map's way collection.
    */
   RemoveWayByEid(bool removeFully = false);
-
   /**
-   * @brief RemoveWayByEid is used to remove ways from maps
+   * Constructor
+   *
    * @param wId ID of the way to remove
-   * @param removeFully if true, way is removed from all relations in the map, then
-   *                    removed from the map's way collection.
+   * @param removeFully if true, way is removed from all relations in the map, then removed from the
+   * map's way collection.
    */
   RemoveWayByEid(long wId, bool removeFully = false);
-
-  virtual ~RemoveWayByEid() = default;
-
-  /**
-   * @brief apply Apply the operation to the given map
-   * @param map the map to operate on
-   */
-  void apply(OsmMapPtr& map);
+  ~RemoveWayByEid() = default;
 
   /**
-   * @brief setWayId set the ID of the way to remove on the apply() call
-   * @param wId ID of the way to remove
+   * see OsmMapOperation
    */
-  void setWayId(long wId) { _wayIdToRemove = wId; }
+  void apply(OsmMapPtr& map) override;
 
   /**
    * @brief removeWay Remove the given way from the given map
@@ -92,15 +79,19 @@ public:
    */
   static void removeWayFully(OsmMapPtr map, long wId);
 
-  virtual QString getDescription() const { return "Removes a single way by element ID"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Removes a single way by element ID"; }
+
+  void setWayId(long wId) { _wayIdToRemove = wId; }
 
 private:
 
   long _wayIdToRemove;
   bool _removeFully;
 
-  void _removeWay(OsmMapPtr& map, long wId);
-  void _removeWayFully(OsmMapPtr& map, long wId);
+  void _removeWay(const OsmMapPtr& map, long wId) const;
+  void _removeWayFully(const OsmMapPtr& map, long wId) const;
 };
 
 }

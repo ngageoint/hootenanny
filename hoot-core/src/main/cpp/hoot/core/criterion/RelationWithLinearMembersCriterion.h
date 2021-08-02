@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RELATION_WITH_LINEAR_MEMBERS_CRITERION_H
@@ -30,13 +30,12 @@
 
 // Hoot
 #include <hoot/core/criterion/RelationWithMembersOfTypeCriterion.h>
-#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
 /**
- * Identifies relations with children having linear geometries
+ * Identifies relations with members that have linear geometries
  */
 class RelationWithLinearMembersCriterion : public RelationWithMembersOfTypeCriterion
 {
@@ -46,21 +45,20 @@ public:
 
   RelationWithLinearMembersCriterion();
   RelationWithLinearMembersCriterion(ConstOsmMapPtr map);
-  virtual ~RelationWithLinearMembersCriterion() = default;
+  ~RelationWithLinearMembersCriterion() = default;
 
-  virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new RelationWithLinearMembersCriterion(_map)); }
+  ElementCriterionPtr clone() override
+  { return std::make_shared<RelationWithLinearMembersCriterion>(_map); }
 
-  virtual QString getCriterion() const override;
+  QString getCriterion() const override;
 
-  virtual QString getDescription() const
+  GeometryType getGeometryType() const override;
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override
   { return "Identifies relations with children having linear geometries"; }
-
-  virtual GeometryType getGeometryType() const;
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
 };
 
 }

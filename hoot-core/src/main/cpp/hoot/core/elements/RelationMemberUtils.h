@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RELATION_MEMBER_UTILS_H
@@ -54,58 +54,55 @@ public:
    * @param map map owning the relation
    * @return a detailed relations members string
    */
-  static QString getRelationMembersDetailedString(const ConstRelationPtr& relation,
-                                                  const ConstOsmMapPtr& map);
+  static QString getRelationMembersDetailString(
+    const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 
   /**
    * Determines if an element is a member of a relation
    *
    * @param map map owning the input element
    * @param childId element ID of the input element
+   * @param ignoreReviewRelations if true, review relations are ignored when determining membership
    * @return true if the element is a member of a relation
    */
-  static bool isMemberOfRelation(const ConstOsmMapPtr& map, const ElementId& childId);
+  static bool isMemberOfRelation(
+    const ConstOsmMapPtr& map, const ElementId& childId, const bool ignoreReviewRelations = false);
 
   /**
    * Determines if an element is a member of a relation of a given type
    *
    * @param map map owning the input element
    * @param childId element ID of the input element
-   * @param relationType type of relation to search for; if left blank, relation types are not
-   * checked
-   * @return true if the element is a member of a relation of the specified type OR if the element
-   * is simply a member of a relation and the type is not specified; false otherwise
+   * @param relationType type of relation to search for
+   * @return true if the element is a member of a relation of the specified type; false otherwise
    */
-  static bool isMemberOfRelationType(const ConstOsmMapPtr& map, const ElementId& childId,
-                                     const QString& relationType = "");
+  static bool isMemberOfRelationWithType(
+    const ConstOsmMapPtr& map, const ElementId& childId, const QString& relationType);
 
   /**
    * Determines if an element is a member of a relation that is in a given schema category
    *
    * @param map map owning the input element
    * @param childId element ID of the input element
-   * @param schemaCategory schema category to search for relation membership in; if left blank,
-   * category membership for the relations is not checked
-   * @return true if the element is a member of a relation that is in the specified schema category
-   * OR if the element is simply a member of a relation and the category is not specified; false
-   * otherwise
+   * @param schemaCategory schema category to search for relation membership in
+   * @return true if the element is a member of a relation that is in the specified schema category;
+   * false otherwise
    */
-  static bool isMemberOfRelationInCategory(const ConstOsmMapPtr& map, const ElementId& childId,
-                                           const QString& schemaCategory = "");
+  static bool isMemberOfRelationInCategory(
+    const ConstOsmMapPtr& map, const ElementId& childId, const QString& schemaCategory);
 
   /**
    * Determines if an element is a member of a relation that has a given tag key
    *
    * @param map map owning the input element
    * @param childId element ID of the input element
-   * @param tagKey tag key to search relations for; if left blank, tag keys on the relations are not
-   * checked
-   * @return true if the element is a member of a relation with the specified tag key OR if the
-   * element is simply a member of a relation and a tag key is not specified
+   * @param tagKey tag key to search relations for
+   * @return true if the element is a member of a relation with the specified tag key; false
+   * otherwise
    * @todo This is redundant with isMemberOfRelationSatisfyingCriterion using a TagKeyCriterion.
    */
-  static bool isMemberOfRelationWithTagKey(const ConstOsmMapPtr& map, const ElementId& childId,
-                                           const QString& tagKey = "");
+  static bool isMemberOfRelationWithTagKey(
+    const ConstOsmMapPtr& map, const ElementId& childId, const QString& tagKey);
 
   /**
    * Determines if an element is contained by any relation in a map
@@ -141,55 +138,47 @@ public:
   /**
    * Determines if an element is a member of a relation that satisfies a specified criterion
    *
-   * @param map map owning the relation and element possessing the input ID
    * @param childId ID of the element child
    * @param criterion criteria which the relation must satisfy
+   * @param map map owning the relation and element possessing the input ID
    * @return true if the element is a member of any relation satisfying the specified criterion;
    * false otherwise
    */
   static bool isMemberOfRelationSatisfyingCriterion(
-    const ConstOsmMapPtr& map, const ElementId& childId, const ElementCriterion& criterion);
+    const ElementId& childId, const ElementCriterion& criterion, const ConstOsmMapPtr& map);
 
   /**
-   * Retrieves all relations containing a child element as const
+   * Retrieves all relations containing a child element
    *
-   * @param map map the child element belongs to
    * @param childId ID of the child element
+   * @param map map the child element belongs to
+   * @param ignoreReviewRelations if true, review relations are ignored when determining membership
+   * @return a collection of relations
+   */
+  static std::vector<RelationPtr> getContainingRelations(
+    const ElementId& childId, const ConstOsmMapPtr& map, const bool ignoreReviewRelations = false);
+
+  /**
+   * Retrieves all relations containing a child element
+   *
+   * @param childId ID of the child element
+   * @param map map the child element belongs to
+   * @param ignoreReviewRelations if true, review relations are ignored when determining membership
    * @return a collection of const relations
    */
-  static std::vector<ConstRelationPtr> getContainingRelations(
-    const ConstOsmMapPtr& map, const ElementId& childId);
+  static std::vector<ConstRelationPtr> getContainingRelationsConst(
+    const ElementId& childId, const ConstOsmMapPtr& map, const bool ignoreReviewRelations = false);
 
   /**
-   * Returns IDs of all relation which contain the element with the input ID as a member
+   * Retrieves the number of relations containing a child element
    *
-   * @param map map owning the element identified by childId
    * @param childId ID of the child element
-   * @return a list of element IDs
+   * @param map map the child element belongs to
+   * @param ignoreReviewRelations if true, review relations are ignored when determining membership
+   * @return a relation count
    */
-  static QSet<long> getContainingRelationIds(
-    const ConstOsmMapPtr& map, const ElementId& childId);
-
-  /**
-   * Counts the number of way nodes in way members belonging to a relation
-   *
-   * @param relation the relation containing the way members
-   * @param map the map owning the relation
-   * @return a count
-   */
-  static int getMemberWayNodeCount(const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
-
-  /**
-   * Determines if a relation has a member conflatable by the current configuration of conflate
-   * matchers
-   *
-   * @param relation relation to examine
-   * @param map map owning the input relation
-   * @return true if the input relation contains at least one member element that can be conflated
-   * and optionally satisfies the bounds requirement; false otherwise
-   */
-  static bool relationHasConflatableMember(
-    const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
+  static int getContainingRelationCount(
+    const ElementId& childId, const ConstOsmMapPtr& map, const bool ignoreReviewRelations = false);
 };
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef NETWORKEDGE_H
 #define NETWORKEDGE_H
@@ -57,14 +57,7 @@ public:
 
   bool contains(const ConstNetworkVertexPtr& v) const;
 
-  ConstNetworkVertexPtr getFrom() const { return _from; }
-
-  const QList<ConstElementPtr>& getMembers() const { return _members; }
-
-  ConstNetworkVertexPtr getTo() const { return _to; }
-
   bool isDirected() const { return _directed; }
-
   /**
    * Returns true if this is a stub edge (both vertices are the same). Stubs are handy when trying
    * to match an edge to a vertex.
@@ -73,9 +66,13 @@ public:
 
   bool operator==(const NetworkEdge& other) const { return toString() == other.toString(); }
 
-  void setMembers(QList<ConstElementPtr> members) { _members = members; }
-
   QString toString() const;
+
+  ConstNetworkVertexPtr getFrom() const { return _from; }
+  const QList<ConstElementPtr>& getMembers() const { return _members; }
+  ConstNetworkVertexPtr getTo() const { return _to; }
+
+  void setMembers(QList<ConstElementPtr> members) { _members = members; }
 
 private:
 
@@ -84,8 +81,8 @@ private:
   QList<ConstElementPtr> _members;
 };
 
-typedef std::shared_ptr<NetworkEdge> NetworkEdgePtr;
-typedef std::shared_ptr<const NetworkEdge> ConstNetworkEdgePtr;
+using NetworkEdgePtr = std::shared_ptr<NetworkEdge>;
+using ConstNetworkEdgePtr = std::shared_ptr<const NetworkEdge>;
 
 // not implemented
 bool operator<(ConstNetworkEdgePtr, ConstNetworkEdgePtr);

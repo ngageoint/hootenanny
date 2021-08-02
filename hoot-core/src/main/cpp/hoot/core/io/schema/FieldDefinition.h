@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef COLUMN_H
 #define COLUMN_H
@@ -50,8 +50,7 @@ public:
       _fieldName(fieldName)
     {
     }
-
-    virtual ~InvalidValueException() throw() {}
+    ~InvalidValueException() throw() = default;
 
   private:
 
@@ -62,15 +61,11 @@ public:
   virtual ~FieldDefinition() = default;
 
   virtual bool getAllowNull() const { return _allowNull; }
-
   virtual bool getDefaultIsNull() const { return _defaultIsNull; }
-
   virtual QVariant getDefaultValue() const = 0;
 
   QString getName() const { return _name; }
-
   virtual QVariant::Type getType() const = 0;
-
   int getWidth() const { return _width; }
 
   virtual bool hasDefaultValue() const = 0;
@@ -82,11 +77,8 @@ public:
   virtual void validate(const QVariant& v, StrictChecking strict) const = 0;
 
   void setAllowNull(bool a) { _allowNull = a; }
-
   void setDefaultIsNull(bool defaultIsNull) { _defaultIsNull = defaultIsNull; }
-
   void setName(const QString& name) { _name = name; }
-
   void setWidth(int w) { _width = w; }
 
   virtual QString toString() const = 0;
@@ -95,13 +87,12 @@ protected:
 
   void _reportError(const QString& field, const QString& error, StrictChecking strict) const;
 
-  bool _allowNull;
-  bool _defaultIsNull;
-
 private:
 
   int _width;
   QString _name;
+  bool _allowNull;
+  bool _defaultIsNull;
 };
 
 }

@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __MULTI_LINE_STRING_LOCATION_H__
 #define __MULTI_LINE_STRING_LOCATION_H__
 
 // Hoot
-#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 
 namespace hoot
 {
@@ -39,19 +39,15 @@ class Relation;
 class OsmMap;
 
 /**
- * Represents a location on a multi-line feature
+ * @brief The MultiLineStringLocation class represents a location on a multi-line feature.
  */
 class MultiLineStringLocation
 {
 public:
 
-  // Don't like having a default constructor here, but its needed by PertyWaySplitVisitor
-  // for now.
-  MultiLineStringLocation() {}
-
+  MultiLineStringLocation() = default;
   /**
-   * Creates a location along the multi-line string
-   *
+   * @brief Constructor - Creates a location along the multi-line string
    * @param map map containing the multi-line string data
    * @param relation a multi-line string relation containing only ways; will throw if relation
    *        contains feature types other than ways
@@ -63,17 +59,18 @@ public:
                           const WayLocation& wayLocation);
 
   /**
-   * Returns the collection of way sublines up to and including _wayLocation
+   * @brief getWaySublineString returns the collection of way sublines up to and including
+   * _wayLocation.
    */
   WaySublineCollection getWaySublineString() const { return _waySublineString; }
 
   /**
-   * Returns the location along the selected way in the multi-line string
+   * @brief getWayLocation returns the location along the selected way in the multi-line string.
    */
   WayLocation getWayLocation() const { return _wayLocation; }
 
   /**
-   * Determines whether the location is valid
+   * @brief isValid determines whether the location is valid.
    */
   bool isValid() const { return _wayLocation.getSegmentIndex() != -1; }
 

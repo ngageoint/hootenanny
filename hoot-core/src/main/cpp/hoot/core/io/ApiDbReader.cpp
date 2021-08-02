@@ -19,21 +19,23 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ApiDbReader.h"
 
 // Hoot
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/io/TableType.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/ApiDb.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/TableType.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/io/IoUtils.h>
 
 // tgs
 #include <tgs/System/Time.h>
@@ -88,15 +90,15 @@ void ApiDbReader::setOverrideBoundingBox(const QString& bbox)
 
 void ApiDbReader::initializePartial()
 {
-  _partialMap.reset(new OsmMap());
+  _partialMap = std::make_shared<OsmMap>();
 
   _firstPartialReadCompleted = false;
   _elementsRead = 0;
   _selectElementType = ElementType::Node;
-  _lastId = 0;
-  _maxNodeId = 0;
-  _maxWayId = 0;
-  _maxRelationId = 0;
+  _lastId = std::numeric_limits<long>::min();
+  _maxNodeId = std::numeric_limits<long>::min();
+  _maxWayId = std::numeric_limits<long>::min();
+  _maxRelationId = std::numeric_limits<long>::min();
   _totalNumMapNodes = 0;
   _totalNumMapWays = 0;
   _totalNumMapRelations = 0;
@@ -105,7 +107,7 @@ void ApiDbReader::initializePartial()
   _numRelationsRead = 0;
 }
 
-bool ApiDbReader::_hasBounds()
+bool ApiDbReader::_hasBounds() const
 {
   return _bounds.get() || _overrideBounds.get();
 }
@@ -175,7 +177,7 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
   return result;
 }
 
-void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
+void ApiDbReader::_updateMetadataOnElement(ElementPtr element) const
 {
   LOG_TRACE("Updating metadata on element " << element->getElementId() << "...");
 
@@ -185,9 +187,8 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
   if (tags.contains(MetadataTags::HootStatus()))
   {
     QString statusStr = tags.get(MetadataTags::HootStatus());
-    bool ok;
     const int statusInt = statusStr.toInt(&ok);
-    Status status = static_cast<Status::Type>(statusInt);
+    Status status = statusInt;
     if (ok && status.getEnum() >= Status::Invalid && status.getEnum() <= Status::Conflated)
     {
       element->setStatus(status);
@@ -230,7 +231,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
 
   // Arbitrarily pick the first error tag found. If the element has both, the last one parsed will
   // be used. We're not expecting elements to have more than one CE tag.
-  const QString ceKey = tags.getFirstKey(_circularErrorTagKeys);
+  const QString ceKey = tags.getFirstMatchingKey(_circularErrorTagKeys);
   if (!ceKey.isEmpty())
   {
     element->setCircularError(tags.get(ceKey).toDouble(&ok));
@@ -287,7 +288,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
   }
   LOG_VART(wayIds.size());
 
-  if (wayIds.size() > 0)
+  if (!wayIds.empty())
   {
     // If the appropriate option is enabled, here we'll add the IDs of all ways that fall outside
     // of the requested bounds but are directly connected to a way that is being returned by the
@@ -341,7 +342,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     additionalNodeIds = additionalNodeIds.subtract(nodeIds);
     LOG_VART(additionalNodeIds.size());
 
-    if (additionalNodeIds.size() > 0)
+    if (!additionalNodeIds.empty())
     {
       LOG_DEBUG(
         "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
@@ -397,155 +398,152 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   }
   LOG_VART(nodeIds.size());
 
-  if (!_returnNodesOnly)
+  if (!_returnNodesOnly && !nodeIds.empty())
   {
-    if (nodeIds.size() > 0)
-    {
-      QSet<QString> wayIds;
-      QSet<QString> additionalWayNodeIds;
-      _readWaysByNodeIds(
-        map, nodeIds, wayIds, additionalWayNodeIds, boundedNodeCount, boundedWayCount);
-      nodeIds.unite(additionalWayNodeIds);
-      LOG_VART(nodeIds.size());
-      LOG_VART(wayIds.size());
+    QSet<QString> wayIds;
+    QSet<QString> additionalWayNodeIds;
+    _readWaysByNodeIds(
+      map, nodeIds, wayIds, additionalWayNodeIds, boundedNodeCount, boundedWayCount);
+    nodeIds.unite(additionalWayNodeIds);
+    LOG_VART(nodeIds.size());
+    LOG_VART(wayIds.size());
 
-      LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
-      QSet<QString> relationIds;
-      assert(nodeIds.size() > 0);
-      std::shared_ptr<QSqlQuery> relationIdItr =
-        _getDatabase()->selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
+    LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
+    QSet<QString> relationIds;
+    assert(nodeIds.size() > 0);
+    std::shared_ptr<QSqlQuery> relationIdItr =
+      _getDatabase()->selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
+    while (relationIdItr->next())
+    {
+      const long relationId = (*relationIdItr).value(0).toLongLong();
+      LOG_VART(ElementId(ElementType::Relation, relationId));
+      relationIds.insert(QString::number(relationId));
+    }
+    if (!wayIds.empty())
+    {
+      relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
       while (relationIdItr->next())
       {
         const long relationId = (*relationIdItr).value(0).toLongLong();
         LOG_VART(ElementId(ElementType::Relation, relationId));
         relationIds.insert(QString::number(relationId));
       }
-      if (wayIds.size() > 0)
+    }
+    LOG_VART(relationIds.size());
+
+    //  Iterate all relations (and sub-relations) that are "within" the bounds
+    QSet<QString> completedRelationIds;
+    while (!relationIds.empty())
+    {
+      QSet<QString> newNodes;
+      QSet<QString> newWays;
+      QSet<QString> newRelations;
+
+      LOG_DEBUG("Retrieving relations by relation ID...");
+      std::shared_ptr<QSqlQuery> relationItr =
+        _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
+      while (relationItr->next())
       {
-        relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
-        while (relationIdItr->next())
+        RelationPtr relation = _resultToRelation(*relationItr, *map);
+        map->addElement(relation);
+        const vector<RelationData::Entry>& members = relation->getMembers();
+        //  Iterate all members so that they can be retrieved later
+        for (vector<RelationData::Entry>::const_iterator it = members.begin();
+             it != members.end(); ++it)
         {
-          const long relationId = (*relationIdItr).value(0).toLongLong();
-          LOG_VART(ElementId(ElementType::Relation, relationId));
-          relationIds.insert(QString::number(relationId));
+          ElementType type = it->getElementId().getType();
+          QString id = QString::number(it->getElementId().getId());
+          if (type == ElementType::Node)
+            newNodes.insert(id);
+          else if (type == ElementType::Way)
+            newWays.insert(id);
+          else if (type == ElementType::Relation)
+            newRelations.insert(id);
+          else
+          {
+            LOG_WARN("Unknown relation member type");
+          }
+        }
+        LOG_VART(relation);
+        boundedRelationCount++;
+        //  Keep track of all relations that have been added to the map so we don't try them again
+        completedRelationIds.insert(QString::number(relation->getId()));
+      }
+
+      //  Clear the relations that we are iterating on, it is then filled with new relations later
+      relationIds.clear();
+
+      //  Iterate any new nodes that are members of relations that need to be queried
+      newNodes = newNodes.subtract(nodeIds);
+      if (!newNodes.empty())
+      {
+        std::shared_ptr<QSqlQuery> queryItr =
+          _getDatabase()->selectElementsByElementIdList(newNodes, TableType::Node);
+        while (queryItr->next())
+        {
+          const QSqlQuery resultIterator = *queryItr;
+          NodePtr node = _resultToNode(resultIterator, *map);
+          LOG_VART(node);
+          map->addElement(node);
+          boundedNodeCount++;
+          const long nodeId = resultIterator.value(0).toLongLong();
+          LOG_VART(ElementId(ElementType::Node, nodeId));
+          nodeIds.insert(QString::number(nodeId));
         }
       }
-      LOG_VART(relationIds.size());
 
-      //  Iterate all relations (and sub-relations) that are "within" the bounds
-      QSet<QString> completedRelationIds;
-      while (relationIds.size() > 0)
+      //  Iterate any new ways that are members of relations that need to be queried
+      newWays = newWays.subtract(wayIds);
+      if (!newWays.empty())
       {
-        QSet<QString> newNodes;
-        QSet<QString> newWays;
-        QSet<QString> newRelations;
+        QSet<QString> additionalNodeIds;
 
-        LOG_DEBUG("Retrieving relations by relation ID...");
-        std::shared_ptr<QSqlQuery> relationItr =
-          _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
-        while (relationItr->next())
+        LOG_DEBUG("Retrieving ways by way ID...");
+        std::shared_ptr<QSqlQuery> wayItr =
+          _getDatabase()->selectElementsByElementIdList(newWays, TableType::Way);
+        while (wayItr->next())
         {
-          RelationPtr relation = _resultToRelation(*relationItr, *map);
-          map->addElement(relation);
-          const vector<RelationData::Entry>& members = relation->getMembers();
-          //  Iterate all members so that they can be retrieved later
-          for (vector<RelationData::Entry>::const_iterator it = members.begin();
-               it != members.end(); ++it)
-          {
-            ElementType type = it->getElementId().getType();
-            QString id = QString::number(it->getElementId().getId());
-            if (type == ElementType::Node)
-              newNodes.insert(id);
-            else if (type == ElementType::Way)
-              newWays.insert(id);
-            else if (type == ElementType::Relation)
-              newRelations.insert(id);
-            else
-            {
-              LOG_WARN("Unknown relation member type");
-            }
-          }
-          LOG_VART(relation);
-          boundedRelationCount++;
-          //  Keep track of all relations that have been added to the map so we don't try them again
-          completedRelationIds.insert(QString::number(relation->getId()));
+          WayPtr way = _resultToWay(*wayItr, *map);
+          map->addElement(way);
+          LOG_VART(way);
+          boundedWayCount++;
         }
 
-        //  Clear the relations that we are iterating on, it is then filled with new relations later
-        relationIds.clear();
-
-        //  Iterate any new nodes that are members of relations that need to be queried
-        newNodes = newNodes.subtract(nodeIds);
-        if (newNodes.size() > 0)
+        LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
+        std::shared_ptr<QSqlQuery> additionalWayNodeIdItr =
+          _getDatabase()->selectWayNodeIdsByWayIds(newWays);
+        while (additionalWayNodeIdItr->next())
         {
-          std::shared_ptr<QSqlQuery> nodeItr =
-            _getDatabase()->selectElementsByElementIdList(newNodes, TableType::Node);
-          while (nodeItr->next())
+          const long nodeId = (*additionalWayNodeIdItr).value(0).toLongLong();
+          LOG_VART(ElementId(ElementType::Node, nodeId));
+          additionalNodeIds.insert(QString::number(nodeId));
+        }
+
+        // subtract nodeIds from additionalWayNodeIds, so no dupes get added
+        LOG_VART(nodeIds.size());
+        LOG_VART(additionalNodeIds.size());
+        additionalNodeIds = additionalNodeIds.subtract(nodeIds);
+        LOG_VART(additionalNodeIds.size());
+
+        if (!additionalNodeIds.empty())
+        {
+          LOG_DEBUG(
+            "Retrieving nodes falling outside of the query bounds but belonging to a selected " <<
+            "way...");
+          std::shared_ptr<QSqlQuery> additionalWayNodeItr =
+            _getDatabase()->selectElementsByElementIdList(additionalNodeIds, TableType::Node);
+          while (additionalWayNodeItr->next())
           {
-            const QSqlQuery resultIterator = *nodeItr;
-            NodePtr node = _resultToNode(resultIterator, *map);
-            LOG_VART(node);
+            NodePtr node = _resultToNode(*additionalWayNodeItr, *map);
             map->addElement(node);
+            LOG_VART(node);
             boundedNodeCount++;
-            const long nodeId = resultIterator.value(0).toLongLong();
-            LOG_VART(ElementId(ElementType::Node, nodeId));
-            nodeIds.insert(QString::number(nodeId));
           }
         }
-
-        //  Iterate any new ways that are members of relations that need to be queried
-        newWays = newWays.subtract(wayIds);
-        if (newWays.size() > 0)
-        {
-          QSet<QString> additionalNodeIds;
-
-          LOG_DEBUG("Retrieving ways by way ID...");
-          std::shared_ptr<QSqlQuery> wayItr =
-            _getDatabase()->selectElementsByElementIdList(newWays, TableType::Way);
-          while (wayItr->next())
-          {
-            WayPtr way = _resultToWay(*wayItr, *map);
-            map->addElement(way);
-            LOG_VART(way);
-            boundedWayCount++;
-          }
-
-          LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
-          std::shared_ptr<QSqlQuery> additionalWayNodeIdItr =
-            _getDatabase()->selectWayNodeIdsByWayIds(newWays);
-          while (additionalWayNodeIdItr->next())
-          {
-            const long nodeId = (*additionalWayNodeIdItr).value(0).toLongLong();
-            LOG_VART(ElementId(ElementType::Node, nodeId));
-            additionalNodeIds.insert(QString::number(nodeId));
-          }
-
-          // subtract nodeIds from additionalWayNodeIds, so no dupes get added
-          LOG_VART(nodeIds.size());
-          LOG_VART(additionalNodeIds.size());
-          additionalNodeIds = additionalNodeIds.subtract(nodeIds);
-          LOG_VART(additionalNodeIds.size());
-
-          if (additionalNodeIds.size() > 0)
-          {
-            LOG_DEBUG(
-              "Retrieving nodes falling outside of the query bounds but belonging to a selected " <<
-              "way...");
-            std::shared_ptr<QSqlQuery> additionalWayNodeItr =
-              _getDatabase()->selectElementsByElementIdList(additionalNodeIds, TableType::Node);
-            while (additionalWayNodeItr->next())
-            {
-              NodePtr node = _resultToNode(*additionalWayNodeItr, *map);
-              map->addElement(node);
-              LOG_VART(node);
-              boundedNodeCount++;
-            }
-          }
-        }
-
-        //  Get the set of new relations found minus anything that has already been completed
-        relationIds = newRelations.subtract(completedRelationIds);
       }
+
+      //  Get the set of new relations found minus anything that has already been completed
+      relationIds = newRelations.subtract(completedRelationIds);
     }
   }
 
@@ -672,7 +670,7 @@ bool ApiDbReader::hasMoreElements()
     //we'll just grab the estimated count and expect it to be wrong from time to time.
 
     const double start = Tgs::Time::getTime();
-    LOG_DEBUG("Retrieving element counts and max IDs for: " << _url.right(25) << "...");
+    LOG_DEBUG("Retrieving element counts and max IDs for: " << FileUtils::toLogFormat(_url, 25) << "...");
 
     _totalNumMapNodes = _getDatabase()->numEstimatedElements(ElementType::Node);
     _totalNumMapWays = 0;
@@ -727,7 +725,7 @@ std::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   {
     //no results are available, so request some more results
     LOG_DEBUG(
-      "Requesting more query results from: " << _url.right(50) << ", for element type: " <<
+      "Requesting more query results from: " << FileUtils::toLogFormat(_url, 50) << ", for element type: " <<
        _selectElementType.toString() << ", starting with ID: " << _lastId << "...");
     const double start = Tgs::Time::getTime();
     //NEVER remove the _lastId input from the call to selectElements here.  Doing that will
@@ -811,7 +809,7 @@ ElementType ApiDbReader::_getCurrentSelectElementType()
   }
   else if (_selectElementType == ElementType::Node && _lastId == _maxNodeId)
   {
-    _lastId = 0;
+    _lastId = std::numeric_limits<long>::min();
     //calling finish/clear as the underlying query would have changed here to the query for the
     //next element type; this may not be necessary
     _elementResultIterator->finish();
@@ -824,7 +822,7 @@ ElementType ApiDbReader::_getCurrentSelectElementType()
   }
   else if (_selectElementType == ElementType::Way && _lastId == _maxWayId)
   {
-    _lastId = 0;
+    _lastId = std::numeric_limits<long>::min();
     //see comment above
     _elementResultIterator->finish();
     _elementResultIterator->clear();
@@ -929,12 +927,7 @@ std::shared_ptr<Element> ApiDbReader::_resultToElement(
 
 std::shared_ptr<OGRSpatialReference> ApiDbReader::getProjection() const
 {
-  std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
-  if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
-  {
-    throw HootException("Error creating EPSG:4326 projection.");
-  }
-  return wgs84;
+  return MapProjector::createWgs84Projection();
 }
 
 }

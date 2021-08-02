@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "TagFilter.h"
@@ -59,41 +59,6 @@ _category(category)
       throw IllegalArgumentException("Invalid tag filter tag value: " + _value);
     }
   }
-}
-
-void TagFilter::setKey(const QString& key)
-{
-  if (_category != OsmSchemaCategory::Empty && !key.trimmed().isEmpty())
-  {
-    throw IllegalArgumentException("Both a tag filter and a category filter cannot be specified.");
-  }
-  else if (_category == OsmSchemaCategory::Empty && key.trimmed().isEmpty())
-  {
-    throw IllegalArgumentException("Invalid tag filter tag key: " + _key);
-  }
-  _key = key.trimmed().toLower();
-}
-
-void TagFilter::setValue(const QString& val)
-{
-  if (_category != OsmSchemaCategory::Empty && !val.trimmed().isEmpty())
-  {
-    throw IllegalArgumentException("Both a tag filter and a category filter cannot be specified.");
-  }
-  else if (_category == OsmSchemaCategory::Empty && val.trimmed().isEmpty())
-  {
-    throw IllegalArgumentException("Invalid tag filter tag val: " + _value);
-  }
-  _value = val.trimmed().toLower();
-}
-
-void TagFilter::setCategory(OsmSchemaCategory category)
-{
-  if (category != OsmSchemaCategory::Empty && (!_key.isEmpty() || !_value.isEmpty()))
-  {
-    throw IllegalArgumentException("Both a tag filter and a category filter cannot be specified.");
-  }
-  _category = category;
 }
 
 void TagFilter::setSimilarityThreshold(double threshold)

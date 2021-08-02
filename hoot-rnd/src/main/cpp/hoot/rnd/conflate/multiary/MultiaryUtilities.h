@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTIARYUTILITIES_H
 #define MULTIARYUTILITIES_H
@@ -52,12 +52,12 @@ class MultiarySimpleMatch
 
 public:
 
-  MultiarySimpleMatch() {}
+  MultiarySimpleMatch() = default;
 
-  MultiarySimpleMatch(int nIndex, double s) : neighborIndex(nIndex), score(s) {}
+  MultiarySimpleMatch(int nIndex, double s) : neighborIndex(nIndex), score(s) { }
 
-  QString toString() const { return QString("{neighborIndex: %1, score: %2}").arg(neighborIndex).
-        arg(score); }
+  QString toString() const
+  { return QString("{neighborIndex: %1, score: %2}").arg(neighborIndex).arg(score); }
 
   // The index of the elements that match in the provided vector.
   int neighborIndex;
@@ -72,23 +72,20 @@ class MultiaryElement
 
 public:
 
-  MultiaryElement() {}
+  MultiaryElement() = default;
 
 #ifndef SWIG
   MultiaryElement(QByteArray h, geos::geom::Envelope b, QByteArray p) :
     _hash(h), _bounds(b), _payload(p) {}
 #endif
 
-  const geos::geom::Envelope& getBounds() { return _bounds; }
+  const geos::geom::Envelope& getBounds() const { return _bounds; }
 
-  QString getHash() { return _hash; }
-
-  QByteArray getPayload() { return _payload; }
+  QString getHash() const { return _hash; }
+  QByteArray getPayload() const { return _payload; }
 
   void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
-
   void setHash(QString hash) { _hash = hash; }
-
   void setPayload(QByteArray payload) { _payload = payload; }
 
   QString toString() const { return QString("{hash: '%1', bounds: '%2', payload: '%3'}").

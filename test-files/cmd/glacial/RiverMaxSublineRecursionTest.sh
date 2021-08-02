@@ -16,4 +16,5 @@ IN_DIR=test-files/cmd/glacial/$TEST_NAME
 OUT_DIR=test-output/cmd/glacial/$TEST_NAME
 mkdir -p $OUT_DIR
 
-hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf -D match.creators=hoot::ScriptMatchCreator,River.js -D merger.creators=hoot::ScriptMergerCreator -D differential.snap.unconnected.roads=true $IN_DIR/Input1.osm $IN_DIR/Input2.osm $OUT_DIR/diff.osc --differential --changeset-stats $OUT_DIR/stats.json --include-tags --separate-output
+# Its very expensive to only remove partial matches for this dataset, so we disable that feature.
+hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf -D differential.remove.linear.partial.matches.as.whole=true -D differential.remove.river.partial.matches.as.whole=true -D match.creators=hoot::ScriptMatchCreator,River.js -D merger.creators=hoot::ScriptMergerCreator -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=hoot::HighwayCriterion $IN_DIR/Input1.osm $IN_DIR/Input2.osm $OUT_DIR/diff.osc --differential --changeset-stats $OUT_DIR/stats.json --include-tags --separate-output

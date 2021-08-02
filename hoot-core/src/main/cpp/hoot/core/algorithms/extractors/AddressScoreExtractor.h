@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ADDRESS_SCORE_EXTRACTOR_H
 #define ADDRESS_SCORE_EXTRACTOR_H
@@ -43,7 +43,9 @@ namespace hoot
 class Address;
 
 /**
- * Calculates the address similarity score of two features involved in certain types of conflation.
+ * @brief The AddressScoreExtractor class calculates the address similarity score of two features
+ * involved in certain types of conflation.
+ *
  * Only exact string matches yield a 1.0 score that is considered a match. There is limited support
  * for partial matching.
  *
@@ -60,17 +62,12 @@ public:
   static QString className() { return "hoot::AddressScoreExtractor"; }
 
   AddressScoreExtractor();
-  virtual ~AddressScoreExtractor() = default;
+  ~AddressScoreExtractor() = default;
 
-  virtual QString getClassName() const { return className(); }
-
-  virtual QString getName() const { return className(); }
-
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
-   * Calculates the address similarity score of two features
-   *
+   * @brief extract calculates the address similarity score of two features
    * @param map map containing the elements whose score is to be determined
    * @param element1 the first element whose address is to be compared
    * @param element2 the second element whose address is to be compared
@@ -78,10 +75,13 @@ public:
    * for a non-match where both input elements have an address, and a score of -1.0 is returned if
    * either input element does not have an address
    */
-  virtual double extract(const OsmMap& map, const ConstElementPtr& element1,
-                         const ConstElementPtr& element2) const;
+  double extract(
+    const OsmMap& map, const ConstElementPtr& element1,
+    const ConstElementPtr& element2) const override;
 
-  virtual QString getDescription() const
+  QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getDescription() const override
   { return "Scores address similarity for conflation"; }
 
   long getAddressesProcessed() const { return _addressesProcessed; }

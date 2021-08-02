@@ -1,5 +1,5 @@
 
-== Configure
+== Details on `Configure`
 
 The C++ portion of Hootenanny uses autoconf to configure the C++ libraries and such. Any Linux admin will be quite familiar with the `configure` script that this process generates. However, autoconf is anything but automatic. The following sections describe how the configure process works, which files are created and how that impacts the build process.
 
@@ -14,9 +14,7 @@ aclocal
 autoconf
 --------
 
-These two command depend on the `configure.ac` file as well as all the files included from `configure.ac` in the `m4` directory. These macro files define all the dependencies and describe how to determine if the dependencies exist, are the right version, and how Hootenanny needs to compile and link against the dependencies.
-
-If you take a peek at `configure.ac` most people will think it is some form of gibberish with a few familiar terms mixed in. I won't try and explain what the gibberish means, but you can likely get the gist. There are a number of tutorials on autoconf that should be useful. We can start by looking at a simple example (as of 2013-08-14). At about line 81 is the following snippet:
+These two command depend on the `configure.ac` file as well as all the files included from `configure.ac` in the `m4` directory. These macro files define all the dependencies and describe how to determine if the dependencies exist, are the right version, and how Hootenanny needs to compile and link against the dependencies. If you take a peek at `configure.ac` most people will think it is some form of gibberish with a few familiar terms mixed in. I won't try and explain what the gibberish means, but you can likely get the gist. There are a number of tutorials on autoconf that should be useful. We can start by looking at a simple example (as of 2013-08-14). At about line 81 is the following snippet:
 
 --------
 # CPPUnit
@@ -28,7 +26,7 @@ This defines the dependence on CPPUnit by including it's macro file and then exe
 
 * `HAS_CPPUNIT = cppunit` if cppunit is present. This will provide some substitutions later in the process.
 
-If you then go and poke around inside the crazy long configure script that was generated you'll see the shell script equivalent of that substitution. (not recommended)
+If you then go and poke around inside the crazy long configure script that was generated you'll see the shell script equivalent of that substitution (not recommended).
 
 === Running `configure`
 
@@ -90,8 +88,3 @@ The make process is itself a bit complicated. There are two Makefiles at the top
 When modifying projects you'll typically be adding or removing entries from the `.pro` file associated with your project. Rarely changes will be made to the top level `Makefile`. You should never modify a `Makefile.qmake` directly as the changes will be overwritten.
 
 When you type `make` for the first time all the `.qmake` makefiles will be generated for you and the code will be built. _Magic_.
-
-=== Pretty Pipes
-
-Pretty Pipes is a bit of an outlier in that it uses Maven for building the `pp-lib` Java code and qmake/swig for building the .cpp code. If you need detailed information on this build process please create an issue at https://github.com/ngageoint/hootenanny.
-

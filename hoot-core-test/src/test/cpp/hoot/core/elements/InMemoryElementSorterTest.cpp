@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -54,7 +54,7 @@ public:
     //from the xml reader before its sorted that we don't care to see.
     DisableLog dl;
 
-    OsmMapPtr inputMap(new OsmMap());
+    OsmMapPtr inputMap = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       inputMap,
       _inputPath + "ExternalMergeElementSorterTest.osm",

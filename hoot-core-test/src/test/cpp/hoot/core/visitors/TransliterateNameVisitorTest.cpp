@@ -19,17 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -49,8 +48,8 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
-    NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 0, 0, 10);
     n1->getTags()["name"] = "أَلِف";
     map->addNode(n1);
 
@@ -61,8 +60,8 @@ public:
     //characters is not latin, "note, Transliterated Name" added.
     CPPUNIT_ASSERT_EQUAL(false, n1->getTags().find("note") == n1->getTags().end());
 
-    OsmMapPtr map1(new OsmMap());
-    NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), 500, 500, 10));
+    OsmMapPtr map1 = std::make_shared<OsmMap>();
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 500, 500, 10);
     n2->getTags()["name"] = "little town";
     map1->addNode(n2);
     TransliterateNameVisitor v1;

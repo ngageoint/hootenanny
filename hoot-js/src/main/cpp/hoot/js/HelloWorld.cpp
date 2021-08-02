@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "HelloWorld.h"
 
@@ -36,10 +36,11 @@
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/HootJsStable.h>
 
-
-using namespace hoot;
 using namespace std;
 using namespace v8;
+
+namespace hoot
+{
 
 /**
  * This class is used to determine if the HootJs library has already been loaded or not. This may
@@ -54,9 +55,11 @@ public:
 
 HOOT_FACTORY_REGISTER_BASE(HootJsLoaded)
 
-void init(Handle<Object> exports)
+void init(Local<Object> exports)
 {
   JsRegistrar::Init(exports);
 }
 
 NODE_MODULE(HootJs, init)
+
+}

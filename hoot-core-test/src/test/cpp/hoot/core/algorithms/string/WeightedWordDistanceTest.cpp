@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -51,8 +51,6 @@ class WeightedWordDistanceTest : public HootTestFixture
 
 public:
 
-  WeightedWordDistance* _wwd;
-
   QString normalize(QString s)
   {
     QStringList l = s.split(" ");
@@ -75,7 +73,7 @@ public:
     LOG_INFO("* " << s1 << " (" << normalize(s1) << ")  vs. " << s2 << " (" <<
       normalize(s2) << ")");
 
-    MeanWordSetDistance mwsd(StringDistancePtr(new LevenshteinDistance(1.5)));
+    MeanWordSetDistance mwsd(std::make_shared<LevenshteinDistance>(1.5));
 
     LevenshteinDistance ld(1.5);
 
@@ -86,8 +84,9 @@ public:
 
   void runTest()
   {
-    WeightedWordDistance uut(new LevenshteinDistance(),
-      new TextFileWordWeightDictionary("test-files/algorithms/string/WordWeight.tsv"));
+    WeightedWordDistance uut(
+      std::make_shared<LevenshteinDistance>(),
+      std::make_shared<TextFileWordWeightDictionary>("test-files/algorithms/string/WordWeight.tsv"));
     HOOT_STR_EQUALS(0, uut.compare("foo", "bar"));
     HOOT_STR_EQUALS(0.631018, uut.compare("foo street", "fou street"));
     HOOT_STR_EQUALS(0.987104, uut.compare("foo road", "foo street"));
@@ -100,10 +99,10 @@ public:
 
   void runRealWorldTest()
   {
-    SqliteWordWeightDictionary* dict = new SqliteWordWeightDictionary(
-      ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary()));
-    WeightedWordDistance uut(new LevenshteinDistance(1.5),
-      dict);
+    std::shared_ptr<SqliteWordWeightDictionary> dict =
+      std::make_shared<SqliteWordWeightDictionary>(
+        ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary()));
+    WeightedWordDistance uut(std::make_shared<LevenshteinDistance>(1.5), dict);
     _wwd = &uut;
     LOG_VAR(dict->getWeight("kafr"));
     LOG_VAR(uut.compare("Kafr Ibrahim al Aydi", "Kafr Ayyub"));
@@ -125,6 +124,10 @@ public:
     test3("`Izbat ash Sharaqwah", "Izbat al Sharaqwah");
     test3("Joe's Coffee", "Joe's Restaurant");
   }
+
+private:
+
+  WeightedWordDistance* _wwd;
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WeightedWordDistanceTest, "quick");

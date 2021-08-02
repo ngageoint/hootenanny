@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMAPIDBREADER_H
 #define OSMAPIDBREADER_H
@@ -43,21 +43,21 @@ public:
   static QString className() { return "hoot::OsmApiDbReader"; }
 
   OsmApiDbReader();
-  virtual ~OsmApiDbReader();
+  ~OsmApiDbReader();
 
-  virtual void open(const QString& urlStr) override;
+  void open(const QString& urlStr) override;
 
-  virtual void setConfiguration(const Settings &conf) override;
+  void setConfiguration(const Settings &conf) override;
 
-  virtual QString supportedFormats() override { return MetadataTags::OsmApiDbScheme() + "://"; }
+  QString supportedFormats() override { return MetadataTags::OsmApiDbScheme() + "://"; }
 
 protected:
 
-  virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) override;
-  virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) override;
-  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map) override;
+  NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) override;
+  WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) override;
+  RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map) override;
 
-  virtual std::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
+  std::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
 
 private:
 
@@ -72,7 +72,7 @@ private:
    * The element ID is passed in separately from the element here, as the element may have been
    * set with a remapped ID, and we need to use the original ID to retrieve the element's tags.
    */
-  void _parseAndSetTagsOnElement(const ElementId& elementId, const ElementPtr& element);
+  void _parseAndSetTagsOnElement(const ElementId& elementId, const ElementPtr& element) const;
 };
 
 }

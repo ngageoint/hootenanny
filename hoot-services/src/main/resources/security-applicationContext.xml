@@ -4,8 +4,7 @@
 	xmlns="http://www.springframework.org/schema/security"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:oauth="http://www.springframework.org/schema/security/oauth"
-	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd http://www.springframework.org/schema/security/oauth http://www.springframework.org/schema/security/spring-security-oauth.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
-
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/security/oauth http://www.springframework.org/schema/security/spring-security-oauth.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<!-- Spring Annotation Driven Components -->
 	<context:annotation-config />
 	<context:component-scan

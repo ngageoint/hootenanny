@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MostEnglishName.h"
 
 // Hoot
+#include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/Tags.h>
 
 // Qt
 #include <QFile>
@@ -55,7 +55,7 @@ MostEnglishName::MostEnglishName()
 
 const MostEnglishNamePtr& MostEnglishName::getInstance()
 {
-  if (_theInstance.get() == 0)
+  if (_theInstance.get() == nullptr)
   {
     _theInstance.reset(new MostEnglishName());
   }
@@ -101,7 +101,7 @@ const QSet<QString>& MostEnglishName::_getWords()
       }
     }
 
-    if (_englishWords.size() == 0)
+    if (_englishWords.empty())
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {

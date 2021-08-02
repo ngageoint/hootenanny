@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "NodeDensityTaskGridWriter.h"
@@ -63,7 +63,7 @@ void NodeDensityTaskGridWriter::writeTilesToGeoJson(
   writer.open(outputPath);
   writer.write(boundaryMap);
 
-  OsmMapWriterFactory::writeDebugMap(boundaryMap, "osm-tiles");
+  OsmMapWriterFactory::writeDebugMap(boundaryMap, className(), "osm-tiles");
 }
 
 void NodeDensityTaskGridWriter::writeTilesToOsm(
@@ -81,7 +81,7 @@ void NodeDensityTaskGridWriter::writeTilesToOsm(
     _tilesToOsmMap(tiles, nodeCounts, randomTileIndex, selectSingleRandomTile);
 
   OsmMapWriterFactory::write(boundaryMap, outputPath);
-  OsmMapWriterFactory::writeDebugMap(boundaryMap, "osm-tiles");
+  OsmMapWriterFactory::writeDebugMap(boundaryMap, className(), "osm-tiles");
 }
 
 OsmMapPtr NodeDensityTaskGridWriter::_tilesToOsmMap(
@@ -89,9 +89,9 @@ OsmMapPtr NodeDensityTaskGridWriter::_tilesToOsmMap(
   const std::vector<std::vector<long>>& nodeCounts,
   int randomTileIndex, const bool selectSingleRandomTile)
 {
-  OsmMapPtr boundaryMap(new OsmMap());
+  OsmMapPtr boundaryMap = std::make_shared<OsmMap>();
   // This ensures the ways stay in the same order as the task IDs when the map is written out.
-  boundaryMap->setIdGenerator(std::shared_ptr<IdGenerator>(new PositiveIdGenerator));
+  boundaryMap->setIdGenerator(std::make_shared<PositiveIdGenerator>());
   int bboxCtr = 1;
   for (size_t tx = 0; tx < tiles.size(); tx++)
   {

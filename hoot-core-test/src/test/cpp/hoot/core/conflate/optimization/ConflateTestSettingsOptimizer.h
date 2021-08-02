@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CONFLATETESTSETTINGSOPTIMIZER_H
 #define CONFLATETESTSETTINGSOPTIMIZER_H
@@ -37,9 +37,9 @@ namespace hoot
 class AbstractTestFitnessFunction;
 
 /**
- * Uses simulated annealing to attempt to determine the optimal configuration for conflation
- * related configuration options, given a fitness function that describes how well a conflation
- * test performs.
+ * @brief the ConflateTestSettingsOptimizer class uses simulated annealing to attempt to determine
+ * the optimal configuration for conflation related configuration options, given a fitness function
+ * that describes how well a conflation test performs.
  */
 class ConflateTestSettingsOptimizer
 {
@@ -48,8 +48,7 @@ public:
   ConflateTestSettingsOptimizer(bool verbose);
 
   /**
-   * Runs the optimization process
-   *
+   * @brief runOptimization Runs the optimization process
    * @param fitnessFunction a user specified fitness function that determines the value of test
    * outcome
    * @param numIterations the number of iterations to run the optimization

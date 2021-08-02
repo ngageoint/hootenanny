@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "v8Engine.h"
 
@@ -39,9 +39,9 @@ v8Engine::v8Engine()
   //  Setup and initialize the platform
   if (v8Engine::_needPlatform)
   {
-    V8::InitializeICUDefaultLocation(NULL);
-    V8::InitializeExternalStartupData(NULL);
-    _platform.reset(platform::CreateDefaultPlatform());
+    V8::InitializeICUDefaultLocation(nullptr);
+    V8::InitializeExternalStartupData(nullptr);
+    _platform = platform::NewDefaultPlatform();
     V8::InitializePlatform(_platform.get());
     //  Initialize v8
     V8::Initialize();
@@ -50,13 +50,13 @@ v8Engine::v8Engine()
     Isolate::CreateParams params;
     params.array_buffer_allocator = _allocator.get();
     _isolate = Isolate::New(params);
-    _isolateScope.reset(new Isolate::Scope(_isolate));
+    _isolateScope = std::make_shared<Isolate::Scope>(_isolate);
     //  Create the main context
-    _locker.reset(new Locker(_isolate));
+    _locker = std::make_shared<Locker>(_isolate);
     HandleScope handleScope(_isolate);
-    _context.reset(new Persistent<Context>(_isolate, Context::New(_isolate)));
+    _context = std::make_shared<Persistent<Context>>(_isolate, Context::New(_isolate));
     Local<Context> context = ToLocal(_context.get());
-    _scopeContext.reset(new Context::Scope(context));
+    _scopeContext = std::make_shared<Context::Scope>(context);
   }
   else
   {

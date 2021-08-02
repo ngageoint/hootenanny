@@ -19,19 +19,19 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonTypeScoreExtractor.h"
 
 // hoot
 #include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonSchemaType.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonSchemaType.h>
 
 // Qt
 #include <QSet>
@@ -50,7 +50,7 @@ QMap<QString, QSet<QString>> PoiPolygonTypeScoreExtractor::_categoriesToSchemaTa
 PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor(PoiPolygonInfoCachePtr infoCache) :
 _typeScoreThreshold(-1.0),
 _featureDistance(-1.0),
-_printMatchDistanceTruth(false),
+_calculateMatchDistanceTruth(false),
 _translateTagValuesToEnglish(false),
 _noTypeFound(false),
 _infoCache(infoCache)
@@ -62,14 +62,14 @@ void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
   ConfigOptions config = ConfigOptions(conf);
 
   setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
-  setPrintMatchDistanceTruth(config.getPoiPolygonPrintMatchDistanceTruth());
+  setCalculateMatchDistanceTruth(config.getPoiPolygonCalculateMatchDistanceTruth());
 
   _translateTagValuesToEnglish = config.getPoiPolygonTypeTranslateToEnglish();
   if (_translateTagValuesToEnglish && !_translator)
   {
-    _translator.reset(
+    _translator =
       Factory::getInstance().constructObject<ToEnglishTranslator>(
-        config.getLanguageTranslationTranslator()));
+        config.getLanguageTranslationTranslator());
     _translator->setConfiguration(conf);
     _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
     _translator->setId(className());
@@ -123,7 +123,7 @@ QSet<QString> PoiPolygonTypeScoreExtractor::_getTagValueTokens(const QString& ca
          tagItr != tags.end(); ++tagItr)
     {
       SchemaVertex tag = *tagItr;
-      const QString tagVal = tag.value.toLower();
+      const QString tagVal = tag.getValue().toLower();
       if (!tagVal.contains("*"))  //skip wildcards
       {
         _categoriesToSchemaTagValues[category].insert(tagVal);
@@ -198,7 +198,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
 
   LOG_VART(poiTagList);
   LOG_VART(polyTagList);
-  if (poiTagList.size() == 0 || polyTagList.size() == 0)
+  if (poiTagList.empty() || polyTagList.empty())
   {
     _noTypeFound = true;
     LOG_TRACE("No valid type found when comparing: " << poi << " to: " << poly);
@@ -263,7 +263,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
 
       if (result == 1.0)
       {
-        if (_printMatchDistanceTruth)
+        if (_calculateMatchDistanceTruth)
         {
           LOG_VART(_poiBestKvp);
           LOG_VART(_polyBestKvp);
@@ -277,7 +277,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
   LOG_VART(_poiBestKvp);
   LOG_VART(_polyBestKvp);
 
-  if (_printMatchDistanceTruth)
+  if (_calculateMatchDistanceTruth)
   {
     PoiPolygonDistanceTruthRecorder::recordDistanceTruth(
       poi, poly, _poiBestKvp, _polyBestKvp, _featureDistance);
@@ -340,17 +340,15 @@ bool PoiPolygonTypeScoreExtractor::_failsCuisineMatch(const ConstElementPtr& e1,
   QString t2Val;
   if (_infoCache->isType(e1, PoiPolygonSchemaType::Restaurant) &&
       _infoCache->isType(e2, PoiPolygonSchemaType::Restaurant) &&
-      _haveConflictingTags("cuisine", t1, t2, t1Val, t2Val))
+      _haveConflictingTags("cuisine", t1, t2, t1Val, t2Val) &&
+      // Don't return false on regional, since its location dependent, and we don't take the
+      // location into account for this.
+      t1Val != "regional" && t2Val != "regional" &&
+      // Don't fail on "other", since that's not very descriptive.
+      t1Val != "other" && t2Val != "other")
   {
-    if (//Don't return false on regional, since its location dependent, and we don't take the
-        //location into account for this.
-        t1Val != "regional" && t2Val != "regional" &&
-        //Don't fail on "other", since that's not very descriptive.
-        t1Val != "other" && t2Val != "other")
-    {
-      LOG_TRACE("Failed type match on different cuisines.");
-      return true;
-    }
+    LOG_TRACE("Failed type match on different cuisines.");
+    return true;
   }
   return false;
 }

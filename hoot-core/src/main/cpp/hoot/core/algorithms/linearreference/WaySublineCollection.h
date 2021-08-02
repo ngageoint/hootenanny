@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WAYSUBLINECOLLECTION_H
 #define WAYSUBLINECOLLECTION_H
@@ -41,8 +41,8 @@ namespace hoot
 {
 
 /**
- * Contains a continuous collection of ways. Each way subline must touch the next subline end to
- * start.
+ * @brief The WaySublineCollection class contains a continuous collection of ways. Each way subline
+ * must touch the next subline end to start.
  */
 class WaySublineCollection
 {
@@ -52,21 +52,23 @@ public:
 
   static int logWarnCount;
 
-  typedef std::vector<WaySubline> SublineCollection;
+  using SublineCollection = std::vector<WaySubline>;
 
-  WaySublineCollection();
+  WaySublineCollection() = default;
 
   void addSubline(const WaySubline& subline);
 
   /**
-   * Create a new WaySublineCollection that represents the negative of the sublines on this
-   * WaySublineCollection. This will only include sublines on the ways that are in this subline. If
-   * the subline is empty then it will not be included.
+   * @brief invert creates a new WaySublineCollection that represents the negative of the sublines
+   * on this WaySublineCollection.
+   *
+   * This will only include sublines on the ways that are in this subline. If the subline is empty,
+   * then it will not be included.
    */
   WaySublineCollection invert() const;
 
   /**
-   * Return the sum of the lengths of all thes sublines.
+   * @brief getLength returns the sum of the lengths of all thes sublines.
    */
   Meters getLength() const;
 

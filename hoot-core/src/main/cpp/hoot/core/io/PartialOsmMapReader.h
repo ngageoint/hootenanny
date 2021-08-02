@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef PARTIALOSMMAPREADER_H
 #define PARTIALOSMMAPREADER_H
@@ -47,14 +47,13 @@ public:
 
   virtual ~PartialOsmMapReader() = default;
 
-  long getMaxElementsPerMap() { return _maxElementsPerMap; }
-
+  long getMaxElementsPerMap() const { return _maxElementsPerMap; }
   void setMaxElementsPerMap(long maxElements) { _maxElementsPerMap = maxElements; }
 
   /**
    * The default reads the map and then calls finalizePartial();
    */
-  virtual void read(const OsmMapPtr& map) override;
+  void read(const OsmMapPtr& map) override;
 
   /**
    * Reads all the entries in the OsmMap.
@@ -74,25 +73,14 @@ public:
    */
   virtual void finalizePartial() = 0;
 
-  /**
-   * Returns true if the reader can read any more elements
-   *
-   * @return true if there are more elements; false otherwise
-   */
-  virtual bool hasMoreElements() = 0;
-
-  /**
-   * Reads the next available element from the data source
-   *
-   * @return an element
-   */
-  virtual ElementPtr readNextElement() = 0;
-
 protected:
 
-  long _maxElementsPerMap;
   long _elementsRead;
   OsmMapPtr _partialMap;
+
+private:
+
+  long _maxElementsPerMap;
 };
 
 }

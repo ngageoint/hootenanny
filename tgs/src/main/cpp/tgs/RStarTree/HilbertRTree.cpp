@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "HilbertRTree.h"
@@ -33,7 +33,6 @@
 #include <cmath>
 #include <exception>
 #include <iostream>
-using namespace std;
 
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>
@@ -41,17 +40,15 @@ using namespace std;
 #include <tgs/RStarTree/RTreeNode.h>
 #include <tgs/Statistics/Random.h>
 
-using namespace Tgs;
+using namespace std;
+
+namespace Tgs
+{
 
 HilbertRTree::HilbertRTree(const std::shared_ptr<PageStore>& ps, int dimensions) :
-  RStarTree(ps, dimensions)
+RStarTree(ps, dimensions),
+_hilbertCurve(std::make_shared<HilbertCurve>(dimensions, 8))
 {
-  _hilbertCurve = new HilbertCurve(dimensions, 8);
-}
-
-HilbertRTree::~HilbertRTree()
-{
-  delete _hilbertCurve;
 }
 
 void HilbertRTree::bulkInsert(const std::vector<Box>& boxes, const std::vector<int>& fids)
@@ -81,7 +78,7 @@ void HilbertRTree::bulkInsert(const std::vector<Box>& boxes, const std::vector<i
 }
 
 void HilbertRTree::_calculateHilbertValues(const std::vector<Box>& boxes,
-  const std::vector<int>& fids, std::vector<UserBoxHolder>& hilbertBoxes)
+  const std::vector<int>& fids, std::vector<UserBoxHolder>& hilbertBoxes) const
 {
   //std::cout << "Calculating Hilbert values..." << std::endl;
 
@@ -184,7 +181,7 @@ double HilbertRTree::_calculatePairwiseOverlap(int parentId, std::vector<double>
   return result;
 }
 
-int HilbertRTree::_chooseWeightedChild(const std::vector<double>& weights)
+int HilbertRTree::_chooseWeightedChild(const std::vector<double>& weights) const
 {
   assert(weights.size() > 0);
   int result = -1;
@@ -239,7 +236,7 @@ void HilbertRTree::_createLeafNodes(const std::vector<UserBoxHolder>& hilbertBox
 //    numProcessed++;
 //    if (numProcessed % 100000 == 0)
 //    {
-//      std::cout << "                              Created " << numProcessed << " / " <<
+//      std::cout << "                              Created " << numProcessed << " of " <<
 //        hilbertBoxes.size() << " leaf nodes." << std::endl;
 //    }
   }
@@ -274,7 +271,7 @@ void HilbertRTree::_createParentNodes(const std::vector<int>& childNodes,
 //    if (numProcessed % 1000 == 0)
 //    {
 //      std::cout << "                                                            Created " <<
-//        numProcessed << " / " << childNodes.size() << " parent nodes." << std::endl;
+//        numProcessed << " of " << childNodes.size() << " parent nodes." << std::endl;
 //    }
   }
 }
@@ -292,7 +289,7 @@ void HilbertRTree::greedyShuffle()
 void HilbertRTree::_greedyShuffle(int parentId)
 {
   std::vector<double> tmp;
-  RTreeNode* parent = _getNode(parentId);
+  const RTreeNode* parent = _getNode(parentId);
   // if we're a leaf, no shuffling is possible, return the overlap
   if (parent->isLeafNode())
   {
@@ -332,11 +329,7 @@ public:
   HilbertRTree::BoxPair boxPair;
   int hilbertValue;
 
-  BoxHolder(const BoxHolder& bh) :
-    boxPair(bh.boxPair)
-  {
-    hilbertValue = bh.hilbertValue;
-  }
+  BoxHolder(const BoxHolder&)  = default;
 
   BoxHolder(const HilbertRTree::BoxPair& bp, int hv) :
     boxPair(bp)
@@ -344,7 +337,7 @@ public:
     hilbertValue = hv;
   }
 
-  bool operator<(const BoxHolder& b)
+  bool operator<(const BoxHolder& b) const
   {
     return hilbertValue < b.hilbertValue;
   }
@@ -378,7 +371,7 @@ int HilbertRTree::_splitBoxes(BoxVector& boxes)
   hilbertBoxes.reserve(boxes.size());
   for (unsigned int i = 0; i < boxes.size(); i++)
   {
-    BoxInternalData& box = boxes[i].box;
+    const BoxInternalData& box = boxes[i].box;
     for (int j = 0; j < box.getDimensions(); j++)
     {
       double v = (box.getLowerBoundRaw(j) + box.getUpperBoundRaw(j)) / 2.0;
@@ -393,7 +386,7 @@ int HilbertRTree::_splitBoxes(BoxVector& boxes)
       assert(point[j] >= 0 && point[j] < (1 << ORDER));
     }
 
-    hilbertBoxes.push_back(BoxHolder(boxes[i], _hilbertCurve->encode(point)));
+    hilbertBoxes.emplace_back(boxes[i], _hilbertCurve->encode(point));
   }
   //sort(hilbertBoxes.begin(), hilbertBoxes.end());
   bool swap = false;
@@ -420,7 +413,7 @@ int HilbertRTree::_splitBoxes(BoxVector& boxes)
   return _chooseSplitIndex(boxes);
 }
 
-double HilbertRTree::_sum(const std::vector<double>& v)
+double HilbertRTree::_sum(const std::vector<double>& v) const
 {
   double result = 0.0;
   for (unsigned int i = 0; i < v.size(); i++)
@@ -432,7 +425,7 @@ double HilbertRTree::_sum(const std::vector<double>& v)
 
 double HilbertRTree::_swapGrandChildNodes(int parentId, const std::vector<double>& overlaps)
 {
-  RTreeNode* parent = _getNode(parentId);
+  const RTreeNode* parent = _getNode(parentId);
   assert(parent->isLeafNode() == false);
   assert(parent->getChildCount() >= 2);
 
@@ -546,4 +539,6 @@ double HilbertRTree::_swapGrandChildNodes(int parentId, const std::vector<double
   }
 
   return result;
+}
+
 }

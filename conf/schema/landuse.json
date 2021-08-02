@@ -1,10 +1,7 @@
 [
     {
         "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": [ "node", "area" ],
         "influence": 1,
         "isA": "poi",
         "name": "landuse",
@@ -22,9 +19,7 @@
         "objectType": "tag"
     },
     {
-        "aliases": [
-            "landuse=cemetary"
-        ],
+        "aliases": [ "landuse=cemetary" ],
         "isA": "landuse",
         "name": "landuse=cemetery",
         "objectType": "tag",
@@ -38,10 +33,7 @@
         "isA": "landuse",
         "name": "landuse=installation",
         "objectType": "tag",
-        "similarTo": {
-                "name": "facility=yes",
-                "weight": 0.9
-         }
+        "similarTo": { "name": "facility=yes", "weight": 0.9 }
     },
     {
         "isA": "landuse",
@@ -49,18 +41,14 @@
         "objectType": "tag"
     },
     {
-        "categories": [
-            "multiuse"
-        ],
+        "categories": [ "multiuse" ],
         "isA": "landuse",
         "name": "landuse=basin",
         "objectType": "tag"
     },
     {
         "geometries": [ "area" ],
-        "categories": [
-            "multiuse"
-        ],
+        "categories": [ "multiuse" ],
         "isA": "landuse",
         "name": "landuse=commercial",
         "objectType": "tag"
@@ -73,43 +61,33 @@
     },
     {
         "geometries": [ "area" ],
-        "categories": [
-            "multiuse"
-        ],
+        "categories": [ "multiuse" ],
         "isA": "landuse",
         "name": "landuse=forest",
         "objectType": "tag"
     },
     {
         "#": "TODO: This is deprecated; replaced by man_made=observatory.",
-        "categories": [
-            "multiuse"
-        ],
+        "categories": [ "multiuse" ],
         "isA": "landuse",
         "name": "landuse=observatory",
         "objectType": "tag"
     },
     {
-        "categories": [
-            "multiuse"
-        ],
+        "categories": [ "multiuse" ],
         "isA": "landuse",
         "name": "landuse=industrial",
         "objectType": "tag"
     },
     {
-        "categories": [
-            "multiuse"
-        ],
+        "categories": [ "multiuse" ],
         "isA": "landuse",
         "name": "landuse=quarry",
         "objectType": "tag"
     },
     {
         "geometries": [ "area" ],
-        "categories": [
-            "multiuse"
-        ],
+        "categories": [ "multiuse" ],
         "isA": "landuse",
         "name": "landuse=railway",
         "objectType": "tag"
@@ -129,21 +107,13 @@
         "name": "landuse=training_area",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "landuse=military",
-                "weight": 0.9
-            },
-            {
-                "name": "military=installation",
-                "weight": 0.8
-            }
+            { "name": "landuse=military", "weight": 0.9 },
+            { "name": "military=installation", "weight": 0.8 }
          ]
     },
     {
         "geometries": [ "area" ],
-        "categories": [
-            "multiuse"
-        ],
+        "categories": [ "multiuse" ],
         "isA": "landuse",
         "name": "landuse=recreation_ground",
         "objectType": "tag",
@@ -156,28 +126,18 @@
         "isA": "landuse",
         "name": "landuse=built_up_area",
         "objectType": "tag",
-        "similarTo": {
-            "name": "place=village",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "place=village", "weight": 0.9 }
     },
     {
         "geometries": [ "area" ],
-        "categories": [
-            "multiuse"
-        ],
+        "categories": [ "multiuse" ],
         "isA": "landuse",
         "name": "landuse=residential",
         "objectType": "tag",
-        "similarTo": {
-            "name": "landuse=built_up_area",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "landuse=built_up_area", "weight": 0.9 }
     },
     {
-        "categories": [
-            "multiuse"
-        ],
+        "categories": [ "multiuse" ],
         "isA": "landuse",
         "name": "landuse=reservoir",
         "objectType": "tag",
@@ -185,26 +145,16 @@
         "similarTo": { "name": "water=lake", "weight": 0.9 }
     },
     {
-        "geometries": [
-            "area"
-        ],
-        "categories": [
-            "poi"
-        ],
+        "geometries": [ "area" ],
+        "categories": [ "poi" ],
         "isA": "landuse",
         "name": "landuse=farmyard",
         "objectType": "tag"
     },
     {
-        "aliases": [
-            "landuse=farm"
-        ],
-        "geometries": [
-            "area"
-        ],
-        "categories": [
-            "poi"
-        ],
+        "aliases": [ "landuse=farm" ],
+        "geometries": [ "area" ],
+        "categories": [ "poi" ],
         "isA": "landuse",
         "name": "landuse=farmland",
         "objectType": "tag"

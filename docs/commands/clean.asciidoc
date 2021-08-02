@@ -3,13 +3,25 @@
 
 === Description
 
-The +clean+ command corrects common erroneous data scenarios from input and writes to output by applying the operations specified
-in the `map.cleaner.transforms` configuration option.
+The +clean+ command corrects common erroneous data scenarios from input and writes to output by applying the 
+operations specified in the `map.cleaner.transforms` configuration option. The operation is memory bound.
 
-* +input+  - Input; may be any supported input format (e.g. .osm file).
-* +output+ - Output file; may be any supported output format (e.g. .osm file).
+* +input(s)+          - One or more inputs(s); may be any supported input format (e.g. .osm file).
+* +output+            - Output; may be any supported output format (e.g. .osm file). This parameter may not be specified with 
+                        the `--separate-output` parameter.
+* +--recursive+       - Allows for processing inputs recursively in a directory structure. This must be followed by either "*" 
+                        to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*". 
+                        This parameter is not compatible with the OGR layer input syntax.
+* +--separate-output+ - This parameter replaces the `--output` parameter and will result in no validation summary to
+                        be displayed on the screen. The default behavior when processing multiple inputs is to 
+                        combine them into the same single output. With this parameter specified, each input is 
+                        processed and written to a separate output. The +output+ parameter is invalid in combination 
+                        with this parameter, and output is written back to a new URL with the same base name as 
+                        each input with the text "-validated" appended to it. This parameter cannot be used with OSM 
+                        API database (osmapidb://) or OSM API (http://) inputs. This parameter is not compatible with the 
+                        OGR layer input syntax.
 
-To see a list of available cleaning operations:
+To see a list of the default cleaning operation configuration:
 -----
 hoot info --cleaning-operations
 -----
@@ -17,14 +29,12 @@ hoot info --cleaning-operations
 === Usage
 
 --------------------------------------
-clean (input) (output)
+hoot clean (input) [input2] ... (output) [--recursive "*"|"filter1;filter2..."]
+
+hoot clean (input) [input2] ... [--recursive "*"|"filter1;filter2..."] [--separate-output]
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot clean JustHighways.osm Cleaned.osm
---------------------------------------
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#cleaning[Examples]
 
 ==== See Also
 

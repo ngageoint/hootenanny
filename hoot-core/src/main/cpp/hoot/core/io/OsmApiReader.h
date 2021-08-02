@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSM_API_READER_H
 #define OSM_API_READER_H
@@ -55,42 +55,51 @@ public:
   /** Constructor */
   OsmApiReader();
   /** Destructor */
-  virtual ~OsmApiReader();
+  ~OsmApiReader();
   /**
    * @brief close Close the reader
    */
-  virtual void close();
+  void close() override;
   /**
    * @brief isSupported
    * @param url URL of the OSM API to read
    * @return True if the URL is a supported format
    */
-  virtual bool isSupported(const QString& url) override;
-  /**
-   * @brief open Open up the reader
-   * @param url URL of the OSM API to read from
-   */
-  virtual void open(const QString& url) override;
+  bool isSupported(const QString& url) override;
   /**
    * @brief read Read the OSM from the API into the map
    * @param map Pointer to the map to read into
    */
-  virtual void read(const OsmMapPtr& map) override;
+  void read(const OsmMapPtr& map) override;
   /**
    * @brief setUseDataSourceIds
    * @param useDataSourceIds
    */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) override;
+  void setUseDataSourceIds(bool useDataSourceIds) override;
   /**
    * @brief supportedFormats
    * @return the supported formats
    */
-  virtual QString supportedFormats() override;
+  QString supportedFormats() override;
   /**
    * @brief setConfiguration
    * @param conf Updated configuration
    */
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
+
+private:
+
+  /**
+   * @brief _getBoundsEnvelope - Get either the `bounds` parameter value
+   *  or the bounds of a file listed in `bounds.file` parameter
+   * @return The bounds for the read
+   */
+  std::shared_ptr<geos::geom::Geometry> _getBoundsEnvelope() const;
+
+  /** Value of the bounds envelope string */
+  QString _boundsString;
+  /** Value of the bounds filename string */
+  QString _boundsFilename;
 };
 
 }

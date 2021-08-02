@@ -54,7 +54,7 @@ regardless.
 * Default Value: `false`
 
 If set to true and multiple criterion are specified in add.attributes.visitor.element.criteria,
-the attributes of elements will be modified only if they satisfy all of the criteria.  If set to
+the attributes of elements will be modified only if they satisfy all of the criteria. If set to
 false, then only one of the specified criteria must be met in order to modify the attributes of an
 element.
 
@@ -64,8 +64,7 @@ element.
 * Default Value: ``
 
 One or more element criteria used for selecting elements whose attributes to modify. Delimit names
-with '='. From the command line, names with ';' and surround the entire list in double quotes.
-E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
+with '='. E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
 
 === add.attributes.visitor.kvps
 
@@ -118,8 +117,7 @@ Tag key used by AddUuidVisitor for adding custom unique ID's to data.
 ** ``
 
 By default,conflation examines standard OSM tags for address comparisons (see the addressTagKeys
-file).  You can expand the tag keys searched by populating this list. From the command line,
-separate list items with a semicolon and surround the entire list in double quotes.
+file).  You can expand the tag keys searched by populating this list.
 
 === address.allow.lenient.house.number.matching
 
@@ -402,6 +400,18 @@ timestamp, user, uid, or version.
 Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See
 MatchFactory::_tempFixDefaults() for more info.
 
+=== average.conflation.min.split.size.multiplier
+
+* Data Type: double
+* Default Value: `0.7`
+
+Multiplier used in determining the minimum linear feature split size during Average Conflation.
+The valid range is greater than 0.0 and less than or equal to 1.0. The lesser of
+`way.merger.min.split.size` and the result of applying this multiple to the length of the feature
+being conflated determines the actual minimum split size. The higher this multiplier is, the larger
+the minimum split size becomes, if the feature being conflated has a length greater than
+`way.merger.min.split.size`.
+
 === bounds
 
 * Data Type: string
@@ -420,6 +430,20 @@ Example Usage:
 hoot convert -D bounds="106.851,-6.160,107.052,-5.913" input.osm output.osm
 ----
 
+=== bounds.input.file
+
+* Data Type: string
+* Default Value: ``
+
+A complete file path that contains the bounds of to be used.  The bounds will be the min/max lat/lon
+for the entire file.
+
+Example Usage:
+
+---
+hoot convert -D bounds.input.file="$HOOT_HOME/test-files/ToyTestA.osm" input.osm output.osm
+---
+
 === bounds.hoot.api.database
 
 * Data Type: string
@@ -434,17 +458,17 @@ precendence over the `bounds` setting for Hootenanny API database data sources o
 * Data Type: bool
 * Default Value: `true`
 
-If true, will not break apart features crossing the convert bounds. This is analagous to
-crop.keep.entire.features.crossing.bounds used with the crop command, but used with the convert
-command only and kept as a separate option with a different default value.
+If enabled, operations supporting the `bounds` option other than `crop` will not break apart
+features crossing the specified. This is analagous to crop.keep.entire.features.crossing.bounds used
+with the `crop` command.
 
 === bounds.keep.immediately.connected.ways.outside.bounds
 
 * Data Type: bool
 * Default Value: `false`
 
-If enabled, bounded queries will also return ways that are outside of `bounds` but
-immediately connected to ways crossing or within the bounds. Can be used in conjunction with
+If enabled, APIDB readers will also return ways that are outside of `bounds` but immediately
+connected to ways crossing or within the bounds. Can be used in conjunction with
 `bounds.tag.immediately.connected.out.of.bounds.ways`. Not supported by all readers.
 
 === bounds.keep.only.features.inside.bounds
@@ -452,9 +476,9 @@ immediately connected to ways crossing or within the bounds. Can be used in conj
 * Data Type: bool
 * Default Value: `false`
 
-If true, will throw out any features that do not fall completely within the convert bounds. This is
-analagous to crop.keep.entire.features.crossing.bounds used with the crop command, but used with
-the commands supporting the `bounds` option only and kept as a separate option.
+If enabled, operations supporting the `bounds` option other than `crop` will throw out any features
+that do not fall completely within the specified bounds. This is analagous to
+crop.keep.entire.features.crossing.bounds used with the crop command.
 
 === bounds.osm.api.database
 
@@ -470,8 +494,8 @@ the `bounds` setting for OSM API database data sources only.
 * Data Type: string
 * Default Value: `tmp/bounds.osm`
 
-Output location for a bounds file when the `--write-bounds` option is selected for either the
-`changeset-derive`, `changeset-derive-replacement`, `convert`, or `crop` commands.
+Output location for a bounds file when the `--write-bounds` option is selected for supporting
+commands.
 
 === bounds.remove.missing.elements
 
@@ -567,7 +591,7 @@ manual review process.
 * Data Type: double
 * Default Value: `${conflate.match.threshold.default}`
 
-The threshold at which a match is called a match for buildings.
+The threshold at which a match is called a match for buildings. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -586,7 +610,7 @@ together when matched.
 * Data Type: double
 * Default Value: `${conflate.miss.threshold.default}`
 
-The threshold at which a miss is called a miss for buildings.
+The threshold at which a miss is called a miss for buildings. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -623,7 +647,7 @@ If true, any building matches other than 1:1 matches are automatically marked fo
 * Data Type: double
 * Default Value: `${conflate.review.threshold.default}`
 
-The threshold at which a review is called a review for buildings.  See
+The threshold at which a review is called a review for buildings. The valid range is (0.0, 1.0]. See
 `conflate.review.threshold.default`.
 
 See also:
@@ -762,8 +786,8 @@ This allows for writing metadata tags to the changeset output.
 * Data Type: bool
 * Default Value: `true`
 
-If disabled, replacement changesets generated by `changeset-derive-replacement` will never add
-delete statements for reference features falling outside of `bounds`.
+If disabled, replacement changesets generated by `changeset-derive` command with the `--replacement`
+option will never add delete statements for reference features falling outside of `bounds`.
 
 === changeset.replacement.cut.only.implementation
 
@@ -822,9 +846,10 @@ may be desirable.
 * Default Value:
 ** `road_marking=solid_stop_line`
 ** `highway=steps`
+** `noexit=yes`
 
 Feature types that should never be snapped by `ChangesetReplacementCreator` when using
-`UnconnectedWaySnapper`.
+`UnconnectedWaySnapper`. Overrides +snap.unconnected.ways.exclude.types+.
 
 === changeset.source
 
@@ -877,13 +902,37 @@ this list is empty, no circular error will be parsed from input features and a t
 
 Path to this file.  Only modified during testing the Hootenanny options command.
 
-=== conflate.mark.merge.created.multilinestring.relations
+=== conflate.element.criterion
+
+* Data Type: string
+* Default Value: ``
+
+Criteria used for filtering elements before conflating them.
+
+=== conflate.element.criterion.negate
 
 * Data Type: bool
 * Default Value: `false`
 
+Negates conflate.element.criterion.
+
+=== conflate.info.max.size.per.cache
+
+* Data Type: int
+* Default Value: `100000`
+
+The maximum number of elements to cache information for per cache when running Conflation. This
+maximum size is repeated across multiple internal element information caches. To disable caching,
+completely specify a value less than one.
+
+=== conflate.mark.merge.created.multilinestring.relations
+
+* Data Type: bool
+* Default Value: `true`
+
 Marks any multilinestring relations created as a result of merging during conflation with a custom
-tag. Individual mergers must enable this option independently.
+tag. Individual mergers must enable this option independently. This option must be enabled in order
+for `MultilineStringMergeRelationCollapser` to be able to run properly against conflated output.
 
 === conflate.match.building.model
 
@@ -909,6 +958,14 @@ Path to the RF highway model. A new model can be created with `build-model`. Sea
 and then `$HOOT_HOME/conf/`. This is only relevant if the `conflate.match.highway.classifier` is
 set to `hoot::HighwayRfClassifier`.
 
+=== conflate.match.only
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled, features will be matched but not merged during conflation. Combine with
+`writer.include.conflate.score.tags=true` to see conflate match scores in the output.
+
 === conflate.match.poi.model
 
 * Data Type: string
@@ -922,7 +979,7 @@ local path and then `$HOOT_HOME/conf/`.
 * Data Type: double
 * Default Value: `0.6`
 
-The default threshold at which a match is called a match. Valid values are between 0.0 and 1.0.
+The default threshold at which a match is called a match. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -933,7 +990,7 @@ See also:
 * Data Type: double
 * Default Value: `0.6`
 
-The default threshold at which a miss is called a miss. Valid values are between 0.0 and 1.0.
+The default threshold at which a miss is called a miss. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -944,6 +1001,7 @@ See also:
 * Data Type: list
 * Default Value:
 ** `hoot::RemoveMissingElementsVisitor`
+** `hoot::InvalidWayRemover`
 ** `hoot::PoiPolygonInvalidReviewNodeRemover`
 ** `hoot::SuperfluousNodeRemover`
 ** `hoot::SmallHighwayMerger`
@@ -961,12 +1019,14 @@ See also:
 ** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RemoveEmptyRelationsOp`
 ** `hoot::RelationCircularRefRemover`
+** `hoot::MultilineStringMergeRelationCollapser`
 ** `hoot::RoadCrossingPolyReviewMarker`
 ** `hoot::ApiTagTruncateVisitor`
 ** `hoot::AddHilbertReviewSortOrderOp`
 
-List of operations to run in the conflate command after data is conflated, but before exporting.
-'hoot info --operators' displays information about the available operations.
+Runs during conflation just after the data is conflated, but before it is saved. The ordering here
+is sensitive and addition of new operations may take experimentation to produce optimal conflated
+output. 'hoot info --operators' displays information about the available operations.
 
 === conflate.pre.ops
 
@@ -980,7 +1040,9 @@ List of operations to run in the conflate command after data is conflated, but b
 ** `hoot::RemoveInvalidReviewRelationsVisitor`
 ** `hoot::RubberSheet`
 
-Runs in the conflate command after data is loaded. 'hoot info --operators' displays information
+Runs during conflation just after data is loaded. The ordering here is sensitive (although
+generally not as sensitive as with conflate.post.ops) and addition of new operations may take
+experimentation to produce optimal conflated output. 'hoot info --operators' displays information
 about the available operations.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
@@ -1005,7 +1067,7 @@ associated with conflate operators.
 * Default Value: `0.6`
 
 The default threshold at which a review is called a review. Reviews are also declared in some
-other situations when the relationship is not clear. Valid values are between 0.0 and 1.0.
+other situations when the relationship is not clear. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -1015,8 +1077,8 @@ See also:
 
 * Data Type: list
 * Default Value:
-** `hoot::LinearWaterwayCriterion`
-** `hoot::LinearWaterwayWayNodeCriterion`
+** `hoot::RiverCriterion`
+** `hoot::RiverWayNodeCriterion`
 ** `hoot::PowerLineCriterion`
 ** `hoot::PowerLineWayNodeCriterion`
 
@@ -1046,8 +1108,8 @@ testing purposes only.
 * Data Type: string
 * Default Value: ``
 
-A JSON tag filter that is applied to filter features before conflation.  See the Hootenanny
-User Guide "Feature Filtering" section for filter usage examples.
+A JSON tag filter that is applied to filter features before conflation. See the Hootenanny User
+Guide "Feature Filtering" section for filter usage examples.
 
 === conflate.use.data.source.ids.1
 
@@ -1083,14 +1145,6 @@ less confident matches.
 
 ID of the node that ContainsNodeCriterion should search for.
 
-=== convert.require.area.for.polygon
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, an element must be classifiable as an area geometry in the Hootenanny schema in order to
-be converted to a GEOS polygon.
-
 === convert.ops
 
 * Data Type: list
@@ -1100,6 +1154,22 @@ be converted to a GEOS polygon.
 Specifies one or more semi-colon delimited map operations or visitors to apply before writing
 converted data.  This is only applicable to the convert command. 'hoot info --operators' displays
 information about the available operations.
+
+=== convert.require.area.for.polygon
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, an element must be classifiable as an area geometry in the Hootenanny schema in order to
+be converted to a GEOS polygon.
+
+=== convert.translate.multithreaded
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled calling the convert command with a translation script will run a separate thread for
+translating. Multi-threaded translation is memory bound.
 
 === cookie.cutter.alpha
 
@@ -1134,6 +1204,13 @@ parallel.  Warning: each thread has some memory overhead
 
 Crops based on the polygon rather than doing a cookie cut when using the cookie cutter map
 operation (see CookieCutterOp).
+
+=== copy.map.subset.op.element.criteria
+
+* Data Type: list
+* Default Value: ``
+
+One or more element criteria used for filtering maps with `CopyMapSubsetOp`.
 
 === create.bogus.review.tags
 
@@ -1187,6 +1264,30 @@ The maximum number of nodes to be cropped out when running either the `crop-rand
 
 The pixel size used when running either the `crop-random` command or `RandomMapCropper`.
 
+=== data.summary.tag.sources
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of valid values for data sources used to calculate the summary data for multiple conflations
+
+=== debug.maps.class.exclude.filter
+
+* Data Type: list
+* Default Value: ``
+
+A list of class names used for controlling debug map writing. This follows the same format as
+`log.class.exclude.filter`.
+
+=== debug.maps.class.include.filter
+
+* Data Type: list
+* Default Value: ``
+
+A list of class names used for controlling debug map writing. This follows the same format as
+`log.class.include.filter`.
+
 === debug.maps.filename
 
 * Data Type: string
@@ -1211,6 +1312,26 @@ If true, multiple debug maps will be generated during a conflation job.  The out
 is controlled by debug.maps.filename.  The maps can be large and slow things down
 significantly.
 
+=== debug.maps.write.detailed
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled, debug maps are written from inside loops where enabled. debug.maps.write must already
+be enabled for this option to be used. Enabling this option can create a lot of debug maps and slow
+down debugging significantly, so use with caution.
+
+=== differential.remove.linear.partial.matches.as.whole
+
+* Data Type: bool
+* Default Value: `false`
+
+When disabled, Differential Conflation only removes the element geometric portions of linear matches
+involved in the match from the differential output. Otherwise, elements are removed completely from
+the differential, even if they are only partially involved in a match. Disabling this setting may
+yield more accurate linear feature differentials. This setting may only be disabled when using the
+Unifying Algorithm.
+
 === differential.remove.reference.data
 
 * Data Type: bool
@@ -1218,6 +1339,13 @@ significantly.
 
 If false, when running Differential Conflation the reference elements will not be dropped from the
 output. Setting this to false is primarily useful when debugging unconnected way snapping issues.
+
+=== differential.remove.river.partial.matches.as.whole
+
+* Data Type: bool
+* Default Value: `true`
+
+Overrides +differential.remove.linear.partial.matches.as.whole+ when dealing with river data.
 
 === differential.remove.unconflatable.data
 
@@ -1227,13 +1355,13 @@ output. Setting this to false is primarily useful when debugging unconnected way
 If true Differential Conflation will remove all elements from output which Hootenanny is unable to
 match. If false, the unconflatable data will pass through to the output.
 
-=== differential.snap.unconnected.roads
+=== differential.snap.unconnected.features
 
 * Data Type: bool
 * Default Value: `false`
 
 If true, when running Differential Conflation the Unconnected Way Snapper will snap unconnected
-secondary road endpoint nodes to the nearest reference road.
+features to the nearest feature. See snap.unconnected.ways.* options for configurability.
 
 === differential.tag.ignore.list
 
@@ -1250,7 +1378,7 @@ are always ignored.
 * Default Value: `true`
 
 If true, reviews are treated as matches by Differential Conflation and removed from the output if
-differential.remove.reference.data is enabled. If set to false, reviews are not treated as matches
++differential.remove.reference.data+ is enabled. If set to false, reviews are not treated as matches
 and will pass through to the differential output.
 
 === direction.finder.angle.threshold
@@ -1259,8 +1387,7 @@ and will pass through to the differential output.
 * Default Value: `45.0`
 
 Maximum angle different in degrees that two line features can have and still be considered as
-going in the same direction by DirectionFinder::isSimilarDirection2. Used by Attribute Conflation
-only.
+going in the same direction by Attribute Conflation.
 
 === distance.node.criterion.center
 
@@ -1277,6 +1404,30 @@ searching for nodes.
 
 Distance in meters that the DistanceNodeCriterion should search for nodes out from a center
 specified by 'distance.node.criterion.center'.
+
+=== dual.highway.marker.mark.crossing.roads
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled, DualHighwayMarker will tag roads crossing between divided roads in addition to the
+divided roads themselves.
+
+=== dual.highway.marker.crossing.roads.parallel.score.threshold
+
+* Data Type: double
+* Default Value: `0.4`
+
+How perpendicular a road must be to a divided road to be considered as crossing it, with 0.0 being
+the most perpendicular and 1.0 being the least.
+
+=== dual.highway.marker.parallel.score.threshold
+
+* Data Type: double
+* Default Value: `0.9`
+
+How parallel two roads must to be considered as part of the same divided highway, with 0.0 being the
+least parallel and 1.0 being the most.
 
 === dual.highway.splitter.driving.side
 
@@ -1362,15 +1513,25 @@ Size of the in memory relation cache used when streaming I/O is used with relati
 
 Size of the in memory way cache used when streaming I/O is used with ways.
 
-=== element.criterion.negate
+=== element.criteria.chain
 
 * Data Type: bool
 * Default Value: `false`
 
-If true, element criterion passed to an ElementCriterionConsumer will be negated. Not honored by
-all ElementCriterionConsumers. Since this configuration option is shared across all
-ElementCriterionConsumers, there may be undesirable effects in invocations involving multiple
-ElementCriterionConsumers.
+Generic criteria chaining option used by classes which run in isolation from the command line and
+do not require their own version of the option. If set to true and multiple criterion are specified,
+an element must satisfy each criterion in order to pass the filter. If set to false, then only one
+of the specified criteria must be satisified in order to pass the filter.
+
+=== element.criteria.negate
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, element criteria passed to an ElementCriterionConsumer and other consuming classes will be
+negated. Not honored by all ElementCriterionConsumers. Since this configuration option is shared
+across all ElementCriterionConsumers, there may be undesirable effects in invocations involving
+multiple ElementCriterionConsumers.
 
 === element.hash.visitor.non.metadata.ignore.keys
 
@@ -1412,6 +1573,14 @@ Absolute file path to dictionaries of English words. The first file found will b
 dictionary of English words and used by some algorithms. If the files are not found then the English
 words will be silently ignored.
 
+=== generic.line.matcher.heading.delta
+
+* Data Type: double
+* Default Value: `${way.matcher.heading.delta}`
+
+The distance around a point on a power line to look when matching sublines with generic line
+conflation.  See `way.matcher.heading.delta`.
+
 === generic.line.matcher.max.angle
 
 * Data Type: double
@@ -1431,32 +1600,41 @@ The way subline matcher to use when determining matching sublines with generic l
 * Data Type: double
 * Default Value: `0.8`
 
-Tag similarity threshold (0.0 to 1.0) at or above which an linear element not conflatable by
-specific Hootenanny conflation routines is considered to have similar tags.
+Tag similarity threshold, in the range (0.0,1.0], at or above which an linear element not
+conflatable by specific Hootenanny conflation routines is considered to have similar tags.
 
 === generic.point.type.threshold
 
 * Data Type: double
 * Default Value: `0.8`
 
-Tag similarity threshold (0.0 to 1.0) at or above which an point element not conflatable by
-specific Hootenanny conflation routines is considered to have similar tags.
+Tag similarity threshold, in the range (0.0,1.0], at or above which an point element not
+conflatable by specific Hootenanny conflation routines is considered to have similar tags.
 
 === generic.point.polygon.type.threshold
 
 * Data Type: double
 * Default Value: `0.8`
 
-Tag similarity threshold (0.0 to 1.0) at or above which a pair of point and polygon elements not
-conflatable by specific Hootenanny conflation routines is considered to have similar tags.
+Tag similarity threshold, in the range (0.0,1.0], at or above which a pair of point and polygon
+elements not conflatable by specific Hootenanny conflation routines is considered to have similar
+tags.
 
 === generic.polygon.type.threshold
 
 * Data Type: double
 * Default Value: `0.8`
 
-Tag similarity threshold (0.0 to 1.0) at or above which an polygon element not conflatable by
-specific Hootenanny conflation routines is considered to have similar tags.
+Tag similarity threshold, in the range (0.0,1.0], at or above which an polygon element not
+conflatable by specific Hootenanny conflation routines is considered to have similar tags.
+
+=== geometry.linear.merger.default
+
+* Data Type: string
+* Default Value: `hoot::LinearSnapMerger`
+
+The merger to use when merging features with linear geometries during conflation. Must inherit from
+`LinearMergerAbstract`.
 
 === geometry.modifier.rules.file
 
@@ -1575,7 +1753,7 @@ documentation for detail on the rule file format.
 * Data Type: double
 * Default Value: `0.161`
 
-The threshold at which a match is called a match for roads. Valid values are between 0.0 and 1.0.
+The threshold at which a match is called a match for roads. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -1607,19 +1785,12 @@ for match. For example:
 * "highway=primary" vs "highway=secondary" has a diff of 0.2.
 * "highway=primary" vs "highway=footway" has a diff of 0.67.
 
-=== highway.merge.tags.only
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, road conflation merges tag changes into the reference only and makes no geometry changes.
-
 === highway.miss.threshold
 
 * Data Type: double
 * Default Value: `0.999`
 
-The threshold at which a miss is called a miss for roads. Valid values are between 0.0 and 1.0.
+The threshold at which a miss is called a miss for roads. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -1630,7 +1801,7 @@ See also:
 * Data Type: double
 * Default Value: `0.25`
 
-The threshold at which a review is called a review for roads. Valid values are between 0.0 and 1.0.
+The threshold at which a review is called a review for roads. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -1656,7 +1827,7 @@ The way subline string matcher to use when determining matching sublines for hig
 * Default Value: ``
 
 OpenstreetMap OAuth Consumer Key found after registering Hootenanny with OpenstreetMap (or its
-derivatives) at http://<OSM Domain>/user/<your username>/oauth_clients
+derivatives) at `http://<OSM Domain>/user/<your username>/oauth_clients`
 
 === hoot.osm.auth.consumer.secret
 
@@ -1664,7 +1835,7 @@ derivatives) at http://<OSM Domain>/user/<your username>/oauth_clients
 * Default Value: ``
 
 OpenstreetMap OAuth Private Consumer Key found after registering Hootenanny with OpenstreetMap (or
-its derivatives) at http://<OSM Domain>/user/<your username>/oauth_clients
+its derivatives) at `http://<OSM Domain>/user/<your username>/oauth_clients`
 
 === hoot.osm.auth.access.token
 
@@ -1977,6 +2148,14 @@ are -1 or 1 up to the number of available processors.
 If true, all implicit taggers will translate element name words to English before querying the
 corresponding implicit tag rules database.
 
+=== intersecting.way.criterion.source.way.ids
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of way IDs to find intersecting ways for when using `IntersectingWayCriterion`.
+
 === javascript.schema.translator.path
 
 * Data Type: list
@@ -2047,7 +2226,7 @@ If true, cleaning/validation detail tags will be added to map outputs when clean
 === josm.map.validator.java.implementation
 
 * Data Type: string
-* Default Value: `hoot/core/josm/JosmMapValidator`
+* Default Value: `hoot/josm/JosmMapValidator`
 
 File path relative to Hootenanny root directory without file extension or prefixed namespace to
 Java class to use as the JOSM Java map validator/cleaner implementation.
@@ -2228,8 +2407,7 @@ HootServicesLanguageDetectorClient as a source language detector, one or more ho
 class names implementing LanguageDetector.  Language detectors are used in order of entry.
 'hoot info --languages --detectors' displays information about the available server side detectors.
 If no detectors are specified, then language translation will attempt to use as many detectors as
-needed, in a pre-determined order, to get a positive detection. Separate values with a ';' and
-surround in quotes when passing in from the command line.
+needed, in a pre-determined order, to get a positive detection.
 
 === language.info.provider
 
@@ -2289,8 +2467,7 @@ will skip the translation of any tags whose value is in an English dictionary.
 
 A list of keys of tags whose values are to either be translated to English by a
 ToEnglishTranslationVisitor or just have their source languages detected by a
-LanguageDetectionVisitor depending on the operation being performed. Separate keys with a ';' and
-surround in quotes when passing in from the command line.
+LanguageDetectionVisitor depending on the operation being performed.
 
 === language.translation.comparison.pretranslated.tag.keys
 
@@ -2299,8 +2476,7 @@ surround in quotes when passing in from the command line.
 ** ``
 
 A list of tag keys whose values are known to have been previously translated to the desired target
-language.  The list ordering should correspond to that of language.tag.keys.  Separate keys with a
-';' and surround in quotes when passing in from the command line.
+language. The list ordering should correspond to that of language.tag.keys.
 
 === language.translation.comparison.scorer
 
@@ -2347,8 +2523,7 @@ ISO-639-1 language codes for the source languages for to English translation
 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).  Also, you can specify a single list item,
 "detect", to attempt to auto-detect the appropriate source language before translation.  Specifying
 multiple source languages can have a large impact on translation performance due to language
-detection cost.  Separate list items with a ';' and surround in quotes when passing them in from
-the command line.
+detection cost.
 
 === language.translation.string.distance.tokenize
 
@@ -2397,13 +2572,24 @@ The "best" value varies depending on the input data as well as how the data is b
 Absolute path to the directory where the libpostal library, used for address parsing, stores its
 data.
 
-=== log.class.filter
+=== log.class.exclude.filter
 
-* Data Type: string
+* Data Type: list
 * Default Value: ``
 
-A semicolon delimited list of class names used for limiting the log output. Do not prepend class
-names with their namespace. An empty string (default) disables the filtering.
+A list of class names used for controlling logging. If the list is not empty, all classes in this
+list will not be allowed to write log statements. An empty list disables the filtering completely.
+Wildcard regular expressions with '*' are allowed. `log.class.include.filter` is overriden by this
+option.
+
+=== log.class.include.filter
+
+* Data Type: list
+* Default Value: ``
+
+A list of class names used for controlling logging. If the list is not empty, only classes in this
+list will be allowed to write log statements. An empty list disables the filtering completely.
+Wildcard regular expressions with '*' are allowed. `log.class.exclude.filter` overrides this option.
 
 === log.warn.message.limit
 
@@ -2445,6 +2631,7 @@ trigger warning log messages.
 * Data Type: list
 * Default Value:
 ** `hoot::ReprojectToPlanarOp`
+** `hoot::InvalidWayRemover`
 ** `hoot::DuplicateNodeRemover`
 ** `hoot::RemoveDuplicateWayNodesVisitor`
 ** `hoot::OneWayRoadStandardizer`
@@ -2595,9 +2782,9 @@ RAM usage of applications in a shared server environment.
 * Data Type: int
 * Default Value: `-1`
 
-Maximum recursive calls allowed in MaximalSubline as it looks for line matches. Too low of a number
-may degrade Unifying algorithm line matching conflate performance. Too high of a number may result
-in runaway line matching processing times. -1 indicates an internally determined limit.
+Maximum recursive calls allowed in when using maximal subline matching during conflation. A value of
+-1 indicates an internally determined limit. Setting this too low may degrade linear conflate
+performance. Setting it too high may result in runaway line matching processing times.
 
 === maximal.subline.spacing
 
@@ -2695,10 +2882,12 @@ collected (export).
 === multilinestring.relation.collapser.types
 
 * Data Type: list
-* Default Value: ``
+* Default Value:
+** `*`
 
 A list of type keys or key/value pairs eligible for moving from multilinestring relations to
-their relation members when using `MultilineStringRelationCollapser`.
+their relation members when using `MultilineStringMergeRelationCollapser`. Use a single list with
+the item, '*', to collapse relations of any type.
 
 === name.criterion.case.sensitive
 
@@ -2713,8 +2902,7 @@ name.criterion.names. If false, the cases of the names do not have to match.
 * Data Type: list
 * Default Value: ``
 
-A list of names to use with NameCriterion. From the command line, delimit multiple entries with ';'
-and surround the entire list in double quotes. E.g. "Subway;Jimmys"
+A list of names to use with NameCriterion.
 
 === name.criterion.partial.match
 
@@ -2745,7 +2933,8 @@ Added to a conflicting match score to allow for match pruning
 * Data Type: double
 * Default Value: `0.35`
 
-The score threshold used to compare whole networks with the ConflictsNetworkMatcher
+The score threshold used to compare whole networks with the ConflictsNetworkMatcher. The valid range
+is (0.0, 1.0].
 
 === network.conflicts.outbound.weighting
 
@@ -2754,14 +2943,14 @@ The score threshold used to compare whole networks with the ConflictsNetworkMatc
 
 A value of 0 will cause an edge to contribute (1 * score * weight) to each neighbor when using
 network conflation. A value of 1 will give approx (1 / n * score * weight) influence to each
-neighbor.  This value is generally not changed by users.  Reasonable range is [0, 2].
+neighbor. This value is generally not changed by users.  Reasonable range is [0, 2].
 
 === network.conflicts.partial.handicap
 
 * Data Type: double
 * Default Value: `0.2`
 
-A larger value will increase the weight of partial matches when using network conflation.  A
+A larger value will increase the weight of partial matches when using network conflation. A
 smaller value prefers whole matches over partial matches. This value is generally not changed by
 users. Reasonable range is (0, ~2].
 
@@ -2842,7 +3031,8 @@ Algorithm. This value is generally not changed by users.
 * Data Type: double
 * Default Value: `0.15`
 
-The threshold at which a network match is called a match when using network conflation.
+The threshold at which a network match is called a match when using network conflation. The valid
+range is (0.0, 1.0].
 
 See also:
 
@@ -2877,7 +3067,7 @@ The minimum network match overlap percentage allowed for a network merge to occu
 * Data Type: double
 * Default Value: `0.85`
 
-The threshold at which a network miss is called a miss.
+The threshold at which a network miss is called a miss. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -2897,7 +3087,7 @@ conflation.
 * Default Value: `0.5`
 
 The threshold at which a network review is called a review. Reviews are also declared in some
-other situations when the relationship is not clear.
+other situations when the relationship is not clear. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -2961,6 +3151,14 @@ ways for their nodes to be counted, otherwise the criterion will be ignored.
 If false, in order for a relation to be deemed not conflatable all of its members must also not be
 conflatable. If true, a relation can be deemed not conflatable even if any of its members are also
 conflatable.
+
+=== offset.intersection.max
+
+* Data Type: double
+* Default Value: `5`
+
+The offset intersection merger joins two closely spaced intersections within this max threshold to
+form one single intersection.
 
 === ogr.add.uuid
 
@@ -3150,9 +3348,10 @@ to be simplified. For example : watrcrsl_hydro instead of 'watrcrsl@hydro(*)_lin
 * Data Type: string
 * Default Value: ``
 
-This is used to pass the output format (file extension: shp, gdb etc) to translation scripts to enable output format specific translations.
-E.g. Setting this to 'shp' would be telling the translation script to shorten attribute names to 10 characters and keep text
-attributes below the 255 character maximum length.
+This is used to pass the output format (file extension: shp, gdb etc) to translation scripts to
+enable output format specific translations. e.g. Setting this to 'shp' would be telling the
+translation script to shorten attribute names to 10 characters and keep text attributes below the
+255 character maximum length.
 
 === ogr.split.o2s
 
@@ -3372,11 +3571,11 @@ Y direction is in the output permutation. Units in meters.
 * Data Type: double
 * Default Value: `0.025`
 
-A score variance in the range of 0.0 to 1.0 by which a `perty-test` test run score may vary
-while still allowing the test run's status to be described as passing.  Test run score differences
-larger than this value will cause the test run's status to be described as failing.  If you are
-not sure what your expected scores should be and want to bypass this check, create a list with
-all entries equal to "1.0" of the same size as perty.test.num.runs, and then set
+A score variance in the range, in the range [0.0,1.0], by which a `perty-test` test run score may
+vary while still allowing the test run's status to be described as passing.  Test run score
+differences larger than this value will cause the test run's status to be described as failing. If
+you are not sure what your expected scores should be and want to bypass this check, create a list
+with all entries equal to "1.0" of the same size as perty.test.num.runs, and then set
 perty.test.allowed.score.variance to "1.0".  This effectively disables the score validation.
 
 === perty.test.dynamic.variable.increment
@@ -3412,9 +3611,9 @@ restricted to Hootenanny PERTY options only (perty.*) of a numeric type.
 * Default Value:
 ** `1.0`
 
-A list of expected PERTY scores in the range of 0.0 to 1.0 for a `perty-test` run.  The number of
-scores must match the value assigned to perty.test.num.runs.  If you are not sure what your
-expected scores should be and want to bypass this check, create a list with all entries equal
+A list of expected PERTY scores in the range of, in the range [0.0,1.0], for a `perty-test` run. The
+number of scores must match the value assigned to perty.test.num.runs.  If you are not sure what
+your expected scores should be and want to bypass this check, create a list with all entries equal
 to "1.0" of the same size as perty.test.num.runs, and then set perty.test.allowed.score.variance
 to "1.0".  This effectively disables the score validation.
 
@@ -3461,8 +3660,7 @@ final PERTY score for the test run.
 ** ``
 
 By default, conflation examines all tags with keys containing the text "phone" for phone number
-comparisons.  You can expand the tag keys searched by populating this list. From the command line,
-separate list items with a semicolon and surround the entire list in double quotes.
+comparisons.  You can expand the tag keys searched by populating this list.
 
 === phone.number.normalization.format
 
@@ -3641,23 +3839,14 @@ overall number of reviews can increase substantially otherwise. Disabling this s
 all POI/Polygon matches to be converted to reviews if they contain a feature that overlaps with a
 POI/POI review.
 
-=== poi.polygon.max.size.per.cache
-
-* Data Type: int
-* Default Value: `100000`
-
-The maximum number of elements to cache information for when using POI/Polygon Conflation. This
-maximum size is repeated across multiple internal element information caches. To disable caching,
-specify a value less than one.
-
 === poi.polygon.name.score.threshold
 
 * Data Type: double
 * Default Value: `0.8`
 
-The minimum similarity the name scores of two features can have and be considered a name
-match, with 0.0 being the least similar and 1.0 being the most similar (-1.0 if there are no names
-present (null).
+The minimum similarity the name scores, in the range (0.0,1.0], of two features can have and be
+considered a name match, with 0.0 being the least similar and 1.0 being the most similar (-1.0 if
+there are no names present (null).
 
 === poi.polygon.name.translate.to.english
 
@@ -3694,13 +3883,13 @@ will be skipped by POI to Polygon conflation.
 Path to a file containing a list of polygon feature ignore tags.  Any polygons containing tags in
 the file will be skipped by POI to Polygon conflation.
 
-=== poi.polygon.print.match.distance.truth
+=== poi.polygon.calculate.match.distance.truth
 
 * Data Type: bool
 * Default Value: `false`
 
-If true, debug match distance output will be obtained from manually matched source data and printed
-if running 'hoot score-matches' with POI to Polygon conflation.
+If true, debug match distance output will be obtained from manually matched source data if running
+'hoot score-matches' with POI to Polygon conflation.
 
 === poi.polygon.promote.points.with.addresses.to.pois
 
@@ -3731,8 +3920,7 @@ changed except when working with specific POI/Polygon conflation use cases that 
 
 List of key value pairs in the format 'key=value' or  'key,value' (UI only) for features to always
 review if marked as matches with POI to polygon conflation.  Delimit the individual types with ';'.
-e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'.  Also, when specifying the list from
-the command line, surround the entire value string in double quotes.
+e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'.
 
 === poi.polygon.review.multiuse.buildings
 
@@ -3772,8 +3960,8 @@ is always used and changes to this option value are ignore.
 * Data Type: double
 * Default Value: `0.7`
 
-The minimum similarity the type scores a POI and polygon can have and be considered a type
-match, with 0.0 being the least similar and 1.0 being the most similar.
+The minimum similarity the type scores, in the range (0.0,1.0], a POI and polygon can have and be
+considered a type match, with 0.0 being the least similar and 1.0 being the most similar.
 
 === poi.polygon.type.to.names.file
 
@@ -3815,7 +4003,7 @@ sheet tie point distances.
 * Data Type: double
 * Default Value: `${conflate.match.threshold.default}`
 
-The threshold at which a match is called a match for power lines.
+The threshold at which a match is called a match for power lines. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -3826,9 +4014,17 @@ See also:
 * Data Type: double
 * Default Value: `0.01`
 
-A weighting coefficient value from 0.0 to 1.0 for the applying distance weighting to power line
-matches.  This will favor feature that are closer together.  The higher the coefficient value, the
-higher the weighting applied.  A value of 0.0 will disable distance weighting.
+A weighting coefficient value, in the range [0.0,1.0], for the applying distance weighting to power
+line matches. This will favor feature that are closer together. The higher the coefficient value,
+the higher the weighting applied. A value of 0.0 will disable distance weighting.
+
+=== power.line.matcher.heading.delta
+
+* Data Type: double
+* Default Value: `${way.matcher.heading.delta}`
+
+The distance around a point on a power line to look when calculating the heading.  See
+`way.matcher.heading.delta`.
 
 === power.line.matcher.max.angle
 
@@ -3842,7 +4038,7 @@ Sets that maximum angle that is still considered a power line match. Units in de
 * Data Type: double
 * Default Value: `${conflate.miss.threshold.default}`
 
-The threshold at which a miss is called a miss for power lines.
+The threshold at which a miss is called a miss for power lines. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -3853,7 +4049,7 @@ See also:
 * Data Type: double
 * Default Value: `${conflate.review.threshold.default}`
 
-The threshold at which a review is called a review for power lines.
+The threshold at which a review is called a review for power lines. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -3871,7 +4067,7 @@ The way subline matcher to use when determining matching power line sublines.
 * Data Type: double
 * Default Value: `0.0`
 
-A quantile value from 0.0 to 1.0 for the QuantileAggregator.
+A quantile value, in the range [0.0,1.0], for the QuantileAggregator.
 
 === progress.var.print.length.max
 
@@ -4028,7 +4224,8 @@ removed).
 * Data Type: double
 * Default Value: `0.1`
 
-The probability between 0.0 and 1.0 that a way will be randomly generalized by RandomWayGeneralizer.
+The probability, in the range [0.0,1.0], that a way will be randomly generalized by
+RandomWayGeneralizer.
 
 === random.way.splitter.min.node.spacing
 
@@ -4043,7 +4240,7 @@ splits.
 * Data Type: double
 * Default Value: `0.1`
 
-The probability between 0.0 and 1.0 that a way will randomly be split into multiple features by
+The probability, in the range [0.0,1.0], that a way will randomly be split into multiple features by
 RandomWayGeneralizer.
 
 === reader.add.source.datetime
@@ -4140,16 +4337,16 @@ Allows for requiring a type tag match when using RelationCriterion.
 * Data Type: double
 * Default Value: `0.9`
 
-Name similarity threshold (0.0 to 1.0) at or above which an collection relation feature is
-considered to have a name match.
+Name similarity threshold, in the range (0.0,1.0], at or above which an collection relation feature
+is considered to have a name match.
 
 === relation.type.threshold
 
 * Data Type: double
 * Default Value: `0.8`
 
-Tag similarity threshold (0.0 to 1.0) at or above which an collection relation feature is considered
-to have similar tags.
+Tag similarity threshold, in the range (0.0,1.0], at or above which an collection relation feature
+is considered to have similar tags.
 
 === relation.with.members.of.type.criterion.allow.mixed.children
 
@@ -4195,18 +4392,16 @@ Use this class for calculating the difference between element tags. If the diffe
 * Data Type: bool
 * Default Value: `false`
 
-If set to true and multiple criterion are specified in remove.elements.visitor.element.criteria,
-elements will be removed only if they satisfy all of the criteria.  If set to false, then only
-one of the specified criteria must be met in order to remove an element.
+If set to true and multiple criterion are specified in `remove.elements.visitor.element.criteria`,
+elements will be removed only if they satisfy all of the criteria. If set to false, then only
+one of the specified criteria must be satisified in order to remove an element.
 
 === remove.elements.visitor.element.criteria
 
 * Data Type: list
 * Default Value: ``
 
-One or more element criteria used for selecting elements to remove. Delimit names with '='. From
-the command line, names with ';' and surround the entire list in double quotes.
-E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
+One or more element criteria used for selecting elements to remove.
 
 === remove.elements.visitor.recursive
 
@@ -4251,9 +4446,86 @@ with attribute.conflation.allow.reviews.by.score.
 * Data Type: double
 * Default Value: `0.0`
 
-The score threshold below which reviews will not pass the filter.  A value of 0.0 signifies no
-minimum score threshold.  This currently works with Attribute Conflation only and can be enabled
-with attribute.conflation.allow.reviews.by.score.
+The score threshold below which reviews will not pass the filter, in the range [0.0,1.0],.  A value
+of 0.0 signifies no minimum score threshold.  This currently works with Attribute Conflation only
+and can be enabled with attribute.conflation.allow.reviews.by.score.
+
+=== river.angle.sample.distance
+
+* Data Type: double
+* Default Value: `20.0`
+
+Distance, in meters, used for sampling river data during angle histogram extraction with the
+SampledAngleHistogramExtractor
+
+=== river.auto.calc.search.radius
+
+* Data Type: bool
+* Default Value: `true`
+
+Automatically calculates the search radius to be used during conflation of rivers using rubber
+sheet tie point distances.
+
+=== river.matcher.heading.delta
+
+* Data Type: double
+* Default Value: `150.0`
+
+The distance around a point on a river to look when calculating the heading. See
+`way.matcher.heading.delta`.
+
+=== river.matcher.max.angle
+
+* Data Type: double
+* Default Value: `90.0`
+
+Sets that maximum angle that is still considered a river match. Units in degrees.
+
+=== river.maximal.subline.auto.optimize
+
+* Data Type: bool
+* Default Value: `true`
+
+Enabling this allows River Conflation to optimize the manner it uses maximal subline matching for
+runtime performance.
+
+=== river.name.threshold
+
+* Data Type: double
+* Default Value: `0.9`
+
+Name similarity threshold, in the range (0.0,1.0], at or above which a river feature is considered
+to have a name match.
+
+=== river.rubber.sheet.minimum.ties
+
+* Data Type: int
+* Default Value: `5`
+
+Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution
+with river data.
+
+=== river.rubber.sheet.ref
+
+* Data Type: bool
+* Default Value: `true`
+
+See `rubber.sheet.ref`. Used during river conflation.
+
+=== river.subline.matcher
+
+* Data Type: string
+* Default Value: `hoot::MaximalSublineMatcher`
+
+The way subline matcher to use when determining matching sublines.
+
+=== river.type.threshold
+
+* Data Type: double
+* Default Value: `0.7`
+
+Tag similarity threshold, in the range (0.0,1.0], at or above which a river element is considered
+to have similar tags.
 
 === rubber.sheet.debug
 
@@ -4369,6 +4641,15 @@ SchemaTranslationOp is specified the convert command will add the translation op
 first conversion operation. If you want the translation operation to occur in a different order,
 then you must explicitly specify it in convert.ops. For more information on translation files read
 the "Translation" section of the Hootenanny User Guide.
+
+=== schema.translation.element.status
+
+* Data Type: string
+* Default Value: ``
+
+Optional element status filter to use when performing schema translation. Valid values are empty
+(default), 'Unknown1', and 'Unknown2'. An empty value will cause no filtering to occur. A non-empty
+value will only translate elements with the specified status.
 
 === score.graph.debug.images
 
@@ -4523,13 +4804,13 @@ The search radius, in meters, to use when conflating railways. See `search.radiu
 The search radius, in meters, to use when conflating collection relations. See
 `search.radius.default`.
 
-=== search.radius.waterway
+=== search.radius.river
 
 * Data Type: double
 * Default Value: `${search.radius.default}`
 
-The search radius to use when conflating waterways. This value is not used if
-`waterway.auto.calc.search.radius=true`, and in that case the search radius is auto-calculated for
+The search radius to use when conflating rivers. This value is not used if
+`river.auto.calc.search.radius=true`, and in that case the search radius is auto-calculated for
 the entire input dataset.  See `search.radius.default`.
 
 === set.tag.value.visitor.append.to.existing.value
@@ -4545,7 +4826,7 @@ option will have the value specified in the set.tag.value.visitor.value option a
 * Data Type: bool
 * Default Value: `false`
 
-If set to true and multiple criterion are specified in set.tag.value.visitor.element.criteria,
+If set to true and multiple criterion are specified in `set.tag.value.visitor.element.criteria`,
 the tags of elements will be modified only if they satisfy all of the criteria.  If set to
 false, then only one of the specified criteria must be met in order to modify the tags of an
 element.
@@ -4596,6 +4877,21 @@ shape file and cannot be used in combination with a translation.  If this option
 then the list of columns will be automatically determined based on the most frequently populated
 tags.
 
+=== small.disconnected.way.remover.max.node.count
+
+* Data Type: int
+* Default Value: `2`
+
+The maximum number of nodes a way can have to be considered for removal by
+SmallDisconnectedWayRemover.
+
+=== small.disconnected.way.remover.max.length
+
+* Data Type: double
+* Default Value: `2.0`
+
+The maximum length a way can have to be considered for removal by SmallDisconnectedWayRemover.
+
 === small.highway.merger.diff
 
 * Data Type: string
@@ -4628,6 +4924,14 @@ snap node candidate added to them.
 The spacing granularity to which a unconnected way node is snapped back to a way with the
 Unconnected Way Snapper.  Setting this too low could result in lower algorithm performance, and
 setting it too high may result in less accurate way snapping.
+
+=== snap.unconnected.ways.exclude.types
+
+* Data Type: list
+* Default Value:
+** `noexit=yes`
+
+Feature types that should never be snapped.
 
 === snap.unconnected.ways.existing.way.node.tolerance
 
@@ -4670,8 +4974,8 @@ marked with a custom tag. Useful for debugging purposes.
 * Default Value: `-1.0`
 
 The feature type similarity score at or above which two ways being snapped must score. Valid values
-are between 0.0 and 1.0. A value of -1.0 disables the feature type match requirement completely and
-only the snap criterions will influence the snapping.
+are, -1.0 and the range (0.0,1.0],. A value of -1.0 disables the feature type match requirement
+completely and only the snap criteria will influence the snapping.
 
 === snap.unconnected.ways.review.snapped.ways
 
@@ -4681,24 +4985,28 @@ only the snap criterions will influence the snapping.
 If true, any snapped way will be marked for review. Useful if you want the opportunity to manually
 correct any snaps made.
 
-=== snap.unconnected.ways.snap.to.way.criterion
+=== snap.unconnected.ways.snap.criteria
 
-* Data Type: string
-* Default Value: `hoot::WayCriterion`
+* Data Type: list
+* Default Value:
+** ``
 
-Optional criterion class to filter the types of ways being snapped to.  An example would be:
-hoot::HighwayCriterion. If no criterion is specified, then all ways are considered as targets for
-way snapping.
+Optional criteria used to filter both the types of ways being snapped (sources) and the types of
+ways being snapped to (targets). The classes specified must inherit from
+`ConflatableElementCriterion`. An example is: `hoot::HighwayCriterion`. The default value of an
+empty list allows for snapping any type of linear feature. This option is overridden by the options:
+`snap.unconnected.ways.snap.way.criteria` and/or `snap.unconnected.ways.snap.to.way.criteria` to
+allow for more granularity in selecting the types to snap.
 
-=== snap.unconnected.ways.snap.to.way.node.criterion
+=== snap.unconnected.ways.snap.to.way.criteria
 
-* Data Type: string
-* Default Value: `hoot::WayNodeCriterion`
+* Data Type: list
+* Default Value:
+** ``
 
-Optional criterion class to filter the types of way nodes being snapped to.  An example would be:
-hoot::HighwayWayNodeCriterion. If no criterion is specified, then all ways are considered as
-targets for way snapping. This option is only used if snap.unconnected.ways.reuse.way.nodes is
-enabled.
+Optional criteria used to filter the types of ways being snapped to (targets). The classes specified
+must inherit from `ConflatableElementCriterion`. An example is: `hoot::HighwayCriterion`. This
+option overrides `snap.unconnected.ways.snap.criteria`.
 
 === snap.unconnected.ways.snap.to.way.statuses
 
@@ -4709,7 +5017,8 @@ enabled.
 Statuses of ways or way nodes being snapped to. Valid values are 'Input1', 'Input2', or 'Conflated'.
 Specify 'Input1' to snap secondary ways to reference ways or 'Input2' to snap reference ways to
 secondary ways. You may add multiple statuses and separate them with a semicolon. For example, to
-snap to both reference and conflated ways use: 'Input1;Conflated'.
+snap to both reference and conflated ways use: 'Input1;Conflated'. If no statuses are specified,
+then feature status is ignored for ways or way nodes being snapped to.
 
 === snap.unconnected.ways.snap.tolerance
 
@@ -4720,14 +5029,15 @@ Maximum distance used by the Unconnected Way Snapper, in meters, allowed between
 way endpoint node and a neighboring way for the way endpoint node to be snapped to the closest
 section of the neighboring way.
 
-=== snap.unconnected.ways.snap.way.criterion
+=== snap.unconnected.ways.snap.way.criteria
 
-* Data Type: string
-* Default Value: `hoot::WayCriterion`
+* Data Type: list
+* Default Value:
+** ```
 
-Optional criterion class to filter the types of ways being snapped. An example would be:
-hoot::HighwayCriterion. If no criterion is specified, then all ways are considered as sources for
-way snapping.
+Optional criteria used to filter the types of ways being snapped (sources). The classes specified
+must inherit from `ConflatableElementCriterion`. An example is: `hoot::HighwayCriterion`. This
+option overrides `snap.unconnected.ways.snap.criteria`.
 
 === snap.unconnected.ways.snap.way.statuses
 
@@ -4738,7 +5048,8 @@ way snapping.
 Statuses of ways being snapped.  Valid values are 'Input1', 'Input2', or 'Conflated'. Specify
 'Input1' to snap reference ways to secondary ways or 'Input2' to snap secondary ways to reference
 ways. You may add multiple statuses and separate them with a semicolon. For example, to snap both
-reference and conflated ways use: 'Input1;Conflated'.
+reference and conflated ways use: 'Input1;Conflated'. If no statuses are specified, then feature
+status is ignored for ways or way nodes being snapped.
 
 === snap.unconnected.ways.use.existing.way.nodes
 
@@ -4803,6 +5114,14 @@ Adds the specified status to elements.  Valid values are: 'Conflated', 'Invalid'
 
 Flat file containing street types and their abbreviations.
 
+=== subline.matcher.secondary
+
+* Data Type: string
+* Default Value: `hoot::FrechetSublineMatcher`
+
+This subline matcher is used as a backup if the primary linear subline merging runs for too long.
+See `maximal.subline.max.recursions`.
+
 === superfluous.node.remover.exclude.ids
 
 * Data Type: list
@@ -4863,9 +5182,8 @@ to match.
 * Data Type: list
 * Default Value: ``
 
-Key/value pairs to use with TagContainsCriterion. Delimit keys and values with '='.  From the
-command line, delimit multiple key/value pairs with ';' and surround the entire list in double
-quotes. E.g. "name=Java;name=Shop"
+Key/value pairs to use with TagContainsCriterion. Delimit keys and values with '='.  E.g.
+"name=Java;name=Shop"
 
 === tag.criterion.case.sensitive
 
@@ -4880,18 +5198,17 @@ tag.criterion.kvps. If false, the cases of the tag strings do not have to match.
 * Data Type: list
 * Default Value: ``
 
-Key/value pairs to use with TagCriterion. Delimit keys and values with '='.  From the command line,
-delimit multiple key/value pairs with ';' and surround the entire list in double quotes.
-E.g. "highway=road;amenity=school"
+Key/value pairs to use with TagCriterion. Delimit keys and values with '='. E.g.
+"highway=road;amenity=school"
 
 === tag.filter.element.criterion
 
 * Data Type: string
 * Default Value: ``
 
-The plugin name of an element criterion used to select tags to keep/remove used by
-KeepTagsVisitor/RemoveTagsVisitor.  To pass in complex nested criteria for tag filtering, use the
-Hootenanny Javascript interface instead.
+The class name of an element criterion used to select tags to keep/remove used by RemoveTagsVisitor.
+To pass in complex nested criteria for tag filtering, use the Hootenanny Javascript interface
+instead.
 
 === tag.filter.keys
 
@@ -4900,8 +5217,7 @@ Hootenanny Javascript interface instead.
 ** ``
 
 A list of tag keys the KeepTagsVisitor/RemoveTagsVisitor will keep/remove on/from elements.
-Wildcard matching is supported with '*'. From the command line, separate list items with a semicolon
-and surround the entire list in double quotes.
+Wildcard matching is supported with '*'.
 
 === tag.key.contains.criterion.text
 
@@ -4915,8 +5231,7 @@ Text that TagKeyContainsCriterion uses to filter elements.
 * Data Type: list
 * Default Value: ``
 
-Tag keys that TagKeyCriterion uses to filter elements. From the command line, delimit multiple
-key/value pairs with ';' and surround the entire list in double quotes.
+Tag keys that TagKeyCriterion uses to filter elements.
 
 === tag.merger.default
 
@@ -4936,8 +5251,8 @@ available mergers.
 This allows the OverwriteTagMerger to preserve the values of select tags during tag merging. This
 does not apply to name tags or tags marked as type "text" or "metadata" in the schema. Any tag key
 in the option list found in the set of tags used to overwrite will result in corresponding tag
-values in the target feature being appended to each other. e.g. A: { a_id=1, b_id=1 } merged with
-B: { b_id=2 } results in C: { a_id=1, b_id=1;2 }
+values in the target feature being appended to each other. e.g. A: { myField1=1, myField2=1 }
+merged with B: { myField2=1, myField3=1 } results in C: { myField1=1, myField2=1;2, myField3=1 }
 
 === tag.merger.overwrite.exclude
 
@@ -4986,8 +5301,7 @@ renaming existing tag keys on all elements in a map.
 ** ``
 
 The keys the TagValueNumericRangeCriterion examines the numeric value of.  Tags for all keys must
-meet the numeric range requirement for the criterion to be met.  Separate multiple keys with a
-semicolon from the command line and surround the entire list in double quotes.
+meet the numeric range requirement for the criterion to be met.
 
 === tag.value.numeric.range.criterion.max
 
@@ -5010,8 +5324,7 @@ Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to b
 ** ``
 
 List of tag keys for which the AverageNumericTagsVisitor, SumNumericTagsVisitor, or
-TagKeyCountVisitor uses.  Separate keys with a ';' and surround entire list in double quotes when
-passing in from the command line.
+TagKeyCountVisitor uses.
 
 === task.status.update.interval
 
@@ -5150,6 +5463,42 @@ is changing between runs and GLPK isn't finding an optimal solution then this is
 different output.  Just because the output is changing doesn't mean it is wrong, but this can be
 problematic if you're doing testing or expecting repeatable output for other.
 
+=== unlikely.road.remover.heading.delta
+
+* Data Type: double
+* Default Value: `5.0`
+
+Way heading delta used by UnlikelyRoadRemover. See `way.matcher.heading.delta`.
+
+=== unlikely.road.remover.max.heading.variance
+
+* Data Type: double
+* Default Value: `60.0`
+
+The heading variance a road may have at or above which it will be considered for removal by
+UnlikelyRoadRemover.
+
+=== unlikely.road.remover.max.length
+
+* Data Type: double
+* Default Value: `25.0`
+
+The maximum length a road may have to be considered for removal by UnlikelyRoadRemover.
+
+=== unlikely.road.remover.num.bins
+
+* Data Type: int
+* Default Value: `16`
+
+Number of histogram bins used by UnlikelyRoadRemover. See `angle.histogram.extractor.bins`.
+
+=== unlikely.road.remover.sample.distance
+
+* Data Type: double
+* Default Value: `1.0`
+
+Way sample distance used by UnlikelyRoadRemover. See `way.angle.sample.distance`.
+
 === uuid.helper.repeatable
 
 * Data Type: bool
@@ -5157,90 +5506,6 @@ problematic if you're doing testing or expecting repeatable output for other.
 
 Creates a repeatable UUID for the features. This is useful for debugging, but shouldn't be used in
 normal operation.
-
-=== waterway.angle.sample.distance
-
-* Data Type: double
-* Default Value: `20.0`
-
-Distance, in meters, used for sampling river data during angle histogram extraction with the
-SampledAngleHistogramExtractor
-
-=== waterway.auto.calc.search.radius
-
-* Data Type: bool
-* Default Value: `true`
-
-Automatically calculates the search radius to be used during conflation of waterways using rubber
-sheet tie point distances.
-
-=== waterway.mark.merge.created.multilinestring.relations
-
-* Data Type: bool
-* Default Value: `true`
-
-River specific setting which overrides `conflate.mark.merge.created.multilinestring.relations`.
-
-=== waterway.matcher.heading.delta
-
-* Data Type: double
-* Default Value: `150.0`
-
-The distance around a point on a waterway to look when calculating the heading. See
-`way.matcher.heading.delta`.
-
-=== waterway.matcher.max.angle
-
-* Data Type: double
-* Default Value: `90.0`
-
-Sets that maximum angle that is still considered a waterway match. Units in degrees.
-
-=== waterway.maximal.subline.auto.optimize
-
-* Data Type: bool
-* Default Value: `true`
-
-Enabling this allows River Conflation to optimize the manner it uses maximal subline matching for
-runtime performance.
-
-=== waterway.name.threshold
-
-* Data Type: double
-* Default Value: `0.9`
-
-Name similarity threshold (0.0 to 1.0) at or above which a linear watereay feature is considered to
-have a name match.
-
-=== waterway.rubber.sheet.minimum.ties
-
-* Data Type: int
-* Default Value: `5`
-
-Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution
-with river data.
-
-=== waterway.rubber.sheet.ref
-
-* Data Type: bool
-* Default Value: `true`
-
-See `rubber.sheet.ref`.  Used during waterway conflation.
-
-=== waterway.subline.matcher
-
-* Data Type: string
-* Default Value: `hoot::MaximalSublineMatcher`
-
-The way subline matcher to use when determining matching sublines.
-
-=== waterway.type.threshold
-
-* Data Type: double
-* Default Value: `0.7`
-
-Tag similarity threshold (0.0 to 1.0) at or above which a waterway element is considered to have
-similar tags.
 
 === way.angle.sample.distance
 
@@ -5352,7 +5617,7 @@ The minimum size that a way should be split into for merging. Units in meters.
 * Data Type: double
 * Default Value: `0.05`
 
-Distance tolerance, in the range of 0.0 to 1.0, allowed for WayNodeCopier to consider two nodes
+Distance tolerance, in the range (0.0,1.0], allowed for WayNodeCopier to consider two nodes
 duplicates and not copy them. The higher the value, the more likely two nearby nodes would be
 considered to be duplicates.
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENT_CRITERION_JS_H
 #define ELEMENT_CRITERION_JS_H
@@ -41,21 +41,18 @@ class ElementCriterionJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
-  ElementCriterionPtr getCriterion() { return _c; }
-
-  static v8::Handle<v8::Object> New(ElementCriterionPtr c);
+  ElementCriterionPtr getCriterion() const { return _c; }
 
   virtual ~ElementCriterionJs() = default;
 
 private:
 
   ElementCriterionJs() = default;
-  ElementCriterionJs(ElementCriterion* c) : _c(c) {}
+  ElementCriterionJs(ElementCriterionPtr c);
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void addCriterion(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isSatisfied(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   ElementCriterionPtr _c;

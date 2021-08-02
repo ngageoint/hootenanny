@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Standard Includes
@@ -47,7 +47,8 @@
 #include <tgs/RStarTree/KnnIterator.h>
 #include <tgs/Statistics/Random.h>
 
-using namespace Tgs;
+namespace Tgs
+{
 
 class RStarTreeTest : public CppUnit::TestFixture
 {
@@ -64,8 +65,7 @@ public:
 
    void test1()
    {
-    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(2048));
-     RStarTree uut(mps, 2);
+     RStarTree uut(std::make_shared<MemoryPageStore>(2048), 2);
      int maxChildCount = uut.getRoot()->getMaxChildCount();
 
      CPPUNIT_ASSERT_EQUAL(0, uut.getRoot()->getChildCount());
@@ -122,8 +122,7 @@ public:
 
    void test2()
    {
-    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
-     RStarTree uut(mps, 2);
+     RStarTree uut(std::make_shared<MemoryPageStore>(256), 2);
 
      Box b(2);
      for (int i = 0; i < 1000; i++)
@@ -148,8 +147,7 @@ public:
          QFile::remove("fileTest.dat");
        }
 
-      std::shared_ptr<FilePageStore> mps(new FilePageStore(256, "fileTest.dat"));
-       RStarTree uut(mps, 2);
+       RStarTree uut(std::make_shared<FilePageStore>(256, "fileTest.dat"), 2);
 
        Box b(2);
        for (int i = 0; i < 3000; i++)
@@ -165,8 +163,7 @@ public:
        validateTreeBounds(uut);
      }
      {
-      std::shared_ptr<FilePageStore> mps(new FilePageStore(256, "fileTest.dat", true));
-       RStarTree uut(mps, 2);
+       RStarTree uut(std::make_shared<FilePageStore>(256, "fileTest.dat"), 2);
 
        validateTreeBounds(uut);
      }
@@ -336,3 +333,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RStarTreeTest, PluginFactory::testName());
+
+}

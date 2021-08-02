@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef FRECHETSUBLINEMATCHER_H
 #define FRECHETSUBLINEMATCHER_H
@@ -35,40 +35,35 @@ namespace hoot
 {
 
 /**
- * A SublineMatcher based on the Frechet distance algorithm.
+ * @brief The FrechetSublineMatcher class is a SublineMatcher based on the Frechet distance
+ * algorithm.
  */
 class FrechetSublineMatcher : public SublineMatcher, public Configurable
 {
 public:
+
   static QString className() { return "hoot::FrechetSublineMatcher"; }
 
   FrechetSublineMatcher() = default;
-  virtual ~FrechetSublineMatcher() = default;
+  ~FrechetSublineMatcher() = default;
 
   /**
    * @param maxRelevantDistance This value is set on a per match basis because it tends to vary
    *  based on the CE of the inputs. If set to -1 then the value is derived based on the CE of the
    *  input ways.
    */
-  virtual WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
+  WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
     const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const override;
 
-  virtual void setMaxRelevantAngle(Radians angle) override { _maxAngle = angle; }
-  virtual void setMinSplitSize(Meters /*minSplitSize*/) override {}
-  virtual void setHeadingDelta(Meters /*headingDelta*/) override {}
+  /**
+   * @see Configurable
+   */
+  void setConfiguration(const Settings& conf) override;
 
-  virtual void setConfiguration(const Settings &conf);
-
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Matches lines based on the Frechet Distance algorithm"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
-
-private:
-
-  Radians _maxAngle;
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

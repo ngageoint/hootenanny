@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmChangesetFileWriterFactory.h"
 
@@ -44,7 +44,7 @@ OsmChangesetFileWriterFactory& OsmChangesetFileWriterFactory::getInstance()
 }
 
 std::shared_ptr<OsmChangesetFileWriter> OsmChangesetFileWriterFactory::createWriter(
-  const QString& url, const QString& osmApiDbUrl)
+  const QString& url, const QString& osmApiDbUrl) const
 {
   LOG_VARD(url);
   LOG_VARD(osmApiDbUrl);
@@ -55,13 +55,12 @@ std::shared_ptr<OsmChangesetFileWriter> OsmChangesetFileWriterFactory::createWri
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
     LOG_VARD(names[i]);
-    writer.reset(Factory::getInstance().constructObject<OsmChangesetFileWriter>(names[i]));
+    writer = Factory::getInstance().constructObject<OsmChangesetFileWriter>(names[i]);
     if (writer->isSupported(url))
-    {
-      LOG_DEBUG("Using changeset output writer: " << names[i]);
+    { LOG_DEBUG("Using changeset output writer: " << names[i]);
 
       Configurable* c = dynamic_cast<Configurable*>(writer.get());
-      if (c != 0)
+      if (c != nullptr)
       {
         c->setConfiguration(conf());
       }

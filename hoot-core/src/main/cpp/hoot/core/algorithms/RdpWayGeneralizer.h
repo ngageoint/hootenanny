@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RDP_WAY_GENERALIZER_H
@@ -42,8 +42,10 @@ class Node;
 class Way;
 
 /**
- * Uses the Ramer-Douglas Peucker algorithm [1] to generalize a set of point.  This
- * implementation modeled after [2].  A description of the algorithm from [2]:
+ * @brief The RdpWayGeneralizer class uses the Ramer-Douglas Peucker algorithm [1] to generalize a
+ * set of points.
+ *
+ * This implementation is modeled after [2].  A description of the algorithm from [2]:
  *
  * "The Ramer-Douglas Peucker algorithm is an algorithm for reducing the number of points in a curve
  * that is approximated by a series of points. It does so by "thinking" of a line between the first
@@ -75,25 +77,25 @@ class RdpWayGeneralizer : public OsmMapConsumer
 public:
 
   RdpWayGeneralizer(double epsilon);
-  virtual ~RdpWayGeneralizer() = default;
+  ~RdpWayGeneralizer() = default;
 
   /**
-    Generalizes a way to a set of reduced points.  The map the way belongs to is modified.
-
+    @brief generalize generalizes a way to a set of reduced points.  The map the way belongs to is
+    modified.
     @param way the way whose points are to be reduced
     @return the number of nodes removed
     */
   int generalize(const std::shared_ptr<Way>& way);
 
   /**
-    Sets the distance parameter that determines to what degree the way is generalized; higher
-    values result in more generalization (more nodes are removed)
+    @brief setEpsilon sets the distance parameter that determines to what degree the way is
+    generalized; higher values result in more generalization (more nodes are removed)
     */
   void setEpsilon(double epsilon);
 
   void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
 
-  virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(OsmMap* map) override { _map = map->shared_from_this(); }
 
 private:
 
@@ -116,7 +118,7 @@ private:
     @param wayPoints the collection of points to be reduced
     @returns a reduced set of line points
     */
-  virtual QList<std::shared_ptr<const Node>> _getGeneralizedPoints(
+  QList<std::shared_ptr<const Node>> _getGeneralizedPoints(
     const QList<std::shared_ptr<const Node>>& wayPoints);
 
   /*
@@ -143,7 +145,7 @@ private:
    */
   QList<long> _getUpdatedWayNodeIdsForThoseNotAllowedToBeRemoved(
     const QSet<long>& nodeIdsNotAllowedToBeRemoved, const QList<long>& nodeIdsBeforeGeneralization,
-    const QList<long>& generalizedNodeIds);
+    const QList<long>& generalizedNodeIds) const;
 };
 
 }

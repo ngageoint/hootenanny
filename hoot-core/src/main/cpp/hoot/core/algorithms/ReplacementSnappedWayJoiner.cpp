@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ReplacementSnappedWayJoiner.h"
@@ -50,40 +50,6 @@ _refIdToVersionMappings(refIdToVersionMappings)
 {
   _leavePid = true;
   _callingClass = className();
-}
-
-bool ReplacementSnappedWayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2) const
-{
-  // We'll join up anything, as long as its not invalid.
-  return w1->getStatus() != Status::Invalid && w2->getStatus() != Status::Invalid;
-}
-
-void ReplacementSnappedWayJoiner::_determineKeeperFeatureForTags(
-  WayPtr parent, WayPtr child, WayPtr& keeper, WayPtr& toRemove) const
-{
-  // We always want to keep unknown2, which is the dough ways being joined up with the cookie cut
-  // replacement ways.
-  if (parent->getStatus() == Status::Unknown2)
-  {
-    keeper = parent;
-    toRemove = child;
-  }
-  else if (child->getStatus() == Status::Unknown2)
-  {
-    keeper = child;
-    toRemove = parent;
-  }
-  else
-  {
-    keeper = parent;
-    toRemove = child;
-  }
-}
-
-void ReplacementSnappedWayJoiner::_determineKeeperFeatureForId(
-  WayPtr parent, WayPtr child, WayPtr& keeper, WayPtr& toRemove) const
-{
-  _determineKeeperFeatureForTags(parent, child, keeper, toRemove);
 }
 
 bool ReplacementSnappedWayJoiner::_hasPid(const ConstWayPtr& way) const
@@ -130,28 +96,8 @@ void ReplacementSnappedWayJoiner::join(const OsmMapPtr& map)
     LOG_VART(way->getElementId());
     const long pid = _getPid(way);
     LOG_VART(pid);
-    if (pid != WayData::PID_EMPTY && pid > 0 && !pidsUsed.contains(pid))
-    {
-      LOG_TRACE("Setting id from pid: " << pid << " on: " << way->getElementId());
-      ElementPtr newWay(way->clone());
-      newWay->setId(pid);
-      const ElementId parentElementId = ElementId(ElementType::Way, pid);
-      if (!_refIdToVersionMappings.contains(parentElementId))
-      {
-        LOG_WARN("No version mapping for ref way: " << parentElementId);
-      }
-      else
-      {
-        newWay->setVersion(_refIdToVersionMappings[parentElementId]);
-      }
-      LOG_VART(newWay->getVersion());
-      LOG_VART(newWay->getStatus());
-      _joinedWayIdMappings[way->getId()] = newWay->getId();
-      _map->replace(way, newWay);
-      pidsUsed.insert(pid);
-    }
   }
-  OsmMapWriterFactory::writeDebugMap(map, "after-replacement-snapped-way-joiner-pid-set");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-pid-set");
 }
 
 }

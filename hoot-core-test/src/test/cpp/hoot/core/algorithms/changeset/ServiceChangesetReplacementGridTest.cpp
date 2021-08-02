@@ -19,35 +19,36 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/HootApiDb.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/io/ServicesDbTestUtils.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/algorithms/changeset/ChangesetTaskGridReplacer.h>
 #include <hoot/core/algorithms/changeset/BoundsFileTaskGridGenerator.h>
+#include <hoot/core/algorithms/changeset/BoundsStringTaskGridGenerator.h>
+#include <hoot/core/algorithms/changeset/ChangesetTaskGridReplacer.h>
 #include <hoot/core/algorithms/changeset/NodeDensityTaskGridGenerator.h>
 #include <hoot/core/algorithms/changeset/UniformTaskGridGenerator.h>
-#include <hoot/core/algorithms/changeset/BoundsStringTaskGridGenerator.h>
 #include <hoot/core/conflate/ConflateUtils.h>
-#include <hoot/core/visitors/SetTagValueVisitor.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/ServicesDbTestUtils.h>
+#include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
 
 namespace hoot
 {
@@ -236,7 +237,7 @@ public:
     else
     {
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+      CPPUNIT_ASSERT_EQUAL(6, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(18, uut.getOutputMetrics().getNumWayEndNodes());
@@ -300,7 +301,7 @@ public:
     else
     {
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+      CPPUNIT_ASSERT_EQUAL(11, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(27, uut.getOutputMetrics().getNumWayEndNodes());
@@ -374,9 +375,9 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(10L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(9L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
@@ -439,19 +440,19 @@ public:
     else
     {
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+      CPPUNIT_ASSERT_EQUAL(10, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
-      CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairs());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(101, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(2067L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(173L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(2065L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(167L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(587L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(447L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(445L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(158L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(99L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(97L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(10L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(6L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
@@ -512,17 +513,17 @@ public:
     else
     {
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+      CPPUNIT_ASSERT_EQUAL(463, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
-      CPPUNIT_ASSERT_EQUAL(8, uut.getOutputMetrics().getNumDuplicateElementPairs());
+      CPPUNIT_ASSERT_EQUAL(9, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(986, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(17647L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(659L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(748L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(2495L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(17648L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(651L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(747L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(2496L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(189L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(156L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(157L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(281L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(24L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(48L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
@@ -652,17 +653,17 @@ public:
     else
     {
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+      CPPUNIT_ASSERT_EQUAL(18, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
-      CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairs());
-      CPPUNIT_ASSERT_EQUAL(228, uut.getOutputMetrics().getNumWayEndNodes());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
+      CPPUNIT_ASSERT_EQUAL(227, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(17943L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(529L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(199L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(2503L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(17945L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(507L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(202L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(2506L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(349L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(130L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(133L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(40L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(17L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(12L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
@@ -740,7 +741,7 @@ public:
     else
     {
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+      CPPUNIT_ASSERT_EQUAL(12, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(73, uut.getOutputMetrics().getNumWayEndNodes());
@@ -948,13 +949,13 @@ public:
     else
     {
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+      CPPUNIT_ASSERT_EQUAL(6, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(96, uut.getOutputMetrics().getNumWayEndNodes());
 
       CPPUNIT_ASSERT_EQUAL(1941L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(240L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(239L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(56L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(419L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(76L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
@@ -1081,7 +1082,7 @@ public:
     else
     {
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+      CPPUNIT_ASSERT_EQUAL(7, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(2, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(94, uut.getOutputMetrics().getNumWayEndNodes());
@@ -1235,9 +1236,9 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(5, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(1975L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(1976L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(1443L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(1444L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(297L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(297L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
@@ -1388,7 +1389,7 @@ public:
     const QString outDir = rootDir + "/" + _testName;
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/" + _testName + "-debug.osm");
     QDir(outDir).removeRecursively();
-    QDir().mkpath(outDir);;
+    QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/NOME_14992d.osm",
       rootDir + "/OSM_14992d.osm"/*,
@@ -1458,7 +1459,7 @@ private:
     const QString& input, const QString& cropBounds = "", const QString& cropOut = "",
     const bool clearDb = true)
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     // make sure the db is empty
     if (clearDb)
@@ -1472,9 +1473,9 @@ private:
       }
     }
 
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     // TODO: replace the string truncation lengths with getProgressVarPrintLengthMax
-    LOG_STATUS("Reading the data to replace from: ..." << input.right(25) << "...");
+    LOG_STATUS("Reading the data to replace from: ..." << FileUtils::toLogFormat(input, 25) << "...");
     OsmMapReaderFactory::read(map, input, true, Status::Unknown1);
     LOG_STATUS(
       StringUtils::formatLargeNumber(map->size()) << " elements to replace read in: " <<
@@ -1499,7 +1500,7 @@ private:
         {
           throw IllegalArgumentException("No crop output file path specified.");
         }
-        LOG_STATUS("Writing cropped data to: ..." << cropOut.right(25) << "...");
+        LOG_STATUS("Writing cropped data to: ..." << FileUtils::toLogFormat(cropOut, 25) << "...");
         OsmMapWriterFactory::write(map, cropOut);
       }
       _subTaskTimer.restart();
@@ -1507,14 +1508,14 @@ private:
 
     // Add a tag specifying this is the to replace data, so we can see it in the output.
     SetTagValueVisitor addTagVis("note", "Source 1");
-    NotCriterion addTagCrit(std::shared_ptr<WayNodeCriterion>(new WayNodeCriterion(map)));
+    NotCriterion addTagCrit(std::make_shared<WayNodeCriterion>(map));
     FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
     map->visitRw(deleteExcludeTagVis);
 
     // TODO: after separating quality issue tagging from replacement, grab starting quality metrics
     // for this data.
 
-    LOG_STATUS("Loading the data to replace db to: ..." << DATA_TO_REPLACE_URL.right(25) << "...");
+    LOG_STATUS("Loading the data to replace db to: ..." << FileUtils::toLogFormat(DATA_TO_REPLACE_URL, 25) << "...");
     OsmMapWriterFactory::write(map, DATA_TO_REPLACE_URL);
     _originalDataSize = (int)map->size();
     LOG_STATUS(
@@ -1528,8 +1529,8 @@ private:
   {
     // TODO: Can this be converted over to use the bulk inserter?
 
-    OsmMapPtr map(new OsmMap());
-    LOG_STATUS("Reading the replacement data from: ..." << input.right(25) << "...");
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    LOG_STATUS("Reading the replacement data from: ..." << FileUtils::toLogFormat(input, 25) << "...");
     // Load in with the replacement source IDs to mimic production behavior.
     // ChangesetReplacementCreator will throw them out when the data is first loaded in to avoid ID
     // conflicts.
@@ -1557,7 +1558,7 @@ private:
         {
           throw IllegalArgumentException("No crop output file path specified.");
         }
-        LOG_STATUS("Writing cropped data to: ..." << cropOut.right(25) << "...");
+        LOG_STATUS("Writing cropped data to: ..." << FileUtils::toLogFormat(cropOut, 25) << "...");
         OsmMapWriterFactory::write(map, cropOut);
       }
       _subTaskTimer.restart();
@@ -1565,14 +1566,14 @@ private:
 
     // add a tag specifying this is the to replace data, so we can see it in the output
     SetTagValueVisitor addTagVis("note", "Source 2");
-    NotCriterion addTagCrit(std::shared_ptr<WayNodeCriterion>(new WayNodeCriterion(map)));
+    NotCriterion addTagCrit(std::make_shared<WayNodeCriterion>(map));
     FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
     map->visitRw(deleteExcludeTagVis);
 
     // TODO: after separating quality issue tagging from replacement, grab starting quality metrics
     // for this data.
 
-    LOG_STATUS("Loading the replacement data db to: ..." << _replacementDataUrl.right(25) << "...");
+    LOG_STATUS("Loading the replacement data db to: ..." << FileUtils::toLogFormat(_replacementDataUrl, 25) << "...");
     OsmMapWriterFactory::write(map, _replacementDataUrl);
     LOG_STATUS(
       StringUtils::formatLargeNumber(map->size()) << " replacement elements loaded in: " <<
@@ -1600,12 +1601,11 @@ private:
   }
 
   void _writeDiffBetweenReplacedAndReplacement(
-    const geos::geom::Envelope& bounds, const QString& output)
+    const geos::geom::Envelope& bounds, QString& output)
   {
     // Calculate a diff between the data we just replaced and the original replacement data to
     // aid in finding any errors during the replacement process. We only want to calculate the
     // diff out to the task grid bounds, b/c that's the data that was actually replaced.
-    //conf().set(ConfigOptions::getBoundsKey(), GeometryUtils::envelopeToString(bounds));
     // use a lenient bounds
     conf().set(ConfigOptions::getBoundsKeepEntireFeaturesCrossingBoundsKey(), true);
     conf().set(
@@ -1618,7 +1618,7 @@ private:
   void _cleanupDataToReplace()
   {
     LOG_STATUS(
-      "Cleaning up the data to replace db at: ..." << DATA_TO_REPLACE_URL.right(25) << "...");
+      "Cleaning up the data to replace db at: ..." << FileUtils::toLogFormat(DATA_TO_REPLACE_URL, 25) << "...");
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     LOG_INFO(
       "Data to replace db cleaned in: " <<
@@ -1629,7 +1629,7 @@ private:
   void _cleanupReplacementData()
   {
     LOG_STATUS(
-      "Cleaning up the replacement data db at: ..." << _replacementDataUrl.right(25) << "...");
+      "Cleaning up the replacement data db at: ..." << FileUtils::toLogFormat(_replacementDataUrl, 25) << "...");
     HootApiDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     database.deleteMap(database.getMapIdByName(_testName));

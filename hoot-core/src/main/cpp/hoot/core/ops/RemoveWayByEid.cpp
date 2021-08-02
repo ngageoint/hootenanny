@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RemoveWayByEid.h"
 
@@ -46,11 +46,9 @@ RemoveWayByEid::RemoveWayByEid(long wId, bool removeFully) :
 _wayIdToRemove(wId),
 _removeFully(removeFully)
 {
-  LOG_VART(_wayIdToRemove);
-  LOG_VART(_removeFully);
 }
 
-void RemoveWayByEid::_removeWay(OsmMapPtr& map, long wId)
+void RemoveWayByEid::_removeWay(const OsmMapPtr& map, long wId) const
 {
   if (map->_ways.find(wId) != map->_ways.end())
   {
@@ -64,7 +62,7 @@ void RemoveWayByEid::_removeWay(OsmMapPtr& map, long wId)
   }
 }
 
-void RemoveWayByEid::_removeWayFully(OsmMapPtr& map, long wId)
+void RemoveWayByEid::_removeWayFully(const OsmMapPtr& map, long wId) const
 {
   // copy the set because we may modify it later.
   set<long> rid =

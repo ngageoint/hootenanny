@@ -19,20 +19,21 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonPolyCriterion.h"
 
 // hoot
+#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyWayNodeCriterion.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/criterion/AreaCriterion.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
 
 using namespace std;
 
@@ -86,10 +87,15 @@ bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
   LOG_VART(AreaCriterion().isSatisfied(e));
   // isArea includes building too
   const bool isPoly =
-    AreaCriterion().isSatisfied(e) && (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+    AreaCriterion().isSatisfied(e) && (inABuildingOrPoiCategory || !tags.getNames().empty());
 
   LOG_VART(isPoly);
   return isPoly;
+}
+
+QStringList PoiPolygonPolyCriterion::getChildCriteria() const
+{
+  return QStringList(PoiPolygonPolyWayNodeCriterion::className());
 }
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "GeometryUtils.h"
@@ -37,11 +37,12 @@
 #include <geos/util/IllegalArgumentException.h>
 
 // hoot
+#include <hoot/core/geometry/PolygonCompare.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Float.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/geometry/PolygonCompare.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -129,46 +130,9 @@ Envelope* GeometryUtils::toEnvelope(const OGREnvelope& e)
   return new Envelope(e.MinX, e.MaxX, e.MinY, e.MaxY);
 }
 
-Envelope* GeometryUtils::toEnvelopeFromHex(const QString& s)
+std::shared_ptr<OGREnvelope> GeometryUtils::toOGREnvelope(const geos::geom::Envelope& e)
 {
-  QStringList aEnvStr = s.split(",");
-  if (aEnvStr.size() != 4)
-  {
-    throw HootException("Invalid Envelope: Expected 4 bounds.");
-  }
-
-  double b[4];
-  for (int j = 0; j < 4; j++)
-  {
-    bool ok;
-    DoubleCast f;
-    f.v = aEnvStr.at(j).toULongLong(&ok, 16);
-    b[j] = f.d;
-    if (ok == false)
-    {
-      throw HootException("Invalid Envelope: Unable to parse double.");
-    }
-  }
-  return new Envelope(b[0], b[1], b[2], b[3]);
-}
-
-QString GeometryUtils::toHexString(const Envelope& e)
-{
-  DoubleCast minx, maxx, miny, maxy;
-  minx.d = e.getMinX();
-  maxx.d = e.getMaxX();
-  miny.d = e.getMinY();
-  maxy.d = e.getMaxY();
-  return QString("%1,%2,%3,%4").
-      arg(minx.v, 0, 16).
-      arg(maxx.v, 0, 16).
-      arg(miny.v, 0, 16).
-      arg(maxy.v, 0, 16);
-}
-
-OGREnvelope* GeometryUtils::toOGREnvelope(const geos::geom::Envelope& e)
-{
-  OGREnvelope* result = new OGREnvelope();
+  std::shared_ptr<OGREnvelope> result = std::make_shared<OGREnvelope>();
   result->MinX = e.getMinX();
   result->MaxX = e.getMaxX();
   result->MinY = e.getMinY();
@@ -221,7 +185,7 @@ bool GeometryUtils::isPolygonString(const QString& str)
   {
     return false;
   }
-  return poly.get() != 0;
+  return poly.get() != nullptr;
 }
 
 QString GeometryUtils::envelopeToString(const Envelope& bounds)
@@ -270,7 +234,7 @@ std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
   }
 
   CoordinateSequence* coordSeq =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(5, 2);
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(5, 2).release();
   coordSeq->setAt(geos::geom::Coordinate(env.getMinX(), env.getMinY()), 0);
   coordSeq->setAt(geos::geom::Coordinate(env.getMinX(), env.getMaxY()), 1);
   coordSeq->setAt(geos::geom::Coordinate(env.getMaxX(), env.getMaxY()), 2);
@@ -278,9 +242,10 @@ std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
   coordSeq->setAt(geos::geom::Coordinate(env.getMinX(), env.getMinY()), 4);
 
   // an empty set of holes
-  vector<Geometry*>* holes = new vector<Geometry*>();
-  // create the outer line
+  vector<LinearRing*>* holes = new vector<LinearRing*>();
+  // create the outer line; GeometryFactory takes ownership of these input parameters.
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(coordSeq);
+  // GeometryFactory takes ownership of these input parameters.
   std::shared_ptr<Polygon> poly(
     GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
   LOG_VART(poly->isValid());
@@ -316,7 +281,7 @@ std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
   LOG_VART(coords);
 
   CoordinateSequence* coordSeq =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(coords.size(), 2);
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(coords.size(), 2).release();
   for (int i = 0; i < coords.size(); i++)
   {
     const QString coordStr = coords.at(i);
@@ -341,9 +306,10 @@ std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
   LOG_VART(coordSeq->size());
 
   // an empty set of holes
-  vector<Geometry*>* holes = new vector<Geometry*>();
-  // create the outer line
+  vector<LinearRing*>* holes = new vector<LinearRing*>();
+  // create the outer line; GeometryFactory takes ownership of these input parameters.
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(coordSeq);
+  // GeometryFactory takes ownership of these input parameters.
   return std::shared_ptr<Polygon>(
     GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
 }
@@ -356,7 +322,7 @@ QString GeometryUtils::polygonStringToEnvelopeString(const QString& str)
 QString GeometryUtils::polygonToString(const std::shared_ptr<Polygon>& poly)
 {
   const int precision = ConfigOptions().getWriterPrecision();
-  geos::geom::CoordinateSequence* coords = poly->getCoordinates();
+  std::unique_ptr<geos::geom::CoordinateSequence> coords = poly->getCoordinates();
   QString str;
   for (size_t i = 0; i < coords->getSize(); i++)
   {
@@ -415,11 +381,11 @@ Geometry* GeometryUtils::validateGeometry(const Geometry* g)
 
 Geometry* GeometryUtils::validateGeometryCollection(const GeometryCollection *gc)
 {
-  Geometry* result = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
+  Geometry* result = GeometryFactory::getDefaultInstance()->createEmptyGeometry().release();
   for (size_t i = 0; i < gc->getNumGeometries(); i++)
   {
     std::shared_ptr<Geometry> geometry(validateGeometry(gc->getGeometryN(i)));
-    Geometry* tmp = result->Union(geometry.get());
+    Geometry* tmp = result->Union(geometry.get()).release();
     delete result;
     result = tmp;
   }
@@ -431,7 +397,7 @@ Geometry* GeometryUtils::validateLineString(const LineString* ls)
   // See JTS Secrets for details: http://2007.foss4g.org/presentations/view.php?abstract_id=115
   std::shared_ptr<Point> p(
     GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
-  return ls->Union(p.get());
+  return ls->Union(p.get()).release();
 }
 
 LinearRing* GeometryUtils::validateLinearRing(const LinearRing* lr)
@@ -449,13 +415,13 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
     std::shared_ptr<Geometry> tmp;
     // buffer it by zero to attempt to fix topology errors and store the result in an
     // std::shared_ptr that will self delete.
-    tmp.reset(p->buffer(0));
+    tmp = p->buffer(0);
     // run the new geometry through the whole routine again just in case the type changed.
     result = validateGeometry(tmp.get());
   }
   else if (p->getArea() == 0.0)
   {
-    result = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
+    result = GeometryFactory::getDefaultInstance()->createEmptyGeometry().release();
   }
   else
   {
@@ -463,7 +429,7 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
     std::shared_ptr<LinearRing> oldLinearRing(
       GeometryFactory::getDefaultInstance()->createLinearRing(oldShell->getCoordinates()));
     LinearRing* shell = validateLinearRing(oldLinearRing.get());
-    std::vector<Geometry*>* holes = new vector<Geometry*>();
+    std::vector<LinearRing*>* holes = new vector<LinearRing*>();
     holes->reserve(p->getNumInteriorRing());
 
     for (size_t i = 0; i < p->getNumInteriorRing(); i++)
@@ -483,10 +449,12 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
       else
       {
         LOG_TRACE("Why isn't it a linear ring?");
-        holes->push_back(validateGeometry(ls));
+        throw HootException("Interior ring is not a linear ring...");
+//        holes->push_back(validateGeometry(ls));
       }
     }
 
+    // GeometryFactory takes ownership of these input parameters.
     result = GeometryFactory::getDefaultInstance()->createPolygon(shell, holes);
   }
 
@@ -495,27 +463,15 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
 
 OsmMapPtr GeometryUtils::createMapFromBounds(const geos::geom::Envelope& bounds)
 {
-  OsmMapPtr boundaryMap(new OsmMap());
+  OsmMapPtr boundaryMap = std::make_shared<OsmMap>();
   createBoundsInMap(boundaryMap, bounds);
   return boundaryMap;
 }
 
 OsmMapPtr GeometryUtils::createMapFromBoundsCollection(
-  const QList<geos::geom::Envelope>& boundsCollection)
-{
-  OsmMapPtr boundariesMap(new OsmMap());
-  for (QList<geos::geom::Envelope>::const_iterator boundsItr = boundsCollection.begin();
-       boundsItr != boundsCollection.end(); ++boundsItr)
-  {
-    createBoundsInMap(boundariesMap, *boundsItr);
-  }
-  return boundariesMap;
-}
-
-OsmMapPtr GeometryUtils::createMapFromBoundsCollection(
   const QMap<int, geos::geom::Envelope>& boundsCollection)
 {
-  OsmMapPtr boundariesMap(new OsmMap());
+  OsmMapPtr boundariesMap = std::make_shared<OsmMap>();
   for (QMap<int, geos::geom::Envelope>::const_iterator boundsItr = boundsCollection.begin();
        boundsItr != boundsCollection.end(); ++boundsItr)
   {
@@ -528,32 +484,28 @@ OsmMapPtr GeometryUtils::createMapFromBoundsCollection(
 
 ElementId GeometryUtils::createBoundsInMap(const OsmMapPtr& map, const geos::geom::Envelope& bounds)
 {
-  NodePtr lowerLeft(
-    new Node(
-      Status::Unknown1,
-      map->createNextNodeId(),
-      geos::geom::Coordinate(bounds.getMinX(), bounds.getMinY())));
+  NodePtr lowerLeft =
+    std::make_shared<Node>(
+      Status::Unknown1, map->createNextNodeId(), geos::geom::Coordinate(bounds.getMinX(),
+      bounds.getMinY()));
   map->addNode(lowerLeft);
-  NodePtr upperRight(
-    new Node(
-      Status::Unknown1,
-      map->createNextNodeId(),
-      geos::geom::Coordinate(bounds.getMaxX(), bounds.getMaxY())));
+  NodePtr upperRight =
+    std::make_shared<Node>(
+      Status::Unknown1, map->createNextNodeId(), geos::geom::Coordinate(bounds.getMaxX(),
+      bounds.getMaxY()));
   map->addNode(upperRight);
-  NodePtr upperLeft(
-    new Node(
-      Status::Unknown1,
-      map->createNextNodeId(),
-      geos::geom::Coordinate(bounds.getMinX(), bounds.getMaxY())));
+  NodePtr upperLeft =
+    std::make_shared<Node>(
+      Status::Unknown1, map->createNextNodeId(), geos::geom::Coordinate(bounds.getMinX(),
+      bounds.getMaxY()));
   map->addNode(upperLeft);
-  NodePtr lowerRight(
-    new Node(
-      Status::Unknown1,
-      map->createNextNodeId(),
-      geos::geom::Coordinate(bounds.getMaxX(), bounds.getMinY())));
+  NodePtr lowerRight =
+    std::make_shared<Node>(
+      Status::Unknown1, map->createNextNodeId(), geos::geom::Coordinate(bounds.getMaxX(),
+      bounds.getMinY()));
   map->addNode(lowerRight);
 
-  WayPtr bbox(new Way(Status::Unknown1, map->createNextWayId()));
+  WayPtr bbox = std::make_shared<Way>(Status::Unknown1, map->createNextWayId());
   bbox->addNode(lowerLeft->getId());
   bbox->addNode(upperLeft->getId());
   bbox->addNode(upperRight->getId());
@@ -566,17 +518,16 @@ ElementId GeometryUtils::createBoundsInMap(const OsmMapPtr& map, const geos::geo
 
 OsmMapPtr GeometryUtils::createMapFromBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
 {
-  OsmMapPtr boundaryMap(new OsmMap());
-  WayPtr boundsWay(new Way(Status::Unknown1, boundaryMap->createNextWayId()));
-  geos::geom::CoordinateSequence* coords = bounds->getCoordinates();
+  OsmMapPtr boundaryMap = std::make_shared<OsmMap>();
+  WayPtr boundsWay = std::make_shared<Way>(Status::Unknown1, boundaryMap->createNextWayId());
+  std::unique_ptr<geos::geom::CoordinateSequence> coords = bounds->getCoordinates();
   for (size_t i = 0; i < coords->getSize(); i++)
   {
     const geos::geom::Coordinate& coord = coords->getAt(i);
-    NodePtr node(
-      new Node(
-        Status::Unknown1,
-        boundaryMap->createNextNodeId(),
-        geos::geom::Coordinate(coord.x, coord.y)));
+    NodePtr node =
+      std::make_shared<Node>(
+        Status::Unknown1, boundaryMap->createNextNodeId(),
+        geos::geom::Coordinate(coord.x, coord.y));
     boundaryMap->addNode(node);
     boundsWay->addNode(node->getId());
   }
@@ -584,25 +535,11 @@ OsmMapPtr GeometryUtils::createMapFromBounds(const std::shared_ptr<geos::geom::P
   return boundaryMap;
 }
 
-QList<geos::geom::Envelope> GeometryUtils::readBoundsFile(const QString& input)
-{
-  QList<geos::geom::Envelope> boundList;
-  OsmMapPtr map(new OsmMap());
-  OsmMapReaderFactory::read(map, input);
-  const WayMap ways = map->getWays();
-  // read the bounds files in the order they are presented in the input
-  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
-  {
-    boundList.append(wayItr->second->getEnvelopeInternal(map));
-  }
-  return boundList;
-}
-
 QMap<int, geos::geom::Envelope> GeometryUtils::readBoundsFileWithIds(const QString& input)
 {
   // This will sort the bounds inputs by their "id" tag.
   QMap<int, geos::geom::Envelope> boundsById;
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   OsmMapReaderFactory::read(map, input);
   const WayMap ways = map->getWays();
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
@@ -625,6 +562,31 @@ QMap<int, geos::geom::Envelope> GeometryUtils::readBoundsFileWithIds(const QStri
     boundsById[id] = way->getEnvelopeInternal(map);
   }
   return boundsById;
+}
+
+std::shared_ptr<geos::geom::Geometry> GeometryUtils::readBoundsFromFile(const QString& input)
+{
+  OsmMapPtr map = std::make_shared<OsmMap>();
+  LOG_INFO("Loading map bounds from ..." << FileUtils::toLogFormat(input, 50) << "...");
+  OsmMapReaderFactory::read(map, input);
+  const NodeMap nodes = map->getNodes();
+  double min_x =  180.0,
+         max_x = -180.0,
+         min_y =  90.0,
+         max_y = -90.0;
+  //  No nodes should return an empty pointer
+  if (nodes.empty())
+    return nullptr;
+  //  Iterate all nodes and find the min/max x/y
+  for (NodeMap::const_iterator nodeItr = nodes.begin(); nodeItr != nodes.end(); ++nodeItr)
+  {
+    ConstNodePtr node = nodeItr->second;
+    min_x = std::min(min_x, node->getX());
+    max_x = std::max(max_x, node->getX());
+    min_y = std::min(min_y, node->getY());
+    max_y = std::max(max_y, node->getY());
+  }
+  return GeometryUtils::envelopeToPolygon(geos::geom::Envelope(min_x, max_x, min_y, max_y));
 }
 
 QString GeometryUtils::geometryTypeIdToString(const geos::geom::GeometryTypeId& geometryTypeId)

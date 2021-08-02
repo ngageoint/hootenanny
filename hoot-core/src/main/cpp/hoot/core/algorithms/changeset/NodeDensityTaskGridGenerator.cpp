@@ -19,21 +19,22 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "NodeDensityTaskGridGenerator.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/NodeDensityTaskGridWriter.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/io/HootApiDbReader.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/HootApiDbReader.h>
+#include <hoot/core/io/NodeDensityTaskGridWriter.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -76,7 +77,7 @@ OsmMapPtr NodeDensityTaskGridGenerator::_getNodeDensityTaskGridInput()
 
   // TODO: replace the string truncation lengths with getProgressVarPrintLengthMax
   QString msg =
-    "Preparing input data for task grid cell calculation from: ..." + _output.right(25);
+    "Preparing input data for task grid cell calculation from: ..." + FileUtils::toLogFormat(_output, 25);
   if (!_bounds.trimmed().isEmpty())
   {
     msg += ", across bounds: " + _bounds;
@@ -96,7 +97,7 @@ OsmMapPtr NodeDensityTaskGridGenerator::_getNodeDensityTaskGridInput()
   }
 
   // IMPORTANT: data used here must be unknown1 for node density calc to work
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   // small optimization since node density only needs nodes in the input; can only do this with
   // a db reader right now
   // TODO: I don't think the node only read is working correctly.
@@ -126,7 +127,7 @@ OsmMapPtr NodeDensityTaskGridGenerator::_getNodeDensityTaskGridInput()
 TaskGrid NodeDensityTaskGridGenerator::_calcNodeDensityTaskGrid(OsmMapPtr map)
 {
   LOG_STATUS(
-    "Calculating task grid cells for replacement data to: ..." << _output.right(25) << "...");
+    "Calculating task grid cells for replacement data to: ..." << FileUtils::toLogFormat(_output, 25) << "...");
 
   _boundsCalc.calculateTiles(map);
 

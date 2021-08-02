@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "HootServicesLanguageInfoResponseParser.h"
@@ -42,7 +42,7 @@ QString HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
   displayStr += type + " languages:\n\n";
   int langCtr = 0;
   int availableCtr = 0;
-  for (boost::property_tree::ptree::value_type& language : response->get_child("languages"))
+  for (const boost::property_tree::ptree::value_type& language : response->get_child("languages"))
   {
     LOG_VART(language.second.get<std::string>("name"));
     LOG_VART(QString::fromStdString(language.second.get<std::string>("name")));
@@ -85,7 +85,7 @@ QString HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(
 
   displayStr += "Available language " + type + ":\n\n";
   int appCtr = 0;
-  for (boost::property_tree::ptree::value_type& app : response->get_child("apps"))
+  for (const boost::property_tree::ptree::value_type& app : response->get_child("apps"))
   {
     displayStr += "Name: " + QString::fromStdString(app.second.get<std::string>("name")) + "\n";
     displayStr += "Description: " +
@@ -110,7 +110,7 @@ QMap<QString, QString> HootServicesLanguageInfoResponseParser::getLangCodesToLan
   const std::shared_ptr<boost::property_tree::ptree>& response)
 {
   QMap<QString, QString> langCodesToLangs;
-  for (boost::property_tree::ptree::value_type& language : response->get_child("languages"))
+  for (const boost::property_tree::ptree::value_type& language : response->get_child("languages"))
   {
     const QString langCode =
       QString::fromStdString(language.second.get<std::string>("iso6391Code"));

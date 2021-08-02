@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RecursiveSetTagValueOp.h"
@@ -42,61 +42,32 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RecursiveSetTagValueOp)
 
+RecursiveSetTagValueOp::RecursiveSetTagValueOp()
+{
+  _tagger = std::make_shared<SetTagValueVisitor>();
+  _tagger->setConfiguration(conf());
+}
+
 RecursiveSetTagValueOp::RecursiveSetTagValueOp(
   const QStringList& keys, const QStringList& values, ElementCriterionPtr elementCriterion,
   bool appendToExistingValue, const bool overwriteExistingTag) :
 _crit(elementCriterion),
-_negateCriterion(false)
+_negateCriterion(false),
+_tagger(
+  std::make_shared<SetTagValueVisitor>(
+    keys, values, appendToExistingValue, QStringList(), overwriteExistingTag))
 {
-  _tagger.reset(
-    new SetTagValueVisitor(
-      keys, values, appendToExistingValue, QStringList(), overwriteExistingTag));
 }
 
 RecursiveSetTagValueOp::RecursiveSetTagValueOp(
   const QString& key, const QString& value, ElementCriterionPtr elementCriterion,
   bool appendToExistingValue, const bool overwriteExistingTag) :
 _crit(elementCriterion),
-_negateCriterion(false)
+_negateCriterion(false),
+_tagger(
+  std::make_shared<SetTagValueVisitor>(
+    key, value, appendToExistingValue, QStringList(), overwriteExistingTag))
 {
-  _tagger.reset(
-    new SetTagValueVisitor(key, value, appendToExistingValue, QStringList(), overwriteExistingTag));
-}
-
-RecursiveSetTagValueOp::RecursiveSetTagValueOp(
-  const QStringList& keys, const QStringList& values, const QString& criterionName,
-  bool appendToExistingValue, const bool overwriteExistingTag,
-  const bool negateCriterion) :
-_negateCriterion(negateCriterion)
-{
-  _tagger.reset(
-    new SetTagValueVisitor(
-      keys, values, appendToExistingValue, QStringList(), overwriteExistingTag));
-  _setCriterion(criterionName);
-}
-
-RecursiveSetTagValueOp::RecursiveSetTagValueOp(
-  const QString& key, const QString& value, const QString& criterionName,
-  bool appendToExistingValue, const bool overwriteExistingTag,
-  const bool negateCriterion) :
-_negateCriterion(negateCriterion)
-{
-  _tagger.reset(
-    new SetTagValueVisitor(key, value, appendToExistingValue, QStringList(), overwriteExistingTag));
-  _setCriterion(criterionName);
-}
-
-void RecursiveSetTagValueOp::setConfiguration(const Settings& conf)
-{
-  ConfigOptions configOptions(conf);
-  _tagger.reset(
-    new SetTagValueVisitor(
-      configOptions.getSetTagValueVisitorKeys(), configOptions.getSetTagValueVisitorValues(),
-      configOptions.getSetTagValueVisitorAppendToExistingValue(), QStringList(),
-      configOptions.getSetTagValueVisitorOverwrite()));
-  _negateCriterion = configOptions.getElementCriterionNegate();
-  // We're only supporting one crit here for now.
-  _setCriterion(configOptions.getSetTagValueVisitorElementCriteria().at(0));
 }
 
 void RecursiveSetTagValueOp::addCriterion(const ElementCriterionPtr& e)
@@ -107,7 +78,7 @@ void RecursiveSetTagValueOp::addCriterion(const ElementCriterionPtr& e)
   }
   else
   {
-    _crit.reset(new NotCriterion(e));
+    _crit = std::make_shared<NotCriterion>(e);
   }
 }
 
@@ -117,13 +88,17 @@ void RecursiveSetTagValueOp::_setCriterion(const QString& criterionName)
   {
     LOG_VART(criterionName);
     addCriterion(
-      std::shared_ptr<ElementCriterion>(
-        Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed())));
+      Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed()));
   }
 }
 
 void RecursiveSetTagValueOp::apply(std::shared_ptr<OsmMap>& map)
 {
+  if (!_tagger->isValid())
+  {
+    throw IllegalArgumentException(SetTagValueVisitor::className() + " not configured properly.");
+  }
+
   const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {

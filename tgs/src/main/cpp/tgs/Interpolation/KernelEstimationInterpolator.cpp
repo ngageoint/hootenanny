@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "KernelEstimationInterpolator.h"
 
@@ -51,21 +51,13 @@ KernelEstimationInterpolator::KernelEstimationInterpolator(double sigma)
   _stopDelta = 1.0;
 }
 
-KernelEstimationInterpolator::~KernelEstimationInterpolator()
-{
-  //cout << "KernelEstimationInterpolator::~KernelEstimationInterpolator()" << endl << flush;
-}
-
 class OptimizeFunction : public NelderMead::Function
 {
 public:
 
-  OptimizeFunction(KernelEstimationInterpolator& kei) : _kei(kei)
-  {
+  OptimizeFunction(KernelEstimationInterpolator& kei) : _kei(kei) { }
 
-  }
-
-  virtual double f(Vector v)
+  double f(Vector v) override
   {
     double s = std::max(0.1, v[0]);
     _kei.setSigma(s);
@@ -107,7 +99,7 @@ void KernelEstimationInterpolator::_buildModel()
     // prevent some edge conditions.
     double silvermans = max(1.0, 1.06 * sdx * pow(n, -.2));
 
-    NelderMead optimizer(1, new OptimizeFunction(*this), _stopDelta);
+    NelderMead optimizer(1, std::make_shared<OptimizeFunction>(*this), _stopDelta);
     Vector result;
     result.prepare(1);
 

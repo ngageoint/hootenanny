@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESETPROVIDER_H
 #define CHANGESETPROVIDER_H
@@ -31,14 +31,15 @@
 #include <ogr_spatialref.h>
 
 // hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/algorithms/changeset/Change.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
 /**
- * Interface for classes implementing OSM changeset capabilities
+ * @brief The ChangesetProvider class is the interface for classes providing OSM changeset
+ * capabilities.
  */
 class ChangesetProvider
 {
@@ -48,30 +49,25 @@ public:
   virtual std::shared_ptr<OGRSpatialReference> getProjection() const = 0;
 
   /**
-   * @brief ~ElementInputStream
-   *
+   * @brief ~ChangesetProvider Destructor
    * If the stream is open when the destructor is called, closeStream must be called in the
    * destructor
    */
-  virtual ~ChangesetProvider() {}
+  virtual ~ChangesetProvider() = default;
 
   /**
-   * @brief closeStream
-   *
-   * Releases all resources associated with the stream, if any
+   * @brief close releases all resources associated with the stream, if any.
    */
   virtual void close() = 0;
 
   /**
-   * Determines if the changeset has any unparsed changes
-   *
+   * @brief hasMoreChanges determines if the changeset has any unparsed changes.
    * @return true if the changeset has more changes; false otherwise
    */
   virtual bool hasMoreChanges() = 0;
 
   /**
-   * Returns the next change in the changeset
-   *
+   * @brief readNextChange returns the next change in the changeset.
    * @return a changeset change
    */
   virtual Change readNextChange() = 0;
@@ -80,49 +76,45 @@ public:
   // also really needed yet on some of the inheriting members.
 
   /**
-   * Returns the number of element parsed from the starting state used to generate changes
-   *
+   * @brief getNumFromElementsParsed returns the number of element parsed from the starting state
+   * used to generate changes.
    * @return a number of elements
    */
   virtual int getNumFromElementsParsed() const { return 0; }
 
   /**
-   * Returns the number of element parsed from the ending state used to generate changes
-   *
+   * @brief getNumToElementsParsed returns the number of element parsed from the ending state used
+   * to generate changes.
    * @return a number of elements
    */
   virtual int getNumToElementsParsed() const { return 0; }
 
   /**
-   * Returns the number of create changes in the changeset
-   *
+   * @brief getNumCreateChanges returns the number of create changes in the changeset.
    * @return a number of changes
    */
   virtual int getNumCreateChanges() const { return 0; }
 
   /**
-   * Returns the number of modify changes in the changeset
-   *
+   * @brief getNumModifyChanges returns the number of modify changes in the changeset.
    * @return a number of changes
    */
   virtual int getNumModifyChanges() const { return 0; }
 
   /**
-   * Returns the number of delete changes in the changeset
-   *
+   * @brief getNumDeleteChanges returns the number of delete changes in the changeset.
    * @return a number of changes
    */
   virtual int getNumDeleteChanges() const { return 0; }
 
   /**
-   * Returns the total number of changes in the changeset
-   *
+   * @brief getNumChanges returns the total number of changes in the changeset.
    * @return a number of changes
    */
   virtual int getNumChanges() const { return 0; }
 };
 
-typedef std::shared_ptr<ChangesetProvider> ChangesetProviderPtr;
+using ChangesetProviderPtr = std::shared_ptr<ChangesetProvider>;
 
 }
 

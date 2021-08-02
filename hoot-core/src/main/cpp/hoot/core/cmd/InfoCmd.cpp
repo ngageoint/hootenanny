@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -30,9 +30,9 @@
 #include <hoot/core/info/ApiEntityDisplayInfo.h>
 #include <hoot/core/info/ConfigOptionsDisplayer.h>
 #include <hoot/core/info/FormatsDisplayer.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QUrl>
@@ -52,27 +52,27 @@ public:
 
   InfoCmd() = default;
 
-  virtual QString getName() const override { return "info"; }
+  QString getName() const override { return "info"; }
+  QString getDescription() const override { return "Displays information about capabilities"; }
 
-  virtual QString getDescription() const override
-  { return "Displays information about capabilities"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
-    // only allowing one option per command
     const QStringList supportedOpts = _getSupportedOptions();
     QStringList specifiedOpts;
+    // Only allowing one option per info command by default. Options with more than sub-option
+    // are parsed separately after this.
+    LOG_VART(args);
     for (int i = 0; i < args.size(); i++)
     {
       const QString arg = args.at(i);
-      if (specifiedOpts.contains(arg) || (supportedOpts.contains(arg) && specifiedOpts.size() > 0))
+      if (specifiedOpts.contains(arg) || (supportedOpts.contains(arg) && !specifiedOpts.empty()))
       {
         std::cout << getHelp() << std::endl << std::endl;
         throw IllegalArgumentException(QString("%1 takes a single option.").arg(getName()));
       }
       specifiedOpts.append(arg);
     }
-    if (specifiedOpts.size() == 0)
+    if (specifiedOpts.empty())
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(QString("%1 takes a single option.").arg(getName()));
@@ -112,7 +112,7 @@ public:
             .arg(getName()));
       }
 
-      if (args.size() == 0)
+      if (args.empty())
       {
         std::cout << ConfigOptionsDisplayer::getAllOptionNames(getDetails).toStdString();
       }
@@ -191,11 +191,11 @@ public:
         args.removeAt(args.indexOf("--output-streamable"));
       }
 
-      // If none were specified, show them all, except OGR.
-      // This is getting a little messy...maybe pass in an object with the settings instead...
+      // If none were specified, show them all, except OGR. This is getting a little messy...maybe
+      // pass in an object with the settings instead.
       if (!displayInputs && !displayInputsSupportingBounds && !displayInputsSupportingStreaming &&
           !displayOutputs && !displayOutputsSupportingStreaming &&
-          (args.size() == 0 || (args.size() == 1 && displayOgrOnly)))
+          (args.empty() || (args.size() == 1 && displayOgrOnly)))
       {
         displayInputs = true;
         displayInputsSupportingStreaming = true;
@@ -231,13 +231,13 @@ public:
         QString supportedOpt = supportedOpts.at(i);
         if (args.contains(supportedOpt))
         {
-          //should only be one of these
+          // should only be one of these
           args.removeAt(args.indexOf(supportedOpt));
           apiEntityType = supportedOpt.replace("--", "");
         }
       }
       LOG_VARD(apiEntityType);
-      if (args.size() != 0)
+      if (!args.empty())
       {
         std::cout << getHelp() << std::endl << std::endl;
         throw IllegalArgumentException(
@@ -280,6 +280,7 @@ private:
     options.append("--tag-mergers");
     options.append("--value-aggregators");
     options.append("--way-joiners");
+    options.append("--way-snap-criteria");
     return options;
   }
 };

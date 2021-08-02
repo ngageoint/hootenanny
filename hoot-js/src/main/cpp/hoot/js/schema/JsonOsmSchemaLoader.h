@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef JSONOSMSCHEMALOADER_H
 #define JSONOSMSCHEMALOADER_H
@@ -45,44 +45,36 @@ public:
   static int logWarnCount;
 
   JsonOsmSchemaLoader();
+  ~JsonOsmSchemaLoader() = default;
 
-  virtual ~JsonOsmSchemaLoader() = default;
+  bool isSupported(QString url) const override { return url.endsWith(".json"); }
 
-  virtual bool isSupported(QString url) const override { return url.endsWith(".json"); }
+  void load(QString path, OsmSchema& s) override;
 
-  virtual void load(QString path, OsmSchema& s) override;
+  std::set<QString> getDependencies() override { return _deps; }
 
-  virtual std::set<QString> getDependencies() override { return _deps; }
-
-protected:
+private:
 
   std::set<QString> _deps;
   QList<QString> _baseDir;
   v8::Persistent<v8::Context> _context;
 
   double _asDouble(const QVariant& v) const;
-
   /**
    * Will return the string representation iff v is a string.
    */
   QString _asString(const QVariant& v) const;
-
   QStringList _asStringList(const QVariant& v) const;
 
   void _processObject(const QVariantMap& v, OsmSchema& s);
 
-  void _loadBase(QVariantMap& v, OsmSchema &s, SchemaVertex& tv);
-
-  void _loadCompound(const QVariantMap& v, OsmSchema& s);
-
-  void _loadCompoundTags(SchemaVertex& tv, const QVariant& value);
-
+  void _loadBase(QVariantMap& v, const OsmSchema &s, SchemaVertex& tv) const;
+  void _loadAssociatedWith(const SchemaVertex& tv, const QVariant& v, const OsmSchema& s) const;
+  void _loadCompound(const QVariantMap& v, const OsmSchema& s) const;
+  void _loadCompoundTags(SchemaVertex& tv, const QVariant& value) const;
   void _loadGeometries(SchemaVertex& tv, const QVariant& v) const;
-
-  void _loadSimilarTo(QString fromName, const QVariant& value, OsmSchema& s) const;
-
-  void _loadTag(const QVariantMap& v, OsmSchema& s);
-
+  void _loadSimilarTo(QString fromName, const QVariant& value, const OsmSchema& s) const;
+  void _loadTag(const QVariantMap& v, const OsmSchema& s) const;
 };
 
 }

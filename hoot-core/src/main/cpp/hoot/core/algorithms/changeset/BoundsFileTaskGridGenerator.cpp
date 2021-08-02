@@ -19,17 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "BoundsFileTaskGridGenerator.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -48,7 +49,7 @@ TaskGrid BoundsFileTaskGridGenerator::generateTaskGrid()
   for (int i = 0; i < _inputs.size(); i++)
   {
     const QString gridInput = _inputs.at(i);
-    LOG_INFO("Reading task grid file: ..." << gridInput.right(25) << "...");
+    LOG_INFO("Reading task grid file: ..." << FileUtils::toLogFormat(gridInput, 25) << "...");
     taskGridTemp = GeometryUtils::readBoundsFileWithIds(gridInput);
     for (QMap<int, geos::geom::Envelope>::const_iterator taskGridTempItr = taskGridTemp.begin();
          taskGridTempItr != taskGridTemp.end(); ++taskGridTempItr)

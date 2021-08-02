@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __TGC_KNN_ITERATOR_H__
@@ -53,7 +53,8 @@ public:
   class LeafDistance
   {
   public:
-    LeafDistance() {}
+
+    LeafDistance() : distance(0.0), fid(0) { }
 
     LeafDistance(double dist, int fid)
     {
@@ -69,6 +70,7 @@ public:
     : public std::binary_function<KnnIterator::LeafDistance, KnnIterator::LeafDistance, bool>
   {
   public:
+
     bool operator()(const KnnIterator::LeafDistance& _Left,
       const KnnIterator::LeafDistance& _Right) const
     {
@@ -87,6 +89,7 @@ public:
   class NodeDistance
   {
   public:
+
     NodeDistance() = default;
 
     NodeDistance(double dist, int nodeId)
@@ -103,8 +106,9 @@ public:
     : public std::binary_function<KnnIterator::NodeDistance*, KnnIterator::NodeDistance*, bool>
   {
   public:
-    bool operator()(/*const*/ KnnIterator::NodeDistance*& _Left,
-      /*const*/ KnnIterator::NodeDistance*& _Right) const
+
+    bool operator()(KnnIterator::NodeDistance*& _Left,
+                    KnnIterator::NodeDistance*& _Right) const
     {
       return (_Left->minPossibleDistance > _Right->minPossibleDistance);
     }
@@ -114,11 +118,11 @@ public:
     const Box& searchRegion = Box());
   virtual ~KnnIterator();
 
-  virtual const Box& getBox() const;
-  int getId() const { return _knnId; }
-  double getDistance() const { return _knnDistance; }
-  virtual bool hasNext();
-  bool next();
+  const Box& getBox() const override;
+  int getId() const override { return _knnId; }
+  virtual double getDistance() const { return _knnDistance; }
+  bool hasNext() override;
+  bool next() override;
 
   virtual void reset(const double x, const double y);
 
@@ -126,6 +130,7 @@ public:
   static double distPtToLine(double x, double y, double s1, double t1, double s2, double t2);
 
 protected:
+
   enum
   {
     RESERVED_ID = -1,

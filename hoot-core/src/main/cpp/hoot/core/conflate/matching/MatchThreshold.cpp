@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MatchThreshold.h"
 
@@ -34,8 +34,31 @@
 namespace hoot
 {
 
-MatchThreshold::MatchThreshold(double matchThreshold, double missThreshold, double reviewThreshold)
+MatchThreshold::MatchThreshold(
+  double matchThreshold, double missThreshold, double reviewThreshold, bool validateRange)
 {
+  if (validateRange)
+  {
+    if (matchThreshold <= 0.0 || matchThreshold > 1.0)
+    {
+      throw IllegalArgumentException(
+        "Invalid match threshold: " + QString::number(matchThreshold) +
+        ". Must be greater than 0.0 and less than 1.0.");
+    }
+    if (missThreshold <= 0.0 || missThreshold > 1.0)
+    {
+      throw IllegalArgumentException(
+        "Invalid miss threshold: " + QString::number(missThreshold) +
+        ". Must be greater than 0.0 and less than 1.0.");
+    }
+    if (reviewThreshold <= 0.0 || reviewThreshold > 1.0)
+    {
+      throw IllegalArgumentException(
+        "Invalid review threshold: " + QString::number(reviewThreshold) +
+        ". Must be greater than 0.0 and less than 1.0.");
+    }
+  }
+
   _matchThreshold = matchThreshold;
   _missThreshold = missThreshold;
   _reviewThreshold = reviewThreshold;

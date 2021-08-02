@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __ALPHASHAPE_H__
@@ -35,7 +35,6 @@
 
 // GDAL
 #include <ogr_core.h>
-class OGRSpatialReference;
 
 // Qt
 #include <QString>
@@ -45,6 +44,8 @@ class OGRSpatialReference;
 #include <memory>
 #include <set>
 #include <vector>
+
+class OGRSpatialReference;
 
 namespace Tgs
 {
@@ -61,11 +62,16 @@ class FaceGroup;
 class OsmMap;
 class Way;
 
-typedef std::shared_ptr<geos::geom::Geometry> GeometryPtr;
+using GeometryPtr = std::shared_ptr<geos::geom::Geometry>;
 
 /**
- * Representation of an Alpha Shape. Technically an Alpha complex, not an Alpha Shape, but the
- * literature seems to alternate between the terms.
+ *
+ */
+/**
+ * @brief The AlphaShape class is a representation of an Alpha Shape.
+ *
+ * Technically an Alpha complex, not an Alpha Shape, but the literature seems to alternate between
+ * the terms.
  *
  * https://github.com/ngageoint/hootenanny/files/595246/Hootenanny.-.Alpha.Shape.2013-03-07.pptx
  * https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AlphaShape.asciidoc
@@ -80,36 +86,31 @@ public:
   static int logWarnCount;
 
   /**
-   * Constructor
-   *
+   * @brief AlphaShape Constructor
    * @param alpha tuning parameter which determines the makeup of the output shape
    */
   AlphaShape(double alpha = -1.0);
 
   /**
-   * Converts this shape to a GEOS geometry
-   *
+   * @brief toGeometry Converts this shape to a GEOS geometry.
    * @return a GEOS geometry
    */
   GeometryPtr toGeometry();
 
   /**
-   * Inserts points which are used to build the shape
-   *
+   * @brief insert inserts points which are used to build the shape.
    * @param points a collection of points
    */
   void insert(const std::vector<std::pair<double, double>>& points);
 
   /**
-   * Returns a string representation of the shape
-   *
+   * @brief toString returns a string representation of the shape.
    * @return a string
    */
-  QString toString();
+  QString toString() const;
 
   /**
-   * Returns the length of the longest face edge used to create the shape
-   *
+   * @brief getLongestFaceEdge returns the length of the longest face edge used to create the shape.
    * @return a length
    */
   double getLongestFaceEdge() const { return _longestFaceEdge; }
@@ -153,7 +154,7 @@ private:
    * @param e Envelope containing all faces
    * @return Sum of the area of all faces
    */
-  double _collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e);
+  double _collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e) const;
 
   /**
    * @brief _searchAlpha Run a binary search to find the alpha value that create a "complete" alpha shape

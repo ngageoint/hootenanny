@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESET_REPLACEMENT_H
 #define CHANGESET_REPLACEMENT_H
@@ -38,7 +38,8 @@ namespace hoot
 {
 
 /**
- * Interface for classes generating changesets where one dataset replaces another
+ * @brief The ChangesetReplacement class is the interface to implement for classes generating
+ * changesets where one dataset replaces another
  *
  * The interface supports a Polygon geometry instead of any geometry as input due to the fact the
  * bounds option string has to be set by the creators at the beginning of the replacement
@@ -55,9 +56,8 @@ public:
 
   /**
    * The manner in which replacement boundary conditions are handled. See the
-   * changeset-derive-replacement CLI doc for more detail.
-   *
-   * @todo remove Hybrid
+   * changeset-derive CLI doc for more detail.
+   * @todo remove Hybrid; not used anywhere
    */
   enum BoundsInterpretation
   {
@@ -67,8 +67,7 @@ public:
   };
 
   /**
-   * Creates a changeset that replaces data
-   *
+   * @brief create creates a changeset that replaces data.
    * @param input1 the target data file path
    * @param input2 the source data file path
    * @param bounds the rectangular bounds over which features are to be replaced
@@ -77,10 +76,8 @@ public:
   virtual void create(
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output) = 0;
-
   /**
-   * Creates a changeset that replaces data
-   *
+   * @brief create creates a changeset that replaces data.
    * @param input1 the target data file path
    * @param input2 the source data file path
    * @param bounds the bounds over which features are to be replaced
@@ -94,19 +91,11 @@ public:
 
   virtual void setFullReplacement(const bool full) = 0;
   virtual void setBoundsInterpretation(const BoundsInterpretation& interpretation) = 0;
-  virtual void setGeometryFilters(const QStringList& filterClassNames) = 0;
-  virtual void setReplacementFilters(const QStringList& filterClassNames) = 0;
-  virtual void setChainReplacementFilters(const bool chain)  = 0;
-  virtual void setReplacementFilterOptions(const QStringList& optionKvps) = 0;
-  virtual void setRetainmentFilters(const QStringList& filterClassNames) = 0;
-  virtual void setChainRetainmentFilters(const bool chain) = 0;
-  virtual void setRetainmentFilterOptions(const QStringList& optionKvps) = 0;
   virtual void setEnableWaySnapping(const bool enable) = 0;
   virtual void setChangesetId(const QString& id) = 0;
 
   /**
-   * Sets changeset options
-   *
+   * @brief setChangesetOptions sets changeset options.
    * @param printStats prints statistics for the output changeset
    * @param outputStatsFile optional file to output the changeset statistics to
    * @param osmApiDbUrl URL to an OSM API database used to calculate element IDs; required only if

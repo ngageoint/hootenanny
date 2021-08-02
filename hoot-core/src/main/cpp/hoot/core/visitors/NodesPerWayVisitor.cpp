@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "NodesPerWayVisitor.h"
@@ -52,10 +52,10 @@ void NodesPerWayVisitor::setConfiguration(const Settings& conf)
   // Can we move some of the logic up to the parent? Do the same in the other children as well.
 
   ConfigOptions configOptions(conf);
-  _negateCriterion = configOptions.getElementCriterionNegate();
-  LOG_VARD(_negateCriterion);
+  _negateCriterion = configOptions.getElementCriteriaNegate();
+  LOG_VART(_negateCriterion);
   const QString critName = configOptions.getNodesPerWayVisitorElementCriterion();
-  LOG_VARD(critName);
+  LOG_VART(critName);
   _setCriterion(critName);
 }
 
@@ -67,7 +67,7 @@ void NodesPerWayVisitor::addCriterion(const ElementCriterionPtr& e)
   }
   else
   {
-    _customCrit.reset(new NotCriterion(e));
+    _customCrit = std::make_shared<NotCriterion>(e);
   }
 }
 
@@ -77,8 +77,7 @@ void NodesPerWayVisitor::_setCriterion(const QString& criterionName)
   {
     LOG_VART(criterionName);
     addCriterion(
-      std::shared_ptr<ElementCriterion>(
-        Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed())));
+      Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed()));
   }
 }
 
@@ -105,6 +104,12 @@ void NodesPerWayVisitor::visit(const ConstElementPtr& e)
     }
     _numAffected++;
   }
+}
+
+double NodesPerWayVisitor::getAverage() const
+{
+  const double average = _numAffected == 0 ? 0.0 : _totalWayNodes / _numAffected;
+  return average;
 }
 
 }

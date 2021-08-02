@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RELATION_WITH_MEMBERS_OF_TYPE_CRITERION_H
@@ -51,13 +51,13 @@ public:
   RelationWithMembersOfTypeCriterion(ConstOsmMapPtr map);
   virtual ~RelationWithMembersOfTypeCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual QString getCriterion() const = 0;
 
-  virtual void setOsmMap(const OsmMap* map);
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setAllowMixedChildren(bool allow) { _allowMixedChildren = allow; }
 

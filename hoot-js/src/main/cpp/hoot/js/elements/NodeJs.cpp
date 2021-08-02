@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "NodeJs.h"
 
@@ -67,43 +67,44 @@ void NodeJs::getY(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(Number::New(current, n->getY()));
 }
 
-void NodeJs::Init(Handle<Object> target)
+void NodeJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, Node::className().toStdString().data()));
+  tpl->SetClassName(String::NewFromUtf8(current, Node::className().toStdString().data()).ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getX"),
-      FunctionTemplate::New(current, getX));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getY"),
-      FunctionTemplate::New(current, getY));
+  tpl->PrototypeTemplate()->Set(current, "getX", FunctionTemplate::New(current, getX));
+  tpl->PrototypeTemplate()->Set(current, "getY", FunctionTemplate::New(current, getY));
   ElementJs::_addBaseFunctions(tpl);
 
-  _constructor.Reset(current, tpl->GetFunction());
-  target->Set(String::NewFromUtf8(current, "Node"), ToLocal(&_constructor));
+  _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
+  target->Set(context, toV8("Node"), ToLocal(&_constructor));
 }
 
-Handle<Object> NodeJs::New(ConstNodePtr node)
+Local<Object> NodeJs::New(ConstNodePtr node)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   NodeJs* from = ObjectWrap::Unwrap<NodeJs>(result);
   from->_setNode(node);
 
   return scope.Escape(result);
 }
 
-Handle<Object> NodeJs::New(NodePtr node)
+Local<Object> NodeJs::New(NodePtr node)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   NodeJs* from = ObjectWrap::Unwrap<NodeJs>(result);
   from->_setNode(node);
 

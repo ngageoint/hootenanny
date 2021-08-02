@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef TAG_FILTER_H
@@ -53,10 +53,8 @@ public:
             const OsmSchemaCategory& category = OsmSchemaCategory::Empty);
 
   QString getKey() const { return _key; }
-  void setKey(const QString& key);
 
   QString getValue() const { return _value; }
-  void setValue(const QString& val);
 
   bool getAllowAliases() const { return _allowAliases; }
   void setAllowAliases(bool allow) { _allowAliases = allow; }
@@ -74,7 +72,6 @@ public:
   void setAllowAssociations(bool allow) { _allowAssociations = allow; }
 
   OsmSchemaCategory getCategory() const { return _category; }
-  void setCategory(OsmSchemaCategory category);
 
   /**
    * Creates a tag filter from a JSON node

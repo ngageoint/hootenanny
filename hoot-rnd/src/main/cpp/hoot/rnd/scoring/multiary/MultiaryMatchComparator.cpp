@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MultiaryMatchComparator.h"
 
@@ -68,8 +68,8 @@ MultiaryMatchComparator::MultiaryMatchComparator()
   _tagErrors = true;
 }
 
-void MultiaryMatchComparator::_addToConfusionTable(const ConfusionTable& x, ConfusionTable& addTo)
-  const
+void MultiaryMatchComparator::_addToConfusionTable(
+  const ConfusionTable& x, ConfusionTable& addTo) const
 {
   bool foundOne = false;
   foreach (int i, x.keys())
@@ -102,9 +102,9 @@ void MultiaryMatchComparator::_calculateNodeBasedStats(const ConstOsmMapPtr& con
 
   if (_translationScript != "")
   {
-    translator.reset(
-      dynamic_cast<ScriptToOgrSchemaTranslator*>(
-        ScriptSchemaTranslatorFactory::getInstance().createTranslator(_translationScript)));
+    translator =
+      std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(
+        ScriptSchemaTranslatorFactory::getInstance().createTranslator(_translationScript));
     translator->getOgrOutputSchema();
   }
 
@@ -147,7 +147,7 @@ void MultiaryMatchComparator::_calculateNodeBasedStats(const ConstOsmMapPtr& con
       {
         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> translated =
             translator->translateToOgr(tags, e->getElementType(),
-              ec.getGeometryType(e, false));
+              ElementToGeometryConverter::getGeometryType(e, false));
 
         bool foundCategory = false;
         foreach (const ScriptToOgrSchemaTranslator::TranslatedFeature& tf, translated)
@@ -214,7 +214,7 @@ void MultiaryMatchComparator::_clearCache()
 double MultiaryMatchComparator::evaluateMatches(const ConstOsmMapPtr& in,
   const OsmMapPtr& conflated)
 {
-  OsmMapPtr copyIn(new OsmMap(in));
+  OsmMapPtr copyIn = std::make_shared<OsmMap>(in);
   MultiaryMatchTrainingValidator().apply(copyIn);
 
   _clearCache();
@@ -224,15 +224,9 @@ double MultiaryMatchComparator::evaluateMatches(const ConstOsmMapPtr& in,
   _findActualMatches(conflated);
   _findActualReviews(conflated);
 
-//  LOG_VAR(_actualMatchGroups);
-//  LOG_VAR(_expectedMatchGroups);
-//  LOG_VAR(_actualReviews);
-//  LOG_VAR(_expectedReviews);
-
   // go through all the IDs in the in data set.
   foreach (QString id, _expectedIdToEid.keys())
   {
-//    LOG_VAR(id);
     assert(_actualMatchGroups.contains(id));
     assert(_expectedMatchGroups.contains(id));
 
@@ -245,12 +239,6 @@ double MultiaryMatchComparator::evaluateMatches(const ConstOsmMapPtr& in,
     expectedMatchSet -= id;
     actualReviewSet -= id;
     expectedReviewSet -= id;
-
-//    LOG_VAR(id);
-//    LOG_VAR(actualMatchSet);
-//    LOG_VAR(expectedMatchSet);
-//    LOG_VAR(actualReviewSet);
-//    LOG_VAR(expectedReviewSet);
 
     // confusion matrix contributions. Variables are named as: actualExpected
 
@@ -353,11 +341,11 @@ void MultiaryMatchComparator::_findActualMatches(const ConstOsmMapPtr& conflated
     {
     }
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       QList<QString> ids = _getAllIds(e);
 
@@ -370,8 +358,7 @@ void MultiaryMatchComparator::_findActualMatches(const ConstOsmMapPtr& conflated
         }
       }
 
-      IdClusterPtr cluster(new IdCluster());
-
+      IdClusterPtr cluster = std::make_shared<IdCluster>();
       foreach (QString id, ids)
       {
         if (_matchGroups.contains(id))
@@ -445,11 +432,11 @@ void MultiaryMatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
     {
     }
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       const Tags& t = e->getTags();
       QString id = MetadataTags::TrainingId();
@@ -459,7 +446,7 @@ void MultiaryMatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
         _idToEid[t[id]] = e->getElementId();
         if (_matchGroups.contains(t[id]) == false)
         {
-          _matchGroups.insert(t[id], IdClusterPtr(new IdCluster()));
+          _matchGroups.insert(t[id], std::make_shared<IdCluster>());
         }
         _matchGroups[t[id]]->insert(t[id]);
       }
@@ -480,7 +467,7 @@ void MultiaryMatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
         {
           if (_matchGroups.contains(t[match]) == false)
           {
-            _matchGroups.insert(t[match], IdClusterPtr(new IdCluster()));
+            _matchGroups.insert(t[match], std::make_shared<IdCluster>());
           }
           // copy all the matches in t[id] into t[match]
           *_matchGroups[t[match]] += *_matchGroups[t[id]];
@@ -525,11 +512,11 @@ void MultiaryMatchComparator::_findExpectedReviews(const ConstOsmMapPtr& in)
     {
     }
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       if (e->getStatus().isInput())
       {
@@ -713,10 +700,10 @@ void MultiaryMatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
 {
   _elementWrongCounts[elementType] =
     (int)FilteredVisitor::getStat(
-      ElementCriterionPtr(new ChainCriterion(
-      ElementCriterionPtr(new ElementTypeCriterion(elementType)),
-      ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootWrong())))),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
+      std::make_shared<ChainCriterion>(
+        std::make_shared<ElementTypeCriterion>(elementType),
+        std::make_shared<TagKeyCriterion>(MetadataTags::HootWrong())),
+      std::make_shared<ElementCountVisitor>(),
       map);
 }
 

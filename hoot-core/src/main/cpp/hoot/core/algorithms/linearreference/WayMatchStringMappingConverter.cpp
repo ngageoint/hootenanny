@@ -19,22 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2021 Maxar (http://www.maxar.com/)
  */
 #include "WayMatchStringMappingConverter.h"
 
 namespace hoot
 {
 
-WayMatchStringMappingConverter::WayMatchStringMappingConverter()
-{
-}
-
 WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString(
-  WayMatchStringMappingPtr mapping)
+  WayMatchStringMappingPtr mapping) const
 {
   WayStringPtr wstr1 = mapping->getWayString1();
   WayStringPtr wstr2 = mapping->getWayString2();
@@ -48,8 +44,8 @@ WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString
   // keep stepping through till you reach the end of both ways.
   while (wl1 != wstr1->back().getEnd() || wl2 != wstr2->back().getEnd())
   {
-    WaySubline& ws1 = wstr1->at(i1);
-    WaySubline& ws2 = wstr2->at(i2);
+    const WaySubline& ws1 = wstr1->at(i1);
+    const WaySubline& ws2 = wstr2->at(i2);
 
     // calculate the distance on str1 that the next subline map to. Not that we aren't calculating
     // the distance on str2, but mapping from str2 to str1, then calculate the distance.
@@ -76,7 +72,7 @@ WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString
     WaySubline tmp2 = sub2;
     tmp1.ensureForwards();
     tmp2.ensureForwards();
-    coll.push_back(WaySublineMatch(tmp1, tmp2, reversed));
+    coll.emplace_back(tmp1, tmp2, reversed);
 
     wl1 = sub1.getEnd();
     wl2 = sub2.getEnd();
@@ -93,7 +89,7 @@ WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString
     }
   }
 
-  return WaySublineMatchStringPtr(new WaySublineMatchString(coll));
+  return std::make_shared<WaySublineMatchString>(coll);
 }
 
 }

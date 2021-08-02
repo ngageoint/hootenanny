@@ -1,0 +1,2221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.56972799999813" minlon="125.7806830000004" maxlat="39.75273499999724" maxlon="126.0792060000043"/>
+    <node visible="true" id="-4157" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6002020955986964" lon="125.8642862980418471"/>
+    <node visible="true" id="-4152" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6220347035184304" lon="125.8941775656318072"/>
+    <node visible="true" id="-4151" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6219849753417250" lon="125.8941130346234729"/>
+    <node visible="true" id="-4150" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6101068667523961" lon="125.8751598335347524"/>
+    <node visible="true" id="-4146" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7239373600800292" lon="125.8972496893138242"/>
+    <node visible="true" id="-4139" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6025853130851715" lon="125.9879181664623502"/>
+    <node visible="true" id="-4123" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6841682439961616" lon="125.8501745389837509"/>
+    <node visible="true" id="-4098" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6146810269464851" lon="125.9645338731612725"/>
+    <node visible="true" id="-4091" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6062185552348538" lon="125.8681655343427082"/>
+    <node visible="true" id="-4089" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7069006989741524" lon="125.8848913667285672"/>
+    <node visible="true" id="-4088" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7115007362208559" lon="125.8847665973244290"/>
+    <node visible="true" id="-4076" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6753214998291384" lon="125.9107856116749957"/>
+    <node visible="true" id="-4074" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6519750233098591" lon="125.9070335182381797"/>
+    <node visible="true" id="-4069" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6517054737219254" lon="125.9067318274564968"/>
+    <node visible="true" id="-4052" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7156892349822712" lon="125.8888748027050895"/>
+    <node visible="true" id="-4047" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5840263090611160" lon="125.8639737973760759"/>
+    <node visible="true" id="-4046" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5892002278258772" lon="125.8687295067765461"/>
+    <node visible="true" id="-4045" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5835673960283430" lon="125.8638177099224578"/>
+    <node visible="true" id="-4040" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5760187893129327" lon="125.8601184810397768"/>
+    <node visible="true" id="-4038" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7300807988286877" lon="126.0787565393315504"/>
+    <node visible="true" id="-4033" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6992607594856182" lon="125.8888477167619726"/>
+    <node visible="true" id="-4025" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7070739525959553" lon="125.8847575637882841"/>
+    <node visible="true" id="-4010" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6999421492971791" lon="125.8883674901398280"/>
+    <node visible="true" id="-4005" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6350962495216237" lon="125.9030895220982842"/>
+    <node visible="true" id="-4004" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6350722462499334" lon="125.9030077857876506"/>
+    <node visible="true" id="-4002" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6317800676263303" lon="125.8982281971229185"/>
+    <node visible="true" id="-3997" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7097185549982186" lon="126.0621820330035661"/>
+    <node visible="true" id="-3993" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6943288587591780" lon="126.0145299600599458"/>
+    <node visible="true" id="-3992" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6936160256101971" lon="126.0131855390142732"/>
+    <node visible="true" id="-3991" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6924364762757946" lon="126.0110059184359841"/>
+    <node visible="true" id="-3990" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6922207734733377" lon="126.0106080242409519"/>
+    <node visible="true" id="-2092" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7505546019975355" lon="125.9132189899074490"/>
+    <node visible="true" id="-2091" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7510661150036526" lon="125.9134548339968518"/>
+    <node visible="true" id="-2090" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7517626699938802" lon="125.9137486888573960"/>
+    <node visible="true" id="-2089" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7520059709977858" lon="125.9138536819237402"/>
+    <node visible="true" id="-2070" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6029450289989882" lon="125.9882326870060041"/>
+    <node visible="true" id="-2017" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6499647050052815" lon="125.9045844549778224"/>
+    <node visible="true" id="-2016" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6499239650018680" lon="125.9045561089643570"/>
+    <node visible="true" id="-2015" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6498834940000719" lon="125.9045279510050506"/>
+    <node visible="true" id="-1965" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5894414590013639" lon="125.8688064469846921"/>
+    <node visible="true" id="-1964" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5893606409965315" lon="125.8687821739996195"/>
+    <node visible="true" id="-1963" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5892560289984559" lon="125.8687507559950518"/>
+    <node visible="true" id="-1942" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5839335270028982" lon="125.8639401719803459"/>
+    <node visible="true" id="-1930" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7002234060011503" lon="125.8882016759783937"/>
+    <node visible="true" id="-1929" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7003634159972094" lon="125.8881030409804396"/>
+    <node visible="true" id="-1928" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7008027599968258" lon="125.8878259589888131"/>
+    <node visible="true" id="-1927" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7011803139990391" lon="125.8875921189724352"/>
+    <node visible="true" id="-1926" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7015704099973945" lon="125.8873906579759137"/>
+    <node visible="true" id="-1925" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7020165660003244" lon="125.8871526270021235"/>
+    <node visible="true" id="-1924" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7023866270021699" lon="125.8869522009936190"/>
+    <node visible="true" id="-1923" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7026751020031696" lon="125.8868064959872015"/>
+    <node visible="true" id="-1922" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7030591069985235" lon="125.8866027599893727"/>
+    <node visible="true" id="-1921" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7033840059948417" lon="125.8864344529751094"/>
+    <node visible="true" id="-1920" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7037012519982966" lon="125.8862781970151588"/>
+    <node visible="true" id="-1919" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7039142729992633" lon="125.8861745959828369"/>
+    <node visible="true" id="-1918" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7043863949997515" lon="125.8859164449905279"/>
+    <node visible="true" id="-1917" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7047424299965854" lon="125.8857491209905106"/>
+    <node visible="true" id="-1916" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7050305840005038" lon="125.8856416429940026"/>
+    <node visible="true" id="-1915" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7053209429931684" lon="125.8855243339694567"/>
+    <node visible="true" id="-1914" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7055283929987368" lon="125.8854487679696774"/>
+    <node visible="true" id="-1913" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7056446409957289" lon="125.8853981819722776"/>
+    <node visible="true" id="-1912" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7058714569964479" lon="125.8853084259845616"/>
+    <node visible="true" id="-1911" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7060757700031957" lon="125.8852418749673490"/>
+    <node visible="true" id="-1910" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7064086390022553" lon="125.8850958979888759"/>
+    <node visible="true" id="-1909" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7067291760010264" lon="125.8849406910054256"/>
+    <node visible="true" id="-1908" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7069583439987994" lon="125.8848239529805113"/>
+    <node visible="true" id="-1792" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6993691500021484" lon="125.8887921019865388"/>
+    <node visible="true" id="-1791" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6998800210023219" lon="125.8885377789594600"/>
+    <node visible="true" id="-1734" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6447928870057851" lon="125.9067586460050450"/>
+    <node visible="true" id="-1733" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6447438399962166" lon="125.9067796329771625"/>
+    <node visible="true" id="-1732" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6447269940007985" lon="125.9067868420010399"/>
+    <node visible="true" id="-1693" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6350816129992367" lon="125.9030370959611105"/>
+    <node visible="true" id="-1677" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6317705469968757" lon="125.8982187400128936"/>
+    <node visible="true" id="-1676" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6315180199985875" lon="125.8979797659739859"/>
+    <node visible="true" id="-1675" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6313364959987808" lon="125.8978275099851913"/>
+    <node visible="true" id="-1674" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6311830140019410" lon="125.8977115139911120"/>
+    <node visible="true" id="-1673" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6308441250035060" lon="125.8975035979641603"/>
+    <node visible="true" id="-1672" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6305306639985133" lon="125.8973650469834809"/>
+    <node visible="true" id="-1671" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6302050290035695" lon="125.8972580939751111"/>
+    <node visible="true" id="-1670" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6298992170024462" lon="125.8971800059502897"/>
+    <node visible="true" id="-1669" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6296585290018086" lon="125.8971565589808108"/>
+    <node visible="true" id="-1668" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6293086910003396" lon="125.8971554939851529"/>
+    <node visible="true" id="-1667" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6289540019972506" lon="125.8971973399927862"/>
+    <node visible="true" id="-1666" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6286975289944365" lon="125.8972574059837370"/>
+    <node visible="true" id="-1665" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6286201069999109" lon="125.8972854729918254"/>
+    <node visible="true" id="-1664" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6285704020023388" lon="125.8973006479840961"/>
+    <node visible="true" id="-1647" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6234714980023810" lon="125.8961646679928208"/>
+    <node visible="true" id="-1646" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6234545409944872" lon="125.8961432010020758"/>
+    <node visible="true" id="-1645" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6234263959992816" lon="125.8961091250151014"/>
+    <node visible="true" id="-1641" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6220273110011902" lon="125.8941674199890599"/>
+    <node visible="true" id="-1586" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6099570100013807" lon="125.8749790759871132"/>
+    <node visible="true" id="-1585" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6098661840023141" lon="125.8748634899855148"/>
+    <node visible="true" id="-1584" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6096336250016279" lon="125.8745660449789909"/>
+    <node visible="true" id="-1583" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6094390450007268" lon="125.8742830609968593"/>
+    <node visible="true" id="-1582" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6092973380018236" lon="125.8740649709958603"/>
+    <node visible="true" id="-1581" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6091628769986315" lon="125.8738368520027251"/>
+    <node visible="true" id="-1580" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6090379790020819" lon="125.8736102439994653"/>
+    <node visible="true" id="-1579" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6089513829957482" lon="125.8734472459826463"/>
+    <node visible="true" id="-1578" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6087531130011854" lon="125.8730648069829101"/>
+    <node visible="true" id="-1577" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6084502169950810" lon="125.8724826619967132"/>
+    <node visible="true" id="-1576" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6081789260015853" lon="125.8719573160003620"/>
+    <node visible="true" id="-1575" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6076698140042751" lon="125.8709769179884290"/>
+    <node visible="true" id="-1574" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6074419079973410" lon="125.8705362990059911"/>
+    <node visible="true" id="-1573" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6071111660046427" lon="125.8698881309864390"/>
+    <node visible="true" id="-1572" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6068976310025249" lon="125.8694785639964380"/>
+    <node visible="true" id="-1571" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6066110720085405" lon="125.8689260879788065"/>
+    <node visible="true" id="-1570" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6062846149969801" lon="125.8682880779990683"/>
+    <node visible="true" id="-1569" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6062696310020357" lon="125.8682607909760094"/>
+    <node visible="true" id="-1568" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6062461369985286" lon="125.8682180059851845"/>
+    <node visible="true" id="-1517" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6759632970015588" lon="125.8070651679975498"/>
+    <node visible="true" id="-1516" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6759625800011548" lon="125.8070098459969728"/>
+    <node visible="true" id="-1515" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6759621819999566" lon="125.8069791049853734"/>
+    <node visible="true" id="-1514" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5712802910040722" lon="125.9636364920169740"/>
+    <node visible="true" id="-1513" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5713947460005997" lon="125.9630781720150452"/>
+    <node visible="true" id="-1512" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5715032210045621" lon="125.9625280840392918"/>
+    <node visible="true" id="-1511" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5716076210028547" lon="125.9621505920518558"/>
+    <node visible="true" id="-1510" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5717246130015639" lon="125.9618295160081800"/>
+    <node visible="true" id="-1509" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5719404490010405" lon="125.9614271620127965"/>
+    <node visible="true" id="-1508" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5722735939999311" lon="125.9609899079962645"/>
+    <node visible="true" id="-1507" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5725568930075653" lon="125.9607352890353553"/>
+    <node visible="true" id="-1506" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5729125760001921" lon="125.9604808069993851"/>
+    <node visible="true" id="-1505" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5733351970019669" lon="125.9601717520053086"/>
+    <node visible="true" id="-1504" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5737524730031822" lon="125.9598690510152181"/>
+    <node visible="true" id="-1503" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5741072050076852" lon="125.9596315060552030"/>
+    <node visible="true" id="-1502" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5744526250009230" lon="125.9593764790294443"/>
+    <node visible="true" id="-1501" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5747568240002252" lon="125.9591306680264324"/>
+    <node visible="true" id="-1500" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5749496429982841" lon="125.9589402499804436"/>
+    <node visible="true" id="-1499" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5751617710036214" lon="125.9586667110221327"/>
+    <node visible="true" id="-1498" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5753114650000484" lon="125.9584163930313707"/>
+    <node visible="true" id="-1497" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5754506290009331" lon="125.9581158750299892"/>
+    <node visible="true" id="-1496" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5755697380028053" lon="125.9577800450435490"/>
+    <node visible="true" id="-1495" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5756665720050833" lon="125.9573625980610245"/>
+    <node visible="true" id="-1494" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5757167340007712" lon="125.9570026560704719"/>
+    <node visible="true" id="-1493" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5757688030051824" lon="125.9566088400554520"/>
+    <node visible="true" id="-1492" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5758273810011758" lon="125.9561593590403561"/>
+    <node visible="true" id="-1491" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5758835760007486" lon="125.9557264749856103"/>
+    <node visible="true" id="-1490" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5759188179990389" lon="125.9553572459773392"/>
+    <node visible="true" id="-1489" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5759252229971068" lon="125.9549830310101868"/>
+    <node visible="true" id="-1488" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5758931579962834" lon="125.9546091579686617"/>
+    <node visible="true" id="-1487" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5758288179999766" lon="125.9542542710511981"/>
+    <node visible="true" id="-1486" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5757436819979986" lon="125.9539516329865165"/>
+    <node visible="true" id="-1485" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5756927090057715" lon="125.9538256250496460"/>
+    <node visible="true" id="-1484" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5755822440006710" lon="125.9535525570015864"/>
+    <node visible="true" id="-1483" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5753594819999037" lon="125.9530968570416576"/>
+    <node visible="true" id="-1482" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5749209920030722" lon="125.9522291040083246"/>
+    <node visible="true" id="-1481" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5747073300033847" lon="125.9518232660408330"/>
+    <node visible="true" id="-1480" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5745067380029454" lon="125.9514911210557528"/>
+    <node visible="true" id="-1479" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5742690529991705" lon="125.9511806289764593"/>
+    <node visible="true" id="-1478" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5739824749982105" lon="125.9508813360252901"/>
+    <node visible="true" id="-1477" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5737010290030113" lon="125.9506595640252868"/>
+    <node visible="true" id="-1476" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5733830740026349" lon="125.9504862850858729"/>
+    <node visible="true" id="-1475" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5730084489969727" lon="125.9503166249941444"/>
+    <node visible="true" id="-1474" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5725904880043728" lon="125.9501194390791312"/>
+    <node visible="true" id="-1473" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5722081660053320" lon="125.9499441540108364"/>
+    <node visible="true" id="-1472" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5721385020047691" lon="125.9499122150936188"/>
+    <node visible="true" id="-1471" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5718726660006723" lon="125.9497876349761185"/>
+    <node visible="true" id="-1470" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5716283669982616" lon="125.9496777380163337"/>
+    <node visible="true" id="-1469" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5712316760029736" lon="125.9494970820204998"/>
+    <node visible="true" id="-1468" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5705694140038418" lon="125.9491900000628561"/>
+    <node visible="true" id="-1467" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5700234549968570" lon="125.9489374239956447"/>
+    <node visible="true" id="-1466" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6759618550002386" lon="125.8069538589951009"/>
+    <node visible="true" id="-1431" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7318489159985688" lon="125.8650061759817760"/>
+    <node visible="true" id="-1430" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7317982970014256" lon="125.8650401460003252"/>
+    <node visible="true" id="-1406" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7202964529977010" lon="125.8717879729656488"/>
+    <node visible="true" id="-1405" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7202507619929861" lon="125.8718328729702733"/>
+    <node visible="true" id="-1394" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7203481349959731" lon="125.8717371859850260"/>
+    <node visible="true" id="-1363" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7431875080006805" lon="125.9094392599941585"/>
+    <node visible="true" id="-1362" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7433899530002464" lon="125.9096723749892561"/>
+    <node visible="true" id="-1361" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7436430610005473" lon="125.9099256129924100"/>
+    <node visible="true" id="-1360" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7438372730008780" lon="125.9100898980040455"/>
+    <node visible="true" id="-1359" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7440256149991811" lon="125.9102381799552575"/>
+    <node visible="true" id="-1358" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7441836619963595" lon="125.9103480609737034"/>
+    <node visible="true" id="-1357" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7442375199978386" lon="125.9103856909769519"/>
+    <node visible="true" id="-1356" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7443751310002398" lon="125.9104678239298636"/>
+    <node visible="true" id="-1355" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7445321409926962" lon="125.9105502768932752"/>
+    <node visible="true" id="-1354" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7447476559974930" lon="125.9106546779773623"/>
+    <node visible="true" id="-1353" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7450799079945583" lon="125.9108049939163436"/>
+    <node visible="true" id="-1352" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7454618159985813" lon="125.9109710209606163"/>
+    <node visible="true" id="-1351" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7458295999955382" lon="125.9111337679684510"/>
+    <node visible="true" id="-1350" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7462947209998134" lon="125.9113421129728323"/>
+    <node visible="true" id="-1349" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7467666819957088" lon="125.9115478649516859"/>
+    <node visible="true" id="-1348" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7473416950023548" lon="125.9118047230190740"/>
+    <node visible="true" id="-1347" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7478272189978057" lon="125.9120178049462453"/>
+    <node visible="true" id="-1346" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7483195819979969" lon="125.9122282928877752"/>
+    <node visible="true" id="-1345" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7487004859994499" lon="125.9123899019529063"/>
+    <node visible="true" id="-1344" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7488066740005692" lon="125.9124417379919549"/>
+    <node visible="true" id="-1343" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7488536089939970" lon="125.9124660719060671"/>
+    <node visible="true" id="-1342" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7488943119956204" lon="125.9124871759126023"/>
+    <node visible="true" id="-1341" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7490333010061434" lon="125.9125361680183772"/>
+    <node visible="true" id="-1340" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7491808590004041" lon="125.9125934240294953"/>
+    <node visible="true" id="-1339" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7494820040022390" lon="125.9127344299841553"/>
+    <node visible="true" id="-1338" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7498567889951673" lon="125.9129050759368056"/>
+    <node visible="true" id="-1337" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7499999999946922" lon="125.9129638399059559"/>
+    <node visible="true" id="-1286" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7319001699905527" lon="125.8649717769694831"/>
+    <node visible="true" id="-1285" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5697965719966760" lon="125.9699020679771309"/>
+    <node visible="true" id="-1284" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5699271640034596" lon="125.9695480020371718"/>
+    <node visible="true" id="-1283" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5700641579978694" lon="125.9691802090013937"/>
+    <node visible="true" id="-1282" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5701914179999434" lon="125.9688081800211990"/>
+    <node visible="true" id="-1281" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5702795199966531" lon="125.9685030859943282"/>
+    <node visible="true" id="-1280" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5703340270019623" lon="125.9682614840247510"/>
+    <node visible="true" id="-1279" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5703674100028380" lon="125.9681273690104462"/>
+    <node visible="true" id="-1278" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5704692709989629" lon="125.9676233849819340"/>
+    <node visible="true" id="-1277" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5705030840044216" lon="125.9674598070192104"/>
+    <node visible="true" id="-1276" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5706443140088027" lon="125.9667650200507865"/>
+    <node visible="true" id="-1275" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5712765880021777" lon="125.9636545530189125"/>
+    <node visible="true" id="-1251" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5697495430051376" lon="125.8595653339951355"/>
+    <node visible="true" id="-1250" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5703807969941508" lon="125.8597486540021464"/>
+    <node visible="true" id="-1249" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5707555290044439" lon="125.8598248809765749"/>
+    <node visible="true" id="-1248" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5711903710068782" lon="125.8598735139793376"/>
+    <node visible="true" id="-1247" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5715982790036023" lon="125.8598832829797232"/>
+    <node visible="true" id="-1246" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5722105410000893" lon="125.8598694219839587"/>
+    <node visible="true" id="-1245" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5729402150016014" lon="125.8598302249996408"/>
+    <node visible="true" id="-1244" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5733526230000550" lon="125.8598086450011806"/>
+    <node visible="true" id="-1243" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5738522300022737" lon="125.8597869299960195"/>
+    <node visible="true" id="-1242" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5743576580029028" lon="125.8597761409926505"/>
+    <node visible="true" id="-1241" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5746925470014261" lon="125.8597799000042841"/>
+    <node visible="true" id="-1240" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5750423050025972" lon="125.8598139159817464"/>
+    <node visible="true" id="-1239" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5753733830008443" lon="125.8598854299885090"/>
+    <node visible="true" id="-1238" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5758160550035711" lon="125.8600236719862409"/>
+    <node visible="true" id="-1159" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6798588340037313" lon="125.9087805699356153"/>
+    <node visible="true" id="-1158" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6796376800021946" lon="125.9089130859855601"/>
+    <node visible="true" id="-1157" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6793452769991930" lon="125.9090615820144876"/>
+    <node visible="true" id="-1156" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6789859160001228" lon="125.9092510959984708"/>
+    <node visible="true" id="-1155" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6786043139989957" lon="125.9094514709458537"/>
+    <node visible="true" id="-1154" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6782366990018360" lon="125.9096336389263655"/>
+    <node visible="true" id="-1153" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6779272680016604" lon="125.9097992049816099"/>
+    <node visible="true" id="-1152" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6776152300056921" lon="125.9099616679864369"/>
+    <node visible="true" id="-1151" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6773136520069940" lon="125.9101216459630450"/>
+    <node visible="true" id="-1150" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6769796150003557" lon="125.9102865389908601"/>
+    <node visible="true" id="-1149" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6766537149998797" lon="125.9104225199520926"/>
+    <node visible="true" id="-1148" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6763651189963369" lon="125.9105319650092127"/>
+    <node visible="true" id="-1147" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6760944770004613" lon="125.9106055139872353"/>
+    <node visible="true" id="-1146" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6757787539968447" lon="125.9106813909752276"/>
+    <node visible="true" id="-1145" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6755162049961427" lon="125.9107409239746005"/>
+    <node visible="true" id="-1141" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6817392299939797" lon="125.8403200739967076"/>
+    <node visible="true" id="-1140" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6817303869983533" lon="125.8402982969910511"/>
+    <node visible="true" id="-1139" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6817155040096168" lon="125.8402616459952839"/>
+    <node visible="true" id="-1138" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6816892620011359" lon="125.8401970229921716"/>
+    <node visible="true" id="-1049" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6002409339913157" lon="125.8642558300079770"/>
+    <node visible="true" id="-984" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5838894790001916" lon="125.9744762730177285"/>
+    <node visible="true" id="-983" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5838649179963866" lon="125.9744783729906175"/>
+    <node visible="true" id="-982" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5838254790033659" lon="125.9744817419908287"/>
+    <node visible="true" id="-956" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6715966270017688" lon="125.9893726870143809"/>
+    <node visible="true" id="-955" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6715784730055816" lon="125.9893427070181104"/>
+    <node visible="true" id="-954" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6715483139971070" lon="125.9892929080045008"/>
+    <node visible="true" id="-945" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6501217229963103" lon="125.9056959319614748"/>
+    <node visible="true" id="-944" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6500592420016318" lon="125.9056857949540387"/>
+    <node visible="true" id="-943" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6500437009918230" lon="125.9056832729920501"/>
+    <node visible="true" id="-911" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6454375290011711" lon="125.9139153259841493"/>
+    <node visible="true" id="-910" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6453868120043253" lon="125.9140799039787026"/>
+    <node visible="true" id="-909" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6453352420009821" lon="125.9142472579234777"/>
+    <node visible="true" id="-764" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6276083119983866" lon="125.9591211930204224"/>
+    <node visible="true" id="-763" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6275483979937633" lon="125.9591665859972096"/>
+    <node visible="true" id="-712" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6144808010014202" lon="125.9646027810128430"/>
+    <node visible="true" id="-711" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6142770490042722" lon="125.9646850550222013"/>
+    <node visible="true" id="-710" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6140945639981794" lon="125.9647754260040102"/>
+    <node visible="true" id="-690" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6640511659916513" lon="125.7810933909956503"/>
+    <node visible="true" id="-676" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6766987659978483" lon="125.9298534505103646"/>
+    <node visible="true" id="-675" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6766659320017325" lon="125.9299402037487994"/>
+    <node visible="true" id="-629" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6767146190004425" lon="125.9298115149116910"/>
+    <node visible="true" id="-587" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6841682439961616" lon="125.8501745389837509"/>
+    <node visible="true" id="-405" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6519635290022734" lon="125.9070186969907894"/>
+    <node visible="true" id="-404" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6519326860009471" lon="125.9069861819792777"/>
+    <node visible="true" id="-403" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6518343109993552" lon="125.9068876459773065"/>
+    <node visible="true" id="-402" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6517364179988192" lon="125.9067722499623727"/>
+    <node visible="true" id="-372" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7237857359986890" lon="125.8970689649727746"/>
+    <node visible="true" id="-338" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7238619769968366" lon="125.8971466289708445"/>
+    <node visible="true" id="-337" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7370997130002763" lon="125.9046194649928196"/>
+    <node visible="true" id="-336" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7371386329998870" lon="125.9046224749537117"/>
+    <node visible="true" id="-335" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7371942830015215" lon="125.9046267769622602"/>
+    <node visible="true" id="-334" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7373155330005545" lon="125.9046402829849711"/>
+    <node visible="true" id="-333" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7376923689989283" lon="125.9046566519647428"/>
+    <node visible="true" id="-332" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7381097270006833" lon="125.9046845179673824"/>
+    <node visible="true" id="-331" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7385178259992315" lon="125.9047206909918089"/>
+    <node visible="true" id="-330" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7388344040057291" lon="125.9047858110071587"/>
+    <node visible="true" id="-329" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7391700080014374" lon="125.9048888070117584"/>
+    <node visible="true" id="-328" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7394600099972379" lon="125.9050167699443961"/>
+    <node visible="true" id="-327" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7398035979977990" lon="125.9052136349478559"/>
+    <node visible="true" id="-326" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7401260059994001" lon="125.9054578649940623"/>
+    <node visible="true" id="-325" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7403932359951924" lon="125.9057143849506275"/>
+    <node visible="true" id="-324" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7406566759970303" lon="125.9060097559462434"/>
+    <node visible="true" id="-323" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7408889179962870" lon="125.9063313479593802"/>
+    <node visible="true" id="-322" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7411221309974110" lon="125.9066343439429971"/>
+    <node visible="true" id="-321" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7413826579914371" lon="125.9069855039181220"/>
+    <node visible="true" id="-320" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7416855019965922" lon="125.9074050429587004"/>
+    <node visible="true" id="-319" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7419484790009037" lon="125.9077735039421242"/>
+    <node visible="true" id="-318" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7422211540040067" lon="125.9081421230076074"/>
+    <node visible="true" id="-317" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7425430249968628" lon="125.9085995389661008"/>
+    <node visible="true" id="-316" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7428031109980680" lon="125.9089422319703147"/>
+    <node visible="true" id="-315" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7429417400027631" lon="125.9091333499899577"/>
+    <node visible="true" id="-314" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7430526640020219" lon="125.9092804919399100"/>
+    <node visible="true" id="-313" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7430907909985933" lon="125.9093310659337988"/>
+    <node visible="true" id="-312" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7156503259986451" lon="125.8888357679835082"/>
+    <node visible="true" id="-311" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7155921719994893" lon="125.8887774839937919"/>
+    <node visible="true" id="-310" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7155384859968805" lon="125.8887236819817304"/>
+    <node visible="true" id="-287" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7001975230029416" lon="125.8883542289808588"/>
+    <node visible="true" id="-286" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7005783609983354" lon="125.8881940429799187"/>
+    <node visible="true" id="-285" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7009011779977001" lon="125.8880718219685946"/>
+    <node visible="true" id="-284" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7010978499998615" lon="125.8879748929751656"/>
+    <node visible="true" id="-283" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7017278119994543" lon="125.8876457789834973"/>
+    <node visible="true" id="-282" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7021737289998455" lon="125.8874161819959596"/>
+    <node visible="true" id="-281" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7025245549957404" lon="125.8872426499691954"/>
+    <node visible="true" id="-280" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7027923119972854" lon="125.8871083769920887"/>
+    <node visible="true" id="-279" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7030511349956399" lon="125.8869771559700581"/>
+    <node visible="true" id="-278" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7035421699994231" lon="125.8867303319977253"/>
+    <node visible="true" id="-277" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7038666290037270" lon="125.8865639920084902"/>
+    <node visible="true" id="-276" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7042578070049217" lon="125.8863650640036553"/>
+    <node visible="true" id="-275" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7045861929995780" lon="125.8861959300056839"/>
+    <node visible="true" id="-274" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7049771720004188" lon="125.8859905369964878"/>
+    <node visible="true" id="-273" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7052453690002309" lon="125.8858542990034834"/>
+    <node visible="true" id="-272" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7053862619961819" lon="125.8857706109893826"/>
+    <node visible="true" id="-271" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7056114629973465" lon="125.8855906129953013"/>
+    <node visible="true" id="-270" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7059283890046899" lon="125.8853916350015822"/>
+    <node visible="true" id="-269" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7061170059944004" lon="125.8852938259822594"/>
+    <node visible="true" id="-268" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7063939389952694" lon="125.8851480699803034"/>
+    <node visible="true" id="-267" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7064255569980276" lon="125.8851321910021284"/>
+    <node visible="true" id="-266" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7065753439979972" lon="125.8850603499949159"/>
+    <node visible="true" id="-265" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7067920899966964" lon="125.8849474880090469"/>
+    <node visible="true" id="-252" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7113348889995663" lon="125.8846627769936788"/>
+    <node visible="true" id="-251" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7112885639951969" lon="125.8846360269735385"/>
+    <node visible="true" id="-250" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7111990060014008" lon="125.8845843119877514"/>
+    <node visible="true" id="-231" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5833401190006526" lon="125.8637469360003109"/>
+    <node visible="true" id="-230" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5833158629974875" lon="125.8637377639837354"/>
+    <node visible="true" id="-229" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5832858950035629" lon="125.8637276539780885"/>
+    <node visible="true" id="-228" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7237282070034325" lon="125.8970103590173437"/>
+    <node visible="true" id="-223" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6890959339986367" lon="126.0076668980224497"/>
+    <node visible="true" id="-222" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6895767729979596" lon="126.0078437150076240"/>
+    <node visible="true" id="-221" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6897808979948934" lon="126.0079348070080130"/>
+    <node visible="true" id="-220" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6900512339989007" lon="126.0080721350199298"/>
+    <node visible="true" id="-219" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6903165119949293" lon="126.0082399710200178"/>
+    <node visible="true" id="-218" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6906054570038549" lon="126.0084511619955236"/>
+    <node visible="true" id="-217" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6908935139963717" lon="126.0086965700122477"/>
+    <node visible="true" id="-216" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6910616459952408" lon="126.0088606350125673"/>
+    <node visible="true" id="-215" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6913943889953700" lon="126.0092349530209646"/>
+    <node visible="true" id="-214" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6916725139988671" lon="126.0096386050030617"/>
+    <node visible="true" id="-213" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6918710570007747" lon="126.0099888870063722"/>
+    <node visible="true" id="-212" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6921134300012497" lon="126.0104116190084511"/>
+    <node visible="true" id="-210" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6927077249996714" lon="126.0115137830201206"/>
+    <node visible="true" id="-209" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6930153929995768" lon="126.0120774180095253"/>
+    <node visible="true" id="-208" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6932974199938542" lon="126.0125991210088756"/>
+    <node visible="true" id="-204" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6944373520016569" lon="126.0147378340105746"/>
+    <node visible="true" id="-203" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6947572869984882" lon="126.0153362640014336"/>
+    <node visible="true" id="-202" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6950191500013574" lon="126.0158288690116422"/>
+    <node visible="true" id="-201" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6952435509971835" lon="126.0162276390111060"/>
+    <node visible="true" id="-200" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6955341249943316" lon="126.0167633180190734"/>
+    <node visible="true" id="-199" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6958016839988304" lon="126.0172753180080321"/>
+    <node visible="true" id="-198" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6959923299945530" lon="126.0176312950089113"/>
+    <node visible="true" id="-197" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6962971450013100" lon="126.0182003460059406"/>
+    <node visible="true" id="-196" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6964723830060464" lon="126.0185235819994602"/>
+    <node visible="true" id="-195" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6966105120000137" lon="126.0187833710099170"/>
+    <node visible="true" id="-194" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6968861780034814" lon="126.0192962320016363"/>
+    <node visible="true" id="-193" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6971765349981780" lon="126.0198253540030038"/>
+    <node visible="true" id="-192" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6976058239959215" lon="126.0206134730127019"/>
+    <node visible="true" id="-191" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6979719979939816" lon="126.0212960490163567"/>
+    <node visible="true" id="-190" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6984061020048102" lon="126.0221075510138604"/>
+    <node visible="true" id="-189" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6986379799993259" lon="126.0225377400111881"/>
+    <node visible="true" id="-111" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6987830140037872" lon="126.0228092380105380"/>
+    <node visible="true" id="-108" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6883166819985078" lon="126.0073696410050275"/>
+    <node visible="true" id="-107" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6884632269981736" lon="126.0074137770157989"/>
+    <node visible="true" id="-106" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6885319959952767" lon="126.0074526760252382"/>
+    <node visible="true" id="-51" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7301024019999005" lon="126.0788663090089159"/>
+    <node visible="true" id="-23" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6877284099964172" lon="126.0071427730129443"/>
+    <node visible="true" id="-22" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7097185549982186" lon="126.0621820330035661"/>
+    <node visible="true" id="-6" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7301659526506725" lon="126.0792060000043335"/>
+    <node visible="true" id="-5" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6636568131218610" lon="125.7806830000003941"/>
+    <node visible="true" id="-4" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5697279999981291" lon="125.8595580118357731"/>
+    <node visible="true" id="-3" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5697280000025557" lon="125.9700855984577572"/>
+    <node visible="true" id="-2" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5697280000018949" lon="125.9488005346400570"/>
+    <node visible="true" id="-1" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7527349999972444" lon="125.9141793349448193"/>
+    <way visible="true" id="-4436" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1049"/>
+        <nd ref="-4157"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="06CDEA93-8387-4E74-8BA3-D516CDFF35ED"/>
+        <tag k="SHAPE_Leng" v="0.0074347424660099999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.859Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{8bea8c4a-389e-4858-8aa1-80c944fece58}"/>
+    </way>
+    <way visible="true" id="-4426" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4152"/>
+        <nd ref="-1641"/>
+        <nd ref="-4151"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="E321083D-F887-4B88-A6B3-D426D856EFA4"/>
+        <tag k="SHAPE_Leng" v="0.0331224642794"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.868Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{92cb72af-9207-4072-830d-6bfbbbc2ce28}"/>
+    </way>
+    <way visible="true" id="-4418" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4150"/>
+        <nd ref="-1586"/>
+        <nd ref="-1585"/>
+        <nd ref="-1584"/>
+        <nd ref="-1583"/>
+        <nd ref="-1582"/>
+        <nd ref="-1581"/>
+        <nd ref="-1580"/>
+        <nd ref="-1579"/>
+        <nd ref="-1578"/>
+        <nd ref="-1577"/>
+        <nd ref="-1576"/>
+        <nd ref="-1575"/>
+        <nd ref="-1574"/>
+        <nd ref="-1573"/>
+        <nd ref="-1572"/>
+        <nd ref="-1571"/>
+        <nd ref="-1570"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="E321083D-F887-4B88-A6B3-D426D856EFA4"/>
+        <tag k="SHAPE_Leng" v="0.0331224642794"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.868Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{92cb72af-9207-4072-830d-6bfbbbc2ce28}"/>
+    </way>
+    <way visible="true" id="-4402" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4146"/>
+        <nd ref="-338"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="0A463DAA-BD74-4BD5-8652-362B7F51A59E"/>
+        <tag k="SHAPE_Leng" v="0.016633364326399998"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.900Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{41b58113-3b96-4bf2-bc2a-1660e4dd781a}"/>
+    </way>
+    <way visible="true" id="-4392" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-2070"/>
+        <nd ref="-4139"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="21B95A9E-52CF-409B-883B-35A9D1660021"/>
+        <tag k="SHAPE_Leng" v="0.0024139442267300001"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="dismantled"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="76"/>
+        <tag k="gauge:type" v="narrow"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.859Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{7496465e-e9d7-4184-a426-c9b738781922}"/>
+    </way>
+    <way visible="true" id="-4363" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4123"/>
+        <nd ref="-587"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="086CA38F-2330-42CD-8EE7-0276BA37DD65"/>
+        <tag k="SHAPE_Leng" v="0.018957522478000002"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6282826"/>
+        <tag k="gndb_id:2" v="6253325"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Kaech'on-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.896Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{8b17653d-9d6e-441b-8d1e-2d2c8a903d61}"/>
+    </way>
+    <way visible="true" id="-4345" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4098"/>
+        <nd ref="-712"/>
+        <nd ref="-711"/>
+        <nd ref="-710"/>
+        <tag k="FCSubtype" v="00003b"/>
+        <tag k="GFID" v="130FA2DA-C2A0-470E-8C88-FFE1D76E66FF"/>
+        <tag k="SHAPE_Leng" v="0.015086935804400001"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.893Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{a4bf38ac-0b13-44b5-ba07-350e188239b1}"/>
+    </way>
+    <way visible="true" id="-4335" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1568"/>
+        <nd ref="-4091"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="E88AC4FD-9ECB-46E1-8422-D0CD37FF7CE9"/>
+        <tag k="SHAPE_Leng" v="0.0066840824949699999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.869Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{cec91cec-05c3-49b7-93c6-0b284ff78e05}"/>
+    </way>
+    <way visible="true" id="-4329" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-287"/>
+        <nd ref="-286"/>
+        <nd ref="-285"/>
+        <nd ref="-284"/>
+        <nd ref="-283"/>
+        <nd ref="-282"/>
+        <nd ref="-281"/>
+        <nd ref="-280"/>
+        <nd ref="-279"/>
+        <nd ref="-278"/>
+        <nd ref="-277"/>
+        <nd ref="-276"/>
+        <nd ref="-275"/>
+        <nd ref="-274"/>
+        <nd ref="-273"/>
+        <nd ref="-272"/>
+        <nd ref="-271"/>
+        <nd ref="-270"/>
+        <nd ref="-269"/>
+        <nd ref="-268"/>
+        <nd ref="-267"/>
+        <nd ref="-266"/>
+        <nd ref="-265"/>
+        <nd ref="-4089"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="874803D2-9CB4-4461-9A4A-D3A85DA354F8"/>
+        <tag k="SHAPE_Leng" v="0.0155755425742"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.902Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{cb84b01d-3161-44be-8ee6-db1604553333}"/>
+    </way>
+    <way visible="true" id="-4326" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4088"/>
+        <nd ref="-252"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="71193742-965D-4F34-9FBA-20F883D11FF2"/>
+        <tag k="SHAPE_Leng" v="0.0058527432677999997"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.902Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{9a240920-fd44-43bd-9403-edb08c6b18a5}"/>
+    </way>
+    <way visible="true" id="-4309" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1159"/>
+        <nd ref="-1158"/>
+        <nd ref="-1157"/>
+        <nd ref="-1156"/>
+        <nd ref="-1155"/>
+        <nd ref="-1154"/>
+        <nd ref="-1153"/>
+        <nd ref="-1152"/>
+        <nd ref="-1151"/>
+        <nd ref="-1150"/>
+        <nd ref="-1149"/>
+        <nd ref="-1148"/>
+        <nd ref="-1147"/>
+        <nd ref="-1146"/>
+        <nd ref="-1145"/>
+        <nd ref="-4076"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="2C0AA698-F5A4-4C52-A502-63B9672C5CE9"/>
+        <tag k="SHAPE_Leng" v="0.0050289045246600002"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.884Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{5fb8b74b-703e-4e3a-abc2-576225a869c8}"/>
+    </way>
+    <way visible="true" id="-4306" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4074"/>
+        <nd ref="-405"/>
+        <nd ref="-404"/>
+        <nd ref="-403"/>
+        <nd ref="-402"/>
+        <nd ref="-4069"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="CF55958D-3815-42C9-B9C4-D5AC9E191181"/>
+        <tag k="SHAPE_Leng" v="0.0060340641372099999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.899Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{940cac72-480e-472b-82fe-964e9bcf5b40}"/>
+    </way>
+    <way visible="true" id="-4266" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4052"/>
+        <nd ref="-312"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="5DF182A2-EF20-4760-A3E8-0A8B2C173301"/>
+        <tag k="SHAPE_Leng" v="0.010270162404400001"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.900Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{f178421d-fd17-4a0b-9043-066a392886cf}"/>
+    </way>
+    <way visible="true" id="-4252" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4047"/>
+        <nd ref="-1942"/>
+        <nd ref="-4045"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="7E3486F2-DFB6-4DB4-B7EF-C382DEF1D95E"/>
+        <tag k="SHAPE_Leng" v="0.00799775686823"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.862Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{aa909189-e138-49c5-bca8-8e34db155572}"/>
+    </way>
+    <way visible="true" id="-4249" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1963"/>
+        <nd ref="-4046"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="7E3486F2-DFB6-4DB4-B7EF-C382DEF1D95E"/>
+        <tag k="SHAPE_Leng" v="0.00799775686823"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.862Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{aa909189-e138-49c5-bca8-8e34db155572}"/>
+    </way>
+    <way visible="true" id="-4236" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4"/>
+        <nd ref="-1251"/>
+        <nd ref="-1250"/>
+        <nd ref="-1249"/>
+        <nd ref="-1248"/>
+        <nd ref="-1247"/>
+        <nd ref="-1246"/>
+        <nd ref="-1245"/>
+        <nd ref="-1244"/>
+        <nd ref="-1243"/>
+        <nd ref="-1242"/>
+        <nd ref="-1241"/>
+        <nd ref="-1240"/>
+        <nd ref="-1239"/>
+        <nd ref="-1238"/>
+        <nd ref="-4040"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="D339C2B4-E595-4354-97BF-3B9A181DCBBA"/>
+        <tag k="SHAPE_Leng" v="0.0153244490001"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.882Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{a26f95b0-df1a-4003-85c8-6b17d3cfed2b}"/>
+    </way>
+    <way visible="true" id="-4232" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4038"/>
+        <nd ref="-51"/>
+        <nd ref="-6"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="F1E58184-26DB-4689-8468-79C12AAD3EB2"/>
+        <tag k="SHAPE_Leng" v="0.0065427624618700003"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.962Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{d7d4ba79-5452-4ceb-9869-336b33a55595}"/>
+    </way>
+    <way visible="true" id="-4224" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4033"/>
+        <nd ref="-1792"/>
+        <nd ref="-1791"/>
+        <nd ref="-287"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="81024870-B195-4EA2-840B-54CD57811A41"/>
+        <tag k="SHAPE_Leng" v="0.0037646217889700001"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.863Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{015c9439-e28a-439f-acfc-c1d26fdf26f9}"/>
+    </way>
+    <way visible="true" id="-4208" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4010"/>
+        <nd ref="-1930"/>
+        <nd ref="-1929"/>
+        <nd ref="-1928"/>
+        <nd ref="-1927"/>
+        <nd ref="-1926"/>
+        <nd ref="-1925"/>
+        <nd ref="-1924"/>
+        <nd ref="-1923"/>
+        <nd ref="-1922"/>
+        <nd ref="-1921"/>
+        <nd ref="-1920"/>
+        <nd ref="-1919"/>
+        <nd ref="-1918"/>
+        <nd ref="-1917"/>
+        <nd ref="-1916"/>
+        <nd ref="-1915"/>
+        <nd ref="-1914"/>
+        <nd ref="-1913"/>
+        <nd ref="-1912"/>
+        <nd ref="-1911"/>
+        <nd ref="-1910"/>
+        <nd ref="-1909"/>
+        <nd ref="-1908"/>
+        <nd ref="-4025"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="45FA327E-47D7-4C7B-BFB2-BD377EF95E9F"/>
+        <tag k="SHAPE_Leng" v="0.029715494970199999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.863Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{0cf4ea9f-d066-4a91-a5f0-8fffac7776b2}"/>
+    </way>
+    <way visible="true" id="-4166" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4005"/>
+        <nd ref="-1693"/>
+        <nd ref="-4004"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="CE15A63D-8BB5-42E7-BB13-462DBB77FB44"/>
+        <tag k="SHAPE_Leng" v="0.022989659365000002"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.867Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{93f3e200-8a80-48c6-8295-52655354fea7}"/>
+    </way>
+    <way visible="true" id="-4153" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-4002"/>
+        <nd ref="-1677"/>
+        <nd ref="-1676"/>
+        <nd ref="-1675"/>
+        <nd ref="-1674"/>
+        <nd ref="-1673"/>
+        <nd ref="-1672"/>
+        <nd ref="-1671"/>
+        <nd ref="-1670"/>
+        <nd ref="-1669"/>
+        <nd ref="-1668"/>
+        <nd ref="-1667"/>
+        <nd ref="-1666"/>
+        <nd ref="-1665"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="CE15A63D-8BB5-42E7-BB13-462DBB77FB44"/>
+        <tag k="SHAPE_Leng" v="0.022989659365000002"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.867Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{93f3e200-8a80-48c6-8295-52655354fea7}"/>
+    </way>
+    <way visible="true" id="-4142" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-3997"/>
+        <nd ref="-22"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="865454EB-A4C8-47D1-B727-2A75C8FDFBAB"/>
+        <tag k="SHAPE_Leng" v="0.043719588302199998"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.960Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{5f08faf6-1221-46e6-a257-d834e0a8986f}"/>
+    </way>
+    <way visible="true" id="-4136" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-3993"/>
+        <nd ref="-204"/>
+        <nd ref="-203"/>
+        <nd ref="-202"/>
+        <nd ref="-201"/>
+        <nd ref="-200"/>
+        <nd ref="-199"/>
+        <nd ref="-198"/>
+        <nd ref="-197"/>
+        <nd ref="-196"/>
+        <nd ref="-195"/>
+        <nd ref="-194"/>
+        <nd ref="-193"/>
+        <nd ref="-192"/>
+        <nd ref="-191"/>
+        <nd ref="-190"/>
+        <nd ref="-189"/>
+        <nd ref="-111"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="F77EA7D0-7840-4273-B57B-C52AB69B7E85"/>
+        <tag k="SHAPE_Leng" v="0.018886577265199999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.960Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{2154ca17-2a83-4a8a-b425-07cff4f5c4b2}"/>
+    </way>
+    <way visible="true" id="-4133" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-3991"/>
+        <nd ref="-210"/>
+        <nd ref="-209"/>
+        <nd ref="-208"/>
+        <nd ref="-3992"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="F77EA7D0-7840-4273-B57B-C52AB69B7E85"/>
+        <tag k="SHAPE_Leng" v="0.018886577265199999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.960Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{2154ca17-2a83-4a8a-b425-07cff4f5c4b2}"/>
+    </way>
+    <way visible="true" id="-4128" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-106"/>
+        <nd ref="-223"/>
+        <nd ref="-222"/>
+        <nd ref="-221"/>
+        <nd ref="-220"/>
+        <nd ref="-219"/>
+        <nd ref="-218"/>
+        <nd ref="-217"/>
+        <nd ref="-216"/>
+        <nd ref="-215"/>
+        <nd ref="-214"/>
+        <nd ref="-213"/>
+        <nd ref="-212"/>
+        <nd ref="-3990"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="F77EA7D0-7840-4273-B57B-C52AB69B7E85"/>
+        <tag k="SHAPE_Leng" v="0.018886577265199999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.960Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{2154ca17-2a83-4a8a-b425-07cff4f5c4b2}"/>
+    </way>
+    <way visible="true" id="-132" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-5"/>
+        <nd ref="-690"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="EC8B9815-14C9-4B65-9400-FA16B95D35A9"/>
+        <tag k="SHAPE_Leng" v="0.0054863333900200002"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6282826"/>
+        <tag k="gndb_id:2" v="6253325"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="underground"/>
+        <tag k="name" v="Kaech'on-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="approximate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.894Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{c9d943b7-0e68-4033-88df-cdb2b3e8f209}"/>
+    </way>
+    <way visible="true" id="-130" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-3"/>
+        <nd ref="-1285"/>
+        <nd ref="-1284"/>
+        <nd ref="-1283"/>
+        <nd ref="-1282"/>
+        <nd ref="-1281"/>
+        <nd ref="-1280"/>
+        <nd ref="-1279"/>
+        <nd ref="-1278"/>
+        <nd ref="-1277"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="729E551C-116D-4669-9C08-2B06115D8194"/>
+        <tag k="SHAPE_Leng" v="0.0118303791954"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.880Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{9b1ceee2-97c3-4546-99b6-83f947def270}"/>
+    </way>
+    <way visible="true" id="-129" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1275"/>
+        <nd ref="-1514"/>
+        <nd ref="-1513"/>
+        <nd ref="-1512"/>
+        <nd ref="-1511"/>
+        <nd ref="-1510"/>
+        <nd ref="-1509"/>
+        <nd ref="-1508"/>
+        <nd ref="-1507"/>
+        <nd ref="-1506"/>
+        <nd ref="-1505"/>
+        <nd ref="-1504"/>
+        <nd ref="-1503"/>
+        <nd ref="-1502"/>
+        <nd ref="-1501"/>
+        <nd ref="-1500"/>
+        <nd ref="-1499"/>
+        <nd ref="-1498"/>
+        <nd ref="-1497"/>
+        <nd ref="-1496"/>
+        <nd ref="-1495"/>
+        <nd ref="-1494"/>
+        <nd ref="-1493"/>
+        <nd ref="-1492"/>
+        <nd ref="-1491"/>
+        <nd ref="-1490"/>
+        <nd ref="-1489"/>
+        <nd ref="-1488"/>
+        <nd ref="-1487"/>
+        <nd ref="-1486"/>
+        <nd ref="-1485"/>
+        <nd ref="-1484"/>
+        <nd ref="-1483"/>
+        <nd ref="-1482"/>
+        <nd ref="-1481"/>
+        <nd ref="-1480"/>
+        <nd ref="-1479"/>
+        <nd ref="-1478"/>
+        <nd ref="-1477"/>
+        <nd ref="-1476"/>
+        <nd ref="-1475"/>
+        <nd ref="-1474"/>
+        <nd ref="-1473"/>
+        <nd ref="-1472"/>
+        <nd ref="-1471"/>
+        <nd ref="-1470"/>
+        <nd ref="-1469"/>
+        <nd ref="-1468"/>
+        <nd ref="-1467"/>
+        <nd ref="-2"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="36DE4BFB-8B46-4445-AB88-0781639F03BE"/>
+        <tag k="SHAPE_Leng" v="0.0279871152151"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.871Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{465fb1ea-6328-45dd-be71-f20bbfb9002e}"/>
+    </way>
+    <way visible="true" id="-128" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1337"/>
+        <nd ref="-2092"/>
+        <nd ref="-2091"/>
+        <nd ref="-2090"/>
+        <nd ref="-2089"/>
+        <nd ref="-1"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="F9E19200-45EE-4384-BCC4-881BB1C0ED3A"/>
+        <tag k="SHAPE_Leng" v="0.0066933122956900001"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.515Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{034002fe-5809-4bb7-a05b-6c5ef9fbf7b1}"/>
+    </way>
+    <way visible="true" id="-120" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-2017"/>
+        <nd ref="-2016"/>
+        <nd ref="-2015"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="50B0C24B-3C28-47E5-ADAB-3A06B6464235"/>
+        <tag k="SHAPE_Leng" v="9.8933960484799994e-05"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.861Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{cb2a394b-c82b-4c58-ab8e-e18ad5af26b1}"/>
+    </way>
+    <way visible="true" id="-116" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1965"/>
+        <nd ref="-1964"/>
+        <nd ref="-1963"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="F18B371D-BA18-4014-B695-3BA26E615A07"/>
+        <tag k="SHAPE_Leng" v="0.00019361242827900001"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.862Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{642679fc-1074-4523-b48d-87492b3a53fc}"/>
+    </way>
+    <way visible="true" id="-101" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1734"/>
+        <nd ref="-1733"/>
+        <nd ref="-1732"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="705322C5-2552-4901-87F3-0636F0FA9127"/>
+        <tag k="SHAPE_Leng" v="7.1672183354900003e-05"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.867Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{797fbbfd-6dbd-4f33-ac96-ed04dbeeed9e}"/>
+    </way>
+    <way visible="true" id="-99" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1665"/>
+        <nd ref="-1664"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="3D32BABF-5238-4BCA-9616-E0AA342DA4E9"/>
+        <tag k="SHAPE_Leng" v="5.1969872571300001e-05"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.867Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{61c203c8-a50d-44c9-bdbc-27eae32ae200}"/>
+    </way>
+    <way visible="true" id="-97" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1647"/>
+        <nd ref="-1646"/>
+        <nd ref="-1645"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="540314FA-973E-46B6-8517-06FFF41E608E"/>
+        <tag k="SHAPE_Leng" v="7.1552708666800002e-05"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.868Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{bb69fe96-7616-42a5-a322-e8215482366a}"/>
+    </way>
+    <way visible="true" id="-95" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1570"/>
+        <nd ref="-1569"/>
+        <nd ref="-1568"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="A85CD030-EB5E-4B9C-8063-6B385766C76A"/>
+        <tag k="SHAPE_Leng" v="7.9941489129999998e-05"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.869Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{cec4601b-9e40-4cc7-911a-4ea83cba0868}"/>
+    </way>
+    <way visible="true" id="-89" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1517"/>
+        <nd ref="-1516"/>
+        <nd ref="-1515"/>
+        <nd ref="-1466"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="D9008066-0A34-4B54-98BF-BB32471F37C8"/>
+        <tag k="SHAPE_Leng" v="0.00011131834008900001"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6282826"/>
+        <tag k="gndb_id:2" v="6253325"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Kaech'on-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.870Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{22de9c4f-db4c-4500-8e7e-c6a71cd1d403}"/>
+    </way>
+    <way visible="true" id="-86" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1286"/>
+        <nd ref="-1431"/>
+        <nd ref="-1430"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="8C3A65D0-2ACB-4924-AA98-FE7BD12B6771"/>
+        <tag k="SHAPE_Leng" v="0.000122688338074"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.874Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{f2c02b61-b7e5-48b6-ab9e-0e8e57c7b254}"/>
+    </way>
+    <way visible="true" id="-84" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1394"/>
+        <nd ref="-1406"/>
+        <nd ref="-1405"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="BCA6385F-C991-4F95-8475-A4BC62D776CA"/>
+        <tag k="SHAPE_Leng" v="0.00013651924077200001"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.875Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{d5da7e13-3bdd-4a9f-a380-bc4dad42e7b7}"/>
+    </way>
+    <way visible="true" id="-79" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-313"/>
+        <nd ref="-1363"/>
+        <nd ref="-1362"/>
+        <nd ref="-1361"/>
+        <nd ref="-1360"/>
+        <nd ref="-1359"/>
+        <nd ref="-1358"/>
+        <nd ref="-1357"/>
+        <nd ref="-1356"/>
+        <nd ref="-1355"/>
+        <nd ref="-1354"/>
+        <nd ref="-1353"/>
+        <nd ref="-1352"/>
+        <nd ref="-1351"/>
+        <nd ref="-1350"/>
+        <nd ref="-1349"/>
+        <nd ref="-1348"/>
+        <nd ref="-1347"/>
+        <nd ref="-1346"/>
+        <nd ref="-1345"/>
+        <nd ref="-1344"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="65D166FD-8236-435D-9160-5FC05BAE55A3"/>
+        <tag k="SHAPE_Leng" v="0.0065764680185699999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.878Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{c6038d05-22e0-4649-87a9-264c1dbbf827}"/>
+    </way>
+    <way visible="true" id="-78" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1344"/>
+        <nd ref="-1343"/>
+        <nd ref="-1342"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="844E52FC-8706-4078-903D-02C4D42879DD"/>
+        <tag k="SHAPE_Leng" v="9.8716922995600002e-05"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.878Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{c60b095a-24a9-4771-8186-2bee8d8acd3b}"/>
+    </way>
+    <way visible="true" id="-77" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1342"/>
+        <nd ref="-1341"/>
+        <nd ref="-1340"/>
+        <nd ref="-1339"/>
+        <nd ref="-1338"/>
+        <nd ref="-1337"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="F3DC5E06-9B80-4932-B394-5C05B2E1F39D"/>
+        <tag k="SHAPE_Leng" v="0.0012047741908300001"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.878Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{f1e5c005-f021-4732-9fd4-116de5e803e0}"/>
+    </way>
+    <way visible="true" id="-74" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1277"/>
+        <nd ref="-1276"/>
+        <nd ref="-1275"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="0214D18A-5BE7-4B27-BEAD-181458747C5B"/>
+        <tag k="SHAPE_Leng" v="0.0038830743544799999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.880Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{fd59eccb-9c1b-4584-9b67-7d48463ebbf7}"/>
+    </way>
+    <way visible="true" id="-64" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-1141"/>
+        <nd ref="-1140"/>
+        <nd ref="-1139"/>
+        <nd ref="-1138"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="1E2C957E-5DD6-472D-B668-682615845B31"/>
+        <tag k="SHAPE_Leng" v="0.000132809448498"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6282826"/>
+        <tag k="gndb_id:2" v="6253325"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Kaech'on-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.885Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{ffc14593-6129-49d6-8a09-9212229c562b}"/>
+    </way>
+    <way visible="true" id="-59" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-984"/>
+        <nd ref="-983"/>
+        <nd ref="-982"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="16A9ECED-DE72-464D-9495-C64EA5BB5E5C"/>
+        <tag k="SHAPE_Leng" v="6.4233246596899997e-05"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="dismantled"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="76"/>
+        <tag k="gauge:type" v="narrow"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.889Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{4dc1c5b9-22ed-40a4-ad14-7a781a0247e2}"/>
+    </way>
+    <way visible="true" id="-57" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-956"/>
+        <nd ref="-955"/>
+        <nd ref="-954"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="D622EC2C-31AB-4370-AAD9-59826195AF7C"/>
+        <tag k="SHAPE_Leng" v="9.3267544250900003e-05"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.890Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{0fbb41d3-a379-487b-8421-4d19ca48abf5}"/>
+    </way>
+    <way visible="true" id="-54" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-945"/>
+        <nd ref="-944"/>
+        <nd ref="-943"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="571DA482-E2BC-49DA-8E50-F4EF24ABA284"/>
+        <tag k="SHAPE_Leng" v="7.9042284650300001e-05"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.891Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{bfc5d0c3-0741-483d-ae79-57f5179ab6ea}"/>
+    </way>
+    <way visible="true" id="-50" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-911"/>
+        <nd ref="-910"/>
+        <nd ref="-909"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="2B123040-22DD-4D89-9434-8F62B7E81F90"/>
+        <tag k="SHAPE_Leng" v="0.00034733482836600001"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.892Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{ce6e5e85-e82c-4f03-8709-e6e37526d777}"/>
+    </way>
+    <way visible="true" id="-46" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-764"/>
+        <nd ref="-763"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="FE862BDB-C7EA-46AD-8C5E-B37520112081"/>
+        <tag k="SHAPE_Leng" v="7.5167891027600004e-05"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.893Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{0f9ca7f2-b724-45ab-8375-76ce6f874231}"/>
+    </way>
+    <way visible="true" id="-40" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-629"/>
+        <nd ref="-676"/>
+        <nd ref="-675"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="EC56FAEF-334D-4ACC-8B4E-A84CB30F2A00"/>
+        <tag k="SHAPE_Leng" v="0.000137686403246"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.895Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{dd5d6b4c-79ed-4122-b160-a6683d2f07f8}"/>
+    </way>
+    <way visible="true" id="-25" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-338"/>
+        <nd ref="-372"/>
+        <nd ref="-228"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="3F3D828B-7EFE-43AD-968C-C7475A1D6EAB"/>
+        <tag k="SHAPE_Leng" v="0.00019095529791099999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.900Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{377cd06c-1049-41ba-b1f9-1175f6cdc42f}"/>
+    </way>
+    <way visible="true" id="-23" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-337"/>
+        <nd ref="-336"/>
+        <nd ref="-335"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="AACFC6E4-4130-4EAA-8681-62CB21EFBB2F"/>
+        <tag k="SHAPE_Leng" v="9.4852254816400001e-05"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.901Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{bad2028e-8947-46d7-82db-903cf0962226}"/>
+    </way>
+    <way visible="true" id="-22" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-335"/>
+        <nd ref="-334"/>
+        <nd ref="-333"/>
+        <nd ref="-332"/>
+        <nd ref="-331"/>
+        <nd ref="-330"/>
+        <nd ref="-329"/>
+        <nd ref="-328"/>
+        <nd ref="-327"/>
+        <nd ref="-326"/>
+        <nd ref="-325"/>
+        <nd ref="-324"/>
+        <nd ref="-323"/>
+        <nd ref="-322"/>
+        <nd ref="-321"/>
+        <nd ref="-320"/>
+        <nd ref="-319"/>
+        <nd ref="-318"/>
+        <nd ref="-317"/>
+        <nd ref="-316"/>
+        <nd ref="-315"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="2602FCB2-9CAD-4299-96CB-545E4734F367"/>
+        <tag k="SHAPE_Leng" v="0.00775561418773"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.901Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{b911043c-f22d-400f-94ec-3cb27d9ce72a}"/>
+    </way>
+    <way visible="true" id="-21" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-315"/>
+        <nd ref="-314"/>
+        <nd ref="-313"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="803D59AE-A2EB-4735-83C7-6AB74195B96F"/>
+        <tag k="SHAPE_Leng" v="0.00024760415436699999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.901Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{a669bb79-6cc4-42b3-a700-14eb5cc8a083}"/>
+    </way>
+    <way visible="true" id="-20" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-312"/>
+        <nd ref="-311"/>
+        <nd ref="-310"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="FD284DCC-290F-44D8-B8EF-2B43CE92C921"/>
+        <tag k="SHAPE_Leng" v="0.00015833968861200001"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.902Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{39687aa2-9622-46a0-856e-e479442645d0}"/>
+    </way>
+    <way visible="true" id="-17" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-252"/>
+        <nd ref="-251"/>
+        <nd ref="-250"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="73AFA4B1-C7B5-41FE-8226-8CDFC3E5B63A"/>
+        <tag k="SHAPE_Leng" v="0.00015691063032799999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.902Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{ff1b7309-ef57-4c16-beb9-03e3a5897027}"/>
+    </way>
+    <way visible="true" id="-15" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-231"/>
+        <nd ref="-230"/>
+        <nd ref="-229"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="0477D1FA-1E7F-4529-BE77-2ACAAE71E56C"/>
+        <tag k="SHAPE_Leng" v="5.7559613345700003e-05"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.903Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{d2ba0fac-6640-4003-82ae-86a533d56d0e}"/>
+    </way>
+    <way visible="true" id="-10" timestamp="2018-02-16T13:57:43Z" version="1">
+        <nd ref="-23"/>
+        <nd ref="-108"/>
+        <nd ref="-107"/>
+        <nd ref="-106"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="2AACAADD-2F8D-482D-B6BC-7EB667F310D7"/>
+        <tag k="SHAPE_Leng" v="0.00086255761262700003"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:railrdl_rail;osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.961Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{15c1bcf5-8ecc-4f99-b5a0-13de360bc2fe}"/>
+    </way>
+</osm>

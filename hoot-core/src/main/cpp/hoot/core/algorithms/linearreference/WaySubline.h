@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WAYSUBLINE_H
 #define WAYSUBLINE_H
 
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/GeometryToElementConverter.h>
 
 namespace hoot
@@ -37,106 +37,100 @@ namespace hoot
 class ConstElementVisitor;
 
 /**
- * Represents a section of a way.
+ * @brief The WaySubline class represents a section of a way.
  *
- * If the start is after the end the WaySubline is considered to be backwards. This can be handy
+ * If the start is after the end, the WaySubline is considered to be backwards. This can be handy
  * when representing strings of ways.
  */
 class WaySubline
 {
 public:
 
-  WaySubline();
+  WaySubline() = default;
   WaySubline(const WayLocation& start, const WayLocation& end);
   WaySubline(const WaySubline& from);
-  WaySubline(const WaySubline& from, const ConstOsmMapPtr &newMap);
+  WaySubline(const WaySubline& from, const ConstOsmMapPtr& newMap);
+
   WaySubline& operator=(const WaySubline& from);
 
-  Meters calculateLength() const;
-
   bool contains(const WayLocation& wl) const;
-
   /**
-   * Returns true if all the points in other overlap with this.
+   * @brief contains returns true if all the points in other overlap with this.
    */
   bool contains(const WaySubline& other) const;
 
-  /**
-   * Ensures that start <= end by swapping start/end if necessary.
-   */
-  void ensureForwards() { if (isBackwards()) { WayLocation s = _end; _end = _start; _start = s; } }
-
   WaySubline expand(Meters d) const;
 
-  ElementId getElementId() const { return _start.getWay()->getElementId(); }
-
-  const WayLocation& getEnd() const { return _end; }
-
-  /**
-   * Returns the way location that is closer to the beginning of the way regardless of the
-   * isBackwards() result.
-   */
-  const WayLocation& getFormer() const { return isBackwards() ? _end : _start; }
-
   Meters getLength() const;
-
-  const ConstOsmMapPtr& getMap() const { return _start.getMap(); }
-
-  /**
-   * Returns the way location that is closer to the end of the way regardless of the
-   * isBackwards() result.
-   */
-  const WayLocation& getLatter() const { return isBackwards() ? _start : _end; }
-
-  const WayLocation& getStart() const { return _start; }
-
-  const ConstWayPtr& getWay() const { return _start.getWay(); }
-
-  bool isBackwards() const { return _end < _start; }
-
-  bool isValid() const { return _start.isValid() && _end.isValid(); }
-
-  bool isZeroLength() const { return _start == _end; }
+  Meters calculateLength() const;
 
   /**
-   * Returns true if the two sublines have interior points in common. If they only touch at one
-   * point then they do not overlap.
+   * @brief overlaps returns true if the two sublines have interior points in common. If they only
+   * touch at one point, then they do not overlap.
    */
   bool overlaps(const WaySubline& other) const;
 
   /**
-   * This conceptually does the same as if you were to reverse the way without changing the
-   * subline values. Or said another way, if you reverse the way you'll have to call this to
-   * keep the WaySubline correct.
+   * @brief reverse conceptually does the same as if you were to reverse the way without changing
+   * the subline values.
+   *
+   * Or said another way, if you reverse the way you'll have to call this to keep the WaySubline
+   * correct.
    */
   WaySubline reverse(const ConstWayPtr& reversedWay) const;
 
-  QString toString() const;
-
   /**
-   * Create a new way that represents this subline and return it. This way will not be added to a
-   * map.
-   */
-  /**
-   * @brief toWay - Create a new way that represents this subline and return it. This way will not
+   * @brief toWay creates a new way that represents this subline and return it. This way will not
    *  be added to a map.
    * @param map - pointer to OsmMap object
    * @param nf - pointer (if available) to NodeFactory object
    * @param reuse - flag for reusing way id or getting a new one from the map
-   * @return
+   * @return the created way
    */
-  WayPtr toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf = 0,
-               bool reuse = false) const;
+  WayPtr toWay(
+    const OsmMapPtr& map,
+    std::shared_ptr<GeometryToElementConverter::NodeFactory> nf =
+      std::shared_ptr<GeometryToElementConverter::NodeFactory>(),
+    bool reuse = false) const;
 
   /**
-   * Returns true if the two sublines have any points in common.
+   * @brief touches returns true if the two sublines have any points in common.
    */
   bool touches(const WaySubline& other) const;
 
   /**
-   * Visit the way and all nodes on the way that intersect the WaySubline.
+   * @brief visitRo visits the way and all nodes on the way that intersect the WaySubline.
    */
   void visitRo(const ElementProvider& ep, ConstElementVisitor& visitor) const;
+
+  /**
+   * @brief ensureForwards ensures that start <= end by swapping start/end if necessary.
+   */
+  void ensureForwards() { if (isBackwards()) { WayLocation s = _end; _end = _start; _start = s; } }
+
+  const ConstOsmMapPtr& getMap() const { return _start.getMap(); }
+  const ConstWayPtr& getWay() const { return _start.getWay(); }
+  ElementId getElementId() const { return _start.getWay()->getElementId(); }
+
+  const WayLocation& getStart() const { return _start; }
+  const WayLocation& getEnd() const { return _end; }
+
+  /**
+   * @brief getFormer returns the way location that is closer to the beginning of the way regardless
+   * of the isBackwards() result.
+   */
+  const WayLocation& getFormer() const { return isBackwards() ? _end : _start; }
+  /**
+   * @brief getLatter returns the way location that is closer to the end of the way regardless of
+   * the isBackwards() result.
+   */
+  const WayLocation& getLatter() const { return isBackwards() ? _start : _end; }
+
+  bool isBackwards() const { return _end < _start; }
+  bool isValid() const { return _start.isValid() && _end.isValid(); }
+  bool isZeroLength() const { return _start == _end; }
+
+  QString toString() const;
 
 private:
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef GEONAMESREADER_H
 #define GEONAMESREADER_H
@@ -43,31 +43,24 @@ public:
   static QString className() { return "hoot::GeoNamesReader"; }
 
   GeoNamesReader();
-  virtual ~GeoNamesReader() = default;
+  ~GeoNamesReader() = default;
 
-  virtual void close();
+  void close() override;
+  void initializePartial() override { }
+  void finalizePartial() override { }
 
-  virtual void initializePartial() { }
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
-  virtual void finalizePartial() { }
-
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
-
-  virtual bool hasMoreElements();
-
-  virtual bool isSupported(const QString& url) override;
-
-  virtual void open(const QString& url) override;
-
-  virtual ElementPtr readNextElement() override;
+  bool hasMoreElements() override;
+  bool isSupported(const QString& url) override;
+  void open(const QString& url) override;
+  ElementPtr readNextElement() override;
 
   void setDefaultAccuracy(Meters circularError) { _defaultCircularError = circularError; }
+  void setDefaultStatus(Status s) override { _status = s; }
+  void setUseDataSourceIds(bool useDataSourceIds) override { _useDataSourceIds = useDataSourceIds; }
 
-  void setDefaultStatus(Status s) { _status = s; }
-
-  virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceIds = useDataSourceIds; }
-
-  virtual QString supportedFormats() override { return ".geonames"; }
+  QString supportedFormats() override { return ".geonames"; }
 
 private:
 

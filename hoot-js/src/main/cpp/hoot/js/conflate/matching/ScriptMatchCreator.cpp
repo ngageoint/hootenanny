@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ScriptMatchCreator.h"
 
@@ -98,7 +98,6 @@ public:
     _neighborCountMax(-1),
     _neighborCountSum(0),
     _elementsEvaluated(0),
-    _maxGroupSize(0),
     _numElementsVisited(0),
     _numMatchCandidatesVisited(0),
     _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
@@ -111,17 +110,18 @@ public:
     // Point/Polygon is not meant to conflate any polygons that are conflatable by other *specific*
     // alg conflation routines (generic geometry algs should be ignored here), hence the use of
     // NonConflatableCriterion.
-    std::shared_ptr<NonConflatableCriterion> nonConflatableCrit(new NonConflatableCriterion(map));
+    std::shared_ptr<NonConflatableCriterion> nonConflatableCrit =
+      std::make_shared<NonConflatableCriterion>(map);
     nonConflatableCrit->setIgnoreGenericConflators(true);
-    _pointPolyCrit.reset(
-      new ChainCriterion(ElementCriterionPtr(new PolygonCriterion(map)), nonConflatableCrit));
+    _pointPolyCrit =
+      std::make_shared<ChainCriterion>(std::make_shared<PolygonCriterion>(map), nonConflatableCrit);
 
     _timer.start();
   }
 
-  virtual ~ScriptMatchVisitor()
+  ~ScriptMatchVisitor()
   {
-    //  Free the perisistent object
+    //  Free the persistent object
     if (_mapJs.IsEmpty())
       return;
     Local<Object> mapJs(ToLocal(&_mapJs));
@@ -138,7 +138,8 @@ public:
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
-    Handle<Object> plugin = getPlugin();
+    Local<Context> context = current->GetCurrentContext();
+    Local<Object> plugin = getPlugin();
 
     _candidateDistanceSigma = getNumber(plugin, "candidateDistanceSigma", 0.0, 1.0);
 
@@ -147,7 +148,7 @@ public:
       getNumber(plugin, "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
     LOG_VARD(_customSearchRadius);
 
-    Handle<Value> value = plugin->Get(toV8("getSearchRadius"));
+    Local<Value> value = plugin->Get(context, toV8("getSearchRadius")).ToLocalChecked();
     if (value->IsUndefined())
     {
       // pass
@@ -158,13 +159,13 @@ public:
     }
     else
     {
-      _getSearchRadius.Reset(current, Handle<Function>::Cast(value));
+      _getSearchRadius.Reset(current, Local<Function>::Cast(value));
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -223,10 +224,13 @@ public:
 
       if (attemptToMatch)
       {
-        // score each candidate and push it on the result vector
-        std::shared_ptr<ScriptMatch> m(
-          new ScriptMatch(_script, plugin, map, mapJs, from, *it, _mt));
-        // if we're confident this is a miss
+        // Score each candidate and push it on the result vector.
+        std::shared_ptr<ScriptMatch> m =
+          std::make_shared<ScriptMatch>(_script, plugin, map, mapJs, from, *it, _mt);
+        m->setMatchMembers(
+          ScriptMatch::geometryTypeToMatchMembers(
+            GeometryTypeCriterion::typeToString(_scriptInfo.getGeometryType())));
+        // if we're confident this is not a miss
         if (m->getType() != MatchType::Miss)
         {
           _result.push_back(m);
@@ -240,20 +244,22 @@ public:
 
   ConstOsmMapPtr getMap() const { return _map.lock(); }
 
-  static double getNumber(Handle<Object> obj, QString key, double minValue, double defaultValue)
+  static double getNumber(Local<Object> obj, QString key, double minValue, double defaultValue)
   {
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
+    Local<Context> context = current->GetCurrentContext();
+
     double result = defaultValue;
-    Handle<String> cdtKey = String::NewFromUtf8(current, key.toUtf8());
-    if (obj->Has(cdtKey))
+    Local<String> cdtKey = String::NewFromUtf8(current, key.toUtf8()).ToLocalChecked();
+    if (obj->Has(context, cdtKey).ToChecked())
     {
-      Local<Value> v = obj->Get(cdtKey);
-      if (v->IsNumber() == false || ::qIsNaN(v->NumberValue()))
+      Local<Value> v = obj->Get(context, cdtKey).ToLocalChecked();
+      if (v->IsNumber() == false || ::qIsNaN(v->NumberValue(context).ToChecked()))
       {
         throw IllegalArgumentException("Expected " + key + " to be a number.");
       }
-      result = v->NumberValue();
+      result = v->NumberValue(context).ToChecked();
 
       if (result < minValue)
       {
@@ -274,15 +280,16 @@ public:
     Isolate* current = v8::Isolate::GetCurrent();
     EscapableHandleScope handleScope(current);
     Context::Scope context_scope(script->getContext(current));
-    Handle<Object> global = script->getContext(current)->Global();
+    Local<Context> context = current->GetCurrentContext();
+    Local<Object> global = script->getContext(current)->Global();
 
-    if (global->Has(String::NewFromUtf8(current, "plugin")) == false)
+    if (global->Has(context, toV8("plugin")).ToChecked() == false)
     {
       throw IllegalArgumentException("Expected the script to have exports.");
     }
 
-    Handle<Value> pluginValue = global->Get(String::NewFromUtf8(current, "plugin"));
-    Handle<Object> plugin(Handle<Object>::Cast(pluginValue));
+    Local<Value> pluginValue = global->Get(context, toV8("plugin")).ToLocalChecked();
+    Local<Object> plugin(Local<Object>::Cast(pluginValue));
     if (plugin.IsEmpty() || plugin->IsObject() == false)
     {
       throw IllegalArgumentException("Expected plugin to be a valid object.");
@@ -300,13 +307,13 @@ public:
     {
       if (_customSearchRadius < 0)
       {
-        //base the radius off of the element itself
+        // base the radius off of the element itself
         LOG_TRACE("Calculating search radius based off of element...");
         result = e->getCircularError() * _candidateDistanceSigma;
       }
       else
       {
-        //base the radius off some predefined radius
+        // base the radius off some predefined radius
         LOG_TRACE("Calculating search radius based off of custom defined script value...");
         result = _customSearchRadius * _candidateDistanceSigma;
       }
@@ -325,13 +332,15 @@ public:
         Isolate* current = v8::Isolate::GetCurrent();
         HandleScope handleScope(current);
         Context::Scope context_scope(_script->getContext(current));
+        Local<Context> context = current->GetCurrentContext();
 
-        Handle<Value> jsArgs[1];
+        Local<Value> jsArgs[1];
 
         int argc = 0;
         jsArgs[argc++] = ElementJs::New(e);
 
-        Handle<Value> f = ToLocal(&_getSearchRadius)->Call(getPlugin(), argc, jsArgs);
+        Local<Value> f =
+          ToLocal(&_getSearchRadius)->Call(context, getPlugin(), argc, jsArgs).ToLocalChecked();
 
         result = toCpp<Meters>(f) * _candidateDistanceSigma;
 
@@ -355,16 +364,17 @@ public:
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
+    Local<Context> context = current->GetCurrentContext();
 
     Persistent<Object> plugin(current, getPlugin(_script));
-    Handle<String> initStr = String::NewFromUtf8(current, "calculateSearchRadius");
+    Local<String> initStr = String::NewFromUtf8(current, "calculateSearchRadius").ToLocalChecked();
     // optional method, so don't throw an error
-    if (ToLocal(&plugin)->Has(initStr) == false)
+    if (ToLocal(&plugin)->Has(context, initStr).ToChecked() == false)
     {
       LOG_TRACE("calculateSearchRadius function not present.");
       return;
     }
-    Handle<Value> value = ToLocal(&plugin)->Get(initStr);
+    Local<Value> value = ToLocal(&plugin)->Get(context, initStr).ToLocalChecked();
     if (value->IsFunction() == false)
     {
       LOG_TRACE("calculateSearchRadius function not present.");
@@ -373,15 +383,15 @@ public:
 
     LOG_DEBUG("Getting search radius for: " << _scriptPath << "...");
 
-    Handle<Function> func = Handle<Function>::Cast(value);
-    Handle<Value> jsArgs[1];
+    Local<Function> func = Local<Function>::Cast(value);
+    Local<Value> jsArgs[1];
     int argc = 0;
-    HandleScope scope(current);  // This extra one might not be needed
     assert(getMap().get());
-    OsmMapPtr copiedMap(new OsmMap(getMap()));
+    OsmMapPtr copiedMap = std::make_shared<OsmMap>(getMap());
     jsArgs[argc++] = OsmMapJs::create(copiedMap);
 
-    func->Call(ToLocal(&plugin), argc, jsArgs);
+    Local<Value> c = func->Call(context, ToLocal(&plugin), argc, jsArgs).ToLocalChecked();
+    LOG_DEBUG("Return value: " << c);
 
     // This could be an expensive call.
     _customSearchRadius =
@@ -407,8 +417,7 @@ public:
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
-      std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-      _index.reset(new HilbertRTree(mps, 2));
+      _index = std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
 
       // Only index elements that satisfy the isMatchCandidate. Previously we only indexed Unknown2,
       // but that causes issues when wanting to conflate from n datasets and support intra-dataset
@@ -424,14 +433,14 @@ public:
       {
         std::function<bool (ConstElementPtr)> f =
           std::bind(&ScriptMatchVisitor::isMatchCandidate, this, placeholders::_1);
-        std::shared_ptr<ArbitraryCriterion> pC(new ArbitraryCriterion(f));
+        std::shared_ptr<ArbitraryCriterion> pC = std::make_shared<ArbitraryCriterion>(f);
 
         SpatialIndexer v(_index,
                          _indexToEid,
                          pC,
                          std::bind(&ScriptMatchVisitor::getSearchRadius, this, placeholders::_1),
                          getMap());
-        switch (_scriptInfo.geometryType)
+        switch (_scriptInfo.getGeometryType())
         {
           case GeometryTypeCriterion::GeometryType::Point:
             getMap()->visitNodesRo(v);
@@ -491,7 +500,7 @@ public:
    *  - The Unknown1/Input1 is always e1. This is a requirement for some of the older code.
    *  - Gives a consistent ordering to allow backwards compatibility with system tests.
    */
-  bool isCorrectOrder(const ConstElementPtr& e1, const ConstElementPtr& e2)
+  bool isCorrectOrder(const ConstElementPtr& e1, const ConstElementPtr& e2) const
   {
     LOG_VART(e1->getStatus().getEnum());
     LOG_VART(e2->getStatus().getEnum());
@@ -523,6 +532,7 @@ public:
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
+    Local<Context> context = current->GetCurrentContext();
     Persistent<Object> plugin(current, getPlugin(_script));
 
     bool result = false;
@@ -531,33 +541,34 @@ public:
     // the crit instead of the function; doing so causes this to crash; see #3047 and the history
     // of this file for the failing code that needs to be re-enabled
 
-    Handle<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate");
-    if (ToLocal(&plugin)->Has(isMatchCandidateStr) == false)
+    Local<String> isMatchCandidateStr =
+      String::NewFromUtf8(current, "isMatchCandidate").ToLocalChecked();
+    if (ToLocal(&plugin)->Has(context, isMatchCandidateStr).ToChecked() == false)
     {
       throw HootException("Error finding 'isMatchCandidate' function.");
     }
-    Handle<Value> value = ToLocal(&plugin)->Get(isMatchCandidateStr);
+    Local<Value> value = ToLocal(&plugin)->Get(context, isMatchCandidateStr).ToLocalChecked();
     if (value->IsFunction() == false)
     {
       throw HootException("isMatchCandidate is not a function.");
     }
-    Handle<Function> func = Handle<Function>::Cast(value);
-    Handle<Value> jsArgs[2];
+    Local<Function> func = Local<Function>::Cast(value);
+    Local<Value> jsArgs[2];
 
     int argc = 0;
     jsArgs[argc++] = getOsmMapJs();
     jsArgs[argc++] = ElementJs::New(e);
 
-    Handle<Value> f = func->Call(ToLocal(&plugin), argc, jsArgs);
+    Local<Value> f = func->Call(context, ToLocal(&plugin), argc, jsArgs).ToLocalChecked();
 
-    result = f->BooleanValue();
+    result = f->BooleanValue(current);
 
     _matchCandidateCache[e->getElementId()] = result;
 
     return result;
   }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (isMatchCandidate(e))
     {
@@ -586,8 +597,8 @@ public:
     _numElementsVisited++;
     if (_numElementsVisited % _taskStatusUpdateInterval == 0)
     {
-      PROGRESS_INFO(
-        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
+      PROGRESS_STATUS(
+        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
         StringUtils::formatLargeNumber(_totalElementsToProcess) << " elements.");
        _timer.restart();
     }
@@ -617,7 +628,7 @@ public:
     }
     else
     {
-      switch (_scriptInfo.geometryType)
+      switch (_scriptInfo.getGeometryType())
       {
         case GeometryTypeCriterion::GeometryType::Point:
           _totalElementsToProcess = getMap()->getNodeCount();
@@ -660,7 +671,6 @@ private:
   int _neighborCountMax;
   int _neighborCountSum;
   int _elementsEvaluated;
-  size_t _maxGroupSize;
   long _numElementsVisited;
   long _numMatchCandidatesVisited;
 
@@ -672,8 +682,6 @@ private:
   std::shared_ptr<ChainCriterion> _pointPolyCrit;
 
   QElapsedTimer _timer;
-
-  long _elementCount;
 
   CreatorDescription _scriptInfo;
 
@@ -714,7 +722,7 @@ void ScriptMatchCreator::setArguments(QStringList args)
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   _scriptPath = ConfPath::search(args[0], "rules");
-  _script.reset(new PluginContext());
+  _script = std::make_shared<PluginContext>();
   Context::Scope context_scope(_script->getContext(current));
   _script->loadScript(_scriptPath, "plugin");
   // bit of a hack...see MatchCreator.h...need to refactor
@@ -751,17 +759,17 @@ MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
     {
       if (!_pointPolyPolyCrit)
       {
-        _pointPolyPolyCrit.reset(
-          new ChainCriterion(
-            ElementCriterionPtr(new PolygonCriterion(map)),
-            ElementCriterionPtr(new NonConflatableCriterion(map))));
+          _pointPolyPolyCrit =
+            std::make_shared<ChainCriterion>(
+              std::make_shared<PolygonCriterion>(map),
+              std::make_shared<NonConflatableCriterion>(map));
       }
       if (!_pointPolyPointCrit)
       {
-        _pointPolyPointCrit.reset(
-          new ChainCriterion(
-            ElementCriterionPtr(new PointCriterion(map)),
-            ElementCriterionPtr(new NonConflatableCriterion(map))));
+          _pointPolyPointCrit =
+            std::make_shared<ChainCriterion>(
+              std::make_shared<PointCriterion>(map),
+              std::make_shared<NonConflatableCriterion>(map));
       }
 
       // see related note in ScriptMatchVisitor::checkForMatch
@@ -778,10 +786,15 @@ MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
 
-    Handle<Object> mapJs = OsmMapJs::create(map);
+    Local<Object> mapJs = OsmMapJs::create(map);
     Persistent<Object> plugin(current, ScriptMatchVisitor::getPlugin(_script));
 
-    return MatchPtr(new ScriptMatch(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold()));
+    std::shared_ptr<ScriptMatch> match =
+      std::make_shared<ScriptMatch>(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold());
+    match->setMatchMembers(
+      ScriptMatch::geometryTypeToMatchMembers(
+        GeometryTypeCriterion::typeToString(_scriptInfo.getGeometryType())));
+    return match;
   }
 
   return MatchPtr();
@@ -836,7 +849,7 @@ void ScriptMatchCreator::createMatches(
   _cachedCustomSearchRadii[_scriptPath] = searchRadius;
   _candidateDistanceSigmaCache[_scriptPath] = v.getCandidateDistanceSigma();
 
-  LOG_VARD(GeometryTypeCriterion::typeToString(_scriptInfo.geometryType));
+  LOG_VARD(GeometryTypeCriterion::typeToString(_scriptInfo.getGeometryType()));
   // kind of hack; not sure of a better way to do determine if we're doing collection relation
   // conflation
   if (scriptFileInfo.fileName().toLower().contains("relation"))
@@ -845,7 +858,7 @@ void ScriptMatchCreator::createMatches(
   }
   else
   {
-    switch (_scriptInfo.geometryType)
+    switch (_scriptInfo.getGeometryType())
     {
       case GeometryTypeCriterion::GeometryType::Point:
         map->visitNodesRo(v);
@@ -867,7 +880,7 @@ void ScriptMatchCreator::createMatches(
 
   const int matchesSizeAfter = matches.size();
 
-  QString matchType = CreatorDescription::baseFeatureTypeToString(_scriptInfo.baseFeatureType);
+  QString matchType = CreatorDescription::baseFeatureTypeToString(_scriptInfo.getBaseFeatureType());
   // Workaround for the Point/Polygon script since it doesn't identify a base feature type. See
   // note in ScriptMatchVisitor::getIndex and rules/PointPolygon.js.
   if (_scriptPath.contains(POINT_POLYGON_SCRIPT_NAME))
@@ -895,10 +908,10 @@ vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const
     {
       // if the script is a valid generic script w/ 'description' exposed, add it to the list.
       CreatorDescription d = _getScriptDescription(scripts[i]);
-      if (!d.description.isEmpty())
+      if (!d.getDescription().isEmpty())
       {
         result.push_back(d);
-        LOG_TRACE(d.description);
+        LOG_TRACE(d.getDescription());
       }
       else
       {
@@ -933,8 +946,9 @@ std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
     LOG_TRACE("Resetting the match candidate checker: " << scriptFileInfo.fileName() << "...");
 
     vector<ConstMatchPtr> emptyMatches;
-    _cachedScriptVisitor.reset(
-      new ScriptMatchVisitor(map, emptyMatches, ConstMatchThresholdPtr(), _script, _filter));
+    _cachedScriptVisitor =
+      std::make_shared<ScriptMatchVisitor>(
+        map, emptyMatches, ConstMatchThresholdPtr(), _script, _filter);
 
     _cachedScriptVisitor->setScriptPath(scriptPath);
 
@@ -974,60 +988,82 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   LOG_DEBUG("Getting script description...");
 
   CreatorDescription result;
-  result.experimental = true;
+  result.setExperimental(true);
 
-  std::shared_ptr<PluginContext> script(new PluginContext());
+  std::shared_ptr<PluginContext> script = std::make_shared<PluginContext>();
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(script->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
   script->loadScript(path, "plugin");
 
   Persistent<Object> plugin(current, ScriptMatchVisitor::getPlugin(script));
-  Handle<String> descriptionStr = String::NewFromUtf8(current, "description");
-  if (ToLocal(&plugin)->Has(descriptionStr))
+  Local<String> descriptionStr = String::NewFromUtf8(current, "description").ToLocalChecked();
+  if (ToLocal(&plugin)->Has(context, descriptionStr).ToChecked())
   {
-    Handle<Value> value = ToLocal(&plugin)->Get(descriptionStr);
-    result.description = toCpp<QString>(value);
+    Local<Value> value = ToLocal(&plugin)->Get(context, descriptionStr).ToLocalChecked();
+    result.setDescription(toCpp<QString>(value));
   }
-  Handle<String> experimentalStr = String::NewFromUtf8(current, "experimental");
-  if (ToLocal(&plugin)->Has(experimentalStr))
+  else
   {
-    Handle<Value> value = ToLocal(&plugin)->Get(experimentalStr);
-    result.experimental = toCpp<bool>(value);
+    throw IllegalArgumentException("No script description provided for: " + path);
   }
-  Handle<String> featureTypeStr = String::NewFromUtf8(current, "baseFeatureType");
-  if (ToLocal(&plugin)->Has(featureTypeStr))
+  Local<String> experimentalStr = String::NewFromUtf8(current, "experimental").ToLocalChecked();
+  if (ToLocal(&plugin)->Has(context, experimentalStr).ToChecked())
   {
-    Handle<Value> value = ToLocal(&plugin)->Get(featureTypeStr);
-    result.baseFeatureType = CreatorDescription::stringToBaseFeatureType(toCpp<QString>(value));
+    Local<Value> value = ToLocal(&plugin)->Get(context, experimentalStr).ToLocalChecked();
+    result.setExperimental(toCpp<bool>(value));
   }
-  Handle<String> geometryTypeStr = String::NewFromUtf8(current, "geometryType");
-  if (ToLocal(&plugin)->Has(geometryTypeStr))
+  Local<String> featureTypeStr = String::NewFromUtf8(current, "baseFeatureType").ToLocalChecked();
+  if (ToLocal(&plugin)->Has(context, featureTypeStr).ToChecked())
   {
-    Handle<Value> value = ToLocal(&plugin)->Get(geometryTypeStr);
-    result.geometryType = GeometryTypeCriterion::typeFromString(toCpp<QString>(value));
+    Local<Value> value = ToLocal(&plugin)->Get(context, featureTypeStr).ToLocalChecked();
+    result.setBaseFeatureType(CreatorDescription::stringToBaseFeatureType(toCpp<QString>(value)));
   }
-  // This controls which feature types a script conflates and is required. It allows for disabling
-  // superfluous conflate ops. It should probably be integrated with isMatchCandidate somehow at
-  // some point, if possible.
-  Handle<String> matchCandidateCriterionStr =
-    String::NewFromUtf8(current, "matchCandidateCriterion");
-  if (ToLocal(&plugin)->Has(matchCandidateCriterionStr))
+  // A little kludgy, but we'll identify generic geometry Point/Polygon conflation by its script
+  // name.
+  else if (!path.contains("PointPolygon.js"))
   {
-    Handle<Value> value = ToLocal(&plugin)->Get(matchCandidateCriterionStr);
+    throw IllegalArgumentException("No base feature type provided for: " + path);
+  }
+  Local<String> geometryTypeStr = String::NewFromUtf8(current, "geometryType").ToLocalChecked();
+  if (ToLocal(&plugin)->Has(context, geometryTypeStr).ToChecked())
+  {
+    Local<Value> value = ToLocal(&plugin)->Get(context, geometryTypeStr).ToLocalChecked();
+    result.setGeometryType(GeometryTypeCriterion::typeFromString(toCpp<QString>(value)));
+  }
+  else if (!path.contains("PointPolygon.js"))
+  {
+    throw IllegalArgumentException("No geometry type provided for: " + path);
+  }
+  // The criteria parsed here describe which feature types a script conflates. Its used only for
+  // determining which conflate ops to disable with SuperfluousConflateOpRemover and for some
+  // scripts, also to determine how to cull features when performing rubbersheeting during search
+  // radius auto-calc. Is does *not* actually cull features during matching.
+  // exports.isMatchCandidate does that. So, there is a bit of a disconnect there. However, it
+  // hasn't caused any problems so far.
+  Local<String> matchCandidateCriterionStr =
+    String::NewFromUtf8(current, "matchCandidateCriterion").ToLocalChecked();
+  if (ToLocal(&plugin)->Has(context, matchCandidateCriterionStr).ToChecked())
+  {
+    Local<Value> value = ToLocal(&plugin)->Get(context, matchCandidateCriterionStr).ToLocalChecked();
     const QString valueStr = toCpp<QString>(value);
     if (valueStr.contains(";"))
     {
-      result.matchCandidateCriteria = valueStr.split(";");
+      result.setMatchCandidateCriteria(valueStr.split(";"));
     }
     else
     {
-      result.matchCandidateCriteria = QStringList(valueStr);
+      result.setMatchCandidateCriteria(QStringList(valueStr));
     }
+  }
+  else
+  {
+    throw IllegalArgumentException("No match candidate criteria provided for: " + path);
   }
 
   QFileInfo fi(path);
-  result.className = className() + "," + fi.fileName();
+  result.setClassName(className() + "," + fi.fileName());
 
   return result;
 }
@@ -1053,7 +1089,7 @@ std::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
-    Handle<Object> plugin = ScriptMatchVisitor::getPlugin(_script);
+    Local<Object> plugin = ScriptMatchVisitor::getPlugin(_script);
 
     double matchThreshold = -1.0;
     double missThreshold = -1.0;
@@ -1064,18 +1100,17 @@ std::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()
       missThreshold = ScriptMatchVisitor::getNumber(plugin, "missThreshold", 0.0, 1.0);
       reviewThreshold = ScriptMatchVisitor::getNumber(plugin, "reviewThreshold", 0.0, 1.0);
     }
-    catch (const IllegalArgumentException& e)
+    catch (const IllegalArgumentException& /*e*/)
     {
     }
 
     if (matchThreshold != -1.0 && missThreshold != -1.0 && reviewThreshold != -1.0)
     {
-      return std::shared_ptr<MatchThreshold>(
-        new MatchThreshold(matchThreshold, missThreshold, reviewThreshold));
+      return std::make_shared<MatchThreshold>(matchThreshold, missThreshold, reviewThreshold);
     }
     else
     {
-      return std::shared_ptr<MatchThreshold>(new MatchThreshold());
+      return std::make_shared<MatchThreshold>();
     }
   }
   return _matchThreshold;
@@ -1089,7 +1124,7 @@ QString ScriptMatchCreator::getName() const
 
 QStringList ScriptMatchCreator::getCriteria() const
 {
-  return _scriptInfo.matchCandidateCriteria;
+  return _scriptInfo.getMatchCandidateCriteria();
 }
 
 }

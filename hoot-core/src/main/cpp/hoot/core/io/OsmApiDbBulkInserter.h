@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMAPIDBBULKINSERTER_H
 #define OSMAPIDBBULKINSERTER_H
@@ -139,16 +139,16 @@ public:
   OsmApiDbBulkInserter();
   virtual ~OsmApiDbBulkInserter();
 
-  virtual bool isSupported(const QString& url) override;
-  virtual void open(const QString& url) override;
-  void close();
+  bool isSupported(const QString& url) override;
+  void open(const QString& url) override;
+  void close() override;
 
-  virtual void finalizePartial() override;
-  virtual void writePartial(const ConstNodePtr& node) override;
-  virtual void writePartial(const ConstWayPtr& way) override;
-  virtual void writePartial(const ConstRelationPtr& relation) override;
+  void finalizePartial() override;
+  void writePartial(const ConstNodePtr& node) override;
+  void writePartial(const ConstWayPtr& way) override;
+  void writePartial(const ConstRelationPtr& relation) override;
 
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
   void setFileOutputElementBufferSize(long size) { _fileOutputElementBufferSize = size; }
   void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
@@ -191,7 +191,7 @@ public:
   void setWriteIdSequenceUpdates(bool write)
   { _writeIdSequenceUpdates = write; }
 
-  virtual QString supportedFormats() { return MetadataTags::OsmApiDbScheme() + "://"; }
+  QString supportedFormats() override { return MetadataTags::OsmApiDbScheme() + "://"; }
 
 protected:
 
@@ -220,7 +220,7 @@ protected:
   void _verifyStartingIds();
   void _closeOutputFiles();
   void _flush();
-  void _verifyDependencies();
+  void _verifyDependencies() const;
 
   void _createOutputFile(const QString& tableName, const QString& header = "");
   QString _getCombinedSqlFileName() const;
@@ -271,7 +271,7 @@ protected:
 
   virtual unsigned int _numberOfFileDataPasses() const;
 
-  void _logStats(const bool debug = false);
+  void _logStats(const bool debug = false) const;
 
   virtual unsigned long _getTotalRecordsWritten() const;
   virtual unsigned long _getTotalFeaturesWritten() const;
@@ -292,17 +292,17 @@ private:
   OsmApiDb _database;
   std::shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
 
-  void _verifyOutputCopySettings();
-  void _verifyFileOutputs();
+  void _verifyOutputCopySettings() const;
+  void _verifyFileOutputs() const;
   void _verifyChangesetUserId();
 
   void _incrementAndGetLatestIdsFromDb();
-  void _updateRecordLineWithIdOffset(const QString& tableName, QString& recordLine);
+  void _updateRecordLineWithIdOffset(const QString& tableName, QString& recordLine) const;
   void _reserveIdsInDb();
 
   void _writeSequenceUpdates(long changesetId, const unsigned long nodeId,
                              const unsigned long wayId, const unsigned long relationId,
-                             QString& outputStr);
+                             QString& outputStr) const;
 };
 
 }

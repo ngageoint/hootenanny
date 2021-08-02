@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef DUPLICATE_ELEMENT_MARKER_H
@@ -45,39 +45,24 @@ public:
   static QString className() { return "hoot::DuplicateElementMarker"; }
 
   DuplicateElementMarker();
-  virtual ~DuplicateElementMarker() = default;
+  ~DuplicateElementMarker() = default;
 
   /**
    * @see OsmMapOperation
    */
-  void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
-  /**
-   * Marks elements within a map that are exact duplicates of each other
-   *
-   * @param map the map owning the elements
-   * @param coordinateComparisonSensitivity node coordinate decimal place comparison sensitivity
-   * @return the number of duplicates found
-   */
-  static int markDuplicates(
-    OsmMapPtr& map,
-    const int coordinateComparisonSensitivity =
-      ConfigOptions().getNodeComparisonCoordinateSensitivity());
-
-  virtual QString getInitStatusMessage() const { return "Marking duplicate elements..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getInitStatusMessage() const override { return "Marking duplicate elements..."; }
+  QString getCompletedStatusMessage() const override
   {
     return
       "Marked " + QString::number(_numAffected) + " duplicate element pairs out of " +
       QString::number(_numProcessed) + " elements total.";
   }
 
-  virtual QString getDescription() const { return "Adds a tag to elements who have duplicates"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Adds a tag to elements who have duplicates"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   std::set<QString> getContainingWayTypes() const { return _containingWayTypes; }
 
@@ -91,7 +76,7 @@ private:
   // collects the most specific type of any way owning a way node marked as a duplicate
   std::set<QString> _containingWayTypes;
 
-  QString _getUuidVal(const QString& newUuid, const ConstElementPtr& element);
+  QString _getUuidVal(const QString& newUuid, const ConstElementPtr& element) const;
 };
 
 }

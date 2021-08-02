@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef COPYMAPSUBSETOP_H
 #define COPYMAPSUBSETOP_H
@@ -33,17 +33,16 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
 /**
  * Copies a subset of the map into a new map. The old map is unchanged.
- *
- * TODO: implement OperationStatus
  */
 class CopyMapSubsetOp : public OsmMapOperation, public ConstOsmMapConsumer,
-  public ElementCriterionConsumer
+  public ElementCriterionConsumer, public Configurable
 {
 public:
 
@@ -55,29 +54,41 @@ public:
   CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const ElementCriterionPtr& crit);
-  virtual ~CopyMapSubsetOp() = default;
+  ~CopyMapSubsetOp() = default;
 
   /**
-   * A new map is created and the eids specified in the constructor and their depedencies will be
+   * A new map is created and the eids specified in the constructor and their dependencies will be
    * copied into the new map. The map will be set to point to the new map.
    */
-  virtual void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
+
+  /**
+   * @see Configurable
+   */
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * @see ConstOsmMapConsumer
    */
-  virtual void setOsmMap(const OsmMap* map) { _from = map->shared_from_this(); }
+  void setOsmMap(const OsmMap* map) override { _from = map->shared_from_this(); }
 
   /**
    * @see ElementCriterionConsumer
    */
-  virtual void addCriterion(const ElementCriterionPtr& crit);
+  void addCriterion(const ElementCriterionPtr& crit) override;
 
-  virtual QString getDescription() const { return "Copies a subset of the map into a new map"; }
+  /**
+    @see OperationStatus
+    */
+  QString getInitStatusMessage() const override { return "Copying map subset..."; }
+  /**
+    @see OperationStatus
+    */
+  QString getCompletedStatusMessage() const override { return "Subset map copying complete."; }
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Copies a subset of the map into a new map"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   std::set<ElementId>& getEidsCopied() { return _eidsCopied; }
 

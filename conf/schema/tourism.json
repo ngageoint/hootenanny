@@ -1,10 +1,7 @@
 [
     {
         "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": [ "node", "area" ],
         "influence": 1,
         "isA": "poi",
         "name": "tourism",
@@ -16,58 +13,37 @@
         "name": "tourism=*",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "leisure",
-                "weight": 0.1
-            },
-            {
-                "name": "historic",
-                "weight": 0.1
-            },
-            {
-                "name": "amenity",
-                "weight": 0.1
-            }
+            { "name": "leisure", "weight": 0.1 },
+            { "name": "historic", "weight": 0.1 },
+            { "name": "amenity", "weight": 0.1 }
         ]
     },
     {
         "isA": "tourism",
         "name": "tourism=artwork",
         "objectType": "tag",
-        "similarTo": {
-            "name": "historic=monument",
-            "weight": 0.6
-        }
+        "similarTo": { "name": "historic=monument", "weight": 0.6 }
     },
     {
         "isA": "tourism",
         "name": "tourism=guest_house",
         "objectType": "tag",
-        "similarTo": {
-            "name": "tourism=hotel",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "tourism=hotel", "weight": 0.8 }
     },
     {
-        "categories": [
-            "multiuse"
-        ],
+        "categories": [ "multiuse" ],
         "isA": "tourism",
         "name": "tourism=hotel",
         "objectType": "tag"
     },
     {
-        "categories": [
-            "multiuse"
-        ],
+        "categories": [ "multiuse" ],
         "isA": "tourism",
         "name": "tourism=camp_site",
         "objectType": "tag"
     },
     {
-        "categories": [
-            "multiuse"
-        ],
+        "categories": [ "multiuse" ],
         "isA": "tourism",
         "name": "tourism=zoo",
         "objectType": "tag"
@@ -79,34 +55,15 @@
             "multiuse"
         ],
         "isA": "tourism",
-        "geometries": [
-            "node",
-            "area",
-            "linestring"
-        ],
+        "geometries": [ "node", "area", "linestring" ],
         "name": "tourism=attraction",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "tourism=zoo",
-                "weight": 0.8
-            },
-            {
-                "name": "tourism=theme_park",
-                "weight": 0.8
-            },
-            {
-                "name": "leisure=garden",
-                "weight": 0.5
-            },
-            {
-                "name": "amenity=auditorium",
-                "weight": 0.2
-            },
-            {
-                "name": "tourism=museum",
-                "weight": 0.8
-            }
+            { "name": "tourism=zoo", "weight": 0.8 },
+            { "name": "tourism=theme_park", "weight": 0.8 },
+            { "name": "leisure=garden", "weight": 0.5 },
+            { "name": "amenity=auditorium", "weight": 0.2 },
+            { "name": "tourism=museum", "weight": 0.8 }
         ]
     },
     {
@@ -120,9 +77,7 @@
         "objectType": "tag"
     },
     {
-        "aliases": [
-            "amenity=museum"
-        ],
+        "aliases": [ "amenity=museum" ],
          "categories": [
             "building",
             "multiuse"
@@ -131,10 +86,7 @@
         "name": "tourism=museum",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "amenity=arts_centre",
-                "weight": 0.8
-            }
+            { "name": "amenity=arts_centre", "weight": 0.8 }
         ]
     },
     {

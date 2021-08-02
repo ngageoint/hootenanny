@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef EDGEMATCH_H
 #define EDGEMATCH_H
@@ -58,19 +58,15 @@ public:
    * Returns true if the specified edge is in either the first or second edge string.
    */
   bool contains(ConstNetworkEdgePtr e) const;
-
   /**
    * Returns true if string 1 & 2 in other are contained by string 1 & 2 of this.
    */
   bool contains(const std::shared_ptr<const EdgeMatch>& other) const;
-
   /**
    * Returns true if the specified vertex is in either the first or second edge string.
    */
   bool contains(ConstNetworkVertexPtr v) const;
-
   bool containsPartial() const { return getString1()->isPartial() || getString2()->isPartial(); }
-
   bool containsStub() const { return getString1()->isStub() || getString2()->isStub(); }
 
   /**
@@ -79,17 +75,14 @@ public:
   int countPartialMatches() const;
 
   EdgeStringPtr getString1() { return _edges1; }
-
   EdgeStringPtr getString2() { return _edges2; }
-
   ConstEdgeStringPtr getString1() const { return _edges1; }
-
   ConstEdgeStringPtr getString2() const { return _edges2; }
 
   /**
    * Call this method if the underlying strings have changed.
    */
-  void notifyStringChange() { _resetHash(); }
+  void notifyStringChange() const { _resetHash(); }
 
   /**
    * Returns true if any of the edges in this edge match overlap with other. Overlapping vertices
@@ -128,8 +121,8 @@ private:
   void _resetHash() const { _hash = 0; }
 };
 
-typedef std::shared_ptr<EdgeMatch> EdgeMatchPtr;
-typedef std::shared_ptr<const EdgeMatch> ConstEdgeMatchPtr;
+using EdgeMatchPtr = std::shared_ptr<EdgeMatch>;
+using ConstEdgeMatchPtr = std::shared_ptr<const EdgeMatch>;
 
 // not implemented
 bool operator<(ConstEdgeMatchPtr, ConstEdgeMatchPtr);

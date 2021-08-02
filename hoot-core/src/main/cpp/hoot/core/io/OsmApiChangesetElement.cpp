@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiChangesetElement.h"
@@ -56,7 +56,7 @@ std::string toString(ChangesetType type)
 }
 
 /**  Global regular expression for truncating tag keys/values at max tag length */
-QRegularExpression truncateTags("&[^;]+$", QRegularExpression::UseUnicodePropertiesOption);
+const QRegularExpression truncateTags("&[^;]+$", QRegularExpression::UseUnicodePropertiesOption);
 
 ChangesetElement::ChangesetElement(const XmlObject& object, ElementIdToIdMap* idMap)
   : _type(ElementType::Unknown),
@@ -73,17 +73,6 @@ ChangesetElement::ChangesetElement(const XmlObject& object, ElementIdToIdMap* id
   }
 }
 
-ChangesetElement::ChangesetElement(const ChangesetElement& element)
-  : _type(element._type),
-    _id(element._id),
-    _version(element._version),
-    _object(element._object),
-    _tags(element._tags),
-    _idMap(element._idMap),
-    _status(element._status)
-{
-}
-
 void ChangesetElement::addTag(const XmlObject& tag)
 {
   //  Make sure that the object is in fact a tag before adding it
@@ -98,7 +87,7 @@ void ChangesetElement::addTag(const XmlObject& tag)
       else if (it->name() == "v")
         value = it->value().toString();
     }
-    if (key != "" and value != "")
+    if (key != "" && value != "")
       _tags.push_back(std::make_pair(key, value));
   }
 }
@@ -291,11 +280,6 @@ ChangesetNode::ChangesetNode(const XmlObject& node, ElementIdToIdMap* idMap)
   _type = ElementType::Node;
 }
 
-ChangesetNode::ChangesetNode(const ChangesetNode &node)
-  : ChangesetElement(node)
-{
-}
-
 QString ChangesetNode::toString(long changesetId, ChangesetType type) const
 {
   QString buffer;
@@ -341,12 +325,6 @@ ChangesetWay::ChangesetWay(const XmlObject& way, ElementIdToIdMap* idMap)
 {
   //  Override the type
   _type = ElementType::Way;
-}
-
-ChangesetWay::ChangesetWay(const ChangesetWay &way)
-  : ChangesetElement(way),
-    _nodes(way._nodes)
-{
 }
 
 void ChangesetWay::removeNodes(int position, int count)
@@ -434,12 +412,6 @@ ChangesetRelation::ChangesetRelation(const XmlObject& relation, ElementIdToIdMap
 {
   //  Override the type
   _type = ElementType::Relation;
-}
-
-ChangesetRelation::ChangesetRelation(const ChangesetRelation &relation)
-  : ChangesetElement(relation),
-    _members(relation._members)
-{
 }
 
 bool ChangesetRelation::hasMember(ElementType::Type type, long id) const

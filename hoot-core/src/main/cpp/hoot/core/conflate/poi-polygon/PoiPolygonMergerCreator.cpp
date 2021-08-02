@@ -19,15 +19,14 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonMergerCreator.h"
 
 // hoot
-#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
@@ -49,7 +48,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(MergerCreator, PoiPolygonMergerCreator)
 
 PoiPolygonMergerCreator::PoiPolygonMergerCreator() :
-_map(0),
+_map(nullptr),
 _autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches()),
 _allowCrossConflationMerging(ConfigOptions().getPoiPolygonAllowCrossConflationMerging())
 {
@@ -78,6 +77,12 @@ bool PoiPolygonMergerCreator::createMergers(
   {
     ConstMatchPtr m = *it;
     LOG_VART(m->toString());
+    LOG_VART(m->getName());
+    // This could be a generic PointPolygon match, which we don't process here.
+    if (m->getName() != PoiPolygonMatch::getPoiPolygonMatchName())
+    {
+      continue;
+    }
     if (m->getMatchMembers() & MatchMembers::Poi)
     {
       foundAPoi = true;
@@ -119,17 +124,17 @@ bool PoiPolygonMergerCreator::createMergers(
     if (_isConflictingSet(matches))
     {
       mergers.push_back(
-        MergerPtr(
-          new MarkForReviewMerger(
-            eids,
-            QString("Conflicting information: multiple features have been matched to the same ") +
-            QString("feature and require review."),
-            matchTypes.join(";"), 1)));
+        std::make_shared<MarkForReviewMerger>(
+          eids,
+          "Conflicting information: multiple features have been matched to the same feature and "
+          "require review.",
+          matchTypes.join(";"),
+          1));
       LOG_TRACE("Pushed back review merger for : " << eids);
     }
     else
     {
-      mergers.push_back(MergerPtr(new PoiPolygonMerger(eids)));
+      mergers.push_back(std::make_shared<PoiPolygonMerger>(eids));
       LOG_TRACE("Pushed back merger for : " << eids);
     }
 
@@ -146,11 +151,10 @@ bool PoiPolygonMergerCreator::createMergers(
 vector<CreatorDescription> PoiPolygonMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates mergers that merge POIs into polygons",
-      false));
+  result.emplace_back(
+    className(),
+    "Generates mergers that merge POIs into polygons",
+    false);
   return result;
 }
 
@@ -248,7 +252,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
 
     // Return conflict only if it is a miss, a review is ok.
     result = false;
-    if (ma.get() == 0 || ma->getType() == MatchType::Miss)
+    if (ma.get() == nullptr || ma->getType() == MatchType::Miss)
     {
       LOG_TRACE("miss");
       result = true;
@@ -425,9 +429,8 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(
             "Adding review for POI to Polygon match conflicting with another POI/POI match and " <<
             "removing; ids: " << matchPairs << "...");
           mergers.push_back(
-            MergerPtr(
-              new MarkForReviewMerger(
-                matchPairs, "Inter-matcher overlapping matches", match->getName(), 1.0)));
+            std::make_shared<MarkForReviewMerger>(
+              matchPairs, "Inter-matcher overlapping matches", match->getName(), 1.0));
         }
         else
         {

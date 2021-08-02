@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __SUBLINE_STRING_MATCHER_JS_H__
 #define __SUBLINE_STRING_MATCHER_JS_H__
@@ -46,34 +46,38 @@ public:
 
   static int logWarnCount;
 
-  static void Init(v8::Handle<v8::Object> target);
-
-  SublineStringMatcherPtr getSublineStringMatcher() { return _sm; }
-
+  static void Init(v8::Local<v8::Object> target);
   virtual ~SublineStringMatcherJs() = default;
+  static v8::Local<v8::Object> New(const SublineStringMatcherPtr& sd);
+
+  SublineStringMatcherPtr getSublineStringMatcher() const { return _sm; }
 
 private:
 
   SublineStringMatcherJs(SublineStringMatcherPtr sm) : _sm(sm) { }
 
-  static void extractMatchingSublines(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void findMatch(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void extractMatchingSublines(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  QString _className;
+  static v8::Persistent<v8::Function> _constructor;
   SublineStringMatcherPtr _sm;
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, SublineStringMatcherPtr& ptr)
+inline void toCpp(v8::Local<v8::Value> v, SublineStringMatcherPtr& ptr)
 {
   if (!v->IsObject())
   {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
   }
 
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
-  SublineStringMatcherJs* ptrj = node::ObjectWrap::Unwrap<SublineStringMatcherJs>(obj);
+  v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
+  const SublineStringMatcherJs* ptrj = node::ObjectWrap::Unwrap<SublineStringMatcherJs>(obj);
   ptr = ptrj->getSublineStringMatcher();
+}
+
+inline v8::Local<v8::Value> toV8(const SublineStringMatcherPtr& matcher)
+{
+  return SublineStringMatcherJs::New(matcher);
 }
 
 }

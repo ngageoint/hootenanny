@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTIARYINGESTER_H
 #define MULTIARYINGESTER_H
@@ -87,7 +87,7 @@ private:
 
   QElapsedTimer _timer;
 
-  std::shared_ptr<ElementInputStream> _getFilteredNewInputStream(const QString& sortedNewInput);
+  std::shared_ptr<ElementInputStream> _getFilteredNewInputStream(const QString& sortedNewInput) const;
 
   /*
    * Writes data to the reference layer when no data exists there (no changeset derivation)
@@ -111,7 +111,7 @@ private:
   void _sortInputFile(const QString& input);
 
   void _doInputErrorChecking(const QString& newInput, const QString& translationScript,
-                             const QString& referenceOutput, const QString& changesetOutput);
+                             const QString& referenceOutput, const QString& changesetOutput) const;
 };
 
 }

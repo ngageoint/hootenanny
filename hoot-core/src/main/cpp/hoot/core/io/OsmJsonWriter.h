@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMJSONWRITER_H
 #define OSMJSONWRITER_H
@@ -38,25 +38,21 @@
 #include <QHash>
 #include <QString>
 #include <QXmlDefaultHandler>
-class QXmlStreamWriter;
 
 // Standard
 #include <deque>
 
+class QXmlStreamWriter;
 
 namespace hoot
 {
 
 /**
- * Writes an OsmMap to a .json file format.
- * http://overpass-api.de/output_formats.html#json
+ * Writes an OsmMap to a .json file format: http://overpass-api.de/output_formats.html#json
  *
  * This class uses very simple writing of one element at a time out to the string with print
  * methods. There is not proper JSON writer. This both simplifies dependencies, code and should
  * make things a bit faster.
- *
- * This is being used for unit testing only as of 3/24/2014 and has not been tested for
- * interoperability with any other tools.
  */
 class OsmJsonWriter : public QXmlDefaultHandler, public OsmMapWriter, public Configurable
 {
@@ -67,60 +63,46 @@ public:
   OsmJsonWriter(int precision = ConfigOptions().getWriterPrecision());
   virtual ~OsmJsonWriter() = default;
 
-  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".json"); }
+  void setConfiguration(const Settings& conf) override;
 
-  /**
-   * Mark up a string so it can be used in JSON. This will add double quotes around the string too.
-   */
-  static QString markupString(const QString& str);
-
-  virtual void open(const QString& url) override;
-
+  bool isSupported(const QString& url) override { return url.toLower().endsWith(".json"); }
+  void open(const QString& url) override;
   virtual void close() { if (_fp.isOpen()) { _fp.close(); } }
-
-  void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
-
-  void setPrecision(int p) { _precision = p; }
+  void write(const ConstOsmMapPtr& map) override;
+  QString supportedFormats() override { return ".json"; }
 
   /**
    * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
    */
   void write(const ConstOsmMapPtr& map, const QString& path);
 
-  virtual void write(const ConstOsmMapPtr& map);
+  /**
+   * Mark up a string so it can be used in JSON. This will add double quotes around the string too.
+   */
+  static QString markupString(const QString& str);
 
   /**
    * Very handy for testing.
    */
   QString toString(const ConstOsmMapPtr& map);
 
-  /**
-   * Allow the writer to write empty tags to JSON
-   */
-  void SetWriteEmptyTags(bool writeEmpty) { _writeEmptyTags = writeEmpty; }
-
+  void setPrecision(int p) { _precision = p; }
   void setIncludeCompatibilityTags(bool includeCompatibility)
   { _includeCompatibilityTags = includeCompatibility; }
   void setIncludeCircularError(bool includeCircularError)
   { _addExportTagsVisitor.setIncludeCircularError( includeCircularError); }
 
-  virtual QString supportedFormats() override { return ".json"; }
-
-  virtual void setConfiguration(const Settings& conf) override;
-
 protected:
 
   ConstOsmMapPtr _map;
-  bool _includeDebug;
-  // This setting is here to stay in sync with how OsmXmlWriter writes attribute metadata.
-  bool _includeCompatibilityTags;
+
   int _precision;
   QFile _fp;
   QIODevice* _out;
-  bool _pretty;
+
   bool _firstElement;
-  bool _writeEmptyTags;
   bool _writeHootFormat;
+
   long _numWritten;
   long _statusUpdateInterval;
 
@@ -135,14 +117,21 @@ protected:
   void _writeKvp(const QString& key, const QString& value);
   void _writeKvp(const QString& key, long value);
   void _writeKvp(const QString& key, double value);
-  bool _hasTags(const ConstElementPtr& e);
-  void _writeTag(const QString& key, const QString& value, bool& firstTag);
+  bool _hasTags(const ConstElementPtr& e) const;
   void _writeTags(const ConstElementPtr& e);
-  void _writeMetadata(const Element& element);
 
 private:
 
+  bool _includeDebug;
+  // This setting is here to stay in sync with how OsmXmlWriter writes attribute metadata.
+  bool _includeCompatibilityTags;
+  bool _pretty;
+  bool _writeEmptyTags;
+
   AddExportTagsVisitor _addExportTagsVisitor;
+
+  void _writeTag(const QString& key, const QString& value, bool& firstTag);
+  void _writeMetadata(const Element& element);
 };
 
 }

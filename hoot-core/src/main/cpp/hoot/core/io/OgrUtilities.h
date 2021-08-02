@@ -19,18 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OGRUTILITIES_H
 #define OGRUTILITIES_H
 
 // GDAL
 #include <gdal.h>
-// Forward declaration
-class GDALDataset;
 
 // Qt
 #include <QString>
@@ -38,25 +36,36 @@ class GDALDataset;
 
 #include <vector>
 
+// Forward declaration
+class GDALDataset;
+
 namespace hoot
 {
 
 class OgrDriverInfo
 {
 public:
+
   /**
    * @brief OgrDriverInfo Builds an object to hold driver information for loading GDAL
-   * @param indicator Text prefix (i.e. PG: for PostgreSQL) or file extension
-   *        (i.e. .shp for ESRI Shapefile)
+   * @param indicator Text prefix (i.e. PG: for PostgreSQL) or file extension (i.e. .shp for ESRI
+   * Shapefile)
    * @param driverName Text name of the driver
    * @param is_ext Value is true if the indcator is a file extension, false for prefix
    * @param is_rw Value is true if the driver is able to read and write, false for readonly
    * @param driverType GDAL_OF_VECTOR or GDAL_OF_ALL open flags
    */
-  OgrDriverInfo(const char* indicator = NULL, const char* driverName = NULL, bool is_ext = false,
-                bool is_rw = true, unsigned int driverType = GDAL_OF_ALL)
-   : _indicator(indicator), _driverName(driverName), _is_ext(is_ext), _is_rw(is_rw), _driverType(driverType)
-  {}
+  OgrDriverInfo(
+    const char* indicator = nullptr, const char* driverName = nullptr, bool is_ext = false,
+    bool is_rw = true, unsigned int driverType = GDAL_OF_ALL) :
+  _indicator(indicator),
+  _driverName(driverName),
+  _is_ext(is_ext),
+  _is_rw(is_rw),
+  _driverType(driverType)
+  {
+  }
+
   const char* _indicator;
   const char* _driverName;
   bool _is_ext;

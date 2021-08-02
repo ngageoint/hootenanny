@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef FINDINTERSECTIONSVISITOR_H
 #define FINDINTERSECTIONSVISITOR_H
@@ -31,7 +31,7 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -46,29 +46,24 @@ public:
   static QString className() { return "hoot::FindIntersectionsVisitor"; }
 
   FindIntersectionsVisitor() = default;
-  virtual ~FindIntersectionsVisitor() = default;
+  ~FindIntersectionsVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-
+  void setOsmMap(OsmMap* map) override { _map = map; }
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
   std::vector<long>& getIntersections() { return _ids; }
 
-  virtual QString getDescription() const { return "Identifies generic intersections"; }
-
-  virtual QString getInitStatusMessage() const
-  { return "Finding intersections..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getInitStatusMessage() const override { return "Finding intersections..."; }
+  QString getCompletedStatusMessage() const override
   { return "Found " + QString::number(_numAffected) + " intersections"; }
 
   virtual ElementCriterionPtr createCriterion(ConstOsmMapPtr map) = 0;
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Identifies generic intersections"; }
 
 private:
 
@@ -87,17 +82,16 @@ public:
   static QString className() { return "hoot::FindHighwayIntersectionsVisitor"; }
 
   FindHighwayIntersectionsVisitor() = default;
-  virtual ~FindHighwayIntersectionsVisitor() = default;
+  ~FindHighwayIntersectionsVisitor() = default;
 
-  virtual QString getDescription() const { return "Identifies road intersections"; }
+  QString getDescription() const override { return "Identifies road intersections"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Finding road intersections..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Found " + QString::number(_numAffected) + " road intersections"; }
 
-  virtual ElementCriterionPtr createCriterion(ConstOsmMapPtr map);
+  ElementCriterionPtr createCriterion(ConstOsmMapPtr map) override;
 };
 
 /**
@@ -110,17 +104,16 @@ public:
   static QString className() { return "hoot::FindRailwayIntersectionsVisitor"; }
 
   FindRailwayIntersectionsVisitor() = default;
-  virtual ~FindRailwayIntersectionsVisitor() = default;
+  ~FindRailwayIntersectionsVisitor() = default;
 
-  virtual QString getDescription() const { return "Identifies railway intersections"; }
+  QString getDescription() const override { return "Identifies railway intersections"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Finding railway intersections..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Found " + QString::number(_numAffected) + " railway intersections"; }
 
-  virtual ElementCriterionPtr createCriterion(ConstOsmMapPtr map);
+  ElementCriterionPtr createCriterion(ConstOsmMapPtr map) override;
 };
 
 }

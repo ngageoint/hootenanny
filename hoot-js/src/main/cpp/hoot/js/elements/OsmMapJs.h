@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMMAPJS_H
 #define OSMMAPJS_H
@@ -32,7 +32,6 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/js/io/DataConvertJs.h>
-#include <hoot/js/util/IdGeneratorJs.h>
 
 namespace hoot
 {
@@ -41,10 +40,10 @@ class OsmMapJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
-  static v8::Handle<v8::Object> create(ConstOsmMapPtr map);
-  static v8::Handle<v8::Object> create(OsmMapPtr map);
+  static v8::Local<v8::Object> create(ConstOsmMapPtr map);
+  static v8::Local<v8::Object> create(OsmMapPtr map);
 
   OsmMapPtr& getMap();
   ConstOsmMapPtr& getConstMap() { return _constMap; }
@@ -56,16 +55,11 @@ public:
 private:
 
   OsmMapJs();
-  OsmMapJs(OsmMapPtr map);
 
-  static void clone(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void clone(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getElement(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getElementCount(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getParents(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void removeElement(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void setIdGenerator(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void copyProjection(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void visit(const v8::FunctionCallbackInfo<v8::Value>& args); 
 
   OsmMapPtr _map;
@@ -76,26 +70,26 @@ private:
   void _setMap(ConstOsmMapPtr map) { _map.reset(); _constMap = map; }
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, ConstOsmMapPtr& ptr)
+inline void toCpp(v8::Local<v8::Value> v, ConstOsmMapPtr& ptr)
 {
   if (!v->IsObject())
   {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
   }
 
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   OsmMapJs* ptrj = node::ObjectWrap::Unwrap<OsmMapJs>(obj);
   ptr = ptrj->getConstMap();
 }
 
-inline void toCpp(v8::Handle<v8::Value> v, OsmMapPtr& ptr)
+inline void toCpp(v8::Local<v8::Value> v, OsmMapPtr& ptr)
 {
   if (!v->IsObject())
   {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
   }
 
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   OsmMapJs* ptrj = node::ObjectWrap::Unwrap<OsmMapJs>(obj);
   ptr = ptrj->getMap();
 }

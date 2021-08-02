@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef LOG_H
@@ -100,48 +100,39 @@ public:
 
   static Log& getInstance();
 
-  WarningLevel getLevel() const { return _level; }
-
-  static WarningLevel levelFromString(QString l);
-
-  static QString levelToString(WarningLevel l);
-
-  QString getLevelAsString() const;
-
   /**
    * May get called multiple times (e.g. before and after config settings are finalized).
    */
-  void init();
+  void init() const;
+
+  static WarningLevel levelFromString(QString l);
+  static QString levelToString(WarningLevel l);
+  QString getLevelAsString() const;
 
   bool isDebugEnabled() const { return _level <= Debug; }
-
   bool isInfoEnabled() const { return _level <= Info; }
 
   void log(WarningLevel level, const std::string& str);
-
   void log(WarningLevel level, const std::string& str, const std::string& filename,
     const std::string& prettyFunction, int lineNumber);
-
   void log(WarningLevel level, const QString& str, const QString& filename,
     const QString& prettyFunction, int lineNumber);
-
   void progress(WarningLevel level, const std::string& str, const std::string& filename,
     const std::string& functionName, int lineNumber);
-
-  void setLevel(WarningLevel l);
 
   static int getWarnMessageLimit();
 
   static std::string ellipsisStr(const std::string& str, uint count = 33);
 
-private:
+  WarningLevel getLevel() const { return _level; }
+  void setLevel(WarningLevel l);
 
-  bool notFiltered(const std::string& prettyFunction);
+private:
 
   WarningLevel _level;
   static int _warnMessageLimit;
-  bool _classFilterInitialized;
-  QStringList _classFilter;
+  QStringList _includeClassFilter;
+  QStringList _excludeClassFilter;
 
   Log();
   /** Default destructor */
@@ -149,6 +140,17 @@ private:
   /** Delete copy constructor and assignment operator */
   Log(const Log&) = delete;
   Log& operator=(const Log&) = delete;
+
+  void _setFilter();
+  /*
+   * Determines whether the function logging should be allowed to or log or be prevented from
+   * logging based on the filter configuration.
+   *
+   * One item to note is that inner classes with names different than the class files they are
+   * included in can cause log statements to print even when the class name is in the exclude list.
+   * This isn't really a bug, but just something to be aware of.
+   */
+  bool _passesFilter(const std::string& prettyFunction);
 };
 
 /**
@@ -171,7 +173,7 @@ public:
     reset();
   }
 
-  void reset()
+  void reset() const
   {
     Log::getInstance().setLevel(_oldLevel);
     Log::getInstance().log(Log::Trace, "Enabled logging.");

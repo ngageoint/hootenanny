@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RUBBERSHEET_H
@@ -35,6 +35,7 @@
 #include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // tgs
 #include <tgs/Interpolation/Interpolator.h>
@@ -52,19 +53,19 @@ class RubberSheetTest;
 class OsmMap;
 class Status;
 
-class RubberSheet : public OsmMapOperation, public Configurable
+class RubberSheet : public OsmMapOperation, public Configurable, public ConflateInfoCacheConsumer
 {
 public:
 
   static QString className() { return "hoot::RubberSheet"; }
 
   /**
-   * If this configuration setting is set to true then the first layer is treated as the reference
-   * layer and will not be moved.
+   * @brief refKey If this configuration setting is set to true then the first layer is treated as
+   * the reference layer and will not be moved.
    */
   static QString refKey() { return "rubber.sheet.ref"; }
   /**
-   * If this is true then debug tags will be added to the output file.
+   * @brief debugKey If this is true then debug tags will be added to the output file.
    */
   static QString debugKey() { return "rubber.sheet.debug"; }
 
@@ -76,63 +77,89 @@ public:
   };
 
   RubberSheet();
-  virtual ~RubberSheet() = default;
+  ~RubberSheet() = default;
 
-  RubberSheet* clone() const { return new RubberSheet(*this); }
-
-  /**
-   * @see OsmMapOperation
-   */
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  std::shared_ptr<RubberSheet> clone() const { return std::make_shared<RubberSheet>(*this); }
 
   /**
-   * @see Configurable
-   */
-  virtual void setConfiguration(const Settings& conf);
-
-  /**
-   * Applies a perviously calculated or loaded transform to the specified map
-   *
+   * @brief applyTransform applies a perviously calculated or loaded transform to the specified map.
    * @param map the map to apply the transform to
    * @return true if the operation succeeded; false otherwise
    */
-  bool applyTransform(std::shared_ptr<OsmMap>& map);
-
+  bool applyTransform(const std::shared_ptr<OsmMap>& map);
   /**
-   * Calculates an appropriate transform for the specified map, but does not change any data
-   *
+   * @brief calculateTransform calculates an appropriate transform for the specified map, but does
+   * not change any data.
    * @param map the map to calculate the transform for
    * @return true if the operation succeeded; false otherwise
    */
-  bool calculateTransform(std::shared_ptr<OsmMap>& map);
+  bool calculateTransform(const std::shared_ptr<OsmMap>& map);
 
   /**
-   * Reads the data necessary to perform a transform from unknown1 to unknown2.
+   * @brief readTransform1to2 reads the data necessary to perform a transform from unknown1 to
+   * unknown2.
    */
   void readTransform1to2(QIODevice& is) { _interpolator1to2 = _readInterpolator(is); }
-
   /**
-   * Reads the data necessary to perform a transform from unknown1 to unknown2.
+   * @brief readTransform2to1 reads the data necessary to perform a transform from unknown1 to
+   * unknown2.
    */
   void readTransform2to1(QIODevice& is) { _interpolator2to1 = _readInterpolator(is); }
-
   /**
-   * Writes out the data necessary to perform a transform from unknown1 to unknown2.
+   * @brief writeTransform1to2 writes out the data necessary to perform a transform from unknown1 to
+   * unknown2.
    */
   void writeTransform1to2(QIODevice& os) const { _writeInterpolator(_interpolator1to2, os); }
-
   /**
-   * Writes out the data necessary to perform a transform from unknown1 to unknown2.
+   * @brief writeTransform2to1 writes out the data necessary to perform a transform from unknown1 to
+   * unknown2.
    */
   void writeTransform2to1(QIODevice& os) const { _writeInterpolator(_interpolator2to1, os); }
 
   /**
-   * Calculates the distances between each of the rubber sheet's tie points
-   *
+   * @brief calculateTiePointDistances calculates the distances between each of the rubber sheet's
+   * tie points.
    * @return a collection of distance values
    * @throws HootException if the tie points have not been created
    */
    std::vector<double> calculateTiePointDistances();
+
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
+  { _conflateInfoCache = cache; }
+
+  /**
+   * @see OsmMapOperation
+   */
+  void apply(std::shared_ptr<OsmMap>& map) override;
+
+  /**
+   * @see Configurable
+   */
+  void setConfiguration(const Settings& conf) override;
+
+   /**
+    * @see FilteredByGeometryTypeCriteria
+    */
+   QStringList getCriteria() const override;
+
+   QString getName() const override { return className(); }
+   QString getClassName() const override { return className(); }
+   QString getDescription() const override { return "Applies rubber sheeting to a map"; }
+
+   /**
+    * @see OperationStatus
+    */
+   QString getInitStatusMessage() const override { return "Rubbersheeting data..."; }
+
+   /**
+    * @see OperationStatus
+    */
+   QString getCompletedStatusMessage() const override
+   {
+     return
+       "Rubbersheeted " + StringUtils::formatLargeNumber(_numAffected) + " / " +
+       StringUtils::formatLargeNumber(_numProcessed) + " linear features.";
+   }
 
    void setReference(bool ref) { _ref = ref; }
    void setDebug(bool debug) { _debug = debug; }
@@ -143,37 +170,11 @@ public:
    void setMaxAllowedWays(int max) { _maxAllowedWays = max; }
    void setCriteria(const QStringList& criteria, OsmMapPtr map = OsmMapPtr());
 
-   virtual QString getDescription() const override { return "Applies rubber sheeting to a map"; }
-
-   /**
-    * @see FilteredByGeometryTypeCriteria
-    */
-   virtual QStringList getCriteria() const;
-
-   virtual QString getName() const { return className(); }
-
-   virtual QString getClassName() const override { return className(); }
-
-   /**
-    * @see OperationStatus
-    */
-   virtual QString getInitStatusMessage() const override { return "Rubbersheeting data..."; }
-
-   /**
-    * @see OperationStatus
-    */
-   virtual QString getCompletedStatusMessage() const override
-   {
-     return
-       "Rubbersheeted " + StringUtils::formatLargeNumber(_numAffected) + " / " +
-       StringUtils::formatLargeNumber(_numProcessed) + " linear features.";
-   }
-
 private:
 
   static int logWarnCount;
 
-  typedef std::map<long, std::list<Match>> MatchList;
+  using MatchList = std::map<long, std::list<Match>>;
 
   class Tie
   {
@@ -187,7 +188,7 @@ private:
       double dx() const { return c1.x - c2.x; }
       double dy() const { return c1.y - c2.y; }
 
-      QString toString()
+      QString toString() const
       { return "dx: " + QString::number(dx()) + ", dy: " + QString::number(dy()); }
   };
 
@@ -224,7 +225,11 @@ private:
 
   OrCriterionPtr _criteria;
 
-  bool _calcAndApplyTransform(OsmMapPtr& map);
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
+
+  bool _calcAndApplyTransform(const OsmMapPtr& map);
   void _filterCalcAndApplyTransform(OsmMapPtr& map);
 
   bool _findTies();

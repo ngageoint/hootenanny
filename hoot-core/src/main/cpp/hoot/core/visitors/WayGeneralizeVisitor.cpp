@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "WayGeneralizeVisitor.h"
 
@@ -52,8 +52,7 @@ void WayGeneralizeVisitor::setConfiguration(const Settings& conf)
   const QString critClass = configOptions.getWayGeneralizerCriterion().trimmed();
   if (!critClass.isEmpty())
   {
-    addCriterion(
-      ElementCriterionPtr(Factory::getInstance().constructObject<ElementCriterion>(critClass)));
+    addCriterion(Factory::getInstance().constructObject<ElementCriterion>(critClass));
   }
 }
 
@@ -63,7 +62,7 @@ void WayGeneralizeVisitor::setOsmMap(OsmMap* map)
   MapProjector::projectToPlanar(_map->shared_from_this());
 
   assert(_epsilon != -1.0);
-  _generalizer.reset(new RdpWayGeneralizer(_epsilon));
+  _generalizer = std::make_shared<RdpWayGeneralizer>(_epsilon);
   _generalizer->setOsmMap(_map);
   _generalizer->setRemoveNodesSharedByWays(_removeNodesSharedByWays);
 }

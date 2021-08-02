@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WAY_END_NODE_CRITERION_H
 #define WAY_END_NODE_CRITERION_H
@@ -49,13 +49,13 @@ public:
 
   WayEndNodeCriterion(const bool allowShared = true);
   WayEndNodeCriterion(ConstOsmMapPtr map, const bool allowShared = true);
-  virtual ~WayEndNodeCriterion() = default;
+  ~WayEndNodeCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<WayEndNodeCriterion>(_map); }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new WayEndNodeCriterion(_map)); }
-
-  virtual QString getDescription() const { return "Identifies way end nodes"; }
+  QString getDescription() const override { return "Identifies way end nodes"; }
+  QString toString() const override { return className(); }
 
 private:
 

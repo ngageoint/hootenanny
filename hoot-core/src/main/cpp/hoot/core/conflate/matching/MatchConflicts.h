@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MATCHCONFLICTS_H
 #define MATCHCONFLICTS_H
@@ -46,8 +46,8 @@ class MatchConflicts
 {
 public:
 
-  typedef QMultiHash<size_t, size_t> ConflictMap;
-  typedef std::multimap<ElementId, size_t> EidIndexMap;
+  using ConflictMap = QMultiHash<size_t, size_t>;
+  using EidIndexMap = std::multimap<ElementId, size_t>;
 
   MatchConflicts(const ConstOsmMapPtr& map);
 
@@ -55,7 +55,8 @@ public:
    * Calculates all the conflicts between matches and puts the indexes to the conflicting pairs in
    * the provided conflicts set. conflicts is cleared before inserting conflicts.
    */
-  void calculateMatchConflicts(const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts);
+  void calculateMatchConflicts(
+    const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts) const;
 
 private:
 
@@ -63,7 +64,7 @@ private:
 
   void _calculateSubsetConflicts(
     const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts,
-    const std::vector<int>& matchSet, const QHash<QString, ConstMatchPtr>& idIndexedMatches);
+    const std::vector<int>& matchSet, const QHash<QString, ConstMatchPtr>& idIndexedMatches) const;
 
   EidIndexMap _calculateEidIndexMap(const std::vector<ConstMatchPtr>& matches) const;
 };

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "CalculateAreaVisitor.h"
 
@@ -40,18 +40,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, CalculateAreaVisitor)
 
-Meters CalculateAreaVisitor::getArea(const OsmMapPtr& map, ElementPtr e)
-{
-  CalculateAreaVisitor v;
-  v.setOsmMap(map.get());
-  e->visitRo(*map, v);
-  return v.getArea();
-}
-
 void CalculateAreaVisitor::visit(const ConstElementPtr& e)
 {
-  std::shared_ptr<Geometry> g = ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e);
-  _total += g->getArea();
+  std::shared_ptr<Geometry> g =
+    ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e, false, true);
+  if (!g->isEmpty())
+  {
+    _total += g->getArea();
+  }
 }
 
 }

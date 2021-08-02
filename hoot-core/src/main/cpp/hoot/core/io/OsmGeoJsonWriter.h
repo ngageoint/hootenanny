@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSM_GEOJSON_WRITER_H
 #define OSM_GEOJSON_WRITER_H
@@ -45,33 +45,32 @@ namespace hoot
 class OsmGeoJsonWriter : public OsmJsonWriter
 {
 public:
+
   static QString className() { return "hoot::OsmGeoJsonWriter"; }
 
   OsmGeoJsonWriter(int precision = ConfigOptions().getWriterPrecision());
-  virtual ~OsmGeoJsonWriter() = default;
-
-  /**
-   * @brief write Write the OsmMap out to a file in GeoJSON format, writer must be "open"
-   * @param map
-   */
-  virtual void write(const ConstOsmMapPtr& map) override;
-
-  /**
-   * @brief isSupported returns true if the URL is likely supported
-   * @param url Filename ending in ".geojson"
-   * @return
-   */
-  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".geojson"); }
+  ~OsmGeoJsonWriter() = default;
 
   /**
    * @brief setConfiguration allows configuration settings to override the defaults
    * @param conf Configuration settings object
    */
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString supportedFormats() override { return ".geojson"; }
+  /**
+   * @brief write Write the OsmMap out to a file in GeoJSON format, writer must be "open"
+   * @param map
+   */
+  void write(const ConstOsmMapPtr& map) override;
+  /**
+   * @brief isSupported returns true if the URL is likely supported
+   * @param url Filename ending in ".geojson"
+   * @return
+   */
+  bool isSupported(const QString& url) override { return url.toLower().endsWith(".geojson"); }
+  QString supportedFormats() override { return ".geojson"; }
 
-  virtual QString toString(const ConstOsmMapPtr& map);
+  QString toString(const ConstOsmMapPtr& map);
 
 protected:
 
@@ -79,32 +78,27 @@ protected:
    * @brief _writeNodes Iterates all nodes that aren't part of another element and writes
    *   them out to the GeoJSON file
    */
-  virtual void _writeNodes();
-
+  void _writeNodes() override;
   /**
    * @brief _writeNode Writes a single node; metadata, tags, and geometry
    * @param node
    */
   void _writeNode(ConstNodePtr node);
-
   /**
    * @brief _writeWays Iterates all ways that aren't part of another element and writes
    *   them out to the GeoJSON file
    */
-  virtual void _writeWays();
-
+  void _writeWays() override;
   /**
    * @brief _writeWay Writes a single way; metadata, tags, and geometry
    * @param way
    */
   void _writeWay(ConstWayPtr way);
-
   /**
    * @brief _writeRelations Iterates all relations that aren't part of another element and writes
    *   them out to the GeoJSON file
    */
-  virtual void _writeRelations();
-
+  void _writeRelations() override;
   /**
    * @brief _writeRelationInfo Writes relation specific information, relation-type and roles
    * @param relation
@@ -117,38 +111,32 @@ protected:
    * @param element
    */
   void _writeFeature(ConstElementPtr element);
-
   /**
    * @brief _writeMeta Write node/way/relation metadata, i.e. timestamp, version, and visible
    * @param element
    */
   void _writeMeta(ConstElementPtr element);
-
   /**
    * @brief _writeGeometry Write out the geometry in GeoJSON format based on the type
    * @param nodes Vector of node ids in OsmMap
    * @param type GeoJSON geometry type, i.e. Point, LineString, Polygon
    */
   void _writeGeometry(const std::vector<long>& nodes, std::string type);
-
   /**
    * @brief _writeGeometry Write out geometry for any element
    * @param element
    */
   void _writeGeometry(ConstElementPtr element);
-
   /**
    * @brief _writeGeometry Write out geometry for a single node
    * @param node
    */
   void _writeGeometry(ConstNodePtr node);
-
   /**
    * @brief _writeGeometry Write out geometry for a single way
    * @param way
    */
   void _writeGeometry(ConstWayPtr way);
-
   /**
    * @brief _writeGeometry Write out geometry for a single relation
    * @param relation
@@ -159,7 +147,7 @@ protected:
    * @brief _getBbox Create a bounding box array in GeoJSON format
    * @return
    */
-  QString _getBbox();
+  QString _getBbox() const;
 
   /**
    * @brief _buildRoles Iterates all members of relations (recurses super-relations) collecting roles

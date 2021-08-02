@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "AttributeValueCriterion.h"
 
@@ -33,7 +33,7 @@
 namespace hoot
 {
 
-int AttributeValueCriterion::logWarnCount = 0;
+int AttributeValueCriterion::_logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementCriterion, AttributeValueCriterion)
 
@@ -87,7 +87,8 @@ void AttributeValueCriterion::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   _attributeType = ElementAttributeType::fromString(configOptions.getAttributeValueCriterionType());
-  QString comparisonTypeStr = configOptions.getAttributeValueCriterionComparisonType();
+  QString comparisonTypeStr =
+    configOptions.getAttributeValueCriterionComparisonType().trimmed().toLower();
   if (comparisonTypeStr.toLower().startsWith("text"))
   {
     _comparisonType =
@@ -139,33 +140,21 @@ bool AttributeValueCriterion::_satisfiesComparison(const QVariant& val) const
 
     if (!ok)
     {
-      if (logWarnCount < Log::getWarnMessageLimit())
+      if (_logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Unable to convert " << val.toString() << " to a numeric value.");
       }
-      else if (logWarnCount == Log::getWarnMessageLimit())
+      else if (_logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
-      logWarnCount++;
+      _logWarnCount++;
       return false;
     }
 
-    switch (_comparisonType)
-    {
-      case NumericComparisonType::EqualTo:
-        return numericVal == _comparisonVal.toDouble();
-      case NumericComparisonType::LessThan:
-        return numericVal < _comparisonVal.toDouble();
-      case NumericComparisonType::LessThanOrEqualTo:
-        return numericVal <= _comparisonVal.toDouble();
-      case NumericComparisonType::GreaterThan:
-        return numericVal > _comparisonVal.toDouble();
-      case NumericComparisonType::GreaterThanOrEqualTo:
-        return numericVal >= _comparisonVal.toDouble();
-      default:
-        throw IllegalArgumentException("Invalid comparison type: " + _comparisonType);
-    }
+    return
+      NumericComparisonType(_comparisonType).satisfiesComparison(
+        numericVal, _comparisonVal.toDouble());
   }
   else
   {

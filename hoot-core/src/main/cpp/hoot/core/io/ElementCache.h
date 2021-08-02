@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTCACHE_H
 #define ELEMENTCACHE_H
@@ -49,7 +49,6 @@ public:
    * @brief ElementCache
    */
   ElementCache() = default;
-
   /**
    * @brief ~ElementCache
    */
@@ -60,7 +59,6 @@ public:
    * @return True if the cache does not contain any elements, else false
    */
   virtual bool isEmpty() const = 0;
-
   /**
    * @brief size
    * @return Total number of elements in the cache
@@ -105,7 +103,6 @@ public:
    * @note Nodes will be returned in order by ascending node ID
    */
   virtual ConstNodePtr getNextNode() = 0;
-
   /**
    * @brief getNextWay
    * @return Pointer to the next entry in cache's list of ways, or ConstWayPtr() if no more ways
@@ -113,7 +110,6 @@ public:
    * @note Ways will be returned in order by ascending way ID
    */
   virtual ConstWayPtr getNextWay() = 0;
-
   /**
    * @brief getNextRelation
    * @return Pointer to the next entry in cache's list of relations, or ConstRelationPtr() if no
@@ -123,66 +119,16 @@ public:
    */
   virtual ConstRelationPtr getNextRelation() = 0;
 
-  // Functions for ElementInputStream
-  virtual void close() = 0;             // Also works for elementoutputstream
-  virtual bool hasMoreElements() = 0;
-
-  /**
-   * @brief readNextElement
-   *
-   * @note There is no guarantee of the order that items will be pulled from the cache when this
-   *      method is invoked. If ordering of elements (e.g., all nodes first, then all ways, and
-   *      finally all relations) is required, the getNext(Node/Way/Relation) methods should be
-   *      invoked
-   *
-   * @return Pointer to next element out of cache
-   */
-  virtual ElementPtr readNextElement() = 0;
-
-  // Functions for ElementOutputStream
-  virtual void writeElement(ElementPtr& element) = 0;
-
-  // Functions from ElementProvider
-
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const = 0;
-
-  virtual bool containsElement(const ElementId& eid) const = 0;
-
-  virtual ConstElementPtr getElement(const ElementId& id) const = 0;
-
-  virtual const ConstNodePtr getNode(long id) const = 0;
-
-  virtual const NodePtr getNode(long id) = 0;
-
-  virtual const ConstRelationPtr getRelation(long id) const = 0;
-
-  virtual const RelationPtr getRelation(long id) = 0;
-
-  virtual const ConstWayPtr getWay(long id) const = 0;
-
-  virtual const WayPtr getWay(long id) = 0;
-
-  virtual bool containsNode(long id) const = 0;
-
-  virtual bool containsRelation(long id) const = 0;
-
-  virtual bool containsWay(long id) const = 0;
-
-
   // Cache-specific items
   virtual void removeElement(const ElementId& eid) = 0;
-
   virtual void removeElements(const ElementType::Type type) = 0;
 
-  virtual unsigned long getNodeCacheSize() = 0;
-
-  virtual unsigned long getWayCacheSize() = 0;
-
-  virtual unsigned long getRelationCacheSize() = 0;
-
+  virtual unsigned long getNodeCacheSize() const = 0;
+  virtual unsigned long getWayCacheSize() const = 0;
+  virtual unsigned long getRelationCacheSize() const = 0;
 };
 
-typedef std::shared_ptr<ElementCache> ElementCachePtr;
+using ElementCachePtr = std::shared_ptr<ElementCache>;
 
 }
 

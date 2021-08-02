@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -58,10 +58,10 @@ public:
 
   void runNeedsReviewTest()
   {
-    OsmMapPtr map(new OsmMap());
-    ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
-    ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
-    ElementPtr n3(new Node(Status::Unknown2, 3, 0, 0, 0));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    ElementPtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
+    ElementPtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0, 0, 0);
+    ElementPtr n3 = std::make_shared<Node>(Status::Unknown2, 3, 0, 0, 0);
 
     // set the uuids so they don't change with each test
     n1->getTags().set("uuid", "n1");
@@ -90,9 +90,9 @@ public:
 
   void runSimpleTest()
   {
-    OsmMapPtr map(new OsmMap());
-    ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
-    ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    ElementPtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
+    ElementPtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0, 0, 0);
 
     // set the uuids so they don't change with each test
     n1->getTags().set("uuid", "n1");
@@ -120,11 +120,11 @@ public:
    */
   void runMultipleScoresTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     DisableLog dl;
 
-    ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
-    ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
+    ElementPtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
+    ElementPtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0, 0, 0);
 
     // set the uuids so they don't change with each test
     n1->getTags().set("uuid", "n1");
@@ -150,10 +150,10 @@ public:
 
   void runAddReviewTagsToFeaturesTest()
   {
-    OsmMapPtr map(new OsmMap());
-    ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
-    ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
-    ElementPtr n3(new Node(Status::Unknown2, 3, 0, 0, 0));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    ElementPtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
+    ElementPtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0, 0, 0);
+    ElementPtr n3 = std::make_shared<Node>(Status::Unknown2, 3, 0, 0, 0);
 
     // set the uuids so they don't change with each test
     n1->getTags().set("uuid", "n1");

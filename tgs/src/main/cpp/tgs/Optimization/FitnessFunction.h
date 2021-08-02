@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef FITNESSFUNCTION_H
 #define FITNESSFUNCTION_H
@@ -35,16 +35,22 @@ namespace Tgs
 class FitnessFunction
 {
 public:
+
   /**
    * Calculates the fitness of the specified state. Lower values are better.
    *
    * While not required fitness functions that return values from [0, 1] may work better.
    */
+  /**
+   * @brief f Calculates the fitness of the specified state. Lower values are better.
+   * @param s a simulated annealing state
+   * @return a fitness value (lower is better)
+   */
   virtual double f(const ConstStatePtr& s) = 0;
 };
 
-typedef std::shared_ptr<FitnessFunction> FitnessFunctionPtr;
-typedef std::shared_ptr<const FitnessFunction> ConstFitnessFunctionPtr;
+using FitnessFunctionPtr = std::shared_ptr<FitnessFunction>;
+using ConstFitnessFunctionPtr = std::shared_ptr<const FitnessFunction>;
 
 }
 

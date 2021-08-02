@@ -19,25 +19,25 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PertyOp.h"
 
 // hoot
+#include <hoot/core/algorithms/perty/DirectSequentialSimulation.h>
+#include <hoot/core/algorithms/perty/PermuteGridCalculator.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/algorithms/perty/DirectSequentialSimulation.h>
-#include <hoot/core/algorithms/perty/PermuteGridCalculator.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
 
 //Qt
 #include <QVector>
@@ -61,9 +61,9 @@ public:
     _gridSpacing(gridSpacing)
   {
   }
-  virtual ~ShiftMapVisitor() = default;
+  ~ShiftMapVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getElementType() == ElementType::Node)
     {
@@ -76,16 +76,16 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual void visit(const std::shared_ptr<Element>&) {}
+  void visit(const std::shared_ptr<Element>&) override { }
 
   /**
    * User barycentric interpolation to determine the shift at a given point.
    */
-  Vec2d _interpolateShift(const Coordinate& p)
+  Vec2d _interpolateShift(const Coordinate& p) const
   {
     Vec2d result;
 
@@ -143,7 +143,7 @@ public:
     return result;
   }
 
-  Coordinate gridCoordinate(int r, int c)
+  Coordinate gridCoordinate(int r, int c) const
   {
     return Coordinate((double)c * _gridSpacing + _e.getMinX(),
       (double)r * _gridSpacing + _e.getMinY());
@@ -152,7 +152,7 @@ public:
   /**
    * Return 2 * the area of a triangle.
    */
-  double triArea2(const Coordinate& a, const Coordinate& b, const Coordinate& c)
+  double triArea2(const Coordinate& a, const Coordinate& b, const Coordinate& c) const
   {
     return fabs((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x));
   }
@@ -164,12 +164,12 @@ private:
   const Envelope& _e;
   Meters _gridSpacing;
 
-  double _getX(int row, int col)
+  double _getX(int row, int col) const
   {
     return _EX.at<double>((row * _cols + col) * 2, 0);
   }
 
-  double _getY(int row, int col)
+  double _getY(int row, int col) const
   {
     return _EX.at<double>((row * _cols + col) * 2 + 1, 0);
   }
@@ -205,19 +205,19 @@ void PertyOp::apply(std::shared_ptr<OsmMap>& map)
 
   // permute the data first
   permute(map);
-  OsmMapWriterFactory::writeDebugMap(map, "perty-after-perty-op");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-perty-op");
 
   // apply any custom perturbation ops
-  NamedOp namedOps(_namedOps);
+  OpExecutor namedOps(_namedOps);
   namedOps.setConfiguration(_settings);
   namedOps.apply(map);
 }
 
-Mat PertyOp::_calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& cols)
+Mat PertyOp::_calculatePermuteGrid(const geos::geom::Envelope& env, int& rows, int& cols)
 {
   LOG_DEBUG("Using permute algorithm: " + _permuteAlgorithm);
-  _gridCalculator.reset(
-    Factory::getInstance().constructObject<PermuteGridCalculator>(_permuteAlgorithm));
+  _gridCalculator =
+    Factory::getInstance().constructObject<PermuteGridCalculator>(_permuteAlgorithm);
   _gridCalculator->setCsmParameters(_D);
   _gridCalculator->setGridSpacing(_gridSpacing);
   _gridCalculator->setSeed(_seed);
@@ -226,10 +226,10 @@ Mat PertyOp::_calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& col
   return _gridCalculator->permute(env, rows, cols);
 }
 
-std::shared_ptr<OsmMap> PertyOp::generateDebugMap(std::shared_ptr<OsmMap>& map)
+std::shared_ptr<OsmMap> PertyOp::generateDebugMap(const OsmMapPtr& map)
 {
   MapProjector::projectToPlanar(map);
-  std::shared_ptr<OsmMap> result(new OsmMap(map->getProjection()));
+  std::shared_ptr<OsmMap> result = std::make_shared<OsmMap>(map->getProjection());
 
   geos::geom::Envelope env = CalculateMapBoundsVisitor::getGeosBounds(map);
   LOG_INFO("env: " << env.toString());
@@ -251,12 +251,13 @@ std::shared_ptr<OsmMap> PertyOp::generateDebugMap(std::shared_ptr<OsmMap>& map)
       double dx = EX.at<double>((i * cols + j) * 2, 0);
       double dy = EX.at<double>((i * cols + j) * 2 + 1, 0);
 
-      NodePtr n1(new Node(Status::Unknown1, result->createNextNodeId(), x, y, 5));
-      NodePtr n2(new Node(Status::Unknown1, result->createNextNodeId(), x + dx, y + dy, 5));
+      NodePtr n1 = std::make_shared<Node>(Status::Unknown1, result->createNextNodeId(), x, y, 5);
+      NodePtr n2 =
+        std::make_shared<Node>(Status::Unknown1, result->createNextNodeId(), x + dx, y + dy, 5);
       result->addNode(n1);
       result->addNode(n2);
 
-      WayPtr w(new Way(Status::Unknown1, result->createNextWayId(), 5.0));
+      WayPtr w = std::make_shared<Way>(Status::Unknown1, result->createNextWayId(), 5.0);
       w->addNode(n1->getId());
       w->addNode(n2->getId());
       w->getTags().addNote(QString("r: %1 c: %2").arg(i).arg(j));

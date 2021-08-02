@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef IMPLICITTAGRULESSQLITEREADER_H
@@ -144,14 +144,14 @@ private:
    * Check to see which input words exist
    */
   void _queryWords(const QSet<QString>& words, QSet<long>& queriedWordIds,
-                   QSet<QString>& queriedWords);
+                   QSet<QString>& queriedWords) const;
   /*
    * Gets tags associated with only the inputs words that actually exist
    */
   Tags _getTagsForWords(const QSet<long>& queriedWordIds, const QSet<QString>& queriedWords,
                         const QSet<QString>& inputWords, QSet<QString>& matchingWords,
                         bool& wordsInvolvedInMultipleRules);
-  void _removeTagsWithDuplicatedValues(Tags& tags);
+  void _removeTagsWithDuplicatedValues(Tags& tags) const;
   void _modifyWordIdsForMultipleRules(QSet<long>& queriedWordIds);
 };
 

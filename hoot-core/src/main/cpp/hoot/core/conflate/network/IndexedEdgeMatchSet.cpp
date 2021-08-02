@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "IndexedEdgeMatchSet.h"
 
@@ -131,7 +131,7 @@ void IndexedEdgeMatchSet::_removeVertexToMatchMapping(ConstEdgeStringPtr str,
 
 std::shared_ptr<IndexedEdgeLinks> IndexedEdgeMatchSet::calculateEdgeLinks()
 {
-  std::shared_ptr<IndexedEdgeLinks> result(new IndexedEdgeLinks());
+  std::shared_ptr<IndexedEdgeLinks> result = std::make_shared<IndexedEdgeLinks>();
   for (QHash<ConstEdgeMatchPtr, double>::const_iterator it = getAllMatches().begin();
        it != getAllMatches().end(); ++it)
   {
@@ -166,7 +166,7 @@ std::shared_ptr<IndexedEdgeLinks> IndexedEdgeMatchSet::calculateEdgeLinks()
 
 std::shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSet::clone() const
 {
-  IndexedEdgeMatchSetPtr result(new IndexedEdgeMatchSet());
+  IndexedEdgeMatchSetPtr result = std::make_shared<IndexedEdgeMatchSet>();
   result->_matches = _matches;
   return result;
 }

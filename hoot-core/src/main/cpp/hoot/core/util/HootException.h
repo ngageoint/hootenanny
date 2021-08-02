@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef HOOTEXCEPTION_H
@@ -40,25 +40,29 @@
 namespace hoot
 {
 
+/**
+ * This class is intended to be the base class for all exceptions thrown by Hootenanny.
+ */
 class HootException : public std::exception
 {
 public:
 
   static QString className() { return "hoot::HootException"; }
 
-  HootException() { }
+  HootException() = default;
   HootException(const char* str) { _what = QString::fromUtf8(str); }
   HootException(const std::string& str) { _what = QString::fromStdString(str); }
   HootException(QString str) { _what = str; }
   HootException(const HootException& e) { _what = e._what; }
-  virtual ~HootException() throw() {}
+  virtual ~HootException() throw() = default;
 
-  virtual HootException* clone() const { return new HootException(*this); }
+  virtual std::shared_ptr<HootException> clone() const
+  { return std::make_shared<HootException>(*this); }
 
   virtual QString getName() const { return className(); }
 
   const QString& getWhat() const { return _what; }
-  virtual const char* what() const throw() { _tmp = _what.toLatin1(); return _tmp.constData(); }
+  const char* what() const throw() override { _tmp = _what.toLatin1(); return _tmp.constData(); }
 
 private:
 
@@ -95,7 +99,7 @@ class HootExceptionThrower
 {
 public:
 
-  typedef void (*ThrowMethod)(HootException* e);
+  using ThrowMethod = void(*)(HootException* e);
 
   static HootExceptionThrower& getInstance();
 
@@ -157,8 +161,8 @@ public: \
   Name(QString str) : HootException(str) { } \
   Name(const Name& e) : HootException(e.getWhat()) { } \
   virtual ~Name() throw() {} \
-  virtual HootException* clone() const { return new Name(*this); } \
-  virtual QString getName() const { return className(); } \
+  virtual std::shared_ptr<HootException> clone() const { return std::make_shared<Name>(*this); } \
+  QString getName() const override { return className(); } \
 };
 
 #define HOOT_DEFINE_EXCEPTION_STR(Name, Default) \
@@ -170,8 +174,8 @@ public: \
   Name(QString str) : HootException(str) { } \
   Name(const Name& e) : HootException(e.getWhat()) { } \
   virtual ~Name() throw() {} \
-  virtual HootException* clone() const { return new Name(*this); } \
-  virtual QString getName() const { return className(); } \
+  virtual std::shared_ptr<HootException> clone() const { return std::make_shared<Name>(*this); } \
+  QString getName() const override { return className(); } \
 };
 
 /****
@@ -183,8 +187,12 @@ HOOT_DEFINE_EXCEPTION(InternalErrorException)
 HOOT_DEFINE_EXCEPTION(IoException)
 HOOT_DEFINE_EXCEPTION(NeedsReviewException)
 HOOT_DEFINE_EXCEPTION(UnsupportedException)
+// This exception exists to kick out of logic whose performance ends up having a very poor runtime
+// against certain input data. Not the most elegant solution but necessary at this time. See River
+// Conflation as an example.
 HOOT_DEFINE_EXCEPTION_STR(RecursiveComplexityException, "RecursiveComplexityException")
 HOOT_DEFINE_EXCEPTION_STR(NotImplementedException, "Not Implemented")
+HOOT_DEFINE_EXCEPTION_STR(EmptyMapInputException, "Empty map input.")
 
 }
 

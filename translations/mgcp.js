@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -42,22 +42,39 @@ mgcp = {
 
   mgcp.rawSchema = mgcp.schema.getDbSchema(); // This is <GLOBAL> so we can access it from other areas
 
-  // Build the MGCP fcode/attrs lookup table. Note: This is <GLOBAL>
-  mgcp.AttrLookup = translate.makeAttrLookup(mgcp.rawSchema);
+  // These have been moved to mgcp.rules as static lists
+  // Now build the FCODE/layername lookup table.
+  // NOTE: If we change the output to be ROAD_C instead of LAP030, we need to rebuild this using the function in translate.
+  // mgcp.layerNameLookup = translate.makeLayerNameLookup(mgcp.rawSchema);
 
-  // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
-  mgcp.layerNameLookup = translate.makeLayerNameLookup(mgcp.rawSchema);
+  // Quick list generator
+  // mgcp.layerNameLookup = [];
+  // mgcp.rawSchema.forEach( function (item) {mgcp.layerNameLookup.push(item.geom.charAt(0) + item.fcode);});
+  // print('###');
+  // print(mgcp.layerNameLookup);
+  // print('###');
 
-  // Now add an o2s[A,L,P] feature to the mgcp.rawSchema
-  // We can drop features but this is a nice way to see what we would drop
+  // Quick lookup list for valid FCODES
+  // mgcp.fcodeList = translate.makeFcodeList(mgcp.rawSchema);
+
+  // Now add an o2s[A,L,P] feature to the mgcp.rawSchema and an attribute to hold OSM tags
   if (config.getOgrOutputFormat() == 'shp')
   {
+    // Add OSMTAGS1-4 attributes
+    // Build the MGCP fcode/attrs lookup table
+    mgcp.attrLookup = translate.makeAttrLookup(translate.addTagFeatures(mgcp.rawSchema));
+
     // Add tag1, tag2, tag3 and tag4
-    mgcp.rawSchema = translate.addEmptyFeature(mgcp.rawSchema);
+    mgcp.rawSchema = translate.addO2sFeatures(mgcp.rawSchema);
+    ;
   }
   else
   {
-    // Just add tag1
+    // Add a single OSMTAGS attributes
+    // Build the MGCP fcode/attrs lookup table
+    mgcp.attrLookup = translate.makeAttrLookup(translate.addSingleTagFeature(mgcp.rawSchema));
+
+    // Just add tag1 && OSMTAGS
     mgcp.rawSchema = translate.addSingleO2sFeature(mgcp.rawSchema);
   }
 
@@ -77,7 +94,7 @@ mgcp = {
   // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
   //        feature
   validateAttrs: function(geometryType,attrs,notUsed,transMap) {
-    var attrList = mgcp.AttrLookup[geometryType.toString().charAt(0) + attrs.FCODE];
+    var attrList = mgcp.attrLookup[geometryType.toString().charAt(0) + attrs.FCODE];
 
     if (attrList != undefined)
     {
@@ -254,7 +271,7 @@ mgcp = {
 
       default:
         // Debug
-        hoot.logWarn('ManyFeatures: Should get to here');
+        hoot.logWarn('ManyFeatures: Should not get to here');
     } // end switch
 
     // Now make new features based on what tags are left
@@ -331,26 +348,17 @@ mgcp = {
   }, // End manyFeatures
 
 
-  // ##### Start of the xxToOsmxx Block #####
-
-  applyToOsmPreProcessing: function(attrs, layerName, geometryType)
+  // Cleanup the attributes
+  cleanAttrs: function (attrs)
   {
-    // Drop the FCSUBTYPE since we don't use it
-    if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
-
-    // The swap list. These are the same attr, just named differently
-    // These may get converted back on output
-    var swapList = {
-        'CPYRT_NOTE':'CCN',
-        'SRC_INFO':'SDP',
-        'SRC_DATE':'SDV',
-        'SMC':'MCC'
-        };
+      // Clean up BEFORE trying to untangle
+    delete attrs.FCSUBTYPE;
+    delete attrs.FCSubtype;
 
     // List of data values to drop/ignore
     var ignoreList = { '-32765':1,'-32767':1,'-32768':1,
-               '998':1,'-999999':1,
-               'n_a':1,'noinformation':1,'unknown':1,'unk':1 };
+               '998':1,'-999999':1,'fcsubtype':1,
+               'n_a':1,'n/a':1,'noinformation':1,'unknown':1,'unk':1 };
 
     // Unit conversion. Some attributes are in centimetres, others in decimetres
     // var unitList = { 'GAW':100,'HCA':10,'WD1':10,'WD2':10,'WD3':10,'WT2':10 };
@@ -377,15 +385,20 @@ mgcp = {
       // if (col in unitList) attrs[col] = attrs[col] / unitList[col];
 
       // Now see if we need to swap attr names
-      if (col in swapList)
+      if (col in mgcp.rules.swapListIn)
       {
         // print('Swapped: ' + swapList[i]); // debug
-        attrs[swapList[col]] = attrs[col];
+        attrs[mgcp.rules.swapListIn[col]] = attrs[col];
         delete attrs[col];
         continue
       }
     } // End col in attrs loop
+  }, // End cleanAttrs
 
+
+  // ##### Start of the xxToOsmxx Block #####
+  applyToOsmPreProcessing: function(attrs, layerName, geometryType)
+  {
     if (attrs.F_CODE)
     {
       // Drop the the "Not Found" F_CODE. This is from the UI
@@ -494,62 +507,96 @@ mgcp = {
       }
     } // End of Find an FCode
 
-    // The FCODE for Buildings is different. TDS uses AL013
-    if (attrs.F_CODE == 'AL015') attrs.F_CODE = 'AL013';
-
-    // Swap the F_CODE for a Ferry Terminal
-    if (attrs.F_CODE == 'AQ125' && attrs.TRS == '7')
-    {
-      attrs.F_CODE = 'AQ080'; // TDS/GGDM fcode for Ferry Terminal
-    }
-
     // Tag retired
     if (tags.controlling_authority)
     {
       tags.operator = tags.controlling_authority;
       delete tags.controlling_authority;
     }
+
+    switch (attrs.F_CODE)
+    {
+      case 'AL013':     // Posible Building F_CODE screwup
+        attrs.F_CODE = 'AL015';
+        break;
+
+      case 'AQ125': // Swap the F_CODE for a Ferry Terminal
+        if (attrs.TRS == '7') attrs.F_CODE = 'AQ080'; // TDS/GGDM fcode for Ferry Terminal
+        break;
+    } // End F_CODE
+
+
   }, // End of applyToOsmPreProcessing
 
   // Post Processing: Lots of cleanup
   applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
   {
-    // Unpack the TXT field
-    if (tags.note)
+    // Unpack the TXT field or OSMTAGSX if needed
+    if (tags.note || attrs.OSMTAGS)
     {
+      var tTags = {};
       var tObj = translate.unpackMemo(tags.note);
 
       if (tObj.tags !== '')
       {
-        var tTags = JSON.parse(tObj.tags)
-        for (i in tTags)
+        try
         {
-          // Debug
-          // print('Memo: Add: ' + i + ' = ' + tTags[i]);
-          if (tags[tTags[i]]) hoot.logDebug('Unpacking TXT, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
-          tags[i] = tTags[i];
+          tTags = JSON.parse(tObj.tags);
+        }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags in TXT attribute: ' + tObj.tags);
+        }
+      }
 
-          // Now check if this is a synonym etc. If so, remove the other tag.
-          if (i in mgcp.fcodeLookupOut) // tag -> FCODE table
+      if (attrs.OSMTAGS)
+      {
+        try
+        {
+          var tStr = attrs.OSMTAGS;
+          ['OSMTAGS2','OSMTAGS3','OSMTAGS4'].forEach( item => { if (attrs[item]) tStr = tStr.concat(attrs[item]); });
+
+          var tmp = JSON.parse(tStr);
+          for (var i in tmp)
           {
-            if (tags[i] in mgcp.fcodeLookupOut[i])
-            {
-              var row = mgcp.fcodeLookupOut[i][tags[i]];
+            if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
+            tTags[i] = tmp[i];
+          }
+        }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags from one of the OSMTAGS attributes');
+        }
+      }
 
-              // Now find the "real" tag that comes frm the FCode
-              if (row[1] in mgcp.fcodeLookup['F_CODE'])
+      // Now add the unpacked tags to the main list
+      for (var i in tTags)
+      {
+        // Debug
+        // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+        if (tags[tTags[i]]) hoot.logDebug('Unpacking tags, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+        tags[i] = tTags[i];
+
+        // Now check if this is a synonym etc. If so, remove the other tag.
+        if (i in mgcp.fcodeLookupOut) // tag -> FCODE table
+        {
+          if (tags[i] in mgcp.fcodeLookupOut[i])
+          {
+            var row = mgcp.fcodeLookupOut[i][tags[i]];
+
+            // Now find the "real" tag that comes frm the FCode
+            if (row[1] in mgcp.fcodeLookup['F_CODE'])
+            {
+              var row2 = mgcp.fcodeLookup['F_CODE'][row[1]];
+              // If the tags match, delete it
+              if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
               {
-                var row2 = mgcp.fcodeLookup['F_CODE'][row[1]];
-                // If the tags match, delete it
-                if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
-                {
-                  delete tags[row2[0]];
-                }
+                delete tags[row2[0]];
               }
             }
           }
-        } // End nTags
-      }
+        }
+      } // End nTags
 
       if (tObj.text !== '')
       {
@@ -625,37 +672,41 @@ mgcp = {
     {
       tags.amenity = 'place_of_worship';
 
-      if (tags.building)
+      switch (tags.building)
       {
-        switch (tags.building)
-        {
-          case 'cathedral':
-          case 'chapel':
-          case 'church':
-            tags.religion = 'christian';
-            break;
+        case undefined:
+          break;
 
-          case 'marabout':
-          case 'mosque':
-            tags.religion = 'muslim';
-            break;
+        case 'yes':
+          delete tags.building;
+          break;
 
-          case 'synagogue':
-            tags.religion = 'jewish';
-            break;
+        case 'cathedral':
+        case 'chapel':
+        case 'church':
+          tags.religion = 'christian';
+          break;
 
-          case 'stupa':
-            religion = 'buddhist';
-            break;
+        case 'marabout':
+        case 'mosque':
+          tags.religion = 'muslim';
+          break;
 
-          // In the spec, these don't specify a religion
-          // case 'religious_community':
-          // case 'pagoda':
-          // case 'shrine':
-          // case 'tabernacle':
-          // case 'temple':
-        } // End switch
-      }
+        case 'synagogue':
+          tags.religion = 'jewish';
+          break;
+
+        case 'stupa':
+          religion = 'buddhist';
+          break;
+
+        // In the spec, these don't specify a religion
+        // case 'religious_community':
+        // case 'pagoda':
+        // case 'shrine':
+        // case 'tabernacle':
+        // case 'temple':
+      } // End switch
 
       if (tags['tower:type'] == 'minaret')
       {
@@ -697,16 +748,17 @@ mgcp = {
       ["t['building:religious'] == 'other'","t.amenity = 'religion'"],
       ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
       ["t.control_tower == 'yes'","t['tower:type'] = 'observation'; t.use = 'air_traffic_control'"],
-      ["t['generator:source'] == 'wind'","t.power = 'generator'"],
+      ["t['generator:source']","t.power = 'generator'"],
       ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
       ["t.leisure == 'stadium'","t.building = 'yes'"],
       ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
       ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
-      ["t.public_transport == 'station'","t.bus = 'yes'"],
+      // ["t.public_transport == 'station'","t.bus = 'yes'"],
       ["t.pylon =='yes' && t['cable:type'] == 'power'"," t.power = 'tower'"],
       ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
       ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
-      ["t.water && !(t.natural)","t.natural = 'water'"]
+      ["t.water && !(t.natural)","t.natural = 'water'"],
+      ["t.wetland && !(t.natural)","t.natural = 'wetland'"]
       ];
 
       mgcp.osmPostRules = translate.buildComplexRules(rulesList);
@@ -765,168 +817,230 @@ mgcp = {
         break;
     } // End switch condifion
 
-    // Add 'building = yes' to amenities if we don't already have one
-    // if (tags.amenity && !tags.building)
-    // {
-    //   // Debug:
-    //   // print('Added building');
-    //   // Don't add building=yes to built up areas!
-    //   if (!tags.place) tags.building = 'yes';
-    // }
-
     // if (tags.building == 'train_station' && !tags.railway) tags.railway = 'station';
     // if ('ford' in tags && !tags.highway) tags.highway = 'road';
 
     // Some FCODE specific rules
     switch (attrs.F_CODE)
     {
-      case undefined: // Break early if no value
-        break;
+    case undefined: // Break early if no value
+      break;
 
-      case 'AA050': // Well
-        if (tags.product)
+    case 'AA050': // Well
+      if (tags.product)
+      {
+        tags.substance = tags.product;
+        delete tags.product;
+
+        if (tags.substance == 'oil' || tags.substance == 'gas') tags.man_made = 'petroleum_well';
+        if (tags.substance == 'water' )
         {
-          tags.substance = tags.product;
-          delete tags.product;
-
-          if (tags.substance == 'oil' || tags.substance == 'gas') tags.man_made = 'petroleum_well';
-          if (tags.substance == 'water' )
-          {
-            tags.man_made = 'water_well';
-            delete tags.substance;
-          }
+          tags.man_made = 'water_well';
+          delete tags.substance;
         }
+      }
+      break;
+
+    case 'AA052': // Hydrocarbons Field
+      tags.landuse = 'industrial';
+      break;
+
+    case 'AD010': // Electric Power Plant
+      if (!tags['plant:output:electricity']) tags['plant:output:electricity'] = 'yes';
+      if (!tags.landuse) tags.landuse = 'industrial';
+
+      switch (attrs.PPC)
+      {
+        case undefined:
+          break;
+
+        case '2':
+          tags['plant:method'] = 'fission';
+          break;
+
+        case '5':
+          tags['plant:method'] = 'wind_turbine';
+          break;
+      }
+      break;
+
+
+    case 'AF030': // Cooling Tower
+      if (!tags['tower:type']) tags['tower:type'] = 'cooling';
+      break;
+
+    case 'AH050': // Fortification
+      // Castles are not Bunkers but they get stored in the same layer
+      if (tags.military == 'bunker' && tags.historic == 'castle')
+      {
+        delete tags.military;
+      }
+      else if (!tags.building)
+      {
+        tags.building = 'bunker';
+      }
+      break;
+
+    case 'AK040': // Athletic Field, Sports Ground
+    case 'BA050': // Beach
+    case 'DA010': // Soil Surface Region
+    case 'DB070': // Cut
+      if (tags.material && !tags.surface)
+      {
+        tags.surface = tags.material;
+        delete tags.material;
+      }
+      break;
+
+    case 'AL015': // Building
+      if (tags.surface == 'unknown') delete tags.surface;
+      break;
+
+    case 'AL020': // AL020 (Built-up Area) should become a Place. NOTE: This is a bit vague...
+      tags.place = 'yes'; // Catch All
+
+      switch (tags['place:importance'])
+      {
+        case undefined: // Break early if no value
+          break;
+
+        case 'first':
+          tags.place = 'city';
+          tags.capital = 'yes'
+          break;
+
+        case 'second':
+          tags.place = 'city';
+          break;
+
+        case 'third':
+        case 'fourth':
+          tags.place = 'town';
+          break;
+
+        case 'fifth':
+          tags.place = 'village';
+          break;
+
+        case 'sixth':
+          tags.place = 'hamlet';
+          break;
+      } // End switch
+
+      switch (tags.use) // Fixup the landuse tags
+      {
+        case undefined: // Break early if no value
+          break;
+
+        case 'industrial':
+          tags.landuse = 'industrial';
+          delete tags.use;
+          break;
+
+        case 'commercial':
+          tags.landuse = 'commercial';
+          delete tags.use;
+          break;
+
+        case 'residential':
+          tags.landuse = 'residential';
+          delete tags.use;
+          break;
+      } // End switch
+
+      break;
+
+    case 'AN010':
+      if (attrs.RGC == '6' && attrs.RRC == '0') tags.railway = 'monorail';
+      break;
+
+    // case 'AP010': // Track
+    // case 'AP050': // Trail
+    //     tags.seasonal = 'fair';
+    //     break;
+
+    case 'AP030': // Trail
+        if (tags.highway == 'yes') tags.highway = 'road';
         break;
 
-      case 'AA052': // Hydrocarbons Field
-        tags.landuse = 'industrial';
+    case 'AQ075': // Ice Route
+      if (!tags.highway) tags.highway = 'road';
+      break;
+
+    case 'AQ125': // Transportation Station
+    //   if (tags.amenity == 'ferry_terminal')
+    //   {
+    //     tags['transport:type'] = 'maritime';
+    //     delete tags.bus;
+    //   }
+      if (!tags.amenity && tags['transport:type'] == 'bus')
+      {
+        tags.amenity = 'bus_station';
+        delete tags['transport:type'];
+      }
+      break;
+
+    // BA040 - Tidal Water
+    case 'BA040':
+      tags.natural = 'water';
+      break;
+
+    // BB190 - Berthing Structure
+    case 'BB190':
+      if (tags.waterway == 'dock' && tags.man_made == 'berthing_structure') delete tags.man_made;
+      break;
+
+    // BD180 - Wreck
+    case 'BD180':
+      if (!tags['seamark:type']) tags['seamark:type'] = 'wreck';
+      break;
+
+    // case 'BH070': // Ford
+    //   // Fords are also supposed to be roads
+    //   if (geometryType == 'Line' && !tags.highway) tags.highway = 'road';
+    //   break;
+
+    case 'BH140': // River
+      if (tags['channel:type'] == 'normal') delete tags['channel:type']; // Default value
+      if (tags.tidal == 'no') delete tags.tidal; // Default value
+
+      // Different translation for area rivers
+      if (geometryType == 'Area')
+      {
+        if (!tags.natural) tags.natural = 'water';
+        if (!tags.water) tags.water = 'river';
+        delete tags.waterway;
         break;
+      }
+      if (geometryType == 'Line')
+      {
+        if (tags.natural == 'water') delete tags.natural;
+        if (tags.water == 'river') delete tags.water;
+      }
+      break;
 
-      case 'AF030': // Cooling Tower
-        if (!tags['tower:type']) tags['tower:type'] = 'cooling';
-        break;
+    case 'ED030': // Mangrove Swamp
+      if (!tags.tidal) tags.tidal = 'yes';
+      break;
 
-      case 'AL013': // Building  NOTE this is the TDS F_CODE for Building. This was swapped during pre-processing
-        if (tags.surface == 'unknown') delete tags.surface;
-        break;
+    // EC030 - Wood
+    case 'EC030':
+      if (geometryType == 'Line')
+      {
+        delete tags.landuse; // Default EC030 translation
+        tags.natural = 'tree_row';
+      }
+      break;
 
-      case 'AL020': // AL020 (Built-up Area) should become a Place. NOTE: This is a bit vague...
-        tags.place = 'yes'; // Catch All
+    case 'FA015': // Firing Range
+      if (! tags.landuse) tags.landuse = 'military';
+      break;
 
-        switch (tags['place:importance'])
-        {
-          case undefined: // Break early if no value
-            break;
+    case 'GB485': // Approach Lighting System
+      tags.navigationaid = 'als';
+      break;
 
-          case 'first':
-            tags.place = 'city';
-            tags.capital = 'yes'
-            break;
-
-          case 'second':
-            tags.place = 'city';
-            break;
-
-          case 'third':
-          case 'fourth':
-            tags.place = 'town';
-            break;
-
-          case 'fifth':
-            tags.place = 'village';
-            break;
-
-          case 'sixth':
-            tags.place = 'hamlet';
-            break;
-        } // End switch
-
-        switch (tags.use) // Fixup the landuse tags
-        {
-          case undefined: // Break early if no value
-            break;
-
-          case 'industrial':
-            tags.landuse = 'industrial';
-            delete tags.use;
-            break;
-
-          case 'commercial':
-            tags.landuse = 'commercial';
-            delete tags.use;
-            break;
-
-          case 'residential':
-            tags.landuse = 'residential';
-            delete tags.use;
-            break;
-        } // End switch
-
-        break;
-
-      case 'AQ125': // Transportation Station
-        if (tags.amenity == 'ferry_terminal')
-        {
-          attrs.TRS = '7';
-          if (tags.bus) delete tags.bus;
-        }
-        break;
-
-      case 'BH070': // Ford
-        // Fords are also supposed to be roads
-        if (geometryType == 'Line' && !tags.highway) tags.highway = 'road';
-        break;
-
-      case 'GB485': // Approach Lighting System
-        tags.navigationaid = 'als';
-        break;
-
-      case 'AH050': // Fortification
-        // Castles are not Bunkers but they get stored in the same layer
-        if (tags.military == 'bunker' && tags.historic == 'castle') delete tags.military;
-        break;
-
-      // BA040 - Tidal Water
-      case 'BA040':
-        tags.natural = 'water';
-        break;
-
-      // EC030 - Wood
-      case 'EC030':
-        if (geometryType == 'Line')
-        {
-          delete tags.landuse; // Default EC030 translation
-          tags.natural = 'tree_row';
-        }
-        break;
     } // End switch FCODE
-
-    // Sort out TRS (Transport Type)
-    switch (attrs.TRS)
-    {
-      case undefined:
-        break;
-
-      case '9': // Pedestrian
-        // NOTE: This _might_ be a path: AP050 (Trail)
-        if (!tags.highway) tags.highway = 'track';
-        break;
-
-      case '12': // Railway
-        if (!tags.railway) tags.railway = 'rail';
-        break;
-
-      case '3': // TRD3 'Automotive'
-      case '4': // Bus
-      case '13': // Road
-        if (!tags.highway) tags.highway = 'road';
-        break;
-
-      case '14': // Road and Railway. This might be ugly....
-        if (!tags.highway) tags.highway = 'road';
-        if (!tags.railway) tags.railway = 'rail';
-        break;
-    } // End switch TRS
 
     // Content vs Product for storage tanks
     if (tags.product && tags.man_made == 'storage_tank')
@@ -959,17 +1073,16 @@ mgcp = {
       // print('Adding area=yes');
       tags.area = 'yes';
     }
-
   }, // End of applyToOsmPostProcessing
 
   // ##### Start of the xxToOgrxx Block #####
   applyToOgrPreProcessing: function(tags, attrs, geometryType)
   {
     // Remove Hoot assigned tags for the source of the data
-    if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-    if (tags.area) delete tags.area;
-    if (tags['error:circular']) delete tags['error:circular'];
-    if (tags['hoot:status']) delete tags['hoot:status'];
+    delete tags['source:ingest:datetime'];
+    delete tags.area;
+    delete tags['error:circular'];
+    delete tags['hoot:status'];
 
     // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
     // We need to unpack this before we can do anything.
@@ -1106,6 +1219,12 @@ mgcp = {
         break;
     } // End highway
 
+    // Ice roads are a special case.
+    if (tags.ice_road == 'yes')
+    {
+      attrs.F_CODE = 'AQ075';
+      if (tags.highway == 'road') delete tags.highway;
+    }
 
     if (mgcp.mgcpPreRules == undefined)
     {
@@ -1115,17 +1234,18 @@ mgcp = {
       ["t.amenity == 'ferry_terminal'","t['transport:type'] = 'maritime'"],
       ["t.aeroway == 'navigationaid' && t.navigationaid","delete t.navigationaid"],
       ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
+      ["t.bus == 'yes'","t['transport:type'] = 'bus'"],
       ["t.communication == 'line'","t['cable:type'] = 'communication'"],
       // ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
       // ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
       ["t.content && !(t.product)","t.product = t.content; delete t.content"],
-      ["t.landuse == 'railway' && t['railway:yard'] == 'marshalling_yard'","a.F_CODE = 'AN060'"],
       ["t.leisure == 'stadium' && t.building","delete t.building"],
       ["t.man_made && t.building == 'yes'","delete t.building"],
       ["t.man_made == 'water_tower'","a.F_CODE = 'AL241'"],
+      ["t.military == 'bunker' && t.building == 'bunker'","delete t.building"],
       ["t.natural == 'sinkhole'","a.F_CODE = 'BH145'; t['water:sink:type'] = 'disappearing'; delete t.natural"],
       ["t.natural == 'spring' && !(t['spring:type'])","t['spring:type'] = 'spring'"],
-      ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],
+      // ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],
       //["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
       ["t.power == 'tower'","t['cable:type'] = 'power'; t.pylon = 'yes'; delete t.power"],
       ["t.rapids == 'yes'","t.waterway = 'rapids'"],
@@ -1134,8 +1254,6 @@ mgcp = {
       // ["(t.shop || t.office) && !(t.building)","a.F_CODE = 'AL015'"],
       ["t.tourism == 'information' && t.information","delete t.tourism"],
       ["t.tunnel == 'building_passage'","t.tunnel = 'yes'"],
-      ["t.water == 'pond'","a.F_CODE = 'BH170'; t.natural = 'other_pool_type'"],
-      ["t.water == 'river'","t.waterway = 'river'"],
       ["t.waterway == 'riverbank'","t.waterway = 'river'"],
       ["t.wetland && t.natural == 'wetland'","delete t.natural"]
       ];
@@ -1194,8 +1312,12 @@ mgcp = {
         switch (tags.industrial)
         {
           case undefined: // Built up Area
-            tags.use = 'industrial';
-            tags.landuse = 'built_up_area';
+            if (!tags.power)
+            {
+              tags.use = 'industrial';
+              tags.landuse = 'built_up_area';
+            }
+
             break;
 
           case 'oil':
@@ -1217,7 +1339,16 @@ mgcp = {
         break;
 
       case 'military':
-        tags.military = 'installation';
+        if (tags.military !== 'range') tags.military = 'installation';
+        delete tags.landuse;
+        break;
+
+      case 'railway':
+        if (tags['railway:yard'] == 'marshalling_yard') attrs.F_CODE = 'AN060';
+        break;
+
+      case 'reservoir':
+        tags.water = 'reservoir';
         delete tags.landuse;
         break;
 
@@ -1225,22 +1356,28 @@ mgcp = {
         tags.use = 'residential';
         tags.landuse = 'built_up_area';
         break;
-    } // End switch landuse
 
+      case 'scrub':
+        tags.natural = 'scrub';
+        delete tags.landuse;
+        break;
+    } // End switch landuse
 
     // Fix up OSM 'walls' around facilities
     if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')
     {
-      if (tags.landuse == 'military' || tags.military)
-      {
-        attrs.F_CODE = 'SU001'; // Military Installation
-      }
-      else
-      {
-        attrs.F_CODE = 'AL010'; // Facility
-      }
+      if (tags.landuse == 'military' || tags.military) attrs.F_CODE = 'SU001'; // Military Installation
+    }
 
-      delete tags.barrier; // Take away the walls...
+    // Wind Turbines, Solar Panels etc  vs power plants
+    if (tags['generator:source'])
+    {
+      delete tags.power;
+    }
+    else if (tags.power == 'generator')
+    {
+      attrs.F_CODE = 'AL015';
+      tags.use = 'power_generation';
     }
 
     // Going out on a limb and processing OSM specific tags:
@@ -1256,7 +1393,7 @@ mgcp = {
         attrs.F_CODE = 'AL010'; // Facility
 
         // If the user has also set a building tag, delete it
-        if (tags.building) delete tags.building;
+        delete tags.building;
       }
       else
       {
@@ -1273,6 +1410,14 @@ mgcp = {
       tags.facility = 'processing';
 
       if (tags.product == 'unknown') delete tags.product;
+    }
+
+  // Fix up bus stations
+    if (tags.amenity == 'bus_station')
+    {
+      delete tags.amenity;
+      attrs.F_CODE = 'AQ125';
+      tags['transport:type'] = 'bus';
     }
 
     // More facilities
@@ -1315,6 +1460,28 @@ mgcp = {
       }
     }
   */
+
+    // Moved these out og the complex rules to help with BH090 vs other things
+    switch (tags.water)
+    {
+      case undefined:
+        break;
+
+      case 'intermittent':
+        attrs.F_CODE = 'BH090'; // Old tag for Land Subject to inundation
+        delete tags.water;
+        break;
+
+      case 'river':
+        tags.waterway = 'river';
+        delete tags.water;
+        break;
+
+      case 'pond':
+        attrs.F_CODE = 'BH170';
+        tags.natural = 'other_pool_type';
+        break;
+    } // End Water
 
     // Places, localities and regions
     switch (tags.place)
@@ -1425,7 +1592,7 @@ mgcp = {
     }
 
     // Sort out tidal features
-    if (tags.tidal && (tags.water || tags.waterway))
+    if (tags.tidal && (tags.water || tags.waterway || tags.wetland))
     {
       if (tags.tidal == 'yes') attrs.TID = '1001'; // Tidal
       if (tags.tidal == 'no') attrs.TID = '1000'; // non-Tidal
@@ -1481,9 +1648,6 @@ mgcp = {
     // if (tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
     if (!(attrs.F_CODE) && !(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL015';
 
-    // The FCODE for Buildings changed...
-    if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
-
     // Tag changed
     if (tags.vertical_obstruction_identifier)
     {
@@ -1491,13 +1655,24 @@ mgcp = {
       delete tags.vertical_obstruction_identifier;
     }
 
+    // Surface vs Material
+    // Deconflict based on F_CODE for Sports Ground, Beach, Soil Surface Region & Cut
+    if (tags.surface && ['AK040','BA050','DA010','DB070'].indexOf(attrs.F_CODE) > -1)
+    {
+      if (!tags.material) // Defensive
+      {
+        tags.material = tags.surface;
+        delete tags.surface;
+      }
+    }
+
     // Soil Surface Regions
-    if (! attrs.F_CODE)
+    if (!attrs.F_CODE)
     {
       if (tags.surface)
       {
         attrs.F_CODE = 'DA010'; // Soil Surface Region
-        if (! tags.material)
+        if (!tags.material)
         {
           tags.material = tags.surface;
           delete tags.surface;
@@ -1652,7 +1827,7 @@ mgcp = {
       var fcodeMap = {
         'highway':'AP030','railway':'AN010','building':'AL015',
         'ford':'BH070','waterway':'BH140','bridge':'AQ040','tomb':'AL036',
-        'railway:in_road':'AN010','tourism':'AL013','mine:access':'AA010',
+        'railway:in_road':'AN010','tourism':'AL015','mine:access':'AA010',
         'cutting':'DB070','shop':'AL015','office':'AL015'
       };
 
@@ -1683,46 +1858,28 @@ mgcp = {
       if (mgcp.configOut.OgrAddUuid == 'true') attrs.UID = createUuid().replace('{','').replace('}','');
     }
 
+    // The follwing bit of ugly code is to account for the specs haveing two different attributes
+    // with similar names and roughly the same attributes. Bleah!
+    if (mgcp.rules.swapListOut[attrs.F_CODE])
+    {
+      for (var i in mgcp.rules.swapListOut[attrs.F_CODE])
+      {
+        if (i in attrs)
+        {
+          attrs[mgcp.rules.swapListOut[attrs.F_CODE][i]] = attrs[i];
+          delete attrs[i];
+        }
+      }
+    }
+
     // Default railway
     // if (attrs.F_CODE == 'AN010' && tags.railway == 'yes') attrs.RRC = '0';
 
     // Not a great fit
-    if (tags.public_transportation == 'station' && tags.bus == 'yes') attrs.FFN = '481';
+    if (tags.public_transport == 'station' && tags.bus == 'yes') attrs.FFN = '481';
 
     // Mapping Senior Citizens home to Accomodation. Not great
     if (tags.amenity == 'social_facility' && tags['social_facility:for'] == 'senior') attrs.FFN = 550;
-
-    // These FCODES have "No prescribed attributes" in TRDv40
-    // Therefore:
-    // - clean up the the attrs
-    // - JSON the tags and stick them in a text field
-    var noAttrList = [ 'AJ010','AJ030','AK170','AL019','AL070','AL099','AN076',
-               'BD100','BD180','BH165','BI010','BJ020','BJ031','BJ110',
-               'DB061','DB071','DB100',
-               'EA020','EA055','EC010','EC040','EC060',
-               'FA090',
-               'GB050',
-               'ZD020',
-             ];
-
-    if (noAttrList.indexOf(attrs.F_CODE) !== -1)
-    {
-      // The metadata tags to skip
-      var skipTags = ['F_CODE','ACC','TXT','UID','SDV','SDP','CCN','SRT'];
-      var tmpAttrs = {};
-
-      for (var i in attrs)
-      {
-        // Skip the metadata tags, save the others, then delete them
-        // from the main list of attrs
-        if (skipTags.indexOf(i) == -1)
-        {
-          tmpAttrs[i] = attrs[i];
-          delete attrs[i];
-        }
-      }
-      attrs.TEXT = JSON.stringify(tmpAttrs);
-    }
 
     // Add Weather Restrictions to transportation features
     if (['AP010','AP030','AP050'].indexOf(attrs.FCODE > -1) && !attrs.WTC )
@@ -1762,17 +1919,31 @@ mgcp = {
       case undefined: // Break early if no value
         break;
 
+      case 'AA050': // Well
+        if (attrs.PPO && attrs.PPO !== '0' && attrs.PPO !== '122')
+        {
+          if (!attrs.HYP) attrs.HYP = '998'; // Not Applicable for non-water wells
+          if (!attrs.SCC) attrs.SCC = '998'; // Not Applicable for non-water wells
+        }
+        break;
+
+      case 'AD010': // Electric Power Plants
+        if (notUsedTags['plant:output:electricity'] == 'yes') delete notUsedTags['plant:output:electricity'];
+        if (notUsedTags.landuse == 'industrial') delete notUsedTags.landuse;
+        if (notUsedTags['plant:method']) delete notUsedTags['plant:method'];
+        break;
+
       case 'AJ085': // Barn: Valid NFDD/NAS FCODE but not in the MGCP spec
         attrs.F_CODE = 'AL015'; // Barns are Buildings
         break;
 
-      case 'AK040': // Athletic Field, Sports Ground
-        if (attrs.MCC)
-        {
-          attrs.SMC = attrs.MCC;
-          delete attrs.MCC;
-        }
-        break;
+      // case 'AK040': // Athletic Field, Sports Ground
+      //   if (attrs.MCC)
+      //   {
+      //     attrs.SMC = attrs.MCC;
+      //     delete attrs.MCC;
+      //   }
+      //   break;
 
       case 'AL015': // General Building
         // Unknown House of Worship
@@ -1800,18 +1971,35 @@ mgcp = {
 
       case 'AL020': // Built-up Area
         // Allowed values for FUC
-        if (['0','1','2','4','19','999'].indexOf(attrs['FUC']) < 0) attrs.FUC = '999';
+        if (attrs.FUC && ['0','1','2','4','19','999'].indexOf(attrs.FUC) < 0) attrs.FUC = '999';
         break;
 
       case 'AL105': // Settlement
         // Allowed values for FUC
-        if (['0','4','8','19','999'].indexOf(attrs['FUC']) < 0) attrs.FUC = '999';
+        if (attrs.FUC && ['0','4','8','19','999'].indexOf(attrs.FUC) < 0) attrs.FUC = '999';
         break;
 
       case 'AN010': // Railway
         if (tags.bridge) attrs.LOC = '45'; // Above Surface
         if (tags.tunnel) attrs.LOC = '40'; // Below Surface
         if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
+        if (tags.railway == 'rail') delete attrs.RRC; // Avoid sending RRC=0 when it is "unknown"
+
+        break;
+
+      // case 'AP010': // Cart Track
+      //   if (attrs.WID && !attrs.WD1)
+      //   {
+      //     attrs.WD1 = attrs.WID;
+      //     delete attrs.WID;
+      //   }
+      //   break;
+
+      case 'AP030': // Road
+        if (tags.bridge) attrs.LOC = '45'; // Above Surface
+        if (tags.tunnel) attrs.LOC = '40'; // Below Surface
+        if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
+        if (attrs.RST == '6') attrs.RST = '2'; // Move 'ground' to 'unpaved'
 
         // Single lane roads dont have a median and are not separated
         // NOTE: This could cause problems
@@ -1819,26 +2007,6 @@ mgcp = {
         {
           attrs.SEP = '1000';
           attrs.MES = '1000';
-        }
-        break;
-
-      case 'AP010': // Cart Track
-        if (attrs.WID && ! attrs.WD1)
-        {
-          attrs.WD1 = attrs.WID;
-          delete attrs.WID;
-        }
-        break;
-
-      case 'AP030': // Road
-        if (tags.bridge) attrs.LOC = '45'; // Above Surface
-        if (tags.tunnel) attrs.LOC = '40'; // Below Surface
-        if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
-        if (attrs.RST == '6') attrs.RST = '2'; // Move 'ground' to 'unpaved'
-        if (attrs.WID && ! attrs.WD1)
-        {
-          attrs.WD1 = attrs.WID;
-          delete attrs.WID;
         }
         break;
 
@@ -1862,36 +2030,25 @@ mgcp = {
         if (geometryType == 'Point') attrs.F_CODE = 'AL015'; // Parking Garage Building
         break;
 
-      case 'BA050': // Beach
-        if (attrs.MCC)
-        {
-          attrs.SMC = attrs.MCC;
-          delete attrs.MCC;
-        }
+      case 'AT060': // Communications Cable
+        // Drop these since the F_CODE does not have them and validate will try to re-add them
+        delete attrs.CAB;
+        delete notUsedTags.cable;
         break;
 
-      case 'DA010': // Soil Surface Area
-        if (attrs.MCC)
-        {
-          attrs.SMC = attrs.MCC;
-          delete attrs.MCC;
-        }
+      case 'BA040': // Tidal Water
+        // It's tidal so we don't need to store this
+        delete attrs.TID;
         break;
 
-      case 'DB010': // Bluff/Cliff/Escarpment
-        if (attrs.MCC)
-        {
-          attrs.SMC = attrs.MCC;
-          delete attrs.MCC;
-        }
+      case 'BD180': // BA040 - Tidal Water
+        if (notUsedTags['seamark:type'] == 'wreck') delete notUsedTags['seamark:type'];
         break;
 
-      case 'DB070': // Cut
-        if (attrs.MCC)
-        {
-          attrs.SMC = attrs.MCC;
-          delete attrs.MCC;
-        }
+      case 'BH140': // River
+        if (!attrs.WCC) attrs.WCC = '7'; // Normal Channel
+        if (!attrs.TID) attrs.TID = '1000'; // Not tidal
+        if (!attrs.WST) attrs.WST = '998'; // Vanishing point - Not Applicable
         break;
 
       case 'DB090': // Embankment
@@ -1900,10 +2057,10 @@ mgcp = {
         {
           attrs.FIC = '2'; // Fill
         }
-        else
-        {
-          attrs.FIC = '1'; // Mound
-        }
+        // else
+        // {
+        //   attrs.FIC = '1'; // Mound
+        // }
         break;
 
       case 'EA010': // Crop Land
@@ -2016,9 +2173,9 @@ mgcp = {
     if (mgcp.configIn == undefined)
     {
       mgcp.configIn = {};
+      mgcp.configIn.OgrAddUuid = config.getOgrAddUuid();
       mgcp.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
       mgcp.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
-      mgcp.configIn.OgrAddUuid = config.getOgrAddUuid();
 
       // Get any changes
       mgcp.toChange = hoot.Settings.get("schema.translation.override");
@@ -2047,7 +2204,6 @@ mgcp = {
         print('');
       }
 
-
       return tags;
     } // End layername = o2s_X
 
@@ -2058,7 +2214,8 @@ mgcp = {
       // First the MGCPv3 & 4 FCODES, then the common ones. This ensures that the common ones don't
       // stomp on the other ones
       mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,mgcp.rules.fcodeOne2oneInV3);
-      mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,fcodeCommon.one2one);
+
+      fcodeCommon.one2one.forEach( function(item) { if (~mgcp.rules.fcodeList.indexOf(item[1])) mgcp.rules.fcodeOne2oneV4.push(item); });
 
       mgcp.fcodeLookup = translate.createLookup(mgcp.rules.fcodeOne2oneV4);
 
@@ -2094,6 +2251,9 @@ mgcp = {
       for (var i in mgcp.rules.numBiasedV4) mgcp.rules.numBiased[i] = mgcp.rules.numBiasedV4[i];
       for (var i in mgcp.rules.numBiasedV3) mgcp.rules.numBiased[i] = mgcp.rules.numBiasedV3[i];
     }
+
+    // Clean out the usless values
+    mgcp.cleanAttrs(attrs);
 
     // Untangle MGCP attributes & OSM tags
     // NOTE: This could get wrapped with an ENV variable so it only gets called during import
@@ -2182,11 +2342,11 @@ mgcp = {
     if (mgcp.configOut == undefined)
     {
       mgcp.configOut = {};
-      mgcp.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
-      mgcp.configOut.OgrNoteExtra = config.getOgrNoteExtra();
-      mgcp.configOut.OgrFormat = config.getOgrOutputFormat();
-      mgcp.configOut.OgrThrowError = config.getOgrThrowError();
       mgcp.configOut.OgrAddUuid = config.getOgrAddUuid();
+      mgcp.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
+      mgcp.configOut.OgrFormat = config.getOgrOutputFormat();
+      mgcp.configOut.OgrNoteExtra = config.getOgrNoteExtra();
+      mgcp.configOut.OgrThrowError = config.getOgrThrowError();
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon
@@ -2215,10 +2375,9 @@ mgcp = {
     {
 
       // Order is important:
-      // First the MGCPv4 FCODES, then the common ones. This ensures that the common ones don't
-      // stomp on the V4 ones
-      // mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,mgcp.rules.fcodeOne2oneOut);
-      mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,fcodeCommon.one2one);
+      // Start with the TRD4 specific FCODES and then add the valid MGCP ones from the common list
+      fcodeCommon.one2one.forEach( function(item) { if (~mgcp.rules.fcodeList.indexOf(item[1])) mgcp.rules.fcodeOne2oneV4.push(item); });
+
       mgcp.fcodeLookup = translate.createBackwardsLookup(mgcp.rules.fcodeOne2oneV4);
 
       // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
@@ -2245,15 +2404,16 @@ mgcp = {
 
     // pre processing
     mgcp.applyToOgrPreProcessing(tags, attrs, geometryType);
+if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'Tags after PreProc: ');
 
     // Make a copy of the input tags so we can remove them as they get translated. What is left is
     // the not used tags
     // not in v8 yet: // var tTags = Object.assign({},tags);
     var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
-    if (notUsedTags.hoot) delete notUsedTags.hoot; // Added by the UI
+    delete notUsedTags.hoot; // Added by the UI
     // Debug info. We use this in postprocessing via "tags"
-    if (notUsedTags['hoot:id']) delete notUsedTags['hoot:id'];
+    delete notUsedTags['hoot:id'];
 
     // apply the simple number and text biased rules
     translate.numToOgr(attrs, notUsedTags, mgcp.rules.numBiasedV4,mgcp.rules.intList,transMap);
@@ -2261,6 +2421,8 @@ mgcp = {
 
     // one 2 one
     translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup, transMap);
+
+if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'After one2one: Not used: ');
 
     // post processing
     // mgcp.applyToOgrPostProcessing(attrs, tableName, geometryType);
@@ -2276,7 +2438,10 @@ mgcp = {
     // Now check for invalid feature geometry
     // E.g. If the spec says a runway is a polygon and we have a line, throw error and
     // push the feature to the o2s layer
-    if (mgcp.layerNameLookup[tableName])
+
+    // Change this back if we need to change the lookup table
+    // if (mgcp.rules.layerNameLookup[tableName])
+    if (mgcp.rules.layerNameLookup.includes(tableName))
     {
       // Check if we need to return more than one feature
       // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
@@ -2293,20 +2458,36 @@ mgcp = {
         // Now make sure that we have a valid feature _before_ trying to validate and jam it into the list of
         // features to return
         var gFcode = gType + returnData[i]['attrs']['FCODE'];
-        if (mgcp.layerNameLookup[gFcode.toUpperCase()])
+
+        // Change this back if we need to change the lookup table
+        // if (mgcp.rules.layerNameLookup[gFcode.toUpperCase()])
+        if (mgcp.rules.layerNameLookup.includes(gFcode.toUpperCase()))
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
           mgcp.validateAttrs(geometryType,returnData[i]['attrs'],notUsedTags,transMap);
 
-          // If we have unused tags, add them to the TXT field
-          // NOTE: We are not checking if this is longer than 255 characters
+          // If we have unused tags, store them
           if (Object.keys(notUsedTags).length > 0 && mgcp.configOut.OgrNoteExtra == 'attribute')
           {
-            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            attrs.TXT = translate.appendValue(attrs.TXT,tStr,';');
-          }
+            // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+            // returnData[i]['attrs']['TXT'] = translate.appendValue(returnData[i]['attrs']['TXT'],tStr,';');
 
-          returnData[i]['tableName'] = mgcp.layerNameLookup[gFcode.toUpperCase()];
+            var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
+            if (mgcp.configOut.OgrFormat == 'shp')
+            {
+              returnData[i]['attrs']['OSMTAGS'] = str.substring(0,225);
+              returnData[i]['attrs']['OSMTAGS2'] = str.substring(225,450);
+              returnData[i]['attrs']['OSMTAGS3'] = str.substring(450,675);
+              returnData[i]['attrs']['OSMTAGS4'] = str.substring(675,900);
+            }
+            else
+            {
+              returnData[i]['attrs']['OSMTAGS'] = str;
+            }
+          }
+        // Change this back if we need to change the lookup table
+          // returnData[i]['tableName'] = mgcp.rules.layerNameLookup[gFcode.toUpperCase()];
+          returnData[i]['tableName'] = gFcode.toUpperCase();
         }
         else
         {
@@ -2390,14 +2571,14 @@ mgcp = {
       if (mgcp.configOut.OgrFormat == 'shp')
       {
         // Throw a warning that text will get truncated.
-        if (str.length > 1012) hoot.logWarn('o2s tags truncated to fit in available space.');
+        if (str.length > 900) hoot.logWarn('o2s tags truncated to fit in available space.');
 
         // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
         // which means that it returns an empty string.
-        attrs = {tag1:str.substring(0,253),
-          tag2:str.substring(253,506),
-          tag3:str.substring(506,759),
-          tag4:str.substring(759,1012)};
+        attrs = {tag1:str.substring(0,225),
+          tag2:str.substring(225,450),
+          tag3:str.substring(450,675),
+          tag4:str.substring(675,900)};
       }
       else
       {

@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ImplicitTagEligiblePoiPolyCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QStringBuilder>
@@ -40,7 +40,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, ImplicitTagEligiblePoiPolyCriterion)
 
 bool ImplicitTagEligiblePoiPolyCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return e->getTags().getNames().size() > 0 && hasEligibleKvp(e->getTags());
+  return !e->getTags().getNames().empty() && hasEligibleKvp(e->getTags());
 }
 
 QStringList ImplicitTagEligiblePoiPolyCriterion::getEligibleKvps(const Tags& tags) const

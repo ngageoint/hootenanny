@@ -19,21 +19,21 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ToEnglishDictionaryTranslator.h"
 
 // Hoot
+#include <hoot/core/conflate/address/Address.h>
 #include <hoot/core/language/ToEnglishTranslateDictionary.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/conflate/address/Address.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QMap>
@@ -67,7 +67,7 @@ QString ToEnglishDictionaryTranslator::translate(const QString& textToTranslate)
   return toEnglish(textToTranslate, _tokenizeInput);
 }
 
-QString ToEnglishDictionaryTranslator::toEnglish(const QString& input, const bool tokenize)
+QString ToEnglishDictionaryTranslator::toEnglish(const QString& input, const bool tokenize) const
 {
   LOG_TRACE("Translating: " << input << " to English...");
 
@@ -116,7 +116,7 @@ QStringList ToEnglishDictionaryTranslator::toEnglishAll(const QStringList& l)
 {
   LOG_VART(l);
   QStringList result;
-  if (l.size() == 0)
+  if (l.empty())
   {
     return result;
   }
@@ -172,7 +172,7 @@ QStringList ToEnglishDictionaryTranslator::toEnglishAll(const QStringList& l)
 
   QStringList children = toEnglishAll(l.mid(biggestMatchSize));
   LOG_VART(children);
-  if (children.size() == 0)
+  if (children.empty())
   {
     result = biggestMatch;
   }
@@ -198,12 +198,12 @@ QStringList ToEnglishDictionaryTranslator::toEnglishAll(const QStringList& l)
   return result;
 }
 
-QString ToEnglishDictionaryTranslator::toTitleCase(const QString& input)
+QString ToEnglishDictionaryTranslator::toTitleCase(const QString& input) const
 {
   return _transform(ToEnglishTranslateDictionary::getInstance().getTitler(), input);
 }
 
-QString ToEnglishDictionaryTranslator::translateStreet(const QString& input)
+QString ToEnglishDictionaryTranslator::translateStreet(const QString& input) const
 {
   QStringList l = input.split(_whiteSpace, QString::SkipEmptyParts);
 
@@ -222,7 +222,7 @@ QString ToEnglishDictionaryTranslator::translateStreet(const QString& input)
     }
   }
 
-  if (l.size() > 0 && _streetTypes.contains(l[0]))
+  if (!l.empty() && _streetTypes.contains(l[0]))
   {
     QString first = l[0];
     l.removeFirst();
@@ -234,7 +234,7 @@ QString ToEnglishDictionaryTranslator::translateStreet(const QString& input)
   return toTitleCase(result);
 }
 
-QString ToEnglishDictionaryTranslator::transliterateToLatin(const QString& input)
+QString ToEnglishDictionaryTranslator::transliterateToLatin(const QString& input) const
 {
   // cache incoming requests -- we sometimes get a lot of duplicates.
   QString result;

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef DIRECTIONFINDER_H
 #define DIRECTIONFINDER_H
@@ -37,13 +37,15 @@ class DirectionFinder
 public:
 
   /**
-   * Returns true if these lines are generally pointed in a similar direction.
+   * @brief isSimilarDirection returns true if these lines are generally pointed in a similar
+   * direction.
    */
-  static bool isSimilarDirection(const hoot::ConstOsmMapPtr& map, hoot::ConstWayPtr w1,
-    hoot::ConstWayPtr w2);
+  static bool isSimilarDirection(
+    const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2);
 
   /**
-   * Returns true if these lines are generally pointed in a similar direction.
+   * @brief isSimilarDirection2 Returns true if these lines are generally pointed in a similar
+   * direction.
    *
    * This is an alternative implementation written for Attribute Conflation, which may possibly
    * replace the original at some point after extensive testing.
@@ -53,9 +55,10 @@ public:
    * @param way2 the second way to compare direction for
    * @return true if both ways are running in a similar direction; false otherwise
    * @see direction.finder.angle.threshold
+   * @todo After recent fixes, we may be able to have Attribute Conflation switch back to the
+   * original isSimilarDirection implementation.
    */
-  static bool isSimilarDirection2(const hoot::ConstOsmMapPtr& map, hoot::ConstWayPtr way1,
-    hoot::ConstWayPtr way2);
+  static bool isSimilarDirection2(const ConstOsmMapPtr& map, ConstWayPtr way1, ConstWayPtr way2);
 
 private:
 

@@ -19,17 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RelationWithRiverMembersCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/RiverCriterion.h>
 
 namespace hoot
 {
@@ -43,12 +43,12 @@ RelationWithMembersOfTypeCriterion()
 
 QString RelationWithRiverMembersCriterion::getCriterion() const
 {
-  return LinearWaterwayCriterion::className();
+  return RiverCriterion::className();
 }
 
 GeometryTypeCriterion::GeometryType RelationWithRiverMembersCriterion::getGeometryType() const
 {
-  return LinearWaterwayCriterion().getGeometryType();
+  return RiverCriterion().getGeometryType();
 }
 
 }

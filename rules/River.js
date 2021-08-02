@@ -4,9 +4,13 @@
 
 "use strict";
 
-exports.description = "Matches linear waterways";
+// Much like road conflation covers everything from dirt paths to interstates, this script,
+// although labeled as "river", covers everything from rivers to creeks, etc....basically any
+// linear waterway.
+
+exports.description = "Matches rivers";
 exports.experimental = false;
-exports.baseFeatureType = "Waterway";
+exports.baseFeatureType = "River";
 exports.geometryType = "line";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
@@ -17,25 +21,20 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
-exports.nameThreshold = parseFloat(hoot.get("waterway.name.threshold"));
-exports.typeThreshold = parseFloat(hoot.get("waterway.type.threshold"));
+exports.nameThreshold = parseFloat(hoot.get("river.name.threshold"));
+exports.typeThreshold = parseFloat(hoot.get("river.type.threshold"));
 
-// This is needed for disabling superfluous conflate ops. In the future, it may also
-// be used to replace exports.isMatchCandidate (see #3047). 
-exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion";
+// This is needed for disabling superfluous conflate ops and calculating a search radius only.
+// exports.isMatchCandidate handles culling match candidates.
+exports.matchCandidateCriterion = "hoot::RiverCriterion";
 
 // used during subline matching
-var sublineMatcherName = hoot.get("waterway.subline.matcher");
-var sublineMatcher; // default subline matcher; gets set up in calculateSearchRadius function
-var frechetSublineMatcher = // we'll switch over to this one if the default matcher runs too slowly
-  new hoot.MaximalSublineStringMatcher(
-    { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
-      "way.subline.matcher": "hoot::FrechetSublineMatcher" }); 
+var sublineStringMatcher; // gets set up in calculateSearchRadius function
 
 var sampledAngleHistogramExtractor =
   new hoot.SampledAngleHistogramExtractor(
-    { "way.angle.sample.distance" : hoot.get("waterway.angle.sample.distance"),
-      "way.matcher.heading.delta" : hoot.get("waterway.matcher.heading.delta"),
+    { "way.angle.sample.distance" : hoot.get("river.angle.sample.distance"),
+      "way.matcher.heading.delta" : hoot.get("river.matcher.heading.delta"),
       "angle.histogram.extractor.process.relations" : "false" });
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 var nameExtractor = new hoot.NameExtractor(
@@ -45,47 +44,30 @@ var nameExtractor = new hoot.NameExtractor(
     { "translate.string.distance.tokenize": "false" },
     new hoot.LevenshteinDistance( { "levenshtein.distance.alpha": 1.15 } )));
 
-var mergeOptionsConfigured = false;
-
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
  */
 exports.calculateSearchRadius = function(map)
 {
-  var autoCalcSearchRadius = (hoot.get("waterway.auto.calc.search.radius") === 'true');
+  var autoCalcSearchRadius = (hoot.get("river.auto.calc.search.radius") === 'true');
   if (autoCalcSearchRadius)
   {
-    hoot.log("Calculating search radius for waterway conflation...");
+    hoot.log("Calculating search radius for river conflation...");
     exports.searchRadius =
       parseFloat(
         calculateSearchRadiusUsingRubberSheeting(
           map,
-          hoot.get("waterway.rubber.sheet.ref"),
-          hoot.get("waterway.rubber.sheet.minimum.ties"),
+          hoot.get("river.rubber.sheet.ref"),
+          hoot.get("river.rubber.sheet.minimum.ties"),
           exports.matchCandidateCriterion));
   }
   else
   {
-    exports.searchRadius = parseFloat(hoot.get("search.radius.waterway"));
-    hoot.debug("Using specified search radius for waterway conflation: " + exports.searchRadius);
+    exports.searchRadius = parseFloat(hoot.get("search.radius.river"));
+    hoot.debug("Using specified search radius for river conflation: " + exports.searchRadius);
   }
 
-  var maxRecursions = -1;
-  if (hoot.get("waterway.maximal.subline.auto.optimize") === 'true')
-  {
-    // We need to configure the maximal subline matcher to not have runaway recursion when 
-    // matching sublines. This is done based on the total length of all rivers in the input data.
-    // This isn't the best place to put this logic, but there really isn't anywhere convenient in 
-    // the C++ to do it, and this is the only exported method that takes in a map and runs before 
-    // the matching.
-    maxRecursions = getRiverMaxSublineRecursions(map);
-  }
-  hoot.debug("maxRecursions: " + maxRecursions);
-  sublineMatcher =
-    new hoot.MaximalSublineStringMatcher(
-      { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
-        "way.subline.matcher": sublineMatcherName,
-        "maximal.subline.max.recursions": maxRecursions });
+  sublineStringMatcher = hoot.SublineStringMatcherFactory.getMatcher(exports.baseFeatureType, map);
 }
 
 /**
@@ -95,9 +77,7 @@ exports.calculateSearchRadius = function(map)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  hoot.trace("e: " + e.getElementId());
-  hoot.trace("isLinearWaterway: " + isLinearWaterway(e));
-  return isLinearWaterway(e);
+  return hoot.OsmSchema.isRiver(e);
 };
 
 /**
@@ -142,23 +122,11 @@ function geometryMismatch(map, e1, e2)
   hoot.trace("Processing geometry...");
 
   var sublines;
-  // Try matching with our default subline matcher, which may be more accurate, but slower for complex 
-  // features.
+  // Try matching with our default subline matcher, which may be more accurate, but slower for
+  // complex features.
   hoot.trace("Extracting sublines with default...");
-  sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  sublines = sublineStringMatcher.extractMatchingSublines(map, e1, e2);
   hoot.trace(sublines);
-  if (sublines && String(sublines).includes("maximum recursion complexity"))
-  {
-    // If we receive an error message with "RecursiveComplexityException" from the matching routine, we 
-    // know our subline matcher hit the cap on the number of recursive calls we allow for it (A little 
-    // kludgy, but not sure how to handle hoot exceptions in a js script at this point). So, now we'll 
-    // try a backup matcher that may be a little less accurate but much faster. Previously tried 
-    // tweaking the configuration of MaximalSublineMatcher for performance instead of using this 
-    // approach, but it didn't increase performance.
-    hoot.trace("Extracting sublines with Frechet...");
-    sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
-  }
-
   if (sublines)
   {
     var m = sublines.map;
@@ -231,19 +199,19 @@ exports.matchScore = function(map, e1, e2)
   {
     hoot.trace("e2 note: " + tags2.get("note"));
   }  
-  hoot.trace("mostSpecificType 1: " + mostSpecificType(e1));
-  hoot.trace("mostSpecificType 2: " + mostSpecificType(e2));
+  hoot.trace("mostSpecificType 1: " + hoot.OsmSchema.mostSpecificType(e1));
+  hoot.trace("mostSpecificType 2: " + hoot.OsmSchema.mostSpecificType(e2));
   
   // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
   // look for an explicit type mismatch.
-  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.typeThreshold);
+  var typeScorePassesThreshold = !hoot.OsmSchema.explicitTypeMismatch(e1, e2, exports.typeThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
   if (!typeScorePassesThreshold)
   {
     return result;
   }
-  hoot.trace("mostSpecificType(e1): " + mostSpecificType(e1));
-  hoot.trace("mostSpecificType(e2): " + mostSpecificType(e2));
+  hoot.trace("mostSpecificType(e1): " + hoot.OsmSchema.mostSpecificType(e1));
+  hoot.trace("mostSpecificType(e2): " + hoot.OsmSchema.mostSpecificType(e2));
   if (nameMismatch(map, e1, e2))
   {
     return result;
@@ -274,28 +242,14 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
-  if (!mergeOptionsConfigured)
-  {
-    // We add a conflate post op here which will remove conflate merge created multilinestring
-    // relations and add waterway type tags to their children. See
-    // MultilineStringMergeRelationCollapser for more details. Its possible we may need to replicate
-    // this logic for other matchers going forward. This has to be done within this method, b/c its
-    // the only js entry point for conflate merging.
-    var markMergeMultiLineStringRelations =
-      (hoot.get("waterway.mark.merge.created.multilinestring.relations") === 'true');
-    hoot.set({'conflate.mark.merge.created.multilinestring.relations': markMergeMultiLineStringRelations});
-    hoot.prependToList({'conflate.post.ops': "hoot::MultilineStringMergeRelationCollapser"});
-    hoot.set({'multilinestring.relation.collapser.types': "waterway"});
-    mergeOptionsConfigured = true;
-  }
-
-  // Snap the ways in the second input to the first input and use the default tag merge method. 
+  // Snap the ways in the second input to the first input and use the default tag merging method.
 
   // Feature matching also occurs during the merging phase. Since its not possible to know the 
-  // original subline matcher used during matching, pass in both of the possible subline matchers 
-  // that could have been used and use the same internal core logic that was used during matching to 
-  // determine which one to use during merging.
-  return snapWays2(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
+  // original subline matcher used during matching by this script, pass in both of the possible
+  // subline matchers that could have been used and use the same internal core logic that was used
+  // during matching to determine which one to use during merging. See related comment in
+  // LinearMergerJs::apply.
+  return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RELATION_MEMBER_SWAPPER_H
@@ -45,14 +45,15 @@ public:
   static QString className() { return "hoot::RelationMemberSwapper"; }
 
   RelationMemberSwapper();
-  RelationMemberSwapper(const ElementId& idToReplace, const ElementId& idToReplaceWith,
-                        const bool includeReviewRelations = true);
-  virtual ~RelationMemberSwapper() = default;
+  RelationMemberSwapper(
+    const ElementId& idToReplace, const ElementId& idToReplaceWith,
+    const bool includeReviewRelations = true);
+  ~RelationMemberSwapper() = default;
 
   /**
    * @see OsmMapOperation
    */
-  void apply(const OsmMapPtr& map);
+  void apply(const OsmMapPtr& map) override;
 
   /**
    * Swaps all relation members references for one element ID with another
@@ -62,25 +63,23 @@ public:
    * @param map map owning the element being removed
    * @param includeReviewRelations if true, review relations are modified
    */
-  static void swap(const ElementId& idToReplace, const ElementId& idToReplaceWith,
-                   const OsmMapPtr& map, const bool includeReviewRelations = true);
+  static void swap(
+    const ElementId& idToReplace, const ElementId& idToReplaceWith, const OsmMapPtr& map,
+    const bool includeReviewRelations = true);
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   {
     return
       "Swapping relation member references for " + _idToReplace.toString() + " with " +
       _idToReplaceWith.toString() + " ...";
   }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Swapped " + QString::number(_numAffected) + " relation member references"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Swaps all relation members references for one element ID with another"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef METADATAEXPORT_H
@@ -65,21 +65,16 @@ public:
   static QString className() { return "hoot::MetadataExport"; }
 
   MetadataExport() = default;
-  virtual ~MetadataExport() = default;
+  ~MetadataExport() = default;
 
-  // OsmMapOperation
-  virtual QString getDescription() const override { return "Creates and exports metadata"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Creates and exports metadata"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 
-  // MetadataOp
-  virtual void _apply();
+  void _apply() override;
 
-  // private data
   QList<WayPtr> _modifiedDatasets;
 
   // process sequence functions
@@ -91,7 +86,7 @@ private:
   void _exportMetadataFromElements();
 
   // helper functions
-  long _addNodeToPoly(double x, double y, WayPtr& pPoly);
+  long _addNodeToPoly(double x, double y, const WayPtr& pPoly) const;
 };
 
 }

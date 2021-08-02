@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "WaySubline.h"
 
@@ -30,9 +30,10 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -40,13 +41,9 @@ using namespace std;
 namespace hoot
 {
 
-WaySubline::WaySubline()
-{
-}
-
 WaySubline::WaySubline(const WaySubline& from) :
-  _start(from.getStart()),
-  _end(from.getEnd())
+_start(from.getStart()),
+_end(from.getEnd())
 {
 }
 
@@ -56,16 +53,18 @@ WaySubline::WaySubline(const WaySubline& from, const ConstOsmMapPtr& newMap)
   {
     ConstWayPtr oldWay = from.getStart().getWay();
     ConstWayPtr newWay = newMap->getWay(oldWay->getId());
-    _start = WayLocation(newMap, newWay,
-      from.getStart().getSegmentIndex(), from.getStart().getSegmentFraction());
-    _end = WayLocation(newMap, newWay,
-      from.getEnd().getSegmentIndex(), from.getEnd().getSegmentFraction());
+    _start =
+      WayLocation(
+        newMap, newWay, from.getStart().getSegmentIndex(), from.getStart().getSegmentFraction());
+    _end =
+      WayLocation(
+        newMap, newWay, from.getEnd().getSegmentIndex(), from.getEnd().getSegmentFraction());
   }
 }
 
 WaySubline::WaySubline(const WayLocation& start, const WayLocation& end) :
-  _start(start),
-  _end(end)
+_start(start),
+_end(end)
 {
 }
 
@@ -77,6 +76,11 @@ WaySubline& WaySubline::operator=(const WaySubline& from)
     _end = from.getEnd();
   }
   return *this;
+}
+
+bool operator==(const WaySubline& a, const WaySubline& b)
+{
+  return a.getStart() == b.getStart() && a.getEnd() == b.getEnd();
 }
 
 Meters WaySubline::calculateLength() const
@@ -105,22 +109,13 @@ Meters WaySubline::getLength() const
   return fabs(_end.calculateDistanceOnWay() - _start.calculateDistanceOnWay());
 }
 
-bool operator==(const WaySubline& a, const WaySubline& b)
-{
-  return a.getStart() == b.getStart() && a.getEnd() == b.getEnd();
-}
-
 bool WaySubline::overlaps(const WaySubline& other) const
 {
   bool overlaps = true;
-
-  if (other.getWay() != getWay() ||
-      getStart() >= other.getEnd() ||
-      other.getStart() >= getEnd())
+  if (other.getWay() != getWay() || getStart() >= other.getEnd() || other.getStart() >= getEnd())
   {
     overlaps = false;
   }
-
   return overlaps;
 }
 
@@ -131,7 +126,6 @@ WaySubline WaySubline::reverse(const ConstWayPtr& reversedWay) const
   // sanity check to make sure they're actually reversed, this isn't conclusive but should help
   // if there is a major goof.
   assert(reversedWay->getNodeCount() == getWay()->getNodeCount());
-  //assert(reversedWay->getNodeId(0) == getWay()->getLastNodeId());
 
   double l = ElementToGeometryConverter(getMap()).convertToLineString(getWay())->getLength();
 
@@ -146,16 +140,16 @@ QString WaySubline::toString() const
   return "start: " + getStart().toString() + " end: " + getEnd().toString();
 }
 
-WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf, bool reuse) const
+WayPtr WaySubline::toWay(
+  const OsmMapPtr& map, std::shared_ptr<GeometryToElementConverter::NodeFactory> nf,
+  bool reuse) const
 {
   ConstWayPtr way = _start.getWay();
+  LOG_VART(way->getElementId());
 
-  std::shared_ptr<GeometryToElementConverter::NodeFactory> nfPtr;
-  if (nf == 0)
+  if (!nf)
   {
-    nf = new FindNodesInWayFactory(way);
-    // delete it automatically.
-    nfPtr.reset(nf);
+    nf = std::make_shared<FindNodesInWayFactory>(way);
   }
 
   Meters ce = way->getRawCircularError();
@@ -163,11 +157,13 @@ WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeF
   long way_id = way->getId();
   if (!reuse)
     way_id = map->createNextWayId();
-  WayPtr result(new Way(way->getStatus(), way_id, ce));
+  LOG_VART(way_id);
+  WayPtr result = std::make_shared<Way>(way->getStatus(), way_id, ce);
   result->setPid(way->getPid());
   result->setVersion(way->getVersion());
   result->setTimestamp(way->getTimestamp());
   result->setTags(way->getTags());
+  LOG_VART(result->getElementId());
 
   int includedStartIndex = _start.getSegmentIndex();
   if (_start.getSegmentFraction() > 0.0)
@@ -193,28 +189,28 @@ WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeF
     result->addNode(way->getNodeId(i));
   }
 
+  LOG_VART(_end.isNode());
   if (!_end.isNode())
   {
     Coordinate c = _end.getCoordinate();
+    LOG_VART(c);
     NodePtr n = nf->createNode(map, c, way->getStatus(), ce);
+    LOG_VART(n->getElementId());
     map->addNode(n);
     result->addNode(n->getId());
   }
 
+  LOG_VART(result);
   return result;
 }
 
 bool WaySubline::touches(const WaySubline& other) const
 {
   bool touches = true;
-
-  if (other.getWay() != getWay() ||
-      getStart() > other.getEnd() ||
-      other.getStart() > getEnd())
+  if (other.getWay() != getWay() || getStart() > other.getEnd() || other.getStart() > getEnd())
   {
     touches = false;
   }
-
   return touches;
 }
 

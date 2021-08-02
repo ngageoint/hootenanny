@@ -19,36 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ELEMENT_TO_GEOMETRY_CONVERTER_H
 #define ELEMENT_TO_GEOMETRY_CONVERTER_H
 
-// GDAL
-class OGRSpatialReference;
-
 // GEOS
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
-
-namespace geos
-{
-  namespace geom
-  {
-    class Geometry;
-    class GeometryCollection;
-    class LinearRing;
-    class LineString;
-    class MultiLineString;
-    class MultiPolygon;
-    class Point;
-    class Polygon;
-  }
-}
 
 // GDAL
 #include <ogr_geometry.h>
@@ -62,6 +44,15 @@ namespace geos
 
 // Standard
 #include <memory>
+
+namespace geos
+{
+  namespace geom
+  {
+    class LineString;
+    class Polygon;
+  }
+}
 
 namespace hoot
 {
@@ -78,7 +69,7 @@ public:
   static QString className() { return "hoot::ElementToGeometryConverter"; }
 
   /**
-   * see class description
+   * Constructor
    *
    * @note If the element provider passed as a parameter is an OsmMap, the spatial reference
    *      from the parameter will be set as the spatial reference for the element converter
@@ -89,8 +80,15 @@ public:
   ~ElementToGeometryConverter() = default;
 
   /**
-   * Converts the given element to a geos geometry object. The tags are used with OsmSchema to
+   * Converts the given element to a geos geometry object. The tags are used with the schema to
    * determine the geometry type.
+   *
+   * @param e the element to convert
+   * @param throwError If true, an exception is thrown when encountering an invalid element. If
+   * false, an empty geometry is returned when encountering an invalid element.
+   * @param statsFlag If true, this geometry type is being retrieved for the purpose of map
+   * statistics.
+   * @return a geometry
    */
   std::shared_ptr<geos::geom::Geometry> convertToGeometry(
     const std::shared_ptr<const Element>& e, bool throwError = true,
@@ -110,16 +108,17 @@ public:
   /**
    * Return the geometry type of the specific element.
    *
-   * @param e
-   * @param throwError If true an exception is thrown with an invalid geometry. If false a -1 is
-   *  returned on error.
-   * @param statsFlag if true, this geometry type is being retrieved for the purpose of map
-   * statistics
+   * @param e the element to retrieve the geometry type of
+   * @param throwError If true, an exception is thrown when encountering an invalid element. If
+   * false, a an unknown geometry ID is returned when encountering an invalid element.
+   * @param statsFlag If true, this geometry type is being retrieved for the purpose of map
+   * statistics.
    * @param requireAreaForPolygonConversion if true, in order for the element being converted to
    * become a polygon it must be classifiable in the schema as an area
+   * @return a geometry ID
    */
   static geos::geom::GeometryTypeId getGeometryType(const ConstElementPtr& e,
-    bool throwError = true, const bool statsFlag = false,
+    bool throwError = false, const bool statsFlag = false,
     const bool requireAreaForPolygonConversion = true);
 
   void setRequireAreaForPolygonConversion(bool require)
@@ -127,7 +126,7 @@ public:
 
   static const int UNKNOWN_GEOMETRY = -1;
 
-protected:
+private:
 
   ConstElementProviderPtr _constProvider;
   std::shared_ptr<OGRSpatialReference>  _spatialReference;

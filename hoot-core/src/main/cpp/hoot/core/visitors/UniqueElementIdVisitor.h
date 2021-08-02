@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef UNIQUE_ELEMENT_ID_VISITOR_H
 #define UNIQUE_ELEMENT_ID_VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -46,20 +46,18 @@ public:
   static QString className() { return "hoot::UniqueElementIdVisitor"; }
 
   UniqueElementIdVisitor() = default;
-  virtual ~UniqueElementIdVisitor() = default;
+  ~UniqueElementIdVisitor() = default;
+
+  void visit(const ConstElementPtr& e) override;
+
+  QString getDescription() const override { return "Returns the unique element IDs visited"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * Returns a set containing all the ElementIds visited.
    */
   const std::set<ElementId>& getElementSet() const { return _elements; }
-
-  virtual void visit(const ConstElementPtr& e);
-
-  virtual QString getDescription() const { return "Returns the unique element IDs visited"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
 
 private:
 

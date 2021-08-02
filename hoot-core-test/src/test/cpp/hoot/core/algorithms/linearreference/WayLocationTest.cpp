@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -63,7 +63,7 @@ public:
 
   OsmMapPtr createMap()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -76,12 +76,12 @@ public:
 
   void runTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                        Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                        Coordinate::getNull() };
-    WayPtr w = TestUtils::createWay(map, Status::Unknown1, c, 1, "");
+    WayPtr w = TestUtils::createWay(map,  c, "", Status::Unknown1, 1);
 
     WayLocation wl(map, w, 0, 1);
     CPPUNIT_ASSERT_EQUAL(wl.getSegmentIndex(), 1);
@@ -101,7 +101,7 @@ public:
                          Coordinate(250, 0),
                          Coordinate(330, 0),
                          Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c, 1, "");
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1, 1);
 
     WayLocation wl(map, w1, 90.0);
     HOOT_STR_EQUALS("way(-1) index: 2 fraction: 0.4", wl);
@@ -110,12 +110,12 @@ public:
 
   void runMoveTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                        Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                        Coordinate::getNull() };
-    WayPtr w = TestUtils::createWay(map, Status::Unknown1, c, 1, "");
+    WayPtr w = TestUtils::createWay(map, c, "", Status::Unknown1, 1);
 
     WayLocation wl;
     wl = WayLocation(map, w, 0, 1);
@@ -176,7 +176,7 @@ public:
                         Coordinate(-219.7621528089831600, -3889.8777209144068365),
                         Coordinate(-220.4189617007821482, -3896.2709067124583271),
                         Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, c2, 1, "");
+    WayPtr w2 = TestUtils::createWay(map, c2, "", Status::Unknown1, 1);
 
     wl = WayLocation(map, w2, 4, 0.6888048860567166);
     HOOT_STR_EQUALS(144, wl.move(2).calculateDistanceOnWay());

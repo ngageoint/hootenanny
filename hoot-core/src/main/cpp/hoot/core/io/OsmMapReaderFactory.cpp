@@ -19,23 +19,23 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmMapReaderFactory.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Validate.h>
 #include <hoot/core/util/Boundable.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Validate.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -45,21 +45,7 @@ using namespace std;
 namespace hoot
 {
 
-bool OsmMapReaderFactory::hasElementInputStream(const QString& url)
-{
-  bool result = false;
-  std::shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
-  std::shared_ptr<ElementInputStream> eis =
-    std::dynamic_pointer_cast<ElementInputStream>(reader);
-  if (eis)
-  {
-    result = true;
-  }
-
-  return result;
-}
-
-bool OsmMapReaderFactory::hasPartialReader(const QString& url)
+bool OsmMapReaderFactory::supportsPartialReading(const QString& url)
 {
   bool result = false;
   std::shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
@@ -69,18 +55,17 @@ bool OsmMapReaderFactory::hasPartialReader(const QString& url)
   {
     result = true;
   }
-
   return result;
 }
 
 std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString& url)
 {
-  QString readerOverride = ConfigOptions().getMapFactoryReader();
-
   std::shared_ptr<OsmMapReader> reader;
+
+  const QString readerOverride = ConfigOptions().getMapFactoryReader();
   if (readerOverride != "")
   {
-    reader.reset(Factory::getInstance().constructObject<OsmMapReader>(readerOverride));
+    reader = Factory::getInstance().constructObject<OsmMapReader>(readerOverride);
     LOG_DEBUG("Using reader: " << readerOverride);
   }
 
@@ -88,7 +73,7 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString& 
   for (size_t i = 0; i < names.size() && !reader; ++i)
   {
     LOG_TRACE("Checking input " << url << " with reader " << names[i]);
-    reader.reset(Factory::getInstance().constructObject<OsmMapReader>(names[i]));
+    reader = Factory::getInstance().constructObject<OsmMapReader>(names[i]);
     if (reader->isSupported(url))
     {
       LOG_DEBUG("Using input reader: " << names[i]);
@@ -109,9 +94,8 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString& 
   return reader;
 }
 
-std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(const QString& url,
-                                                                bool useDataSourceIds,
-                                                                Status defaultStatus)
+std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(
+  const QString& url, bool useDataSourceIds, Status defaultStatus)
 {
   LOG_VART(url);
   LOG_VART(useDataSourceIds);
@@ -123,9 +107,8 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(const QString& u
   return reader;
 }
 
-std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(bool useDataSourceIds,
-                                                                bool useFileStatus,
-                                                                const QString& url)
+std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(
+  bool useDataSourceIds, bool useFileStatus, const QString& url)
 {
   LOG_VART(url);
   LOG_VART(useDataSourceIds);
@@ -142,15 +125,15 @@ QString OsmMapReaderFactory::getReaderName(const QString& url)
   LOG_VARD(url);
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapReader::className());
   LOG_VARD(names.size());
-  std::shared_ptr<OsmMapReader> writer;
+  std::shared_ptr<OsmMapReader> reader;
   for (size_t i = 0; i < names.size(); i++)
   {
     const QString name = names[i];
     LOG_VART(name);
-    writer.reset(Factory::getInstance().constructObject<OsmMapReader>(name));
+    reader = Factory::getInstance().constructObject<OsmMapReader>(name);
     LOG_VART(url);
-    LOG_VART(writer->isSupported(url));
-    if (writer->isSupported(url))
+    LOG_VART(reader->isSupported(url));
+    if (reader->isSupported(url))
     {
       return name;
     }
@@ -158,29 +141,25 @@ QString OsmMapReaderFactory::getReaderName(const QString& url)
   return "";
 }
 
-bool OsmMapReaderFactory::isSupportedFormat(const QString& url)
+void OsmMapReaderFactory::read(
+  const OsmMapPtr& map, const QString& url, bool useDataSourceIds, Status defaultStatus)
 {
-  return !getReaderName(url).trimmed().isEmpty();
-}
-
-void OsmMapReaderFactory::read(const OsmMapPtr& map, const QString& url, bool useDataSourceIds,
-                               Status defaultStatus)
-{
-  LOG_INFO("Loading map from ..." << url.right(50) << "...");
+  LOG_INFO("Loading map from ..." << FileUtils::toLogFormat(url, 50) << "...");
   std::shared_ptr<OsmMapReader> reader = createReader(url, useDataSourceIds, defaultStatus);
   _read(map, reader, url);
 }
 
-void OsmMapReaderFactory::read(const OsmMapPtr& map, bool useDataSourceIds,
-                               bool useFileStatus, const QString& url)
+void OsmMapReaderFactory::read(
+  const OsmMapPtr& map, bool useDataSourceIds, bool useFileStatus, const QString& url)
 {
-  LOG_INFO("Loading map from " << url.right(50) << "...");
-  std::shared_ptr<OsmMapReader> reader = createReader(url, useDataSourceIds, useFileStatus);
+  LOG_INFO("Loading map from " << FileUtils::toLogFormat(url, 50) << "...");
+  LOG_VART(useFileStatus);
+  std::shared_ptr<OsmMapReader> reader = createReader(useDataSourceIds, useFileStatus, url);
   _read(map, reader, url);
 }
 
-void OsmMapReaderFactory::_read(const OsmMapPtr& map,
-                                const std::shared_ptr<OsmMapReader>& reader, const QString& url)
+void OsmMapReaderFactory::_read(
+  const OsmMapPtr& map, const std::shared_ptr<OsmMapReader>& reader, const QString& url)
 {
   std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(reader);
   if (!ConfigOptions().getBounds().trimmed().isEmpty() && !boundable.get())
@@ -208,7 +187,7 @@ void OsmMapReaderFactory::_read(const OsmMapPtr& map,
     }
   }
   VALIDATE(map->validate(true));
-  LOG_INFO(
+  LOG_STATUS(
     "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
     " elements from input in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }

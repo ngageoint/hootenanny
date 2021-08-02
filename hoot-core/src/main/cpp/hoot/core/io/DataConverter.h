@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef DATACONVERTER_H
 #define DATACONVERTER_H
@@ -30,52 +30,15 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/util/Progress.h>
-#include <hoot/core/io/OgrReader.h>
 
 // Qt
 #include <QStringList>
 #include <QQueue>
-#include <QThread>
-#include <QMutex>
 
 namespace hoot
 {
-
-class elementTranslatorThread : public QThread
-{
-  Q_OBJECT
-  void run();
-
-public:
-
-  QString _translation;
-  QQueue<ElementPtr>* _pElementQ;
-  QMutex* _pTransFeaturesQMutex;
-  QMutex* _pInitMutex;
-  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
-         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
-  bool* _pFinishedTranslating;
-  ElementCachePtr _pElementCache;
-};
-
-class ogrWriterThread : public QThread
-{
-  Q_OBJECT
-  void run();
-
-public:
-
-  QString _translation;
-  QString _output;
-  QMutex* _pTransFeaturesQMutex;
-  QMutex* _pInitMutex;
-  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
-         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
-  bool* _pFinishedTranslating;
-};
 
 /**
  * Converts data from one Hootenanny supported format to another
@@ -92,9 +55,9 @@ public:
   static const QString JOB_SOURCE;
 
   DataConverter();
-  virtual ~DataConverter() = default;
+  ~DataConverter() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Converts multiple datasets from format to a single output format
@@ -123,6 +86,7 @@ private:
 
   QString _translation;
   QString _translationDirection;
+  bool _translateMultithreaded;
   QStringList _shapeFileColumns;
   int _ogrFeatureReadLimit;
   QStringList _convertOps;
@@ -130,38 +94,36 @@ private:
   Progress _progress;
   int _printLengthMax;
 
-  void _validateInput(const QStringList& inputs, const QString& output);
+  void _validateInput(const QStringList& inputs, const QString& output) const;
 
-  // converts from any input to an OGR output; a translation is required
-  void _convertToOgr(const QString& input, const QString& output);
+  // converts from any input to an OGR output; A translation is required and operations are memory
+  // bound.
+  void _convertToOgr(const QStringList& inputs, const QString& output);
   // converts from an OGR input to any output; a translation is required
   void _convertFromOgr(const QStringList& inputs, const QString& output);
-
-  // This handles all conversions not done by _convertToOgr or _convertFromOgr.
+  /*
+   * This method handles all conversions including OGR conversions not done by _convertToOgr or
+   * _convertFromOgr. OGR conversions performed by this method will not be memory bound.
+   */
   void _convert(const QStringList& inputs, const QString& output);
-  void _handleGeneralConvertTranslationOpts(const QString& output);
-  QString _outputFormatToTranslationDirection(const QString& output) const;
-  // If specific columns were specified for export to a shape file, then this is called.
-  void _exportToShapeWithCols(const QString& output, const QStringList& cols, const OsmMapPtr& map);
 
-  void _fillElementCache(const QString& inputUrl, ElementCachePtr cachePtr,
-                         QQueue<ElementPtr>& workQ);
+  // sets ogr options only for _convert
+  void _setFromOgrOptions();
+  void _setToOgrOptions(const QString& output);
+  // This handles configures translations options correctly for non-OGR outputs.
+  void _handleNonOgrOutputTranslationOpts();
+  QString _outputFormatToTranslationDirection(const QString& output) const;
+
+  // If specific columns were specified for export to a shape file, then this is called.
+  void _exportToShapeWithCols(
+    const QString& output, const QStringList& cols, const OsmMapPtr& map) const;
+  bool _shapeFileColumnsSpecified() const { return !_shapeFileColumns.isEmpty(); }
+
   // _convertToOgr will call this to run the translator in a separate thread for a performance
   // increase if certain pre-conditions are met.
-  void _transToOgrMT(const QString& input, const QString& output);
-
-  /*
-   * Attempts to determine the relative weighting of each layer in an OGR data source based on
-   * feature size. If the feature size hasn't already been calculated for each layer, then a even
-   * distribution of weighting between layers is returned.
-   */
-  std::vector<float> _getOgrInputProgressWeights(OgrReader& reader, const QString& input,
-                                                 const QStringList& layers);
-  QStringList _getOgrLayersFromPath(OgrReader& reader, QString& input);
-
-  bool _shapeFileColumnsSpecified() { return !_shapeFileColumns.isEmpty(); }
-
-  void _setFromOgrOptions();
+  void _transToOgrMT(const QStringList& inputs, const QString& output) const;
+  void _fillElementCacheMT(
+    const QString& inputUrl, ElementCachePtr cachePtr, QQueue<ElementPtr>& workQ) const;
 };
 
 }

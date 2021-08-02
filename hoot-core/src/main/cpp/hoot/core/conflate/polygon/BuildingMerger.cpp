@@ -19,28 +19,32 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "BuildingMerger.h"
 
 // hoot
+#include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
 #include <hoot/core/conflate/IdSwap.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/BuildingPartCriterion.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/NodeCriterion.h>
+#include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/IdSwapOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/ops/ReuseNodeIdsOnWayOp.h>
 #include <hoot/core/schema/BuildingRelationMemberTagMerger.h>
@@ -54,9 +58,6 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
-#include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
-#include <hoot/core/conflate/polygon/BuildingMatch.h>
-#include <hoot/core/ops/RemoveRelationByEid.h>
 
 using namespace std;
 
@@ -71,37 +72,30 @@ class DeletableBuildingCriterion : public ElementCriterion
 public:
 
   DeletableBuildingCriterion() = default;
-  virtual ~DeletableBuildingCriterion() = default;
+  ~DeletableBuildingCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const
+  bool isSatisfied(const ConstElementPtr& e) const override
   {
     bool result = false;
-
     if (e->getElementType() == ElementType::Node && e->getTags().getInformationCount() == 0)
     {
       result = true;
     }
-    else if (e->getElementType() != ElementType::Node)
+    else if (e->getElementType() != ElementType::Node &&
+             (_buildingCrit.isSatisfied(e) || _buildingPartCrit.isSatisfied(e)))
     {
-      if (_buildingCrit.isSatisfied(e) || _buildingPartCrit.isSatisfied(e))
-      {
-        result = true;
-      }
+      result = true;
     }
-
     return !result;
   }
 
-  virtual QString getDescription() const { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual QString getName() const override { return ""; }
+  ElementCriterionPtr clone() override { return std::make_shared<DeletableBuildingCriterion>(); }
 
-virtual QString getClassName() const override { return ""; }
-
-  virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new DeletableBuildingCriterion()); }
-
-  virtual QString toString() const override { return ""; }
+  QString toString() const override { return ""; }
 
 private:
 
@@ -112,7 +106,7 @@ private:
 int BuildingMerger::logWarnCount = 0;
 
 BuildingMerger::BuildingMerger(const set<pair<ElementId, ElementId>>& pairs) :
-_pairs(pairs),
+MergerBase(pairs),
 _keepMoreComplexGeometryWhenAutoMerging(
   ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging()),
 _mergeManyToManyMatches(ConfigOptions().getBuildingMergeManyToManyMatches()),
@@ -135,10 +129,10 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   for (set<pair<ElementId, ElementId>>::const_iterator sit = _pairs.begin(); sit != _pairs.end();
        ++sit)
   {
-    firstPairs.insert(sit->first);
-    secondPairs.insert(sit->second);
-    combined.insert(sit->first);
-    combined.insert(sit->second);
+    firstPairs.emplace(sit->first);
+    secondPairs.emplace(sit->second);
+    combined.emplace(sit->first);
+    combined.emplace(sit->second);
   }
   _manyToManyMatch = firstPairs.size() > 1 && secondPairs.size() > 1;
 
@@ -270,8 +264,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   }
 
   // remove the scrap element from the map
-  DeletableBuildingCriterion crit;
-  RecursiveElementRemover(scrap->getElementId(), &crit).apply(map);
+  std::shared_ptr<DeletableBuildingCriterion> crit = std::make_shared<DeletableBuildingCriterion>();
+  RecursiveElementRemover(scrap->getElementId(), false, crit).apply(map);
   scrap->getTags().clear();
 
   // delete any pre-existing multipoly members
@@ -288,13 +282,10 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   {
     // if we replaced the second group of buildings
     if (it->second != keeper->getElementId())
-    {
-      replacedSet.insert(pair<ElementId, ElementId>(it->second, keeper->getElementId()));
-    }
+      replacedSet.emplace(it->second, keeper->getElementId());
+
     if (it->first != keeper->getElementId())
-    {
-      replacedSet.insert(pair<ElementId, ElementId>(it->first, keeper->getElementId()));
-    }
+      replacedSet.emplace(it->first, keeper->getElementId());
   }
   replaced.insert(replaced.end(), replacedSet.begin(), replacedSet.end());
 }
@@ -326,7 +317,7 @@ Tags BuildingMerger::_getMergedTags(const ElementPtr& e1, const ElementPtr& e2)
   ref1.sort();
   ref2.sort();
 
-  if (ref1.size() != 0 || ref2.size() != 0)
+  if (!ref1.empty() || !ref2.empty())
   {
     if (ref1 == ref2)
     {
@@ -345,15 +336,14 @@ Tags BuildingMerger::_getMergedTags(const ElementPtr& e1, const ElementPtr& e2)
 ElementId BuildingMerger::_getIdOfMoreComplexBuilding(
   const ElementPtr& building1, const ElementPtr& building2, const OsmMapPtr& map) const
 {
-  // use node count as a surrogate for complexity of the geometry.
+  // Use node count as a surrogate for complexity of the geometry.
   int nodeCount1 = 0;
   if (building1.get())
   {
     LOG_VART(building1);
     nodeCount1 =
       (int)FilteredVisitor::getStat(
-        ElementCriterionPtr(new NodeCriterion()),
-        ElementVisitorPtr(new ElementCountVisitor()), map, building1);
+        std::make_shared<NodeCriterion>(), std::make_shared<ElementCountVisitor>(), map, building1);
   }
   LOG_VART(nodeCount1);
 
@@ -363,8 +353,7 @@ ElementId BuildingMerger::_getIdOfMoreComplexBuilding(
     LOG_VART(building2);
     nodeCount2 =
       (int)FilteredVisitor::getStat(
-        ElementCriterionPtr(new NodeCriterion()),
-        ElementVisitorPtr(new ElementCountVisitor()), map, building2);
+        std::make_shared<NodeCriterion>(), std::make_shared<ElementCountVisitor>(), map, building2);
   }
   LOG_VART(nodeCount2);
 
@@ -447,12 +436,12 @@ QSet<ElementId> BuildingMerger::_getMultiPolyMemberIds(const ConstElementPtr& el
 std::shared_ptr<Element> BuildingMerger::buildBuilding(
   const OsmMapPtr& map, const set<ElementId>& eid, const bool preserveTypes)
 {
-  if (eid.size() > 0)
+  if (!eid.empty())
   {
     LOG_TRACE("Creating building for eid's: " << eid << "...");
   }
 
-  if (eid.size() == 0)
+  if (eid.empty())
   {
     throw IllegalArgumentException("No element ID passed to building builder.");
   }
@@ -553,14 +542,15 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(
     LOG_TRACE("Combined constituent buildings into: " << result);
 
     // remove the relation we previously marked for removal
-    DeletableBuildingCriterion crit;
+    std::shared_ptr<DeletableBuildingCriterion> crit =
+      std::make_shared<DeletableBuildingCriterion>();
     for (size_t i = 0; i < toRemove.size(); i++)
     {
       if (map->containsElement(toRemove[i]))
       {
         ElementPtr willRemove = map->getElement(toRemove[i]);
         ReplaceElementOp(toRemove[i], result->getElementId()).apply(map);
-        RecursiveElementRemover(toRemove[i], &crit).apply(map);
+        RecursiveElementRemover(toRemove[i], false, crit).apply(map);
         // just in case it wasn't removed (e.g. part of another relation)
         willRemove->getTags().clear();
       }
@@ -573,7 +563,7 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(
 RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   const OsmMapPtr& map, std::vector<ElementPtr>& constituentBuildings, const bool preserveTypes)
 {
-  if (constituentBuildings.size() == 0)
+  if (constituentBuildings.empty())
   {
     throw IllegalArgumentException("No constituent buildings passed to building merger.");
   }
@@ -620,10 +610,10 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   {
     relationType = MetadataTags::RelationBuilding();
   }
-  RelationPtr parentRelation(
-    new Relation(
+  RelationPtr parentRelation =
+    std::make_shared<Relation>(
       constituentBuildings[0]->getStatus(), map->createNextRelationId(),
-      WorstCircularErrorVisitor::getWorstCircularError(constituentBuildings), relationType));
+      WorstCircularErrorVisitor::getWorstCircularError(constituentBuildings), relationType);
   LOG_VART(parentRelation->getElementId());
 
   TagMergerPtr tagMerger;
@@ -638,11 +628,11 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   LOG_VART(overwriteExcludeTags);
   if (!preserveTypes)
   {
-    tagMerger.reset(new BuildingRelationMemberTagMerger(overwriteExcludeTags));
+    tagMerger = std::make_shared<BuildingRelationMemberTagMerger>(overwriteExcludeTags);
   }
   else
   {
-    tagMerger.reset(new PreserveTypesTagMerger(overwriteExcludeTags));
+    tagMerger = std::make_shared<PreserveTypesTagMerger>(overwriteExcludeTags);
   }
 
   Tags& relationTags = parentRelation->getTags();
@@ -683,10 +673,12 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   relationTags = parentRelation->getTags();
   LOG_VART(relationTags);
 
+  const bool isAttributeConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
   // Doing this for multipoly relations in Attribute Conflation only for the time being.
   const bool suppressBuildingTagOnConstituents =
-    // relatively loose way to identify AC; also used in ConflateCmd
-    ConfigOptions().getHighwayMergeTagsOnly() &&
+    // relatively loose way to identify AC; also used in ConflateExecutor
+    isAttributeConflate &&
     // allAreBuildingParts = building relation
     !allAreBuildingParts &&
     ConfigOptions().getAttributeConflationSuppressBuildingTagOnMultipolyRelationConstituents();
@@ -791,14 +783,14 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
 {
   LOG_INFO("Merging buildings...");
 
-  //The building merger by default uses geometric complexity (node count) to determine which
-  //building geometry to keep.  Since the UI at this point will never pass in buildings with their
-  //child nodes, we want to override the default behavior and make sure the building merger always
-  //arbitrarily keeps the geometry of the first building passed in.  This is ok, b/c the UI workflow
-  //lets the user select which building to keep and using complexity wouldn't make sense.
-  LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMergingKey());
+  // The building merger by default uses geometric complexity (node count) to determine which
+  // building geometry to keep.  Since the UI at this point will never pass in buildings with their
+  // child nodes, we want to override the default behavior and make sure the building merger always
+  // arbitrarily keeps the geometry of the first building passed in.  This is ok, b/c the UI
+  // workflow lets the user select which building to keep and using complexity wouldn't make sense.
+  LOG_VART(ConfigOptions::getBuildingKeepMoreComplexGeometryWhenAutoMergingKey());
   conf().set(
-    ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMergingKey(), "false");
+    ConfigOptions::getBuildingKeepMoreComplexGeometryWhenAutoMergingKey(), "false");
   LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging());
 
   // See related note about statuses in PoiPolygonMerger::mergePoiAndPolygon. Don't know how to
@@ -810,9 +802,12 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
     _fixStatuses(map);
   }
 
+  // Formerly, we required that the buildings have a status other than conflated in order to be
+  // merged...can't remember exactly why...but removed that stipulation and test output still looks
+  // good.
+
   int buildingsMerged = 0;
   BuildingCriterion buildingCrit;
-  const QString statusErrMsg = "Elements being merged must have an Unknown1 or Unknown2 status.";
 
   const WayMap ways = map->getWays();
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
@@ -820,14 +815,9 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
     const ConstWayPtr& way = wayItr->second;
     if (way->getElementId() != mergeTargetId && buildingCrit.isSatisfied(way))
     {
-      LOG_VART(way);
-      if (way->getStatus() == Status::Conflated)
-      {
-        throw IllegalArgumentException(statusErrMsg);
-      }
-
+      LOG_VART(way->getElementId());
       std::set<std::pair<ElementId, ElementId>> pairs;
-      pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, way->getElementId()));
+      pairs.emplace(mergeTargetId, way->getElementId());
       BuildingMerger merger(pairs);
       LOG_VART(pairs.size());
       std::vector<std::pair<ElementId, ElementId>> replacedElements;
@@ -842,14 +832,9 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
     const ConstRelationPtr& relation = relItr->second;
     if (relation->getElementId() != mergeTargetId && buildingCrit.isSatisfied(relation))
     {
-      LOG_VART(relation);
-      if (relation->getStatus() == Status::Conflated)
-      {
-        throw IllegalArgumentException(statusErrMsg);
-      }
-
+      LOG_VART(relation->getElementId());
       std::set<std::pair<ElementId, ElementId>> pairs;
-      pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, relation->getElementId()));
+      pairs.emplace(mergeTargetId, relation->getElementId());
       BuildingMerger merger(pairs);
       LOG_VART(pairs.size());
       std::vector<std::pair<ElementId, ElementId>> replacedElements;
@@ -863,7 +848,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
 
 QString BuildingMerger::toString() const
 {
-  return QString("BuildingMerger %1").arg(hoot::toString(_getPairs()));
+  return QString("BuildingMerger %1").arg(hoot::toString(_pairs));
 }
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef RELATIONJS_H
 #define RELATIONJS_H
@@ -44,24 +44,23 @@ class RelationJs : public ElementJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
-  virtual ConstElementPtr getConstElement() const { return getConstRelation(); }
+  ConstElementPtr getConstElement() const override { return getConstRelation(); }
   ConstRelationPtr getConstRelation() const { return _constRelation; }
-  virtual ElementPtr getElement() { return getRelation(); }
-  RelationPtr getRelation() { assert(_relation); return _relation; }
+  ElementPtr getElement() override { return getRelation(); }
+  RelationPtr getRelation() const { assert(_relation); return _relation; }
 
-  static v8::Handle<v8::Object> New(ConstRelationPtr relation);
-  static v8::Handle<v8::Object> New(RelationPtr relation);
+  static v8::Local<v8::Object> New(ConstRelationPtr relation);
+  static v8::Local<v8::Object> New(RelationPtr relation);
 
 private:
 
   RelationJs(ConstRelationPtr r) : _constRelation(r) { }
   RelationJs() = default;
-  virtual ~RelationJs() = default;
+  ~RelationJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void replaceElement(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getType(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   ConstRelationPtr _constRelation;

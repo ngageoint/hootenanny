@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MaximalNearestSublineMatcher.h"
 
@@ -31,9 +31,9 @@
 
 // hoot
 #include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -42,11 +42,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(SublineMatcher, MaximalNearestSublineMatcher)
-
-MaximalNearestSublineMatcher::MaximalNearestSublineMatcher()
-{
-  _minSplitSize = 0.0;
-}
 
 WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapPtr& map,
   const ConstWayPtr& way1, const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const
@@ -59,10 +54,8 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
     maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() :
     maxRelevantDistance;
 
-  OsmMapPtr mapCopy(new OsmMap());
-  CopyMapSubsetOp(map,
-               way1->getElementId(),
-               way2->getElementId()).apply(mapCopy);
+  OsmMapPtr mapCopy = std::make_shared<OsmMap>();
+  CopyMapSubsetOp(map, way1->getElementId(), way2->getElementId()).apply(mapCopy);
 
   WayPtr way1NonConst = mapCopy->getWay(way1->getId());
   WayPtr way2NonConst = mapCopy->getWay(way2->getId());
@@ -72,11 +65,11 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
   MaximalNearestSubline mns1(
     mapCopy, way1NonConst, way2NonConst, _minSplitSize, mrd, _maxRelevantAngle, _headingDelta);
 
-  // use the maximal nearest subline code to find the best subline
+  // Use the maximal nearest subline code to find the best subline.
   std::vector<WayLocation> interval1 = mns1.getInterval();
   if (!interval1[0].isValid() || !interval1[1].isValid() || interval1[0] == interval1[1])
   {
-    // if the interval isn't valid then return an invalid result.
+    // If the interval isn't valid, then return an invalid result.
     LOG_TRACE("Returning invalid result...");
     return WaySublineMatchString();
   }
@@ -100,8 +93,9 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
 
   if (subline1->getNodeCount() > 1)
   {
-    std::shared_ptr<LineString> ls = ElementToGeometryConverter(mapCopy).convertToLineString(subline1);
-    if (ls->isValid())
+    std::shared_ptr<LineString> ls =
+      ElementToGeometryConverter(mapCopy).convertToLineString(subline1);
+    if (ls && ls->isValid())
     {
       score = ls->getLength();
     }
@@ -109,8 +103,8 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
   LOG_VART(score);
 
   vector<WaySublineMatch> v;
-  // switch the subline match to reference a different map.
-  v.push_back(WaySublineMatch(match, map));
+  // Switch the subline match to reference a different map.
+  v.emplace_back(match, map);
 
   return WaySublineMatchString(v);
 }

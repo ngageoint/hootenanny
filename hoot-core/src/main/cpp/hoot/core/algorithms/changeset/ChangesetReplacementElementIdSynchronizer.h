@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CHANGESET_REPLACEMENT_ELEMENT_ID_SYNCHRONIZER_H
@@ -30,13 +30,13 @@
 
 // Hoot
 #include <hoot/core/elements/ElementIdSynchronizer.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {
 
 /**
- * This performs some additional element ID synchronization specific to cut and replace.
+ * @brief The ChangesetReplacementElementIdSynchronizer class performs some additional element ID
+ * synchronization specific to cut and replace.
  */
 class ChangesetReplacementElementIdSynchronizer : public ElementIdSynchronizer
 {
@@ -44,13 +44,13 @@ class ChangesetReplacementElementIdSynchronizer : public ElementIdSynchronizer
 public:
 
   ChangesetReplacementElementIdSynchronizer() = default;
-  virtual ~ChangesetReplacementElementIdSynchronizer() = default;
+  ~ChangesetReplacementElementIdSynchronizer() = default;
 
   /**
    * see ElementIdSynchronizer
    */
-  virtual void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
-                           const ElementType& elementType = ElementType::Unknown) override;
+  void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
+                   const ElementType& elementType = ElementType::Unknown) override;
 
 private:
 

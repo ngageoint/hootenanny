@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "HighwayCriterion.h"
 
@@ -32,17 +32,26 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/HighwayWayNodeCriterion.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 
+HighwayCriterion::HighwayCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+}
+
 bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
-  LOG_VART(element->getElementId());
-  //LOG_VART(element);
+  if (!element)
+  {
+    return false;
+  }
 
+  LOG_VART(element->getElementId());
   const ElementType type = element->getElementType();
 
   if (type == ElementType::Node)
@@ -50,7 +59,6 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
     return false;
   }
 
-  //LOG_VART(element);
   bool result = false;
   const Tags& tags = element->getTags();
 
@@ -71,10 +79,6 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
     LOG_VART(result);
   }
 
-  // At one point we were allowing any way with a date tag to pass here as well, but that can lead
-  // to false positive highway matches, so it was removed. Its better to tag the way as a highway
-  // before conflation.
-
   // Make sure this isn't an area highway section.
   if (result)
   {
@@ -84,6 +88,11 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 
   LOG_TRACE(element->getElementId() << " result: " << result);
   return result;
+}
+
+QStringList HighwayCriterion::getChildCriteria() const
+{
+  return QStringList(HighwayWayNodeCriterion::className());
 }
 
 }

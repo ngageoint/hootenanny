@@ -3,45 +3,28 @@
 
 === Description
 
-When you have two data sets to conflate where one is clearly better than the other in every way (attributes and geometric accuracy),
-the cookie cutter can be a very useful tool. For instance, you may have country wide primary roads and very high quality city
-scale roads for a small region. In this case you'll want to remove a section of the country scale roads, then conflate the
-high quality roads back in.  The +cut+ command functions by reading in a OSM input file as the +cutter-shape+ and
-removes the cookie cutter shape from the contents of the 'dough' file. The resulting geometries are written to 'output'.
-The dough input is limited by the available RAM.
+The +cut+ command cuts a section out of a map.
 
-* +cutter-shape+ - The input Polygons to use as the cutter shape; may be any supported input format (e.g. .osm file).
-* +dough+        - The input OSM data to cut from; may be any supported input format (e.g. .osm file).
-* +output+       - The output OSM data path; may be any supported output format (e.g. .osm file).
-* +buffer+       - Optional buffer value, if the buffer value is provided then the
-                   shape is buffered by this many meters before cutting. The buffer may be
-                   positive or negative.
-* +--crop+       - Optionally crops based on the polygon rather than doing a cookie cut.
+When you have two data sets to conflate where one is clearly better than the other in every way (attributes and 
+geometric accuracy), the cookie cutter can be a very useful tool. For instance, you may have country wide primary roads 
+and very high quality city scale roads for a small region. In this case you'll want to remove a section of the country 
+scale roads, then conflate the high quality roads back in.  The +cut+ command functions by reading in a OSM input file 
+as the +cutter-shape+ and removes the cookie cutter shape from the contents of the 'dough' file. The resulting geometries 
+are written to 'output'. The dough input is limited by the available RAM.
+
+* +cutter-shape+ - The input to use as the cutter shape; may be any supported input format (e.g. .osm file).
+* +dough+        - The input data to cut from; may be any supported input format (e.g. .osm file).
+* +output+       - Output; may be any supported output format (e.g. .osm file).
+* +--buffer+     - Optional buffer value to buffer the shape with before cutting. The value may be positive or negative.
+* +--crop+       - Optionally crops the exterior based on the cutter shape rather than cutting from inside the cutter shape.
 
 === Usage
 
 --------------------------------------
-cut (cutter-shape) (dough) (output) [buffer] [--crop]
+hoot cut (cutter-shape) (dough) (output) [--buffer value] [--crop]
 --------------------------------------
 
-==== Example
-
---------------------------------------
-wget http://dcatlas.dcgis.dc.gov/catalog/download.asp?downloadID=88&downloadTYPE=ESRI
-hoot convert -D schema.translation.script=DcRoads StreetSegmentLn.shp DcBig.osm
-cp $HOOT_HOME/test-files/DcTigerRoads.osm DcSmall.osm
-# It is a good idea to manually verify the alpha shape for correctness after it
-# is generated. -15m works well for this square data, but will likely cause
-# issues on more complex shapes.
-<<<<<<< HEAD:docs/commands/cookie-cut.asciidoc
-hoot alpha-shape --alpha 1000 --buffer -15 DcSmall.osm DcSmallBounds.shp
-hoot cookie-cut DcSmallBounds.shp DcBig.osm DcBigCut.osm
-=======
-hoot alpha-shape --alpha 1000 --buffer -15 DcSmall.osm DcSmallBounds.shp
-hoot cut DcSmallBounds.shp DcBig.osm DcBigCut.osm
->>>>>>> parent of 5b12b31... Revert "rename command":docs/commands/cut.asciidoc
-hoot conflate DcSmall.osm DcBigCut.osm ConflatedDc.osm
---------------------------------------
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#cut-a-section-out-of-a-map[Examples]
 
 === See Also
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef RANGE_H
 #define RANGE_H
@@ -36,48 +36,41 @@ namespace hoot
 {
 
 /**
- * Range of values. Min is inclusive. Max is inclusive.
+ * @brief The Range class is a range of values. Min is inclusive. Max is inclusive.
  */
-
 class Range
 {
 public:
 
   static QString className() { return "hoot::Range"; }
 
-  Range() {}
-
+  Range() = default;
   Range(long int min, long int max);
+  virtual ~Range() = default;
 
-  virtual ~Range() {}
+  bool hashCode() const;
 
-  bool hashCode();
+  bool operator>(const Range& r) const { return _min > r.getMin(); }
+  bool operator<(const Range& r) const { return _min < r.getMin(); }
+  bool operator<=(const Range& r) const { return operator <(r) || operator==(r); }
+  bool operator==(const Range& r) const { return _min == r.getMin() && _max == r.getMax(); }
 
-  bool operator>(Range r) const { return _min > r.getMin(); }
+  bool in(long int l) const;
 
-  bool operator<(Range r) const { return _min < r.getMin(); }
-
-  bool operator<=(Range r) const { return operator <(r) || operator==(r); }
-
-  bool operator==(Range r) const { return _min == r.getMin() && _max == r.getMax(); }
-
-  bool in(long int l);
-
-  bool isValid();
-
+  bool isValid() const;
   void setInvalid();
 
-  QString toString();
+  QString toString() const;
 
-  long calculateSize() { return (_max - _min) + 1; }
+  long calculateSize() const { return (_max - _min) + 1; }
 
   long int getMin() const { return _min; }
-
   long int getMax() const { return _max; }
 
   void set(long int min, long int max);
 
 private:
+
   long int _min;
   long int _max;
 };

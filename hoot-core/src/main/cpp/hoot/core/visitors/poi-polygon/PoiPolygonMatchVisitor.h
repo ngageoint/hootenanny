@@ -19,17 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef POIPOLYGONMATCHVISITOR_H
 #define POIPOLYGONMATCHVISITOR_H
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
@@ -60,7 +60,7 @@ public:
                          ConstMatchThresholdPtr threshold,
                          std::shared_ptr<PoiPolygonRfClassifier> rf, PoiPolygonInfoCachePtr infoCache,
                          ElementCriterionPtr filter = ElementCriterionPtr());
-  virtual ~PoiPolygonMatchVisitor() = default;
+  ~PoiPolygonMatchVisitor() = default;
 
   /**
    * Determines whether an element is a Poi/Polygon conflation match candidate and, if so,
@@ -68,17 +68,15 @@ public:
    *
    * @param e element to examine
    */
-  virtual void visit(const ConstElementPtr& e) override;
+  void visit(const ConstElementPtr& e) override;
 
-  bool isMatchCandidate(ConstElementPtr element);
+  bool isMatchCandidate(ConstElementPtr element) const;
 
-  virtual QString getDescription() const override { return ""; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return ""; }
 
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
 
 private:
 
@@ -122,7 +120,7 @@ private:
 
   std::shared_ptr<Tgs::HilbertRTree>& _getPolyIndex();
 
-  ConstOsmMapPtr _getMap() { return _map; }
+  ConstOsmMapPtr _getMap() const { return _map; }
 };
 
 }

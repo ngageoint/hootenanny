@@ -19,17 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -49,23 +49,25 @@ class DuplicateNodeRemoverTest : public HootTestFixture
     CPPUNIT_TEST_SUITE(DuplicateNodeRemoverTest);
     CPPUNIT_TEST(runBasicTest);
     CPPUNIT_TEST(runMetadataTest);
+    CPPUNIT_TEST(runInvalidDistanceTest);
+    CPPUNIT_TEST(runIgnoreStatusTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
   DuplicateNodeRemoverTest() : HootTestFixture("test-files/", UNUSED_PATH)
   {
+    setResetType(ResetAll);
   }
 
   void runBasicTest()
   {
-    OgrReader reader;
-    OsmMapPtr map(new OsmMap());
-    reader.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    IoUtils::loadMap(map, _inputPath + "jakarta_raya_coastline.shp", true);
     MapProjector::projectToOrthographic(map);
     CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
 
-    // merge all nodes within a meter.
+    // Merge all nodes within a meter.
     DuplicateNodeRemover::removeNodes(map, 1.0);
 
     CPPUNIT_ASSERT_EQUAL(601, (int)map->getNodes().size());
@@ -73,11 +75,11 @@ public:
 
   void runMetadataTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     // Nodes are within the proximity threshold and have no tags...so they're dupes.
-    /*NodePtr node1 =*/ TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
-    /*NodePtr node2 =*/ TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    /*NodePtr node1 =*/ TestUtils::createNode(map);
+    /*NodePtr node2 =*/ TestUtils::createNode(map);
     MapProjector::projectToOrthographic(map);
 
     DuplicateNodeRemover::removeNodes(map, 1.0);
@@ -86,9 +88,9 @@ public:
 
     // uuid is a metadata tag and should be ignored, so no removal here
     map->clear();
-    NodePtr node3 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    NodePtr node3 = TestUtils::createNode(map);
     node3->getTags().set("uuid", "{12449bc4-c059-4270-8d72-134fcf54291d}");
-    NodePtr node4 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    NodePtr node4 = TestUtils::createNode(map);
     node4->getTags().set("uuid", "{bfbf2946-4342-444c-9926-1477c7bcce05}");
     MapProjector::projectToOrthographic(map);
 
@@ -98,9 +100,9 @@ public:
 
     // hoot:* tags are metadata tags and should be ignored, so no removal here
     map->clear();
-    NodePtr node5 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    NodePtr node5 = TestUtils::createNode(map);
     node5->getTags().set("hoot:id", "1");
-    NodePtr node6 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    NodePtr node6 = TestUtils::createNode(map);
     node6->getTags().set("hoot:id", "2");
     MapProjector::projectToOrthographic(map);
 
@@ -111,15 +113,48 @@ public:
     // The nodes are inside of the proximity threshold but have different names, so aren't
     // duplicates.
     map->clear();
-    NodePtr node7 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    NodePtr node7 = TestUtils::createNode(map);
     node7->getTags().set("name", "node7");
-    NodePtr node8 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    NodePtr node8 = TestUtils::createNode(map);
     node8->getTags().set("name", "node8");
     MapProjector::projectToOrthographic(map);
 
     DuplicateNodeRemover::removeNodes(map, 1.0);
 
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
+  }
+
+  void runInvalidDistanceTest()
+  {
+    conf().set(ConfigOptions::getDuplicateNodeRemoverDistanceThresholdKey(), -1.0);
+
+    QString exceptionMsg;
+    try
+    {
+      DuplicateNodeRemover uut(-1.0);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Nearby node merging distance must be greater than zero. Distance specified: -1")
+        .toStdString(),
+      exceptionMsg.toStdString());
+  }
+
+  void runIgnoreStatusTest()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+
+    // Statuses are different, so won't be considered dupes unless we explicitly ignore status.
+    /*NodePtr node1 =*/ TestUtils::createNode(map, "", Status::Unknown1);
+    /*NodePtr node2 =*/ TestUtils::createNode(map, "", Status::Unknown2);
+    MapProjector::projectToOrthographic(map);
+
+    DuplicateNodeRemover::removeNodes(map, 1.0, true);
+
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
   }
 };
 

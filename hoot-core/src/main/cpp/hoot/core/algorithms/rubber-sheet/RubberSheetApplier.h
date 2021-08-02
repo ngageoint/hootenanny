@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RUBBERSHEETAPPLIER_H
@@ -35,22 +35,21 @@ namespace hoot
 {
 
 /**
- * Applies a rubber sheet transform
+ * @brief The RubberSheetApplier class applies a rubber sheet transform.
  */
 class RubberSheetApplier
 {
 public:
 
-  RubberSheetApplier();
+  RubberSheetApplier() = default;
 
   /**
-   * Applies a rubber sheet transform to input and writes to output
-   *
+   * @brief apply applies a rubber sheet transform to input and writes to output.
    * @param transform transform to apply
    * @param input input to apply the transform to
    * @param output path to write the transformed output
    */
-  void apply(const QString& transform, const QString& input, const QString& output);
+  void apply(const QString& transform, const QString& input, const QString& output) const;
 };
 
 }

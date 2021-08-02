@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -31,6 +31,8 @@
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
+#include <hoot/core/util/FileUtils.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -52,48 +54,68 @@ class PoiPolygonTypeScoreExtractorTest : public HootTestFixture
 
 public:
 
+  PoiPolygonTypeScoreExtractorTest() :
+  HootTestFixture(
+    "test-files/conflate/poi-polygon/PoiPolygonTypeScoreExtractorTest/",
+    "test-output/conflate/poi-polygon/PoiPolygonTypeScoreExtractorTest/")
+  {
+  }
+
   void runTest()
   {
-    OsmMapPtr map(new OsmMap());
-    PoiPolygonInfoCachePtr infoCache(new PoiPolygonInfoCache(map));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    PoiPolygonDistanceTruthRecorder::resetMatchDistanceInfo();
+    PoiPolygonInfoCachePtr infoCache = std::make_shared<PoiPolygonInfoCache>(map);
     infoCache->setConfiguration(conf());
     PoiPolygonTypeScoreExtractor uut(infoCache);
     uut.setConfiguration(conf());
+    uut.setCalculateMatchDistanceTruth(true);
 
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set("amenity", "school");
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way1->getTags().set("amenity", "school");
+    // Mocking a feature distance here that would have been otherwise set by PoiPolygonMatch.
+    uut.setFeatureDistance(20.5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set("amenity", "hospital");
-    WayPtr way2(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way2->getTags().set("amenity", "clinic");
+    uut.setFeatureDistance(10.2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.6, uut.extract(*map, node2, way2), 0.0001);
 
-    NodePtr node3(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node3 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node3->getTags().set("amenity", "drinking_water");
-    WayPtr way3(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way3 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way3->getTags().set("building", "yes");
+    uut.setFeatureDistance(5.1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node3, way3), 0.0);
+
+    FileUtils::writeFully(
+      _outputPath + "PoiPolygonTypeScoreExtractorTest-runTest-matchDistanceInfo",
+      PoiPolygonDistanceTruthRecorder::getMatchDistanceInfo().trimmed());
+    HOOT_FILE_EQUALS(
+      _inputPath + "PoiPolygonTypeScoreExtractorTest-runTest-matchDistanceInfo",
+      _outputPath + "PoiPolygonTypeScoreExtractorTest-runTest-matchDistanceInfo");
   }
 
   void translateTagValueTest()
   {
     Settings settings = conf();
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     settings.set("poi.polygon.type.translate.to.english", "true");
     settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
-    PoiPolygonInfoCachePtr infoCache(new PoiPolygonInfoCache(map));
+    PoiPolygonInfoCachePtr infoCache = std::make_shared<PoiPolygonInfoCache>(map);
     infoCache->setConfiguration(settings);
     PoiPolygonTypeScoreExtractor uut(infoCache);
     uut.setConfiguration(settings);
 
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set("amenity", "ticket_office");
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way1->getTags().set("amenity", "Fahrscheinschalter");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
@@ -101,22 +123,6 @@ public:
     uut.setConfiguration(settings);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
-
-  // for misc type debug testing only
-//  void miscTest()
-//  {
-//    OsmMapPtr map(new OsmMap());
-//    PoiPolygonInfoCachePtr infoCache(new PoiPolygonInfoCache(map));
-//    infoCache->setConfiguration(conf());
-//    PoiPolygonTypeScoreExtractor uut(infoCache);
-//    uut.setConfiguration(conf());
-//    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-//    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
-
-//    node1->getTags().set("amenity", "arts_centre");
-//    way1->getTags().set("amenity", "fountain");
-//    LOG_VARW(uut.extract(*map, node1, way1));
-//  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonTypeScoreExtractorTest, "quick");

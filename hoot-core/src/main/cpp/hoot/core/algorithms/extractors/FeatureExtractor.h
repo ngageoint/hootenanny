@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef FEATUREEXTRACTOR_H
 #define FEATUREEXTRACTOR_H
@@ -46,42 +46,46 @@ namespace hoot
 class OsmMap;
 
 /**
- * Extracts a single feature (AKA factor) for a given element pair.
+ * @brief The FeatureExtractor class extracts a single feature (AKA factor) for a given element
+ * pair.
  */
 class FeatureExtractor : public ApiEntityInfo
 {
 public:
 
+  static QString className() { return "hoot::FeatureExtractor"; }
+
   FeatureExtractor() = default;
   virtual ~FeatureExtractor() = default;
-
-  static QString className() { return "hoot::FeatureExtractor"; }
 
   static double nullValue() { return -999999999; }
 
   /**
-   * Extracts a feature from a given pair of elements. The feature may be something like the
-   * distance between colors, the overlap of two polygons, etc.
+   * @brief extract extracts a feature from a given pair of elements.
+   *
+   * The feature may be something like the distance between colors, the overlap of two polygons,
+   * etc.
    */
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const = 0;
 
-  virtual QString toString() const { return ""; }
+  QString toString() const override { return ""; }
 
   /**
-   * Returns the factor type for this feature/factor (Nominal or Numeric).
+   * @brief getFactorType returns the factor type for this feature/factor (Nominal or Numeric).
    */
   virtual Tgs::DataFrame::FactorType getFactorType() const = 0;
 
   /**
-   * Returns the null treatment for this feature/factor (NullAsValue or NullAsMissingValue).
+   * @brief getNullTreatment returns the null treatment for this feature/factor (NullAsValue or
+   * NullAsMissingValue).
    */
   virtual Tgs::DataFrame::NullTreatment getNullTreatment() const = 0;
 
   static bool isNull(double v) { return v == nullValue() || ::qIsNaN(v); }
 };
 
-typedef std::shared_ptr<FeatureExtractor> FeatureExtractorPtr;
+using FeatureExtractorPtr = std::shared_ptr<FeatureExtractor>;
 
 }
 

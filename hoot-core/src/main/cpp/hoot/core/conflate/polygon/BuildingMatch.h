@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef BUILDINGMATCH_H
 #define BUILDINGMATCH_H
@@ -55,44 +55,33 @@ public:
   BuildingMatch(const ConstMatchThresholdPtr& mt);
   BuildingMatch(const ConstOsmMapPtr& map, const std::shared_ptr<const BuildingRfClassifier>& rf,
                 const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt);
-  virtual ~BuildingMatch() = default;
+  ~BuildingMatch() = default;
 
-  virtual const MatchClassification& getClassification() const override { return _p; }
-
-  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
-
-  virtual MatchMembers getMatchMembers() const override { return MatchMembers::Polygon; }
-
-  virtual QString getName() const override { return MATCH_NAME; }
-
-  virtual QString getClassName() const override { return className(); }
-
-  virtual double getProbability() const override;
-
+  const MatchClassification& getClassification() const override { return _p; }
+  std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
+  MatchMembers getMatchMembers() const override { return MatchMembers::Polygon; }
+  double getProbability() const override;
   /**
    * Building matches never conflict other building matches, but conflict with everything else.
    */
-  virtual bool isConflicting(
-    const ConstMatchPtr& other, const ConstOsmMapPtr& map,
+  bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map,
     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
-
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
+  std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
+  QString explain() const override { return _explainText; }
+  void setExplain(const QString& explainText) override { _explainText = explainText; }
 
-  virtual QString toString() const override;
-
-  virtual QString explain() const override { return _explainText; }
-  virtual void setExplain(const QString& explainText) override { _explainText = explainText; }
-
-  virtual QString getDescription() const override { return "Matches buildings"; }
+  QString getName() const override { return MATCH_NAME; }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Matches buildings"; }
+  QString toString() const override;
 
 private:
 
   friend class PoiPolygonMergerCreatorTest;
 
-  ElementId _eid1, _eid2;
   MatchClassification _p;
   std::shared_ptr<const BuildingRfClassifier> _rf;
   QString _explainText;

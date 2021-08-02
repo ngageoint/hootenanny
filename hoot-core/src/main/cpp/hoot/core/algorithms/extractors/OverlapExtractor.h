@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OVERLAPEXTRACTOR_H
 #define OVERLAPEXTRACTOR_H
@@ -37,11 +37,7 @@ namespace hoot
 class Element;
 
 /**
- * This is exactly the same as the SymDiffMatcher (in JCS speak) so I've skipped implementing the
- * SymDiffMatcher.
- *
- * All non-area geometries have 0% overlap. (due to 0 area)
- *
+ * @brief The OverlapExtractor class is exactly the same as the JCS SymDiffMatcher.
  * @author RoadMatcher
  * @copyright GPL
  * http://www.vividsolutions.com/products.asp?catg=spaapp&code=roadmatcher
@@ -53,18 +49,16 @@ class OverlapExtractor : public FeatureExtractorBase
 public:
 
   OverlapExtractor() = default;
-  virtual ~OverlapExtractor() = default;
+  ~OverlapExtractor() = default;
 
   static QString className() { return "hoot::OverlapExtractor"; }
 
-  virtual QString getClassName() const override { return className(); }
-
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getDescription() const { return "Determines the overlap between two features"; }
-
-  virtual QString getName() const { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Determines the overlap between two features"; }
+  QString getName() const override { return className(); }
 };
 
 }

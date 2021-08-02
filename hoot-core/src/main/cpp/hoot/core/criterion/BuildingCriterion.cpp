@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "BuildingCriterion.h"
 
@@ -30,7 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/BuildingWayNodeCriterion.h>
 
 using namespace std;
 
@@ -38,6 +38,11 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, BuildingCriterion)
+
+BuildingCriterion::BuildingCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+}
 
 bool BuildingCriterion::isParentABuilding(ElementId eid) const
 {
@@ -106,6 +111,11 @@ bool BuildingCriterion::isSatisfied(const Tags& tags, const ElementType& element
 
   return
     elementType != ElementType::Node && OsmSchema::getInstance().hasCategory(tags, "building");
+}
+
+QStringList BuildingCriterion::getChildCriteria() const
+{
+  return QStringList(BuildingWayNodeCriterion::className());
 }
 
 }

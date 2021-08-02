@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 #include "RelationMemberUtilsJs.h"
 
@@ -47,30 +47,29 @@ namespace hoot
 
 HOOT_JS_REGISTER(RelationMemberUtilsJs)
 
-void RelationMemberUtilsJs::Init(Handle<Object> exports)
+void RelationMemberUtilsJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> obj = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "RelationMemberUtils"), obj);
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> obj = Object::New(current);
+  exports->Set(context, toV8("RelationMemberUtils"), obj);
 
-  obj->Set(String::NewFromUtf8(current, "isMemberOfRelationType"),
-           FunctionTemplate::New(current, isMemberOfRelationType)->GetFunction());
-  obj->Set(String::NewFromUtf8(current, "isMemberOfRelationInCategory"),
-           FunctionTemplate::New(current, isMemberOfRelationInCategory)->GetFunction());
-  obj->Set(String::NewFromUtf8(current, "isMemberOfRelationWithTagKey"),
-           FunctionTemplate::New(current, isMemberOfRelationWithTagKey)->GetFunction());
-  obj->Set(String::NewFromUtf8(current, "getNumRelationMemberNodes"),
-           FunctionTemplate::New(current, getNumRelationMemberNodes)->GetFunction());
-  obj->Set(String::NewFromUtf8(current, "relationsHaveConnectedWayMembers"),
-           FunctionTemplate::New(current, relationsHaveConnectedWayMembers)->GetFunction());
-  obj->Set(String::NewFromUtf8(current, "isMemberOfRelationSatisfyingCriterion"),
-           FunctionTemplate::New(current, isMemberOfRelationSatisfyingCriterion)->GetFunction());
-  obj->Set(String::NewFromUtf8(current, "relationHasConflatableMember"),
-           FunctionTemplate::New(current, relationHasConflatableMember)->GetFunction());
+  obj->Set(context, toV8("isMemberOfRelationWithType"),
+           FunctionTemplate::New(current, isMemberOfRelationWithType)->GetFunction(context).ToLocalChecked());
+  obj->Set(context, toV8("isMemberOfRelationInCategory"),
+           FunctionTemplate::New(current, isMemberOfRelationInCategory)->GetFunction(context).ToLocalChecked());
+  obj->Set(context, toV8("isMemberOfRelationWithTagKey"),
+           FunctionTemplate::New(current, isMemberOfRelationWithTagKey)->GetFunction(context).ToLocalChecked());
+  obj->Set(context, toV8("getNumRelationMemberNodes"),
+           FunctionTemplate::New(current, getNumRelationMemberNodes)->GetFunction(context).ToLocalChecked());
+  obj->Set(context, toV8("relationsHaveConnectedWayMembers"),
+           FunctionTemplate::New(current, relationsHaveConnectedWayMembers)->GetFunction(context).ToLocalChecked());
+  obj->Set(context, toV8("isMemberOfRelationSatisfyingCriterion"),
+           FunctionTemplate::New(current, isMemberOfRelationSatisfyingCriterion)->GetFunction(context).ToLocalChecked());
 }
 
-void RelationMemberUtilsJs::isMemberOfRelationType(const FunctionCallbackInfo<Value>& args)
+void RelationMemberUtilsJs::isMemberOfRelationWithType(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
@@ -80,7 +79,7 @@ void RelationMemberUtilsJs::isMemberOfRelationType(const FunctionCallbackInfo<Va
   QString relationType = toCpp<QString>(args[2]);
 
   const bool inRelationOfSpecifiedType =
-    RelationMemberUtils::isMemberOfRelationType(map, childId, relationType);
+    RelationMemberUtils::isMemberOfRelationWithType(map, childId, relationType);
 
   args.GetReturnValue().Set(Boolean::New(current, inRelationOfSpecifiedType));
 }
@@ -172,8 +171,7 @@ void RelationMemberUtilsJs::isMemberOfRelationSatisfyingCriterion(
   LOG_VART(critClassName);
 
   ElementCriterionPtr crit =
-    std::shared_ptr<ElementCriterion>(
-      Factory::getInstance().constructObject<ElementCriterion>(critClassName.trimmed()));
+    Factory::getInstance().constructObject<ElementCriterion>(critClassName.trimmed());
   if (!crit)
   {
     throw IllegalArgumentException(
@@ -188,38 +186,9 @@ void RelationMemberUtilsJs::isMemberOfRelationSatisfyingCriterion(
   }
 
   const bool isMember =
-    RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(map, childId, *crit);
+    RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(childId, *crit, map);
 
   args.GetReturnValue().Set(Boolean::New(current, isMember));
-}
-
-void RelationMemberUtilsJs::relationHasConflatableMember(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  try
-  {
-    Context::Scope context_scope(current->GetCurrentContext());
-
-    ConstElementPtr element = toCpp<ConstElementPtr>(args[0]);
-    if (element->getElementType() != ElementType::Relation)
-    {
-      args.GetReturnValue().Set(
-        current->ThrowException(
-          Exception::TypeError(String::NewFromUtf8(current, "Expected a relation"))));
-    }
-    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
-
-    ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[1]);
-
-    args.GetReturnValue().Set(
-      Boolean::New(current, RelationMemberUtils::relationHasConflatableMember(relation, map)));
-  }
-  catch (const HootException& err)
-  {
-    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
-  }
 }
 
 }

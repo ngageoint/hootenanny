@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "DualHighwaySplitter.h"
@@ -35,29 +35,27 @@
 #include <geos/geom/Point.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/BufferBuilder.h>
-using namespace geos::geom;
-using namespace geos::operation::buffer;
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/DistanceNodeCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/ops/RemoveNodeByEid.h>
-#include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Qt
 #include <QDebug>
@@ -70,6 +68,7 @@ using namespace geos::operation::buffer;
 #include <tgs/StreamUtils.h>
 
 using namespace geos::geom;
+using namespace geos::operation::buffer;
 using namespace std;
 using namespace Tgs;
 
@@ -104,25 +103,25 @@ _map(map)
 }
 
 std::shared_ptr<Way> DualHighwaySplitter::_createOneWay(const std::shared_ptr<const Way>& w,
-                                                        Meters bufferSize, bool left)
+                                                        Meters bufferSize, bool left) const
 {
   std::shared_ptr<const LineString> ls = ElementToGeometryConverter(_result).convertToLineString(w);
 
   BufferParameters bp(8, BufferParameters::CAP_FLAT, BufferParameters::JOIN_ROUND,
                       bufferSize * 2);
 
-  BufferBuilder bb(bp);
-  std::shared_ptr<Geometry> g(bb.bufferLineSingleSided(ls.get(), bufferSize, left));
+  BufferBuilder* bb = new BufferBuilder(bp);
+  std::shared_ptr<Geometry> g(bb->bufferLineSingleSided(ls.get(), bufferSize, left));
   const LineString* newLs = dynamic_cast<const LineString*>(g.get());
 
   long way_id = w->getId();
   if (!left)
     way_id = _result->createNextWayId();
-  WayPtr result(new Way(w->getStatus(), way_id, w->getRawCircularError()));
+  WayPtr result = std::make_shared<Way>(w->getStatus(), way_id, w->getRawCircularError());
   result->setPid(w->getPid());
 
   // This sometimes happens if the buffer builder returns a multilinestring. See #2275
-  if (newLs == 0)
+  if (newLs == nullptr)
   {
     // TODO: MultiLineString not handled properly See r2275 (need to port issue to github)
 
@@ -150,8 +149,9 @@ std::shared_ptr<Way> DualHighwaySplitter::_createOneWay(const std::shared_ptr<co
     const CoordinateSequence* cs = ls->getCoordinatesRO();
     for (size_t i = 0; i < cs->getSize(); i++)
     {
-      std::shared_ptr<Node> n(new Node(w->getStatus(), _result->createNextNodeId(), cs->getAt(i),
-        w->getCircularError()));
+      std::shared_ptr<Node> n =
+        std::make_shared<Node>(
+          w->getStatus(), _result->createNextNodeId(), cs->getAt(i), w->getCircularError());
       _result->addNode(n);
       result->addNode(n->getId());
     }
@@ -161,8 +161,9 @@ std::shared_ptr<Way> DualHighwaySplitter::_createOneWay(const std::shared_ptr<co
     const CoordinateSequence* cs = newLs->getCoordinatesRO();
     for (size_t i = 0; i < cs->getSize(); i++)
     {
-      std::shared_ptr<Node> n(new Node(w->getStatus(), _result->createNextNodeId(), cs->getAt(i),
-        w->getCircularError()));
+      std::shared_ptr<Node> n =
+        std::make_shared<Node>(
+          w->getStatus(), _result->createNextNodeId(), cs->getAt(i), w->getCircularError());
       _result->addNode(n);
       result->addNode(n->getId());
     }
@@ -176,7 +177,7 @@ double DualHighwaySplitter::_dotProduct(const Coordinate& c1, const Coordinate& 
   return c1.x * c2.x + c1.y * c2.y;
 }
 
-long DualHighwaySplitter::_nearestNode(long nid, const std::shared_ptr<const Way>& w)
+long DualHighwaySplitter::_nearestNode(long nid, const std::shared_ptr<const Way>& w) const
 {
   std::shared_ptr<Node> src = _result->getNode(nid);
   const vector<long>& nids = w->getNodeIds();
@@ -196,7 +197,7 @@ long DualHighwaySplitter::_nearestNode(long nid, const std::shared_ptr<const Way
   return bestNid;
 }
 
-Coordinate DualHighwaySplitter::_normalizedVector(long nid1, long nid2)
+Coordinate DualHighwaySplitter::_normalizedVector(long nid1, long nid2) const
 {
   Coordinate c1 = _result->getNode(nid1)->toCoordinate();
   Coordinate c2 = _result->getNode(nid2)->toCoordinate();
@@ -214,14 +215,13 @@ Coordinate DualHighwaySplitter::_normalizedVector(long nid1, long nid2)
 }
 
 bool DualHighwaySplitter::_onRight(long intersectionId, const std::shared_ptr<Way>& inbound,
-                                   long leftNn, long rightNn)
+                                   long leftNn, long rightNn) const
 {
   // calculate the normalized vector from nodeId to the nearest end point on left.
-  size_t inboundNodeIndex;
+  size_t inboundNodeIndex = 0;
   Coordinate vi;
   if (inbound->getNodeId(0) == intersectionId)
   {
-    inboundNodeIndex = 0;
     vi = WayHeading::calculateVector(_result->getNode(inbound->getNodeId(0))->toCoordinate(),
                                      _result->getNode(inbound->getNodeId(1))->toCoordinate());
   }
@@ -267,7 +267,7 @@ std::shared_ptr<OsmMap> DualHighwaySplitter::splitAll(const std::shared_ptr<cons
 std::shared_ptr<OsmMap> DualHighwaySplitter::splitAll()
 {
   _numAffected = 0;
-  std::shared_ptr<OsmMap> result(new OsmMap(_map));
+  std::shared_ptr<OsmMap> result = std::make_shared<OsmMap>(_map);
   _result = result;
   // TODO: Why does the class description ref 'divided=yes' and this uses 'divider=yes'?
   TagCriterion tagCrit("divider", "yes");
@@ -277,9 +277,9 @@ std::shared_ptr<OsmMap> DualHighwaySplitter::splitAll()
   bool todoLogged = false;
   for (size_t i = 0; i < wayIds.size(); i++)
   {
-    if (wayIds.size() % 1000 == 0 && wayIds.size() > 0)
+    if (wayIds.size() % 1000 == 0 && !wayIds.empty())
     {
-      PROGRESS_DEBUG("  splitting " << i << " / " << wayIds.size());
+      PROGRESS_DEBUG("  splitting " << i << " of " << wayIds.size());
       todoLogged = true;
     }
     _splitWay(wayIds[i]);
@@ -288,7 +288,7 @@ std::shared_ptr<OsmMap> DualHighwaySplitter::splitAll()
 
   if (todoLogged)
   {
-    LOG_DEBUG("  splitting " << wayIds.size() << " / " << wayIds.size());
+    LOG_DEBUG("  splitting " << wayIds.size() << " of " << wayIds.size());
   }
 
   //  Remove the un-needed nodes from the original way that aren't part of any other way now
@@ -299,7 +299,7 @@ std::shared_ptr<OsmMap> DualHighwaySplitter::splitAll()
   return result;
 }
 
-void DualHighwaySplitter::_fixLanes(const std::shared_ptr<Way>& w)
+void DualHighwaySplitter::_fixLanes(const std::shared_ptr<Way>& w) const
 {
   QString lanesStr = w->getTags()["lanes"];
 
@@ -324,7 +324,7 @@ void DualHighwaySplitter::_fixLanes(const std::shared_ptr<Way>& w)
   }
 }
 
-void DualHighwaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr<Way>& edge)
+void DualHighwaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr<Way>& edge) const
 {
   Coordinate centerNodeC = _result->getNode(centerNodeId)->toCoordinate();
   // determine which end of edge we're operating on
@@ -345,12 +345,13 @@ void DualHighwaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr
     edgeEndId = last->getId();
   }
 
-  // find all the nodes that are about the right distance from centerNodeId
-  // Find nodes that are > _splitSize*.99 away, but less than _splitSize*1.01
-  std::shared_ptr<DistanceNodeCriterion> outerCrit(
-    new DistanceNodeCriterion(centerNodeC, _splitSize*1.01));
-  std::shared_ptr<NotCriterion> notInnerCrit(
-    new NotCriterion(new DistanceNodeCriterion(centerNodeC, _splitSize * .99)));
+  // Find all the nodes that are about the right distance from centerNodeId. Find nodes that are >
+  // _splitSize*.99 away, but less than _splitSize*1.01.
+  std::shared_ptr<DistanceNodeCriterion> outerCrit =
+    std::make_shared<DistanceNodeCriterion>(centerNodeC, _splitSize * 1.01);
+  std::shared_ptr<NotCriterion> notInnerCrit =
+    std::make_shared<NotCriterion>(
+      std::make_shared<DistanceNodeCriterion>(centerNodeC, _splitSize * .99));
   ChainCriterion chainCrit(outerCrit, notInnerCrit);
 
   vector<long> nids =
@@ -385,7 +386,7 @@ void DualHighwaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr
   }
 }
 
-void DualHighwaySplitter::_splitIntersectingWays(long nid)
+void DualHighwaySplitter::_splitIntersectingWays(long nid) const
 {
   std::vector<long> wids = ElementIdsVisitor::findWaysByNode(_result, nid);
 

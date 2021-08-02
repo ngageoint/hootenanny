@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef EDGESUBLINE_H
 #define EDGESUBLINE_H
@@ -40,10 +40,8 @@ namespace hoot
 class EdgeSubline
 {
 public:
+
   EdgeSubline(const ConstEdgeLocationPtr& start, const ConstEdgeLocationPtr& end);
-
-  EdgeSubline(const EdgeLocationPtr& start, const EdgeLocationPtr& end);
-
   EdgeSubline(const ConstNetworkEdgePtr& e, double start, double end);
 
   Meters calculateLength(const ConstElementProviderPtr& provider) const;
@@ -51,29 +49,23 @@ public:
   std::shared_ptr<EdgeSubline> clone() const;
 
   bool contains(const ConstNetworkVertexPtr& v) const;
-
   bool contains(const std::shared_ptr<const EdgeSubline>& es) const;
-
   bool contains(const ConstEdgeLocationPtr& el) const;
 
   static std::shared_ptr<EdgeSubline> createFullSubline(const ConstNetworkEdgePtr& e);
 
   const ConstNetworkEdgePtr& getEdge() const { return _start->getEdge(); }
-
   const ConstEdgeLocationPtr& getEnd() const { return _end; }
-
   /**
    * Returns the way location that is closer to the beginning of the way regardless of the
    * isBackwards() result.
    */
   ConstEdgeLocationPtr getFormer() const { return isBackwards() ? _end : _start; }
-
   /**
    * Returns the way location that is closer to the end of the way regardless of the
    * isBackwards() result.
    */
   ConstEdgeLocationPtr getLatter() const { return isBackwards() ? _start : _end; }
-
   const ConstEdgeLocationPtr& getStart() const { return _start; }
 
   /**
@@ -87,11 +79,8 @@ public:
    * a valid test if sublines belong to the same edge.
    */
   bool isSameDirection(const std::shared_ptr<const EdgeSubline>& other) const;
-
   bool isBackwards() const { return _end < _start; }
-
   bool isValid() const { return _start->isValid() && _end->isValid(); }
-
   bool isZeroLength() const { return _start == _end; }
 
   /**
@@ -114,11 +103,12 @@ public:
   std::shared_ptr<EdgeSubline> unionSubline(const std::shared_ptr<const EdgeSubline>& other) const;
 
 private:
+
   ConstEdgeLocationPtr _start, _end;
 };
 
-typedef std::shared_ptr<EdgeSubline> EdgeSublinePtr;
-typedef std::shared_ptr<const EdgeSubline> ConstEdgeSublinePtr;
+using EdgeSublinePtr = std::shared_ptr<EdgeSubline>;
+using ConstEdgeSublinePtr = std::shared_ptr<const EdgeSubline>;
 
 bool operator==(const ConstEdgeSublinePtr&, const ConstEdgeSublinePtr&);
 
@@ -132,8 +122,6 @@ bool operator<(const ConstEdgeSublinePtr&, const ConstEdgeSublinePtr&);
 
 inline uint qHash(const ConstEdgeSublinePtr& es)
 {
-//  LOG_VARW(qHash(es->getStart()));
-//  LOG_VARW(qHash(es->getEnd()));
   return ::qHash(Tgs::cantorPairing(qHash(es->getStart()), qHash(es->getEnd())));
 }
 

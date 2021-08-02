@@ -91,8 +91,7 @@ amount of time has elapsed.
 === Test Setup
 
 The test is configured such that the server under test (server a) is being tested
-by node.js scripts running on another server (server b). All testing occurred on
-server's at DigitalGlobe in Herndon.
+by node.js scripts running on another server (server b).
 
 * server a
 ** 8 core VM, 72 GB of RAM, Ubuntu 14.04
@@ -229,7 +228,7 @@ server repeatedly.
 This is unlikely to occur in the wild as one IP would have to churn with
 more than 30k connections within 60 seconds.
 
-A good summary of the issue can be found link:$$http://vincent.bernat.im/en/blog/2014-tcp-time-wait-state-linux.html$$[here]:
+A good summary of the issue can be found http://vincent.bernat.im/en/blog/2014-tcp-time-wait-state-linux.html[here]:
 
 If for some reason this is still an issue there are a number of rather straight
 forward fixes:

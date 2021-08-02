@@ -19,16 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "BaseCommand.h"
 
 // Hoot
 #include <hoot/core/Hoot.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/util/Settings.h>
@@ -37,6 +38,7 @@
 
 // Qt
 #include <QFileInfo>
+#include <QDir>
 
 using namespace geos::geom;
 
@@ -58,44 +60,17 @@ QString BaseCommand::getHelp() const
 
 QString BaseCommand::_getHelpPath() const
 {
-  QString result = ConfPath::getHootHome() + "/docs/commands/" + getName() + ".asciidoc";
-
-  return result;
-}
-
-Envelope BaseCommand::parseEnvelope(QString envStr) const
-{
-  QStringList envArr = envStr.split(",");
-
-  if (envArr.size() != 4)
-  {
-    throw HootException("Invalid bounds format, requires 4 values: " + envStr);
-  }
-
-  bool ok, allOk = true;
-  double left = envArr[0].toDouble(&ok);
-  allOk &= ok;
-  double bottom = envArr[1].toDouble(&ok);
-  allOk &= ok;
-  double right = envArr[2].toDouble(&ok);
-  allOk &= ok;
-  double top = envArr[3].toDouble(&ok);
-  allOk &= ok;
-
-  if (allOk == false)
-  {
-    throw HootException("Invalid bounds format: " + envStr);
-  }
-
-  return Envelope(left, right, bottom, top);
+  return ConfPath::getHootHome() + "/docs/commands/" + getName() + ".asciidoc";
 }
 
 int BaseCommand::run(char* argv[], int argc)
 {
   QStringList args = toQStringList(argv, argc);
-  LOG_VART(args)
+  LOG_VART(args);
+  LOG_VART(args.join(" "));
 
   args = args.mid(2);
+  _rawArgs = args;
 
   Settings::parseCommonArguments(args);
   LOG_VART(args);
@@ -109,7 +84,7 @@ int BaseCommand::run(char* argv[], int argc)
   return runSimple(args);
 }
 
-QStringList BaseCommand::toQStringList(char* argv[], int argc)
+QStringList BaseCommand::toQStringList(char* argv[], int argc) const
 {
   QStringList result;
   for (int i = 0; i < argc; i++)
@@ -117,6 +92,33 @@ QStringList BaseCommand::toQStringList(char* argv[], int argc)
     result << argv[i];
   }
   return result;
+}
+
+QStringList BaseCommand::_parseRecursiveInputParameter(QStringList& args, bool& paramPresent)
+{
+  QStringList inputFilters;
+  paramPresent = false;
+  if (args.contains("--recursive"))
+  {
+    paramPresent = true;
+    const int recursiveIndex = args.indexOf("--recursive");
+    if (args.size() < recursiveIndex + 2)
+    {
+      throw IllegalArgumentException(
+        "The --recursive option must be followed by either \"*\" for no filtering or one or "
+        "more filters.");
+    }
+    const QString filter = args.at(recursiveIndex + 1).trimmed();
+    // "*" denotes no filtering
+    if (filter != "*")
+    {
+      inputFilters = filter.split(";");
+    }
+    args.removeAt(recursiveIndex + 1);
+    args.removeAt(recursiveIndex);
+  }
+  LOG_VARD(inputFilters);
+  return inputFilters;
 }
 
 }

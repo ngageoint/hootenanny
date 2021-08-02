@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef IMPLICITTAGRAWRULESDERIVER_H
 #define IMPLICITTAGRAWRULESDERIVER_H
@@ -62,7 +62,7 @@ class ImplicitTagRawRulesDeriver : public Configurable
 public:
 
   ImplicitTagRawRulesDeriver();
-  virtual ~ImplicitTagRawRulesDeriver() = default;
+  ~ImplicitTagRawRulesDeriver() = default;
 
   /**
    * Derives implicit tag rules for POIs given input data and writes the rules to output
@@ -75,7 +75,7 @@ public:
   void deriveRawRules(const QStringList& inputs, const QStringList& translationScripts,
                       const QString& output);
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setSortParallelCount(int count) { _sortParallelCount = count; }
   void setSkipFiltering(bool skip) { _skipFiltering = skip; }
@@ -159,7 +159,7 @@ private:
    * In cases where these is a word/tag key occurrence count tie, this resolves the tie.
    */
   void _resolveCountTies();
-  void _sortByWord(const std::shared_ptr<QTemporaryFile>& input);
+  void _sortByWord(const std::shared_ptr<QTemporaryFile>& input) const;
 };
 
 }

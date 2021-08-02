@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "EdgeLocation.h"
 
@@ -67,7 +67,7 @@ std::shared_ptr<EdgeLocation> EdgeLocation::move(const ConstElementProviderPtr& 
   Meters offset = _portion * l + distance;
   Meters portion = min(1.0, max(offset / l, 0.0));
 
-  return std::shared_ptr<EdgeLocation>(new EdgeLocation(_e, portion));
+  return std::make_shared<EdgeLocation>(_e, portion);
 }
 
 QString EdgeLocation::toString() const

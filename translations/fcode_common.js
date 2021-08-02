@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -173,14 +173,14 @@ fcodeCommon = {
       ['F_CODE','AM080','man_made','water_tower'], // Water Tower
       ['F_CODE','AN010','railway','rail'], // Railway
       ['F_CODE','AN050','sidetrack','yes'], // Railway Sidetrack
-      ['F_CODE','AN060','service','yard'], // Railway Yard
+      ['F_CODE','AN060','landuse','railway'], // Railway Yard
       ['F_CODE','AN075','railway','turntable'], // Railway Turntable
       ['F_CODE','AN076','railway','roundhouse'], // Roundhouse
       ['F_CODE','AN080','railway','switch'], // Railway Signal
       ['F_CODE','AN085','railway','signal'], // Railway Signal
       ['F_CODE','AP010','highway','track'], // Cart Track
       ['F_CODE','AP020','junction','yes'], // Road Interchange - See RIT
-      ['F_CODE','AP030','highway','road'], // Road - See Custom rules
+      ['F_CODE','AP030','highway','yes'], // Road - See Custom rules
       ['F_CODE','AP033','highway','turning_circle'], // Engineered Turn Around Site
       ['F_CODE','AP040','barrier','gate'], // Gate
       ['F_CODE','AP041','barrier','yes'], // Vehicle Barrier
@@ -245,7 +245,8 @@ fcodeCommon = {
       ['F_CODE','BB020','seamark:type','berth'], // GGDM3/NAS7 BERTH
       ['F_CODE','BB050','seamark:type','calling-in_point'], // GGDM3/NAS7 CALLING_IN_POINT
       ['F_CODE','BB080','seamark:mooring:category','dolphin'], // GGDM3/NAS7 DOLPHIN
-      ['F_CODE','BB081','shoreline_construction','yes'], // Shoreline Construction
+      // ['F_CODE','BB081','shoreline_construction','yes'], // Shoreline Construction
+      ['F_CODE','BB081','man_made','shoreline_construction'], // Shoreline Construction
       ['F_CODE','BB082','leisure','slipway'], // Shoreline Ramp
       ['F_CODE','BB090','dock','drydock'], // Dry Dock
       ['F_CODE','BB100','seamark:fishing_facility:category','stake'], // GGDM3/NAS7 Fishing Stakes
@@ -299,7 +300,7 @@ fcodeCommon = {
       ['F_CODE','BH075','amenity','fountain'], // Fountain
       ['F_CODE','BH077','natural','hummock'], // Hummock
       ['F_CODE','BH082','water','lake'], // Inland Waterbody
-      ['F_CODE','BH090','water','intermittent'], // Land Subject to Inundation
+      ['F_CODE','BH090','subject_to_inundation','yes'], // Land Subject to Inundation
       ['F_CODE','BH100','water','moat'], // Moat
       ['F_CODE','BH110','pipeline:type','penstock'], // Penstock
       ['F_CODE','BH116','natural','aquifer'], // Aquifer
@@ -384,7 +385,7 @@ fcodeCommon = {
       ['F_CODE','FA000','boundary','administrative'], // GGDM3/NAS7 Administrative Boundary
       ['F_CODE','FA002','place','geopolitical_entity'], // GGDM3/NAS7 GEOPOLITICAL_ENTITY
       ['F_CODE','FA003','place','administrative_subdivision'], // GGDM3/NAS7 ADMINISTRATIVE_SUBDIVISION
-      ['F_CODE','FA012','protect_class','16'], // Contaminated Region
+      ['F_CODE','FA012','hazard','contamination'], // Contaminated Region
       ['F_CODE','FA015','military','range'], // Firing Range/Gunnery Range
       ['F_CODE','FA100','landuse','test_area'], // Test Area, Test Site
       ['F_CODE','FA110','boundary','date_line'], // GGDM3/NAS7 International Date Line

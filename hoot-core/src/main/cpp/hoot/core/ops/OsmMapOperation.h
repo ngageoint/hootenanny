@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OsmMapOperation_H
@@ -48,14 +48,14 @@ namespace hoot
 class OsmMap;
 
 /**
- * Modifies an OsmMap in some way.
+ * Modifies an OsmMap in some manner.
  *
  * Due to needing an entire map, this does not support streaming I/O.  If you do not need the
  * entire input map in memory at one time (operation logic does not require it and you are not
  * running in the conflate pipeline), consider using ElementVisitor instead.
  *
- * @todo We should eventually remove the default empty string implementations of OperationStatus
- * methods and require them to be implemented in children.
+ * @see notes in ElementVisitor about FilteredByGeometryTypeCriteria, OperationStatus, and
+ * ConflateInfoCacheConsumer implementations
  */
 class OsmMapOperation : public ApiEntityInfo, public FilteredByGeometryTypeCriteria,
   public OperationStatus
@@ -64,7 +64,7 @@ public:
 
   static QString className() { return "hoot::OsmMapOperation"; }
 
-  OsmMapOperation() : _numAffected(0), _numProcessed(0) {}
+  OsmMapOperation() = default;
   virtual ~OsmMapOperation() = default;
 
   /**
@@ -84,40 +84,24 @@ public:
   /**
    * @see OperationStatus
    */
-  virtual long getNumFeaturesAffected() const { return _numAffected; }
+  QString getInitStatusMessage() const override { return ""; }
 
   /**
    * @see OperationStatus
    */
-  virtual long getNumFeaturesProcessed() const { return _numProcessed; }
-
-  /**
-   * @see OperationStatus
-   */
-  virtual QString getInitStatusMessage() const { return ""; }
-
-  /**
-   * @see OperationStatus
-   */
-  virtual QString getCompletedStatusMessage() const { return ""; }
+  QString getCompletedStatusMessage() const override { return ""; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    *
-   * An empty list returned here means that the operation is associated no specific criteria and
-   * can be run against any feature type. Any operations that want to control which feature types
-   * they are run against during conflation should populate this list. The list is treated in a
-   * logical OR fashion.
+   * An empty list returned here means that the visitor is associated with no specific element type
+   * criteria and can be run against any feature type. Any visitors that want to control which
+   * feature types they are run against during conflation should populate this list. The list is
+   * treated in a logical OR fashion.
    */
-  virtual QStringList getCriteria() const { return QStringList(); }
+  QStringList getCriteria() const override { return QStringList(); }
 
-  virtual QString toString() const override { return ""; }
-
-protected:
-
-  // These will only be used by those implementing OperationStatus.
-  long _numAffected;    // how many elements the operation actually counted or did something to
-  long _numProcessed;   // how many elements the operation processed total
+  QString toString() const override { return ""; }
 };
 
 }

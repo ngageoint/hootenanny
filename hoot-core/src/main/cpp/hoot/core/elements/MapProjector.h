@@ -19,18 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __MAP_PROJECTOR_H__
 #define __MAP_PROJECTOR_H__
 
 // GDAL
 #include <ogr_core.h>
-class OGRCoordinateTransformation;
-class OGRSpatialReference;
 
 // GEOS
 #include <geos/geom/Coordinate.h>
@@ -38,8 +36,8 @@ class OGRSpatialReference;
 #include <geos/geom/Geometry.h>
 
 // Hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/elements/ElementProvider.h>
+#include <hoot/core/util/Units.h>
 
 // Qt
 #include <QString>
@@ -48,6 +46,9 @@ class OGRSpatialReference;
 #include <memory>
 #include <vector>
 
+class OGRCoordinateTransformation;
+class OGRSpatialReference;
+
 namespace hoot
 {
 
@@ -55,6 +56,8 @@ class OsmMap;
 
 /**
  * (Singleton)
+ *
+ * Note that OGRSpatialReference does not always play nicely with make_shared at GDAL 3.2.3.
  */
 class MapProjector
 {
@@ -91,7 +94,7 @@ public:
    * Returns a vector of all candidate planar projections for a given envelope.
    */
   std::vector<std::shared_ptr<OGRSpatialReference>> createAllPlanarProjections(
-    const OGREnvelope& env);
+    const OGREnvelope& env) const;
 
   /**
    * Using a predefined set of projections this method evaluates each one of them for both distance
@@ -104,7 +107,7 @@ public:
    */
   std::shared_ptr<OGRSpatialReference> createPlanarProjection(const OGREnvelope& env,
     Radians maxAngleError = toRadians(2.0), Meters maxDistanceError = 10.0,
-    Meters testDistance = 1000.0, bool warnOnFail = true);
+    Meters testDistance = 1000.0, bool warnOnFail = true) const;
 
   static MapProjector& getInstance();
 
@@ -162,7 +165,7 @@ public:
                                         const std::shared_ptr<OGRSpatialReference>& srs2);
 
   static QString toWkt(const std::shared_ptr<OGRSpatialReference>& srs) { return toWkt(srs.get()); }
-  static QString toWkt(OGRSpatialReference* srs);
+  static QString toWkt(const OGRSpatialReference* srs);
 
 private:
 
@@ -172,6 +175,14 @@ private:
     Meters distanceError;
     Radians angleError;
     double score;
+
+    PlanarTestResult()
+      : i(-1),
+        distanceError(0.0),
+        angleError(0.0),
+        score(0.0)
+    {
+    }
 
     QString toString() const
     {
@@ -183,26 +194,27 @@ private:
 
   static std::shared_ptr<MapProjector> _theInstance;
 
-  static bool _angleLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
-
-  Radians _calculateAngle(geos::geom::Coordinate p1, geos::geom::Coordinate p2,
-                          geos::geom::Coordinate p3);
-
-  static bool _distanceLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
-
-  bool _evaluateProjection(const OGREnvelope& env, const std::shared_ptr<OGRSpatialReference>& srs,
-    Meters testDistance, Meters& maxDistanceError, Radians& maxAngleError);
-
-  size_t _findBestScore(std::vector<PlanarTestResult>& results);
-
-  static bool _scoreLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
-
   /** Default constructor/destructor */
   MapProjector() = default;
   ~MapProjector() = default;
   /** Delete copy constructor and assignment operator */
   MapProjector(const MapProjector&) = delete;
   MapProjector& operator=(const MapProjector&) = delete;
+
+  static bool _angleLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
+
+  Radians _calculateAngle(geos::geom::Coordinate p1, geos::geom::Coordinate p2,
+                          geos::geom::Coordinate p3) const;
+
+  static bool _distanceLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
+
+  bool _evaluateProjection(
+    const OGREnvelope& env, const std::shared_ptr<OGRSpatialReference>& srs, Meters testDistance,
+    Meters& maxDistanceError, Radians& maxAngleError) const;
+
+  size_t _findBestScore(const std::vector<PlanarTestResult>& results) const;
+
+  static bool _scoreLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 };
 
 class ReprojectCoordinateFilter : public geos::geom::CoordinateFilter
@@ -211,7 +223,7 @@ public:
 
   ReprojectCoordinateFilter(OGRCoordinateTransformation* t);
 
-  virtual void filter_rw(geos::geom::Coordinate* c) const;
+  void filter_rw(geos::geom::Coordinate* c) const override;
 
   void project(geos::geom::Coordinate* c) const;
 

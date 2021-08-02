@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ElementIdsVisitor.h"
@@ -36,11 +36,6 @@ using namespace std;
 namespace hoot
 {
 
-ElementIdsVisitor::ElementIdsVisitor(const ElementType& elementType) :
-_elementType(elementType)
-{
-}
-
 ElementIdsVisitor::ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit) :
 _elementType(elementType),
 _pCrit(pCrit)
@@ -49,33 +44,11 @@ _pCrit(pCrit)
 
 void ElementIdsVisitor::visit(const std::shared_ptr<const Element>& e)
 {
-  if (e->getElementType() == ElementType::Unknown || e->getElementType() == _elementType)
+  if ((e->getElementType() == ElementType::Unknown || e->getElementType() == _elementType) &&
+      (_pCrit == nullptr || _pCrit->isSatisfied(e)))
   {
-    if (_pCrit == 0 || _pCrit->isSatisfied(e))
-    {
-      _elementIds.push_back(e->getId());
-    }
+    _elementIds.push_back(e->getId());
   }
-}
-
-vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map,
-                                             const ElementType& elementType)
-{
-  ElementIdsVisitor v(elementType);
-  if (elementType == ElementType::Node)
-  {
-    map->visitNodesRo(v);
-  }
-  else if (elementType == ElementType::Way)
-  {
-    map->visitWaysRo(v);
-  }
-  else
-  {
-    map->visitRelationsRo(v);
-  }
-  LOG_TRACE(v.getIds());
-  return v.getIds();
 }
 
 vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map,
@@ -98,12 +71,6 @@ vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map,
   return v.getIds();
 }
 
-vector<long> ElementIdsVisitor::_findCloseNodes(const ConstOsmMapPtr& map,
-                                                const Coordinate& refCoord, Meters maxDistance)
-{
-  return map->getIndex().findNodes(refCoord, maxDistance);
-}
-
 vector<long> ElementIdsVisitor::_findCloseWays(const ConstOsmMapPtr& map,
                                                ConstWayPtr refWay, Meters maxDistance,
                                                bool addError)
@@ -111,8 +78,8 @@ vector<long> ElementIdsVisitor::_findCloseWays(const ConstOsmMapPtr& map,
   return map->getIndex().findWayNeighbors(refWay, maxDistance, addError);
 }
 
-vector<long> ElementIdsVisitor::_findElements(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
-                                              const vector<long>& closeElementIds)
+vector<long> ElementIdsVisitor::_findElements(
+  const ConstOsmMapPtr& map, const ElementCriterion* pCrit, const vector<long>& closeElementIds)
 {
   vector<long> result;
   for (size_t i = 0; i < closeElementIds.size(); i++)
@@ -124,16 +91,10 @@ vector<long> ElementIdsVisitor::_findElements(const ConstOsmMapPtr& map, Element
   return result;
 }
 
-vector<long> ElementIdsVisitor::findNodes(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+vector<long> ElementIdsVisitor::findNodes(const ConstOsmMapPtr& map, const ElementCriterion* pCrit,
                                           const Coordinate& refCoord, Meters maxDistance)
 {
   return _findElements(map, pCrit, map->getIndex().findNodes(refCoord, maxDistance));
-}
-
-vector<long> ElementIdsVisitor::findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
-                                         ConstWayPtr refWay, Meters maxDistance, bool addError)
-{
-  return _findElements(map, pCrit, map->getIndex().findWayNeighbors(refWay, maxDistance, addError));
 }
 
 vector<long> ElementIdsVisitor::findElementsByTag(const ConstOsmMapPtr& map,

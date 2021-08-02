@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef EDGEDISTANCEEXTRACTOR_H
 #define EDGEDISTANCEEXTRACTOR_H
@@ -36,15 +36,17 @@ namespace hoot
 class ValueAggregator;
 
 /**
- * Calculates the distance from one set of lines to the other set of lines. There are several
- * options for how to aggregate the distances. See subclasses of ValueAggregator.
  *
+ */
+/**
+ * @brief The EdgeDistanceExtractor class calculates the distance from one set of lines to the other
+ * set of lines.
+ *
+ * There are several options for how to aggregate the distances. See subclasses of ValueAggregator.
  * The distance will be calculated from target to candidate and candidate to target. The lower
- * of the two values will be returned.
- *
- * The distances are determined by sampling one of the geometries into points every samples meters
- * and then calculating the distance from each sample to the lines that make up the other
- * geometry.
+ * of the two values will be returned. The distances are determined by sampling one of the
+ * geometries into points every samples meters and then calculating the distance from each sample to
+ * the lines that make up the other geometry.
  */
 class EdgeDistanceExtractor : public AbstractDistanceExtractor, public ValueAggregatorConsumer,
   public Configurable
@@ -53,25 +55,22 @@ public:
 
   EdgeDistanceExtractor(ValueAggregatorPtr, Meters spacing = 5.0);
   EdgeDistanceExtractor(Meters spacing = 5.0);
-  virtual ~EdgeDistanceExtractor() = default;
+  ~EdgeDistanceExtractor() = default;
 
   static QString className() { return "hoot::EdgeDistanceExtractor"; }
 
   double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getClassName() const override { return className(); }
-
-  virtual QString getName() const override;
-
-  void setValueAggregator(const ValueAggregatorPtr& va) override { _aggregator = va; }
-
   void setConfiguration(const Settings& conf) override;
 
+  void setValueAggregator(const ValueAggregatorPtr& va) override { _aggregator = va; }
   void setSpacing(const double spacing) { _spacing = spacing; }
 
   QString getDescription() const override
   { return "Calculates the distance from one set of lines to another"; }
+  QString getClassName() const override { return className(); }
+  QString getName() const override;
 
 private:
 

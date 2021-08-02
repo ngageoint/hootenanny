@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef IDSWAPOP_H
@@ -42,6 +42,7 @@ namespace hoot
 class IdSwapOp : public ConstOsmMapOperation
 {
 public:
+
   /**
    * @brief className - Get classname string
    * @return - "hoot::IdSwapOp"
@@ -52,50 +53,43 @@ public:
    * @brief IdSwapOp - Default constructor
    */
   IdSwapOp() = default;
-
   /**
    * @brief IdSwapOp - Constructor taking a swap object with the IDs to swap
    */
-  IdSwapOp(const IdSwapPtr& idSwap) : _idSwap(idSwap) { }
-
+  IdSwapOp(const IdSwapPtr& idSwap);
   /**
    * @brief IdSwapOp - Constructor taking two elements to swap IDs
    */
-  IdSwapOp(ElementId e1, ElementId e2) : _idSwap(new IdSwap(e1,e2)) { }
-
-  virtual ~IdSwapOp() = default;
+  IdSwapOp(ElementId e1, ElementId e2);
+  ~IdSwapOp() = default;
 
   /**
    * @brief apply - Apply the IdSwap op
    * @param pMap - Target map
    */
-  virtual void apply(const std::shared_ptr<OsmMap>& map) override;
+  void apply(const std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getDescription() const override
-  { return "Swap IDs for ID preservation in Attribute Conflation"; }
-
-  virtual QString getInitStatusMessage() const override
-  { return "Swapping IDs..."; }
-
-  virtual QString getCompletedStatusMessage() const override
+  QString getInitStatusMessage() const override { return "Swapping IDs..."; }
+  QString getCompletedStatusMessage() const override
   { return "Swapped " + QString::number(_numAffected) + " IDs."; }
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Swap IDs for ID preservation in Attribute Conflation"; }
 
 private:
+
   /**
    * @brief swapNodeIdInWay Swap the node ID in the ways with the swap ID
    * @param map - Target map
    * @param nodeId - Node ID of the node in the ways that is being replaced
    * @param swapId - Node ID of the node to swap into the ways
    */
-  void swapNodeIdInWay(const std::shared_ptr<OsmMap>& map, long nodeId, long swapId);
+  void swapNodeIdInWay(const std::shared_ptr<OsmMap>& map, long nodeId, long swapId) const;
 
   /** Element IDs of elements to swap, if empty check the map for an IdSwap object */
   IdSwapPtr _idSwap;
-
 };
 
 }

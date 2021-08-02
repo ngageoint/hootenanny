@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "HighwayCornerSplitter.h"
@@ -32,22 +32,22 @@
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
-#include <geos/geom/LineString.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/GeometryFactory.h>
-using namespace geos::geom;
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <geos/geom/LineString.h>
 
 // Qt
 #include <QDebug>
 #include <QTextStream>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot
@@ -56,19 +56,19 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, HighwayCornerSplitter)
 
 HighwayCornerSplitter::HighwayCornerSplitter()
-  : _cornerThreshold(ConfigOptions().getHighwayCornerSplitterThresholdDefaultValue()),
-    _splitRounded(ConfigOptions().getHighwayCornerSplitterRoundedSplitDefaultValue()),
-    _roundedThreshold(ConfigOptions().getHighwayCornerSplitterRoundedThresholdDefaultValue()),
-    _roundedMaxNodeCount(ConfigOptions().getHighwayCornerSplitterRoundedMaxNodeCountDefaultValue())
+  : _cornerThreshold(ConfigOptions().getHighwayCornerSplitterThreshold()),
+    _splitRounded(ConfigOptions().getHighwayCornerSplitterRoundedSplit()),
+    _roundedThreshold(ConfigOptions().getHighwayCornerSplitterRoundedThreshold()),
+    _roundedMaxNodeCount(ConfigOptions().getHighwayCornerSplitterRoundedMaxNodeCount())
 {
 }
 
 HighwayCornerSplitter::HighwayCornerSplitter(const std::shared_ptr<OsmMap>& map)
   : _map(map),
-    _cornerThreshold(ConfigOptions().getHighwayCornerSplitterThresholdDefaultValue()),
-    _splitRounded(ConfigOptions().getHighwayCornerSplitterRoundedSplitDefaultValue()),
-    _roundedThreshold(ConfigOptions().getHighwayCornerSplitterRoundedThresholdDefaultValue()),
-    _roundedMaxNodeCount(ConfigOptions().getHighwayCornerSplitterRoundedMaxNodeCountDefaultValue())
+    _cornerThreshold(ConfigOptions().getHighwayCornerSplitterThreshold()),
+    _splitRounded(ConfigOptions().getHighwayCornerSplitterRoundedSplit()),
+    _roundedThreshold(ConfigOptions().getHighwayCornerSplitterRoundedThreshold()),
+    _roundedMaxNodeCount(ConfigOptions().getHighwayCornerSplitterRoundedMaxNodeCount())
 {
 }
 
@@ -183,9 +183,9 @@ void HighwayCornerSplitter::_splitRoundedCorners()
       for (int start_index = 0; start_index < headings.size() - 2; ++start_index)
       {
         double total = 0.0;
-        for (int i = 0; i < _roundedMaxNodeCount && start_index + i + 1 < headings.size(); ++i)
+        for (int j = 0; j < _roundedMaxNodeCount && start_index + j + 1 < headings.size(); ++j)
         {
-          double delta = headings[start_index + i + 1] - headings[start_index + i];
+          double delta = headings[start_index + j + 1] - headings[start_index + j];
           total += delta;
         }
         //  Save the highest heading delta and the start index of that subline
@@ -219,9 +219,9 @@ void HighwayCornerSplitter::_splitRoundedCorners()
       {
         QString buffer;
         QTextStream ts(&buffer);
-        for (int i = 0; i < headings.size(); ++i)
-          ts << QString().setNum(headings[i], 'f') << "\t| " <<
-                QString().setNum(distances[i], 'f') << "\n";
+        for (int j = 0; j < headings.size(); ++j)
+          ts << QString().setNum(headings[j], 'f') << "\t| " <<
+                QString().setNum(distances[j], 'f') << "\n";
         //  Output a bunch of stuff here to help develop the algorithm
         LOG_TRACE("\nWay: " << pWay->getTags().getName() <<
                   "\nHeadings\t| Distances" <<
@@ -243,7 +243,7 @@ bool HighwayCornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, boo
   //  For sharp corners, some small
   if (sharpCorner)
   {
-    GeometryFactory::unique_ptr factory = GeometryFactory::create();
+    GeometryFactory::Ptr factory = GeometryFactory::create();
     //  Check the previous segment to ensure it is larger than the circular error before splitting
     if (nodeIdx == 1)
     {
@@ -251,6 +251,7 @@ bool HighwayCornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, boo
       CoordinateArraySequence* subline = new CoordinateArraySequence();
       subline->add(0, ls->getCoordinateN(nodeIdx), true);
       subline->add(1, ls->getCoordinateN(nodeIdx - 1), true);
+      // GeometryFactory takes ownership of these input parameters.
       std::shared_ptr<LineString> sub(factory->createLineString(subline));
       if (sub->getLength() <= pWay->getCircularError())
         return false;
@@ -262,6 +263,7 @@ bool HighwayCornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, boo
       CoordinateArraySequence* subline = new CoordinateArraySequence();
       subline->add(0, ls->getCoordinateN(nodeIdx), true);
       subline->add(1, ls->getCoordinateN(nodeIdx + 1), true);
+      // GeometryFactory takes ownership of these input parameters.
       std::shared_ptr<LineString> sub(factory->createLineString(subline));
       if (sub->getLength() <= pWay->getCircularError())
         return false;

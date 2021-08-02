@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RELATION_CIRCULAR_REF_REMOVER_H
@@ -49,23 +49,20 @@ public:
   static QString className() { return "hoot::RelationCircularRefRemover"; }
 
   RelationCircularRefRemover() = default;
-  virtual ~RelationCircularRefRemover() = default;
+  ~RelationCircularRefRemover() = default;
 
-  void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing relation members with circular references..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) +
            " relation members involved in circular references"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Removes half of a relation pair that reference each other from a map"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

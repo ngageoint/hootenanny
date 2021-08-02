@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef LARGEWAYSPLITTER_H
@@ -38,9 +38,14 @@ class OsmMap;
 class Way;
 
 /**
- * This class is designed for splitting ways that are too large into smaller ways. If the
- * way length is greater than threshold into an number of equal sized pieces that are smaller than
- * threshold.
+ *
+ */
+/**
+ * @brief The LargeWaySplitter class is designed for splitting ways that are too large into smaller
+ * ways.
+ *
+ * If the way length is greater than threshold, it is split into an number of equal sized pieces
+ * that are smaller than threshold.
  */
 class LargeWaySplitter
 {
@@ -55,18 +60,17 @@ public:
   void apply(const std::shared_ptr<OsmMap>& map);
 
   /**
-   * Split large ways into smaller ways.
-   * @param threshold - The threshold length. This projection units.
+   * @brief splitWays splist large ways into smaller ways.
+   * @param threshold the threshold length.
    */
   static void splitWays(const std::shared_ptr<OsmMap>& map, double threshold);
 
-protected:
+private:
 
   std::shared_ptr<OsmMap> _map;
-
   double _threshold;
 
-  void _divideWay(const std::shared_ptr<Way>& way, int numPieces);
+  void _divideWay(const std::shared_ptr<Way>& way, int numPieces) const;
 };
 
 }

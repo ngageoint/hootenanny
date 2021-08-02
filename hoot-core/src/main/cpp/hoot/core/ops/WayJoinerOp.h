@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __WAY_JOINER_OP_H__
@@ -37,29 +37,33 @@
 namespace hoot
 {
 
+/**
+ * @see WayJoiner
+ *
+ * Don't *believe* we need to make conflatable element checks in way joiners due to the fact that
+ * all the code that writes parent IDs (what causes rejoins) already uses conflatable element checks
+ * and/or FilteredByGeometryTypeCriteria to prevent rejoining features not configured to be
+ * conflatable during a conflate operation (@see description of this behavior in ElementVisitor).
+ */
 class WayJoinerOp : public OsmMapOperation, public Configurable
 {
 public:
 
   WayJoinerOp();
-  virtual ~WayJoinerOp() = default;
+  ~WayJoinerOp() = default;
 
   static QString className() { return "hoot::WayJoinerOp"; }
 
   /**
    * Apply the way joiner to the specified map
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getDescription() const
-  { return "Joins ways split during cleaning and conflation matching operations"; }
-
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Rejoining ways split during conflation..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Rejoined " + StringUtils::formatLargeNumber(_wayJoiner->getNumJoined()) + " pairs of ways";
@@ -68,11 +72,11 @@ public:
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Rejoins ways split during conflation"; }
 
   std::shared_ptr<WayJoiner> getWayJoiner() const { return _wayJoiner; }
 

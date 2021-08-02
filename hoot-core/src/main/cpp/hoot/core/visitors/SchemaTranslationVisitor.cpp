@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "SchemaTranslationVisitor.h"
@@ -32,12 +32,12 @@
 #include <geos/geom/Geometry.h>
 
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
-#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -61,13 +61,19 @@ void SchemaTranslationVisitor::setConfiguration(const Settings& conf)
 
   LOG_VARD(conf.hasKey(c.getSchemaTranslationScriptKey()));
   LOG_VARD(c.getSchemaTranslationScript());
-  if (conf.hasKey(c.getSchemaTranslationScriptKey()) && c.getSchemaTranslationScript() != "")
+  if (conf.hasKey(ConfigOptions::getSchemaTranslationScriptKey()) &&
+      c.getSchemaTranslationScript() != "")
   {
     setTranslationDirection(c.getSchemaTranslationDirection());
     setTranslationScript(c.getSchemaTranslationScript());
   }
   LOG_VARD(_toOgr);
   _circularErrorTagKeys = c.getCircularErrorTagKeys();
+  const QString elementStatusFilter = c.getSchemaTranslationElementStatus();
+  if (!elementStatusFilter.trimmed().isEmpty())
+  {
+    _elementStatusFilter = Status::fromString(elementStatusFilter);
+  }
 }
 
 void SchemaTranslationVisitor::setTranslationDirection(QString direction)
@@ -90,11 +96,11 @@ void SchemaTranslationVisitor::setTranslationDirection(QString direction)
 void SchemaTranslationVisitor::setTranslationScript(QString path)
 {
   LOG_VARD(path);
-  _translator.reset(ScriptSchemaTranslatorFactory::getInstance().createTranslator(path));
+  _translator = ScriptSchemaTranslatorFactory::getInstance().createTranslator(path);
   if (_toOgr)
   {
-    _ogrTranslator = dynamic_cast<ScriptToOgrSchemaTranslator*>(_translator.get());
-    if (_ogrTranslator == 0)
+    _ogrTranslator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(_translator);
+    if (_ogrTranslator == nullptr)
     {
       throw IllegalArgumentException(
         "Translating to OGR requires a script that supports to OGR translations.");
@@ -104,7 +110,8 @@ void SchemaTranslationVisitor::setTranslationScript(QString path)
 
 void SchemaTranslationVisitor::visit(const ElementPtr& e)
 {
-  if (e.get() && e->getTags().getNonDebugCount() > 0)
+  if (e.get() && e->getTags().getNonDebugCount() > 0 &&
+      (_elementStatusFilter == Status::Invalid || e->getStatus() == _elementStatusFilter))
   {
     Tags& tags = e->getTags();
 
@@ -120,7 +127,7 @@ void SchemaTranslationVisitor::visit(const ElementPtr& e)
     {
       vector<Tags> allTags = _ogrTranslator->translateToOgrTags(tags, e->getElementType(), gtype);
 
-      if (allTags.size() > 0)
+      if (!allTags.empty())
       {
         if (allTags.size() > 1)
         {
@@ -168,7 +175,7 @@ void SchemaTranslationVisitor::visit(const ElementPtr& e)
 
       // Arbitrarily pick the first error tag found. If the element has both, the last one parsed
       // will be used. We're not expecting elements to have more than one CE tag.
-      const QString ceKey = tags.getFirstKey(_circularErrorTagKeys);
+      const QString ceKey = tags.getFirstMatchingKey(_circularErrorTagKeys);
       if (!ceKey.isEmpty())
       {
         e->setCircularError(tags.getDouble(ceKey));

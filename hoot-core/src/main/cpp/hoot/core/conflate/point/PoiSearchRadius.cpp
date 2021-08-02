@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "PoiSearchRadius.h"
@@ -42,11 +42,6 @@
 
 namespace hoot
 {
-
-PoiSearchRadius::PoiSearchRadius() :
-_distance(-1)
-{
-}
 
 PoiSearchRadius::PoiSearchRadius(QString key, QString val, int distance) :
 _key(key),
@@ -72,12 +67,12 @@ QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStrin
       throw IllegalArgumentException("POI to POI search radii file does not exist.");
     }
 
-    propTree.reset(new boost::property_tree::ptree());
+    propTree = std::make_shared<boost::property_tree::ptree>();
     try
     {
       boost::property_tree::read_json(jsonStringOrFile.toStdString(), *propTree);
     }
-    catch (boost::property_tree::json_parser::json_parser_error& e)
+    catch (const boost::property_tree::json_parser::json_parser_error& e)
     {
       throw HootException(
         QString("Error parsing JSON: %1 (line %2)")
@@ -93,7 +88,7 @@ QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStrin
 
   QList<PoiSearchRadius> radii;
 
-  for (boost::property_tree::ptree::value_type& distProp : propTree->get_child("search_radii"))
+  for (const boost::property_tree::ptree::value_type& distProp : propTree->get_child("search_radii"))
   {
     const QString key =
       QString::fromStdString(distProp.second.get<std::string>("key", "")).trimmed();
@@ -112,7 +107,7 @@ QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStrin
     }
     LOG_VART(val);
 
-    const int distance = distProp.second.get<int>("distance");
+    const int distance = distProp.second.get<int>("distance", -1);
     LOG_VART(distance);
     if (distance < 0)
     {

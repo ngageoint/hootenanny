@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ELEMENT_GEOMETRY_UTILS_H
@@ -49,7 +49,7 @@ class ElementGeometryUtils
 public:
 
   /**
-   * Determines two elements have a geometric relationship
+   * Determines if two elements have a geometric relationship
    *
    * @param element1 the first element to examine
    * @param element2 the second element to examine
@@ -57,36 +57,10 @@ public:
    * @param map map owning the input elements
    * @return true if the two elements have the specified geometric relationship; false otherwise or
    * if the relationship could not be calculated
-   * @todo should eventually back this with a cache, as is done in PoiPolygonInfoCache (or merge
-   * the two)
    */
   static bool haveGeometricRelationship(
     const ConstElementPtr& element1, const ConstElementPtr& element2,
     const GeometricRelationship& relationship, ConstOsmMapPtr map);
-
-  /**
-   * Determines two elements have a geometric relationship
-   *
-   * @param element the element to examine
-   * @param bounds the bounds geometry to examine
-   * @param relationship the geometric relationship to check for between the element and the bounds
-   * @param map map owning the input element
-   * @return true if the element and the bounds have the specified geometric relationship; false
-   * otherwise or if the relationship could not be calculated
-   */
-  static bool haveGeometricRelationship(
-    const ConstElementPtr& element, const std::shared_ptr<geos::geom::Geometry>& bounds,
-    const GeometricRelationship& relationship, ConstOsmMapPtr map);
-
-  /**
-   * Determines an elements hoot geometry type (used by GeometryTypeCriterion)
-   *
-   * @param element the element to inspect
-   * @param map the map owning the element being inspected
-   * @return a valid geometry type or GeometryType::Unknown if one cannot be determined
-   */
-  static GeometryTypeCriterion::GeometryType geometryTypeForElement(
-    const ConstElementPtr& element, ConstOsmMapPtr map = OsmMapPtr());
 
   /**
    * Calculate the length of the given way in meters. The projection must be planar.

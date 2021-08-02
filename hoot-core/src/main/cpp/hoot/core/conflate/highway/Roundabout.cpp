@@ -19,29 +19,29 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "Roundabout.h"
+
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/elements/NodeUtils.h>
+#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-#include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/elements/NodeUtils.h>
-#include <hoot/core/elements/WayUtils.h>
 
-#include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h>
 
 using geos::geom::CoordinateSequence;
@@ -49,7 +49,7 @@ using geos::geom::CoordinateSequence;
 namespace hoot
 {
 
-typedef std::shared_ptr<geos::geom::Geometry> GeomPtr;
+using GeomPtr = std::shared_ptr<geos::geom::Geometry>;
 
 Roundabout::Roundabout() :
 _status(Status::Invalid),
@@ -90,7 +90,7 @@ NodePtr Roundabout::getNewCenter(OsmMapPtr pMap)
   lat = lat / count;
   lon = lon / count;
 
-  NodePtr pNewNode(new Node(_status, pMap->createNextNodeId(), lon, lat, 15));
+  NodePtr pNewNode = std::make_shared<Node>(_status, pMap->createNextNodeId(), lon, lat, 15);
   pNewNode->setTag(MetadataTags::HootSpecial(), MetadataTags::RoundaboutCenter());
 
   return pNewNode;
@@ -98,7 +98,7 @@ NodePtr Roundabout::getNewCenter(OsmMapPtr pMap)
 
 RoundaboutPtr Roundabout::makeRoundabout(const OsmMapPtr& pMap, WayPtr pWay)
 {
-  RoundaboutPtr rnd(new Roundabout());
+  RoundaboutPtr rnd = std::make_shared<Roundabout>();
 
   // Add the way to the roundabout
   rnd->setRoundaboutWay(pWay);
@@ -147,6 +147,10 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
   // Calculate intersection points of crossing ways
   ElementToGeometryConverter converter(pMap);
   GeomPtr pRndGeo = converter.convertToGeometry(_roundaboutWay);
+  if (!pRndGeo || pRndGeo->isEmpty())
+  {
+    return;
+  }
   for (size_t i = 0; i < intersectIds.size(); i++)
   {
     WayPtr pWay = pMap->getWay(intersectIds[i]);
@@ -200,13 +204,13 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
               _connectingWays.push_back(newWays[j]);
 
               // Now make connector way
-              WayPtr pWay(new Way(_otherStatus, pMap->createNextWayId(), 15));
-              pWay->addNode(pCenterNode->getId());
-              pWay->setTag("highway", "unclassified");
-              pWay->setTag(MetadataTags::HootSpecial(), MetadataTags::RoundaboutConnector());
+              WayPtr w = std::make_shared<Way>(_otherStatus, pMap->createNextWayId(), 15);
+              w->addNode(pCenterNode->getId());
+              w->setTag("highway", "unclassified");
+              w->setTag(MetadataTags::HootSpecial(), MetadataTags::RoundaboutConnector());
               //  Also add in the connector ways to later remove
-              LOG_TRACE("Adding temp way: " << pWay->getId() << "...");
-              _tempWays.push_back(pWay);
+              LOG_TRACE("Adding temp way: " << w->getId() << "...");
+              _tempWays.push_back(w);
 
               // Take the new way. Whichever is closest, first node or last, connect it to our
               // center point.
@@ -219,20 +223,20 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
               // Connect to center node
               if (firstD < lastD)
               {
-                pWay->addNode(pFirstNode->getId());
+                w->addNode(pFirstNode->getId());
               }
               else
               {
-                pWay->addNode(pLastNode->getId());
+                w->addNode(pLastNode->getId());
               }
-              pMap->addWay(pWay);
+              pMap->addWay(w);
               replace = true;
             }
           }
         }
 
         // Remove the original way if it's been split
-        if (newWays.size() > 0 && replace)
+        if (!newWays.empty() && replace)
         {
           // Remove pWay
           LOG_TRACE("Removing original way: " << pWay->getElementId() << "...");
@@ -303,7 +307,7 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
   LOG_TRACE("Connecting center node: " << _pCenterNode << "...");
   for (std::set<long>::iterator it = connectingNodeIDs.begin(); it != connectingNodeIDs.end(); ++it)
   {
-    WayPtr pWay(new Way(_status, pMap->createNextWayId(), 15));
+    WayPtr pWay = std::make_shared<Way>(_status, pMap->createNextWayId(), 15);
     pWay->addNode(_pCenterNode->getId());
     pWay->addNode(*it);
     LOG_VART(pWay->getNodeIds());
@@ -360,7 +364,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
         if (thisNode->toCoordinate().distance(otherNode->toCoordinate()) >
             thisNode->getCircularError())
         {
-          NodePtr pNewNode(new Node(*thisNode));
+          NodePtr pNewNode = std::make_shared<Node>(*thisNode);
           pNewNode->setId(pMap->createNextNodeId());
           LOG_TRACE(
             "Node with ID: " << nodeId << " found. Adding it with ID: " << pNewNode->getId() <<
@@ -374,7 +378,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
       // If not found, we need to add it back to the map
       if (!found)
       {
-        NodePtr pNewNode(new Node(*(_roundaboutNodes[i])));
+        NodePtr pNewNode = std::make_shared<Node>(*(_roundaboutNodes[i]));
         LOG_TRACE(
           "Node with ID: " << nodeId << " not found. Adding new node: " << pNewNode->getId() <<
           "...");
@@ -384,7 +388,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
     }
 
     // All our nodes should be there, now lets add the way back
-    WayPtr pRoundabout(new Way(*_roundaboutWay));
+    WayPtr pRoundabout = std::make_shared<Way>(*_roundaboutWay);
 
     // Make sure our nodes are set correctly
     std::vector<long> nodeIds;
@@ -393,9 +397,6 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
     pRoundabout->setNodes(nodeIds);
     LOG_VART(pRoundabout->getNodeIds());
     pMap->addWay(pRoundabout);
-//    OsmUtils::logElementDetail(
-//      pRoundabout, pMap, Log::Trace,
-//      "Roundabout::replaceRoundabout: roundabout after updating nodes");
     LOG_VART(WayUtils::getWayNodesDetailedString(pRoundabout, pMap));
 
     //  Convert the roundabout to a geometry for distance checking later
@@ -419,8 +420,10 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
         //  Validate the endpoints
         if (!node1 || !node2)
           continue;
-        std::shared_ptr<geos::geom::Geometry> ep1 = converter.convertToGeometry(ConstNodePtr(node1));
-        std::shared_ptr<geos::geom::Geometry> ep2 = converter.convertToGeometry(ConstNodePtr(node2));
+        std::shared_ptr<geos::geom::Geometry> ep1 =
+          converter.convertToGeometry(ConstNodePtr(node1));
+        std::shared_ptr<geos::geom::Geometry> ep2 =
+          converter.convertToGeometry(ConstNodePtr(node2));
         //  Use the distance to find the right end to use
         NodePtr endpoint;
         if (geometry->distance(ep1.get()) < geometry->distance(ep2.get()))
@@ -463,7 +466,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
           pRoundabout->containsNodeId(endpoint2->getId()))
         continue;
       //  Snap the closest
-      UnconnectedWaySnapper::snapClosestEndpointToWay(pMap, way, pRoundabout);
+      UnconnectedWaySnapper::snapClosestWayEndpointToWay(pMap, way, pRoundabout);
       numAttemptedSnaps++;
     }
     LOG_VART(numAttemptedSnaps);

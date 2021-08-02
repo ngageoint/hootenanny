@@ -19,23 +19,19 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/visitors/IsSortedVisitor.h>
+#include <hoot/core/elements/SortedElementsValidator.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
-#include <QFile>
-#include <QFileInfo>
 #include <QElapsedTimer>
 
 namespace hoot
@@ -49,63 +45,27 @@ public:
 
   IsSortedCmd() = default;
 
-  virtual QString getName() const override { return "is-sorted"; }
-
-  virtual QString getDescription() const override
+  QString getName() const override { return "is-sorted"; }
+  QString getDescription() const override
   { return "Determines if a map is sorted to the OSM standard"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
-
     if (args.size() != 1)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes one parameter.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes one parameter. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
+
+    QElapsedTimer timer;
+    timer.start();
 
     const QString input = args[0];
-    QFileInfo fileInfo(input);
-    if (!fileInfo.exists())
-    {
-      throw HootException("Specified input: " + input + " does not exist.");
-    }
-
-    bool result = true;
-    if (OsmPbfReader().isSupported(input))
-    {
-      result = OsmPbfReader().isSorted(input);
-    }
-    else
-    {
-      std::shared_ptr<PartialOsmMapReader> reader =
-        std::dynamic_pointer_cast<PartialOsmMapReader>(
-          OsmMapReaderFactory::createReader(input));
-      reader->setUseDataSourceIds(true);
-      reader->open(input);
-      reader->initializePartial();
-
-      IsSortedVisitor vis;
-      while (reader->hasMoreElements())
-      {
-        ElementPtr element = reader->readNextElement();
-        if (element)
-        {
-          vis.visit(element);
-          if (!vis.getIsSorted())
-          {
-            result = false;
-            LOG_VART(result);
-            break;
-          }
-        }
-      }
-
-      reader->finalizePartial();
-      reader->close();
-    }
-
+    const bool result = SortedElementsValidator::validate(input);
     if (result)
     {
       std::cout << input << " is sorted." << std::endl;

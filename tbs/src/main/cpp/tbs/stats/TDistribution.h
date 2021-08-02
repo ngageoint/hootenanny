@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __T_DISTRIBUTION_H__
 #define __T_DISTRIBUTION_H__
@@ -56,7 +56,8 @@ class TDistribution
 {
 public:
 
-  TDistribution();
+  TDistribution() = default;
+  virtual ~TDistribution() = default;
 
   /**
    * Similar to calling initialize.
@@ -84,19 +85,19 @@ private:
 
   friend class CostT;
 
-  double _calculateDataLogLikelihood(const cv::Mat& m, double v);
+  double _calculateDataLogLikelihood(const cv::Mat& m, double v) const;
 
   void _calculateNewMuAndSigma(const std::vector<double>& EH, const cv::Mat& m);
 
   void _calculateNewV(const cv::Mat& m, const std::vector<double>& EH, const std::vector<double>& ELogH);
 
-  double _calculateTCost(double v, const std::vector<double> &EH, const std::vector<double> &ELogH);
+  double _calculateTCost(double v, const std::vector<double> &EH, const std::vector<double> &ELogH) const;
 
   void _initMu(const cv::Mat& m);
 
   void _initSigma(const cv::Mat& m);
 
-  cv::Mat _log(const cv::Mat& m);
+  cv::Mat _log(const cv::Mat& m) const;
 };
 
 }

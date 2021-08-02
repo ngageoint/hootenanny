@@ -19,15 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 
 namespace hoot
@@ -47,20 +48,20 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "ComplexBuildings.osm");
 
     BuildingCriterion uut;
     uut.setOsmMap(map.get());
-    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "targetandbestbuy")));
-    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "target")));
-    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "bestbuy")));
-    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "pho")));
-    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "panera")));
-    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "freddys")));
-    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "jewelry")));
-    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "paneragroup")));
-    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "jewelryandfreddys")));
+    HOOT_STR_EQUALS(1, uut.isSatisfied(MapUtils::getFirstElementWithNote(map, "targetandbestbuy")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(MapUtils::getFirstElementWithNote(map, "target")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(MapUtils::getFirstElementWithNote(map, "bestbuy")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(MapUtils::getFirstElementWithNote(map, "pho")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(MapUtils::getFirstElementWithNote(map, "panera")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(MapUtils::getFirstElementWithNote(map, "freddys")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(MapUtils::getFirstElementWithNote(map, "jewelry")));
+    HOOT_STR_EQUALS(1, uut.isSatisfied(MapUtils::getFirstElementWithNote(map, "paneragroup")));
+    HOOT_STR_EQUALS(1, uut.isSatisfied(MapUtils::getFirstElementWithNote(map, "jewelryandfreddys")));
   }
 };
 

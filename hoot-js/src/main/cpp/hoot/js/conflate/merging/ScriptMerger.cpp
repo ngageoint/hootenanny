@@ -19,22 +19,22 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ScriptMerger.h"
 
 // hoot
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/js/elements/OsmMapJs.h>
-#include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/elements/ElementIdJs.h>
-#include <hoot/js/io/DataConvertJs.h>
-#include <hoot/js/util/HootExceptionJs.h>
-#include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/js/elements/ElementIdJs.h>
+#include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/io/StreamUtilsJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
@@ -50,10 +50,11 @@ HOOT_FACTORY_REGISTER(Merger, ScriptMerger)
 
 int ScriptMerger::logWarnCount = 0;
 
-ScriptMerger::ScriptMerger(const std::shared_ptr<PluginContext>& script, Persistent<Object>& plugin,
-                           const set<pair<ElementId, ElementId>>& pairs) :
-  _pairs(pairs),
-  _script(script)
+ScriptMerger::ScriptMerger(
+  const std::shared_ptr<PluginContext>& script, const Persistent<Object>& plugin,
+  const set<pair<ElementId, ElementId>>& pairs) :
+MergerBase(pairs),
+_script(script)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope scope(current);
@@ -113,7 +114,7 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
     logWarnCount++;
     return;
   }
-  else if (_pairs.size() == 0)
+  else if (_pairs.empty())
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
@@ -128,18 +129,18 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
   }
   else if (_pairs.size() > 1)
   {
-    throw HootException("A set of elements was specified, but only mergePairs is implemented. "
-                        "See the _Supplemental User Documentation_, _Conflating Sets_ for "
-                        "details.");
+    throw HootException(
+      "A set of elements was specified, but only mergePairs is implemented. See the _Supplemental "
+      "User Documentation_, _Conflating Sets_ for details.");
   }
 
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
-  Handle<Value> v = _callMergePair(map);
+  Local<Value> v = _callMergePair(map);
 
-  Handle<Object> o = Handle<Object>::Cast(v);
-  ElementJs* newElementJs = ObjectWrap::Unwrap<ElementJs>(o);
+  Local<Object> o = Local<Object>::Cast(v);
+  const ElementJs* newElementJs = ObjectWrap::Unwrap<ElementJs>(o);
   ConstElementPtr newElement = newElementJs->getConstElement();
 
   if (map->containsElement(newElement) == false)
@@ -150,12 +151,12 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
   LOG_VART(map->containsElement(_eid1));
   if (map->containsElement(_eid1) == false)
   {
-    replaced.push_back(pair<ElementId, ElementId>(_eid1, newElement->getElementId()));
+    replaced.emplace_back(_eid1, newElement->getElementId());
   }
   LOG_VART(map->containsElement(_eid2));
   if (map->containsElement(_eid2) == false)
   {
-    replaced.push_back(pair<ElementId, ElementId>(_eid2, newElement->getElementId()));
+    replaced.emplace_back(_eid2, newElement->getElementId());
   }
 }
 
@@ -164,26 +165,27 @@ void ScriptMerger::_applyMergeSets(const OsmMapPtr& map,
 {
   _callMergeSets(map, replaced);
 
-  // verify that all the elements are where they need to be (e.g. were removed from the map or
+  // Verify that all the elements are where they need to be (e.g. were removed from the map or
   // added to the map as needed).
 }
 
-Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
+Local<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope handleScope(current);
-  Handle<Object> plugin =
-    Handle<Object>::Cast(
-      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
-  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "mergePair"));
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> plugin =
+    Local<Object>::Cast(
+      _script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
+  Local<Value> value = plugin->Get(context, toV8("mergePair")).ToLocalChecked();
 
   if (value.IsEmpty() || value->IsFunction() == false)
   {
     throw IllegalArgumentException("The merge function 'mergePair' was not found.");
   }
 
-  Handle<Function> func = Handle<Function>::Cast(value);
-  Handle<Value> jsArgs[3];
+  Local<Function> func = Local<Function>::Cast(value);
+  Local<Value> jsArgs[3];
 
   LOG_VART(map->getElement(_eid1));
   LOG_VART(map->getElement(_eid2));
@@ -192,8 +194,8 @@ Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid1));
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid2));
 
-  TryCatch trycatch;
-  Handle<Value> result = func->Call(ToLocal(&_plugin), argc, jsArgs);
+  TryCatch trycatch(current);
+  Local<Value> result = func->Call(context, ToLocal(&_plugin), argc, jsArgs).ToLocalChecked();
   HootExceptionJs::checkV8Exception(result, trycatch);
 
   if (result.IsEmpty() || result == Undefined(current))
@@ -210,26 +212,28 @@ void ScriptMerger::_callMergeSets(const OsmMapPtr& map,
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
-  Handle<Object> plugin =
-    Handle<Object>::Cast(
-      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
-  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "mergeSets"));
+  Local<Context> context = current->GetCurrentContext();
+
+  Local<Object> plugin =
+    Local<Object>::Cast(
+      _script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
+  Local<Value> value = plugin->Get(context, toV8("mergeSets")).ToLocalChecked();
 
   if (value.IsEmpty() || value->IsFunction() == false)
   {
     throw IllegalArgumentException("The merge function 'mergeSets' was not found.");
   }
 
-  Handle<Function> func = Handle<Function>::Cast(value);
-  Handle<Value> jsArgs[3];
+  Local<Function> func = Local<Function>::Cast(value);
+  Local<Value> jsArgs[3];
 
   int argc = 0;
   jsArgs[argc++] = OsmMapJs::create(map);
   jsArgs[argc++] = toV8(_pairs);
   jsArgs[argc++] = toV8(replaced);
 
-  TryCatch trycatch;
-  Handle<Value> result = func->Call(ToLocal(&_plugin), argc, jsArgs);
+  TryCatch trycatch(current);
+  Local<Value> result = func->Call(context, ToLocal(&_plugin), argc, jsArgs).ToLocalChecked();
   HootExceptionJs::checkV8Exception(result, trycatch);
 
   // read the replaced values back out
@@ -241,10 +245,10 @@ bool ScriptMerger::hasFunction(QString name) const
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
-  Handle<Object> plugin =
-    Handle<Object>::Cast(_script->getContext(current)->Global()->Get(
-      String::NewFromUtf8(current, "plugin")));
-  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, name.toUtf8().data()));
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> plugin =
+    Local<Object>::Cast(_script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
+  Local<Value> value = plugin->Get(context, toV8(name.toUtf8().data())).ToLocalChecked();
 
   bool result = true;
   if (value.IsEmpty() || value->IsFunction() == false)

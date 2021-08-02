@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef TAGKEYCRITERION_H
 #define TAGKEYCRITERION_H
@@ -48,28 +48,23 @@ public:
 
   TagKeyCriterion() = default;
   explicit TagKeyCriterion(QString key);
+  explicit TagKeyCriterion(QStringList keys);
   TagKeyCriterion(QString key1, QString key2);
   TagKeyCriterion(QString key1, QString key2, QString key3);
-  virtual ~TagKeyCriterion() = default;
+  ~TagKeyCriterion() = default;
 
   void addKey(QString key);
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<TagKeyCriterion>(_keys); }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagKeyCriterion(_keys)); }
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getDescription() const
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override
   { return "Identifies elements that contain a specified tag key"; }
-
-  virtual void setConfiguration(const Settings& conf);
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
-
-protected:
-
-  explicit TagKeyCriterion(QStringList keys);
 
 private:
 

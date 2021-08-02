@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef SHARED_WAY_NODE_FINDER_H
@@ -54,15 +54,6 @@ public:
    * shared
    */
   static QSet<long> getSharedWayNodes(const ConstWayPtr& way1, const ConstWayPtr& way2);
-
-  /**
-   * Determines if two ways share at least one node
-   *
-   * @param way1 first way to examine
-   * @param way2 second way to examine
-   * @return true if the input ways share at least on node; false otherwise
-   */
-  static bool waysShareNode(const ConstWayPtr& way1, const ConstWayPtr& way2);
 
   /**
    * Determines if two ways share at least one node at their ends

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -71,7 +71,7 @@ public:
   void runCalcResultTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "Haiti_CNIGS_Rivers_REF1-cropped-2.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -88,7 +88,7 @@ public:
 
     searchRadiusCalculator.apply(map);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      34.334710, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
+      34.334701, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
   }
 
   void runNotEnoughTiePointsTest()
@@ -115,7 +115,7 @@ public:
   void runPreviouslyConflatedDataTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "Haiti_CNIGS_Rivers_REF1-cropped-2.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -141,7 +141,7 @@ public:
 
     searchRadiusCalculator.apply(map);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      32.675054, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
+      32.675050, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
   }
 
 };

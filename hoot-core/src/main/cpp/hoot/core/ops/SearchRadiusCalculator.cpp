@@ -19,25 +19,25 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "SearchRadiusCalculator.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
-#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/criterion/OrCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -77,7 +77,7 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
 
   // determine tie points with rubbersheeting
   const std::vector<double> tiePointDistances = _getTiePointDistances(filteredMap);
-  if (tiePointDistances.size() == 0)
+  if (tiePointDistances.empty())
   {
     // no tie points found, so use CE
     _result = _circularError;
@@ -91,16 +91,16 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
   _calculateSearchRadius(tiePointDistances);
 }
 
-OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map)
+OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map) const
 {
-  OsmMapPtr filteredMap(new OsmMap());
+  OsmMapPtr filteredMap = std::make_shared<OsmMap>();
 
   // don't care about conflated data and invalid data, so filter them out always
   ElementCriterionPtr crit;
-  ElementCriterionPtr unknownCrit(
-    new OrCriterion(
-      ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
-      ElementCriterionPtr(new StatusCriterion(Status::Unknown2))));
+  ElementCriterionPtr unknownCrit =
+    std::make_shared<OrCriterion>(
+      std::make_shared<StatusCriterion>(Status::Unknown1),
+      std::make_shared<StatusCriterion>(Status::Unknown2));
   if (_elementCriterion.isEmpty())
   {
     // If no match candidate criterion was specified, then we'll use all remaining elements.
@@ -110,11 +110,9 @@ OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map)
   {
     // If a match candidate criterion was specified, filter out the remaining elements that don't
     // fit the criterion.
-    // TODO: This logic doesn't support Generic Conflation calling scripts who implement the
-    // isMatchCandidate function. - see #3048
-    ElementCriterionPtr candidateCrit(
-      Factory::getInstance().constructObject<ElementCriterion>(_elementCriterion));
-    crit.reset(new ChainCriterion(unknownCrit, candidateCrit));
+    ElementCriterionPtr candidateCrit =
+      Factory::getInstance().constructObject<ElementCriterion>(_elementCriterion);
+    crit = std::make_shared<ChainCriterion>(unknownCrit, candidateCrit);
   }
 
   // make a copy of the filtered map to do the search radius calc on
@@ -127,14 +125,14 @@ OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map)
   return filteredMap;
 }
 
-std::vector<double> SearchRadiusCalculator::_getTiePointDistances(OsmMapPtr& map)
+std::vector<double> SearchRadiusCalculator::_getTiePointDistances(OsmMapPtr& map) const
 {
   std::vector<double> tiePointDistances;
   //  First check if there is a cached RubberSheet before creating a new one
   std::shared_ptr<RubberSheet> rubberSheet = map->getCachedRubberSheet();
   if (!rubberSheet)
   {
-    rubberSheet.reset(new RubberSheet());
+    rubberSheet = std::make_shared<RubberSheet>();
     rubberSheet->setReference(_rubberSheetRef);
     rubberSheet->setMinimumTies(_minTies);
     rubberSheet->setFailWhenMinimumTiePointsNotFound(false);
@@ -145,9 +143,9 @@ std::vector<double> SearchRadiusCalculator::_getTiePointDistances(OsmMapPtr& map
     }
     catch (const HootException& e)
     {
-      // In many cases, the input map will have already been cleaned by this point...but possibly not
-      // (direct call to the stats command, for example). So, try to clean it and re-run to get around
-      // this error.
+      // In many cases, the input map will have already been cleaned by this point...but possibly
+      // not (direct call to the stats command, for example). So, try to clean it and re-run to get
+      // around this error.
       LOG_DEBUG("Rubber sheeting error: " << e.getWhat());
       LOG_DEBUG(
         "An error occurred calculating the rubber sheet transform during automatic search radius " <<
@@ -156,7 +154,7 @@ std::vector<double> SearchRadiusCalculator::_getTiePointDistances(OsmMapPtr& map
       {
         MapCleaner().apply(map);
 
-        rubberSheet.reset(new RubberSheet());
+        rubberSheet = std::make_shared<RubberSheet>();
         rubberSheet->setReference(_rubberSheetRef);
         rubberSheet->setMinimumTies(_minTies);
         rubberSheet->setFailWhenMinimumTiePointsNotFound(false);
@@ -198,7 +196,7 @@ void SearchRadiusCalculator::_calculateSearchRadius(const std::vector<double>& t
   }
 }
 
-double SearchRadiusCalculator::_calculateStandardDeviation(const std::vector<double>& samples)
+double SearchRadiusCalculator::_calculateStandardDeviation(const std::vector<double>& samples) const
 {
   double sumSquares = 0.0;
   for (size_t i = 0; i < samples.size(); i++)

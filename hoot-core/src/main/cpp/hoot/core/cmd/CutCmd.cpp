@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // GEOS
@@ -32,6 +32,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/CookieCutter.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/IoUtils.h>
@@ -52,59 +53,65 @@ public:
 
   CutCmd() = default;
 
-  virtual QString getName() const override { return "cut"; }
+  QString getName() const override { return "cut"; }
+  QString getDescription() const override { return "Cuts out a portion from a map"; }
 
-  virtual QString getDescription() const override { return "Cuts out a portion from a map"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
+    bool crop = false;
+    if (args.contains("--crop"))
+    {
+      crop = true;
+      args.removeAt(args.indexOf("--crop"));
+    }
+
+    double buffer = 0.0;
+    if (args.contains("--buffer"))
+    {
+      const int bufferIndex = args.indexOf("--buffer");
+      bool ok = false;
+      buffer = args.at(bufferIndex + 1).toDouble(&ok);
+      if (!ok)
+      {
+        throw IllegalArgumentException("Invalid buffer value: " + args.at(bufferIndex));
+      }
+      args.removeAt(bufferIndex + 1);
+      args.removeAt(bufferIndex);
+    }
+
+    LOG_VARD(args);
+
+    if (args.size() != 3)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
+    }
+
+    const QString cutterShapePath = args[0].trimmed();
+    const QString doughPath = args[1].trimmed();
+    const QString outputPath = args[2].trimmed();
+
     QElapsedTimer timer;
     timer.start();
 
-    if (args.size() < 3 || args.size() > 5)
-    {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes three to five parameters.").arg(getName()));
-    }
+    LOG_STATUS(
+      "Cutting ..." << FileUtils::toLogFormat(cutterShapePath, 25) << " out of ..." <<
+      FileUtils::toLogFormat(doughPath, 25) << " and writing output to ..." <<
+      FileUtils::toLogFormat(outputPath, 25) << "...");
 
-    int i = 0;
-    QString cutterShapePath = args[i++];
-    QString doughPath = args[i++];
-    QString outputPath = args[i++];
-    bool ok = false;
-    double buffer = args.size() > i ? args[i].toDouble(&ok) : 0.0;
-    if (ok)
-    {
-      i++;
-    }
-    else
-    {
-      buffer = 0.0;
-    }
-    bool crop = false;
-    if (args.size() > i)
-    {
-      if (args[i++] == "--crop")
-      {
-        crop = true;
-      }
-      else
-      {
-        throw HootException(
-          QString("Expected --crop as the last argument, but got %1.").
-            arg(args[i - 1]));
-      }
-    }
-
-    // load up the shape being cut out
-    OsmMapPtr cutterShapeMap(new OsmMap());
+    // Load up the shape being cut out.
+    OsmMapPtr cutterShapeMap = std::make_shared<OsmMap>();
     IoUtils::loadMap(cutterShapeMap, cutterShapePath, true, Status::Unknown1);
 
-    // load up the dough
-    OsmMapPtr doughMap(new OsmMap());
+    // Load up the dough.
+    OsmMapPtr doughMap = std::make_shared<OsmMap>();
     IoUtils::loadMap(doughMap, doughPath, true, Status::Unknown1);
 
-    // cut the cutter shape out of the dough
+    // Cut the cutter shape out of the dough.
     CookieCutter(crop, buffer).cut(cutterShapeMap, doughMap);
     OsmMapPtr result = doughMap;
 

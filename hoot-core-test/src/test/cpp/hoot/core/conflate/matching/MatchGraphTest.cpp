@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -74,9 +74,7 @@ public:
   FakeMatch() : Match(std::shared_ptr<MatchThreshold>()) {}
   FakeMatch(ElementId eid1, ElementId eid2, double p,
             const std::shared_ptr<const MatchThreshold>& mt) :
-    Match(mt),
-    _eid1(eid1),
-    _eid2(eid2),
+    Match(mt, eid1, eid2),
     _p(p)
   {}
 
@@ -87,9 +85,6 @@ public:
     _c.setReviewP(0.0);
     return _c;
   }
-
-  virtual QString getName() const { return "Fake Match"; }
-  virtual QString getClassName() const { return ""; }
 
   virtual double getProbability() const { return _p; }
 
@@ -115,12 +110,13 @@ public:
 
   MatchType getType() const { return _threshold->getType(*this); }
 
-  virtual QString getDescription() const { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return "Fake Match"; }
+  QString getClassName() const override { return ""; }
 
 private:
 
   mutable MatchClassification _c;
-  ElementId _eid1, _eid2;
   double _p;
 };
 
@@ -141,17 +137,17 @@ public:
     ElementId e = ElementId::way(5);
     ElementId f = ElementId::way(6);
 
-    std::shared_ptr<MatchThreshold> mt(new MatchThreshold(0.5, 0.5));
+    std::shared_ptr<MatchThreshold> mt = std::make_shared<MatchThreshold>(0.5, 0.5);
     vector<std::shared_ptr<FakeMatch>> fm(7);
-    fm[0].reset(new FakeMatch(a, b, 1.0, mt));
-    fm[1].reset(new FakeMatch(a, c, 0.1, mt));
-    fm[2].reset(new FakeMatch(c, d, 1.0, mt));
+    fm[0] = std::make_shared<FakeMatch>(a, b, 1.0, mt);
+    fm[1] = std::make_shared<FakeMatch>(a, c, 0.1, mt);
+    fm[2] = std::make_shared<FakeMatch>(c, d, 1.0, mt);
     // duplicates are silly, but allowable
-    fm[3].reset(new FakeMatch(d, e, 0.9, mt));
-    fm[4].reset(new FakeMatch(d, e, 0.9, mt));
-    fm[5].reset(new FakeMatch(c, e, 0.1, mt));
+    fm[3] = std::make_shared<FakeMatch>(d, e, 0.9, mt);
+    fm[4] = std::make_shared<FakeMatch>(d, e, 0.9, mt);
+    fm[5] = std::make_shared<FakeMatch>(c, e, 0.1, mt);
     // doesn't really make sense, but it shouldn't throw an error.
-    fm[6].reset(new FakeMatch(f, f, 1.0, mt));
+    fm[6] = std::make_shared<FakeMatch>(f, f, 1.0, mt);
 
     MatchGraph uut;
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MINSUMWORDSETDISTANCE_H
 #define MINSUMWORDSETDISTANCE_H
@@ -35,37 +35,33 @@ namespace hoot
 {
 
 /**
- * See ScoreMatrix::minSumScore for details.
+ * @see ScoreMatrix::minSumScore for details.
  */
 class MinSumWordSetDistance : public StringDistance, public StringDistanceConsumer,
   public Configurable
 {
 public:
 
+  MinSumWordSetDistance() = default;
   /**
    * @param d Takes ownership of d.
    */
   MinSumWordSetDistance(StringDistancePtr d);
-
-  MinSumWordSetDistance() = default;
-  virtual ~MinSumWordSetDistance() = default;
+  ~MinSumWordSetDistance() = default;
 
   static QString className() { return "hoot::MinSumWordSetDistance"; }
 
-  virtual double compare(const QString& s1, const QString& s2) const override;
+  double compare(const QString& s1, const QString& s2) const override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual void setStringDistance(const StringDistancePtr &sd) { _d = sd; }
+  void setStringDistance(const StringDistancePtr &sd) override { _d = sd; }
 
-  virtual QString toString() const override
+  QString toString() const override
   { return QString("MinSumWordSetDistance %1 %2").arg(_p).arg(_d->toString()); }
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
-
-  virtual QString getDescription() const override
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
   { return "Returns a string comparison score based on Minimum Sum Wordset Distance"; }
 
 private:

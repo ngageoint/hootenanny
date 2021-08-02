@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ReplaceTagVisitor.h"
 
@@ -85,18 +85,6 @@ void ReplaceTagVisitor::setConfiguration(const Settings& conf)
     _replaceKey = replaceTagParts[0];
     _replaceValue = replaceTagParts[1];
   }
-}
-
-void ReplaceTagVisitor::setMatchTag(QString k, QString v)
-{
-  _matchKey = k;
-  _matchValue = v;
-}
-
-void ReplaceTagVisitor::setReplaceTag(QString k, QString v)
-{
-  _replaceKey = k;
-  _replaceValue = v;
 }
 
 void ReplaceTagVisitor::visit(const std::shared_ptr<Element>& e)

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -78,7 +78,7 @@ public:
     int i = 0;
     while (v[i] >= 0)
     {
-      std::shared_ptr<ActorTask> ptr(new ActorTask(v[i++]));
+      std::shared_ptr<ActorTask> ptr = std::make_shared<ActorTask>(v[i++]);
       toDelete.push_back(ptr);
       solver.addActor(ptr.get());
     }
@@ -89,7 +89,7 @@ public:
     int i = 0;
     while (v[i] >= 0)
     {
-      std::shared_ptr<ActorTask> ptr(new ActorTask(v[i++]));
+      std::shared_ptr<ActorTask> ptr = std::make_shared<ActorTask>(v[i++]);
       toDelete.push_back(ptr);
       solver.addTask(ptr.get());
     }
@@ -103,7 +103,7 @@ public:
          it != pairs.end(); ++it)
     {
       SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair pair = *it;
-      if (pair.actor != NULL && pair.task != NULL)
+      if (pair.actor != nullptr && pair.task != nullptr)
       {
         totalCost += costFunction.cost(pair.actor, pair.task);
       }

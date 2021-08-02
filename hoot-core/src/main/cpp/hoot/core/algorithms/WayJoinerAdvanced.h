@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef WAYJOINER_ADVANCED_H
@@ -37,8 +37,10 @@ namespace hoot
 {
 
 /**
- * An way joiner with extended features implemented to work with Attribute Conflation. Eventually
- * some of the logic other than tag merging could be moved up to WayJoinerBasic.
+ * @brief The WayJoinerAdvanced class is a way joiner with extended features implemented to work
+ * with Attribute Conflation.
+ *
+ * Eventually some of the logic other than tag merging could be moved up to WayJoinerBasic.
  */
 class WayJoinerAdvanced : public WayJoiner
 {
@@ -46,35 +48,39 @@ public:
 
   static QString className() { return "hoot::WayJoinerAdvanced"; }
 
-  typedef enum
+  enum JoinAtNodeMergeType
   {
     ParentFirst,
     ParentLast,
     ShareFirstNode
-  } JoinAtNodeMergeType;
+  };
 
   WayJoinerAdvanced();
   virtual ~WayJoinerAdvanced() = default;
 
   /**
-   * Static method to join all joinable ways using WayJoinerAdvanced
+   * @brief joinWays is a static method to join all joinable ways using WayJoinerAdvanced.
    */
   static void joinWays(const OsmMapPtr& map);
 
   /**
    * @see WayJoiner
    */
-  virtual void join(const OsmMapPtr& map) override;
+  void join(const OsmMapPtr& map) override;
 
   /**
    * @see ApiEntityInfo
    */
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Extends WayJoinerBasic with additional join pre-conditions."; }
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getName() const override { return className(); }
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getClassName() const override { return className(); }
 
 protected:
 
@@ -83,10 +89,10 @@ protected:
   // the name of the class implementation being executed
   QString _callingClass;
 
-  virtual void _joinParentChild() override;
-  virtual void _joinAtNode() override;
-  virtual void _rejoinSiblings(std::deque<long>& way_ids) override;
-  virtual bool _joinWays(const WayPtr& parent, const WayPtr& child) override;
+  void _joinParentChild() override;
+  void _joinAtNode() override;
+  void _rejoinSiblings(std::deque<long>& way_ids) override;
+  bool _joinWays(const WayPtr& parent, const WayPtr& child) override;
 
   /*
    * Determines which feature's tags are kept during a way join
@@ -121,7 +127,7 @@ private:
    */
   void _joinUnsplitWaysAtNode();
 
-  bool _handleOneWayStreetReversal(WayPtr wayWithTagsToKeep, ConstWayPtr wayWithTagsToLose);
+  bool _handleOneWayStreetReversal(WayPtr wayWithTagsToKeep, ConstWayPtr wayWithTagsToLose) const;
 
   double _getTotalLengthFromTags(const Tags& tags1, const Tags& tags2) const;
 };

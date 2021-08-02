@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RdpWayGeneralizer.h"
@@ -31,15 +31,15 @@
 #include <cmath>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/NodeUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/NodeUtils.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/ops/RemoveNodeByEid.h>
-#include <hoot/core/elements/WayUtils.h>
 
 using namespace std;
 
@@ -75,8 +75,8 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
     QVector<long>::fromStdVector(way->getNodeIds()).toList();
   LOG_VART(wayNodeIdsBeforeFiltering);
 
-  //filter the nodes to be generalized to those in this way and those with no information tags;
-  //tried using hoot filters here at first, but it didn't end up making sense
+  // filter the nodes to be generalized to those in this way and those with no information tags;
+  // tried using hoot filters here at first, but it didn't end up making sense
   QList<long> wayNodeIdsAfterFiltering;
   for (QList<long>::const_iterator it = wayNodeIdsBeforeFiltering.begin();
        it != wayNodeIdsBeforeFiltering.end(); ++it)
@@ -88,10 +88,9 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
   }
   LOG_VART(wayNodeIdsAfterFiltering);
 
-  //get the generalized points
+  // get the generalized points
   const QList<std::shared_ptr<const Node>>& generalizedPoints =
     _getGeneralizedPoints(NodeUtils::nodeIdsToNodes(wayNodeIdsAfterFiltering, _map));
-  NodeUtils::printNodes("generalizedPoints", generalizedPoints);
   QList<long> wayNodeIdsAfterGeneralization = NodeUtils::nodesToNodeIds(generalizedPoints);
 
   // The nodes we're going to remove is the difference between the node ids before and after
@@ -123,7 +122,7 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
   LOG_VART(nodeIdsNotAllowedToBeRemoved);
 
   QList<long> updatedWayNodeIds = wayNodeIdsAfterGeneralization;
-  if (nodeIdsNotAllowedToBeRemoved.size() > 0)
+  if (!nodeIdsNotAllowedToBeRemoved.empty())
   {
     // If there were any nodes we removed during generalization but aren't allowed to remove, we
     // need to add those back in here using the pre-generalization node set. We could have tried to
@@ -161,7 +160,7 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
 
 QList<long> RdpWayGeneralizer::_getUpdatedWayNodeIdsForThoseNotAllowedToBeRemoved(
   const QSet<long>& nodeIdsNotAllowedToBeRemoved, const QList<long>& nodeIdsBeforeGeneralization,
-  const QList<long>& generalizedNodeIds)
+  const QList<long>& generalizedNodeIds) const
 {
   LOG_VART(nodeIdsBeforeGeneralization);
   LOG_VART(generalizedNodeIds);
@@ -171,7 +170,7 @@ QList<long> RdpWayGeneralizer::_getUpdatedWayNodeIdsForThoseNotAllowedToBeRemove
   for (QSet<long>::const_iterator it = nodeIdsNotAllowedToBeRemoved.begin();
        it != nodeIdsNotAllowedToBeRemoved.end(); ++it)
   {
-    const int nodeIdToAddBack = *it;
+    const long nodeIdToAddBack = *it;
     LOG_VART(nodeIdToAddBack);
     const int originalIndex = nodeIdsBeforeGeneralization.indexOf(nodeIdToAddBack);
     LOG_VART(originalIndex);
@@ -270,23 +269,18 @@ QList<std::shared_ptr<const Node>> RdpWayGeneralizer::_getGeneralizedPoints(
     //split the curve into two parts and recursively reduce the two lines
     const QList<std::shared_ptr<const Node>> splitLine1 =
       wayPoints.mid(0, indexOfLargestPerpendicularDistance + 1);
-    NodeUtils::printNodes("splitLine1", splitLine1);
     const QList<std::shared_ptr<const Node>> splitLine2 =
       wayPoints.mid(indexOfLargestPerpendicularDistance);
-    NodeUtils::printNodes("splitLine2", splitLine2);
 
     const QList<std::shared_ptr<const Node>> recursivelySplitLine1 =
       _getGeneralizedPoints(splitLine1);
-    NodeUtils::printNodes("recursivelySplitLine1", recursivelySplitLine1);
     const QList<std::shared_ptr<const Node>> recursivelySplitLine2 =
       _getGeneralizedPoints(splitLine2);
-    NodeUtils::printNodes("recursivelySplitLine2", recursivelySplitLine2);
 
     //concat r2 to r1 minus the end/start point that will be the same
     QList<std::shared_ptr<const Node>> combinedReducedLines =
       recursivelySplitLine1.mid(0, recursivelySplitLine1.size() - 1);
     combinedReducedLines.append(recursivelySplitLine2);
-    NodeUtils::printNodes("combinedReducedLines", combinedReducedLines);
     return combinedReducedLines;
   }
   else
@@ -295,7 +289,6 @@ QList<std::shared_ptr<const Node>> RdpWayGeneralizer::_getGeneralizedPoints(
     QList<std::shared_ptr<const Node>> reducedLine;
     reducedLine.append(firstPoint);
     reducedLine.append(lastPoint);
-    NodeUtils::printNodes("reducedLine", reducedLine);
     return reducedLine;
   }
 }

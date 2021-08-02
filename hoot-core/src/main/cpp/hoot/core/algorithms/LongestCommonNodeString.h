@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef LONGESTCOMMONNODESTRING_H
@@ -33,29 +33,32 @@ namespace hoot
   class Way;
 
 /**
- * Given two ways it calculates the longest string of nodes that are identical within the ways.
+ * @brief The LongestCommonNodeString class given two ways calculates the longest string of nodes
+ * that are identical within the ways.
  */
 class LongestCommonNodeString
 {
 public:
+
   LongestCommonNodeString(const std::shared_ptr<Way>& w1, const std::shared_ptr<Way>& w2);
 
   /**
-   * Returns the length of the common substring. Zero if no common substring was found.
+   * @brief apply Returns the length of the common substring. Zero if no common substring was found.
    */
   int apply();
 
   /**
-   * Returns the start index of the match in w1.
+   * @brief getW1Index returns the start index of the match in w1.
    */
-  int getW1Index() { return _i1; }
+  int getW1Index() const{ return _i1; }
 
   /**
-   * Returns the start index of the match in w2.
+   * @brief getW2Index returns the start index of the match in w2.
    */
-  int getW2Index() { return _i2; }
+  int getW2Index() const{ return _i2; }
 
 private:
+
   std::shared_ptr<Way> _w1, _w2;
   size_t _i1, _i2;
 };

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REGRESSIONTESTSUITE_H
 #define REGRESSIONTESTSUITE_H
@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * Represents a collection of hoot regression tests
+ * @brief The RegressionTestSuite class represents a collection of hoot regression tests.
  */
 class RegressionTestSuite : public AbstractTestSuite
 {
@@ -43,10 +43,7 @@ public:
   RegressionTestSuite(const QString& dir, const QString& testDirExtension);
 
   /**
-   * Attempts to load a conflate case test given a directory
-   *
-   * @param dir directory to load the test from
-   * @param confs hoot configuration files to pass to the test
+   * @see AbstractTestSuite
    */
   virtual void loadDir(const QString& dir, QStringList confs) override;
 

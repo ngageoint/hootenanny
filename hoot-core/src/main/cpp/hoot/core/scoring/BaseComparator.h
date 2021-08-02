@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef BASE_COMPARATOR_H
@@ -54,49 +54,56 @@ namespace hoot
 class OsmMap;
 
 /**
- * Compares two OSM maps for consistency of vector location and density. The resulting score is a
- * value from 0 to 1 where 1 is an exact match and 0 is completely different.
+ * Base class for map comparators which determine a particular similarity score for two maps
  */
 class BaseComparator
 {
 public:
+
   /**
    * Takes two maps for comparison as input
    */
   BaseComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
-
   virtual ~BaseComparator() = default;
 
-  void setPixelSize(double pixelSize) { _pixelSize = pixelSize; }
-
   virtual double compareMaps() = 0;
+
+  void setPixelSize(double pixelSize) { _pixelSize = pixelSize; }
 
 protected:
 
   int _width, _height;
-  std::shared_ptr<OsmMap> _map1, _map2;
-  std::shared_ptr<OsmMap> _mapP1, _mapP2;
   Meters _pixelSize;
-  OGREnvelope _worldBounds;
+
+  std::shared_ptr<OsmMap> _mapP1, _mapP2;
+
   OGREnvelope _projectedBounds;
+
   Meters _sigma;
 
-  double _calculateError(const cv::Mat& image1, const cv::Mat& image2);
-
-  geos::geom::Coordinate _findNearestPointOnFeature(const std::shared_ptr<OsmMap>& map, const geos::geom::Coordinate& c);
+  int _taskStatusUpdateInterval;
 
   virtual void _init(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
-
-  void _saveImage(cv::Mat& image, QString path, double max = 0.0, bool gradient = true);
-
   void _updateBounds();
 
-  void _calculateColor(double v, double max, QRgb& c);
+  double _calculateError(const cv::Mat& image1, const cv::Mat& image2) const;
 
+  geos::geom::Coordinate _findNearestPointOnFeature(
+    const std::shared_ptr<OsmMap>& map, const geos::geom::Coordinate& c);
+
+  void _saveImage(cv::Mat& image, QString path, double max = 0.0, bool gradient = true) const;
+
+private:
+
+  std::shared_ptr<OsmMap> _map1, _map2;
+
+  OGREnvelope _worldBounds;
+
+  void _calculateColor(double v, double max, QRgb& c) const;
   /**
    * Calculates rings on 10min intervals.
    */
-  void _calculateRingColor(double v, double max, QRgb& c);
+  void _calculateRingColor(double v, double max, QRgb& c) const;
 };
 
 }

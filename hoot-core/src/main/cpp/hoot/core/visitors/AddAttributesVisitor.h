@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ADDATTRIBUTESVISITOR_H
 #define ADDATTRIBUTESVISITOR_H
@@ -48,26 +48,23 @@ public:
 
   AddAttributesVisitor();
   explicit AddAttributesVisitor(const QStringList attributes, const bool negateCriteria = false);
-  virtual ~AddAttributesVisitor() = default;
+  ~AddAttributesVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
+
+  QString getInitStatusMessage() const override { return "Adding attributes..."; }
+  QString getCompletedStatusMessage() const override
+  { return "Added " + QString::number(_numAffected) + " attributes"; }
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Adds one or more common OSM attributes to features"; }
 
   void setAttributes(const QStringList attributes) { _attributes = attributes; }
   void setAddOnlyIfEmpty(const bool addOnlyIfEmpty) { _addOnlyIfEmpty = addOnlyIfEmpty; }
-
-  virtual QString getDescription() const
-  { return "Adds one or more common OSM attributes to features"; }
-
-  virtual QString getInitStatusMessage() const { return "Adding attributes..."; }
-
-  virtual QString getCompletedStatusMessage() const
-  { return "Added " + QString::number(_numAffected) + " attributes"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
 
 private:
 
@@ -77,7 +74,8 @@ private:
   //forces the visitor to only update features where the attribute has an empty (default) value
   bool _addOnlyIfEmpty;
 
-  ElementAttributeType::Type _getAttributeType(const QString& attribute, QString& attributeValue);
+  ElementAttributeType::Type _getAttributeType(
+    const QString& attribute, QString& attributeValue) const;
 };
 
 }

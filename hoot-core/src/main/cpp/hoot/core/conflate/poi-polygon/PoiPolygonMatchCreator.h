@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef POIPOLYGONMATCHCREATOR_H
 #define POIPOLYGONMATCHCREATOR_H
@@ -47,17 +47,17 @@ public:
   static QString className() { return "hoot::PoiPolygonMatchCreator"; }
 
   PoiPolygonMatchCreator() = default;
-  virtual ~PoiPolygonMatchCreator() = default;
+  ~PoiPolygonMatchCreator() = default;
 
-  virtual MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) override;
+  MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) override;
 
   /**
    * Search the provided map for POI/Polygon matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
-                             ConstMatchThresholdPtr threshold) override;
+  void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+                     ConstMatchThresholdPtr threshold) override;
 
-  virtual std::vector<CreatorDescription> getAllCreators() const override;
+  std::vector<CreatorDescription> getAllCreators() const override;
 
   /**
    * Determines whether an element is a candidate for matching for this match creator
@@ -66,16 +66,16 @@ public:
    * @param map the map the element whose candidacy is being determined belongs to
    * @return true if the element is a match candidate; false otherwise
    */
-  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
+  bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
 
-  virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
+  std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
 private:
 
@@ -91,30 +91,31 @@ private:
 
   /*
    * For any 2:1 matches/reviews, will only keep the match with the smallest distance between
-   * matched features
+   * matched features; returns the number of matches removed
    */
   int _retainClosestDistanceMatchesOnly(
-    std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map);
+    std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map) const;
   /*
    * Called by _retainClosestDistanceMatchesOnly; 2:1 POI to poly and 2:1 polyl to POI matches are
-   * processed separately
+   * processed separately; returns the number of matches removed
    */
   int _retainClosestDistanceMatchesOnlyByType(
-    std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois);
+    std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois) const;
 
   /*
    * Organizes matches with key=element's ID and value=match its associated with; one
    * element may be involved in more than one match
    */
   QMultiMap<ElementId, ConstMatchPtr> _indexMatchesById(
-    const std::vector<ConstMatchPtr>& matches, const QString& matchTypeStr);
+    const std::vector<ConstMatchPtr>& matches, const QString& matchTypeStr) const;
 
   /*
    * Finds all instances where an element is involved in more than one match; returns a collection
-   * with the element's ID and all the matches its involved with
+   * with the element's ID and all the matches its involved with; one element may be involved in
+   * more than one math
    */
   QMap<ElementId, QList<ConstMatchPtr>> _getOverlappingMatches(
-    const QMultiMap<ElementId, ConstMatchPtr>& matchesById, const QString& matchTypeStr);
+    const QMultiMap<ElementId, ConstMatchPtr>& matchesById, const QString& matchTypeStr) const;
 
   /*
    * Cycles through each overlapping match and keeps only the single match associated with each
@@ -123,9 +124,9 @@ private:
   std::vector<ConstMatchPtr> _filterOutNonClosestMatches(
     const QMap<ElementId, QList<ConstMatchPtr>>& overlappingMatches,
     const std::vector<ConstMatchPtr>& allMatches, const ConstOsmMapPtr& map,
-    const QString& matchTypeStr);
+    const QString& matchTypeStr) const;
 
-  //debugging only methods
+  // debugging only methods
   bool _containsMatch(
     const ElementId& elementId1, const ElementId& elementId2,
     const std::vector<ConstMatchPtr>& matches) const;

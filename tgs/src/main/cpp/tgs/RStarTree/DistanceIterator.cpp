@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "DistanceIterator.h"
 
@@ -93,7 +93,7 @@ namespace Tgs
   {
     bool result = false;
     _populateNext();
-    if (_pendingResults.size() != 0)
+    if (!_pendingResults.empty())
     {
       _currentResult = _pendingResults.front();
       _pendingResults.pop_front();
@@ -104,9 +104,9 @@ namespace Tgs
 
   void DistanceIterator::_populateNext()
   {
-    while (_pendingResults.size() == 0 && !_done)
+    while (_pendingResults.empty() && !_done)
     {
-      if (_pendingNodes.size() == 0) //If the tree has been completely searched, stop
+      if (_pendingNodes.empty()) //If the tree has been completely searched, stop
       {
         _done = true;
       }
@@ -125,7 +125,7 @@ namespace Tgs
           {
             if (node->isLeafNode())
             {
-              _pendingResults.push_back(Result(b, node->getChildUserId(i)));
+              _pendingResults.emplace_back(b, node->getChildUserId(i));
             }
             else
             {

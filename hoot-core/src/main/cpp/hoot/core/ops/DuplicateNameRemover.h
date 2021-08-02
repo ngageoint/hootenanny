@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef DUPLICATENAMEREMOVER_H
@@ -34,6 +34,7 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 namespace hoot
 {
@@ -43,36 +44,37 @@ class OsmMap;
  * Searches for ways that contain the same name multiple times in the name and/or alt_name fields.
  * Any duplicates in the alt_name field will be removed.
  */
-class DuplicateNameRemover : public OsmMapOperation, public Configurable
+class DuplicateNameRemover : public OsmMapOperation, public Configurable,
+  public ConflateInfoCacheConsumer
 {
 public:
 
   static QString className() { return "hoot::DuplicateNameRemover"; }
 
   DuplicateNameRemover();
-  virtual ~DuplicateNameRemover() = default;
+  ~DuplicateNameRemover() = default;
 
-  void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * Remove alternate names that are duplicates.
    */
   static void removeDuplicates(std::shared_ptr<OsmMap> map);
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
 
-  virtual QString getInitStatusMessage() const { return "Removing duplicate name tags..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getInitStatusMessage() const override { return "Removing duplicate name tags..."; }
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " duplicate name tags"; }
 
-  virtual QString getDescription() const { return "Removes duplicate name tags from a feature"; }
+  QString getDescription() const override { return "Removes duplicate name tags from a feature"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
+  { _conflateInfoCache = cache; }
 
 private:
 
@@ -83,9 +85,13 @@ private:
   // point.
   bool _preserveOriginalName;
 
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
+
   std::shared_ptr<OsmMap> _map;
 
-  QString _getBestName(const QString& n1, const QString& n2);
+  QString _getBestName(const QString& n1, const QString& n2) const;
 };
 
 }

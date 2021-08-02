@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef NODESVISITOR_H
 #define NODESVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 
 // Qt
@@ -44,15 +44,13 @@ public:
   static QString className() { return "hoot::NodesVisitor"; }
 
   NodesVisitor(QList<ConstNodePtr>& n) : _n(n) { }
-  virtual ~NodesVisitor() = default;
+  ~NodesVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<const Element>& e);
+  void visit(const std::shared_ptr<const Element>& e) override;
 
-  virtual QString getDescription() const { return "Collects the nodes visited"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Collects the nodes visited"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef FRECHETDISTANCE_H
 #define FRECHETDISTANCE_H
@@ -42,21 +42,25 @@
 namespace hoot
 {
 
-typedef boost::multi_array<Meters, 2> frechet_matrix;
-typedef frechet_matrix::index frechet_index;
-typedef std::pair<int, int> vertex_match;
-typedef std::vector<vertex_match> subline_entry;
-typedef std::pair<Meters, subline_entry> frechet_subline;
+using frechet_matrix = boost::multi_array<Meters, 2>;
+using frechet_index = frechet_matrix::index;
+using vertex_match = std::pair<int, int>;
+using subline_entry = std::vector<vertex_match>;
+using frechet_subline = std::pair<Meters, subline_entry>;
 
-typedef std::shared_ptr<geos::geom::LineString> LineStringPtr;
+using LineStringPtr = std::shared_ptr<geos::geom::LineString>;
 
-/** Class for calculating Frechet Distance between two ways and calculating maximal subline matches.
- *  Algorithm developed from "A new merging process for data integration base on the descrete Frechet distance"
- *  (http://thomas.devogele.free.fr/articles/avant_2003_selection/DevogeleSDH2002.pdf)
+/**
+ * @brief The FrechetDistance class is for calculating Frechet Distance between two ways and
+ * calculating maximal subline matches.
+ *
+ * Algorithm developed from "A new merging process for data integration base on the descrete Frechet
+ * distance" (http://thomas.devogele.free.fr/articles/avant_2003_selection/DevogeleSDH2002.pdf)
  */
 class FrechetDistance
 {
 public:
+
   /**
    * @brief FrechetDistance class constructor
    * @param map - pointer to the OSM map containing the two ways to be compared
@@ -85,12 +89,13 @@ public:
    */
   std::vector<frechet_subline> matchingSublines(Meters maxDistance = 15.0);
 
-protected:
+private:
+
   /**
    * @brief calculateMatrix - calculate the matrix of distances between any two given points in the ways
    * @return distinct Frechet matrix of distances calculated
    */
-  frechet_matrix calculateMatrix();
+  frechet_matrix calculateMatrix() const;
   /**
    * @brief advanceAndCheck - advances the current position (r, c) in the Frechet matrix and modifies the
    *  max_frechet with the maximum distance from the current and next positions to the closest point on the
@@ -130,14 +135,14 @@ protected:
    * @param index - node index into way of where to get the heading at
    * @return heading of way at the point index in radians
    */
-  Radians getHeading(WayPtr way, int index);
+  Radians getHeading(WayPtr way, int index) const;
   /**
    * @brief getHeadingWay1 and getHeadingWay2 - helper functions to make using getHeading easier to use
    * @param index - node index into way of where to get the heading at
    * @return heading of way at the point index in radians
    */
-  Radians getHeadingWay1(int index);
-  Radians getHeadingWay2(int index);
+  Radians getHeadingWay1(int index) const;
+  Radians getHeadingWay2(int index) const;
 
   /**
    * @brief getHeadingAvg - get the heading of the way averaged over three way segments (if possible)
@@ -146,7 +151,7 @@ protected:
    * @param index - index of the node to check the heading at
    * @return heading of the way at the given point
    */
-  Radians getHeadingAvg(WayPtr way, int index);
+  Radians getHeadingAvg(WayPtr way, int index) const;
   /**
    * @brief getHeadingSimple - get the heading of the way at the current way segment defined between node
    *  index and index + 1
@@ -154,7 +159,7 @@ protected:
    * @param index - index of the node to check the heading at
    * @return heading of the way at the given point
    */
-  Radians getHeadingSimple(WayPtr way, int index);
+  Radians getHeadingSimple(WayPtr way, int index) const;
   //  Allow test class to access protected members for white box testing
   friend class FrechetDistanceTest;
   //  Copies of the map and both ways

@@ -19,30 +19,29 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "SparkChangesetWriter.h"
 
 // geos
 #include <geos/geom/Envelope.h>
 
-using namespace geos::geom;
-
 // hoot
 #include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 
 // Qt
 #include <QStringBuilder>
 #include <QFileInfo>
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -71,7 +70,7 @@ void SparkChangesetWriter::open(const QString& fileName)
 
   QFileInfo fileInfo(fileName);
 
-  _addFile.reset(new QFile());
+  _addFile = std::make_shared<QFile>();
   const QString addFileName =
     fileInfo.absolutePath() + "/" + fileInfo.baseName() + "-add." + fileInfo.completeSuffix();
   _addFile->setFileName(addFileName);
@@ -85,7 +84,7 @@ void SparkChangesetWriter::open(const QString& fileName)
   }
   LOG_DEBUG("Opened: " << addFileName << ".");
 
-  _deleteFile.reset(new QFile());
+  _deleteFile = std::make_shared<QFile>();
   const QString deleteFileName =
     fileInfo.absolutePath() + "/" + fileInfo.baseName() + "-delete." + fileInfo.completeSuffix();
   _deleteFile->setFileName(deleteFileName);
@@ -112,7 +111,7 @@ void SparkChangesetWriter::open(const QString& fileName)
       }
       else
       {
-        _boundsCalculator.reset(new SearchBoundsCalculator(sbc));
+        _boundsCalculator = std::make_shared<SearchBoundsCalculator>(sbc);
       }
     }
   }
@@ -196,7 +195,7 @@ void SparkChangesetWriter::writeChange(const Change& change)
     nodeCopy->getTags().remove(MetadataTags::HootHash());
     _exportTagsVisitor.visit(nodeCopy);
 
-    OsmMapPtr tmpMap(new OsmMap());
+    OsmMapPtr tmpMap = std::make_shared<OsmMap>();
     tmpMap->addElement(nodeCopy);
 
     const Envelope env = _boundsCalculator->calculateSearchBounds(tmpMap, nodeCopy);

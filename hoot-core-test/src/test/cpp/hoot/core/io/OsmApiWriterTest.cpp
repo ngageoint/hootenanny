@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 //  hoot
@@ -138,7 +138,7 @@ public:
 #endif
 
     QList<QString> changesets;
-    HootNetworkRequestPtr request(new HootNetworkRequest());
+    HootNetworkRequestPtr request = std::make_shared<HootNetworkRequest>();
     OsmApiWriter writer(osm, changesets);
     CPPUNIT_ASSERT(writer.queryCapabilities(request));
     CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), HttpResponseCode::HTTP_OK);
@@ -174,7 +174,7 @@ public:
 #endif
 
     QList<QString> changesets;
-    HootNetworkRequestPtr request(new HootNetworkRequest());
+    HootNetworkRequestPtr request = std::make_shared<HootNetworkRequest>();
     OsmApiWriter writer(osm, changesets);
     CPPUNIT_ASSERT(writer.validatePermissions(request));
     CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), HttpResponseCode::HTTP_OK);

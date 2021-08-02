@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MOSTENGLISHNAME_H
 #define MOSTENGLISHNAME_H
@@ -43,13 +43,14 @@ namespace hoot
 class MostEnglishName;
 class Tags;
 
-typedef std::shared_ptr<MostEnglishName> MostEnglishNamePtr;
+using MostEnglishNamePtr = std::shared_ptr<MostEnglishName>;
 
 /**
- * Return a best guess at the "most english" name in the list (Singleton). There are no guarantees.
- * This is an ad-hoc routine that should be better than taking the first choice in most cases.
+ * @brief The MostEnglishName class returns a best guess at the "most english" name in the list
+ * (Singleton).
  *
- * If there are no names then an empty string is returned.
+ * There are no guarantees. This is an ad-hoc routine that should be better than taking the first
+ * choice in most cases. If there are no names then an empty string is returned.
  *
  * Logic:
  *  - Tokenize the string into words.
@@ -68,46 +69,40 @@ public:
 
   static const MostEnglishNamePtr& getInstance();
 
-  virtual ~MostEnglishName() = default;
+  ~MostEnglishName() = default;
+
+  void setConfiguration(const Settings& conf) override;
 
   /**
-   * Returns the most English name tag value from a set of tags
-   *
+   * @brief getMostEnglishName returns the most English name tag value from a set of tags.
    * @param tags input to examine
    * @return the single name that has the highest resemblance to English text
    */
   QString getMostEnglishName(const Tags& tags);
 
   /**
-   * Scores input as to how likely it is to be English text
-   *
+   * @brief scoreName scores input as to how likely it is to be English text.
    * @param text input to examine
    * @return a score from 0.0 to 1.0 with 1.0 indicating the highest likelihood that the input is
    * English text
    */
   double scoreName(const QString& text);
 
-  void setConfiguration(const Settings& conf);
-
   /**
-   * Determines if a single input is in the English dictionary
-   *
+   * @brief isInDictionary determines if a single input is in the English dictionary.
    * @param text input to examine
    * @return true if the input is in the English dictionary; false otherwise
    */
   bool isInDictionary(const QString& text);
-
   /**
-   * Determines if all inputs are in the English dictionary
-   *
+   * @brief areAllInDictionary determines if all inputs are in the English dictionary.
    * @param texts input to examine
    * @return true if all text inputs are in the English dictionary; false otherwise
    */
   bool areAllInDictionary(const QStringList& texts);
 
   /**
-   * Determines if the input is an English word
-   *
+   * @brief isEnglishText determines if the input is an English word.
    * @param text input to examine
    * @return true if the input is determined to be English text; false otherwise
    */
@@ -116,12 +111,6 @@ public:
 private:
 
   static int logWarnCount;
-
-  // This class is unique in that it 1) is a Singleton, 2) is configurable, and 3) and gets called
-  // from hoot-js.  hoot-js isn't set up to treat treat configurable classes as Singletons, so
-  // so this is here to limit that calling behavior just to MostEnglishNameJs.  Possibly,
-  // MostEnglishNameJs could be changed to use it as a Singleton at some point.
-  friend class MostEnglishNameJs;
 
   MostEnglishName();
 

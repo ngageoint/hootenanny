@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -46,7 +46,9 @@ namespace hoot
 class RelationMergerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RelationMergerTest);
-  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runBasicTest);
+  // TODO: add test for empty relation being replaced
+  // TODO: add test for relations referencing each other
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -61,11 +63,9 @@ public:
     //setResetType(ResetAll);
   }
 
-  void runTest()
+  void runBasicTest()
   {
-    LOG_DEBUG("runTest");
-
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "runTestInput.osm", true);
 
     RelationMerger uut;

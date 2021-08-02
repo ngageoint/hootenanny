@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __SCHEMA_VERTEX_H__
 #define __SCHEMA_VERTEX_H__
@@ -74,15 +74,15 @@ class SchemaVertex
 {
 public:
 
-  typedef enum VertexType
+  enum VertexType
   {
     UnknownVertexType,
     Tag,
     Compound
-  } VertexType;
+  };
 
-  typedef QList<KeyValuePairPtr> CompoundRule;
-  typedef QList<CompoundRule> CompoundRuleList;
+  using CompoundRule = QList<KeyValuePairPtr>;
+  using CompoundRuleList = QList<CompoundRule>;
 
   SchemaVertex();
 
@@ -92,58 +92,78 @@ public:
   void addCompoundRule(const CompoundRule& rule);
 
   /**
-   * Yes, technically you could modify the contents of the rules returned. Please don't. Taking
-   * this short cut we don't need to copy the rules into a proper const object each time.
-   */
-  const CompoundRuleList& getCompoundRules() const { return _compoundRules; }
-
-  VertexType getType() const { return _type; }
-
-  /**
    * Returns true if one or more of the compound rules match this tag.
    */
   bool isCompoundMatch(const Tags& t) const;
-
-  bool isEmpty() const { return name.isEmpty(); }
-
+  bool isEmpty() const { return _name.isEmpty(); }
   /**
    * Returns ture if each of the elements in this rule matches one of the kvps in t.
    */
   static bool isMatch(const CompoundRule& rule, const Tags& t);
-
   bool isValid() const { return _type != UnknownVertexType; }
+
+  VertexType getType() const { return _type; }
+  /**
+   * Yes, technically you could modify the contents of the rules returned. Please don't. Taking
+   * this short cut we don't need to copy the rules into a proper const object each time.
+   */
+  const CompoundRuleList& getCompoundRules() const { return _compoundRules; }
+  QString getName() const { return _name; }
+  QString getDescription() const { return _description; }
+  QString getKey() const { return _key; }
+  QString getValue() const { return _value; }
+  double getInfluence() const { return _influence; }
+  double getChildWeight() const { return _childWeight; }
+  double getMismatchScore() const { return _mismatchScore; }
+  TagValueType getValueType() const { return _valueType; }
+  QStringList getAliases() const { return _aliases; }
+  QStringList getCategories() const { return _categories; }
+  uint16_t getGeometries() const { return _geometries; }
 
   /**
    * Sets the name and does not parse out the key/value. The key and value will not be changed.
    */
-  void setName(QString n);
-
+  void setName(const QString& n) { _name = n; }
+  void setDescription(const QString& d) { _description = d; }
   /**
    * Sets the name and parses out and stores the key/value.
    */
-  void setNameKvp(QString n);
-
-  void setType(VertexType t);
-
-  void setValueTypeString(QString t);
+  void setNameKvp(const QString& n);
+  void setType(const VertexType& t);
+  void setValueTypeString(const QString& t);
+  void setKey(const QString& k) { _key = k; }
+  void setValue(const QString& v) { _value = v; }
+  void setInfluence(double i) { _influence = i; }
+  void setChildWeight(double c) { _childWeight = c; }
+  void setMismatchScore(double s) { _mismatchScore = s; }
+  void setValueType(const TagValueType& t) { _valueType = t; }
+  void setAliases(const QStringList& a) { _aliases = a; }
+  void setCategories(const QStringList& c) { _categories = c; }
+  void addCategory(const QString& category) { _categories.append(category); }
+  void setGeometries(uint16_t g) { _geometries = g; }
 
   QString toString() const;
 
-  QString name;
-  QString description;
-  QString key;
-  QString value;
-  double influence; // What is this used for?
-  double childWeight;
+private:
+
+  VertexType _type;
+  CompoundRuleList _compoundRules;
+
+  QString _name;
+  QString _description;
+  QString _key;
+  QString _value;
+  double _influence; // What is this used for?
+  double _childWeight;
 
   /**
    * The mismatchScore is used only with wildcard enumerated types. (e.g. addr:housenumber=*).
    * This score is the score returned when two wildcard enumerated types are compared that have
    * different values.
    */
-  double mismatchScore;
-  enum TagValueType valueType;
-  QStringList aliases;
+  double _mismatchScore;
+  enum TagValueType _valueType;
+  QStringList _aliases;
 
   /**
    * Each tag can have categories associated with it. This can help when grouping a number of
@@ -152,13 +172,8 @@ public:
    *
    * If a category is set on an ancestor then it is also set in the category tag.
    */
-  QStringList categories;
-  uint16_t geometries;
-
-private:
-
-  VertexType _type;
-  CompoundRuleList _compoundRules;
+  QStringList _categories;
+  uint16_t _geometries;
 };
 
 }

@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ScriptSchemaTranslatorFactory.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
-#include <hoot/core/util/Settings.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Settings.h>
 
 using namespace std;
 
@@ -44,18 +44,21 @@ ScriptSchemaTranslatorFactory& ScriptSchemaTranslatorFactory::getInstance()
   return instance;
 }
 
-bool CompareSt(ScriptSchemaTranslator* st1, ScriptSchemaTranslator* st2)
+bool CompareSt(
+  const std::shared_ptr<ScriptSchemaTranslator> st1,
+  const std::shared_ptr<ScriptSchemaTranslator> st2)
 {
   return st1->order() < st2->order();
 }
 
-ScriptSchemaTranslator* ScriptSchemaTranslatorFactory::createTranslator(QString scriptPath)
+std::shared_ptr<ScriptSchemaTranslator> ScriptSchemaTranslatorFactory::createTranslator(
+  QString scriptPath)
 {
   LOG_VARD(scriptPath);
 
   _init();
 
-  vector<ScriptSchemaTranslator*> st;
+  vector<std::shared_ptr<ScriptSchemaTranslator>> st;
   for (size_t i = 0; i < _translators.size(); ++i)
   {
     LOG_VART(_translators[i]);
@@ -63,35 +66,29 @@ ScriptSchemaTranslator* ScriptSchemaTranslatorFactory::createTranslator(QString 
   }
 
   sort(st.begin(), st.end(), CompareSt);
-  LOG_VART(st);
 
-  ScriptSchemaTranslator* result = 0;
+  std::shared_ptr<ScriptSchemaTranslator> result;
   for (size_t i = 0; i < st.size(); ++i)
   {
     try
     {
       st[i]->setScript(scriptPath);
       LOG_VART(st[i]->isValidScript());
-      if (result == 0 && st[i]->isValidScript())
+      if (!result && st[i]->isValidScript())
       {
         result = st[i];
         LOG_TRACE("Found a valid translator: " + _translators[i]);
         break;
-      }
-      else
-      {
-        delete st[i];
       }
       LOG_VART(result);
     }
     catch (...)
     {
       LOG_WARN("isValidScript shouldn't throw an exception.");
-      delete st[i];
     }
   }
 
-  if (result == 0)
+  if (!result)
   {
     throw HootException("Unable to find an appropriate scripting language for: " + scriptPath);
   }
@@ -101,7 +98,7 @@ ScriptSchemaTranslator* ScriptSchemaTranslatorFactory::createTranslator(QString 
 
 void ScriptSchemaTranslatorFactory::_init()
 {
-  if (_translators.size() == 0)
+  if (_translators.empty())
   {
     _translators = Factory::getInstance().getObjectNamesByBase(ScriptSchemaTranslator::className());
   }

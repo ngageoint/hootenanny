@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESET_CUT_ONLY_CREATOR_H
 #define CHANGESET_CUT_ONLY_CREATOR_H
@@ -38,10 +38,7 @@ class ChainCriterion;
 class Settings;
 
 /**
- * This is the cut only version of C&R.
- *
- * TODO: Some of the simplification that has been applied to ChangesetReplacementCreator can also
- * probably be applied to this class.
+ * @brief The ChangesetCutOnlyCreator class is the cut only version of Cut and Replace.
  */
 class ChangesetCutOnlyCreator : public ChangesetReplacementCreatorAbstract
 {
@@ -53,45 +50,31 @@ public:
   ChangesetCutOnlyCreator();
 
   /**
-   * Creates a changeset that replaces features in the first input
-   *
+   * @brief create creates a changeset that replaces features in the first input.
    * @param input1 the target data file path for the changeset in which to replace features; must
    * support Boundable
    * @param input2 ignored
    * @param bounds the rectangular bounds over which features are to be replaced
    * @param output the changeset file output location
    */
-  virtual void create(
-    const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
-    const QString& output);
-
+  void create(const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
+    const QString& output) override;
   /**
-   * Creates a changeset that replaces features in the first input
-   *
+   * @brief create creates a changeset that replaces features in the first input.
    * @param input1 the target data file path for the changeset in which to replace features; must
    * support Boundable
    * @param input2 ignored
    * @param bounds the bounds over which features are to be replaced
    * @param output the changeset file output location
    */
-  virtual void create(
-    const QString& input1, const QString& input2,
-    const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output);
+  void create(const QString& input1, const QString& input2,
+    const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output) override;
 
-  virtual void setGeometryFilters(const QStringList& filterClassNames);
-  virtual void setReplacementFilters(const QStringList& filterClassNames);
-  virtual void setChainReplacementFilters(const bool chain) { _chainReplacementFilters = chain; }
-  virtual void setReplacementFilterOptions(const QStringList& optionKvps);
-  virtual void setRetainmentFilters(const QStringList& filterClassNames);
-  virtual void setChainRetainmentFilters(const bool chain) { _chainRetainmentFilters = chain; }
-  virtual void setRetainmentFilterOptions(const QStringList& optionKvps);
-
-  virtual QString toString() const override
-    { return className().remove("hoot::"); }
+  QString toString() const override { return className().remove("hoot::"); }
 
 protected:
 
-  virtual void _setGlobalOpts() override;
+  void _setGlobalOpts() override;
 
 private:
 
@@ -108,13 +91,8 @@ private:
   /*
    * Combines filters in _geometryTypeFilters with _replacementFilter.
    */
-  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
-    std::shared_ptr<ChainCriterion> nonGeometryFilter);
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getFilters();
   bool _roadFilterExists() const;
-  void _setInputFilter(
-    std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
-    const bool chainFilters);
-  void _setInputFilterOptions(Settings& opts, const QStringList& optionKvps);
 
   OsmMapPtr _loadRefMap(const GeometryTypeCriterion::GeometryType& geometryType);
   OsmMapPtr _loadSecMap(const GeometryTypeCriterion::GeometryType& geometryType);

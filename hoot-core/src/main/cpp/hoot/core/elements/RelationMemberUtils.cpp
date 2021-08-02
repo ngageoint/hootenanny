@@ -19,28 +19,31 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RelationMemberUtils.h"
 
 // Hoot
+#include <hoot/core/conflate/ConflateInfoCache.h>
+#include <hoot/core/elements/ElementIdUtils.h>
+#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/util/CollectionUtils.h>
-#include <hoot/core/conflate/ConflateUtils.h>
 
 namespace hoot
 {
 
-QString RelationMemberUtils::getRelationMembersDetailedString(const ConstRelationPtr& relation,
-                                                              const ConstOsmMapPtr& map)
+QString RelationMemberUtils::getRelationMembersDetailString(const ConstRelationPtr& relation,
+                                                            const ConstOsmMapPtr& map)
 {
   QString str = "\nMember Detail:\n\n";
   const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
@@ -61,7 +64,8 @@ QString RelationMemberUtils::getRelationMembersDetailedString(const ConstRelatio
   return str;
 }
 
-bool RelationMemberUtils::isMemberOfRelation(const ConstOsmMapPtr& map, const ElementId& childId)
+bool RelationMemberUtils::isMemberOfRelation(
+  const ConstOsmMapPtr& map, const ElementId& childId, const bool ignoreReviewRelations)
 {
   const std::set<ElementId> parentIds = map->getParents(childId);
   LOG_VART(parentIds.size());
@@ -70,24 +74,30 @@ bool RelationMemberUtils::isMemberOfRelation(const ConstOsmMapPtr& map, const El
     const ElementId parentId = *it;
     if (parentId.getType() == ElementType::Relation)
     {
-      LOG_TRACE(childId << " member of relation: " << parentId);
-      return true;
-
+      if (!ignoreReviewRelations)
+      {
+        LOG_TRACE(childId << " member of relation: " << parentId);
+        return true;
+      }
+      else
+      {
+        ConstElementPtr parentElement = map->getElement(parentId);
+        if (parentElement && !parentElement->hasTag(MetadataTags::HootReviewNeeds()))
+        {
+          LOG_TRACE(childId << " member of relation: " << parentId);
+          return true;
+        }
+      }
     }
   }
   return false;
 }
 
-bool RelationMemberUtils::isMemberOfRelationType(
+bool RelationMemberUtils::isMemberOfRelationWithType(
   const ConstOsmMapPtr& map, const ElementId& childId, const QString& relationType)
 {
   LOG_VART(childId);
   LOG_VART(relationType);
-
-  if (relationType.trimmed().isEmpty())
-  {
-    return isMemberOfRelation(map, childId);
-  }
 
   const std::set<ElementId> parentIds = map->getParents(childId);
   LOG_VART(parentIds.size());
@@ -116,11 +126,6 @@ bool RelationMemberUtils::isMemberOfRelationInCategory(
   LOG_VART(schemaCategory);
   LOG_VART(map.get());
 
-  if (schemaCategory.trimmed().isEmpty())
-  {
-    return isMemberOfRelation(map, childId);
-  }
-
   const std::set<ElementId> parentIds = map->getParents(childId);
   LOG_VART(parentIds.size());
   for (std::set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
@@ -147,11 +152,6 @@ bool RelationMemberUtils::isMemberOfRelationWithTagKey(
   LOG_VART(childId);
   LOG_VART(tagKey);
 
-  if (tagKey.trimmed().isEmpty())
-  {
-    return isMemberOfRelation(map, childId);
-  }
-
   const std::set<ElementId> parentIds = map->getParents(childId);
   LOG_VART(parentIds.size());
   for (std::set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
@@ -175,7 +175,7 @@ bool RelationMemberUtils::isMemberOfRelationWithTagKey(
 bool RelationMemberUtils::elementContainedByAnyRelation(
   const ElementId& elementId, const ConstOsmMapPtr& map)
 {
-  return map->getIndex().getElementToRelationMap()->getRelationByElement(elementId).size() > 0;
+  return !map->getIndex().getElementToRelationMap()->getRelationByElement(elementId).empty();
 }
 
 bool RelationMemberUtils::containsMemberWithCriterion(
@@ -234,8 +234,8 @@ bool RelationMemberUtils::containsOnlyMembersWithCriterion(
   return true;
 }
 
-std::vector<ConstRelationPtr> RelationMemberUtils::getContainingRelations(
-  const ConstOsmMapPtr& map, const ElementId& childId)
+std::vector<ConstRelationPtr> RelationMemberUtils::getContainingRelationsConst(
+  const ElementId& childId, const ConstOsmMapPtr& map, const bool ignoreReviewRelations)
 {
   LOG_VART(map.get());
   LOG_VART(childId);
@@ -249,30 +249,42 @@ std::vector<ConstRelationPtr> RelationMemberUtils::getContainingRelations(
   {
     ConstRelationPtr relation = map->getRelation(*it);
     LOG_VART(relation.get());
-    if (relation)
+    if (relation && (!ignoreReviewRelations || !relation->hasTag(MetadataTags::HootReviewNeeds())))
     {
       relations.push_back(relation);
-    }
+    }  
   }
   return relations;
 }
 
-QSet<long> RelationMemberUtils::getContainingRelationIds(
-  const ConstOsmMapPtr& map, const ElementId& childId)
+std::vector<RelationPtr> RelationMemberUtils::getContainingRelations(
+  const ElementId& childId, const ConstOsmMapPtr& map, const bool ignoreReviewRelations)
 {
-  return
-    CollectionUtils::stdSetToQSet(
-      map->getIndex().getElementToRelationMap()->getRelationByElement(childId));
+  std::vector<RelationPtr> relationsToReturn;
+  std::vector<ConstRelationPtr> relations =
+    getContainingRelationsConst(childId, map, ignoreReviewRelations);
+  for (std::vector<ConstRelationPtr>::const_iterator itr = relations.begin();
+       itr != relations.end(); ++itr)
+  {
+    relationsToReturn.push_back(std::const_pointer_cast<Relation>(*itr));
+  }
+  return relationsToReturn;
+}
+
+int RelationMemberUtils::getContainingRelationCount(
+  const ElementId& childId, const ConstOsmMapPtr& map, const bool ignoreReviewRelations)
+{
+  return (int)getContainingRelations(childId, map, ignoreReviewRelations).size();
 }
 
 bool RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
-  const ConstOsmMapPtr& map, const ElementId& childId, const ElementCriterion& criterion)
+  const ElementId& childId, const ElementCriterion& criterion, const ConstOsmMapPtr& map)
 {
   LOG_VART(map.get());
   LOG_VART(childId);
   LOG_VART(criterion.toString());
 
-  std::vector<ConstRelationPtr> containingRelations = getContainingRelations(map, childId);
+  std::vector<ConstRelationPtr> containingRelations = getContainingRelationsConst(childId, map);
   LOG_VART(containingRelations.size());
   for (std::vector<ConstRelationPtr>::const_iterator it = containingRelations.begin();
        it != containingRelations.end(); ++it)
@@ -280,51 +292,6 @@ bool RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
     if (criterion.isSatisfied(*it))
     {
       return true;
-    }
-  }
-  return false;
-}
-
-int RelationMemberUtils::getMemberWayNodeCount(const ConstRelationPtr& relation,
-                                               const ConstOsmMapPtr& map)
-{
-  int count = 0;
-  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
-  for (size_t i = 0; i < relationMembers.size(); i++)
-  {
-    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-    if (member)
-    {
-      ConstWayPtr way = std::dynamic_pointer_cast<const Way>(member);
-      if (way)
-      {
-        count += (int)way->getNodeCount();
-      }
-    }
-  }
-  return count;
-}
-
-bool RelationMemberUtils::relationHasConflatableMember(
-  const ConstRelationPtr& relation, const ConstOsmMapPtr& map)
-{
-  if (!relation)
-  {
-    return false;
-  }
-
-  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
-  for (size_t i = 0; i < relationMembers.size(); i++)
-  {
-    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-    if (member)
-    {
-      LOG_VART(member->getElementId());
-
-      if (ConflateUtils::elementCanBeConflatedByActiveMatcher(member, map))
-      {
-        return true;
-      }
     }
   }
   return false;

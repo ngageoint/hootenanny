@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "InBoundsCriterion.h"
@@ -72,8 +72,8 @@ void InBoundsCriterion::setConfiguration(const Settings& conf)
 void InBoundsCriterion::setOsmMap(const OsmMap* map)
 {
   _map = map->shared_from_this();
-  _elementConverter.reset(new ElementToGeometryConverter(_map));
-  _wayNodeCrit.reset(new WayNodeCriterion(_map));
+  _elementConverter = std::make_shared<ElementToGeometryConverter>(_map);
+  _wayNodeCrit = std::make_shared<WayNodeCriterion>(_map);
 }
 
 bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const
@@ -109,7 +109,7 @@ bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const
   else
   {
     std::vector<ConstWayPtr> containingWays =
-      WayUtils::getContainingWaysByNodeId(e->getElementId().getId(), _map);
+      WayUtils::getContainingWaysConst(e->getElementId().getId(), _map);
     LOG_VART(containingWays.size());
     for (std::vector<ConstWayPtr>::const_iterator containingWaysItr = containingWays.begin();
          containingWaysItr != containingWays.end(); ++containingWaysItr)
@@ -132,7 +132,7 @@ bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const
 bool InBoundsCriterion::_nonWayNodeInBounds(const ConstElementPtr& e) const
 {
   std::shared_ptr<geos::geom::Geometry> geom = _elementConverter->convertToGeometry(e);
-  if (!geom)
+  if (!geom || geom->isEmpty())
   {
     return false;
   }

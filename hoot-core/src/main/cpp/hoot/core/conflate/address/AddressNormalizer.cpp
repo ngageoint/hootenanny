@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "AddressNormalizer.h"
@@ -40,12 +40,12 @@ namespace hoot
 {
 
 AddressNormalizer::AddressNormalizer() :
-_numNormalized(0)
+_numNormalized(0),
+_addressTagKeys(std::make_shared<AddressTagKeys>())
 {
-  _addressTagKeys.reset(new AddressTagKeys());
 }
 
-void AddressNormalizer::normalizeAddresses(const ElementPtr& e)
+void AddressNormalizer::normalizeAddresses(const ElementPtr& e) const
 {
   const QSet<QString> addressTagKeys = _addressTagKeys->getAddressTagKeys(*e);
   LOG_VART(addressTagKeys);
@@ -101,6 +101,11 @@ QSet<QString> AddressNormalizer::normalizeAddress(const QString& address) const
 
 QSet<QString> AddressNormalizer::_normalizeAddressWithLibPostal(const QString& address) const
 {
+  if (address.trimmed().isEmpty())
+  {
+    return QSet<QString>();
+  }
+
   LOG_TRACE("Normalizing " << address << " with libpostal...");
 
   QSet<QString> normalizedAddresses;

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ArffToRfConverter.h"
@@ -60,7 +60,7 @@ void ArffToRfConverter::convert(const QString& input, const QString& output)
   if (Log::getInstance().getLevel() >= Log::Warn)
   {
     // disable the printing of "Trained Tree ..."
-    dc.reset(new Tgs::DisableCout());
+    dc = std::make_shared<Tgs::DisableCout>();
   }
   const int numFactors =
     std::min(df->getNumFactors(), std::max<unsigned int>(3, df->getNumFactors() / 5));
@@ -73,7 +73,7 @@ void ArffToRfConverter::convert(const QString& input, const QString& output)
   LOG_DEBUG("Error: " << error << " sigma: " << sigma);
 
   std::ofstream fileStream;
-  fileStream.open((output).toStdString().data());
+  fileStream.open(output.toStdString().data());
   rf.exportModel(fileStream);
   fileStream.close();
 }

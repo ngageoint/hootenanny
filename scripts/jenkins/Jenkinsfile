@@ -17,19 +17,26 @@ pipeline {
         booleanParam(name: 'Destroy_VM', defaultValue: true)
         booleanParam(name: 'Hoot_provision', defaultValue: true)
         booleanParam(name: 'Configure_Tests', defaultValue: false)
+        // Generating a core test coverage report slows down the core tests quite a bit, so turning
+        // it off by default. This must be set the same as Core_coverage. Tried to couple this to
+        // Core_coverage to avoid an extra parameter but was unsuccessful.
+        booleanParam(name: 'Configure_coverage', defaultValue: false)
         booleanParam(name: 'Build', defaultValue: true)
+        booleanParam(name: 'Archive_docs', defaultValue: false)
         booleanParam(name: 'Core_tests', defaultValue: true)
+        booleanParam(name: 'Translations_tests', defaultValue: true)
+        booleanParam(name: 'Core_coverage', defaultValue: false)
         booleanParam(name: 'Services_tests', defaultValue: true)
         booleanParam(name: 'UI_hoot1_tests', defaultValue: true)
         booleanParam(name: 'UI_hoot2_tests', defaultValue: true)
         booleanParam(name: 'Sonar', defaultValue: false)
         booleanParam(name: 'Halt_on_failure', defaultValue: true)
-        string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
+        string(name: 'Box', defaultValue: 'hoot_centos7', description: 'Vagrant Box')
         string(name: 'HOOT_AWS_ENV_TAG', defaultValue: 'testing')
         string(name: 'HOOT_AWS_USE_TAG', defaultValue: 'jenkins')
         string(name: 'HOOT_AWS_GROUP_TAG', defaultValue: 'devops')
     }
-    
+
     environment {
         SYS_URL = 'UNKOWN'
         SYS_VER = 'UNKOWN'
@@ -109,12 +116,15 @@ pipeline {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/sonar/sonar-install.sh'"
                 // Compile with build watcher to allow for sonar scanning in subsequent steps
                 sh "sed -i 's/^make \$SILENT_MAKE -j\$(nproc)\$/build-wrapper-linux-x86-64 --out-dir bw-output make \$SILENT_MAKE -j\$(nproc)/' VagrantBuild.sh"
-                script {
-                    if (env.BRANCH_NAME == "master") {
-                        // Compile instrumented code for master branch which allows for calculating coverage
-                        sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
-                    }
-                }
+                // Until PCH support is fixed in Sonar, run this to fix
+                sh "sed -i 's|^make \$SILENT_MAKE clean|make \$SILENT_MAKE clean\\n./scripts/sonar/sonar-prep-makefile.sh|g' VagrantBuild.sh"
+            }
+        }
+        stage("Configure Coverage") {
+            when { expression { return params.Configure_coverage } }
+            steps {
+                // Allow test coverage to be generated.
+                sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
             }
         }
         stage("Build") {
@@ -131,16 +141,41 @@ pipeline {
                 sh "vagrant provision ${params.Box} --provision-with tomcat"
             }
         }
+        stage("Archive Docs") {
+            when { expression { return params.Archive_docs } }
+            steps {
+                // make archive does this same thing, but we don't run it from this script.
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; tar czf docs.tar.gz docs || touch docs.tar.gz'"
+                sh "vagrant scp ${params.Box}:~/hoot/docs.tar.gz ./"
+                archiveArtifacts artifacts: '**/docs.tar.gz'
+            }
+        }
         stage("Core Tests") {
             when { expression { return params.Core_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel 6'"
+                // Unfortunately, the code coverage report generation slows down tests and results in a lot of "Waiting 
+                // for process to finish..." messages to be displayed that you wouldn't see otherwise. So, we may want
+                // to make a change that runs this as --error here or increase the wait time when generating the report.
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --error --glacial --diff --parallel'"
+            }
+        }
+        stage("Translations Tests") {
+            when { expression { return params.Services_tests } }
+            steps {
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` translations-test'"
+            }
+        }
+        stage("Core Coverage") {
+            when { expression { return params.Core_coverage } }
+            steps {
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; make -j`nproc` core-coverage; tar czf coverage.tar.gz coverage || touch coverage.tar.gz'"
+                sh "vagrant scp ${params.Box}:~/hoot/coverage.tar.gz ./"
+                archiveArtifacts artifacts: '**/coverage.tar.gz'
             }
         }
         stage("Services Tests") {
             when { expression { return params.Services_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` translations-test'"
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test-all'"
             }
         }
@@ -168,7 +203,9 @@ pipeline {
                 }
             }
             steps{
-                    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; mvn sonar:sonar \
+                    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; \
+                        JAVA_HOME=/usr/lib/jvm/java-11-openjdk \
+                        mvn sonar:sonar \
                         -Dsonar.host.url=https://sonarcloud.io \
                         -Dsonar.organization=hootenanny \
                         -Dsonar.login=${env.SONAR_CLOUD_KEY} \
@@ -181,9 +218,6 @@ pipeline {
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME} -p ${env.CHANGE_ID} -a ${env.DGIS_BOT_TOKEN}'"
                     }
                     else {
-                        if (env.BRANCH_NAME == "master") {
-                            sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/cover/coverGcov.sh'"
-                        }
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME}'"
                     }
                 }
@@ -216,9 +250,12 @@ pipeline {
                 sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
                 postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
                 // Copy over the test-output directory and add it to the artifacts
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; tar czf failed-test-output.tar.gz test-output'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; tar czf failed-test-output.tar.gz test-output || touch failed-test-output.tar.gz'"
                 sh "vagrant scp ${params.Box}:~/hoot/failed-test-output.tar.gz ./"
                 archiveArtifacts artifacts: '**/failed-test-output.tar.gz'
+                // Copy over the failed sonar file
+                sh "vagrant scp ${params.Box}:~/hoot/sonar-cfamily-reproducer.zip ./ || touch sonar-cfamily-reproducer.zip"
+                archiveArtifacts artifacts: '**/sonar-cfamily-reproducer.zip'
             }
         }
         cleanup {

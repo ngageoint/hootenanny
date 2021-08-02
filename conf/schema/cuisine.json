@@ -1,13 +1,8 @@
 [
     {
-        "categories": [
-            "combination"
-        ],
+        "categories": [ "combination" ],
         "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": [ "node", "area" ],
         "influence": 1,
         "name": "cuisine",
         "objectType": "tag"
@@ -22,14 +17,8 @@
         "name": "cuisine=afghan",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=middle_eastern",
-                "weight": 0.7
-            },
-            {
-                "name": "cuisine=indian",
-                "weight": 0.7
-            }
+            { "name": "cuisine=middle_eastern", "weight": 0.7 },
+            { "name": "cuisine=indian", "weight": 0.7 }
         ]
     },
     {
@@ -41,10 +30,7 @@
         "isA": "cuisine",
         "name": "cuisine=alpine_hut",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=swiss",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "cuisine=swiss", "weight": 0.8 }
     },
     {
         "isA": "cuisine",
@@ -60,15 +46,10 @@
         "isA": "cuisine",
         "name": "cuisine=armenian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=european",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 }
     },
     {
-        "aliases": [
-            "cuisine=oriental"
-        ],
+        "aliases": [ "cuisine=oriental" ],
         "isA": "cuisine",
         "name": "cuisine=asian",
         "objectType": "tag"
@@ -78,33 +59,21 @@
         "name": "cuisine=australian",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=british",
-                "weight": 0.8
-            },
-            {
-                "name": "cuisine=asian",
-                "weight": 0.4
-            }
+            { "name": "cuisine=british", "weight": 0.8 },
+            { "name": "cuisine=asian", "weight": 0.4 }
         ]
     },
     {
         "isA": "cuisine",
         "name": "cuisine=austrian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=european",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=bagel",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=deli",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=deli", "weight": 0.9 }
     },
     {
         "isA": "cuisine=brazilian",
@@ -120,19 +89,13 @@
         "isA": "cuisine",
         "name": "cuisine=balkan",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=european",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=bangladeshi",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=indian",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "cuisine=indian", "weight": 0.7 }
     },
     {
         "aliases": [
@@ -157,28 +120,19 @@
         "isA": "cuisine",
         "name": "cuisine=belarusian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=russian",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=russian", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=belgian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=european",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=bistro",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=diner",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "cuisine=diner", "weight": 0.7 }
     },
     {
         "isA": "cuisine=greek",
@@ -186,9 +140,7 @@
         "objectType": "tag"
     },
     {
-        "aliases": [
-            "cuisine=beef_bowl"
-        ],
+        "aliases": [ "cuisine=beef_bowl" ],
         "isA": "cuisine",
         "name": "cuisine=bowl",
         "objectType": "tag"
@@ -197,9 +149,7 @@
         "isA": "cuisine",
         "name": "cuisine=brazilian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=argentinian",
-            "weight": 0.7
+        "similarTo": { "name": "cuisine=argentinian", "weight": 0.7
         }
     },
     {
@@ -208,16 +158,11 @@
         "objectType": "tag"
     },
     {
-        "aliases": [
-            "cuisine=english"
-        ],
+        "aliases": [ "cuisine=english" ],
         "isA": "cuisine",
         "name": "cuisine=british",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=european",
-            "weight": 0.4
-        }
+        "similarTo": { "name": "cuisine=european", "weight": 0.4 }
     },
     {
         "isA": "cuisine",
@@ -229,14 +174,8 @@
         "name": "cuisine=buffet",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=bistro",
-                "weight": 0.7
-            },
-            {
-                "name": "cuisine=cafetaria",
-                "weight": 0.8
-            }
+            { "name": "cuisine=bistro", "weight": 0.7 },
+            { "name": "cuisine=cafetaria", "weight": 0.8 }
         ]
     },
     {
@@ -248,14 +187,8 @@
         "name": "cuisine=burger",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=fast_food",
-                "weight": 0.9
-            },
-            {
-                "name": "cuisine=american",
-                "weight": 0.4
-            }
+            { "name": "cuisine=fast_food", "weight": 0.9 },
+            { "name": "cuisine=american", "weight": 0.4 }
         ]
     },
     {
@@ -267,24 +200,15 @@
         "isA": "cuisine",
         "name": "cuisine=cafe",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=coffee_shop",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "cuisine=coffee_shop", "weight": 0.8 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=cafe/diner",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=cafe",
-                "weight": 0.9
-            },
-            {
-                "name": "cuisine=diner",
-                "weight": 0.9
-            }
+            { "name": "cuisine=cafe", "weight": 0.9 },
+            { "name": "cuisine=diner", "weight": 0.9 }
         ]
     },
     {
@@ -302,24 +226,15 @@
         "name": "cuisine=cake",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=bakery",
-                "weight": 0.9
-            },
-            {
-                "name": "cuisine=coffee_shop",
-                "weight": 0.4
-            }
+            { "name": "cuisine=bakery", "weight": 0.9 },
+            { "name": "cuisine=coffee_shop", "weight": 0.4 }
         ]
     },
     {
         "isA": "cuisine",
         "name": "cuisine=canteen",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=cafetaria",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=cafetaria", "weight": 0.9 }
     },
     {
         "isA": "cuisine=chinese",
@@ -345,10 +260,7 @@
         "isA": "cuisine",
         "name": "cuisine=chicken",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=fried_chicken",
-            "weight": 0.5
-        }
+        "similarTo": { "name": "cuisine=fried_chicken", "weight": 0.5 }
     },
     {
         "isA": "cuisine=american",
@@ -364,19 +276,13 @@
         "isA": "cuisine",
         "name": "cuisine=chocolate",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=dessert",
-            "weight": 0.4
-        }
+        "similarTo": { "name": "cuisine=dessert", "weight": 0.4 }
     },
     {
         "isA": "cuisine=coffee_shop",
         "name": "cuisine=coffee",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=diner",
-            "weight": 0.4
-        }
+        "similarTo": { "name": "cuisine=diner", "weight": 0.4 }
     },
     {
         "isA": "cuisine",
@@ -400,10 +306,7 @@
         "isA": "cuisine",
         "name": "cuisine=croatian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=balkan",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=balkan", "weight": 0.9 }
     },
     {
         "isA": "cuisine=latin_american",
@@ -415,42 +318,27 @@
         "name": "cuisine=curry",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=indian",
-                "weight": 0.8
-            },
-            {
-                "name": "cuisine=asian",
-                "weight": 0.3
-            }
+            { "name": "cuisine=indian", "weight": 0.8 },
+            { "name": "cuisine=asian", "weight": 0.3 }
         ]
     },
     {
         "isA": "cuisine",
         "name": "cuisine=czech",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=european",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=danish",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=european",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=deli",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=cafe",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "cuisine=cafe", "weight": 0.7 }
     },
     {
         "isA": "cuisine",
@@ -471,19 +359,13 @@
         "isA": "cuisine",
         "name": "cuisine=donut",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=coffee_shop",
-            "weight": 0.4
-        }
+        "similarTo": { "name": "cuisine=coffee_shop", "weight": 0.4 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=dutch",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=european",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 }
     },
     {
         "isA": "cuisine=middle_eastern",
@@ -494,19 +376,13 @@
         "isA": "cuisine",
         "name": "cuisine=egyptian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=middle_eastern",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=middle_eastern", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=empanada",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=latin_american",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "cuisine=latin_american", "weight": 0.8 }
     },
     {
         "isA": "cuisine=african",
@@ -537,10 +413,7 @@
         "isA": "cuisine=seafood",
         "name": "cuisine=fish_and_chips",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=fast_food",
-            "weight": 0.5
-        }
+        "similarTo": { "name": "cuisine=fast_food", "weight": 0.5 }
     },
     {
         "isA": "cuisine=swiss",
@@ -551,10 +424,7 @@
         "isA": "cuisine",
         "name": "cuisine=french",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=european",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 }
     },
     {
         "isA": "cuisine=fried_food",
@@ -569,19 +439,13 @@
         "isA": "cuisine",
         "name": "cuisine=fried_food",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=fast_food",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "cuisine=fast_food", "weight": 0.7 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=frozen_yogurt",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=ice_cream",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=ice_cream", "weight": 0.9 }
     },
     {
         "isA": "cuisine=brazilian",
@@ -592,33 +456,21 @@
         "isA": "cuisine",
         "name": "cuisine=georgian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=russian",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=russian", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=german",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=european",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=greek",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=mediterranean",
-                "weight": 0.9
-            },
-            {
-                "name": "cuisine=balkan",
-                "weight": 0.6
-            }
+            { "name": "cuisine=mediterranean", "weight": 0.9 },
+            { "name": "cuisine=balkan", "weight": 0.6 }
         ]
     },
     {
@@ -627,9 +479,7 @@
         "objectType": "tag"
     },
     {
-        "aliases": [
-            "cuisine=gyros"
-        ],
+        "aliases": [ "cuisine=gyros" ],
         "isA": "cuisine=greek",
         "name": "cuisine=gyro",
         "objectType": "tag"
@@ -653,14 +503,8 @@
         "name": "cuisine=hotdog",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=fast_food",
-                "weight": 0.8
-            },
-            {
-                "name": "cuisine=american",
-                "weight": 0.5
-            }
+            { "name": "cuisine=fast_food", "weight": 0.8 },
+            { "name": "cuisine=american", "weight": 0.5 }
         ]
     },
     {
@@ -672,19 +516,13 @@
         "isA": "cuisine",
         "name": "cuisine=hungarian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=european",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=ice_cream",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=dessert",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "cuisine=dessert", "weight": 0.7 }
     },
     {
         "isA": "cuisine",
@@ -695,10 +533,7 @@
         "isA": "cuisine=asian",
         "name": "cuisine=indonesian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=malaysian",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "cuisine=malaysian", "weight": 0.8 }
     },
     {
         "isA": "cuisine",
@@ -712,24 +547,15 @@
         "isA": "cuisine",
         "name": "cuisine=iranian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=middle_eastern",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=middle_eastern", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=irish",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=european",
-                "weight": 0.9
-            },
-            {
-                "name": "cuisine=british",
-                "weight": 0.7
-            }
+            { "name": "cuisine=european", "weight": 0.9 },
+            { "name": "cuisine=british", "weight": 0.7 }
         ]
     },
     {
@@ -737,14 +563,8 @@
         "name": "cuisine=italian",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=european",
-                "weight": 0.7
-            },
-            {
-                "name": "cuisine=mediterranean",
-                "weight": 0.8
-            }
+            { "name": "cuisine=european", "weight": 0.7 },
+            { "name": "cuisine=mediterranean", "weight": 0.8 }
         ]
     },
     {
@@ -777,14 +597,8 @@
         "name": "cuisine=kosher",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=mediterranean",
-                "weight": 0.8
-            },
-            {
-                "name": "cuisine=middle_eastern",
-                "weight": 0.4
-            }
+            { "name": "cuisine=mediterranean", "weight": 0.8 },
+            { "name": "cuisine=middle_eastern", "weight": 0.4 }
         ]
     },
     {
@@ -796,10 +610,7 @@
         "isA": "cuisine=asian",
         "name": "cuisine=lao",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=thai",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "cuisine=thai", "weight": 0.8 }
     },
     {
         "isA": "cuisine",
@@ -811,14 +622,8 @@
         "name": "cuisine=lebanese",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=middle_eastern",
-                "weight": 0.7
-            },
-            {
-                "name": "cuisine=mediterranean",
-                "weight": 0.9
-            }
+            { "name": "cuisine=middle_eastern", "weight": 0.7 },
+            { "name": "cuisine=mediterranean", "weight": 0.9 }
         ]
     },
     {
@@ -845,10 +650,7 @@
         "isA": "cuisine",
         "name": "cuisine=mediterranean",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=european",
-            "weight": 0.4
-        }
+        "similarTo": { "name": "cuisine=european", "weight": 0.4 }
     },
     {
         "isA": "cuisine",
@@ -873,46 +675,29 @@
         "isA": "cuisine=asian",
         "name": "cuisine=mongolian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=chinese",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "cuisine=chinese", "weight": 0.7 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=moroccan",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=middle_eastern",
-                "weight": 0.7
-            },
-            {
-                "name": "cuisine=mediterranean",
-                "weight": 0.9
-            }
+            { "name": "cuisine=middle_eastern", "weight": 0.7 },
+            { "name": "cuisine=mediterranean", "weight": 0.9 }
         ]
     },
     {
         "isA": "cuisine",
         "name": "cuisine=nepalese",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=indian",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "cuisine=indian", "weight": 0.7 }
     },
     {
-        "aliases": [
-            "cuisine=noodles"
-        ],
+        "aliases": [ "cuisine=noodles" ],
         "isA": "cuisine",
         "name": "cuisine=noodle",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=asian",
-            "weight": 0.4
-        }
+        "similarTo": { "name": "cuisine=asian", "weight": 0.4 }
     },
     {
         "isA": "cuisine=japanese",
@@ -933,34 +718,22 @@
         "isA": "cuisine",
         "name": "cuisine=pakistani",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=indian",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "cuisine=indian", "weight": 0.7 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=pancake",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=crepe",
-                "weight": 0.9
-            },
-            {
-                "name": "cuisine=waffle",
-                "weight": 0.7
-            }
+            { "name": "cuisine=crepe", "weight": 0.9 },
+            { "name": "cuisine=waffle", "weight": 0.7 }
         ]
     },
     {
         "isA": "cuisine=italian",
         "name": "cuisine=pasta",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=noodle",
-            "weight": 0.3
-        }
+        "similarTo": { "name": "cuisine=noodle", "weight": 0.3 }
     },
     {
         "isA": "cuisine",
@@ -968,9 +741,7 @@
         "objectType": "tag"
     },
     {
-        "aliases": [
-            "cuisine=filipino"
-        ],
+        "aliases": [ "cuisine=filipino" ],
         "isA": "cuisine=asian",
         "name": "cuisine=philippine",
         "objectType": "tag"
@@ -985,18 +756,9 @@
         "name": "cuisine=pie",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=bakery",
-                "weight": 0.9
-            },
-            {
-                "name": "cuisine=coffee_shop",
-                "weight": 0.4
-            },
-            {
-                "name": "cuisine=diner",
-                "weight": 0.4
-            }
+            { "name": "cuisine=bakery", "weight": 0.9 },
+            { "name": "cuisine=coffee_shop", "weight": 0.4 },
+            { "name": "cuisine=diner", "weight": 0.4 }
         ]
     },
     {
@@ -1008,22 +770,14 @@
         "isA": "cuisine",
         "name": "cuisine=polish",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=european",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 }
     },
     {
-        "aliases": [
-            "cuisine=portuguese"
-        ],
+        "aliases": [ "cuisine=portuguese" ],
         "isA": "cuisine",
         "name": "cuisine=portugese",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=mediterranean",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=mediterranean", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
@@ -1042,10 +796,7 @@
         "isA": "cuisine=japanese",
         "name": "cuisine=ramen",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=noodle",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=noodle", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
@@ -1061,10 +812,7 @@
         "isA": "cuisine",
         "name": "cuisine=russian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=european",
-            "weight": 0.4
-        }
+        "similarTo": { "name": "cuisine=european", "weight": 0.4 }
     },
     {
         "isA": "cuisine=spanish",
@@ -1085,24 +833,15 @@
         "name": "cuisine=sandwich",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=deli",
-                "weight": 0.7
-            },
-            {
-                "name": "cuisine=coffee_shop",
-                "weight": 0.4
-            }
+            { "name": "cuisine=deli", "weight": 0.7 },
+            { "name": "cuisine=coffee_shop", "weight": 0.4 }
         ]
     },
     {
         "isA": "cuisine",
         "name": "cuisine=sausage",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=meat",
-            "weight": 0.6
-        }
+        "similarTo": { "name": "cuisine=meat", "weight": 0.6 }
     },
     {
         "isA": "cuisine=japanese",
@@ -1143,24 +882,15 @@
         "name": "cuisine=snackbar",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=cafetaria",
-                "weight": 0.6
-            },
-            {
-                "name": "cuisine=coffee_shop",
-                "weight": 0.6
-            }
+            { "name": "cuisine=cafetaria", "weight": 0.6 },
+            { "name": "cuisine=coffee_shop", "weight": 0.6 }
         ]
     },
     {
         "isA": "cuisine=japanese",
         "name": "cuisine=soba",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=noodle",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=noodle", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
@@ -1172,36 +902,22 @@
         "name": "cuisine=spanish",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=european",
-                "weight": 0.5
-            },
-            {
-                "name": "cuisine=mediterranean",
-                "weight": 0.8
-            }
+            { "name": "cuisine=european", "weight": 0.5 },
+            { "name": "cuisine=mediterranean", "weight": 0.8 }
         ]
     },
     {
         "isA": "cuisine=steak_house",
         "name": "cuisine=steak",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=meat",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=meat", "weight": 0.9 }
     },
     {
-        "aliases": [
-            "cuisine=steakhouse"
-        ],
+        "aliases": [ "cuisine=steakhouse" ],
         "isA": "cuisine",
         "name": "cuisine=steak_house",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=grill",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "cuisine=grill", "weight": 0.8 }
     },
     {
         "isA": "cuisine=japanese",
@@ -1217,55 +933,37 @@
         "isA": "cuisine",
         "name": "cuisine=swedish",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=european",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=swiss",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=european",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=european", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=syrian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=middle_eastern",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=middle_eastern", "weight": 0.9 }
     },
     {
         "isA": "cuisine=mexican",
         "name": "cuisine=taco",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=fast_food",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "cuisine=fast_food", "weight": 0.7 }
     },
     {
         "isA": "cuisine=asian",
         "name": "cuisine=taiwanese",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=chinese",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "cuisine=chinese", "weight": 0.7 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=tapas",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=spanish",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=spanish", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
@@ -1277,24 +975,15 @@
         "name": "cuisine=tea_shop",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=tea",
-                "weight": 0.9
-            },
-            {
-                "name": "cuisine=coffee_shop",
-                "weight": 0.6
-            }
+            { "name": "cuisine=tea", "weight": 0.9 },
+            { "name": "cuisine=coffee_shop", "weight": 0.6 }
         ]
     },
     {
         "isA": "cuisine",
         "name": "cuisine=teahouse",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=tea",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=tea", "weight": 0.9 }
     },
     {
         "isA": "cuisine=japanese",
@@ -1310,10 +999,7 @@
         "isA": "cuisine=asian",
         "name": "cuisine=thai",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=malaysian",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "cuisine=malaysian", "weight": 0.8 }
     },
     {
         "isA": "cuisine",
@@ -1325,57 +1011,36 @@
         "name": "cuisine=turkish",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=middle_eastern",
-                "weight": 0.6
-            },
-            {
-                "name": "cuisine=mediterranean",
-                "weight": 0.9
-            }
+            { "name": "cuisine=middle_eastern", "weight": 0.6 },
+            { "name": "cuisine=mediterranean", "weight": 0.9 }
         ]
     },
     {
         "isA": "cuisine=japanese",
         "name": "cuisine=udon",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=noodle",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=noodle", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=ukrainian",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=russian",
-                "weight": 0.7
-            },
-            {
-                "name": "cuisine=european",
-                "weight": 0.9
-            }
+            { "name": "cuisine=russian", "weight": 0.7 },
+            { "name": "cuisine=european", "weight": 0.9 }
         ]
     },
     {
         "isA": "cuisine",
         "name": "cuisine=uzbek",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=afghan",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "cuisine=afghan", "weight": 0.8 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=vegan",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=vegetarian",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=vegetarian", "weight": 0.9 }
     },
     {
         "isA": "cuisine",
@@ -1391,10 +1056,7 @@
         "isA": "cuisine",
         "name": "cuisine=waffle",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=diner",
-            "weight": 0.4
-        }
+        "similarTo": { "name": "cuisine=diner", "weight": 0.4 }
     },
     {
         "isA": "cuisine",
@@ -1410,24 +1072,15 @@
         "isA": "cuisine",
         "name": "cuisine=wine",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=pub",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "cuisine=pub", "weight": 0.8 }
     },
     {
         "isA": "cuisine",
         "name": "cuisine=wings",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "cuisine=pub",
-                "weight": 0.8
-            },
-            {
-                "name": "cuisine=fast_food",
-                "weight": 0.8
-            }
+            { "name": "cuisine=pub", "weight": 0.8 },
+            { "name": "cuisine=fast_food", "weight": 0.8 }
         ]
     },
     {
@@ -1449,9 +1102,6 @@
         "isA": "cuisine",
         "name": "cuisine=yugoslavian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "cuisine=balkan",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "cuisine=balkan", "weight": 0.9 }
     }
 ]

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef PROVENANCEAWAREOVERWRITETAGMERGER_H
 #define PROVENANCEAWAREOVERWRITETAGMERGER_H
@@ -45,9 +45,9 @@ public:
 
   ProvenanceAwareOverwriteTagMerger(bool swap = false);
 
-  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
+  Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Overwrites tags secondary feature tags with reference tags while maintaining provenance (experimental)"; }
 };
 

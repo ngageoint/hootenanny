@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMMAPREADER_H
 #define OSMMAPREADER_H
@@ -89,7 +89,7 @@ public:
   /**
    * Gets the ignore duplicates flag
    */
-  bool getIgnoreDuplicates() { return _ignoreDuplicates; }
+  bool getIgnoreDuplicates() const { return _ignoreDuplicates; }
 
   /**
    * Set the ignore duplicates flag, when set to true, derived classes will ignore any element
@@ -101,7 +101,7 @@ public:
   void setWarnOnVersionZeroElement(bool warn) { _warnOnVersionZeroElement = warn; }
 
   /** Configurable interface */
-  virtual void setConfiguration(const Settings& conf) override
+  void setConfiguration(const Settings& conf) override
   {
     _ignoreDuplicates =  ConfigOptions(conf).getMapMergeIgnoreDuplicateIds();
   }

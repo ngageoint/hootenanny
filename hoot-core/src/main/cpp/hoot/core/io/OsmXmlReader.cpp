@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmXmlReader.h"
 
 // Hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/DateTimeUtils.h>
@@ -37,7 +37,6 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
@@ -63,21 +62,21 @@ int OsmXmlReader::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
 OsmXmlReader::OsmXmlReader() :
-_osmFound(false),
 _status(Status::Invalid),
-_missingNodeCount(0),
-_missingWayCount(0),
-_badAccuracyCount(0),
 _keepStatusTag(false),
 _useFileStatus(false),
 _useDataSourceId(false),
+_numRead(0),
+_osmFound(false),
+_missingNodeCount(0),
+_missingWayCount(0),
+_badAccuracyCount(0),
 _addSourceDateTime(true),
 _wayId(0),
 _relationId(0),
 _inputCompressed(false),
 _addChildRefsWhenMissing(false),
 _logWarningsForMissingElements(true),
-_numRead(0),
 _statusUpdateInterval(1000),
 _keepImmediatelyConnectedWaysOutsideBounds(false)
 {
@@ -96,7 +95,7 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   setDefaultAccuracy(configOptions.getCircularErrorDefaultValue());
   setKeepStatusTag(configOptions.getReaderKeepStatusTag());
-  setUseFileStatus(configOptions.getReaderUseFileStatus()),
+  setUseFileStatus(configOptions.getReaderUseFileStatus());
   setAddSourceDateTime(configOptions.getReaderAddSourceDatetime());
   setPreserveAllTags(configOptions.getReaderPreserveAllTags());
   setStatusUpdateInterval(configOptions.getTaskStatusUpdateInterval() * 10);
@@ -118,7 +117,7 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   setCircularErrorTagKeys(configOptions.getCircularErrorTagKeys());
 }
 
-void OsmXmlReader::_parseTimeStamp(const QXmlAttributes& attributes)
+void OsmXmlReader::_parseTimeStamp(const QXmlAttributes& attributes) const
 {
   if ((attributes.value("timestamp") != "") &&
       (attributes.value("timestamp") != "1970-01-01T00:00:00Z") &&
@@ -285,8 +284,9 @@ void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
     logWarnCount++;
   }
 
-  _element.reset(
-    new Way(_status, newId, _defaultCircularError, changeset, version, timestamp, user, uid));
+  _element =
+    std::make_shared<Way>(
+      _status, newId, _defaultCircularError, changeset, version, timestamp, user, uid);
 
   _parseTimeStamp(attributes);
 }
@@ -354,9 +354,9 @@ void OsmXmlReader::_createRelation(const QXmlAttributes& attributes)
     logWarnCount++;
   }
 
-  _element.reset(
-    new Relation(
-      _status, newId, _defaultCircularError, "", changeset, version, timestamp, user, uid));
+  _element =
+    std::make_shared<Relation>(
+      _status, newId, _defaultCircularError, "", changeset, version, timestamp, user, uid);
 
   _parseTimeStamp(attributes);
 }
@@ -385,27 +385,27 @@ bool OsmXmlReader::isSupported(const QString& url)
   return false;
 }
 
-double OsmXmlReader::_parseDouble(const QString& s)
+double OsmXmlReader::_parseDouble(const QString& s) const
 {
   bool ok;
   double result = s.toDouble(&ok);
 
   if (ok == false)
   {
-    throw Exception("Error parsing double: " + s);
+    throw HootException("Error parsing double: " + s);
   }
 
   return result;
 }
 
-long OsmXmlReader::_parseLong(const QString& s)
+long OsmXmlReader::_parseLong(const QString& s) const
 {
   bool ok;
   long result = s.toLong(&ok);
 
   if (ok == false)
   {
-    throw Exception("Error parsing long: " + s);
+    throw HootException("Error parsing long: " + s);
   }
 
   return result;
@@ -448,7 +448,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   QFile file(_url);
   if (!file.open(QFile::ReadOnly | QFile::Text))
   {
-    throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_url));
+    throw HootException(QObject::tr("Error opening OSM file for parsing: %1").arg(_url));
   }
   LOG_DEBUG("File " << _url << " opened for read");
 
@@ -462,7 +462,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
 
   // This is meant for taking a larger input down to a smaller size. Clearly, if the input data's
   // bounds is already smaller than _bounds, this will have no effect. Also, We don't support
-  // cropping during streaming, and there is a check in ElementStreamer::isStreamableIo to make
+  // cropping during streaming, and there is a check in IoUtils::isStreamableIo to make
   // sure nothing tries to stream with this reader when a bounds has been set.
   LOG_VARD(_bounds.get());
   if (_bounds.get())
@@ -480,9 +480,9 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   _map.reset();
 }
 
-OsmMapPtr OsmXmlReader::fromXml(const QString& xml, const bool useDataSourceId,
-                                const bool useDataSourceStatus, const bool keepStatusTag,
-                                const bool addChildRefsWhenMissing)
+OsmMapPtr OsmXmlReader::fromXml(
+  const QString& xml, const bool useDataSourceId, const bool useDataSourceStatus,
+  const bool keepStatusTag, const bool addChildRefsWhenMissing)
 {
   if (xml.isEmpty())
   {
@@ -491,7 +491,7 @@ OsmMapPtr OsmXmlReader::fromXml(const QString& xml, const bool useDataSourceId,
 
   LOG_DEBUG("Reading map from xml...");
   //LOG_VART(xml);
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   OsmXmlReader reader;
   reader.setUseDataSourceIds(useDataSourceId);
   reader.setUseFileStatus(useDataSourceStatus);
@@ -520,7 +520,7 @@ void OsmXmlReader::readFromString(const QString& xml, const OsmMapPtr& map)
   QXmlInputSource xmlInputSource(&buffer);
   if (reader.parse(xmlInputSource) == false)
   {
-    throw Exception(_errorString);
+    throw HootException(_errorString);
   }
 
   LOG_DEBUG("Parsed map from xml.");
@@ -564,14 +564,14 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
     {
       if (qName != "osm")
       {
-        throw Exception("The file is not an OSM file.");
+        throw HootException("The file is not an OSM file.");
       }
       else
       {
         _osmFound = true;
         if (attributes.value("version") != "0.6")
         {
-          throw Exception("Only version 0.6 OSM files are supported.");
+          throw HootException("Only version 0.6 OSM files are supported.");
         }
       }
     }
@@ -864,7 +864,7 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
       }
     }
   }
-  catch (const Exception& e)
+  catch (const HootException& e)
   {
     _errorString = e.what();
     return false;
@@ -1000,7 +1000,7 @@ void OsmXmlReader::_uncompressInput()
 }
 
 QXmlAttributes OsmXmlReader::_streamAttributesToAttributes(
-  const QXmlStreamAttributes& streamAttributes)
+  const QXmlStreamAttributes& streamAttributes) const
 {
   QXmlAttributes attributes;
   for (QXmlStreamAttributes::const_iterator itr = streamAttributes.begin();
@@ -1020,7 +1020,7 @@ bool OsmXmlReader::hasMoreElements()
     finalizePartial();
     //map needed for assigning new element ids only (not actually putting any of the elements that
     //are read into this map, since this is the partial reading logic)
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
 
     if (_url.endsWith(".osm.bz2") || _url.endsWith(".osm.gz"))
     {
@@ -1031,7 +1031,7 @@ bool OsmXmlReader::hasMoreElements()
     _inputFile.setFileName(_url);
     if (!_inputFile.open(QFile::ReadOnly | QFile::Text))
     {
-      throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_url));
+      throw HootException(QObject::tr("Error opening OSM file for parsing: %1").arg(_url));
     }
     _streamReader.setDevice(&_inputFile);
 
@@ -1071,7 +1071,7 @@ bool OsmXmlReader::_foundOsmHeaderXmlStartElement()
   if (_osmFound &&
       _streamAttributesToAttributes(_streamReader.attributes()).value("version") != "0.6")
   {
-    throw Exception("Only version 0.6 OSM files are supported.");
+    throw HootException("Only version 0.6 OSM files are supported.");
   }
   return _osmFound;
 }

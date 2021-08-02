@@ -19,16 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/extractors//poi-polygon/PoiPolygonAlphaShapeDistanceExtractor.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 
 // CPP Unit
@@ -58,7 +59,7 @@ public:
   {
     PoiPolygonAlphaShapeDistanceExtractor uut;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map,
       _inputPath + "PoiPolygonAlphaShapeDistanceExtractorTest1.osm",
@@ -73,8 +74,8 @@ public:
       0.0,
       uut.extract(
         *map,
-        TestUtils::getElementWithTag(map, "name", "test1"), //poly
-        TestUtils::getElementWithTag(map, "name", "test2")), //poi
+        MapUtils::getFirstElementWithTag(map, "name", "test1"), //poly
+        MapUtils::getFirstElementWithTag(map, "name", "test2")), //poi
       0.0001);
   }
 };

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -51,6 +51,7 @@ class RunDiffCommand extends GrailCommand {
         List<String> options = new LinkedList<>();
 
         Map<String, String> hoot2AdvOptions = params.getAdvancedOptions();
+        String algorithm = "";
 
         if (hoot2AdvOptions != null && !hoot2AdvOptions.isEmpty()) {
             for (Entry<String, String> option: hoot2AdvOptions.entrySet()) {
@@ -58,13 +59,22 @@ class RunDiffCommand extends GrailCommand {
                     Map<String, String> optionConfig = configOptions.get(option.getKey());
                     String optionValue = option.getValue();
 
-                    if (optionConfig.get("type").toLowerCase().equals("list")) {
+                    if (optionConfig.get("type").equalsIgnoreCase("list")) {
                         optionValue = optionValue.replaceAll("\\[|\\]", "").replaceAll(",", ";");
                     }
 
                     options.add("\"" + optionConfig.get("key") + "=" + optionValue + "\"");
                 }
             }
+
+            if (hoot2AdvOptions.get("RoadEngines") != null) {
+                algorithm = hoot2AdvOptions.get("RoadEngines") + "Algorithm.conf";
+            }
+        }
+
+        if (params.getBounds() != null) {
+            //Add bounds
+            options.add("bounds=" + params.getBounds());
         }
 
         Map<String, Object> substitutionMap = new HashMap<>();
@@ -74,8 +84,11 @@ class RunDiffCommand extends GrailCommand {
         substitutionMap.put("OUTPUT", params.getOutput());
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("STATS_FILE", new File(params.getWorkDir(), "stats.json").getPath());
+        substitutionMap.put("ROAD_ALGORITHM", algorithm);
 
-        String command = "hoot.bin conflate --${DEBUG_LEVEL} -C DifferentialConflation.conf -C NetworkAlgorithm.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} --differential --changeset-stats ${STATS_FILE} --include-tags --separate-output";
+        String command = "hoot.bin conflate --${DEBUG_LEVEL} -C DifferentialConflation.conf"
+                + (!algorithm.equals("") ? " -C ${ROAD_ALGORITHM}" : "")
+                + " ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} --differential --changeset-stats ${STATS_FILE} --include-tags --separate-output";
 
         super.configureCommand(command, substitutionMap, caller);
     }

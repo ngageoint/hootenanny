@@ -19,24 +19,25 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/MapStatsWriter.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/visitors/LengthOfWaysVisitor.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/LengthOfWaysVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -54,49 +55,66 @@ public:
 
   StatsCmd() = default;
 
-  virtual QString getName() const override { return "stats"; }
+  QString getName() const override { return "stats"; }
+  QString getDescription() const override
+  { return "Calculates a pre-configured set of statistics for a map"; }
 
-  virtual QString getDescription() const override
-  { return "Displays a pre-configured set of statistics for a map"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
 
-    if (args.size() < 1)
+    bool quick = false;
+    if (args.contains("--brief"))
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes one parameter.").arg(getName()));
+      quick = true;
+      args.removeAt(args.indexOf("--brief"));
     }
 
-    const QString QUICK_SWITCH = "--brief";
-    const QString OUTPUT_SWITCH = "--output=";
-
-    QStringList inputs(args);
-
-    bool quick = false;
-    bool toFile = false;
-    QString outputFilename = "";
-    // Capture any flags and remove them before processing inputs
-    for (int i = 0; i < args.size(); i++)
+    QString output;
+    if (args.contains("--output"))
     {
-      if (args[i].startsWith(OUTPUT_SWITCH))
+      const int outputIndex = args.indexOf("--output");
+      output = args.at(outputIndex + 1).trimmed();
+
+      QStringList supportedOutputFormats;
+      supportedOutputFormats.append(".json");
+      supportedOutputFormats.append(".txt");
+      if (!StringUtils::endsWithAny(output, supportedOutputFormats))
       {
-        outputFilename = args[i];
-        outputFilename.remove(OUTPUT_SWITCH);
-        toFile = true;
-        inputs.removeOne(args[i]);
+        throw IllegalArgumentException(
+          "Invalid output format: ..." + FileUtils::toLogFormat(output, 25));
       }
-      else if (args[i] == QUICK_SWITCH)
-      {
-        quick = true;
-        inputs.removeOne(args[i]);
-      }
+
+      args.removeAt(outputIndex + 1);
+      args.removeAt(outputIndex);
+    }
+
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
+    if (args.size() < 1)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least one parameter. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
+    }
+
+    // Everything left is an input.
+    QStringList inputs;
+    if (!recursive)
+    {
+      inputs = args;
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
     }
 
     const QString sep = "\t";
-    // read the conflation status from the file.
     conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
 
     QList<QList<SingleStat>> allStats;
@@ -105,10 +123,11 @@ public:
       QElapsedTimer timer2;
       timer2.restart();
 
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       // Tried using IoUtils::loadMap here, but it has extra logic beyond OsmMapReaderFactory::read
       // for reading in OGR layers. Using it causes the last part of Osm2OgrTranslationTest to fail.
       // Need to determine why either strictly use one reading method or the other.
+      LOG_STATUS("Reading from: ..." << FileUtils::toLogFormat(inputs[i], 25) << "...");
       OsmMapReaderFactory::read(map, inputs[i], true, Status::Invalid);
       MapProjector::projectToPlanar(map);
 
@@ -116,7 +135,7 @@ public:
         "Calculating statistics for map " << i + 1 << " of " << inputs.size() << ": " <<
         inputs[i].right(25) << "...");
 
-      std::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
+      std::shared_ptr<CalculateStatsOp> cso = std::make_shared<CalculateStatsOp>();
       cso->setQuickSubset(quick);
       cso->apply(map);
       allStats.append(cso->getStats());
@@ -126,13 +145,14 @@ public:
         inputs[i].right(25) << " in " + StringUtils::millisecondsToDhms(timer2.elapsed()));
     }
 
-    if (toFile)
+    if (!output.isEmpty())
     {
-      LOG_STATUS("Writing statistics output to: " << outputFilename.right(25) << "...");
-      if (outputFilename.endsWith(".json", Qt::CaseInsensitive))
-        MapStatsWriter().writeStatsToJson(allStats, outputFilename);
+      LOG_STATUS(
+        "Writing statistics output to: " << FileUtils::toLogFormat(output, 25) << "...");
+      if (output.endsWith(".json", Qt::CaseInsensitive))
+        MapStatsWriter().writeStatsToJson(allStats, output);
       else
-        MapStatsWriter().writeStatsToText(allStats, outputFilename);
+        MapStatsWriter().writeStatsToText(allStats, output);
     }
     else
     {

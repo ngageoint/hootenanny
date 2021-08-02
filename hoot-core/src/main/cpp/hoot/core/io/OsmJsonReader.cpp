@@ -19,29 +19,28 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmJsonReader.h"
 
 // hoot
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/HootNetworkRequest.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 
 // Boost
 #include <boost/foreach.hpp>
 #include <boost/property_tree/json_parser.hpp>
-namespace pt = boost::property_tree;
 
 // Qt
 #include <QTextCodec>
@@ -54,6 +53,8 @@ namespace pt = boost::property_tree;
 #include <sstream>
 #include <thread>
 #include <unistd.h>
+
+namespace pt = boost::property_tree;
 using namespace std;
 
 namespace hoot
@@ -64,24 +65,18 @@ int OsmJsonReader::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 
 // TODO: implement Configurable to help simplify this
-OsmJsonReader::OsmJsonReader() : ParallelBoundedApiReader(false, true),
+OsmJsonReader::OsmJsonReader() :
+ParallelBoundedApiReader(false, true),
 _defaultStatus(Status::Invalid),
 _useDataSourceIds(true),
 _defaultCircErr(ConfigOptions().getCircularErrorDefaultValue()),
-_circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys()),
-_propTree(),
-_version(""),
-_generator(""),
-_timestamp_base(""),
-_copyright(""),
 _isFile(false),
-_isWeb(false),
 _numRead(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
+_circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys()),
+_isWeb(false),
 _keepImmediatelyConnectedWaysOutsideBounds(
   ConfigOptions().getBoundsKeepImmediatelyConnectedWaysOutsideBounds()),
-_missingNodeCount(0),
-_missingWayCount(0),
 _addChildRefsWhenMissing(ConfigOptions().getMapReaderAddChildRefsWhenMissing()),
 _logWarningsForMissingElements(ConfigOptions().getLogWarningsForMissingElements())
 {
@@ -100,12 +95,10 @@ bool OsmJsonReader::isSupported(const QString& url)
   const bool isLocalFile =  myUrl.isLocalFile();
 
   // Is it a file?
-  if (isRelativeUrl || isLocalFile)
+  if ((isRelativeUrl || isLocalFile) &&
+      url.endsWith(".json", Qt::CaseInsensitive) && !url.startsWith("http", Qt::CaseInsensitive))
   {
-    if (url.endsWith(".json", Qt::CaseInsensitive) && !url.startsWith("http", Qt::CaseInsensitive))
-    {
-      return true;
-    }
+    return true;
   }
 
   // Is it a web address?
@@ -293,7 +286,7 @@ void OsmJsonReader::_loadJSON(const QString& jsonStr)
   {
     pt::read_json(ss, _propTree);
   }
-  catch (pt::json_parser::json_parser_error& e)
+  catch (const pt::json_parser::json_parser_error& e)
   {
     QString reason = QString::fromStdString(e.message());
     QString line = QString::number(e.line());
@@ -332,7 +325,7 @@ void OsmJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr &map)
 OsmMapPtr OsmJsonReader::loadFromPtree(const boost::property_tree::ptree &tree)
 {
   _propTree = tree;
-  _map.reset(new OsmMap());
+  _map = std::make_shared<OsmMap>();
   _readToMap();
   return _map;
 }
@@ -348,7 +341,7 @@ OsmMapPtr OsmJsonReader::loadFromFile(const QString& path)
   QTextStream instream(&infile);
   QString jsonStr = instream.readAll();
   _loadJSON(jsonStr);
-  _map.reset(new OsmMap());
+  _map = std::make_shared<OsmMap>();
   _readToMap();
   return _map;
 }
@@ -446,7 +439,7 @@ void OsmJsonReader::_parseOverpassJson()
   // the child itself is definitely absent from the input.
 }
 
-void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType)
+void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType) const
 {
   QList<long> relationIdsWithChildrenNotPresent;
   QHash<long, long> originalIdMap;
@@ -637,7 +630,7 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
 
   // Construct node
   NodePtr pNode(
-    new Node(
+    Node::newSp(
       _defaultStatus, newId, lon, lat, _defaultCircErr, changeset, version, timestamp,
       QString::fromStdString(user), uid));
 
@@ -724,10 +717,10 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
   uid = item.get("uid", uid);
 
   // Construct Way
-  WayPtr pWay(
-    new Way(
+  WayPtr pWay =
+    std::make_shared<Way>(
       _defaultStatus, newId, _defaultCircErr, changeset, version, timestamp,
-      QString::fromStdString(user), uid));
+      QString::fromStdString(user), uid);
 
   // Add nodes
   if (item.not_found() != item.find("nodes"))
@@ -850,10 +843,10 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
   uid = item.get("uid", uid);
 
   // Construct Relation
-  RelationPtr pRelation(
-    new Relation(
+  RelationPtr pRelation =
+    std::make_shared<Relation>(
       _defaultStatus, newId, _defaultCircErr, "", changeset, version, timestamp,
-      QString::fromStdString(user), uid));
+      QString::fromStdString(user), uid);
 
   // Add members
   if (item.not_found() != item.find("members"))
@@ -974,7 +967,7 @@ long OsmJsonReader::_getRelationId(long fileId)
   return newId;
 }
 
-void OsmJsonReader::_addTags(const boost::property_tree::ptree& item, hoot::ElementPtr pElement)
+void OsmJsonReader::_addTags(const boost::property_tree::ptree& item, hoot::ElementPtr pElement) const
 {
   // Find tags and add them
   if (item.not_found() != item.find("tags"))

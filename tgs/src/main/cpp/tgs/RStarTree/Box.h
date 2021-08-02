@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __TGS__BOX_H__
@@ -51,7 +51,7 @@ public:
 
   Box(int dimensions);
 
-  ~Box() {}
+  ~Box() = default;
 
   double calculateOverlap(const Box& b) const;
 
@@ -81,13 +81,13 @@ public:
 
   bool isValid() const;
 
-  bool operator==(const Box& b);
+  bool operator==(const Box& b) const;
 
   void setDimensions(int d);
 
   std::string toString() const;
 
-  bool isContained(const Box& b);
+  bool isContained(const Box& b) const;
 
 private:
 
@@ -96,7 +96,7 @@ private:
   bool _valid;
   int _dimensions;
 
-  void _copyArray(double* destination, const double* source)
+  void _copyArray(double* destination, const double* source) const
   {
     memcpy(destination, source, sizeof(double) * MAX_DIMENSIONS);
   }

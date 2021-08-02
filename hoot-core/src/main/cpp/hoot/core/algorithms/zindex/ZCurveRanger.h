@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ZCURVERANGER_H
 #define ZCURVERANGER_H
@@ -38,10 +38,9 @@ class Range;
 class BBox;
 
 /**
- * Decomposes a bounding box into a range of zcurve values.
+ * @brief The ZCurveRanger class decomposes a bounding box into a range of zcurve values.
  *
- * Yes, ZCurve Ranger. Picture a guy wearing a space helmet in blue spandex
- * covered in Zs.
+ * Yes, ZCurve Ranger. Picture a guy wearing a space helmet in blue spandex covered in Zs.
  */
 class ZCurveRanger
 {
@@ -50,15 +49,15 @@ public:
   static QString className() { return "hoot::ZCurveRanger"; }
 
   ZCurveRanger(const ZValue& zv);
+  ~ZCurveRanger() = default;
 
-  ~ZCurveRanger() {}
-
-  /** Find a good break point for the given box based on major z-value breaks
+  /**
+   * @brief breakBox finds a good break point for the given box based on major z-value breaks
    * and break the box into two children.
    */
-  std::vector<std::shared_ptr<LongBox>> breakBox(const std::shared_ptr<LongBox>& box);
+  std::vector<std::shared_ptr<LongBox>> breakBox(const std::shared_ptr<LongBox>& box) const;
 
-  long int calculateExcess(const std::shared_ptr<LongBox>& box);
+  long int calculateExcess(const std::shared_ptr<LongBox>& box) const;
 
   /**
    * Recursively decompose a box over level iterations.
@@ -70,50 +69,34 @@ public:
   static long int getSplitValue(long int v1, long int v2);
 
   /**
-   * Focuses the decomposition to the ares that intersect the focus box. The
-   * shows some promise with the dual space index.
+   * @brief decomposeRange decomposes the z value ranges that cover box into an array of ranges.
+   * @param box Must be a valid box within the ZValue.
    */
-  std::vector<Range> decomposeRange(BBox box, BBox focusBox, int levels);
-
+  std::vector<Range> decomposeRange(const BBox& box, int levels);
+  std::vector<Range> decomposeRange(const LongBox& box, int levels);
 
   /**
-   * Decomposes the z value ranges that cover box into an array of ranges.
+   * @brief setSlop sets the number of cells that can be acceptably merged into one range.
    *
-   * @param box - Must be a valid box within the ZValue.
-   */
-  std::vector<Range> decomposeRange(BBox box, int levels);
-
-  /**
-   * The number of cells that can be acceptably merged into one range. This
-   * should never be less than one. Other than that it is a tunable parameter.
-   * Denser data sets probably want a smaller value. Less dense data sets
-   * should have a higher value.
-   *
+   * This should never be less than one. Other than that it is a tunable parameter. Denser data sets
+   * probably want a smaller value. Less dense data sets should have a higher value.
    * @param slop
    */
   void setSlop(int slop) { _slop = slop; }
 
-  std::vector<Range> decomposeRange(LongBox box, int levels);
-
-  std::vector<Range> decomposeRangeIterative(BBox box, int count);
-
-  bool rangeCoversIdentity(Range r);
+  bool rangeCoversIdentity(const Range& r) const;
 
 private:
+
   /**
    * Condense ranges that overlap or are within "slop" cells of each other.
    */
-  std::vector<Range> _condenseRanges(std::vector<Range>& r);
+  std::vector<Range> _condenseRanges(std::vector<Range>& r) const;
 
-  Range _toRange(const std::shared_ptr<LongBox>& box);
+  Range _toRange(const std::shared_ptr<LongBox>& box) const;
+  LongBox _toLongBox(const BBox& box);
 
-  LongBox _toLongBox(BBox box);
-
-  std::vector<Range> _decomposeRange(LongBox box, LongBox focusBox, int levels);
-
-  LongBox _clipBox(LongBox box);
-
-  std::vector<Range> _decomposeRangeIterative(LongBox box, int count);
+  LongBox _clipBox(const LongBox& box) const;
 
   long int _slop;
   ZValue _zv;

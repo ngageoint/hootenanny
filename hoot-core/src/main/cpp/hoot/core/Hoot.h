@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef HOOT_H
 #define HOOT_H
@@ -36,8 +36,9 @@ namespace hoot
 {
 
 /**
- * A Singleton to initialize hootenanny. You should call getInstance() on this before any other
- * use of hoot. You can call getInstance multiple times without any ill effects.
+ * @brief The Hoot class is a Singleton to initialize hootenanny. You should call getInstance() on
+ * this before any other use of hoot. You can call getInstance multiple times without any ill
+ * effects.
  */
 class Hoot
 {
@@ -46,23 +47,23 @@ public:
   static Hoot& getInstance();
 
   /**
-   * A no-op that makes the code a little easier to read.
+   * @brief init A no-op that makes the code a little easier to read.
    */
-  void init() {}
+  void init() const {}
 
   /**
-   * Load the specified library if it exists using QLibrary.
+   * @brief loadLibrary Load the specified library if it exists using QLibrary.
    */
-  void loadLibrary(const QString& name);
+  void loadLibrary(const QString& name) const;
 
   /**
-   * Reinitialize hootenanny based on configuration changes.
+   * @brief reinit Reinitialize hootenanny based on configuration changes.
    */
-  void reinit();
+  void reinit() const;
 
 private:
 
-  void _init();
+  void _init() const;
 
   long _toBytes(const QString& str) const;
 

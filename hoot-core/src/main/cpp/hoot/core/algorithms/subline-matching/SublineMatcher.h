@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SUBLINEMATCHER_H
 #define SUBLINEMATCHER_H
@@ -35,8 +35,9 @@ namespace hoot
 {
 
 /**
- * Given two ways, calculate zero or more likely matching sublines. The definition of a matching
- * subline is implementation dependent.
+ * @brief The SublineMatcher class given two ways, calculates zero or more likely matching sublines.
+ *
+ * The definition of a matching subline is implementation dependent.
  */
 class SublineMatcher : public ApiEntityInfo
 {
@@ -44,7 +45,12 @@ public:
 
   static QString className() { return "hoot::SublineMatcher"; }
 
-  SublineMatcher() = default;
+  SublineMatcher() :
+  _minSplitSize(ConfigOptions().getWayMergerMinSplitSize()),
+  _maxRelevantAngle(ConfigOptions().getWayMatcherMaxAngle()),
+  _headingDelta(ConfigOptions().getWayMatcherHeadingDelta())
+  {
+  }
   virtual ~SublineMatcher() = default;
 
   /**
@@ -52,17 +58,28 @@ public:
    *  based on the CE of the inputs. If set to -1 then the value is derived based on the CE of the
    *  input ways.
    */
-  virtual WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
-    const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const = 0;
+  virtual WaySublineMatchString findMatch(
+    const ConstOsmMapPtr& map, const ConstWayPtr& way1, const ConstWayPtr& way2, double& score,
+    Meters maxRelevantDistance = -1) const = 0;
 
-  virtual void setMaxRelevantAngle(Radians r) = 0;
-  virtual void setMinSplitSize(Meters minSplitSize) = 0;
-  virtual void setHeadingDelta(Meters headingDelta) = 0;
+  Meters getMinSplitSize() const { return _minSplitSize; }
+  Meters getMaxRelevantAngle() const { return _maxRelevantAngle; }
+  Meters getHeadingDelta() const { return _headingDelta; }
 
-  virtual QString toString() const override { return ""; }
+  void setMaxRelevantAngle(Radians angle) { _maxRelevantAngle = angle; }
+  void setMinSplitSize(Meters minSplitSize) { _minSplitSize = minSplitSize; }
+  void setHeadingDelta(Meters headingDelta) { _headingDelta = headingDelta; }
+
+  QString toString() const override { return ""; }
+
+protected:
+
+  Meters _minSplitSize;
+  Radians _maxRelevantAngle;
+  Meters _headingDelta;
 };
 
-typedef std::shared_ptr<SublineMatcher> SublineMatcherPtr;
+using SublineMatcherPtr = std::shared_ptr<SublineMatcher>;
 
 }
 

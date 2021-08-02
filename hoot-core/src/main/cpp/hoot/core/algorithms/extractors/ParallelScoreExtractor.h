@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef PARALLELSCOREEXTRACTOR_H
 #define PARALLELSCOREEXTRACTOR_H
@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * Derive a score from how parallel the ways are
+ * @brief The ParallelScoreExtractor class derive a score for how parallel two ways are.
  */
 class ParallelScoreExtractor : public WayFeatureExtractor
 {
@@ -42,13 +42,11 @@ public:
   static QString className() { return "hoot::ParallelScoreExtractor"; }
 
   ParallelScoreExtractor() = default;
-  virtual ~ParallelScoreExtractor() = default;
+  ~ParallelScoreExtractor() = default;
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
-
-  virtual QString getDescription() const
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
   { return "Calculates how parallel ways are with each other"; }
 
 protected:

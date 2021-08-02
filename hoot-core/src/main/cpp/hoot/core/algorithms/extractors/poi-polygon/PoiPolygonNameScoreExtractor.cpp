@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonNameScoreExtractor.h"
 
@@ -47,10 +47,9 @@ _namesProcessed(0),
 _matchAttemptMade(false)
 {
   // default string comp
-  _stringComp.reset(
-    new MeanWordSetDistance(
-      StringDistancePtr(
-        new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))));
+  _stringComp =
+    std::make_shared<MeanWordSetDistance>(
+      std::make_shared<LevenshteinDistance>(ConfigOptions().getLevenshteinDistanceAlpha()));
 }
 
 void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
@@ -68,9 +67,7 @@ void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
   }
   else
   {
-    _stringComp =
-      StringDistancePtr(
-        Factory::getInstance().constructObject<StringDistance>(stringCompClassName));
+    _stringComp = Factory::getInstance().constructObject<StringDistance>(stringCompClassName);
     if (!_stringComp)
     {
       throw IllegalArgumentException(
@@ -82,16 +79,16 @@ void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
     if (strDistConsumer)
     {
       strDistConsumer->setStringDistance(
-        StringDistancePtr(new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha())));
+        std::make_shared<LevenshteinDistance>(ConfigOptions().getLevenshteinDistanceAlpha()));
     }
   }
 
   setTranslateTagValuesToEnglish(config.getPoiPolygonNameTranslateToEnglish());
   if (_translateTagValuesToEnglish && !_translator)
   {
-    _translator.reset(
+    _translator =
       Factory::getInstance().constructObject<ToEnglishTranslator>(
-        config.getLanguageTranslationTranslator()));
+        config.getLanguageTranslationTranslator());
     _translator->setConfiguration(conf);
     _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
     _translator->setId(className());
@@ -103,14 +100,14 @@ std::shared_ptr<NameExtractor> PoiPolygonNameScoreExtractor::_getNameExtractor()
   assert(_stringComp);
   if (_translateTagValuesToEnglish)
   {
-    ToEnglishTranslateStringDistance* translateStringDist =
-      new ToEnglishTranslateStringDistance(_stringComp, _translator);
+    std::shared_ptr<ToEnglishTranslateStringDistance> translateStringDist =
+      std::make_shared<ToEnglishTranslateStringDistance>(_stringComp, _translator);
     translateStringDist->setTranslateAll(false);
-    return std::shared_ptr<NameExtractor>(new NameExtractor(StringDistancePtr(translateStringDist)));
+    return std::make_shared<NameExtractor>(translateStringDist);
   }
   else
   {
-    return std::shared_ptr<NameExtractor>(new NameExtractor(_stringComp));
+    return std::make_shared<NameExtractor>(_stringComp);
   }
 }
 

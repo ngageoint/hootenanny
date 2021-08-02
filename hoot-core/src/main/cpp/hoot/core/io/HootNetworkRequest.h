@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef HOOT_NETWORK_REQUEST_H
@@ -91,19 +91,19 @@ public:
   /**
    * @brief getResponseContent
    * @return HTTP response content
-   */
-  const QByteArray& getResponseContent() { return _content; }
+   */ 
+  const QByteArray& getResponseContent() const { return _content; }
   /**
    * @brief getHttpStatus
    * @return HTTP status code
    */
-  int getHttpStatus() { return _status; }
+  int getHttpStatus() const { return _status; }
 
   /**
    * @brief getErrorString
    * @return Error string from the last network request
    */
-  QString getErrorString() { return _error; }
+  QString getErrorString() const { return _error; }
 
   /**
    * @brief getCookies
@@ -136,7 +136,7 @@ public:
   /**
    * @brief logConnectionError Log an error with the connection based on the reponse error, not an HTTP error code
    */
-  void logConnectionError();
+  void logConnectionError() const;
 
 private:
   /**
@@ -158,13 +158,13 @@ private:
    * @param reply Network reply object
    * @return HTTP response code as an integer instead of a string
    */
-  int _getHttpResponseCode(QNetworkReply* reply);
+  int _getHttpResponseCode(const QNetworkReply* reply) const;
   /**
    * @brief _setOAuthHeader Sets the "Authorize: OAuth" HTTP header for the specific request
    * @param http_op OAuth signatures are based off of the HTTP operation type (GET/PUT/POST)
    * @param request Reference to the actual network request object
    */
-  void _setOAuthHeader(QNetworkAccessManager::Operation http_op, QNetworkRequest& request);
+  void _setOAuthHeader(QNetworkAccessManager::Operation http_op, QNetworkRequest& request) const;
   /** HTTP response body, if available */
   QByteArray _content;
   /** HTTP status response code  */
@@ -185,7 +185,7 @@ private:
   bool _timedOut;
 };
 
-typedef std::shared_ptr<HootNetworkRequest> HootNetworkRequestPtr;
+using HootNetworkRequestPtr = std::shared_ptr<HootNetworkRequest>;
 
 }
 

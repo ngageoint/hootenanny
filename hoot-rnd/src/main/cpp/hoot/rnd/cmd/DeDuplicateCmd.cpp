@@ -19,18 +19,19 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/elements/ElementDeduplicator.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -38,62 +39,23 @@
 namespace hoot
 {
 
-/*
- * @todo needs command line test
- */
 class DeDuplicateCmd : public BaseCommand
 {
 public:
 
   static QString className() { return "hoot::DeDuplicateCmd"; }
 
-  DeDuplicateCmd()
-  {
-  }
+  DeDuplicateCmd() = default;
 
-  virtual QString getName() const override { return "de-duplicate"; }
-
-  virtual QString getDescription() const override
+  QString getName() const override { return "de-duplicate"; }
+  QString getDescription() const override
   { return "Removes duplicate features within a single map or between two maps (experimental)"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual QString getType() const { return "rnd"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {  
     QElapsedTimer timer;
     timer.start();
-
-    bool dedupeIntraMap = true;
-    if (args.contains("--skip-intra-map"))
-    {
-      dedupeIntraMap = false;
-      args.removeAll("--skip-intra-map");
-    }
-    LOG_VARD(dedupeIntraMap);
-
-    bool dedupeNodes = true;
-    if (args.contains("--skip-nodes"))
-    {
-      dedupeNodes = false;
-      args.removeAll("--skip-nodes");
-    }
-    LOG_VARD(dedupeNodes);
-
-    bool dedupeWays = true;
-    if (args.contains("--skip-ways"))
-    {
-      dedupeWays = false;
-      args.removeAll("--skip-ways");
-    }
-    LOG_VARD(dedupeWays);
-
-    bool dedupeRelations = true;
-    if (args.contains("--skip-relations"))
-    {
-      dedupeRelations = false;
-      args.removeAll("--skip-relations");
-    }
-    LOG_VARD(dedupeRelations);
 
     bool favorMoreConnectedWays = false;
     if (args.contains("--favor-connected-ways"))
@@ -103,15 +65,14 @@ public:
     }
     LOG_VARD(favorMoreConnectedWays);
 
-    ElementCriterionPtr nodeCrit = _parseFilter("--node-filter", args);
-    ElementCriterionPtr wayCrit = _parseFilter("--way-filter", args);
-    ElementCriterionPtr relationCrit = _parseFilter("--relation-filter", args);
-
     if (args.size() != 2 && args.size() != 4)
     {
-      LOG_VAR(args);
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes two or four parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes at least two or four parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     QString input1;
@@ -120,15 +81,11 @@ public:
     QString output2;
     if (args.size() == 2)
     {
-      if (!dedupeIntraMap)
-      {
-        LOG_WARN("--skip-intra-map option ignored for single input map.");
-      }
-
       input1 = args[0].trimmed();
       output1 = args[1].trimmed();
       LOG_STATUS(
-        "De-duplicating ...:" << input1.right(25) << " to ..." << output1.right(25) << "...");
+        "De-duplicating ...:" << FileUtils::toLogFormat(input1, 25) << " to ..." <<
+        FileUtils::toLogFormat(output1, 25) << "...");
     }
     else
     {
@@ -137,8 +94,10 @@ public:
       output1 = args[2].trimmed();
       output2 = args[3].trimmed();
       LOG_STATUS(
-        "De-duplicating ...:" << input1.right(25) << " to ..." << output1.right(25) << " and ..." <<
-        input2.right(25) << " to ..." << output2.right(25) << "...");
+        "De-duplicating ...:" << FileUtils::toLogFormat(input1, 25) << " to ..." <<
+        FileUtils::toLogFormat(output1, 25) << " and ..." <<
+        FileUtils::toLogFormat(input2, 25) << " to ..." << FileUtils::toLogFormat(output2, 25) <<
+        "...");
     }
     LOG_VARD(input1);
     LOG_VARD(input2);
@@ -146,16 +105,9 @@ public:
     LOG_VARD(output2);
 
     ElementDeduplicator deduper;
-    deduper.setDedupeIntraMap(dedupeIntraMap);
-    deduper.setDedupeNodes(dedupeNodes);
-    deduper.setDedupeWays(dedupeWays);
-    deduper.setDedupeRelations(dedupeRelations);
-    deduper.setNodeCriterion(nodeCrit);
-    deduper.setWayCriterion(wayCrit);
-    deduper.setRelationCriterion(relationCrit);
     deduper.setFavorMoreConnectedWays(favorMoreConnectedWays);
 
-    OsmMapPtr input1Map(new OsmMap());
+    OsmMapPtr input1Map = std::make_shared<OsmMap>();
     IoUtils::loadMap(input1Map, input1, true, Status::Unknown1);
     input1Map->setName("map1");
     OsmMapPtr input2Map;
@@ -165,7 +117,7 @@ public:
     }
     else
     {
-      input2Map.reset(new OsmMap());
+      input2Map = std::make_shared<OsmMap>();
       IoUtils::loadMap(input2Map, input2, true, Status::Unknown2);
       input2Map->setName("map2");
 
@@ -180,7 +132,8 @@ public:
     LOG_STATUS(
       "De-duplicated " <<
       StringUtils::formatLargeNumber(deduper.getMap1DuplicateTotalFeaturesRemoved()) <<
-      " features from ..." << input1 << " and wrote them to: ..." << output1.right(25) << ".");
+      " features from ..." << FileUtils::toLogFormat(input1) << " and wrote them to: ..." <<
+      FileUtils::toLogFormat(output1, 25) << ".");
     LOG_STATUS(
       "\t" << StringUtils::formatLargeNumber(deduper.getMap1DuplicateNodesRemoved()) << " nodes");
     LOG_STATUS(
@@ -193,7 +146,8 @@ public:
       LOG_STATUS(
         "De-duplicated " <<
         StringUtils::formatLargeNumber(deduper.getMap2DuplicateTotalFeaturesRemoved()) <<
-        " features from ..." << input2 << " and wrote them to: ..." << output2.right(25) << ".");
+        " features from ..." << FileUtils::toLogFormat(input2) << " and wrote them to: ..." <<
+        FileUtils::toLogFormat(output2, 25) << ".");
       LOG_STATUS(
         "\t" << StringUtils::formatLargeNumber(deduper.getMap2DuplicateNodesRemoved()) << " nodes");
       LOG_STATUS(
@@ -206,34 +160,6 @@ public:
       "De-duplicated elements in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
-  }
-
-private:
-
-  ElementCriterionPtr _parseFilter(const QString& optionName, QStringList& args)
-  {
-    ElementCriterionPtr crit;
-    if (args.contains(optionName))
-    {
-      const int optionNameIndex = args.indexOf(optionName);
-      QString critClassName = args.at(optionNameIndex + 1).trimmed();
-      args.removeAt(optionNameIndex + 1);
-      args.removeAt(optionNameIndex);
-
-      try
-      {
-        crit.reset(Factory::getInstance().constructObject<ElementCriterion>(critClassName));
-      }
-      catch (const boost::bad_any_cast&)
-      {
-        throw IllegalArgumentException("Invalid criterion: " + critClassName);
-      }
-    }
-    if (crit)
-    {
-      LOG_DEBUG(optionName << ": " << crit);
-    }
-    return crit;
   }
 };
 

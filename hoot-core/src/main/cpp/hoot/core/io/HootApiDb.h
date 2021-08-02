@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef HOOTAPIDB_H
 #define HOOTAPIDB_H
@@ -49,41 +49,33 @@ public:
   static QString className() { return "hoot::HootApiDb"; }
 
   HootApiDb();
+  ~HootApiDb();
 
-  virtual ~HootApiDb();
+  void close() override;
+  bool isSupported(const QUrl& url) override;
+  void open(const QUrl& url) override;
+  void commit() override;
 
   /**
    * Called after open. This will read the bounds of the specified layer in a relatively efficient
    * manner. (e.g. SELECT min(x)...)
+   *
+   * @todo implement EnvelopeProvider
    */
   virtual geos::geom::Envelope calculateEnvelope() const;
 
-  virtual void close();
-
   virtual bool isCorrectHootDbVersion();
-
   virtual QString getHootDbVersion();
-
-  virtual bool isSupported(const QUrl& url) override;
-
-  virtual void open(const QUrl& url) override;
-
-  virtual void commit();
 
   /**
    * @see ApiDb::elementTypeToElementTableName
    */
-  virtual QString elementTypeToElementTableName(const ElementType& elementType) const override;
+  QString elementTypeToElementTableName(const ElementType& elementType) const override;
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
    */
-  virtual std::vector<long> selectNodeIdsForWay(long wayId) override;
-
-  /**
-   * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
-   */
-  std::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) override;
+  std::vector<long> selectNodeIdsForWay(long wayId) override;
 
   /**
    * Returns a vector with all the relation members for a given relation
@@ -161,9 +153,9 @@ public:
   /**
    * Deletes a map and all of it's dependencies.
    */
-  void deleteMap(long mapId);
+  void deleteMap(long mapId) const;
 
-  virtual void deleteUser(long userId);
+  void deleteUser(long userId) override;
 
   /**
    * Start a new changeset
@@ -190,10 +182,10 @@ public:
    */
   long insertMap(QString mapName);
 
-  bool insertNode(const double lat, const double lon, const Tags &tags, long& assignedId,
-                  long version = 0);
-  bool insertNode(const long id, const double lat, const double lon, const Tags &tags,
-                  long version = 0);
+  bool insertNode(
+    const double lat, const double lon, const Tags &tags, long& assignedId, long version = 0);
+  bool insertNode(
+    const long id, const double lat, const double lon, const Tags &tags, long version = 0);
   bool insertNode(ConstNodePtr node, long version = 0);
 
   bool insertWay(const Tags& tags, long& assignedId, long version = 0);
@@ -214,8 +206,9 @@ public:
    * @param sequenceId Sequence for the relation
    * @return True if success, else false
    */
-  bool insertRelationMember(const long relationId, const ElementType& type,
-    const long elementId, const QString& role, const int sequenceId);
+  bool insertRelationMember(
+    const long relationId, const ElementType& type, const long elementId, const QString& role,
+    const int sequenceId);
 
   void insertRelationTag(long relationId, const QString& k, const QString& v);
 
@@ -256,19 +249,9 @@ public:
    */
   QStringList selectMapNamesAvailableToCurrentUser();
 
-  /**
-   * Returns the IDs of all maps with the given name
-   *
-   * @param name map name
-   * @return a collection of map IDs
-   */
-  std::set<long> selectMapIds(QString name);
-
-  void updateNode(const long id, const double lat, const double lon, const long version,
-                  const Tags& tags);
-
+  void updateNode(
+    const long id, const double lat, const double lon, const long version, const Tags& tags);
   void updateNode(ConstNodePtr node);
-
   void deleteNode(ConstNodePtr node);
 
   void updateRelation(const long id, const long version, const Tags& tags);
@@ -290,15 +273,6 @@ public:
   long reserveElementId(const ElementType::Type type);
 
   /**
-   * Drops the specified database. No warning or error will be given if the DB doesn't exist.
-   *
-   * No validation is done on the DB name. In other words, don't pass in user provided strings.
-   *
-   * @param databaseName
-   */
-  void dropDatabase(const QString& databaseName);
-
-  /**
    * Drops the specified table and cascades (removes dependants). No warning or error will be given
    * if the table does not exist.
    *
@@ -306,12 +280,12 @@ public:
    *
    * @param tableName
    */
-  void dropTable(const QString& tableName);
+  void dropTable(const QString& tableName) const;
 
   /**
    * Check if the database has table.
    */
-  bool hasTable(const QString& tableName);
+  bool hasTable(const QString& tableName) const;
 
   /**
    * Drops the specified sequences and cascades. No warning or error will be given
@@ -321,7 +295,7 @@ public:
    *
    * @param sequenceName
    */
-  void dropSequence(const QString& sequenceName);
+  void dropSequence(const QString& sequenceName) const;
 
   /**
    * Returns a map ID string suitable for using in table names. E.g. _1
@@ -372,11 +346,9 @@ public:
    * Very handy for testing.
    */
   QString execToString(QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
-                       QVariant v3 = QVariant());
+                       QVariant v3 = QVariant()) const;
 
-  virtual QString tableTypeToTableName(const TableType& tableType) const override;
-
-  virtual long getNextId(const ElementType& elementType);
+  QString tableTypeToTableName(const TableType& tableType) const override;
 
   static QUrl getBaseUrl();
 
@@ -389,12 +361,19 @@ public:
   long getMapIdByName(const QString& name);
 
   /**
-   * Removes the layer name from a Hooteanny API database URL
+   * Removes the table name from a Hootenanny API database URL
    *
    * @param url input URL
-   * @return a URL with the layer name removed
+   * @return a URL
    */
-  static QString removeLayerName(const QString& url);
+  static QString getTableName(const QString& url);
+  /**
+   * Removes the table name from a Hooteanny API database URL
+   *
+   * @param url input URL
+   * @return a URL
+   */
+  static QString removeTableName(const QString& url);
 
   void setCreateIndexesOnClose(bool create) { _createIndexesOnClose = create; }
   void setFlushOnClose(bool flush) { _flushOnClose = flush; }
@@ -407,8 +386,8 @@ public:
    * @param accessTokenSecret private OAuth access token for the user
    * @return an HTTP session ID or an empty string if no session ID was found for the given input
    */
-  QString getSessionIdByAccessTokens(const QString& userName, const QString& accessToken,
-                                     const QString& accessTokenSecret);
+  QString getSessionIdByAccessTokens(
+    const QString& userName, const QString& accessToken, const QString& accessTokenSecret);
 
   /**
    * Determines whether a set of access tokens are valid for a user
@@ -419,8 +398,8 @@ public:
    * @return true if the access tokens passed in are associated with the specified user; false
    * otherwise
    */
-  bool accessTokensAreValid(const QString& userName, const QString& accessToken,
-                            const QString& accessTokenSecret);
+  bool accessTokensAreValid(
+    const QString& userName, const QString& accessToken, const QString& accessTokenSecret);
 
   /**
    * Returns the HTTP session ID associated with a user
@@ -461,8 +440,8 @@ public:
    * @param accessToken OAuth public access token
    * @param accessTokenSecret OAuth private access token
    */
-  void updateUserAccessTokens(const long userId, const QString& accessToken,
-                              const QString& accessTokenSecret);
+  void updateUserAccessTokens(
+    const long userId, const QString& accessToken, const QString& accessTokenSecret);
 
   /**
    * Determines whether a user has permission to access a map
@@ -487,8 +466,8 @@ public:
    * @param isPublic folder visibility
    * @returns ID of the created folder
    */
-  long insertFolder(const QString& displayName, const long parentId, const long userId,
-                    const bool isPublic);
+  long insertFolder(
+    const QString& displayName, const long parentId, const long userId, const bool isPublic);
 
   /**
    * Creates a mapping between a map and a data folder
@@ -527,14 +506,6 @@ public:
   void verifyCurrentUserMapUse(const long mapId, const bool write = false);
 
   /**
-   * Determines if the currently configured user owns a map with the given name
-   *
-   * @param mapName map name
-   * @return true if the current user owns a map with the input name; false othersie
-   */
-  bool currentUserHasMapWithName(const QString& mapName);
-
-  /**
    * Returns the ID of a map with given name if owned by the currently configured user
    *
    * @param name map name
@@ -567,15 +538,14 @@ public:
   long getJobStatusResourceId(const QString& jobId);
 
   /**
-   * @brief updateImportSequences Updates the node/way/relation ID sequences to ensure that
-   *   any elements inserted afterwards have the correct beginning ID so that there is no
-   *   reuse of IDs or ID collisions
+   * Updates the node/way/relation ID sequences to ensure that any elements inserted afterwards
+   * have the correct beginning ID so that there is no reuse of IDs or ID collisions
    */
   void updateImportSequences();
 
 protected:
 
-  virtual void _resetQueries();
+  void _resetQueries() override;
 
 private:
 
@@ -616,7 +586,6 @@ private:
   std::shared_ptr<QSqlQuery> _insertFolderMapMapping;
   std::shared_ptr<QSqlQuery> _folderIdsAssociatedWithMap;
   std::shared_ptr<QSqlQuery> _deleteFolders;
-  std::shared_ptr<QSqlQuery> _selectMapIds;
   std::shared_ptr<QSqlQuery> _getMapPermissionsById;
   std::shared_ptr<QSqlQuery> _getMapPermissionsByName;
   std::shared_ptr<QSqlQuery> _currentUserHasMapWithName;
@@ -712,20 +681,20 @@ private:
    * @param from Copy structure from this table.
    * @param to Copy structure to this table.
    */
-  void _copyTableStructure(const QString& from, const QString& to);
+  void _copyTableStructure(const QString& from, const QString& to) const;
 
-  void _flushBulkInserts();
-  void _flushBulkDeletes();
+  void _flushBulkInserts() const;
+  void _flushBulkDeletes() const;
   long _getNextNodeId();
   long _getNextRelationId();
   long _getNextWayId();
   void _init();
-  void _lazyFlushBulkInsert();
+  void _lazyFlushBulkInsert() const;
 
   /**
    * Executes the insert, performs error checking and returns the new ID.
    */
-  long _insertRecord(QSqlQuery& query);
+  long _insertRecord(QSqlQuery& query) const;
   void _updateChangesetEnvelope( const ConstNodePtr node );
   void _updateChangesetEnvelope(const ConstWayPtr way);
   void _updateChangesetEnvelopeWayIds(const std::vector<long>& wayIds);
@@ -738,7 +707,7 @@ private:
   // These delete methods are for testing purposes only, as they don't do any checks for orphaned
   // relationships.  Feel free to harden them and promote to public members that can be used beyond
   // test code, if needed.
-  void _deleteFolderMapMappingsByMapId(const long mapId);
+  void _deleteFolderMapMappingsByMapId(const long mapId) const;
   void _deleteAllFolders(const std::set<long>& folderIds);
   void _deleteJob(const QString& id);
 };

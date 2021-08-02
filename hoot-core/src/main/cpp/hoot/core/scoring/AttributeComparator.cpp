@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "AttributeComparator.h"
@@ -37,6 +37,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
@@ -49,17 +50,19 @@ namespace hoot
 
 AttributeComparator::AttributeComparator(const std::shared_ptr<OsmMap>& map1,
                                          const std::shared_ptr<OsmMap>& map2) :
-  BaseComparator(map1, map2),
-  _iterations(10),
-  _median(0.0),
-  _mean(0.0),
-  _ci(-1.0),
-  _s(-1.0)
+BaseComparator(map1, map2),
+_iterations(10),
+_median(0.0),
+_mean(0.0),
+_ci(-1.0),
+_s(-1.0)
 {
 }
 
 double AttributeComparator::compareMaps()
 {
+  LOG_STATUS("Comparing map attributes...");
+
   _updateBounds();
   double scoreSum = 0.0;
 
@@ -78,13 +81,16 @@ double AttributeComparator::compareMaps()
   std::shared_ptr<OsmMap> referenceMap, otherMap;
 
   // do this a bunch of times
-  for (int i = 0; i < _iterations * 4 && (int)scores.size() < _iterations; i++)
+  const int totalIterations = _iterations * 4;
+  for (int i = 0; i < totalIterations && (int)scores.size() < _iterations; i++)
   {
     // generate a random source point
-    _r.x = Random::instance()->generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
-          _projectedBounds.MinX;
-    _r.y = Random::instance()->generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
-          _projectedBounds.MinY;
+    _r.x =
+      Random::instance()->generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
+        _projectedBounds.MinX;
+    _r.y =
+      Random::instance()->generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
+        _projectedBounds.MinY;
 
     // pick one map as the reference map
     if (Random::instance()->coinToss())
@@ -123,11 +129,6 @@ double AttributeComparator::compareMaps()
 
     if (bestScore >= 0.0)
     {
-//        LOG_INFO("====");
-//        LOG_INFO("score: " << bestScore);
-//        LOG_INFO("t1: \n" << t1);
-//        LOG_INFO("t2: \n" << t2);
-
       scoreSum += bestScore;
       scores.push_back(bestScore);
       sort(scores.begin(), scores.end());
@@ -138,19 +139,25 @@ double AttributeComparator::compareMaps()
     if (scores.size() > 1)
     {
       double v = 0;
-      for (size_t i = 0; i < scores.size(); i++)
+      for (size_t j = 0; j < scores.size(); j++)
       {
-        v += (scores[i] - _mean) * (scores[i] - _mean);
+        v += (scores[j] - _mean) * (scores[j] - _mean);
       }
       _s = sqrt(v / (scores.size() - 1));
 
       _ci = zalpha * _s / sqrt(scores.size());
     }
 
-    PROGRESS_INFO(i << " / " << _iterations << " mean: " << _mean << "   ");
+    if (i % _taskStatusUpdateInterval == 0)
+    {
+      PROGRESS_STATUS(
+        "Completed " << StringUtils::formatLargeNumber(i) << " of " <<
+        StringUtils::formatLargeNumber(totalIterations) << " attribute comparison iterations.");
+    }
   }
-
-  LOG_INFO(_iterations << " / " << _iterations << " mean: " << _mean << "   ");
+  LOG_STATUS(
+    "Completed " << StringUtils::formatLargeNumber(totalIterations) <<
+    " attribute comparison iterations.");
 
   OsmSchema::getInstance().setIsACost(oldIsACost);
 

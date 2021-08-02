@@ -5,7 +5,7 @@ set -e
 # fully hydrated relations (API DB queries used automatically hydrate the relations) in the 
 # following way:
 #
-# 3) Rivers and their parent relations only are conflated with the input data is first filtered to 
+# 3) Rivers and their parent relations only are conflated where the input data is first filtered to 
 #    rivers only:
 #   a) Same as scenario 2a
 #   b) Same as scenario 2b
@@ -31,7 +31,7 @@ LOG_FILTER=""
 GENERAL_OPTS="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999" 
 # The input feature filtering done here is the only difference between this scenario and scenario 2.
-CONVERT_OPTS="-D convert.ops=hoot::RemoveElementsVisitor -D remove.elements.visitor.element.criteria=hoot::LinearWaterwayCriterion;hoot::LinearWaterwayWayNodeCriterion;hoot::RelationWithRiverMembersCriterion -D element.criterion.negate=true -D remove.elements.visitor.chain.element.criteria=true -D remove.elements.visitor.recursive=true -D relation.with.members.of.type.criterion.allow.mixed.children=false"
+CONVERT_OPTS="-D convert.ops=hoot::RemoveElementsVisitor -D remove.elements.visitor.element.criteria=hoot::RiverCriterion;hoot::RelationWithRiverMembersCriterion -D element.criteria.negate=true -D remove.elements.visitor.chain.element.criteria=true -D remove.elements.visitor.recursive=true -D relation.with.members.of.type.criterion.allow.mixed.children=false"
 # The match/merger creators added here are the only difference between this scenario and scenario 1.
 BOUNDS="-117.729492166,40.9881915574,-117.718505838,40.996484138672"
 CONFLATE_OPTS="-D match.creators=hoot::ScriptMatchCreator,River.js;hoot::ScriptMatchCreator,Relation.js -D merger.creators=hoot::ScriptMergerCreator;hoot::ScriptMergerCreator -D bounds=$BOUNDS -D bounds.output.file=$OUTPUT_DIR/bounds.osm"
@@ -41,7 +41,7 @@ DEBUG=false
 if [ "$DEBUG" == "true" ]; then
   GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
   LOG_LEVEL="--trace"
-  LOG_FILTER="-D log.class.filter= "
+  LOG_FILTER="-D log.class.include.filter= "
 fi
 
 scripts/database/CleanAndInitializeOsmApiDb.sh
@@ -58,7 +58,7 @@ CONFLATED=$HOOT_DB_URL/$TEST_NAME-conflated
 hoot conflate $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true $OSM_API_DB_URL $SEC_INPUT $CONFLATED --write-bounds
 
 # generate a changeset between the original ref data and the diff calculated in the previous step
-hoot changeset-derive $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $OSM_API_DB_URL $CONFLATED $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL
+hoot changeset-derive $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $OSM_API_DB_URL $CONFLATED $OUTPUT_DIR/diff.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL
 if [ "$DEBUG" == "true" ]; then
   hoot changeset-derive $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $OSM_API_DB_URL $CONFLATED $OUTPUT_DIR/diff.osc
 fi
@@ -72,6 +72,4 @@ hoot diff $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $GOLD_DIR/out-3.osm $OUTPUT_DIR/o
 
 # cleanup
 scripts/database/CleanOsmApiDB.sh
-hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $SEC_INPUT
-hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $CONFLATED
-#PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -d $DB_NAME -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null
+hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $SEC_INPUT $CONFLATED

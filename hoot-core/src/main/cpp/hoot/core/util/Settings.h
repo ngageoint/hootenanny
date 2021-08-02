@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CONFIGURATION_H
@@ -56,13 +56,13 @@ class Settings
 {
 public:
 
-  // Technically, this is a Singleton and this constructor should not be publicly accessible.  There
+  // Technically, this is a Singleton and this constructor should not be publicly accessible. There
   // does seem to be a use case for passing around temporary settings, though, which then makes
-  // sense for it to remain public.  Possibly, we need a separate class for HootSettings that would
+  // sense for it to remain public. Possibly, we need a separate class for HootSettings that would
   // then be a true Singleton?
   Settings();
 
-  typedef QHash<QString, QVariant> SettingsMap;
+  using SettingsMap = QHash<QString, QVariant>;
 
   void append(const QString& key, const QStringList& values);
   void prepend(const QString& key, const QStringList& values);
@@ -83,7 +83,6 @@ public:
    */
   void loadEnvironment();
   void loadFromString(QString json);
-
   /**
    * Load the JSON file at the path specified.
    */
@@ -102,7 +101,7 @@ public:
   double getDouble(const QString& key) const;
   double getDouble(const QString& key, double defaultValue) const;
   double getDouble(const QString& key, double defaultValue, double minValue,
-                   double maxValue ) const;
+                   double maxValue) const;
   /**
    * Returns the double represented in the supplied string. Where necessary variables will be
    * resolved.
@@ -170,39 +169,39 @@ public:
    * @param listReplacementEntryValues list of value replacement entries of the form:
    * "<old optionValueEntry 1>-><new optionValueEntry 1>;<old optionValueEntry 2>-><new optionValueEntry 2>..."
    */
-  static void replaceListOptionEntryValues(Settings& settings, const QString& optionName,
-                                           const QStringList& listReplacementEntryValues);
+  static void replaceListOptionEntryValues(
+    Settings& settings, const QString& optionName, const QStringList& listReplacementEntryValues);
 
 private:
 
   static std::shared_ptr<Settings> _theInstance;
   SettingsMap _settings;
-  /// matches variables in the form ${My_Var_1}
+  // matches variables in the form ${My_Var_1}
   QRegularExpression _dynamicRegex;
-  /// matches variables in the form $(My_Var_1)
+  // matches variables in the form $(My_Var_1)
   QRegularExpression _staticRegex;
 
-  QString _markup(QString s) const
-  {
-    s.replace("\\", "\\\\");
-    s.replace("\n", "\\n");
-    s.replace("\t", "\\t");
-    s.replace("\"", "\\\"");
-    return s;
-  }
+  QString _markup(QString s) const;
 
   void _checkConvert(const QString& key, const QVariant& value, QVariant::Type type) const;
 
   QString _replaceStaticVariables(QString value) const;
   QString _replaceVariables(const QString& key, std::set<QString> used) const;
   QString _replaceVariablesValue(QString value) const;
-  QString _replaceVariablesValue(QString value, std::set<QString> used) const;
+  QString _replaceVariablesValue(QString value, const std::set<QString>& used) const;
 
   /*
    * This validates input for options that take a list of hoot operators (factory configurable
    * ElementVisitor or OsmMapOperation)
    */
   static void _validateOperatorRefs(const QStringList& operators);
+
+  // This ensure option values matching factory class names always have the global namespace
+  // prepended to them. This allows users to avoid having to type in the namespace repeatedly when
+  // using commands and shorten command text. If hoot ever updates namespace usage to anything other
+  // than a single global namespece, then this logic would become obsolete
+  static void _addNamespacePrefixIfClassNameWithout(QString& val);
+  static void _updateClassNamesInList(QStringList& list);
 };
 
 inline Settings& conf() { return Settings::getInstance(); }

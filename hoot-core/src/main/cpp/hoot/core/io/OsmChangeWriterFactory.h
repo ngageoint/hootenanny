@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMCHANGEWRITERFACTORY_H
 #define OSMCHANGEWRITERFACTORY_H
@@ -50,7 +50,7 @@ public:
    * @return an OSM change writer
    */
   std::shared_ptr<OsmChangeWriter> createWriter(const QString& url,
-                                                const QString& elementPayloadFormat = "json");
+                                                const QString& elementPayloadFormat = "json") const;
 
   /**
    * Determines if the output location is supported by any OsmChangeWriter
@@ -58,7 +58,7 @@ public:
    * @param output the output path to validate
    * @return true if the output path is supported by any writer; false otherwise
    */
-  bool isSupported(const QString& output);
+  bool isSupported(const QString& output) const;
 
   /**
    * Returns a Singleton instance of OsmChangeWriterFactory

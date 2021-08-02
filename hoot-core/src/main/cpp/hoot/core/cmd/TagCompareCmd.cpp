@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -30,6 +30,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/schema/AttributeCoOccurrence.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -48,19 +49,15 @@ public:
 
   TagCompareCmd() = default;
 
-  virtual QString getName() const override { return "tag-compare"; }
+  QString getName() const override { return "tag-compare"; }
+  QString getDescription() const override { return "Compares tags between two maps"; }
 
-  virtual QString getDescription() const override
-  { return "Compares tags between two maps"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
 
     bool tableFormat = true;
-    AttributeCoOccurrence cooccurrence;
-
     // Print a table or just a list
     if (args.contains("--no-table"))
     {
@@ -70,16 +67,26 @@ public:
 
     if (args.size() != 2)
     {
-      LOG_VARD(args);
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").
-                          arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
-    OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, args[0], false, Status::Unknown1);
-    IoUtils::loadMap(map, args[1], false, Status::Unknown2);
+    const QString input1 = args[0];
+    const QString input2 = args[1];
 
+    LOG_STATUS(
+      "Comparing tags for ..." << FileUtils::toLogFormat(input1, 25) << " and ..." <<
+      FileUtils::toLogFormat(input2, 25) << "...");
+
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    IoUtils::loadMap(map, input1, false, Status::Unknown1);
+    IoUtils::loadMap(map, input2, false, Status::Unknown2);
+
+    AttributeCoOccurrence cooccurrence;
     cooccurrence.addToMatrix(map);
 
     if (tableFormat)

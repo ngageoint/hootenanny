@@ -3,49 +3,26 @@
 
 === Description
 
-The +changeset-apply+ command writes a OSM changeset XML file(s) (.osc or .xml) or a SQL changeset file (.osc.sql) to an OSM API database.
+The +changeset-apply+ command writes changes from a changeset file to an OSM API database.
 
-Optional conflict parameters may be passed for SQL files, so that if the target database contains any changesets created after the time 
-represented by a timestamp that intersect with a specified AOI, the command will return an error.
-
-* +changeset.os*+     - One or more input OSM XML changeset (.osc file) or OSM XML file (.osm) with negative IDs when writing the changeset 
-                        through the OSM API OR an input SQL changeset (.osc.sql) when writing the changeset directly to an OSM API database.
-* +targetUrl+         - If writing the changeset through the OSM API, the OSM API endpoint the changeset will be written to; if writing the 
-                        changeset directly to an OSM API database, the URL of the database being written to
-* +conflictAoi+       - Bounding box string of the form: minx,miny,maxx,maxy used to prevent writing conflicted data (see description); valid 
-                        only when writing the changeset directly to an OSM API database
-* +conflictTimestamp+ - Timestamp of the form: "yyyy-MM-dd hh:mm:ss.zzz" used to prevent writing conflicted data (see description); valid only 
-                        when writing the changeset directly to an OSM API database
-* +--stats+           - Output statistics (element, node, way, relation, failure, create, modify, and delete counts)
-* +--progress+        - Display progress as a percent complete while the upload is working
+* +changeset(s)+ - Input(s); One or more input OSM XML changesets (.osc) or OSM XML files (.osm). Elements being created 
+                   must have negative element IDs when writing the changeset through the OSM API. If writing directly to an OSM 
+                   API database, then the input must be a single SQL changeset (.osc.sql) file with positive element IDs.
+* +targetUrl+    - Output; If writing the changeset through the OSM API, the OSM API endpoint the changeset will be written 
+                   to. If writing the changeset directly to an OSM API database, this should be the URL of the database 
+                   being written to.
+* +--progress+   - Displays progress as a percent complete while the upload is working; ignored when using SQL changesets.
+* +--stats+      - Displays changeset output statistics; ignored when using SQL changesets.
 
 === Usage
 
 --------------------------------------
-changeset-apply (changeset.os*) [changeset2.os* ...] (targetUrl) [--stats] [--progress]
-changeset-apply (changeset.osc.sql) (targetUrl) [conflictAoi] [conflictTimestamp]
+hoot changeset-apply (changeset1.os*) [changeset2.os* ...] (targetUrl) [--progress] [--stats] 
+hoot changeset-apply (changeset.osc.sql) (targetUrl)
 --------------------------------------
 
-==== Examples
-
---------------------------------------
-# Apply 'changeset.osc' to 'localhost' using 'username' and 'password'
-hoot changeset-apply changeset.osc http://username:password@localhost/
-
-# Apply 'changeset.osc', 'changeset-001.osc', and 'changeset-002.osc' to 'localhost' using 'username' and 'password'
-hoot changeset-apply changeset.osc changeset-001.osc changeset-002.osc https://username:password@localhost/
-
-# Apply 'sourcedata.osm' as <create> operations to 'localhost' using 'username' and 'password', display stats and progress
-hoot changeset-apply sourcedata.osm http://username:password@localhost/ --stats --progress
-
-# Apply SQL file 'changeset.osc.sql' to 'localhost' using 'username' and 'password' to the database `databaseName'
-hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName
-
-# Apply SQL file 'changeset.osc.sql' to 'localhost' using 'username' and 'password' to the database `databaseName' with conflict AOI and conflict timestamp
-hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName -93.89258,40.96917,-93.60583,41.0425 "2016-05-04 10:15:37.000"
---------------------------------------
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[Examples]
 
 === See Also
 
 * `changeset.*` configuration options
-

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -56,11 +56,11 @@ public:
   void runWayTest()
   {
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
-      WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+      WayPtr way = TestUtils::createWay(map, coords);
       way->getTags()["oneway"] = "-1";
       way->getTags()["highway"] = "residential";
 
@@ -78,11 +78,11 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
-      WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+      WayPtr way = TestUtils::createWay(map, coords);
       way->getTags()["oneway"] = "reverse";
       way->getTags()["highway"] = "residential";
 
@@ -100,11 +100,11 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
-      WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+      WayPtr way = TestUtils::createWay(map, coords);
       // This way isn't reversed, so nothing should happen to it.
       way->getTags()["oneway"] = "yes";
       way->getTags()["highway"] = "residential";
@@ -123,11 +123,11 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
-      WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+      WayPtr way = TestUtils::createWay(map, coords);
       // This way isn't a road, so nothing should happen to it.
       way->getTags()["oneway"] = "reverse";
       way->getTags()["building"] = "yes";
@@ -149,12 +149,12 @@ public:
   void runRelationTest()
   {
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
       // The member way doesn't need any special tags in order to be reversed.
-      WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+      WayPtr way = TestUtils::createWay(map, coords);
       QList<ElementPtr> elements;
       elements.append(way);
       RelationPtr relation = TestUtils::createRelation(map, elements);
@@ -177,12 +177,12 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
       // The member way doesn't need any special tags in order to be reversed.
-      WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+      WayPtr way = TestUtils::createWay(map, coords);
       QList<ElementPtr> elements;
       elements.append(way);
       RelationPtr relation = TestUtils::createRelation(map, elements);
@@ -205,11 +205,11 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
-      WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+      WayPtr way = TestUtils::createWay(map, coords);
       QList<ElementPtr> elements;
       elements.append(way);
       // This relation isn't reversed, so nothing should happen to it.
@@ -233,11 +233,11 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
-      WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+      WayPtr way = TestUtils::createWay(map, coords);
       QList<ElementPtr> elements;
       elements.append(way);
       RelationPtr relation = TestUtils::createRelation(map, elements);

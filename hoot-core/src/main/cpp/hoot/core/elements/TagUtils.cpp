@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "TagUtils.h"
@@ -100,8 +100,19 @@ bool TagUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
   return false;
 }
 
+bool TagUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
+                                     const std::set<ElementId>& elementIds, const OsmMapPtr& map)
+{
+  std::vector<ElementPtr> elements;
+  for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
+  {
+    elements.push_back(map->getElement(*it));
+  }
+  return anyElementsHaveAnyKvp(kvps, elements);
+}
+
 bool TagUtils::allElementsHaveAnyTagKey(const QStringList& tagKeys,
-                                        const std::set<ElementId>& elementIds, OsmMapPtr& map)
+                                        const std::set<ElementId>& elementIds, const OsmMapPtr& map)
 {
   std::vector<ElementPtr> elements;
   for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
@@ -112,7 +123,7 @@ bool TagUtils::allElementsHaveAnyTagKey(const QStringList& tagKeys,
 }
 
 bool TagUtils::anyElementsHaveAnyTagKey(const QStringList& tagKeys,
-                                        const std::set<ElementId>& elementIds, OsmMapPtr& map)
+                                        const std::set<ElementId>& elementIds, const OsmMapPtr& map)
 {
   std::vector<ElementPtr> elements;
   for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
@@ -120,17 +131,6 @@ bool TagUtils::anyElementsHaveAnyTagKey(const QStringList& tagKeys,
     elements.push_back(map->getElement(*it));
   }
   return anyElementsHaveAnyTagKey(tagKeys, elements);
-}
-
-bool TagUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
-                                     const std::set<ElementId>& elementIds, OsmMapPtr& map)
-{
-  std::vector<ElementPtr> elements;
-  for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
-  {
-    elements.push_back(map->getElement(*it));
-  }
-  return anyElementsHaveAnyKvp(kvps, elements);
 }
 
 bool TagUtils::nameConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2)

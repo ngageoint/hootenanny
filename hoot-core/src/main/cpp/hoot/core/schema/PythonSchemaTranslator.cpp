@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Python redefines these two macros from /usr/include/features.h
@@ -42,7 +42,6 @@
 // hoot
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/ConfPath.h>
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
@@ -52,7 +51,7 @@
 
 // Python version before 2.4 don't have a Py_ssize_t typedef.
 #if PY_VERSION_HEX < 0x02050000 && !defined(PY_SSIZE_T_MIN)
-typedef int Py_ssize_t;
+using Py_ssize_t = int;
 #endif
 
 using namespace std;
@@ -82,7 +81,7 @@ void PythonSchemaTranslator::_init()
     QFileInfo info(_scriptPath);
     if (info.exists() == false)
     {
-      throw Exception("Unable to find translation module: " + _scriptPath);
+      throw HootException("Unable to find translation module: " + _scriptPath);
     }
     moduleName = info.baseName();
     pythonPath.append(info.dir().absolutePath());
@@ -108,20 +107,20 @@ void PythonSchemaTranslator::_init()
   const char* data = moduleName.toLatin1().data();
   PyObject* module = PyImport_ImportModule(data);
 
-  if (module == NULL)
+  if (module == nullptr)
   {
     PyErr_Print();
-    throw Exception("Error loading module " + _scriptPath);
+    throw HootException("Error loading module " + _scriptPath);
   }
 
   _translateFunction = PyObject_GetAttrString(module, "translateToOsm");
-  if (_translateFunction == NULL)
+  if (_translateFunction == nullptr)
   {
-    throw Exception("Error retrieving 'translateToOsm'");
+    throw HootException("Error retrieving 'translateToOsm'");
   }
   if (PyCallable_Check((PyObject*)_translateFunction) == 0)
   {
-    throw Exception("Error: 'translateToOsm' isn't callable");
+    throw HootException("Error: 'translateToOsm' isn't callable");
   }
   Py_DECREF(module);
 }
@@ -135,9 +134,9 @@ bool PythonSchemaTranslator::isValidScript()
       _init();
       _initialized = true;
     }
-    catch (const Exception&)
+    catch (const HootException& e)
     {
-      // pass
+      LOG_DEBUG(e.getWhat());
     }
   }
 
@@ -151,7 +150,8 @@ void PythonSchemaTranslator::_finalize()
   Py_Finalize();
 }
 
-void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, const char* geomType)
+void PythonSchemaTranslator::_translateToOsm(
+  Tags& tags, const char* layerName, const char* geomType)
 {
   PyObject* layerNamePy = PyString_FromString(layerName);
   PyObject* geomTypePy = PyString_FromString(geomType);
@@ -179,10 +179,10 @@ void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, 
 
   tags.clear();
 
-  if (pyResult == NULL)
+  if (pyResult == nullptr)
   {
     PyErr_Print();
-    throw Exception("Python call failed.");
+    throw HootException("Python call failed.");
   }
   else if (pyResult == Py_None)
   {
@@ -191,7 +191,7 @@ void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, 
   else if (PyDict_Check(pyResult) == 0)
   {
     Py_DECREF(pyResult);
-    throw Exception("Expected a dict as a return type.");
+    throw HootException("Expected a dict as a return type.");
   }
   // we got a valid result.
   else
@@ -203,19 +203,19 @@ void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, 
       PyObject* keyUnicode = PyUnicode_FromObject(key);
       PyObject* valueUnicode = PyUnicode_FromObject(value);
 
-      if (keyUnicode == 0 || valueUnicode == 0)
+      if (keyUnicode == nullptr || valueUnicode == nullptr)
       {
-        throw Exception("Both the key and value in the return translation must be "
+        throw HootException("Both the key and value in the return translation must be "
                             "convertable to strings.");
       }
 
-      Py_UNICODE* keyUnicodeData = PyUnicode_AsUnicode(keyUnicode);
-      Py_UNICODE* valueUnicodeData = PyUnicode_AsUnicode(valueUnicode);
+      const Py_UNICODE* keyUnicodeData = PyUnicode_AsUnicode(keyUnicode);
+      const Py_UNICODE* valueUnicodeData = PyUnicode_AsUnicode(valueUnicode);
       QString qKey, qValue;
 #       if (Py_UNICODE_SIZE == 4)
       {
-        qKey = QString::fromUcs4((const uint*)keyUnicodeData);
-        qValue = QString::fromUcs4((const uint*)valueUnicodeData);
+        qKey = QString::fromUcs4(keyUnicodeData);
+        qValue = QString::fromUcs4(valueUnicodeData);
       }
 #       elif (Py_UNICODE_SIZE == 2)
       {

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef REPLACEMENT_SNAPPED_WAY_JOINER_H
@@ -35,8 +35,8 @@ namespace hoot
 {
 
 /**
- * A way joiner to be used in the changeset replacement generation workflow to join up ways
- * snapped with UnconnectedWaySnapper.
+ * @brief The ReplacementSnappedWayJoiner class is a way joiner to be used in the changeset
+ * replacement generation workflow to join up ways snapped with UnconnectedWaySnapper.
  */
 class ReplacementSnappedWayJoiner : public WayJoinerAdvanced
 {
@@ -45,60 +45,46 @@ public:
   static QString className() { return "hoot::ReplacementSnappedWayJoiner"; }
 
   /**
-   * Constructor
+   * @brief Constructor
    */
   ReplacementSnappedWayJoiner();
 
   /**
-   * Constructor
-   *
+   * @brief Constructor
    * @param refIdToVersionMappings a mapping of reference element IDs to their versions
    */
   ReplacementSnappedWayJoiner(const QMap<ElementId, long>& refIdToVersionMappings);
-  virtual ~ReplacementSnappedWayJoiner() = default;
+  ~ReplacementSnappedWayJoiner() = default;
 
   /**
    * @see WayJoiner
    */
-  virtual void join(const OsmMapPtr& map) override;
+  void join(const OsmMapPtr& map) override;
 
   /**
    * @see ApiEntityInfo
    */
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Way joiner for use after way snapping when generating replacement changesets."; }
-
-  virtual QString getClassName() const override { return className(); }
-
-  virtual QString getName() const override { return className(); }
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getClassName() const override { return className(); }
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getName() const override { return className(); }
 
 protected:
 
   /*
-   * @see WayJoiner
+   * @see WayJoinerAdvanced
    */
-  virtual bool _areJoinable(const WayPtr& w1, const WayPtr& w2) const override;
-
+  bool _hasPid(const ConstWayPtr& way) const override;
   /*
    * @see WayJoinerAdvanced
    */
-  virtual void _determineKeeperFeatureForTags(WayPtr parent, WayPtr child, WayPtr& keeper,
-                                              WayPtr& toRemove) const override;
-
-  /*
-   * @see WayJoinerAdvanced
-   */
-  virtual void _determineKeeperFeatureForId(WayPtr parent, WayPtr child, WayPtr& keeper,
-                                            WayPtr& toRemove) const override;
-
-  /*
-   * @see WayJoinerAdvanced
-   */
-  virtual bool _hasPid(const ConstWayPtr& way) const override;
-  /*
-   * @see WayJoinerAdvanced
-   */
-  virtual long _getPid(const ConstWayPtr& way) const override;
+  long _getPid(const ConstWayPtr& way) const override;
 
 private:
 

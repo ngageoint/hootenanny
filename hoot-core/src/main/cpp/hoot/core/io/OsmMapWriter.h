@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMMAPWRITER_H
 #define OSMMAPWRITER_H
@@ -33,6 +33,9 @@
 namespace hoot
 {
 
+/*
+ * @todo The debug map methods should be implemented across writers other than OsmXmlWriter.
+ */
 class OsmMapWriter
 {
 public:
@@ -69,8 +72,6 @@ public:
    */
   virtual QString supportedFormats() = 0;
 
-  // TODO: These methods should be implemented across writers other than OsmXmlWriter.
-
   /**
    * Sets flag indicating the writer is writing a debug map so that extra debugging metadata is
    * included in the output
@@ -81,7 +82,7 @@ public:
    * Gets flag indicating the writer is writing a debug map so that extra debugging metadata can
    * be included in each implementation of the output formats
    */
-  bool getIsDebugMap() { return _debug; }
+  bool getIsDebugMap() const { return _debug; }
 
 private:
 

@@ -22,16 +22,10 @@ AC_DEFUN([UI_TESTS_INIT],[
       AC_CHECK_PROG(NPM_FOUND, npm, [yes], [no])
       AS_IF([test "x$NPM_FOUND" != "xyes"], [AC_MSG_ERROR([Unable to find npm.])])
 
-      CHECK_RUBY(2.0)
-      CHECK_GEM(2.0)
-      CHECK_RUBY_GEM(mime-types, 2.6.2)
-      CHECK_RUBY_GEM(cucumber, 2.4.0)
-      CHECK_RUBY_GEM(selenium-cucumber, 3.1.5)
-      CHECK_RUBY_GEM(selenium-webdriver, 2.53.4)
-      CHECK_RUBY_GEM(capybara, 2.18.0)
-      CHECK_RUBY_GEM(capybara-webkit, 1.15.0)
-      CHECK_RUBY_GEM(rspec, 3.6.0)
-      CHECK_RUBY_GEM(capybara-screenshot, 1.0.18)
+      # Check for at least Ruby 2.7.x (which includes Gem 3.1.6 and and Bundler 2.1.4).
+      CHECK_RUBY(2.7.0)
+      CHECK_GEM(3.1.6)
+      CHECK_RUBY_GEM(bundler, 2.1.4)
 
       AC_CHECK_PROG(CHROME_FOUND, google-chrome-stable, [yes], [no])
       AS_IF([test "x$CHROME_FOUND" != "xyes"], [AC_MSG_ERROR([Unable to find chrome.])])

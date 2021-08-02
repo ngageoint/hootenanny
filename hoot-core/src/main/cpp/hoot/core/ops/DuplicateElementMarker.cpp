@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "DuplicateElementMarker.h"
@@ -74,13 +74,13 @@ void DuplicateElementMarker::apply(OsmMapPtr& map)
       if (wayNodeCrit.isSatisfied(dupe1))
       {
         const std::set<QString> containingWayTypesTemp =
-          WayUtils::getContainingWaysMostSpecificTypesByNodeId(dupe1->getId(), map);
+          WayUtils::getContainingWaysMostSpecificTypes(dupe1->getId(), map);
         _containingWayTypes.insert(containingWayTypesTemp.begin(), containingWayTypesTemp.end());
       }
       if (wayNodeCrit.isSatisfied(dupe2))
       {
         const std::set<QString> containingWayTypesTemp =
-          WayUtils::getContainingWaysMostSpecificTypesByNodeId(dupe2->getId(), map);
+          WayUtils::getContainingWaysMostSpecificTypes(dupe2->getId(), map);
         _containingWayTypes.insert(containingWayTypesTemp.begin(), containingWayTypesTemp.end());
       }
     }
@@ -89,7 +89,7 @@ void DuplicateElementMarker::apply(OsmMapPtr& map)
   _numProcessed = map->size();
 }
 
-QString DuplicateElementMarker::_getUuidVal(const QString& newUuid, const ConstElementPtr& element)
+QString DuplicateElementMarker::_getUuidVal(const QString& newUuid, const ConstElementPtr& element) const
 {
   QString uuidVal;
   QString existingUuid = element->getTag(MetadataTags::HootDuplicate()).trimmed();
@@ -99,16 +99,6 @@ QString DuplicateElementMarker::_getUuidVal(const QString& newUuid, const ConstE
   }
   uuidVal += newUuid;
   return uuidVal;
-}
-
-int DuplicateElementMarker::markDuplicates(
-  OsmMapPtr& map, const int coordinateComparisonSensitivity)
-{
-  LOG_VARD(coordinateComparisonSensitivity);
-  DuplicateElementMarker marker;
-  marker.setCoordinateComparisonSensitivity(coordinateComparisonSensitivity);
-  marker.apply(map);
-  return marker.getNumFeaturesAffected();
 }
 
 }

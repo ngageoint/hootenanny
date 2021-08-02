@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef POIPOLYGONMATCH_H
 #define POIPOLYGONMATCH_H
@@ -52,7 +52,7 @@ namespace hoot
  * This is an additive, rule based mechanism for matching POIs to polygons. See "POI to
  * Polygon Conflation" in the Hootenanny Algorithms document for more details.
  *
- * This class could use some refactoring.
+ * This class could definitely use some refactoring.
  */
 class PoiPolygonMatch : public Match, public MatchDetails, public Configurable
 {
@@ -64,58 +64,44 @@ public:
   static const QString MATCH_NAME;
 
   PoiPolygonMatch() = default;
-  // this constructor added primarily for testing purposes
-  PoiPolygonMatch(ConstMatchThresholdPtr threshold);
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     std::shared_ptr<const PoiPolygonRfClassifier> rf,
     PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr(),
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>());
-  virtual ~PoiPolygonMatch() = default;
-
-  virtual void setConfiguration(const Settings& conf) override;
+  ~PoiPolygonMatch() = default;
 
   void calculateMatch(const ElementId& eid1, const ElementId& eid2);
 
-  virtual const MatchClassification& getClassification() const override { return _class; }
-
-  virtual MatchMembers getMatchMembers() const override
-  { return MatchMembers::Poi | MatchMembers::Polygon; }
-
-  virtual QString getName() const override { return getPoiPolygonMatchName(); }
   static QString getPoiPolygonMatchName() { return MATCH_NAME; }
-  virtual QString getClassName() const override { return className(); }
-
-  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
-
-  virtual double getProbability() const override { return _class.getMatchP(); }
-
-  // Is this the right implementation?
-  virtual bool isConflicting(const ConstMatchPtr& /*other*/,
-                             const ConstOsmMapPtr& /*map*/,
-                             const QHash<QString, ConstMatchPtr>& /*matches*/) const override
-  { return false; }
-
-  virtual bool isWholeGroup() const override { return true; }
-
-  virtual QString toString() const override;
-
-  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
 
   /**
    * Pass through to the same method in PoiPolygonDistanceTruthRecorder
    */
   static void printMatchDistanceInfo();
-
   /**
    * Pass through to the same method in PoiPolygonDistanceTruthRecorder
    */
   static void resetMatchDistanceInfo();
 
-  virtual QString explain() const override { return _explainText; }
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getDescription() const override { return "Matches POIs with polygons"; }
+  const MatchClassification& getClassification() const override { return _class; }
+  MatchMembers getMatchMembers() const override
+  { return MatchMembers::Poi | MatchMembers::Polygon; }
+  std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
+  double getProbability() const override { return _class.getMatchP(); }
+  bool isConflicting(
+    const ConstMatchPtr& /*other*/, const ConstOsmMapPtr& /*map*/,
+    const QHash<QString, ConstMatchPtr>& /*matches*/) const override { return false; }
+  bool isWholeGroup() const override { return true; }
+  std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
+  QString explain() const override { return _explainText; }
+  MatchType getType() const override;
 
-  virtual MatchType getType() const override;
+  QString getName() const override { return getPoiPolygonMatchName(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override;
+  QString getDescription() const override { return "Matches POIs with polygons"; }
 
   void setMatchDistanceThreshold(const double distance);
   void setReviewDistanceThreshold(const double distance);
@@ -137,8 +123,8 @@ public:
   void setReviewMultiUseBuildings(const bool review) { _reviewMultiUseBuildings = review; }
   void setAddressMatchingEnabled(const bool enabled) { _addressMatchEnabled = enabled; }
 
-  //summary of match types found; assumes one invocation of this class per executed process; would
-  //like to handle these in a different way
+  // summary of match types found; assumes one invocation of this class per executed process; would
+  // like to handle these in a different way
   static long matchesProcessed;
   static long distanceMatches;
   static long typeMatches;
@@ -162,8 +148,8 @@ private:
 
   ConstOsmMapPtr _map;
 
-  ElementId _eid1;
-  ElementId _eid2;
+  PoiPolygonInfoCachePtr _infoCache;
+
   ConstNodePtr _poi;
   ConstElementPtr _poly;
   std::shared_ptr<geos::geom::Geometry> _poiGeom;
@@ -235,9 +221,10 @@ private:
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
 
-  PoiPolygonInfoCachePtr _infoCache;
-
   int _timingThreshold;
+
+  // this constructor added primarily for testing purposes
+  PoiPolygonMatch(ConstMatchThresholdPtr threshold);
 
   void _categorizeElementsByGeometryType();
 
@@ -245,7 +232,7 @@ private:
 
   unsigned int _calculateEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly);
-  unsigned int _getConvexPolyDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly);
+  unsigned int _getConvexPolyDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly) const;
   unsigned int _getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getNameEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly);
@@ -255,7 +242,7 @@ private:
 
   bool _skipForReviewTypeDebugging() const;
 
-  void _clearCache();
+  void _clearCache() const;
 };
 
 }

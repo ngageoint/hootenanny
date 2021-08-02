@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "LongBox.h"
@@ -39,16 +39,15 @@ using namespace std;
 namespace hoot
 {
 
-LongBox::LongBox(vector<long int> min, vector<long int> max)
+LongBox::LongBox(const std::vector<long>& min, const std::vector<long>& max)
 {
   setMin(min);
   setMax(max);
 }
 
-std::shared_ptr<LongBox> LongBox::copy()
+std::shared_ptr<LongBox> LongBox::copy() const
 {
-  std::shared_ptr<LongBox> box = std::shared_ptr<LongBox>(new LongBox(getMin(), getMax()));
-  return box;
+  return std::make_shared<LongBox>(getMin(), getMax());
 }
 
 LongBox::~LongBox()
@@ -57,7 +56,7 @@ LongBox::~LongBox()
   _max.clear();
 }
 
-long int LongBox::calculateVolume()
+long int LongBox::calculateVolume() const
 {
   long result = 1;
   for (uint i = 0; i < getMin().size(); i++)
@@ -67,7 +66,7 @@ long int LongBox::calculateVolume()
   return result;
 }
 
-bool LongBox::edgeOverlaps(LongBox b)
+bool LongBox::edgeOverlaps(const LongBox& b) const
 {
   bool result = false;
   for (uint i = 0; i < getMin().size(); i++)
@@ -82,7 +81,7 @@ bool LongBox::edgeOverlaps(LongBox b)
   return result;
 }
 
-LongBox LongBox::expand(int size)
+LongBox LongBox::expand(int size) const
 {
   vector<long int> min = getMin();
   vector<long int> max = getMax();
@@ -95,7 +94,7 @@ LongBox LongBox::expand(int size)
   return LongBox(min, max);
 }
 
-bool LongBox::in(vector<long int> p)
+bool LongBox::in(const vector<long int>& p) const
 {
   if (p.size() < _min.size() || p.size() < _max.size())
   {
@@ -110,19 +109,7 @@ bool LongBox::in(vector<long int> p)
   return result;
 }
 
-bool LongBox::intersects(LongBox b)
-{
-  bool result = true;
-  for (uint i = 0; i < getMin().size(); i++)
-  {
-    result = result && (b.getMin()[i] <= getMax()[i]);
-    result = result && (b.getMax()[i] >= getMin()[i]);
-  }
-
-  return result;
-}
-
-QString LongBox::toString()
+QString LongBox::toString() const
 {
   QString result = "{ ";
   for (uint i = 0; i < _min.size(); i++)
@@ -133,7 +120,7 @@ QString LongBox::toString()
   return result;
 }
 
-long LongBox::getWidth(int d)
+long LongBox::getWidth(int d) const
 {
   if (d > (int)getMin().size() || d > (int)getMax().size())
   {

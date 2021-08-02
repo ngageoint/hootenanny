@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef DEBUGNETWORKMAPCREATOR_H
 #define DEBUGNETWORKMAPCREATOR_H
@@ -46,18 +46,17 @@ public:
   DebugNetworkMapCreator();
 
   void addDebugElements(OsmMapPtr map, QList<NetworkEdgeScorePtr> edgeScores,
-    QList<NetworkVertexScorePtr> vertexScores);
+    QList<NetworkVertexScorePtr> vertexScores) const;
 
 private:
 
   double _matchThreshold;
 
-  void _addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edgeScore);
+  void _addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edgeScore) const;
+  void _addVertexLink(OsmMapPtr map, NetworkVertexScorePtr vertexScore) const;
 
-  void _addVertexLink(OsmMapPtr map, NetworkVertexScorePtr vertexScore);
-
-  ConstNodePtr _getMedianNode(ConstOsmMapPtr map, QList<ConstElementPtr> e);
-  ConstNodePtr _getMedianNode(ConstOsmMapPtr map, ConstElementPtr e);
+  ConstNodePtr _getMedianNode(ConstOsmMapPtr map, QList<ConstElementPtr> e) const;
+  ConstNodePtr _getMedianNode(ConstOsmMapPtr map, ConstElementPtr e) const;
 };
 
 }

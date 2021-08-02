@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -154,7 +154,7 @@ public:
   void runReadOsmApiTest()
   {
     OsmApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     insertData();
 
@@ -176,7 +176,7 @@ public:
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     OsmApiDbReader reader;
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     // The default behavior is return both features entirely within the bounds and those that
     // cross the bounds. This uses MapCropper internally, so other variations on the cropping are
@@ -217,7 +217,7 @@ public:
     //just want to make sure I can read against the same data twice in a row w/o crashing and also
     //make sure I don't get the same result again for a different bounds
     reader.setBoundingBox("-1,-1,1,1");
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     reader.read(map);
 
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
@@ -242,7 +242,7 @@ public:
     reader.initializePartial();
 
     int ctr = 0;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     //3 nodes
 
@@ -276,7 +276,7 @@ public:
 
     //2 nodes, 1 way
 
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
@@ -307,7 +307,7 @@ public:
 
     //2 ways, 1 relation
 
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
@@ -332,10 +332,10 @@ public:
     CPPUNIT_ASSERT(relation->contains(ElementId::node(1)));
     CPPUNIT_ASSERT(relation->contains(ElementId::way(1)));
     RelationData::Entry member = relation->getMembers().at(0);
-    HOOT_STR_EQUALS("n1", member.role);
+    HOOT_STR_EQUALS("n1", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
     member = relation->getMembers().at(1);
-    HOOT_STR_EQUALS("w1", member.role);
+    HOOT_STR_EQUALS("w1", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
     CPPUNIT_ASSERT_EQUAL(1, relation->getTags().size());
     HOOT_STR_EQUALS("r1", relation->getTags().get("note"));
@@ -344,7 +344,7 @@ public:
 
     //1 relation
 
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
@@ -357,7 +357,7 @@ public:
     CPPUNIT_ASSERT(relation->contains(ElementId::node(2)));
     CPPUNIT_ASSERT_EQUAL(size_t(1), relation->getMembers().size());
     member = relation->getMembers().at(0);
-    HOOT_STR_EQUALS("n2", member.role);
+    HOOT_STR_EQUALS("n2", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)2, member.getElementId().getId());
     CPPUNIT_ASSERT_EQUAL(0, relation->getTags().size());
 
@@ -381,7 +381,7 @@ public:
     OsmApiDbReader reader;
     reader.setKeepImmediatelyConnectedWaysOutsideBounds(true);
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     // The default behavior is return both features entirely within the bounds and those that
     // cross the bounds. This uses MapCropper internally, so other variations on the cropping are
@@ -414,7 +414,7 @@ public:
     //just want to make sure I can read against the same data twice in a row w/o crashing and also
     //make sure I don't get the same result again for a different bounds
     reader.setBoundingBox("-1,-1,1,1");
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     reader.read(map);
 
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());

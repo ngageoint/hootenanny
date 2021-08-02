@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "MultiaryReviewCommand.h"
@@ -39,10 +39,10 @@
 // Boost
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
-namespace pt = boost::property_tree;
-
 
 #include <QCryptographicHash>
+
+namespace pt = boost::property_tree;
 
 namespace hoot
 {
@@ -120,7 +120,7 @@ void MultiaryReviewCommand::setFinalElement(ElementPtr e)
 QString MultiaryReviewCommand::toJsonString() const
 {
   // Put our element in a map to make it easy to write
-  OsmMapPtr pMap(new OsmMap());
+  OsmMapPtr pMap = std::make_shared<OsmMap>();
   if (_finalElement)
     pMap->addElement(_copyElement(_finalElement));
 
@@ -186,7 +186,7 @@ MultiaryReviewCommand MultiaryReviewCommand::fromJsonString(QString jsonStr)
   {
     pt::read_json(ss, propTree);
   }
-  catch (pt::json_parser::json_parser_error& e)
+  catch (const pt::json_parser::json_parser_error& e)
   {
     QString reason = QString::fromStdString(e.message());
     QString line = QString::number(e.line());
@@ -219,12 +219,10 @@ MultiaryReviewCommand MultiaryReviewCommand::fromJsonString(QString jsonStr)
       || MultiaryReviewCommand::Modify == newCommand.getOp())
   {
     OsmMapPtr pMap = OsmJsonReader().loadFromPtree(propTree.get_child("FinalElement"));
-
     // Get the first node out of the map
     if (pMap->getNodeCount() > 0)
     {
-      NodePtr pNode = pMap->getNodes().begin()->second;
-      newCommand.setFinalElement(NodePtr(new Node(*pNode)));
+      newCommand.setFinalElement(std::make_shared<Node>(*(pMap->getNodes().begin()->second)));
     }
   }
 
@@ -282,17 +280,17 @@ ElementPtr MultiaryReviewCommand::_copyElement (ElementPtr e) const
   switch(e->getElementType().getEnum())
   {
   case ElementType::Node:
-    return ElementPtr(new Node(*(std::dynamic_pointer_cast<Node>(e))));
+    return std::make_shared<Node>(*(std::dynamic_pointer_cast<Node>(e)));
     break;
   case ElementType::Way:
-    return ElementPtr(new Way(*(std::dynamic_pointer_cast<Way>(e))));
+    return std::make_shared<Way>(*(std::dynamic_pointer_cast<Way>(e)));
     break;
   case ElementType::Relation:
-    return ElementPtr(new Relation(*(std::dynamic_pointer_cast<Relation>(e))));
+    return std::make_shared<Relation>(*(std::dynamic_pointer_cast<Relation>(e)));
     break;
   default:
     return ElementPtr();
   }
 }
 
-} // namespace hoot
+}

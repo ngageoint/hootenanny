@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -130,19 +130,21 @@ public:
     OsmMapPtr map = createEmptyMap();
 
     Coordinate c1[] = {
-      Coordinate(10.0, 10.0), Coordinate(20.0, 20.0), Coordinate(30.0, 15.0), Coordinate(40.0, 20.0), Coordinate(50.0, 10.0), Coordinate::getNull() };
-    TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      Coordinate(10.0, 10.0), Coordinate(20.0, 20.0), Coordinate(30.0, 15.0),
+      Coordinate(40.0, 20.0), Coordinate(50.0, 10.0), Coordinate::getNull() };
+    TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
 
     Coordinate c2[] = {
-      Coordinate(10.0, 12.0), Coordinate(20.0, 22.0), Coordinate(30.0, 17.0), Coordinate(40.0, 22.0), Coordinate(45.0, 32.0), Coordinate::getNull() };
-    TestUtils::createWay(map, Status::Unknown1, c2, 5, "w2");
+      Coordinate(10.0, 12.0), Coordinate(20.0, 22.0), Coordinate(30.0, 17.0),
+      Coordinate(40.0, 22.0), Coordinate(45.0, 32.0), Coordinate::getNull() };
+    TestUtils::createWay(map, c2, "w2", Status::Unknown1, 5);
 
     return map;
   }
 
   OsmMapPtr createEmptyMap()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -158,11 +160,11 @@ public:
 
     Coordinate c1[] = {
       Coordinate(1.0, 2.0), Coordinate(21.0, 22.0), Coordinate(31.0, 32.0), Coordinate::getNull() };
-    TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
 
     Coordinate c2[] = {
       Coordinate(1.0, 1.0), Coordinate(11.0, 11.0),  Coordinate(31.0, 31.0), Coordinate::getNull() };
-    TestUtils::createWay(map, Status::Unknown1, c2, 5, "w2");
+    TestUtils::createWay(map, c2, "w2", Status::Unknown1, 5);
 
     return map;
   }
@@ -326,13 +328,13 @@ public:
     Coordinate c1[] = {
       Coordinate(0, 0.7),    Coordinate(0.8, 2.5),  Coordinate(1.8, 3.2), Coordinate(5.9, 4.4),
       Coordinate(11.5, 3.5), Coordinate(10, 0.8),   Coordinate(6.2, 0.5), Coordinate::getNull() };
-    TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
 
     Coordinate c2[] = {
       Coordinate(0.5, 0),    Coordinate(1.7, 2.3),  Coordinate(4.9, 3.3), Coordinate(9.6, 3.4),
       Coordinate(10.4, 3.1), Coordinate(10.5, 2.4), Coordinate(9.5, 1.3), Coordinate(6, 1.1),
       Coordinate::getNull() };
-    TestUtils::createWay(map, Status::Unknown1, c2, 5, "w2");
+    TestUtils::createWay(map, c2, "w2", Status::Unknown1, 5);
 
     return map;
   }
@@ -361,7 +363,7 @@ public:
       Coordinate(8.5, 9.8), Coordinate(9.5, 10),    Coordinate(10.5, 11.3), Coordinate(11.5, 12.7),
       Coordinate(12.5, 14),
       Coordinate::getNull() };
-    TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
 
     Coordinate c2[] = {
       Coordinate(4.6, 1.6), Coordinate(4.8, 2.6),   Coordinate(3.4, 1.8),   Coordinate(3.4, 2.8),
@@ -370,7 +372,7 @@ public:
       Coordinate(12, 11.9), Coordinate(13, 13.2),   Coordinate(13.2, 12.6), Coordinate(13.8, 12.6),
       Coordinate(14, 11.7),
       Coordinate::getNull() };
-    TestUtils::createWay(map, Status::Unknown1, c2, 5, "w2");
+    TestUtils::createWay(map, c2, "w2", Status::Unknown1, 5);
 
     return map;
   }
@@ -399,12 +401,12 @@ public:
     Coordinate c1[] = {
       Coordinate(0.0, 0.0), Coordinate(10.0, 0.0), Coordinate(20.0, 0.0), Coordinate(30.0, 0.0), Coordinate(40.0, 0.0),
       Coordinate::getNull() };
-    TestUtils::createWay(map, Status::Unknown1, c1, 3, "w1");
+    TestUtils::createWay(map, c1, "w1", Status::Unknown1, 3);
 
     Coordinate c2[] = {
       Coordinate(0.0, 3.0), Coordinate(10.0, 3.0), Coordinate(15.0, 40.0), Coordinate(20.0, 3.0), Coordinate(30.0, 3.0), Coordinate(40.0, 3.0),
       Coordinate::getNull() };
-    TestUtils::createWay(map, Status::Unknown1, c2, 3, "w2");
+    TestUtils::createWay(map, c2, "w2", Status::Unknown1, 3);
 
     return map;
   }

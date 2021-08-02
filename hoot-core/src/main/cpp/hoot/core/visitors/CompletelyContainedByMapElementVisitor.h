@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef COMPLETELYCONTAINEDBYMAPELEMENTVISITOR_H
 #define COMPLETELYCONTAINEDBYMAPELEMENTVISITOR_H
@@ -55,32 +55,28 @@ public:
   static QString className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
 
   CompletelyContainedByMapElementVisitor();
-  virtual ~CompletelyContainedByMapElementVisitor() = default;
+  ~CompletelyContainedByMapElementVisitor() = default;
 
   /**
    * Returns true if all the children of this element are available within the specified map.
    */
   static bool isComplete(const OsmMap* map, ElementId eid);
-
   bool isComplete() const { return _complete; }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Determines if a element is completely contained within a map"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
-
-protected:
+private:
 
   bool _complete;
 
   bool _isComplete(const std::shared_ptr<const Element>& e);
 
   void _visit(const std::shared_ptr<const Way>& w);
-
   void _visit(const std::shared_ptr<const Relation>& r);
 };
 

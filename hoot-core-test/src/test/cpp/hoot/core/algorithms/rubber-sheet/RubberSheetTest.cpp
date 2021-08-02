@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -77,7 +77,7 @@ public:
   void runSimpleTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcGisRoads.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -107,7 +107,7 @@ public:
     {
       OsmXmlReader reader;
       OsmMap::resetCounters();
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/DcGisRoads.osm", map);
       reader.setDefaultStatus(Status::Unknown2);
@@ -136,7 +136,7 @@ public:
     {
       OsmXmlReader reader;
       OsmMap::resetCounters();
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/DcGisRoads.osm", map);
       reader.setDefaultStatus(Status::Unknown2);
@@ -211,7 +211,7 @@ public:
   void runCalculateTiePointDistancesNotEnoughTiePointsTest2()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcGisRoads.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -243,7 +243,7 @@ public:
   void runFilterTest1()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/cmd/glacial/RelationMergeTest/input1.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -252,7 +252,7 @@ public:
     RubberSheet uut;
     uut.setReference(true);
     uut.setDebug(true);
-    uut.setCriteria(QStringList("hoot::LinearWaterwayCriterion"), map);
+    uut.setCriteria(QStringList("hoot::RiverCriterion"), map);
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -266,7 +266,7 @@ public:
   void runFilterTest2()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/cmd/glacial/RelationMergeTest/input1.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -276,7 +276,7 @@ public:
     uut.setReference(true);
     uut.setDebug(true);
     QStringList criteria;
-    criteria.append("hoot::LinearWaterwayCriterion");
+    criteria.append("hoot::RiverCriterion");
     criteria.append("hoot::HighwayCriterion");
     uut.setCriteria(criteria, map);
     uut.apply(map);

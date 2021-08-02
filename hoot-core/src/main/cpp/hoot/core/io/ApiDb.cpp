@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ApiDb.h"
 
@@ -88,15 +88,15 @@ ApiDb::~ApiDb()
 
 void ApiDb::_resetQueries()
 {
-  if (_selectUserByEmail != 0)
+  if (_selectUserByEmail != nullptr)
   {
     _selectUserByEmail.reset();
   }
-  if (_insertUser != 0)
+  if (_insertUser != nullptr)
   {
     _insertUser.reset();
   }
-  if (_selectNodeIdsForWay != 0)
+  if (_selectNodeIdsForWay != nullptr)
   {
     _selectNodeIdsForWay.reset();
   }
@@ -120,7 +120,8 @@ void ApiDb::_resetQueries()
   {
     itr.value().reset();
   }
-  for (QHash<QString, std::shared_ptr<QSqlQuery>>::iterator itr = _numEstimatedElementsQueries.begin();
+  for (QHash<QString, std::shared_ptr<QSqlQuery>>::iterator itr =
+         _numEstimatedElementsQueries.begin();
        itr != _numEstimatedElementsQueries.end(); ++itr)
   {
     itr.value().reset();
@@ -183,7 +184,7 @@ void ApiDb::open(const QUrl& url)
     }
   }
 
-  if (_db.tables().size() == 0)
+  if (_db.tables().empty())
   {
     throw HootException("Attempting to open _db " + url.toString(QUrl::RemoveUserInfo) +
                         " but found zero tables. Does the DB exist? Has it been populated?");
@@ -229,9 +230,9 @@ void ApiDb::rollback()
 long ApiDb::getUserIdByName(const QString& userName)
 {
   LOG_VART(userName);
-  if (_getUserIdByName == 0)
+  if (_getUserIdByName == nullptr)
   {
-    _getUserIdByName.reset(new QSqlQuery(_db));
+    _getUserIdByName = std::make_shared<QSqlQuery>(_db);
     _getUserIdByName->prepare(
       "SELECT id FROM " + ApiDb::getUsersTableName() + " WHERE display_name = :displayName");
   }
@@ -268,9 +269,9 @@ long ApiDb::getUserIdByName(const QString& userName)
 QString ApiDb::getUserNameById(const long userId)
 {
   LOG_VART(userId);
-  if (_getUserNameById == 0)
+  if (_getUserNameById == nullptr)
   {
-    _getUserNameById.reset(new QSqlQuery(_db));
+    _getUserNameById = std::make_shared<QSqlQuery>(_db);
     _getUserNameById->prepare(
       "SELECT display_name FROM " + ApiDb::getUsersTableName() + " WHERE id = :userId");
   }
@@ -308,9 +309,9 @@ bool ApiDb::userExists(const QString& userName)
 bool ApiDb::userExists(const long id)
 {
   LOG_VART(id);
-  if (_userExists == 0)
+  if (_userExists == nullptr)
   {
-    _userExists.reset(new QSqlQuery(_db));
+    _userExists = std::make_shared<QSqlQuery>(_db);
     _userExists->prepare("SELECT id FROM " + ApiDb::getUsersTableName() + " WHERE id = :id");
   }
   _userExists->bindValue(":id", (qlonglong)id);
@@ -344,9 +345,9 @@ bool ApiDb::userExists(const long id)
 
 long ApiDb::getUserId(const QString& email, bool throwWhenMissing)
 {
-  if (_selectUserByEmail == 0)
+  if (_selectUserByEmail == nullptr)
   {
-    _selectUserByEmail.reset(new QSqlQuery(_db));
+    _selectUserByEmail = std::make_shared<QSqlQuery>(_db);
     _selectUserByEmail->prepare(
       "SELECT email, id, display_name FROM " + ApiDb::getUsersTableName() +
       " WHERE email LIKE :email");
@@ -386,9 +387,9 @@ long ApiDb::insertUser(const QString& email, const QString& displayName)
 
   long id = -1;
 
-  if (_insertUser == 0)
+  if (_insertUser == nullptr)
   {
-    _insertUser.reset(new QSqlQuery(_db));
+    _insertUser = std::make_shared<QSqlQuery>(_db);
     _insertUser->prepare("INSERT INTO " + ApiDb::getUsersTableName() + " (email, display_name) "
                          "VALUES (:email, :display_name) "
                          "RETURNING id");
@@ -445,7 +446,7 @@ vector<long> ApiDb::selectNodeIdsForWay(long wayId, const QString& sql)
 
   if (!_selectNodeIdsForWay)
   {
-    _selectNodeIdsForWay.reset(new QSqlQuery(_db));
+    _selectNodeIdsForWay = std::make_shared<QSqlQuery>(_db);
     _selectNodeIdsForWay->setForwardOnly(true);
     _selectNodeIdsForWay->prepare(sql);
   }
@@ -471,27 +472,6 @@ vector<long> ApiDb::selectNodeIdsForWay(long wayId, const QString& sql)
   }
 
   return result;
-}
-
-std::shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString& sql)
-{
-  if (!_selectNodeIdsForWay)
-  {
-    _selectNodeIdsForWay.reset(new QSqlQuery(_db));
-    _selectNodeIdsForWay->setForwardOnly(true);
-    _selectNodeIdsForWay->prepare(sql);
-  }
-
-  _selectNodeIdsForWay->bindValue(":wayId", (qlonglong)wayId);
-  if (_selectNodeIdsForWay->exec() == false)
-  {
-    throw HootException("Error selecting node ID's for way with ID: " + QString::number(wayId) +
-      " Error: " + _selectNodeIdsForWay->lastError().text());
-  }
-  LOG_VART(_selectNodeIdsForWay->numRowsAffected());
-  LOG_VART(_selectNodeIdsForWay->executedQuery());
-
-  return _selectNodeIdsForWay;
 }
 
 Tags ApiDb::unescapeTags(const QVariant &v)
@@ -576,9 +556,8 @@ unsigned int ApiDb::tileForPoint(double lat, double lon)
   int latInt = round((lat + 90.0) * 65535.0 / 180.0);
 
   unsigned int tile = 0;
-  int          i;
 
-  for (i = 15; i >= 0; i--)
+  for (int i = 15; i >= 0; i--)
   {
     tile = (tile << 1) | ((lonInt >> i) & 1);
     tile = (tile << 1) | ((latInt >> i) & 1);
@@ -603,7 +582,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
   // prepared once.
   if (!_selectNodesByBounds)
   {
-    _selectNodesByBounds.reset(new QSqlQuery(_db));
+    _selectNodesByBounds = std::make_shared<QSqlQuery>(_db);
     _selectNodesByBounds->setForwardOnly(true);
   }
   QString sql = "SELECT * FROM " + tableTypeToTableName(TableType::Node) + " WHERE";
@@ -642,14 +621,14 @@ std::shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
 
 std::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds)
 {
-  if (nodeIds.size() == 0)
+  if (nodeIds.empty())
   {
     throw HootException("Empty node ID list.");
   }
 
   if (!_selectWayIdsByWayNodeIds)
   {
-    _selectWayIdsByWayNodeIds.reset(new QSqlQuery(_db));
+    _selectWayIdsByWayNodeIds = std::make_shared<QSqlQuery>(_db);
     _selectWayIdsByWayNodeIds->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
@@ -670,7 +649,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& 
 
 QSet<QString> ApiDb::selectConnectedWayIds(const QSet<QString>& wayIds)
 {
-  if (wayIds.size() == 0)
+  if (wayIds.empty())
   {
     throw IllegalArgumentException("Empty way ID list.");
   }
@@ -706,14 +685,14 @@ QSet<QString> ApiDb::selectConnectedWayIds(const QSet<QString>& wayIds)
 std::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QString>& elementIds,
                                                                 const TableType& tableType)
 {
-  if (elementIds.size() == 0)
+  if (elementIds.empty())
   {
     throw HootException("Empty element ID list.");
   }
 
   if (!_selectElementsByElementIdList)
   {
-    _selectElementsByElementIdList.reset(new QSqlQuery(_db));
+    _selectElementsByElementIdList = std::make_shared<QSqlQuery>(_db);
     _selectElementsByElementIdList->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
@@ -736,14 +715,14 @@ std::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QStri
 
 std::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayIds)
 {
-  if (wayIds.size() == 0)
+  if (wayIds.empty())
   {
     throw HootException("Empty way ID list.");
   }
 
   if (!_selectWayNodeIdsByWayIds)
   {
-    _selectWayNodeIdsByWayIds.reset(new QSqlQuery(_db));
+    _selectWayNodeIdsByWayIds = std::make_shared<QSqlQuery>(_db);
     _selectWayNodeIdsByWayIds->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
@@ -766,14 +745,14 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& 
 std::shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
                                                                const ElementType& memberElementType)
 {
-  if (memberIds.size() == 0)
+  if (memberIds.empty())
   {
     throw HootException("Empty member ID list.");
   }
 
   if (!_selectRelationIdsByMemberIds)
   {
-    _selectRelationIdsByMemberIds.reset(new QSqlQuery(_db));
+    _selectRelationIdsByMemberIds = std::make_shared<QSqlQuery>(_db);
     _selectRelationIdsByMemberIds->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
@@ -855,7 +834,7 @@ std::shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString& t
   LOG_VART(timeStr);
   if (!_selectChangesetsCreatedAfterTime)
   {
-    _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
+    _selectChangesetsCreatedAfterTime = std::make_shared<QSqlQuery>(_db);
     _selectChangesetsCreatedAfterTime->prepare(
       QString("SELECT min_lon, max_lon, min_lat, max_lat FROM %1 ")
         .arg(ApiDb::getChangesetsTableName()) +
@@ -924,19 +903,6 @@ void ApiDb::execSqlFile(const QString& dbUrl, const QString& sqlFile)
   }
 }
 
-QString ApiDb::getPqString(const QString& url)
-{
-  const QMap<QString, QString> dbUrlParts = getDbUrlParts(url);
-  QString hostAddr = dbUrlParts["host"];
-  if (hostAddr == "localhost")
-  {
-    hostAddr = "127.0.0.1";
-  }
-  return
-    "dbname=" + dbUrlParts["database"] + " user=" + dbUrlParts["user"] + " password=" +
-    dbUrlParts["password"] + " hostaddr=" + hostAddr + " port=" + dbUrlParts["port"];
-}
-
 Settings ApiDb::readDbConfig()
 {
   Settings result;
@@ -979,7 +945,7 @@ long ApiDb::maxId(const ElementType& elementType)
   const QString elementTableName = elementTypeToElementTableName(elementType);
   if (!_maxIdQueries[elementTableName])
   {
-    _maxIdQueries[elementTableName].reset(new QSqlQuery(_db));
+    _maxIdQueries[elementTableName] = std::make_shared<QSqlQuery>(_db);
     _maxIdQueries[elementTableName]->prepare(
       "SELECT id FROM " + elementTableName + " ORDER BY id DESC LIMIT 1");
   }
@@ -992,7 +958,7 @@ long ApiDb::maxId(const ElementType& elementType)
     throw HootException(_maxIdQueries[elementTableName]->lastError().text());
   }
 
-  long result = -1;
+  long result = std::numeric_limits<long>::min();
   if (_maxIdQueries[elementTableName]->next())
   {
     bool ok;
@@ -1011,7 +977,7 @@ long ApiDb::numElements(const ElementType& elementType)
   const QString elementTableName = elementTypeToElementTableName(elementType);
   if (!_numElementsQueries[elementTableName])
   {
-    _numElementsQueries[elementTableName].reset(new QSqlQuery(_db));
+    _numElementsQueries[elementTableName] = std::make_shared<QSqlQuery>(_db);
     _numElementsQueries[elementTableName]->prepare(
       "SELECT COUNT(*) FROM " + elementTableName + " WHERE visible = true");
   }
@@ -1043,7 +1009,7 @@ long ApiDb::numEstimatedElements(const ElementType& elementType)
   const QString elementTableName = elementTypeToElementTableName(elementType);
   if (!_numEstimatedElementsQueries[elementTableName])
   {
-    _numEstimatedElementsQueries[elementTableName].reset(new QSqlQuery(_db));
+    _numEstimatedElementsQueries[elementTableName] = std::make_shared<QSqlQuery>(_db);
     _numEstimatedElementsQueries[elementTableName]->prepare(
       "SELECT reltuples AS approximate_row_count FROM pg_class WHERE relname = '" +
       elementTableName + "'");
@@ -1076,7 +1042,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectAllElements(const ElementType& elementTy
   const QString elementTableName = elementTypeToElementTableName(elementType);
   if (!_selectAllQueries[elementTableName])
   {
-    _selectAllQueries[elementTableName].reset(new QSqlQuery(_db));
+    _selectAllQueries[elementTableName] = std::make_shared<QSqlQuery>(_db);
     _selectAllQueries[elementTableName]->setForwardOnly(true);
     const QString sql = "SELECT * FROM " + elementTableName + " WHERE visible = true ORDER BY id";
     LOG_VARD(sql);
@@ -1103,7 +1069,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectElements(const ElementType& elementType,
   const QString elementTableName = elementTypeToElementTableName(elementType);
   if (!_selectQueries[elementTableName])
   {
-    _selectQueries[elementTableName].reset(new QSqlQuery(_db));
+    _selectQueries[elementTableName] = std::make_shared<QSqlQuery>(_db);
     _selectQueries[elementTableName]->setForwardOnly(true);
     //This query uses the ORDER BY with LIMIT to ensure that we consistently see unique pages
     //of data returned. However, the data coming back won't necessarily be strictly sorted by

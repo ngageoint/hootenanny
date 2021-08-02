@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef POIPOLYGONTYPESCOREEXTRACTOR_H
 #define POIPOLYGONTYPESCOREEXTRACTOR_H
@@ -41,7 +41,8 @@ namespace hoot
 {
 
 /**
- * Scores element type similarity
+ * @brief The PoiPolygonTypeScoreExtractor class scores element type similarity for POI to Polygon
+ * conflation.
  */
 class PoiPolygonTypeScoreExtractor : public FeatureExtractorBase, public Configurable
 {
@@ -50,11 +51,11 @@ public:
   static QString className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
 
   PoiPolygonTypeScoreExtractor(PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr());
-  virtual ~PoiPolygonTypeScoreExtractor() = default;
+  ~PoiPolygonTypeScoreExtractor() = default;
 
-  virtual QString getClassName() const { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature types.
@@ -63,21 +64,21 @@ public:
    * @param poi a POI element
    * @param poly a polygon element
    */
-  virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
-                         const ConstElementPtr& poly) const;
+  double extract(const OsmMap& map, const ConstElementPtr& poi,
+                 const ConstElementPtr& poly) const override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  double getTypeScoreThreshold() { return _typeScoreThreshold; }
+  double getTypeScoreThreshold() const { return _typeScoreThreshold; }
   void setTypeScoreThreshold(double threshold) { _typeScoreThreshold = threshold; }
 
-  double getFeatureDistance() { return _featureDistance; }
+  double getFeatureDistance() const { return _featureDistance; }
   void setFeatureDistance(double distance) { _featureDistance = distance; }
 
-  bool getPrintMatchDistanceTruth() { return _printMatchDistanceTruth; }
-  void setPrintMatchDistanceTruth(bool print) { _printMatchDistanceTruth = print; }
+  bool getCalculateMatchDistanceTruth() const { return _calculateMatchDistanceTruth; }
+  void setCalculateMatchDistanceTruth(bool calculate) { _calculateMatchDistanceTruth = calculate; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Scores element type similarity for POI/Polygon conflation"; }
 
   QStringList getFailedMatchRequirements() const { return _failedMatchRequirements; }
@@ -87,7 +88,7 @@ private:
 
   double _typeScoreThreshold;
   double _featureDistance;
-  bool _printMatchDistanceTruth;
+  bool _calculateMatchDistanceTruth;
   static QMap<QString, QSet<QString>> _categoriesToSchemaTagValues;
 
   //when enabled, will scan through all tags and, for any tag keys recognized in the schema, will

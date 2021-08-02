@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PrintJs.h"
 
@@ -40,12 +40,13 @@ namespace hoot
 
 HOOT_JS_REGISTER(PrintJs)
 
-void PrintJs::Init(Handle<Object> exports)
+void PrintJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  exports->Set(String::NewFromUtf8(current, "print"),
-               FunctionTemplate::New(current, jsPrint)->GetFunction());
+  Local<Context> context = current->GetCurrentContext();
+  exports->Set(context, toV8("print"),
+               FunctionTemplate::New(current, jsPrint)->GetFunction(context).ToLocalChecked());
 }
 
 void PrintJs::jsPrint(const FunctionCallbackInfo<Value>& args)

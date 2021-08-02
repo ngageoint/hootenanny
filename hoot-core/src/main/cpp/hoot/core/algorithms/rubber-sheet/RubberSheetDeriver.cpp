@@ -19,23 +19,24 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RubberSheetDeriver.h"
 
 // Hoot
+#include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
-#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/util/Settings.h>
 
 // Qt
@@ -44,15 +45,15 @@
 namespace hoot
 {
 
-RubberSheetDeriver::RubberSheetDeriver()
+void RubberSheetDeriver::derive(
+  const QString& input1, const QString& input2, const QString& transform2To1,
+  const QString& transform1To2, const bool ref) const
 {
-}
+  LOG_STATUS(
+    "Deriving alignment transform for inputs ..." << FileUtils::toLogFormat(input1, 25) <<
+    " and " << FileUtils::toLogFormat(input2, 25) << "...");
 
-void RubberSheetDeriver::derive(const QString& input1, const QString& input2,
-                                const QString& transform2To1, const QString& transform1To2,
-                                const bool ref)
-{
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   IoUtils::loadMap(map, input1, false, Status::Unknown1);
   IoUtils::loadMap(map, input2, false, Status::Unknown2);
 

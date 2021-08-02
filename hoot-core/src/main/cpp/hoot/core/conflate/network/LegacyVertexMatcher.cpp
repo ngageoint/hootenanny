@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "LegacyVertexMatcher.h"
 
 // hoot
-#include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/conflate/network/SearchRadiusProvider.h>
+#include <hoot/core/util/Log.h>
 
 // tgs
 #include <tgs/RStarTree/IntersectionIterator.h>
@@ -93,7 +93,7 @@ void LegacyVertexMatcher::_balanceVertexScores()
   }
 }
 
-IntersectionIterator LegacyVertexMatcher::_createIterator(Envelope env)
+IntersectionIterator LegacyVertexMatcher::_createIterator(const Envelope& env)  const
 {
   vector<double> min(2), max(2);
   min[0] = env.getMinX();
@@ -106,12 +106,11 @@ IntersectionIterator LegacyVertexMatcher::_createIterator(Envelope env)
 }
 
 void LegacyVertexMatcher::_createVertexIndex(const OsmNetwork::VertexMap& vm,
-  SearchRadiusProvider& srp)
+  const SearchRadiusProvider& srp)
 {
   // No tuning was done, I just copied these settings from OsmMapIndex.
   // 10 children = 368 bytes
-  std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-  _vertex2Index.reset(new HilbertRTree(mps, 2));
+  _vertex2Index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
   std::vector<Box> boxes;
   std::vector<int> fids;
@@ -136,7 +135,7 @@ void LegacyVertexMatcher::_createVertexIndex(const OsmNetwork::VertexMap& vm,
   _vertex2Index->bulkInsert(boxes, fids);
 }
 
-double LegacyVertexMatcher::_denominatorForTie(TiePointScorePtr tie)
+double LegacyVertexMatcher::_denominatorForTie(TiePointScorePtr tie) const
 {
   QSet<TiePointScorePtr> ties;
 
@@ -171,15 +170,15 @@ NodeMatcherPtr LegacyVertexMatcher::_getNodeMatcher()
 {
   if (!_nodeMatcher)
   {
-    _nodeMatcher.reset(new NodeMatcher());
+    _nodeMatcher = std::make_shared<NodeMatcher>();
     _nodeMatcher->setMap(_map);
   }
 
   return _nodeMatcher;
 }
 
-void LegacyVertexMatcher::identifyVertexMatches(ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2,
-  SearchRadiusProvider& srp)
+void LegacyVertexMatcher::identifyVertexMatches(
+  ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2, const SearchRadiusProvider& srp)
 {
   LOG_DEBUG("Identifying vertex matches...");
 
@@ -202,7 +201,7 @@ void LegacyVertexMatcher::identifyVertexMatches(ConstOsmNetworkPtr n1, ConstOsmN
       double score = _scoreSinglePair(v1, v2);
       if (score > 0)
       {
-        TiePointScorePtr tps(new TiePointScore(v1, v2, score));
+        TiePointScorePtr tps = std::make_shared<TiePointScore>(v1, v2, score);
         // calculate the vertex score and store it
         _scores1[v1].append(tps);
         _scores2[v2].append(tps);
@@ -210,12 +209,12 @@ void LegacyVertexMatcher::identifyVertexMatches(ConstOsmNetworkPtr n1, ConstOsmN
     }
   }
 
-  // balance the vertex scores by considering neighboring scores.
+  // Balance the vertex scores by considering neighboring scores.
   _balanceVertexScores();
 }
 
 bool LegacyVertexMatcher::isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
-  SearchRadiusProvider& srp)
+  const SearchRadiusProvider& srp)
 {
   bool result = false;
   double score = scoreMatch(v1, v2);
@@ -224,21 +223,16 @@ bool LegacyVertexMatcher::isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetwor
   {
     result = true;
   }
-  // if this isn't a tie point and the intersections aren't part of any confident tie points
+  // If this isn't a tie point, the intersections aren't part of any confident tie points, and
   else if (score == 0.0 &&
-    _hasConfidentTie.contains(v1) == false &&
-    _hasConfidentTie.contains(v2) == false)
+           _hasConfidentTie.contains(v1) == false && _hasConfidentTie.contains(v2) == false &&
+           // these aren't technically intersections, then they might be tie points.
+           (_getNodeMatcher()->getDegree(v1->getElementId()) <= 2 ||
+            _getNodeMatcher()->getDegree(v2->getElementId()) <= 2))
   {
-    // if these aren't technically intersections they might be tie points.
-    if (_getNodeMatcher()->getDegree(v1->getElementId()) <= 2 ||
-        _getNodeMatcher()->getDegree(v2->getElementId()) <= 2)
-    {
-      Meters sr = srp.getSearchRadius(v1, v2);
-
-      double d = EuclideanDistanceExtractor().distance(*_map, v1->getElement(), v2->getElement());
-
-      result = d <= sr;
-    }
+    Meters sr = srp.getSearchRadius(v1, v2);
+    double d = EuclideanDistanceExtractor().distance(*_map, v1->getElement(), v2->getElement());
+    result = d <= sr;
   }
 
   return result;

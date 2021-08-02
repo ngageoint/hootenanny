@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSMCHANGESETTESTPROVIDER_H
@@ -52,8 +52,7 @@ class TestOsmChangesetProvider : public ChangesetProvider
 public:
 
   /**
-   * Constructor
-   *
+   * @brief Constructor
    * @param useCoordScale SQL changeset provider uses the ApiDb::COORDINATE_SCALE
    *  while the OSM changeset does not
    */
@@ -67,16 +66,16 @@ public:
 
   ~TestOsmChangesetProvider() { }
 
-  std::shared_ptr<OGRSpatialReference> getProjection() const
+  std::shared_ptr<OGRSpatialReference> getProjection() const override
   {
     return std::shared_ptr<OGRSpatialReference>();
   }
 
-  void close() { }
+  void close() override { }
 
-  bool hasMoreChanges() { return _ctr < _max; }
+  bool hasMoreChanges() override { return _ctr < _max; }
 
-  Change readNextChange()
+  Change readNextChange() override
   {
     Change change;
     Change::ChangeType changeType = _getRandomType();
@@ -112,7 +111,9 @@ public:
           new Node(
             Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
             version));
-        WayPtr way(new Way(Status::Unknown1, ++_way, 15.0, ElementData::CHANGESET_EMPTY, version));
+        WayPtr way =
+          std::make_shared<Way>(
+            Status::Unknown1, ++_way, 15.0, ElementData::CHANGESET_EMPTY, version);
         way->addNode(node1->getId());
         way->addNode(node2->getId());
         way->setTag("key1", "value1");
@@ -129,7 +130,9 @@ public:
           new Node(
             Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
             version));
-        WayPtr way(new Way(Status::Unknown1, ++_way, 15.0, ElementData::CHANGESET_EMPTY, version));
+        WayPtr way =
+          std::make_shared<Way>(
+            Status::Unknown1, ++_way, 15.0, ElementData::CHANGESET_EMPTY, version);
         way->addNode(node1->getId());
         way->addNode(node2->getId());
         way->setTag("key1", "value1");

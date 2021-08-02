@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "Hoot.h"
 
@@ -74,12 +74,12 @@ Hoot& Hoot::getInstance()
   return instance;
 }
 
-void Hoot::_init()
+void Hoot::_init() const
 {
-  //lower this log level temporarily *only* for debugging init issues; some hoot services
-  //functionality that parses log output is sensitive to extra logged statements and will fail
-  //when this is lowered
-  Log::getInstance().setLevel(Log::Info);
+  // Lower this log level temporarily *only* for debugging init issues. Some hoot services
+  // functionality that parses log output is sensitive to extra logged statements and will fail
+  // when this is lowered.
+  Log::getInstance().setLevel(Log::Status);
 
   LOG_DEBUG("Hoot instance init...");
 
@@ -125,7 +125,7 @@ void Hoot::_init()
   loadLibrary("HootJosm");
 # endif
 
-  Log::getInstance().setLevel(Log::Info);
+  Log::getInstance().setLevel(Log::Status);
   //  Registering these metatypes here removes warning messages
   //  in threads that use QNetworkAccessManager whose initialization
   //  routine isn't thread safe
@@ -134,7 +134,7 @@ void Hoot::_init()
   qRegisterMetaType<QSharedPointer<QNetworkSession>>();
 }
 
-void Hoot::loadLibrary(const QString& name)
+void Hoot::loadLibrary(const QString& name) const
 {
   // this library sticks around in ram even after the object is destroyed.
   QLibrary lib(name);
@@ -153,7 +153,7 @@ void Hoot::loadLibrary(const QString& name)
   }
 }
 
-void Hoot::reinit()
+void Hoot::reinit() const
 {
   LOG_TRACE("Hoot instance reinit...");
 

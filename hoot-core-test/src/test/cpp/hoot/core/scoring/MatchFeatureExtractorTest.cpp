@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -66,7 +66,7 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(s1, map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -83,7 +83,9 @@ public:
   {
     // This test is primarily useful as an input to Weka for training models.
     MatchFeatureExtractor uut;
-    uut.addMatchCreator(std::shared_ptr<MatchCreator>(new BuildingMatchCreator()));
+    std::shared_ptr<BuildingMatchCreator> matchCreator = std::make_shared<BuildingMatchCreator>();
+    matchCreator->getMatchThreshold(); // This inits the threshold on the match creator.
+    uut.addMatchCreator(matchCreator);
     uut.processMap(load(_inputPath + "BuildingsA.osm", _inputPath + "BuildingsB.osm"));
 
     LOG_TRACE(uut.getResults().toStdString());
@@ -98,7 +100,6 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "Buildings.arff",
                      _outputPath + "Buildings.arff");
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MatchFeatureExtractorTest, "quick");

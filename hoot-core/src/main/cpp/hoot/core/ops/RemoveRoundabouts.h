@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef REMOVEROUNDABOUTS_H
@@ -69,7 +69,7 @@ public:
    * @brief RemoveRoundabouts - Default constructor
    */
   RemoveRoundabouts() = default;
-  virtual ~RemoveRoundabouts() = default;
+  ~RemoveRoundabouts() = default;
 
   /**
    * @brief apply - Apply the RemoveRoundabouts op
@@ -82,24 +82,21 @@ public:
    *                            with simple intersections
    * @param removed - Vector of the removed roundabouts
    */
-  void removeRoundabouts(std::vector<RoundaboutPtr> &removed);
+  void removeRoundabouts(std::vector<RoundaboutPtr>& removed);
 
-  virtual QString getDescription() const override { return "Removes roundabouts from roads"; }
-
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing road roundabouts..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " road roundabouts"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Removes roundabouts from roads"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

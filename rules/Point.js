@@ -18,11 +18,12 @@ exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point"));
 exports.typeThreshold = parseFloat(hoot.get("generic.point.type.threshold"));
 exports.baseFeatureType = "Point";
+exports.writeDebugTags = hoot.get("writer.include.debug.tags");
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "point";
 
-// This is needed for disabling superfluous conflate ops. In the future, it may also
-// be used to replace exports.isMatchCandidate (see #3047).
+// This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
+// culling match candidates.
 exports.matchCandidateCriterion = "hoot::PointCriterion";
 
 function distance(e1, e2) 
@@ -38,11 +39,7 @@ function distance(e1, e2)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  //hoot.trace("e: " + e.getId());
-  //hoot.trace("isPoint(map, e): " + isPoint(map, e));
-  //hoot.trace("isSpecificallyConflatable(map, e, exports.geometryType): " + isSpecificallyConflatable(map, e, exports.geometryType));
-
-  return isPoint(map, e) && !isSpecificallyConflatable(map, e, exports.geometryType);
+  return hoot.OsmSchema.isPoint(map, e) && !hoot.OsmSchema.isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
 /**
@@ -90,7 +87,7 @@ exports.matchScore = function(map, e1, e2)
 
   // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
   // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
-  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.typeThreshold);
+  var typeScorePassesThreshold = !hoot.OsmSchema.explicitTypeMismatch(e1, e2, exports.typeThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
   if (!typeScorePassesThreshold)
   {
@@ -130,7 +127,7 @@ exports.mergePair = function(map, e1, e2)
   // replace instances of e2 with e1 and merge tags
   mergeElements(map, e1, e2);
   e1.setStatusString("conflated");
-  if (exports.writeMatchedBy == "true")
+  if (exports.writeDebugTags == "true" && exports.writeMatchedBy == "true")
   {
     // Technically, we should get this key from MetadataTags, but that's not integrated with hoot yet.
     e1.setTag("hoot:matchedBy", exports.baseFeatureType);

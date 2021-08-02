@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "DataFrame.h"
@@ -42,11 +42,12 @@
 #include <limits>
 #include <sstream>
 #include <stdexcept>
-using namespace std;
 
 // Tgs
 #include <tgs/TgsException.h>
 #include <tgs/Statistics/Random.h>
+
+using namespace std;
 
 namespace Tgs
 {
@@ -77,13 +78,8 @@ namespace Tgs
     }
   }
 
-  DataFrame::~DataFrame()
-  {
-
-  }
-
-  void DataFrame::addDataVector(std::string label, const std::vector<double>& dataItem,
-    double eventWeight /*= 1.*/)
+  void DataFrame::addDataVector(
+    const std::string& label, const std::vector<double>& dataItem, double eventWeight /*= 1.*/)
   {
     try
     {
@@ -102,7 +98,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::addDataVector(std::string label, const double* dataItem,
+  void DataFrame::addDataVector(const std::string& label, const double* dataItem,
     double eventWeight /*= 1.*/)
   {
     try
@@ -199,7 +195,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::deactivateFactor(std::string factor)
+  void DataFrame::deactivateFactor(const std::string& factor)
   {
     try
     {
@@ -376,7 +372,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::exportData(std::ostream & fileStream) const
+  void DataFrame::exportData(std::ostream& fileStream) const
   {
     try
     {
@@ -393,8 +389,8 @@ namespace Tgs
     }
   }
 
-  void DataFrame::getClassPopulations(const std::vector<unsigned int> & indices, 
-    HashMap<std::string, int>& populations)
+  void DataFrame::getClassPopulations(
+    const std::vector<unsigned int>& indices, HashMap<std::string, int>& populations) const
   {
     try
     {
@@ -459,7 +455,7 @@ namespace Tgs
 
       return _data[vIdx][fIdx];
     }
-    catch(const std::out_of_range& oor)
+    catch(const std::out_of_range& /*oor*/)
     {
       std::stringstream ss;
       ss << "Out of range accessing data vector " << vIdx << ", element " << fIdx;
@@ -477,7 +473,7 @@ namespace Tgs
     {
       return _data[vIdx];
     }
-    catch(const std::out_of_range& oor)
+    catch(const std::out_of_range& /*oor*/)
     {
       std::stringstream ss;
       ss << "Out of range accessing data vector index: "  << vIdx;
@@ -515,7 +511,7 @@ namespace Tgs
     }
   }
 
-  const vector<string> DataFrame::getFactorLabels() const
+  vector<string> DataFrame::getFactorLabels() const
   {
     try
     {
@@ -611,7 +607,7 @@ namespace Tgs
     {
       return _trainingLabels[dIdx];
     }
-    catch(const std::out_of_range& oor)
+    catch(const std::out_of_range& /*oor*/)
     {
       std::stringstream ss;
       ss << "Out of range accessing training label " << dIdx;
@@ -640,7 +636,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::import(QDomElement & e)
+  void DataFrame::import(const QDomElement & e)
   {
     try
     {
@@ -664,7 +660,7 @@ namespace Tgs
 
             for (unsigned int fIdx = 0; fIdx < (unsigned int)factorList.size(); fIdx++)
             {
-              _factorLabels.push_back(factorList[fIdx].toLatin1().constData());
+              _factorLabels.emplace_back(factorList[fIdx].toLatin1().constData());
             }
           }
           else if (tag == "DATAVECTORS")
@@ -693,13 +689,11 @@ namespace Tgs
     }
   }
 
-  bool DataFrame::isDataSetPure(std::vector<unsigned int> & indices)
+  bool DataFrame::isDataSetPure(const std::vector<unsigned int>& indices) const
   {
     try
     {
-      //std::cout << "isDataPure ";
-      //std::cout << indices.size() << std::endl;
-      if (indices.size() > 0)
+      if (!indices.empty())
       {
         HashMap<std::string, int> populations;
 
@@ -734,7 +728,7 @@ namespace Tgs
       {
         return true;
       }
-      if (_factorType.size() == 0)
+      if (_factorType.empty())
       {
         return false;
       }
@@ -840,8 +834,9 @@ namespace Tgs
     }
   }
 
-  void DataFrame::makeBalancedRoundRobinBootstrapAndOobSets(std::string className1, 
-    std::string className2, std::vector<unsigned int> & bootstrap, std::vector<unsigned int> & oob)
+  void DataFrame::makeBalancedRoundRobinBootstrapAndOobSets(const std::string& className1,
+    const std::string& className2, std::vector<unsigned int>& bootstrap,
+    std::vector<unsigned int>& oob)
   {
     try
     {
@@ -931,7 +926,7 @@ namespace Tgs
 
 
   void DataFrame::makeBoostrapAndOobSets(std::vector<unsigned int> & bootstrap, 
-    std::vector<unsigned int> & oob)
+    std::vector<unsigned int> & oob) const
   {
     try
     {
@@ -1013,7 +1008,7 @@ namespace Tgs
     {
       return _data[vIdx];
     }
-    catch(const std::out_of_range& oor)
+    catch(const std::out_of_range& /*oor*/)
     {
       std::stringstream ss;
       ss << "Out of range accessing data vector index: "  << vIdx;
@@ -1129,7 +1124,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::setBinaryClassLabels(std::string posClass)
+  void DataFrame::setBinaryClassLabels(const std::string& posClass)
   {
     try
     {
@@ -1322,7 +1317,7 @@ namespace Tgs
     return s;
   }
 
-  void DataFrame::_importDataVector(QDomElement & e)
+  void DataFrame::_importDataVector(const QDomElement & e)
   {
     try
     {
@@ -1337,19 +1332,19 @@ namespace Tgs
 
         if (childList.at(i).isElement())
         {
-          QDomElement e = childList.at(i).toElement(); // try to convert the node to an element.
+          QDomElement element = childList.at(i).toElement(); // try to convert the node to an element.
 
-          QString tag = e.tagName().toUpper();
+          QString tag = element.tagName().toUpper();
 
           bool parseOk = true;
 
           if (tag == "CLASSNAME")
           {
-            _trainingLabels.push_back(e.text().toLatin1().constData());
+            _trainingLabels.emplace_back(element.text().toLatin1().constData());
           }
           else if (tag == "DATA")
           {
-            QStringList factorList = e.text().split(" ");
+            QStringList factorList = element.text().split(" ");
 
             std::vector<double> dataVector(factorList.size());
 
@@ -1372,9 +1367,9 @@ namespace Tgs
         }
       }
     }
-    catch(const Exception & e)
+    catch(const Exception & ex)
     {
-      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, ex);
     }
   }
 

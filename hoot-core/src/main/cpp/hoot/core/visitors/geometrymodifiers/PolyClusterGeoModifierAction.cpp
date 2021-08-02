@@ -19,23 +19,23 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "PolyClusterGeoModifierAction.h"
 
 // Hoot
 #include <hoot/core/algorithms/alpha-shape/AlphaShape.h>
+#include <hoot/core/geometry/CoordinateExt.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/CoordinateExt.h>
-#include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 // Geos
@@ -182,6 +182,8 @@ void PolyClusterGeoModifierAction::_createWayPolygons()
 
   foreach (WayPtr pWay, _ways)
   {
+    if (!pWay)
+      continue;
     std::shared_ptr<Polygon> pPoly = ElementToGeometryConverter.convertToPolygon(pWay);
     long wayId = pWay->getId();
     // set id as user data
@@ -196,13 +198,13 @@ void PolyClusterGeoModifierAction::_generateClusters()
   _distanceSquared = _distance * _distance;
 
   // build the ClosePointHash
-  _pClosePointHash = std::shared_ptr<ClosePointHash>(new ClosePointHash(_distance));
+  _pClosePointHash = std::make_shared<ClosePointHash>(_distance);
 
   // gather coordinates and build lookups
   foreach (std::shared_ptr<Polygon> poly, _polys)
   {
     long wayId = (long)poly->getUserData();
-    CoordinateSequence* pCoords = poly->getCoordinates();
+    std::unique_ptr<CoordinateSequence> pCoords = poly->getCoordinates();
     int coordCount = min((int)pCoords->size(), MAX_PROCESSED_NODES_PER_POLY-1);
 
     for (int i = 0; i < coordCount; i++)
@@ -326,7 +328,7 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
 
     foreach (long wayId, cluster)
     {
-      CoordinateSequence* pCoords = _polyByWayId[wayId]->getCoordinates();
+      std::unique_ptr<CoordinateSequence> pCoords = _polyByWayId[wayId]->getCoordinates();
 
       CoordinateExt last;
       bool hasLast = false;
@@ -372,16 +374,15 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
     std::shared_ptr<Geometry> pAlphaGeom = alphashape.toGeometry();
 
     // combine polys from this cluster with AlphaShape
-    vector<Geometry*> geomvect;
-    geomvect.push_back(pAlphaGeom.get());
+    vector<Geometry*>* geomvect = new vector<Geometry*>();
+    geomvect->push_back(pAlphaGeom.get());
 
     foreach (long wayId, cluster)
     {
-      geomvect.push_back(_polyByWayId[wayId].get());
+      geomvect->push_back(_polyByWayId[wayId].get());
     }
 
-    MultiPolygon *mp = GeometryFactory::getDefaultInstance()->createMultiPolygon(&geomvect);
-    //std::shared_ptr<MultiPolygon> mp = std::shared_ptr<MultiPolygon>(GeometryFactory::getDefaultInstance()->createMultiPolygon(&geomvect));
+    Geometry *mp = GeometryFactory::getDefaultInstance()->createMultiPolygon(geomvect);
     std::shared_ptr<Geometry> pCombinedPoly = geos::operation::geounion::UnaryUnionOp::Union(*mp);
 
     // create a new element with cluster representation

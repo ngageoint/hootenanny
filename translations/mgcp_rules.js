@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -47,13 +47,13 @@ mgcp.rules = {
     // MGCP TRDv4 Only FCODES
     // These are used for both import and export
     ['F_CODE','AA012','landuse','quarry'], // Quarry - NFDD AA010
-    ['F_CODE','AL015','building','yes'], // Building - changed to AL013
     ['F_CODE','AA050','man_made','well'], // Well - NFDD BH230 or AA054 based on Product type
     ['F_CODE','AC000','facility','processing'], // Processing Facility - NFDD AL010
-    // ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
     ['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
+    // ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
     ['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
     ['F_CODE','AK190','man_made','recreational_pier'], // Recreational Pier - NFDD BB081
+    ['F_CODE','AL015','building','yes'], // Building - changed to AL013
     ['F_CODE','AL210','route:protection','yes'], // Protection Shed - NFDD AL211
     ['F_CODE','AT030','power','line'], // Power Line - NFDD AT005
     ['F_CODE','AT050','use','communication'], // Communication Station - No replacement code
@@ -61,7 +61,8 @@ mgcp.rules = {
     ['F_CODE','BB041','man_made','breakwater'], // Breakwater - NFDD BB081
     ['F_CODE','BB043','man_made','groyne'], // Groin - NFDD BB081
     ['F_CODE','BB140','man_made','training_wall'], // Training Wall - NFDD BB081
-    ['F_CODE','BB190','waterway','dock'], // Berthing Structure - NFDD BB081
+    ['F_CODE','BB190','man_made','shoreline_construction'], // Shoreline Construction
+    // ['F_CODE','BB190','man_made','berthing_structure'], // Berthing Structure - NFDD BB081
     ['F_CODE','BB230','wall','seawall'], // Seawall - NFDD BB081
     ['F_CODE','BB240','leisure','slipway'], // Slipway - NFDD BB082
     ['F_CODE','BD110','man_made','offshore_construction'], // Offshore Platform - NFDD BD115
@@ -137,6 +138,8 @@ mgcp.rules = {
     ['F_CODE','BA030','place','islet'], // From OSM
     ['F_CODE','BA040','water','tidal'], // Tidal Water
     ['F_CODE','BB190','man_made','pier'], // From OSM
+    ['F_CODE','BB190','man_made','quay'], // Berthing Structure - NFDD BB081
+    ['F_CODE','BB190','waterway','dock'], // Berthing Structure - NFDD BB081
     ['F_CODE','BH080','landuse','basin'], // From OSM - Lake is close but not great
     ['F_CODE','BH130','landuse','reservoir'], // From OSM
     ['F_CODE','BH130','man_made','reservoir'], // Reservoir - NFDD BH082
@@ -206,7 +209,7 @@ mgcp.rules = {
     'LEN':'length', // Length or Diameter
     'LTN':'lanes', // Track or Lane Count
     'NOS':'bridge:span_count', // Span Count
-    'OHB':'height', // Overall Bridge Height
+    // 'OHB':'height', // Overall Bridge Height - copy of HGT
     'SDO':'dune:orientation',  // Sand Dune Orientation
     'WD1':'width:minimum_traveled_way', // Route Minimum Travelled Way
     'WID':'width', // Width
@@ -432,7 +435,7 @@ mgcp.rules = {
     ['FFN','511','building','maritime_pilotage'],
     ['FFN','513','building','harbour_control'],
     ['FFN','530','building','warehouse'],
-    ['FFN','535','amenity','parking'],
+    ['FFN','535','building','parking'],
     ['FFN','540','amenity','post_office'],
     ['FFN','550','building','accomodation'],
     ['FFN','563','building','residence'],
@@ -469,6 +472,7 @@ mgcp.rules = {
     ['FFN','894','tourism','opera_house'],
     ['FFN','902','amenity','library'],
     ['FFN','905','tourism','museum'],
+    ['FFN','907','use','botanical_and/or_zoological_reserve_activities'],
     ['FFN','912','leisure','sports_centre'],
     ['FFN','919','amenity','animal_boarding'],
     ['FFN','930','amenity','religious_activities'],
@@ -567,6 +571,7 @@ mgcp.rules = {
     // ['HAF','0','helipad:facility','unknown'],
     ['HAF','0',undefined,undefined],
     ['HAF','1','helipad:facility','heliport'],
+    ['HAF','2','helipad:facility','land_aerodrome'],
     ['HAF','3','helipad:facility','hospital'],
     ['HAF','4','helipad:facility','non-hospital_building'],
     ['HAF','6','helipad:facility','rig'],
@@ -633,6 +638,7 @@ mgcp.rules = {
     ['MCC','5','material','asphalt'],
     ['MCC','9','material','brick'],
     ['MCC','8','material','boulders'], // From SMC
+    ['MCC','14','material','cinders'], // From SMC
     ['MCC','16','material','clay'],
     ['MCC','20','material','composition'],
     ['MCC','21','material','concrete'],
@@ -650,6 +656,7 @@ mgcp.rules = {
     ['MCC','77','material','prestressed_concrete'],
     ['MCC','83','material','reinforced_concrete'],
     ['MCC','84','material','rock'],
+    ['MCC','85','material','rubber'], // From SMC
     ['MCC','86','material','rubble'],
     ['MCC','87','material','salt'], // From SMC
     ['MCC','88','material','sand'],
@@ -746,16 +753,16 @@ mgcp.rules = {
     ['PBY','999','by_product','other'], // Other
 
     // PPC - Power Station Type
-    //['PPC','0','generator:source','unknown'], // Unknown
+    //['PPC','0','plant:source','unknown'], // Unknown
     ['PPC','0',undefined,undefined], // Unknown
-    ['PPC','1','generator:source','hydro'], // Hydro-electric
-    ['PPC','2','generator:source','nuclear'], // Nuclear
-    ['PPC','3','generator:source','solar'], // Solar
-    ['PPC','4','generator:source','geothermal'], // Geothermal
-    ['PPC','5','generator:source','wind'], // Wind
-    ['PPC','6','generator:source','tidal'], // Tidal
-    ['PPC','7','generator:source','thermal'], // Thermal
-    ['PPC','999','generator:source','other'], // Other
+    ['PPC','1','plant:source','hydro'], // Hydro-electric
+    ['PPC','2','plant:source','nuclear'], // Nuclear
+    ['PPC','3','plant:source','solar'], // Solar
+    ['PPC','4','plant:source','geothermal'], // Geothermal
+    ['PPC','5','plant:source','wind'], // Wind
+    ['PPC','6','plant:source','tidal'], // Tidal
+    ['PPC','7','plant:source','thermal'], // Thermal
+    ['PPC','999','plant:source','other'], // Other
 
     // PPO Product
     // ['PPO','0','product','unknown'],
@@ -794,6 +801,7 @@ mgcp.rules = {
     ['PPO','75','product','oil'],
     ['PPO','79','product','palm'],
     ['PPO','80','product','paper'],
+    ['PPO','83','product','petroleum'],
     ['PPO','84','product','plastic'],
     ['PPO','89','product','quartz'],
     ['PPO','90','product','radioactive_material'],
@@ -828,7 +836,7 @@ mgcp.rules = {
 
     // PWC - Shoreline Construction Type
     //['PWC','0','raw:PWC','unknown'], // Unknown
-    ['PWC','0',undefined,undefined], // Unknown
+    ['PWC','0','shoreline_construction:type','unknown'], // Unknown
     ['PWC','1','man_made','pier'], // Pier
     ['PWC','2','waterway','dock'], // Wharf
     ['PWC','3','man_made','quay'], // Quay
@@ -901,7 +909,7 @@ mgcp.rules = {
     ['RRC','8','railway','logging'],
     ['RRC','14','railway','tram'],
     ['RRC','15','railway','funicular'],
-    ['RRC','32','railway','automated_transit_system'],
+    ['RRC','32','automated_transit_system','yes'],
     ['RRC','33','railway','longhaul'],
     ['RRC','999','railway','Other'],
 
@@ -1107,7 +1115,7 @@ mgcp.rules = {
     ['SUC','1','man_made','snow_fence'],
     ['SUC','2','man_made','rock_shed'],
     ['SUC','4','man_made','rock_and_snow_fence'],
-    // ['SUC','999','building','shed'],
+    ['SUC','999','protection:type','other'],
 
     // SWT - Natural Pool Type
     // ['SWT','0','raw:SWT','unknown'], // Unknown
@@ -1166,7 +1174,7 @@ mgcp.rules = {
     ['TTC','10','tower:type','lookout'], // Lookout Tower
     ['TTC','12','tower:type','fire'], // Fire Tower
     // ['TTC','16','tower:type','control'], // Control Tower
-    ['TTC','16','control_tower','yes'], // Control Tower
+    ['TTC','16','service','aircraft_control'], // Control Tower
     ['TTC','18','tower:type','communication'], // Telecommunication Tower
     ['TTC','19','tower:type','cell'], // Cell Tower
     ['TTC','21','tower:type','guard'], // Guard Tower
@@ -1217,12 +1225,12 @@ mgcp.rules = {
     ['VSP','999','vegetation:type','other'], // Other
 
     // WCC - Watercourse Channel Type
-    ['WCC','0','waterway','yes'],
-    ['WCC','1','waterway','stream'],
-    ['WCC','2','waterway','braided_stream'],
-    ['WCC','3','waterway','gorge'],
+    // ['WCC','0','channel:type','yes'],
+    ['WCC','1','channel:type','channelized_stream'],
+    ['WCC','2','channel:type','braided_stream'],
+    ['WCC','3','channel:type','gorge'],
     ['WCC','4','wadi','yes'],
-    ['WCC','7','waterway','river'],
+    ['WCC','7','channel:type','normal'],
 
     // WFT - Well Type
     // ['WFT','0','water_well:type','unknown'],
@@ -1456,8 +1464,7 @@ mgcp.rules = {
     ['GFC','999','amenity','government'],
 
     // HAF - Helipad Accociated Facilities
-    ['HAF','2','helipad:facility','land_aerodrome'],
-    ['HAF','5','helipad:facility','offshore_platform'],
+    ['HAF','5','helipad:facility','offshore_construction'], // Seems to have changed to '9' in TRD4
 
     // ICF - Manufacturing Facility Type - the rest of these are in biased rules
     ['ICF','0',undefined,undefined],
@@ -2026,6 +2033,29 @@ mgcp.rules = {
     [undefined,undefined,'amenity','hospital'], // To stop warnings. Fixed in biased rules
     [undefined,undefined,'natural','water'], // To stop warnings. Fixed in biased rules
 
+    // CAA - Controlling Authority - TRD3/NFDD values. Convert to 'civilian'
+    ['CAA','16','operator','national'],
+    ['CAA','16','operator','state'],
+    ['CAA','16','operator','tribal'], // From NFDD
+    ['CAA','16','operator','municipal'], // From NFDD
+    ['CAA','16','operator','international'],
+    ['CAA','16','operator','province'], // From NFDD
+    ['CAA','16','operator','regional'], // From NFDD
+    ['CAA','16','operator','public'], // From NFDD
+
+    // AP020 - Interchange
+    ['CON','35','junction','cloverleaf'],
+    ['CON','35','junction','diamond'],
+    ['CON','35','junction','fork'],
+    ['CON','35','junction','roundabout'],
+    ['CON','35','junction','staggered_ramps'],
+    ['CON','35','junction','standard_ramps'],
+    ['CON','35','junction','symetrical_ramps'],
+    ['CON','35','junction','trumpet'],
+    ['CON','35','junction','turban'],
+    ['CON','35','junction','wye'],
+    ['CON','35','junction','other'],
+
     ['COS','4','operational_status','non_operational'], // Non-operational
 
     ['FIC','1','embankment:type','mound'], // Mound
@@ -2038,11 +2068,11 @@ mgcp.rules = {
     ['FIC','999','embankment','divider'], // TDS etc
     ['FIC','999','embankment:type','levee'], // TDS etc
     ['FIC','999','embankment:type','divider'], // TDS etc
-    ['FIC','999','embankment:type','other'], // Other
+    // ['FIC','999','embankment:type','other'], // Other
 
     // AFC - Agricultural Facility Type
     ['FFN','2','building','farm'],
-    ['FFN','2','building','greenhouse'],
+    // ['FFN','2','building','greenhouse'],
     ['FFN','2','building','farm_auxiliary'],
     ['FFN','2','building','barn'],
     ['FFN','999','building','agricultural'],
@@ -2098,7 +2128,7 @@ mgcp.rules = {
 
     // MFC - Military Facility Type
     ['FFN','835','military','administration'],
-    ['FFN','835','military','range'],
+    // ['FFN','835','military','range'],
     ['FFN','835','military','dormitory'],
     ['FFN','835','military','dependent_housing'],
     ['FFN','835','military','battery'],
@@ -2174,64 +2204,6 @@ mgcp.rules = {
     ['FFN','99','building','manufacturing'],
     ['FFN','192','product','petroleum'],
 
-    // CAA - Controlling Authority - TRD3/NFDD values. Convert to 'civilian'
-    ['CAA','16','operator','national'],
-    ['CAA','16','operator','state'],
-    ['CAA','16','operator','tribal'], // From NFDD
-    ['CAA','16','operator','municipal'], // From NFDD
-    ['CAA','16','operator','international'],
-    ['CAA','16','operator','province'], // From NFDD
-    ['CAA','16','operator','regional'], // From NFDD
-    ['CAA','16','operator','public'], // From NFDD
-
-    // AP020 - Interchange
-    ['CON','35','junction','cloverleaf'],
-    ['CON','35','junction','diamond'],
-    ['CON','35','junction','fork'],
-    ['CON','35','junction','roundabout'],
-    ['CON','35','junction','staggered_ramps'],
-    ['CON','35','junction','standard_ramps'],
-    ['CON','35','junction','symetrical_ramps'],
-    ['CON','35','junction','trumpet'],
-    ['CON','35','junction','turban'],
-    ['CON','35','junction','wye'],
-    ['CON','35','junction','other'],
-
-    // From UFD
-    ['FUN','6','condition','not_isolated'], // Changed to Fully Functional
-
-    // Highway
-    ['HCT','3','highway','motorway_link'],
-    ['HCT','1','highway','trunk'],
-    ['HCT','1','highway','trunk_link'],
-    ['HCT','1','highway','primary_link'],
-    ['HCT','2','highway','secondary_link'],
-    ['HCT','4','highway','tertiary_link'],
-    ['HCT','4','highway','living_street'],
-    ['HCT','4','highway','residential'],
-    ['HCT','4','highway','service'],
-    [undefined,undefined,'highway','traffic_signals'], // Drop
-    [undefined,undefined,'highway','residential;unclassified'], // Drop
-    [undefined,undefined,'highway','tertiary;track'], // Drop
-
-    // Surface
-    ['RST','1','surface','asphalt'],
-    ['RST','1','surface','cobblestone'],
-    ['RST','1','surface','concrete'],
-    ['RST','1','surface','paving_stones'],
-    ['RST','1','surface','compacted'],
-    ['RST','1','surface','metal'],
-    ['RST','1','surface','pebblestone'],
-    ['RST','1','surface','wood'],
-    ['RST','2','surface','sand'],
-    ['RST','2','surface','dirt'],
-    ['RST','2','surface','fine_gravel'],
-    ['RST','2','surface','gravel'], // DIGEST FACC from Data: Loose/Light
-    ['RST','2','surface','mud'],
-    ['RST','5','surface','grass_paver'],
-    ['RST','999','surface','ice'],
-    ['RST','999','surface','snow'],
-
     // Building
     ['FFN','563','building','detached'],
     ['FFN','563','building','terrace'],
@@ -2262,19 +2234,8 @@ mgcp.rules = {
     ['FFN','860','office','physician'], // Human Health
     ['FFN','860','office','therapist'], // Human Health
     ['FFN','860','office','medical'], // Human Health
-
     ['FFN','440','information','office'], // Commerce - Tourist information as a "service"
-
-    // UFD
     ['FFN','192','industrial','oil_gas_facility'],
-
-    // Source stuff from UFD
-    ['SRT','116','source:name','landsat'], // Landsat
-    ['SRT','999','source:name','foundation_feature_data/relocatable_target_data_(ffd/rtad)'], //  Foundation Feature Data/Relocatable Target Data (FFD/RTAD)
-    ['SRT','999','source:name','nima_gis_medical_facilities_database'], // NIMA GIS Medical Facilities Database
-    ['SRT','999','source:name','reference_map'], // Reference Map
-    ['SRT','999','source:name','digital_globe'], // Digital Globe
-    ['SRT','999','source:name','boundaries_(international_boundaries_database)'], // Boundaries (International Boundaries Database)
 
     // Tags from "native" OSM start here - for export
     ['FFN','550','tourism','hotel'], // Accomodation
@@ -2287,18 +2248,78 @@ mgcp.rules = {
     ['FFN','850','amenity','college'],
     ['FFN','850','amenity','university'],
 
+    ['FUN','6','condition','intact'],
+    ['FUN','6','condition','not_isolated'], // Changed to Fully Functional
+
+    // Highway
+    ['HCT','1','highway','trunk'],
+    ['HCT','1','highway','trunk_link'],
+    ['HCT','1','highway','primary_link'],
+    ['HCT','2','highway','secondary_link'],
+    ['HCT','3','highway','motorway_link'],
+    ['HCT','4','highway','tertiary_link'],
+    ['HCT','4','highway','living_street'],
+    ['HCT','4','highway','residential'],
+    ['HCT','4','highway','service'],
+    [undefined,undefined,'highway','traffic_signals'], // Drop
+    [undefined,undefined,'highway','residential;unclassified'], // Drop
+    [undefined,undefined,'highway','tertiary;track'], // Drop
+
+    // Surface
+    ['RST','1','surface','asphalt'],
+    ['RST','1','surface','cobblestone'],
+    ['RST','1','surface','concrete'],
+    ['RST','1','surface','paving_stones'],
+    ['RST','1','surface','compacted'],
+    ['RST','1','surface','metal'],
+    ['RST','1','surface','pebblestone'],
+    ['RST','1','surface','wood'],
+    ['RST','2','surface','sand'],
+    ['RST','2','surface','dirt'],
+    ['RST','2','surface','fine_gravel'],
+    ['RST','2','surface','gravel'], // DIGEST FACC from Data: Loose/Light
+    ['RST','2','surface','mud'],
+    ['RST','5','surface','grass_paver'],
+    ['RST','999','surface','ice'],
+    ['RST','999','surface','snow'],
+
+    // Source stuff from UFD
+    ['SRT','116','source:name','landsat'], // Landsat
+    ['SRT','999','source:name','foundation_feature_data/relocatable_target_data_(ffd/rtad)'], //  Foundation Feature Data/Relocatable Target Data (FFD/RTAD)
+    ['SRT','999','source:name','nima_gis_medical_facilities_database'], // NIMA GIS Medical Facilities Database
+    ['SRT','999','source:name','reference_map'], // Reference Map
+    ['SRT','999','source:name','digital_globe'], // Digital Globe
+    ['SRT','999','source:name','boundaries_(international_boundaries_database)'], // Boundaries (International Boundaries Database)
+
     // TRE - Foliage Type
     ['TRE','1','wood','deciduous'], // Deciduous
     ['TRE','2','wood','evergreen'], // Evergreen
     ['TRE','3','wood','mixed'], // Mixed
 
-      ], // End one2oneOut
+    ], // End one2oneOut
     // ##### End of One2One Rules #####
 
     // Stuff to be ignored or that gets swapped later
     // This is taken from OSM pre processing and a few things added.
     ignoreList : ['FCODE','error_circ','CPYRT_NOTE','SRC_INFO','SRC_DATE','SMC'],
     // ##### End of ignoreList #####
+
+    // Attribute names to swap on input. These are to avoid having copies of the same translation.
+    swapListIn : {'OHB':'HGT','CPYRT_NOTE':'CCN','SRC_INFO':'SDP','SRC_DATE':'SDV','SMC':'MCC'},
+
+    // Swap attribute values on export.
+    // Format is: <FCODE>:{<from>:<to>}
+    swapListOut : {
+      'AQ040':{'HGT':'OHB'},
+      'AK040':{'MCC':'SMC'},
+      'AP010':{'WID':'WD1'},
+      'AP030':{'WID':'WD1'},
+      'BA050':{'MCC':'SMC'},
+      'DA010':{'MCC':'SMC'},
+      'DB010':{'MCC':'SMC'},
+      'DB070':{'MCC':'SMC'},
+
+    },
 
     // ##### Start of txtLength #####
     // This list is for validateing the lengths of text attributes prior to export
@@ -2314,6 +2335,12 @@ mgcp.rules = {
     intList : ['LTN','NOS'],
     // ##### End of intList#####
 
+    // fCodeList - This is a list of all of the valid MGCP F_CODES in TRD4.5.1
+    fcodeList : ["AA010","AA012","AA040","AA050","AA052","AB000","AB010","AC000","AC020","AC030","AD010","AD020","AD030","AD050","AF010","AF020","AF040","AF070","AH025","AH050","AH070","AI030","AJ010","AJ030","AJ050","AJ051","AJ110","AK030","AK040","AK060","AK090","AK100","AK120","AK130","AK150","AK160","AK170","AK180","AK190","AL010","AL012","AL015","AL019","AL020","AL025","AL030","AL060","AL070","AL099","AL105","AL130","AL140","AL170","AL200","AL208","AL210","AL241","AL260","AM010","AM020","AM030","AM040","AM060","AM070","AN010","AN050","AN060","AN075","AN076","AP010","AP030","AP050","AQ040","AQ063","AQ065","AQ070","AQ075","AQ090","AQ110","AQ113","AQ116","AQ125","AQ130","AQ135","AQ140","AT010","AT030","AT041","AT042","AT045","AT050","AT060","BA010","BA030","BA040","BA050","BB005","BB041","BB043","BB090","BB140","BB155","BB190","BB230","BB240","BD100","BD110","BD120","BD130","BD180","BH010","BH015","BH020","BH030","BH040","BH050","BH051","BH060","BH070","BH080","BH090","BH110","BH120","BH130","BH135","BH140","BH145","BH150","BH155","BH160","BH165","BH170","BH180","BI010","BI020","BI030","BI040","BI041","BI050","BJ020","BJ030","BJ031","BJ040","BJ060","BJ100","BJ110","DA010","DB010","DB029","DB061","DB070","DB071","DB090","DB100","DB110","DB115","DB150","DB160","DB170","DB180","DB200","EA010","EA020","EA040","EA050","EA055","EB010","EB020","EC010","EC020","EC030","EC040","EC060","ED010","ED020","ED030","FA015","FA090","FA100","GA034","GB005","GB015","GB030","GB035","GB040","GB045","GB050","GB055","GB065","GB075","GB220","GB230","GB485","SU001","ZD020","ZD040"],
+
+    // layerNameLookup - List of all of the possibl;e geometry & F_CODES.
+    // AKA the list of layer names
+    // NOTE: This is just a list.  If the layer names change then this goes back to being an object
+    layerNameLookup : ["AAA010","AAA012","AAA052","AAB000","AAB010","AAC000","AAC030","AAD010","AAD030","AAD050","AAH050","AAI030","AAJ010","AAJ030","AAJ110","AAK030","AAK040","AAK060","AAK090","AAK100","AAK120","AAK160","AAK170","AAK180","AAK190","AAL010","AAL012","AAL015","AAL019","AAL020","AAL030","AAL060","AAL105","AAL140","AAL170","AAL200","AAL208","AAM010","AAM020","AAM030","AAM040","AAM060","AAM070","AAN060","AAN076","AAQ040","AAQ116","AAQ125","AAQ130","AAQ135","AAQ140","AAT050","ABA030","ABA040","ABA050","ABB005","ABB041","ABB043","ABB090","ABB140","ABB190","ABB240","ABD100","ABD120","ABH010","ABH015","ABH020","ABH030","ABH040","ABH050","ABH051","ABH080","ABH090","ABH120","ABH130","ABH135","ABH140","ABH150","ABH155","ABH160","ABH165","ABI020","ABI030","ABJ020","ABJ030","ABJ031","ABJ100","ABJ110","ADA010","ADB061","ADB090","ADB115","ADB160","ADB170","ADB180","ADB200","AEA010","AEA040","AEA050","AEA055","AEB010","AEB020","AEC010","AEC020","AEC030","AEC040","AEC060","AED010","AED020","AED030","AFA015","AFA100","AGB005","AGB015","AGB035","AGB045","AGB055","AGB065","AGB075","AGB230","ASU001","AZD020","LAF020","LAH025","LAK130","LAK150","LAK190","LAL060","LAL070","LAL210","LAL260","LAN010","LAN050","LAP010","LAP030","LAP050","LAQ040","LAQ063","LAQ070","LAQ075","LAQ113","LAQ130","LAT030","LAT041","LAT060","LBA010","LBB041","LBB043","LBB140","LBB190","LBB230","LBD120","LBH010","LBH020","LBH030","LBH060","LBH070","LBH110","LBH120","LBH140","LBH165","LBH180","LBI020","LBI030","LBI040","LBI041","LBJ031","LBJ040","LDB010","LDB061","LDB070","LDB071","LDB090","LDB100","LDB110","LDB160","LDB200","LEA020","LEC030","LFA090","LGB050","PAA010","PAA012","PAA040","PAA050","PAC000","PAC020","PAC030","PAD010","PAD020","PAD030","PAD050","PAF010","PAF040","PAF070","PAH050","PAH070","PAJ030","PAJ050","PAJ051","PAJ110","PAK040","PAK150","PAK160","PAK170","PAL012","PAL015","PAL019","PAL020","PAL025","PAL030","PAL099","PAL105","PAL130","PAL210","PAL241","PAM020","PAM030","PAM040","PAM060","PAM070","PAN075","PAN076","PAQ065","PAQ070","PAQ090","PAQ110","PAQ116","PAQ125","PAT010","PAT042","PAT045","PBA050","PBB155","PBD100","PBD110","PBD130","PBD180","PBH010","PBH070","PBH120","PBH145","PBH170","PBH180","PBI010","PBI020","PBI030","PBI040","PBI041","PBI050","PBJ060","PDB029","PDB115","PDB150","PDB160","PDB180","PEC030","PGA034","PGB030","PGB040","PGB050","PGB065","PGB220","PGB230","PGB485","PSU001","PZD040"],
+
 } // End of mgcp.rules
-
-

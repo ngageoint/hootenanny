@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "WayString.h"
 
@@ -38,12 +38,8 @@ namespace hoot
 
 int WayString::logWarnCount = 0;
 
-// if the difference is smaller than this we consider it to be equivalent.
+// If the difference is smaller than this, we consider it to be equivalent.
 Meters WayString::_epsilon = 1e-9;
-
-WayString::WayString()
-{
-}
 
 Meters WayString::_aggregateCircularError() const
 {
@@ -63,7 +59,7 @@ Meters WayString::_aggregateCircularError() const
 
 void WayString::append(const WaySubline& subline)
 {
-  if (_sublines.size() > 0)
+  if (!_sublines.empty())
   {
     if (back().getWay() == subline.getWay() &&
       back().getEnd() != subline.getStart())
@@ -82,15 +78,18 @@ void WayString::append(const WaySubline& subline)
           "node.");
       }
       if (back().getEnd().getNode(WayLocation::SLOPPY_EPSILON) !=
-        subline.getStart().getNode(WayLocation::SLOPPY_EPSILON))
+          subline.getStart().getNode(WayLocation::SLOPPY_EPSILON))
       {
-        //The intent of this class is being violated.  So either change this back to an
-        //exception as part of the work to be done in #1312, or create a new class for the new
-        //behavior.
-        //throw IllegalArgumentException("Ways must connect at a node in the WayString.");
+        // TODO: The intent of this class is being violated.  So either change this back to an
+        // exception as part of the work to be done in #1312, or create a new class for the new
+        // behavior.
+
+        // throw IllegalArgumentException("Ways must connect at a node in the WayString.");
+
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN("Ways must connect at a node in the WayString.");
+          // Decided to not make this a warning for the time being, since it pops up quite a bit.
+          LOG_TRACE("Ways must connect at a node in the WayString.");
           LOG_VART(back());
           LOG_VART(back().getWay());
           LOG_VART(subline);
@@ -101,7 +100,7 @@ void WayString::append(const WaySubline& subline)
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          LOG_TRACE(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
         logWarnCount++;
       }
@@ -212,7 +211,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
 {
   ConstWayPtr w = _sublines.front().getWay();
   Meters ce = _aggregateCircularError();
-  WayPtr newWay(new Way(w->getStatus(), destination->createNextWayId(), ce));
+  WayPtr newWay = std::make_shared<Way>(w->getStatus(), destination->createNextWayId(), ce);
   newWay->setPid(w->getPid());
 
   Tags newTags;
@@ -224,8 +223,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     ConstWayPtr oldWay = subline.getWay();
     newWay->setPid(Way::getPid(newWay, oldWay));
 
-    newTags =
-      TagMergerFactory::getInstance().mergeTags(newTags, oldWay->getTags(), ElementType::Way);
+    newTags = TagMergerFactory::mergeTags(newTags, oldWay->getTags(), ElementType::Way);
 
     // Figure out which node is the first node. If we're between nodes, then create a new node to
     // add.
@@ -233,8 +231,9 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     vector<long> newNids;
     if (subline.getFormer().isNode() == false)
     {
-      NodePtr n = NodePtr(new Node(w->getStatus(), destination->createNextNodeId(),
-                                   subline.getFormer().getCoordinate(), ce));
+      NodePtr n =
+        std::make_shared<Node>(
+          w->getStatus(), destination->createNextNodeId(), subline.getFormer().getCoordinate(), ce);
       destination->addNode(n);
       newNids.push_back(n->getId());
       formeri = subline.getFormer().getSegmentIndex() + 1;
@@ -252,14 +251,15 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     {
       long nid = oldWay->getNodeId(i);
       newNids.push_back(nid);
-      destination->addNode(NodePtr(new Node(*map.getNode(nid))));
+      destination->addNode(std::make_shared<Node>(*map.getNode(nid)));
     }
 
     // if the last location isn't on a node, create a new node for it
     if (subline.getLatter().isNode() == false)
     {
-      NodePtr n = NodePtr(new Node(w->getStatus(), destination->createNextNodeId(),
-        subline.getLatter().getCoordinate(), ce));
+      NodePtr n =
+        std::make_shared<Node>(
+          w->getStatus(), destination->createNextNodeId(), subline.getLatter().getCoordinate(), ce);
       destination->addNode(n);
       newNids.push_back(n->getId());
     }

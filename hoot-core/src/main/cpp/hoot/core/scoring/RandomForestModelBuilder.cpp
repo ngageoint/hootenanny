@@ -19,26 +19,26 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RandomForestModelBuilder.h"
 
 // Hoot
-#include <hoot/core/ops/MapCleaner.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
+#include <hoot/core/io/ArffToRfConverter.h>
 #include <hoot/core/io/ArffWriter.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/StringUtils.h>
-
-#include <hoot/core/io/ArffToRfConverter.h>
 
 // Standard
 #include <fstream>
@@ -52,13 +52,15 @@
 namespace hoot
 {
 
-void RandomForestModelBuilder::build(const QStringList trainingData, QString output,
-                                     const bool exportArffOnly)
+void RandomForestModelBuilder::build(
+  const QStringList trainingData, QString output, const bool exportArffOnly)
 {
   if (output.endsWith(".rf"))
   {
     output = output.remove(output.size() - 3, 3);
   }
+
+  LOG_STATUS("Building RF model ..." << FileUtils::toLogFormat(output, 25) << "...");
 
   MatchFeatureExtractor mfe;
   QStringList creators = ConfigOptions().getMatchCreators();
@@ -68,12 +70,13 @@ void RandomForestModelBuilder::build(const QStringList trainingData, QString out
     QStringList creatorParts = creator.split(",");
     QString className = creatorParts[0];
     creatorParts.removeFirst();
-    MatchCreator* mc = Factory::getInstance().constructObject<MatchCreator>(className);
-    if (creatorParts.size() > 0)
+    std::shared_ptr<MatchCreator> mc =
+      Factory::getInstance().constructObject<MatchCreator>(className);
+    if (!creatorParts.empty())
     {
       mc->setArguments(creatorParts);
     }
-    mfe.addMatchCreator(std::shared_ptr<MatchCreator>(mc));
+    mfe.addMatchCreator(mc);
   }
 
   int datasetPairCtr = 1;
@@ -83,7 +86,7 @@ void RandomForestModelBuilder::build(const QStringList trainingData, QString out
       "Processing dataset pair " << datasetPairCtr << " of " << ((trainingData.size() - 1) / 2) <<
       ": " << trainingData[i].right(50) << " and " << trainingData[i + 1].right(50));
     datasetPairCtr++;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     IoUtils::loadMap(map, trainingData[i], false, Status::Unknown1);
     IoUtils::loadMap(map, trainingData[i + 1], false, Status::Unknown2);
@@ -112,7 +115,7 @@ void RandomForestModelBuilder::build(const QStringList trainingData, QString out
   if (Log::getInstance().getLevel() >= Log::Warn)
   {
     // disable the printing of "Trained Tree ..."
-    dc.reset(new Tgs::DisableCout());
+    dc = std::make_shared<Tgs::DisableCout>();
   }
   const int numFactors =
     std::min(df->getNumFactors(), std::max<unsigned int>(3, df->getNumFactors() / 5));

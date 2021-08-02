@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSMPBFWRITER_H
@@ -74,59 +74,34 @@ public:
   static const char* const OSM_HEADER;
 
   OsmPbfWriter();
-  virtual ~OsmPbfWriter();
+  ~OsmPbfWriter();
 
   /**
    * Used to finalize a call to writePartial.
    */
-  virtual void finalizePartial();
+  void finalizePartial() override;
 
-  /**
-   * Returns the number of elements written by this class since it was instantiated.
-   */
-  int getElementsWritten() { return _elementsWritten; }
-
-  /**
-   * Removes the version number from the output. This is only useful for unit testing.
-   */
-  void includVersion(bool iv) { _includeVersion = iv; }
-
-  void initializePartial(std::ostream* strm);
-
-  virtual void initializePartial() override;
-
-  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith("osm.pbf"); }
-
-  virtual void open(const QString& url) override;
-  virtual void close();
-
-  /**
-   * Set the compression level to a value of -1 to 9. -1 is "default" or equivalent to about 7.
-   * 0 is uncompressed. 1 is fastest. 9 is best compression.
-   */
-  void setCompressionLevel(int z) { _compressionLevel = z; }
-
-  /**
-   * Sets a value that should be added to nodes and ways before they're written out. This is
-   * handy when all values need to be renumbered to avoid conflicts.
-   */
-  void setIdDelta(long nodeIdDelta, long wayIdDelta, long relationIdDelta);
-
-  /**
-   * Sets the granularity to 1 or higher. The granuarlity is in units of nanodegrees. The larger
-   * the value the coarser the data stored, but potentially higher compression. The default of
-   * 100nm introduces about 8.5mm of error on average and 15.5mm of error maximum with 2000 random
-   * points.
-   */
-  void setGranularity(int granularity) { _granularity = granularity; }
-
+  void initializePartial() override;
+  bool isSupported(const QString& url) override { return url.toLower().endsWith("osm.pbf"); }
+  void open(const QString& url) override;
+  void close() override;
+  QString supportedFormats() override { return ".osm.pbf"; }
   /**
    * The write command called after open.
    */
-  virtual void write(const ConstOsmMapPtr& map) override;
+  void write(const ConstOsmMapPtr& map) override;
+  /**
+   * Write out a map in chunks. This may be called multiple times and must be precceded with a
+   * call to initializePartial and finalized with a call to finalizePartial.
+   */
+  void writePartial(const ConstOsmMapPtr& map) override;
+  void writePartial(const ConstNodePtr& n) override;
+  void writePartial(const ConstWayPtr& w) override;
+  void writePartial(const ConstRelationPtr& r) override;
+
+  void initializePartial(std::ostream* strm);
 
   void write(const ConstOsmMapPtr& map, const QString& path);
-
   void write(const ConstOsmMapPtr& map, std::ostream* strm);
 
   /**
@@ -136,21 +111,12 @@ public:
   void writeHeader(std::ostream* strm, bool includeBounds = true, bool sorted = true);
 
   /**
-   * Write out a map in chunks. This may be called multiple times and must be precceded with a
-   * call to initializePartial and finalized with a call to finalizePartial.
-   */
-  virtual void writePartial(const ConstOsmMapPtr& map) override;
-
-  virtual void writePartial(const ConstNodePtr& n) override;
-  virtual void writePartial(const ConstWayPtr& w) override;
-  virtual void writePartial(const ConstRelationPtr& r) override;
-
-  /**
    * Write out the map as a PrimitiveBlock to the specified stream. The size of the primitive
    * block will first be written as a network order uint32_t
    */
   void writePb(const ConstOsmMapPtr& map, std::ostream* strm);
-  void writePb(const OsmMapPtr& map, std::ostream* strm) { writePb((const ConstOsmMapPtr)map, strm); }
+  void writePb(const OsmMapPtr& map, std::ostream* strm)
+  { writePb((const ConstOsmMapPtr)map, strm); }
 
   /**
    * Write a single node out as a PrimitiveBlock to the specified stream. The size of the primitive
@@ -171,9 +137,35 @@ public:
    * block will first be written as a network order uint32_t
    */
   void writePb(const ConstRelationPtr& r, std::ostream* strm);
-  void writePb(const RelationPtr& r, std::ostream* strm) { writePb((const ConstRelationPtr)r, strm); }
+  void writePb(const RelationPtr& r, std::ostream* strm)
+  { writePb((const ConstRelationPtr)r, strm); }
 
-  virtual QString supportedFormats() { return ".osm.pbf"; }
+  /**
+   * Returns the number of elements written by this class since it was instantiated.
+   */
+  int getElementsWritten() const { return _elementsWritten; }
+
+  /**
+   * Removes the version number from the output. This is only useful for unit testing.
+   */
+  void setIncludeVersion(bool iv) { _includeVersion = iv; }
+  /**
+   * Set the compression level to a value of -1 to 9. -1 is "default" or equivalent to about 7.
+   * 0 is uncompressed. 1 is fastest. 9 is best compression.
+   */
+  void setCompressionLevel(int z) { _compressionLevel = z; }
+  /**
+   * Sets a value that should be added to nodes and ways before they're written out. This is
+   * handy when all values need to be renumbered to avoid conflicts.
+   */
+  void setIdDelta(long nodeIdDelta, long wayIdDelta, long relationIdDelta);
+  /**
+   * Sets the granularity to 1 or higher. The granuarlity is in units of nanodegrees. The larger
+   * the value the coarser the data stored, but potentially higher compression. The default of
+   * 100nm introduces about 8.5mm of error on average and 15.5mm of error maximum with 2000 random
+   * points.
+   */
+  void setGranularity(int granularity) { _granularity = granularity; }
 
 private:
 
@@ -186,7 +178,7 @@ private:
   bool _includeInfo;
   bool _includeVersion;
   // Bend over backwards to keep the PBF headers out of the normal build. They're quite large.
-  OsmPbfWriterData* _d;
+  std::shared_ptr<OsmPbfWriterData> _d;
   QHash<QString, int> _strings;
   ConstOsmMapPtr _map;
   int _rawSize;
@@ -196,7 +188,8 @@ private:
   long _lastLon;
   long _lastLat;
   long _lastWayNid;
-  long _minBlobTarget, _maxBlobTarget;
+  std::size_t _minBlobTarget;
+  long _maxBlobTarget;
 
   int _granularity;
   long _latOffset;
@@ -217,10 +210,8 @@ private:
 
   void _addTag(const std::shared_ptr<Element>& n, const QString& k, const QString& v);
 
-  long _convertLon(double lon);
-
-  long _convertLat(double lat);
-
+  long _convertLon(double lon) const;
+  long _convertLat(double lat) const;
   int _convertString(const QString& s);
 
   void _deflate(const char* raw, size_t rawSize);
@@ -229,7 +220,7 @@ private:
 
   void _initBlob();
 
-  int _toRelationMemberType(ElementType t);
+  int _toRelationMemberType(ElementType t) const;
 
   void _writeBlob(const char* buffer, int size, const std::string& type);
 
@@ -237,20 +228,14 @@ private:
    * Write out the guts of the map.
    */
   void _writeMap();
-
   /**
    * Writes a node using the non-dense format.
    */
   void _writeNode(const std::shared_ptr<const hoot::Node>& n);
-
   void _writeNodeDense(const std::shared_ptr<const hoot::Node>& n);
-
   void _writeOsmHeader(bool includeBounds = true, bool sorted = true);
-
   void _writePrimitiveBlock();
-
   void _writeRelation(const std::shared_ptr<const hoot::Relation>& r);
-
   void _writeWay(const std::shared_ptr<const hoot::Way>& w);
 
   void _open(const QString& url);

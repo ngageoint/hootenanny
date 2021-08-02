@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __SCHEMA_CHECKER_H__
 #define __SCHEMA_CHECKER_H__
@@ -50,9 +50,8 @@ public:
 
   static int logWarnCount;
 
-  SchemaChecker(OsmSchema& osmSchema);
-
-  ~SchemaChecker() {}
+  SchemaChecker(const OsmSchema& osmSchema);
+  ~SchemaChecker() = default;
 
   /**
    * Print out error message if schemavertex is unkonw vertex type.
@@ -68,13 +67,14 @@ public:
   /**
    * Retrun true if schemavertex is unkonw vertex type.
    */
-
-  static bool isUnknownVertexType(const SchemaVertex& schemaVertex) { return schemaVertex.isValid(); }
+  static bool isUnknownVertexType(const SchemaVertex& schemaVertex)
+  { return schemaVertex.isValid(); }
 
   /**
    * Return true if schemavertex has empty geometry.
    */
-  static bool isEmptyGeometry(const SchemaVertex& schemaVertex) { return schemaVertex.geometries > 0; }
+  static bool isEmptyGeometry(const SchemaVertex& schemaVertex)
+  { return schemaVertex.getGeometries() > 0; }
 
 private:
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -34,6 +34,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/rnd/ops/RandomMapCropper.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -51,76 +52,72 @@ public:
 
   CropRandomCmd() = default;
 
-  virtual QString getName() const override { return "crop-random"; }
-
-  virtual QString getDescription() const override
+  QString getName() const override { return "crop-random"; }
+  QString getDescription() const override
   { return "Crops out a random section of a map (experimental)"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual QString getType() const { return "rnd"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
-
-    if (args.size() < 4 || args.size() > 6)
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes four to six parameters.").arg(getName()));
-    }
-
     bool writeTileFootprints = false;
     if (args.contains("--write-tiles"))
     {
       writeTileFootprints = true;
       args.removeAll("--write-tiles");
     }
-    LOG_VARD(writeTileFootprints);
-
-    QStringList inputs;
-    const QString input = args[0].trimmed();
-    LOG_VARD(input);
-    if (!input.contains(";"))
-    {
-      inputs.append(input);
-    }
-    else
-    {
-      //multiple inputs
-      inputs = input.split(";");
-    }
-    LOG_VARD(inputs);
-
-    const QString output = args[1].trimmed();
-    LOG_VARD(output);
 
     bool ok = false;
-    const int maxNodes = args[2].toLong(&ok);
-    if (!ok || maxNodes < 1)
-    {
-      throw HootException("Invalid maximum node count: " + args[2]);
-    }
-    LOG_VARD(maxNodes);
-
-    ok = false;
-    double pixelSize = args[3].toDouble(&ok);
-    if (!ok || pixelSize <= 0.0)
-    {
-      throw HootException("Invalid pixel size value: " + args[3]);
-    }
-    LOG_VARD(pixelSize);
-
     int randomSeed = -1;
-    if (args.size() > 4)
+    if (args.contains("--randomSeed"))
     {
+      const int randomSeedIndex = args.indexOf("--randomSeed");
       ok = false;
-      randomSeed = args[4].toLong(&ok);
+      randomSeed = args[randomSeedIndex + 1].toInt(&ok);
       if (!ok || randomSeed < -1)
       {
-        throw HootException("Invalid random seed: " + args[4]);
+        throw HootException("Invalid random seed: " + args[randomSeedIndex]);
       }
+      args.removeAt(randomSeedIndex + 1);
+      args.removeAt(randomSeedIndex);
     }
-    LOG_VARD(randomSeed);
+
+    if (args.size() < 4)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least four parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
+    }
+
+    QElapsedTimer timer;
+    timer.start();
+
+    const int outputIndex = args.size() - 3;
+    const QString output = args[outputIndex].trimmed();
+    args.removeAt(outputIndex);
+
+    ok = false;
+    const int maxNodesIndex = args.size() - 2;
+    const int maxNodes = args[maxNodesIndex].toInt(&ok);
+    if (!ok || maxNodes < 1)
+    {
+      throw HootException("Invalid maximum node count: " + args[maxNodesIndex]);
+    }
+    args.removeAt(maxNodesIndex);
+
+    ok = false;
+    const int pixelSizeIndex = args.size() - 1;
+    double pixelSize = args[pixelSizeIndex].toDouble(&ok);
+    if (!ok || pixelSize <= 0.0)
+    {
+      throw HootException("Invalid pixel size value: " + args[pixelSizeIndex]);
+    }
+    args.removeAt(pixelSizeIndex);
+
+    // Everything left is an input.
+    const QStringList inputs = args;
 
     QString tileOutputFootprintPath;
     if (writeTileFootprints)
@@ -132,7 +129,6 @@ public:
           outputFileInfo.baseName() + "." + outputFileInfo.completeSuffix(),
           outputFileInfo.baseName() + "-tiles.osm");
     }
-    LOG_VARD(tileOutputFootprintPath);
 
     if (!ConfigOptions().getCropBounds().trimmed().isEmpty())
     {
@@ -145,6 +141,10 @@ public:
       throw IllegalArgumentException(
         "The crop.invert configuration option is not supported by " + getName() + ".");
     }
+
+    LOG_STATUS(
+      "Randomly cropping " << inputs.size() << " inputs and writing output to ..." <<
+      FileUtils::toLogFormat(output, 25) << "...");
 
     OsmMapPtr map = _readInputs(inputs);
 
@@ -167,13 +167,12 @@ public:
 
 private:
 
-  OsmMapPtr _readInputs(const QStringList& inputs)
+  OsmMapPtr _readInputs(const QStringList& inputs) const
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     for (int i = 0; i < inputs.size(); i++)
     {
       const QString input = inputs.at(i);
-      LOG_INFO("Reading " << input << "...");
       // tile alg expects inputs read in as Unknown1
       std::shared_ptr<OsmMapReader> reader =
         OsmMapReaderFactory::createReader(input, true, Status::Unknown1);
@@ -183,7 +182,7 @@ private:
     }
     LOG_VARD(map->getNodeCount());
 
-    OsmMapWriterFactory::writeDebugMap(map);
+    OsmMapWriterFactory::writeDebugMap(map, className(), "");
 
     return map;
   }

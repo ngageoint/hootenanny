@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ReuseNodeIdsOnWayOp.h"
 
@@ -103,7 +103,7 @@ void ReuseNodeIdsOnWayOp::apply(const std::shared_ptr<OsmMap>& map)
   //  Only replace node IDs of non-shared nodes
   std::shared_ptr<NodeToWayMap> nodeToWayMap = map->getIndex().getNodeToWayMap();
   //  Swap all of the node IDs at once
-  std::shared_ptr<IdSwap> swap(new IdSwap());
+  std::shared_ptr<IdSwap> swap = std::make_shared<IdSwap>();
   //  For closed ways the use the unique node count
   size_t toNodeCount = to->getNodeCount();
   if (toNodeCount > 1 && to->getNodeId(0) == to->getNodeId(toNodeCount - 1))

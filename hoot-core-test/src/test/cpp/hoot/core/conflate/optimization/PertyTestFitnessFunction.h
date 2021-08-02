@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __PERTYTESTFITNESSFUNCTION_H__
@@ -35,7 +35,8 @@ namespace hoot
 {
 
 /**
- * Fitness function which optimizes against Hootenanny regression PERTY test data.
+ * @brief The PertyTestFitnessFunction class is a fitness function which optimizes against
+ * Hootenanny regression PERTY test data.
  */
 class PertyTestFitnessFunction : public AbstractRegressionTestFitnessFunction
 {
@@ -43,8 +44,7 @@ class PertyTestFitnessFunction : public AbstractRegressionTestFitnessFunction
 public:
 
   /**
-   * Constructor
-   *
+   * @brief PertyTestFitnessFunction Constructor
    * @param dir base dir for the tests
    * @param configFile custom config file to pass to the associated test suite
    */

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SCRIPT_SCHEMA_TRANSLATOR_H
 #define SCRIPT_SCHEMA_TRANSLATOR_H
@@ -73,7 +73,7 @@ public:
   /**
    * String containing the regexp to use for filtering the layer names.
    */
-  virtual const QString getLayerNameFilter() { return "."; }
+  virtual QString getLayerNameFilter() { return "."; }
 
   /**
    * lower order values make the script engine get evaluated earlier.
@@ -91,7 +91,9 @@ public:
    * Translates the specified tags. The result is placed back into the original tag set. The script
    * will be initialized if necessary.
    */
-  void translateToOsm(Tags& tags, const char *layerName, const char* geomType);
+  void translateToOsm(Tags& tags, const char* layerName, const char* geomType);
+
+  QString toString() const { return _scriptPath; }
 
 protected:
 
@@ -99,9 +101,6 @@ protected:
   QString _scriptPath;
 
   StrictChecking _strict;
-  // store all key/value strings in this QHash, this promotes implicit sharing of string data. The
-  // QHash goes away when the reading is done, but the memory sharing remains.
-  QHash<QString, QString> _strings;
 
   /**
    * Called before translate is called. It is possible to get multiple calls. E.g:
@@ -119,17 +118,23 @@ protected:
    */
   virtual void _finalize() = 0;
 
-  const QString& _saveMemory(const QString& s);
+  virtual const QString& _saveMemory(const QString& s);
 
-  void strictError(const QString& s);
+  virtual void strictError(const QString& s) const;
 
   /**
    * Wrapped by translateToOsm().
    */
-  virtual void _translateToOsm(Tags& tags, const char *layerName, const char* geomType) = 0;
+  virtual void _translateToOsm(Tags& tags, const char* layerName, const char* geomType) = 0;
+
+private:
+
+  // store all key/value strings in this QHash, this promotes implicit sharing of string data. The
+  // QHash goes away when the reading is done, but the memory sharing remains.
+  QHash<QString, QString> _strings;
 };
 
-typedef std::shared_ptr<ScriptSchemaTranslator> ScriptSchemaTranslatorPtr;
+using ScriptSchemaTranslatorPtr = std::shared_ptr<ScriptSchemaTranslator>;
 
 }
 

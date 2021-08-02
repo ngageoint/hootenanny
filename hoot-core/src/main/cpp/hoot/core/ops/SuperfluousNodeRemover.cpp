@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "SuperfluousNodeRemover.h"
@@ -36,6 +36,7 @@
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 
 // Standard
 #include <iostream>
@@ -135,12 +136,12 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
       continue;
     }
     const vector<long>& nodeIds = w->getNodeIds();
-    LOG_VART(nodeIds);
+    LOG_TRACE("Nodes belonging to " << w->getElementId() << ": " << nodeIds);
     _usedNodeIds.insert(nodeIds.begin(), nodeIds.end());
     _numProcessed += nodeIds.size();
 
     _numProcessed++;
-    if (_numProcessed % _taskStatusUpdateInterval == 0)
+    if ((_numProcessed % (_taskStatusUpdateInterval * 100) == 0) && _numProcessed != 0)
     {
       PROGRESS_INFO(
         "Exempted " << StringUtils::formatLargeNumber(_usedNodeIds.size()) <<
@@ -182,7 +183,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     {
       LOG_TRACE(
         "Marking " << n->getElementId() << " for removal with unallowed orphan kvp: " <<
-        n->getTags().getFirstKvp(_unallowedOrphanKvps) << "...");
+        n->getTags().getFirstMatchingKvp(_unallowedOrphanKvps) << "...");
     }
     else if (!_ignoreInformationTags && n->getTags().getNonDebugCount() != 0)
     {
@@ -191,13 +192,24 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
         n->getTags().getNonDebugCount() << " non-metadata tags...");
       _usedNodeIds.insert(n->getId());
     }
+    // Since this class operates on elements with generic types, an additional check must be
+    // performed here during conflation to enure we don't modify any element not associated with
+    // an active conflate matcher in the current conflation configuration.
+    else if (_conflateInfoCache && _ignoreInformationTags &&
+             !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n->cloneSp(), className()))
+    {
+      LOG_TRACE(
+        "Skipping processing of " << n->getElementId() << ", as it cannot be conflated by any " <<
+        "actively configured conflate matcher...");
+      _usedNodeIds.insert(n->getId());
+    }
     else
     {
       LOG_TRACE("Marking " << n->getElementId() << " for removal...");
     }
     _numProcessed++;
 
-    if (_numProcessed % _taskStatusUpdateInterval == 0)
+    if ((_numProcessed % (_taskStatusUpdateInterval * 100) == 0) && _numProcessed != 0)
     {
       PROGRESS_INFO(
         "Exempted " << StringUtils::formatLargeNumber(_usedNodeIds.size()) <<
@@ -211,16 +223,15 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     " total elements.");
 
   LOG_VARD(_usedNodeIds.size());
-  //LOG_VART(_usedNodeIds);
 
   std::shared_ptr<OsmMap> reprojected;
   const NodeMap* nodesWgs84 = &nodes;
   // if the map is not in WGS84
   if (MapProjector::isGeographic(map) == false)
   {
-    // create a new copy of the map and reproject it. This way we can be sure we do the bounds
+    // Create a new copy of the map and reproject it. This way we can be sure we do the bounds
     // calculation correctly.
-    reprojected.reset(new OsmMap(map));
+    reprojected = std::make_shared<OsmMap>(map);
     MapProjector::projectToWgs84(reprojected);
     nodesWgs84 = &reprojected->getNodes();
     LOG_VART(nodesWgs84->size());
@@ -254,7 +265,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
       }
       else
       {
-        LOG_TRACE("node not in bounds. " << n->getElementId());
+        LOG_TRACE("Node not in bounds: " << n->getElementId());
         LOG_VART(_bounds);
       }
     }

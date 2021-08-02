@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "FeatureExtractorJs.h"
 
@@ -53,23 +53,24 @@ void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  FeatureExtractorJs* feJs = ObjectWrap::Unwrap<FeatureExtractorJs>(args.This());
+  const FeatureExtractorJs* feJs = ObjectWrap::Unwrap<FeatureExtractorJs>(args.This());
 
   if (args.Length() != 3)
   {
     throw IllegalArgumentException("Expected exactly three argument in extract (map, e1, e2)");
   }
 
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject());
-  ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject());
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
+  const ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked());
+  const ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject(context).ToLocalChecked());
 
   double result =
     feJs->getFeatureExtractor()->extract(
       *(mapJs->getConstMap()), e1Js->getConstElement(), e2Js->getConstElement());
 
-  if (result == feJs->getFeatureExtractor()->nullValue())
+  if (result == FeatureExtractor::nullValue())
   {
     args.GetReturnValue().SetNull();
   }
@@ -79,10 +80,11 @@ void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
   }
 }
 
-void FeatureExtractorJs::Init(Handle<Object> target)
+void FeatureExtractorJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(FeatureExtractor::className());
 
@@ -93,16 +95,13 @@ void FeatureExtractorJs::Init(Handle<Object> target)
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "extract"),
-        FunctionTemplate::New(current, extract));
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getName"),
-        FunctionTemplate::New(current, getName));
+    tpl->PrototypeTemplate()->Set(current, "extract", FunctionTemplate::New(current, extract));
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
+    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
+    target->Set(context, toV8(n), ToLocal(&constructor));
   }
 }
 
@@ -112,21 +111,14 @@ void FeatureExtractorJs::New(const FunctionCallbackInfo<Value>& args)
 
   const QString className = "hoot::" + str(args.This()->GetConstructorName());
 
-  FeatureExtractorPtr fe(Factory::getInstance().constructObject<FeatureExtractor>(className));
+  FeatureExtractorPtr fe = Factory::getInstance().constructObject<FeatureExtractor>(className);
   FeatureExtractorJs* obj = new FeatureExtractorJs(fe);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
-  PopulateConsumersJs::populateConsumers<FeatureExtractor>(fe.get(), args);
+  PopulateConsumersJs::populateConsumers<FeatureExtractor>(fe, args);
 
   args.GetReturnValue().Set(args.This());
-}
-
-void FeatureExtractorJs::getName(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  args.GetReturnValue().Set(toV8(toCpp<FeatureExtractorPtr>(args.This())->getName()));
 }
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 #include "RelationMergerJs.h"
 
@@ -47,15 +47,17 @@ namespace hoot
 
 HOOT_JS_REGISTER(RelationMergerJs)
 
-void RelationMergerJs::Init(Handle<Object> exports)
+void RelationMergerJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> thisObj = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "RelationMerger"), thisObj);
+  Local<Context> context = current->GetCurrentContext();
 
-  thisObj->Set(String::NewFromUtf8(current, "mergeRelations"),
-               FunctionTemplate::New(current, mergeRelations)->GetFunction());
+  Local<Object> thisObj = Object::New(current);
+  exports->Set(context, toV8("RelationMerger"), thisObj);
+
+  thisObj->Set(context, toV8("mergeRelations"),
+               FunctionTemplate::New(current, mergeRelations)->GetFunction(context).ToLocalChecked());
 }
 
 void RelationMergerJs::mergeRelations(const FunctionCallbackInfo<Value>& args)

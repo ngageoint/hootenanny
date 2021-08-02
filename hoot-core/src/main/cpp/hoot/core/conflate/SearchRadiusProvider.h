@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SEARCHRADIUSPROVIDER_H
 #define SEARCHRADIUSPROVIDER_H
@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * This interface calculates the search radius for a given feature.
+ * @brief The SearchRadiusProvider class calculates the search radius for a given feature.
  */
 class SearchRadiusProvider
 {
@@ -44,17 +44,17 @@ public:
   virtual ~SearchRadiusProvider() = default;
 
   /**
-   * Optional init
+   * @brief init Optional init
    */
   virtual void init(const ConstOsmMapPtr& /*map*/) {}
 
   /**
-   * Returns the search radius for the given element.
+   * @brief calculateSearchRadius returns the search radius for the given element.
    */
   virtual Meters calculateSearchRadius(const ConstOsmMapPtr& map, const ConstElementPtr& e) = 0;
 };
 
-typedef std::shared_ptr<SearchRadiusProvider> SearchRadiusProviderPtr;
+using SearchRadiusProviderPtr = std::shared_ptr<SearchRadiusProvider>;
 
 }
 

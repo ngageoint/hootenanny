@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Standard
@@ -55,8 +55,8 @@ namespace Tgs
   {
   public:
 
-    typedef int64_t bitmask_t;
-    typedef int64_t halfmask_t;
+    using bitmask_t = int64_t;
+    using halfmask_t = int64_t;
 
     HilbertCurve(int dimensions, int order)
     {
@@ -77,7 +77,6 @@ namespace Tgs
 
       _point = new bitmask_t[_dimensions];
     }
-
     HilbertCurve(const HilbertCurve& curve)
     {
       _dimensions = curve._dimensions;
@@ -85,13 +84,12 @@ namespace Tgs
       _point = new bitmask_t[_dimensions];
       std::memcpy(_point, curve._point, sizeof(bitmask_t) * _dimensions);
     }
-
     ~HilbertCurve()
     {
       delete [] _point;
     }
 
-    long encode(int point[])
+    long encode(const int point[])
     {
       long int result;
 
@@ -102,7 +100,6 @@ namespace Tgs
       }
 
       result = hilbert_c2inew(_dimensions, _order, _point);
-      //hilbert_c2i(_dimensions, _order, point, &result);
       return result;
     }
 
@@ -112,7 +109,7 @@ namespace Tgs
     int _order;
     bitmask_t* _point;
 
-    bitmask_t bitTranspose(unsigned nDims, unsigned nBits, bitmask_t inCoords)
+    bitmask_t bitTranspose(unsigned nDims, unsigned nBits, bitmask_t inCoords) const
     {
       unsigned const nDims1 = nDims-1;
       unsigned inB = nBits;
@@ -177,7 +174,7 @@ namespace Tgs
      *      nDims*nBits <= (sizeof bitmask_t) * (bits_per_byte)
      */
     bitmask_t
-    hilbert_c2inew(unsigned nDims, unsigned nBits, bitmask_t const coord[])
+    hilbert_c2inew(unsigned nDims, unsigned nBits, bitmask_t const coord[]) const
     {
       if (nDims > 1)
         {

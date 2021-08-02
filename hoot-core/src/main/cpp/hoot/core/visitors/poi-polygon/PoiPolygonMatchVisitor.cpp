@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "PoiPolygonMatchVisitor.h"
@@ -110,8 +110,8 @@ void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>
         // score each candidate and push it on the result vector
         LOG_TRACE(
           "Calculating match between: " << poiId << " and " << poly->getElementId() << "...");
-        std::shared_ptr<PoiPolygonMatch> m(
-          new PoiPolygonMatch(_map, _threshold, _rf, _infoCache, surroundingPolyIds));
+        std::shared_ptr<PoiPolygonMatch> m =
+          std::make_shared<PoiPolygonMatch>(_map, _threshold, _rf, _infoCache, surroundingPolyIds);
         m->setConfiguration(conf());
         m->calculateMatch(poiId, polyId);
 
@@ -213,8 +213,8 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   _numElementsVisited++;
   if (_numElementsVisited % _taskStatusUpdateInterval == 0)
   {
-    PROGRESS_INFO(
-      "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
+    PROGRESS_STATUS(
+      "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
       StringUtils::formatLargeNumber(_map->getNodeCount()) << " nodes.");
     _timer.restart();
   }
@@ -224,7 +224,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-bool PoiPolygonMatchVisitor::isMatchCandidate(ConstElementPtr element)
+bool PoiPolygonMatchVisitor::isMatchCandidate(ConstElementPtr element) const
 {
   if (_filter && !_filter->isSatisfied(element))
   {
@@ -245,10 +245,10 @@ std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
     LOG_INFO("Creating POI/Polygon feature index...");
 
     // tune this? - see #3054
-    std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
-    _polyIndex.reset(new Tgs::HilbertRTree(mps, 2));
+    _polyIndex =
+      std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
 
-    std::shared_ptr<PoiPolygonPolyCriterion> crit(new PoiPolygonPolyCriterion());
+    std::shared_ptr<PoiPolygonPolyCriterion> crit = std::make_shared<PoiPolygonPolyCriterion>();
 
     SpatialIndexer v(_polyIndex,
                      _polyIndexToEid,

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __TGS__HILBERT_R_TREE_H__
@@ -43,8 +43,7 @@ namespace Tgs
   public:
 
     HilbertRTree(const std::shared_ptr<PageStore>& ps, int dimensions);
-
-    virtual ~HilbertRTree();
+    ~HilbertRTree() = default;
 
     /**
      * This method can only be called before the tree has been built. 
@@ -54,7 +53,7 @@ namespace Tgs
 
     void greedyShuffle();
 
-  protected:
+  private:
 
     class UserBoxHolder
     {
@@ -78,29 +77,25 @@ namespace Tgs
     };
 
     static const int ORDER = 8;
-    HilbertCurve* _hilbertCurve;
+    std::shared_ptr<HilbertCurve> _hilbertCurve;
     int _shuffleSize;
 
-    virtual int _splitBoxes(BoxVector& boxes);
+    int _splitBoxes(BoxVector& boxes) override;
 
     void _calculateHilbertValues(const std::vector<Box>& boxes, 
-      const std::vector<int>& fids, std::vector<UserBoxHolder>& hilbertBoxes);
-
+      const std::vector<int>& fids, std::vector<UserBoxHolder>& hilbertBoxes) const;
     double _calculateArea(int parentId);
-
     double _calculateOverlap(int parentId);
-
     double _calculatePairwiseOverlap(int parentId, std::vector<double>& overlaps);
 
     /**
      * Randomly select a child based on the available weights. The weights must be >= 0 and the 
      * sum must be > 0.
      */
-    int _chooseWeightedChild(const std::vector<double>& weights);
+    int _chooseWeightedChild(const std::vector<double>& weights) const;
 
     void _createLeafNodes(const std::vector<UserBoxHolder>& hilbertBoxes, 
       std::vector<int>& result);
-
     void _createParentNodes(const std::vector<int>& childNodes, 
       std::vector<int>& result);
 
@@ -109,13 +104,13 @@ namespace Tgs
      */
     void _greedyShuffle(int parentId);
 
-    double _sum(const std::vector<double>& v);
+    double _sum(const std::vector<double>& v) const;
 
     double _swapGrandChildNodes(int parentId, const std::vector<double>& overlaps);
   };
 
-  typedef std::shared_ptr<HilbertRTree> HilbertRTreePtr;
-  typedef std::shared_ptr<const HilbertRTree> ConstHilbertRTreePtr;
+  using HilbertRTreePtr = std::shared_ptr<HilbertRTree>;
+  using ConstHilbertRTreePtr = std::shared_ptr<const HilbertRTree>;
 }
 
 

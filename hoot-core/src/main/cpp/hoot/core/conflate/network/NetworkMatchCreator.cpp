@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "NetworkMatchCreator.h"
 
@@ -33,8 +33,9 @@
 #include <hoot/core/conflate/network/NetworkMatcher.h>
 #include <hoot/core/conflate/network/OsmNetworkExtractor.h>
 #include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -42,10 +43,9 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/NotImplementedException.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 // Standard
 #include <fstream>
@@ -65,11 +65,11 @@ namespace hoot
 HOOT_FACTORY_REGISTER(MatchCreator, NetworkMatchCreator)
 
 NetworkMatchCreator::NetworkMatchCreator() :
+_userCriterion(std::make_shared<HighwayCriterion>()),
 _matchScoringFunctionMax(ConfigOptions().getNetworkMatchScoringFunctionMax()),
 _matchScoringFunctionCurveMidpointX(ConfigOptions().getNetworkMatchScoringFunctionCurveMidX()),
 _matchScoringFunctionCurveSteepness(ConfigOptions().getNetworkMatchScoringFunctionCurveSteepness())
 {
-  _userCriterion.reset(new HighwayCriterion());
 }
 
 MatchPtr NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, ElementId /*eid1*/,
@@ -78,13 +78,13 @@ MatchPtr NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, Element
   return MatchPtr();
 }
 
-ConstMatchPtr NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, NetworkEdgeScorePtr e,
-  ConstMatchThresholdPtr mt)
+ConstMatchPtr NetworkMatchCreator::_createMatch(
+  const NetworkDetailsPtr& map, NetworkEdgeScorePtr e, ConstMatchThresholdPtr mt) const
 {
-  return ConstMatchPtr(
-    new NetworkMatch(
+  return
+    std::make_shared<const NetworkMatch>(
       map, e->getEdgeMatch(), e->getScore(), mt, _matchScoringFunctionMax,
-      _matchScoringFunctionCurveMidpointX, _matchScoringFunctionCurveSteepness));
+      _matchScoringFunctionCurveMidpointX, _matchScoringFunctionCurveSteepness);
 }
 
 void NetworkMatchCreator::createMatches(
@@ -107,15 +107,15 @@ void NetworkMatchCreator::createMatches(
     searchRadiusStr =
       "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
   }
-  LOG_STATUS("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
+  LOG_INFO("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
   LOG_VART(threshold);
   const int matchesSizeBefore = matches.size();
 
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
-  std::shared_ptr<ChainCriterion> c1(
-    new ChainCriterion(
-      ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), _userCriterion));
+  std::shared_ptr<ChainCriterion> c1 =
+    std::make_shared<ChainCriterion>(
+      std::make_shared<StatusCriterion>(Status::Unknown1), _userCriterion);
   if (_filter)
   {
     c1->addCriterion(_filter);
@@ -125,9 +125,9 @@ void NetworkMatchCreator::createMatches(
   LOG_TRACE("Extracted Network 1: " << n1->toString());
 
   OsmNetworkExtractor e2;
-  std::shared_ptr<ChainCriterion> c2(
-    new ChainCriterion(
-      ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), _userCriterion));
+  std::shared_ptr<ChainCriterion> c2 =
+    std::make_shared<ChainCriterion>(
+      std::make_shared<StatusCriterion>(Status::Unknown2), _userCriterion);
   if (_filter)
   {
     c2->addCriterion(_filter);
@@ -138,11 +138,11 @@ void NetworkMatchCreator::createMatches(
 
   LOG_INFO("Matching networks...");
   // call class to derive final graph node and graph edge matches
-  NetworkMatcherPtr matcher(
-    Factory::getInstance().constructObject<NetworkMatcher>(ConfigOptions().getNetworkMatcher()));
+  NetworkMatcherPtr matcher =
+    Factory::getInstance().constructObject<NetworkMatcher>(ConfigOptions().getNetworkMatcher());
   matcher->matchNetworks(map, n1, n2);
 
-  NetworkDetailsPtr details(new NetworkDetails(map, n1, n2));
+  NetworkDetailsPtr details = std::make_shared<NetworkDetails>(map, n1, n2);
 
   const size_t numIterations = ConfigOptions().getNetworkOptimizationIterations();
   if (numIterations < 1)
@@ -157,12 +157,13 @@ void NetworkMatchCreator::createMatches(
     matcher->iterate();
     LOG_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
 
-    OsmMapWriterFactory::writeDebugMap(map, "network-match-iteration-" + QString::number(i + 1));
+    OsmMapWriterFactory::writeDebugMap(
+      map, className(), "match-iteration-" + QString::number(i + 1));
   }
 
   matcher->finalize();
 
-  OsmMapWriterFactory::writeDebugMap(map, "network-match-after-final-iteration", matcher);
+  OsmMapWriterFactory::writeDebugMap(map, className(), "match-after-final-iteration", matcher);
 
   LOG_DEBUG("Retrieving edge scores...");
   // Convert graph edge matches into NetworkMatch objects.
@@ -193,12 +194,11 @@ void NetworkMatchCreator::createMatches(
 vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates matchers that match roads with the Network Algorithm",
-      CreatorDescription::BaseFeatureType::Highway,
-      false));
+  result.emplace_back(
+    className(),
+    "Generates matchers that match roads with the Network Algorithm",
+    CreatorDescription::BaseFeatureType::Highway,
+    false);
   return result;
 }
 
@@ -218,10 +218,10 @@ std::shared_ptr<MatchThreshold> NetworkMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
-    ConfigOptions config;
-    _matchThreshold.reset(
-      new MatchThreshold(config.getNetworkMatchThreshold(), config.getNetworkMissThreshold(),
-                         config.getNetworkReviewThreshold()));
+    _matchThreshold =
+      std::make_shared<MatchThreshold>(
+        ConfigOptions().getNetworkMatchThreshold(), ConfigOptions().getNetworkMissThreshold(),
+        ConfigOptions().getNetworkReviewThreshold());
   }
   return _matchThreshold;
 }

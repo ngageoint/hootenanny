@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // geos
@@ -57,14 +57,14 @@ public:
 
   OsmMapPtr createTestMap()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0, 0), Coordinate(10, 0), Coordinate(20, 0), Coordinate(30, 0),
                        Coordinate::getNull() };
-    TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
 
     Coordinate c2[] = { Coordinate(50, 0), Coordinate(150, 0), Coordinate::getNull() };
-    TestUtils::createWay(map, Status::Unknown1, c2, 5, "w2");
+    TestUtils::createWay(map,  c2, "w2", Status::Unknown1, 5);
 
     return map;
   }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ContainsNodeCriterion.h"
 
@@ -37,6 +37,11 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ContainsNodeCriterion)
+
+ContainsNodeCriterion::ContainsNodeCriterion(long nodeId) :
+_nodeId(nodeId)
+{
+}
 
 void ContainsNodeCriterion::setConfiguration(const Settings& s)
 {

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef TAGS_JS_H
 #define TAGS_JS_H
@@ -49,11 +49,11 @@ class TagsJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
   Tags& getTags() { return _tags; }
 
-  static v8::Handle<v8::Object> New(const Tags& t);
+  static v8::Local<v8::Object> New(const Tags& t);
 
   virtual ~TagsJs() = default;
 
@@ -68,11 +68,8 @@ private:
 
   static void contains(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void get(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getCreateUuid(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getInformationCount(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getLengthInMeters(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getNames(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getVelocityInMeters(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void set(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toDict(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -80,15 +77,15 @@ private:
   void _setTags(const Tags& t) { _tags = t; }
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, Tags& t)
+inline void toCpp(v8::Local<v8::Value> v, Tags& t)
 {
   if (!v->IsObject())
   {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
   }
 
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
-  TagsJs* js = 0;
+  v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
+  TagsJs* js = nullptr;
   if (obj->InternalFieldCount() > 0)
   {
     js = node::ObjectWrap::Unwrap<TagsJs>(obj);
@@ -96,24 +93,6 @@ inline void toCpp(v8::Handle<v8::Value> v, Tags& t)
   if (js)
   {
     t = js->getTags();
-  }
-  else
-  {
-    QStringList keys = toCpp<QStringList>(obj->GetPropertyNames());
-
-    if (keys.size() == 0)
-    {
-      throw IllegalArgumentException("Expected a MostEnglishNameJs, got: (" + toJson(v) + ")");
-    }
-    else
-    {
-      t.clear();
-      for (int i = 0; i < keys.size(); i++)
-      {
-        QString value = toCpp<QString>(obj->Get(toV8(keys[i])));
-        t[keys[i]] = value;
-      }
-    }
   }
 }
 

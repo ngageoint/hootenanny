@@ -19,15 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "JsRegistrar.h"
 
 #include <hoot/core/Hoot.h>
 #include <hoot/core/util/Log.h>
+
+#include <hoot/js/io/DataConvertJs.h>
 
 using namespace v8;
 
@@ -38,7 +40,7 @@ void Method(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
-  args.GetReturnValue().Set(String::NewFromUtf8(current, "world"));
+  args.GetReturnValue().Set(toV8("world"));
 }
 
 JsRegistrar& JsRegistrar::getInstance()
@@ -48,25 +50,20 @@ JsRegistrar& JsRegistrar::getInstance()
   return instance;
 }
 
-void JsRegistrar::Init(Handle<Object> exports)
+void JsRegistrar::Init(Local<Object> exports)
 {
   LOG_DEBUG("JS registrar init...");
   Hoot::getInstance().init();
   getInstance().initAll(exports);
 }
 
-void JsRegistrar::initAll(Handle<Object> exports)
+void JsRegistrar::initAll(Local<Object> exports)
 {
   // Got this from the NodeJS docs. Seems to be a bit simpler than what we were doing.
-  NODE_SET_METHOD(exports,"hello",Method);
-//  Isolate* current = exports->GetIsolate();
-//  exports->Set(String::NewFromUtf8("hello"),
-//      FunctionTemplate::New(Method)->GetFunction());
+  NODE_SET_METHOD(exports, "hello", Method);
 
   for (size_t i = 0; i < _initializers.size(); i++)
-  {
     _initializers[i]->Init(exports);
-  }
 }
 
 void JsRegistrar::registerInitializer(const std::shared_ptr<ClassInitializer>& ci)

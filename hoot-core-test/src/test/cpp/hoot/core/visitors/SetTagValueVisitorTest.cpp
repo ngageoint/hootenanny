@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -63,7 +63,7 @@ public:
 
   void runAddNewTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
@@ -78,7 +78,7 @@ public:
 
   void runOverwriteExistingTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
@@ -93,7 +93,7 @@ public:
 
   void runAppendValueTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
@@ -108,7 +108,7 @@ public:
 
   void runFilterTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
@@ -123,7 +123,7 @@ public:
 
   void runOverwriteDisabledTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
@@ -141,7 +141,7 @@ public:
 
   void runNegatedFilterTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "SetTagValueVisitorTest.osm", false, Status::Unknown1);
 

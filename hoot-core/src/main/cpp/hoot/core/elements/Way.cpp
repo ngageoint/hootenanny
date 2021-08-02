@@ -19,20 +19,20 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "Way.h"
 
 // Hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 // Geos
 #include <geos/geom/CoordinateSequenceFactory.h>
@@ -40,26 +40,26 @@
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Polygon.h>
-using namespace geos::geom;
 
 #include <tgs/StreamUtils.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot
 {
 
 Way::Way(Status s, long id, Meters circularError, long changeset, long version,
-         quint64 timestamp, QString user, long uid, bool visible, long pid)
-  : Element(s)
+         quint64 timestamp, QString user, long uid, bool visible, long pid) :
+Element(s)
 {
-  _wayData.reset(new WayData(id, changeset, version, timestamp, user, uid, visible, pid));
+  _wayData = std::make_shared<WayData>(id, changeset, version, timestamp, user, uid, visible, pid);
   _wayData->setCircularError(circularError);
 }
 
-Way::Way(const Way& from)
-  : Element(from.getStatus()),
-    _wayData(new WayData(*from._wayData.get()))
+Way::Way(const Way& from) :
+Element(from.getStatus()),
+_wayData(std::make_shared<WayData>(*from._wayData.get()))
 {
 }
 
@@ -300,7 +300,6 @@ bool Way::isSimpleLoop() const
   {
     return false;
   }
-
   return (getFirstNodeId() == getLastNodeId());
 }
 
@@ -326,14 +325,14 @@ bool Way::isValidPolygon() const
 
 void Way::_makeWritable()
 {
-  // make sure we're the only ones referencing the way data.
+  // Make sure we're the only ones referencing the way data.
   if (_wayData.use_count() > 1)
   {
-    _wayData.reset(new WayData(*_wayData));
+    _wayData = std::make_shared<WayData>(*_wayData);
   }
 }
 
-void Way::removeNode(long id)
+void Way::removeNode(long id) const
 {
   LOG_TRACE("Removing node: " << id << " in way: " << getId() << "...");
 
@@ -497,7 +496,20 @@ QSet<long> Way::sharedNodeIds(const Way& other) const
 
 bool Way::hasSharedNode(const Way& other) const
 {
-  return sharedNodeIds(other).size() > 0;
+  return !sharedNodeIds(other).empty();
+}
+
+bool Way::hasSharedEndNode(const Way& other) const
+{
+  const std::vector<long> nodeIds1 = getNodeIds();
+  const std::vector<long> nodeIds2 = other.getNodeIds();
+  const long firstNodeId = nodeIds1.at(0);
+  const long lastNodeId = nodeIds1.at(nodeIds1.size() - 1);
+  const long otherFirstNodeId = nodeIds2.at(0);
+  const long otherLastNodeId = nodeIds2.at(nodeIds2.size() - 1);
+  return
+    firstNodeId == otherFirstNodeId || firstNodeId == otherLastNodeId ||
+    lastNodeId == otherFirstNodeId || lastNodeId == otherLastNodeId;
 }
 
 }

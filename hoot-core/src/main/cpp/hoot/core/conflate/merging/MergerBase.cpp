@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MergerBase.h"
 
@@ -31,15 +31,18 @@ using namespace std;
 namespace hoot
 {
 
+MergerBase::MergerBase(const std::set<std::pair<ElementId, ElementId>>& pairs) :
+_pairs(pairs)
+{
+}
+
 set<ElementId> MergerBase::getImpactedElementIds() const
 {
   set<ElementId> result;
 
-  const PairsSet& pairs = _getPairs();
-  LOG_VART(hoot::toString(pairs));
-  // make sure the map contains all our elements and they aren't conflated.
-  for (set<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
-       it != pairs.end(); ++it)
+  // Make sure the map contains all our elements and they aren't conflated.
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
+       it != _pairs.end(); ++it)
   {
     LOG_VART(it->first);
     LOG_VART(it->second);
@@ -56,11 +59,9 @@ bool MergerBase::isValid(const ConstOsmMapPtr& map) const
 {
   bool result = true;
 
-  const PairsSet& pairs = _getPairs();
-  LOG_VART(hoot::toString(pairs));
   // make sure the map contains all our elements and they aren't conflated.
-  for (set<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
-       it != pairs.end() && result; ++it)
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
+       it != _pairs.end() && result; ++it)
   {
     LOG_VART(it->first);
     LOG_VART(it->second);
@@ -81,40 +82,37 @@ bool MergerBase::isValid(const ConstOsmMapPtr& map) const
 
 void MergerBase::replace(ElementId oldEid, ElementId newEid)
 {
-  LOG_TRACE("Replacing " << oldEid << " with " << newEid << "...");
-
-  PairsSet& pairs = _getPairs();
-  LOG_VART(hoot::toString(pairs));
-
-  set<pair<ElementId, ElementId>>::iterator it = pairs.begin();
-  while (it != pairs.end())
+  set<pair<ElementId, ElementId>>::iterator it = _pairs.begin();
+  while (it != _pairs.end())
   {
-    LOG_VART(it->first);
-    LOG_VART(it->second);
+    ElementId eid1 = it->first;
+    ElementId eid2 = it->second;
+    LOG_VART(eid1);
+    LOG_VART(eid2);
 
     if (it->first == oldEid)
     {
+      LOG_TRACE("Replacing " << oldEid << " with " << newEid << "...");
       pair<ElementId, ElementId> newP = *it;
       newP.first = newEid;
       LOG_VART(newP);
-      pairs.insert(newP);
-      pairs.erase(it++);
+      _pairs.insert(newP);
+      _pairs.erase(it++);
     }
     else if (it->second == oldEid)
     {
+      LOG_TRACE("Replacing " << oldEid << " with " << newEid << "...");
       pair<ElementId, ElementId> newP = *it;
       newP.second = newEid;
       LOG_VART(newP);
-      pairs.insert(newP);
-      pairs.erase(it++);
+      _pairs.insert(newP);
+      _pairs.erase(it++);
     }
     else
     {
       ++it;
     }
   }
-
-  LOG_VART(hoot::toString(pairs));
 }
 
 }

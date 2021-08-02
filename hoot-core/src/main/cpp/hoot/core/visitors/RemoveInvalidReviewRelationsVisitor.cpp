@@ -19,20 +19,20 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RemoveInvalidReviewRelationsVisitor.h"
 
 //hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -58,7 +58,7 @@ void RemoveInvalidReviewRelationsVisitor::visit(const ElementPtr& e)
       }
       // in case the review member count tag didn't get added for some reason, go ahead and at least
       // remove empty relations
-      else if (!hasMemberCountTag && r->getMembers().size() == 0)
+      else if (!hasMemberCountTag && r->getMembers().empty())
       {
         invalidRelation = true;
       }

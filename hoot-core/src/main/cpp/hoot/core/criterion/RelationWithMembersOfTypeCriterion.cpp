@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RelationWithMembersOfTypeCriterion.h"
@@ -48,9 +48,7 @@ _allowMixedChildren(false)
 
 void RelationWithMembersOfTypeCriterion::_initCrit() const
 {
-  _crit =
-    std::shared_ptr<ElementCriterion>(
-      Factory::getInstance().constructObject<ElementCriterion>(getCriterion()));
+  _crit = Factory::getInstance().constructObject<ElementCriterion>(getCriterion());
   if (_map)
   {
     std::shared_ptr<ConstOsmMapConsumer> consumer =

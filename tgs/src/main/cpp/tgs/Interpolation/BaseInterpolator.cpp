@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "BaseInterpolator.h"
 
@@ -38,9 +38,9 @@
 
 // Tgs
 #include <tgs/StreamUtils.h>
+#include <tgs/RandomForest/DataFrame.h>
 #include <tgs/RStarTree/HilbertRTree.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
-#include <tgs/RandomForest/DataFrame.h>
 
 using namespace std;
 
@@ -55,7 +55,7 @@ _iterations(0)
 
 void BaseInterpolator::_checkRebuild()
 {
-  if (_indColumns.size() > 0 && _depColumns.size() > 0 && _df.get() != 0)
+  if (!_indColumns.empty() && !_depColumns.empty() && _df.get() != nullptr)
   {
     _buildModel();
   }
@@ -74,13 +74,15 @@ double BaseInterpolator::estimateError()
 
 HilbertRTree* BaseInterpolator::_getIndex() const
 {
-  if (_index.get() == 0)
+  if (_index.get() == nullptr)
   {
     const DataFrame& df = *_df;
     // 8 children was picked experimentally with two dimensions.
-    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(
-      BoxInternalData::size(_indColumns.size()) * 8 + sizeof(int) * 4));
-    _index.reset(new HilbertRTree(mps, _indColumns.size()));
+    _index =
+      std::make_shared<HilbertRTree>(
+        std::make_shared<MemoryPageStore>(
+          BoxInternalData::size(_indColumns.size()) * 8 + sizeof(int) * 4),
+        _indColumns.size());
 
     vector<Box> boxes(df.getNumDataVectors());
     vector<int> fids(df.getNumDataVectors());
@@ -122,9 +124,9 @@ void BaseInterpolator::readInterpolator(QIODevice& is)
   for (size_t i = 0; i < _indColumns.size(); i++)
   {
     ds >> _indColumns[i];
-    QString s;
-    ds >> s;
-    _indColumnsLabels[i] = s.toStdString();
+    QString str;
+    ds >> str;
+    _indColumnsLabels[i] = str.toStdString();
   }
 
   ds >> s;
@@ -133,16 +135,16 @@ void BaseInterpolator::readInterpolator(QIODevice& is)
   for (size_t i = 0; i < _depColumns.size(); i++)
   {
     ds >> _depColumns[i];
-    QString s;
-    ds >> s;
-    _depColumnsLabels[i] = s.toStdString();
+    QString str;
+    ds >> str;
+    _depColumnsLabels[i] = str.toStdString();
   }
 
   QByteArray qb;
   ds >> qb;
   string str = QString::fromUtf8(qb.constData()).toStdString();
   stringstream ss(str);
-  std::shared_ptr<DataFrame> df(new DataFrame());
+  std::shared_ptr<DataFrame> df = std::make_shared<DataFrame>();
   df->import(ss);
   _df = df;
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef POIPOLYGONDISTANCEEXTRACTOR_H
 #define POIPOLYGONDISTANCEEXTRACTOR_H
@@ -36,7 +36,8 @@ namespace hoot
 {
 
 /**
- * Calculates the distance between a poi and a polygon
+ * @brief The PoiPolygonDistanceExtractor class calculates the distance between a poi and a polygon
+ * for POI to Polygon conflation.
  */
 class PoiPolygonDistanceExtractor : public FeatureExtractorBase
 {
@@ -45,25 +46,22 @@ public:
   static QString className() { return "hoot::PoiPolygonDistanceExtractor"; }
 
   PoiPolygonDistanceExtractor(PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr());
-  virtual ~PoiPolygonDistanceExtractor() = default;
-
-  virtual QString getClassName() const { return className(); }
+  ~PoiPolygonDistanceExtractor() = default;
 
   /**
-   * Calculates the distance between a poi and a polygon
-   *
+   * @brief extract calculates the distance between a poi and a polygon.
    * @param map map containing the elements whose distance is to be determined
    * @param poi a POI element
    * @param poly a polygon element
    * @return the distance between the two elements
    */
-  virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
-                         const ConstElementPtr& poly) const;
+  double extract(const OsmMap& map, const ConstElementPtr& poi,
+                 const ConstElementPtr& poly) const override;
 
-  virtual QString getDescription() const
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
   { return "Calculates the distance between a poi and a polygon"; }
-
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
 private:
 

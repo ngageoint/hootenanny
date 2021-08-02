@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RStarTree.h"
@@ -33,19 +33,21 @@
 #include <cmath>
 #include <exception>
 #include <iostream>
-using namespace std;
 
 #include <tgs/StreamUtils.h>
 #include <tgs/TgsException.h>
 #include <tgs/RStarTree/PageStore.h>
 #include <tgs/RStarTree/RTreeNode.h>
 
-using namespace Tgs;
+using namespace std;
+
+namespace Tgs
+{
 
 RStarTree::RStarTree(const std::shared_ptr<PageStore>& ps, int dimensions)
   : _store(dimensions, ps)
 {
-  RTreeNode* root;
+  const RTreeNode* root;
 
   if (ps->getPageCount() > 0)
   {
@@ -79,10 +81,6 @@ RStarTree::RStarTree(const std::shared_ptr<PageStore>& ps, int dimensions)
   _dimensions = dimensions;
 }
 
-RStarTree::~RStarTree()
-{
-}
-
 void RStarTree::_addChild(RTreeNode* parent, const Box& b, int id)
 {
   if (id < 0)
@@ -104,11 +102,6 @@ int RStarTree::_calculateNodeLevel(const RTreeNode* node) const
     node = _store.getNode(node->getParentId());
   }
   return level;
-}
-
-void RStarTree::cleanTree()
-{
-  //_store.checkThresholdAndFlush();
 }
 
 void RStarTree::_chooseSplitAxis(BoxVector& boxes) const
@@ -197,7 +190,7 @@ RTreeNode* RStarTree::_chooseSubTree(const Box& b, int level)
     int id;
 
     // if the childpointers in N point to leaves
-    RTreeNode* firstChild = _store.getNode(N ->getChildNodeId(0));
+    const RTreeNode* firstChild = _store.getNode(N ->getChildNodeId(0));
     if (firstChild->isLeafNode())
     {
       // determine the minimum overlap cost
@@ -222,7 +215,7 @@ RTreeNode* RStarTree::_chooseSubTree(const Box& b, int level)
   return N ;
 }
 
-int RStarTree::_findLeastEnlargement(RTreeNode* node, const Box& b) const
+int RStarTree::_findLeastEnlargement(const RTreeNode* node, const Box& b) const
 {
   double minExpansion = DBL_MAX;
   int minId = -1;
@@ -238,7 +231,7 @@ int RStarTree::_findLeastEnlargement(RTreeNode* node, const Box& b) const
   return minId;
 }
 
-int RStarTree::_findLeastOverlapEnlargement(RTreeNode* node, const Box& b) const
+int RStarTree::_findLeastOverlapEnlargement(const RTreeNode* node, const Box& b) const
 {
   double minOverlapExpansion = DBL_MAX;
   int minId = -1;
@@ -310,7 +303,7 @@ void RStarTree::_insert(const Box& b, int id, int level)
   else
   {
     // splits 'node' into 'N' and 'newNode'. These nodes contain everything from N
-    RTreeNode* newNode = NULL;
+    RTreeNode* newNode = nullptr;
     int a = _overflowTreatment(N, newNode, level);
     
     // I3 If OverflowTreatment was called and a split was performed, propagate OverflowTreatment
@@ -372,12 +365,12 @@ public:
   Box b;
   int id;
 
-  Child() {}
+  Child() : id(0) { }
 
   Child(int id, const BoxInternalData& b) : b(b.toBox()), id(id) { }
 };
 
-typedef std::pair<double, int> DistancePair;
+using DistancePair = std::pair<double, int>;
 
 class CompareDistancePairs
 {
@@ -490,11 +483,11 @@ void RStarTree::_split(RTreeNode* node, RTreeNode*& newNode)
   {
     if (leaf)
     {
-      boxes.push_back(BoxPair(node->getChildEnvelope(i), node->getChildUserId(i)));
+      boxes.emplace_back(node->getChildEnvelope(i), node->getChildUserId(i));
     }
     else
     {
-      boxes.push_back(BoxPair(node->getChildEnvelope(i), node->getChildNodeId(i)));
+      boxes.emplace_back(node->getChildEnvelope(i), node->getChildNodeId(i));
     }
   }
 
@@ -515,7 +508,7 @@ void RStarTree::_split(RTreeNode* node, RTreeNode*& newNode)
     // efficient.
     for (unsigned int i = 0; i < boxes.size(); i++)
     {
-      tmp.push_back(std::pair<Box, int>(boxes[i].box.toBox(), boxes[i].id)); 
+      tmp.emplace_back(boxes[i].box.toBox(), boxes[i].id);
     }
     node->clear();
     node->setParentId(parentId);
@@ -643,4 +636,6 @@ void RStarTree::_updateBounds(RTreeNode* node)
     // cout << *node << endl;
     parentId = node->getParentId();
   }
+}
+
 }

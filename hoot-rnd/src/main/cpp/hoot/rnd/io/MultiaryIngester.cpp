@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MultiaryIngester.h"
 
@@ -32,6 +32,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/rnd/io/SparkChangesetWriter.h>
 #include <hoot/core/io/HootApiDbReader.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
@@ -69,9 +70,9 @@ _logUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 void MultiaryIngester::_doInputErrorChecking(const QString& newInput,
                                              const QString& translationScript,
                                              const QString& referenceOutput,
-                                             const QString& changesetOutput)
+                                             const QString& changesetOutput) const
 {
-  if (!OsmMapReaderFactory::hasElementInputStream(newInput))
+  if (!IoUtils::isStreamableInput(newInput))
   {
     throw IllegalArgumentException(
       QString("Multiary ingest only supports streamable input formats.") +
@@ -167,18 +168,18 @@ void MultiaryIngester::_sortInputFile(const QString& input)
   if (!OgrReader().isSupported(input))
   {
     QFileInfo newInputFileInfo(input);
-      _sortTempFile.reset(
-        new QTemporaryFile(
-          ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + sortTempFileBaseName + "." +
-          newInputFileInfo.completeSuffix()));
+    _sortTempFile =
+      std::make_shared<QTemporaryFile>(
+        ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + sortTempFileBaseName + "." +
+        newInputFileInfo.completeSuffix());
   }
   else
   {
     //OGR formats have to be converted to PBF before sorting
-    _sortTempFile.reset(
-      new QTemporaryFile(
+    _sortTempFile =
+      std::make_shared<QTemporaryFile>(
         ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + sortTempFileBaseName +
-        ".osm.pbf"));
+        ".osm.pbf");
   }
   //for debugging only
   //sortTempFile->setAutoRemove(false);
@@ -194,7 +195,7 @@ void MultiaryIngester::_sortInputFile(const QString& input)
 }
 
 std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream(
-  const QString& sortedNewInput)
+  const QString& sortedNewInput) const
 {
   std::shared_ptr<PartialOsmMapReader> newInputReader =
     std::dynamic_pointer_cast<PartialOsmMapReader>(
@@ -205,10 +206,11 @@ std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream
     std::dynamic_pointer_cast<ElementInputStream>(newInputReader);
 
   //filter data down to POIs only, translate each element, and assign it a unique hash id
-  std::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
+  std::shared_ptr<PoiCriterion> elementCriterion = std::make_shared<PoiCriterion>();
   QList<ElementVisitorPtr> visitors;
 
-  std::shared_ptr<SchemaTranslationVisitor> translationVisitor(new SchemaTranslationVisitor());
+  std::shared_ptr<SchemaTranslationVisitor> translationVisitor =
+    std::make_shared<SchemaTranslationVisitor>();
   // I think we always want to be going to OSM here unless otherwise specified (or maybe
   // regardless if its specified), but that should be verified.
   QString translationDirection =
@@ -224,12 +226,11 @@ std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream
     conf().getString(ConfigOptions::getSchemaTranslationScriptKey()));
 
   visitors.append(translationVisitor);
-  std::shared_ptr<MultiaryPoiHashVisitor> hashVis(new MultiaryPoiHashVisitor());
+  std::shared_ptr<MultiaryPoiHashVisitor> hashVis = std::make_shared<MultiaryPoiHashVisitor>();
   hashVis->setIncludeCircularError(true);
   visitors.append(hashVis);
-  std::shared_ptr<ElementInputStream> filteredNewInputStream(
-    new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
-  return filteredNewInputStream;
+  return
+    std::make_shared<ElementCriterionVisitorInputStream>(inputStream, elementCriterion, visitors);
 }
 
 void MultiaryIngester::_writeNewReferenceData(const std::shared_ptr<ElementInputStream>& filteredNewInputStream,
@@ -333,10 +334,10 @@ std::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChange
   //the element payload json for writing the change to the database in the next step, write out
   //a second changeset with the payload in xml; this spark changeset writer will write the
   //element payload as xml for db writing
-  std::shared_ptr<QTemporaryFile> tmpChangeset(
-    new QTemporaryFile(
+  std::shared_ptr<QTemporaryFile> tmpChangeset =
+    std::make_shared<QTemporaryFile>(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
-      "/multiary-ingest-changeset-temp-XXXXXX.mic"));
+      "/multiary-ingest-changeset-temp-XXXXXX.mic");
   //for debugging only
   //tmpChangeset->setAutoRemove(false);
   if (!tmpChangeset->open())

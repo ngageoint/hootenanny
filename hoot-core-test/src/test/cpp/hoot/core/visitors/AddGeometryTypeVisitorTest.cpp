@@ -19,16 +19,15 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -56,12 +55,20 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
-    NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 0, 0, 10);
     n1->getTags()["name"] = "strange test";
     map->addNode(n1);
 
-    WayPtr w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 0, 10, 10);
+    map->addNode(n2);
+    NodePtr n3 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 0, 20, 10);
+    map->addNode(n3);
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 13.0);
+    // The geometry must be valid in order to get back a geometry type during conversion, so add
+    // some dummy nodes to this road.
+    w1->addNode(n2->getId());
+    w1->addNode(n3->getId());
     w1->setTag("highway", "road");
     map->addWay(w1);
 

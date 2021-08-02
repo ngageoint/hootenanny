@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SCRIPTMERGER_H
 #define SCRIPTMERGER_H
@@ -46,33 +46,29 @@ public:
   static int logWarnCount;
 
   ScriptMerger() = default;
-  virtual ~ScriptMerger() = default;
-
-  ScriptMerger(const std::shared_ptr<PluginContext>& script, v8::Persistent<v8::Object>& plugin,
+  ScriptMerger(
+    const std::shared_ptr<PluginContext>& script, const v8::Persistent<v8::Object>& plugin,
     const std::set<std::pair<ElementId, ElementId>>& pairs);
+  ~ScriptMerger() = default;
 
-  virtual void apply(const OsmMapPtr& map,
-                     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /**
    * Returns true if the plugin has a function with the specified name.
    */
   bool hasFunction(QString name) const;
 
-  virtual QString toString() const override { return QString("ScriptMerger"); }
+  QString toString() const override { return QString("ScriptMerger"); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Merges elements matched with Generic Conflation"; }
-
-  virtual QString getName() const { return className() + "-" + _matchType; }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className() + "-" + _matchType; }
+  QString getClassName() const override { return className(); }
 
   void setMatchType(const QString& matchType) { _matchType = matchType; }
 
-protected:
+private:
 
-  PairsSet _pairs;
   v8::Persistent<v8::Object> _plugin;
   std::shared_ptr<PluginContext> _script;
   ElementId _eid1, _eid2;
@@ -89,11 +85,9 @@ protected:
   virtual void _applyMergeSets(
     const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) const;
 
-  v8::Handle<v8::Value> _callMergePair(const OsmMapPtr& map) const;
+  v8::Local<v8::Value> _callMergePair(const OsmMapPtr& map) const;
   void _callMergeSets(const OsmMapPtr& map,
                       std::vector<std::pair<ElementId, ElementId>>& replaced) const;
-  virtual PairsSet& _getPairs() override { return _pairs; }
-  virtual const PairsSet& _getPairs() const override { return _pairs; }
 };
 
 }

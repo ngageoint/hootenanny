@@ -19,14 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "CopyMapSubsetOp.h"
 
-#include <hoot/core/elements/ConstElementVisitor.h>
+// Hoot
+#include <hoot/core/criterion/CriterionUtils.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
@@ -52,9 +54,9 @@ public:
   {
     LOG_VART(_copyChildren);
   }
-  virtual ~AddAllVisitor() = default;
+  ~AddAllVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     ElementId eid = e->getElementId();
     LOG_VART(eid);
@@ -63,7 +65,7 @@ public:
     if (eid != _exempt && _to->containsElement(eid) == false)
     {
       // create a copy of the element.
-      ElementPtr ee(_from->getElement(eid)->clone());
+      ElementPtr ee = _from->getElement(eid)->clone();
       LOG_VART(ee->getElementId());
 
       // If it is a node, just copy it, as we don't need to worry about dependencies.
@@ -94,9 +96,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
   std::set<ElementId>& getElementsAdded() { return _elementsAdded; }
 
@@ -156,6 +158,15 @@ _copyChildren(true)
   addCriterion(crit);
 }
 
+void CopyMapSubsetOp::setConfiguration(const Settings& conf)
+{
+  ConfigOptions opts = ConfigOptions(conf);
+  QStringList criterionClassNames = opts.getCopyMapSubsetOpElementCriteria();
+  addCriterion(
+    CriterionUtils::constructCriterion(
+      criterionClassNames, opts.getElementCriteriaChain(), opts.getElementCriteriaNegate()));
+}
+
 void CopyMapSubsetOp::apply(OsmMapPtr& map)
 {
   if (!_from)
@@ -179,7 +190,7 @@ void CopyMapSubsetOp::apply(OsmMapPtr& map)
   std::set<ElementId> eids = v.getElementsAdded();
   LOG_VART(eids.size());
   _eidsCopied.insert(eids.begin(), eids.end());
-  //  Copy the cached rubbersheet if it exists
+  //  Copy the cached rubbersheet if it exists.
   map->setCachedRubberSheet(_from->getCachedRubberSheet());
 }
 
@@ -191,7 +202,7 @@ void CopyMapSubsetOp::addCriterion(const ElementCriterionPtr& crit)
   }
   LOG_VART(crit);
 
-  std::shared_ptr<UniqueElementIdVisitor> getIdVis(new UniqueElementIdVisitor());
+  std::shared_ptr<UniqueElementIdVisitor> getIdVis = std::make_shared<UniqueElementIdVisitor>();
   FilteredVisitor idVis(crit, getIdVis);
   _from->visitRo(idVis);
   _eids = getIdVis->getElementSet();

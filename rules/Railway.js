@@ -20,14 +20,14 @@ exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default")
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 
-// This is needed for disabling superfluous conflate ops. In the future, it may also
-// be used to replace exports.isMatchCandidate (see #3047).
+// This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
+// culling match candidates.
 exports.matchCandidateCriterion = "hoot::RailwayCriterion";
 
-var sublineMatcher =
-  new hoot.MaximalSublineStringMatcher(
-    { "way.matcher.max.angle": hoot.get("railway.matcher.max.angle"),
-      "way.subline.matcher": hoot.get("railway.subline.matcher") });
+// We're just using the default max recursions here for MaximalSubline. May need to come up with a
+// custom value via empirical testing. This will not work if we ever end up needing to pass map in
+// here for this data type.
+var sublineStringMatcher = hoot.SublineStringMatcherFactory.getMatcher(exports.baseFeatureType);
 
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 // Use default spacing, 5 meters
@@ -45,7 +45,7 @@ var lengthScoreExtractor = new hoot.LengthScoreExtractor();
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isRailway(e);
+  return hoot.OsmSchema.isRailway(e);
 };
 
 /**
@@ -74,16 +74,19 @@ exports.matchScore = function(map, e1, e2)
 {
   var result = { miss: 1.0, explain:"miss" };
 
-  if (e1.getStatusString() === e2.getStatusString()) {
+  if (e1.getStatusString() === e2.getStatusString())
+  {
     return result;
   }
 
-  // extract the sublines needed for matching
-  var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
-  if (sublines) {
-    //result = { match: 1.0, explain:"match" };
-    //return result;
+  // Extract the sublines needed for matching.
 
+  var sublines;
+  hoot.trace("Extracting sublines with default...");
+  sublines = sublineStringMatcher.extractMatchingSublines(map, e1, e2);
+  hoot.trace(sublines);
+  if (sublines)
+  {
     var m = sublines.map;
     var m1 = sublines.match1;
     var m2 = sublines.match2;
@@ -122,7 +125,7 @@ exports.mergeSets = function(map, pairs, replaced)
 {
   // snap the ways in the second input to the first input. Use the default tag
   // merge method.
-  return snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
+  return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

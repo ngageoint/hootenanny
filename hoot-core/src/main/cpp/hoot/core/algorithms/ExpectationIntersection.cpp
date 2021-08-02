@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ExpectationIntersection.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 // Tbs
 #include <tbs/stats/TDistribution.h>
@@ -46,7 +46,7 @@ ExpectationIntersection::ExpectationIntersection()
 }
 
 double ExpectationIntersection::_findSplit(const TDistribution& t1, const TDistribution& t2,
-  const Mat &matches, int start, int stop)
+  const Mat &matches, int start, int stop) const
 {
   vector<double> p1(matches.rows);
   double sum2 = 0.0;
@@ -80,13 +80,12 @@ double ExpectationIntersection::_findSplit(const TDistribution& t1, const TDistr
   }
 
   double result = best;
-  int split = (int)best;
 
   // figure out what fraction we need to use to determine a point where it is equal probability.
-  if (p1[split] > 0.5 && p1[split + 1] < 0.5)
+  if (p1[best] > 0.5 && p1[best + 1] < 0.5)
   {
-    double m = p1[split + 1] - p1[split];
-    double b = p1[split];
+    double m = p1[best + 1] - p1[best];
+    double b = p1[best];
     double x = (0.5 - b) / m;
     assert (x >= 0.0 && x <= 1.0);
     result = result + x;
@@ -97,7 +96,7 @@ double ExpectationIntersection::_findSplit(const TDistribution& t1, const TDistr
   return result;
 }
 
-vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Mat& ranges)
+vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Mat& ranges) const
 {
   LOG_TRACE("Snapping matches...");
 
@@ -107,7 +106,7 @@ vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Ma
   vector<int> splitsInt(ranges.rows - 1);
   vector<double> splits(ranges.rows - 1);
 
-  if (splits.size() == 0)
+  if (splits.empty())
   {
     return splits;
   }
@@ -167,7 +166,7 @@ vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Ma
   return splits;
 }
 
-void ExpectationIntersection::_validateRanges(int rowCount, const Mat& ranges)
+void ExpectationIntersection::_validateRanges(int rowCount, const Mat& ranges) const
 {
   assert(ranges.at<int>(0, 0) == 0);
   if (ranges.at<int>(ranges.rows - 1, 1) != rowCount - 1)

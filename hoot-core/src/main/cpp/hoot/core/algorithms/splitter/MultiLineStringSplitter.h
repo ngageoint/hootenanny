@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTILINESTRINGSPLITTER_H
 #define MULTILINESTRINGSPLITTER_H
@@ -46,47 +46,46 @@ public:
   MultiLineStringSplitter(const bool markAddedMultilineStringRelations = false);
 
   /**
-   * Given a WaySublineCollection, extract all the matching sub-elements.
-   *
-   * @param map - Map that contains the data. The resulting match will be added to map if it isn't
+   * @brief createSublines given a WaySublineCollection, extract all the matching sub-elements.
+   * @param map Map that contains the data. The resulting match will be added to map if it isn't
    *  already in map.
-   * @param string - The string of sublines to extract.
-   * @param match - The match will be placed here. If there are multiple matching sublines they'll
+   * @param string The string of sublines to extract.
+   * @param match The match will be placed here. If there are multiple matching sublines they'll
    *  be placed into a multilinestring relation. The relations tags will _not_ be populated with
    *  the subline way tags. Status and CE will be taken from the first matching subline.
    */
   ElementPtr createSublines(const OsmMapPtr& map, const WaySublineCollection& string,
-    const std::vector<bool>& reverse, GeometryToElementConverter::NodeFactory* nf = 0) const;
+    const std::vector<bool>& reverse,
+    std::shared_ptr<GeometryToElementConverter::NodeFactory> nf =
+      std::shared_ptr<GeometryToElementConverter::NodeFactory>()) const;
 
   /**
-   * Given a subline string, cut out all the bits that match the subline and put them into @a match
-   * and put anything that doesn't match into @a scraps.
+   * @brief split given a subline string, cut out all the bits that match the subline and put them
+   * into @a match and put anything that doesn't match into @a scraps.
    *
    * The elements referenced in @a string are not removed from the map. @a match and @a scraps are
    * added to the map along with all their children.
-   *
    * @param match Contains all the bits that match the subline string. This element will be created
-   *  and added to the map. If nothing matches or the line length is zero then @a match will be
-   *  reset.
+   * and added to the map. If nothing matches or the line length is zero then @a match will be
+   * reset.
    * @param scraps Contains all the bits that don't match the subline string. This element will be
    *  created and added to the map. If nothing matches or the line length is zero then @a scraps
    */
   void split(const OsmMapPtr& map, const WaySublineCollection& string,
              const std::vector<bool>& reverse, ElementPtr& match, ElementPtr& scraps,
-             GeometryToElementConverter::NodeFactory *nf = 0) const;
-
+             std::shared_ptr<GeometryToElementConverter::NodeFactory> nf =
+               std::shared_ptr<GeometryToElementConverter::NodeFactory>()) const;
   /**
-   * Split a multi-line string at a given location and put the matching subline into @a match.
-   * Remove the pieces that do not match from the map.
-   *
+   * @brief split splits a multi-line string at a given location, puts the matching subline into
+   * @a match, and removes the pieces that do not match from the map.
    * @param map The map containing the multi-line string to split
    * @param splitPoint The point on a given way in the multi-line string to split on
    * @param match contains all the bits that match the subline string. This element will be created
-   *  and added to the map. If nothing matches or the line length is zero then @a match will be
-   *  reset.
+   * and added to the map. If nothing matches or the line length is zero then @a match will be
+   * reset.
    */
-  void split(const OsmMapPtr& map, const MultiLineStringLocation& splitPoint,
-             ElementPtr& match) const;
+  void split(
+    const OsmMapPtr& map, const MultiLineStringLocation& splitPoint, ElementPtr& match) const;
 
 private:
 

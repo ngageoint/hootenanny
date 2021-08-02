@@ -19,25 +19,25 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "BuildingPartMergeOp.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/polygon/BuildingMerger.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/schema/BuildingRelationMemberTagMerger.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/PreserveTypesTagMerger.h>
+#include <hoot/core/schema/TagComparator.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/TagComparator.h>
-#include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/schema/PreserveTypesTagMerger.h>
-#include <hoot/core/conflate/polygon/BuildingMerger.h>
-#include <hoot/core/schema/BuildingRelationMemberTagMerger.h>
 
 // Qt
 #include <QThreadPool>
@@ -71,11 +71,11 @@ void BuildingPartMergeOp::setConfiguration(const Settings& conf)
   LOG_VARD(_threadCount);
 }
 
-void BuildingPartMergeOp::_init(OsmMapPtr& map)
+void BuildingPartMergeOp::_init(const OsmMapPtr& map)
 {
   _buildingPartGroups.clear();
   _map = map;
-  _ElementToGeometryConverter.reset(new ElementToGeometryConverter(_map));
+  _elementToGeometryConverter = std::make_shared<ElementToGeometryConverter>(_map);
   _numAffected = 0;
   _totalBuildingGroupsProcessed = 0;
   _numBuildingGroupsMerged = 0;
@@ -101,7 +101,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   _map.reset();
 }
 
-QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProcessingInput()
+QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProcessingInput() const
 {
   QQueue<BuildingPartRelationship> buildingPartInput;
 
@@ -113,15 +113,15 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProc
     WayPtr way = it->second;
     std::shared_ptr<geos::geom::Geometry> buildingGeom = _getGeometry(way);
     // If the way wasn't a building, this will be null.
-    if (buildingGeom)
+    if (buildingGeom && !buildingGeom->isEmpty())
     {
       const std::vector<long>& intersectIds =
         _map->getIndex().findWays(*buildingGeom->getEnvelopeInternal());
       LOG_VART(intersectIds.size());
-      for (std::vector<long>::const_iterator it = intersectIds.begin(); it != intersectIds.end();
-           ++it)
+      for (std::vector<long>::const_iterator intersection_it = intersectIds.begin(); intersection_it != intersectIds.end();
+           ++intersection_it)
       {
-        WayPtr neighbor = _map->getWay(*it);
+        WayPtr neighbor = _map->getWay(*intersection_it);
         // see related note about _buildingCrit in BuildingPartMergeOp::_calculateNeighbors
         if (_buildingCrit.isSatisfied(neighbor))
         {
@@ -134,9 +134,9 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProc
 
       const std::set<long>& neighborIds = _calculateNeighbors(way, way->getTags());
       LOG_VART(neighborIds.size());
-      for (std::set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); ++it)
+      for (std::set<long>::const_iterator neighbor_it = neighborIds.begin(); neighbor_it != neighborIds.end(); ++neighbor_it)
       {
-        WayPtr neighbor = _map->getWay(*it);
+        WayPtr neighbor = _map->getWay(*neighbor_it);
         // have already checked building status for neighbor in _calculateNeighbors
         buildingPartInput.enqueue(
           BuildingPartRelationship(
@@ -149,7 +149,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProc
     if (numProcessed % 10000 == 0)
     {
       PROGRESS_INFO(
-        "\tAdded " << StringUtils::formatLargeNumber(numProcessed) << " / " <<
+        "\tAdded " << StringUtils::formatLargeNumber(numProcessed) << " of " <<
         StringUtils::formatLargeNumber(ways.size()) << " ways to building part input.");
     }
   }
@@ -158,7 +158,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProc
   return buildingPartInput;
 }
 
-QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPreProcessingInput()
+QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPreProcessingInput() const
 {
   QQueue<BuildingPartRelationship> buildingPartInput;
 
@@ -171,15 +171,15 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPr
 
     std::shared_ptr<geos::geom::Geometry> buildingGeom = _getGeometry(relation);
     // If the relation wasn't a building, this will be null.
-    if (buildingGeom)
+    if (buildingGeom && !buildingGeom->isEmpty())
     {
       const std::vector<long>& intersectIds =
         _map->getIndex().findWays(*buildingGeom->getEnvelopeInternal());
       LOG_VART(intersectIds.size());
-      for (std::vector<long>::const_iterator it = intersectIds.begin(); it != intersectIds.end();
-           ++it)
+      for (std::vector<long>::const_iterator intersection_it = intersectIds.begin(); intersection_it != intersectIds.end();
+           ++intersection_it)
       {
-        WayPtr neighbor = _map->getWay(*it);
+        WayPtr neighbor = _map->getWay(*intersection_it);
         // see related note about _buildingCrit in BuildingPartMergeOp::_calculateNeighbors
         if (_buildingCrit.isSatisfied(neighbor))
         {
@@ -200,10 +200,10 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPr
         {
           WayPtr member = _map->getWay(memberElementId.getId());
           const std::set<long> neighborIds = _calculateNeighbors(member, relation->getTags());
-          for (std::set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end();
-               ++it)
+          for (std::set<long>::const_iterator neighbor_it = neighborIds.begin(); neighbor_it != neighborIds.end();
+               ++neighbor_it)
           {
-            WayPtr neighbor = _map->getWay(*it);
+            WayPtr neighbor = _map->getWay(*neighbor_it);
             // have already checked building status for neighbor in _calculateNeighbors
             buildingPartInput.enqueue(
               BuildingPartRelationship(
@@ -230,7 +230,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPr
     if (numProcessed % 10000 == 0)
     {
       PROGRESS_INFO(
-        "\tAdded " << StringUtils::formatLargeNumber(numProcessed) << " / " <<
+        "\tAdded " << StringUtils::formatLargeNumber(numProcessed) << " of " <<
         StringUtils::formatLargeNumber(relations.size()) << " relations to building part input.");
     }
   }
@@ -239,7 +239,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPr
   return buildingPartInput;
 }
 
-QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartPreProcessingInput()
+QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartPreProcessingInput() const
 {
   // Tried caching all of the geometries beforehand in order to pass them to the task threads to
   // try to not only avoid repeated geometry calcs but also get rid of an extra call to
@@ -267,11 +267,12 @@ void BuildingPartMergeOp::_preProcessBuildingParts()
   LOG_VART(threadPool.maxThreadCount());
   for (int i = 0; i < _threadCount; i++)
   {
+    // The thread pool takes ownership of this task.
     BuildingPartPreMergeCollector* buildingPartCollectTask = new BuildingPartPreMergeCollector();
     buildingPartCollectTask->setBuildingPartsInput(&buildingPartsInput);
     buildingPartCollectTask->setStartingInputSize(buildingPartsInput.size());
-    // Passing the groups into the threads as a shared pointer slows down processing by ~60%, so
-    // will pass in as a raw pointer.
+    // Passing the groups into the threads as a shared pointer slows down processing by ~60% (not
+    // sure why), so will pass in as a raw pointer.
     buildingPartCollectTask->setBuildingPartGroupsOutput(&_buildingPartGroups);
     buildingPartCollectTask->setMap(_map);
     buildingPartCollectTask->setBuildingPartInputMutex(&buildingPartsInputMutex);
@@ -310,13 +311,13 @@ void BuildingPartMergeOp::_mergeBuildingParts()
       PROGRESS_INFO(
         "\tMerged " << StringUtils::formatLargeNumber(_numAffected) <<
         " building parts after processing " <<
-        StringUtils::formatLargeNumber(_numBuildingGroupsMerged) << " / " <<
+        StringUtils::formatLargeNumber(_numBuildingGroupsMerged) << " of " <<
         StringUtils::formatLargeNumber(_totalBuildingGroupsProcessed) << " building groups.");
     }
   }
 }
 
-std::set<long> BuildingPartMergeOp::_calculateNeighbors(const ConstWayPtr& way, const Tags& tags)
+std::set<long> BuildingPartMergeOp::_calculateNeighbors(const ConstWayPtr& way, const Tags& tags) const
 {
   LOG_VART(way->getElementId());
 
@@ -354,7 +355,7 @@ std::set<long> BuildingPartMergeOp::_calculateNeighbors(const ConstWayPtr& way, 
   return neighborIds;
 }
 
-bool BuildingPartMergeOp::_compareTags(Tags t1, Tags t2)
+bool BuildingPartMergeOp::_compareTags(Tags t1, Tags t2) const
 {
   // remove all the building tags that are building:part=yes specific.
   const QSet<QString> buildingPartTagNames =
@@ -396,10 +397,11 @@ std::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
     {
       case ElementType::Way:
         return
-          _ElementToGeometryConverter->convertToGeometry(std::dynamic_pointer_cast<const Way>(element));
+          _elementToGeometryConverter->convertToGeometry(
+            std::dynamic_pointer_cast<const Way>(element));
       case ElementType::Relation:
         return
-          _ElementToGeometryConverter->convertToGeometry(
+          _elementToGeometryConverter->convertToGeometry(
             std::dynamic_pointer_cast<const Relation>(element));
       default:
         throw IllegalArgumentException(

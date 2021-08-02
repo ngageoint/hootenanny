@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmGbdxXmlWriter.h"
 
@@ -38,7 +38,6 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/UuidHelper.h>
@@ -115,25 +114,13 @@ QString OsmGbdxXmlWriter::removeInvalidCharacters(const QString& s)
 
 void OsmGbdxXmlWriter::open(const QString& url)
 {
-//  if (url.toLower().endsWith(".gxml"))
-//  {
-//    url.remove(url.size() - 5, url.size());
-//  }
-
-//  _outputDir = QDir(url);
-//  _outputDir.makeAbsolute();
-//  _outputFileName = _outputDir.dirName();
-
   QFileInfo fi(url);
   _outputDir = fi.absoluteDir();
   _outputFileName = fi.baseName();
 
-  if (_outputDir.exists() == false)
+  if (_outputDir.exists() == false && FileUtils::makeDir(_outputDir.path()) == false)
   {
-    if (FileUtils::makeDir(_outputDir.path()) == false)
-    {
-      throw HootException("Error creating directory for writing.");
-    }
+    throw HootException("Error creating directory for writing.");
   }
   _bounds.init();
 }
@@ -148,35 +135,32 @@ void OsmGbdxXmlWriter::_newOutputFile()
   }
 
   // The output has had a few changes.....
-//  QString url = _outputDir.filePath(UuidHelper::createUuid().toString().replace("{", "").replace("}", "") + ".xml");
-//  QString url = _outputDir.filePath(QString("%1_%2.xml").arg(_outputFileName,QString::number(_fileNumber++).rightJustified(4,'0')));
-//  QString url = _outputDir.filePath(QString("%1_%2.xml").arg(_outputFileName).arg(_fileNumber++));
   QString url = _outputDir.filePath(QString("%1_00_%2.xml").arg(_outputFileName).arg(_fileNumber++));
 
   // If the file exists, increment the middle _00_ in the name.
   // NOTE: This assumes that there can be a maximum of 10 copies of a filename....
   if (QFile::exists(url))
   {
-//    LOG_ERROR("Clash: Orig Filename: " + url);
     int inc = 0;
     while (QFile::exists(url))
     {
       inc++;
-      url = _outputDir.filePath(QString("%1_%2_%3.xml").arg(_outputFileName).arg(inc,2,10,QChar('0')).arg(_fileNumber));
+      url =
+        _outputDir.filePath(QString("%1_%2_%3.xml")
+          .arg(_outputFileName).arg(inc, 2, 10, QChar('0'))
+          .arg(_fileNumber));
     }
-//    LOG_ERROR("Final name: " + url);
   }
 
-  QFile* f = new QFile();
-  _fp.reset(f);
-  f->setFileName(url);
+  _fp = std::make_shared<QFile>();
+  std::dynamic_pointer_cast<QFile>(_fp)->setFileName(url);
 
   if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {
-    throw Exception(QObject::tr("Error opening %1 for writing").arg(url));
+    throw HootException(QObject::tr("Error opening %1 for writing").arg(url));
   }
 
-  _writer.reset(new QXmlStreamWriter(_fp.get()));
+  _writer = std::make_shared<QXmlStreamWriter>(_fp.get());
   _writer->setCodec("UTF-8");
 
   if (_formatXml)
@@ -207,9 +191,9 @@ QString OsmGbdxXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatX
 {
   OsmGbdxXmlWriter writer;
   writer.setFormatXml(formatXml);
-  // this will be deleted by the _fp std::shared_ptr
-  QBuffer* buf = new QBuffer();
-  writer._fp.reset(buf);
+  // This will be deleted by the _fp std::shared_ptr.
+  std::shared_ptr<QBuffer> buf = std::make_shared<QBuffer>();
+  writer._fp = buf;
   if (!writer._fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {
     throw InternalErrorException(QObject::tr("Error opening QBuffer for writing. Odd."));
@@ -254,9 +238,6 @@ void OsmGbdxXmlWriter::_writeTags(const ConstElementPtr& element)
   // GBDX XML format:
   //   <M_Lang>English</M_Lang>
 
-  //  const ElementType type = element->getElementType();
-  //  assert(type != ElementType::Unknown);
-
   const Tags& tags = element->getTags();
 
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
@@ -279,30 +260,6 @@ void OsmGbdxXmlWriter::_writeTags(const ConstElementPtr& element)
       continue;
     }
 
-    // Image, Platform and Instrument can be a list
-//    if (key == "Src_imgid" || key == "Pltfrm_id" || key == "Ins_Type")
-//    {
-//      QStringList l = val.split(";");
-
-//      _writer->writeStartElement(key);
-//      _writer->writeStartElement("t1");
-//      _writer->writeCharacters(removeInvalidCharacters(l[0]));
-//      _writer->writeEndElement();
-//      _writer->writeStartElement("t2");
-//      // Look for a second value
-//      if (l.size() == 2)
-//      {
-//        _writer->writeCharacters(removeInvalidCharacters(l[1]));
-//      }
-//      else
-//      {
-//        _writer->writeCharacters("NULL");
-//      }
-//      _writer->writeEndElement(); // t2
-//      _writer->writeEndElement(); // key
-//      continue;
-//    }
-
     // Keywords can be a list
     if (key == "Kywrd" || key == "Src_imgid" || key == "Pltfrm_id" || key == "Ins_Type")
     {
@@ -322,21 +279,7 @@ void OsmGbdxXmlWriter::_writeTags(const ConstElementPtr& element)
     _writer->writeStartElement(removeInvalidCharacters(key));
     _writer->writeCharacters(removeInvalidCharacters(val));
     _writer->writeEndElement();
-  } // End tag loop
-
-//  // This is the next to fix.
-//  if (type == ElementType::Relation)
-//  {
-//    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
-//    if (relation->getType() != "")
-//    {
-//      _writer->writeStartElement("Got Relation");
-//      _writer->writeAttribute("k", "type");
-//      _writer->writeAttribute("v", removeInvalidCharacters(relation->getType()));
-//      _writer->writeEndElement();
-//    }
-//  }
-
+  }
 }
 
 void OsmGbdxXmlWriter::_writeNodes(ConstOsmMapPtr map)
@@ -368,12 +311,12 @@ void OsmGbdxXmlWriter::_writeWays(ConstOsmMapPtr map)
     ConstWayPtr w = it->second;
 
     // Skip if null
-    if (w.get() == NULL)
+    if (w.get() == nullptr)
       continue;
 
     //  Skip any ways that have parents
     set<ElementId> parents = map->getParents(w->getElementId());
-    if (parents.size() > 0)
+    if (!parents.empty())
       continue;
 
     // Make sure that building ways are "complete"
@@ -384,7 +327,7 @@ void OsmGbdxXmlWriter::_writeWays(ConstOsmMapPtr map)
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
       {
         ConstNodePtr node = map->getNode(*nodeIt);
-        if (node.get() == NULL)
+        if (node.get() == nullptr)
         {
           valid = false;
           break;
@@ -402,7 +345,7 @@ void OsmGbdxXmlWriter::_writeWays(ConstOsmMapPtr map)
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
       {
         ConstNodePtr node = map->getNode(*nodeIt);
-        if (node.get() != NULL)
+        if (node.get() != nullptr)
         {
           LOG_INFO("Writing Nodes XXX");
           _newOutputFile();
@@ -432,7 +375,7 @@ void OsmGbdxXmlWriter::_writeRelations(ConstOsmMapPtr map)
   }
 }
 
-void OsmGbdxXmlWriter::_writeBounds(const Envelope& bounds)
+void OsmGbdxXmlWriter::_writeBounds(const Envelope& bounds) const
 {
   _writer->writeStartElement("bounds");
   _writer->writeAttribute("minlat", QString::number(bounds.getMinY(), 'g', _precision));
@@ -566,7 +509,7 @@ void OsmGbdxXmlWriter::writePartial(const ConstRelationPtr& r)
     _writer->writeStartElement("member");
     _writer->writeAttribute("type", _typeName(e.getElementId().getType()));
     _writer->writeAttribute("ref", QString::number(e.getElementId().getId()));
-    _writer->writeAttribute("role", removeInvalidCharacters(e.role));
+    _writer->writeAttribute("role", removeInvalidCharacters(e.getRole()));
     _writer->writeEndElement();
   }
 
@@ -627,7 +570,7 @@ void OsmGbdxXmlWriter::_writeRelationWithPoints(const ConstRelationPtr& r,  Cons
   for (vector<RelationData::Entry>::const_iterator it = members.begin(); it != members.end(); ++it)
   {
     ConstElementPtr elm = map->getElement(it->getElementId());
-    if (elm.get() == NULL)
+    if (elm.get() == nullptr)
       continue;
 
     if (firstRel)

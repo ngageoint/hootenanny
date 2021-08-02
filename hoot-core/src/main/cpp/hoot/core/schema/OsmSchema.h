@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSMSCHEMA_H
@@ -263,27 +263,27 @@ class OsmSchema
 {
 public:
 
-  virtual ~OsmSchema();
+  virtual ~OsmSchema() = default;
 
-  void addAssociatedWith(const QString& name1, const QString& name2);
-  void addIsA(const QString& name1, const QString& name2);
-  void addSimilarTo(const QString& name1, const QString& name2, double weight, bool oneway = false);
+  void addAssociatedWith(const QString& name1, const QString& name2) const;
+  void addIsA(const QString& name1, const QString& name2) const;
+  void addSimilarTo(const QString& name1, const QString& name2, double weight, bool oneway = false) const;
 
-  QString average(const QString& kvp1, double w1, const QString& kvp2, double w2, double& best);
-  QString average(const QString& kvp1, const QString& kvp2, double& best);
-
+  QString average(const QString& kvp1, double w1, const QString& kvp2, double w2, double& best) const;
+  QString average(const QString& kvp1, const QString& kvp2, double& best) const;
+ 
   /**
    * ONLY FOR UNIT TESTING. Be a good neighbor and call loadDefault() when you're done.
    */
-  void createTestingGraph();
+  void createTestingGraph() const;
 
   /**
    * Searches for the first common ancestor between two key value pairs. If there is no common
    * ancestor then an empty TagVertex is returned.
    */
-  const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2);
+  const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2) const;
 
-  std::vector<SchemaVertex> getAssociatedTagsAsVertices(const QString& name);
+  std::vector<SchemaVertex> getAssociatedTagsAsVertices(const QString& name) const;
   /**
    * Retrieves a set of tags that are associated with the input tags, as defined by the hoot schema
    *
@@ -296,7 +296,7 @@ public:
   OsmSchemaCategory getCategories(const QString& k, const QString& v) const;
   OsmSchemaCategory getCategories(const QString& kvp) const;
 
-  std::vector<SchemaVertex> getAllTags();
+  std::vector<SchemaVertex> getAllTags() const;
 
   /**
    * Retrieves all possible tag keys from the schema
@@ -314,7 +314,7 @@ public:
 
   bool hasTagKey(const QString& key);
 
-  std::vector<SchemaVertex> getChildTagsAsVertices(const QString& name);
+  std::vector<SchemaVertex> getChildTagsAsVertices(const QString& name) const;
 
   /**
    * Retrieves all child tags for the given input tags
@@ -333,7 +333,7 @@ public:
    *
    * minimumScore must be > 0.
    */
-  std::vector<SchemaVertex> getSimilarTagsAsVertices(const QString& name, double minimumScore);
+  std::vector<SchemaVertex> getSimilarTagsAsVertices(const QString& name, double minimumScore) const;
 
   /**
    * Retrieves tags similar to the input tag
@@ -398,10 +398,10 @@ public:
    */
   bool hasAnyCategory(const QString& key, const QString& val) const;
 
-  bool isAncestor(const QString& childKvp, const QString& parentKvp);
+  bool isAncestor(const QString& childKvp, const QString& parentKvp) const;
 
-  bool allowsFor(const Tags& t, const ElementType& type, OsmGeometries::Type geometries);
-  bool allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries);
+  bool allowsFor(const Tags& t, const ElementType& type, OsmGeometries::Type geometries) const;
+  bool allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries) const;
 
   /**
    * Returns true if this is a list of values. Right now this just looks for a semicolon in value,
@@ -427,20 +427,20 @@ public:
   /**
    * Return true if this tag can contain free-form text.
    */
-  bool isTextTag(const QString& key);
+  bool isTextTag(const QString& key) const;
 
   /**
    * Return true if this tag can contain numeric text.
    */
-  bool isNumericTag(const QString& key);
+  bool isNumericTag(const QString& key) const;
 
   /**
    * Loads the default configuration. This should only be used by unit tests.
    */
   void loadDefault();
 
-  double score(const QString& kvp1, const QString& kvp2);
-  double score(const SchemaVertex& v1, const SchemaVertex& v2);
+  double score(const QString& kvp1, const QString& kvp2) const;
+  double score(const SchemaVertex& v1, const SchemaVertex& v2) const;
 
   /**
    * Scores a particular kvp against an element's tags
@@ -449,7 +449,7 @@ public:
    * @param tags the tags to compare against
    * @return the highest similarity score found in tags when compared to kvp
    */
-  double score(const QString& kvp, const Tags& tags);
+  double score(const QString& kvp, const Tags& tags) const;
 
   /**
    * Returns a collection of tag key/value pairs that represent generic feature types
@@ -497,7 +497,7 @@ public:
    * @param kvp the key/value pair to examine
    * @return true if the input key/value pair represents a generic type; false otherwise
    */
-  bool isGenericKvp(const QString& kvp);
+  bool isGenericKvp(const QString& kvp) const;
 
   /**
    * Determines whether a set of tags represents a generic feature type
@@ -546,7 +546,7 @@ public:
    * @brief scoreOneWay Returns a oneway score. E.g. highway=primary is similar to highway=road,
    *  but a highway=road isn't necessarily similar to a highway=primary (so it gets a low score).
    */
-  double scoreOneWay(const QString& kvp1, const QString& kvp2);
+  double scoreOneWay(const QString& kvp1, const QString& kvp2) const;
 
   /**
    * Determines if a tag key corresponds to a type in the schema
@@ -560,15 +560,15 @@ public:
    * Sets the cost when traversing up the tree to a parent node. This is useful for strict score
    * checking rather than equivalent tags.
    */
-  void setIsACost(double cost);
+  void setIsACost(double cost) const;
 
   QString toGraphvizString() const;
 
   static QString toKvp(const QString& key, const QString& value);
 
-  void update();
+  void update() const;
 
-  void updateOrCreateVertex(const SchemaVertex& tv);
+  void updateOrCreateVertex(const SchemaVertex& tv) const;
 
   /**
    * Determines tags are contained in a list of tags
@@ -599,7 +599,7 @@ public:
    * @return tag that is the ancestor of the other or the first tag if neither is an ancestor of
    * each other
    */
-  QString getParentKvp(const QString& kvp1, const QString& kvp2);
+  QString getParentKvp(const QString& kvp1, const QString& kvp2) const;
 
 private:
 
@@ -610,7 +610,7 @@ private:
 
   // the templates we're including take a crazy long time to include, so I'm isolating the
   // implementation.
-  OsmSchemaData* d;
+  std::shared_ptr<OsmSchemaData> _d;
   static std::shared_ptr<OsmSchema> _theInstance;
   SchemaVertex _empty;
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 #include "Histogram.h"
 
@@ -73,22 +73,16 @@ double Histogram::diff(Histogram& other)
   return diff / 2.0;
 }
 
-size_t Histogram::getBin(Radians theta)
+size_t Histogram::getBin(Radians theta) const
 {
-//  const double c2pi = 2 * M_PI;
-//  // bring theta into 0 - 2pi if it is outside those bounds.
-//  theta = theta - c2pi * floor(theta / c2pi);
-//  return std::max<size_t>(0,
-//    std::min<size_t>(_bins.size() - 1, (theta / c2pi) * _bins.size()));
   while (theta < 0.0)
   {
     theta += 2 * M_PI;
   }
   return (theta / (2 * M_PI)) * _bins.size();
-
 }
 
-Radians Histogram::_getBinAngle(size_t i)
+Radians Histogram::_getBinAngle(size_t i) const
 {
   return 2 * M_PI / _bins.size() * i + M_PI / _bins.size();
 }
@@ -124,7 +118,7 @@ void Histogram::smooth(Radians sigma)
 {
   vector<double> old = _bins;
 
-  // this is quite inefficient and can be reworked to cache the normal curve and reuse it as needed.
+  // This is quite inefficient and can be reworked to cache the normal curve and reuse it as needed.
   for (size_t i = 0; i < _bins.size(); ++i)
   {
     _bins[i] = 0.0;
@@ -143,7 +137,26 @@ QString Histogram::toString() const
   QStringList l;
   for (size_t i = 0; i < _bins.size(); ++i)
   {
-    l << QString::fromUtf8("%1°: %2").arg(toDegrees(getBinCenter(i))).arg(_bins[i]);
+    l <<
+      QString("%1°: %2")
+        .arg(QString::number(toDegrees(getBinCenter(i)), 'g', 6))
+        .arg(QString::number(_bins[i], 'g', 6));
+  }
+  return l.join(", ");
+}
+
+QString Histogram::printPositiveBins() const
+{
+  QStringList l;
+  for (size_t i = 0; i < _bins.size(); ++i)
+  {
+    if (_bins[i] > 0.0)
+    {
+      l <<
+        QString("%1°: %2")
+          .arg(QString::number(toDegrees(getBinCenter(i)), 'g', 6))
+          .arg(QString::number(_bins[i], 'g', 6));
+    }
   }
   return l.join(", ");
 }

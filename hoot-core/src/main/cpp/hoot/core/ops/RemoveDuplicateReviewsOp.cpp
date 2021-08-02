@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RemoveDuplicateReviewsOp.h"
 
@@ -73,7 +73,6 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
 
   // loop through duplicate reviews
   LOG_DEBUG("Removing duplicate reviews...");
-  LOG_VARD(MatchFactory::getInstance().getCreatorsStr());
 
   ReviewMarker reviewMarker;
   QMap<set<ElementId>, QList<ReviewMarker::ReviewUid>>::iterator it = membersToReview.begin();
@@ -99,7 +98,7 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
       ElementId beid = *eids.begin();
       ElementId eeid = *eids.rbegin();
 
-      std::shared_ptr<OsmMap> copy(new OsmMap());
+      std::shared_ptr<OsmMap> copy = std::make_shared<OsmMap>();
       CopyMapSubsetOp(map, beid, eeid).apply(copy);
       copy->getElement(beid)->setStatus(Status::Unknown1);
       copy->getElement(eeid)->setStatus(Status::Unknown2);

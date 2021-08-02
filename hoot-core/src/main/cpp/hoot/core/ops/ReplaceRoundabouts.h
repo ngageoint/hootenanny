@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef REPLACEROUNDABOUTS_H
@@ -64,13 +64,13 @@ public:
    * @brief ReplaceRoundabouts - default constructor
    */
   ReplaceRoundabouts() = default;
-  virtual ~ReplaceRoundabouts() = default;
+  ~ReplaceRoundabouts() = default;
 
   /**
    * @brief apply - Apply the ReplaceRoundabouts Op to the map.
    * @param pMap - Map to operate on.
    */
-  virtual void apply(std::shared_ptr<OsmMap>& pMap) override;
+  void apply(std::shared_ptr<OsmMap>& pMap) override;
 
   /**
    * @brief replaceRoundabouts - Loops through all the roundabouts stored
@@ -80,23 +80,20 @@ public:
    */
   void replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap);
 
-  virtual QString getInitStatusMessage() const override
+  QString getInitStatusMessage() const override
   { return "Replacing road roundabouts with simple intersections..."; }
-
-  virtual QString getCompletedStatusMessage() const override
+  QString getCompletedStatusMessage() const override
   { return "Replaced " + QString::number(_numAffected) + " road roundabouts"; }
-
-  virtual QString getDescription() const override
-  { return "Replaces road roundabouts with simple intersections"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Replaces road roundabouts with simple intersections"; }
 
 private:
 

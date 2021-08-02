@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -71,7 +71,7 @@ public:
       "]                                      \n"
       "}                                      \n";
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmJsonReader().loadFromString(testJsonStr, map);
 
     map->setProjection(MapProjector::createOrthographic(0, 0));
@@ -116,12 +116,12 @@ public:
     // compare a cluster of 2 to a cluster of 1. This isn't strictly the way it will operate
     // under real conditions, but it makes a reasonable test.
     {
-      MultiaryClusterPtr mc1(new MultiaryCluster());
+      MultiaryClusterPtr mc1 = std::make_shared<MultiaryCluster>();
       mc1->append(map->getNode(-2));
       mc1->append(map->getNode(-3));
       mc1->mergedElement = map->getNode(-2);
 
-      MultiaryClusterPtr mc2(new MultiaryCluster());
+      MultiaryClusterPtr mc2 = std::make_shared<MultiaryCluster>();
       mc2->append(map->getNode(-1));
       mc2->mergedElement = map->getNode(-1);
 
@@ -130,12 +130,12 @@ public:
 
     // compare a cluster of 2 to a cluster of 2.
     {
-      MultiaryClusterPtr mc1(new MultiaryCluster());
+      MultiaryClusterPtr mc1 = std::make_shared<MultiaryCluster>();
       mc1->append(map->getNode(-1));
       mc1->append(map->getNode(-2));
       mc1->mergedElement = map->getNode(-2);
 
-      MultiaryClusterPtr mc2(new MultiaryCluster());
+      MultiaryClusterPtr mc2 = std::make_shared<MultiaryCluster>();
       mc2->append(map->getNode(-3));
       mc2->append(map->getNode(-4));
       mc2->mergedElement = map->getNode(-3);
@@ -145,12 +145,12 @@ public:
 
     // compare a cluster of 2 pubs to a cluster w/ locality and military base.
     {
-      MultiaryClusterPtr mc1(new MultiaryCluster());
+      MultiaryClusterPtr mc1 = std::make_shared<MultiaryCluster>();
       mc1->append(map->getNode(-1));
       mc1->append(map->getNode(-2));
       mc1->mergedElement = map->getNode(-2);
 
-      MultiaryClusterPtr mc2(new MultiaryCluster());
+      MultiaryClusterPtr mc2 = std::make_shared<MultiaryCluster>();
       mc2->append(map->getNode(-4));
       mc2->append(map->getNode(-5));
       mc2->mergedElement = map->getNode(-5);

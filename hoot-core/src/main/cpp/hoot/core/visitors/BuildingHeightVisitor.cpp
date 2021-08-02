@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "BuildingHeightVisitor.h"
@@ -93,7 +93,7 @@ void BuildingHeightVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-Meters BuildingHeightVisitor::_getHeight(const ConstElementPtr& e)
+Meters BuildingHeightVisitor::_getHeight(const ConstElementPtr& e) const
 {
   QString heightStr = e->getTags().get("height");
   LOG_VART(heightStr);
@@ -129,7 +129,7 @@ Meters BuildingHeightVisitor::_getHeight(const ConstElementPtr& e)
   return 0.0;
 }
 
-void BuildingHeightVisitor::_cleanHeightStr(QString& heightStr)
+void BuildingHeightVisitor::_cleanHeightStr(QString& heightStr) const
 {
   heightStr =
     heightStr.toLower()
@@ -138,7 +138,7 @@ void BuildingHeightVisitor::_cleanHeightStr(QString& heightStr)
     .simplified();
 }
 
-Meters BuildingHeightVisitor::_parseMetersVal(const QString& heightStr)
+Meters BuildingHeightVisitor::_parseMetersVal(const QString& heightStr) const
 {
   bool ok = false;
   const Meters height = heightStr.toDouble(&ok);
@@ -179,23 +179,23 @@ Meters BuildingHeightVisitor::_parseFeetVal(const QString& heightStr,
   bool noParseErrors = true;
   bool successfulParse = true;
   // These shouldn't really ever be in decimal format, but let's support it anyway.
-  const double feet = _parseFeetToken(feetCaptureGroupName, regexMatch, successfulParse);
+  const double ft = _parseFeetToken(feetCaptureGroupName, regexMatch, successfulParse);
   noParseErrors &= successfulParse;
   const double inches = _parseFeetToken(inchesCaptureGroupName, regexMatch, successfulParse);
   noParseErrors &= successfulParse;
   LOG_VARD(noParseErrors);
-  LOG_VART(feet);
+  LOG_VART(ft);
   LOG_VART(inches);
 
   // warn about invalid values
-  if (!noParseErrors || feet < 0.0 || inches < 0.0)
+  if (!noParseErrors || ft < 0.0 || inches < 0.0)
   {
     _logInvalidFeetHeight(heightStr);
     return 0.0;
   }
 
   // return height in meters
-  return (feet + (inches / 12)) / 3.2808;
+  return (ft + (inches / 12)) / 3.2808;
 }
 
 Meters BuildingHeightVisitor::_parseFeetToken(const QString& type,

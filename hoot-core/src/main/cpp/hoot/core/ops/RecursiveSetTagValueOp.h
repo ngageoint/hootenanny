@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RECURSIVE_SET_TAG_VALUE_OP_H
@@ -39,70 +39,53 @@ namespace hoot
 /**
  * Allows for setting tags on elements and their children (way nodes, relation members)
  */
-class RecursiveSetTagValueOp : public OsmMapOperation, public ElementCriterionConsumer,
-  public Configurable
+class RecursiveSetTagValueOp : public OsmMapOperation, public ElementCriterionConsumer
 {
 public:
 
   static QString className() { return "hoot::RecursiveSetTagValueOp"; }
 
-  RecursiveSetTagValueOp() = default;
-  virtual ~RecursiveSetTagValueOp() = default;
-
-  // We have the constructor signatures from SetTagValueVisitor here, as well as a signature that
-  // allows passing in an already configured, possibly complex, criterion. We may want to extend
-  // that capability to SetTagValueVisitor at some point.
+  RecursiveSetTagValueOp();
+  // We have some of the constructor signatures from SetTagValueVisitor here, as well as a signature
+  // that allows passing in an already configured, possibly complex, criterion. We may want to
+  // extend that capability to SetTagValueVisitor at some point.
   RecursiveSetTagValueOp(
     const QStringList& keys, const QStringList& values, ElementCriterionPtr elementCriterion,
     bool appendToExistingValue = false, const bool overwriteExistingTag = true);
   RecursiveSetTagValueOp(
     const QString& key, const QString& value, ElementCriterionPtr elementCriterion,
     bool appendToExistingValue = false, const bool overwriteExistingTag = true);
-  RecursiveSetTagValueOp(
-    const QStringList& keys, const QStringList& values, const QString& criterionName,
-    bool appendToExistingValue = false, const bool overwriteExistingTag = true,
-    const bool negateCriterion = false);
-  RecursiveSetTagValueOp(
-    const QString& key, const QString& value, const QString& criterionName,
-    bool appendToExistingValue = false, const bool overwriteExistingTag = true,
-    const bool negateCriterion = false);
+    ~RecursiveSetTagValueOp() = default;
 
   /**
    * @see OsmMapOperation
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * @see ElementCriterionConsumer
    */
-  virtual void addCriterion(const ElementCriterionPtr& e);
+  void addCriterion(const ElementCriterionPtr& e) override;
 
   /**
-   * @see Configurable
+   * @see OperationStatus
    */
-  virtual void setConfiguration(const Settings& conf);
-
-  void setNegateCriterion(bool negate) { _negateCriterion = negate; }
+  QString getInitStatusMessage() const override { return _tagger->getInitStatusMessage(); }
+  /**
+   * @see OperationStatus
+   */
+  QString getCompletedStatusMessage() const override
+  { return _tagger->getCompletedStatusMessage(); }
 
   /**
    * @see ApiEntityInfo
    */
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Adds or updates specific tags on elements and their children"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  /**
-   * @see OperationStatus
-   */
-  virtual QString getInitStatusMessage() const { return _tagger->getInitStatusMessage(); }
-
-  /**
-   * @see OperationStatus
-   */
-  virtual QString getCompletedStatusMessage() const { return _tagger->getCompletedStatusMessage(); }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  void setNegateCriterion(bool negate) { _negateCriterion = negate; }
 
 private:
 

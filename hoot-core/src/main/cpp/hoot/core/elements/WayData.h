@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __ELEMENT_WAY_DATA_H__
 #define __ELEMENT_WAY_DATA_H__
@@ -50,12 +50,12 @@ public:
 
   WayData(const WayData& from);
 
-  virtual ~WayData() = default;
+  ~WayData() = default;
 
   void addNode(long id) { _nodes.push_back(id); }
   void insertNode(long index, long id ) { _nodes.insert(_nodes.begin() + index, id); }
 
-  void clear();
+  void clear() override;
 
   const std::vector<long>& getNodeIds() const { return _nodes; }
 
@@ -64,7 +64,7 @@ public:
   long getPid() const { return _pid; }
   void setPid(long pid) { _pid = pid; }
 
-protected:
+private:
 
   /** List of node IDs in the way */
   std::vector<long> _nodes;

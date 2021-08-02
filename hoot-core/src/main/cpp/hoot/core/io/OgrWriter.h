@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OGRWRITER_H
@@ -63,7 +63,21 @@ public:
   static QString className() { return "hoot::OgrWriter"; }
 
   OgrWriter();
-  virtual ~OgrWriter() = default;
+  ~OgrWriter() = default;
+
+  void setConfiguration(const Settings& conf) override;
+
+  void open(const QString& url) override;
+  void write(const ConstOsmMapPtr& map) override;
+  void finalizePartial() override;
+  void writePartial(const ConstNodePtr& node) override;
+  void writePartial(const ConstWayPtr& way) override;
+  void writePartial(const ConstRelationPtr& relation) override;
+  void writeElement(ElementPtr& element) override;
+  void close() override;
+  bool isSupported(const QString& url) override;
+  // leaving this empty for the time being
+  QString supportedFormats() override { return ""; }
 
   /**
    * @brief setCacheCapacity
@@ -74,33 +88,14 @@ public:
    * @note This call deletes the existing cache and creates an entirely new one -- make sure
    *    this function is called BEFORE any data is stored in the cache
    */
-  void setCacheCapacity(const unsigned long maxNodes, const unsigned long maxWays,
-                        const unsigned long maxRelations);
+  void setCacheCapacity(
+    const unsigned long maxNodes, const unsigned long maxWays, const unsigned long maxRelations);
 
-  void close();
-
-  virtual bool isSupported(const QString& url) override;
-
-  // Init the translator
   void initTranslator();
 
-  // Open our ogr output
   void openOutput(const QString& url);
 
-  // Create layers from our translation schema
   void createAllLayers();
-
-  void setCache(ElementCachePtr cachePtr) { _elementCache = cachePtr; }
-
-  virtual void open(const QString& url) override;
-
-  virtual void setConfiguration(const Settings& conf) override;
-
-  void setCreateAllLayers(bool createAll) { _createAllLayers = createAll; }
-
-  void setPrependLayerName(const QString& pre) { _prependLayerName = pre; }
-
-  void setSchemaTranslationScript(const QString& path) { _scriptPath = path; }
 
   /**
    * @brief translateToFeatures Translates the element to a geometry and a
@@ -110,32 +105,25 @@ public:
    * @param g Geometry output
    * @param tf Vector of translated features output
    */
-  void translateToFeatures(ElementProviderPtr& provider,
-                           const ConstElementPtr& e,
-                           std::shared_ptr<geos::geom::Geometry>& g,
-                           std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf);
+  void translateToFeatures(
+    const ElementProviderPtr& provider, const ConstElementPtr& e,
+    std::shared_ptr<geos::geom::Geometry>& g,
+    std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf) const;
 
-  void writeTranslatedFeature(const std::shared_ptr<geos::geom::Geometry>& g,
-                              const std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf);
+  void writeTranslatedFeature(
+    const std::shared_ptr<geos::geom::Geometry>& g,
+    const std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf);
 
-  virtual void write(const ConstOsmMapPtr& map) override;
-
-  virtual void finalizePartial() override;
-
-  virtual void writePartial(const std::shared_ptr<const hoot::Node>&) override;
-
-  virtual void writePartial(const std::shared_ptr<const hoot::Way>&) override;
-
-  virtual void writePartial(const std::shared_ptr<const hoot::Relation>&) override;
-
-  virtual void writeElement(ElementPtr& element) override;
-
-  virtual void writeElement(ElementPtr& element, bool debug);
-
-  //leaving this empty for the time being
-  virtual QString supportedFormats() override { return ""; }
+  void setCreateAllLayers(bool createAll) { _createAllLayers = createAll; }
+  void setPrependLayerName(const QString& pre) { _prependLayerName = pre; }
+  void setSchemaTranslationScript(const QString& path) { _scriptPath = path; }
+  void setCache(ElementCachePtr cachePtr) { _elementCache = cachePtr; }
 
 protected:
+
+  virtual void _writePartial(ElementProviderPtr& provider, const ConstElementPtr& e);
+
+private:
 
   static int logWarnCount;
 
@@ -144,7 +132,7 @@ protected:
   QString _scriptPath;
   mutable std::shared_ptr<ScriptToOgrSchemaTranslator> _translator;
   std::shared_ptr<GDALDataset> _ds;
-  /** Hash of layer names and corresponding layer objects that are owned by the GDALDataset */
+  /* Hash of layer names and corresponding layer objects that are owned by the GDALDataset */
   QHash<QString, OGRLayer*> _layers;
   QHash<QString, std::shared_ptr<OGRSpatialReference>> _projections;
   QString _prependLayerName;
@@ -154,31 +142,26 @@ protected:
   OGRSpatialReference _wgs84;
   AddExportTagsVisitor _addExportTagsVisitor;
 
-  void _addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, const std::shared_ptr<geos::geom::Geometry>& g);
-
-  void _addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Feature>& f,
-                          const geos::geom::Geometry* g,
-                          OGRFeature* poFeature);
-
-  void _createLayer(const std::shared_ptr<const Layer>& layer);
-
-  OGRLayer* _getLayer(const QString& layerName);
-
-  OGRLayer* _getLayerByName(const QString& layerName);
-
-  std::shared_ptr<geos::geom::Geometry> _toMulti(const std::shared_ptr<geos::geom::Geometry>& from);
-
-  void strictError(const QString& warning);
-
-  virtual void _writePartial(ElementProviderPtr& provider, const ConstElementPtr& e);
-
-private:
-
-  //relations that weren't written on a first pass b/c they contained relations as a member which
-  //had not yet been written.
+  // contains relations that weren't written on a first pass b/c they contained relations as a
+  // member which had not yet been written
   QList<long> _unwrittenFirstPassRelationIds;
   bool _failOnSkipRelation;
   int _maxFieldWidth;
+
+  int _numWritten;
+  int _statusUpdateInterval;
+
+  void _addFeature(
+    OGRLayer* layer, const std::shared_ptr<Feature>& f,
+    const std::shared_ptr<geos::geom::Geometry>& g) const;
+  void _addFeatureToLayer(
+    OGRLayer* layer, const std::shared_ptr<Feature>& f, const geos::geom::Geometry* g,
+    OGRFeature* poFeature) const;
+  void _createLayer(const std::shared_ptr<const Layer>& layer);
+  OGRLayer* _getLayer(const QString& layerName);
+  OGRLayer* _getLayerByName(const QString& layerName);
+
+  void _strictError(const QString& warning) const;
 };
 
 }

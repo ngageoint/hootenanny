@@ -19,25 +19,25 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SCHEMATRANSLATEDTAGCOUNTVISITOR_H
 #define SCHEMATRANSLATEDTAGCOUNTVISITOR_H
 
 // hoot
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/SingleStatistic.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 
 namespace hoot
 {
 
 class Feature;
-class ScriptToOgrSchemaTranslator;
 class ScriptSchemaTranslator;
 class Schema;
 
@@ -48,36 +48,35 @@ public:
 
   static QString className() { return "hoot::SchemaTranslatedTagCountVisitor"; }
 
+  SchemaTranslatedTagCountVisitor();
   SchemaTranslatedTagCountVisitor(const std::shared_ptr<ScriptSchemaTranslator>& t);
-  SchemaTranslatedTagCountVisitor() = default;
-  virtual ~SchemaTranslatedTagCountVisitor() = default;
+  ~SchemaTranslatedTagCountVisitor() = default;
 
   long getPopulatedCount() const { return _populatedCount; }
   long getDefaultCount() const { return _defaultCount; }
   long getNullCount() const { return _nullCount; }
   long getTotalCount() const { return getPopulatedCount() + getDefaultCount() + getNullCount(); }
 
-  double getStat() const { return (double)getPopulatedCount() / (double)getTotalCount(); }
+  double getStat() const override { return (double)getPopulatedCount() / (double)getTotalCount(); }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
+  void setOsmMap(const OsmMap* map) override { _map = map; }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Counts the number of tags translated to a schema"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
-
-  virtual QString getInitStatusMessage() const { return "Counting translated tags..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getInitStatusMessage() const override { return "Counting translated tags..."; }
+  QString getCompletedStatusMessage() const override
   {
     return
       "Counted " + StringUtils::formatLargeNumber(getTotalCount()) + " translated tags on " +
       StringUtils::formatLargeNumber(_numAffected) + " features.";
   }
+
+  void setTranslator(const std::shared_ptr<ScriptSchemaTranslator>& translator);
 
 private:
 
@@ -88,7 +87,7 @@ private:
 
   int _taskStatusUpdateInterval;
 
-  void _countTags(std::shared_ptr<Feature>& f);
+  void _countTags(const std::shared_ptr<Feature>& f);
 };
 
 }

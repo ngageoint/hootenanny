@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/HootApiDb.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -41,24 +41,29 @@ public:
 
   DbListCmd() = default;
 
-  virtual QString getName() const override { return "db-list"; }
-
-  virtual QString getDescription() const override
+  QString getName() const override { return "db-list"; }
+  QString getDescription() const override
   { return "Lists maps in the Hootenanny Web Services database"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     if (args.size() != 1)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes one parameter.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes one parameter. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
+
+    LOG_STATUS("Retrieving available maps...");
 
     HootApiDb mapReader;
     mapReader.open(args[0]);
     mapReader.setUserId(mapReader.getUserId(ConfigOptions().getApiDbEmail(), true));
     const QStringList mapNames = mapReader.selectMapNamesAvailableToCurrentUser();
-    if (mapNames.size() == 0)
+    if (mapNames.empty())
     {
       std::cout << "There are no maps available to the specified user in the Hootenanny Web Services database." << std::endl;
     }

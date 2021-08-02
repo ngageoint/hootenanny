@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MAXAGGREGATOR_H
 #define MAXAGGREGATOR_H
@@ -36,21 +36,43 @@ class MaxAggregator : public ValueAggregator
 {
 public:
 
+  /**
+   * @brief className Returns the name of the class
+   * @return a class name
+   */
   static QString className() { return "hoot::MaxAggregator"; }
 
+  /**
+   * @brief Constructor
+   */
   MaxAggregator() = default;
-  virtual ~MaxAggregator() = default;
+  /**
+   * @brief Destructor
+   */
+  ~MaxAggregator() = default;
 
-  virtual double aggregate(std::vector<double>& d) const override;
+  /**
+   * @see ValueAggregator
+   */
+  double aggregate(std::vector<double>& d) const override;
 
-  virtual QString toString() const override { return "MaxAggregator"; }
-
-  virtual QString getDescription() const override
+  /**
+   * @see ApiEntityInfo
+   */
+  QString toString() const override { return "MaxAggregator"; }
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getDescription() const override
   { return "Aggregates data based on the maximum value"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getName() const override { return className(); }
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getClassName() const override { return className(); }
 };
 
 }

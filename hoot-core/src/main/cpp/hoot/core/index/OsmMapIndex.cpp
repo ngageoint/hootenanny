@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmMapIndex.h"
@@ -33,11 +33,11 @@
 #include <geos/geom/Point.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/index/KnnWayIterator.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/index/KnnWayIterator.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/util/StringUtils.h>
@@ -61,14 +61,15 @@ using namespace Tgs;
 namespace hoot
 {
 
-OsmMapIndex::OsmMapIndex(const OsmMap& map) : _map(map)
+OsmMapIndex::OsmMapIndex(const OsmMap& map) :
+_map(map)
 {
   _indexSlush = 0.0;
 }
 
 void OsmMapIndex::addWay(ConstWayPtr w)
 { 
-  if (_nodeToWayMap != 0)
+  if (_nodeToWayMap != nullptr)
   {
     LOG_TRACE("Adding way to index: " << w->getElementId());
     _nodeToWayMap->addWay(w);
@@ -80,9 +81,9 @@ void OsmMapIndex::addWay(ConstWayPtr w)
   _pendingWayRemoval.erase(w->getId());
 }
 
-void OsmMapIndex::addRelation(const ConstRelationPtr& r)
+void OsmMapIndex::addRelation(const ConstRelationPtr& r) const
 {
-  if (_elementToRelationMap != 0)
+  if (_elementToRelationMap != nullptr)
   {
     LOG_TRACE("Adding relation to index: " << r->getElementId());
     _elementToRelationMap->addRelation(_map, r);
@@ -97,8 +98,7 @@ void OsmMapIndex::_buildNodeTree() const
 
   LOG_INFO("Building node R-Tree index");
   // 10 children - 368 - see #3054
-  std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-  _nodeTree.reset(new HilbertRTree(mps, 2));
+  _nodeTree = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
   vector<Box> boxes;
   vector<int> ids;
@@ -124,7 +124,7 @@ void OsmMapIndex::_buildNodeTree() const
 
     if (count % 1000 == 0)
     {
-      PROGRESS_DEBUG("  Node R-Tree count: " << count << " / " << nodes.size() << "       ");
+      PROGRESS_DEBUG("  Node R-Tree count: " << count << " of " << nodes.size() << "       ");
     }
   }
 
@@ -149,8 +149,7 @@ void OsmMapIndex::_buildWayTree() const
 
   LOG_INFO("Building way R-Tree index...");
   // 10 children - 368 - see #3054
-  std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-  _wayTree.reset(new HilbertRTree(mps, 2));
+  _wayTree = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
   vector<Box> boxes;
   vector<int> ids;
@@ -184,7 +183,7 @@ void OsmMapIndex::_buildWayTree() const
 
     if (count % 1000 == 0)
     {
-      PROGRESS_DEBUG("Way R-Tree Index: " << count << " / " << ways.size() << "       ");
+      PROGRESS_DEBUG("Way R-Tree Index: " << count << " of " << ways.size() << "       ");
     }
   }
 
@@ -313,7 +312,7 @@ vector<long> OsmMapIndex::findWayNeighborsBruteForce(ConstWayPtr way, Meters buf
   {
     long nId = it->first;
     ConstWayPtr n = it->second;
-    if (n != 0 && nId != way->getId())
+    if (n != nullptr && nId != way->getId())
     {
       std::shared_ptr<LineString> ls2 =
         ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(n);
@@ -335,7 +334,7 @@ long OsmMapIndex::findNearestWay(Coordinate c) const
   double bestDistance = std::numeric_limits<double>::max();
 
   // grab the geometry for the way that we're comparing all others against.
-  Point* p = GeometryFactory::getDefaultInstance()->createPoint(c);
+  std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
 
   // go through all other ways
   for (WayMap::const_iterator it = _map.getWays().begin();
@@ -343,7 +342,7 @@ long OsmMapIndex::findNearestWay(Coordinate c) const
   {
     long nId = it->first;
     ConstWayPtr n = it->second;
-    if (n != 0 && n->getNodeCount() > 1)
+    if (n != nullptr && n->getNodeCount() > 1)
     {
       std::shared_ptr<LineString> ls2 =
         ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(n);
@@ -356,18 +355,15 @@ long OsmMapIndex::findNearestWay(Coordinate c) const
       }
     }
   }
-
-  delete p;
-
   return result;
 }
 
-std::vector<long> OsmMapIndex::findWayNeighbors(Coordinate& from, Meters buffer) const
+std::vector<long> OsmMapIndex::findWayNeighbors(const Coordinate& from, Meters buffer) const
 {
   vector<long> result;
 
   // grab the geometry for the way that we're comparing all others against.
-  Point* p = GeometryFactory::getDefaultInstance()->createPoint(from);
+  std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(from));
 
   // go through all other ways
   for (WayMap::const_iterator it = _map.getWays().begin();
@@ -375,7 +371,7 @@ std::vector<long> OsmMapIndex::findWayNeighbors(Coordinate& from, Meters buffer)
   {
     long nId = it->first;
     ConstWayPtr n = it->second;
-    if (n != 0 && n->getNodeCount() > 1)
+    if (n != nullptr && n->getNodeCount() > 1)
     {
       std::shared_ptr<LineString> ls2 =
         ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(n);
@@ -387,9 +383,6 @@ std::vector<long> OsmMapIndex::findWayNeighbors(Coordinate& from, Meters buffer)
       }
     }
   }
-
-  delete p;
-
   return result;
 }
 
@@ -419,9 +412,9 @@ vector<long> OsmMapIndex::findWays(const Envelope& e) const
 
 const std::shared_ptr<ElementToRelationMap>& OsmMapIndex::getElementToRelationMap() const
 {
-  if (_elementToRelationMap == 0)
+  if (_elementToRelationMap == nullptr)
   {
-    _elementToRelationMap.reset(new ElementToRelationMap());
+    _elementToRelationMap = std::make_shared<ElementToRelationMap>();
 
     const RelationMap& relations = _map.getRelations();
     for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
@@ -435,22 +428,22 @@ const std::shared_ptr<ElementToRelationMap>& OsmMapIndex::getElementToRelationMa
 
 std::shared_ptr<NodeToWayMap> OsmMapIndex::getNodeToWayMap() const
 {
-  if (_nodeToWayMap == 0)
+  if (_nodeToWayMap == nullptr)
   {
     LOG_TRACE("Initializing node to way map with map of size: " << _map.size() << "...");
-    _nodeToWayMap.reset(new NodeToWayMap(_map));
+    _nodeToWayMap = std::make_shared<NodeToWayMap>(_map);
   }
   return _nodeToWayMap;
 }
 
 std::shared_ptr<const HilbertRTree> OsmMapIndex::getNodeTree() const
 {
-  if (_nodeTree == 0)
+  if (_nodeTree == nullptr)
   {
     _buildNodeTree();
   }
 
-  OsmMapIndex* t = const_cast<OsmMapIndex*>(this);
+  const OsmMapIndex* t = const_cast<OsmMapIndex*>(this);
   for (set<long>::const_iterator it = _pendingNodeInsert.begin(); it != _pendingNodeInsert.end();
        ++it)
   {
@@ -506,12 +499,12 @@ set<ElementId> OsmMapIndex::getParents(ElementId eid) const
 
 std::shared_ptr<const HilbertRTree> OsmMapIndex::getWayTree() const
 {
-  if (_wayTree == 0)
+  if (_wayTree == nullptr)
   {
     _buildWayTree();
   }
 
-  OsmMapIndex* t = const_cast<OsmMapIndex*>(this);
+  const OsmMapIndex* t = const_cast<OsmMapIndex*>(this);
   for (set<long>::const_iterator it = _pendingWayInsert.begin(); it != _pendingWayInsert.end();
        ++it)
   {
@@ -525,7 +518,7 @@ std::shared_ptr<const HilbertRTree> OsmMapIndex::getWayTree() const
   return _wayTree;
 }
 
-void OsmMapIndex::_insertNode(long nid)
+void OsmMapIndex::_insertNode(long nid) const
 {
   ConstNodePtr n = _map.getNode(nid);
 
@@ -537,7 +530,7 @@ void OsmMapIndex::_insertNode(long nid)
   _nodeTree->insert(b, _createTreeNid(nid));
 }
 
-void OsmMapIndex::_insertWay(long wid)
+void OsmMapIndex::_insertWay(long wid) const
 {
   ConstWayPtr w = _map.getWay(wid);
 
@@ -555,13 +548,13 @@ void OsmMapIndex::_insertWay(long wid)
 
 void OsmMapIndex::preGeometryChange(Element* e)
 {
-  if (_nodeToWayMap != 0)
+  if (_nodeToWayMap != nullptr)
   {
     VALIDATE(_nodeToWayMap->validate(_map));
   }
   // if the element to relation map is being maintained and this is not a node. Node movement
   // doesn't impact any relation memberships.
-  if (_elementToRelationMap != 0 && e->getElementType() != ElementType::Node)
+  if (_elementToRelationMap != nullptr && e->getElementType() != ElementType::Node)
   {
     assert(_pendingRelationChange.size() == 0);
     VALIDATE(_elementToRelationMap->validate(_map));
@@ -593,11 +586,11 @@ void OsmMapIndex::postGeometryChange(Element* e)
   {
     addWay(_map.getWay(e->getId()));
   }
-  if (_nodeToWayMap != 0)
+  if (_nodeToWayMap != nullptr)
   {
     VALIDATE(_nodeToWayMap->validate(_map));
   }
-  if (_elementToRelationMap != 0)
+  if (_elementToRelationMap != nullptr)
   {
     // add all the relations that were impacted back into the index.
     for (set<long>::iterator it = _pendingRelationChange.begin();
@@ -617,8 +610,8 @@ void OsmMapIndex::removeNode(ConstNodePtr n)
     _pendingNodeRemoval.insert(n->getId());
     _pendingNodeInsert.erase(n->getId());
 
-    if (_pendingNodeRemoval.size() > std::max((size_t)100, (size_t)_map.getNodes().size() / 8) &&
-        _nodeTree != 0)
+    if (_pendingNodeRemoval.size() > std::max((size_t)100, _map.getNodes().size() / 8) &&
+        _nodeTree != nullptr)
     {
       LOG_DEBUG("pending removal size: " << _pendingNodeRemoval.size());
       _nodeTree.reset();
@@ -626,9 +619,9 @@ void OsmMapIndex::removeNode(ConstNodePtr n)
   }
 }
 
-void OsmMapIndex::removeRelation(const ConstRelationPtr& r)
+void OsmMapIndex::removeRelation(const ConstRelationPtr& r) const
 {
-  if (_elementToRelationMap != 0)
+  if (_elementToRelationMap != nullptr)
   {
     _elementToRelationMap->removeRelation(_map, r);
   }
@@ -639,14 +632,14 @@ void OsmMapIndex::removeWay(ConstWayPtr w)
   _pendingWayRemoval.insert(w->getId());
   _pendingWayInsert.erase(w->getId());
 
-  if (_nodeToWayMap != 0)
+  if (_nodeToWayMap != nullptr)
   {
     VALIDATE(_nodeToWayMap->validate(_map));
     _nodeToWayMap->removeWay(w);
   }
 
-  if (_wayTree != 0 &&
-      _pendingWayRemoval.size() > std::max((size_t)100, (size_t)_map.getWays().size() / 8))
+  if (_wayTree != nullptr &&
+      _pendingWayRemoval.size() > std::max((size_t)100, _map.getWays().size() / 8))
   {
     LOG_DEBUG("pending removal size: " << _pendingWayRemoval.size());
     _wayTree.reset();
@@ -667,11 +660,11 @@ void OsmMapIndex::reset()
 bool OsmMapIndex::validate() const
 {
   bool result = true;
-  if (_nodeToWayMap != 0)
+  if (_nodeToWayMap != nullptr)
   {
     result &= _nodeToWayMap->validate(_map);
   }
-  if (_elementToRelationMap != 0)
+  if (_elementToRelationMap != nullptr)
   {
     result &= _elementToRelationMap->validate(_map);
   }

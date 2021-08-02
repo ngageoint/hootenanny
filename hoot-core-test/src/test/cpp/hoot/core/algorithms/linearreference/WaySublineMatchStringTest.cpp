@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -58,15 +58,15 @@ public:
 
   void runTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                        Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                        Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c, 1, "");
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c, 1, "");
+    WayPtr w1 = TestUtils::createWay(map,  c, "", Status::Unknown1, 1);
+    WayPtr w2 = TestUtils::createWay(map, c, "", Status::Unknown2, 1);
 
-    OsmMapPtr copy(new OsmMap());
+    OsmMapPtr copy = std::make_shared<OsmMap>();
     set<ElementId> eids;
     eids.insert(w1->getElementId());
     eids.insert(w2->getElementId());
@@ -87,15 +87,15 @@ public:
 
   void runTouchesTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                        Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                        Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c, 1, "");
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c, 1, "");
+    WayPtr w1 = TestUtils::createWay(map, c, "", Status::Unknown1, 1);
+    WayPtr w2 = TestUtils::createWay(map, c, "", Status::Unknown2, 1);
 
-    OsmMapPtr copy(new OsmMap());
+    OsmMapPtr copy = std::make_shared<OsmMap>();
     set<ElementId> eids;
     eids.insert(w1->getElementId());
     eids.insert(w2->getElementId());

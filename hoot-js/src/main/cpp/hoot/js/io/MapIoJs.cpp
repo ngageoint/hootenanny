@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MapIoJs.h"
 
@@ -48,44 +48,44 @@ namespace hoot
 
 HOOT_JS_REGISTER(MapIoJs)
 
-void MapIoJs::Init(Handle<Object> exports)
+void MapIoJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  exports->Set(String::NewFromUtf8(current, "loadMap"),
-               FunctionTemplate::New(current, loadMap)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "loadMapFromString"),
-               FunctionTemplate::New(current, loadMapFromString)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "loadGeoJsonFromString"),
-               FunctionTemplate::New(current, loadGeoJsonFromString)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "loadMapFromStringPreserveIdAndStatus"),
-               FunctionTemplate::New(current, loadMapFromStringPreserveIdAndStatus)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "saveMap"),
-               FunctionTemplate::New(current, saveMap)->GetFunction());
+  Local<Context> context = current->GetCurrentContext();
+  exports->Set(context, toV8("loadMap"),
+               FunctionTemplate::New(current, loadMap)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("loadMapFromString"),
+               FunctionTemplate::New(current, loadMapFromString)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("loadMapFromStringPreserveIdAndStatus"),
+               FunctionTemplate::New(current, loadMapFromStringPreserveIdAndStatus)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("saveMap"),
+               FunctionTemplate::New(current, saveMap)->GetFunction(context).ToLocalChecked());
 }
 
 void MapIoJs::loadMap(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   try
   {
-    OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+    OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
 
-    String::Utf8Value param1(args[1]->ToString());
+    String::Utf8Value param1(current, args[1]->ToString(context).ToLocalChecked());
     QString url = QString::fromUtf8(*param1);
 
     bool useFileId = true;
     if (args.Length() >= 3)
     {
-      useFileId = args[2]->ToBoolean()->Value();
+      useFileId = args[2]->BooleanValue(current);
     }
 
     Status status = Status::Invalid;
     if (args.Length() >= 4)
     {
-      status = (Status::Type)args[3]->ToInteger()->Value();
+      status = (Status::Type)args[3]->ToInteger(context).ToLocalChecked()->Value();
     }
 
     OsmMapReaderFactory::read(map->getMap(), url, useFileId, status);
@@ -102,8 +102,9 @@ void MapIoJs::loadMapFromString(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
   QString mapXml = toCpp<QString>(args[1]);
 
   OsmXmlReader reader;
@@ -114,7 +115,7 @@ void MapIoJs::loadMapFromString(const FunctionCallbackInfo<Value>& args)
   Status status = Status::Invalid;
   if (args.Length() >= 4)
   {
-    status = (Status::Type)args[3]->ToInteger()->Value();
+    status = (Status::Type)args[3]->ToInteger(context).ToLocalChecked()->Value();
     reader.setDefaultStatus(status);
   }
   reader.readFromString(mapXml, map->getMap());
@@ -122,37 +123,13 @@ void MapIoJs::loadMapFromString(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().SetUndefined();
 }
 
-void MapIoJs::loadGeoJsonFromString(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  QString mapGeoJson = toCpp<QString>(args[1]);
-
-  OsmGeoJsonReader reader;
-  if (args.Length() >= 3)
-  {
-    reader.setUseDataSourceIds(toCpp<bool>(args[2]));
-  }
-  Status status = Status::Invalid;
-  if (args.Length() >= 4)
-  {
-    status = (Status::Type)args[3]->ToInteger()->Value();
-    reader.setDefaultStatus(status);
-  }
-  reader.loadFromString(mapGeoJson, map->getMap());
-
-  args.GetReturnValue().SetUndefined();
-}
-
-
 void MapIoJs::loadMapFromStringPreserveIdAndStatus(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
   QString mapXml = toCpp<QString>(args[1]);
 
   OsmXmlReader reader;
@@ -167,12 +144,13 @@ void MapIoJs::saveMap(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  OsmMapPtr map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
+  OsmMapPtr map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getMap();
 
   MapProjector::projectToWgs84(map);
 
-  String::Utf8Value param1(args[1]->ToString());
+  String::Utf8Value param1(current, args[1]->ToString(context).ToLocalChecked());
   QString url = QString::fromUtf8(*param1);
 
   OsmMapWriterFactory::write(map, url);

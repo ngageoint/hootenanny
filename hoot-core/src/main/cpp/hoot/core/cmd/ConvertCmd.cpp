@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/DataConverter.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -40,6 +41,7 @@
 // Qt
 #include <QElapsedTimer>
 #include <QStringList>
+#include <QFileInfo>
 
 using namespace std;
 
@@ -54,11 +56,10 @@ public:
 
   ConvertCmd() = default;
 
-  virtual QString getName() const override { return "convert"; }
+  QString getName() const override { return "convert"; }
+  QString getDescription() const override { return "Converts between map formats"; }
 
-  virtual QString getDescription() const override { return "Converts between map formats"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
@@ -68,10 +69,24 @@ public:
 
     BoundedCommand::runSimple(args);
 
-    if (args.size() < 2)
+    bool separateOutput = false;
+    if (args.contains("--separate-output"))
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes at least two parameters.").arg(getName()));
+      separateOutput = true;
+      args.removeAt(args.indexOf("--separate-output"));
+    }
+
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
+    if (args.size() < 2)
+    { 
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     ConfigOptions configOpts(conf());
@@ -81,44 +96,49 @@ public:
     {
       throw IllegalArgumentException(
         "When using " + MapCropper::className() + " with the convert command, the " +
-        configOpts.getCropBoundsKey() + " option must be specified.");
+        ConfigOptions::getCropBoundsKey() + " option must be specified.");
     }
 
+    // Output is the last param.
+    const int outputIndex = args.size() - 1;
+    const QString output = args[outputIndex];
+    args.removeAt(outputIndex);
+    LOG_VARD(output);
+
+    // Everything that's left is an input.
     QStringList inputs;
-    QString output;
-    int argIndex = 0;
-    for (int i = 0; i < args.size(); i++)
+    if (!recursive)
     {
-      const QString arg = args[i];
-      LOG_VART(arg);
-      // Formerly, "--" options existed and were required to all be at the end of the command, so
-      // you could break here once you reached them, and you knew you were done parsing
-      // inputs/outputs. Now, the command doesn't take any command line options except
-      // --write-bounds, which is parsed out beforehand. After that, it uses all configuration
-      // options. So, let's throw if we see a command line option at this point.
-      if (arg.startsWith("--"))
-      {
-        throw IllegalArgumentException(
-          QString("The convert command takes no inline options starting with '--'. All options ") +
-          QString("are passed in as configuration options (-D)."));
-      }
-      argIndex++;
-      inputs.append(arg);
+      inputs = args;
     }
-    LOG_VART(inputs.size());
-    LOG_VART(argIndex);
-    output = inputs.at(argIndex - 1);
-    inputs.removeAt(argIndex - 1);
-    LOG_VART(inputs.size());
-    LOG_VART(inputs);
-    LOG_VART(output);  
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
+    }
 
     ConfigUtils::checkForDuplicateElementCorrectionMismatch(ConfigOptions().getConvertOps());
 
-    DataConverter converter;
-    converter.setConfiguration(conf());
-    converter.convert(inputs, output);
-
+    if (!separateOutput)
+    {
+      // combines all inputs and writes them to the same output
+      DataConverter converter;
+      converter.setConfiguration(conf());
+      converter.convert(inputs, output);
+    }
+    else
+    {
+      // writes a separate output for each input
+      for (int i = 0; i < inputs.size(); i++)
+      {
+        const QString input = inputs.at(i);
+        // Write each output to the format specified by output and a similarly named path as the
+        // input with some text appended to the input name. We need to re-init DataConverter here
+        // each time since it sets and holds onto conversion operators based on the input type.
+        DataConverter converter;
+        converter.setConfiguration(conf());
+        converter.convert(input, IoUtils::getOutputUrlFromInput(input, "-converted", output));
+      }
+    }
     LOG_STATUS(
       "Data conversion completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 

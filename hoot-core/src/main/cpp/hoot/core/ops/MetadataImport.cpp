@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "MetadataImport.h"
@@ -125,7 +125,7 @@ void MetadataImport::_importMetadataToElements()
   }
 }
 
-bool MetadataImport::_areMetadataTagsEqual(ElementPtr p1, ElementPtr p2)
+bool MetadataImport::_areMetadataTagsEqual(ElementPtr p1, ElementPtr p2) const
 {
   Tags t1 = p1->getTags();
   Tags t2 = p2->getTags();

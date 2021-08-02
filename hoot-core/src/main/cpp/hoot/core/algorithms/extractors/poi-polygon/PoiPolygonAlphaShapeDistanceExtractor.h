@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef POIPOLYGONALPHASHAPEDISTANCEEXTRACTOR_H
 #define POIPOLYGONALPHASHAPEDISTANCEEXTRACTOR_H
@@ -36,7 +36,8 @@ namespace hoot
 {
 
 /**
- * Calculates the convex hull distance between a poi and a polygon
+ * @brief The PoiPolygonAlphaShapeDistanceExtractor class calculates the convex hull distance
+ * between a poi and a polygon for POI to Polygon conflation.
  */
 class PoiPolygonAlphaShapeDistanceExtractor : public FeatureExtractorBase
 {
@@ -45,9 +46,7 @@ public:
   static QString className() { return "hoot::PoiPolygonAlphaShapeDistanceExtractor"; }
 
   PoiPolygonAlphaShapeDistanceExtractor() = default;
-  virtual ~PoiPolygonAlphaShapeDistanceExtractor() = default;
-
-  virtual QString getClassName() const { return className(); }
+  ~PoiPolygonAlphaShapeDistanceExtractor() = default;
 
   /**
    * Calculates the convex hull distance between a poi and a polygon
@@ -57,13 +56,13 @@ public:
    * @param poly a polygon element
    * @return the distance between the two elements
    */
-  virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
-                         const ConstElementPtr& poly) const;
+  double extract(const OsmMap& map, const ConstElementPtr& poi,
+                 const ConstElementPtr& poly) const override;
 
-  virtual QString getDescription() const
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
   { return "Calculates the convex hull distance between a poi and a polygon"; }
-
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 };
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "TestUtils.h"
@@ -31,7 +31,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
-#include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/scoring/MapComparator.h>
@@ -40,10 +39,43 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/BuildingOutlineRemoveOp.h>
+#include <hoot/core/ops/RemoveRoundabouts.h>
+#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/algorithms/splitter/HighwayCornerSplitter.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/ops/SmallHighwayMerger.h>
+#include <hoot/core/ops/ReplaceRoundabouts.h>
+#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
+#include <hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.h>
+#include <hoot/core/ops/RemoveDuplicateReviewsOp.h>
+#include <hoot/core/ops/WayJoinerOp.h>
+#include <hoot/core/visitors/RemoveInvalidRelationVisitor.h>
+#include <hoot/core/visitors/RemoveInvalidMultilineStringMembersVisitor.h>
+#include <hoot/core/ops/SuperfluousWayRemover.h>
+#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
+#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
+#include <hoot/core/visitors/ApiTagTruncateVisitor.h>
+#include <hoot/core/ops/AddHilbertReviewSortOrderOp.h>
+#include <hoot/core/ops/ReprojectToPlanarOp.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
+#include <hoot/core/visitors/OneWayRoadStandardizer.h>
+#include <hoot/core/ops/DuplicateWayRemover.h>
+#include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
+#include <hoot/core/ops/UnlikelyIntersectionRemover.h>
+#include <hoot/core/algorithms/splitter/DualHighwaySplitter.h>
+#include <hoot/core/ops/HighwayImpliedDividedMarker.h>
+#include <hoot/core/ops/DuplicateNameRemover.h>
+#include <hoot/core/visitors/RemoveEmptyAreasVisitor.h>
+#include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>
+#include <hoot/core/ops/RelationCircularRefRemover.h>
+#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
+#include <hoot/core/visitors/RemoveDuplicateAreasVisitor.h>
+#include <hoot/core/ops/NoInformationElementRemover.h>
+#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 
 //  tgs
 #include <tgs/Statistics/Random.h>
@@ -74,8 +106,8 @@ bool TestUtils::compareMaps(const QString& refPath, const QString& testPath)
   reader.setUseFileStatus(true);
   reader.setAddSourceDateTime(false);
 
-  OsmMapPtr ref(new OsmMap());
-  OsmMapPtr test(new OsmMap());
+  OsmMapPtr ref = std::make_shared<OsmMap>();
+  OsmMapPtr test = std::make_shared<OsmMap>();
   reader.read(refPath, ref);
   reader.read(testPath, test);
   return compareMaps(ref, test);
@@ -86,81 +118,123 @@ bool TestUtils::compareMaps(OsmMapPtr ref, OsmMapPtr test)
   return MapComparator().isMatch(ref, test);
 }
 
-NodePtr TestUtils::createNode(OsmMapPtr map, Status status, double x, double y,
-                              Meters circularError, Tags tags)
+NodePtr TestUtils::createNode(
+  const OsmMapPtr& map, const QString& note, const Status& status, const double x, const double y,
+  const Meters circularError, const Tags& tags)
 {
-  NodePtr result(new Node(status, map->createNextNodeId(), x, y, circularError));
-  map->addNode(result);
-  result->getTags().add(tags);
-  return result;
-}
-
-WayPtr TestUtils::createDummyWay(OsmMapPtr map, Status status)
-{
-  geos::geom::Coordinate coords[] =
-  { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(0, 10),
-    geos::geom::Coordinate::getNull() };
-  return createWay(map, status, coords);
-}
-
-WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters circularError,
-                            const QString& note)
-{
-  WayPtr result(new Way(s, map->createNextWayId(), circularError));
-  for (size_t i = 0; c[i].isNull() == false; i++)
-  {
-    NodePtr n(new Node(s, map->createNextNodeId(), c[i], circularError));
-    map->addNode(n);
-    result->addNode(n->getId());
-  }
-
+  NodePtr node = std::make_shared<Node>(status, map->createNextNodeId(), x, y, circularError);
+  map->addNode(node);
+  node->getTags().add(tags);
   if (!note.isEmpty())
   {
-    result->getTags().addNote(note);
+    node->getTags().addNote(note);
   }
-  map->addWay(result);
-  return result;
+  return node;
 }
 
-WayPtr TestUtils::createWay(OsmMapPtr map, geos::geom::Coordinate c[], Status status,
-                            Meters circularError, Tags tags)
+WayPtr TestUtils::createWay(
+  const OsmMapPtr& map, const geos::geom::Coordinate c[], const QString& note, const Status& s,
+  const Meters circularError, const Tags& tags)
 {
-  WayPtr way(new Way(status, map->createNextWayId(), circularError));
-  for (size_t i = 0; c[i].isNull() == false; i++)
+  WayPtr way = std::make_shared<Way>(s, map->createNextWayId(), circularError);
+  if (c != nullptr)
   {
-    NodePtr n(new Node(status, map->createNextNodeId(), c[i], circularError));
-    map->addNode(n);
-    way->addNode(n->getId());
+    for (size_t i = 0; c[i].isNull() == false; i++)
+    {
+      NodePtr n = std::make_shared<Node>(s, map->createNextNodeId(), c[i], circularError);
+      map->addNode(n);
+      way->addNode(n->getId());
+    }
   }
-  way->setTags(tags);
+  way->getTags().add(tags);
+  if (!note.isEmpty())
+  {
+    way->getTags().addNote(note);
+  }
   map->addWay(way);
   return way;
 }
 
-WayPtr TestUtils::createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status status,
-                            Meters circularError, Tags tags)
+WayPtr TestUtils::createWay(
+  const OsmMapPtr& map, const QList<NodePtr>& nodes, const QString& note, const Status& status,
+  const Meters circularError, const Tags& tags)
 {
-  WayPtr way(new Way(status, map->createNextWayId(), circularError));
+  WayPtr way = std::make_shared<Way>(status, map->createNextWayId(), circularError);
   foreach (NodePtr node, nodes)
   {
     map->addNode(node);
     way->addNode(node->getId());
   }
   way->setTags(tags);
+  if (!note.isEmpty())
+  {
+    way->getTags().addNote(note);
+  }
   map->addWay(way);
   return way;
 }
 
-RelationPtr TestUtils::createRelation(OsmMapPtr map, const QList<ElementPtr>& elements,
-  Status status, Meters circularError, Tags tags)
+WayPtr TestUtils::createWay(
+  const OsmMapPtr& map, const QList<ElementId>& nodeIds, const QString& note, const Status& status,
+  const Meters circularError, const Tags& tags)
 {
-  RelationPtr relation(new Relation(status, map->createNextRelationId(), circularError));
+  WayPtr way = std::make_shared<Way>(status, map->createNextWayId(), circularError);
+  foreach (ElementId nodeId, nodeIds)
+  {
+    if (!map->containsNode(nodeId.getId()))
+    {
+      throw IllegalArgumentException(nodeId.toString() + " not present in test map.");
+    }
+    way->addNode(nodeId.getId());
+  }
+  way->setTags(tags);
+  if (!note.isEmpty())
+  {
+    way->getTags().addNote(note);
+  }
+  map->addWay(way);
+  return way;
+}
+
+RelationPtr TestUtils::createRelation(
+  const OsmMapPtr& map, const QList<ElementPtr>& elements, const QString& note,
+  const Status& status, const Meters circularError, const Tags& tags)
+{
+  RelationPtr relation =
+    std::make_shared<Relation>(status, map->createNextRelationId(), circularError);
   foreach (ElementPtr element, elements)
   {
     map->addElement(element);
     relation->addElement("test", element);
   }
   relation->setTags(tags);
+  if (!note.isEmpty())
+  {
+    relation->getTags().addNote(note);
+  }
+  map->addRelation(relation);
+  return relation;
+}
+
+RelationPtr TestUtils::createRelation(
+  const OsmMapPtr& map, const QList<ElementId>& elementIds, const QString& note,
+  const Status& status, const Meters circularError, const Tags& tags)
+{
+  RelationPtr relation =
+    std::make_shared<Relation>(status, map->createNextRelationId(), circularError);
+  foreach (ElementId elementId, elementIds)
+  {
+    if (!map->containsElement(elementId))
+    {
+      throw IllegalArgumentException(elementId.toString() + " not present in test map.");
+    }
+    relation->addElement("test", elementId);
+  }
+  relation->setTags(tags);
+  if (!note.isEmpty())
+  {
+    relation->getTags().addNote(note);
+  }
   map->addRelation(relation);
   return relation;
 }
@@ -182,28 +256,6 @@ void TestUtils::dumpString(const string& str)
   }
   cout << "};" << endl;
   cout << "size_t dataSize = " << str.size() << ";" << endl;
-}
-
-ElementPtr TestUtils::getElementWithNote(OsmMapPtr map, QString note)
-{
-  return getElementWithTag(map, "note", note);
-}
-
-ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString& tagKey,
-                                        const QString& tagValue)
-{
-  TagCriterion tc(tagKey, tagValue);
-  UniqueElementIdVisitor v;
-  FilteredVisitor fv(tc, v);
-  map->visitRo(fv);
-  const set<ElementId> bag = v.getElementSet();
-
-  if (bag.size() != 1)
-  {
-    throw HootException("Could not find an expected element with tag: " + tagKey + "=" + tagValue);
-  }
-
-  return map->getElement(*bag.begin());
 }
 
 TestUtils& TestUtils::getInstance()
@@ -256,7 +308,6 @@ void TestUtils::resetEnvironment(const QStringList confs)
     LOG_VART(confs[i]);
     conf().loadJson(confs[i]);
   }
-  //LOG_VART(conf());
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
 
   // Sometimes we add new projections to the MapProjector, when this happens it may pick a new
@@ -318,54 +369,54 @@ void TestUtils::verifyStdMatchesOutputIgnoreDate(const QString& stdFilePath,
 QStringList TestUtils::getConflateCmdSnapshotPreOps()
 {
   QStringList conflatePreOps;
-  conflatePreOps.append("hoot::BuildingOutlineRemoveOp");
-  conflatePreOps.append("hoot::RemoveRoundabouts");
-  conflatePreOps.append("hoot::MapCleaner");
-  conflatePreOps.append("hoot::HighwayCornerSplitter");
+  conflatePreOps.append(BuildingOutlineRemoveOp::className());
+  conflatePreOps.append(RemoveRoundabouts::className());
+  conflatePreOps.append(MapCleaner::className());
+  conflatePreOps.append(HighwayCornerSplitter::className());
   return conflatePreOps;
 }
 
 QStringList TestUtils::getConflateCmdSnapshotPostOps()
 {
   QStringList conflatePostOps;
-  conflatePostOps.append("hoot::SuperfluousNodeRemover");
-  conflatePostOps.append("hoot::SmallHighwayMerger");
-  conflatePostOps.append("hoot::ReplaceRoundabouts");
-  conflatePostOps.append("hoot::RemoveMissingElementsVisitor");
-  conflatePostOps.append("hoot::RemoveInvalidReviewRelationsVisitor");
-  conflatePostOps.append("hoot::RemoveDuplicateReviewsOp");
-  conflatePostOps.append("hoot::BuildingOutlineUpdateOp");
-  conflatePostOps.append("hoot::WayJoinerOp");
-  conflatePostOps.append("hoot::RemoveInvalidRelationVisitor");
-  conflatePostOps.append("hoot::RemoveInvalidMultilineStringMembersVisitor");
-  conflatePostOps.append("hoot::SuperfluousWayRemover");
-  conflatePostOps.append("hoot::RemoveDuplicateWayNodesVisitor");
-  conflatePostOps.append("hoot::RemoveEmptyRelationsOp");
-  conflatePostOps.append("hoot::ApiTagTruncateVisitor");
-  conflatePostOps.append("hoot::AddHilbertReviewSortOrderOp");
+  conflatePostOps.append(SuperfluousNodeRemover::className());
+  conflatePostOps.append(SmallHighwayMerger::className());
+  conflatePostOps.append(ReplaceRoundabouts::className());
+  conflatePostOps.append(RemoveMissingElementsVisitor::className());
+  conflatePostOps.append(RemoveInvalidReviewRelationsVisitor::className());
+  conflatePostOps.append(RemoveDuplicateReviewsOp::className());
+  conflatePostOps.append(BuildingOutlineUpdateOp::className());
+  conflatePostOps.append(WayJoinerOp::className());
+  conflatePostOps.append(RemoveInvalidRelationVisitor::className());
+  conflatePostOps.append(RemoveInvalidMultilineStringMembersVisitor::className());
+  conflatePostOps.append(SuperfluousWayRemover::className());
+  conflatePostOps.append(RemoveDuplicateWayNodesVisitor::className());
+  conflatePostOps.append(RemoveEmptyRelationsOp::className());
+  conflatePostOps.append(ApiTagTruncateVisitor::className());
+  conflatePostOps.append(AddHilbertReviewSortOrderOp::className());
   return conflatePostOps;
 }
 
 QStringList TestUtils::getConflateCmdSnapshotCleaningOps()
 {
   QStringList mapCleanerTransforms;
-  mapCleanerTransforms.append("hoot::ReprojectToPlanarOp");
-  mapCleanerTransforms.append("hoot::DuplicateNodeRemover");
-  mapCleanerTransforms.append("hoot::OneWayRoadStandardizer");
-  mapCleanerTransforms.append("hoot::DuplicateWayRemover");
-  mapCleanerTransforms.append("hoot::SuperfluousWayRemover");
-  mapCleanerTransforms.append("hoot::IntersectionSplitter");
-  mapCleanerTransforms.append("hoot::UnlikelyIntersectionRemover");
-  mapCleanerTransforms.append("hoot::DualHighwaySplitter");
-  mapCleanerTransforms.append("hoot::HighwayImpliedDividedMarker");
-  mapCleanerTransforms.append("hoot::DuplicateNameRemover");
-  mapCleanerTransforms.append("hoot::SmallHighwayMerger");
-  mapCleanerTransforms.append("hoot::RemoveEmptyAreasVisitor");
-  mapCleanerTransforms.append("hoot::RemoveDuplicateRelationMembersVisitor");
-  mapCleanerTransforms.append("hoot::RelationCircularRefRemover");
-  mapCleanerTransforms.append("hoot::RemoveEmptyRelationsOp");
-  mapCleanerTransforms.append("hoot::RemoveDuplicateAreasVisitor");
-  mapCleanerTransforms.append("hoot::NoInformationElementRemover");
+  mapCleanerTransforms.append(ReprojectToPlanarOp::className());
+  mapCleanerTransforms.append(DuplicateNodeRemover::className());
+  mapCleanerTransforms.append(OneWayRoadStandardizer::className());
+  mapCleanerTransforms.append(DuplicateWayRemover::className());
+  mapCleanerTransforms.append(SuperfluousWayRemover::className());
+  mapCleanerTransforms.append(IntersectionSplitter::className());
+  mapCleanerTransforms.append(UnlikelyIntersectionRemover::className());
+  mapCleanerTransforms.append(DualHighwaySplitter::className());
+  mapCleanerTransforms.append(HighwayImpliedDividedMarker::className());
+  mapCleanerTransforms.append(DuplicateNameRemover::className());
+  mapCleanerTransforms.append(SmallHighwayMerger::className());
+  mapCleanerTransforms.append(RemoveEmptyAreasVisitor::className());
+  mapCleanerTransforms.append(RemoveDuplicateRelationMembersVisitor::className());
+  mapCleanerTransforms.append(RelationCircularRefRemover::className());
+  mapCleanerTransforms.append(RemoveEmptyRelationsOp::className());
+  mapCleanerTransforms.append(RemoveDuplicateAreasVisitor::className());
+  mapCleanerTransforms.append(NoInformationElementRemover::className());
   return mapCleanerTransforms;
 }
 
@@ -375,9 +426,9 @@ void TestUtils::runConflateOpReductionTest(
 {
   QStringList actualOps;
 
-  CPPUNIT_ASSERT_EQUAL(4,  TestUtils::getConflateCmdSnapshotPreOps().size());
-  CPPUNIT_ASSERT_EQUAL(15,  TestUtils::getConflateCmdSnapshotPostOps().size());
-  CPPUNIT_ASSERT_EQUAL(17,  TestUtils::getConflateCmdSnapshotCleaningOps().size());
+  CPPUNIT_ASSERT_EQUAL(4, TestUtils::getConflateCmdSnapshotPreOps().size());
+  CPPUNIT_ASSERT_EQUAL(15, TestUtils::getConflateCmdSnapshotPostOps().size());
+  CPPUNIT_ASSERT_EQUAL(17, TestUtils::getConflateCmdSnapshotCleaningOps().size());
 
   MatchFactory::getInstance().reset();
   MatchFactory::getInstance()._setMatchCreators(matchCreators);
@@ -392,12 +443,15 @@ void TestUtils::runConflateOpReductionTest(
   SuperfluousConflateOpRemover::removeSuperfluousOps();
 
   actualOps = conf().getList(ConfigOptions::getConflatePreOpsKey());
+  LOG_VART(actualOps);
   CPPUNIT_ASSERT_EQUAL(expectedPreOpSize, actualOps.size());
 
   actualOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
+  LOG_VART(actualOps);
   CPPUNIT_ASSERT_EQUAL(expectedPostOpsSize, actualOps.size());
 
   actualOps = conf().getList(ConfigOptions::getMapCleanerTransformsKey());
+  LOG_VART(actualOps);
   CPPUNIT_ASSERT_EQUAL(expectedCleaningOpsSize, actualOps.size());
 }
 

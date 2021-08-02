@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "Address.h"
 
@@ -69,7 +69,7 @@ _isSubLetter(false)
   }
 }
 
-void Address::_initializeStringComparator()
+void Address::_initializeStringComparator() const
 {
   const QString stringCompClassName = ConfigOptions().getAddressStringComparer().trimmed();
   if (stringCompClassName.isEmpty())
@@ -79,9 +79,7 @@ void Address::_initializeStringComparator()
   }
   else
   {
-    _stringComp =
-      StringDistancePtr(
-        Factory::getInstance().constructObject<StringDistance>(stringCompClassName));
+    _stringComp = Factory::getInstance().constructObject<StringDistance>(stringCompClassName);
     if (!_stringComp)
     {
       throw IllegalArgumentException(
@@ -93,7 +91,7 @@ void Address::_initializeStringComparator()
     if (strDistConsumer)
     {
       strDistConsumer->setStringDistance(
-        StringDistancePtr(new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha())));
+        std::make_shared<LevenshteinDistance>(ConfigOptions().getLevenshteinDistanceAlpha()));
     }
   }
 }
@@ -107,7 +105,7 @@ bool Address::operator==(const Address& address) const
     !_address.isEmpty() &&
       (_stringComp->compare(_address, address._address) == 1.0 ||
        (_allowLenientHouseNumberMatching &&
-        // don't do subletter matching on an intersection, as it won't have house numbers
+        // Don't do subletter matching on an intersection, as it won't have house numbers.
         !isStreetIntersectionAddress(_address, !_parsedFromAddressTag) &&
         AddressParser::addressesMatchDespiteSubletterDiffs(_address, address._address)));
 }

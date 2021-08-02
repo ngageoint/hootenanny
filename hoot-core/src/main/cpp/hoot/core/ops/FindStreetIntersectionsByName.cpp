@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "FindStreetIntersectionsByName.h"
 
@@ -46,6 +46,8 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, FindStreetIntersectionsByName)
 void FindStreetIntersectionsByName::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
+  _nameCrit = std::make_shared<NameCriterion>();
+  _nameCrit->setConfiguration(conf);
   const QStringList streetNames = opts.getNameCriterionNames();
   if (streetNames.size() != 2)
   {
@@ -53,8 +55,6 @@ void FindStreetIntersectionsByName::setConfiguration(const Settings& conf)
       QString("The name.criterion.names configuration option for FindStreetIntersectionsByName") +
       QString("must consist of exactly two names."));
   }
-  _nameCrit.reset(new NameCriterion());
-  _nameCrit->setConfiguration(conf);
 }
 
 void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
@@ -69,9 +69,7 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
   // Use the total number of roads in the map as the total feature being processed.
   _numProcessed =
     (int)FilteredVisitor::getStat(
-      ElementCriterionPtr(new HighwayCriterion(map)),
-      ElementVisitorPtr(new ElementCountVisitor()),
-      map);
+      std::make_shared<HighwayCriterion>(map), std::make_shared<ElementCountVisitor>(), map);
   LOG_VARD(_numProcessed);
   _numAffected = 0;
 
@@ -87,12 +85,12 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
 
   // Now, combine the maps back together to search over and use the assigned statuses to prevent
   // incorrect matches.
-  OsmMapPtr combinedMatchingRoadsMap(new OsmMap(matchingRoads1Map));
+  OsmMapPtr combinedMatchingRoadsMap = std::make_shared<OsmMap>(matchingRoads1Map);
   combinedMatchingRoadsMap->append(matchingRoads2Map);
   matchingRoads1Map.reset();
   matchingRoads2Map.reset();
 
-  OsmMapPtr intersectingWayNodesMap(new OsmMap());
+  OsmMapPtr intersectingWayNodesMap = std::make_shared<OsmMap>();
   // make a copy so we can iterate through even if there are changes
   const WayMap ways = combinedMatchingRoadsMap->getWays();
   LOG_VARD(ways.size());
@@ -134,8 +132,8 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
           if (wayNode)
           {
             LOG_VART(wayNode);
-            // add the intersection node to the output map
-            NodePtr intersectionNode(new Node(*wayNode));
+            // Add the intersection node to the output map.
+            NodePtr intersectionNode = std::make_shared<Node>(*wayNode);
             intersectionNode->getTags().set(
               MetadataTags::HootIntersectionStreet1(), way->getTags().getName());
             intersectionNode->getTags().set(
@@ -151,18 +149,34 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
 }
 
 OsmMapPtr FindStreetIntersectionsByName::_filterRoadsByStreetName(
-  const QString& name, const Status& status, const ConstOsmMapPtr& map)
+  const QString& name, const Status& status, const ConstOsmMapPtr& map) const
 {
   const QStringList streetNames(name);
   _nameCrit->setNames(streetNames);
-  ElementCriterionPtr crit(
-    new ChainCriterion(std::shared_ptr<HighwayCriterion>(new HighwayCriterion(map)), _nameCrit));
+  ElementCriterionPtr crit =
+    std::make_shared<ChainCriterion>(std::make_shared<HighwayCriterion>(map), _nameCrit);
   CopyMapSubsetOp mapCopier(map, crit);
-  OsmMapPtr matchingRoadsMap(new OsmMap());
+  OsmMapPtr matchingRoadsMap = std::make_shared<OsmMap>();
   mapCopier.apply(matchingRoadsMap);
   StatusUpdateVisitor statusUpdater(status);
   matchingRoadsMap->visitWaysRw(statusUpdater);
   return matchingRoadsMap;
+}
+
+QString FindStreetIntersectionsByName::getCompletedStatusMessage() const
+{
+  if (!_nameCrit->getNames().isEmpty())
+  {
+    return
+      "Located " + StringUtils::formatLargeNumber(_numAffected) +
+      " street intersections for inputs: " + _nameCrit->getNames()[0] + " and " +
+      _nameCrit->getNames()[1] + " out of " + StringUtils::formatLargeNumber(_numProcessed) +
+      " streets.";
+  }
+  else
+  {
+    return "Located no street intersections.";
+  }
 }
 
 }

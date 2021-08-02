@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESET_REPLACEMENT_CREATOR_ABSTRACT_H
 #define CHANGESET_REPLACEMENT_CREATOR_ABSTRACT_H
@@ -41,9 +41,13 @@ class ChainCriterion;
 class Settings;
 
 /**
- * High level abstract class for prepping data for replacement changeset generation (changesets
- * which replace features inside of a specified bounds) and then calls on the appropriate changeset
- * file writer to output a changeset file.
+ *
+ */
+/**
+ * @brief The ChangesetReplacementCreatorAbstract class is a high level abstract class for prepping
+ * data for replacement changeset generation (changesets which replace features inside of a
+ * specified bounds) and then calls on the appropriate changeset file writer to output a changeset
+ * file.
  *
  * This class uses a customized workflow that depends upon the feature type the changeset is being
  * generated for, whether all the reference features or just those that overlap secondary features
@@ -69,7 +73,6 @@ class Settings;
  */
 class ChangesetReplacementCreatorAbstract : public ChangesetReplacement
 {
-
   /**
    * Options used to control cropping at various stages of the replacement changeset workflow
    */
@@ -128,19 +131,19 @@ public:
   /**
    * @see ChangesetReplacement
    */
-  virtual void setChangesetOptions(
-    const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl);
+  void setChangesetOptions(const bool printStats, const QString& statsOutputFile,
+                           const QString osmApiDbUrl) override;
 
-  virtual int getNumChanges() const { return _numChanges; }
+  int getNumChanges() const  override{ return _numChanges; }
 
-  virtual void setFullReplacement(const bool full) { _fullReplacement = full; }
-  virtual void setBoundsInterpretation(const BoundsInterpretation& interpretation)
+  void setFullReplacement(const bool full) override { _fullReplacement = full; }
+  void setBoundsInterpretation(const BoundsInterpretation& interpretation) override
   { _boundsInterpretation = interpretation; }
-  virtual void setEnableWaySnapping(const bool enable) { _enableWaySnapping = enable; }
-  virtual void setChangesetId(const QString& id) { _changesetId = id; }
+  void setEnableWaySnapping(const bool enable) override { _enableWaySnapping = enable; }
+  void setChangesetId(const QString& id) override { _changesetId = id; }
 
-  virtual QString toString() const override
-    { return className().remove("hoot::"); }
+  QString toString() const override
+  { return className().remove("hoot::"); }
 
 protected:
 
@@ -168,9 +171,6 @@ protected:
   // controls cropping
   BoundsOptions _boundsOpts;
 
-  // Configuration options to pass to the filters in _replacementFilter.
-  Settings _replacementFilterOptions;
-
   // determines if the current changeset map generation pass contains only linear features
   bool _currentChangeDerivationPassIsLinear;
 
@@ -190,25 +190,6 @@ protected:
   // A list of linear geometry criterion classes to apply way snapping to.
   QStringList _linearFilterClassNames;
 
-  // One or more non-geometry criteria to be combined with the geometry type filters for the
-  // secondary input. Allows for further restriction of the secondary data that makes it to output.
-  std::shared_ptr<ChainCriterion> _replacementFilter;
-
-  // If true, the filters specified in _replacementFilter are AND'd together. Otherwise, they're OR'd
-  // together.
-  bool _chainReplacementFilters;
-
-  // One or more non-geometry criteria to be combined with the geometry type filters for the
-  // reference input. Allows for further restriction of the ref data that gets replaced.
-  std::shared_ptr<ChainCriterion> _retainmentFilter;
-
-  // If true, the filters specified in _retainmentFilter are AND'd together. Otherwise, they're OR'd
-  // together.
-  bool _chainRetainmentFilters;
-
-  // Configuration options to pass to the filters in _retainmentFilter.
-  Settings _retainmentFilterOptions;
-
   bool _enableWaySnapping;
 
   // helpful to name the debug map files when doing successive replacements
@@ -224,7 +205,7 @@ protected:
   float _getJobPercentComplete() const;
 
   virtual void _setGlobalOpts() = 0;
-  void _validateInputs();
+  void _validateInputs() const;
   void _printJobDescription() const;
   QString _boundsInterpretationToString(const BoundsInterpretation& boundsInterpretation) const;
 
@@ -232,28 +213,28 @@ protected:
     const QString& mapName, const QString& inputUrl, const bool useFileIds, const Status& status,
     const bool keepEntireFeaturesCrossingBounds, const bool keepOnlyFeaturesInsideBounds,
     const bool keepImmediatelyConnectedWaysOutsideBounds, const bool warnOnZeroVersions,
-    OsmMapPtr& cachedMap);
+    OsmMapPtr& cachedMap) const;
 
   /*
    * Filters features down to just those that should be replaced in the ref dataset or used to
    * replace from the sec dataset.
    */
   void _filterFeatures(
-    OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
+    const OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
     const GeometryTypeCriterion::GeometryType& geometryType, const Settings& config,
-    const QString& debugFileName);
+    const QString& debugFileName) const;
 
   /*
    * Removes changeset replacement metadata tags which should be seen in raw input
    */
-  void _removeMetadataTags(const OsmMapPtr& map);
+  void _removeMetadataTags(const OsmMapPtr& map) const;
 
   /*
    * Adds a custom tag to any element from the input with a missing child. This is primarily useful
    * in repairing relations manually that were passed in without some of their child elements after
    * the replacement changeset is written.
    */
-  void _markElementsWithMissingChildren(OsmMapPtr& map);
+  void _markElementsWithMissingChildren(const OsmMapPtr& map) const;
 
   /*
    * Keeps track of the changeset versions for features
@@ -264,44 +245,44 @@ protected:
    * Adds tags to a feature that will prevent ChangesetDeriver from ever creating a delete
    * statement for it
    */
-  void _addChangesetDeleteExclusionTags(OsmMapPtr& map);
+  void _addChangesetDeleteExclusionTags(OsmMapPtr& map) const;
 
   /*
    * Cut out of the reference map what you don't want, and if there is anything in the secondary
    * map, add that data in (not applicable in the cut only scenario).
    */
   OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap,
-                             const GeometryTypeCriterion::GeometryType& geometryType);
+                             const GeometryTypeCriterion::GeometryType& geometryType) const;
 
   /*
    * Excludes all features within the specified bounds from deletion during changeset derivation
    */
-  void _excludeFeaturesFromChangesetDeletion(OsmMapPtr& map);
+  void _excludeFeaturesFromChangesetDeletion(OsmMapPtr& map) const;
 
   /*
    * Final data cleanup after the changeset replacement maps have been generated to fix any errors
    * introduced.
    */
-  void _cleanup(OsmMapPtr& map);
+  void _cleanup(OsmMapPtr& map) const;
 
   /*
    * Replaces the IDs of elements in the replacment map that are identical with those in the map
    * being replaced with the IDs from the map being replaced.
    */
-  void _synchronizeIds(OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap);
+  void _synchronizeIds(OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap) const;
 
   /*
    * Replaces the IDs of elements in the replacment maps that are identical with those in the maps
    * being replaced with the IDs from the maps being replaced.
    */
   void _synchronizeIds(
-    const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
+    const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps) const;
 
   /*
    * Runs the default hoot cleaning on the data. This helps solve a lot of problems with output, but
    * its likely a subset of the cleaning ops could be run instead to be more efficient.
    */
-  void _clean(OsmMapPtr& map);
+  void _clean(OsmMapPtr& map) const;
 };
 
 }

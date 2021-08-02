@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef POI_POLYGON_SCHEMA_H
 #define POI_POLYGON_SCHEMA_H
@@ -49,8 +49,6 @@ class PoiPolygonSchema
 {
 
 public:
-
-  PoiPolygonSchema();
 
   /**
    * Determines if an element is a park as definied by POI/Polygon conflation
@@ -178,11 +176,12 @@ public:
 
 private:
 
-  //maps an OSM kvp to multiple possible strings such a feature's name might contain
+  // maps an OSM kvp to multiple possible strings such a feature's name might contain
   static QMultiHash<QString, QString> _typeToNames;
   static QSet<QString> _allTypeKeys;
 
-  static void _readTypeToNames();
+  static QMultiHash<QString, QString> _getTypeToNames();
+  static QMultiHash<QString, QString> _readTypeToNames();
   static bool _typeHasName(const QString& kvp, const QString& name);
   static QString _getMatchingTypeName(const QString& kvp, const QString& name);
   static bool _haveMatchingTypeNames(const QString& kvp, const QString& name1, const QString& name2);

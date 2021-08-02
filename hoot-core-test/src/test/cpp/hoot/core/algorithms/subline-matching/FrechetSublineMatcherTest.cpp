@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -74,12 +74,12 @@ public:
     Coordinate c1[] = {
       Coordinate(0.0, 0.0), Coordinate(10.0, 0.0), Coordinate(15.0, 37.0), Coordinate(20.0, 0.0), Coordinate(30.0, 0.0), Coordinate(40.0, 0.0),
       Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 3, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 3);
 
     Coordinate c2[] = {
       Coordinate(0.0, 3.0), Coordinate(10.0, 3.0), Coordinate(15.0, 40.0), Coordinate(20.0, 3.0), Coordinate(30.0, 3.0), Coordinate(40.0, 3.0),
       Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, c2, 3, "w2");
+    WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown1, 3);
 
     FrechetSublineMatcher uut;
     uut.setConfiguration(s);
@@ -100,14 +100,14 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate c1[] = {
-      Coordinate(0.0, 0.0), Coordinate(10.0, 0.0), Coordinate(20.0, 0.0), Coordinate(30.0, 0.0), Coordinate(40.0, 0.0),
-      Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 3, "w1");
+      Coordinate(0.0, 0.0), Coordinate(10.0, 0.0), Coordinate(20.0, 0.0), Coordinate(30.0, 0.0),
+      Coordinate(40.0, 0.0), Coordinate::getNull() };
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 3);
 
     Coordinate c2[] = {
-      Coordinate(0.0, 3.0), Coordinate(10.0, 3.0), Coordinate(15.0, 40.0), Coordinate(20.0, 3.0), Coordinate(30.0, 3.0), Coordinate(40.0, 3.0),
-      Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, c2, 3, "w2");
+      Coordinate(0.0, 3.0), Coordinate(10.0, 3.0), Coordinate(15.0, 40.0), Coordinate(20.0, 3.0),
+      Coordinate(30.0, 3.0), Coordinate(40.0, 3.0), Coordinate::getNull() };
+    WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown1, 3);
 
     FrechetSublineMatcher uut;
     uut.setConfiguration(s);
@@ -135,7 +135,7 @@ public:
   void runCircleTest()
   {
     Settings s;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmXmlReader reader;
     reader.read(_inputPath + "MaximalSublineCircleTestIn.osm", map);
     double score;
@@ -160,7 +160,7 @@ public:
 
   OsmMapPtr createMap()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     MapProjector::projectToPlanar(map);
     return map;
   }

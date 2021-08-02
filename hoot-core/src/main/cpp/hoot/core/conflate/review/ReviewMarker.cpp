@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ReviewMarker.h"
 
@@ -90,7 +90,7 @@ QString ReviewMarker::getReviewType(const ConstOsmMapPtr& map, ReviewUid uid)
   return map->getRelation(uid.getId())->getTags()[MetadataTags::HootReviewType()];
 }
 
-set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &map)
+set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr& map)
 {
   set<ElementId> result;
 
@@ -108,9 +108,15 @@ set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &m
 }
 
 set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr& map,
-  ConstElementPtr e1)
+                                                         ConstElementPtr e1)
 {
   return _getReviewRelations(map, e1->getElementId());
+}
+
+set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &map,
+                                                         ReviewUid uid)
+{
+  return _getReviewRelations(map, uid);
 }
 
 bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr& map, ConstElementPtr e1)
@@ -138,26 +144,25 @@ bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr& map, ConstElementPtr e1, 
   return intersection.size() >= 1;
 }
 
-bool ReviewMarker::isReview(ConstElementPtr e)
+bool ReviewMarker::isReview(const ConstElementPtr& e)
 {
   bool result = false;
-  if (e->getElementType() == ElementType::Relation)
+  if (e->getElementType() == ElementType::Relation &&
+      e->getTags().isTrue(MetadataTags::HootReviewNeeds()))
   {
-    if (e->getTags().isTrue(MetadataTags::HootReviewNeeds()))
-    {
-      result = true;
-    }
+    result = true;
   }
   return result;
 }
 
-bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
+bool ReviewMarker::isReviewUid(const ConstOsmMapPtr& map, ReviewUid uid)
 {
   return isReview(map->getElement(uid));
 }
 
-void ReviewMarker::mark(const OsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2,
-  const QString& note, const QString& reviewType, double score, vector<QString> choices)
+void ReviewMarker::mark(
+  const OsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2, const QString& note,
+  const QString& reviewType, double score, const vector<QString>& choices) const
 {
   if (!e1 || !e2)
     return;
@@ -168,16 +173,18 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ConstElementPtr& e1, const C
   mark(map, ids, note, reviewType, score, choices);
 }
 
-void ReviewMarker::mark(const OsmMapPtr& map, const std::set<ElementId>& ids, const QString& note,
-  const QString& reviewType, double score, vector<QString> choices)
+void ReviewMarker::mark(
+  const OsmMapPtr& map, const std::set<ElementId>& ids, const QString& note,
+  const QString& reviewType, double score, const vector<QString>& choices) const
 {
   //  Copy element IDs into a vector to preserve ordering used by other overloads of mark() function
   vector<ElementId> vids(ids.begin(), ids.end());
   mark(map, vids, note, reviewType, score, choices);
 }
 
-void ReviewMarker::mark(const OsmMapPtr& map, const ConstElementPtr& e, const QString& note,
-  const QString& reviewType, double score, vector<QString> choices)
+void ReviewMarker::mark(
+  const OsmMapPtr& map, const ConstElementPtr& e, const QString& note, const QString& reviewType,
+  double score, const vector<QString>& choices) const
 {
   if (!e)
     return;
@@ -190,16 +197,16 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ConstElementPtr& e, const QS
 
 void ReviewMarker::mark(
   const OsmMapPtr& map, const std::vector<ElementId>& ids, const QString& note,
-  const QString& reviewType, double score, vector<QString> choices)
+  const QString& reviewType, double score, const vector<QString>& choices) const
 {
   if (note.isEmpty())
   {
     throw IllegalArgumentException("You must specify a review note.");
   }
 
-  RelationPtr r(
-    new Relation(
-      Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
+  RelationPtr r =
+    std::make_shared<Relation>(
+      Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview());
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
   if (_addReviewTagsToFeatures)
   {

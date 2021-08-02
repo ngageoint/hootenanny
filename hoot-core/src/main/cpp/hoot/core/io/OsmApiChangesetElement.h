@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSM_API_CHANGESET_ELEMENT_H
@@ -50,10 +50,10 @@ namespace hoot
 class ElementIdToIdMap;
 
 /** Object that matches an XML tag to its XML attributes */
-typedef QPair<QString, QXmlStreamAttributes> XmlObject;
-typedef std::vector<std::pair<QString, QString>> ElementAttributes;
-typedef std::pair<QString, QString> ElementTag;
-typedef std::vector<ElementTag> ElementTags;
+using XmlObject = QPair<QString, QXmlStreamAttributes>;
+using ElementAttributes = std::vector<std::pair<QString, QString>>;
+using ElementTag = std::pair<QString, QString>;
+using ElementTags = std::vector<ElementTag>;
 
 /** Elements in a changeset can be in three sections, create, modify, and delete.  Max is used for iterating */
 enum ChangesetType : int
@@ -76,11 +76,6 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   ChangesetElement(const XmlObject& object, ElementIdToIdMap* idMap);
-  /**
-   * @brief XmlElement copy constructor
-   * @param element XmlElement object to copy
-   */
-  ChangesetElement(const ChangesetElement& element);
 
   virtual ~ChangesetElement() = default;
   /**
@@ -114,7 +109,7 @@ public:
    * @brief getType Get the element type
    * @return Element type (node/way/relation)
    */
-  ElementType::Type getType() { return _type; }
+  ElementType::Type getType() const { return _type; }
   /**
    * @brief toString Get the XML string equivalent for the element
    * @param changesetId ID of the changeset to insert into the element
@@ -204,8 +199,8 @@ protected:
   /** Element status */
   ElementStatus _status;
 };
-/** Handy typedef for element shared pointer */
-typedef std::shared_ptr<ChangesetElement> ChangesetElementPtr;
+/** Handy alias for element shared pointer */
+using ChangesetElementPtr = std::shared_ptr<ChangesetElement>;
 
 /** Simplified changeset node abstraction */
 class ChangesetNode : public ChangesetElement
@@ -217,20 +212,15 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   ChangesetNode(const XmlObject& node, ElementIdToIdMap* idMap);
-  /**
-   * @brief ChangesetNode copy constructor
-   * @param node ChangesetNode object to copy
-   */
-  ChangesetNode(const ChangesetNode& node);
-  /** Virtual destructor */
-  virtual ~ChangesetNode() = default;
+  /** Destructor */
+  ~ChangesetNode() = default;
   /**
    * @brief toString Get the XML string equivalent for the node
    * @param changesetId ID of the changeset to insert into the node
    * @param type Changeset section type (create, modify, delete)
    * @return XML string
    */
-  virtual QString toString(long changesetId, ChangesetType type) const;
+  QString toString(long changesetId, ChangesetType type) const override;
   /**
    * @brief diff Compare two nodes and build a 'diff' style string
    * @param node Node to compare this node against
@@ -239,8 +229,8 @@ public:
    */
   bool diff(const ChangesetNode& node, QString& diffOutput) const;
 };
-/** Handy typedef for node shared pointer */
-typedef std::shared_ptr<ChangesetNode> ChangesetNodePtr;
+/** Handy alias for node shared pointer */
+using ChangesetNodePtr = std::shared_ptr<ChangesetNode>;
 
 /** Simplified changeset way abstraction */
 class ChangesetWay : public ChangesetElement
@@ -252,13 +242,8 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   ChangesetWay(const XmlObject& way, ElementIdToIdMap* idMap);
-  /**
-   * @brief ChangesetWay copy constructor
-   * @param way ChangesetWay object to copy
-   */
-  ChangesetWay(const ChangesetWay& way);
-  /** Virtual destructor */
-  virtual ~ChangesetWay() = default;
+  /** Destructor */
+  ~ChangesetWay() = default;
   /**
    * @brief addNode Add a node ID to the node (in order)
    * @param id Node ID
@@ -287,7 +272,7 @@ public:
    * @param type Changeset section type (create, modify, delete)
    * @return XML string
    */
-  virtual QString toString(long changesetId, ChangesetType type) const;
+  QString toString(long changesetId, ChangesetType type) const override;
   /**
    * @brief diff Compare two ways and build a 'diff' style string
    * @param way Way to compare this way against
@@ -300,8 +285,8 @@ private:
   /** Vector of node ID in the way */
   QVector<long> _nodes;
 };
-/** Handy typedef for way shared pointer */
-typedef std::shared_ptr<ChangesetWay> ChangesetWayPtr;
+/** Handy alias for way shared pointer */
+using ChangesetWayPtr = std::shared_ptr<ChangesetWay>;
 
 /** Simplified changeset relation member abstraction */
 class ChangesetRelationMember
@@ -370,13 +355,8 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   ChangesetRelation(const XmlObject& relation, ElementIdToIdMap* idMap);
-  /**
-   * @brief ChangesetRelation copy constructor
-   * @param relation ChangesetRelation object to copy
-   */
-  ChangesetRelation(const ChangesetRelation& relation);
-  /** Virtual destructor */
-  virtual ~ChangesetRelation() = default;
+  /** Destructor */
+  ~ChangesetRelation() = default;
   /**
    * @brief addMember Add relation member
    * @param member XML attributes of the relation member
@@ -411,7 +391,7 @@ public:
    * @param type Changeset section type (create, modify, delete)
    * @return XML string
    */
-  virtual QString toString(long changesetId, ChangesetType type) const;
+  QString toString(long changesetId, ChangesetType type) const override;
   /**
    * @brief diff Compare two relations and build a 'diff' style string
    * @param relation Relation to compare this relation against
@@ -424,8 +404,8 @@ private:
   /** List of relation members */
   QList<ChangesetRelationMember> _members;
 };
-/** Handy typedef for relation shared pointer */
-typedef std::shared_ptr<ChangesetRelation> ChangesetRelationPtr;
+/** Handy alias for relation shared pointer */
+using ChangesetRelationPtr = std::shared_ptr<ChangesetRelation>;
 
 /** Custom sorting function to sort IDs from -1 to -n followed by 1 to m */
 bool id_sort_order(long lhs, long rhs);
@@ -437,8 +417,8 @@ public:
     return id_sort_order(lhs, rhs);
   }
 };
-/** Handy typedef for a vector of sorted ID maps */
-typedef std::vector<std::map<long, long, osm_id_sort>> ChangesetElementIdMap;
+/** Handy alias for a vector of sorted ID maps */
+using ChangesetElementIdMap = std::vector<std::map<long, long, osm_id_sort>>;
 
 /**
  *  Class for storing ID to ID associations, this is required because elements that are created in
@@ -451,12 +431,12 @@ class ElementIdToIdMap
 {
 public:
   /** Helpful typedefs for iterators */
-  typedef typename std::map<long, long, osm_id_sort>::iterator iterator;
-  typedef typename std::map<long, long, osm_id_sort>::const_iterator const_iterator;
+  using iterator = std::map<long, long, osm_id_sort>::iterator;
+  using const_iterator = std::map<long, long, osm_id_sort>::const_iterator;
   /** Constructor */
   ElementIdToIdMap()
     : _idToId(ElementType::Unknown)
-  {}
+  { }
   /**
    * @brief addId Add ID to the map
    * @param type Element type (node/way/relation)

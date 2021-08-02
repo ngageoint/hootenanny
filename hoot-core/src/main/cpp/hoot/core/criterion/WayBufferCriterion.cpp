@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "WayBufferCriterion.h"
@@ -91,8 +91,8 @@ bool WayBufferCriterion::isSatisfied(const ConstElementPtr& e) const
     {
       _bufferAccuracy = w->getCircularError() + _buffer;
 
-      _baseBuffered.reset(_baseLs->buffer(_bufferAccuracy, 3,
-                                          geos::operation::buffer::BufferOp::CAP_ROUND));
+      _baseBuffered = _baseLs->buffer(_bufferAccuracy, 3,
+                                      geos::operation::buffer::BufferOp::CAP_ROUND);
       _boundsPlus = *_baseBuffered->getEnvelopeInternal();
     }
 
@@ -106,7 +106,7 @@ bool WayBufferCriterion::isSatisfied(const ConstElementPtr& e) const
       {
         std::shared_ptr<Geometry> ls2Buffer(ls2->buffer(_bufferAccuracy, 3,
                                                    geos::operation::buffer::BufferOp::CAP_ROUND));
-        g.reset(ls2Buffer->intersection(_baseLs.get()));
+        g = ls2Buffer->intersection(_baseLs.get());
         double ls1IntersectLength = g->getLength();
 
         if (ls1IntersectLength / _baseLength >= _matchPercent)

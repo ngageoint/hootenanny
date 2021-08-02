@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -63,7 +63,7 @@ public:
 
   void uuidHashTest()
   {
-    std::shared_ptr<PluginContext> _pc(new PluginContext());
+    std::shared_ptr<PluginContext> _pc = std::make_shared<PluginContext>();
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_pc->getContext(current));

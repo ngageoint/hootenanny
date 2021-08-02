@@ -19,15 +19,14 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RelationToMultiPolygonConverter.h"
 
 // geos
-#include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
@@ -39,11 +38,11 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
+#include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/AreaCriterion.h>
 
 // tgs
 #include <tgs/DisjointSet/DisjointSetMap.h>
@@ -77,17 +76,17 @@ Geometry* RelationToMultiPolygonConverter::_addHoles(
 
   vector<double> outerArea;
   // a vector of holes for each of the outer polygons.
-  vector<vector<Geometry*>*> holes;
+  vector<vector<LinearRing*>*> holes;
   holes.resize(outers.size());
 
   outerArea.reserve(outers.size());
-  vector<Geometry*> noHoles;
+  vector<LinearRing*> noHoles;
   for (size_t i = 0; i < outers.size(); i++)
   {
     Polygon* p = gf.createPolygon(*outers[i], noHoles);
     tmpPolygons.push_back(p);
     outerArea.push_back(p->getArea());
-    holes[i] = new vector<Geometry*>();
+    holes[i] = new vector<LinearRing*>();
   }
 
   // go through all the holes.
@@ -159,7 +158,7 @@ Geometry* RelationToMultiPolygonConverter::_addHoles(
     tmpPolygons[i] = p;
   }
 
-  // create the final MultiPolygon
+  // create the final MultiPolygon; GeometryFactory takes ownership of these input parameters.
   return gf.createMultiPolygon(polygons);
 }
 
@@ -174,14 +173,17 @@ void RelationToMultiPolygonConverter::_addWayToSequence(
     increment = -1;
   }
 
+  std::vector<Coordinate> points;
+  cs.toVector(points);
   for (int i = start; i < (int)w->getNodeCount() && i >= 0; i += increment)
   {
     Coordinate c = _provider->getNode(w->getNodeId(i))->toCoordinate();
-    if (cs.getSize() == 0 || c != cs.getAt(cs.getSize() - 1))
+    if (points.size() == 0 || c != points.operator [](points.size() - 1))
     {
-      cs.add(c);
+      points.push_back(c);
     }
   }
+  cs.setPoints(points);
 }
 
 std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() const
@@ -212,7 +214,7 @@ std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() 
     const RelationData::Entry& e = _r->getMembers()[i];
     LOG_VART(e.getElementId());
     if (e.getElementId().getType() == ElementType::Relation &&
-        (e.role == MetadataTags::RoleOuter() || e.role == MetadataTags::RolePart()))
+        (e.getRole() == MetadataTags::RoleOuter() || e.getRole() == MetadataTags::RolePart()))
     {
       ConstRelationPtr r = _provider->getRelation(e.getElementId().getId());
       if (r && (r->isMultiPolygon() || AreaCriterion().isSatisfied(r)))
@@ -222,13 +224,13 @@ std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() 
           RelationToMultiPolygonConverter(_provider, r).createMultipolygon());
         try
         {
-          result.reset(result->Union(child.get()));
+          result = result->Union(child.get());
         }
         catch (const geos::util::TopologyException&)
         {
           child.reset(GeometryUtils::validateGeometry(child.get()));
           result.reset(GeometryUtils::validateGeometry(result.get()));
-          result.reset(result->Union(child.get()));
+          result = result->Union(child.get());
         }
       }
     }
@@ -237,13 +239,13 @@ std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() 
   return result;
 }
 
-QString RelationToMultiPolygonConverter::_findRelationship(LinearRing* ring1,
-                                                           LinearRing* ring2) const
+QString RelationToMultiPolygonConverter::_findRelationship(
+  const LinearRing* ring1, const LinearRing* ring2) const
 {
   QString result = "";
 
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
-  vector<Geometry*> noHoles;
+  vector<LinearRing*> noHoles;
   std::shared_ptr<Polygon> p1(gf.createPolygon(*ring1, noHoles));
 
   // It would be nice to do this in one call but "isWithin" doesn't seem to return anything.
@@ -271,7 +273,7 @@ void RelationToMultiPolygonConverter::_classifyRings(
   std::vector<LinearRing*>& outers) const
 {
   // Empty == nothing else to do
-  if (noRole.size() == 0)
+  if (noRole.empty())
   {
     return;
   }
@@ -281,7 +283,7 @@ void RelationToMultiPolygonConverter::_classifyRings(
     inners.size());
 
   // One polygon, no inners or outers
-  if (noRole.size() == 1 && inners.size() == 0 && outers.size() == 0)
+  if (noRole.size() == 1 && inners.empty() && outers.empty())
   {
     outers.push_back(noRole[0]);
     return;
@@ -343,7 +345,7 @@ void RelationToMultiPolygonConverter::_classifyRings(
   }
 
   // Now go through the things we didn't find.
-  while (notFound.size() > 0)
+  while (!notFound.empty())
   {
     if (notFound.size() == 1)
     {
@@ -406,7 +408,7 @@ void RelationToMultiPolygonConverter::_createRings(
   for (size_t i = 0; i < elements.size(); i++)
   {
     const RelationData::Entry& e = elements[i];
-    if (e.getElementId().getType() == ElementType::Way && e.role == role)
+    if (e.getElementId().getType() == ElementType::Way && e.getRole() == role)
     {
       const ConstWayPtr& w = _provider->getWay(e.getElementId().getId());
       if (!w || w->getNodeCount() == 0)
@@ -449,7 +451,7 @@ void RelationToMultiPolygonConverter::_createRings(
   }
   LOG_VART(partials.size());
 
-  if (partials.size() > 0)
+  if (!partials.empty())
   {
     _createRingsFromPartials(partials, rings);
   }
@@ -504,7 +506,7 @@ void RelationToMultiPolygonConverter::_createSingleRing(
   deque<ConstWayPtr> orderedWays = _orderWaysForRing(partials);
   CoordinateSequence* cs =
     GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(
-      (size_t)0, (size_t)2);
+      (size_t)0, (size_t)2).release();
 
   for (size_t i = 0; i < orderedWays.size(); i++)
   {
@@ -513,7 +515,10 @@ void RelationToMultiPolygonConverter::_createSingleRing(
 
   if (cs->getAt(0) != cs->getAt(cs->getSize() - 1))
   {
-    cs->add(cs->getAt(0));
+    vector<Coordinate> points;
+    cs->toVector(points);
+    points.push_back(cs->getAt(0));
+    cs->setPoints(points);
   }
 
   if (cs->getSize() <= 3)
@@ -534,7 +539,7 @@ void RelationToMultiPolygonConverter::_createSingleRing(
   }
 }
 
-bool RelationToMultiPolygonConverter::_isValidInner(LinearRing* innerRing) const
+bool RelationToMultiPolygonConverter::_isValidInner(const LinearRing* innerRing) const
 {
   if (innerRing->getNumPoints() > 0 && innerRing->getNumPoints() < 4)
   {
@@ -542,7 +547,7 @@ bool RelationToMultiPolygonConverter::_isValidInner(LinearRing* innerRing) const
   }
 
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
-  vector<Geometry*> noHoles;
+  vector<LinearRing*> noHoles;
   std::shared_ptr<Polygon> p(gf.createPolygon(*innerRing, noHoles));
   if (p->getArea() <= 0.0)
   {
@@ -578,8 +583,8 @@ deque<ConstWayPtr> RelationToMultiPolygonConverter::_orderWaysForRing(
     // if the ways are start to start or end to end
     if (w->getNodeId(0) == firstId || w->getLastNodeId() == lastId)
     {
-      // this way needs to be reversed, but clone it first so we don't change any source data
-      WayPtr cloned = WayPtr(new Way(*partials[i]));
+      // This way needs to be reversed, but clone it first so we don't change any source data.
+      WayPtr cloned = std::make_shared<Way>(*partials[i]);
       cloned->reverseOrder();
       w = cloned;
     }
@@ -666,11 +671,11 @@ LinearRing* RelationToMultiPolygonConverter::_toLinearRing(const ConstWayPtr& w)
   if (size <= 3)
   {
     LOG_TRACE("Returning default linear ring...");
-    return GeometryFactory::getDefaultInstance()->createLinearRing();
+    return GeometryFactory::getDefaultInstance()->createLinearRing().release();
   }
 
   CoordinateSequence* cs =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2);
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2).release();
   LOG_VART(cs->size());
 
   size_t i = 0;

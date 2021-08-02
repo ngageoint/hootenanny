@@ -3,35 +3,27 @@
 
 === Description
 
-The +stat+ command displays a statistic calculated from the features in a map.
+The +stat+ command displays a single statistic calculated from the features in a map.
 
-* +input+    - Input; may be any supported input format (e.g. OSM file).
-* +visitor+  - The stat visitor must be the single class name of a Hootenanny visitor that inherits from ElementVisitor and supports the
-               SingleStatistic or NumericStatistic interfaces. Use the +info --operators+ command to obtain a list of available Hootenanny 
-               visitors.
-* +statType+ - If +visitor+ supports NumericStatistic, this optional parameter allows for specifying the statistic type to collect. Supported
-               types are 'total', 'min', 'max', and 'average'. If +visitor+ just supports SingleStatistic, this parameter is ignored and 
-               'total' is automatically used.
+* +input(s)+    - Input(s); may be any supported input format (e.g. .osm file).
+* +visitor+     - The stat visitor must be the single class name of a Hootenanny visitor that inherits from 
+                  +ConstElementVisitor+ and supports the +SingleStatistic+ or +NumericStatistic+ interfaces. Use the 
+                  +info --operators+ command to obtain a list of available visitors.
+* +--recursive+ - Allows for processing the files contained in any directories specified in +input(s)+ recursively. 
+                  This parameter has no effect on the processing of non-directory inputs. This must be followed by either 
+                  "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*". 
+                  This parameter is not compatible with the OGR layer input syntax.
+* +--statType+  - If +visitor+ implements `NumericStatistic`, this optional parameter allows for specifying the statistic type 
+                  to collect. Supported types are 'total', 'min', 'max', and 'average'. If +visitor+ implements 
+                  `SingleStatistic`, this parameter is ignored and 'total' is automatically used.
 
 === Usage
 
 --------------------------------------
-hoot stat (input) (visitor) [statType]
+hoot stat (input1) [input2...] (visitor) [--recursive "*"|"filter1;filter2..."] [--statType type]
 --------------------------------------
 
-=== Examples
-
---------------------------------------
-# calculate the numerical average of all values for a specific tag
-hoot stat -D tags.visitor.keys="accuracy" input.osm hoot::AverageNumericTagsVisitor
-
-# count all manual matches made on features in a map
-# Note: This could also be done in a more straight forward manner with the +count+ command if a "ManualMatchCriterion" existed.
-hoot stat input.osm hoot::CountManualMatchesVisitor
-
-# calculate the average number of nodes across all buildings
-hoot stat -D nodes.per.way.visitor.element.criteria="hoot::BuildingCriterion" input.osm hoot::NodesPerWayVisitor average
---------------------------------------
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#calculate-the-area-of-all-features-in-a-map[Examples]
 
 === See Also
 

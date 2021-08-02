@@ -19,31 +19,31 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonMerger.h"
 
 // hoot
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
-#include <hoot/core/visitors/UniqueElementIdVisitor.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/StatusUpdateVisitor.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/PreserveTypesTagMerger.h>
+#include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/StatusUpdateVisitor.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 using namespace std;
 
@@ -63,7 +63,7 @@ _writeDebugMaps(false)
 }
 
 PoiPolygonMerger::PoiPolygonMerger(const set<pair<ElementId, ElementId>>& pairs) :
-_pairs(pairs),
+MergerBase(pairs),
 _autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches()),
 _tagMergerClass(""),
 _writeDebugMaps(false)
@@ -75,7 +75,6 @@ std::shared_ptr<TagMerger> PoiPolygonMerger::_getTagMerger()
 {
   if (!_tagMerger)
   {
-    LOG_VART(ConfigOptions().getHighwayMergeTagsOnly());
     LOG_VART(_autoMergeManyPoiToOnePolyMatches);
     LOG_VART(_tagMergerClass);
     LOG_VART(ConfigOptions().getPoiPolygonTagMerger());
@@ -109,7 +108,7 @@ std::shared_ptr<TagMerger> PoiPolygonMerger::_getTagMerger()
     }
     LOG_VART(tagMergerClass);
 
-    _tagMerger.reset(Factory::getInstance().constructObject<TagMerger>(tagMergerClass));
+    _tagMerger = Factory::getInstance().constructObject<TagMerger>(tagMergerClass);
 
     std::shared_ptr<Configurable> critConfig = std::dynamic_pointer_cast<Configurable>(_tagMerger);
     if (critConfig.get())
@@ -129,12 +128,12 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   // This debug map writing is very expensive, so just turn it on when debugging small datasets.
   if (_writeDebugMaps)
   {
-    OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-poi-tags-merge-1");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-poi-tags-merge-1");
   }
   Tags poiTags2 = _mergePoiTags(map, Status::Unknown2);
   if (_writeDebugMaps)
   {
-    OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-poi-tags-merge-2");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-poi-tags-merge-2");
   }
 
   // Get all the building parts for each status
@@ -147,7 +146,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   LOG_VART(finalBuildingEid);
   if (_writeDebugMaps)
   {
-    OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-merge");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-building-merge");
   }
 
   ElementPtr finalBuilding = map->getElement(finalBuildingEid);
@@ -178,7 +177,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   // of the features or the conflation workflow chosen.
   Tags finalBuildingTags = finalBuilding->getTags();
   LOG_VART(finalBuildingTags);
-  if (poiTags1.size() > 0)
+  if (!poiTags1.empty())
   {
     // If this is a ref POI, we'll keep its tags and replace the building tags.
     LOG_TRACE("Merging POI tags with building tags for POI status Unknown1...");
@@ -187,10 +186,10 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
     LOG_VART(finalBuildingTags);
     if (_writeDebugMaps)
     {
-      OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-tags-merge-1");
+      OsmMapWriterFactory::writeDebugMap(map, className(), "after-building-tags-merge-1");
     }
   }
-  if (poiTags2.size() > 0)
+  if (!poiTags2.empty())
   {
     LOG_TRACE("Merging POI tags with building tags for POI status Unknown2...");
     // If this is a sec POI, we'll keep the building's tags and replace its tags.
@@ -199,7 +198,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
     LOG_VART(finalBuildingTags);
     if (_writeDebugMaps)
     {
-      OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-tags-merge-2");
+      OsmMapWriterFactory::writeDebugMap(map, className(), "after-building-tags-merge-2");
     }
   }
 
@@ -213,7 +212,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
     const pair<ElementId, ElementId>& p = *it;
     if (p.first.getType() == ElementType::Node)
     {
-      replaced.push_back(pair<ElementId, ElementId>(p.first, finalBuildingEid));
+      replaced.emplace_back(p.first, finalBuildingEid);
       // clear the tags just in case it is part of a way
       if (map->containsElement(p.first))
       {
@@ -236,7 +235,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
 
     if (p.second.getType() == ElementType::Node)
     {
-      replaced.push_back(pair<ElementId, ElementId>(p.second, finalBuildingEid));
+      replaced.emplace_back(p.second, finalBuildingEid);
       // clear the tags just in case it is part of a way
       if (map->containsElement(p.second))
       {
@@ -258,7 +257,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   LOG_VART(poisMerged);
   if (_writeDebugMaps)
   {
-    OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-poi-removal");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-poi-removal");
   }
 
   if (poisMerged > 0)
@@ -283,12 +282,12 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
       MetadataTags::HootPoiPolygonPoisMerged1(), QString::number(poisMergedFromMap1));
     finalBuildingTags.set(
       MetadataTags::HootPoiPolygonPoisMerged2(), QString::number(poisMergedFromMap2));
-    finalBuilding->setStatus(Status::Conflated);
     ConfigOptions conf;
     if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
     {
-      finalBuilding->setTag(MetadataTags::HootMatchedBy(), PoiPolygonMatch::MATCH_NAME);
+      finalBuildingTags.set(MetadataTags::HootMatchedBy(), PoiPolygonMatch::MATCH_NAME);
     }
+    finalBuilding->setStatus(Status::Conflated);
   }
 
   finalBuilding->setTags(finalBuildingTags);
@@ -364,7 +363,7 @@ vector<ElementId> PoiPolygonMerger::_getBuildingParts(const OsmMapPtr& map, Stat
 
 ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
   vector<ElementId>& buildings1, vector<ElementId>& buildings2,
-  vector<pair<ElementId, ElementId>>& replaced)
+  vector<pair<ElementId, ElementId>>& replaced) const
 {
   LOG_TRACE("Merging buildings...");
 
@@ -374,17 +373,17 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
 
   set<pair<ElementId, ElementId>> pairs;
 
-  assert(buildings1.size() != 0 || buildings2.size() != 0);
+  assert(!buildings1.empty() || !buildings2.empty());
   // If there is only one set of buildings, then there is no need to merge. Group all the building
   // parts into a single building.
-  if (buildings1.size() == 0)
+  if (buildings1.empty())
   {
     set<ElementId> eids;
     eids.insert(buildings2.begin(), buildings2.end());
     LOG_VART(eids.size());
     return BuildingMerger::buildBuilding(map, eids)->getElementId();
   }
-  else if (buildings2.size() == 0)
+  else if (buildings2.empty())
   {
     set<ElementId> eids;
     eids.insert(buildings1.begin(), buildings1.end());
@@ -399,8 +398,7 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
     size_t i1 = min(i, buildings1.size() - 1);
     size_t i2 = min(i, buildings2.size() - 1);
 
-    pair<ElementId, ElementId> p(buildings1[i1], buildings2[i2]);
-    pairs.insert(p);
+    pairs.emplace(buildings1[i1], buildings2[i2]);
   }
 
   BuildingMerger(pairs).apply(map, replaced);
@@ -408,7 +406,7 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
   set<ElementId> newElement;
   for (size_t i = 0; i < replaced.size(); i++)
   {
-    newElement.insert(replaced[i].second);
+    newElement.emplace(replaced[i].second);
   }
 
   return *newElement.begin();
@@ -510,7 +508,7 @@ ElementId PoiPolygonMerger::mergeOnePoiAndOnePolygon(OsmMapPtr map)
   // do the merging
   std::set<std::pair<ElementId, ElementId>> pairs;
   // Ordering doesn't matter here, since the poi is always merged into the poly.
-  pairs.insert(std::pair<ElementId, ElementId>(polyId, poiId));
+  pairs.emplace(polyId, poiId);
   PoiPolygonMerger merger(pairs);
   std::vector<std::pair<ElementId, ElementId>> replacedElements;
   merger.apply(map, replacedElements);
@@ -523,7 +521,7 @@ ElementId PoiPolygonMerger::mergeOnePoiAndOnePolygon(OsmMapPtr map)
 
 QString PoiPolygonMerger::toString() const
 {
-  return QString("PoiPolygonMerger %1").arg(hoot::toString(_getPairs()));
+  return QString("PoiPolygonMerger %1").arg(hoot::toString(_pairs));
 }
 
 }

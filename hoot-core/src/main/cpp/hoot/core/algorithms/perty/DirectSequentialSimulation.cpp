@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "DirectSequentialSimulation.h"
 
@@ -45,7 +45,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(PermuteGridCalculator, DirectSequentialSimulation)
 
-Mat DirectSequentialSimulation::permute(geos::geom::Envelope env, int& pointRows, int& pointCols)
+Mat DirectSequentialSimulation::permute(const geos::geom::Envelope& env, int& pointRows, int& pointCols)
 {
   boost::minstd_rand rng;
   if (_seed == -1)
@@ -83,7 +83,7 @@ Mat DirectSequentialSimulation::permute(geos::geom::Envelope env, int& pointRows
 }
 
 Mat DirectSequentialSimulation::_gm2dPerturb2(geos::geom::Envelope env, Meters sigma,
-                                              boost::minstd_rand& rng)
+                                              boost::minstd_rand& rng) const
 {
   // Uses John Dollof's Gauss-Markov method to perturb values assigned to a
   // 2D grid with correlation.  Returns 2D grid of perturbations.
@@ -97,8 +97,8 @@ Mat DirectSequentialSimulation::_gm2dPerturb2(geos::geom::Envelope env, Meters s
   // effects
   env.expandBy(3 * _gridSpacing);
 
-  int rows = max<int>(2, ceil(env.getHeight() / (double)_gridSpacing) + 1);
-  int cols = max<int>(2, ceil(env.getWidth() / (double)_gridSpacing) + 1);
+  int rows = max<int>(2, ceil(env.getHeight() / _gridSpacing) + 1);
+  int cols = max<int>(2, ceil(env.getWidth() / _gridSpacing) + 1);
 
   double r = exp(-_gridSpacing / _D);
   double s = exp(-_gridSpacing / _D);

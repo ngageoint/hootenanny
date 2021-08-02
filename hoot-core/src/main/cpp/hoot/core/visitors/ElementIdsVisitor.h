@@ -19,15 +19,15 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENT_IDS_VISITOR_H
 #define ELEMENT_IDS_VISITOR_H
 
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/TagCriterion.h>
 
@@ -47,22 +47,13 @@ public:
 
   static QString className() { return "hoot::ElementIdsVisitor"; }
 
-  ElementIdsVisitor(const ElementType& elementType);
   ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit);
-  virtual ~ElementIdsVisitor() = default;
+  ElementIdsVisitor() = default;
+  ~ElementIdsVisitor() = default;
 
   void visit(const std::shared_ptr<const Element>& e) override;
 
-  std::vector<long> getIds() { return _elementIds; }
-
-  /**
-   * Retrieves the IDs of all elements of a given type
-   *
-   * @param map map owning the elements
-   * @param elementType type of element to retrieve
-   * @return a collection of numerical element IDs
-   */
-  static std::vector<long> findElements(const ConstOsmMapPtr& map, const ElementType& elementType);
+  std::vector<long> getIds() const { return _elementIds; }
 
   /**
    * Retrieves the IDs of all elements of a given type passing specified criteria
@@ -71,10 +62,10 @@ public:
    * @param elementType type of element to retrieve
    * @param pCrit criteria to satisfy
    * @return a collection of numerical element IDs
+   * @todo change this to take in ElementCriterionPtr instead?
    */
   static std::vector<long> findElements(const ConstOsmMapPtr& map, const ElementType& elementType,
                                         ElementCriterion* pCrit);
-
   /**
    * Retrieves the IDs of nodes satifying specified criteria and within a radius of a specified
    * location
@@ -84,24 +75,10 @@ public:
    * @param refCoord the point out from which to search
    * @param maxDistance the furthest distance away from the source point to search
    * @return a collection of numerical node IDs
+   * @todo change this to take in ElementCriterionPtr instead?
    */
-  static std::vector<long> findNodes(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+  static std::vector<long> findNodes(const ConstOsmMapPtr& map, const ElementCriterion* pCrit,
                                      const geos::geom::Coordinate& refCoord, Meters maxDistance);
-
-  /**
-   * Retrieves the IDs of ways satifying specified criteria and within a radius of a specified
-   * location
-   *
-   * @param map map owning the elements
-   * @param pCrit criteria to satisfy
-   * @param refCoord the point out from which to search
-   * @param maxDistance the furthest distance away from the source point to search
-   * @param addError adds element circular error to the search radius
-   * @return a collection of numerical way IDs
-   */
-  static std::vector<long> findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
-                                    ConstWayPtr refWay, Meters maxDistance, bool addError);
-
   /**
    * Retrieves the IDs of elements of a given type having a specified tag
    *
@@ -114,7 +91,6 @@ public:
   static std::vector<long> findElementsByTag(const ConstOsmMapPtr& map,
                                              const ElementType& elementType, const QString& key,
                                              const QString& value);
-
   /**
    * Retrieves the IDs of all ways owning a specified node
    *
@@ -124,11 +100,9 @@ public:
    */
   static std::vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
 
-  virtual QString getDescription() const { return "Collects the element IDs visited"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Collects the element IDs visited"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 
@@ -138,12 +112,9 @@ private:
   ElementType _elementType;
   ElementCriterion* _pCrit;
 
-  static std::vector<long> _findCloseNodes(const ConstOsmMapPtr& map,
-                                           const geos::geom::Coordinate& refCoord,
-                                           Meters maxDistance);
   static std::vector<long> _findCloseWays(const ConstOsmMapPtr& map, ConstWayPtr refWay,
                                           Meters maxDistance, bool addError);
-  static std::vector<long> _findElements(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+  static std::vector<long> _findElements(const ConstOsmMapPtr& map, const ElementCriterion* pCrit,
                                          const std::vector<long>& closeElementIds);
 };
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -74,7 +74,7 @@ class ConflateCommand extends ExternalCommand {
         try {
             String file = FileUtils.readFileToString(new File(HOME_FOLDER, CONFLATION_TYPES_PATH), Charset.defaultCharset());
             ObjectMapper mapper = new ObjectMapper();
-            TypeReference<?> schema = new TypeReference<Map<String, Map<String, Object>>>(){};
+            TypeReference<Map<String, Map<String, Object>>> schema = new TypeReference<Map<String, Map<String, Object>>>(){};
             conflationFeatures = mapper.readValue(file, schema);
 
             // use default options for map cleaners list...

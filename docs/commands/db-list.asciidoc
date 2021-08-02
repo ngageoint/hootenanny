@@ -3,19 +3,16 @@
 
 === Description
 
-The +db-list+ command lists the names of all maps available in the Hootenanny Web Services database that are either public or are 
-privately owned by the specified user. The +api.db.email+ configuration option must be specified to identify the user.
+The +db-list+ command lists the names of all maps available in the Hootenanny Web Services database that are either 
+public or are privately owned by the specified user. The +api.db.email+ configuration option must be specified to identify 
+the user.
 
-* +databaseUrl+ - URL of the Hootenanny Web Services database (without including a map layer name)
+* +mapDatabaseLayerUrl+ - URL of the Hootenanny Web Services database (without including a map layer name)
 
 === Usage
 
 --------------------------------------
-db-list (databaseUrl)
+hoot db-list (mapDatabaseLayerUrl)
 --------------------------------------
 
-=== Examples
-
---------------------------------------
-db-list -D api.db.email=myemail@me.com hootapidb://user:password@localhost:5432/hoot
---------------------------------------
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-maps-in-the-hootenanny-web-services-database[Examples]

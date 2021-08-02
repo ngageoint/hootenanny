@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // hoot
@@ -51,7 +51,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", false, Status::Unknown1);
 
     NodesPerWayVisitor uut;
@@ -67,12 +67,12 @@ public:
 
   void runCritTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/conflate/unified/AllDataTypesA.osm", false, Status::Unknown1);
 
     NodesPerWayVisitor uut;
-    uut.addCriterion(std::shared_ptr<BuildingCriterion>(new BuildingCriterion()));
+    uut.addCriterion(std::make_shared<BuildingCriterion>());
     map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(81, (int)uut.getStat());

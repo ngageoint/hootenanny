@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SUBLINESTRINGMATCHER_H
 #define SUBLINESTRINGMATCHER_H
@@ -39,7 +39,7 @@ namespace hoot
 {
 
 /**
- * Finds matching sublines in linear elements.
+ * @brief The SublineStringMatcher class finds matching sublines in linear elements.
  */
 class SublineStringMatcher : public Configurable, public ApiEntityInfo
 {
@@ -51,13 +51,18 @@ public:
   virtual ~SublineStringMatcher() = default;
 
   /**
-   * Given two elements find one or more collections of sublines that match. The input elements may
-   * be either multilinestrings or simple ways. The output collection of sublines matches must not
-   * overlap.
+   * @brief findMatch given two elements, finds one or more collections of sublines that match.
+   *
+   * The input elements may be either multilinestrings or simple ways. The output collection of
+   * sublines matches must not overlap.
    */
-  virtual WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
-    const ConstElementPtr& e2, Meters maxRelevantDistance = -1) const = 0;
+  virtual WaySublineMatchString findMatch(
+    const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2,
+    Meters maxRelevantDistance = -1) const = 0;
 
+  /**
+   * @see Configurable
+   */
   virtual void setConfiguration(const Settings& s) = 0;
 
   virtual void setMaxRelevantAngle(Radians r) = 0;
@@ -65,16 +70,15 @@ public:
   virtual void setHeadingDelta(Meters headingDelta) = 0;
 
   /**
-   * Returns the class name of the underlying subline matcher
-   *
+   * @brief getSublineMatcherName returns the class name of the underlying subline matcher.
    * @return class name string
    */
   virtual QString getSublineMatcherName() const = 0;
 
-  virtual QString toString() const override { return ""; }
+  QString toString() const override { return ""; }
 };
 
-typedef std::shared_ptr<SublineStringMatcher> SublineStringMatcherPtr;
+using SublineStringMatcherPtr = std::shared_ptr<SublineStringMatcher>;
 
 }
 

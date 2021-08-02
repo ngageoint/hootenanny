@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __ELEMENT_WAY_H__
 #define __ELEMENT_WAY_H__
@@ -57,13 +57,11 @@ public:
 
   Way(const Way& way);
 
-  virtual ~Way() = default;
+  ~Way() = default;
 
   void addNode(long id);
   void insertNode(long index, long id);
-
   void addNodes(const std::vector<long>& ids);
-
   /**
    * Adds nodes from the provided iterator. This can be faster than repeatedly calling addNode
    * because the indexes will only need to be updated once.
@@ -74,9 +72,9 @@ public:
   /**
    * Removes tags, nodes and circularError.
    */
-  virtual void clear();
+  void clear() override;
 
-  Element* clone() const { return new Way(*this); }
+  ElementPtr clone() const override { return std::make_shared<Way>(*this); }
 
   bool containsNodeId(long nid) const;
 
@@ -99,12 +97,12 @@ public:
   const geos::geom::Envelope& getApproximateEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const;
 
-  virtual ElementType getElementType() const { return ElementType(ElementType::Way); }
+  ElementType getElementType() const override { return ElementType(ElementType::Way); }
 
   /**
    * Returns the same result as getEnvelopeInternal, but copied so the caller gets ownership.
    */
-  virtual geos::geom::Envelope* getEnvelope(
+  geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override
   { return new geos::geom::Envelope(getEnvelopeInternal(ep)); }
 
@@ -112,7 +110,7 @@ public:
    * Returns the envelope for this way. This is guaranteed to be exact. If any of the nodes for
    * this way are not loaded into RAM then the behavior is undefined (probably an assert).
    */
-  virtual const geos::geom::Envelope& getEnvelopeInternal(
+  const geos::geom::Envelope& getEnvelopeInternal(
     const std::shared_ptr<const ElementProvider>& ep) const override;
 
   /**
@@ -125,7 +123,7 @@ public:
   long getLastNodeId() const { return getNodeId(getNodeCount() - 1); }
 
   /**
-   * Determines if an index is the first or las
+   * Determines if an index is the first or last
    *
    * @param index index to examine
    * @return true if the index is extreme; false otherwise
@@ -184,7 +182,7 @@ public:
    * Remove all instances of the node with the specified id. If the node isn't in this way then
    * nothing happens.
    */
-  void removeNode(long id);
+  void removeNode(long id) const;
 
   /**
    * Replaces any node instance with oldId with newId. If oldId isn't referenced by this way then
@@ -214,6 +212,14 @@ public:
   bool hasSharedNode(const Way& other) const;
 
   /**
+   * Determines if two ways share the same end node
+   *
+   * @param other way to compare with
+   * @return true if the other way shares at least one end node with this way; false otherwise
+   */
+  bool hasSharedEndNode(const Way& other) const;
+
+  /**
    * Retrieves the IDs of shared nodes between two ways
    *
    * @param other way to compare with
@@ -227,19 +233,19 @@ public:
    */
   void setCachedEnvelope(const geos::geom::Envelope& e) { _cachedEnvelope = e; }
 
-  QString toString() const;
+  QString toString() const override;
 
   /**
    * @see Element
    */
-  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter,
-                       const bool recursive = true) const;
+  void visitRo(const ElementProvider& map, ConstElementVisitor& filter,
+               const bool recursive = true) const override;
 
   /**
    * @see Element
    */
-  virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter,
-                       const bool recursive = true);
+  void visitRw(ElementProvider& map, ConstElementVisitor& filter,
+               const bool recursive = true) override;
 
   /**
    * Functions for getting/setting/resetting the parent ID, i.e. the ID of the way
@@ -247,30 +253,29 @@ public:
    */
   bool hasPid() const { return _wayData->getPid() != WayData::PID_EMPTY; }
   long getPid() const { return _wayData->getPid(); }
-  void setPid(long pid) { _wayData->setPid(pid); }
-  void resetPid() { _wayData->setPid(WayData::PID_EMPTY); }
+  void setPid(long pid) const { _wayData->setPid(pid); }
+  void resetPid() const { _wayData->setPid(WayData::PID_EMPTY); }
   static long getPid(const std::shared_ptr<const Way>& p, const std::shared_ptr<const Way>& c);
   static long getPid(long p, long c);
 
 protected:
 
-  virtual ElementData& _getElementData() { _makeWritable(); return *_wayData; }
-
-  virtual const ElementData& _getElementData() const { return *_wayData; }
-
-  void _makeWritable();
+  ElementData& _getElementData() override { _makeWritable(); return *_wayData; }
+  const ElementData& _getElementData() const override { return *_wayData; }
 
 private:
 
   std::shared_ptr<WayData> _wayData;
+
+  void _makeWritable();
 
   // for debugging only; SLOW - We don't check for duplicated nodes (outside of start/end) at
   // runtime due to the performance hit. So, use this to debug when that occurs.
   bool _nodeIdsAreDuplicated(const std::vector<long>& ids) const;
 };
 
-typedef std::shared_ptr<Way> WayPtr;
-typedef std::shared_ptr<const Way> ConstWayPtr;
+using WayPtr = std::shared_ptr<Way>;
+using ConstWayPtr = std::shared_ptr<const Way>;
 
 inline bool operator<(const WayPtr& w1, const WayPtr& w2)
 {

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef POI_SEARCH_RADIUS_JS_H
 #define POI_SEARCH_RADIUS_JS_H
@@ -37,7 +37,7 @@ class PoiSearchRadiusJs : public node::ObjectWrap
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
   static void getSearchRadii(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:

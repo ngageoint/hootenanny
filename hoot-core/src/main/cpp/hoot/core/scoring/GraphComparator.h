@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef GRAPHCOMPARATOR_H
@@ -50,32 +50,26 @@ class Way;
 class GraphComparator : public BaseComparator
 {
 public:
+
   GraphComparator(OsmMapPtr map1, OsmMapPtr map2);
+  ~GraphComparator() = default;
 
-  virtual ~GraphComparator() = default;
-
-  double compareMaps();
+  double compareMaps() override;
 
   /**
    * Returns the 90% confidence interval.
    */
-  double getConfidenceInterval() { return _ci; }
-
-  double getMeanScore() { return _mean; }
-
-  double getMedianScore() { return _median; }
-
-  double getStandardDeviation() { return _s; }
+  double getConfidenceInterval() const { return _ci; }
+  double getMeanScore() const { return _mean; }
+  double getMedianScore() const { return _median; }
+  double getStandardDeviation() const { return _s; }
 
   void setDebugImages(bool di) { _debugImages = di; }
-
   void setIterations(int i) { _iterations = i; }
-
   void setMaxThreads(int t) { _maxThreads = t; }
 
-  void drawCostDistance(OsmMapPtr map, std::vector<geos::geom::Coordinate>& c, QString output, double& maxGraphCost);
-
 private:
+
   /** Number of times to iterate of the map calculating scores */
   int _iterations;
   /** Median score of all iterations */
@@ -105,24 +99,29 @@ private:
   /** Vector of error values - returned from _calculateError() in each iteration */
   std::vector<double> _results;
   std::mutex _resultsMutex;
+  std::mutex _logMutex;
   /**
    * @brief _graphCompareThreadFunc - Thread function that processes a graph comparison operation
    */
   void _graphCompareThreadFunc();
 
-  cv::Mat _calculateCostDistance(OsmMapPtr map, geos::geom::Coordinate c, double& maxGraphCost, const Tgs::RandomPtr& random);
+  cv::Mat _calculateCostDistance(
+    OsmMapPtr map, geos::geom::Coordinate c, double& maxGraphCost,
+    const Tgs::RandomPtr& random) const;
+  void _calculateRasterCost(cv::Mat& mat, const Tgs::RandomPtr& random) const;
 
-  void _calculateRasterCost(cv::Mat& mat, const Tgs::RandomPtr& random);
-
-  void _exportGraphImage(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp,
-                         QString path, const geos::geom::Coordinate& coord);
+  void _exportGraphImage(
+    OsmMapPtr map, const ShortestPath& sp, const QString& path,
+    const geos::geom::Coordinate& coord) const;
 
   void _init();
 
-  cv::Mat _paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp, double& maxGraphCost);
-
-  void _paintWay(cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, double friction,
-    double startCost, double endCost);
+  cv::Mat _paintGraph(
+    const ConstOsmMapPtr& map, const DirectedGraph& graph, const ShortestPath& sp,
+    double& maxGraphCost) const;
+  void _paintWay(
+    cv::Mat& mat, const ConstOsmMapPtr& map, const ConstWayPtr& way, double friction,
+    double startCost, double endCost) const;
 };
 
 }

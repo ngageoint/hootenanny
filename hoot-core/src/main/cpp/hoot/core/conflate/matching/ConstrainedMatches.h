@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CONSTRAINEDMATCHES_H
 #define CONSTRAINEDMATCHES_H
@@ -31,7 +31,6 @@
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchConflicts.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Configurable.h>
 
 // Standard
 #include <map>
@@ -48,7 +47,7 @@ namespace hoot
  * Maximizing the set of matches is kind of tricky. For now, best is defined as maximizing the sum
  * of the Match scores.
  */
-class ConstrainedMatches : public Configurable
+class ConstrainedMatches
 {
 public:
 
@@ -78,8 +77,6 @@ public:
    * Returns the score for the last calculateSubset operation.
    */
   double getScore() const { return _score; }
-
-  void setConfiguration(const Settings &/*conf*/) {}
 
   void setTimeLimit(double limit) { _timeLimit = limit; }
 

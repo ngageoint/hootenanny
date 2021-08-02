@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -39,6 +39,11 @@ class PoiSearchRadiusTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(PoiSearchRadiusTest);
   CPPUNIT_TEST(runFileTest);
   CPPUNIT_TEST(runJsonTest);
+  CPPUNIT_TEST(runToStringTest);
+  CPPUNIT_TEST(runMissingFileTest);
+  CPPUNIT_TEST(runBadJsonTest);
+  CPPUNIT_TEST(runMissingKeyTest);
+  CPPUNIT_TEST(runMissingDistanceTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -58,6 +63,74 @@ public:
   {
     _validateRadii(
       PoiSearchRadius::readSearchRadii(FileUtils::readFully(_inputPath + "input.json")));
+  }
+
+  void runToStringTest()
+  {
+    PoiSearchRadius uut("foo", "bar", 10);
+    HOOT_STR_EQUALS("Key: foo, Value: bar, distance: 10", uut.toString());
+  }
+
+  void runMissingFileTest()
+  {
+    QString exceptionMsg;
+    try
+    {
+      PoiSearchRadius::readSearchRadii("blah.json");
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("POI to POI search radii file does not exist.").toStdString(),
+      exceptionMsg.toStdString());
+  }
+
+  void runBadJsonTest()
+  {
+    QString exceptionMsg;
+    try
+    {
+      PoiSearchRadius::readSearchRadii(_inputPath + "runBadJsonTest-in.json");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Error parsing JSON"));
+  }
+
+  void runMissingKeyTest()
+  {
+    QString exceptionMsg;
+    try
+    {
+      PoiSearchRadius::readSearchRadii(_inputPath + "runMissingKeyTest-in.json");
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Missing 'key' in POI search radius entry.").toStdString(),
+      exceptionMsg.toStdString());
+  }
+
+  void runMissingDistanceTest()
+  {
+    QString exceptionMsg;
+    try
+    {
+      PoiSearchRadius::readSearchRadii(_inputPath + "runMissingDistanceTest-in.json");
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Missing 'distance' in POI search radius entry.").toStdString(),
+      exceptionMsg.toStdString());
   }
 
 private:

@@ -19,17 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
+
 #ifndef CHANGESET_TASK_GRID_REPLACER_H
 #define CHANGESET_TASK_GRID_REPLACER_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/changeset/TaskGrid.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/DataQualityMetricTagger.h>
 
 // Qt
@@ -43,11 +44,12 @@ class ChangesetReplacement;
 class OsmApiDbSqlChangesetApplier;
 
 /**
- * This class can replace data in an OSM API database across multiple AOI's via changeset generation
- * and application. Its primarily meant as a testing harness to support
- * ServiceChangesetReplacementGridTest. However, in theory, with some tweaks it could be used in a
- * production environment if desired. Any of the TaskGridGenerator implementations can be used to
- * create a task grid to pass to this class.
+ * @brief The ChangesetTaskGridReplacer class can replace data in an OSM API database across multiple
+ * AOI's via changeset generation and application.
+ *
+ * Its primarily meant as a testing harness to support ServiceChangesetReplacementGridTest. However,
+ * in theory, with some tweaks it could be used in a production environment if desired. Any of the
+ * TaskGridGenerator implementations can be used to create a task grid to pass to this class.
  */
 class ChangesetTaskGridReplacer
 {
@@ -58,8 +60,7 @@ public:
   virtual ~ChangesetTaskGridReplacer() = default;
 
   /**
-   * Replaces data within a task grid cell
-   *
+   * @brief replace replaces data within a task grid cell.
    * @param toReplace URL to the data to replace; must be an OSM API database
    * @param replacement URL to the replacement data; must be a Hoot API database
    * @param taskGrid the task grid that partitions the individual replacement operations
@@ -67,7 +68,7 @@ public:
    */
   OsmMapPtr replace(const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid);
 
-  const DataQualityMetricTagger getOutputMetrics() { return _metricTagger; }
+  DataQualityMetricTagger getOutputMetrics() const { return _metricTagger; }
   QMap<QString, long> getChangesetStats() const { return _changesetStats; }
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }
@@ -133,7 +134,7 @@ private:
   bool _tagQualityIssues;
   DataQualityMetricTagger _metricTagger;
 
-  void _initConfig();
+  void _initConfig() const;
 
   void _replaceEntireTaskGrid(const TaskGrid& taskGrid);
   void _replaceTaskGridCell(

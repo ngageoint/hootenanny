@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -65,15 +65,16 @@ public:
     KeepTagsVisitor visitor(keysToKeep);
     map->visitRw(visitor);
 
-    std::shared_ptr<TagKeyCountVisitor> keyCountVisitor(new TagKeyCountVisitor("source"));
+    std::shared_ptr<TagKeyCountVisitor> keyCountVisitor =
+      std::make_shared<TagKeyCountVisitor>("source");
     map->visitRo(*keyCountVisitor);
     HOOT_STR_EQUALS("0", keyCountVisitor->getStat());
 
-    keyCountVisitor.reset(new TagKeyCountVisitor("highway"));
+    keyCountVisitor = std::make_shared<TagKeyCountVisitor>("highway");
     map->visitRo(*keyCountVisitor);
     HOOT_STR_EQUALS("6", keyCountVisitor->getStat());
 
-    keyCountVisitor.reset(new TagKeyCountVisitor("blah"));
+    keyCountVisitor = std::make_shared<TagKeyCountVisitor>("blah");
     map->visitRo(*keyCountVisitor);
     HOOT_STR_EQUALS("0", keyCountVisitor->getStat());
   }
@@ -88,15 +89,16 @@ public:
     KeepTagsVisitor visitor(keysToKeep);
     map->visitRw(visitor);
 
-    std::shared_ptr<TagKeyCountVisitor> keyCountVisitor(new TagKeyCountVisitor("source"));
+    std::shared_ptr<TagKeyCountVisitor> keyCountVisitor =
+      std::make_shared<TagKeyCountVisitor>("source");
     map->visitRo(*keyCountVisitor);
     HOOT_STR_EQUALS("0", keyCountVisitor->getStat());
 
-    keyCountVisitor.reset(new TagKeyCountVisitor("highway"));
+    keyCountVisitor = std::make_shared<TagKeyCountVisitor>("highway");
     map->visitRo(*keyCountVisitor);
     HOOT_STR_EQUALS("6", keyCountVisitor->getStat());
 
-    keyCountVisitor.reset(new TagKeyCountVisitor("blah"));
+    keyCountVisitor = std::make_shared<TagKeyCountVisitor>("blah");
     map->visitRo(*keyCountVisitor);
     HOOT_STR_EQUALS("0", keyCountVisitor->getStat());
   }
@@ -106,7 +108,7 @@ private:
   OsmMapPtr _loadMap()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "TagRenameKeyVisitorTest.osm", map);
     return map;

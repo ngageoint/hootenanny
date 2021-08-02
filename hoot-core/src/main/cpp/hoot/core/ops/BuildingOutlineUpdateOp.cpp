@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "BuildingOutlineUpdateOp.h"
 
@@ -31,23 +31,22 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Polygon.h>
 #include <geos/util/TopologyException.h>
-#include <geos/opBuffer.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -64,9 +63,9 @@ class NodeIdVisitor : public ConstElementVisitor
 public:
 
   NodeIdVisitor(set<long>& nodes) : allNodes(nodes) { }
-  virtual ~NodeIdVisitor() = default;
+  ~NodeIdVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getElementType() == ElementType::Node)
     {
@@ -74,9 +73,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 
@@ -90,9 +89,9 @@ public:
   NodeReplaceVisitor(OsmMap& map, const std::map<long, long>& fromTo)
     : _fromTo(fromTo), _map(map)
   { }
-  virtual ~NodeReplaceVisitor() = default;
+  ~NodeReplaceVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getElementType() == ElementType::Way)
     {
@@ -115,7 +114,7 @@ public:
       const NodeToWayMap& n2w = *_map.getIndex().getNodeToWayMap();
       for (size_t i = 0; i < oldNodes.size(); i++)
       {
-        if (n2w.getWaysByNode(oldNodes[i]).size() == 0 && _map.containsNode(oldNodes[i]))
+        if (n2w.getWaysByNode(oldNodes[i]).empty() && _map.containsNode(oldNodes[i]))
         {
           RemoveNodeByEid::removeNode(_map.shared_from_this(), oldNodes[i]);
         }
@@ -123,9 +122,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 
@@ -154,7 +153,7 @@ void BuildingOutlineUpdateOp::apply(std::shared_ptr<OsmMap>& map)
 
 void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
                                             const ElementPtr& pElement,
-                                            std::shared_ptr<Geometry>& pOutline)
+                                            std::shared_ptr<Geometry>& pOutline) const
 {
   ElementToGeometryConverter elementConverter = ElementToGeometryConverter(_map);
   std::shared_ptr<Geometry> pGeometry;
@@ -177,8 +176,12 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
       pGeometry = elementConverter.convertToGeometry(pElement);
       LOG_VART(pGeometry->getGeometryTypeId());
     }
+    if (!pGeometry || pGeometry->isEmpty())
+    {
+      return;
+    }
 
-    pOutline.reset(pOutline->Union(pGeometry.get()));
+    pOutline = pOutline->Union(pGeometry.get());
     LOG_VART(pOutline->getGeometryTypeId());
   }
   catch (const geos::util::TopologyException& e)
@@ -187,7 +190,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
     std::shared_ptr<Geometry> cleanedGeom(GeometryUtils::validateGeometry(pGeometry.get()));
     try
     {
-      pOutline.reset(pOutline->Union(cleanedGeom.get()));
+      pOutline = pOutline->Union(cleanedGeom.get());
       LOG_VART(pOutline->getGeometryTypeId());
     }
     catch (const geos::util::TopologyException& e)
@@ -211,7 +214,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
   }
 }
 
-void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
+void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding) const
 {
   LOG_TRACE("Input building: " << pBuilding->toString());
 
@@ -220,13 +223,13 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
 
   for (size_t i = 0; i < entries.size(); i++)
   {
-    LOG_VART(entries[i].role);
-    if (entries[i].role == MetadataTags::RoleOutline())
+    LOG_VART(entries[i].getRole());
+    if (entries[i].getRole() == MetadataTags::RoleOutline())
     {
       LOG_TRACE("Removing outline role from: " << entries[i] << "...");
-      pBuilding->removeElement(entries[i].role, entries[i].getElementId());
+      pBuilding->removeElement(entries[i].getRole(), entries[i].getElementId());
     }
-    else if (entries[i].role == MetadataTags::RolePart())
+    else if (entries[i].getRole() == MetadataTags::RolePart())
     {
       if (entries[i].getElementId().getType() == ElementType::Way)
       {
@@ -312,7 +315,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
 }
 
 void BuildingOutlineUpdateOp::_mergeNodes(
-  const std::shared_ptr<Element>& changed, const RelationPtr& reference)
+  const std::shared_ptr<Element>& changed, const RelationPtr& reference) const
 {
   set<long> changedNodes;
   set<long> referenceNodes;

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RELATION_WITH_HIGHWAY_MEMBERS_CRITERION_H
@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/criterion/RelationWithMembersOfTypeCriterion.h>
-#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -46,21 +45,19 @@ public:
 
   RelationWithHighwayMembersCriterion();
   RelationWithHighwayMembersCriterion(ConstOsmMapPtr map);
-  virtual ~RelationWithHighwayMembersCriterion() = default;
+  ~RelationWithHighwayMembersCriterion() = default;
 
-  virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new RelationWithHighwayMembersCriterion(_map)); }
+  ElementCriterionPtr clone() override
+  { return std::make_shared<RelationWithHighwayMembersCriterion>(_map); }
 
-  virtual QString getCriterion() const override;
+  QString getCriterion() const override;
 
-  virtual QString getDescription() const
-  { return "Identifies relations with road members"; }
+  GeometryType getGeometryType() const override;
 
-  virtual GeometryType getGeometryType() const;
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override { return "Identifies relations with road members"; }
 };
 
 }

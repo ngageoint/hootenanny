@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "NonConflatableCriterion.h"
 
@@ -71,7 +71,7 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
     if (_map)
     {
       ConstOsmMapConsumer* mapConsumer = dynamic_cast<ConstOsmMapConsumer*>(crit.get());
-      if (mapConsumer != 0)
+      if (mapConsumer != nullptr)
       {
         mapConsumer->setOsmMap(_map.get());
       }
@@ -138,7 +138,6 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
 
   // It is not something we can conflate.
   LOG_TRACE("Element: " << e->getElementId() << " is not conflatable.");
-  //LOG_VART(e);
   return true;
 }
 

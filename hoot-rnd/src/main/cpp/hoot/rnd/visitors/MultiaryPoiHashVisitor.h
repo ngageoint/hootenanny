@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTIARY_POI_HASH_VISITOR_H
 #define MULTIARY_POI_HASH_VISITOR_H
@@ -44,18 +44,18 @@ public:
   static QString className() { return "hoot::MultiaryPoiHashVisitor"; }
 
   MultiaryPoiHashVisitor() = default;
-  virtual ~MultiaryPoiHashVisitor() = default;
+  ~MultiaryPoiHashVisitor() = default;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates unique hash values for POIs conflated with Multiary POI Conflation"; }
 
 protected:
 
-  virtual QString _toJson(const ConstNodePtr& node) const;
+  QString _toJson(const ConstNodePtr& node) const override;
 };
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "StringDistanceJs.h"
 
@@ -43,12 +43,11 @@ namespace hoot
 
 HOOT_JS_REGISTER(StringDistanceJs)
 
-Persistent<Function> StringDistanceJs::_constructor;
-
-void StringDistanceJs::Init(Handle<Object> target)
+void StringDistanceJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(StringDistance::className());
 
@@ -59,17 +58,13 @@ void StringDistanceJs::Init(Handle<Object> target)
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
-        FunctionTemplate::New(current, toString));
-    tpl->PrototypeTemplate()->Set(
-      PopulateConsumersJs::baseClass(),
-      String::NewFromUtf8(current, StringDistance::className().toStdString().data()));
+    tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(), toV8(StringDistance::className()));
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
+    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
+    target->Set(context, toV8(n), ToLocal(&constructor));
   }
 }
 
@@ -79,23 +74,14 @@ void StringDistanceJs::New(const FunctionCallbackInfo<Value>& args)
 
   const QString className = "hoot::" + str(args.This()->GetConstructorName());
 
-  StringDistance* c = Factory::getInstance().constructObject<StringDistance>(className);
-  StringDistanceJs* obj = new StringDistanceJs(StringDistancePtr(c));
+  StringDistancePtr c = Factory::getInstance().constructObject<StringDistance>(className);
+  StringDistanceJs* obj = new StringDistanceJs(c);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
   PopulateConsumersJs::populateConsumers<StringDistance>(c, args);
 
   args.GetReturnValue().Set(args.This());
-}
-
-void StringDistanceJs::toString(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  StringDistancePtr sd = toCpp<StringDistancePtr>(args.This());
-
-  args.GetReturnValue().Set(toV8(sd->toString()));
 }
 
 }

@@ -3,39 +3,42 @@
 
 === Description
 
-The +validate+ command uses JOSM to identify (but does not fix) data with common erroneous aspects. This command is only available when
-Hootenanny is configured with JOSM (compiled --with-josm).
+The +validate+ command uses JOSM to identify map data with erroneous aspects.
 
-* +input+                  - Input; may be any supported input format (e.g. .osm file).
-* +output+                 - (optional) Output file; may be any supported output format (e.g. .osm file). If specified, elements with 
-                             validation will be marked with tags in the output file. If not specified, then only a validation error summary 
-                             will be displayed.
-* +--available-validators+ - Displays available JOSM validators for use in validation. Not all validators have cleaning (auto-fix) capabilities. 
-                             If this option is selected, neither an input or output must be specified.
+* +input(s)+               - Input(s); may be any supported input format (e.g. .osm file).
+* +--output+               - Optional output; may be any supported output format (e.g. .osm file). If specified, elements 
+                             with validation will be marked with tags in the output file. If not specified, then only 
+                             a validation error summary will be displayed. This parameter may not be specified with the 
+                             `--separate-output` parameter.
+* +--available-validators+ - Displays available JOSM validators for use in validation. Not all validators have cleaning 
+                             (auto-fix) capabilities. If this option is selected, neither an input or output need be specified.
+* +--recursive+            - Allows for processing the files contained in any directories specified in +input(s)+ 
+                             recursively. This parameter has no effect on the processing of non-directory inputs. This must 
+                             be followed by either "*" to denote no filtering or one or more wildcard name filters. 
+                             e.g. "*.osm;*.json" or "*myFile*". This parameter is not compatible with the OGR layer input syntax.
+* +--separate-output+      - This parameter replaces the `--output` parameter and will result in no validation summary to
+                             be displayed on the screen. The default behavior when processing multiple inputs is to 
+                             combine them into the same single output. With this parameter specified, each input is 
+                             processed and written to a separate output. The +output+ parameter is invalid in combination 
+                             with this parameter, and output is written back to a new URL with the same base name as 
+                             each input with the text "-validated" appended to it. This parameter cannot be used with OSM 
+                             API database (osmapidb://) or OSM API (http://) inputs. This parameter is not compatible with 
+                             the OGR layer input syntax.
 
 === Usage
 
 --------------------------------------
-validate (input) [output]
-
-validate [--available-validators]
---------------------------------------
-
-==== Examples
-
---------------------------------------
-# run default validation
-hoot validate input.osm
-
-# run default validation and mark features with validation failure tags
-hoot validate input.osm output.osm
-
 # list the available validators
-hoot validate --available-validators
+hoot validate [--available-validators]
 
-# run customized validation
-hoot validate -D josm.validators.include="DuplicatedWayNodes" input.osm
+# perform validation
+hoot validate (input1) [input2...] [--output path] [--recursive "*"|"filter1;filter2..."]
+
+# perform validation and write to separate outputs
+hoot validate (input1) [input2...] [--recursive "*"|"filter1;filter2..."] [--separate-output]
 --------------------------------------
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#validation[Examples]
 
 ==== See Also
 

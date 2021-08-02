@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "MatchFeatureExtractor.h"
@@ -66,8 +66,8 @@ void MatchFeatureExtractor::addMatchCreator(const std::shared_ptr<MatchCreator>&
   _creators.push_back(m);
 }
 
-MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
-  const std::shared_ptr<const OsmMap>& map) const
+MatchType MatchFeatureExtractor::_getActualMatchType(
+  const set<ElementId> &eids, const std::shared_ptr<const OsmMap>& map) const
 {
   set<QString> ref1, ref2, review;
 
@@ -250,13 +250,16 @@ QString MatchFeatureExtractor::getResults(bool useNulls)
 void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap>& map)
 {
   vector<ConstMatchPtr> matches;
-  std::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0, 0));
+  // We don't want to validate the thresholds here in order to do the full match feature extraction.
+  // Reviews aren't applicable here, so just use the default value.
+  std::shared_ptr<const MatchThreshold> mt =
+    std::make_shared<MatchThreshold>(0.0, 0.0, 1.0, false);
   _matchFactory->createMatches(map, matches, std::shared_ptr<geos::geom::Geometry>(), mt);
   size_t matchCount = 0;
   for (size_t i = 0; i < matches.size(); i++)
   {
     const MatchDetails* d = dynamic_cast<const MatchDetails*>(matches[i].get());
-    if (d == 0)
+    if (d == nullptr)
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {
@@ -309,7 +312,7 @@ void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap>& map)
       if (matchCount % 10 == 0)
       {
         PROGRESS_INFO(
-          "Processed " << StringUtils::formatLargeNumber(matchCount) << " / " <<
+          "Processed " << StringUtils::formatLargeNumber(matchCount) << " of " <<
           StringUtils::formatLargeNumber(matches.size()) << " matches; samples collected: " <<
           StringUtils::formatLargeNumber(_samples.size()));
       }

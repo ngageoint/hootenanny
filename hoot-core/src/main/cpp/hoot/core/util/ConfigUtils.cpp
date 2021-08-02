@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ConfigUtils.h"
@@ -98,19 +98,18 @@ std::shared_ptr<InBoundsCriterion> ConfigUtils::getBoundsFilter(const ConstOsmMa
 {
   std::shared_ptr<InBoundsCriterion> boundsCrit;
   const QString boundsStr = ConfigOptions().getBounds().trimmed();
-  LOG_VART(boundsStr);
   if (!boundsStr.isEmpty())
   {
     const GeometricRelationship boundsRelationship = ConfigUtils::getBoundsRelationship();
     const bool mustContain = true ? (boundsRelationship == GeometricRelationship::Contains) : false;
-    boundsCrit.reset(new InBoundsCriterion(mustContain));
+    boundsCrit = std::make_shared<InBoundsCriterion>(mustContain);
     std::shared_ptr<geos::geom::Geometry> bounds = GeometryUtils::boundsFromString(boundsStr);
     if (!MapProjector::isGeographic(map))
     {
       // The bounds is always in WGS84, so if our map isn't currently in WGS84 we need to reproject
       // the bounds.
-      std::shared_ptr<OGRSpatialReference> srs84(new OGRSpatialReference());
-      srs84->SetWellKnownGeogCS("WGS84");
+      LOG_DEBUG("Reprojecting bounds: " << boundsStr << "...");
+      std::shared_ptr<OGRSpatialReference> srs84 = MapProjector::createWgs84Projection();
       MapProjector::project(bounds, srs84, map->getProjection());
     }
     boundsCrit->setBounds(bounds);
@@ -153,6 +152,13 @@ void ConfigUtils::removeListOpEntry(const QString& opName, const QString& entryT
 {
   QStringList opValue = conf().getList(opName);
   opValue.removeAll(entryToRemove);
+  conf().set(opName, opValue);
+}
+
+void ConfigUtils::insertListOpEntry(const QString& opName, const QString& opEntry, const int index)
+{
+  QStringList opValue = conf().getList(opName);
+  opValue.insert(index, opEntry);
   conf().set(opName, opValue);
 }
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MatchComparator.h"
 
@@ -36,12 +36,12 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueTagValuesVisitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
-#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QSet>
@@ -60,19 +60,19 @@ class GetRefUuidVisitor : public ConstElementVisitor
 {
 public:
 
-  typedef map<QString, set<QString>> RefToUuid;
+  using RefToUuid = map<QString, set<QString>>;
 
   GetRefUuidVisitor(QString ref) : _ref(ref) { }
 
-  virtual ~GetRefUuidVisitor() = default;
+  ~GetRefUuidVisitor() = default;
 
   const RefToUuid& getRefToUuid() const { return _ref2Uuid; }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     QStringList refs;
     if (e->getTags().contains(_ref))
@@ -88,7 +88,7 @@ public:
     refs.removeAll("none");
 
     QString uuid = e->getTags()["uuid"];
-    if (refs.size() > 0 && uuid.isEmpty())
+    if (!refs.empty() && uuid.isEmpty())
     {
       LOG_TRACE("refs: " << refs);
       LOG_TRACE("Element: " << e->toString());
@@ -119,15 +119,15 @@ class UuidToEidVisitor : public ConstElementVisitor
 public:
 
   UuidToEidVisitor() = default;
-  virtual ~UuidToEidVisitor() = default;
+  ~UuidToEidVisitor() = default;
 
   const MatchComparator::UuidToEid& getUuidToEid() const { return _uuidToEid; }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     QString uuid;
     if (e->getTags().contains("uuid"))
@@ -207,7 +207,7 @@ void MatchComparator::_clearCache()
 }
 
 bool MatchComparator::_debugLog(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& in,
-  const ConstOsmMapPtr& /*conflated*/)
+  const ConstOsmMapPtr& /*conflated*/) const
 {
   TagContainsCriterion tcf("uuid", uuid1);
   tcf.addPair("uuid", uuid2);
@@ -392,7 +392,7 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
     numPairsParsed++;
     if (numPairsParsed % _statusUpdateInterval == 0)
     {
-      PROGRESS_INFO("Processed " << numPairsParsed << " / " << allPairs.size() << " match pairs.");
+      PROGRESS_INFO("Processed " << numPairsParsed << " of " << allPairs.size() << " match pairs.");
     }
   }
 
@@ -411,7 +411,7 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
 }
 
 void MatchComparator::_createMatches(const set<QString>& uuids1, const set<QString>& uuids2,
-  set<UuidPair>& matches, Tgs::DisjointSetMap<QString>& groups)
+  set<UuidPair>& matches, Tgs::DisjointSetMap<QString>& groups) const
 {
   // create a match between all the combinations of ref1 uuid to ref2 uuid
   for (set<QString>::const_iterator u1 = uuids1.begin(); u1 != uuids1.end(); ++u1)
@@ -485,7 +485,7 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
       {
         u2.insert(uuidStr);
       }
-      else if (u1.size() == 0 && u2.size() > 0)
+      else if (u1.empty() && !u2.empty())
       {
         u1.insert(uuidStr);
       }
@@ -542,7 +542,7 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
       else
       {
         LOG_TRACE("Missing UUID: " << cList[i]);
-        throw HootException("Conflated uuid wasn't found in either input.");
+        throw HootException("Conflated uuid was not found in either input: " + cList[i]);
       }
     }
     // create a match between all the combinations of ref1 uuid to ref2 uuid
@@ -628,7 +628,7 @@ int MatchComparator::getTotalCount() const
 }
 
 bool MatchComparator::_isNeedsReview(const QString& uuid1, const QString& uuid2,
-                                     const ConstOsmMapPtr& conflated)
+                                     const ConstOsmMapPtr& conflated) const
 {
   QList<ElementId> eid1s = _actualUuidToEid.values(uuid1);
   QList<ElementId> eid2s = _actualUuidToEid.values(uuid2);
@@ -648,7 +648,7 @@ bool MatchComparator::_isNeedsReview(const QString& uuid1, const QString& uuid2,
         return false;
       }
 
-      if (_reviewMarker.isNeedsReview(conflated, conflated->getElement(eid1),
+      if (ReviewMarker::isNeedsReview(conflated, conflated->getElement(eid1),
                                       conflated->getElement(eid2)))
       {
         result = true;
@@ -675,9 +675,9 @@ void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString& uuid,
   }
 }
 
-void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const QString& value)
+void MatchComparator::_tagError(const OsmMapPtr& map, const QString& uuid, const QString& value)
 {
-  // if the uuid contains the first uuid, set mismatch
+  // If the uuid contains the first uuid, set mismatch.
   SetTagValueVisitor stv(MetadataTags::HootMismatch(), value);
   for (MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
        it != _actualUuidToEid.end(); ++it)
@@ -690,9 +690,9 @@ void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const
   }
 }
 
-void MatchComparator::_tagWrong(const OsmMapPtr &map, const QString &uuid)
+void MatchComparator::_tagWrong(const OsmMapPtr& map, const QString &uuid)
 {
-  // if the uuid contains the first uuid, set wrong
+  // If the uuid contains the first uuid, set wrong.
   SetTagValueVisitor stv(MetadataTags::HootWrong(), "1");
   for (MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
        it != _actualUuidToEid.end(); ++it)
@@ -717,10 +717,10 @@ void MatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
 {
   _elementWrongCounts[elementType] =
     (int)FilteredVisitor::getStat(
-      ElementCriterionPtr(new ChainCriterion(
-        ElementCriterionPtr(new ElementTypeCriterion(elementType)),
-        ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootWrong())))),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
+      std::make_shared<ChainCriterion>(
+        std::make_shared<ElementTypeCriterion>(elementType),
+        std::make_shared<TagKeyCriterion>(MetadataTags::HootWrong())),
+      std::make_shared<ElementCountVisitor>(),
       map);
 }
 

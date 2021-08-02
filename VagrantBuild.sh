@@ -36,7 +36,7 @@ fi
 
 aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure $SILENT_CONFIGURE --with-rnd --with-josm --with-services --with-uitests
 
-if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
+if [ ! -f LocalConfig.pri ] || ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
     cp LocalConfig.pri.orig LocalConfig.pri
     sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri

@@ -19,17 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "HighwayMergerCreator.h"
 
 // hoot
 #include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/conflate/linear/LinearSnapMerger.h>
-#include <hoot/core/conflate/linear/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/merging/LinearMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
@@ -56,42 +55,37 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
   set<pair<ElementId, ElementId>> eids;
 
   std::shared_ptr<SublineStringMatcher> sublineMatcher;
-  // go through all the matches
+  // Go through all the matches.
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    ConstMatchPtr m = *it;
-    LOG_VART(m->toString());
-    const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(m.get());
-    // check to make sure all the input matches are highway matches.
-    if (hm == 0)
+    ConstMatchPtr match = *it;
+    LOG_VART(match->toString());
+    const HighwayMatch* highwayMatch = dynamic_cast<const HighwayMatch*>(match.get());
+    // Check to make sure all the input matches are highway matches.
+    if (highwayMatch == nullptr)
     {
       // return an empty result
-      LOG_TRACE("Returning empty result due to match not being HighwayMatch: " << m->toString());
+      LOG_TRACE(
+        "Returning empty result due to match not being " << HighwayMatch::className() << ": " <<
+        match->toString());
       return false;
     }
-    // add all the element to element pairs to a set
+    // Add all the element to element pairs to a set.
     else
     {
-      // there should only be one HighwayMatch in a set.
-      sublineMatcher = hm->getSublineMatcher();
-      set<pair<ElementId, ElementId>> s = hm->getMatchPairs();
-      //LOG_VART(s);
-      eids.insert(s.begin(), s.end());
+      // There should only be one HighwayMatch in a set.
+      sublineMatcher = highwayMatch->getSublineMatcher();
+      set<pair<ElementId, ElementId>> matchPairs = highwayMatch->getMatchPairs();
+      eids.insert(matchPairs.begin(), matchPairs.end());
     }
   }
   LOG_VART(eids);
 
-  // only add the highway merge if there are elements to merge.
-  if (eids.size() > 0)
+  // Only add the highway merger if there are elements to merge.
+  if (!eids.empty())
   {
-    if (!ConfigOptions().getHighwayMergeTagsOnly())
-    {
-      mergers.push_back(MergerPtr(new LinearSnapMerger(eids, sublineMatcher)));
-    }
-    else
-    {
-      mergers.push_back(MergerPtr(new LinearTagOnlyMerger(eids, sublineMatcher)));
-    }
+    mergers.push_back(
+      LinearMergerFactory::getMerger(eids, sublineMatcher, HighwayMatch::MATCH_NAME));
     result = true;
   }
 
@@ -101,11 +95,10 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
 vector<CreatorDescription> HighwayMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates mergers that merge roads with the 2nd Generation (Unifying) Algorithm",
-      false));
+  result.emplace_back(
+    className(),
+    "Generates mergers that merge roads with the 2nd Generation (Unifying) Algorithm",
+    false);
   return result;
 }
 

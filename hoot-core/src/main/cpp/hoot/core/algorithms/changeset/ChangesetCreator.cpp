@@ -19,41 +19,40 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ChangesetCreator.h"
 
 // Hoot
+#include <hoot/core/algorithms/changeset/ChangesetCleaner.h>
+#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/elements/ExternalMergeElementSorter.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
-#include <hoot/core/io/ElementStreamer.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/OsmChangesetFileWriter.h>
+#include <hoot/core/io/OsmChangesetFileWriterFactory.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
-#include <hoot/core/algorithms/changeset/ChangesetCleaner.h>
-#include <hoot/core/io/OsmChangesetFileWriterFactory.h>
-#include <hoot/core/io/OsmChangesetFileWriter.h>
-#include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/DbUtils.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -84,12 +83,9 @@ _numDeleteChanges(0)
   if (printDetailedStats)
   {
     QFile statsFile(statsOutputFile);
-    if (statsFile.exists())
+    if (statsFile.exists() && !statsFile.remove())
     {
-      if (!statsFile.remove())
-      {
-        LOG_ERROR("Unable to remove changeset statistics file: " << statsOutputFile);
-      }
+      LOG_ERROR("Unable to remove changeset statistics file: " << statsOutputFile);
     }
   }
 }
@@ -119,7 +115,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   LOG_VARD(_singleInput);
   // both inputs must support streaming to use streaming I/O
   const bool useStreamingIo =
-    // TODO: may be able to move this check to ElementStreamer::areValidStreamingOps
+    // TODO: may be able to move this check to IoUtils::areValidStreamingOps
     !ConfigUtils::boundsOptionEnabled() &&
     _inputIsStreamable(input1) &&
     (_singleInput || _inputIsStreamable(input2));
@@ -134,12 +130,12 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     // the larger number of steps. With streaming I/O that isn't possible since all the data
     // conversion operations are executed inline at the same time the data is read in.
     _numTotalTasks += 3;
-    if (ConfigOptions().getConvertOps().size() > 0)
+    if (!ConfigOptions().getConvertOps().empty())
     {
-      // Convert ops get a single task, which NamedOp will break down into sub-tasks during
+      // Convert ops get a single task, which OpExecutor will break down into sub-tasks during
       // progress reporting.
       _numTotalTasks++;
-      if (!ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
+      if (!IoUtils::areValidStreamingOps(ConfigOptions().getConvertOps()))
       {
         // Have the extra work of combining and separating data inputs when any of the convert
         // ops aren't streamable.
@@ -156,8 +152,8 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   Progress progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
   QString msg =
-    "Deriving output changeset: ..." + output.right(maxFilePrintLength) + " from inputs: ..." +
-    input1.right(maxFilePrintLength) + " and ..." + input2.right(maxFilePrintLength);
+    "Deriving output changeset: ..." + FileUtils::toLogFormat(output, maxFilePrintLength) + " from inputs: ..." +
+    FileUtils::toLogFormat(input1, maxFilePrintLength) + " and ..." + FileUtils::toLogFormat(input2, maxFilePrintLength);
   if (ConfigUtils::boundsOptionEnabled())
   {
     msg += " over bounds: ..." + ConfigUtils::getBoundsString().right(maxFilePrintLength);
@@ -185,8 +181,8 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     // use memory bound sorting.
 
     // read both inputs completely
-    OsmMapPtr map1(new OsmMap());
-    OsmMapPtr map2(new OsmMap());
+    OsmMapPtr map1 = std::make_shared<OsmMap>();
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
     _readInputsFully(input1, input2, map1, map2, progress);
     _map1List.append(map1);
     _map2List.append(map2);
@@ -236,10 +232,10 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
 
   progress.set(
     1.0, Progress::JobState::Successful,
-    "Changeset written to: ..." + output.right(maxFilePrintLength));
+    "Changeset written to: ..." + FileUtils::toLogFormat(output, maxFilePrintLength));
 }
 
-void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& output)
+void ChangesetCreator::create(const OsmMapPtr& map1, const OsmMapPtr& map2, const QString& output)
 {
   QList<OsmMapPtr> map1Inputs;
   map1Inputs.append(map1);
@@ -264,16 +260,18 @@ void ChangesetCreator::create(
     // If map2 is empty, we'll end up deleting features from map1 in the resultant changeset.
     OsmMapPtr map2 = map2Inputs.at(i);
     LOG_DEBUG(
-      "Creating changeset from inputs: " << map1->getName() << " of size: " << map1->size() <<
-      " and " << map2->getName() << " of size: " << map2->size() << " to output: " <<
-      output.right(25) << "...");
-    OsmMapWriterFactory::writeDebugMap(map1, "map1-before-changeset-derivation-" + map1->getName());
-    OsmMapWriterFactory::writeDebugMap(map2, "map2-before-changeset-derivation-" + map2->getName());
+      "Creating changeset from inputs: " << FileUtils::toLogFormat(map1->getName()) << " of size: " << map1->size() <<
+      " and " << FileUtils::toLogFormat(map2->getName()) << " of size: " << map2->size() << " to output: " <<
+      FileUtils::toLogFormat(output, 25) << "...");
+    OsmMapWriterFactory::writeDebugMap(
+      map1, className(), "map1-before-changeset-derivation-" + map1->getName());
+    OsmMapWriterFactory::writeDebugMap(
+      map2, className(), "map2-before-changeset-derivation-" + map2->getName());
 
     if (!_includeReviews)
     {
-      std::shared_ptr<TagKeyCriterion> elementCriterion(
-        new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
+      std::shared_ptr<TagKeyCriterion> elementCriterion =
+        std::make_shared<TagKeyCriterion>(MetadataTags::HootReviewNeeds());
       RemoveElementsVisitor removeElementsVisitor;
       removeElementsVisitor.setRecursive(false);
       removeElementsVisitor.addCriterion(elementCriterion);
@@ -324,7 +322,7 @@ bool ChangesetCreator::_isSupportedOutputFormat(const QString& format) const
 bool ChangesetCreator::_inputIsSorted(const QString& input) const
 {
   // ops could change the ordering
-  if (ConfigOptions().getConvertOps().size() > 0)
+  if (!ConfigOptions().getConvertOps().empty())
   {
     return false;
   }
@@ -342,14 +340,14 @@ bool ChangesetCreator::_inputIsSorted(const QString& input) const
 
 bool ChangesetCreator::_inputIsStreamable(const QString& input) const
 {
-  LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
-  LOG_VARD(ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()));
+  LOG_VARD(IoUtils::isStreamableInput(input));
+  LOG_VARD(IoUtils::areValidStreamingOps(ConfigOptions().getConvertOps()));
   LOG_VARD(ConfigOptions().getElementSorterElementBufferSize());
   return
     // The input format itself must be streamable (partially read).
-    OsmMapReaderFactory::hasElementInputStream(input) &&
+    IoUtils::isStreamableInput(input) &&
     // All ops must be streamable, otherwise we'll load both inputs into memory.
-    ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()) &&
+    IoUtils::areValidStreamingOps(ConfigOptions().getConvertOps()) &&
     // If no sort buffer size is set, we sort in-memory. If we're already loading the data
     // into memory for sorting, might as well force it into memory for the initial read as well.
     ConfigOptions().getElementSorterElementBufferSize() != -1;
@@ -362,7 +360,7 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
 
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input ...");
-  OsmMapPtr fullMap(new OsmMap());
+  OsmMapPtr fullMap = std::make_shared<OsmMap>();
   if (!_singleInput)
   {
     // We must preserve the original element IDs while loading in order for changeset derivation
@@ -371,13 +369,15 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
     // Load the first map. If we have a bounded query, let's check for the crop related option
     // overrides.
     IoUtils::loadMap(fullMap, input1, true, Status::Unknown1);
-    OsmMapWriterFactory::writeDebugMap(fullMap, "after-initial-read-unstreamable-ref-map");
+    OsmMapWriterFactory::writeDebugMap(
+      fullMap, className(), "after-initial-read-unstreamable-ref-map");
 
     // append the second map onto the first one
 
-    OsmMapPtr tmpMap(new OsmMap());
+    OsmMapPtr tmpMap = std::make_shared<OsmMap>();
     IoUtils::loadMap(tmpMap, input2, true, Status::Unknown2);
-    OsmMapWriterFactory::writeDebugMap(tmpMap, "after-initial-read-unstreamable-sec-map");
+    OsmMapWriterFactory::writeDebugMap(
+      tmpMap, className(), "after-initial-read-unstreamable-sec-map");
 
     try
     {
@@ -406,18 +406,19 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
   }
 
   LOG_VARD(fullMap->getElementCount());
-  OsmMapWriterFactory::writeDebugMap(fullMap, "after-initial-read-unstreamable-full-map");
+  OsmMapWriterFactory::writeDebugMap(
+    fullMap, className(), "after-initial-read-unstreamable-full-map");
   _currentTaskNum++;
 
   // Apply our convert ops to the entire map. If any of these are map consumers (OsmMapOperation)
   // then they some will exhibit undefined behavior if you try to exec them on the inputs
   // separately.
   LOG_DEBUG("Applying convert ops...");
-  NamedOp convertOps(ConfigOptions().getConvertOps());
+  OpExecutor convertOps(ConfigOptions().getConvertOps());
   convertOps.setProgress(
     Progress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0 / (float)_numTotalTasks));
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0f / (float)_numTotalTasks));
   convertOps.apply(fullMap);
   // get back into wgs84 in case some op changed the proj
   MapProjector::projectToWgs84(fullMap);
@@ -429,12 +430,12 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Separating out input maps...");
   RemoveUnknown1Visitor remove1Vis;
   RemoveUnknown2Visitor remove2Vis;
-  map1.reset(new OsmMap(fullMap));
+  map1 = std::make_shared<OsmMap>(fullMap);
   if (!_singleInput)
   {
     map1->visitRw(remove2Vis);
 
-    map2.reset(new OsmMap(fullMap));
+    map2 = std::make_shared<OsmMap>(fullMap);
     map2->visitRw(remove1Vis);
   }
   else
@@ -442,9 +443,9 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
     map1->visitRw(remove1Vis);
   }
   LOG_VARD(map1->getElementCount());
-  OsmMapWriterFactory::writeDebugMap(map1, "unstreamable-separated-map-1");
+  OsmMapWriterFactory::writeDebugMap(map1, className(), "unstreamable-separated-map-1");
   LOG_VARD(map2->getElementCount());
-  OsmMapWriterFactory::writeDebugMap(map2, "unstreamable-separated-map-2");
+  OsmMapWriterFactory::writeDebugMap(map2, className(), "unstreamable-separated-map-2");
   _currentTaskNum++;
 }
 
@@ -474,17 +475,17 @@ void ChangesetCreator::_handleStreamableConvertOpsInMemory(
     // input.
     IoUtils::loadMap(map1, input1, true, Status::Unknown2);
   }
-  OsmMapWriterFactory::writeDebugMap(map1, "after-initial-read-streamable-map-1");
-  OsmMapWriterFactory::writeDebugMap(map2, "after-initial-read-streamable-map-2");
+  OsmMapWriterFactory::writeDebugMap(map1, className(), "after-initial-read-streamable-map-1");
+  OsmMapWriterFactory::writeDebugMap(map2, className(), "after-initial-read-streamable-map-2");
   _currentTaskNum++;
 
   // Apply our convert ops to each map separately.
   LOG_DEBUG("Applying convert ops...");
-  NamedOp convertOps(ConfigOptions().getConvertOps());
+  OpExecutor convertOps(ConfigOptions().getConvertOps());
   convertOps.setProgress(
     Progress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0 / (float)_numTotalTasks));
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0f / (float)_numTotalTasks));
   convertOps.apply(map1);
   MapProjector::projectToWgs84(map1);
   if (!_singleInput)
@@ -499,9 +500,9 @@ void ChangesetCreator::_readInputsFully(
   const QString& input1, const QString& input2, OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
 {  
   LOG_VARD(ConfigOptions().getConvertOps().size());
-  if (ConfigOptions().getConvertOps().size() > 0)
+  if (!ConfigOptions().getConvertOps().empty())
   {
-    if (!ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
+    if (!IoUtils::areValidStreamingOps(ConfigOptions().getConvertOps()))
     {
       /*
        * If any op in the convert ops is a map consumer, then it must go through this logic, which
@@ -544,8 +545,8 @@ void ChangesetCreator::_readInputsFully(
       // input.
       IoUtils::loadMap(map1, input1, true, Status::Unknown2);
     }
-    OsmMapWriterFactory::writeDebugMap(map1, "after-initial-read-no-ops-map-1");
-    OsmMapWriterFactory::writeDebugMap(map2, "after-initial-read-no-ops-map-2");
+    OsmMapWriterFactory::writeDebugMap(map1, className(), "after-initial-read-no-ops-map-1");
+    OsmMapWriterFactory::writeDebugMap(map2, className(), "after-initial-read-no-ops-map-2");
     _currentTaskNum++;
   }
 
@@ -553,8 +554,8 @@ void ChangesetCreator::_readInputsFully(
   {
     progress.set(
       (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Removing review relations...");
-    std::shared_ptr<TagKeyCriterion> elementCriterion(
-      new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
+    std::shared_ptr<TagKeyCriterion> elementCriterion =
+      std::make_shared<TagKeyCriterion>(MetadataTags::HootReviewNeeds());
     RemoveElementsVisitor removeElementsVisitor;
     removeElementsVisitor.setRecursive(false);
     removeElementsVisitor.addCriterion(elementCriterion);
@@ -563,8 +564,8 @@ void ChangesetCreator::_readInputsFully(
     {
       map2->visitRw(removeElementsVisitor);
     }
-    OsmMapWriterFactory::writeDebugMap(map1, "after-remove-reviews-map-1");
-    OsmMapWriterFactory::writeDebugMap(map2, "after-remove-reviews-map-2");
+    OsmMapWriterFactory::writeDebugMap(map1, className(), "after-remove-reviews-map-1");
+    OsmMapWriterFactory::writeDebugMap(map2, className(), "after-remove-reviews-map-2");
     _currentTaskNum++;
   }
 
@@ -577,8 +578,8 @@ void ChangesetCreator::_readInputsFully(
   {
     map2->visitRw(truncateTags);
   }
-  OsmMapWriterFactory::writeDebugMap(map1, "after-truncate-tags-map-1");
-  OsmMapWriterFactory::writeDebugMap(map2, "after-truncate-tags-map-2");
+  OsmMapWriterFactory::writeDebugMap(map1, className(), "after-truncate-tags-map-1");
+  OsmMapWriterFactory::writeDebugMap(map2, className(), "after-truncate-tags-map-2");
   _currentTaskNum++;
 }
 
@@ -587,7 +588,7 @@ ElementInputStreamPtr ChangesetCreator::_getExternallySortedElements(const QStri
 {
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-    "Sorting input elements ..." + input.right(25) + "...");
+    "Sorting input elements ..." + FileUtils::toLogFormat(input, 25) + "...");
 
   ElementInputStreamPtr sortedElements;
 
@@ -610,28 +611,27 @@ ElementInputStreamPtr ChangesetCreator::_getExternallySortedElements(const QStri
   return sortedElements;
 }
 
-ElementInputStreamPtr ChangesetCreator::_getEmptyInputStream()
+ElementInputStreamPtr ChangesetCreator::_getEmptyInputStream() const
 {
   // a no-op here since InMemoryElementSorter taking in an empty map will just return an empty
   // element stream
-  return InMemoryElementSorterPtr(new InMemoryElementSorter(OsmMapPtr(new OsmMap())));
+  return std::make_shared<InMemoryElementSorter>(std::make_shared<OsmMap>());
 }
 
-ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& input)
+ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& input) const
 {
-  LOG_DEBUG("Retrieving filtered input stream for: " << input.right(25) << "...");
+  LOG_DEBUG("Retrieving filtered input stream for: " << FileUtils::toLogFormat(input, 25) << "...");
 
   QList<ElementVisitorPtr> visitors;
   std::shared_ptr<ElementCriterion> elementCriterion;
   if (!_includeReviews)
   {
-    elementCriterion.reset(
-      new NotCriterion(
-        std::shared_ptr<TagKeyCriterion>(
-          new TagKeyCriterion(MetadataTags::HootReviewNeeds()))));
+    elementCriterion =
+      std::make_shared<NotCriterion>(
+        std::make_shared<TagKeyCriterion>(MetadataTags::HootReviewNeeds()));
   }
   // Tags need to be truncated if they are over max tag length characters.
-  visitors.append(std::shared_ptr<ApiTagTruncateVisitor>(new ApiTagTruncateVisitor()));
+  visitors.append(std::make_shared<ApiTagTruncateVisitor>());
 
   // open a stream to the input data
   std::shared_ptr<PartialOsmMapReader> reader =
@@ -643,29 +643,30 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
   ElementInputStreamPtr filteredInputStream;
   if (elementCriterion)
   {
-    filteredInputStream.reset(
-      new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
+    filteredInputStream =
+      std::make_shared<ElementCriterionVisitorInputStream>(inputStream, elementCriterion, visitors);
   }
   else
   {
-    filteredInputStream.reset(new ElementVisitorInputStream(inputStream, visitors.at(0)));
+    filteredInputStream = std::make_shared<ElementVisitorInputStream>(inputStream, visitors.at(0));
   }
 
   // Add convert ops supporting streaming into the pipeline, if there are any.
   // TODO: Any OsmMapOperations in the bunch need to operate on the entire map made up of both
   // inputs to work correctly.
   return
-    ElementStreamer::getFilteredInputStream(filteredInputStream, ConfigOptions().getConvertOps());
+    IoUtils::getFilteredInputStream(filteredInputStream, ConfigOptions().getConvertOps());
 }
 
-ElementInputStreamPtr ChangesetCreator::_sortElementsInMemory(OsmMapPtr map)
+ElementInputStreamPtr ChangesetCreator::_sortElementsInMemory(OsmMapPtr map) const
 {
-  return InMemoryElementSorterPtr(new InMemoryElementSorter(map));
+  return std::make_shared<InMemoryElementSorter>(map);
 }
 
-ElementInputStreamPtr ChangesetCreator::_sortElementsExternally(const QString& input)
+ElementInputStreamPtr ChangesetCreator::_sortElementsExternally(const QString& input) const
 {
-  std::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
+  std::shared_ptr<ExternalMergeElementSorter> sorted =
+    std::make_shared<ExternalMergeElementSorter>();
   sorted->sort(_getFilteredInputStream(input));
   return sorted;
 }
@@ -682,7 +683,7 @@ void ChangesetCreator::_streamChangesetOutput(
       "Changeset input data inputs are not the same size for streaming to output.");
   }
 
-  LOG_INFO("Streaming changeset output to ..." << output.right(25) << "...");
+  LOG_INFO("Streaming changeset output to ..." << FileUtils::toLogFormat(output, 25) << "...");
 
   QString detailedStats;
   _numCreateChanges = 0;
@@ -692,8 +693,7 @@ void ChangesetCreator::_streamChangesetOutput(
   QList<ChangesetProviderPtr> changesetProviders;
   for (int i = 0; i < inputs1.size(); i++)
   {
-    changesetProviders.append(
-      ChangesetDeriverPtr(new ChangesetDeriver(inputs1.at(i), inputs2.at(i))));
+    changesetProviders.append(std::make_shared<ChangesetDeriver>(inputs1.at(i), inputs2.at(i)));
   }
   LOG_VARD(changesetProviders.size());
   assert(inputs1.size() == changesetProviders.size());
@@ -702,7 +702,8 @@ void ChangesetCreator::_streamChangesetOutput(
   {
     // This was added primarily for use by ChangesetReplacementCreator implementations. Eventually,
     // it may be able to be removed if its changeset writing bugs can be fixed.
-    std::shared_ptr<ChangesetCleaner> cleaner(new ChangesetCleaner(changesetProviders));
+    std::shared_ptr<ChangesetCleaner> cleaner =
+      std::make_shared<ChangesetCleaner>(changesetProviders);
     changesetProviders.clear();
     changesetProviders.append(cleaner);
   }
@@ -749,7 +750,7 @@ void ChangesetCreator::_streamChangesetOutput(
   for (int i = 0; i < changesetProviders.size(); i++)
   {
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
-    LOG_DEBUG("Derived changeset: " << i + 1 << " / " << changesetProviders.size() << ": ");
+    LOG_DEBUG("Derived changeset: " << i + 1 << " of " << changesetProviders.size() << ": ");
 
     _numCreateChanges += changesetProvider->getNumCreateChanges();
     _numModifyChanges += changesetProvider->getNumModifyChanges();
@@ -800,7 +801,7 @@ void ChangesetCreator::_streamChangesetOutput(
     }
     else
     {
-      LOG_DEBUG("Writing changeset stats to: ..." << _statsOutputFile.right(25) << "...");
+      LOG_DEBUG("Writing changeset stats to: ..." << FileUtils::toLogFormat(_statsOutputFile, 25) << "...");
       FileUtils::writeFully(_statsOutputFile, detailedStats);
     }
   }

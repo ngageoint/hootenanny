@@ -19,20 +19,20 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmApiDbReader.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Settings.h>
 
 // Qt
 #include <QUrl>
@@ -47,7 +47,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmApiDbReader)
 
 OsmApiDbReader::OsmApiDbReader() :
-_database(new OsmApiDb())
+_database(std::make_shared<OsmApiDb>())
 {
   setConfiguration(conf());
 }
@@ -77,7 +77,7 @@ void OsmApiDbReader::open(const QString& urlStr)
 }
 
 void OsmApiDbReader::_parseAndSetTagsOnElement(const ElementId& elementId,
-                                               const ElementPtr& element)
+                                               const ElementPtr& element) const
 {
   // If performance here is ever a problem, we should see if these tags can be read out at the same
   // time the element itself is read out.
@@ -113,7 +113,7 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(const ElementId& elementId,
       tags << tag;
     }
   }
-  if (tags.size() > 0)
+  if (!tags.empty())
   {
     element->setTags(ApiDb::unescapeTags(tags.join(", ")));
   }
@@ -171,14 +171,11 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
   QDateTime dt = resultIterator.value(ApiDb::WAYS_TIMESTAMP).toDateTime();
   dt.setTimeSpec(Qt::UTC);
 
-  WayPtr way(
-    new Way(
-      _status,
-      newWayId,
-      _defaultCircularError,
+  WayPtr way =
+    std::make_shared<Way>(
+      _status, newWayId, _defaultCircularError,
       resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
-      resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
-      dt.toMSecsSinceEpoch() / 1000));
+      resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(), dt.toMSecsSinceEpoch() / 1000);
 
   // If performance here is ever a problem, try reading these out in batch at the same time the
   // element results are read
@@ -214,15 +211,12 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
   QDateTime dt = resultIterator.value(ApiDb::RELATIONS_TIMESTAMP).toDateTime();
   dt.setTimeSpec(Qt::UTC);
 
-  RelationPtr relation(
-    new Relation(
-      _status,
-      newRelationId,
-      _defaultCircularError,
-      "",
+  RelationPtr relation =
+    std::make_shared<Relation>(
+      _status, newRelationId, _defaultCircularError, "",
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
-      dt.toMSecsSinceEpoch() / 1000));
+      dt.toMSecsSinceEpoch() / 1000);
 
   // If performance here is ever a problem, these could be read out in batch at the same time the
   // element results are read.

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmWriterJs.h"
 
@@ -39,14 +39,15 @@ namespace hoot
 
 HOOT_JS_REGISTER(OsmWriterJs)
 
-void OsmWriterJs::Init(Handle<Object> exports)
+void OsmWriterJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> writer = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "OsmWriter"), writer);
-  writer->Set(String::NewFromUtf8(current, "toString"),
-              FunctionTemplate::New(current, toString)->GetFunction());
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> writer = Object::New(current);
+  exports->Set(context, toV8("OsmWriter"), writer);
+  writer->Set(context, toV8("toString"),
+              FunctionTemplate::New(current, toString)->GetFunction(context).ToLocalChecked());
 }
 
 void OsmWriterJs::toString(const FunctionCallbackInfo<Value>& args)

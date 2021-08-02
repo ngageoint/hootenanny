@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef BOUNDS_STRING_TASK_GRID_GENERATOR_H
 #define BOUNDS_STRING_TASK_GRID_GENERATOR_H
@@ -37,7 +37,8 @@ namespace hoot
 {
 
 /**
- * Generates a rectangular task grid with a single cell from an envelope string
+ * @brief The BoundsStringTaskGridGenerator class generates a rectangular task grid with a single
+ * cell from an envelope string.
  */
 class BoundsStringTaskGridGenerator : public TaskGridGenerator
 {
@@ -45,8 +46,7 @@ class BoundsStringTaskGridGenerator : public TaskGridGenerator
 public:
 
   /**
-   * Constructor
-   *
+   * @brief BoundsStringTaskGridGenerator Constructor
    * @param bounds a string of the form minx,miny,maxx,maxy
    * @param output optional output path for writing the bounds file
    */
@@ -56,7 +56,7 @@ public:
   /**
    * @see TaskGridGenerator
    */
-  virtual TaskGrid generateTaskGrid();
+  TaskGrid generateTaskGrid() override;
 
 private:
 

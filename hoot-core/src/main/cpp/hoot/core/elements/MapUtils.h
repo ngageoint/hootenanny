@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef MAP_UTILS_H
@@ -72,7 +72,34 @@ public:
    * @param map2
    * @param throwOutDupes
    */
-  static void combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes);
+  static void combineMaps(const OsmMapPtr& map1, const OsmMapPtr& map2, const bool throwOutDupes);
+
+  /**
+   * Gets a single element by the "note" tag
+   *
+   * @param map map containing the element
+   * @param note note tag value to search for
+   * @param elementType optional element type for additional filtering
+   * @return returns the first element found with the intput tag key/value pair and element type, if
+   * specified; returns a null element otherwise
+   */
+  static ElementPtr getFirstElementWithNote(
+    const OsmMapPtr& map, const QString& note,
+    const ElementType& elementType = ElementType::Unknown);
+
+  /**
+   * Gets a single element by tag
+   *
+   * @param map map containing the element
+   * @param tagKey tag key to search for
+   * @param tagValue tag value to search for
+   * @param elementType optional element type for additional filtering
+   * @return returns the first element found with the intput tag key/value pair and element type, if
+   * specified; returns a null element otherwise
+   */
+  static ElementPtr getFirstElementWithTag(
+    const OsmMapPtr& map, const QString& tagKey, const QString& tagValue,
+    const ElementType& elementType = ElementType::Unknown);
 };
 
 }

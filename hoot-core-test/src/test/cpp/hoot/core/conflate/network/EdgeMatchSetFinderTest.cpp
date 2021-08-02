@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -62,7 +62,7 @@ public:
   void writeDebugMap(OsmMapPtr map, int testNumber)
   {
     FileUtils::makeDir("tmp");
-    OsmMapPtr copy(new OsmMap(map));
+    OsmMapPtr copy = std::make_shared<OsmMap>(map);
 
     MapProjector::projectToWgs84(copy);
     conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
@@ -74,7 +74,7 @@ public:
   {
     NetworkVertex::reset();
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmMapReaderFactory::read(map, _inputPath + "ParitalEdgeMatch.osm",
       false, Status::Unknown1);
@@ -84,20 +84,24 @@ public:
 
     OsmNetworkExtractor one;
 
-    ElementCriterionPtr c1(new TagCriterion("name", QString("partialTest%1A").arg(testNumber)));
+    ElementCriterionPtr c1 =
+      std::make_shared<TagCriterion>("name", QString("partialTest%1A").arg(testNumber));
     one.setCriterion(c1);
     network1 = one.extractNetwork(map);
 
-    ElementCriterionPtr c2(new TagCriterion("name", QString("partialTest%1B").arg(testNumber)));
+    ElementCriterionPtr c2 =
+      std::make_shared<TagCriterion>("name", QString("partialTest%1B").arg(testNumber));
     one.setCriterion(c2);
     network2 = one.extractNetwork(map);
 
-    matchSet.reset(new IndexedEdgeMatchSet());
-    NetworkDetailsPtr details(new NetworkDetails(map, network1, network2));
+    matchSet = std::make_shared<IndexedEdgeMatchSet>();
+    NetworkDetailsPtr details = std::make_shared<NetworkDetails>(map, network1, network2);
     conf().set(ConfigOptions().getWaySublineMatcherKey(), "hoot::MaximalSublineMatcher");
-    conf().set(ConfigOptions().getConflateMatchHighwayClassifierKey(), "hoot::HighwayExpertClassifier");
+    conf().set(
+      ConfigOptions().getConflateMatchHighwayClassifierKey(), "hoot::HighwayExpertClassifier");
     details->setConfiguration(conf());
-    EdgeMatchSetFinderPtr uut(new EdgeMatchSetFinder(details, matchSet, network1, network2));
+    EdgeMatchSetFinderPtr uut =
+      std::make_shared<EdgeMatchSetFinder>(details, matchSet, network1, network2);
 
     return uut;
   }
@@ -114,7 +118,7 @@ public:
     uut->addEdgeMatches(network1->getEdgeMap().begin().value(),
       network2->getEdgeMap().begin().value());
 
-   HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-9), _portion: 0 }, _end: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-9), _portion: 0.677924 } }} s2: [1]{{ _start: { _e: (2) Node(-10) -- Way(-2) -- (3) Node(-17), _portion: 0 }, _end: { _e: (2) Node(-10) -- Way(-2) -- (3) Node(-17), _portion: 1 } }}, 0.156872)}",
+   HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-9), _portion: 0 }, _end: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-9), _portion: 0.677087 } }} s2: [1]{{ _start: { _e: (2) Node(-10) -- Way(-2) -- (3) Node(-17), _portion: 0 }, _end: { _e: (2) Node(-10) -- Way(-2) -- (3) Node(-17), _portion: 1 } }}, 0.156892)}",
       matchSet);
   }
 
@@ -132,7 +136,7 @@ public:
     uut->addEdgeMatches(network1->getEdgeMap().begin().value(),
       network2->getEdgeMap().begin().value());
 
-    HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node(-23) -- Way(-5) -- (1) Node(-24), _portion: 0 }, _end: { _e: (0) Node(-23) -- Way(-5) -- (1) Node(-24), _portion: 0.740791 } }} s2: [2]{{ _start: { _e: (4) Node(-18) -- Way(-3) -- (3) Node(-20), _portion: 0 }, _end: { _e: (4) Node(-18) -- Way(-3) -- (3) Node(-20), _portion: 1 } }, { _start: { _e: (2) Node(-21) -- Way(-4) -- (3) Node(-20), _portion: 1 }, _end: { _e: (2) Node(-21) -- Way(-4) -- (3) Node(-20), _portion: 0 } }}, 0.102179)}",
+    HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node(-23) -- Way(-5) -- (1) Node(-24), _portion: 0 }, _end: { _e: (0) Node(-23) -- Way(-5) -- (1) Node(-24), _portion: 0.71542 } }} s2: [2]{{ _start: { _e: (4) Node(-18) -- Way(-3) -- (3) Node(-20), _portion: 0 }, _end: { _e: (4) Node(-18) -- Way(-3) -- (3) Node(-20), _portion: 1 } }, { _start: { _e: (2) Node(-21) -- Way(-4) -- (3) Node(-20), _portion: 1 }, _end: { _e: (2) Node(-21) -- Way(-4) -- (3) Node(-20), _portion: 0 } }}, 0.100114)}",
       matchSet);
   }
 
@@ -151,7 +155,7 @@ public:
       network2->getEdgeMap().begin().value());
 
     LOG_VAR(matchSet);
-    HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node(-25) -- Way(-6) -- (1) Node(-26), _portion: 0.276842 }, _end: { _e: (0) Node(-25) -- Way(-6) -- (1) Node(-26), _portion: 0.742578 } }} s2: [1]{{ _start: { _e: (2) Node(-27) -- Way(-7) -- (3) Node(-28), _portion: 0 }, _end: { _e: (2) Node(-27) -- Way(-7) -- (3) Node(-28), _portion: 1 } }}, 0.110705)}",
+    HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node(-25) -- Way(-6) -- (1) Node(-26), _portion: 0.276842 }, _end: { _e: (0) Node(-25) -- Way(-6) -- (1) Node(-26), _portion: 0.742578 } }} s2: [1]{{ _start: { _e: (2) Node(-27) -- Way(-7) -- (3) Node(-28), _portion: 0 }, _end: { _e: (2) Node(-27) -- Way(-7) -- (3) Node(-28), _portion: 1 } }}, 0.110612)}",
       matchSet);
   }
 
@@ -170,7 +174,7 @@ public:
       network2->getEdgeMap().begin().value());
 
     LOG_VAR(matchSet);
-    HOOT_STR_EQUALS("[1]{(s1: [3]{{ _start: { _e: (2) Node(-32) -- Way(-9) -- (0) Node(-31), _portion: 0.492033 }, _end: { _e: (2) Node(-32) -- Way(-9) -- (0) Node(-31), _portion: 1 } }, { _start: { _e: (0) Node(-31) -- Way(-12) -- (1) Node(-30), _portion: 0 }, _end: { _e: (0) Node(-31) -- Way(-12) -- (1) Node(-30), _portion: 1 } }, { _start: { _e: (3) Node(-29) -- Way(-8) -- (1) Node(-30), _portion: 1 }, _end: { _e: (3) Node(-29) -- Way(-8) -- (1) Node(-30), _portion: 0.478189 } }} s2: [2]{{ _start: { _e: (4) Node(-35) -- Way(-11) -- (5) Node(-34), _portion: 0 }, _end: { _e: (4) Node(-35) -- Way(-11) -- (5) Node(-34), _portion: 1 } }, { _start: { _e: (6) Node(-33) -- Way(-10) -- (5) Node(-34), _portion: 1 }, _end: { _e: (6) Node(-33) -- Way(-10) -- (5) Node(-34), _portion: 0 } }}, 0.104163)}",
+    HOOT_STR_EQUALS("[1]{(s1: [3]{{ _start: { _e: (2) Node(-32) -- Way(-9) -- (0) Node(-31), _portion: 0.492027 }, _end: { _e: (2) Node(-32) -- Way(-9) -- (0) Node(-31), _portion: 1 } }, { _start: { _e: (0) Node(-31) -- Way(-12) -- (1) Node(-30), _portion: 0 }, _end: { _e: (0) Node(-31) -- Way(-12) -- (1) Node(-30), _portion: 1 } }, { _start: { _e: (3) Node(-29) -- Way(-8) -- (1) Node(-30), _portion: 1 }, _end: { _e: (3) Node(-29) -- Way(-8) -- (1) Node(-30), _portion: 0.478191 } }} s2: [2]{{ _start: { _e: (4) Node(-35) -- Way(-11) -- (5) Node(-34), _portion: 0 }, _end: { _e: (4) Node(-35) -- Way(-11) -- (5) Node(-34), _portion: 1 } }, { _start: { _e: (6) Node(-33) -- Way(-10) -- (5) Node(-34), _portion: 1 }, _end: { _e: (6) Node(-33) -- Way(-10) -- (5) Node(-34), _portion: 0 } }}, 0.104083)}",
       matchSet);
   }
 
@@ -189,7 +193,7 @@ public:
       network2->getEdgeMap().begin().value());
 
     LOG_VAR(matchSet);
-    HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node(-38) -- Way(-14) -- (1) Node(-39), _portion: 0.531148 }, _end: { _e: (0) Node(-38) -- Way(-14) -- (1) Node(-39), _portion: 1 } }} s2: [1]{{ _start: { _e: (2) Node(-36) -- Way(-13) -- (3) Node(-37), _portion: 0 }, _end: { _e: (2) Node(-36) -- Way(-13) -- (3) Node(-37), _portion: 1 } }}, 0.10837)}",
+    HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node(-38) -- Way(-14) -- (1) Node(-39), _portion: 0.531148 }, _end: { _e: (0) Node(-38) -- Way(-14) -- (1) Node(-39), _portion: 1 } }} s2: [1]{{ _start: { _e: (2) Node(-36) -- Way(-13) -- (3) Node(-37), _portion: 0 }, _end: { _e: (2) Node(-36) -- Way(-13) -- (3) Node(-37), _portion: 1 } }}, 0.108275)}",
       matchSet);
   }
 

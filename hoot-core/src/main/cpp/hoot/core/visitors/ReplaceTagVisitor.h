@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REPLACETAGVISITOR_H
 #define REPLACETAGVISITOR_H
@@ -37,11 +37,7 @@ namespace hoot
 /**
  * The ReplaceTagVisitor class replaces matching tags with the specified replacement tag.
  *
- * This was written for the building outline project: the input data had tag BUILDING=yes, but the
- * output data needed to have tag building=yes.
- *
- * Feel free to extend this class. Maybe add a flag for case-insensitive matching. Or support for
- * wildcards.
+ * @todo Bring this class more in line with the options available in SetTagValueVisitor.
  */
 class ReplaceTagVisitor : public ElementVisitor, public Configurable
 {
@@ -57,7 +53,7 @@ public:
    * @brief ReplaceTagVisitor - default constructor
    */
   ReplaceTagVisitor();
-  virtual ~ReplaceTagVisitor() = default;
+  ~ReplaceTagVisitor() = default;
 
   /**
    * @brief ReplaceTagVisitor - This constructor lets you specify the tag
@@ -71,41 +67,24 @@ public:
                     QString replaceKey, QString replaceValue);
 
   /**
-   * @brief setMatchTag - Set the tag to match
-   * @param k - tag key
-   * @param v - tag value
-   */
-  void setMatchTag(QString k, QString v);
-
-  /**
-   * @brief setReplaceTag -Set the tag to use as a replacement
-   * @param k - tag key
-   * @param v - tag value
-   */
-  void setReplaceTag(QString k, QString v);
-
-  /**
    * @brief visit - visit an element & perform check and replace
    * @param e - element to visit
    */
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const
-  { return "Replaces matching tags with the specified replacement tag"; }
+  void setConfiguration(const Settings& conf) override;
 
-  virtual void setConfiguration(const Settings& conf);
-
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Replacing tags..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return "Replaced " + QString::number(_numAffected) + " element tags";
   }
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Replaces matching tags with the specified replacement tag"; }
 
 private:
 

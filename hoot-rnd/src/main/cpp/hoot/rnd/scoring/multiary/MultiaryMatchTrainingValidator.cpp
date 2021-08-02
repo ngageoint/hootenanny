@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MultiaryMatchTrainingValidator.h"
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 
@@ -42,7 +42,7 @@ class CheckRelationshipsVisitor : public ConstElementVisitor
 {
 public:
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     const Tags& t = e->getTags();
     const QString REV = MetadataTags::TrainingReview();
@@ -77,9 +77,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 };
 
 void MultiaryMatchTrainingValidator::apply(std::shared_ptr<OsmMap>& map)

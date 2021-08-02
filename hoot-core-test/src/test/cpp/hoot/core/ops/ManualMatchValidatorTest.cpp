@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -67,18 +67,18 @@ public:
   {
     // empty manual match ids aren't allowed
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
 
     tags.set(MetadataTags::Ref1(), "");
-    NodePtr node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    NodePtr node = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     tags.clear();
     tags.set(MetadataTags::Ref2(), "");
     geos::geom::Coordinate c1[] = {
       geos::geom::Coordinate(0.0, 0.0), geos::geom::Coordinate(1.0, 1.0),
       geos::geom::Coordinate::getNull() };
-    WayPtr way = TestUtils::createWay(map, c1, Status::Unknown1, 15.0, tags);
+    WayPtr way = TestUtils::createWay(map, c1, "", Status::Unknown1, 15.0, tags);
 
     tags.clear();
     tags.set(MetadataTags::Review(), "");
@@ -86,19 +86,12 @@ public:
     relationMembers.append(node);
     relationMembers.append(way);
     ConstRelationPtr relation =
-      TestUtils::createRelation(map, relationMembers, Status::Unknown1, 15.0, tags);
+      TestUtils::createRelation(map, relationMembers, "", Status::Unknown1, 15.0, tags);
 
     ManualMatchValidator uut;
     uut.apply(map);
 
     CPPUNIT_ASSERT(uut.hasErrors());
-//    LOG_VARW(uut.getErrors().size());
-//    QMap<ElementId, QString> errors = uut.getErrors();
-//    for (QMap<ElementId, QString>::const_iterator itr = errors.begin();
-//         itr != errors.end(); ++itr)
-//    {
-//      LOG_WARN(itr.key().toString() << ";" << itr.value());
-//    }
     CPPUNIT_ASSERT(uut.getErrors().size() == 3);
     QMap<ElementId, QString>::const_iterator errorItr =
       uut.getErrors().find(node->getElementId());
@@ -113,14 +106,14 @@ public:
   {
     // can't have ref1 and ref2/review ids on the same element
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref1(), "002c75");
     tags.set(MetadataTags::Ref2(), "002da0");
-    NodePtr node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    NodePtr node = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -149,17 +142,17 @@ public:
     // all ref2/review manual match ids, excluding todo's and none, have to have a corresponding
     // and matching ref1 id
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref1(), "002c75");
-    TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     tags.clear();
     tags.set(MetadataTags::Ref2(), "002da0");
-    ConstNodePtr ref2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr ref2 = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -171,7 +164,7 @@ public:
     tags.clear();
     RemoveNodeByEid::removeNode(map, ref2->getId());
     tags.set(MetadataTags::Review(), "002da0");
-    ConstNodePtr review = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr review = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -184,7 +177,7 @@ public:
     tags.clear();
     RemoveNodeByEid::removeNode(map, review->getId());
     tags.set(MetadataTags::Ref2(), "NONE");
-    ref2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ref2 = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -193,7 +186,7 @@ public:
     tags.clear();
     RemoveNodeByEid::removeNode(map, ref2->getId());
     tags.set(MetadataTags::Review(), "todo");
-    review = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    review = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -205,7 +198,7 @@ public:
     // This makes ref1's corresponding to ref2/review effectively optional by logging warnings
     // instead of errors.
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator warningItr;
@@ -213,11 +206,11 @@ public:
     uut.setRequireRef1(false);
 
     tags.set(MetadataTags::Ref1(), "002c75");
-    TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     tags.clear();
     tags.set(MetadataTags::Ref2(), "002da0");
-    ConstNodePtr ref2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr ref2 = TestUtils::createNode(map,"",  Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -232,7 +225,7 @@ public:
   {
     // in backward compatibility mode, uuid's are allowed for all types of manual match ids
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
@@ -241,7 +234,7 @@ public:
     uut.setAllowUuidManualMatchIds(true);
 
     tags.set(MetadataTags::Ref1(), "{1c745d1e-39e5-4926-a2d3-8f87af39e037}");
-    NodePtr node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    NodePtr node = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -251,7 +244,7 @@ public:
     node->getTags().clear();
     const QString badUuid = "{1c745d1e-3e5-4926-a2d3-8f87af39e037}";
     tags.set(MetadataTags::Ref1(), badUuid);
-    node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    node = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -267,7 +260,7 @@ public:
     map->clear();
     node->getTags().clear();
     tags.set(MetadataTags::Ref1(), "002c75");
-    node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    node = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -276,7 +269,7 @@ public:
 
   void runInvalidIdTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
@@ -286,7 +279,7 @@ public:
     // ref1 ids all must all be as defined by AddRef1Visitor
 
     tags.set(MetadataTags::Ref1(), "todo");
-    ConstNodePtr ref1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr ref1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -298,7 +291,7 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Ref1(), "none");
-    ref1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    ref1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -312,7 +305,7 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Ref1(), idWrongSize);
-    ref1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    ref1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -329,7 +322,7 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Ref2(), idWrongSize);
-    ConstNodePtr ref2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr ref2 = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -343,7 +336,7 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Review(), idWrongSize);
-    ConstNodePtr review = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr review = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -359,7 +352,7 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Ref1(), idWrongEnd);
-    ref1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    ref1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -373,7 +366,7 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Ref2(), idWrongEnd);
-    ref2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ref2 = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -387,7 +380,7 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Review(), idWrongEnd);
-    review = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    review = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -403,18 +396,18 @@ public:
   {
     // a ref2 and a review can't have the same id on the same element
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref1(), "002da0");
-    TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     tags.clear();
     tags.set(MetadataTags::Ref2(), "002da0");
     tags.set(MetadataTags::Review(), "002da0");
-    ConstNodePtr invalidRef = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidRef = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -431,13 +424,14 @@ public:
     // data loaded with an Unknown1 status can't have any REF2 tags in it and data loaded with an
     // Unknown2 status can't have any REF1 tags in it
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref1(), "002da0");
-    ConstNodePtr invalidRef1 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidRef1 =
+      TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -449,7 +443,8 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Ref2(), "002da0");
-    ConstNodePtr invalidRef2 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidRef2 =
+      TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -461,7 +456,8 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Review(), "002da0");
-    ConstNodePtr invalidReview = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidReview =
+      TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -475,13 +471,14 @@ public:
   {
     // ref1 is always a single id
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref1(), "002da0;002e0f");
-    ConstNodePtr invalidRef1 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidRef1 =
+      TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -495,13 +492,14 @@ public:
   {
     // if a ref2/review has multiple ids, 'todo' and 'none' aren't valid entries
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref2(), "002da0;todo");
-    ConstNodePtr invalidRef2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidRef2 =
+      TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -513,7 +511,8 @@ public:
     tags.clear();
     map->clear();
     tags.set(MetadataTags::Ref2(), "none;002da0");
-    invalidRef2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    invalidRef2 =
+      TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -525,7 +524,8 @@ public:
     tags.clear();
     map->clear();
     tags.set(MetadataTags::Review(), "002da0;todo");
-    ConstNodePtr invalidReview = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidReview =
+      TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -537,7 +537,7 @@ public:
     tags.clear();
     map->clear();
     tags.set(MetadataTags::Review(), "none;002da0");
-    invalidReview = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    invalidReview = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -551,13 +551,14 @@ public:
   {
     // ref2/review can't have the same id duplicated within the same tag value
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref2(), "002da0;002da0");
-    ConstNodePtr invalidRef2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidRef2 =
+      TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -569,7 +570,8 @@ public:
     tags.clear();
     map->clear();
     tags.set(MetadataTags::Review(), "002da0;002da0");
-    ConstNodePtr invalidReview = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidReview =
+      TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -581,7 +583,7 @@ public:
 
   void runFullDebugOutputTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
@@ -590,7 +592,8 @@ public:
 
     tags.set(MetadataTags::Ref2(), "002da0;002da0");
     tags.set("blah", "bleh");
-    ConstNodePtr invalidRef2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidRef2 =
+      TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 

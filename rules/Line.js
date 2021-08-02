@@ -8,9 +8,9 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.description = "Matches generic lines";
 exports.experimental = false;
 
-// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
-// If that ever changes, then the generic score threshold configuration options used below should 
-// be replaced with custom score threshold configuration options.
+// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't
+// used. If that ever changes, then the generic score threshold configuration options used below
+// should be replaced with custom score threshold configuration options.
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
@@ -20,59 +20,43 @@ exports.typeThreshold = parseFloat(hoot.get("generic.line.type.threshold"));
 exports.baseFeatureType = "Line";
 exports.geometryType = "line";
 
-// This is needed for disabling superfluous conflate ops. In the future, it may also
-// be used to replace exports.isMatchCandidate (see #3047).
+// This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
+// culling match candidates.
 exports.matchCandidateCriterion = "hoot::LinearCriterion";
 
 var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 var lengthScoreExtractor = new hoot.LengthScoreExtractor();
-var sublineMatcher =  // default subline matcher
-  new hoot.MaximalSublineStringMatcher(
-  {
-    "way.matcher.max.angle": hoot.get("generic.line.matcher.max.angle"),
-    "way.subline.matcher": hoot.get("generic.line.subline.matcher"),
-    // borrowing this from rivers for the time being; TODO: make separate option for it?
-    "maximal.subline.max.recursive.complexity": hoot.get("waterway.maximal.subline.max.recursive.complexity")
-  });
-var frechetSublineMatcher = // we'll switch over to this one if the default matcher runs too slowly
-  new hoot.MaximalSublineStringMatcher(
-    { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
-      "way.subline.matcher": "hoot::FrechetSublineMatcher" }); 
+
+// We're just using the default max recursions here for MaximalSubline. May need to come up with a
+// custom value via empirical testing. This will not work if we ever end up needing to pass map in
+// here for this data type.
+var sublineStringMatcher = hoot.SublineStringMatcherFactory.getMatcher(exports.baseFeatureType);
 
 /**
- * Returns true if e is a candidate for a match. Implementing this method is
- * optional, but may dramatically increase speed if you can cull some features
- * early on. E.g. no need to check nodes for a polygon to polygon match.
+ * Returns true if e is a candidate for a match. Implementing this method is optional, but may
+   dramatically increase speed if you can cull some features early on. E.g. no need to check nodes
+   for a polygon to polygon match.
  */
 exports.isMatchCandidate = function(map, e)
 {
   hoot.trace("e: " + e.getElementId());
-  // Even though a route relation passes the linear crit, we want only highway or rail conflation to conflate it.
+  // Even though a route relation passes the linear crit, we want only highway or rail conflation to
+  // conflate it.
   if (e.getElementId().getType() == "Relation" && e.getTags().contains("route"))
   {
     return false;
   }
-  // This prevents some of the problems seen in #4149. It should be removed after that issue is fixed.
-  else if (e.getElementId().getType() == "Way" && !hasType(e) &&
-           isMemberOfRelationSatisfyingCriterion(map, e.getElementId(), "hoot::CollectionRelationCriterion"))
-  {
-    return false;
-  }
-
-  hoot.trace("isLinear: " + isLinear(e));
-  hoot.trace("isSpecificallyConflatable: " + isSpecificallyConflatable(map, e, exports.geometryType));
-  return isLinear(e) && !isSpecificallyConflatable(map, e, exports.geometryType);
+  return hoot.OsmSchema.isLinear(e) && !hoot.OsmSchema.isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
 /**
- * If this function returns true then all overlapping matches will be treated
- * as a group. For now that means if two matches overlap then the whole group
- * will be marked as needing review.
+ * If this function returns true then all overlapping matches will be treated as a group. For now
+   that means if two matches overlap then the whole group will be marked as needing review.
  *
- * If this function returns false the conflation routines will attempt to 
- * pick the best subset of matches that do not conflict.
+ * If this function returns false the conflation routines will attempt to pick the best subset of
+   matches that do not conflict.
  */
 exports.isWholeGroup = function() 
 {
@@ -85,8 +69,8 @@ exports.isWholeGroup = function()
  * - miss
  * - review
  *
- * The scores should always sum to one. If they don't you will be taunted 
- * mercilessly and we'll normalize it anyway. :P
+ * The scores should always sum to one. If they don't you will be taunted mercilessly and we'll
+   normalize it anyway. :P
  */
 exports.matchScore = function(map, e1, e2) 
 {
@@ -112,26 +96,21 @@ exports.matchScore = function(map, e1, e2)
 
   // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
   // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
-  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.typeThreshold);
+  var typeScorePassesThreshold = !hoot.OsmSchema.explicitTypeMismatch(e1, e2, exports.typeThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
   if (!typeScorePassesThreshold)
   {
     return result;
   }
-  hoot.trace("mostSpecificType(e1): " + mostSpecificType(e1));
-  hoot.trace("mostSpecificType(e2): " + mostSpecificType(e2));
+  hoot.trace("mostSpecificType(e1): " + hoot.OsmSchema.mostSpecificType(e1));
+  hoot.trace("mostSpecificType(e2): " + hoot.OsmSchema.mostSpecificType(e2));
 
-  // extract the sublines needed for matching - Note that some of this was taken from Highway.js and other parts 
-  // from River.js. See notes on the dual subline matcher approach in River.js.
+  // Extract the sublines needed for matching. Note that some of this was taken from Highway.js
+  // and other parts from River.js. See notes on the dual subline matcher approach in River.js.
   var sublines;
   hoot.trace("Extracting sublines with default...");
-  sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  sublines = sublineStringMatcher.extractMatchingSublines(map, e1, e2);
   hoot.trace(sublines);
-  if (sublines && String(sublines).indexOf("RecursiveComplexityException") !== -1)
-  {
-    hoot.trace("Extracting sublines with Frechet...");
-    sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
-  }
 
   var distanceScore = -1.0;
   var weightShapeDistanceScore = -1.0;
@@ -187,7 +166,7 @@ exports.mergeSets = function(map, pairs, replaced)
 {
   // Snap the ways in the second input to the first input. Use the default tag 
   // merge method. See related notes in exports.mergeSets in River.js.
-  return snapWays2(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
+  return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

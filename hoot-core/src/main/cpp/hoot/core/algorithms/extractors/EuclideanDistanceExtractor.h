@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef EUCLIDEANDISTANCEEXTRACTOR_H
 #define EUCLIDEANDISTANCEEXTRACTOR_H
@@ -44,20 +44,17 @@ public:
   static QString className() { return "hoot::EuclideanDistanceExtractor"; }
 
   /**
-   * Measure the Euclidean distance in meters between two elements in the same map
-   *
+   * @brief distance measures the Euclidean distance in meters between two elements in the same map.
    * @param map map containing the elements
    * @param target the first element of the pair to measure
    * @param candidate the second element of the pair to measure
    * @return the distance between the two elements in meters
    */
-  virtual double distance(
-    const OsmMap& map, const ConstElementPtr& target,
+  double distance(const OsmMap& map, const ConstElementPtr& target,
     const ConstElementPtr& candidate) const override;
-
   /**
-   * Measure the Euclidean distance in meters between two elements in different maps
-   *
+   * @brief distance measures the Euclidean distance in meters between two elements in different
+   * maps
    * @param map1 map containing the target element
    * @param map2 map containing the candidate element
    * @param target the first element of the pair to measure
@@ -68,17 +65,15 @@ public:
     const OsmMap& map1, const OsmMap& map2, const ConstElementPtr& target,
     const ConstElementPtr& candidate) const;
 
-  virtual QString getClassName() const { return className(); }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getDescription() const
+  QString getClassName() const  override{ return className(); }
+  QString getName() const override { return className(); }
+  QString getDescription() const override
   { return "Calculates the Euclidean distance between two features"; }
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
 private:
 

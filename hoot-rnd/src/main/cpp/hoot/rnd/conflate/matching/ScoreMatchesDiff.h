@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SCORE_MATCHES_DIFF_H
 #define SCORE_MATCHES_DIFF_H
@@ -106,7 +106,7 @@ private:
   QString _output;
   std::shared_ptr<QFile> _outputFile;
 
-  std::shared_ptr<QFile> _getOutputFile(const QString& outputPath);
+  std::shared_ptr<QFile> _getOutputFile(const QString& outputPath) const;
 
   /*
    * Returns all element IDs in the map
@@ -116,7 +116,7 @@ private:
   /*
    * Returns all elements with the given match status (hoot:expected or hoot:actual), grouped by ID
    */
-  QMap<ElementId, QString> _getMatchStatuses(const ConstOsmMapPtr& map, const QString& tagKey);
+  QMap<ElementId, QString> _getMatchStatuses(const ConstOsmMapPtr& map, const QString& tagKey) const;
 
   /*
    * Returns the IDS of all elements involved in a wrong match
@@ -129,14 +129,14 @@ private:
    */
   QMap<QString, QSet<ElementId>> _getMatchScoringDiff(
     const QSet<ElementId>& elementIds, const QMap<ElementId, QString>& actualTagMappings1,
-    const QMap<ElementId, QString>& actualTagMappings2);
+    const QMap<ElementId, QString>& actualTagMappings2) const;
 
   /*
    * Records element differences between the two inputs
    */
   void _setAddedAndRemovedElements(
     const QSet<ElementId>& all1Ids, const QSet<ElementId>& all2Ids,
-    QSet<ElementId>& elementIdsAdded, QSet<ElementId>& elementIdsRemoved);
+    QSet<ElementId>& elementIdsAdded, QSet<ElementId>& elementIdsRemoved) const;
 
   void _writeConflateStatusSummary(QTextStream& out);
   void _writeConflateStatusDetail(QTextStream& out);

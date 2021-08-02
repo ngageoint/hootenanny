@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "SqlBulkInsert.h"
 
@@ -42,7 +42,7 @@
 namespace hoot
 {
 
-SqlBulkInsert::SqlBulkInsert(QSqlDatabase& db, const QString &tableName,
+SqlBulkInsert::SqlBulkInsert(const QSqlDatabase& db, const QString &tableName,
   const QStringList &columns, bool ignoreConflict) :
     _db(db),
     _tableName(tableName),
@@ -57,7 +57,7 @@ SqlBulkInsert::SqlBulkInsert(QSqlDatabase& db, const QString &tableName,
 SqlBulkInsert::~SqlBulkInsert()
 {
   LOG_DEBUG("(" << _tableName << ") Total time inserting: " << _time);
-  if (_pending.size() > 0)
+  if (!_pending.empty())
   {
     LOG_WARN("(" << _tableName << ") There are pending inserts in SqlBulkInsert. You should call "
              "flush before destruction.");
@@ -101,7 +101,7 @@ void SqlBulkInsert::flush()
   LOG_TRACE("Flushing bulk insert...");
   LOG_VART(_pending.size());
 
-  if (_pending.size() > 0)
+  if (!_pending.empty())
   {
     double start = Tgs::Time::getTime();
     QString sql;

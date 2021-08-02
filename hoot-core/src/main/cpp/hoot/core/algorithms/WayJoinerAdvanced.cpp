@@ -19,32 +19,32 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "WayJoinerAdvanced.h"
 
 //  Hoot
 #include <hoot/core/algorithms/DirectionFinder.h>
+#include <hoot/core/conflate/highway/HighwayUtils.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/BridgeCriterion.h>
+#include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/conflate/highway/HighwayUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/criterion/CriterionUtils.h>
 
 #include <unordered_set>
 #include <vector>
@@ -78,7 +78,7 @@ void WayJoinerAdvanced::join(const OsmMapPtr& map)
   if (ConfigOptions().getAttributeConflationAggressiveHighwayJoining())
   {
     _joinUnsplitWaysAtNode();
-    OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-unsplit-ways");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-join-unsplit-ways");
   }
 }
 
@@ -197,7 +197,7 @@ void WayJoinerAdvanced::_joinAtNode()
     LOG_VART(currentNumSplitParentIds);
     // If we didn't reduce the number of ways from the previous iteration, or there are none left
     // to reduce, then exit out.
-    if (currentNumSplitParentIds == ids.size() || ids.size() == 0)
+    if (ids.empty() || currentNumSplitParentIds == ids.size())
     {
       break;
     }
@@ -233,10 +233,10 @@ void WayJoinerAdvanced::_joinAtNode()
         const set<long>& way_ids = nodeToWayMap->getWaysByNode(*e);
         LOG_VART(way_ids.size());
         LOG_VART(way_ids);
-        for (set<long>::const_iterator ways = way_ids.begin(); ways != way_ids.end(); ++ways)
+        for (set<long>::const_iterator w = way_ids.begin(); w != way_ids.end(); ++w)
         {
           LOG_VART(way->getElementId());
-          WayPtr child = _map->getWay(*ways);
+          WayPtr child = _map->getWay(*w);
           if (child)
           {
             LOG_VART(child->getElementId());
@@ -454,7 +454,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   //  Check if the two ways are able to be joined back up
 
   //  Make sure that there are nodes in the ways
-  if (parent->getNodeIds().size() == 0 || child->getNodeIds().size() == 0)
+  if (parent->getNodeIds().empty() || child->getNodeIds().empty())
   {
     LOG_TRACE(
       "One or more of the ways: " << parent->getElementId() << " and " << child->getElementId() <<
@@ -530,7 +530,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   elements.push_back(wayWithTagsToKeep);
   elements.push_back(wayWithTagsToLose);
   const bool onlyOneIsABridge =
-    CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, 1, true);
+    CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, OsmMapPtr(), 1, true);
   if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() &&
       onlyOneIsABridge)
   {
@@ -665,7 +665,7 @@ void WayJoinerAdvanced::_joinUnsplitWaysAtNode()
 
             // Since this is basically an unmarked, non-oneway road, let's check both the regular
             // and reversed versions of the way we want to join.
-            WayPtr reversedWayToJoinCopy(new Way(*wayToJoin));
+            WayPtr reversedWayToJoinCopy = std::make_shared<Way>(*wayToJoin);
             reversedWayToJoinCopy->reverseOrder();
 
             if (!roadVal.isEmpty() && roadVal != "road" && connectedWay->getTags().hasName() &&
@@ -711,10 +711,12 @@ void WayJoinerAdvanced::_joinUnsplitWaysAtNode()
 void WayJoinerAdvanced::_determineKeeperFeatureForTags(WayPtr parent, WayPtr child, WayPtr& keeper,
                                                        WayPtr& toRemove) const
 {
-  // This logic is kind of a mess.
+  // This logic is kind of a mess but works.
 
   const QString tagMergerClassName = ConfigOptions().getTagMergerDefault();
   LOG_VART(tagMergerClassName);
+  keeper = parent;
+  toRemove = child;
   if (parent->getStatus() == Status::Unknown1)
   {
     if (tagMergerClassName == "hoot::OverwriteTagMerger" ||
@@ -724,11 +726,6 @@ void WayJoinerAdvanced::_determineKeeperFeatureForTags(WayPtr parent, WayPtr chi
       toRemove = parent;
     }
     else if (tagMergerClassName == "hoot::OverwriteTag1Merger")
-    {
-      keeper = parent;
-      toRemove = child;
-    }
-    else
     {
       keeper = parent;
       toRemove = child;
@@ -748,17 +745,6 @@ void WayJoinerAdvanced::_determineKeeperFeatureForTags(WayPtr parent, WayPtr chi
       keeper = child;
       toRemove = parent;
     }
-    else
-    {
-      keeper = parent;
-      toRemove = child;
-    }
-  }
-  // does this make sense??
-  else
-  {
-    keeper = parent;
-    toRemove = child;
   }
 }
 
@@ -770,7 +756,7 @@ void WayJoinerAdvanced::_determineKeeperFeatureForId(WayPtr parent, WayPtr child
 }
 
 bool WayJoinerAdvanced::_handleOneWayStreetReversal(WayPtr wayWithTagsToKeep,
-                                                    ConstWayPtr wayWithTagsToLose)
+                                                    ConstWayPtr wayWithTagsToLose) const
 {
   OneWayCriterion oneWayCrit;
   if (oneWayCrit.isSatisfied(wayWithTagsToLose) &&

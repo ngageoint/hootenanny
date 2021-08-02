@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "JsonOsmSchemaLoader.h"
 
@@ -72,7 +72,7 @@ void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
   Context::Scope context_scope(ToLocal(&_context));
 
   // If needed, this will throw an exception with user readable(ish) error message.
-  Handle<Value> result = fromJson(QString::fromUtf8(ba.data(), ba.size()), path);
+  Local<Value> result = fromJson(QString::fromUtf8(ba.data(), ba.size()), path);
 
   QVariantList l = toCpp<QVariantList>(result);
 
@@ -87,7 +87,7 @@ void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
       }
       _processObject(l[i].toMap(), s);
     }
-    catch(HootException& e)
+    catch(const HootException& e)
     {
       throw HootException(QString("Error processing '%1' in object '%2'. %3").
         arg(path).arg(toJson(toV8(l[i]))).arg(e.getWhat()));
@@ -97,7 +97,7 @@ void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
   _baseDir.pop_back();
 
   // update implied values via inheritance after all imports are processed
-  if (_baseDir.size() == 0)
+  if (_baseDir.empty())
   {
     s.update();
 
@@ -154,7 +154,8 @@ QStringList JsonOsmSchemaLoader::_asStringList(const QVariant& v) const
   return result;
 }
 
-void _loadAssociatedWith(SchemaVertex& tv, const QVariant& v, OsmSchema& s)
+void JsonOsmSchemaLoader::_loadAssociatedWith(
+  const SchemaVertex& tv, const QVariant& v, const OsmSchema& s) const
 {
   if (v.type() != QVariant::List)
   {
@@ -166,12 +167,12 @@ void _loadAssociatedWith(SchemaVertex& tv, const QVariant& v, OsmSchema& s)
 
     for (int i = 0; i < l.size(); ++i)
     {
-      s.addAssociatedWith(tv.name, toString(l[i]));
+      s.addAssociatedWith(tv.getName(), toString(l[i]));
     }
   }
 }
 
-void JsonOsmSchemaLoader::_loadBase(QVariantMap& copy, OsmSchema& s, SchemaVertex& tv)
+void JsonOsmSchemaLoader::_loadBase(QVariantMap& copy, const OsmSchema& s, SchemaVertex& tv) const
 {
   // we don't need this anymore
   copy.remove("objectType");
@@ -184,43 +185,43 @@ void JsonOsmSchemaLoader::_loadBase(QVariantMap& copy, OsmSchema& s, SchemaVerte
   }
   if (copy.contains("isA"))
   {
-    s.addIsA(tv.name, _asString(copy.take("isA")));
+    s.addIsA(tv.getName(), _asString(copy.take("isA")));
   }
   if (copy.contains("similarTo"))
   {
-    _loadSimilarTo(tv.name, copy.take("similarTo"), s);
+    _loadSimilarTo(tv.getName(), copy.take("similarTo"), s);
   }
   if (copy.contains("description"))
   {
-    tv.description = _asString(copy.take("description"));
+    tv.setDescription(_asString(copy.take("description")));
   }
   if (copy.contains("tagInfoDescription"))
   {
-    if (tv.description.isEmpty())
+    if (tv.getDescription().isEmpty())
     {
-      tv.description = _asString(copy["tagInfoDescription"]);
+      tv.setDescription(_asString(copy["tagInfoDescription"]));
     }
     copy.remove("tagInfoDescription");
   }
   if (copy.contains("influence"))
   {
-    tv.influence = _asDouble(copy.take("influence"));
+    tv.setInfluence(_asDouble(copy.take("influence")));
   }
   if (copy.contains("childWeight"))
   {
-    tv.childWeight = _asDouble(copy.take("childWeight"));
+    tv.setChildWeight(_asDouble(copy.take("childWeight")));
   }
   if (copy.contains("mismatchScore"))
   {
-    tv.mismatchScore = _asDouble(copy.take("mismatchScore"));
+    tv.setMismatchScore(_asDouble(copy.take("mismatchScore")));
   }
   if (copy.contains("aliases"))
   {
-    tv.aliases = _asStringList(copy.take("aliases"));
+    tv.setAliases(_asStringList(copy.take("aliases")));
   }
   if (copy.contains("categories"))
   {
-    tv.categories = _asStringList(copy.take("categories"));
+    tv.setCategories(_asStringList(copy.take("categories")));
   }
   if (copy.contains("geometries"))
   {
@@ -231,7 +232,7 @@ void JsonOsmSchemaLoader::_loadBase(QVariantMap& copy, OsmSchema& s, SchemaVerte
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN(QString("Unrecognized tags found in %1: (%2)").arg(tv.name).
+      LOG_WARN(QString("Unrecognized tags found in %1: (%2)").arg(tv.getName()).
         arg(toJson(toV8(copy.keys()))));
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
@@ -242,7 +243,7 @@ void JsonOsmSchemaLoader::_loadBase(QVariantMap& copy, OsmSchema& s, SchemaVerte
   }
 }
 
-void JsonOsmSchemaLoader::_loadCompound(const QVariantMap& v, OsmSchema& s)
+void JsonOsmSchemaLoader::_loadCompound(const QVariantMap& v, const OsmSchema& s) const
 {
   QVariantMap copy;
   // copy all the non-comments
@@ -281,7 +282,7 @@ void JsonOsmSchemaLoader::_loadCompound(const QVariantMap& v, OsmSchema& s)
   s.updateOrCreateVertex(tv);
 }
 
-void JsonOsmSchemaLoader::_loadCompoundTags(SchemaVertex& tv, const QVariant& value)
+void JsonOsmSchemaLoader::_loadCompoundTags(SchemaVertex& tv, const QVariant& value) const
 {
   if (value.type() != QVariant::List)
   {
@@ -312,15 +313,15 @@ void JsonOsmSchemaLoader::_loadCompoundTags(SchemaVertex& tv, const QVariant& va
       }
 
       QList<KeyValuePairPtr> rule;
-      for (int i = 0; i < a2.size(); i++)
+      for (int j = 0; j < a2.size(); j++)
       {
-        QVariant v3 = a2[i];
+        QVariant v3 = a2[j];
         if (v3.type() != QVariant::String)
         {
           throw HootException("A compound tag rule must be an array of strings.");
         }
 
-        rule.append(KeyValuePairPtr(new KeyValuePair(_asString(v3))));
+        rule.append(std::make_shared<KeyValuePair>(_asString(v3)));
       }
 
       tv.addCompoundRule(rule);
@@ -341,19 +342,19 @@ void JsonOsmSchemaLoader::_loadGeometries(SchemaVertex& tv, const QVariant& v) c
     uint16_t g = 0;
     for (int i = 0; i < arr.size(); i++)
     {
-      QString v = toString(_asString(arr[i])).toLower();
-      LOG_VART(v);
-      uint16_t e = OsmGeometries::fromString(v);
+      QString value = toString(_asString(arr[i])).toLower();
+      LOG_VART(value);
+      uint16_t e = OsmGeometries::fromString(value);
       g |= e;
     }
     LOG_VART(g);
 
-    tv.geometries = g;
+    tv.setGeometries(g);
   }
 }
 
-void JsonOsmSchemaLoader::_loadSimilarTo(QString fromName, const QVariant& value, OsmSchema& s)
-  const
+void JsonOsmSchemaLoader::_loadSimilarTo(
+  QString fromName, const QVariant& value, const OsmSchema& s) const
 {
   if (value.type() == QVariant::List)
   {
@@ -434,7 +435,7 @@ void JsonOsmSchemaLoader::_loadSimilarTo(QString fromName, const QVariant& value
   }
 }
 
-void JsonOsmSchemaLoader::_loadTag(const QVariantMap& v, OsmSchema& s)
+void JsonOsmSchemaLoader::_loadTag(const QVariantMap& v, const OsmSchema& s) const
 {
   QVariantMap copy;
   // copy all the non-comments

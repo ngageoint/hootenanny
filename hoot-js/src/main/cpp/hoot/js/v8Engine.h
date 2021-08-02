@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef V8ENGINE_H
 #define V8ENGINE_H
@@ -49,7 +49,7 @@ public:
   /**
    * @brief init - A no-op that makes the code a little easier to read.
    */
-  void init() {}
+  void init() const {}
 
   static v8::Isolate* getIsolate();
 
@@ -71,10 +71,8 @@ private:
   /** Main isolate */
   v8::Isolate* _isolate;
   std::shared_ptr<v8::Isolate::Scope> _isolateScope;
-  /** In Hootenanny we own the Isolate, when called from Node we do not */
-  bool _ownIsolate;
   /** Platform object */
-  std::shared_ptr<v8::Platform> _platform;
+  std::unique_ptr<v8::Platform> _platform;
   std::shared_ptr<v8::Locker> _locker;
   /** Main context */
   std::shared_ptr<v8::Persistent<v8::Context>> _context;

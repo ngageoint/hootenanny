@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ElementGeometryUtilsJs.h"
 
@@ -47,16 +47,15 @@ namespace hoot
 
 HOOT_JS_REGISTER(ElementGeometryUtilsJs)
 
-void ElementGeometryUtilsJs::Init(Handle<Object> exports)
+void ElementGeometryUtilsJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> thisObj = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "ElementGeometryUtils"), thisObj);
-  thisObj->Set(String::NewFromUtf8(current, "calculateLength"),
-               FunctionTemplate::New(current, calculateLength)->GetFunction());
-  thisObj->Set(String::NewFromUtf8(current, "haveGeometricRelationship"),
-               FunctionTemplate::New(current, haveGeometricRelationship)->GetFunction());
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> thisObj = Object::New(current);
+  exports->Set(context, toV8("ElementGeometryUtils"), thisObj);
+  thisObj->Set(context, toV8("calculateLength"),
+               FunctionTemplate::New(current, calculateLength)->GetFunction(context).ToLocalChecked());
 }
 
 void ElementGeometryUtilsJs::calculateLength(const FunctionCallbackInfo<Value>& args)
@@ -72,43 +71,6 @@ void ElementGeometryUtilsJs::calculateLength(const FunctionCallbackInfo<Value>& 
     ConstElementPtr e = toCpp<ConstElementPtr>(args[1]);
 
     args.GetReturnValue().Set(toV8(ElementGeometryUtils::calculateLength(e, m)));
-  }
-  catch (const HootException& err)
-  {
-    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
-  }
-}
-
-void ElementGeometryUtilsJs::haveGeometricRelationship(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  try
-  {
-    Context::Scope context_scope(current->GetCurrentContext());
-
-    ConstElementPtr element = toCpp<ConstElementPtr>(args[0]);
-    std::shared_ptr<geos::geom::Geometry> bounds =
-      GeometryUtils::boundsFromString(toCpp<QString>(args[1]));
-    const GeometricRelationship relationship =
-      GeometricRelationship::fromString(toCpp<QString>(args[2]));
-    ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[3]);
-
-    if (!MapProjector::isGeographic(map))
-    {
-      // The bounds is always in WGS84, so if our map isn't currently in WGS84 we need to reproject
-      // the bounds.
-      std::shared_ptr<OGRSpatialReference> srs84(new OGRSpatialReference());
-      srs84->SetWellKnownGeogCS("WGS84");
-      MapProjector::project(bounds, srs84, map->getProjection());
-      LOG_VART(bounds);
-    }
-
-    args.GetReturnValue().Set(
-      Boolean::New(
-        current,
-        ElementGeometryUtils::haveGeometricRelationship(element, bounds, relationship, map)));
   }
   catch (const HootException& err)
   {

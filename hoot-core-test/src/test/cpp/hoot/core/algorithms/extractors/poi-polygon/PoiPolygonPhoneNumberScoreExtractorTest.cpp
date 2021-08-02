@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 
@@ -56,13 +56,19 @@ class PoiPolygonPhoneNumberScoreExtractorTest : public HootTestFixture
 
 public:
 
+  PoiPolygonPhoneNumberScoreExtractorTest() : HootTestFixture(UNUSED_PATH, UNUSED_PATH)
+  {
+    setResetType(ResetAll);
+  }
+
   void basicTest()
   {
     PoiPolygonPhoneNumberScoreExtractor uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set("phone", "(123) 456 7890");
     way1->getTags().set("phone", "123 456 7890");
@@ -72,10 +78,11 @@ public:
   void regionValidationTest()
   {
     PoiPolygonPhoneNumberScoreExtractor uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set("phone", "(123) 456 7890");
     way1->getTags().set("phone", "123 456 7890");
@@ -94,10 +101,11 @@ public:
   void invalidNumberTest()
   {
     PoiPolygonPhoneNumberScoreExtractor uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set("phone", "blah");
     way1->getTags().set("phone", "123 456 7890");
@@ -107,10 +115,11 @@ public:
   void tagKeyTest()
   {
     PoiPolygonPhoneNumberScoreExtractor uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set("source:phone", "(123) 456 7890");
     way1->getTags().set("phone", "123 456 7890");
@@ -135,10 +144,11 @@ public:
   void additionalTagKeysTest()
   {
     PoiPolygonPhoneNumberScoreExtractor uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set("note", "(123) 456 7890");
     way1->getTags().set("phone", "123 456 7890");
@@ -153,10 +163,11 @@ public:
   void findInTextTest()
   {
     PoiPolygonPhoneNumberScoreExtractor uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set(
       "phone",

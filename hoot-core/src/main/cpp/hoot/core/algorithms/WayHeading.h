@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef WAYHEADING_H
@@ -40,23 +40,23 @@ namespace hoot
 class WayLocation;
 
 /**
- * Calculates the heading of a way at any point on the way.
+ * @brief The WayHeading class calculates the heading of a way at any point on the way.
  */
 class WayHeading
 {
 public:
 
   /**
-   * Delta is the distance to travel up or down the line when calculating the heading. A larger
-   * delta will be less exact for the given location, but will also average out small perturbations.
+   * @brief calculateHeading calculates the heading of a way at any point on the way.
+   * @param delta Delta is the distance to travel up or down the line when calculating the heading.
+   * A larger delta will be less exact for the given location, but will also average out small
+   * perturbations.
    */
   static Radians calculateHeading(const WayLocation& loc, Meters delta = 0.001);
-
   static Radians calculateHeading(const geos::geom::Coordinate& c1,
                                   const geos::geom::Coordinate& c2);
 
   static geos::geom::Coordinate calculateVector(const WayLocation& loc, Meters delta = 0.001);
-
   static geos::geom::Coordinate calculateVector(const geos::geom::Coordinate& c1,
                                                 const geos::geom::Coordinate& c2);
 

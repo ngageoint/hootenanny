@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef UNLIKELYINTERSECTIONREMOVER_H
@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // Standard
 #include <set>
@@ -49,14 +50,14 @@ class Way;
  * For example, a motorway overpass intersecting a residential street at a 90° is considered
  * unlikely and "unsnapped". The geometry location is not modified.
  */
-class UnlikelyIntersectionRemover : public OsmMapOperation
+class UnlikelyIntersectionRemover : public OsmMapOperation, public ConflateInfoCacheConsumer
 {
 public:
 
   static QString className() { return "hoot::UnlikelyIntersectionRemover"; }
 
   UnlikelyIntersectionRemover() = default;
-  virtual ~UnlikelyIntersectionRemover() = default;
+  ~UnlikelyIntersectionRemover() = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
@@ -65,32 +66,36 @@ public:
    */
   static void removeIntersections(std::shared_ptr<OsmMap> map);
 
-  virtual QString getInitStatusMessage() const override
+  QString getInitStatusMessage() const override
   { return "Removing unlikely intersections..."; }
-
-  virtual QString getCompletedStatusMessage() const override
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " unlikely intersections"; }
-
-  virtual QString getDescription() const override
-  { return "Removes road intersections that are likely mistakes"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Removes road intersections that are likely mistakes"; }
 
-  virtual QString getClassName() const override { return className(); }
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
+  { _conflateInfoCache = cache; }
 
-protected:
+private:
 
   std::shared_ptr<OsmMap> _result;
 
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
+
   void _evaluateAndSplit(long intersectingNode, const std::set<long>& wayIds);
   double _pIntersection(long intersectingNode, const std::shared_ptr<Way>& w1,
-                        const std::shared_ptr<Way>& w2);
-  void _splitIntersection(long intersectingNode, const std::vector<std::shared_ptr<Way>>& g2);
+                        const std::shared_ptr<Way>& w2) const;
+  void _splitIntersection(long intersectingNode, const std::vector<std::shared_ptr<Way>>& g2) const;
 };
 
 }

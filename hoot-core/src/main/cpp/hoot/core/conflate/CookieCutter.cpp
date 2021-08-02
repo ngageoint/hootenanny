@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "CookieCutter.h"
@@ -52,15 +52,15 @@ _removeMissingElements(removeMissingElements)
 {
 }
 
-void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
+void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap) const
 {
   LOG_VARD(cutterShapeOutlineMap->getNodes().size());
   LOG_VART(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(
-    cutterShapeOutlineMap, "cookie-cutter-cutter-shape-outline-map");
+    cutterShapeOutlineMap, className(), "cutter-shape-outline-map");
   LOG_VARD(doughMap->getNodes().size());
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cutter-dough-map");
+  OsmMapWriterFactory::writeDebugMap(doughMap, className(), "dough-map");
 
   OGREnvelope env = CalculateMapBoundsVisitor::getBounds(cutterShapeOutlineMap);
   LOG_VARD(GeometryUtils::toEnvelope(env)->toString());
@@ -76,7 +76,7 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
   std::shared_ptr<Geometry> cutterShape = v.getUnion();
   if (_outputBuffer != 0.0)
   {
-    cutterShape.reset(cutterShape->buffer(_outputBuffer));
+    cutterShape = cutterShape->buffer(_outputBuffer);
   }
   if (cutterShape->getArea() == 0.0)
   {
@@ -105,7 +105,7 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
   OsmMapPtr cookieCutMap = doughMap;
   LOG_VARD(cookieCutMap->getNodes().size());
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cutter-cookie-cut-map");
+  OsmMapWriterFactory::writeDebugMap(cookieCutMap, className(), "cookie-cut-map");
 }
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef UPDATE_WAY_PARENT_VISITOR_H
 #define UPDATE_WAY_PARENT_VISITOR_H
@@ -40,16 +40,14 @@ public:
   static QString className() { return "hoot::UpdateWayParentVisitor"; }
 
   UpdateWayParentVisitor(long oldParentId, long newParentId);
-  virtual ~UpdateWayParentVisitor() = default;
+  ~UpdateWayParentVisitor() = default;
 
-  virtual void visit(const ElementPtr& e) override;
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Updates all way parent IDs to a new ID"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

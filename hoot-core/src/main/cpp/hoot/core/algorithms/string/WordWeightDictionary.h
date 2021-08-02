@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef WORDWEIGHTDICTIONARY_H
@@ -35,9 +35,7 @@ namespace hoot
 {
 
 /**
- * @brief The WordWeightDictionary class
- *
- * Return the weight of a given word.
+ * @brief The WordWeightDictionary class returns the weight of a given word.
  */
 class WordWeightDictionary
 {
@@ -60,7 +58,7 @@ public:
   virtual double getWeight(const QString& word) const = 0;
 };
 
-typedef std::shared_ptr<WordWeightDictionary> WordWeightDictionaryPtr;
+using WordWeightDictionaryPtr = std::shared_ptr<WordWeightDictionary>;
 
 }
 

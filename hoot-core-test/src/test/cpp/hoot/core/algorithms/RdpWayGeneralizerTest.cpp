@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -87,17 +87,17 @@ public:
 
     QTextStream textStream(&file);
     QList<ConstNodePtr> points;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     while (!textStream.atEnd())
     {
       QStringList pointParts = textStream.readLine().split(",");
-      ConstNodePtr node(
-        new Node(
+      ConstNodePtr node =
+        std::make_shared<const Node>(
           Status::Unknown1,
           map->createNextNodeId(),
           pointParts.at(0).toDouble(),
           pointParts.at(1).toDouble(),
-          15.0));
+          15.0);
       points.append(node);
     }
     file.close();
@@ -144,13 +144,13 @@ public:
 
   void writePointOutput(const QList<ConstNodePtr>& points, const QString& outFileName)
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
-    //points will be empty for the generalize calls with way inputs instead of points
+    // Points will be empty for the generalize calls with way inputs instead of points.
     for (QList<ConstNodePtr>::const_iterator it = points.constBegin();
          it != points.constEnd(); ++it)
     {
-      NodePtr nodeCopy(new Node(*(*it).get()));
+      NodePtr nodeCopy = std::make_shared<Node>(*(*it).get());
       map->addNode(nodeCopy);
     }
 
@@ -238,12 +238,12 @@ public:
 
   void runGeneralizeWayInput1NoInformationNodesTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     QList<Coordinate> inputCoords =
       readCoords(_inputPath + "RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputCoords.size());
     inputCoords.append(Coordinate::getNull());
-    WayPtr way = TestUtils::createWay(map, Status::Unknown1, inputCoords.toVector().data(), 1, "");
+    WayPtr way = TestUtils::createWay(map, inputCoords.toVector().data(), "", Status::Unknown1, 1);
     CPPUNIT_ASSERT_EQUAL((size_t)197, way->getNodeIds().size());
 
     RdpWayGeneralizer generalizer(0.1);
@@ -260,12 +260,12 @@ public:
 
   void runGeneralizeWayInput1WithInformationNodesTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     QList<Coordinate> inputCoords =
       readCoords(_inputPath + "RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputCoords.size());
     inputCoords.append(Coordinate::getNull());
-    WayPtr way = TestUtils::createWay(map, Status::Unknown1, inputCoords.toVector().data(), 1, "");
+    WayPtr way = TestUtils::createWay(map, inputCoords.toVector().data(), "", Status::Unknown1, 1);
     CPPUNIT_ASSERT_EQUAL((size_t)197, way->getNodeIds().size());
 
     //randomly add some information tags to nodes
@@ -309,8 +309,7 @@ public:
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT_EQUAL(
-      QString("Invalid epsilon value: 0").toStdString(),
-      exceptionMsg.toStdString());
+      QString("Invalid epsilon value: 0").toStdString(), exceptionMsg.toStdString());
   }
 };
 

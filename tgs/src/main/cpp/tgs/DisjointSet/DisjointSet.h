@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2006 Pedro Felzenszwalb
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef DISJOINTSET_H
 #define DISJOINTSET_H
@@ -38,12 +38,12 @@ namespace Tgs
 {
 // disjoint-set forests using union-by-rank and path compression (sort of).
 
-typedef struct
+struct uni_elt
 {
   int rank;
   int p;
   int size;
-} uni_elt;
+};
 
 class DisjointSet
 {

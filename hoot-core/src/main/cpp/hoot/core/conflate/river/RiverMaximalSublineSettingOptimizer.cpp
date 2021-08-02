@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RiverMaximalSublineSettingOptimizer.h"
 
 // Hoot
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/RiverCriterion.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/util/StringUtils.h>
@@ -73,13 +73,13 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
     const WayPtr& way = it->second;
     if (way)
     {
-      LOG_VART(LinearWaterwayCriterion().isSatisfied(way));
+      LOG_VART(RiverCriterion().isSatisfied(way));
     }
     if (boundsCrit && way)
     {
       LOG_VART(boundsCrit->isSatisfied(way));
     }
-    if (way && LinearWaterwayCriterion().isSatisfied(way) &&
+    if (way && RiverCriterion().isSatisfied(way) &&
         (!boundsCrit || boundsCrit->isSatisfied(way)))
     { 
       totalRiverLength += ElementGeometryUtils::calculateLength(way, map);
@@ -90,7 +90,7 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
     if (numProcessed % statusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Processed " << StringUtils::formatLargeNumber(numProcessed) << " / " <<
+        "Processed " << StringUtils::formatLargeNumber(numProcessed) << " of " <<
         StringUtils::formatLargeNumber(ways.size()) << " ways.");
     }
   }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -77,17 +77,17 @@ public:
   {
     // Creates a single match and should result in a PoiPolygonMerger
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags()["name"] = "foo";
     w1->getTags()["amenity"] = "bar";
-    NodePtr n1(new Node(Status::Unknown2, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown2, 1, 10, 10, 5);
     n1->getTags()["name"] = "bar";
     n1->getTags()["amenity"] = "cafe";
     map->addNode(n1);
@@ -95,7 +95,7 @@ public:
     std::shared_ptr<PoiPolygonMatch> match1(
           new PoiPolygonMatch(map, std::shared_ptr<MatchThreshold>(),
                               std::shared_ptr<PoiPolygonRfClassifier>(),
-                              PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map))));
+                              std::make_shared<PoiPolygonInfoCache>(map)));
     match1->setMatchEvidenceThreshold(3);
     match1->setReviewEvidenceThreshold(1);
     match1->calculateMatch(w1->getElementId(), n1->getElementId());
@@ -115,13 +115,13 @@ public:
     // Create a building and poi/poly match with feature overlap and ensure they create reviews and
     // don't merge together when cross feature conflate merging is not allowed.
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("building", true);
     w1->getTags()["name"] = "foo";
     w1->getTags()["amenity"] = "bar";
@@ -130,11 +130,11 @@ public:
                         Coordinate(5.0, 5.0), Coordinate(0.0, 5.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 5, "w2");
+    WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 5);
     w2->getTags().set("building", true);
     w2->getTags()["name"] = "goofie";
 
-    NodePtr n1(new Node(Status::Unknown2, 1, 19, 19, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown2, 1, 19, 19, 5);
     n1->getTags()["name"] = "foo";
     n1->getTags()["amenity"] = "cafe";
     map->addNode(n1);
@@ -144,19 +144,20 @@ public:
     std::shared_ptr<PoiPolygonMatch> match1(
           new PoiPolygonMatch(map, std::shared_ptr<MatchThreshold>(),
                               std::shared_ptr<PoiPolygonRfClassifier>(),
-                              PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map))));
+                              std::make_shared<PoiPolygonInfoCache>(map)));
     //match1->setConfiguration(conf());
     match1->setMatchEvidenceThreshold(3);
     match1->setReviewEvidenceThreshold(1);
     match1->calculateMatch(w1->getElementId(), n1->getElementId());
     matchesV.push_back(match1);
-    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.5, 0.5, 0.5));
+    std::shared_ptr<const MatchThreshold> threshold =
+      std::make_shared<MatchThreshold>(0.5, 0.5, 0.5);
     BuildingMatchCreator().createMatches(map, matchesV, threshold);
 
     std::shared_ptr<PoiPolygonMatch> match2(
           new PoiPolygonMatch(map, std::shared_ptr<MatchThreshold>(),
                               std::shared_ptr<PoiPolygonRfClassifier>(),
-                              PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map))));
+                              std::make_shared<PoiPolygonInfoCache>(map)));
     //match2->setConfiguration(conf());
     match2->setMatchEvidenceThreshold(3);
     match2->setReviewEvidenceThreshold(1);
@@ -183,8 +184,8 @@ public:
 
     vector<ConstMatchPtr> matchesV;
 
-    std::shared_ptr<BuildingMatch> match1(
-      new BuildingMatch(std::shared_ptr<const MatchThreshold>(new MatchThreshold(0.5, 0.5, 0.5))));
+    std::shared_ptr<BuildingMatch> match1 =
+      std::make_shared<BuildingMatch>(std::make_shared<const MatchThreshold>(0.5, 0.5, 0.5));
     match1->_p.setMatch();
     match1->_eid1 = ElementId(ElementType::Way, 1);
     match1->_eid2 = ElementId(ElementType::Node, 1);
@@ -203,7 +204,7 @@ public:
     PoiPolygonMergerCreator uut;
     // Neither of the match types used here actually require a map to calculate isConflicting, but
     // since the merger creator requires a map we'll pass in an empty one.
-    OsmMapPtr emptyMap(new OsmMap());
+    OsmMapPtr emptyMap = std::make_shared<OsmMap>();
     uut.setOsmMap(emptyMap.get());
     uut.setAllowCrossConflationMerging(true);
 

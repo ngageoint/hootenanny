@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 
@@ -36,18 +36,20 @@
 #include <tgs/RStarTree/MemoryPageStore.h>
 #include <tgs/RStarTree/RTreeNodeStore.h>
 
-using namespace Tgs;
+namespace Tgs
+{
 
 class RTreeNodeStoreTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(RTreeNodeStoreTest);
   CPPUNIT_TEST(test1);
   CPPUNIT_TEST_SUITE_END();
+
 public:
+
   void test1()
   {
-    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(100));
-    RTreeNodeStore uut(2, mps);
+    RTreeNodeStore uut(2, std::make_shared<MemoryPageStore>(100));
 
     RTreeNode* n1 = uut.createNode();
     CPPUNIT_ASSERT_EQUAL(0, n1->getChildCount());
@@ -63,3 +65,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RTreeNodeStoreTest, PluginFactory::testName());
+
+}

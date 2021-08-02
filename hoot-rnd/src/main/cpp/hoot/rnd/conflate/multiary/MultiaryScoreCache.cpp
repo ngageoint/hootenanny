@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MultiaryScoreCache.h"
 
@@ -63,9 +63,9 @@ MatchClassification MultiaryScoreCache::getScore(ConstElementPtr e1, ConstElemen
 {
   _lastExplainText.clear();
 
-  OsmMapPtr tmp(new OsmMap(_map->getProjection()));
-  tmp->addElement(ElementPtr(e1->clone()));
-  tmp->addElement(ElementPtr(e2->clone()));
+  OsmMapPtr tmp = std::make_shared<OsmMap>(_map->getProjection());
+  tmp->addElement(e1->clone());
+  tmp->addElement(e2->clone());
 
   ConstMatchPtr m(_matchCreator->createMatch(tmp, e1->getElementId(), e2->getElementId()));
 

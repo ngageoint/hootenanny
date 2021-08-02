@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #define BUILDING_NODE_EXTENSION
 #include "ReviewMarkerJs.h"
@@ -35,7 +35,6 @@
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/io/StreamUtilsJs.h>
-#include <hoot/js/visitors/JsFunctionVisitor.h>
 
 using namespace std;
 using namespace v8;
@@ -45,14 +44,15 @@ namespace hoot
 
 HOOT_JS_REGISTER(ReviewMarkerJs)
 
-void ReviewMarkerJs::Init(Handle<Object> exports)
+void ReviewMarkerJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> reviewMarker = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "ReviewMarker"), reviewMarker);
-  reviewMarker->Set(String::NewFromUtf8(current, "mark"),
-                    FunctionTemplate::New(current, mark)->GetFunction());
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> reviewMarker = Object::New(current);
+  exports->Set(context, toV8("ReviewMarker"), reviewMarker);
+  reviewMarker->Set(context, toV8("mark"),
+                    FunctionTemplate::New(current, mark)->GetFunction(context).ToLocalChecked());
 }
 
 void ReviewMarkerJs::mark(const FunctionCallbackInfo<Value>& args)

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // GEOS
@@ -76,7 +76,7 @@ public:
   void runTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/algorithms/LongestCommonNodeStringTest.osm", map);
 
@@ -99,7 +99,7 @@ public:
      * matching is *on*, we *should not* see those two ways get merged.
      */
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
     //create a non matching text tag between two of the ways that will be examined
@@ -129,7 +129,7 @@ public:
      * matching is *off*, we *should* see those two ways get merged.
      */
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
     //create a non matching text tag between two of the ways that will be examined

@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "LocationOfPoint.h"
@@ -33,7 +33,6 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/util/Assert.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
 
@@ -110,7 +109,9 @@ WayLocation LocationOfPoint::locate(const ConstOsmMapPtr& map, ConstWayPtr way,
 
 WayLocation LocationOfPoint::locate(const Coordinate& inputPt) const
 {
-  double minDistance = std::numeric_limits<double>().max();
+  LOG_TRACE("Locating coordinate location: " << inputPt << "...");
+
+  double minDistance = std::numeric_limits<double>::max();
   int minIndex = 0;
   double minFrac = -1.0;
 
@@ -118,8 +119,19 @@ WayLocation LocationOfPoint::locate(const Coordinate& inputPt) const
 
   if (_length == -1)
   {
-    _length = ElementToGeometryConverter(_map).convertToLineString(_way)->getLength();
+    std::shared_ptr<geos::geom::LineString> lineString =
+      ElementToGeometryConverter(_map).convertToLineString(_way);
+    if (lineString)
+    {
+      _length = lineString->getLength();
+    }
+    else
+    {
+      LOG_TRACE("Invalid line string. Returning empty way location...");
+      return WayLocation();
+    }
   }
+  LOG_VART(_length);
 
   if (_length <= 0.0)
   {
@@ -132,7 +144,8 @@ WayLocation LocationOfPoint::locate(const Coordinate& inputPt) const
     Coordinate lastCoord = _map->getNode(_way->getNodeId(0))->toCoordinate();
     for (size_t i = 0; i < _way->getNodeCount() - 1; i++)
     {
-      Coordinate nextCoord = _map->getNode(_way->getNodeId(i + 1))->toCoordinate();
+      ConstNodePtr node = _map->getNode(_way->getNodeId((long)(i + 1)));
+      Coordinate nextCoord = node->toCoordinate();
       seg.p0 = lastCoord;
       seg.p1 = nextCoord;
       lastCoord = nextCoord;
@@ -161,7 +174,7 @@ WayLocation LocationOfPoint::locateAfter(const Coordinate& inputPt, const WayLoc
 
   assert(minLocation.getWay() == _way);
 
-  double minDistance = std::numeric_limits<double>().max();
+  double minDistance = std::numeric_limits<double>::max();
   WayLocation nextClosestLocation = minLocation;
 
   LineSegment seg;
@@ -187,17 +200,19 @@ WayLocation LocationOfPoint::locateAfter(const Coordinate& inputPt, const WayLoc
       if (i == startIndex)
       {
         // recalculate the segFrac in terms of the whole line segment.
-        segFrac = minLocation.getSegmentFraction() +
-            (1 - minLocation.getSegmentFraction()) * segFrac;
+        segFrac =
+          minLocation.getSegmentFraction() + (1 - minLocation.getSegmentFraction()) * segFrac;
       }
       nextClosestLocation = WayLocation(_map, _way, i, segFrac);
       minDistance = segDistance;
     }
   }
-  // Return the minDistanceLocation found.
-  // This will not be null, since it was initialized to minLocation
-  Assert::isFalse(nextClosestLocation >= minLocation,
-                "computed location is before specified minimum location");
+  // Return the minDistanceLocation found. This will not be null, since it was initialized to
+  // minLocation.
+  if (!(nextClosestLocation >= minLocation))
+  {
+    throw HootException("Computed location is before specified minimum location");
+  }
 
   return nextClosestLocation;
 }

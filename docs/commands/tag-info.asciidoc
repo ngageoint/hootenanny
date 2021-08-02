@@ -3,77 +3,33 @@
 
 === Description
 
-The +tag-info+ command prints out unique feature tag values grouped by tag key.
+The +tag-info+ command displays unique feature tag values, grouped by tag key, found in one or more maps. 
 
-* +inputs+             - One or more inputs; may be any supported input format (e.g. OSM file).  If using an OGR layer within a data source, 
-                         then delimit the data source and layer with a semicolon.
-* +--tag-values-limit+ - Limits the number of unique tag values printed per tag key.  By default, there is no limit.  This option is ignored
-                         if --keys-only is specified.
-* +--keys+             - Prints unique tag values for the specified keys only.  Delimit multiple keys with a semicolon (e.g. "key1;key2").
-                         This option is ignored if --keys-only is specified.
-* +--keys-only+        - Prints tag keys only and does not print any associated values.
-* +--case-insensitive+ - If this option is specified, tag key comparisons are not case sensitive.  By default the comparisons are case sensitive.
-* +--partial-key-match - If this option is specified, then any key in a feature which partially matches the given set of keys in --keys
-                         will have its tag value added to the output.  By default, keys must be an exact match with each other for the
-                         tag value to be written to output.
+* +input(s)+            - Inputs(s); may be any supported input format (e.g. .osm file).
+* +--case-insensitive+  - Makes tag key comparisons case insensitive. By default the comparisons are case sensitive.
+* +--delimited-text+    - By default, JSON output is generated. If this option is specified, a delimited list with the format
+                          "key1;key2..." is returned. Value when the `--keys-only` option is used only.
+* +--keys+              - Displays unique tag values for the specified keys only. This option is ignored if `--keys-only` 
+                          is specified.
+* +--keys-only+         - Displays tag keys only and does not print any associated values.
+* +--partial-key-match+ - Causes any key in a feature which partially matches the given set of keys in `--keys` to have its 
+                          tag value added to the output. By default, keys must be an exact match with each other for the 
+                          tag value to be written to output.
+* +--recursive+         - Allows for processing the files contained in any directories specified in +input(s)+ recursively.
+                          This parameter has no effect on the processing of non-directory inputs. This must be followed 
+                          by either "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" 
+                          or "*myFile*". This parameter is not compatible with the OGR layer input syntax.
+* +--tag-values-limit+  - Limits the number of unique tag values printed per tag key. By default, there is no limit. This 
+                          option is ignored if +--keys-only+ is specified.
 
 === Usage
 
 --------------------------------------
-tag-info (input1[;layer]) [input2[;layer]] ... [--tag-values-limit] [--keys-only "key1;key2..."] [--keys-only] [--case-insensitive]
+hoot tag-info (input1) [input2...] [--case-insensitive] [--delimited-text] [--keys "key1;key2..."] [--keys-only] \
+  [--partial-key-match] [--recursive "*"|"filter1;filter2..."] [--tag-values-limit]
 --------------------------------------
 
-==== Examples
-
---------------------------------------
-hoot tag-info myshapefile.shp "myfgb.gdb;mylayer"
-
-hoot tag-info input.osm
-
-hoot tag-info input.osm --keys-only
-
-hoot tag-info input.osm --keys "key1;Key2" --case-insensitive
-
-hoot tag-info myshapefile.shp "myfgb.gdb;mylayer" --tag-values-limit 30
-
-hoot tag-info input.osm --keys "key" --partial-key-match
---------------------------------------
-
-=== Example Output
-
----------------------------------------
-.{
-  "ca-Transmission_Line-state-gov.shp":{
-    "ca-Transmission_Line-state-gov":{
-      "Circuit":[
-        "Double",
-        "Duble",
-        "Liberty Energy",
-        "Many",
-        "Quad",
-        "Single"
-        ],
-      "Comments":[
-        "Attached to 115kv poles",
-        "Caldwell-victor 220kv",
-        "Changed kv from 115 to 60kv",
-        "Distribution line",
-        ...
-        ],
-      "Legend":[
-        "IID_161kV",
-        "IID_230kV",
-        "IID_34.5_92kV",
-        "LADWP_115_138kV",
-        ...
-        ],
-        ...
-}}
----------------------------------------
-
-=== Notes
-
-This command works on streamable inputs only.
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-tag-schema-information-for-a-map[Examples]
 
 === See Also
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef EDGELOCATION_H
 #define EDGELOCATION_H
@@ -56,11 +56,8 @@ public:
   EdgeLocation(ConstNetworkEdgePtr e, double portion) : _e(e), _portion(portion) {}
 
   const ConstNetworkEdgePtr& getEdge() const { return _e; }
-
   Meters getOffset(const ConstElementProviderPtr& provider) const;
-
   double getPortion() const { return _portion; }
-
   /**
    * Returns the vertex at this location if isExtreme(epsilon) == true. Otherwise an exception is
    * thrown.
@@ -71,11 +68,8 @@ public:
    * Returns true if the location is either at the start or end of an edge.
    */
   bool isExtreme(double epsilon = 0.0) const { return isFirst(epsilon) || isLast(epsilon); }
-
   bool isFirst(double epsilon = 0.0) const { return _portion <= epsilon; }
-
   bool isLast(double epsilon = 0.0) const { return _portion >= 1 - epsilon; }
-
   bool isValid() const { return _portion >= 0.0 && _portion <= 1.0; }
 
   std::shared_ptr<EdgeLocation> move(const ConstElementProviderPtr& provider, Meters distance) const;
@@ -89,8 +83,8 @@ private:
 
 };
 
-typedef std::shared_ptr<EdgeLocation> EdgeLocationPtr;
-typedef std::shared_ptr<const EdgeLocation> ConstEdgeLocationPtr;
+using EdgeLocationPtr = std::shared_ptr<EdgeLocation>;
+using ConstEdgeLocationPtr = std::shared_ptr<const EdgeLocation>;
 
 inline bool operator==(const ConstEdgeLocationPtr& a, const ConstEdgeLocationPtr& b)
 {
@@ -128,12 +122,8 @@ inline bool operator>=(const ConstEdgeLocationPtr& a, const ConstEdgeLocationPtr
 
 inline uint qHash(const ConstEdgeLocationPtr& el)
 {
-//  LOG_VARW(el);
-//  LOG_VARW(qHash(el->getEdge()));
-//  LOG_VARW(::qHash(__gnu_cxx::fastHashDouble()(el->getPortion())));
   uint result = ::qHash(Tgs::cantorPairing(qHash(el->getEdge()),
     ::qHash((quint64)__gnu_cxx::fastHashDouble()(el->getPortion()))));
-//  LOG_VARW(result);
   return result;
 }
 

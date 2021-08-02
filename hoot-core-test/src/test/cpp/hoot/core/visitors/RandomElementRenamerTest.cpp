@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -36,7 +36,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/RandomElementRenamer.h>
@@ -64,14 +63,14 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
-    NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 0, 0, 10);
     n1->getTags()["name"] = "strange test";
     n1->getTags()["name:ru"] = QString::fromUtf8("странное испытание");
     n1->getTags()["alt_name"] = "strange;test";
     map->addNode(n1);
 
-    NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), 500, 500, 10));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 500, 500, 10);
     n2->getTags()["name"] = "little town";
     n2->getTags()["name:he"] = QString::fromUtf8("העיר קטנה");
     n2->getTags()["alt_name"] = "small town;littleville";

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __SA_URGENT_EXCEPTION_H__
@@ -75,8 +75,9 @@ namespace Tgs
      * @param lineNum the line number throwing the exception
      * @param error the previous error in the exception chain
      */
-    Exception(std::string className, std::string functionName, unsigned int lineNum,
-      const Exception & error)
+    Exception(
+      const std::string& className, const std::string& functionName, unsigned int lineNum,
+      const Exception& error)
     {
       std::stringstream ss;
       ss <<  className << "::" << functionName << " Line( " << lineNum << "): -->" << error.what() <<
@@ -94,7 +95,8 @@ namespace Tgs
      * @param lineNum the line number throwing the exception
      * @param errorMessage the description of the error
      */
-    Exception(std::string className, std::string functionName, unsigned int lineNum,
+    Exception(
+      const std::string& className, const std::string& functionName, unsigned int lineNum,
       const std::string & errorMessage)
     {
       std::stringstream ss;
@@ -106,20 +108,17 @@ namespace Tgs
     /**
      * A destructor
      */
-    ~Exception() throw ()
-    {
-
-    }
+    ~Exception() throw () = default;
 
     /** 
     * @returns the error string provided in the constructor
     */
-    virtual const char* what() const throw()
+    const char* what() const throw() override
     {
       return _errorStr.data();
     }
 
-  protected:
+  private:
 
     std::string _errorStr;
   };

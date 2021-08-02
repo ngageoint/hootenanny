@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "NodeUtils.h"
@@ -33,22 +33,6 @@
 
 namespace hoot
 {
-
-void NodeUtils::printNodes(const QString& nodeCollectionName,
-                          const QList<std::shared_ptr<const Node>>& nodes)
-{
-  if (Log::getInstance().getLevel() == Log::Trace)
-  {
-    LOG_DEBUG(nodeCollectionName);
-    LOG_VARD(nodes.size());
-    for (QList<std::shared_ptr<const Node>>::const_iterator it = nodes.begin();
-         it != nodes.end(); ++it)
-    {
-      std::shared_ptr<const Node> node = *it;
-      LOG_VARD(node->toString());
-    }
-  }
-}
 
 QList<long> NodeUtils::nodesToNodeIds(const QList<std::shared_ptr<const Node>>& nodes)
 {
@@ -147,14 +131,6 @@ QString NodeUtils::nodeCoordsToString(const std::vector<ConstNodePtr>& nodes)
   }
   str.chop(2);
   return str;
-}
-
-bool NodeUtils::nodeCoordsMatch(const ConstWayPtr& way1, const ConstWayPtr& way2,
-                                const ConstOsmMapPtr& map)
-{
-  return
-    nodeCoordsMatch(
-      nodeIdsToNodes(way1->getNodeIds(), map), nodeIdsToNodes(way2->getNodeIds(), map));
 }
 
 geos::geom::Coordinate NodeUtils::nodeToCoord(const std::shared_ptr<const Node>& node)

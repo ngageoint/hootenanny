@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "DirectedGraph.h"
@@ -31,24 +31,20 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/OneWayCriterion.h>
 
 namespace hoot
 {
-
-DirectedGraph::DirectedGraph()
-{
-}
 
 void DirectedGraph::addEdge(long from, long to, double weight)
 {
   _edges.insert(from, Edge(from, to, weight));
 }
 
-double DirectedGraph::determineCost(const std::shared_ptr<Way>& way)
+double DirectedGraph::determineCost(const std::shared_ptr<Way>& way) const
 {
   QString highway = way->getTags()["highway"];
   // reasonable default for an unknown "highway"
@@ -84,8 +80,16 @@ void DirectedGraph::deriveEdges(const std::shared_ptr<const OsmMap>& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const std::shared_ptr<Way>& way = it->second;
+    LOG_VART(way.get());
+    LOG_VART(way->getNodeIds().size());
     double cost = determineCost(way);
+    LOG_VART(cost);
     double length = ElementToGeometryConverter(map).convertToLineString(way)->getLength();
+    LOG_VART(length);
+    if (length == 0)
+    {
+      continue;
+    }
 
     long nStart = way->getNodeId(0);
     long nEnd = way->getNodeId(way->getNodeCount() - 1);

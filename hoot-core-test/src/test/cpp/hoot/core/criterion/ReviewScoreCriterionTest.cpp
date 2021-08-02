@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -53,7 +53,7 @@ public:
     uut.setInvertThresholding(false);
 
     // just creating a barebones, empty review relation...all we need for these tests
-    RelationPtr reviewRelation(new Relation(Status::Conflated, 1));
+    RelationPtr reviewRelation = std::make_shared<Relation>(Status::Conflated, 1);
     reviewRelation->getTags().set(MetadataTags::HootReviewNeeds(), true);
 
     reviewRelation->getTags().set(MetadataTags::HootReviewScore(), "0.6");
@@ -83,7 +83,7 @@ public:
     uut.setMaxScoreThreshold(0.8);
     uut.setInvertThresholding(true);
 
-    RelationPtr reviewRelation(new Relation(Status::Conflated, 1));
+    RelationPtr reviewRelation = std::make_shared<Relation>(Status::Conflated, 1);
     reviewRelation->getTags().set(MetadataTags::HootReviewNeeds(), true);
 
     reviewRelation->getTags().set(MetadataTags::HootReviewScore(), "0.1");

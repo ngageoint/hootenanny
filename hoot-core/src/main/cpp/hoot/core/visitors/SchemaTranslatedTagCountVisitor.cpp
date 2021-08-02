@@ -19,15 +19,14 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "SchemaTranslatedTagCountVisitor.h"
 
 // hoot
-#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/FieldDefinition.h>
@@ -46,9 +45,18 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, SchemaTranslatedTagCountVisitor)
 
+SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor() :
+  _map(nullptr),
+  _populatedCount(0),
+  _defaultCount(0),
+  _nullCount(0),
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+{
+}
+
 SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor(
   const std::shared_ptr<ScriptSchemaTranslator>& t) :
-  _map(NULL),
+  _map(nullptr),
   _populatedCount(0),
   _defaultCount(0),
   _nullCount(0),
@@ -57,23 +65,27 @@ SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor(
   _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(t);
   if (!_translator)
   {
-    throw HootException("Error allocating translator, the translation script must support "
-                        "converting to OGR.");
+    throw HootException(
+      "Error allocating translator, the translation script must support converting to OGR.");
   }
-
   _schema = _translator->getOgrOutputSchema();
 }
 
-void SchemaTranslatedTagCountVisitor::_countTags(std::shared_ptr<Feature>& f)
+void SchemaTranslatedTagCountVisitor::setTranslator(
+  const std::shared_ptr<ScriptSchemaTranslator>& translator)
+{
+  _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(translator);
+  _schema = _translator->getOgrOutputSchema();
+}
+
+void SchemaTranslatedTagCountVisitor::_countTags(const std::shared_ptr<Feature>& f)
 {
   const std::shared_ptr<const FeatureDefinition>& defn = f->getFeatureDefinition();
 
   for (size_t i = 0; i < defn->getFieldCount(); i++)
   {
     std::shared_ptr<const FieldDefinition> fd = defn->getFieldDefinition(i);
-
     const QVariantMap& vm = f->getValues();
-
     if (vm.contains(fd->getName()) == false)
     {
       _nullCount++;
@@ -104,12 +116,16 @@ void SchemaTranslatedTagCountVisitor::visit(const ConstElementPtr& e)
   {
     std::shared_ptr<Geometry> g =
       ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e, false);
+    if (!g || g->isEmpty())
+    {
+      return;
+    }
 
     Tags t = e->getTags();
     t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
     t[MetadataTags::HootStatus()] = e->getStatusString();
 
-    // remove all the empty tags.
+    // Remove all the empty tags.
     for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
     {
       if (t[it.key()] == "")
@@ -121,7 +137,7 @@ void SchemaTranslatedTagCountVisitor::visit(const ConstElementPtr& e)
     vector<ScriptToOgrSchemaTranslator::TranslatedFeature> f =
       _translator->translateToOgr(t, e->getElementType(), g->getGeometryTypeId());
 
-    // only write the feature if it wasn't filtered by the translation script.
+    // Only write the feature if it wasn't filtered by the translation script.
     for (size_t i = 0; i < f.size(); i++)
     {
       _countTags(f[i].feature);

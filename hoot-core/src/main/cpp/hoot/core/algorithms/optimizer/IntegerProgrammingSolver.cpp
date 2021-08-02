@@ -19,14 +19,14 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "IntegerProgrammingSolver.h"
 
-#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/SignalCatcher.h>
 
@@ -98,11 +98,11 @@ void IntegerProgrammingSolver::solveBranchAndCut()
     iocp.tm_lim = _timeLimit * 1000.0 + 0.5;
   }
   //  Setup message level
-  if (Log::getInstance().getLevel() <= Log::Debug)
+  if (Log::getInstance().getLevel() <= Log::Trace)
   {
     iocp.msg_lev = GLP_MSG_ON;
   }
-  else if (Log::getInstance().getLevel() <= Log::Warn)
+  else if (Log::getInstance().getLevel() <= Log::Debug)
   {
     iocp.msg_lev = GLP_MSG_ERR;
   }
@@ -123,13 +123,13 @@ void IntegerProgrammingSolver::solveBranchAndCut()
   }
   catch (...)
   {
-    throw Exception(QString("Error solving integer programming problem in glp_intopt()."));
+    throw HootException(QString("Error solving integer programming problem in glp_intopt()."));
   }
 
   // if there was an error and the error was not a timeout or iteration limit error.
   if (result != 0 && result != GLP_EITLIM && result != GLP_ETMLIM)
   {
-    throw Exception(QString("Error solving integer programming problem. %1").arg(result));
+    throw HootException(QString("Error solving integer programming problem. %1").arg(result));
   }
 }
 
@@ -145,11 +145,11 @@ void IntegerProgrammingSolver::solveSimplex()
     smcp.tm_lim = _timeLimit * 1000.0 + 0.5;
   }
   //  Setup message level
-  if (Log::getInstance().getLevel() <= Log::Debug)
+  if (Log::getInstance().getLevel() <= Log::Trace)
   {
     smcp.msg_lev = GLP_MSG_ON;
   }
-  else if (Log::getInstance().getLevel() <= Log::Warn)
+  else if (Log::getInstance().getLevel() <= Log::Debug)
   {
     smcp.msg_lev = GLP_MSG_ERR;
   }
@@ -170,15 +170,14 @@ void IntegerProgrammingSolver::solveSimplex()
   }
   catch (...)
   {
-    throw Exception(QString("Error solving integer programming problem in glp_simplex()."));
+    throw HootException(QString("Error solving integer programming problem in glp_simplex()."));
   }
 
   // if there was an error and the error was not a timeout or iteration limit error.
   if (result != 0 && result != GLP_EITLIM && result != GLP_ETMLIM)
   {
-    throw Exception(QString("Error solving integer programming problem. %1").arg(result));
+    throw HootException(QString("Error solving integer programming problem. %1").arg(result));
   }
 }
-
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "GraphComparator.h"
@@ -33,22 +33,21 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Point.h>
 #include <geos/operation/distance/DistanceOp.h>
-using namespace geos::operation::distance;
 
 // Hoot
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryPainter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/scoring/DirectedGraph.h>
 #include <hoot/core/scoring/ShortestPath.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/geometry/GeometryPainter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 
 // Qt
 #include <QDebug>
@@ -60,6 +59,7 @@ using namespace geos::operation::distance;
 #include <tgs/ProbablePath/ProbablePathCalculator.h>
 
 using namespace geos::geom;
+using namespace geos::operation::distance;
 using namespace std;
 using namespace Tgs;
 
@@ -67,44 +67,50 @@ namespace hoot
 {
 
 GraphComparator::GraphComparator(OsmMapPtr map1, OsmMapPtr map2) :
-      BaseComparator(map1, map2),
-      _iterations(100),
-      _median(0.0),
-      _mean(0.0),
-      _ci(-1.0),
-      _s(-1.0),
-      _debugImages(false),
-      _maxThreads(1)
+BaseComparator(map1, map2),
+_iterations(100),
+_median(0.0),
+_mean(0.0),
+_ci(-1.0),
+_s(-1.0),
+_debugImages(false),
+_maxThreads(1)
 {
   _init();
 }
 
-cv::Mat GraphComparator::_calculateCostDistance(OsmMapPtr map, Coordinate c, double& maxGraphCost,
-                                                const RandomPtr& random)
+cv::Mat GraphComparator::_calculateCostDistance(
+  OsmMapPtr map, Coordinate c, double& maxGraphCost, const RandomPtr& random) const
 {
-  // make a copy of the map so we can manipulate it.
-  map.reset(new OsmMap(map));
+  // Make a copy of the map so we can manipulate it.
+  map = std::make_shared<OsmMap>(map);
 
   // find the nearest feature
+  LOG_TRACE("Finding nearest feature...");
   long wId = map->getIndex().findNearestWay(c);
   WayPtr w = map->getWay(wId);
+  LOG_VART(w.get());
 
   // split way at c
+  LOG_TRACE("Splitting way...");
   WayLocation wl = LocationOfPoint::locate(map, w, c);
+  LOG_VART(wl.isValid());
   vector<WayPtr > v = WaySplitter::split(map, w, wl);
   wl = LocationOfPoint::locate(map, v[0], c);
+  LOG_VART(wl.isValid());
   if (wl.isNode() == false)
   {
-    // I haven't been able to recreate the case when this happens.
+    // Haven't been able to recreate the case when this happens.
     LOG_ERROR("Internal Error: Expected wl to be on a node, but it was this: " << wl);
-    //throw here?
   }
   assert(wl.isNode() == true);
 
   // populate graph
-  std::shared_ptr<DirectedGraph> graph(new DirectedGraph());
+  LOG_TRACE("Populating graph...");
+  std::shared_ptr<DirectedGraph> graph = std::make_shared<DirectedGraph>();
   graph->deriveEdges(map);
 
+  LOG_TRACE("Calculating cost...");
   ShortestPath sp(graph);
   // set cost at c to zero.
   long sourceId = v[0]->getNodeId(wl.getSegmentIndex());
@@ -123,8 +129,10 @@ cv::Mat GraphComparator::_calculateCostDistance(OsmMapPtr map, Coordinate c, dou
   return mat;
 }
 
-void GraphComparator::_calculateRasterCost(cv::Mat& mat, const RandomPtr& random)
+void GraphComparator::_calculateRasterCost(cv::Mat& mat, const RandomPtr& random) const
 {
+  LOG_TRACE("Calculating raster cost...");
+
   ProbablePathCalculator ppc(random);
   ppc.setRandomNoise(0.0);
   ppc.setRandomPatches(0.0, 1);
@@ -133,7 +141,7 @@ void GraphComparator::_calculateRasterCost(cv::Mat& mat, const RandomPtr& random
 
   for (int y = 0; y < _height; y++)
   {
-    float* row = mat.ptr<float>(y);
+    const float* row = mat.ptr<float>(y);
     for (int x = 0; x < _width; x++)
     {
       cost.pixel(x, y) = row[x];
@@ -160,7 +168,7 @@ double GraphComparator::compareMaps()
   // sampled standard deviation
   _s = -1;
   // 1.645 for 90% confidence, 1.96 for 95% confidence, and 2.58 for 99% confidence.
-  // please update the header file comments if you change this value.
+  // Please update the header file comments if you change this value.
   double zalpha = 1.645;
   _ci = -1;
 
@@ -171,10 +179,12 @@ double GraphComparator::compareMaps()
     WorkInfo info;
     info.index = i;
     // generate a random source point
-    info.coord.x = Random::instance()->generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
-          _projectedBounds.MinX;
-    info.coord.y = Random::instance()->generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
-          _projectedBounds.MinY;
+    info.coord.x =
+      Random::instance()->generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
+        _projectedBounds.MinX;
+    info.coord.y =
+      Random::instance()->generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
+        _projectedBounds.MinY;
     // pick one map as the reference map
     if (Random::instance()->coinToss())
       info.referenceMap = _mapP1;
@@ -184,11 +194,14 @@ double GraphComparator::compareMaps()
     _workQueue.push(info);
   }
   //  Start up all of the threads
+  LOG_STATUS("Starting " << _maxThreads << " graph comparison thread(s)...");
   for (int i = 0; i < _maxThreads; ++i)
     _threadPool.push_back(thread(&GraphComparator::_graphCompareThreadFunc, this));
   //  Wait for the threads to finish working
   for (int i = 0; i < _maxThreads; ++i)
     _threadPool[i].join();
+  LOG_INFO("Graph comparison threaded execution complete.");
+
   //  Perform the final calculations
   vector<double> scores;
   double diffScoreSum = 0.0;
@@ -212,8 +225,6 @@ double GraphComparator::compareMaps()
   //  Calculate the confidence interval
   _ci = zalpha * _s / sqrt(scores.size());
 
-  LOG_INFO(_iterations << " / " << _iterations << " mean: " << _mean << "   ");
-
   return _mean;
 }
 
@@ -226,11 +237,18 @@ void GraphComparator::_graphCompareThreadFunc()
     //  Grab the work info to process
     WorkInfo info = _workQueue.front();
     _workQueue.pop();
+    const size_t workRemaining = _workQueue.size();
+    if (workRemaining % 5 == 0)
+    {
+      _logMutex.lock();
+      PROGRESS_STATUS("Remaining iterations: " << _workQueue.size());
+      _logMutex.unlock();
+    }
     //  Make sure to unlock the queue
     _workQueueMutex.unlock();
 
     double maxGraphCost = 0.0;
-    RandomPtr random(new Random(info.index));
+    RandomPtr random = std::make_shared<Random>(info.index);
 
     // find the random source point's nearest point on a feature in one of the maps
     info.coord = _findNearestPointOnFeature(info.referenceMap, info.coord);
@@ -254,9 +272,12 @@ void GraphComparator::_graphCompareThreadFunc()
         diffData[j] = fabs(image1Data[j] - image2Data[j]);
 
       FileUtils::makeDir("test-output/route-image");
-      QString s1 = QString("test-output/route-image/route-%1-a.png").arg(info.index, 3, 10, QChar('0'));
-      QString s2 = QString("test-output/route-image/route-%1-b.png").arg(info.index, 3, 10, QChar('0'));
-      QString sdiff = QString("test-output/route-image/route-%1-diff.png").arg(info.index, 3, 10, QChar('0'));
+      QString s1 =
+        QString("test-output/route-image/route-%1-a.png").arg(info.index, 3, 10, QChar('0'));
+      QString s2 =
+        QString("test-output/route-image/route-%1-b.png").arg(info.index, 3, 10, QChar('0'));
+      QString sdiff =
+        QString("test-output/route-image/route-%1-diff.png").arg(info.index, 3, 10, QChar('0'));
       _saveImage(image1, s1, maxGraphCost * 3);
       _saveImage(image2, s2, maxGraphCost * 3);
       _saveImage(diff, sdiff, maxGraphCost * 3);
@@ -275,85 +296,9 @@ void GraphComparator::_graphCompareThreadFunc()
   _workQueueMutex.unlock();
 }
 
-void GraphComparator::drawCostDistance(OsmMapPtr map, vector<Coordinate>& c,
-                                       QString output, double& maxGraphCost)
-{
-  _updateBounds();
-  // make a copy of the map so we can manipulate it.
-  map.reset(new OsmMap(map));
-
-  for (size_t i = 0; i < c.size(); i++)
-  {
-    cout << c[i].x << " " << c[i].y << endl;
-    c[i] = _findNearestPointOnFeature(map, c[i]);
-    cout << c[i].x << " " << c[i].y << endl;
-    // find the nearest feature
-    long wId = map->getIndex().findNearestWay(c[i]);
-    WayPtr w = map->getWay(wId);
-
-    // split way at c
-    WayLocation wl = LocationOfPoint::locate(map, w, c[i]);
-    vector<WayPtr > v = WaySplitter::split(map, w, wl);
-    wl = LocationOfPoint::locate(map, v[0], c[i]);
-    assert(wl.isNode() == true);
-  }
-
-  // populate graph
-  std::shared_ptr<DirectedGraph> graph(new DirectedGraph());
-  graph->deriveEdges(map);
-
-  LOG_DEBUG("Running cost");
-  ShortestPath sp(graph);
-
-  for (size_t i = 0; i < c.size(); i++)
-  {
-    long wId = map->getIndex().findNearestWay(c[i]);
-    WayPtr w = map->getWay(wId);
-
-    WayLocation wl = LocationOfPoint::locate(map, w, c[i]);
-
-    // set cost at c to zero.
-    long sourceId = w->getNodeId(wl.getSegmentIndex());
-    sp.setNodeCost(sourceId, 0.0);
-  }
-
-  // calculate cost
-  sp.calculateCost();
-  LOG_DEBUG("Cost done");
-
-  cv::Mat mat = _paintGraph(map, *graph, sp, maxGraphCost);
-
-  _saveImage(mat, output, -1.0, false);
-  _saveImage(mat, output.replace(".png", "2.png"), -1.0, true);
-
-  std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
-  srs->importFromEPSG(900913);
-
-  Coordinate c1 = MapProjector::project(Coordinate(_projectedBounds.MinX, _projectedBounds.MinY), map->getProjection(), srs);
-  cout << "coord " << c1.x << ", " << c1.y << endl;
-
-  Coordinate c2 = MapProjector::project(Coordinate(_projectedBounds.MaxX, _projectedBounds.MaxY), map->getProjection(), srs);
-  cout << "coord2 " << c2.x << ", " << c2.y << endl;
-
-  printf("POSITION_Y=%f\n", (c1.y + c2.y) / 2.0);
-  //cout << "POSITION_Y=" << (c1.y + c2.y) / 2.0 << endl;
-  printf("POSITION_X=%f\n", (c1.x + c2.x) / 2.0);
-  //cout << "POSITION_X=" << (c1.x + c2.x) / 2.0 << endl;
-  cout << "M12=0.0" << endl;
-  cout << "M11=1.0" << endl;
-  cout << "M10=0.0" << endl;
-  cout << "M02=0.0" << endl;
-  cout << "INITIAL_SCALE=" << (c2.x - c1.x) / (double)_width * 100.0 << endl;
-  cout << "M01=0.0" << endl;
-  cout << "M00=1.0" << endl;
-
-  // paint graph onto raster
-  //_exportGraphImage(map, *graph, sp, output);
-}
-
-void GraphComparator::_exportGraphImage(OsmMapPtr map, DirectedGraph& /*graph*/,
-                                        ShortestPath& sp, QString path,
-                                        const geos::geom::Coordinate& coord)
+void GraphComparator::_exportGraphImage(
+  OsmMapPtr map, const ShortestPath& sp, const QString& path,
+  const geos::geom::Coordinate& coord) const
 {
   const NodeMap& nodes = map->getNodes();
 
@@ -371,14 +316,13 @@ void GraphComparator::_exportGraphImage(OsmMapPtr map, DirectedGraph& /*graph*/,
   pt.setRenderHint(QPainter::Antialiasing, true);
   pt.fillRect(pt.viewport(), Qt::black);
 
-  GeometryPainter gp;
-  QMatrix m = gp.createMatrix(pt.viewport(), _projectedBounds);
+  QMatrix m = GeometryPainter::createMatrix(pt.viewport(), _projectedBounds);
 
   QPen pen(Qt::white);
 
   pen.setWidth(7);
   pt.setPen(pen);
-  gp.drawPoint(pt, coord.x, coord.y, m);
+  GeometryPainter::drawPoint(pt, coord.x, coord.y, m);
 
   pen.setWidth(3);
   QColor c;
@@ -398,7 +342,7 @@ void GraphComparator::_exportGraphImage(OsmMapPtr map, DirectedGraph& /*graph*/,
     }
     else
     {
-      int v = (cost / maxCost) * 255.0;
+      int v = (int)((cost / maxCost) * 255.0);
       c.setRgb(255, v, 0);
     }
 
@@ -406,7 +350,7 @@ void GraphComparator::_exportGraphImage(OsmMapPtr map, DirectedGraph& /*graph*/,
 
     pen.setColor(c);
     pt.setPen(pen);
-    gp.drawNode(pt, it->second.get(), m);
+    GeometryPainter::drawNode(pt, it->second.get(), m);
   }
 
   image.save(path);
@@ -414,14 +358,18 @@ void GraphComparator::_exportGraphImage(OsmMapPtr map, DirectedGraph& /*graph*/,
 
 void GraphComparator::_init()
 {
-  // make sure the intersections only lay on end nodes.
+  // Make sure the intersections only lay on end nodes.
   IntersectionSplitter::splitIntersections(_mapP1);
   IntersectionSplitter::splitIntersections(_mapP2);
   _debugImages = false;
 }
 
-cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp, double& maxGraphCost)
+cv::Mat GraphComparator::_paintGraph(
+  const ConstOsmMapPtr& map, const DirectedGraph& graph, const ShortestPath& sp,
+  double& maxGraphCost) const
 {
+  LOG_TRACE("Painting graph...");
+
   const WayMap& ways = map->getWays();
 
   cv::Mat mat(cvSize(_width, _height), CV_32FC1);
@@ -438,7 +386,14 @@ cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, Shorte
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr w = it->second;
+    LOG_VART(w.get());
+    LOG_VART(w->getNodeIds().size());
+    if (w->getNodeIds().empty())
+    {
+      continue;
+    }
     double cost = sp.getNodeCost(w->getNodeIds()[0]);
+    LOG_VART(cost);
     if (cost >= 0)
     {
       double friction = graph.determineCost(w);
@@ -455,8 +410,9 @@ cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, Shorte
   return mat;
 }
 
-void GraphComparator::_paintWay(cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, double friction,
-                                double startCost, double endCost)
+void GraphComparator::_paintWay(
+  cv::Mat& mat, const ConstOsmMapPtr& map, const ConstWayPtr& way, double friction,
+  double startCost, double endCost) const
 {
   LocationOfPoint lop(map, way);
   double length = ElementToGeometryConverter(map).convertToLineString(way)->getLength();

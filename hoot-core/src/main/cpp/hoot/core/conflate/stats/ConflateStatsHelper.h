@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CONFLATE_STATS_HELPER_H
 #define CONFLATE_STATS_HELPER_H
@@ -38,8 +38,6 @@ class SingleStat;
 
 /**
  * Used to calculate conflation stats that require the conflation input *and* output data
- *
- * TODO: rename this class to something more relevant
  */
 class ConflateStatsHelper
 {
@@ -53,15 +51,14 @@ public:
    *
    * @param statsToUpdate the set of stats to update
    */
-  void updateStats(QList<SingleStat>& statsToUpdate);
-
+  void updateStats(QList<SingleStat>& statsToUpdate) const;
   /**
    * Insert additional conflation stats into a set of existing stats at the specified location.
    *
    * @param statsToUpdate the set of stats to update
    * @param insertIndex the location in statsToUpdate where the stats should be insert
    */
-  void updateStats(QList<SingleStat>& statsToUpdate, long insertIndex);
+  void updateStats(QList<SingleStat>& statsToUpdate, long insertIndex) const;
 
   /**
    * Retrieves a stat by name from a set of stats
@@ -95,7 +92,7 @@ private:
    * These are useful stats if the reference map (map 1) is being treated as ground truth.
    * Eventually, may want to add the option to turn this on/off.
    */
-  void _addRefAsGroundTruthStats(QList<SingleStat>& statsToUpdate, long insertIndex);
+  void _addRefAsGroundTruthStats(QList<SingleStat>& statsToUpdate, long insertIndex) const;
 };
 
 }

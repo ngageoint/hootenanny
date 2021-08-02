@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVE_UNKNOWN_VISITOR_H
 #define REMOVE_UNKNOWN_VISITOR_H
@@ -46,14 +46,14 @@ public:
 
   void set(Status status) { _status = status; }
 
-  virtual void visit(const std::shared_ptr<Element>& e) override;
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " elements."; }
 
 protected:
 
-  RemoveUnknownVisitor(Status status) : _status(status) {}
+  RemoveUnknownVisitor(Status status) : _status(status) { }
 
 private:
 
@@ -72,16 +72,14 @@ public:
   static QString className() { return "hoot::RemoveUnknown1Visitor"; }
 
   RemoveUnknown1Visitor() : RemoveUnknownVisitor(Status::Unknown1) {}
-  virtual ~RemoveUnknown1Visitor() = default;
+  ~RemoveUnknown1Visitor() = default;
 
-  virtual QString getInitStatusMessage() const { return "Removing unknown1 elements..."; }
+  QString getInitStatusMessage() const override { return "Removing unknown1 elements..."; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Removes all elements with a status of Unknown1"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 /**
@@ -94,16 +92,14 @@ public:
   static QString className() { return "hoot::RemoveUnknown2Visitor"; }
 
   RemoveUnknown2Visitor() : RemoveUnknownVisitor(Status::Unknown2) {}
-  virtual ~RemoveUnknown2Visitor() = default;
+  ~RemoveUnknown2Visitor() = default;
 
-  virtual QString getInitStatusMessage() const { return "Removing unknown2 elements..."; }
+  QString getInitStatusMessage() const override { return "Removing unknown2 elements..."; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Removes all elements with a status of Unknown2"; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

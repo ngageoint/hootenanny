@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef COUNTMANUALMATCHESVISITOR_H
 #define COUNTMANUALMATCHESVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/SingleStatistic.h>
 
 namespace hoot
@@ -48,17 +48,17 @@ public:
 
   CountManualMatchesVisitor() : _numManualMatches(0) { }
 
-  virtual ~CountManualMatchesVisitor() = default;
+  ~CountManualMatchesVisitor() = default;
 
-  double getStat() const { return _numManualMatches; }
+  double getStat() const override { return _numManualMatches; }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Counts manual matches"; }
+  QString getDescription() const override { return "Counts manual matches"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "UuidHelperJs.h"
 
@@ -42,16 +42,18 @@ namespace hoot
 
 HOOT_JS_REGISTER(UuidHelperJs)
 
-void UuidHelperJs::Init(Handle<Object> exports)
+void UuidHelperJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> helpUuid = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "UuidHelper"), helpUuid);
-  helpUuid->Set(String::NewFromUtf8(current, "createUuid"),
-                FunctionTemplate::New(current, createUuid)->GetFunction());
-  helpUuid->Set(String::NewFromUtf8(current, "createUuid5"),
-                FunctionTemplate::New(current, createUuid5)->GetFunction());
+  Local<Context> context = current->GetCurrentContext();
+
+  Local<Object> helpUuid = Object::New(current);
+  exports->Set(context, toV8("UuidHelper"), helpUuid);
+  helpUuid->Set(context, toV8("createUuid"),
+                FunctionTemplate::New(current, createUuid)->GetFunction(context).ToLocalChecked());
+  helpUuid->Set(context, toV8("createUuid5"),
+                FunctionTemplate::New(current, createUuid5)->GetFunction(context).ToLocalChecked());
 }
 
 void UuidHelperJs::createUuid(const FunctionCallbackInfo<Value>& args)

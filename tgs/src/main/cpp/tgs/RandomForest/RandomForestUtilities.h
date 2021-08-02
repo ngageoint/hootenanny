@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef RANDOMFORESTUTILITIES_H
 #define RANDOMFORESTUTILITIES_H
@@ -87,7 +87,7 @@ namespace Tgs
      * @param filename the path to the target file
      * @return a set of training vectors
      */
-    static RandomForestInputs generateTrainingDataFromFile(std::string filename);
+    static RandomForestInputs generateTrainingDataFromFile(const std::string& filename);
 
   private:
     /**
@@ -95,7 +95,7 @@ namespace Tgs
      * @param filename the name of the file
      * @return a set of training vectors
      */
-    static RandomForestInputs _generateTrainingDataFromAARFFile(std::string filename);
+    static RandomForestInputs _generateTrainingDataFromAARFFile(const std::string& filename);
   };
 }
 

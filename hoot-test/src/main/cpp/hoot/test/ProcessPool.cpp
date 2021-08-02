@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ProcessPool.h"
 
@@ -39,6 +39,14 @@ bool JobQueue::empty()
 {
   _mutex.lock();
   bool e = _jobs.empty();
+//  if (e)
+//  {
+//    std::cout << "Job queue: " << _name.toStdString() << " empty. " << std::endl;
+//  }
+//  else
+//  {
+//    std::cout << "Job queue " << _name.toStdString() << " size: " << _jobs.size() << std::endl;
+//  }
   _mutex.unlock();
   return e;
 }
@@ -61,6 +69,7 @@ QString JobQueue::pop()
     job = *_jobs.begin();
     _jobs.erase(_jobs.begin());
   }
+  //std::cout << "launched test: " << job.toStdString() << std::endl;
   _mutex.unlock();
   return job;
 }
@@ -114,14 +123,16 @@ QProcess* ProcessThread::createProcess()
   QString names = (_showTestName ? "--names" : "");
   QString suppressFailureDetail = (_suppressFailureDetail ? "--suppress-failure-detail" : "");
   QString diff = (_printDiff ? "--diff" : "");
-  proc->start(QString("HootTest %1 %2 %3 --listen %4").arg(names).arg(suppressFailureDetail).arg(diff).arg((int)_waitTime));
+  proc->start(
+    QString("HootTest %1 %2 %3 --listen %4")
+    .arg(names).arg(suppressFailureDetail).arg(diff).arg((int)_waitTime));
   return proc;
 }
 
 void ProcessThread::run()
 {
   _proc.reset(createProcess());
-  if (_serialJobs != NULL)
+  if (_serialJobs != nullptr)
   {
     processJobs(_serialJobs);
     //  Reset the process between queues
@@ -230,40 +241,50 @@ ProcessPool::ProcessPool(int nproc, double waitTime,
   for (int i = 0; i < nproc; ++i)
   {
     //  First process gets the serial jobs
-    JobQueue* serial = (i == 0) ? &_serialJobs : NULL;
-    ProcessThreadPtr thread(new ProcessThread(showTestName,
-                                              suppressFailureDetail,
-                                              printDiff,
-                                              waitTime, &_mutex,
-                                              &_parallelJobs,
-                                              serial));
+    JobQueue* serial = (i == 0) ? &_serialJobs : nullptr;
+    ProcessThreadPtr thread =
+      std::make_shared<ProcessThread>(
+        showTestName, suppressFailureDetail, printDiff, waitTime, &_mutex, &_parallelJobs, serial);
     _threads.push_back(thread);
   }
 }
 
 ProcessPool::~ProcessPool()
 {
+  //std::cout << "Shutting down process pool..." << std::endl;
   for (vector<ProcessThreadPtr>::size_type i = 0; i < _threads.size(); ++i)
   {
     _threads[i]->quit();
     _threads[i]->wait();
   }
+  //std::cout << "Process pool shut down." << std::endl;
 }
 
 void ProcessPool::startProcessing()
 {
   for (vector<ProcessThreadPtr>::size_type i = 0; i < _threads.size(); ++i)
+  {
+    //std::cout << "Starting thread: " << i << std::endl;
     _threads[i]->start();
+  }
+  //std::cout << "All threads started." << std::endl;
 }
 
 void ProcessPool::wait()
 {
   for (vector<ProcessThreadPtr>::size_type i = 0; i < _threads.size(); ++i)
+  {
+    //std::cout << "Waiting for thread: " << i << std::endl;
     _threads[i]->wait();
+  }
+  //std::cout << "Finished waiting." << std::endl;
 }
 
 void ProcessPool::addJob(const QString& test, bool parallel)
 {
+  _parallelJobs.setName("parallel"); // TODO: move this somewhere else?
+  _serialJobs.setName("serial");
+
   if (parallel && !_serialJobs.contains(test))
     _parallelJobs.push(test);
   else if (!parallel)

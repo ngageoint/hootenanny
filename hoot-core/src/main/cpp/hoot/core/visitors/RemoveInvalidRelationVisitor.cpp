@@ -19,21 +19,21 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RemoveInvalidRelationVisitor.h"
 
 //  hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
 
 //  Standard library
 #include <unordered_map>
@@ -77,7 +77,7 @@ void RemoveInvalidRelationVisitor::visit(const ElementPtr& e)
           //  Merge the relation tags back on to the single way before deleting the relation
           ElementPtr element = _map->getElement(members[0].getElementId());
           Tags merged =
-            TagMergerFactory::getInstance().mergeTags(
+            TagMergerFactory::mergeTags(
               element->getTags(), r->getTags(), ElementType::Relation);
           element->setTags(merged);
         }
@@ -116,7 +116,7 @@ void RemoveInvalidRelationVisitor::_removeDuplicates(const RelationPtr& r)
     }
   }
   //  Re-insert the members that were duplicates but all instances were deleted
-  if (membersMap.size() > 0)
+  if (!membersMap.empty())
   {
     for (unordered_map<long, RelationData::Entry>::iterator it = membersMap.begin();
          it != membersMap.end(); ++it)

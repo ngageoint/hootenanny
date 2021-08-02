@@ -1,22 +1,17 @@
-20:26:27.831 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading script: test-files/cmd/slow/tSimple.js
+11:49:25.827 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Converting ...les/jakarta_raya_coastline.shp to ...k/BadJavaScriptTranslation.osm...
+11:49:25.833 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Loading maps: ...les/jakarta_raya_coastline.shp...
 Initialize works!
-20:26:27.859 ERROR ...ot/js/JavaScriptTranslator.cpp( 353) Error initializing JavaScript: test-files/cmd/slow/tSimple.js (63) 
-    if (translate !== undefined)
-    ^ 
-ReferenceError: translate is not defined
-20:26:27.859 INFO  ...t/core/io/PythonTranslator.cpp(  68) Initializing Python
-20:26:27.859 INFO  ...t/core/io/PythonTranslator.cpp(  99) Python path: translations:PYTHONPATH:/home/vagrant/hoot/translations
-20:26:28.864 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading script: translations/BadSyntaxTest.js
-20:26:28.889 ERROR ...ot/js/JavaScriptTranslator.cpp( 353) Error initializing JavaScript: translations/BadSyntaxTest.js (4) 
+11:49:25.861 ERROR  ...JavaScriptSchemaTranslator.cpp( 309) Error initializing JavaScript: Function call 'initialize' returned an error.
+11:49:26.410 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Converting ...les/jakarta_raya_coastline.shp to ...k/BadJavaScriptTranslation.osm...
+11:49:26.416 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Loading maps: ...les/jakarta_raya_coastline.shp...
+11:49:26.439 ERROR  ...JavaScriptSchemaTranslator.cpp( 309) Error initializing JavaScript: undefined:4: SyntaxError: Unexpected identifier
 foo is bad.
-    ^^ 
+    ^^
 SyntaxError: Unexpected identifier
-20:26:28.889 INFO  ...t/core/io/PythonTranslator.cpp(  68) Initializing Python
-20:26:28.889 INFO  ...t/core/io/PythonTranslator.cpp(  99) Python path: translations:PYTHONPATH:/home/vagrant/hoot/translations
-20:26:29.863 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading script: test-files/cmd/slow/BadRequire.js
-20:26:29.890 ERROR ...ot/js/JavaScriptTranslator.cpp( 353) Error initializing JavaScript: /home/vagrant/hoot/translations/BadSyntaxTest.js (4) 
+11:49:26.969 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Converting ...les/jakarta_raya_coastline.shp to ...k/BadJavaScriptTranslation.osm...
+11:49:26.975 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Loading maps: ...les/jakarta_raya_coastline.shp...
+11:49:27.009 ERROR  ...JavaScriptSchemaTranslator.cpp( 309) Error initializing JavaScript: undefined:4: SyntaxError: Unexpected identifier
 foo is bad.
-    ^^ 
+    ^^
 SyntaxError: Unexpected identifier
-20:26:29.891 INFO  ...t/core/io/PythonTranslator.cpp(  68) Initializing Python
-20:26:29.891 INFO  ...t/core/io/PythonTranslator.cpp(  99) Python path: translations:PYTHONPATH:/home/vagrant/hoot/translations
+    at <anonymous>:32:6

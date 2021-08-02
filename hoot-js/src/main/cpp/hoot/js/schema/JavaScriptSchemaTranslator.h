@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef JAVASCRIPT_SCHEMA_TRANSLATOR_H
@@ -60,8 +60,8 @@ class ElementType;
  * Script functions available:
  * http://qt-project.org/doc/qt-4.7/ecmascript.html
  */
-class JavaScriptSchemaTranslator : public ScriptSchemaTranslator, public ScriptToOgrSchemaTranslator,
-  public Configurable
+class JavaScriptSchemaTranslator : public ScriptSchemaTranslator,
+  public ScriptToOgrSchemaTranslator, public Configurable
 {
 public:
 
@@ -70,44 +70,44 @@ public:
   static int logWarnCount;
 
   JavaScriptSchemaTranslator();
-
   virtual ~JavaScriptSchemaTranslator();
 
   QString getScriptPath() const { return _scriptPath; }
 
   const Settings& getConfiguration() const { return _conf; }
 
-  virtual bool isValidScript();
+  bool isValidScript() override;
 
   /**
    * Should not be called publicly.
    */
   void _checkError();
 
-  /**
-   * Returns the number of times that this log message has been emitted.
-   */
-  int getLogCount(const QString& log);
-
-  virtual std::shared_ptr<const Schema> getOgrOutputSchema();
+  std::shared_ptr<const Schema> getOgrOutputSchema() override;
 
   // Filter for file names
-  virtual const QString getLayerNameFilter() override;
+  QString getLayerNameFilter() override;
 
   /**
    * Uses the specified script text instead of loading the script from a file.
    */
   void setScriptText(const QString& text) { close(); _scriptText = text; _scriptPath = QString(); }
 
-  virtual std::vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
-    geos::geom::GeometryTypeId geometryType);
+  std::vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
+    geos::geom::GeometryTypeId geometryType) override;
+  std::vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
+    geos::geom::GeometryTypeId geometryType) override;
 
-  virtual std::vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
-    geos::geom::GeometryTypeId geometryType);
-
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
 protected:
+
+  void _init() override;
+  void _finalize() override;
+
+  void _translateToOsm(Tags& t, const char *layerName, const char* geomType) override;
+
+private:
 
   std::shared_ptr<PluginContext> _gContext;
   QString _toOsmFunctionName;
@@ -118,45 +118,30 @@ protected:
   Tags* _tags;
   std::vector<double> _timing;
   QHash<QString, int> _logs;
-  v8::Handle<v8::Value> _empty[0]; // For function calls
+  v8::Local<v8::Value> _empty[0]; // For function calls
 
   Settings _conf;
 
-  std::vector<TranslatedFeature> _createAllFeatures(const QVariantList& vm);
-  std::shared_ptr<Feature> _createFeature(const QVariantMap& vm, QString& tableName);
+  std::vector<TranslatedFeature> _createAllFeatures(const QVariantList& vm) const;
+  std::shared_ptr<Feature> _createFeature(const QVariantMap& vm, QString& tableName) const;
 
-  virtual void _init();
-
-  /**
-   * Warn the user about the feature currently being processed.
-   */
-  void _featureWarn(const QString& message, const QString& fileName, const QString& functionName,
-                    int lineNumber);
-
-  virtual void _finalize();
-
-  QVariant& _getMapValue(QVariantMap& map, const QString& key);
-
-  void _parseEnumerations(DoubleFieldDefinition* fd, QVariant& enumerations) const;
-
-  void _parseEnumerations(IntegerFieldDefinition* fd, QVariant& enumerations) const;
-
-  void _parseEnumerations(LongIntegerFieldDefinition* fd, QVariant& enumerations) const;
+  void _parseEnumerations(
+    std::shared_ptr<DoubleFieldDefinition> fd, const QVariant& enumerations) const;
+  void _parseEnumerations(
+    std::shared_ptr<IntegerFieldDefinition> fd, const QVariant& enumerations) const;
+  void _parseEnumerations(
+    std::shared_ptr<LongIntegerFieldDefinition> fd, const QVariant& enumerations) const;
 
   std::shared_ptr<FieldDefinition> _parseFieldDefinition(const QVariant& fieldV) const;
 
   std::shared_ptr<Layer> _parseLayer(const QVariant& layer) const;
 
   double _toDouble(const QVariant& v) const;
-
   qint32 _toInt32(const QVariant& v) const;
-
   qint64 _toInt64(const QVariant& v) const;
 
   QVariantList _translateToOgrVariants(Tags& tags,
     ElementType elementType, geos::geom::GeometryTypeId geometryType);
-
-  virtual void _translateToOsm(Tags& t, const char *layerName, const char* geomType);
 };
 
 }

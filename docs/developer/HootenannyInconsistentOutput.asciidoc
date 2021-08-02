@@ -1,5 +1,5 @@
 
-== Inconsistent Output
+== Inconsistent Conflated Data Output
 
 Given the following conditions the output of Hootenanny should always be exactly the same:
 

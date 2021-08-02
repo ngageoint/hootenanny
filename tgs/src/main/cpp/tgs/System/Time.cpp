@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "Time.h"
@@ -51,7 +51,7 @@ namespace Tgs
       result = (double)(liStop.QuadPart) / (double)(liFrequency.QuadPart);
 #   else
       struct timeval tv;
-      gettimeofday(&tv, NULL);
+      gettimeofday(&tv, nullptr);
       result = (double)tv.tv_sec + (double)tv.tv_usec / 1e6;
 #   endif
     return result;

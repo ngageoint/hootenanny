@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PartialNetworkMerger.h"
 
@@ -55,10 +55,10 @@ _needsReview(false)
 }
 
 PartialNetworkMerger::PartialNetworkMerger(const set<pair<ElementId, ElementId>>& pairs,
-  QSet<ConstEdgeMatchPtr> edgeMatches, ConstNetworkDetailsPtr details) :
-  _pairs(pairs),
-  _edgeMatches(edgeMatches),
-  _details(details)
+  const QSet<ConstEdgeMatchPtr>& edgeMatches, const ConstNetworkDetailsPtr& details) :
+MergerBase(pairs),
+_edgeMatches(edgeMatches),
+_details(details)
 {
   assert(_pairs.size() >= 1);
 }
@@ -74,9 +74,10 @@ void PartialNetworkMerger::_appendSublineMappings(
       if (other->getSubline1().overlaps(sm->getSubline1()))
       {
         // We punt on this review, so no point in updating _needsReview.
-        throw NeedsReviewException("Internal Error: Overlapping partial matches were found. To "
-          "resolve please make the logical conflation operations manually. Please report this as "
-          "an error and include sample data to recreate.");
+        throw NeedsReviewException(
+          "Internal Error: Overlapping partial matches were found. To resolve please make the "
+          "logical conflation operations manually. Please report this as an error and include "
+          "sample data to recreate.");
       }
     }
     _allSublineMappings.append(sm);
@@ -91,7 +92,7 @@ void PartialNetworkMerger::apply(const OsmMapPtr& map,
 
   if (_edgeMatches.size() == 1 && (*_edgeMatches.begin())->containsStub())
   {
-    _processStubMatch(map, replaced, (*_edgeMatches.begin()));
+    _processStubMatch(map, replaced, *_edgeMatches.begin());
   }
   else
   {
@@ -103,13 +104,13 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
 {
   LOG_DEBUG("Applying PartialNetworkMerger...");
 
-  // we changed the sublines so we must update the indices.
+  // We changed the sublines, so we must update the indices.
   merger->updateSublineMapping();
 
   WayStringPtr str2 = merger->getMapping()->getWayString2();
 
   merger->mergeTags();
-  // set the status on all keeper ways to conflated.
+  // Set the status on all keeper ways to conflated.
   merger->setKeeperStatus(Status::Conflated);
   ConfigOptions conf;
   if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
@@ -140,14 +141,14 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
     }
   }
 
-  // TODO: this will need to replace one scrap with possibly multiple keeper elements
-  // - think about the case when the way is part of an interstate or bus relation
-  // remove the duplicate element.
+  // TODO: This will need to replace one scrap with possibly multiple keeper elements. Think about
+  // the case when the way is part of an interstate or bus relation remove the duplicate element.
   merger->replaceScraps();
 }
 
-WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(const OsmMapPtr& map,
-  vector<pair<ElementId, ElementId>>& replaced, ConstEdgeMatchPtr edgeMatch) const
+WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(
+  const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced,
+  ConstEdgeMatchPtr edgeMatch) const
 {
   // convert the EdgeStrings into WaySublineStrings
   WayStringPtr str1;
@@ -164,7 +165,7 @@ WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(const Osm
   LOG_VART(str1);
   LOG_VART(str2);
 
-  WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(str1, str2));
+  WayMatchStringMappingPtr mapping = std::make_shared<NaiveWayMatchStringMapping>(str1, str2);
   LOG_VART(mapping->toString());
 
   /******************
@@ -173,7 +174,7 @@ WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(const Osm
    * created at the beginning in the merger and used throughout the rest of the operations.
    ******************/
 
-  WayMatchStringMergerPtr merger(new WayMatchStringMerger(map, mapping, replaced));
+  WayMatchStringMergerPtr merger = std::make_shared<WayMatchStringMerger>(map, mapping, replaced);
   // merge the tags in the keeper segments
   merger->setTagMerger(TagMergerFactory::getInstance().getDefaultPtr());
   return merger;
@@ -204,7 +205,6 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
   }
   LOG_VART(_edgeMatches);
 
-  ///
   /// This approach may seem a little odd at first. We need to accomodate the following problems:
   ///
   /// - Merging while using relations to keep track of scraps is a no-go. This becomes horribly
@@ -220,7 +220,6 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
   /// 2. Split all the ways at one time so we don't have to keep track of scraps with relations or
   ///    similar.
   /// 3. Merge the matched sublines in turn.
-  ///
 
   // calculate all the mappings and split points for all matches.
   LOG_TRACE("Calculating mappings and split points for matches...");
@@ -238,7 +237,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
 
   try
   {
-    // split the ways in such a way that the mappings are updated appropriately.
+    // split the ways in such a way that the mappings are updated appropriately
     LOG_TRACE("Applying way splits...");
     WayMatchStringSplitter splitter;
     splitter.applySplits(map, replaced, _allSublineMappings);
@@ -250,7 +249,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
       _applyMerger(map, merger);
     }
   }
-  catch (NeedsReviewException& e)
+  catch (const NeedsReviewException& e)
   {
     set<ElementId> reviews;
     foreach (WayMatchStringMerger::SublineMappingPtr mapping, _allSublineMappings)
@@ -280,7 +279,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
 }
 
 void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
-  vector<pair<ElementId, ElementId>>& /*replaced*/, ConstEdgeMatchPtr edgeMatch)
+  const vector<pair<ElementId, ElementId>>& /*replaced*/, ConstEdgeMatchPtr edgeMatch)
 {
   LOG_TRACE("Processing stub match...");
   LOG_VART(edgeMatch);
@@ -344,7 +343,7 @@ void PartialNetworkMerger::replace(ElementId oldEid, ElementId newEid)
 
 QString PartialNetworkMerger::toString() const
 {
-  QString s = hoot::toString(_getPairs());
+  QString s = hoot::toString(_pairs);
   return QString("PartialNetworkMerger %1").arg(s);
 }
 

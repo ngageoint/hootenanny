@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef BUFFEREDOVERLAPEXTRACTOR_H
 #define BUFFEREDOVERLAPEXTRACTOR_H
@@ -38,42 +38,37 @@ namespace hoot
 class Element;
 
 /**
- * Shamelessly taken from JCS.
- *
- * This is exactly the same as the SymDiffMatcher (in JCS speak), so I've skipped implementing the
- * SymDiffMatcher.
- *
+ * @brief The BufferedOverlapExtractor class is similar to OverlapExtractor, but the objects are
+ * buffered before the overlap is calculated.
  * @author RoadMatcher
  * @copyright GPL
  * http://www.vividsolutions.com/products.asp?catg=spaapp&code=roadmatcher
  * The ideas were shamelessly taken from RoadMatcher, but reimplemented in C++ with Hootenanny
  * appropriate data structures.
+ * Shamelessly taken from JCS.
  */
 class BufferedOverlapExtractor : public FeatureExtractorBase, public Configurable
 {
 public:
 
   BufferedOverlapExtractor();
-  virtual ~BufferedOverlapExtractor() = default;
+  ~BufferedOverlapExtractor() = default;
   /**
-   * Similar to OverlapExtractor, but the objects are buffered before the overlap is calculated.
-   *
+   * @brief Constructor
    * @param bufferPortion Buffer the objects by this portion of the sqrt of the max area.
    */
   explicit BufferedOverlapExtractor(double bufferPortion);
 
   static QString className() { return "hoot::BufferedOverlapExtractor"; }
 
-  virtual QString getClassName() const override { return BufferedOverlapExtractor::className(); }
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getName() const override;
-
-  virtual void setConfiguration(const Settings& conf);
-
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getDescription() const
+  QString getClassName() const override { return BufferedOverlapExtractor::className(); }
+  QString getName() const override;
+  QString getDescription() const override
   { return "Determines the overlap between two features with buffering"; }
 
 private:

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RemoveMissingElementsVisitor.h"
@@ -39,9 +39,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, RemoveMissingElementsVisitor)
 RemoveMissingElementsVisitor::RemoveMissingElementsVisitor(
   const Log::WarningLevel& logLevel, const int maxReport)
 {
-  _v =
-    std::shared_ptr<ReportMissingElementsVisitor>(
-      new ReportMissingElementsVisitor(true, logLevel, maxReport));
+  _v = std::make_shared<ReportMissingElementsVisitor>(true, logLevel, maxReport);
 }
 
 void RemoveMissingElementsVisitor::visit(const ConstElementPtr& e)

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "NetworkMatcher.h"
 
@@ -49,8 +49,7 @@ void NetworkMatcher::_createEdge2Index()
 
   // No tuning was done, I just copied these settings from OsmMapIndex. 10 children = 368 bytes -
   // see #3054
-  std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-  _edge2Index.reset(new HilbertRTree(mps, 2));
+  _edge2Index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
   std::vector<Box> boxes;
   std::vector<int> fids;
@@ -76,7 +75,7 @@ void NetworkMatcher::_createEdge2Index()
     if (ctr % 10 == 0)
     {
       PROGRESS_INFO(
-        "Created " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Created " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(em.size()) << " edge mappings.");
     }
   }
@@ -84,7 +83,7 @@ void NetworkMatcher::_createEdge2Index()
   _edge2Index->bulkInsert(boxes, fids);
 }
 
-IntersectionIterator NetworkMatcher::_createIterator(Envelope env, HilbertRTreePtr tree)
+IntersectionIterator NetworkMatcher::_createIterator(const Envelope& env, HilbertRTreePtr tree) const
 {
   vector<double> min(2), max(2);
   min[0] = env.getMinX();
@@ -100,8 +99,7 @@ void NetworkMatcher::_createVertex2Index()
 {
   // No tuning was done, I just copied these settings from OsmMapIndex.
   // 10 children = 368 bytes - see #3054
-  std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-  _vertex2Index.reset(new HilbertRTree(mps, 2));
+  _vertex2Index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
   std::vector<Box> boxes;
   std::vector<int> fids;

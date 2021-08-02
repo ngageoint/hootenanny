@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __ELEMENT_ID_JS_H__
 #define __ELEMENT_ID_JS_H__
@@ -43,13 +43,11 @@ class ElementIdJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
+  static v8::Local<v8::Object> New(ElementId eid);
+  virtual ~ElementIdJs() = default;
 
   ElementId& getElementId() { return _eid; }
-
-  static v8::Handle<v8::Object> New(ElementId eid);
-
-  virtual ~ElementIdJs() = default;
 
 private:
 
@@ -61,13 +59,14 @@ private:
   static v8::Persistent<v8::Function> _constructor;
 
   static void getType(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void toJSON(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
+inline void toCpp(v8::Local<v8::Value> v, ElementId& eid)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
 
   // try as string first
   if (v->IsString())
@@ -82,10 +81,10 @@ inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
     throw IllegalArgumentException("Expected an object, got: (" + toString(v) + ")");
   }
 
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
 
-  QString className = str(obj->Get(PopulateConsumersJs::baseClass()));
-  ElementIdJs* eidj = 0;
+  QString className = str(obj->Get(context, PopulateConsumersJs::baseClass()).ToLocalChecked());
+  ElementIdJs* eidj = nullptr;
   if (obj->InternalFieldCount() >= 1 && className == ElementId::className())
   {
     eidj = node::ObjectWrap::Unwrap<ElementIdJs>(obj);
@@ -95,13 +94,13 @@ inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
   {
     eid = eidj->getElementId();
   }
-  else if (obj->Has(v8::String::NewFromUtf8(current, "id")) &&
-           obj->Has(v8::String::NewFromUtf8(current, "type")))
+  else if (obj->Has(context, v8::String::NewFromUtf8(current, "id").ToLocalChecked()).ToChecked() &&
+           obj->Has(context, v8::String::NewFromUtf8(current, "type").ToLocalChecked()).ToChecked())
   {
     long id;
     QString type;
-    toCpp(obj->Get(v8::String::NewFromUtf8(current, "id")), id);
-    toCpp(obj->Get(v8::String::NewFromUtf8(current, "type")), type);
+    toCpp(obj->Get(context, toV8("id")).ToLocalChecked(), id);
+    toCpp(obj->Get(context, toV8("type")).ToLocalChecked(), type);
     eid = ElementId(ElementType::fromString(type), id);
   }
   else
@@ -110,7 +109,7 @@ inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
   }
 }
 
-inline v8::Handle<v8::Value> toV8(const ElementId& eid)
+inline v8::Local<v8::Value> toV8(const ElementId& eid)
 {
   return ElementIdJs::New(eid);
 }

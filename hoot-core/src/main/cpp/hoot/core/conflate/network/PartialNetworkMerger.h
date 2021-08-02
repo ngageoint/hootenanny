@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef PARTIALNETWORKMERGER_H
 #define PARTIALNETWORKMERGER_H
@@ -38,7 +38,6 @@ namespace hoot
 {
 
 /**
- * Rename to NetworkMerger and delete NetworkMerger?
  * Merges one or more partial matches. The matches must not be conflicting.
  */
 class PartialNetworkMerger : public MergerBase, public EidMapper
@@ -52,38 +51,32 @@ public:
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  PartialNetworkMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
-    QSet<ConstEdgeMatchPtr> edgeMatches, ConstNetworkDetailsPtr details);
-  virtual ~PartialNetworkMerger() = default;
+  PartialNetworkMerger(
+    const std::set<std::pair<ElementId, ElementId>>& pairs,
+    const QSet<ConstEdgeMatchPtr>& edgeMatches, const ConstNetworkDetailsPtr& details);
+  ~PartialNetworkMerger() = default;
 
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
+  void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /**
    * Maps from a retired EID to its latest EID. If this EID has no mapping then the original EID
    * is returned.
    */
-  virtual ElementId mapEid(const ElementId& oldEid) const;
+  ElementId mapEid(const ElementId& oldEid) const override;
 
-  virtual void replace(ElementId oldEid, ElementId newEid);
+  void replace(ElementId oldEid, ElementId newEid) override;
 
-  virtual QString toString() const;
+  QString toString() const override;
 
-  virtual QString getDescription() const { return "Merges roads matched by the Network Algorithm"; }
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Merges roads matched by the Network Algorithm"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   bool getNeedsReview() const { return _needsReview; }
 
-protected:
-
-  virtual PairsSet& _getPairs() { return _pairs; }
-  virtual const PairsSet& _getPairs() const { return _pairs; }
-
 private:
 
-  PairsSet _pairs;
   QSet<ConstEdgeMatchPtr> _edgeMatches;
   ConstNetworkDetailsPtr _details;
   QHash<ElementId, ElementId> _substitions;
@@ -103,7 +96,7 @@ private:
                          std::vector<std::pair<ElementId, ElementId>>& replaced);
 
   void _processStubMatch(const OsmMapPtr& map,
-                         std::vector<std::pair<ElementId, ElementId>>& replaced,
+                         const std::vector<std::pair<ElementId, ElementId>>& replaced,
                          ConstEdgeMatchPtr edgeMatch);
 };
 

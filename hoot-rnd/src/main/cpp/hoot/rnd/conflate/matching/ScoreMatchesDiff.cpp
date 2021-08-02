@@ -19,26 +19,27 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ScoreMatchesDiff.h"
 
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/conflate/matching/MatchType.h>
-#include <hoot/core/visitors/ElementIdToTagValueMapper.h>
-#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/conflate/matching/MatchStatusChange.h>
-#include <hoot/core/visitors/UniqueElementIdVisitor.h>
-#include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/visitors/CountManualMatchesVisitor.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
+#include <hoot/core/visitors/ElementIdToTagValueMapper.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
 
 namespace hoot
 {
@@ -91,17 +92,17 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
   _input1 = input1;
   _input2 = input2;
   LOG_INFO(
-    "Calculating match scoring differential for " << _input1.right(25) << " and " <<
-    _input2.right(25) << "...");
+    "Calculating match scoring differential for " << FileUtils::toLogFormat(_input1, 25) << " and " <<
+    FileUtils::toLogFormat(_input2, 25) << "...");
 
   // Considered making this not memory bound, but our scoring data outputs aren't ever humongous
   // and the inputs had to be conflated at some point where they were read completely into
   // memory anyway. There's a lot of repeated element processing here that could be optimized.
 
-  OsmMapPtr map1(new OsmMap());
+  OsmMapPtr map1 = std::make_shared<OsmMap>();
   IoUtils::loadMap(map1, _input1, true);
   map1->setName("original");
-  OsmMapPtr map2(new OsmMap());
+  OsmMapPtr map2 = std::make_shared<OsmMap>();
   IoUtils::loadMap(map2, _input2, true);
   map2->setName("new");
 
@@ -110,24 +111,25 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
 
   // count the manual matches made
 
-  std::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor(
-    new CountManualMatchesVisitor());
+  std::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor =
+    std::make_shared<CountManualMatchesVisitor>();
   map1->visitRo(*manualMatchVisitor);
-  const int numManualMatches1 = manualMatchVisitor->getStat();
-  manualMatchVisitor.reset(new CountManualMatchesVisitor());
+  const int numManualMatches1 = static_cast<int>(manualMatchVisitor->getStat());
+  manualMatchVisitor = std::make_shared<CountManualMatchesVisitor>();
   map2->visitRo(*manualMatchVisitor);
-  const int numManualMatches2 = manualMatchVisitor->getStat();
+  const int numManualMatches2 = static_cast<int>(manualMatchVisitor->getStat());
 
   LOG_VARD(numManualMatches1);
   LOG_VARD(numManualMatches2);
 
-  if (numManualMatches1 != numManualMatches2)
-  {
-    throw HootException(
-      QString("The two input datasets have a different number of manual matches (") +
-      QString::number(numManualMatches1) + " and " + QString::number(numManualMatches2) +
-      QString(") and, therefore, must not been derived from the same input data."));
-  }
+  // TODO: This ends up being true a lot, so maybe not a good check?
+//  if (numManualMatches1 != numManualMatches2)
+//  {
+//    throw HootException(
+//      QString("The two input datasets have a different number of manual matches (") +
+//      QString::number(numManualMatches1) + " and " + QString::number(numManualMatches2) +
+//      QString(") and, therefore, must not been derived from the same input data."));
+//  }
   _numManualMatches = numManualMatches1;
 
   // get all expected/actual match types
@@ -228,22 +230,22 @@ bool ScoreMatchesDiff::printDiff(const QString& output)
   }
 
   LOG_INFO(
-    "Writing match scoring differential for " << _input1.right(25) << " and " <<
-     _input2.right(25) << " to " << _output.right(25) << "...");
+    "Writing match scoring differential for " << FileUtils::toLogFormat(_input1, 25) << " and " <<
+     FileUtils::toLogFormat(_input2, 25) << " to " << FileUtils::toLogFormat(_output, 25) << "...");
 
   _outputFile = _getOutputFile(_output);
   QTextStream out(_outputFile.get());
 
-  out << "Input files: " << _input1.right(25) << " and " << _input2.right(25) << "\n\n";
+  out << "Input files: ..." << FileUtils::toLogFormat(_input1, 25) << " and ..." << FileUtils::toLogFormat(_input2, 25) << "\n\n";
   _writeConflateStatusSummary(out);
   _writeConflateStatusDetail(out);
 
   return true;
 }
 
-std::shared_ptr<QFile> ScoreMatchesDiff::_getOutputFile(const QString& outputPath)
+std::shared_ptr<QFile> ScoreMatchesDiff::_getOutputFile(const QString& outputPath) const
 {
-  std::shared_ptr<QFile> outputFile(new QFile(outputPath));
+  std::shared_ptr<QFile> outputFile = std::make_shared<QFile>(outputPath);
   if (outputFile->exists())
   {
     outputFile->remove();
@@ -264,7 +266,7 @@ QSet<ElementId> ScoreMatchesDiff::_getAllIds(const ConstOsmMapPtr& map)
 }
 
 QMap<ElementId, QString> ScoreMatchesDiff::_getMatchStatuses(
-  const ConstOsmMapPtr& map, const QString& tagKey)
+  const ConstOsmMapPtr& map, const QString& tagKey) const
 {
   LOG_DEBUG("Retrieving match status: " << tagKey << " for " << map->getName() << "...");
   ElementIdToTagValueMapper vis;
@@ -285,7 +287,7 @@ QSet<ElementId> ScoreMatchesDiff::_getWrong(const ConstOsmMapPtr& map)
 
 QMap<QString, QSet<ElementId>> ScoreMatchesDiff::_getMatchScoringDiff(
   const QSet<ElementId>& elementIds, const QMap<ElementId, QString>& expectedTagMappings,
-  const QMap<ElementId, QString>& actualTagMappings)
+  const QMap<ElementId, QString>& actualTagMappings) const
 {
   LOG_DEBUG("Calculating match scoring diff...");
   QMap<QString, QSet<ElementId>> matchSwitches;
@@ -294,13 +296,17 @@ QMap<QString, QSet<ElementId>> ScoreMatchesDiff::_getMatchScoringDiff(
     const ElementId id = *itr;
     if (!expectedTagMappings.contains(id))
     {
-      throw HootException("Can't find ID: " + id.toString() + " for expected.");
+      // TODO: This ends up happening a lot, so maybe not a good reason to throw an error?
+      //throw HootException("Can't find ID: " + id.toString() + " for expected.");
+      continue;
     }
     QString expectedMatchTypeStr = expectedTagMappings[id];
     MatchType expectedMatchType = MatchType(expectedMatchTypeStr);
     if (!actualTagMappings.contains(id))
     {
-      throw HootException("Can't find ID: " + id.toString() + " for actual.");
+      // See note above.
+      //throw HootException("Can't find ID: " + id.toString() + " for actual.");
+      continue;
     }
     QString actualMatchTypeStr = actualTagMappings[id];
     MatchType actualMatchType = MatchType(actualMatchTypeStr);
@@ -343,7 +349,7 @@ QMap<QString, QSet<ElementId>> ScoreMatchesDiff::_getMatchScoringDiff(
 
 void ScoreMatchesDiff::_setAddedAndRemovedElements(
   const QSet<ElementId>& all1Ids, const QSet<ElementId>& all2Ids,
-  QSet<ElementId>& elementIdsAdded, QSet<ElementId>& elementIdsRemoved)
+  QSet<ElementId>& elementIdsAdded, QSet<ElementId>& elementIdsRemoved) const
 {
   LOG_DEBUG("Recording added/removed elements...");
   QSet<ElementId> allIds = all1Ids;
@@ -405,8 +411,9 @@ void ScoreMatchesDiff::_writeConflateStatusSummary(QTextStream& out)
     summary += QString::number(abs(_reviewDifferential)) + " reviews were lost.\n";
   }
 
+  summary = summary.trimmed();
   std::cout << summary << std::endl;
-  std::cout << "Detailed information available in: " << _output << "." << std::endl;
+  std::cout << "\nDetailed information available in: " << _output << "." << std::endl;
 
   out << summary;
 }
@@ -415,17 +422,18 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
 {
   LOG_DEBUG("Printing conflate status detail...");
 
-  out << "\nMatch Type Changes\n";
+  QString detail;
+  detail += "\n\nMatch Type Changes\n";
   if (_newlyWrongMatchSwitches.size() + _newlyCorrectMatchSwitches.size() == 0)
   {
-    out << "none";
+    detail += "none";
   }
   else
   {
-    out << "\nNew Wrong Matches:\n\n";
-    if (_newlyWrongMatchSwitches.size() == 0)
+    detail += "\nNew Wrong Matches:\n";
+    if (_newlyWrongMatchSwitches.empty())
     {
-      out << "none";
+      detail += "none";
     }
     else
     {
@@ -433,21 +441,22 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
            itr != _newlyWrongMatchSwitches.end(); ++itr)
       {
         const QString matchSwitchTypeStr = itr.key();
-        out << "\n" << matchSwitchTypeStr << "\n\n";
+        detail += "\n" + matchSwitchTypeStr + ":\n\n";
         QList<ElementId> ids = itr.value().toList();
         qSort(ids);
         for (QList<ElementId>::const_iterator itr2 = ids.begin(); itr2 != ids.end(); ++itr2)
         {
           const ElementId id = *itr2;
-          out << id.toString() << "\n";
+          detail += id.toString() + "\n";
         }
       }
+      detail = detail.trimmed();
     }
 
-    out << "\nNew Correct Matches:\n\n";
-    if (_newlyCorrectMatchSwitches.size() == 0)
+    detail += "\n\nNew Correct Matches:\n\n";
+    if (_newlyCorrectMatchSwitches.empty())
     {
-      out << "none";
+      detail += "none";
     }
     else
     {
@@ -455,22 +464,23 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
            itr != _newlyCorrectMatchSwitches.end(); ++itr)
       {
         const QString matchSwitchTypeStr = itr.key();
-        out << "\n" << matchSwitchTypeStr << "\n\n";
+        detail += "\n" + matchSwitchTypeStr + "\n\n";
         QList<ElementId> ids = itr.value().toList();
         qSort(ids);
         for (QList<ElementId>::const_iterator itr2 = ids.begin(); itr2 != ids.end(); ++itr2)
         {
           const ElementId id = *itr2;
-          out << id.toString() << "\n";
+          detail += id.toString() + "\n";
         }
       }
     }
+    detail = detail.trimmed();
   }
 
-  out << "\n\nAdded Elements:\n\n";
-  if (_elementIdsAdded.size() == 0)
+  detail +="\n\nAdded Elements:\n\n";
+  if (_elementIdsAdded.empty())
   {
-    out << "none";
+    detail += "none";
   }
   else
   {
@@ -480,14 +490,15 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
          itr != elementIdsAdded.end(); ++itr)
     {
       const ElementId id = *itr;
-      out << id.toString() << "\n";
+      detail += id.toString() + "\n";
     }
+    detail = detail.trimmed();
   }
 
-  out << "\nRemoved Elements:\n\n";
-  if (_elementIdsRemoved.size() == 0)
+  detail += "\n\nRemoved Elements:\n\n";
+  if (_elementIdsRemoved.empty())
   {
-     out << "none";
+     detail += "none";
   }
   else
   {
@@ -497,9 +508,12 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
          itr != elementIdsRemoved.end(); ++itr)
     {
       const ElementId id = *itr;
-      out << id.toString() << "\n";
+      detail += id.toString() + "\n";
     }
+    detail = detail.trimmed();
   }
+
+  out << detail;
 }
 
 }

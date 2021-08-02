@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef HOOTAPIDBBULKINSERTER_H
 #define HOOTAPIDBBULKINSERTER_H
@@ -57,17 +57,17 @@ public:
   static QString className() { return "hoot::HootApiDbBulkInserter"; }
 
   HootApiDbBulkInserter();
-  virtual ~HootApiDbBulkInserter();
+  ~HootApiDbBulkInserter();
 
-  virtual bool isSupported(const QString& url) override;
-  virtual void open(const QString& url) override;
+  bool isSupported(const QString& url) override;
+  void open(const QString& url) override;
 
-  virtual void finalizePartial();
-  virtual void writePartial(const ConstNodePtr& node) override;
-  virtual void writePartial(const ConstWayPtr& way) override;
-  virtual void writePartial(const ConstRelationPtr& relation) override;
+  void finalizePartial() override;
+  void writePartial(const ConstNodePtr& node) override;
+  void writePartial(const ConstWayPtr& way) override;
+  void writePartial(const ConstRelationPtr& relation) override;
 
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
   long getMapId() const { return _database.getMapId(); }
 
@@ -76,42 +76,42 @@ public:
   void setOverwriteMap(bool overwriteMap) { _overwriteMap = overwriteMap; }
   void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
 
-  virtual QString supportedFormats() override { return MetadataTags::HootApiDbScheme() + "://"; }
+  QString supportedFormats() override { return MetadataTags::HootApiDbScheme() + "://"; }
 
 protected:
 
-  virtual unsigned int _numberOfFileDataPasses() const;
+  unsigned int _numberOfFileDataPasses() const override;
 
-  virtual unsigned long _getTotalRecordsWritten() const;
-  virtual unsigned long _getTotalFeaturesWritten() const;
+  unsigned long _getTotalRecordsWritten() const override;
+  unsigned long _getTotalFeaturesWritten() const override;
 
   //creates the output files containing the data
-  virtual void _createNodeOutputFiles();
-  virtual QStringList _createSectionNameList() override;
-  virtual void _createWayOutputFiles();
-  virtual void _createRelationOutputFiles();
+  void _createNodeOutputFiles() override;
+  QStringList _createSectionNameList() override;
+  void _createWayOutputFiles() override;
+  void _createRelationOutputFiles() override;
 
-  virtual void _writeChangeset();
-  virtual void _writeRelation(const unsigned long relationDbId, const Tags& tags,
+  void _writeChangeset() override;
+  void _writeRelation(const unsigned long relationDbId, const Tags& tags,
                               const unsigned long version);
-  virtual void _writeRelationMember(const unsigned long sourceRelationDbId,
+  void _writeRelationMember(const unsigned long sourceRelationDbId,
                                     const RelationData::Entry& member,
                                     const unsigned long memberDbId,
                                     const unsigned int memberSequenceIndex,
                                     const unsigned long version) override;
-  virtual void _writeWay(const unsigned long wayDbId, const Tags& tags, const unsigned long version);
-  virtual void _writeWayNodes(const unsigned long wayId,
+  void _writeWay(const unsigned long wayDbId, const Tags& tags, const unsigned long version);
+  void _writeWayNodes(const unsigned long wayId,
                               const std::vector<long>& wayNodeIds,
                               const unsigned long version) override;
-  virtual void _writeNode(const ConstNodePtr& node, const unsigned long nodeDbId) override;
+  void _writeNode(const ConstNodePtr& node, const unsigned long nodeDbId) override;
 
-  virtual void _writeCombinedSqlFile();
-  virtual void _writeDataToDb();
-  virtual void _writeDataToDbPsql();
+  void _writeCombinedSqlFile() override;
+  void _writeDataToDb() override;
+  void _writeDataToDbPsql() override;
 
-  virtual bool _destinationIsDatabase() const { return true; }
+  bool _destinationIsDatabase() const  override{ return true; }
 
-  virtual void _incrementChangesInChangeset();
+  void _incrementChangesInChangeset() override;
 
 private:
 

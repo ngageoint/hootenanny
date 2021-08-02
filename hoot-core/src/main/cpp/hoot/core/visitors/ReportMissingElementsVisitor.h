@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REPORTMISSINGELEMENTSVISITOR_H
 #define REPORTMISSINGELEMENTSVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Log.h>
@@ -53,25 +53,22 @@ public:
   ReportMissingElementsVisitor(const bool removeMissing = false,
                                const Log::WarningLevel& logLevel = Log::Trace,
                                const int maxReport = Log::getWarnMessageLimit());
-  virtual ~ReportMissingElementsVisitor() = default;
+  ~ReportMissingElementsVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
+  void setOsmMap(OsmMap* map) override { _map = map; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getDescription() const
-  { return "Reports references to missing elements in a map"; }
-
-  virtual QString getInitStatusMessage() const { return "Reporting missing elements..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getInitStatusMessage() const override { return "Reporting missing elements..."; }
+  QString getCompletedStatusMessage() const override
   { return "Reported " + StringUtils::formatLargeNumber(_missingCount) + " missing elements."; }
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Reports references to missing elements in a map"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   int getMissingCount() const { return _missingCount; }
 
@@ -86,7 +83,7 @@ public:
   void setWayKvp(QString kvp) { _wayKvp = kvp; }
   void setRelationKvp(QString kvp) { _relationKvp = kvp; }
 
-protected:
+private:
 
   OsmMap* _map;
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -46,6 +46,9 @@ public:
 
   static QString className() { return "hoot::HelpCmd"; }
 
+  QString getName() const override { return "help"; }
+  QString getDescription() const override { return "Displays help documentation"; }
+
   HelpCmd()
   {
     // Add hoot-core commands to this list that are not part of hoot-rnd and are typically used by
@@ -59,14 +62,14 @@ public:
     _forceToRndList.append("optimize-network-conf");
     _forceToRndList.append("perturb");
     _forceToRndList.append("score-matches");
+    _forceToRndList.append("sort");
     _forceToRndList.append("type-similarity");
   }
 
   static bool commandCompare(const QString& n1, const QString& n2)
   {
-    std::shared_ptr<Command> c1(Factory::getInstance().constructObject<Command>(n1));
-    std::shared_ptr<Command> c2(Factory::getInstance().constructObject<Command>(n2));
-
+    std::shared_ptr<Command> c1 = Factory::getInstance().constructObject<Command>(n1);
+    std::shared_ptr<Command> c2 =  Factory::getInstance().constructObject<Command>(n2);
     return c1->getName() < c2->getName();
   }
 
@@ -74,10 +77,6 @@ public:
   {
     return c1->getName() < c2->getName();
   }
-
-  virtual QString getName() const override { return "help"; }
-
-  virtual QString getDescription() const override { return "Displays help documentation"; }
 
   virtual int runSimple(QStringList& args) override
   {
@@ -110,7 +109,7 @@ private:
     bool foundIt = false;
     for (size_t i = 0; i < cmds.size(); i++)
     {
-      std::shared_ptr<Command> c(Factory::getInstance().constructObject<Command>(cmds[i]));
+      std::shared_ptr<Command> c = Factory::getInstance().constructObject<Command>(cmds[i]);
 
       if (c->getName() == command)
       {
@@ -131,6 +130,14 @@ private:
 
   int _printSummary()
   {
+    cout << endl << "For detailed command help type: hoot help (command name)" << endl << endl;
+
+    // Please update the asciidoc user documentation if you change this usage.
+    cout << "Usage:" << endl << endl;
+    cout << "hoot <command> [--logLevel] [-C configFile ] [-D optionName=optionValue] \\" << endl <<
+            "  [-D optionName=\"<optionValueEntry 1>;<optionValueEntry 2>;...\"] [args]"
+         << endl << endl;
+
     const vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
     vector<std::shared_ptr<Command>> coreCmds;
     vector<std::shared_ptr<Command>> rndCmds;
@@ -138,8 +145,8 @@ private:
     {
       const QString cmdClassName = cmds[i];
       LOG_VART(cmdClassName);
-      std::shared_ptr<Command> command(
-        Factory::getInstance().constructObject<Command>(cmdClassName));
+      std::shared_ptr<Command> command =
+        Factory::getInstance().constructObject<Command>(cmdClassName);
       if (command->displayInHelp())
       {
         const QString commandName = command->getName();
@@ -168,28 +175,21 @@ private:
     cout << endl << "Advanced Commands:" << endl << endl;
     _printCommands(rndCmds);
 
-    // Please update the asciidoc user documentation if you change this usage.
-    cout << endl << "Usage:" << endl << endl;
-    cout << "hoot <command> [--logLevel] [-C configFile ] [-D optionName=optionValue] " <<
-            "[-D optionName=\"<optionValueEntry 1>;<optionValueEntry 2>;...\"] [args]"
-         << endl << endl;
-
-    cout << "For detailed command help type: hoot help (command name)" << endl << endl;
-
-    cout << "Log Levels:" << endl;
-    cout << "  --trace" << endl;
-    cout << "  --debug" << endl;
-    cout << "  --info" << endl;
-    cout << "  --status" << endl;
-    cout << "  --warn" << endl;
+    cout << endl << "Log Levels:" << endl << endl;
     cout << "  --error" << endl;
+    cout << "  --warn" << endl;
+    cout << "  --status (default)" << endl;
+    cout << "  --info" << endl;
+    cout << "  --debug" << endl;
+    cout << "  --trace" << endl;
     cout << endl;
 
-    cout << "List Option Operations:" << endl;
-    cout << "  Append:  [-D optionName+=optionValueEntry]" << endl;
-    cout << "  Prepend: [-D optionName++=optionValueEntry]" << endl;
-    cout << "  Remove:  [-D optionName-=optionValueEntry]" << endl;
-    cout << "  Replace: [-D optionName=\"[old optionValueEntry 1]->[new optionValueEntry 1];[old optionValueEntry 2]->[new optionValueEntry 2]\"...]"
+    cout << "List Option Operations:" << endl << endl;
+    cout << "  Append:  [-D optionName+=optionValue]" << endl;
+    cout << "  Prepend: [-D optionName++=optionValue]" << endl;
+    cout << "  Remove:  [-D optionName-=optionValue]" << endl;
+    cout << "  Replace: [-D optionName=\"[old optionValue 1]->[new optionValue 1];\\"
+         << endl << "                           [old optionValue 2]->[new optionValue 2]\"...]"
          << endl;
 
     return 0;

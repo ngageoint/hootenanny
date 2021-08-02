@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PartialOsmMapWriter.h"
 
@@ -44,28 +44,23 @@ void PartialOsmMapWriter::writePartial(const ConstOsmMapPtr& map)
   const NodeMap& nm = map->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    writePartial(it->second);
+    writePartial((ConstNodePtr)it->second);
   }
 
   const WayMap& wm = map->getWays();
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
-    writePartial(it->second);
+    writePartial((ConstWayPtr)it->second);
   }
 
   const RelationMap& rm = map->getRelations();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
   {
-    writePartial(it->second);
+    writePartial((ConstRelationPtr)it->second);
   }
 }
 
-void PartialOsmMapWriter::writePartial(const OsmMapPtr& map)
-{
-  writePartial((const ConstOsmMapPtr)map);
-}
-
-void PartialOsmMapWriter::writePartial(const std::shared_ptr<const Element>& e)
+void PartialOsmMapWriter::writePartial(const ConstElementPtr& e)
 {
   switch (e->getElementType().getEnum())
   {

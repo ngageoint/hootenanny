@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -219,9 +219,9 @@ public:
     QStringList mergers;
     mergers.append("hoot::NetworkMergerCreator");
     conf().set("merger.creators", mergers.join(";"));
-    conf().set("way.subline.matcher", "hoot::FrechetSublineMatcher");
+    conf().set("highway.subline.matcher", "hoot::FrechetSublineMatcher");
     OptionsValidator::fixMisc();
-    HOOT_STR_EQUALS("hoot::FrechetSublineMatcher", conf().get("way.subline.matcher"));
+    HOOT_STR_EQUALS("hoot::FrechetSublineMatcher", conf().get("highway.subline.matcher"));
 
     TestUtils::resetEnvironment();
     matchers.clear();
@@ -230,9 +230,9 @@ public:
     mergers.clear();
     mergers.append("hoot::NetworkMergerCreator");
     conf().set("merger.creators", mergers.join(";"));
-    conf().set("way.subline.matcher", "hoot::MaximalSublineMatcher");
+    conf().set("highway.subline.matcher", "hoot::MaximalSublineMatcher");
     OptionsValidator::fixMisc();
-    HOOT_STR_EQUALS("hoot::MaximalSublineMatcher", conf().get("way.subline.matcher"));
+    HOOT_STR_EQUALS("hoot::MaximalSublineMatcher", conf().get("highway.subline.matcher"));
 
     TestUtils::resetEnvironment();
     matchers.clear();
@@ -241,9 +241,9 @@ public:
     mergers.clear();
     mergers.append("hoot::NetworkMergerCreator");
     conf().set("merger.creators", mergers.join(";"));
-    conf().set("way.subline.matcher", "blah");
+    conf().set("highway.subline.matcher", "blah");
     OptionsValidator::fixMisc();
-    HOOT_STR_EQUALS("hoot::MaximalSublineMatcher", conf().get("way.subline.matcher"));
+    HOOT_STR_EQUALS("hoot::MaximalSublineMatcher", conf().get("highway.subline.matcher"));
 
     matchers.clear();
     matchers.append("hoot::HighwayMatchCreator");
@@ -251,9 +251,9 @@ public:
     mergers.clear();
     mergers.append("hoot::HighwayMergerCreator");
     conf().set("merger.creators", mergers.join(";"));
-    conf().set("way.subline.matcher", "hoot::FrechetSublineMatcher");
+    conf().set("highway.subline.matcher", "hoot::FrechetSublineMatcher");
     OptionsValidator::fixMisc();
-    HOOT_STR_EQUALS("hoot::FrechetSublineMatcher", conf().get("way.subline.matcher"));
+    HOOT_STR_EQUALS("hoot::FrechetSublineMatcher", conf().get("highway.subline.matcher"));
 
     TestUtils::resetEnvironment();
     matchers.clear();
@@ -262,9 +262,10 @@ public:
     mergers.clear();
     mergers.append("hoot::HighwayMergerCreator");
     conf().set("merger.creators", mergers.join(";"));
-    conf().set("way.subline.matcher", "hoot::MaximalNearestSublineMatcher");
+    conf().set("highway.subline.matcher", "hoot::MaximalNearestSublineMatcher");
     OptionsValidator::fixMisc();
-    HOOT_STR_EQUALS("hoot::MaximalNearestSublineMatcher", conf().get("way.subline.matcher"));
+    HOOT_STR_EQUALS(
+      "hoot::MaximalNearestSublineMatcher", conf().get("highway.subline.matcher"));
 
     TestUtils::resetEnvironment();
     matchers.clear();
@@ -273,9 +274,10 @@ public:
     mergers.clear();
     mergers.append("hoot:HighwayMergerCreator");
     conf().set("merger.creators", mergers.join(";"));
-    conf().set("way.subline.matcher", "blah");
+    conf().set("highway.subline.matcher", "blah");
     OptionsValidator::fixMisc();
-    HOOT_STR_EQUALS("hoot::MaximalNearestSublineMatcher", conf().get("way.subline.matcher"));
+    HOOT_STR_EQUALS(
+      "hoot::MaximalNearestSublineMatcher", conf().get("highway.subline.matcher"));
   }
 
   void runAutoCorrectClassifierTest()

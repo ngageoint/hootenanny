@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ArffReader.h"
@@ -33,8 +33,8 @@
 
 // Hoot
 #include <hoot/core/conflate/matching/MatchType.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/scoring/DataSamples.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QStringList>
@@ -51,27 +51,26 @@ ArffReader::ArffReader(istream* strm) : _strm(strm)
 {
 }
 
-ArffReader::ArffReader(QString path)
+ArffReader::ArffReader(QString path) :
+_autoStrm(std::make_shared<std::fstream>())
 {
   LOG_DEBUG("Opening " + path + " for input.");
-  fstream* fs = new fstream();
-  fs->exceptions(fstream::badbit);
+  _autoStrm->exceptions(fstream::badbit);
   QByteArray arr = path.toUtf8();
-  fs->open(arr.data(), ios_base::in | ios_base::binary);
-  _autoStrm.reset(fs);
-  _strm = fs;
+  _autoStrm->open(arr.data(), ios_base::in | ios_base::binary);
+  _strm = _autoStrm.get();
 
   if (path.endsWith(".bz2"))
   {
-    _bstrm.reset(new boost::iostreams::filtering_istream);
+    _bstrm = std::make_shared<boost::iostreams::filtering_istream>();
     boost::iostreams::filtering_istream& zdat = *_bstrm;
     zdat.push(boost::iostreams::bzip2_decompressor());
-    zdat.push(*fs);
+    zdat.push(*_autoStrm.get());
     _strm = &zdat;
   }
 }
 
-bool ArffReader::_eof()
+bool ArffReader::_eof() const
 {
   bool result;
   if (_bstrm.get())
@@ -88,7 +87,7 @@ bool ArffReader::_eof()
 
 std::shared_ptr<DataSamples> ArffReader::read()
 {
-  std::shared_ptr<DataSamples> result(new DataSamples());
+  std::shared_ptr<DataSamples> result = std::make_shared<DataSamples>();
   DataSamples& ds = *result;
   QStringList columnNames;
 
@@ -104,12 +103,9 @@ std::shared_ptr<DataSamples> ArffReader::read()
   {
     QStringList l = line.split(" ");
     columnNames.append(l[1]);
-    if (l[2] != "NUMERIC")
+    if (l[2] != "NUMERIC" && l[1] != "class")
     {
-      if (l[1] != "class")
-      {
-        throw IoException("Got a non-numeric column. " + line);
-      }
+      throw IoException("Got a non-numeric column. " + line);
     }
     line = _readLine();
   }

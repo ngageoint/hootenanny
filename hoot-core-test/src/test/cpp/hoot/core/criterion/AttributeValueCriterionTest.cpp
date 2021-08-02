@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -35,12 +35,16 @@ namespace hoot
 class AttributeValueCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(AttributeValueCriterionTest);
-  CPPUNIT_TEST(runNumericEqualToTest);
+  CPPUNIT_TEST(runNumericVersionEqualToTest);
+  CPPUNIT_TEST(runNumericChangesetEqualToTest);
+  CPPUNIT_TEST(runNumericUserIdEqualToTest);
+  CPPUNIT_TEST(runNumericIdEqualToTest);
   CPPUNIT_TEST(runNumericLessThanTest);
   CPPUNIT_TEST(runNumericLessThanOrEqualToTest);
   CPPUNIT_TEST(runNumericGreaterThanTest);
   CPPUNIT_TEST(runNumericGreaterThanOrEqualToTest);
-  CPPUNIT_TEST(runTextEqualToTest);
+  CPPUNIT_TEST(runTextUserEqualToTest);
+  CPPUNIT_TEST(runTextTimestampEqualToTest);
   CPPUNIT_TEST(runTextContainsTest);
   CPPUNIT_TEST(runTextStartsWithTest);
   CPPUNIT_TEST(runTextEndsWithTest);
@@ -50,10 +54,16 @@ class AttributeValueCriterionTest : public HootTestFixture
 
 public:
 
-  void runNumericEqualToTest()
+  void runNumericVersionEqualToTest()
   {
-    AttributeValueCriterion uut(ElementAttributeType::Version, 1.0, NumericComparisonType::EqualTo);
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    Settings settings;
+    settings.set(ConfigOptions::getAttributeValueCriterionTypeKey(), "version");
+    settings.set(ConfigOptions::getAttributeValueCriterionComparisonValueKey(), 1.0);
+    settings.set(ConfigOptions::getAttributeValueCriterionComparisonTypeKey(), "NumericEqualTo");
+    AttributeValueCriterion uut;
+    uut.setConfiguration(settings);
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->setVersion(1);
     CPPUNIT_ASSERT(uut.isSatisfied(node));
@@ -62,10 +72,65 @@ public:
     CPPUNIT_ASSERT(!uut.isSatisfied(node));
   }
 
+  void runNumericChangesetEqualToTest()
+  {
+    Settings settings;
+    settings.set(ConfigOptions::getAttributeValueCriterionTypeKey(), "changeset");
+    settings.set(ConfigOptions::getAttributeValueCriterionComparisonValueKey(), 1);
+    settings.set(ConfigOptions::getAttributeValueCriterionComparisonTypeKey(), "NumericEqualTo");
+    AttributeValueCriterion uut;
+    uut.setConfiguration(settings);
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+
+    node->setChangeset(1);
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->setChangeset(2);
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
+
+  void runNumericUserIdEqualToTest()
+  {
+    Settings settings;
+    settings.set(ConfigOptions::getAttributeValueCriterionTypeKey(), "uid");
+    settings.set(ConfigOptions::getAttributeValueCriterionComparisonValueKey(), 1);
+    settings.set(ConfigOptions::getAttributeValueCriterionComparisonTypeKey(), "NumericEqualTo");
+    AttributeValueCriterion uut;
+    uut.setConfiguration(settings);
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+
+    node->setUid(1);
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->setUid(2);
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
+
+  void runNumericIdEqualToTest()
+  {
+    Settings settings;
+    settings.set(ConfigOptions::getAttributeValueCriterionTypeKey(), "id");
+    settings.set(ConfigOptions::getAttributeValueCriterionComparisonValueKey(), 1);
+    settings.set(ConfigOptions::getAttributeValueCriterionComparisonTypeKey(), "NumericEqualTo");
+    AttributeValueCriterion uut;
+    uut.setConfiguration(settings);
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+
+    node->setId(1);
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->setId(2);
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
+
   void runNumericLessThanTest()
   {
     AttributeValueCriterion uut(ElementAttributeType::Version, 1.0, NumericComparisonType::LessThan);
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->setVersion(0);
     CPPUNIT_ASSERT(uut.isSatisfied(node));
@@ -78,7 +143,8 @@ public:
   {
     AttributeValueCriterion uut(
       ElementAttributeType::Version, 1.0, NumericComparisonType::LessThanOrEqualTo);
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->setVersion(1);
     CPPUNIT_ASSERT(uut.isSatisfied(node));
@@ -91,7 +157,8 @@ public:
   {
     AttributeValueCriterion uut(
       ElementAttributeType::Version, 1.0, NumericComparisonType::GreaterThan);
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->setVersion(2);
     CPPUNIT_ASSERT(uut.isSatisfied(node));
@@ -104,7 +171,8 @@ public:
   {
     AttributeValueCriterion uut(
       ElementAttributeType::Version, 1.0, NumericComparisonType::GreaterThan);
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->setVersion(2);
     CPPUNIT_ASSERT(uut.isSatisfied(node));
@@ -113,11 +181,16 @@ public:
     CPPUNIT_ASSERT(!uut.isSatisfied(node));
   }
 
-  void runTextEqualToTest()
+  void runTextUserEqualToTest()
   {
-    AttributeValueCriterion uut(
-      ElementAttributeType::User, "test1", TextComparisonType::EqualTo);
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    Settings settings;
+    settings.set(ConfigOptions::getAttributeValueCriterionTypeKey(), "user");
+    settings.set(ConfigOptions::getAttributeValueCriterionComparisonValueKey(), "test1");
+    settings.set(ConfigOptions::getAttributeValueCriterionComparisonTypeKey(), "TextEqualTo");
+    AttributeValueCriterion uut;
+    uut.setConfiguration(settings);
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->setUser("test1");
     CPPUNIT_ASSERT(uut.isSatisfied(node));
@@ -126,11 +199,31 @@ public:
     CPPUNIT_ASSERT(!uut.isSatisfied(node));
   }
 
+  void runTextTimestampEqualToTest()
+  {
+    Settings settings;
+    settings.set(ConfigOptions::getAttributeValueCriterionTypeKey(), "timestamp");
+    settings.set(
+      ConfigOptions::getAttributeValueCriterionComparisonValueKey(), "1970-01-01T00:00:00Z");
+    settings.set(ConfigOptions::getAttributeValueCriterionComparisonTypeKey(), "TextEqualTo");
+    AttributeValueCriterion uut;
+    uut.setConfiguration(settings);
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+
+    node->setTimestamp(ElementData::TIMESTAMP_EMPTY);
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->setTimestamp(ElementData::TIMESTAMP_EMPTY + 1);
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
+
   void runTextContainsTest()
   {
     AttributeValueCriterion uut(
       ElementAttributeType::User, "test", TextComparisonType::Contains);
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->setUser("test1");
     CPPUNIT_ASSERT(uut.isSatisfied(node));
@@ -143,7 +236,8 @@ public:
   {
     AttributeValueCriterion uut(
       ElementAttributeType::User, "test", TextComparisonType::StartsWith);
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->setUser("test1");
     CPPUNIT_ASSERT(uut.isSatisfied(node));
@@ -156,7 +250,8 @@ public:
   {
     AttributeValueCriterion uut(
       ElementAttributeType::User, "test", TextComparisonType::EndsWith);
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->setUser("1test");
     CPPUNIT_ASSERT(uut.isSatisfied(node));

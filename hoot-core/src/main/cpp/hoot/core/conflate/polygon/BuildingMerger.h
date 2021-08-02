@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef BUILDINGMERGER_H
 #define BUILDINGMERGER_H
@@ -46,15 +46,15 @@ public:
   static QString className() { return "hoot::BuildingMerger"; }
 
   BuildingMerger() = default;
-  virtual ~BuildingMerger() = default;
+  ~BuildingMerger() = default;
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
   explicit BuildingMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
 
-  virtual void apply(const OsmMapPtr& map,
-                     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  void apply(const OsmMapPtr& map,
+             std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /**
    * Creates a single building out of a group of buildings
@@ -69,7 +69,7 @@ public:
                                                 const std::set<ElementId>& eids,
                                                 const bool preserveTypes = false);
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
   /**
    * Utility method that allows for merging an unlimited number of buildings
@@ -94,11 +94,11 @@ public:
     const OsmMapPtr& map, std::vector<ElementPtr>& constituentBuildings,
     const bool preserveTypes = false);
 
-  virtual QString getDescription() const { return "Merges buildings"; }
+  QString getDescription() const override { return "Merges buildings"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   void setKeepMoreComplexGeometryWhenAutoMerging(bool keepMoreComplex)
   { _keepMoreComplexGeometryWhenAutoMerging = keepMoreComplex; }
@@ -107,18 +107,11 @@ public:
   void setChangedReviewIouThreshold(double threshold) { _changedReviewIouThreshold = threshold; }
   QString getMarkedReviewText() const { return _markedReviewText; }
 
-protected:
-
-  virtual PairsSet& _getPairs() override { return _pairs; }
-  virtual const PairsSet& _getPairs() const override { return _pairs; }
-
 private:
 
   static int logWarnCount;
 
   friend class BuildingMergerTest;
-
-  std::set<std::pair<ElementId, ElementId>> _pairs;
 
   //If true, merging always keeps the more complex of the two building geometries.  If false,
   //merging keeps the geometry of the reference building.

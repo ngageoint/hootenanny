@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "TagDifferencerJs.h"
 
@@ -50,18 +50,24 @@ namespace hoot
 
 HOOT_JS_REGISTER(TagDifferencerJs)
 
+TagDifferencerJs::TagDifferencerJs(std::shared_ptr<TagDifferencer> op) :
+_td(op)
+{
+}
+
 void TagDifferencerJs::diff(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   try
   {
     TagDifferencerJs* op = ObjectWrap::Unwrap<TagDifferencerJs>(args.This());
 
-    ConstOsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getConstMap();
-    ConstElementPtr e1 = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
-    ConstElementPtr e2 = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject())->getConstElement();
+    const ConstOsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getConstMap();
+    ConstElementPtr e1 = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked())->getConstElement();
+    ConstElementPtr e2 = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject(context).ToLocalChecked())->getConstElement();
 
     if (!map || !e1 || !e2)
     {
@@ -81,10 +87,11 @@ void TagDifferencerJs::diff(const FunctionCallbackInfo<Value>& args)
   }
 }
 
-void TagDifferencerJs::Init(Handle<Object> target)
+void TagDifferencerJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(TagDifferencer::className());
 
@@ -94,17 +101,16 @@ void TagDifferencerJs::Init(Handle<Object> target)
     const char* n = utf8.data();
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "diff"),
-        FunctionTemplate::New(current, diff));
+    tpl->PrototypeTemplate()->Set(current, "diff", FunctionTemplate::New(current, diff));
     tpl->PrototypeTemplate()->Set(
       PopulateConsumersJs::baseClass(),
-      String::NewFromUtf8(current, TagDifferencer::className().toStdString().data()));
+      String::NewFromUtf8(current, TagDifferencer::className().toStdString().data()).ToLocalChecked());
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
+    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
+    target->Set(context, toV8(n), ToLocal(&constructor));
   }
 }
 
@@ -125,7 +131,8 @@ void TagDifferencerJs::New(const FunctionCallbackInfo<Value>& args)
     }
     else
     {
-      TagDifferencer* op = Factory::getInstance().constructObject<TagDifferencer>(className);
+      std::shared_ptr<TagDifferencer> op =
+        Factory::getInstance().constructObject<TagDifferencer>(className);
       TagDifferencerJs* obj = new TagDifferencerJs(op);
       //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
       obj->Wrap(args.This());

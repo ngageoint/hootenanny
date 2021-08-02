@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSM_API_WRITER_H
@@ -68,18 +68,18 @@ public:
   /** Constructors with one or multiple files consisting of one large changeset */
   OsmApiWriter(const QUrl& url, const QString& changeset);
   OsmApiWriter(const QUrl& url, const QList<QString>& changesets);
-  virtual ~OsmApiWriter() = default;
+  ~OsmApiWriter() = default;
   /**
    * @brief setConfiguration Update the configuration settings with new configuration
    * @param conf - Updated configurations
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
   /**
    * @brief isSupported
    * @param url - Must be a valid, full HTTP[S] URL pointing to an OSM website
    * @return validity of url
    */
-  bool isSupported(const QUrl& url);
+  bool isSupported(const QUrl& url) const;
   /**
    * @brief apply Actually load, divide, and write the changeset to the selected OSM API
    * @return success
@@ -89,7 +89,7 @@ public:
    * @brief containsFailed
    * @return true if there are failed changes in the changeset
    */
-  bool containsFailed() { return _changeset.hasFailedElements(); }
+  bool containsFailed() const { return _changeset.hasFailedElements(); }
   /**
    * @brief getFailedChangeset Creates a changeset will all elements that failed to push to API
    * @return Full .OSC changeset string
@@ -108,14 +108,14 @@ public:
    * @param request - Network request object initialized with OSM API URL
    * @return true if the current user has write permission for the OSM API
    */
-  bool validatePermissions(HootNetworkRequestPtr request);
+  bool validatePermissions(HootNetworkRequestPtr request) const;
   /**
    * @brief usingCgiMap Run a small query on the OSM API and check the generator for CGImap
    * @param request - Network request object initialized with OSM API URL
    * @return true if the response comes from CGImap
    */
-  bool usingCgiMap(HootNetworkRequestPtr request);
-  /**
+  bool usingCgiMap(HootNetworkRequestPtr request) const;
+  /** 
    * @brief getStats Get the stats object
    * @return
    */
@@ -129,11 +129,11 @@ public:
   /**
    * @see ProgressReporter
    */
-  virtual void setProgress(Progress progress) { _progress = progress; }
+  void setProgress(const Progress& progress) override { _progress = progress; }
   /**
    * @see ProgressReporter
    */
-  virtual unsigned int getNumSteps() const { return 1; }
+  unsigned int getNumSteps() const override { return 1; }
   /**
    * @brief setErrorPathname Record the pathname of the error changeset
    * @param path Pathname
@@ -148,7 +148,7 @@ public:
    * @brief getLastChangesetId Get the element information of the last element uploaded
    * @return information of last element uploaded
    */
-  LastElementInfo getLastElementInfo() { return _lastElement; }
+  LastElementInfo getLastElementInfo() const { return _lastElement; }
 
 private:
   /**
@@ -164,7 +164,7 @@ private:
     /** HTTP response body */
     QString response;
   };
-  typedef std::shared_ptr<OsmApiFailureInfo> OsmApiFailureInfoPtr;
+  using OsmApiFailureInfoPtr = std::shared_ptr<OsmApiFailureInfo>;
   /**
    * @brief _createChangeset Request a changeset ID from the API
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_PUT_.2Fapi.2F0.6.2Fchangeset.2Fcreate
@@ -176,7 +176,7 @@ private:
    * @return ID of the changeset that was created on the server
    */
   long _createChangeset(HootNetworkRequestPtr request, const QString& description,
-                        const QString& source, const QString& hashtags, int& http_status);
+                        const QString& source, const QString& hashtags, int& http_status) const;
   /**
    * @brief _closeChangeset End the changeset
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Close:_PUT_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fclose
@@ -193,27 +193,27 @@ private:
    * @param changeset - Atomic changeset to upload
    * @return Failure info status, success, HTTP status and response indicating if the changeset was uploaded correctly
    */
-  OsmApiFailureInfoPtr _uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset);
+  OsmApiFailureInfoPtr _uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset) const;
   /**
    * @brief _parseCapabilities Parse the OSM API capabilities
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Capabilities:_GET_.2Fapi.2Fcapabilities
    * @param capabilites - XML response from the capabilites request
    * @return parsed capabilities object
    */
-  OsmApiCapabilites _parseCapabilities(const QString& capabilites);
+  OsmApiCapabilites _parseCapabilities(const QString& capabilites) const;
   /**
    * @brief _parsePermissions Parse the OSM API perissions
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_permissions:_GET_.2Fapi.2F0.6.2Fpermissions
    * @param permissions - XML response from the permissions request
    * @return true if the current user has write permissions to the OSM API
    */
-  bool _parsePermissions(const QString& permissions);
+  bool _parsePermissions(const QString& permissions) const;
   /**
    * @brief _parseStatus Convert string status to enumeration status
    * @param status String version of the API status
    * @return Enum version of the API status
    */
-  OsmApiStatus _parseStatus(const QString& status);
+  OsmApiStatus _parseStatus(const QString& status) const;
   /**
    * @brief _resolveIssues Query the OSM API for the element in the changeset and try to fix resolvable errors
    * @param request Network request object initialized with OSM API URL
@@ -234,23 +234,23 @@ private:
    * @param conflictExplanation Error message from OSM API
    * @return Whether or not the function found the error in question
    */
-  bool _changesetClosed(const QString& conflictExplanation);
+  bool _changesetClosed(const QString& conflictExplanation) const;
   /**
    * @brief _getNode/Way/Relation Perform HTTP GET request to OSM API to get current node/way/relation by ID
    * @param request Network request object initialized with OSM API URL
    * @param id ID of node/way/relation to query from database
    * @return OSM XML string of node/way/relation as it currently sits in the OSM API database
    */
-  QString _getNode(HootNetworkRequestPtr request, long id);
-  QString _getWay(HootNetworkRequestPtr request, long id);
-  QString _getRelation(HootNetworkRequestPtr request, long id);
+  QString _getNode(HootNetworkRequestPtr request, long id) const;
+  QString _getWay(HootNetworkRequestPtr request, long id) const;
+  QString _getRelation(HootNetworkRequestPtr request, long id) const;
   /**
    * @brief _getElement Perform HTTP GET request to OSM API to get current element by ID
    * @param request Network request object initialized with OSM API URL
    * @param endpoint Filled out API_PATH_GET_ELEMENT string with node/way/relation and ID
    * @return XML result of the GET request
    */
-  QString _getElement(HootNetworkRequestPtr request, const QString& endpoint);
+  QString _getElement(HootNetworkRequestPtr request, const QString& endpoint) const;
   /**
    * @brief _changesetThreadFunc Thread function that does the actual work of creating a changeset ID
    *  via the API, pushing the changeset data, closing the changeset, and splitting a failing changeset
@@ -259,16 +259,16 @@ private:
    */
   void _changesetThreadFunc(int index);
   /** Yield or sleep this thread */
-  void _yield(int milliseconds = 10);
+  void _yield(int milliseconds = 10) const;
   /** Yield or sleep this thread for a random amount of time between minimum and maximum */
-  void _yield(int minimum_ms, int maximum_ms);
+  void _yield(int minimum_ms, int maximum_ms) const;
   /**
    * @brief createNetworkRequest Create a network request object
    * @param requiresAuthentication Authentication flag set to true will cause OAuth credentials,
    *    if present, to be passed to the network request object
    * @return smart pointer to network request object
    */
-  HootNetworkRequestPtr createNetworkRequest(bool requiresAuthentication = false);
+  HootNetworkRequestPtr createNetworkRequest(bool requiresAuthentication = false) const;
   /**
    * @brief _threadsAreIdle Checks each thread in the thread pool if it is working or idle
    * @return True if all threads are idle
@@ -290,7 +290,7 @@ private:
    * @param changeset_id Changeset ID that is currently open
    * @param status HTTP status code returned for response, 000 for request
    */
-  void _writeDebugFile(const QString& type, const QString& data, int file_id, long changeset_id, int status = 0);
+  void _writeDebugFile(const QString& type, const QString& data, int file_id, long changeset_id, int status = 0) const;
   /**
    * @brief _getNextApiId Get the next API ID from the counter for unique debug filenames
    * @return next ID
@@ -362,7 +362,7 @@ private:
    * @param info Failure information structure
    * @param changesetId Current changeset ID
    */
-  void _statusMessage(OsmApiFailureInfoPtr info, long changesetId);
+  void _statusMessage(OsmApiFailureInfoPtr info, long changesetId) const;
   /**
    * @brief _extractLastElement Get the last element uploaded in this changeset and
    *  extract the actual ID (if created) and the version
@@ -443,7 +443,7 @@ private:
   /** For white box testing */
   friend class OsmApiWriterTest;
   /** Default constructor for testing purposes only */
-  OsmApiWriter() {}
+  OsmApiWriter() = default;
 };
 
 }

@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __WAY_LOCATION_H__
 #define __WAY_LOCATION_H__
@@ -32,18 +32,19 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 
 namespace hoot
 {
 
 /**
- * The WayLocation has a segment index and segmentFraction. The segment index is
- * [0, node count - 1]. The segment fraction is [0, 1). If a segment fraction >= 1 is passed in then
- * the index is automatically incremented and the segment fraction is set to 0.
+ * @brief The WayLocation class identifies a location on a way.
  *
+ * It has a segment index and segmentFraction. The segment index is [0, node count - 1]. The segment
+ * fraction is [0, 1). If a segment fraction >= 1 is passed in then the index is automatically
+ * incremented and the segment fraction is set to 0.
  * @author RoadMatcher
  * http://www.vividsolutions.com/products.asp?catg=spaapp&code=roadmatcher
  * The ideas were shamelessly taken from RoadMatcher, but reimplemented in C++ with Hootenanny
@@ -61,31 +62,27 @@ public:
   static const double SLOPPY_EPSILON;
 
   WayLocation();
-
   /**
-   * Constructs a way location that is relative to the start of the way. If the location is
-   * outside the bounds of the way it will be cropped to the beginning or end of the way. An error
-   * will not be reported.
+   * @brief Constructor - Constructs a way location that is relative to the start of the way. If the
+   * location is outside the bounds of the way it will be cropped to the beginning or end of the
+   * way. An error will not be reported.
    */
   WayLocation(ConstOsmMapPtr map, ConstWayPtr way, double distance);
-
   WayLocation(ConstOsmMapPtr map, ConstWayPtr way, int segmentIndex, double segmentFraction);
-
-  virtual ~WayLocation() {}
+  WayLocation(const WayLocation& other);
+  virtual ~WayLocation() = default;
 
   Meters calculateDistanceFromEnd() const;
-
   /**
-   * Calculates the meters of distance this location is along the way.
+   * @brief calculateDistanceOnWay calculates the meters of distance this location is along the way.
    */
   Meters calculateDistanceOnWay() const;
 
-  static int compareLocationValues(int segmentIndex0, double segmentFraction0,
-                                   int segmentIndex1, double segmentFraction1);
+  static int compareLocationValues(
+    int segmentIndex0, double segmentFraction0, int segmentIndex1, double segmentFraction1);
 
   /**
-   * Compares this object with the specified object for order.
-   *
+   * @brief compareTo compares this object with the specified object for order.
    * @param other The WayLocation with which this WayLocation is being compared
    * @return a negative integer, zero, or a positive integer as this WayLocation is less than,
    * equal to, or greater than the specified WayLocation.
@@ -93,66 +90,65 @@ public:
   int compareTo(const WayLocation& other) const;
 
   /**
-   * Construct a way location that represents the end of the specified way.
+   * @brief createAtEndOfWay constructs a way location that represents the end of the specified way.
    */
-  static WayLocation createAtEndOfWay(const ConstOsmMapPtr &map, const ConstWayPtr way);
+  static WayLocation createAtEndOfWay(const ConstOsmMapPtr& map, const ConstWayPtr way);
 
   /**
-   * Computes the location of a point a given length along a line segment.  If the length exceeds
-   * the length of the line segment, the last point of the segment is returned.  If the length is
-   * negative, the first point of the segment is returned.
+   * @brief pointAlongSegmentByFraction computes the location of a point at a given length along a
+   * line segment.
    *
+   * If the length exceeds the length of the line segment, the last point of the segment is
+   * returned. If the length is negative, the first point of the segment is returned.
    * @param p0 the first point of the line segment
    * @param p1 the last point of the line segment
    * @param length the length to the desired point
    * @return the Coordinate of the desired point
    */
-  static const geos::geom::Coordinate pointAlongSegmentByFraction(const geos::geom::Coordinate& p0,
-                                                                  const geos::geom::Coordinate& p1,
-                                                                  double frac);
+  static geos::geom::Coordinate pointAlongSegmentByFraction(
+    const geos::geom::Coordinate& p0, const geos::geom::Coordinate& p1, double frac);
 
   const ConstOsmMapPtr& getMap() const { return _map; }
-
   const ConstWayPtr& getWay() const { return _way; }
 
   /**
-   * Returns the node at this WayLocation. If isNode() returns false, this will thrown an exception.
+   * @brief getNode returns the node at this WayLocation. If isNode() returns false, this will throw
+   * an exception.
    */
   ConstNodePtr getNode(double epsilon = 0.0) const;
-
-  int getSegmentIndex() const { return _segmentIndex; }
-
-  double getSegmentFraction() const { return _segmentFraction; }
-
   /**
-   * Returns true if this way location is at one extreme or the other, first or last
-   */
-  bool isExtreme(double epsilon = 0.0) const { return isFirst(epsilon) || isLast(epsilon); }
-
-  bool isFirst(double epsilon = 0.0) const
-  { return _segmentIndex == 0 && _segmentFraction <= epsilon; }
-
-  bool isLast(double epsilon = 0.0) const;
-
-  /**
-   * If this is effectively on a node.
+   * @brief isNode determines if this is effectively on a node.
    */
   bool isNode(double epsilon = 0.0) const;
 
-  bool isValid() const { return _segmentIndex != -1; }
-
-  const geos::geom::Coordinate getCoordinate() const;
+  int getSegmentIndex() const { return _segmentIndex; }
+  double getSegmentFraction() const { return _segmentFraction; }
 
   /**
-   * Move the location on the way. Negative values will move closer to the beginning of the way.
-   * Higher values will move towards the end of the way. This will create a new WayLocation and
-   * return it. The result will not go past the beginning or end of the line.
+   * @brief isExtreme returns true if this way location is at one extreme or the other, first or
+   * last.
+   */
+  bool isExtreme(double epsilon = 0.0) const { return isFirst(epsilon) || isLast(epsilon); }
+  bool isFirst(double epsilon = 0.0) const
+  { return _segmentIndex == 0 && _segmentFraction <= epsilon; }
+  bool isLast(double epsilon = 0.0) const;
+
+  bool isValid() const { return _segmentIndex != -1; }
+
+  geos::geom::Coordinate getCoordinate() const;
+
+  /**
+   * @brief move moves the location on the way.
+   *
+   * Negative values will move closer to the beginning of the way. Higher values will move towards
+   * the end of the way. This will create a new WayLocation and return it. The result will not go
+   * past the beginning or end of the line.
    */
   WayLocation move(Meters distance) const;
 
   QString toString() const;
 
-protected:
+private:
 
   ConstOsmMapPtr _map;
   ConstWayPtr _way;
@@ -196,8 +192,8 @@ inline uint qHash(const WayLocation& wl)
   return qHash(wl.toString());
 }
 
-typedef std::shared_ptr<WayLocation> WayLocationPtr;
-typedef std::shared_ptr<const WayLocation> ConstWayLocationPtr;
+using WayLocationPtr = std::shared_ptr<WayLocation>;
+using ConstWayLocationPtr = std::shared_ptr<const WayLocation>;
 
 }
 

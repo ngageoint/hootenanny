@@ -46,7 +46,7 @@ clean: Makefile.qmake ui-clean services-clean clean-coverage
 	rm -f lib/*
 	rm -rf test-output/*
 	rm -rf tgs/libTgs.a
-	rm -rf hoot-core/tmp/debug/* hoot-core-test/tmp/debug/* tbs/tmp/debug/* hoot-rnd/tmp/debug/*
+	rm -rf hoot-core/tmp/debug/* hoot-core-test/tmp/debug/* tbs/tmp/debug/* hoot-rnd/tmp/debug/* hoot-js/tmp/debug/* hoot-test/tmp/debug/* tgs/tmp/debug/* hoot-cmd/tmp/debug/*
 	rm -rf bin/*
 	rm -f translations/config.js
 	rm -f conf/core/ConfigOptions.json
@@ -76,7 +76,7 @@ endif
 clean-db: services-clean-db
 
 # start over as close to a new build as is reasonable
-clean-all: clean clean-db clean-ccache
+clean-all: clean clean-db clean-ccache clean-coverage
 
 clean-coverage: services-clean-coverage ui-clean-coverage
 	rm -rf coverage
@@ -151,7 +151,7 @@ tgs/src/main/cpp/tgs/TgsConfig.h: config.h
 	/bin/sed -r -e 's/^(#[ \t]*define) /\1 TGS_/' config.h >> tgs/src/main/cpp/tgs/TgsConfig.h
 	echo "#endif" >> tgs/src/main/cpp/tgs/TgsConfig.h
 
-# We now have different versions of the NFDD Schema that are built from Excel files:
+# We now have different versions of the TDS Schema that are built from Excel files:
 # LTDSv40.csv.gz - Local TDS v4.0
 # SUTDSv40.csv.gz - Specialized Urban TDS v4.0
 # TDSv40.csv.gz - Full TDS v4.0
@@ -493,7 +493,7 @@ tmp/schema.png: tmp/schema.dot
 
 # Code Coverage
 
-IGNORED=/usr/\* \*test/cpp\* \*tgs/src\* \*/local/\* \*/tmp/moc/\* \*core/proto\*
+IGNORED=/usr/\* \*test/cpp\* \*/local/\* \*/tmp/moc/\* \*core/proto\* /opt/\* \*8/\*
 
 # Passing the --quiet switch to lcov when -s is present is causing errors, so writing out to a log every time instead.
 
@@ -501,8 +501,8 @@ coverage/core/core/index.html:
 	echo "Generating core code coverage report..."
 	mkdir -p coverage/core/core
 	rm -f coverage/core/core/log
-	lcov --capture --ignore-errors source -d hoot-core/tmp/debug -b hoot-core/ --output-file coverage/core/core/Core.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
-	lcov -r coverage/core/core/Core.info $(IGNORED) \*tbs/src\* -o coverage/core/core/CoreTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/log
+	lcov --capture --ignore-errors source -d hoot-core/tmp/debug -b hoot-core/ --output-file coverage/core/core/Core.info 2>&1 | grep -v -F "geninfo" >> coverage/core/core/log
+	lcov -r coverage/core/core/Core.info $(IGNORED) \*tgs/src\* \*tbs/src\* -o coverage/core/core/CoreTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/core/log
 	genhtml coverage/core/core/CoreTrimmed.info --output-directory coverage/core/core/ 2>&1 | grep -v -F "geninfo" >> coverage/core/core/log
 
 coverage/core/tbs/index.html:
@@ -512,30 +512,54 @@ coverage/core/tbs/index.html:
 	lcov --capture --ignore-errors source -d tbs/tmp/debug -b tbs/ --output-file coverage/core/tbs/Tbs.info 2>&1 | grep -v -F "geninfo" >> coverage/core/tbs/log
 	lcov -r coverage/core/tbs/Tbs.info $(IGNORED) -o coverage/core/tbs/TbsTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/tbs/log
 	genhtml coverage/core/tbs/TbsTrimmed.info --output-directory coverage/core/tbs/ 2>&1 | grep -v -F "geninfo" >> coverage/core/tbs/log
+	
+coverage/core/tgs/index.html:
+	echo "Generating core tgs code coverage report..."
+	mkdir -p coverage/core/tgs
+	rm -f coverage/core/tgs/log
+	lcov --capture --ignore-errors source -d tgs/tmp/debug -b tgs/ --output-file coverage/core/tgs/Tgs.info 2>&1 | grep -v -F "geninfo" >> coverage/core/tgs/log
+	lcov -r coverage/core/tgs/Tgs.info $(IGNORED) -o coverage/core/tgs/TgsTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/tgs/log
+	genhtml coverage/core/tgs/TgsTrimmed.info --output-directory coverage/core/tgs/ 2>&1 | grep -v -F "geninfo" >> coverage/core/tgs/log
+	
+coverage/core/cmd/index.html:
+	echo "Generating cmd code coverage report..."
+	mkdir -p coverage/core/cmd
+	rm -f coverage/core/cmd/log
+	lcov --capture --ignore-errors source -d hoot-cmd/tmp/debug -b hoot-cmd/ --output-file coverage/core/cmd/Cmd.info 2>&1 | grep -v -F "geninfo" >> coverage/core/cmd/log
+	lcov -r coverage/core/cmd/Cmd.info $(IGNORED) \*tgs/src\* \*hoot-core/src\* \*hoot-js/src\* -o coverage/core/cmd/CmdTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/cmd/log
+	genhtml coverage/core/cmd/CmdTrimmed.info --output-directory coverage/core/cmd/ 2>&1 | grep -v -F "geninfo" >> coverage/core/cmd/log
+	
+coverage/core/js/index.html:
+	echo "Generating core js code coverage report..."
+	mkdir -p coverage/core/js
+	rm -f coverage/core/js/log
+	lcov --capture --ignore-errors source -d hoot-js/tmp/debug -b hoot-js/ --output-file coverage/core/js/Js.info 2>&1 | grep -v -F "geninfo" >> coverage/core/js/log
+	lcov -r coverage/core/js/Js.info $(IGNORED) \*hoot-core/src\* \*tgs/src\* -o coverage/core/js/JsTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/js/log
+	genhtml coverage/core/js/JsTrimmed.info --output-directory coverage/core/js/ 2>&1 | grep -v -F "geninfo" >> coverage/core/js/log
 
-core-rnd-coverage:
+coverage/core/rnd/index.html:
 ifeq ($(BUILD_RND),rnd)
 	echo "Generating core rnd code coverage report..."
 	mkdir -p coverage/core/rnd
 	rm -f coverage/core/rnd/log
 	lcov --capture --ignore-errors source -d hoot-rnd/tmp/debug -b hoot-rnd/ --output-file coverage/core/rnd/Rnd.info 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
-	lcov -r coverage/core/rnd/Rnd.info $(IGNORED) -o coverage/core/rnd/RndTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
+	lcov -r coverage/core/rnd/Rnd.info $(IGNORED) \*hoot-core/src\* \*tgs/src\* -o coverage/core/rnd/RndTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
 	genhtml coverage/core/rnd/RndTrimmed.info --output-directory coverage/core/rnd/ 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
 endif
 
-core-josm-coverage:
+coverage/core/josm/index.html:
 ifeq ($(BUILD_JOSM),josm)
 	echo "Generating core JOSM code coverage report..."
 	mkdir -p coverage/core/josm
 	rm -f coverage/core/josm/log
 	lcov --capture --ignore-errors source -d hoot-josm/tmp/debug -b hoot-josm/ --output-file coverage/core/josm/Josm.info 2>&1 | grep -v -F "geninfo" >> coverage/core/josm/log
-	lcov -r coverage/core/josm/Josm.info $(IGNORED) -o coverage/core/josm/JosmTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/josm/log
+	lcov -r coverage/core/josm/Josm.info $(IGNORED) \*hoot-core/src\* \*tgs/src\* -o coverage/core/josm/JosmTrimmed.info 2>&1 | grep -v -F "geninfo" >> coverage/core/josm/log
 	genhtml coverage/core/josm/JosmTrimmed.info --output-directory coverage/core/josm/ 2>&1 | grep -v -F "geninfo" >> coverage/core/josm/log
 endif
 
-core-coverage: coverage/core/core/index.html coverage/core/tbs/index.html core-rnd-coverage core-josm-coverage
+core-coverage: coverage/core/core/index.html coverage/core/tbs/index.html coverage/core/tgs/index.html coverage/core/cmd/index.html coverage/core/js/index.html coverage/core/rnd/index.html coverage/core/josm/index.html
 
-coverage: services-coverage ui-coverage coverage/core/core/index.html coverage/core/tbs/index.html core-rnd-coverage core-josm-coverage
+coverage: services-coverage ui-coverage core-coverage
 
 conf/dictionary/WordsAbridged.sqlite: conf/dictionary/WordsAbridged.sqlite.gz
 	gunzip -c $^ > $@

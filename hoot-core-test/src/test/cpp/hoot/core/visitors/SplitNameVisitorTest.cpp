@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // hoot
@@ -52,7 +52,7 @@ public:
     // make the max size smaller so the test is a little easier to read.
     v.setMaxSize(20);
 
-    NodePtr n(new Node(Status::Unknown1, -1, Coordinate(0, 0), 5));
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0, 0), 5);
     Tags& t = n->getTags();
 
     t.clear();
@@ -89,7 +89,7 @@ public:
     // make the max size smaller so the test is a little easier to read.
     v.setMaxSize(255);
 
-    NodePtr n(new Node(Status::Unknown1, -1, Coordinate(0, 0), 5));
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0, 0), 5);
     Tags& t = n->getTags();
 
     t.clear();

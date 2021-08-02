@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 
@@ -70,10 +70,10 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.read(_inputPath + "ToyTestA.osm", map);
 
-    OsmMapPtr map2(new OsmMap());
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
     reader.read(_inputPath + "ToyTestB.osm", map2);
 
     const WayMap& w1 = map->getWays();
@@ -95,10 +95,10 @@ public:
     uut.setMaxThreads(2);
     uut.setPixelSize(10);
     uut.compareMaps();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.973744272810634, uut.getMeanScore(), 0.00001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00177888445763033, uut.getConfidenceInterval(), 0.00001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.973924616144161, uut.getMedianScore(), 0.00001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00187302021970233, uut.getStandardDeviation(), 0.00001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.975078263893709, uut.getMeanScore(), 0.00001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00161314619733044, uut.getConfidenceInterval(), 0.00001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.975158195237589, uut.getMedianScore(), 0.00001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00169851135186191, uut.getStandardDeviation(), 0.00001);
   }
 };
 

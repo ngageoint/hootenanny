@@ -19,16 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/rnd/conflate/matching/ScoreMatchesDiff.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -46,35 +47,38 @@ public:
 
   ScoreMatchesDiffCmd() = default;
 
-  virtual QString getName() const override { return "score-matches-diff"; }
+  QString getName() const override { return "score-matches-diff"; }
+  QString getType() const override { return "rnd"; }
+  QString getDescription() const override
+  { return "Compares conflate performance between score-matches outputs (experimental)"; }
 
-  virtual QString getType() const override { return "rnd"; }
-
-  virtual QString getDescription() const override
-  { return "Compares conflation performance between files output by score-matches (experimental)"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
-
     if (args.size() != 3)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes three parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
-    try
-    {
-      ScoreMatchesDiff diffGen;
-      diffGen.calculateDiff(args[0].trimmed(), args[1].trimmed());
-      diffGen.printDiff(args[2].trimmed());
-    }
-    catch (const HootException& e)
-    {
-      LOG_ERROR(e.what());
-      return 1;
-    }
+    const QString input1 = args[0].trimmed();
+    const QString input2 = args[1].trimmed();
+    const QString output = args[2].trimmed();
+
+    QElapsedTimer timer;
+    timer.start();
+
+    LOG_STATUS(
+      "Calculating conflate match difference between ..." << FileUtils::toLogFormat(input1, 25) <<
+      " and ..." << FileUtils::toLogFormat(input2, 25) << "; writing output to ..." <<
+      FileUtils::toLogFormat(output, 25) << "...");
+
+    ScoreMatchesDiff diffGen;
+    diffGen.calculateDiff(input1, input2);
+    diffGen.printDiff(output);
 
     LOG_STATUS(
       "Matches difference calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<

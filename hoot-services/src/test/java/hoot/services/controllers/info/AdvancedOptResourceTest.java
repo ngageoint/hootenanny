@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.info;
 
@@ -32,6 +32,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.hamcrest.CoreMatchers;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -55,6 +56,7 @@ public class AdvancedOptResourceTest extends HootServicesJerseyTestAbstract {
          assertThat(jsonStr, CoreMatchers.containsString("BuildingKeepMoreComplexGeometryWhenAutoMerging"));
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void testGetOptionsWhenHoot2() throws Exception {

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTIARYPOIMERGECACHE_H
 #define MULTIARYPOIMERGECACHE_H
@@ -61,7 +61,7 @@ public:
   MultiaryPoiMergeCache(const ConstOsmMapPtr& map, const std::shared_ptr<MatchCreator>& matchCreator,
     const std::shared_ptr<MergerCreator>& mergerCreator);
 
-  MultiaryClusterPtr merge(const MultiaryClusterPtr& c1, const MultiaryClusterPtr& c2);
+  MultiaryClusterPtr merge(const MultiaryClusterPtr& c1, const MultiaryClusterPtr& c2) const;
 
 private:
 
@@ -70,7 +70,7 @@ private:
   std::shared_ptr<MergerCreator> _mergerCreator;
 };
 
-typedef std::shared_ptr<MultiaryPoiMergeCache> MultiaryPoiMergeCachePtr;
+using MultiaryPoiMergeCachePtr = std::shared_ptr<MultiaryPoiMergeCache>;
 
 }
 

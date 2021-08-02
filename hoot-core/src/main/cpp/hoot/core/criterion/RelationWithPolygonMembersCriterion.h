@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RELATION_WITH_POLYGON_MEMBERS_CRITERION_H
@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Identifies relations with children having polygon geometries
+ * Identifies relations with members that have polygon geometries
  */
 class RelationWithPolygonMembersCriterion : public RelationWithMembersOfTypeCriterion
 {
@@ -45,21 +45,20 @@ public:
 
   RelationWithPolygonMembersCriterion();
   RelationWithPolygonMembersCriterion(ConstOsmMapPtr map);
-  virtual ~RelationWithPolygonMembersCriterion() = default;
+  ~RelationWithPolygonMembersCriterion() = default;
 
-  virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new RelationWithPolygonMembersCriterion(_map)); }
+  ElementCriterionPtr clone() override
+  { return std::make_shared<RelationWithPolygonMembersCriterion>(_map); }
 
-  virtual QString getCriterion() const override;
+  QString getCriterion() const override;
 
-  virtual QString getDescription() const
+  GeometryType getGeometryType() const override;
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override
   { return "Identifies relations with children having polygon geometries"; }
-
-  virtual GeometryType getGeometryType() const;
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
 };
 
 }

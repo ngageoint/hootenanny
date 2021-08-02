@@ -1,7 +1,35 @@
-20:37:18.626 INFO   .../cpp/hoot/core/cmd/StatCmd.cpp(  91) Calculating statistic of type: total, with visitor: hoot::AverageNumericTagsVisitor, for input: umericTagsVisitorTest.osm...
+
+Calculating the numerical average of all values for a custom tag...
+
 
 Calculated statistic: 3.67
-20:37:18.936 INFO   .../cpp/hoot/core/cmd/StatCmd.cpp(  91) Calculating statistic of type: average, with visitor: hoot::NodesPerWayVisitor, for input: les/ToyBuildingsTestA.osm...
 
-Calculated statistic: 8
-20:37:19.201 INFO   .../cpp/hoot/core/cmd/StatCmd.cpp(  91) Calculating statistic of type: average, with visitor: hoot::AddressCountVisitor, for input: les/ToyBuildingsTestA.osm...
+Calculating the minimum number of nodes per way...
+
+
+Calculated statistic: 5
+
+Calculating the maximum number of nodes per way...
+
+
+Calculated statistic: 33
+
+Calculating the average number of nodes per way...
+
+
+Calculated statistic: 8.1
+
+Calculating the total number of nodes per way against multiple files...
+
+
+Calculated statistic: 89
+
+Calculating the total number of nodes per way recursively from a directory...
+
+
+Calculated statistic: 200
+
+Calculating the total number of nodes per way recursively from a directory filtered to read osm inputs only...
+
+
+Calculated statistic: 400

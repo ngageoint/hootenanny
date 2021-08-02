@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // hoot
@@ -38,24 +38,21 @@ class SumNumericTagsVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SumNumericTagsVisitorTest);
   CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runConfigureTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  SumNumericTagsVisitorTest()
-    : HootTestFixture("test-files/visitors/",
-                      UNUSED_PATH)
+  SumNumericTagsVisitorTest() :
+  HootTestFixture("test-files/visitors/", UNUSED_PATH)
   {
   }
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
-      map,
-      _inputPath + "SumNumericTagsVisitorTest.osm",
-      false,
-      Status::Unknown1);
+      map, _inputPath + "SumNumericTagsVisitorTest.osm", false, Status::Unknown1);
 
     SumNumericTagsVisitor uut(QStringList("test1"));
     map->visitRo(uut);
@@ -63,6 +60,20 @@ public:
     CPPUNIT_ASSERT_EQUAL(11, sum);
   }
 
+  void runConfigureTest()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(
+      map, _inputPath + "SumNumericTagsVisitorTest.osm", false, Status::Unknown1);
+
+    Settings settings;
+    settings.set(ConfigOptions::getTagsVisitorKeysKey(), QStringList("test1"));
+    SumNumericTagsVisitor uut;
+    uut.setConfiguration(settings);
+    map->visitRo(uut);
+    const int sum = (int)uut.getStat();
+    CPPUNIT_ASSERT_EQUAL(11, sum);
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SumNumericTagsVisitorTest, "quick");

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef DBUTILS_H
@@ -92,11 +92,26 @@ public:
    */
   static bool isDbUrl(const QString& url);
 
+  /**
+   * Identifies Hootenanny API database URLs
+   *
+   * @param url the string to examine
+   * @return true if the input string is a Hootenanny API database URL; false otherwise
+   */
+  static bool isHootApiDbUrl(const QString& url);
+
+  /**
+   * Identifies OSM API database URLs
+   *
+   * @param url the string to examine
+   * @return true if the input string is a Hootenanny API database URL; false otherwise
+   */
+  static bool isOsmApiDbUrl(const QString& url);
+
 private:
 
-  static void _modifyTableConstraints(const QSqlDatabase& database, const QString& tableName,
-                                      const bool disable = true);
-
+  static void _modifyTableConstraints(
+    const QSqlDatabase& database, const QString& tableName, const bool disable = true);
 };
 
 }

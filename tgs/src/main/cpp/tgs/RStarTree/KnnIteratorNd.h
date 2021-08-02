@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 
@@ -56,13 +56,9 @@ namespace Tgs
     class LeafDistance
     {
     public:
-      LeafDistance() {}
+      LeafDistance() : distance(0.0), fid(0) { }
 
-      LeafDistance(double dist, int fid)
-      {
-        this->distance = dist;
-        this->fid = fid;
-      }
+      LeafDistance(double dist, int fid) : distance(dist), fid(fid) { }
 
       double distance;
       int fid;
@@ -90,7 +86,7 @@ namespace Tgs
     class NodeDistance
     {
     public:
-      NodeDistance() {}
+      NodeDistance() : minPossibleDistance(0.0), id(0) { }
 
       NodeDistance(double dist, int nodeId)
       {
@@ -115,13 +111,13 @@ namespace Tgs
 
     KnnIteratorNd(const RStarTree* tree, const std::vector<double>& point, 
       const Box& searchRegion = Box());
-    virtual ~KnnIteratorNd();
+    ~KnnIteratorNd();
 
-    virtual const Box& getBox() const;
-    int getId() const { return _knnId; }
+    const Box& getBox() const override;
+    int getId() const override { return _knnId; }
     double getDistance() const { return _knnDistance; }
-    bool hasNext(); 
-    bool next();
+    bool hasNext() override;
+    bool next() override;
 
     void reset(const std::vector<double>& point);
 

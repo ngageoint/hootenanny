@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -85,7 +85,7 @@ public:
 
     // This is here to prevent inadvertent removal of stats and to make sure any new stats get added
     // to this test.
-    CPPUNIT_ASSERT_EQUAL(287, calcStatsOp->getStats().size());
+    CPPUNIT_ASSERT_EQUAL(289, calcStatsOp->getStats().size());
 
     // This lets you know if the total stat calls made don't match what was predicted by
     // _initStatCalc.
@@ -100,13 +100,13 @@ private:
   std::shared_ptr<CalculateStatsOp> _calcStats(const QString& inputFile)
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseFileStatus(true);
     reader.setUseDataSourceIds(true);
     reader.read(inputFile, map);
 
-    std::shared_ptr<CalculateStatsOp> calcStatsOp(new CalculateStatsOp());
+    std::shared_ptr<CalculateStatsOp> calcStatsOp = std::make_shared<CalculateStatsOp>();
     // If we figure out the error messages logged by the script translator related stats are
     // invalid and fix them, then this log disablement can be removed.
     {

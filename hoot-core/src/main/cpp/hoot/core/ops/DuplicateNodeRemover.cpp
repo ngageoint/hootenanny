@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "DuplicateNodeRemover.h"
@@ -39,7 +39,7 @@
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/schema/ExactTagDifferencer.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 
 // Qt
 #include <QTime>
@@ -65,7 +65,8 @@ double calcDistanceSquared(const NodePtr& n1, const NodePtr& n2)
   return dx * dx + dy * dy;
 }
 
-DuplicateNodeRemover::DuplicateNodeRemover(Meters distanceThreshold)
+DuplicateNodeRemover::DuplicateNodeRemover(Meters distanceThreshold) :
+_ignoreStatus(false)
 {
   _distance = distanceThreshold;
   if (_distance < 0.0)
@@ -94,18 +95,12 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   if (MapProjector::isGeographic(map))
   {
     wgs84 = map;
-    planar.reset(new OsmMap(map));
+    planar = std::make_shared<OsmMap>(map);
     MapProjector::projectToPlanar(planar);
   }
   else
   {
     planar = map;
-    // if we need to check for bounds containment
-    if (_bounds.get())
-    {
-      wgs84.reset(new OsmMap(map));
-      MapProjector::projectToWgs84(wgs84);
-    }
   }
 
   ClosePointHash cph(_distance);
@@ -119,6 +114,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     {
       continue;
     }
+
     // We don't need to check for existence of the nodes parent here, b/c if it ends up being a dupe
     // we'll replace it with another node instead of removing it from the map.
     cph.addPoint(n->getX(), n->getY(), n->getId());
@@ -138,7 +134,6 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   cph.resetIterator();
   ExactTagDifferencer tagDiff;
 
-  ElementToGeometryConverter elementConverter(map);
   while (cph.next())
   {
     const std::vector<long>& v = cph.getMatch();
@@ -162,31 +157,30 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
           LOG_VART(n1);
           LOG_VART(n2);
 
-          if (n1->getStatus() == n2->getStatus())
+          if ((n1->getStatus() == n2->getStatus()) || _ignoreStatus)
           {
             calcdDistanceSquared = calcDistanceSquared(n1, n2);
             LOG_VART(distanceSquared);
             LOG_VART(calcdDistanceSquared);
             if (distanceSquared > calcdDistanceSquared)
             {
-              // if the geographic bounds are not specified.
-              if (!_bounds)
+              // Since this class operates on elements with generic types, an additional check must
+              // be performed here during conflation to enure we don't modify any element not
+              // associated with an active conflate matcher in the current conflation
+              // configuration.
+              if (_conflateInfoCache &&
+                  (!_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n1, className()) ||
+                   !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n2, className())))
               {
-                replace = true;
+                LOG_TRACE(
+                  "Skipping processing of " << n1->getElementId() << " and " <<
+                  n2->getElementId() << " at least one of them cannot be conflated by any " <<
+                  "actively configured conflate matcher...");
+                replace = false;
               }
-              // if the geographic bounds are specified, then make sure both points are inside.
               else
               {
-                ConstNodePtr node1 = wgs84->getNode(matchIdI);
-                std::shared_ptr<geos::geom::Geometry> geom1 =
-                  elementConverter.convertToGeometry(node1);
-                ConstNodePtr node2 = wgs84->getNode(matchIdJ);
-                std::shared_ptr<geos::geom::Geometry> geom2 =
-                  elementConverter.convertToGeometry(node2);
-                if (_bounds->contains(geom1.get()) && _bounds->contains(geom2.get()))
-                {
-                  replace = true;
-                }
+                replace = true;
               }
               LOG_VART(replace);
 
@@ -239,8 +233,8 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   }
 }
 
-bool DuplicateNodeRemover::_passesLogMergeFilter(const long nodeId1, const long nodeId2,
-                                                 OsmMapPtr& map) const
+bool DuplicateNodeRemover::_passesLogMergeFilter(
+  const long nodeId1, const long nodeId2, const OsmMapPtr& map) const
 {
   // can add various filtering criteria here for debugging purposes...
 
@@ -249,7 +243,7 @@ bool DuplicateNodeRemover::_passesLogMergeFilter(const long nodeId1, const long 
   kvps.append("OBJECTID=76174");
 
   std::set<ElementId> wayIdsOwning1;
-  const std::set<long> waysOwning1 = WayUtils::getContainingWayIdsByNodeId(nodeId1, map);
+  const std::set<long> waysOwning1 = WayUtils::getContainingWayIds(nodeId1, map);
   for (std::set<long>::const_iterator it = waysOwning1.begin(); it != waysOwning1.end(); ++it)
   {
     wayIdsOwning1.insert(ElementId(ElementType::Way, *it));
@@ -260,7 +254,7 @@ bool DuplicateNodeRemover::_passesLogMergeFilter(const long nodeId1, const long 
   }
 
   std::set<ElementId> wayIdsOwning2;
-  const std::set<long> waysOwning2 = WayUtils::getContainingWayIdsByNodeId(nodeId2, map);
+  const std::set<long> waysOwning2 = WayUtils::getContainingWayIds(nodeId2, map);
   for (std::set<long>::const_iterator it = waysOwning2.begin(); it != waysOwning2.end(); ++it)
   {
     wayIdsOwning2.insert(ElementId(ElementType::Way, *it));
@@ -273,9 +267,9 @@ bool DuplicateNodeRemover::_passesLogMergeFilter(const long nodeId1, const long 
   return false;
 }
 
-void DuplicateNodeRemover::_logMergeResult(const long nodeId1, const long nodeId2, OsmMapPtr& map,
-                                           const bool replaced, const double distance,
-                                           const double calcdDistance)
+void DuplicateNodeRemover::_logMergeResult(
+  const long nodeId1, const long nodeId2, const OsmMapPtr& map, const bool replaced,
+  const double distance, const double calcdDistance) const
 {
   if (_passesLogMergeFilter(nodeId1, nodeId2, map))
   {
@@ -295,18 +289,20 @@ void DuplicateNodeRemover::_logMergeResult(const long nodeId1, const long nodeId
     LOG_TRACE(msg);
     LOG_TRACE(
       "Node " << nodeId1 << " belongs to ways: " <<
-      WayUtils::getContainingWayIdsByNodeId(nodeId1, map));
+      WayUtils::getContainingWayIds(nodeId1, map));
     LOG_TRACE(
       "Node " << nodeId2 << " belongs to ways: " <<
-      WayUtils::getContainingWayIdsByNodeId(nodeId2, map));
+      WayUtils::getContainingWayIds(nodeId2, map));
     LOG_VART(WayUtils::nodesAreContainedInTheSameWay(nodeId1, nodeId2, map));
   }
 }
 
-void DuplicateNodeRemover::removeNodes(std::shared_ptr<OsmMap> map, Meters distanceThreshold)
+void DuplicateNodeRemover::removeNodes(
+  std::shared_ptr<OsmMap> map, Meters distanceThreshold, const bool ignoreStatus)
 {
-  DuplicateNodeRemover mnn(distanceThreshold);
-  mnn.apply(map);
+  DuplicateNodeRemover dupeRemover(distanceThreshold);
+  dupeRemover.setIgnoreStatus(ignoreStatus);
+  dupeRemover.apply(map);
 }
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WAYFEATUREEXTRACTOR_H
 #define WAYFEATUREEXTRACTOR_H
@@ -38,9 +38,11 @@ namespace hoot
 class OsmMap;
 
 /**
- * Extracts a feature from two ways. If the features are not both ways and they aren't both
- * multilinestrings of the same count then a null is returned. If they're both multilinestrings then
- * it is assumed that the first ways in the multilinestring correspond along with the second, etc.
+ * @brief The WayFeatureExtractor class extracts a feature from two ways.
+ *
+ * If the features are not both ways and they aren't both multilinestrings of the same count, then a
+ * null is returned. If they're both multilinestrings then it is assumed that the first ways in the
+ * multilinestring correspond along with the second, etc.
  */
 class WayFeatureExtractor : public FeatureExtractorBase, public ValueAggregatorConsumer
 {
@@ -48,19 +50,17 @@ public:
 
   static QString className() { return "hoot::WayFeatureExtractor"; }
 
-  WayFeatureExtractor(ValueAggregatorPtr agg);
-
   WayFeatureExtractor();
+  WayFeatureExtractor(ValueAggregatorPtr agg);
   virtual ~WayFeatureExtractor() = default;
 
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const;
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+    const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getClassName() const { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getName() const override;
 
-  virtual QString getName() const;
-
-  virtual void setValueAggregator(const ValueAggregatorPtr& va) { _agg = va; }
+  void setValueAggregator(const ValueAggregatorPtr& va) override { _agg = va; }
 
 protected:
 

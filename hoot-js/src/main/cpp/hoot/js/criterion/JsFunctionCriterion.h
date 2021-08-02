@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CUSTOMCRITERION_H
@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * A criterion that will either keep or remove matches.
+ * A criterion that uses a JS function to evaluate elements.
  */
 class JsFunctionCriterion : public ElementCriterion, public JsFunctionConsumer
 {
@@ -46,26 +46,21 @@ public:
   static QString className() { return "hoot::JsFunctionCriterion"; }
 
   JsFunctionCriterion() = default;
-  virtual ~JsFunctionCriterion() = default;
+  JsFunctionCriterion(const v8::Persistent<v8::Function>& func)
+  { _func.Reset(v8::Isolate::GetCurrent(), func); }
+  ~JsFunctionCriterion() = default;
 
-  virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func)
+  void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) override
   { _func.Reset(isolate, func); }
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<JsFunctionCriterion>(_func); }
 
-  virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new JsFunctionCriterion(_func)); }
-
-  virtual QString getDescription() const { return ""; }
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
-
-  JsFunctionCriterion(v8::Persistent<v8::Function>& func)
-  { _func.Reset(v8::Isolate::GetCurrent(), func); }
 
   v8::Persistent<v8::Function> _func;
 };

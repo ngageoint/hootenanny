@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -45,31 +45,29 @@ public:
 
   SchemaCmd() = default;
 
-  virtual QString getName() const override { return "schema"; }
+  QString getName() const override { return "schema"; }
+  QString getDescription() const override { return "Displays the tag schema in use"; }
 
-  virtual QString getDescription() const override { return "Displays the tag schema in use"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
-    QString printScript(ConfigOptions().getTagPrintingScript());
-
-    if (args.size() == 1)
+    if (!args.empty())
     {
-      printScript = args[0];
-    }
-    else if (args.size() > 1)
-    {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes one optional parameter.").arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes zero parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
-    // Great bit of code taken from TranslatedTagDifferencer
-    std::shared_ptr<ScriptSchemaTranslator> schemaPrinter(
-      ScriptSchemaTranslatorFactory::getInstance().createTranslator(printScript));
-
+    LOG_STATUS("Printing schema...");
+    std::shared_ptr<ScriptSchemaTranslator> schemaPrinter =
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator(
+        ConfigOptions().getTagPrintingScript());
     if (!schemaPrinter)
     {
-      throw HootException("Unable to find a valid translation format for: " + printScript);
+      throw IllegalArgumentException(
+        "Unable to find a valid translation format for: " + ConfigOptions().getTagPrintingScript());
     }
 
     return 0;

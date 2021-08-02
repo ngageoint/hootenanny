@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef BUILDINGWAYNODECRITERION_H
 #define BUILDINGWAYNODECRITERION_H
@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * A criterion that keeps nodes belonging to a building way.
+ * A criterion that identifies nodes belonging to a building way.
  */
 class BuildingWayNodeCriterion : public WayNodeCriterion
 {
@@ -44,18 +44,16 @@ public:
 
   BuildingWayNodeCriterion();
   BuildingWayNodeCriterion(ConstOsmMapPtr map);
-  virtual ~BuildingWayNodeCriterion() = default;
+  ~BuildingWayNodeCriterion() = default;
 
-  virtual void setOsmMap(const OsmMap* map) override;
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new BuildingWayNodeCriterion(_map)); }
+  ElementCriterionPtr clone() override { return std::make_shared<BuildingWayNodeCriterion>(_map); }
 
-  virtual QString getDescription() const override { return "Identifies way nodes in buildings"; }
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Identifies way nodes in buildings"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 }

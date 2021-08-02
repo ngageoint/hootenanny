@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // GCC
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
   std::shared_ptr<Command> c;
   for (size_t i = 0; i < cmds.size(); i++)
   {
-    c.reset(Factory::getInstance().constructObject<Command>(cmds[i]));
+    c = Factory::getInstance().constructObject<Command>(cmds[i]);
     QString argName = c->getName();
     if (QString(argv[1]) == argName)
     {
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  if (c != NULL)
+  if (c != nullptr)
   {
     try
     {
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
   }
   else
   {
-    c.reset(Factory::getInstance().constructObject<Command>("hoot::HelpCmd"));
+    c = Factory::getInstance().constructObject<Command>("hoot::HelpCmd");
     c->run(argv, argc);
     return -1;
   }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ClosePointHash.h"
@@ -60,7 +60,7 @@ void ClosePointHash::addPoint(double x, double y, long id)
   _idTobin[id].push_back(binIx);
 }
 
-const vector<long>& ClosePointHash::getMatch()
+const vector<long>& ClosePointHash::getMatch() const
 {
   return _match;
 }
@@ -101,7 +101,7 @@ void ClosePointHash::resetIterator()
   _it = _bins.begin();
 }
 
-int64_t ClosePointHash::_toBin(double x, double y)
+int64_t ClosePointHash::_toBin(double x, double y) const
 {
   uint64_t xi = (uint32_t)(x / _binSize + 0.5);
   uint64_t yi = (uint32_t)(y / _binSize + 0.5);

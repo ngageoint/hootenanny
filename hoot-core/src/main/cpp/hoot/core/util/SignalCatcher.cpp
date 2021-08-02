@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "SignalCatcher.h"
@@ -137,7 +137,9 @@ void SignalCatcher::print_stacktrace(FILE *out, unsigned int max_frames)
     // address of this function.
     for (int i = 1; i < addrlen; i++)
     {
-        char *begin_name = 0, *begin_offset = 0, *end_offset = 0;
+        char *begin_name = nullptr,
+             *begin_offset = nullptr,
+             *end_offset = nullptr;
 
         // find parentheses and +address offset surrounding the mangled name:
         // ./module(function+0x15c) [0x8048a6d]

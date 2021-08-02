@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -72,7 +72,7 @@ public:
   void verifyDatabaseOutputOffline()
   {
     OsmApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
 
@@ -140,7 +140,7 @@ public:
   void verifyDatabaseOutputOfflineValidateOff()
   {
     OsmApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
 
@@ -208,7 +208,7 @@ public:
   void verifyDatabaseOutputOfflineWithCustomStartingIds()
   {
     OsmApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
 
@@ -276,7 +276,7 @@ public:
   void verifyDatabaseOutputOfflineWithLargeCustomStartingIds()
   {
     OsmApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
 
@@ -344,7 +344,7 @@ public:
   void verifyDatabaseOutputOnline()
   {
     OsmApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
 
@@ -654,10 +654,10 @@ public:
                  StringUtils::formatLargeNumber(std::numeric_limits<unsigned long>::max()) << std::endl;
     std::cout << "size of float: " << sizeof(float) << std::endl;
     std::cout << "max size of float : " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<float>::max()) << std::endl;
+                 StringUtils::formatLargeNumber(static_cast<unsigned long>(std::numeric_limits<float>::max())) << std::endl;
     std::cout << "size of double: " << sizeof(double) << std::endl;
     std::cout << "max size of double : " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<double>::max()) << std::endl;
+                 StringUtils::formatLargeNumber(static_cast<unsigned long>(std::numeric_limits<double>::max())) << std::endl;
   }
 };
 

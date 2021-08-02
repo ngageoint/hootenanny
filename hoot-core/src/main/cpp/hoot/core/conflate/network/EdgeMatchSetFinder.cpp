@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "EdgeMatchSetFinder.h"
 
@@ -73,7 +73,7 @@ void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdge
 
   if (e1->isStub() || e2->isStub())
   {
-    EdgeMatchPtr em(new EdgeMatch());
+    EdgeMatchPtr em = std::make_shared<EdgeMatch>();
     em->getString1()->addFirstEdge(e1);
     em->getString2()->addFirstEdge(e2);
     _recordMatch(em);
@@ -84,7 +84,7 @@ void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdge
     QList<EdgeSublineMatchPtr> sublines = _details->calculateMatchingSublines(e1, e2);
     foreach (EdgeSublineMatchPtr s, sublines)
     {
-      EdgeMatchPtr em(new EdgeMatch());
+      EdgeMatchPtr em = std::make_shared<EdgeMatch>();
       em->getString1()->addFirstEdge(s->getSubline1());
       em->getString2()->addFirstEdge(s->getSubline2());
       _steps = 0;
@@ -126,47 +126,43 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
   }
   else
   {
-    // if the end of the match isn't terminated.
-    if (!toMatch)
+    // If the end of the match isn't terminated and
+    if (!toMatch &&
+        // either of the vertices doesn't have a tie point, then we need to keep searching.
+        (_hasConfidentTiePoint(to1) == false || _hasConfidentTiePoint(to2) == false))
     {
-      // if either of the vertices doesn't have a tie point then we need to keep searching.
-      if (_hasConfidentTiePoint(to1) == false || _hasConfidentTiePoint(to2) == false)
+      // Get all the neighboring edges to 1 and 2.
+      QSet<ConstNetworkEdgePtr> neighbors1 = _getEdgesFromLocation(to1);
+      QSet<ConstNetworkEdgePtr> neighbors2 = _getEdgesFromLocation(to2);
+
+      // Subtract all the edges that are already in the solution.
+      neighbors1.subtract(em->getString1()->getEdgeSet());
+      neighbors2.subtract(em->getString2()->getEdgeSet());
+
+      LOG_VART(neighbors1);
+      LOG_VART(neighbors2);
+
+      if (!neighbors1.empty() || !neighbors2.empty())
       {
-        // get all the neighboring edges to 1 and 2
-        QSet<ConstNetworkEdgePtr> neighbors1 = _getEdgesFromLocation(to1);
-        QSet<ConstNetworkEdgePtr> neighbors2 = _getEdgesFromLocation(to2);
-
-        // subtract all the edges that are already in the solution.
-        neighbors1.subtract(em->getString1()->getEdgeSet());
-        neighbors2.subtract(em->getString2()->getEdgeSet());
-
-        LOG_VART(neighbors1);
-        LOG_VART(neighbors2);
-
-        if (neighbors1.size() > 0 || neighbors2.size() > 0)
-        {
-          foundSolution = _addEdgeNeighborsToEnd(em, neighbors1, neighbors2) || foundSolution;
-        }
+        foundSolution = _addEdgeNeighborsToEnd(em, neighbors1, neighbors2) || foundSolution;
       }
     }
-    // if the beginning of the match isn't terminated
-    if (!fromMatch && !foundSolution)
+    // If the beginning of the match isn't terminated and
+    if (!fromMatch && !foundSolution &&
+        // either of the vertices doesn't have a tie point, then we need to keep searching.
+        (_hasConfidentTiePoint(from1) == false || _hasConfidentTiePoint(from2) == false))
     {
-      // if either of the vertices doesn't have a tie point then we need to keep searching.
-      if (_hasConfidentTiePoint(from1) == false || _hasConfidentTiePoint(from2) == false)
-      {
-        // get all the neighboring edges to 1 and 2
-        QSet<ConstNetworkEdgePtr> neighbors1 = _getEdgesFromLocation(from1);
-        QSet<ConstNetworkEdgePtr> neighbors2 = _getEdgesFromLocation(from2);
+      // Get all the neighboring edges to 1 and 2.
+      QSet<ConstNetworkEdgePtr> neighbors1 = _getEdgesFromLocation(from1);
+      QSet<ConstNetworkEdgePtr> neighbors2 = _getEdgesFromLocation(from2);
 
-        neighbors1.subtract(em->getString1()->getEdgeSet());
-        neighbors2.subtract(em->getString2()->getEdgeSet());
+      neighbors1.subtract(em->getString1()->getEdgeSet());
+      neighbors2.subtract(em->getString2()->getEdgeSet());
 
-        LOG_VART(neighbors1);
-        LOG_VART(neighbors2);
+      LOG_VART(neighbors1);
+      LOG_VART(neighbors2);
 
-        foundSolution = _addEdgeNeighborsToStart(em, neighbors1, neighbors2) || foundSolution;
-      }
+      foundSolution = _addEdgeNeighborsToStart(em, neighbors1, neighbors2) || foundSolution;
     }
   }
   LOG_VART(foundSolution);
@@ -297,14 +293,6 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
   return foundSolution;
 }
 
-void EdgeMatchSetFinder::_appendMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1,
-                                      ConstNetworkEdgePtr e2) const
-{
-  LOG_TRACE("Appending match...");
-  LOG_VART(em);
-  _details->extendEdgeMatch(em, e1, e2);
-}
-
 QSet<ConstNetworkEdgePtr> EdgeMatchSetFinder::_getEdgesFromLocation(ConstEdgeLocationPtr l) const
 {
   QSet<ConstNetworkEdgePtr> result;
@@ -360,14 +348,6 @@ bool EdgeMatchSetFinder::_isCandidateMatch(ConstEdgeLocationPtr l1, ConstEdgeLoc
     result = false;
   }
   return result;
-}
-
-void EdgeMatchSetFinder::_prependMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1,
-                                       ConstNetworkEdgePtr e2) const
-{
-  LOG_TRACE("Prepending match...");
-  LOG_VART(em);
-  _details->extendEdgeMatch(em, e1, e2);
 }
 
 bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
@@ -461,11 +441,11 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
   return false;
 }
 
-void EdgeMatchSetFinder::_addReverseMatch(ConstEdgeMatchPtr edgeMatch, const double score)
+void EdgeMatchSetFinder::_addReverseMatch(ConstEdgeMatchPtr edgeMatch, const double score) const
 {
   EdgeStringPtr rev1 = edgeMatch->getString1()->clone();
   rev1->reverse();
-  EdgeMatchPtr em2(new EdgeMatch(rev1, edgeMatch->getString2()));
+  EdgeMatchPtr em2 = std::make_shared<EdgeMatch>(rev1, edgeMatch->getString2());
   _matchSet->addEdgeMatch(em2, score);
 }
 
@@ -473,192 +453,6 @@ double EdgeMatchSetFinder::_scoreMatch(ConstEdgeMatchPtr em) const
 {
   LOG_TRACE("Scoring match...");
   return _details->getEdgeStringMatchScore(em->getString1(), em->getString2());
-}
-
-ConstEdgeSublinePtr EdgeMatchSetFinder::_snapSublineToString(ConstEdgeStringPtr str,
-  ConstEdgeSublinePtr sub) const
-{
-  ConstEdgeSublinePtr result;
-
-  if (str->touches(sub))
-  {
-    result = sub;
-  }
-  else if (_details->calculateDistance(str, sub->getStart()) <
-           _details->calculateDistance(str, sub->getEnd()))
-  {
-    ConstEdgeLocationPtr elStr, elSub;
-    _details->calculateNearestLocation(str, sub, elStr, elSub);
-    result.reset(new EdgeSubline(elStr, sub->getEnd()));
-  }
-  else
-  {
-    ConstEdgeLocationPtr elStr, elSub;
-    _details->calculateNearestLocation(str, sub, elStr, elSub);
-    result.reset(new EdgeSubline(sub->getStart(), elStr));
-  }
-
-  return result;
-}
-
-EdgeMatchPtr EdgeMatchSetFinder::_trimFromEdge(ConstEdgeMatchPtr em)
-{
-  LOG_TRACE("Trimming From edge...");
-  LOG_VART(em);
-
-  EdgeMatchPtr result;
-
-  // trim the beginning of the edge string as appropriate.
-  QList<EdgeSublineMatchPtr> matches =
-    _details->calculateMatchingSublines(em->getString1()->getEdge(0), em->getString2()->getEdge(0));
-
-  if (matches.size() == 0)
-  {
-    return result;
-  }
-
-  LOG_VART(matches);
-
-  // only the last match is relevant because it matches to the second to last edge in the match.
-  ConstEdgeSublinePtr s1 = matches.back()->getSubline1();
-  ConstEdgeSublinePtr s2 = matches.back()->getSubline2();
-  LOG_VART(s1);
-  LOG_VART(s2);
-
-  ConstEdgeSublinePtr origS1 = em->getString1()->getAllEdges().front().getSubline();
-  ConstEdgeLocationPtr startS1 = s1->getStart();
-  if (origS1->isBackwards() != s1->isBackwards())
-  {
-    startS1 = s1->getEnd();
-  }
-
-  ConstEdgeSublinePtr origS2 = em->getString2()->getAllEdges().front().getSubline();
-  ConstEdgeLocationPtr startS2 = s2->getStart();
-  if (origS2->isBackwards() != s2->isBackwards())
-  {
-    startS2 = s2->getEnd();
-  }
-  LOG_VART(origS1);
-  LOG_VART(origS2);
-
-  // we don't want to trim from the back of the edges
-  s1 = ConstEdgeSublinePtr(new EdgeSubline(startS1, origS1->getEnd()));
-  s2 = ConstEdgeSublinePtr(new EdgeSubline(startS2, origS2->getEnd()));
-  LOG_VART(s1);
-  LOG_VART(s2);
-
-  if (s1->getEnd()->isExtreme(EdgeLocation::SLOPPY_EPSILON) &&
-      s2->getEnd()->isExtreme(EdgeLocation::SLOPPY_EPSILON))
-  {
-    EdgeStringPtr str1(new EdgeString());
-    EdgeStringPtr str2(new EdgeString());
-
-    str1->addFirstEdge(s1);
-    foreach (const EdgeString::EdgeEntry& ee, em->getString1()->getAllEdges().mid(1))
-    {
-      str1->appendEdge(ee.getSubline());
-    }
-
-    str2->addFirstEdge(s2);
-    foreach (const EdgeString::EdgeEntry& ee, em->getString2()->getAllEdges().mid(1))
-    {
-      str2->appendEdge(ee.getSubline());
-    }
-
-    result.reset(new EdgeMatch(str1, str2));
-  }
-
-  LOG_VART(result);
-  return result;
-}
-
-EdgeMatchPtr EdgeMatchSetFinder::_trimToEdge(ConstEdgeMatchPtr em)
-{
-  LOG_TRACE("Trimming To edge...");
-  LOG_VART(em);
-
-  EdgeMatchPtr result;
-
-  // trim the beginning of the edge string as appropriate.
-  QList<EdgeSublineMatchPtr> matches =
-    _details->calculateMatchingSublines(em->getString1()->getLastEdge(),
-                                        em->getString2()->getLastEdge());
-
-  if (matches.size() == 0)
-  {
-    return result;
-  }
-  LOG_VART(matches);
-
-  // only the first match is relevant because it matches to the second to last edge in the match.
-  ConstEdgeSublinePtr s1 = matches.front()->getSubline1();
-  ConstEdgeSublinePtr s2 = matches.front()->getSubline2();
-
-  LOG_VART(s1);
-  LOG_VART(s2);
-
-  ConstEdgeSublinePtr origS1 = em->getString1()->getAllEdges().back().getSubline();
-  ConstEdgeLocationPtr endS1 = s1->getEnd();
-  if (origS1->isBackwards() != s1->isBackwards())
-  {
-    endS1 = s1->getStart();
-  }
-
-  ConstEdgeSublinePtr origS2 = em->getString2()->getAllEdges().back().getSubline();
-  ConstEdgeLocationPtr endS2 = s2->getEnd();
-  if (origS2->isBackwards() != s2->isBackwards())
-  {
-    endS2 = s2->getStart();
-  }
-
-  // we don't want to trim from the front of the edges
-  s1 = ConstEdgeSublinePtr(new EdgeSubline(origS1->getStart(), endS1));
-  s2 = ConstEdgeSublinePtr(new EdgeSubline(origS2->getStart(), endS2));
-
-  LOG_VART(s1);
-  LOG_VART(s2);
-
-  EdgeStringPtr str1(new EdgeString());
-  EdgeStringPtr str2(new EdgeString());
-
-  if (em->getString1()->getCount() == 1)
-  {
-    str1->addFirstEdge(s1);
-  }
-  else
-  {
-    str1->addFirstEdge(em->getString1()->getAllEdges().first().getSubline());
-    // add all but the last edge
-    foreach (const EdgeString::EdgeEntry& ee,
-             em->getString1()->getAllEdges().mid(1, em->getString1()->getCount() - 2))
-    {
-      str1->appendEdge(ee.getSubline());
-    }
-    // add our new trimmed last edge.
-    str1->appendEdge(s1);
-  }
-
-  if (em->getString2()->getCount() == 1)
-  {
-    str2->addFirstEdge(s2);
-  }
-  else
-  {
-    str2->addFirstEdge(em->getString2()->getAllEdges().first().getSubline());
-    // add all but the last edge
-    foreach (const EdgeString::EdgeEntry& ee,
-             em->getString2()->getAllEdges().mid(1, em->getString2()->getCount() - 2))
-    {
-      str2->appendEdge(ee.getSubline());
-    }
-    // add our new trimmed last edge.
-    str2->appendEdge(s2);
-  }
-
-  result.reset(new EdgeMatch(str1, str2));
-
-  LOG_VART(result);
-  return result;
 }
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ProbabilityOfMatch.h"
@@ -31,27 +31,29 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Point.h>
-using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/criterion/ParallelWayCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/criterion/OneWayCriterion.h>
+
 // Standard
 #include <vector>
-using namespace std;
 
 // Tgs
 #include <tgs/StreamUtils.h>
 #include <tgs/Statistics/Normal.h>
+
+using namespace geos::geom;
+using namespace std;
 using namespace Tgs;
 
 namespace hoot
@@ -63,18 +65,16 @@ ProbabilityOfMatch::ProbabilityOfMatch()
 }
 
 double ProbabilityOfMatch::attributeScore(const ConstOsmMapPtr& map,
-  const ConstWayPtr& w1, const ConstWayPtr& w2)
+  const ConstWayPtr& w1, const ConstWayPtr& w2) const
 {
   double score = 1.0;
 
   score = TagComparator::getInstance().compareTags(w1->getTags(), w2->getTags());
   OneWayCriterion oneWayCrit;
-  if (oneWayCrit.isSatisfied(w1) && oneWayCrit.isSatisfied(w2))
+  if (oneWayCrit.isSatisfied(w1) && oneWayCrit.isSatisfied(w2) &&
+      !DirectionFinder::isSimilarDirection(map, w1, w2))
   {
-    if (DirectionFinder::isSimilarDirection(map, w1, w2) == false)
-    {
-      score *= .1;
-    }
+    score *= .1;
   }
   // if we can't compare the scores, then just give it a 1. Hrmph.
   if (score < 0.0)
@@ -104,12 +104,11 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstW
 
   for (size_t i = 0; i < v.size(); i++)
   {
-    Point* point(GeometryFactory::getDefaultInstance()->createPoint(v[i]));
-    LOG_VART(ls2->distance(point));
-    double d = ls2->distance(point);
+    std::shared_ptr<Point> point(GeometryFactory::getDefaultInstance()->createPoint(v[i]));
+    LOG_VART(ls2->distance(point.get()));
+    double d = ls2->distance(point.get());
     distanceSum += d;
     _dMax = max(d, _dMax);
-    delete point;
   }
 
   _dMax /= (circularError + w1->getCircularError());
@@ -141,7 +140,7 @@ ProbabilityOfMatch& ProbabilityOfMatch::getInstance()
 }
 
 double ProbabilityOfMatch::lengthScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-  const ConstWayPtr &w2)
+  const ConstWayPtr &w2) const
 {
   Meters l1 = ElementToGeometryConverter(map).convertToLineString(w1)->getLength();
   Meters l2 = ElementToGeometryConverter(map).convertToLineString(w2)->getLength();
@@ -153,7 +152,7 @@ double ProbabilityOfMatch::lengthScore(const ConstOsmMapPtr& map, const ConstWay
 }
 
 double ProbabilityOfMatch::parallelScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-                                         const ConstWayPtr& w2)
+                                         const ConstWayPtr& w2) const
 {
   ParallelWayCriterion pwf(map, w1, true);
 
@@ -180,7 +179,7 @@ double ProbabilityOfMatch::expertProbability(const ConstOsmMapPtr& map, const Co
   return ds * ps * as * zs * ls;
 }
 
-double ProbabilityOfMatch::zipperScore(const ConstWayPtr& w1, const ConstWayPtr& w2)
+double ProbabilityOfMatch::zipperScore(const ConstWayPtr& w1, const ConstWayPtr& w2) const
 {
   double result = 1.0;
 

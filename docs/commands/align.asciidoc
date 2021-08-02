@@ -1,64 +1,57 @@
-[[rubber-sheet]]
-== rubber-sheet
+[[align]]
+== align
 
 === Description
 
-The +rubber-sheet+ command finds common high confidence road intersection matches and rubber sheets two map datasets to bring them
+The +align+ command finds common high confidence road intersection matches and rubber sheets two map datasets to bring them
 into alignment.  It reads from inputs, matches nodes, transforms input2, and writes the combined data to output.  The input
 parameters are:
 
 * +input1+ - Input 1; may be any supported input format (e.g. OSM file).
 * +input2+ - Input 2; may be any supported input format (e.g. OSM file).
-* +output+ - Output file; may be any supported output format (e.g. OSM file).
+* +output+ - Output; may be any supported output format (e.g. OSM file).
 
 The following optional defines can be set:
 
-* +rubber.sheet.ref+                   - If set to true then the first input will be treated as a reference layer and the geometries
-                                         will not be moved. By default +input1+ and +input2+ are moved towards each other.
-* +rubber.sheet.kernel.estimate.sigma+ - The sigma to use when applying a kernel estimation interpolation. By default cross validation
-                                         is used to determine an appropriate sigma and should be adequate for most purposes.
+* +rubber.sheet.ref+                   - If set to true then the first input will be treated as a reference layer and 
+                                         the geometries will not be moved. By default +input1+ and +input2+ are moved 
+                                         towards each other.
+* +rubber.sheet.kernel.estimate.sigma+ - The sigma to use when applying a kernel estimation interpolation. By default 
+                                         cross validation is used to determine an appropriate sigma and should be adequate 
+                                         for most purposes.
 
 === Usage
 
 --------------------------------------
-rubber-sheet (input1) (input2) (output)
+hoot align (input1) (input2) (output)
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot rubber-sheet TigerDc.osm DcGis.osm Warped.osm
---------------------------------------
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#alignment[Examples]
 
 === Description With Derive Option
 
-To just derive a transform file that can be used separately to rubber sheet data, used the --derive option.  When using the --derive
-option, the input parameters are:
+To just derive a transform file that can be used separately to rubber sheet data, used the --derive option.  When using the 
+--derive option, the input parameters are:
 
-* +--ref +           - If specified, treat input1 as a reference layer and only produce one
-                       output transform.
 * +input1+           - Input 1; may be any supported input format (e.g. OSM file).
 * +input2+           - Input 2; may be any supported input format (e.g. OSM file).
 * +transform2to1.rs+ - Output transform rubber sheet spec. provides a transform for moving input 2 towards input 1.
-* +transform1to2.rs+ - Output transform rubber sheet spec. Provides a transform for moving input 1 towards input 2. Required if --ref is not 
-                       specified.
+* +transform1to2.rs+ - Output transform rubber sheet spec. Provides a transform for moving input 1 towards input 2. Required 
+                       if --ref is not specified.
+* +--ref +           - If specified, treat input1 as a reference layer and only produce one output transform.
 
 === Usage With Derive Option
 
 --------------------------------------
-rubber-sheet --derive [--ref] (input1) (input2) (transform2to1.rs) [transform1to2.rs]
+hoot align --derive (input1) (input2) (transform2to1.rs) [transform1to2.rs] [--ref]
 --------------------------------------
 
-==== Example With Derive Option
-
---------------------------------------
-hoot rubber-sheet --derive --ref DcGisRoads.osm TigerRoads.osm TigerToDcGis.rs
---------------------------------------
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#derive-an-alignment-transform-for-two-maps[Examples]
 
 === Description With Apply Option
 
-To apply a rubber sheet created with the --derive option, use the --apply option.  When using the --apply option, the input parameters
-are:
+To apply a rubber sheet created with the --derive option, use the --apply option.  When using the --apply option, the 
+input parameters are:
 
 * +transform.rs+ - Transform rubber sheet spec for moving the input.
 * +input+        - Input; may be any supported input format (e.g. OSM file).
@@ -67,14 +60,10 @@ are:
 === Usage With Apply Option
 
 --------------------------------------
-rubber-sheet --apply (transform.rs) (input) (output)
+hoot align --apply (transform.rs) (input) (output)
 --------------------------------------
 
-==== Example With Apply Option
-
---------------------------------------
-hoot rubber-sheet --apply TigerToDcGis.rs TigerRoads.osm TigerRoadsWarped.osm
---------------------------------------
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#apply-an-alignment-transform-for-two-maps[Examples]
 
 === See Also
 

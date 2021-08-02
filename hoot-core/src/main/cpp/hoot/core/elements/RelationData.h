@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef RELATIONDATA_H
 #define RELATIONDATA_H
@@ -44,51 +44,47 @@ public:
 
   struct Entry
   {
-    QString role;
-
-    Entry() {}
-    Entry(QString r, ElementId eid) : role(r), _eid(eid)  { }
+    Entry() = default;
+    Entry(QString r, ElementId eid) : _role(r), _eid(eid)  { }
     Entry(ElementId eid) : _eid(eid) { }
-
-    ElementId getElementId() const { return _eid; }
-    void setElementId(ElementId eid) { _eid = eid; }
-    const QString& getRole() const { return role; }
 
     bool operator!=(const Entry& other) const { return !(*this == other); }
     bool operator==(const Entry& other) const
     {
       return getElementId() == other.getElementId() && getRole() == other.getRole();
     }
+    bool operator<(const Entry& other) const { return getElementId() < other.getElementId(); }
 
     bool isNull() const { return _eid.isNull(); }
 
     QString toString() const
     {
-      return QString("Entry: role: %1, eid: %2").arg(role).arg(_eid.toString());
+      return QString("Entry: role: %1, eid: %2").arg(_role).arg(_eid.toString());
     }
+
+    ElementId getElementId() const { return _eid; }
+    QString getRole() const { return _role; }
+
+    void setElementId(ElementId eid) { _eid = eid; }
+    void setRole(const QString& role) { _role = role; }
 
   private:
 
+    QString _role;
     ElementId _eid;
   };
 
-  RelationData(long id, long changeset = ElementData::CHANGESET_EMPTY,
-               long version = ElementData::VERSION_EMPTY,
-               unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
-               QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
-               bool visible = ElementData::VISIBLE_EMPTY);
-
+  RelationData(
+    long id, long changeset = ElementData::CHANGESET_EMPTY,
+    long version = ElementData::VERSION_EMPTY,
+    unsigned int timestamp = ElementData::TIMESTAMP_EMPTY, QString user = ElementData::USER_EMPTY,
+    long uid = ElementData::UID_EMPTY, bool visible = ElementData::VISIBLE_EMPTY);
   RelationData(const RelationData& rd);
-
-  virtual ~RelationData() = default;
+  ~RelationData() = default;
 
   void addElement(const QString& role, ElementId eid);
 
-  virtual void clear();
-
-  const std::vector<Entry>& getElements() const { return _members; }
-
-  const QString& getType() const { return _type; }
+  void clear() override;
 
   /**
    * @optimize This is very slow and may copy the whole entries list. This should be fine for
@@ -108,19 +104,21 @@ public:
   template<typename IT>
   void replaceElements(Entry old, IT start, IT end);
 
-  void setMembers(const std::vector<Entry>& members) { _members = members; }
+  const std::vector<Entry>& getElements() const { return _members; }
+  const QString& getType() const { return _type; }
 
+  void setMembers(const std::vector<Entry>& members) { _members = members; }
   void setType(const QString& type) { _type = type; }
 
 private:
 
   QString _type;
 
-  //The argument could be made to change this from a vector to a set to eliminate the possibilty of
-  //duplicates.  Have decided against that change for now, until the performance impacts can be
-  //determined.  The workaround is to use RemoveDuplicateRelationMembersVisitor.  There's also an
-  //additional argument to change this to a linked list, as described in replaceElements, which
-  //would rule out using the set.
+  // The argument could be made to change this from a vector to a set to eliminate the possibilty of
+  // duplicates.  Have decided against that change for now, until the performance impacts can be
+  // determined.  The workaround is to use RemoveDuplicateRelationMembersVisitor.  There's also an
+  // additional argument to change this to a linked list, as described in replaceElements, which
+  // would rule out using the set.
   std::vector<Entry> _members;
 };
 
@@ -142,17 +140,17 @@ void RelationData::replaceElements(Entry old, IT start, IT end)
   for (size_t i = 0; i < oldMembers.size(); ++i)
   {
     // if the roles match, or the old role is empty and the other attributes match.
-    if ((old.role.isEmpty() || old.role == oldMembers[i].role) &&
+    if ((old.getRole().isEmpty() || old.getRole() == oldMembers[i].getRole()) &&
         old.getElementId() == oldMembers[i].getElementId())
     {
       // go through all the new members
       for (IT it = start; it != end; ++it)
       {
         // if the old role is empty, then assign the role that the old member has
-        if (old.role.isEmpty())
+        if (old.getRole().isEmpty())
         {
           Entry e = *it;
-          e.role = oldMembers[i].role;
+          e.setRole(oldMembers[i].getRole());
           _members.push_back(e);
         }
         // if the old role is specified then just add the child as is.

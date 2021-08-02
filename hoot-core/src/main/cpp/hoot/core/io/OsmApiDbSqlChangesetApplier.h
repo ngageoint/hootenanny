@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMAPIDBSQLCHANGESETAPPLIER_H
 #define OSMAPIDBSQLCHANGESETAPPLIER_H
@@ -59,7 +59,6 @@ public:
   static const QString TOTAL_DELETE_KEY;
 
   OsmApiDbSqlChangesetApplier(const QUrl targetDatabaseUrl);
-
   ~OsmApiDbSqlChangesetApplier();
 
   /**
@@ -77,18 +76,6 @@ public:
   void write(const QString& sql);
 
   /**
-   * Detects conflicts in the target OSM API database by examining its changesets and bounds and
-   * time input parameters.
-   *
-   * @param boundsStr a bounds string of the form minx,maxx,miny,maxy for which to search
-   * within the target database for changesets
-   * @param timeStr a time string of the format specified by the OsmApiDb::TIME_FORMAT constant;
-   * only searches for changesets created after the time
-   * @return true if a conflict exists; false otherwise
-   */
-  bool conflictExistsInTarget(const QString& boundsStr, const QString& timeStr);
-
-  /**
    * Writes a summary of the contents of a changeset
    *
    * @return a changeset summary string
@@ -100,8 +87,6 @@ public:
 private:
 
   void _initChangesetStats();
-  void _execTransaction(const QString& changesetInsertStatement,
-                        const QString& elementSqlStatements);
 
   OsmApiDb _db;
 

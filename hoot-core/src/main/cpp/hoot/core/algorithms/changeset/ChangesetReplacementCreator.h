@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESET_REPLACEMENT_CREATOR_H
 #define CHANGESET_REPLACEMENT_CREATOR_H
@@ -34,11 +34,10 @@ namespace hoot
 {
 
 /**
- * Single geometry pass version of ChangesetReplacement, which solves the bug in handling relations
- * with children of mixed geometry types. This drops support for overlapping only replacement and
- * strict bounds handling, as they are not useful for replacements within a task grid. This
- * temporarily drops support for the additional filters (they were broken anyway), and they will be
- * restored as part of #4267.
+ * @brief The ChangesetReplacementCreator class is a single geometry pass version of
+ * ChangesetReplacement, which solves the bug in handling relations with children of mixed geometry
+ * types. This drops support for overlapping only replacement and strict bounds handling, as they
+ * are not useful for replacements within a task grid.
  */
 class ChangesetReplacementCreator : public ChangesetReplacementCreatorAbstract
 {
@@ -50,9 +49,8 @@ public:
   ChangesetReplacementCreator();
 
   /**
-   * Creates a changeset that replaces features in the first input with features from the second
-   * input
-   *
+   * @brief create creates a changeset that replaces features in the first input with features from
+   * the second input.
    * @param input1 the target data file path for the changeset in which to replace features; must
    * support Boundable
    * @param input2 the source data file path for the changeset to get replacement features from;
@@ -60,14 +58,11 @@ public:
    * @param bounds the rectangular bounds over which features are to be replaced
    * @param output the changeset file output location
    */
-  virtual void create(
-    const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
+  void create(const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output) override;
-
   /**
-   * Creates a changeset that replaces features in the first input with features from the second
-   * input
-   *
+   * @brief create creates a changeset that replaces features in the first input with features from
+   * the second input.
    * @param input1 the target data file path for the changeset in which to replace features; must
    * support Boundable
    * @param input2 the source data file path for the changeset to get replacement features from;
@@ -75,28 +70,16 @@ public:
    * @param bounds the bounds over which features are to be replaced
    * @param output the changeset file output location
    */
-  virtual void create(
-    const QString& input1, const QString& input2,
+  void create(const QString& input1, const QString& input2,
     const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output) override;
 
-  // Currently, this only supports geometry filters (additional filters are broken right now
-  // anyway: #4267).
-  virtual void setGeometryFilters(const QStringList& filterClassNames) override;
-  virtual void setReplacementFilters(const QStringList& /*filterClassNames*/) override {}
-  virtual void setChainReplacementFilters(const bool /*chain*/) override {}
-  virtual void setReplacementFilterOptions(const QStringList& /*optionKvps*/) override {}
-  virtual void setRetainmentFilters(const QStringList& /*filterClassNames*/) override {}
-  virtual void setChainRetainmentFilters(const bool /*chain*/) override {}
-  virtual void setRetainmentFilterOptions(const QStringList& /*optionKvps*/) override {}
-
-  virtual QString toString() const override
-    { return className().remove("hoot::"); }
+  QString toString() const override { return className().remove("hoot::"); }
 
 protected:
 
   ElementCriterionPtr _geometryTypeFilter;
 
-  virtual void _setGlobalOpts() override;
+  void _setGlobalOpts() override;
 
 private:
 
@@ -104,7 +87,7 @@ private:
    * For any element in the sec dataset with a lower version than the corresponding element in the
    * ref dataset, updates the version of the sec element.
    */
-  void _syncInputVersions(const OsmMapPtr& refMap, const OsmMapPtr& secMap);
+  void _syncInputVersions(const OsmMapPtr& refMap, const OsmMapPtr& secMap) const;
 
   OsmMapPtr _loadAndFilterRefMap(QMap<ElementId, long>& refIdToVersionMappings);
   OsmMapPtr _loadAndFilterSecMap();
@@ -127,17 +110,18 @@ private:
   void _snapUnconnectedWays(
     OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
     const QString& typeCriterionClassName, const bool markSnappedWays,
-    const QString& debugFileName);
+    const QString& debugFileName) const;
 
   /*
    * Removes all ways from the map with both MetadataTags::HootConnectedWayOutsideBounds() and
    * MetadataTags::HootSnapped() tags
    */
-  void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
+  void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(const OsmMapPtr& map) const;
 
-  void _snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap);
+  void _snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap) const;
   void _snapUnconnectedPostChangesetMapCropping(
-    OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays);
+    const OsmMapPtr& refMap, OsmMapPtr& combinedMap,
+    const OsmMapPtr& immediatelyConnectedOutOfBoundsWays) const;
 
   /*
    * Performs cropping to prepare a map for changeset derivation. This is potentially different
@@ -145,9 +129,9 @@ private:
    */
   void _cropMapForChangesetDerivation(
     OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
-    const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName);
+    const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName) const;
 
-  void _generateChangeset(OsmMapPtr& refMap, OsmMapPtr& combinedMap);
+  void _generateChangeset(const OsmMapPtr& refMap, const OsmMapPtr& combinedMap);
 };
 
 }

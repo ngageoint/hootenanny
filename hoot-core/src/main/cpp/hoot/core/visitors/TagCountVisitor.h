@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef TAGCOUNTVISITOR_H
 #define TAGCOUNTVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/NumericStatistic.h>
 #include <hoot/core/info/OperationStatus.h>
 
@@ -46,33 +46,24 @@ public:
   static QString className() { return "hoot::TagCountVisitor"; }
 
   TagCountVisitor();
-  virtual ~TagCountVisitor() = default;
+  ~TagCountVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e) override;
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const override { return "Calculates tag count statistics"; }
-
-  virtual QString getInitStatusMessage() const override
-  { return "Calculating tag count statistics..."; }
-
-  virtual QString getCompletedStatusMessage() const override
-  { return "Calculated tag count statistics for " + QString::number(_numAffected) + " elements"; }
-
-  virtual long numWithStat() const override { return _numAffected; }
-  virtual double getStat() const override { return _totalCount; }
-  virtual double getMin() const override { return _smallestCount; }
-  virtual double getMax() const override { return _largestCount; }
-  virtual double getAverage() const override
+  long numWithStat() const override { return _numAffected; }
+  double getStat() const override { return _totalCount; }
+  double getMin() const override { return _smallestCount; }
+  double getMax() const override { return _largestCount; }
+  double getAverage() const override
   {
     const double average = _numAffected == 0 ? 0.0 : _totalCount / _numAffected;
     return average;
   }
 
-  long numWithInformationStat() const { return _numInformationAffected; }
-  virtual long getInformationCount() const { return _informationCount; }
-  virtual long getInformationMin() const { return _smallestInformationCount; }
-  virtual long getInformationMax() const { return _largestInformationCount; }
-  virtual double getInformationAverage() const
+  long getInformationCount() const override { return _informationCount; }
+  long getInformationMin() const override { return _smallestInformationCount; }
+  long getInformationMax() const override { return _largestInformationCount; }
+  double getInformationAverage() const override
   {
     const double average =
       _numInformationAffected == 0 ? 0.0 :
@@ -80,9 +71,16 @@ public:
     return average;
   }
 
-  virtual QString getName() const { return className(); }
+  QString getInitStatusMessage() const override
+  { return "Calculating tag count statistics..."; }
+  QString getCompletedStatusMessage() const override
+  { return "Calculated tag count statistics for " + QString::number(_numAffected) + " elements"; }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Calculates tag count statistics"; }
+
+  long numWithInformationStat() const { return _numInformationAffected; }
 
 private:
 

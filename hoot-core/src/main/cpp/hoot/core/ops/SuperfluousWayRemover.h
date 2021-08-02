@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef SUPERFLUOUSWAYREMOVER_H
@@ -32,6 +32,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // Qt
 #include <QSet>
@@ -44,22 +45,21 @@ class OsmMap;
 /**
  * Removes all ways that are not being used by relations and contain zero nodes or all the nodes
  * are identical.
- *
- * @todo what about one node ways?
  */
-class SuperfluousWayRemover : public OsmMapOperation, public Configurable
+class SuperfluousWayRemover : public OsmMapOperation, public Configurable,
+  public ConflateInfoCacheConsumer
 {
 public:
 
   static QString className() { return "hoot::SuperfluousWayRemover"; }
 
   SuperfluousWayRemover() = default;
-  virtual ~SuperfluousWayRemover() = default;
+  ~SuperfluousWayRemover() = default;
 
   /**
    * @see OsmMapOperation
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * Splits all the ways in the input map and returns the resulting map.
@@ -71,24 +71,24 @@ public:
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getInitStatusMessage() const { return "Removing superfluous ways..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getInitStatusMessage() const override { return "Removing superfluous ways..."; }
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " superfluous ways"; }
-
-  virtual QString getDescription() const
-  { return "Removes ways not in relations or containing zero or all identical nodes"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Removes ways not in relations or containing zero or all identical nodes"; }
 
-  virtual QString getClassName() const override { return className(); }
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
+  { _conflateInfoCache = cache; }
 
 private:
 
@@ -97,7 +97,11 @@ private:
   // the number of ways that explicitly weren't removed due to configuration
   int _numExplicitlyExcluded;
 
-  void _removeWays(std::shared_ptr<OsmMap>& map);
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
+
+  void _removeWays(const std::shared_ptr<OsmMap>& map);
 };
 
 }

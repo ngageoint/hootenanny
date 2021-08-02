@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVEREVIEWSBYEIDOP_H
 #define REMOVEREVIEWSBYEIDOP_H
@@ -48,41 +48,56 @@ public:
   static QString className() { return "hoot::RemoveReviewsByEidOp"; }
 
   /**
-   */
-  RemoveReviewsByEidOp(ElementId eid, bool clearAndRemoveElement = false);
-
-  /**
+   * Constructor
+   *
    * It is expected that the eid will be populated with addElement after construction. addElement
    * must be called exactly two times.
    */
   RemoveReviewsByEidOp() = default;
-  virtual ~RemoveReviewsByEidOp() = default;
+  /**
+    Constructor
+
+    @param eid ID of the element being removed from reviews
+    @param clearAndRemoveElement If set to true, then the element will be cleared of all attributes and a
+   * removal will be attempted. In some cases (e.g. replace can't be complete if you're replacing a
+   * node with a way and the node is in a way), the element won't be removed. If this happens, then
+   * all tags will be cleared.
+    @param removeParentRefs If true, removes all references in parent relations or ways to the
+   * element being removed before trying to remove it. If false and clearAndRemoveElement=true, and
+   * the element being removed has memberships in a relation or way, the element will not be removed.
+   */
+  RemoveReviewsByEidOp(
+    ElementId eid, bool clearAndRemoveElement = false, bool removeParentRefs = false);
+  ~RemoveReviewsByEidOp() = default;
 
   /**
-   * If the elements aren't specified in the constructor this must be called exactly two times. Once
-   * for 'from' and a second time for 'to'.
+   * If the elements aren't specified in the constructor, this must be called exactly two times.
+   * Once for 'from' and a second time for 'to'.
    */
-  virtual void addElement(const ConstElementPtr& e);
+  void addElement(const ConstElementPtr& e) override;
 
-  virtual void apply(const OsmMapPtr& map);
+  /**
+   * @see ConstOsmMapOperation
+   */
+  void apply(const OsmMapPtr& map) override;
 
-  virtual QString getDescription() const
-  { return "Removes conflation reviews associated with specified element IDs"; }
-
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing conflation reviews..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " conflation reviews"; }
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Removes conflation reviews associated with specified element IDs"; }
 
 private:
 
   ElementId _eid;
+  // removes an element after it has been removed from reviews
   bool _clearAndRemove;
+  // removes all references in parent elements to the element being removed from reviews
+  bool _removeParentRefs;
 };
 
 }

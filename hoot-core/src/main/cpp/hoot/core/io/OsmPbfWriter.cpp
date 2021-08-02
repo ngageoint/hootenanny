@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmPbfWriter.h"
@@ -32,17 +32,15 @@
 #include <hoot/core/io/PbfConstants.h>
 #include <hoot/core/proto/FileFormat.pb.h>
 #include <hoot/core/proto/OsmFormat.pb.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 //  Version must be included last
 #include <hoot/core/info/Version.h>
 #include <hoot/core/info/VersionDefines.h>
-
-using namespace hoot::pb;
 
 // Qt
 #include <qendian.h>
@@ -57,6 +55,7 @@ using namespace hoot::pb;
 #include <arpa/inet.h>
 
 using namespace geos::geom;
+using namespace hoot::pb;
 using namespace std;
 
 namespace hoot
@@ -78,10 +77,10 @@ public:
   PrimitiveBlock primitiveBlock;
 };
 
-OsmPbfWriter::OsmPbfWriter()
+OsmPbfWriter::OsmPbfWriter() :
+_d(std::make_shared<OsmPbfWriterData>())
 {
-  _d = new OsmPbfWriterData();
-  _dn = 0;
+  _dn = nullptr;
   _lonOffset = 0.0;
   _latOffset = 0.0;
   _granularity = 100;
@@ -104,15 +103,14 @@ OsmPbfWriter::OsmPbfWriter()
 OsmPbfWriter::~OsmPbfWriter()
 {
   close();
-  delete _d;
 }
 
-long OsmPbfWriter::_convertLon(double lon)
+long OsmPbfWriter::_convertLon(double lon) const
 {
   return (1000000000 * lon - _lonOffset) / _granularity;
 }
 
-long OsmPbfWriter::_convertLat(double lat)
+long OsmPbfWriter::_convertLat(double lat) const
 {
   return (1000000000 * lat - _latOffset) / _granularity;
 }
@@ -128,7 +126,7 @@ int OsmPbfWriter::_convertString(const QString& s)
   else
   {
     _strings.insert(s, _strings.size() + 1);
-    id = (int)_strings.size();
+    id = _strings.size();
     _d->primitiveBlock.mutable_stringtable()->add_s(s.toUtf8());
   }
 
@@ -202,8 +200,8 @@ void OsmPbfWriter::_initBlob()
   _lastLon = 0;
   _lastLat = 0;
   _lastWayNid = 0;
-  _pg = 0;
-  _dn = 0;
+  _pg = nullptr;
+  _dn = nullptr;
   _tick = 0;
   _strings.clear();
 }
@@ -226,7 +224,7 @@ void OsmPbfWriter::initializePartial()
 void OsmPbfWriter::_open(const QString& url)
 {
   LOG_TRACE("Opening url: " << url);
-  _openStream.reset(new fstream(url.toUtf8().constData(), ios::out | ios::binary));
+  _openStream = std::make_shared<std::fstream>(url.toUtf8().constData(), ios::out | ios::binary);
   if (_openStream->good() == false)
   {
     throw HootException(QString("Error opening for writing: %1").arg(url));
@@ -262,7 +260,7 @@ void OsmPbfWriter::setIdDelta(long nodeIdDelta, long wayIdDelta, long relationId
   _relationIdDelta = relationIdDelta;
 }
 
-int OsmPbfWriter::_toRelationMemberType(ElementType t)
+int OsmPbfWriter::_toRelationMemberType(ElementType t) const
 {
   // This is actually a 1 to 1 translation, but I don't want to rely on the element type
   // enumerations staying static.
@@ -338,7 +336,7 @@ void OsmPbfWriter::writePb(const ConstOsmMapPtr& m, ostream* strm)
   bool oldSetting = _enablePbFlushing;
   _enablePbFlushing = false;
   _writeMap();
-  uint32_t size = qToBigEndian(_d->primitiveBlock.ByteSize());
+  uint32_t size = qToBigEndian((uint32_t)_d->primitiveBlock.ByteSizeLong());
   strm->write((const char*)&size, sizeof(uint32_t));
   _d->primitiveBlock.SerializePartialToOstream(strm);
   _map.reset();
@@ -350,7 +348,7 @@ void OsmPbfWriter::writePb(const ConstNodePtr& n, ostream* strm)
   _initBlob();
 
   _writeNode(n);
-  uint32_t size = qToBigEndian(_d->primitiveBlock.ByteSize());
+  uint32_t size = qToBigEndian((uint32_t)_d->primitiveBlock.ByteSizeLong());
   strm->write((const char*)&size, sizeof(uint32_t));
   _d->primitiveBlock.SerializePartialToOstream(strm);
 }
@@ -360,7 +358,7 @@ void OsmPbfWriter::writePb(const ConstWayPtr& w, ostream* strm)
   _initBlob();
 
   _writeWay(w);
-  uint32_t size = qToBigEndian(_d->primitiveBlock.ByteSize());
+  uint32_t size = qToBigEndian((uint32_t)_d->primitiveBlock.ByteSizeLong());
   strm->write((const char*)&size, sizeof(uint32_t));
   _d->primitiveBlock.SerializePartialToOstream(strm);
 }
@@ -370,7 +368,7 @@ void OsmPbfWriter::writePb(const ConstRelationPtr& r, ostream* strm)
   _initBlob();
 
   _writeRelation(r);
-  uint32_t size = qToBigEndian(_d->primitiveBlock.ByteSize());
+  uint32_t size = qToBigEndian((uint32_t)_d->primitiveBlock.ByteSizeLong());
   strm->write((const char*)&size, sizeof(uint32_t));
   _d->primitiveBlock.SerializePartialToOstream(strm);
 }
@@ -390,9 +388,9 @@ void OsmPbfWriter::_writeBlob(const char* buffer, int size, const string& type)
   // create and serialize the blob header
   _d->blobHeader.Clear();
   _d->blobHeader.set_type(type);
-  _d->blobHeader.set_datasize(_d->blob.ByteSize());
+  _d->blobHeader.set_datasize((uint32_t)_d->blob.ByteSizeLong());
 
-  uint32_t blobHeaderSize = htonl(_d->blobHeader.ByteSize());
+  uint32_t blobHeaderSize = htonl((uint32_t)_d->blobHeader.ByteSizeLong());
   _out->write((char*)&blobHeaderSize, 4);
 
   // serialize the blob header
@@ -422,7 +420,7 @@ void OsmPbfWriter::_writeMap()
     _writeNodeDense(n);
 
     if (_enablePbFlushing && _tick % 100000 == 0 &&
-        _d->primitiveBlock.ByteSize() > _minBlobTarget)
+        (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
     {
       _writePrimitiveBlock();
     }
@@ -445,7 +443,7 @@ void OsmPbfWriter::_writeMap()
     const std::shared_ptr<const hoot::Way>& w = _map->getWay(wids[i]);
     _writeWay(w);
 
-    if (_enablePbFlushing && _tick % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
+    if (_enablePbFlushing && _tick % 10000 == 0 && (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
     {
       _writePrimitiveBlock();
     }
@@ -469,7 +467,7 @@ void OsmPbfWriter::_writeMap()
     const ConstRelationPtr& r = _map->getRelation(rids[i]);
     _writeRelation(r);
 
-    if (_enablePbFlushing && _tick % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
+    if (_enablePbFlushing && _tick % 10000 == 0 && (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
     {
       _writePrimitiveBlock();
     }
@@ -479,8 +477,11 @@ void OsmPbfWriter::_writeMap()
 
 void OsmPbfWriter::_writeNode(const std::shared_ptr<const hoot::Node>& n)
 {
+  //  Ignore NULL elements
+  if (!n) return;
+
   _elementsWritten++;
-  if (_pg == 0)
+  if (_pg == nullptr)
   {
     _pg = _d->primitiveBlock.add_primitivegroup();
   }
@@ -531,10 +532,13 @@ void OsmPbfWriter::_writeNode(const std::shared_ptr<const hoot::Node>& n)
 
 void OsmPbfWriter::_writeNodeDense(const std::shared_ptr<const hoot::Node>& n)
 {
+  //  Ignore NULL elements
+  if (!n) return;
+
   LOG_TRACE("Writing node: " << n->getElementId() << "...");
 
   _elementsWritten++;
-  if (_dn == 0)
+  if (_dn == nullptr)
   {
     _dn = _d->primitiveBlock.add_primitivegroup()->mutable_dense();
   }
@@ -636,7 +640,7 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
     _d->headerBlock.mutable_writingprogram()->assign(HOOT_NAME);
   }
 
-  int size = _d->headerBlock.ByteSize();
+  int size = (uint32_t)_d->headerBlock.ByteSizeLong();
   LOG_VART(size);
   _d->headerBlock.SerializePartialToArray(_getBuffer(size), size);
   _writeBlob(_buffer.data(), size, PBF_OSM_HEADER);
@@ -653,7 +657,7 @@ void OsmPbfWriter::writePartial(const ConstNodePtr& n)
 {
   _writeNodeDense(n);
 
-  if (_enablePbFlushing && _tick % 100000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
+  if (_enablePbFlushing && _tick % 100000 == 0 && (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
   {
     _writePrimitiveBlock();
   }
@@ -664,7 +668,7 @@ void OsmPbfWriter::writePartial(const ConstWayPtr& w)
 {
   _writeWay(w);
 
-  if (_enablePbFlushing && _tick % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
+  if (_enablePbFlushing && _tick % 10000 == 0 && (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
   {
     _writePrimitiveBlock();
   }
@@ -675,7 +679,7 @@ void OsmPbfWriter::writePartial(const ConstRelationPtr& r)
 {
   _writeRelation(r);
 
-  if (_enablePbFlushing && _tick % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
+  if (_enablePbFlushing && _tick % 10000 == 0 && (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
   {
     _writePrimitiveBlock();
   }
@@ -687,7 +691,7 @@ void OsmPbfWriter::_writePrimitiveBlock()
   if (_dirty)
   {
     LOG_DEBUG("Writing primitive block...");
-    int size = _d->primitiveBlock.ByteSize();
+    int size = (uint32_t)_d->primitiveBlock.ByteSizeLong();
     _d->primitiveBlock.SerializePartialToArray(_getBuffer(size), size);
     _writeBlob(_buffer.data(), size, PBF_OSM_DATA);
   }
@@ -695,11 +699,14 @@ void OsmPbfWriter::_writePrimitiveBlock()
 
 void OsmPbfWriter::_writeRelation(const std::shared_ptr<const hoot::Relation>& r)
 {
+  //  Ignore NULL elements
+  if (!r) return;
+
   LOG_TRACE("Writing relation: " << r->getElementId() << "...");
 
   _elementsWritten++;
 
-  if (_pg == 0)
+  if (_pg == nullptr)
   {
     _pg = _d->primitiveBlock.add_primitivegroup();
   }
@@ -722,7 +729,7 @@ void OsmPbfWriter::_writeRelation(const std::shared_ptr<const hoot::Relation>& r
     lastId = id + _nodeIdDelta;
     pbr->add_types((hoot::pb::Relation_MemberType)
                    _toRelationMemberType(entries[i].getElementId().getType()));
-    pbr->add_roles_sid(_convertString(entries[i].role));
+    pbr->add_roles_sid(_convertString(entries[i].getRole()));
   }
 
   // From http://wiki.openstreetmap.org/wiki/PBF_Format#Ways_and_Relations
@@ -765,11 +772,14 @@ void OsmPbfWriter::_writeRelation(const std::shared_ptr<const hoot::Relation>& r
 
 void OsmPbfWriter::_writeWay(const std::shared_ptr<const hoot::Way>& w)
 {
+  //  Ignore NULL elements
+  if (!w) return;
+
   LOG_TRACE("Writing way: " << w->getElementId() << "...");
 
   _elementsWritten++;
 
-  if (_pg == 0)
+  if (_pg == nullptr)
   {
     _pg = _d->primitiveBlock.add_primitivegroup();
   }

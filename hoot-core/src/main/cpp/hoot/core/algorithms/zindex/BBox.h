@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef BBOX_H
 #define BBOX_H
@@ -40,39 +40,25 @@ public:
   static QString className() { return "hoot::BBox"; }
 
   BBox(const std::vector<double>& min, const std::vector<double>& max);
-
-  BBox(geos::geom::Envelope envelope);
-
+  BBox(const geos::geom::Envelope& envelope);
   virtual ~BBox();
 
-  int getDimensions() { return _max.size(); }
+  int getDimensions() const { return _max.size(); }
 
-  std::vector<double> getMax() { return _max; }
+  std::vector<double> getMax() const { return _max; }
+  std::vector<double> getMin() const { return _min; }
 
-  std::vector<double> getMin() { return _min; }
+  bool in(const std::vector<double>& p) const;
 
-  bool in(std::vector<double> p);
+  bool intersects(const BBox& b) const;
 
-  bool in(BBox container);
+  QString toString() const;
 
-  bool intersects(BBox b);
-
-  /**
-  * Returns the minimum distance in any one dimension. This is not
-  * necessarily the Euclidean distance.
-  */
-  double manhattanDistance(BBox b);
-
-  /**
-   * @brief toString
-   * @return QString
-   */
-  QString toString();
-
-  double getWidth(int d);
+  double getWidth(int d) const;
 
 private:
-  void _check();
+
+  void _check() const;
   std::vector<double> _min;
   std::vector<double> _max;
 };

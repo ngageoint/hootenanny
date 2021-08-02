@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SPARSE2DMATRIX_H
 #define SPARSE2DMATRIX_H
@@ -71,34 +71,35 @@ namespace hoot
 {
 
 /**
- * I looked at the boost implementation, but it didn't have an iterator to iterate over the
- * populated cells. That is the main point of this implementation.
+ * @brief The Sparse2dMatrix class
+ *
+ * Looked at the boost implementation, but it didn't have an iterator to iterate over the populated
+ * cells. That is the main point of this implementation.
  */
 class Sparse2dMatrix
 {
 public:
 
-  typedef Sparse2dCellId CellId;
-  typedef HashMap<CellId, double>::const_iterator const_iterator;
+  using CellId = Sparse2dCellId;
+  using const_iterator = HashMap<CellId, double>::const_iterator;
 
-  Sparse2dMatrix();
+  Sparse2dMatrix() = default;
   virtual ~Sparse2dMatrix() = default;
 
   double get(const CellId& cid) const;
-
   double get(int row, int col) const { return get(CellId(row, col)); }
 
   void set(int row, int col, double v) { _map[CellId(row, col)] = v; }
 
   HashMap<CellId, double>::const_iterator begin() const { return _map.begin(); }
-
   HashMap<CellId, double>::const_iterator end() const { return _map.end(); }
 
   QString toString() const;
 
-  long size() { return _map.size(); }
+  long size() const { return _map.size(); }
 
 private:
+
   HashMap<CellId, double> _map;
 };
 

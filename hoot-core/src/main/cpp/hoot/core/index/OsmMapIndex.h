@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSMMAPINDEX_H
@@ -50,10 +50,10 @@ class OsmMapIndex : public ElementListener
 public:
 
   OsmMapIndex(const OsmMap& map);
-  virtual ~OsmMapIndex() = default;
+  ~OsmMapIndex() = default;
 
   void addNode(const ConstNodePtr& n);
-  void addRelation(const ConstRelationPtr& r);
+  void addRelation(const ConstRelationPtr& r) const;
   void addWay(ConstWayPtr w);
 
   /**
@@ -83,7 +83,7 @@ public:
   /**
    * Very inefficient.
    */
-  std::vector<long> findWayNeighbors(geos::geom::Coordinate& from, Meters buffer) const;
+  std::vector<long> findWayNeighbors(const geos::geom::Coordinate& from, Meters buffer) const;
   std::vector<long> findWayNeighborsBruteForce(ConstWayPtr way, Meters buffer) const;
 
   /**
@@ -119,11 +119,11 @@ public:
    * This gets called before an element changes. Between this call and the call to
    * postGeometryChange the index is in an inconsistent state.
    */
-  virtual void preGeometryChange(Element* element);
-  virtual void postGeometryChange(Element* element);
+  void preGeometryChange(Element* element) override;
+  void postGeometryChange(Element* element) override;
 
   void removeNode(ConstNodePtr n);
-  void removeRelation(const ConstRelationPtr& r);
+  void removeRelation(const ConstRelationPtr& r) const;
   void removeWay(ConstWayPtr w);
 
   void reset();
@@ -163,8 +163,8 @@ private:
   int _createTreeNid(long nid) const;
   int _createTreeWid(long wid) const;
 
-  void _insertNode(long nid);
-  void _insertWay(long wid);
+  void _insertNode(long nid) const;
+  void _insertWay(long wid) const;
 
   long _mapToWayId(int treeId) const { return _treeIdToWid[treeId]; }
   long _mapToNodeId(int treeId) const { return _treeIdToNid[treeId]; }

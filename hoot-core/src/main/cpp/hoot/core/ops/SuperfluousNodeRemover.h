@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef SUPERFLUOUSNODEREMOVER_H
@@ -38,6 +38,7 @@
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // Standard
 #include <set>
@@ -56,28 +57,29 @@ class OsmMap;
  *
  * If the bounds have been set via Boundable's setBounds then only nodes that are both not part
  * of a way and inside the bounds will be removed. This is most useful when performing tile based
- * operations such as the FourPassDriver.
+ * operations such as the FourPassDriver (Hadoop).
  *
  * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map
- * with no nodes.
+ * with no nodes. ElementConflatableCheck does need to be implemented here to handle the case when
+ * _ignoreInformationTags = true.
+ *
+ * @todo Do we really need to implement ConflateInfoCacheConsumer here? A superfluous node should
+ * always be removed, right?
  */
-class SuperfluousNodeRemover : public OsmMapOperation, public Boundable, public Configurable
+class SuperfluousNodeRemover : public OsmMapOperation, public Boundable, public Configurable,
+  public ConflateInfoCacheConsumer
 {
 public:
 
   static QString className() { return "hoot::SuperfluousNodeRemover"; }
 
   SuperfluousNodeRemover();
-  virtual ~SuperfluousNodeRemover() = default;
+  ~SuperfluousNodeRemover() = default;
 
   /**
    * @see OsmMapOperation
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map);
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * Removes superfluous nodes from a map
@@ -118,23 +120,27 @@ public:
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getDescription() const { return "Removes all nodes not part of a way"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Removes all nodes not part of a way"; }
 
-  virtual QString getInitStatusMessage() const { return "Removing superfluous nodes..."; }
-
-  virtual QString getCompletedStatusMessage() const
+  QString getInitStatusMessage() const override { return "Removing superfluous nodes..."; }
+  QString getCompletedStatusMessage() const override
   { return "Removed " + StringUtils::formatLargeNumber(_numAffected) + " superfluous nodes"; }
+
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
+  { _conflateInfoCache = cache; }
 
   std::set<long> getSuperfluousNodeIds() const { return _superfluousNodeIds; }
 
   void setIgnoreInformationTags(bool ignore) { _ignoreInformationTags = ignore; }
   void setRemoveNodes(bool remove) { _removeNodes = remove; }
 
-protected:
+private:
 
-  // turning this off is useful for debugging the existence of orphaned nodes
+  // Turning this off is useful for debugging the existence of orphaned nodes.
   bool _removeNodes;
   // nodes with these IDs will never be removed
   QSet<long> _excludeIds;
@@ -150,6 +156,10 @@ protected:
   bool _ignoreInformationTags;
   // configurable set of tags where if found on a node, we always want to remove it
   QStringList _unallowedOrphanKvps;
+
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
   int _taskStatusUpdateInterval;
 };

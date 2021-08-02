@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.ogr;
 
@@ -113,6 +113,7 @@ public class ExtractAttributesResource {
             List<File> files = processFormDataMultiPart(multiPart, workDir, jobId, inputType);
 
             ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(jobId, workDir, files, debugLevel, this.getClass());
+            getAttributesCommand.setTrackable(Boolean.FALSE);
 
             Command[] workflow = { getAttributesCommand };
 
@@ -198,7 +199,7 @@ public class ExtractAttributesResource {
                     }
                     else {
                         //if we have shapefiles, only include shp refs
-                        if (extension.equalsIgnoreCase("shp")) {
+                        if (extension.equalsIgnoreCase("shp") || extension.equalsIgnoreCase("gpkg")) {
                             files.add(uploadedFile);
                         }
                     }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "FrechetDistance.h"
 
@@ -35,9 +35,9 @@
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -51,7 +51,7 @@ FrechetDistance::FrechetDistance(const ConstOsmMapPtr &map, const ConstWayPtr &w
   : _matrix(boost::extents[way1->getNodeCount()][way2->getNodeCount()]), _maxAngle(maxAngle)
 {
   //  Copy the map and two ways
-  _map.reset(new OsmMap());
+  _map = std::make_shared<OsmMap>();
   CopyMapSubsetOp(map,
                way1->getElementId(),
                way2->getElementId()).apply(_map);
@@ -84,7 +84,7 @@ FrechetDistance::FrechetDistance(const ConstOsmMapPtr &map, const ConstWayPtr &w
   _matrix = calculateMatrix();
 }
 
-frechet_matrix FrechetDistance::calculateMatrix()
+frechet_matrix FrechetDistance::calculateMatrix() const
 {
   int rows = _ls1->getNumPoints();
   int cols = _ls2->getNumPoints();
@@ -143,24 +143,24 @@ void FrechetDistance::advanceAndCheck(const int rows, const int cols, int& r, in
   }
 }
 
-Radians FrechetDistance::getHeadingWay1(int index)
+Radians FrechetDistance::getHeadingWay1(int index) const
 {
   //  Return the heading for _w1 at index
   return getHeading(_w1, index);
 }
 
-Radians FrechetDistance::getHeadingWay2(int index)
+Radians FrechetDistance::getHeadingWay2(int index) const
 {
   //  Return the heading for _w2 at index
   return getHeading(_w2, index);
 }
 
-Radians FrechetDistance::getHeading(WayPtr way, int index)
+Radians FrechetDistance::getHeading(WayPtr way, int index) const
 {
   return getHeadingAvg(way, index);
 }
 
-Radians FrechetDistance::getHeadingSimple(WayPtr way, int index)
+Radians FrechetDistance::getHeadingSimple(WayPtr way, int index) const
 {
   //  Setup the indices to check between
   int index1 = index;
@@ -197,7 +197,7 @@ Radians FrechetDistance::getHeadingSimple(WayPtr way, int index)
     return WayHeading::calculateHeading(WayLocation(_map, way, index, 0), 0.5);
 }
 
-Radians FrechetDistance::getHeadingAvg(WayPtr way, int index)
+Radians FrechetDistance::getHeadingAvg(WayPtr way, int index) const
 {
   //  Get the average of the previous, current, and next headings if possible
   int start = index - 1;
@@ -248,7 +248,7 @@ Meters FrechetDistance::distance()
 frechet_subline FrechetDistance::maxSubline(Meters maxDistance)
 {
   vector<frechet_subline> frechet = matchingSublines(maxDistance);
-  if (frechet.size() > 0)
+  if (!frechet.empty())
     return frechet[0];
   return frechet_subline();
 }
@@ -307,22 +307,22 @@ vector<frechet_subline> FrechetDistance::matchingSublines(Meters maxDistance)
     //  Iterate through the matrix from the start position
     while (r != rows && c != cols)
     {
-      Meters max_frechet = 0.0;
+      Meters maximum = 0.0;
       //  Check for the next move
       if (r == rows - 1 && c == cols -1)
         break;
       else if (r == rows - 1)
-        advanceAndCheckColumn(rows, cols, r, c, max_frechet);
+        advanceAndCheckColumn(rows, cols, r, c, maximum);
       else if (c == cols - 1)
-        advanceAndCheckRow(rows, cols, r, c, max_frechet);
+        advanceAndCheckRow(rows, cols, r, c, maximum);
       else if (_matrix[r + 1][c + 1] <= _matrix[r + 1][c] && _matrix[r + 1][c + 1] <= _matrix[r][c + 1])
-        advanceAndCheckBoth(rows, cols, r, c, max_frechet);
+        advanceAndCheckBoth(rows, cols, r, c, maximum);
       else if (_matrix[r][c + 1] <= _matrix[r + 1][c] && _matrix[r][c + 1] <= _matrix[r + 1][c + 1])
-        advanceAndCheckColumn(rows, cols, r, c, max_frechet);
+        advanceAndCheckColumn(rows, cols, r, c, maximum);
       else if (_matrix[r + 1][c] <= _matrix[r][c + 1] && _matrix[r + 1][c] <= _matrix[r + 1][c + 1])
-        advanceAndCheckRow(rows, cols, r, c, max_frechet);
+        advanceAndCheckRow(rows, cols, r, c, maximum);
 
-      double value = (max_frechet > 0.0 ? min(_matrix[r][c], max_frechet) : _matrix[r][c]);
+      double value = (maximum > 0.0 ? min(_matrix[r][c], maximum) : _matrix[r][c]);
       //  Check that the distance is less than the max distance in order to include this node
       if (value < maxDistance)
       {
@@ -350,7 +350,7 @@ vector<frechet_subline> FrechetDistance::matchingSublines(Meters maxDistance)
       m = sub[sub.size() - 1];
     }
     if (sub.size() > 1)
-      results.push_back(frechet_subline(sub.size(), sub));
+      results.emplace_back(sub.size(), sub);
   }
 
   sort(results.begin(), results.end(), sort_sublines);

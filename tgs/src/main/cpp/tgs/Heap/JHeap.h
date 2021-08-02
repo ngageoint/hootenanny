@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2021 Maxar (http://www.maxar.com/)
  */
 
 
@@ -67,15 +67,14 @@ public:
 
     JHeapNode()
       {
-        _left = NULL;
-        _right = NULL;
-        _parent = NULL;
+        _left = nullptr;
+        _right = nullptr;
+        _parent = nullptr;
         _childCount = 0;
         _index = -1;
       }
 
-
-    int getChildCount() 
+    int getChildCount() const
       { 
         return _childCount; 
       }
@@ -85,7 +84,7 @@ public:
         return _value; 
       }
 
-    int getIndex() 
+    int getIndex() const
       { 
         return _index; 
       }
@@ -117,18 +116,18 @@ public:
     void promoteChild()
       {
         // When our right node is already null
-        if (_right == NULL)
+        if (_right == nullptr)
         {
           return;
         }
-        else if (_left == NULL) 
+        else if (_left == nullptr)
         {
           _left = _right;
-          _right = NULL;
+          _right = nullptr;
           return;
         }
-        JHeapNode* skipped = NULL;
-        JHeapNode* promotion = NULL;
+        JHeapNode* skipped = nullptr;
+        JHeapNode* promotion = nullptr;
         // if we have two children, decide which one gets promoted.
         if (_left->isBetter(*_right)) 
         {
@@ -143,12 +142,12 @@ public:
         promotion->promoteChild();
         _left = promotion;
         promotion->_right = skipped;
-        if (skipped != NULL) 
+        if (skipped != nullptr)
         {
           skipped->_parent = promotion;
           promotion->_childCount += skipped->_childCount + 1;
         }
-        _right = NULL;
+        _right = nullptr;
       };
 
     /**
@@ -162,17 +161,17 @@ public:
         }
 
         node->_childCount = 0;
-        node->_left = NULL;
-        node->_right = NULL;
+        node->_left = nullptr;
+        node->_right = nullptr;
 
-        if (_left == NULL) 
+        if (_left == nullptr)
         {
           node->_parent = this;
           _left = node;
           _updateChildCount();
           return;
         }
-        else if (_right == NULL) 
+        else if (_right == nullptr)
         {
           node->_parent = this;
           _right = node;
@@ -181,7 +180,7 @@ public:
         }
 
         // the side of the tree to insert this node.
-        JHeapNode* location = NULL;
+        JHeapNode* location = nullptr;
         if (_left->_childCount <= _right->_childCount) 
         {
           location = _left;
@@ -207,7 +206,7 @@ public:
     void remove()
       {
         promoteChild();
-        if (_parent != NULL) 
+        if (_parent != nullptr)
         {
           if (_parent->_left == this) 
           {
@@ -218,17 +217,17 @@ public:
             _parent->_right = _left;
           }
         }
-        if (_left != NULL) 
+        if (_left != nullptr)
         {
           _left->_parent = _parent;
         }
-        if (_parent != NULL) 
+        if (_parent != nullptr)
         {
           _parent->_updateChildCount();
         }
-        _parent = NULL;
-        _right = NULL;
-        _left = NULL;
+        _parent = nullptr;
+        _right = nullptr;
+        _left = nullptr;
       };
 
     /**
@@ -258,9 +257,9 @@ public:
             _parent->_right = this;
           }
         }
-        node->_parent = NULL;
-        node->_left = NULL;
-        node->_right = NULL;
+        node->_parent = nullptr;
+        node->_left = nullptr;
+        node->_right = nullptr;
         _updateChildCount();
         push(node);
       };
@@ -270,13 +269,12 @@ public:
     */
     void reset()
       {
-        _left = NULL;
-        _right = NULL;
-        _parent = NULL;
+        _left = nullptr;
+        _right = nullptr;
+        _parent = nullptr;
         _childCount = 0;
         _index = -1;
       }
-
 
     void setValue(float value) 
     { 
@@ -318,15 +316,15 @@ public:
     void _updateChildCount()
       {
         _childCount = 0;
-        if (_left != NULL) 
+        if (_left != nullptr)
         {
           _childCount += _left->_childCount + 1;
         }
-        if (_right != NULL) 
+        if (_right != nullptr)
         {
           _childCount += _right->_childCount + 1;
         }
-        if (_parent != NULL) 
+        if (_parent != nullptr)
         {
           _parent->_updateChildCount();
         }
@@ -361,12 +359,12 @@ public:
 
   TgsJHeap()
   {
-    _root = NULL;
+    _root = nullptr;
   }
 
 
 
-  int getChildCount() { return _root != NULL ? _root->getChildCount() + 1 : 0; }
+  int getChildCount() { return _root != nullptr ? _root->getChildCount() + 1 : 0; }
 
   _Type inspectRootValue() { return _root->getValue(); }
   _Type inspectRootIndex() { return _root->getIndex(); }
@@ -392,7 +390,7 @@ public:
           _root = tmp->getLeft();
           if (_root)
           {
-            _root->setParent(NULL);
+            _root->setParent(nullptr);
           }
           tmp->reset();
         }
@@ -403,7 +401,7 @@ public:
       }
       _nodes[id].setIndex(id);
       _nodes[id].setValue((float)value);
-      if (_root == NULL) 
+      if (_root == nullptr)
       {
         _root = &(_nodes[id]);
       }
@@ -426,7 +424,7 @@ public:
    */
   _Type peekValue() const
   {
-    if (_root == NULL)
+    if (_root == nullptr)
     {
       throw Exception("No values available");
     }
@@ -443,7 +441,7 @@ public:
     {
       assert(_nodes.size() != 0);
       int index;
-      if (_root == NULL) 
+      if (_root == nullptr)
       {
         index = -1;
       }
@@ -469,7 +467,7 @@ public:
       {
         throw Exception("Internal Error: The heap size must be greater than zero.");
       }
-      _root = NULL;
+      _root = nullptr;
       _nodes.resize(size);
       for (int i = 0; i < size; i++)
       {
@@ -484,7 +482,7 @@ public:
   */
   bool hasNodes() const
     {
-      return (_root != NULL);
+      return (_root != nullptr);
     }
 
 private:

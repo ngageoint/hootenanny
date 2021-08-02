@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 #include "BufferedLineSegmentIntersector.h"
 
@@ -43,6 +43,7 @@ namespace hoot
 class LineSegmentResult
 {
 public:
+
   LineSegmentResult(const LineSegment& ls) :
     _c0(Coordinate::getNull()),
     _c1(Coordinate::getNull()),
@@ -51,7 +52,7 @@ public:
   {
   }
 
-  double d2(const Coordinate& c1, const Coordinate& c2)
+  double d2(const Coordinate& c1, const Coordinate& c2) const
   {
     double dx = c1.x - c2.x;
     double dy = c1.y - c2.y;
@@ -113,10 +114,6 @@ private:
   const LineSegment& _ls;
 };
 
-BufferedLineSegmentIntersector::BufferedLineSegmentIntersector()
-{
-}
-
 inline double sgn(double x)
 {
   if (x < 0)
@@ -129,7 +126,7 @@ inline double sgn(double x)
   }
 }
 
-bool BufferedLineSegmentIntersector::isWithinLineSegment(const LineSegment& ls, const Coordinate& c)
+bool BufferedLineSegmentIntersector::isWithinLineSegment(const LineSegment& ls, const Coordinate& c) const
 {
   const Coordinate& a = ls.p0;
   const Coordinate& b = ls.p1;
@@ -152,7 +149,7 @@ bool BufferedLineSegmentIntersector::isWithinLineSegment(const LineSegment& ls, 
 }
 
 void BufferedLineSegmentIntersector::circleIntersection(const Coordinate& origin, Meters r,
-  const LineSegment& l, Coordinate& p1, Coordinate& p2)
+  const LineSegment& l, Coordinate& p1, Coordinate& p2) const
 {
   // the algorithm assume the circle is centered at 0,0
   LineSegment c(l.p0.x - origin.x, l.p0.y - origin.y, l.p1.x - origin.x, l.p1.y - origin.y);
@@ -199,8 +196,8 @@ void BufferedLineSegmentIntersector::circleIntersection(const Coordinate& origin
   }
 }
 
-bool BufferedLineSegmentIntersector::intersect(const LineSegment& a, Meters buffer,
-  const LineSegment& b, LineSegment& result)
+bool BufferedLineSegmentIntersector::intersect(
+  const LineSegment& a, Meters buffer, const LineSegment& b, LineSegment& result) const
 {
   LineSegmentResult lsr(b);
 
@@ -239,8 +236,8 @@ bool BufferedLineSegmentIntersector::intersect(const LineSegment& a, Meters buff
       a.p1.x - va90[0] * buffer,
       a.p1.y - va90[1] * buffer);
 
-    Coordinate tmp;
-    if (pLeft.intersection(b, tmp))
+    Coordinate tmp = pLeft.intersection(b);
+    if (!tmp.isNull())
     {
       lsr.addCoordinate(tmp);
       if (lsr.isValid())
@@ -250,7 +247,8 @@ bool BufferedLineSegmentIntersector::intersect(const LineSegment& a, Meters buff
       }
     }
 
-    if (pRight.intersection(b, tmp))
+    tmp = pRight.intersection(b);
+    if (!tmp.isNull())
     {
       lsr.addCoordinate(tmp);
       if (lsr.isValid())

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "SplitLongLinearWaysVisitor.h"
 
@@ -51,8 +51,6 @@ HOOT_FACTORY_REGISTER(ElementVisitor, SplitLongLinearWaysVisitor)
 SplitLongLinearWaysVisitor::SplitLongLinearWaysVisitor():
 _maxNodesPerWay(0)
 {
-  _map = NULL;
-
   // Find out if user set our configuration value at cmdline or if we should use default
   ConfigOptions configOptions;
   _maxNodesPerWay = configOptions.getWayMaxNodesPerWay();
@@ -143,7 +141,7 @@ void SplitLongLinearWaysVisitor::visit(const std::shared_ptr<Element>& element)
     long way_id = way->getId();
     if (masterNodeIndex > 0)
       way_id = _map->createNextWayId();
-    WayPtr newWay(new Way(Status::Unknown1, way_id, way->getRawCircularError()));
+    WayPtr newWay = std::make_shared<Way>(Status::Unknown1, way_id, way->getRawCircularError());
     newWay->setPid(way->getPid());
     LOG_TRACE(
       "Created new way w/ ID " << newWay->getId() << " that is going to hold " << nodesThisTime <<

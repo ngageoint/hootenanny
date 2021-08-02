@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef PERTYTEST_H
 #define PERTYTEST_H
@@ -34,7 +34,8 @@ namespace hoot
 {
 
 /**
- * Represents a hoot regression PERTY test to be run as part of a hoot tests suite.
+ * @brief the PertyTest class Represents a hoot regression PERTY test to be run as part of a hoot
+ * tests suite.
  *
  * This class uses the error log setting to allow for more easily viewing the results of the
  * optimization without having to view conflation log clutter...there may be a better way to
@@ -50,7 +51,7 @@ class PertyTest : public AbstractRegressionTest
 public:
 
   /**
-   * @brief PertyTest
+   * @brief Constructor
    * @param d base dir containing the tests
    * @param confs configuration file paths to pass along to the tests
    */

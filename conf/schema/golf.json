@@ -11,11 +11,15 @@
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["linestring"],
         "isA": "golf",
         "name": "golf=cartpath",
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["area"],
+        "isA": "golf",
+        "name": "golf=driving_range",
         "objectType": "tag"
     }
 ]

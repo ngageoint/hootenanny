@@ -19,27 +19,26 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/CriterionUtils.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
-#include <hoot/core/scoring/AttributeComparator.h>
-#include <hoot/core/scoring/GraphComparator.h>
-#include <hoot/core/scoring/RasterComparator.h>
-#include <hoot/core/visitors/KeepHighwaysVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
-
-// tgs
-#include <tgs/Optimization/NelderMead.h>
+#include <hoot/core/scoring/MapCompareUtils.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -55,180 +54,307 @@ public:
 
   static QString className() { return "hoot::CompareCmd"; }
 
-  CompareCmd() = default;
-
-  virtual QString getName() const override { return "compare"; }
-
-  virtual QString getDescription() const override
-  { return "Compares maps using metrics"; }
-
-  void attributeCompare(OsmMapPtr map1, OsmMapPtr map2, OsmMapPtr outMap,
-                        int& mean, int& confidence)
+  CompareCmd() :
+  _disableAttributeScoring(false),
+  _disableRasterScoring(false),
+  _disableGraphScoring(false),
+  _aic(0),
+  _aim(0),
+  _rasterScore(0),
+  _gic(0),
+  _gim(0)
   {
-    Tgs::Random::instance()->seed(100);
-
-    int iterations = 600;
-    {
-      AttributeComparator attr(map1, outMap);
-      attr.setIterations(iterations);
-      attr.compareMaps();
-      int thisConfidence = attr.getConfidenceInterval() * 1000.0 + 0.5;
-      int thisMean = attr.getMeanScore() * 1000.0 + 0.5;
-      if (map2 != 0)
-      {
-        cout << "Attribute Score 1: " << thisMean << " +/-" << thisConfidence << endl;
-        cout.flush();
-      }
-
-      confidence = thisConfidence;
-      mean = thisMean;
-    }
-
-    if (map2 != 0)
-    {
-      AttributeComparator attr(map2, outMap);
-      attr.setIterations(iterations);
-      attr.compareMaps();
-      int thisConfidence = attr.getConfidenceInterval() * 1000.0 + 0.5;
-      int thisMean = attr.getMeanScore() * 1000.0 + 0.5;
-      cout << "Attribute Score 2: " << thisMean << " +/-" << thisConfidence << endl;
-
-      confidence += thisConfidence;
-      mean += thisMean;
-
-      confidence /= 2;
-      mean /= 2;
-    }
   }
 
-  void graphCompare(OsmMapPtr map1, OsmMapPtr map2, double& mean,
-                    double& confidence)
-  {
-    Tgs::Random::instance()->seed(0);
-    GraphComparator graph(map1, map2);
-    graph.setDebugImages(ConfigOptions().getScoreGraphDebugImages());
-    graph.setIterations(1000);
-    graph.setPixelSize(10);
-    graph.setMaxThreads(ConfigOptions().getGraphComparatorMaxThreads());
-    graph.compareMaps();
-    double thisConfidence = graph.getConfidenceInterval();
-    double thisMean = graph.getMeanScore();
+  QString getName() const override { return "compare"; }
+  QString getDescription() const override { return "Compares maps using metrics"; }
 
-    confidence += thisConfidence;
-    mean += thisMean;
-  }
-
-  void rasterCompare(OsmMapPtr map1, OsmMapPtr map2, double& mean)
-  {
-    RasterComparator raster(map1, map2);
-    raster.setPixelSize(5);
-    mean += raster.compareMaps();
-  }
-
-  int compareMaps(QString in1, QString in2, QString out)
-  {
-    OsmMapPtr map1 = loadMap(in1);
-    OsmMapPtr map2;
-    if (in2 != "")
-    {
-      map2 = loadMap(in2);
-    }
-    OsmMapPtr outMap = loadMap(out);
-
-    int aic, aim;
-    attributeCompare(map1, map2, outMap, aim, aic);
-    cout << "Attribute Score: " << aim <<
-            " +/-" << aic << " (" << aim - aic << " to " << aim + aic << ")" << endl;
-
-    double rMean = 0.0;
-    rasterCompare(map1, outMap, rMean);
-    if (map2 != 0)
-    {
-      double rMean2 = 0.0;
-      rasterCompare(map2, outMap, rMean2);
-      cout << "Raster Score 1: " << int(rMean * 1000.0 + 0.5) << endl;
-      cout << "Raster Score 2: " << int(rMean2 * 1000.0 + 0.5) << endl;
-      rMean = (rMean + rMean2) / 2.0;
-    }
-    int rasterScore = int(rMean * 1000.0 + 0.5);
-    cout << "Raster Score: " << rasterScore << endl;
-
-    double gMean = 0.0;
-    double gConfidence = 0.0;
-    graphCompare(map1, outMap, gMean, gConfidence);
-    if (map2 != 0)
-    {
-      double gMean2 = 0.0;
-      double gConfidence2 = 0.0;
-      graphCompare(map2, outMap, gMean2, gConfidence2);
-      int gic = gConfidence * 1000.0 + 0.5;
-      int gim = gMean * 1000.0 + 0.5;
-      cout << "Graph Score 1: " << gim <<
-              " +/-" << gic << " (" << gim - gic << " to " << gim + gic << ")" << endl;
-      gic = gConfidence2 * 1000.0 + 0.5;
-      gim = gMean2 * 1000.0 + 0.5;
-      cout << "Graph Score 2: " << gim <<
-              " +/-" << gic << " (" << gim - gic << " to " << gim + gic << ")" << endl;
-
-      gConfidence = (gConfidence + gConfidence2) / 2.0;
-      gMean = (gMean + gMean2) / 2.0;
-    }
-    int gic = gConfidence * 1000.0 + 0.5;
-    int gim = gMean * 1000.0 + 0.5;
-
-    cout << "Graph Score: " << gim <<
-            " +/-" << gic << " (" << gim - gic << " to " << gim + gic << ")" << endl;
-
-    int overall = (aim + gim + rasterScore) / 3;
-    int overallConf = (aic + gic) / 3;
-    cout << "Overall: " << overall << " +/-" << overallConf << " (" << overall - overallConf <<
-        " to " << overall + overallConf << ")" << endl;
-
-    return 0;
-  }
-
-  OsmMapPtr loadMap(QString p)
-  {
-    OsmMapPtr result(new OsmMap());
-    IoUtils::loadMap(result, p, false);
-
-    SuperfluousWayRemover().removeWays(result);
-    // drop everything that isn't a highway.
-    KeepHighwaysVisitor keepHighways;
-    result->visitRw(keepHighways);
-    result->visitRw(keepHighways);
-    result->visitRw(keepHighways);
-
-    return result;
-  }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
 
-    if (args.size() < 2 || args.size() > 3)
+    if (args.contains("--disable-attribute"))
     {
-      LOG_VAR(args);
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes at two or three parameters.").
-                          arg(getName()));
+      _disableAttributeScoring = true;
+      args.removeAt(args.indexOf("--disable-attribute"));
+    }
+    if (args.contains("--disable-raster"))
+    {
+      _disableRasterScoring = true;
+      args.removeAt(args.indexOf("--disable-raster"));
+    }
+    if (args.contains("--disable-graph"))
+    {
+      _disableGraphScoring = true;
+      args.removeAt(args.indexOf("--disable-graph"));
+    }
+    if (_disableAttributeScoring && _disableRasterScoring && _disableGraphScoring)
+    {
+      throw IllegalArgumentException("No scoring method selected.");
+    }
+    QStringList criteriaClassNames;
+    if (args.contains("--criteria"))
+    {
+      const int criteriaIndex = args.indexOf("--criteria");
+      criteriaClassNames = args.at(criteriaIndex + 1).trimmed().split(";");
+      args.removeAt(criteriaIndex + 1);
+      args.removeAt(criteriaIndex);
+    }
+    LOG_VARD(args);
+
+    if (args.size() < 2 || args.size() > 3)
+    {   
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes two to three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
-    QString base1 = args[0];
-    QString base2 = args.size() == 3 ? args[1] : QString();
-    QString uut = args.last();
+    const QString base1 = args[0];
+    QString base2;
+    QString uut;
+    if (args.size() == 2)
+    {
+      uut = args[1];
+    }
+    else if (args.size() == 3)
+    {
+      base2 = args[1];
+      uut = args[2];
+    }
 
-    const int status = compareMaps(base1, base2, uut);
+    LOG_VARD(base1);
+    LOG_VARD(base2);
+    LOG_VARD(criteriaClassNames);
+    LOG_VARD(uut);
+
+    _compareMaps(base1, base2, uut, _getCrit(criteriaClassNames));
 
     LOG_STATUS(
       "Maps compared in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
-    return status;
+    return 0;
+  }
+
+private:
+
+  bool _disableAttributeScoring;
+  bool _disableRasterScoring;
+  bool _disableGraphScoring;
+
+  int _aic;
+  int _aim;
+
+  int _rasterScore;
+
+  int _gic;
+  int _gim;
+
+  void _compareMaps(
+    const QString& in1, const QString& in2, const QString& out,
+    const ElementCriterionPtr& filteringCrit)
+  {
+    QString msg = "Comparing maps ..." + FileUtils::toLogFormat(in1, 25);
+    if (!in2.isEmpty())
+    {
+      msg += ", ..." + FileUtils::toLogFormat(in2, 25);
+    }
+    msg += ", ..." + FileUtils::toLogFormat(out, 25);
+    if (filteringCrit)
+    {
+      msg += ". Filtering with: " + filteringCrit->toString();
+    }
+    msg += "...";
+    LOG_STATUS(msg);
+
+    OsmMapPtr map1 = _loadMap(in1, filteringCrit);
+    if (map1->isEmpty())
+    {
+      throw EmptyMapInputException();
+    }
+    OsmMapPtr map2;
+    if (in2 != "")
+    {
+      map2 = _loadMap(in2, filteringCrit);
+      if (map2->isEmpty())
+      {
+        throw EmptyMapInputException();
+      }
+    }
+    OsmMapPtr outMap = _loadMap(out, filteringCrit);
+
+    int numScores = 3;
+
+    if (!_disableAttributeScoring)
+    {
+      _calculateAttributeScore(map1, map2, outMap, 600);
+    }
+    else
+    {
+      numScores--;
+    }
+
+    if (!_disableRasterScoring)
+    {
+      _calculateRasterScore(map1, map2, outMap);
+    }
+    else
+    {
+      numScores--;
+    }
+
+    if (!_disableGraphScoring)
+    {
+      // The graph score only makes sense for linear features, so we'll further filter the input
+      // maps here to ensure only linear features are present.
+      OsmMapPtr filteredMap1 = _filterToLinearOnly(map1);
+      OsmMapPtr filteredMap2;
+      if (map2)
+      {
+        filteredMap2 = _filterToLinearOnly(map2);
+      }
+      _calculateGraphScore(filteredMap1, filteredMap2, outMap);
+    }
+    else
+    {
+      numScores--;
+    }
+
+    if (numScores > 0)
+    {
+      const int overall = (_aim + _gim + _rasterScore) / numScores;
+      const int overallConf = (_aic + _gic) / numScores;
+      cout << "Overall: " << overall << " +/-" << overallConf << " (" << overall - overallConf <<
+          " to " << overall + overallConf << ")" << endl;
+    }
+    else
+    {
+      // This actually can't happen due to an earlier check, but sonar still complains about it.
+      throw IllegalArgumentException("No scoring method selected.");
+    }
+  }
+
+  ElementCriterionPtr _getCrit(QStringList& names) const
+  {
+    if (!names.isEmpty())
+    {
+      ConfigOptions opts;
+      return
+        CriterionUtils::constructCriterion(
+          names, opts.getElementCriteriaChain(), opts.getElementCriteriaNegate());
+    }
+    return ElementCriterionPtr();
+  }
+
+  OsmMapPtr _loadMap(const QString& path, const ElementCriterionPtr& filteringCrit) const
+  {
+    LOG_STATUS("Loading input map: ..." << path << "...");
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    IoUtils::loadMap(map, path, false);
+
+    SuperfluousWayRemover::removeWays(map);
+    LOG_VARD(map->size());
+
+    if (filteringCrit)
+    {
+      LOG_STATUS("Filtering input map...");
+
+      OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(filteringCrit.get());
+      if (omc)
+      {
+        omc->setOsmMap(map.get());
+      }
+
+      OsmMapPtr filteredMap = std::make_shared<OsmMap>();
+      CopyMapSubsetOp op(map, filteringCrit);
+      op.apply(filteredMap);
+      map = filteredMap;
+      LOG_VARD(map->size());
+    }
+
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-input-filtering");
+
+    return map;
+  }
+
+  OsmMapPtr _filterToLinearOnly(const ConstOsmMapPtr& map) const
+  {
+    LOG_STATUS("Filtering input map to linear features only...");
+    OsmMapPtr filteredMap = std::make_shared<OsmMap>();
+    CopyMapSubsetOp op(map, std::make_shared<LinearCriterion>());
+    op.setCopyChildren(true);
+    op.apply(filteredMap);
+    LOG_VARD(filteredMap->size());
+    return filteredMap;
+  }
+
+  void _calculateAttributeScore(
+    const OsmMapPtr& map1, const OsmMapPtr& map2, const OsmMapPtr& outMap, const int numIterations)
+  {
+    MapCompareUtils::getAttributeComparisonFinalScores(map1, outMap, _aim, _aic, numIterations);
+    if (map2 != nullptr)
+    {
+      int aic2, aim2;
+      MapCompareUtils::getAttributeComparisonFinalScores(map2, outMap, aim2, aic2, numIterations);
+      _aic += aic2;
+      _aim += aim2;
+      _aic /= 2;
+      _aim /= 2;
+    }
+    cout << "Attribute Score: " << _aim << " +/-" << _aic << " (" << _aim - _aic << " to " <<
+            _aim + _aic << ")" << endl;
+  }
+
+  void _calculateRasterScore(const OsmMapPtr& map1, const OsmMapPtr& map2, const OsmMapPtr& outMap)
+  {
+    double rMean = 0.0;
+    MapCompareUtils::getRasterComparisonRawScores(map1, outMap, rMean);
+    if (map2 != nullptr)
+    {
+      double rMean2 = 0.0;
+      MapCompareUtils::getRasterComparisonRawScores(map2, outMap, rMean2);
+      LOG_STATUS(""); // Clear out the line after the progress logging with this.
+      cout << "Raster Score 1: " << MapCompareUtils::convertRawScoreToFinalScore(rMean) << endl;
+      cout << "Raster Score 2: " << MapCompareUtils::convertRawScoreToFinalScore(rMean2) << endl;
+      rMean = (rMean + rMean2) / 2.0;
+    }
+    _rasterScore = MapCompareUtils::convertRawScoreToFinalScore(rMean);
+    cout << "Raster Score: " << _rasterScore << endl;
+  }
+
+  void _calculateGraphScore(const OsmMapPtr& map1, const OsmMapPtr& map2, const OsmMapPtr& outMap)
+  {
+    double gMean = 0.0;
+    double gConfidence = 0.0;
+    MapCompareUtils::getGraphComparisonRawScores(map1, outMap, gMean, gConfidence);
+    if (map2 != nullptr)
+    {
+      double gMean2 = 0.0;
+      double gConfidence2 = 0.0;
+      MapCompareUtils::getGraphComparisonRawScores(map2, outMap, gMean2, gConfidence2);
+      _gic = MapCompareUtils::convertRawScoreToFinalScore(gConfidence);
+      _gim = MapCompareUtils::convertRawScoreToFinalScore(gMean);
+      cout << "Graph Score 1: " << _gim <<
+              " +/-" << _gic << " (" << _gim - _gic << " to " << _gim + _gic << ")" << endl;
+      _gic = MapCompareUtils::convertRawScoreToFinalScore(gConfidence2);
+      _gim = MapCompareUtils::convertRawScoreToFinalScore(gMean2);
+      cout << "Graph Score 2: " << _gim <<
+              " +/-" << _gic << " (" << _gim - _gic << " to " << _gim + _gic << ")" << endl;
+
+      gConfidence = (gConfidence + gConfidence2) / 2.0;
+      gMean = (gMean + gMean2) / 2.0;
+    }
+    _gic = MapCompareUtils::convertRawScoreToFinalScore(gConfidence);
+    _gim = MapCompareUtils::convertRawScoreToFinalScore(gMean);
+
+    cout << "Graph Score: " << _gim <<
+            " +/-" << _gic << " (" << _gim - _gic << " to " << _gim + _gic << ")" << endl;
   }
 };
 
 HOOT_FACTORY_REGISTER(Command, CompareCmd)
 
 }
-

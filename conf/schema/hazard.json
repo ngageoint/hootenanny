@@ -1,0 +1,19 @@
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [ "node", "area" ],
+        "influence": 1,
+        "name": "hazard",
+        "objectType": "tag"
+    },
+    {
+        "isA": "hazard",
+        "name": "hazard=*",
+        "objectType": "tag"
+    },
+    {
+        "isA": "hazard",
+        "name": "hazard=contamination",
+        "objectType": "tag"
+    }
+]

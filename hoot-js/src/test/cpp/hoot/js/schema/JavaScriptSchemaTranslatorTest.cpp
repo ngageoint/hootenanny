@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -60,9 +60,9 @@ public:
   void runToOsmTest()
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    std::shared_ptr<ScriptSchemaTranslator> st(
+    std::shared_ptr<ScriptSchemaTranslator> st =
       ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-        "test-files/io/SampleTranslation.js"));
+        "test-files/io/SampleTranslation.js");
 
     std::shared_ptr<ScriptToOgrSchemaTranslator> uut =
       std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
@@ -75,7 +75,6 @@ public:
 
     std::shared_ptr<const Schema> schema = uut->getOgrOutputSchema();
 
-//    JavaScriptSchemaTranslator::TranslatedFeature tf;
     ScriptToOgrSchemaTranslator::TranslatedFeature tf;
     QString layer;
 
@@ -149,9 +148,9 @@ public:
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
     // We just need a standard ScriptSchemaTranslator for this test.
-    std::shared_ptr<ScriptSchemaTranslator> uut(
+    std::shared_ptr<ScriptSchemaTranslator> uut =
       ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-        "test-files/io/SampleTranslation.js"));
+        "test-files/io/SampleTranslation.js");
 
     if (!uut)
     {
@@ -165,9 +164,9 @@ public:
   void runSchemaTest()
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    std::shared_ptr<ScriptSchemaTranslator> st(
+    std::shared_ptr<ScriptSchemaTranslator> st =
       ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-        "test-files/io/SampleTranslation.js"));
+        "test-files/io/SampleTranslation.js");
 
     std::shared_ptr<ScriptToOgrSchemaTranslator>uut =
       std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);

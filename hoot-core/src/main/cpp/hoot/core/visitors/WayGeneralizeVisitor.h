@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WAY_GENERALIZE_VISITOR_H
 #define WAY_GENERALIZE_VISITOR_H
@@ -53,41 +53,37 @@ public:
   static QString className() { return "hoot::WayGeneralizeVisitor"; }
 
   WayGeneralizeVisitor();
-  virtual ~WayGeneralizeVisitor() = default;
+  ~WayGeneralizeVisitor() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
     Recursively applies a way generalize operation to each visited way
 
     @see ConstElementVisitor
     */
-  virtual void visit(const std::shared_ptr<Element>& element);
+  void visit(const std::shared_ptr<Element>& element) override;
 
-  virtual void setOsmMap(OsmMap* map);
+  void setOsmMap(OsmMap* map) override;
+
+  QString getInitStatusMessage() const override
+  { return "Generalizing ways..."; }
+  QString getCompletedStatusMessage() const override
+  { return "Generalized " + StringUtils::formatLargeNumber(_numAffected) + " / " +
+            StringUtils::formatLargeNumber(_numProcessed) + " ways. Removed " +
+            StringUtils::formatLargeNumber(_totalNodesRemoved) + " total nodes."; }
+
+  void addCriterion(const ElementCriterionPtr& crit) override;
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Simplifies ways by removing nodes"; }
 
   /**
     @see RdpWayGeneralizer::setEpsilon
     */
   void setEpsilon(double epsilon) { _epsilon = epsilon; }
-
-  virtual QString getDescription() const { return "Simplifies ways by removing nodes"; }
-
-  virtual QString getInitStatusMessage() const
-  { return "Generalizing ways..."; }
-
-  virtual QString getCompletedStatusMessage() const
-  { return "Generalized " + StringUtils::formatLargeNumber(_numAffected) + " / " +
-            StringUtils::formatLargeNumber(_numProcessed) + " ways. Removed " +
-            StringUtils::formatLargeNumber(_totalNodesRemoved) + " total nodes."; }
-
-  virtual void addCriterion(const ElementCriterionPtr& crit);
-
   void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
-
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
 
 private:
 

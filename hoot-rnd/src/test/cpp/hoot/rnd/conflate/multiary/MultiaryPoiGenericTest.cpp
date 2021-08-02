@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -67,22 +67,23 @@ public:
     env.MaxX = 1;
     env.MaxY = 1;
 
-    OsmMapPtr map(new OsmMap(MapProjector::getInstance().createPlanarProjection(env)));
+    OsmMapPtr map =
+      std::make_shared<OsmMap>(MapProjector::getInstance().createPlanarProjection(env));
 
     Tags foo;
     foo["poi"] = "yes";
     foo["name"] = "foo";
     foo["alt_name"] = "bar";
     foo["hoot:hash"] = "AAA";
-    TestUtils::createNode(map, Status::fromInput(0), 0, 0, 15, foo);
+    TestUtils::createNode(map, "", Status::fromInput(0), 0.0, 0.0, 15.0, foo);
 
     foo["alt_name"] = "baz";
     foo["hoot:hash"] = "BBB";
-    TestUtils::createNode(map, Status::fromInput(1), 5, 0, 15, foo);
+    TestUtils::createNode(map, "", Status::fromInput(1), 5.0, 0.0, 15.0, foo);
 
     foo["alt_name"] = "qux";
     foo["hoot:hash"] = "CCC";
-    TestUtils::createNode(map, Status::fromInput(1), 10, 0, 15, foo);
+    TestUtils::createNode(map, "", Status::fromInput(1), 10.0, 0.0, 15.0, foo);
 
     MatchFactory::getInstance().reset();
     MatchFactory::getInstance().registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");

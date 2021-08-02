@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmJsonWriter.h"
 
@@ -31,13 +31,12 @@
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -55,16 +54,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmJsonWriter)
 
-OsmJsonWriter::OsmJsonWriter(int precision)
-  : _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
-    _includeCompatibilityTags(true),
-    _precision(precision),
-    _out(0),
-    _pretty(ConfigOptions().getJsonPrettyPrint()),
-    _writeEmptyTags(ConfigOptions().getJsonPerserveEmptyTags()),
-    _writeHootFormat(ConfigOptions().getJsonFormatHootenanny()),
-    _numWritten(0),
-    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
+OsmJsonWriter::OsmJsonWriter(int precision) :
+_precision(precision),
+_out(nullptr),
+_writeHootFormat(ConfigOptions().getJsonFormatHootenanny()),
+_numWritten(0),
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
+_includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
+_includeCompatibilityTags(true),
+_pretty(ConfigOptions().getJsonPrettyPrint()),
+_writeEmptyTags(ConfigOptions().getJsonPerserveEmptyTags())
 {
 }
 
@@ -101,7 +100,7 @@ void OsmJsonWriter::open(const QString& url)
   _fp.setFileName(url);
   if (!_fp.open(QIODevice::WriteOnly | QIODevice::Text))
   {
-    throw Exception(QObject::tr("Error opening %1 for writing").arg(url));
+    throw HootException(QObject::tr("Error opening %1 for writing").arg(url));
   }
   _out = &_fp;
 }
@@ -112,7 +111,7 @@ QString OsmJsonWriter::toString(const ConstOsmMapPtr& map)
   b.open(QBuffer::WriteOnly);
   _out = &b;
   write(map);
-  _out = 0;
+  _out = nullptr;
   return QString::fromUtf8(b.buffer());
 }
 
@@ -254,7 +253,7 @@ void OsmJsonWriter::_writeNodes()
     _write("}", false);
 
     _numWritten++;
-    if (_numWritten % (_statusUpdateInterval) == 0)
+    if (_numWritten % _statusUpdateInterval == 0)
     {
       PROGRESS_INFO(
         "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
@@ -269,9 +268,9 @@ void OsmJsonWriter::_write(const QString& str, bool newLine)
     _out->write(QString("\n").toUtf8());
 }
 
-bool OsmJsonWriter::_hasTags(const ConstElementPtr& e)
+bool OsmJsonWriter::_hasTags(const ConstElementPtr& e) const
 {
-  return e->getTags().size() > 0 ||
+  return !e->getTags().empty() ||
          e->getElementType() != ElementType::Node ||
         (e->getCircularError() >= 0 && e->getTags().getInformationCount() > 0) ||
          _includeDebug;
@@ -297,12 +296,12 @@ void OsmJsonWriter::_writeTag(const QString& key, const QString& value, bool& fi
 
 void OsmJsonWriter::_writeTags(const ConstElementPtr& e)
 {
-  ElementPtr eClone(e->clone());
+  ElementPtr eClone = e->clone();
   _addExportTagsVisitor.visit(eClone);
 
   bool firstTag = true;
   const Tags& tags = eClone->getTags();
-  if (tags.size() > 0)
+  if (!tags.empty())
   {
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
@@ -371,7 +370,7 @@ void OsmJsonWriter::_writeWays()
     _write("}", false);
 
     _numWritten++;
-    if (_numWritten % (_statusUpdateInterval) == 0)
+    if (_numWritten % _statusUpdateInterval == 0)
     {
       PROGRESS_INFO(
         "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
@@ -440,7 +439,7 @@ void OsmJsonWriter::_writeRelations()
     _write("}", false);
 
     _numWritten++;
-    if (_numWritten % (_statusUpdateInterval) == 0)
+    if (_numWritten % _statusUpdateInterval == 0)
     {
       PROGRESS_INFO(
         "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");

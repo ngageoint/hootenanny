@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WAY_NODE_CRITERION_H
 #define WAY_NODE_CRITERION_H
@@ -42,22 +42,8 @@ public:
   static QString className() { return "hoot::WayNodeCriterion"; }
 
   WayNodeCriterion() = default;
-  WayNodeCriterion(ConstOsmMapPtr map) : _map(map) { }
-  virtual ~WayNodeCriterion() = default;
-
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new WayNodeCriterion(_map)); }
-
-  virtual QString getDescription() const { return "Identifies way nodes"; }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
-
-  virtual GeometryType getGeometryType() const { return GeometryType::Point; }
-
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  WayNodeCriterion(ConstOsmMapPtr map);
+  ~WayNodeCriterion() = default;
 
   /**
    * Returns the ID of the first way that owns input node
@@ -66,7 +52,19 @@ public:
    * @return the first way ID found that contains the node
    * @todo move to WayUtils
    */
-  long getFirstOwningWayId(const ConstNodePtr& node);
+  long getFirstOwningWayId(const ConstNodePtr& node) const;
+
+  bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<WayNodeCriterion>(_map); }
+
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
+
+  GeometryType getGeometryType() const override { return GeometryType::Point; }
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Identifies way nodes"; }
+  QString toString() const override { return className(); }
 
 protected:
 

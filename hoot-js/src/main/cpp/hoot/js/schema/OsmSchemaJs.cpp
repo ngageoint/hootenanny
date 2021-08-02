@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmSchemaJs.h"
 
@@ -31,7 +31,7 @@
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/RiverCriterion.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
@@ -41,7 +41,7 @@
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/criterion/NonConflatableCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
-#include <hoot/core/criterion/CollectionRelationCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 
 #include <hoot/js/elements/TagsJs.h>
 #include <hoot/js/JsRegistrar.h>
@@ -56,70 +56,61 @@ namespace hoot
 
 HOOT_JS_REGISTER(OsmSchemaJs)
 
-void OsmSchemaJs::Init(Handle<Object> exports)
+void OsmSchemaJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> schema = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "OsmSchema"), schema);
-  schema->Set(String::NewFromUtf8(current, "getAllTags"),
-              FunctionTemplate::New(current, getAllTags)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "getCategories"),
-              FunctionTemplate::New(current, getCategories)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "getChildTagsAsVertices"),
-              FunctionTemplate::New(current, getChildTagsAsVertices)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "getSimilarTagsAsVertices"),
-              FunctionTemplate::New(current, getSimilarTagsAsVertices)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "getTagByCategory"),
-              FunctionTemplate::New(current, getTagByCategory)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "getTagVertex"),
-              FunctionTemplate::New(current, getTagVertex)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isAncestor"),
-              FunctionTemplate::New(current, isAncestor)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isGeneric"),
-              FunctionTemplate::New(current, isGeneric)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "hasType"),
-              FunctionTemplate::New(current, hasType)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "explicitTypeMismatch"),
-              FunctionTemplate::New(current, explicitTypeMismatch)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "mostSpecificType"),
-              FunctionTemplate::New(current, mostSpecificType)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isArea"),
-              FunctionTemplate::New(current, isArea)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isPolygon"),
-              FunctionTemplate::New(current, isPolygon)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isPoint"),
-              FunctionTemplate::New(current, isPoint)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isBuilding"),
-              FunctionTemplate::New(current, isBuilding)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isLinear"),
-              FunctionTemplate::New(current, isLinear)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isLinearWaterway"),
-              FunctionTemplate::New(current, isLinearWaterway)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isPowerLine"),
-              FunctionTemplate::New(current, isPowerLine)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isMetaData"),
-              FunctionTemplate::New(current, isMetaData)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isPoi"),
-              FunctionTemplate::New(current, isPoi)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isRailway"),
-              FunctionTemplate::New(current, isRailway)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isHighway"),
-              FunctionTemplate::New(current, isHighway)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isNonBuildingArea"),
-              FunctionTemplate::New(current, isNonBuildingArea)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isCollectionRelation"),
-              FunctionTemplate::New(current, isCollectionRelation)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "score"),
-              FunctionTemplate::New(current, score)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "scoreTypes"),
-              FunctionTemplate::New(current, scoreTypes)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "scoreOneWay"),
-              FunctionTemplate::New(current, scoreOneWay)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "hasName"),
-              FunctionTemplate::New(current, hasName)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isSpecificallyConflatable"),
-              FunctionTemplate::New(current, isSpecificallyConflatable)->GetFunction());
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> schema = Object::New(current);
+  exports->Set(context, toV8("OsmSchema"), schema);
+
+  schema->Set(context, toV8("getAllTags"),
+              FunctionTemplate::New(current, getAllTags)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("getCategories"),
+              FunctionTemplate::New(current, getCategories)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("getChildTagsAsVertices"),
+              FunctionTemplate::New(current, getChildTagsAsVertices)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("getSimilarTagsAsVertices"),
+              FunctionTemplate::New(current, getSimilarTagsAsVertices)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("getTagVertex"),
+              FunctionTemplate::New(current, getTagVertex)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("isAncestor"),
+              FunctionTemplate::New(current, isAncestor)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("isGeneric"),
+              FunctionTemplate::New(current, isGeneric)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("hasType"),
+              FunctionTemplate::New(current, hasType)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("explicitTypeMismatch"),
+              FunctionTemplate::New(current, explicitTypeMismatch)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("mostSpecificType"),
+              FunctionTemplate::New(current, mostSpecificType)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("score"),
+              FunctionTemplate::New(current, score)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("scoreTypes"),
+              FunctionTemplate::New(current, scoreTypes)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("scoreOneWay"),
+              FunctionTemplate::New(current, scoreOneWay)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("hasName"),
+              FunctionTemplate::New(current, hasName)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("isSpecificallyConflatable"),
+              FunctionTemplate::New(current, isSpecificallyConflatable)->GetFunction(context).ToLocalChecked());
+
+  schema->Set(context, toV8("isPolygon"),
+              FunctionTemplate::New(current, isPolygon)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("isPoint"),
+              FunctionTemplate::New(current, isPoint)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("isLinear"),
+              FunctionTemplate::New(current, isLinear)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("isRiver"),
+              FunctionTemplate::New(current, isRiver)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("isPowerLine"),
+              FunctionTemplate::New(current, isPowerLine)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("isPoi"),
+              FunctionTemplate::New(current, isPoi)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("isRailway"),
+              FunctionTemplate::New(current, isRailway)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("isNonBuildingArea"),
+              FunctionTemplate::New(current, isNonBuildingArea)->GetFunction(context).ToLocalChecked());
 }
 
 void OsmSchemaJs::getAllTags(const FunctionCallbackInfo<Value>& args)
@@ -157,16 +148,6 @@ void OsmSchemaJs::getSimilarTagsAsVertices(const FunctionCallbackInfo<Value>& ar
     toV8(OsmSchema::getInstance().getSimilarTagsAsVertices(kvp, minimumScore)));
 }
 
-void OsmSchemaJs::getTagByCategory(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  QString category = toCpp<QString>(args[0]);
-  OsmSchemaCategory c = OsmSchemaCategory::fromString(category);
-
-  args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getTagByCategory(c)));
-}
-
 void OsmSchemaJs::getTagVertex(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
@@ -192,8 +173,9 @@ void OsmSchemaJs::isGeneric(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
 
   const bool isGeneric = OsmSchema::getInstance().isGeneric(e->getTags());
   LOG_VART(isGeneric);
@@ -205,8 +187,9 @@ void OsmSchemaJs::hasType(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
 
   const bool hasType = OsmSchema::getInstance().hasType(e->getTags());
   LOG_VART(hasType);
@@ -218,9 +201,10 @@ void OsmSchemaJs::explicitTypeMismatch(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  ConstElementPtr e1 = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
-  ConstElementPtr e2 = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
+  ConstElementPtr e1 = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
+  ConstElementPtr e2 = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked())->getConstElement();
   double minimumScore = toCpp<double>(args[2]);
 
   const bool hasExplicitTypeMismatch =
@@ -229,25 +213,14 @@ void OsmSchemaJs::explicitTypeMismatch(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(Boolean::New(current, hasExplicitTypeMismatch));
 }
 
-void OsmSchemaJs::isArea(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
-
-  args.GetReturnValue().Set(
-    Boolean::New(current, AreaCriterion(mapJs->getConstMap()).isSatisfied(e)));
-}
-
 void OsmSchemaJs::isPoint(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked())->getConstElement();
 
   args.GetReturnValue().Set(
     Boolean::New(current, PointCriterion(mapJs->getConstMap()).isSatisfied(e)));
@@ -257,8 +230,9 @@ void OsmSchemaJs::isLinear(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, LinearCriterion().isSatisfied(e)));
 }
@@ -267,63 +241,44 @@ void OsmSchemaJs::isPolygon(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked())->getConstElement();
 
   args.GetReturnValue().Set(
     Boolean::New(current, PolygonCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
-void OsmSchemaJs::isBuilding(const FunctionCallbackInfo<Value>& args)
+void OsmSchemaJs::isRiver(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
 
-  args.GetReturnValue().Set(
-    Boolean::New(current, BuildingCriterion(mapJs->getConstMap()).isSatisfied(e)));
-}
-
-void OsmSchemaJs::isLinearWaterway(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
-
-  args.GetReturnValue().Set(Boolean::New(current, LinearWaterwayCriterion().isSatisfied(e)));
+  args.GetReturnValue().Set(Boolean::New(current, RiverCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isPowerLine(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, PowerLineCriterion().isSatisfied(e)));
-}
-
-void OsmSchemaJs::isMetaData(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  QString key = toCpp<QString>(args[0]);
-  QString value = toCpp<QString>(args[1]);
-
-  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isMetaData(key, value)));
 }
 
 void OsmSchemaJs::isPoi(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, PoiCriterion().isSatisfied(e)));
 }
@@ -332,46 +287,26 @@ void OsmSchemaJs::isRailway(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, RailwayCriterion().isSatisfied(e)));
-}
-
-void OsmSchemaJs::isHighway(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
-
-  args.GetReturnValue().Set(
-    Boolean::New(current, HighwayCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
 void OsmSchemaJs::isNonBuildingArea(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked())->getConstElement();
 
   args.GetReturnValue().Set(
     Boolean::New(current, NonBuildingAreaCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
-void OsmSchemaJs::isCollectionRelation(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
-
-  args.GetReturnValue().Set(
-    Boolean::New(current, CollectionRelationCriterion().isSatisfied(e)));
-}
 void OsmSchemaJs::isSpecificallyConflatable(
   const FunctionCallbackInfo<Value>& args)
 {
@@ -379,12 +314,13 @@ void OsmSchemaJs::isSpecificallyConflatable(
 
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
   NonConflatableCriterion crit(mapJs->getConstMap());
   crit.setIgnoreGenericConflators(true);
 
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked())->getConstElement();
 
   const QString geometryTypeFilterStr = toCpp<QString>(args[2]).trimmed();
   if (!geometryTypeFilterStr.isEmpty())
@@ -402,8 +338,9 @@ void OsmSchemaJs::hasName(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, HasNameCriterion().isSatisfied(e)));
 }
@@ -449,10 +386,11 @@ void OsmSchemaJs::mostSpecificType(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  ConstElementPtr element = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  ConstElementPtr element = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
   const QString kvp = OsmSchema::getInstance().mostSpecificType(element->getTags());
-  args.GetReturnValue().Set(String::NewFromUtf8(current, kvp.toUtf8().data()));
+  args.GetReturnValue().Set(String::NewFromUtf8(current, kvp.toUtf8().data()).ToLocalChecked());
 }
 
 }

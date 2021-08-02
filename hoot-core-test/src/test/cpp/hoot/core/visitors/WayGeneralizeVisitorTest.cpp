@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -35,7 +35,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/WayGeneralizeVisitor.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 
@@ -48,20 +47,23 @@ class WayGeneralizeVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST(runCritTest);
   CPPUNIT_TEST(runRemoveSharedNodeTest);
+  CPPUNIT_TEST(runConfigureTest);
+  CPPUNIT_TEST(runMissingMapTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  WayGeneralizeVisitorTest()
-    : HootTestFixture("test-files/visitors/WayGeneralizeVisitorTest/",
-                      "test-output/visitors/WayGeneralizeVisitorTest/")
+  WayGeneralizeVisitorTest() :
+  HootTestFixture(
+    "test-files/visitors/WayGeneralizeVisitorTest/",
+    "test-output/visitors/WayGeneralizeVisitorTest/")
   {
     setResetType(ResetBasic);
   }
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map,
       "test-files/visitors/RandomWayGeneralizerTest/RandomWayGeneralizerTest-in-1.osm");
@@ -79,14 +81,14 @@ public:
 
   void runCritTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/conflate/unified/AllDataTypesA.osm", false, Status::Unknown1);
 
     WayGeneralizeVisitor uut;
     uut.setEpsilon(0.1);
     uut.setRemoveNodesSharedByWays(true);
-    uut.addCriterion(std::shared_ptr<HighwayCriterion>(new HighwayCriterion()));
+    uut.addCriterion(std::make_shared<HighwayCriterion>());
     map->visitRw(uut);
 
     const QString outputFile = _outputPath + "runCritTest.osm";
@@ -103,7 +105,7 @@ public:
     uut.setEpsilon(1.0);
 
     uut.setRemoveNodesSharedByWays(true);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "runRemoveSharedNodeTest.osm");
     map->visitRw(uut);
 
@@ -114,7 +116,7 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "runRemoveSharedNodeTest-removed.osm", outputFile);
 
     uut.setRemoveNodesSharedByWays(false);
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "runRemoveSharedNodeTest.osm");
     map->visitRw(uut);
 
@@ -124,6 +126,44 @@ public:
     outputFile = _outputPath + "runRemoveSharedNodeTest-not-removed.osm";
     OsmMapWriterFactory::write(map, outputFile);
     HOOT_FILE_EQUALS(_inputPath + "runRemoveSharedNodeTest-not-removed.osm", outputFile);
+  }
+
+  void runConfigureTest()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/visitors/RandomWayGeneralizerTest/RandomWayGeneralizerTest-in-1.osm");
+
+    Settings settings;
+    settings.set(ConfigOptions::getWayGeneralizerEpsilonKey(), 5.0);
+    settings.set(ConfigOptions::getWayGeneralizerRemoveNodesSharedByWaysKey(), true);
+    WayGeneralizeVisitor uut;
+    uut.setConfiguration(settings);
+    map->visitRw(uut);
+
+    const QString outputFile = _outputPath + "runConfigureTest.osm";
+    OsmMapWriterFactory::write(map, outputFile);
+
+    HOOT_FILE_EQUALS(_inputPath + "runBasicTest.osm", outputFile);
+  }
+
+  void runMissingMapTest()
+  {
+    WayPtr way = std::make_shared<Way>(Status::Unknown1, 1);
+
+    WayGeneralizeVisitor uut; // skip setting a map
+    QString exceptionMsg;
+    try
+    {
+      uut.visit(way);
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("No map passed to way generalizer.").toStdString(), exceptionMsg.toStdString());
   }
 };
 

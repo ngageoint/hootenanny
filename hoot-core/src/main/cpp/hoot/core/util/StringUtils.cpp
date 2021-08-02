@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "StringUtils.h"
@@ -41,12 +41,12 @@ QString StringUtils::millisecondsToDhms(const qint64 durationInMilliseconds)
 {
   QString res;
   int duration = (int)(durationInMilliseconds / 1000);
-  const int seconds = (int)(duration % 60);
+  const int seconds = duration % 60;
   duration /= 60;
-  const int minutes = (int)(duration % 60);
+  const int minutes = duration % 60;
   duration /= 60;
-  const int hours = (int)(duration % 24);
-  const int days = (int)(duration / 24);
+  const int hours = duration % 24;
+  const int days = duration / 24;
   if ((hours == 0) && (days == 0))
   {
     return res.sprintf("%02d:%02d", minutes, seconds);
@@ -116,12 +116,13 @@ std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(
   {
     throw HootException(QString("Error reading from reply string:\n%1").arg(jsonStr));
   }
-  std::shared_ptr<boost::property_tree::ptree> jsonObj(new boost::property_tree::ptree());
+  std::shared_ptr<boost::property_tree::ptree> jsonObj =
+    std::make_shared<boost::property_tree::ptree>();
   try
   {
     boost::property_tree::read_json(strStrm, *jsonObj);
   }
-  catch (boost::property_tree::json_parser::json_parser_error& e)
+  catch (const boost::property_tree::json_parser::json_parser_error& e)
   {
     QString reason = QString::fromStdString(e.message());
     QString line = QString::number(e.line());
@@ -133,7 +134,8 @@ std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(
 std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonStringArray(
   const QStringList& stringList)
 {
-  std::shared_ptr<boost::property_tree::ptree> strArr(new boost::property_tree::ptree());
+  std::shared_ptr<boost::property_tree::ptree> strArr =
+    std::make_shared<boost::property_tree::ptree>();
   for (int i = 0; i < stringList.size(); i++)
   {
     boost::property_tree::ptree str;
@@ -180,18 +182,18 @@ QSet<QString> StringUtils::getDuplicates(const QStringList& input)
   return duplicateStrings;
 }
 
-bool StringUtils::containsSubstring(const QStringList& input, const QString& substring,
-                                    Qt::CaseSensitivity caseSensitivity)
+bool StringUtils::containsSubstring(
+  const QStringList& input, const QString& substring, Qt::CaseSensitivity caseSensitivity)
 {
-  return input.filter(substring, caseSensitivity).size() > 0;
+  return !input.filter(substring, caseSensitivity).empty();
 }
 
-bool StringUtils::containsSubstrings(const QStringList& input, const QStringList& substrings,
-                                     Qt::CaseSensitivity caseSensitivity)
+bool StringUtils::containsSubstrings(
+  const QStringList& input, const QStringList& substrings, Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < substrings.size(); i++)
   {
-    if (input.filter(substrings.at(i), caseSensitivity).size() > 0)
+    if (!input.filter(substrings.at(i), caseSensitivity).empty())
     {
       return true;
     }
@@ -199,8 +201,8 @@ bool StringUtils::containsSubstrings(const QStringList& input, const QStringList
   return false;
 }
 
-int StringUtils::indexOfSubstring(const QStringList& input, const QString& substring,
-                                  Qt::CaseSensitivity caseSensitivity)
+int StringUtils::indexOfSubstring(
+  const QStringList& input, const QString& substring, Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < input.size(); i++)
   {
@@ -212,6 +214,21 @@ int StringUtils::indexOfSubstring(const QStringList& input, const QString& subst
   return -1;
 }
 
+void StringUtils::removePrefixes(const QString& prefix, QStringList& input)
+{
+  QStringList inputCopy(input);
+  for (int i = 0; i < input.size(); i++)
+  {
+    QString inputStr = input.at(i);
+    if (inputStr.startsWith(prefix))
+    {
+      inputStr = inputStr.replace(prefix, "");
+    }
+    inputCopy.append(inputStr);
+  }
+  input = inputCopy;
+}
+
 void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
 {
   for (int i = 0; i < toRemove.size(); i++)
@@ -220,8 +237,8 @@ void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
   }
 }
 
-void StringUtils::removeLastIndexOf(QString& input, const QStringList& toRemove,
-                                    Qt::CaseSensitivity caseSensitivity)
+void StringUtils::removeLastIndexOf(
+  QString& input, const QStringList& toRemove, Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < toRemove.size(); i++)
   {
@@ -233,8 +250,8 @@ void StringUtils::removeLastIndexOf(QString& input, const QStringList& toRemove,
   }
 }
 
-bool StringUtils::containsAny(const QStringList& input, const QStringList& toCompare,
-                              Qt::CaseSensitivity caseSensitivity)
+bool StringUtils::containsAny(
+  const QStringList& input, const QStringList& toCompare, Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < toCompare.size(); i++)
   {
@@ -246,8 +263,21 @@ bool StringUtils::containsAny(const QStringList& input, const QStringList& toCom
   return false;
 }
 
-bool StringUtils::endsWithAny(const QString& input, const QStringList& toCompare,
-                              Qt::CaseSensitivity caseSensitivity)
+bool StringUtils::matchesWildcard(const QString& str, const QStringList& wildcards)
+{
+  for (int i = 0; i < wildcards.size(); i++)
+  {
+    QRegExp regex(wildcards.at(i), Qt::CaseInsensitive, QRegExp::Wildcard);
+    if (regex.exactMatch(str))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool StringUtils::endsWithAny(
+  const QString& input, const QStringList& toCompare, Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < toCompare.size(); i++)
   {
@@ -259,8 +289,21 @@ bool StringUtils::endsWithAny(const QString& input, const QStringList& toCompare
   return false;
 }
 
-QString StringUtils::endsWithAnyAsStr(const QString& input, const QStringList& toCompare,
-                                      Qt::CaseSensitivity caseSensitivity)
+bool StringUtils::endsWithAny(
+  const QStringList& inputs, const QString& compareStr, Qt::CaseSensitivity caseSensitivity)
+{
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    if (inputs.at(i).endsWith(compareStr, caseSensitivity))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+QString StringUtils::endsWithAnyAsStr(
+  const QString& input, const QStringList& toCompare, Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < toCompare.size(); i++)
   {
@@ -285,8 +328,8 @@ bool StringUtils::bisectsAny(const QString& input, const QList<QRegExp>& toCompa
   return false;
 }
 
-QStringList StringUtils::splitOnAny(const QString& input, const QList<QRegExp>& tokenList,
-                                    const int numOutputTokens)
+QStringList StringUtils::splitOnAny(
+  const QString& input, const QList<QRegExp>& tokenList, const int numOutputTokens)
 {
   for (int i = 0; i < tokenList.size(); i++)
   {
@@ -308,9 +351,9 @@ void StringUtils::removeAllWithKey(QMap<QString, QString>& input, const QStringL
   }
 }
 
-void StringUtils::replaceLastIndexOf(QString& input, const QString& strToReplace,
-                                     const QString& replacementStr,
-                                     Qt::CaseSensitivity caseSensitivity)
+void StringUtils::replaceLastIndexOf(
+  QString& input, const QString& strToReplace, const QString& replacementStr,
+  Qt::CaseSensitivity caseSensitivity)
 {
   const int index = input.lastIndexOf(strToReplace, -1, caseSensitivity);
   if (index != -1)
@@ -322,14 +365,13 @@ void StringUtils::replaceLastIndexOf(QString& input, const QString& strToReplace
 void StringUtils::splitAndRemoveAtIndex(QString& input, const QRegExp& splitExp, const int index)
 {
   QStringList tokens = input.split(splitExp);
-  LOG_VART(tokens);
   input = StringUtils::_splitAndRemoveAtIndex(tokens, index, " ");
 }
 
-QString StringUtils::_splitAndRemoveAtIndex(QStringList& input, const int index,
-                                            const QString& separator)
+QString StringUtils::_splitAndRemoveAtIndex(
+  QStringList& input, const int index, const QString& separator)
 {
-  if (input.size() > 0 && index < input.size())
+  if (!input.empty() && index < input.size())
   {
     input.removeAt(index);
   }
@@ -346,6 +388,14 @@ QString StringUtils::splitAndGetAtIndex(
     return tokens.at(index);
   }
   return "";
+}
+
+void StringUtils::reverse(QStringList& strList)
+{
+  // sure there's a better qt way to do this...
+  std::list<QString> strStdList = strList.toStdList();
+  std::reverse(strStdList.begin(), strStdList.end());
+  strList = QStringList::fromStdList(strStdList);
 }
 
 }

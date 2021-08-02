@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ZVALUE_H
 #define ZVALUE_H
@@ -39,42 +39,38 @@ public:
 
   static QString className() { return "hoot::ZValue"; }
 
-  ZValue() {}
-
   ZValue(int dimensions, int depth, const std::vector<double>& min, const std::vector<double>& max);
-
   ~ZValue();
 
   long int calculate(std::vector<double> point);
 
   /**
-   * Calculates the z value by interleaving values that are already scaled to
+   * @brief calculate calculates the z value by interleaving values that are already scaled to
    * the proper space.
    */
-  long int calculate(std::vector<long int> point);
+  long int calculate(std::vector<long int> point) const;
 
   /**
-   * Calculates the non-interleaved component for one dimension.
+   * @brief calculateComponent calculates the non-interleaved component for one dimension.
    */
   long int calculateComponent(double v, int d);
 
-  void decompose(long int v, std::vector<long int>& point);
+  void decompose(long int v, std::vector<long int>& point) const;
 
-  int getDepth() { return _depth; }
-
-  int getDimensions() { return _dimensions; }
+  int getDepth() const { return _depth; }
+  int getDimensions() const { return _dimensions; }
 
   double getMax(int d) { return _max[d]; }
-
   double getMin(int d) { return _min[d]; }
 
   /**
-    * Returns the maximum value in any one dimension (number of bins in that
-    * direction - 1).
-    */
-  long int getMaxDimensionRange() { return _range; }
+   * @brief getMaxDimensionRange returns the maximum value in any one dimension (number of bins in
+   * that direction - 1).
+   */
+  long int getMaxDimensionRange() const { return _range; }
 
 private:
+
   std::vector<long int> _b;
   int _depth;
   int _dimensions;

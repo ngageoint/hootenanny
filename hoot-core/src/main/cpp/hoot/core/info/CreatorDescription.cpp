@@ -19,56 +19,57 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "CreatorDescription.h"
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
-#include <hoot/core/criterion/NonBuildingAreaCriterion.h>
-#include <hoot/core/criterion/RailwayCriterion.h>
-#include <hoot/core/criterion/PowerLineCriterion.h>
-#include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/CollectionRelationCriterion.h>
+#include <hoot/core/criterion/RiverCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/NonBuildingAreaCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/PowerLineCriterion.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 
 namespace hoot
 {
 
 CreatorDescription::CreatorDescription() :
-experimental(),
-baseFeatureType(BaseFeatureType::Unknown),
-geometryType(GeometryTypeCriterion::GeometryType::Unknown)
+_experimental(false),
+_baseFeatureType(BaseFeatureType::Unknown),
+_geometryType(GeometryTypeCriterion::GeometryType::Unknown)
 {
 }
 
 CreatorDescription::CreatorDescription(const QString& className, const QString& description,
                                        bool experimental) :
-experimental(experimental),
-className(className),
-description(description),
-baseFeatureType(BaseFeatureType::Unknown),
-geometryType(GeometryTypeCriterion::GeometryType::Unknown)
+_experimental(experimental),
+_className(className),
+_description(description),
+_baseFeatureType(BaseFeatureType::Unknown),
+_geometryType(GeometryTypeCriterion::GeometryType::Unknown)
 {
 }
 
 CreatorDescription::CreatorDescription(const QString& className, const QString& description,
                                        BaseFeatureType featureType, bool experimental) :
-experimental(experimental),
-className(className),
-description(description),
-baseFeatureType(featureType),
-geometryType(GeometryTypeCriterion::GeometryType::Unknown)
+_experimental(experimental),
+_className(className),
+_description(description),
+_baseFeatureType(featureType),
+_geometryType(GeometryTypeCriterion::GeometryType::Unknown)
 {
 }
 
@@ -82,8 +83,8 @@ QString CreatorDescription::baseFeatureTypeToString(BaseFeatureType t)
       return "Road";
     case Building:
       return "Building";
-    case Waterway:
-      return "Waterway";
+    case River:
+      return "River";
     case PoiPolygonPOI:
       return "Polygon Conflatable POI";
     case Polygon:
@@ -98,8 +99,8 @@ QString CreatorDescription::baseFeatureTypeToString(BaseFeatureType t)
       return "Point";
     case Line:
       return "Line";
-    case CollectionRelation:
-      return "Collection Relation";
+    case Relation:
+      return "Relation";
     default:
       return "Unknown";
   }
@@ -114,8 +115,8 @@ CreatorDescription::BaseFeatureType CreatorDescription::stringToBaseFeatureType(
     return Highway;
   else if (0 == s.compare("building"))
     return Building;
-  else if (0 == s.compare("waterway"))
-    return Waterway;
+  else if (0 == s.compare("river"))
+    return River;
   else if (0 == s.compare("polygon conflatable poi"))
     return PoiPolygonPOI;
   else if (0 == s.compare("polygon"))
@@ -130,8 +131,8 @@ CreatorDescription::BaseFeatureType CreatorDescription::stringToBaseFeatureType(
     return Point;
   else if (0 == s.compare("line"))
     return Line;
-  else if (0 == s.compare("collectionrelation"))
-    return CollectionRelation;
+  else if (0 == s.compare("relation"))
+    return Relation;
   else
     return Unknown;
 }
@@ -146,7 +147,7 @@ CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType(BaseF
       return CalcTypeLength;
     case Building:
       return CalcTypeArea;
-    case Waterway:
+    case River:
       return CalcTypeLength;
     case PoiPolygonPOI:
       return CalcTypeNone;
@@ -162,49 +163,83 @@ CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType(BaseF
       return CalcTypeNone;
     case Line:
       return CalcTypeLength;
-    case CollectionRelation:
+    case Relation:
       return CalcTypeArea;
     default:
       return CalcTypeNone;
   }
 }
 
-ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, ConstOsmMapPtr map)
+std::shared_ptr<ElementCriterion> CreatorDescription::getElementCriterion(
+  BaseFeatureType t, ConstOsmMapPtr map)
 {
   switch (t)
   {
     case POI:
-      return ElementCriterionPtr(new PoiCriterion());
+      return std::make_shared<PoiCriterion>();
     case Highway:
-      return ElementCriterionPtr(new HighwayCriterion(map));
+      return std::make_shared<HighwayCriterion>(map);
     case Building:
-      return ElementCriterionPtr(new BuildingCriterion(map));
-    case Waterway:
-      return ElementCriterionPtr(new LinearWaterwayCriterion());
+      return std::make_shared<BuildingCriterion>(map);
+    case River:
+      return std::make_shared<RiverCriterion>();
     case PoiPolygonPOI:
-      return ElementCriterionPtr(new PoiPolygonPoiCriterion());
+      return std::make_shared<PoiPolygonPoiCriterion>();
     case Polygon:
-      return ElementCriterionPtr(new PolygonCriterion(map));
+      return std::make_shared<PolygonCriterion>(map);
     case Area:
-      return ElementCriterionPtr(new NonBuildingAreaCriterion(map));
+      return std::make_shared<NonBuildingAreaCriterion>(map);
     case Railway:
-      return ElementCriterionPtr(new RailwayCriterion());
+      return std::make_shared<RailwayCriterion>();
     case PowerLine:
-      return ElementCriterionPtr(new PowerLineCriterion());
+      return std::make_shared<PowerLineCriterion>();
     case Point:
-      return ElementCriterionPtr(new PointCriterion(map));
+      return std::make_shared<PointCriterion>(map);
     case Line:
-      return ElementCriterionPtr(new LinearCriterion());
-    case CollectionRelation:
-      return ElementCriterionPtr(new CollectionRelationCriterion());
+      return std::make_shared<LinearCriterion>();
+    case Relation:
+      return std::make_shared<RelationCriterion>();
     default:
-      return ElementCriterionPtr();
+      return std::shared_ptr<GeometryTypeCriterion>();
+  }
+}
+
+QString CreatorDescription::getElementCriterionName(BaseFeatureType t)
+{
+  switch (t)
+  {
+    case POI:
+      return PoiCriterion::className();
+    case Highway:
+      return HighwayCriterion::className();
+    case Building:
+      return BuildingCriterion::className();
+    case River:
+      return RiverCriterion::className();
+    case PoiPolygonPOI:
+      return PoiPolygonPoiCriterion::className();
+    case Polygon:
+      return PolygonCriterion::className();
+    case Area:
+      return AreaCriterion::className();
+    case Railway:
+      return RailwayCriterion::className();
+    case PowerLine:
+      return PowerLineCriterion::className();
+    case Point:
+      return PointCriterion::className();
+    case Line:
+      return LinearCriterion::className();
+    case Relation:
+      return RelationCriterion::className();
+    default:
+      return "";
   }
 }
 
 QString CreatorDescription::toString() const
 {
-  return className + ";" + baseFeatureTypeToString(baseFeatureType);
+  return _className + ";" + baseFeatureTypeToString(_baseFeatureType);
 }
 
 }

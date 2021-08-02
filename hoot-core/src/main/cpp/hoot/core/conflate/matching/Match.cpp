@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "Match.h"
 
@@ -31,12 +31,31 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/elements/ElementId.h>
-#include <hoot/core/util/CollectionUtils.h>
 
 namespace hoot
 {
 
 long Match::_orderCount = 0;
+
+/*
+ * All of this order silliness maintains a consistent ordering of matches when they're placed
+ * into a set as pointers.
+ */
+Match::Match(const std::shared_ptr<const MatchThreshold>& threshold) :
+_order(_orderCount++),
+_threshold(threshold)
+{
+}
+
+Match::Match(
+  const std::shared_ptr<const MatchThreshold>& threshold, const ElementId& eid1,
+  const ElementId& eid2) :
+_order(_orderCount++),
+_threshold(threshold),
+_eid1(eid1),
+_eid2(eid2)
+{
+}
 
 QString Match::explain() const
 {
@@ -46,39 +65,6 @@ QString Match::explain() const
 MatchType Match::getType() const
 {
   return _threshold->getType(*this);
-}
-
-bool Match::operator==(const Match& other) const
-{
-  if (getType() != other.getType())
-  {
-    return false;
-  }
-
-  const std::set<std::pair<ElementId, ElementId>> matchPairs = getMatchPairs();
-  const std::set<std::pair<ElementId, ElementId>> otherMatchPairs = other.getMatchPairs();
-
-  if (matchPairs.size() != otherMatchPairs.size())
-  {
-    return false;
-  }
-
-  const QList<std::pair<ElementId, ElementId>> matchListQ =
-    CollectionUtils::stdSetToQSet(matchPairs).toList();
-  const QList<std::pair<ElementId, ElementId>> otherMatchListQ =
-    CollectionUtils::stdSetToQSet(otherMatchPairs).toList();
-  for (int i = 0; i < matchListQ.size(); i++)
-  {
-    const std::pair<ElementId, ElementId> matchPair = matchListQ.at(i);
-    const std::pair<ElementId, ElementId> otherMatchPair = otherMatchListQ.at(i);
-    // requiring order matches here as well...is that correct?
-    if (matchPair.first != otherMatchPair.first || matchPair.second != otherMatchPair.second)
-    {
-      return false;
-    }
-  }
-
-  return true;
 }
 
 QHash<QString, ConstMatchPtr> Match::getIdIndexedMatches(

@@ -19,24 +19,24 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonMatchCreator.h"
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
-#include <hoot/core/visitors/poi-polygon/PoiPolygonMatchVisitor.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/visitors/poi-polygon/PoiPolygonMatchVisitor.h>
 
 // Std
 #include <float.h>
@@ -46,13 +46,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(MatchCreator, PoiPolygonMatchCreator)
 
-MatchPtr PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
-                                             ElementId eid2)
+MatchPtr PoiPolygonMatchCreator::createMatch(
+  const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
   if (!_infoCache)
   {
     LOG_DEBUG("Initializing info cache...");
-    _infoCache.reset(new PoiPolygonInfoCache(map));
+    _infoCache = std::make_shared<PoiPolygonInfoCache>(map);
   }
 
   std::shared_ptr<PoiPolygonMatch> result;
@@ -66,7 +66,7 @@ MatchPtr PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementI
     const bool foundPoly = _polyCrit.isSatisfied(e1) || _polyCrit.isSatisfied(e2);
     if (foundPoi && foundPoly)
     {
-      result.reset(new PoiPolygonMatch(map, getMatchThreshold(), _getRf(), _infoCache));
+      result = std::make_shared<PoiPolygonMatch>(map, getMatchThreshold(), _getRf(), _infoCache);
       result->setConfiguration(conf());
       result->calculateMatch(eid1, eid2);
     }
@@ -111,7 +111,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   if (!_infoCache)
   {
     LOG_DEBUG("Initializing info cache...");
-    _infoCache.reset(new PoiPolygonInfoCache(map));
+    _infoCache = std::make_shared<PoiPolygonInfoCache>(map);
     _infoCache->setConfiguration(conf());
   }
 
@@ -141,7 +141,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
       " / total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
   }
 
-  if (conf().getBool(ConfigOptions::getPoiPolygonPrintMatchDistanceTruthKey()))
+  if (conf().getBool(ConfigOptions::getPoiPolygonCalculateMatchDistanceTruthKey()))
   {
     PoiPolygonMatch::printMatchDistanceInfo();
   }
@@ -163,14 +163,14 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
     " total names processed.");
   LOG_DEBUG(
     "POI/Polygon address matches: " <<
-    StringUtils::formatLargeNumber(PoiPolygonMatch::addressMatches) << " / " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::addressMatches) << " of " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::addressMatchCandidates) <<
     " candidate matches.  " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::addressesProcessed) <<
     " total addresses processed.");
   LOG_DEBUG(
     "POI/Polygon phone number matches: " <<
-    StringUtils::formatLargeNumber(PoiPolygonMatch::phoneNumberMatches) << " / " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::phoneNumberMatches) << " of " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::phoneNumberMatchCandidates) <<
     " candidate matches.  " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::phoneNumbersProcesed) <<
@@ -192,7 +192,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
 }
 
 int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnly(
-  std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map)
+  std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map) const
 {
   LOG_INFO("Discarding non-closest matches...");
 
@@ -290,7 +290,7 @@ int PoiPolygonMatchCreator::_numMatchesContainingElement(
 }
 
 QMultiMap<ElementId, ConstMatchPtr> PoiPolygonMatchCreator::_indexMatchesById(
-  const std::vector<ConstMatchPtr>& matches, const QString& matchTypeStr)
+  const std::vector<ConstMatchPtr>& matches, const QString& matchTypeStr) const
 {
   LOG_DEBUG(
     "Indexing " << StringUtils::formatLargeNumber(matches.size()) << " " << matchTypeStr <<
@@ -341,7 +341,7 @@ QMultiMap<ElementId, ConstMatchPtr> PoiPolygonMatchCreator::_indexMatchesById(
 }
 
 QMap<ElementId, QList<ConstMatchPtr>> PoiPolygonMatchCreator::_getOverlappingMatches(
-  const QMultiMap<ElementId, ConstMatchPtr>& matchesById, const QString& matchTypeStr)
+  const QMultiMap<ElementId, ConstMatchPtr>& matchesById, const QString& matchTypeStr) const
 {
   LOG_DEBUG(
     "Finding overlapping " << matchTypeStr << " matches out of " <<
@@ -368,7 +368,7 @@ QMap<ElementId, QList<ConstMatchPtr>> PoiPolygonMatchCreator::_getOverlappingMat
 std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(
   const QMap<ElementId, QList<ConstMatchPtr>>& overlappingMatches,
   const std::vector<ConstMatchPtr>& allMatches, const ConstOsmMapPtr& map,
-  const QString& matchTypeStr)
+  const QString& matchTypeStr) const
 {
   LOG_DEBUG(
     "Filtering out non-closest " << matchTypeStr << " matches out of " <<
@@ -508,7 +508,7 @@ std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(
 }
 
 int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnlyByType(
-  std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois)
+  std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois) const
 {
   QString matchTypeStr = "Polygon";
   if (processPois)
@@ -539,15 +539,14 @@ int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnlyByType(
 std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
 {
   std::vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates matchers that match POIs to polygons",
-      //this match creator has two conflatable types, so arbitrarily just picking one of them as
-      //the base feature type; stats class will handle the logic to deal with both poi and polygon
-      //input types
-      CreatorDescription::Polygon,
-      false));
+  result.emplace_back(
+    className(),
+    "Generates matchers that match POIs to polygons",
+    //this match creator has two conflatable types, so arbitrarily just picking one of them as
+    //the base feature type; stats class will handle the logic to deal with both poi and polygon
+    //input types
+    CreatorDescription::Polygon,
+    false);
   return result;
 }
 
@@ -562,7 +561,7 @@ std::shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()
 {
   //  Since the POI to Poly matcher is an additive model, all thresholds are 1.0
   if (!_matchThreshold.get())
-    _matchThreshold.reset(new MatchThreshold(1.0, 1.0, 1.0));
+    _matchThreshold = std::make_shared<MatchThreshold>(1.0, 1.0, 1.0);
   return _matchThreshold;
 }
 
@@ -570,7 +569,7 @@ std::shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
 {
   if (!_rf)
   {
-    _rf.reset(new PoiPolygonRfClassifier());
+    _rf = std::make_shared<PoiPolygonRfClassifier>();
   }
   return _rf;
 }
@@ -578,8 +577,8 @@ std::shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
 QStringList PoiPolygonMatchCreator::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(PoiCriterion::className());
-  criteria.append(BuildingCriterion::className());
+  criteria.append(PoiPolygonPoiCriterion::className());
+  criteria.append(PoiPolygonPolyCriterion::className());
   return criteria;
 }
 

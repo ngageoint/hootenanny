@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OPERATION_STATUS_H
 #define OPERATION_STATUS_H
@@ -33,18 +33,18 @@ namespace hoot
 {
 
 /**
- * Interface to describe information about an operation performed on data.  e.g. OsmMapOperation,
- * ElementVisitor, etc.
+ * Interface used to describe information about an operation performed on data.
  *
- * Implementing this interface may not make sense on some operations.  If desired, implementers
+ * Implementing this interface may not make sense on some operations. If desired, implementers
  * can force a subset of any of the status messages to not be displayed by returning an empty
- * string.
+ * string. Note that this is not a true interface in that parts are implemented. If we ever have
+ * multiple inheritance issues with children, it can be converted to a true interface.
  */
 class OperationStatus
 {
 public:
 
-  OperationStatus() = default;
+  OperationStatus() : _numAffected(0), _numProcessed(0) {}
   virtual ~OperationStatus() = default;
 
   /**
@@ -66,14 +66,21 @@ public:
    *
    * @return a number of elements
    */
-  virtual long getNumFeaturesAffected() const = 0;
+  virtual long getNumFeaturesAffected() const { return _numAffected; }
 
   /**
    * Returns the number of elements processed by the visitor
    *
    * @return a number of elements
    */
-  virtual long getNumFeaturesProcessed() const = 0;
+  virtual long getNumFeaturesProcessed() const { return _numProcessed; }
+
+protected:
+
+  /** Number of elements the operation actually counted or modified */
+  long _numAffected;
+  /** Number of elements the operation processed in total */
+  long _numProcessed;
 };
 
 }

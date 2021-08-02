@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
@@ -34,7 +34,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/NodeCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
@@ -62,7 +62,7 @@ public:
 
   void runRemoveTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
@@ -81,7 +81,7 @@ public:
 
   void runFilterTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
@@ -90,7 +90,7 @@ public:
     keys.append("key2");
     RemoveTagsVisitor visitor(keys);
     visitor.setNegateCriterion(false);
-    visitor.addCriterion(std::shared_ptr<NodeCriterion>(new NodeCriterion()));
+    visitor.addCriterion(std::make_shared<NodeCriterion>());
     map->visitRw(visitor);
 
     OsmMapWriterFactory::write(map, _outputPath + "RunFilterTest.osm");
@@ -101,7 +101,7 @@ public:
 
   void runNegatedFilterTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
@@ -110,7 +110,7 @@ public:
     keys.append("key2");
     RemoveTagsVisitor visitor(keys);
     visitor.setNegateCriterion(true);
-    visitor.addCriterion(std::shared_ptr<NodeCriterion>(new NodeCriterion()));
+    visitor.addCriterion(std::make_shared<NodeCriterion>());
     map->visitRw(visitor);
 
     OsmMapWriterFactory::write(map, _outputPath + "RunNegatedFilterTest.osm");
@@ -121,7 +121,7 @@ public:
 
   void runWildcardTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 

@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "WayMatchStringMerger.h"
 
 // hoot
-#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/WayString.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Log.h>
 
@@ -52,12 +52,12 @@ QString WayMatchStringMerger::SublineMapping::toString() const
 }
 
 WayMatchStringMerger::WayMatchStringMerger(const OsmMapPtr& map,
-  WayMatchStringMappingPtr mapping, vector<pair<ElementId, ElementId>> &replaced) :
+  WayMatchStringMappingPtr mapping, vector<pair<ElementId, ElementId>>& replaced) :
   _map(map),
   _mapping(mapping),
   _replaced(replaced)
 {
-  // split the primary way string into chunks that can match n:1 with the secondary way. This will
+  // Split the primary way string into chunks that can match n:1 with the secondary way. This will
   // make merging tags simple.
   _splitPrimary();
 }
@@ -72,28 +72,26 @@ WaySublineMatchStringPtr WayMatchStringMerger::createMatchString() const
   LOG_TRACE("Creating match string...");
 
   vector<WaySublineMatch> matches;
-
   foreach (SublineMappingPtr sm, _sublineMappingOrder)
   {
     WaySubline ws1(sm->getStart1(), sm->getEnd1());
     WaySubline ws2(_mapping->map1To2(sm->getStart1()), _mapping->map1To2(sm->getEnd1()));
-    // they're reversed if they aren't both in the same orientation.
+    // They're reversed if they aren't both in the same orientation.
     bool reversed = ws1.isBackwards() != ws2.isBackwards();
 
     ws1.ensureForwards();
     ws2.ensureForwards();
 
-    matches.push_back(WaySublineMatch(ws1, ws2, reversed));
+    matches.emplace_back(ws1, ws2, reversed);
   }
-
   LOG_VAR(matches);
 
-  WaySublineMatchStringPtr result(new WaySublineMatchString(matches));
-  return result;
+  return std::make_shared<WaySublineMatchString>(matches);
 }
 
-void WayMatchStringMerger::_createWayMappings(WayLocation splitStart, WayLocation splitEnd,
-  WaySubline subline2)
+void WayMatchStringMerger::_createWayMappings(const WayLocation& splitStart,
+                                              const WayLocation& splitEnd,
+                                              const WaySubline& subline2)
 {
   LOG_TRACE("Creating way mappings...");
 
@@ -105,7 +103,7 @@ void WayMatchStringMerger::_createWayMappings(WayLocation splitStart, WayLocatio
   ConstWayPtr way2 = subline2.getWay();
   WayStringPtr ws1 = _mapping->getWayString1();
 
-  SublineMappingPtr lastSm(new SublineMapping());
+  SublineMappingPtr lastSm = std::make_shared<SublineMapping>();
   lastSm->setStart1(splitStart);
   lastSm->setWay2(way2);
 
@@ -123,7 +121,7 @@ void WayMatchStringMerger::_createWayMappings(WayLocation splitStart, WayLocatio
     // if there isn't a last mapping then create one.
     if (!lastSm)
     {
-      lastSm.reset(new SublineMapping());
+      lastSm = std::make_shared<SublineMapping>();
       lastSm->setStart1(ws1->at(i).getStart());
       lastSm->setWay2(way2);
     }
@@ -165,7 +163,7 @@ WayLocation WayMatchStringMerger::_findNodeLocation2(WayStringPtr ws, ElementId 
   assert(nodeId.getType() == ElementType::Node);
 
   // if we haven't created the index, create it.
-  if (_nodeToWayLocation2.size() == 0)
+  if (_nodeToWayLocation2.empty())
   {
     // go through the way string and look at each subline.
     for (int i = 0; i < ws->getSize(); ++i)
@@ -177,15 +175,13 @@ WayLocation WayMatchStringMerger::_findNodeLocation2(WayStringPtr ws, ElementId 
            j <= subline.getLatter().getSegmentIndex(); ++j)
       {
         WayLocation wl(_map, w, j, 0.0);
-        if (subline.contains(wl))
+        if (subline.contains(wl) && !_nodeToWayLocation2.contains(ElementId::node(w->getNodeId(j))))
         {
-          // only record the first instance.
-          if (_nodeToWayLocation2.contains(ElementId::node(w->getNodeId(j))) == false)
-          {
-            assert(wl.isNode(WayLocation::SLOPPY_EPSILON) &&
-              wl.getNode(WayLocation::SLOPPY_EPSILON)->getId() == w->getNodeId(j));
-            _nodeToWayLocation2[ElementId::node(w->getNodeId(j))] = wl;
-          }
+          // Only record the first instance.
+          assert(
+            wl.isNode(WayLocation::SLOPPY_EPSILON) &&
+            wl.getNode(WayLocation::SLOPPY_EPSILON)->getId() == w->getNodeId(j));
+          _nodeToWayLocation2[ElementId::node(w->getNodeId(j))] = wl;
         }
       }
     }
@@ -286,7 +282,7 @@ void WayMatchStringMerger::mergeTags()
   }
 }
 
-void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, WayLocation wl1)
+void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, const WayLocation& wl1)
 {
   LOG_TRACE("Moving node...");
 
@@ -298,8 +294,10 @@ void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, WayLocation wl1)
   NodePtr scrapNode = _map->getNode(scrapNodeId);
 
   // create a new placeholder node so we don't move any scrap ways.
-  NodePtr placeholder(new Node(scrapNode->getStatus(), _map->createNextNodeId(),
-    scrapNode->getX(), scrapNode->getY(), scrapNode->getCircularError()));
+  NodePtr placeholder =
+    std::make_shared<Node>(
+      scrapNode->getStatus(), _map->createNextNodeId(), scrapNode->getX(), scrapNode->getY(),
+      scrapNode->getCircularError());
   _map->addNode(placeholder);
 
   LOG_VART(_sublineMappingOrder);
@@ -327,7 +325,7 @@ void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, WayLocation wl1)
 
     n1->setTags(t);
 
-    _replaced.push_back(pair<ElementId, ElementId>(scrapNodeId, n1->getElementId()));
+    _replaced.emplace_back(scrapNodeId, n1->getElementId());
   }
   else
   {
@@ -342,7 +340,7 @@ void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, WayLocation wl1)
 
 void WayMatchStringMerger::_rebuildWayString(WayNumber way)
 {
-  WayStringPtr ws(new WayString());
+  WayStringPtr ws = std::make_shared<WayString>();
 
   for (int i = 0; i < _sublineMappingOrder.size(); ++i)
   {
@@ -395,8 +393,7 @@ void WayMatchStringMerger::replaceScraps()
 
     for (int i = 0; i < it.value().size(); ++i)
     {
-      _replaced.push_back(
-        pair<ElementId, ElementId>(it.key()->getElementId(), it.value()[i]->getElementId()));
+      _replaced.emplace_back(it.key()->getElementId(), it.value()[i]->getElementId());
     }
   }
 }
@@ -455,7 +452,7 @@ void WayMatchStringMerger::_splitPrimary()
   // Create mappings from the sublines in s2 to sublines in s1
   for (int i = 0; i < ws2->getSize(); ++i)
   {
-    WaySubline& s2 = ws2->at(i);
+    const WaySubline& s2 = ws2->at(i);
     LOG_VART(s2);
     WayLocation splitStart = _mapping->map2To1(s2.getStart());
     WayLocation splitEnd = _mapping->map2To1(s2.getEnd());

@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "MaximalNearestSubline.h"
@@ -50,22 +50,18 @@ namespace hoot
 
 Meters MaximalNearestSubline::_headingDelta = -1;
 
-MaximalNearestSubline::MaximalNearestSubline(const ConstOsmMapPtr& map,
-                                             ConstWayPtr a,
-                                             ConstWayPtr b, Meters minSplitSize,
-                                             Meters maxRelevantDistance,
-                                             Radians maxRelevantAngle,
-                                             Meters headingDelta) :
-  _a(a), _b(b),
-  _aPtLocator(map, a),
-  _map(map)
+MaximalNearestSubline::MaximalNearestSubline(
+  const ConstOsmMapPtr& map, ConstWayPtr a, ConstWayPtr b, Meters minSplitSize,
+  Meters maxRelevantDistance, Radians maxRelevantAngle, Meters headingDelta) :
+_a(a),
+_b(b),
+_aPtLocator(map, a),
+_minSplitSize(minSplitSize),
+_map(map),
+_maxRelevantDistance(maxRelevantDistance),
+_maxRelevantAngle(maxRelevantAngle)
 {
-  _a = a;
-  _b = b;
   _maxInterval.resize(2);
-  _minSplitSize = minSplitSize;
-  _maxRelevantDistance = maxRelevantDistance;
-  _maxRelevantAngle = maxRelevantAngle;
   _headingDelta = headingDelta;
 }
 
@@ -82,9 +78,9 @@ Meters MaximalNearestSubline::_calculateIntervalLength()
   return result;
 }
 
-void MaximalNearestSubline::_expandInterval(WayLocation& loc)
+void MaximalNearestSubline::_expandInterval(const WayLocation& loc)
 {
-  // expand maximal interval if this point is outside it
+  // Expand maximal interval if this point is outside it.
   if (_maxInterval[0].isValid() == false || loc.compareTo(_maxInterval[0]) < 0)
   {
     _maxInterval[0] = loc;
@@ -93,16 +89,6 @@ void MaximalNearestSubline::_expandInterval(WayLocation& loc)
   if (_maxInterval[1].isValid() == false || loc.compareTo(_maxInterval[1]) > 0)
   {
     _maxInterval[1] = loc;
-  }
-}
-
-void MaximalNearestSubline::_findNearestOnA(const geos::geom::Coordinate& bPt)
-{
-  WayLocation nearestLocationOnA = _aPtLocator.locate(bPt);
-  if (_maxRelevantDistance < 0.0 ||
-      nearestLocationOnA.getCoordinate().distance(bPt) <= _maxRelevantDistance)
-  {
-    _expandInterval(nearestLocationOnA);
   }
 }
 
@@ -125,6 +111,8 @@ WayPtr MaximalNearestSubline::getMaximalNearestSubline(const OsmMapPtr& map,
 
 const vector<WayLocation>& MaximalNearestSubline::getInterval()
 {
+  LOG_TRACE("Getting interval...");
+
   vector<WayLocation> testPoints;
 
   // clear the working interval
@@ -138,11 +126,17 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
   // Heuristic #1: use every vertex of B as a test point
   for (size_t ib = 0; ib < _b->getNodeCount(); ib++)
   {
-    Coordinate bPt = _map->getNode(_b->getNodeId(ib))->toCoordinate();
-    WayLocation nearestLocationOnA = _aPtLocator.locate(bPt);
-    if (nearestLocationOnA.isValid())
+    ConstNodePtr node = _map->getNode(_b->getNodeId((long)ib));
+    LOG_VART(node.get());
+    if (node)
     {
-      testPoints.push_back(nearestLocationOnA);
+      Coordinate bPt = node->toCoordinate();
+      WayLocation nearestLocationOnA = _aPtLocator.locate(bPt);
+      LOG_VART(nearestLocationOnA.isValid());
+      if (nearestLocationOnA.isValid())
+      {
+        testPoints.push_back(nearestLocationOnA);
+      }
     }
   }
 
@@ -156,12 +150,20 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
   LocationOfPoint bPtLocator(_map, _b);
   for (size_t ia = 0; ia < _a->getNodeCount(); ia++)
   {
-    WayLocation bLoc = bPtLocator.locate(_map->getNode(_a->getNodeId(ia))->toCoordinate());
-    Coordinate bPt = bLoc.getCoordinate();
-    WayLocation nearestLocationOnA = _aPtLocator.locate(bPt);
-    if (nearestLocationOnA.isValid())
+    ConstNodePtr node = _map->getNode(_a->getNodeId((long)ia));
+    LOG_VART(node.get());
+    if (node)
     {
-      testPoints.push_back(nearestLocationOnA);
+      WayLocation bLoc = bPtLocator.locate(node->toCoordinate());
+      if (bLoc.isValid())
+      {
+        Coordinate bPt = bLoc.getCoordinate();
+        WayLocation nearestLocationOnA = _aPtLocator.locate(bPt);
+        if (nearestLocationOnA.isValid())
+        {
+          testPoints.push_back(nearestLocationOnA);
+        }
+      }
     }
   }
 
@@ -169,6 +171,10 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
   sort(testPoints.begin(), testPoints.end());
 
   std::shared_ptr<LineString> bls = ElementToGeometryConverter(_map).convertToLineString(_b);
+  if (!bls)
+  {
+    return _maxInterval;
+  }
   double bestLength = -1;
   vector<WayLocation> bestInterval;
   bestInterval.resize(2);
@@ -209,80 +215,8 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
   return _maxInterval;
 }
 
-const vector<WayLocation>& MaximalNearestSubline::_getInterval()
-{
-  /**
-   * The basic strategy is to pick test points on B and find their nearest point on A.
-   * The interval containing these nearest points is approximately the MaximalNeareastSubline of A.
-   */
-
-  // Heuristic #1: use every vertex of B as a test point
-  for (size_t ib = 0; ib < _b->getNodeCount(); ib++)
-  {
-    Coordinate bPt = _map->getNode(_b->getNodeId(ib))->toCoordinate();
-    WayLocation nearestLocationOnA = _aPtLocator.locate(bPt);
-    Meters distance = nearestLocationOnA.getCoordinate().distance(bPt);
-    if (_maxRelevantDistance < 0.0)
-    {
-      _expandInterval(nearestLocationOnA);
-    }
-    else
-    {
-      if (distance <= _maxRelevantDistance)
-      {
-        _expandInterval(nearestLocationOnA);
-      }
-      else if (_maxInterval[0].isValid() == true)
-      {
-        break;
-      }
-    }
-  }
-
-  /**
-   * Heuristic #2:
-   *
-   * find the nearest point on B to all vertices of A and use those points of B as test points.
-   * For efficiency use only vertices of A outside current max interval.
-   */
-  LocationOfPoint bPtLocator(_map, _b);
-  bool foundOne = false;
-  for (size_t ia = 0; ia < _a->getNodeCount(); ia++)
-  {
-    if (_isOutsideInterval(ia))
-    {
-      WayLocation bLoc = bPtLocator.locate(_map->getNode(_a->getNodeId(ia))->toCoordinate());
-      Coordinate bPt = bLoc.getCoordinate();
-      WayLocation nearestLocationOnA = _aPtLocator.locate(bPt);
-      Meters distance = nearestLocationOnA.getCoordinate().distance(bPt);
-      if (_maxRelevantDistance < 0.0)
-      {
-        _expandInterval(nearestLocationOnA);
-      }
-      else
-      {
-        if (distance <= _maxRelevantDistance)
-        {
-          _expandInterval(nearestLocationOnA);
-          foundOne = true;
-        }
-        else if (foundOne == true)
-        {
-          break;
-        }
-      }
-    }
-    else
-    {
-      foundOne = true;
-    }
-  }
-
-  return _maxInterval;
-}
-
 bool MaximalNearestSubline::_isInBounds(const WayLocation& wl,
-                                        const std::shared_ptr<LineString>& ls)
+                                        const std::shared_ptr<LineString>& ls) const
 {
   // calculate the distance from the test point to b
   std::shared_ptr<Point> tp(GeometryFactory::getDefaultInstance()->createPoint(
@@ -306,13 +240,15 @@ bool MaximalNearestSubline::_isInBounds(const WayLocation& wl,
 
     LocationOfPoint loc(_map, _b);
     WayLocation wl2 = loc.locate(cs->getAt(1));
-
-    Radians h1 = WayHeading::calculateHeading(wl, _headingDelta);
-    Radians h2 = WayHeading::calculateHeading(wl2, _headingDelta);
-
-    if (WayHeading::deltaMagnitude(h1, h2) > _maxRelevantAngle)
+    if (wl2.isValid())
     {
-      result = false;
+      Radians h1 = WayHeading::calculateHeading(wl, _headingDelta);
+      Radians h2 = WayHeading::calculateHeading(wl2, _headingDelta);
+
+      if (WayHeading::deltaMagnitude(h1, h2) > _maxRelevantAngle)
+      {
+        result = false;
+      }
     }
   }
 
@@ -351,13 +287,13 @@ vector<WayPtr> MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
   // c. ----x---x
   // d. x-------x
 
-  std::shared_ptr<FindNodesInWayFactory> nf(new FindNodesInWayFactory(_a));
+  std::shared_ptr<FindNodesInWayFactory> nf = std::make_shared<FindNodesInWayFactory>(_a);
 
   // if this is b or c
   if (start.getSegmentIndex() != 0 || start.getSegmentFraction() > 0.0)
   {
     WayLocation wl(map, _a, 0, 0.0);
-    WayPtr way1 = WaySubline(wl, start).toWay(map, nf.get());
+    WayPtr way1 = WaySubline(wl, start).toWay(map, nf);
 
     double l = ElementToGeometryConverter(map).convertToLineString(way1)->getLength();
     // if the way is too short, round to the first way.
@@ -374,8 +310,7 @@ vector<WayPtr> MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
   // if this is a or b
   if (end.getSegmentIndex() < (int)_a->getNodeCount() - 1 || end.getSegmentFraction() < 1.0)
   {
-    WayPtr way3 = WaySubline(end, WayLocation(map, _a, _a->getNodeCount() - 1, 0.0)).
-      toWay(map, nf.get());
+    WayPtr way3 = WaySubline(end, WayLocation(map, _a, _a->getNodeCount() - 1, 0.0)).toWay(map, nf);
 
     double l = ElementToGeometryConverter(map).convertToLineString(way3)->getLength();
     // if the way is too short, round to the first way.
@@ -389,8 +324,8 @@ vector<WayPtr> MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
     }
   }
 
-  // in all cases we add the middle line.
-  WayPtr way2 = WaySubline(start, end).toWay(map, nf.get());
+  // In all cases we add the middle line.
+  WayPtr way2 = WaySubline(start, end).toWay(map, nf);
   double l = ElementToGeometryConverter(map).convertToLineString(way2)->getLength();
   // if the way is big enough then add it on.
   if (l > _minSplitSize)

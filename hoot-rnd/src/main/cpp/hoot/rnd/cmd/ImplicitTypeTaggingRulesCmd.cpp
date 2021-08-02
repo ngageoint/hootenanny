@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -31,6 +31,7 @@
 #include <hoot/rnd/schema/ImplicitTagRawRulesDeriver.h>
 #include <hoot/rnd/schema/ImplicitTagRulesDatabaseDeriver.h>
 #include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -47,14 +48,12 @@ public:
 
   ImplicitTypeTaggingRulesCmd()  = default;
 
-  virtual QString getName() const override { return "type-tagger-rules"; }
-
-  virtual QString getDescription() const override
+  QString getName() const override { return "type-tagger-rules"; }
+  QString getDescription() const override
   { return "Creates rules for adding missing type tags to a map"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual QString getType() const { return "rnd"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
@@ -63,40 +62,69 @@ public:
     {
       args.removeAt(args.indexOf("--create-raw"));
       if (args.size() != 3)
-      {
+      {  
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(
-          QString("%1 with the --create-raw option takes three parameters.").arg(getName()));
+        throw IllegalArgumentException(
+          QString("%1 with the --create-raw option takes three parameters. You provided %2: %3")
+            .arg(getName())
+            .arg(args.size())
+            .arg(args.join(",")));
       }
+
+      const QStringList inputs = args[0].trimmed().split(";");
+      const QStringList translations = args[1].trimmed().split(";");
+      const QString output = args[2].trimmed();
+
+      LOG_STATUS(
+        "Generating raw implicit type tag rules for " << inputs.size() <<
+        " inputs and writing output to ..." << FileUtils::toLogFormat(output, 25) << "...");
 
       ImplicitTagRawRulesDeriver rawRulesDeriver;
       rawRulesDeriver.setConfiguration(conf());
-      rawRulesDeriver.deriveRawRules(
-        args[0].trimmed().split(";"), args[1].trimmed().split(";"), args[2].trimmed());
+      rawRulesDeriver.deriveRawRules(inputs, translations, output);
     }
     else if (args.contains("--create-db"))
     {
       args.removeAt(args.indexOf("--create-db"));
       if (args.size() != 2)
-      {
+      {   
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(
-          QString("%1 with the --create-db option takes two parameters.").arg(getName()));
+        throw IllegalArgumentException(
+          QString("%1 with the --create-db option takes two parameters. You provided %2: %3")
+            .arg(getName())
+            .arg(args.size())
+            .arg(args.join(",")));
       }
+
+      const QString input = args[0].trimmed();
+      const QString output = args[1].trimmed();
+
+      LOG_STATUS(
+        "Generating implicit type tag database for ..." << FileUtils::toLogFormat(input, 25) <<
+        " writing output to ..." << FileUtils::toLogFormat(output, 25) << "...");
 
       ImplicitTagRulesDatabaseDeriver rulesDatabaseDeriver;
       rulesDatabaseDeriver.setConfiguration(conf());
-      rulesDatabaseDeriver.deriveRulesDatabase(args[0].trimmed(), args[1].trimmed());
+      rulesDatabaseDeriver.deriveRulesDatabase(input, output);
     }
     else if (args.contains("--db-stats"))
     {
       args.removeAt(args.indexOf("--db-stats"));
       if (args.size() != 1)
-      {
+      {  
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(
-          QString("%1 with the --db-stats option takes one parameter.").arg(getName()));
+        throw IllegalArgumentException(
+          QString("%1 with the --db-stats option takes one parameter. You provided %2: %3")
+            .arg(getName())
+            .arg(args.size())
+            .arg(args.join(",")));
       }
+
+      const QString input = args[0].trimmed();
+
+      LOG_STATUS(
+        "Calculating implicit type tag database statistics for ..." <<
+        FileUtils::toLogFormat(input, 25) << "...");
 
       ImplicitTagRulesSqliteReader dbReader;
       dbReader.open(args[0].trimmed());
@@ -112,7 +140,7 @@ public:
     }
 
     LOG_STATUS(
-      "Implicit type tagging rules generated in " <<
+      "Implicit type tag operation complated in " <<
        StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;

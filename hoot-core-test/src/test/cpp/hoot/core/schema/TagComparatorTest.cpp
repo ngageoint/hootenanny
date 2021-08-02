@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -134,30 +134,6 @@ public:
         uut.averageTags(t1, t2, avg);
         compareTags(expected, avg);
     }
-
-    //    {
-    //      Tags t1;
-    //      t1["highway"] = "path";
-    //      t1["foot"] = "designated";
-    //      t1["name"] = "Intemann Trail";
-    //      t1["official_name"] = "Paul Intemann Memorial Nature Trail";
-
-    //      Tags t2;
-    //      t2["highway"] = "footway";
-    //      t2["name"] = "Intemann";
-
-    //      Tags expected;
-    //      expected["highway"] = "path";
-    //      expected["foot"] = "designated";
-    //      expected["name"] = "Intemann Trail";
-    //      expected["official_name"] = "Paul Intemann Memorial Nature Trail";
-    //      expected["alt_name"] = "Intemann";
-
-    //      Tags avg;
-    //      uut.averageTags(t1, t2, avg);
-    //      //LOG_WARN("average: \n" << avg.toString());
-    //      compareTags(expected, avg);
-    //    }
 
     {
         Tags t1;
@@ -958,6 +934,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TagComparatorTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TagComparatorTest, "current");
 
 }

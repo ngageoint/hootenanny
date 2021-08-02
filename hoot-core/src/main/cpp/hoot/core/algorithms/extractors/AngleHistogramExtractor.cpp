@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "AngleHistogramExtractor.h"
 
@@ -31,11 +31,11 @@
 #include <geos/geom/Geometry.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/extractors/Histogram.h>
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -52,9 +52,9 @@ public:
   static QString className() { return "hoot::HistogramVisitor"; }
 
   HistogramVisitor(Histogram& h) : _h(h) { }
-  virtual ~HistogramVisitor() = default;
+  ~HistogramVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getElementType() == ElementType::Way)
     {
@@ -75,10 +75,10 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getClassName() const { return ""; }
-  virtual QString toString() const { return ""; }
-  virtual QString getName() const { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getClassName() const override { return ""; }
+  QString toString() const override { return ""; }
+  QString getName() const override { return ""; }
 
 private:
 
@@ -113,11 +113,9 @@ AngleHistogramExtractor::AngleHistogramExtractor()
 }
 
 AngleHistogramExtractor::AngleHistogramExtractor(Radians smoothing, unsigned int bins) :
-_smoothing(smoothing),
-_bins(bins)
+_bins(bins),
+_smoothing(smoothing)
 {
-  LOG_VART(_smoothing);
-  LOG_VART(_bins);
 }
 
 void AngleHistogramExtractor::setConfiguration(const Settings& conf)
@@ -125,14 +123,12 @@ void AngleHistogramExtractor::setConfiguration(const Settings& conf)
   ConfigOptions options(conf);
   _smoothing = options.getAngleHistogramExtractorSmoothing();
   _bins = options.getAngleHistogramExtractorBins();
-  LOG_VART(_smoothing);
-  LOG_VART(_bins);
 }
 
-Histogram* AngleHistogramExtractor::_createHistogram(const OsmMap& map, const ConstElementPtr& e)
-  const
+shared_ptr<Histogram> AngleHistogramExtractor::_createHistogram(
+  const OsmMap& map, const ConstElementPtr& e) const
 {
-  Histogram* result = new Histogram(_bins);
+  shared_ptr<Histogram> result = std::make_shared<Histogram>(_bins);
   HistogramVisitor v(*result);
   v.setOsmMap(&map);
   e->visitRo(map, v);
@@ -140,19 +136,23 @@ Histogram* AngleHistogramExtractor::_createHistogram(const OsmMap& map, const Co
   return result;
 }
 
+std::shared_ptr<Histogram> AngleHistogramExtractor::getNormalizedHistogram(
+  const OsmMap& map, const ConstElementPtr& element) const
+{
+  std::shared_ptr<Histogram> hist = _createHistogram(map, element);
+  if (_smoothing > 0.0)
+  {
+    hist->smooth(_smoothing);
+  }
+  hist->normalize();
+  return hist;
+}
+
 double AngleHistogramExtractor::extract(const OsmMap& map, const ConstElementPtr& target,
   const ConstElementPtr& candidate) const
 {
-  std::shared_ptr<Histogram> h1(_createHistogram(map, target));
-  std::shared_ptr<Histogram> h2(_createHistogram(map, candidate));
-  if (_smoothing > 0.0)
-  {
-    h1->smooth(_smoothing);
-    h2->smooth(_smoothing);
-  }
-  h1->normalize();
-  h2->normalize();
-
+  std::shared_ptr<Histogram> h1 = getNormalizedHistogram(map, target);
+  std::shared_ptr<Histogram> h2 = getNormalizedHistogram(map, candidate);
   const double diff = max(0.0, h1->diff(*h2));
   return 1.0 - diff;
 }

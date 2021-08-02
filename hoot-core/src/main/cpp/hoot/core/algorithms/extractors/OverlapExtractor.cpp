@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OverlapExtractor.h"
 
@@ -69,13 +69,13 @@ double OverlapExtractor::extract(const OsmMap& map, const ConstElementPtr& targe
   std::shared_ptr<Geometry> overlap;
   try
   {
-    overlap.reset(g1->intersection(g2.get()));
+    overlap = g1->intersection(g2.get());
   }
   catch (const geos::util::TopologyException&)
   {
     g1.reset(GeometryUtils::validateGeometry(g1.get()));
     g2.reset(GeometryUtils::validateGeometry(g2.get()));
-    overlap.reset(g2->intersection(g1.get()));
+    overlap = g2->intersection(g1.get());
   }
 
   double a1 = g1->getArea();

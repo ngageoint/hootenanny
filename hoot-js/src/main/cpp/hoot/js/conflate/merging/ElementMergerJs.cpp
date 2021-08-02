@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ElementMergerJs.h"
 
@@ -30,25 +30,26 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/criterion/CriterionUtils.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/conflate/merging/AreaMergerJs.h>
 #include <hoot/js/conflate/merging/PoiMergerJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 
 // Qt
@@ -66,12 +67,13 @@ namespace hoot
 
 HOOT_JS_REGISTER(ElementMergerJs)
 
-void ElementMergerJs::Init(Handle<Object> exports)
+void ElementMergerJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  exports->Set(String::NewFromUtf8(current, "mergeElements"),
-               FunctionTemplate::New(current, mergeElements)->GetFunction());
+  Local<Context> context = current->GetCurrentContext();
+  exports->Set(context, toV8("mergeElements"),
+               FunctionTemplate::New(current, mergeElements)->GetFunction(context).ToLocalChecked());
 }
 
 void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
@@ -79,9 +81,10 @@ void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
   LOG_INFO("Merging elements...");
 
   Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   try
   {
-    HandleScope scope(current);
     if (args.Length() != 1)
     {
       args.GetReturnValue().Set(
@@ -91,12 +94,12 @@ void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
       return;
     }
 
-    OsmMapPtr map(node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap());
+    OsmMapPtr map(node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getMap());
     LOG_VART(map->getElementCount());
     _mergeElements(map, current);
     LOG_VART(map->getElementCount());
 
-    Handle<Object> returnMap = OsmMapJs::create(map);
+    Local<Object> returnMap = OsmMapJs::create(map);
     args.GetReturnValue().Set(returnMap);
   }
   // This error handling has been proven to not work as it never returns the error message to the
@@ -189,9 +192,8 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
 {
   const long numMergeTargets =
     (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootMergeTarget())),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
+      std::make_shared<TagKeyCriterion>(MetadataTags::HootMergeTarget()),
+      std::make_shared<ElementCountVisitor>(), map);
   LOG_VART(numMergeTargets);
   if (numMergeTargets != 1)
   {
@@ -257,7 +259,6 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
       QString("Invalid inputs passed to the element merger.  Inputs must contain only one ") +
       QString("combination of the following:  1) two or more POIs, 2) two or more buildings, 3)") +
       QString("two or more areas, or 4) one POI and one polygon");
-    //LOG_ERROR(errorMsg);
     throw IllegalArgumentException(errorMsg);
   }
 

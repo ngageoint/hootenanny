@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef IDSWAP_H
@@ -42,19 +42,13 @@ class IdSwap
 public:
 
   /** Helpful typedefs for container and iterators */
-  typedef std::map<ElementId, ElementId> container;
-  typedef typename container::iterator iterator;
-  typedef typename container::const_iterator const_iterator;
+  using container = std::map<ElementId, ElementId>;
+  using iterator = container::iterator;
+  using const_iterator = container::const_iterator;
 
-  IdSwap();
+  IdSwap() = default;
   IdSwap(ElementId id_1, ElementId id_2) { add(id_1, id_2); }
 
-  /**
-   * @brief add
-   * @param type
-   * @param id_1
-   * @param id_2
-   */
   void add(ElementId id_1, ElementId id_2);
   /**
    * @brief begin Begin iterator
@@ -70,7 +64,7 @@ public:
    * @brief size Total number of elements to swap
    * @return count
    */
-  size_t size();
+  size_t size() const;
 
 private:
 
@@ -79,7 +73,7 @@ private:
   container _idMapReversed;
 };
 
-typedef std::shared_ptr<IdSwap> IdSwapPtr;
+using IdSwapPtr = std::shared_ptr<IdSwap>;
 
 }
 

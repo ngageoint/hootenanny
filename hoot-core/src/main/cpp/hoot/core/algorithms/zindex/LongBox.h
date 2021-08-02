@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef LONGBOX_H
 #define LONGBOX_H
@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * Used to represent a bounding box in Z-Value space.
+ * @brief The LongBox class is used to represent a bounding box in Z-Value space.
  */
 class LongBox
 {
@@ -45,47 +45,38 @@ public:
 
   static QString className() { return "hoot::LongBox"; }
 
-  LongBox() {}
+  LongBox() = default;
+  LongBox(const std::vector<long int>& min, const std::vector<long int>& max);
+   virtual ~LongBox();
 
-  LongBox(std::vector<long int> min, std::vector<long int> max);
+  std::shared_ptr<LongBox> copy() const;
 
-  std::shared_ptr<LongBox> copy();
-
-  virtual ~LongBox();
-
-  long int calculateVolume();
+  long int calculateVolume() const;
 
   /**
     * Returns true if at least one edge overlaps with one of the other boxes
     * edges.
     */
-  bool edgeOverlaps(LongBox b);
+  bool edgeOverlaps(const LongBox& b) const;
 
-  LongBox expand(int size);
+  LongBox expand(int size) const;
 
-  int getDimensions() { return getMin().size(); }
+  int getDimensions() const { return getMin().size(); }
 
   std::vector<long int> getMax() const { return _max; }
-
   std::vector<long int> getMin() const { return _min; }
 
-  void setMax(std::vector<long int> max) { _max = max; }
+  void setMax(const std::vector<long int>& max) { _max = max; }
+  void setMin(const std::vector<long int>& min) { _min = min; }
 
-  void setMin(std::vector<long int> min) { _min = min; }
+  bool in(const std::vector<long int>& p) const;
 
-  bool in(std::vector<long int> p);
+  QString toString() const;
 
-  bool intersects(LongBox b);
-
-  /**
-   * @brief toString
-   * @return QString
-   */
-  QString toString();
-
-  long getWidth(int d);
+  long getWidth(int d) const;
 
 private:
+
   std::vector<long int> _min;
   std::vector<long int> _max;
 };

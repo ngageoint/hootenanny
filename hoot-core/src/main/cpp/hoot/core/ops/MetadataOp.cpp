@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "MetadataOp.h"
@@ -155,9 +155,9 @@ WayPtr MetadataOp::_assignToDataset( ElementPtr pElement )
   // area for closed ways or the longest distance for open ones.
 
   // check if element is inside poly
-  Way* pw = dynamic_cast<Way*>(pElement.get());
-  Node* pn = dynamic_cast<Node*>(pElement.get());
-  Relation* pr = dynamic_cast<Relation*>(pElement.get());
+  const Way* pw = dynamic_cast<Way*>(pElement.get());
+  const Node* pn = dynamic_cast<Node*>(pElement.get());
+  const Relation* pr = dynamic_cast<Relation*>(pElement.get());
 
   vector<long> elementNodes;
 
@@ -240,7 +240,7 @@ WayPtr MetadataOp::_assignToDataset( ElementPtr pElement )
   return datasetWayWithMostNodes;
 }
 
-void MetadataOp::_removeDatasetWay(WayPtr pDataset)
+void MetadataOp::_removeDatasetWay(WayPtr pDataset) const
 {
   // store way nodes for deletion
   vector<long> nodes = pDataset->getNodeIds();

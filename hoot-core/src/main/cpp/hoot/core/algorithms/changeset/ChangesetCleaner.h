@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESET_CLEANER_H
 #define CHANGESET_CLEANER_H
@@ -34,9 +34,11 @@ namespace hoot
 {
 
 /**
- * Removes mistakes from changesets. This is meant to be used when algorithms create erroneous
- * changesets and the cause isn't immediately discernible. Whenever possible, the changeset
- * generation itself should be fixed. The cleaning operation is memory bound.
+ * @brief The ChangesetCleaner class removes mistakes from changesets.
+ *
+ * This is meant to be used when algorithms create erroneous changesets and the cause isn't
+ * immediately discernible. Whenever possible, the changeset generation itself should be fixed. The
+ * cleaning operation is memory bound.
  *
  * Current cleaning ops:
  *
@@ -52,63 +54,62 @@ class ChangesetCleaner : public ChangesetProvider
 public:
 
   /**
-   * Constructor - cleans the changeset summed together from the input providers
-   *
+   * @brief ChangesetCleaner Constructor that cleans the changeset summed together from the input
+   * providers
    * @param changesetProviders a collection of changeset providers
    */
   ChangesetCleaner(const QList<ChangesetProviderPtr>& changesetProviders);
-
-  virtual ~ChangesetCleaner();
-
-  /**
-   * @see ChangeSetProvider
-   */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
+  ~ChangesetCleaner();
 
   /**
    * @see ChangeSetProvider
    */
-  virtual void close() override;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual bool hasMoreChanges() override;
+  void close() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual Change readNextChange() override;
+  bool hasMoreChanges() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual int getNumFromElementsParsed() const override;
+  Change readNextChange() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual int getNumToElementsParsed() const override;
+  int getNumFromElementsParsed() const override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual int getNumCreateChanges() const override;
+  int getNumToElementsParsed() const override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual int getNumModifyChanges() const override;
+  int getNumCreateChanges() const override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual int getNumDeleteChanges() const override;
+  int getNumModifyChanges() const override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual int getNumChanges() const override;
+  int getNumDeleteChanges() const override;
+
+  /**
+   * @see ChangeSetProvider
+   */
+  int getNumChanges() const override;
 
 private:
 
