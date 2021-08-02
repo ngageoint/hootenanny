@@ -62,7 +62,7 @@ public:
 
 private:
 
-  friend class NormalizeAddressesVisitorTest;
+  friend class AddressConflateTest;
 
   AddressNormalizer _addressNormalizer;
 };

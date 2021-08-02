@@ -4,7 +4,7 @@ set -e
 mkdir -p test-output/cmd/ConflateExactTest
 STATS_OUT=test-output/cmd/ConflateExactTest/boston-road-building-out
 
-HOOT_OPTS="-C Testing.conf -D writer.include.debug.tags=true -D poi.polygon.address.match.enabled=true"
+HOOT_OPTS="-C Testing.conf -D writer.include.debug.tags=true"
 
 hoot conflate $HOOT_OPTS test-files/BostonSubsetRoadBuilding_FromShp.osm test-files/BostonSubsetRoadBuilding_FromOsm.osm $STATS_OUT.osm > $STATS_OUT
 
