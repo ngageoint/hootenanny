@@ -92,6 +92,7 @@ long ElementCounter::count(const QStringList& inputs)
   {
     _isStreamableCrit = true;
   }
+  LOG_VARD(_isStreamableCrit);
 
   if (_isStreamableCrit && IoUtils::areStreamableInputs(inputs))
   {
@@ -143,7 +144,7 @@ QString ElementCounter::_getStreamingStatusMessage(const QString& input) const
 QString ElementCounter::_getMemoryBoundStatusMessage(const int inputsSize) const
 {
   const QString dataType = _countFeaturesOnly ? "features" : "elements";
-  QString msg = "Counting memory bound" + dataType;
+  QString msg = "Counting memory bound " + dataType;
   if (_crit)
   {
     msg += " satisfying " + _crit->toString();
