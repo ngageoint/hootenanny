@@ -167,9 +167,7 @@ std::shared_ptr<Element> GeometryToElementConverter::convertMultiLineStringToEle
         s, map->createNextRelationId(), circularError, MetadataTags::RelationMultilineString());
     for (size_t i = 0; i < mls->getNumGeometries(); i++)
     {
-      WayPtr w =
-        convertLineStringToWay(
-          dynamic_cast<const LineString*>(mls->getGeometryN(i)), map, s, circularError);
+      WayPtr w = convertLineStringToWay(mls->getGeometryN(i), map, s, circularError);
       r->addElement("", w);
     }
     map->addRelation(r);
@@ -177,9 +175,7 @@ std::shared_ptr<Element> GeometryToElementConverter::convertMultiLineStringToEle
   }
   else
   {
-    return
-      convertLineStringToWay(
-        dynamic_cast<const LineString*>(mls->getGeometryN(0)), map, s, circularError);
+    return convertLineStringToWay(mls->getGeometryN(0), map, s, circularError);
   }
 }
 
@@ -193,8 +189,7 @@ RelationPtr GeometryToElementConverter::convertMultiPolygonToRelation(
       s, map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
   for (size_t i = 0; i < mp->getNumGeometries(); i++)
   {
-    convertPolygonToRelation(
-      dynamic_cast<const Polygon*>(mp->getGeometryN(i)), map, r, s, circularError);
+    convertPolygonToRelation(mp->getGeometryN(i), map, r, s, circularError);
   }
   map->addRelation(r);
   return r;
