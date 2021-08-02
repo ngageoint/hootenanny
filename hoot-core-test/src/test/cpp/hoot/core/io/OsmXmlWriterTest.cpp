@@ -111,13 +111,13 @@ public:
     OsmMapPtr map(new OsmMap());
 
     QList<NodePtr> nodes;
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, Tags()));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 0.1, 0.1, 15.0, Tags()));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, Tags()));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1, 0.1, 0.1, 15.0, Tags()));
 
     QString reverseAlphabet = "z;y;x;w;v;u;t;s;r;q;p;o;n;m;l;k;j;i;h;g;f;e;d;c;b;a";
     Tags tags;
     tags.set(MetadataTags::SourceImagery(), reverseAlphabet);
-    WayPtr way = TestUtils::createWay(map, nodes, Status::Unknown1, 15.0, tags);
+    WayPtr way = TestUtils::createWay(map, nodes, "", Status::Unknown1, 15.0, tags);
 
     // It is only reversed on output, not as it sits in memory
     HOOT_STR_EQUALS(reverseAlphabet, way->getTags().get(MetadataTags::SourceImagery()));
