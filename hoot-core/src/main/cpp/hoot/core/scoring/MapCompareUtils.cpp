@@ -44,16 +44,14 @@ void MapCompareUtils::getAttributeComparisonFinalScores(
 
   Tgs::Random::instance()->seed(100);
 
-  {
-    AttributeComparator attr(map1, map2);
-    attr.setIterations(numIterations);
-    attr.compareMaps();
-    int thisConfidence = convertRawScoreToFinalScore(attr.getConfidenceInterval());
-    int thisMean = convertRawScoreToFinalScore(attr.getMeanScore());
+  AttributeComparator attr(map1, map2);
+  attr.setIterations(numIterations);
+  attr.compareMaps();
+  int thisConfidence = convertRawScoreToFinalScore(attr.getConfidenceInterval());
+  int thisMean = convertRawScoreToFinalScore(attr.getMeanScore());
 
-    confidence = thisConfidence;
-    mean = thisMean;
-  }
+  confidence = thisConfidence;
+  mean = thisMean;
 }
 
 int MapCompareUtils::getAttributeComparisonFinalScore(
