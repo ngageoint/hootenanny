@@ -95,7 +95,7 @@ public:
     LOG_VARD(completedJobs.size());
 
     QSet<QString> unfinishedTests = launchedJobs.subtract(completedJobs);
-    if (!unfinishedTests.size().empty())
+    if (!unfinishedTests.empty())
     {
       LOG_STATUS("Unfinished tests in ..." << testLog.right(25) << ":\n" << unfinishedTests);
     }

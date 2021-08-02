@@ -101,7 +101,7 @@ public:
   QStringList getLayersWithGeometry(const QString& path) const;
 
   std::shared_ptr<Envelope> getBoundingBoxFromConfig(
-    const Settings& s, OGRSpatialReference* srs) const;
+    const Settings& s, const OGRSpatialReference* srs) const;
 
   void initializePartial();
   void setUseDataSourceIds(bool useIds);
@@ -352,8 +352,8 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(
   return result;
 }
 
-std::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
-  OGRSpatialReference* srs)
+std::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(
+  const Settings& s, const OGRSpatialReference* srs)
 {
   return _d->getBoundingBoxFromConfig(s, srs);
 }
