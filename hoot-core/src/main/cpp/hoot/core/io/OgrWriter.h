@@ -63,7 +63,7 @@ public:
   static QString className() { return "hoot::OgrWriter"; }
 
   OgrWriter();
-  ~OgrWriter();
+  ~OgrWriter() = default;
 
   void setConfiguration(const Settings& conf) override;
 

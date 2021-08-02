@@ -112,14 +112,6 @@ _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
   _wgs84.SetWellKnownGeogCS("WGS84");
 }
 
-OgrWriter::~OgrWriter()
-{
-  // Clearing things out here helps keep a geopackage file write from crashing inside GDAL.
-  _ds.reset();
-  _layers.clear();
-  _projections.clear();
-}
-
 void OgrWriter::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
@@ -619,6 +611,7 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
       options["FEATURE_DATASET"] = layer->getFdName();
     }
 
+    // So far, have only seen this needed when trying to overwrite a gpkg.
     if (name == QString("GPKG"))
     {
       options["OVERWRITE"] = "YES";

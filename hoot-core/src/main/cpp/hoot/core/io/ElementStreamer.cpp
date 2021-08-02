@@ -63,6 +63,7 @@ void ElementStreamer::stream(
     std::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
   partialWriter->initializePartial();
 
+  long numFeaturesWritten = 0;
   for (int i = 0; i < inputs.size(); i++)
   {
     const QString in = inputs.at(i);
@@ -92,7 +93,7 @@ void ElementStreamer::stream(
       IoUtils::getFilteredInputStream(
         std::dynamic_pointer_cast<ElementInputStream>(reader), convertOps);
 
-    ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
+    numFeaturesWritten += ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
 
     std::shared_ptr<PartialOsmMapReader> partialReader =
       std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
@@ -108,7 +109,8 @@ void ElementStreamer::stream(
   }
 
   LOG_INFO(
-    "Streaming element I/O took: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+    "Streamed " << StringUtils::formatLargeNumber(numFeaturesWritten) << " elements in: " <<
+    StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 }

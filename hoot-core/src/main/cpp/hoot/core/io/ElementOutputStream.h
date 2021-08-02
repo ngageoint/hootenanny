@@ -57,10 +57,13 @@ public:
   virtual void writeElement(ElementPtr& element) = 0;
 
   /**
-   * Read elements from the input stream and write to the output stream. There may be a better place
-   * for this to live, but it works for now.
+   * @brief writeAllElements reads elements from the input stream and writes them to the output
+   * stream.
+   * @param eis element source to read
+   * @param eos element target to write to
+   * @return the number of elements written
    */
-  static void writeAllElements(ElementInputStream& eis, ElementOutputStream& eos);
+  static long writeAllElements(ElementInputStream& eis, ElementOutputStream& eos);
 };
 
 }
