@@ -110,8 +110,8 @@ std::shared_ptr<Way> DualHighwaySplitter::_createOneWay(const std::shared_ptr<co
   BufferParameters bp(8, BufferParameters::CAP_FLAT, BufferParameters::JOIN_ROUND,
                       bufferSize * 2);
 
-  BufferBuilder bb(bp);
-  std::shared_ptr<Geometry> g(bb.bufferLineSingleSided(ls.get(), bufferSize, left));
+  BufferBuilder* bb = new BufferBuilder(bp);
+  std::shared_ptr<Geometry> g(bb->bufferLineSingleSided(ls.get(), bufferSize, left));
   const LineString* newLs = dynamic_cast<const LineString*>(g.get());
 
   long way_id = w->getId();

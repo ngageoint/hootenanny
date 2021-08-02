@@ -68,9 +68,6 @@ public:
   void setIterations(int i) { _iterations = i; }
   void setMaxThreads(int t) { _maxThreads = t; }
 
-  void drawCostDistance(
-    OsmMapPtr map, std::vector<geos::geom::Coordinate>& c, QString output, double& maxGraphCost);
-
 private:
 
   /** Number of times to iterate of the map calculating scores */

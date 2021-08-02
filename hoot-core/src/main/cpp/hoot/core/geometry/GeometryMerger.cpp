@@ -157,7 +157,7 @@ void GeometryMerger::mergeGeometryThread()
       {
         //  Attempt the first union operation on the two geometries
         double area = pair.first->getArea() + pair.second->getArea();
-        g.reset(pair.first->Union(pair.second.get()));
+        g = pair.first->Union(pair.second.get());
         if (g->isEmpty() || fabs(g->getArea() - area) > 0.1)
           cleanAndRetry = true;
       }
@@ -173,7 +173,7 @@ void GeometryMerger::mergeGeometryThread()
         pair.second.reset(GeometryUtils::validateGeometry(pair.second.get()));
         try
         {
-          g.reset(pair.first->Union(pair.second.get()));
+          g = pair.first->Union(pair.second.get());
         }
         // if the cleaning didn't fix the problem
         catch(const geos::util::GEOSException& e)

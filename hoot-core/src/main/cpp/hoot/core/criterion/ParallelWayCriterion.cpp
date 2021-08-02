@@ -53,8 +53,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ParallelWayCriterion)
 
-ParallelWayCriterion::ParallelWayCriterion(const ConstOsmMapPtr& map, ConstWayPtr baseWay,
-                                           bool isParallel) :
+ParallelWayCriterion::ParallelWayCriterion(
+  const ConstOsmMapPtr& map, ConstWayPtr baseWay, bool isParallel) :
   _map(map),
   _baseWay(baseWay),
   _isParallel(isParallel)
@@ -101,7 +101,7 @@ Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
   for (size_t i = 0; i < _points.size(); i++)
   {
     // calculate the heading from point to the nearest point on the candidate way.
-    std::shared_ptr<CoordinateSequence> seq(DistanceOp::closestPoints(_points[i], ls.get()));
+    std::shared_ptr<CoordinateSequence> seq(DistanceOp::nearestPoints(_points[i], ls.get()));
     double d = seq->getAt(0).distance(seq->getAt(1));
     if (d > 0.5)
     {

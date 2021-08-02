@@ -28,6 +28,7 @@
 
 // Hoot
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/TableType.h>
@@ -926,12 +927,7 @@ std::shared_ptr<Element> ApiDbReader::_resultToElement(
 
 std::shared_ptr<OGRSpatialReference> ApiDbReader::getProjection() const
 {
-  std::shared_ptr<OGRSpatialReference> wgs84 = std::make_shared<OGRSpatialReference>();
-  if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
-  {
-    throw HootException("Error creating EPSG:4326 projection.");
-  }
-  return wgs84;
+  return MapProjector::createWgs84Projection();
 }
 
 }

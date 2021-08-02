@@ -234,7 +234,7 @@ std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
   }
 
   CoordinateSequence* coordSeq =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(5, 2);
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(5, 2).release();
   coordSeq->setAt(geos::geom::Coordinate(env.getMinX(), env.getMinY()), 0);
   coordSeq->setAt(geos::geom::Coordinate(env.getMinX(), env.getMaxY()), 1);
   coordSeq->setAt(geos::geom::Coordinate(env.getMaxX(), env.getMaxY()), 2);
@@ -242,7 +242,7 @@ std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
   coordSeq->setAt(geos::geom::Coordinate(env.getMinX(), env.getMinY()), 4);
 
   // an empty set of holes
-  vector<Geometry*>* holes = new vector<Geometry*>();
+  vector<LinearRing*>* holes = new vector<LinearRing*>();
   // create the outer line; GeometryFactory takes ownership of these input parameters.
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(coordSeq);
   // GeometryFactory takes ownership of these input parameters.
@@ -281,7 +281,7 @@ std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
   LOG_VART(coords);
 
   CoordinateSequence* coordSeq =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(coords.size(), 2);
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(coords.size(), 2).release();
   for (int i = 0; i < coords.size(); i++)
   {
     const QString coordStr = coords.at(i);
@@ -306,7 +306,7 @@ std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
   LOG_VART(coordSeq->size());
 
   // an empty set of holes
-  vector<Geometry*>* holes = new vector<Geometry*>();
+  vector<LinearRing*>* holes = new vector<LinearRing*>();
   // create the outer line; GeometryFactory takes ownership of these input parameters.
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(coordSeq);
   // GeometryFactory takes ownership of these input parameters.
@@ -322,7 +322,7 @@ QString GeometryUtils::polygonStringToEnvelopeString(const QString& str)
 QString GeometryUtils::polygonToString(const std::shared_ptr<Polygon>& poly)
 {
   const int precision = ConfigOptions().getWriterPrecision();
-  const geos::geom::CoordinateSequence* coords = poly->getCoordinates();
+  std::unique_ptr<geos::geom::CoordinateSequence> coords = poly->getCoordinates();
   QString str;
   for (size_t i = 0; i < coords->getSize(); i++)
   {
@@ -381,11 +381,11 @@ Geometry* GeometryUtils::validateGeometry(const Geometry* g)
 
 Geometry* GeometryUtils::validateGeometryCollection(const GeometryCollection *gc)
 {
-  Geometry* result = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
+  Geometry* result = GeometryFactory::getDefaultInstance()->createEmptyGeometry().release();
   for (size_t i = 0; i < gc->getNumGeometries(); i++)
   {
     std::shared_ptr<Geometry> geometry(validateGeometry(gc->getGeometryN(i)));
-    Geometry* tmp = result->Union(geometry.get());
+    Geometry* tmp = result->Union(geometry.get()).release();
     delete result;
     result = tmp;
   }
@@ -397,7 +397,7 @@ Geometry* GeometryUtils::validateLineString(const LineString* ls)
   // See JTS Secrets for details: http://2007.foss4g.org/presentations/view.php?abstract_id=115
   std::shared_ptr<Point> p(
     GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
-  return ls->Union(p.get());
+  return ls->Union(p.get()).release();
 }
 
 LinearRing* GeometryUtils::validateLinearRing(const LinearRing* lr)
@@ -415,13 +415,13 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
     std::shared_ptr<Geometry> tmp;
     // buffer it by zero to attempt to fix topology errors and store the result in an
     // std::shared_ptr that will self delete.
-    tmp.reset(p->buffer(0));
+    tmp = p->buffer(0);
     // run the new geometry through the whole routine again just in case the type changed.
     result = validateGeometry(tmp.get());
   }
   else if (p->getArea() == 0.0)
   {
-    result = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
+    result = GeometryFactory::getDefaultInstance()->createEmptyGeometry().release();
   }
   else
   {
@@ -429,7 +429,7 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
     std::shared_ptr<LinearRing> oldLinearRing(
       GeometryFactory::getDefaultInstance()->createLinearRing(oldShell->getCoordinates()));
     LinearRing* shell = validateLinearRing(oldLinearRing.get());
-    std::vector<Geometry*>* holes = new vector<Geometry*>();
+    std::vector<LinearRing*>* holes = new vector<LinearRing*>();
     holes->reserve(p->getNumInteriorRing());
 
     for (size_t i = 0; i < p->getNumInteriorRing(); i++)
@@ -449,7 +449,8 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
       else
       {
         LOG_TRACE("Why isn't it a linear ring?");
-        holes->push_back(validateGeometry(ls));
+        throw HootException("Interior ring is not a linear ring...");
+//        holes->push_back(validateGeometry(ls));
       }
     }
 
@@ -519,7 +520,7 @@ OsmMapPtr GeometryUtils::createMapFromBounds(const std::shared_ptr<geos::geom::P
 {
   OsmMapPtr boundaryMap = std::make_shared<OsmMap>();
   WayPtr boundsWay = std::make_shared<Way>(Status::Unknown1, boundaryMap->createNextWayId());
-  const geos::geom::CoordinateSequence* coords = bounds->getCoordinates();
+  std::unique_ptr<geos::geom::CoordinateSequence> coords = bounds->getCoordinates();
   for (size_t i = 0; i < coords->getSize(); i++)
   {
     const geos::geom::Coordinate& coord = coords->getAt(i);

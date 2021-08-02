@@ -56,6 +56,8 @@ class OsmMap;
 
 /**
  * (Singleton)
+ *
+ * Note that OGRSpatialReference does not always play nicely with make_shared at GDAL 3.2.3.
  */
 class MapProjector
 {
@@ -173,6 +175,14 @@ private:
     Meters distanceError;
     Radians angleError;
     double score;
+
+    PlanarTestResult()
+      : i(-1),
+        distanceError(0.0),
+        angleError(0.0),
+        score(0.0)
+    {
+    }
 
     QString toString() const
     {

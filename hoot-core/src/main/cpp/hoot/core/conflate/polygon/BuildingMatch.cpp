@@ -65,7 +65,7 @@ _rf(rf),
 _explainText(""),
 _dateTagKey(ConfigOptions().getBuildingDateTagKey()),
 _dateFormat(ConfigOptions().getBuildingDateFormat())
-{  
+{
   ConstElementPtr element1 = map->getElement(_eid1);
   ConstElementPtr element2 = map->getElement(_eid2);
   LOG_TRACE("BuildingMatch: e1\n" << OsmUtils::getElementDetailString(element1, map));
@@ -95,7 +95,7 @@ _dateFormat(ConfigOptions().getBuildingDateFormat())
   }
   // If we have a match, building address matching is enabled, both have addresses, and we have
   // an explicit address mismatch, declare a miss instead.
-  else if (type != MatchType::Review && ConfigOptions().getBuildingAddressMatchEnabled())
+  else if (type != MatchType::Review && ConfigOptions().getAddressMatchEnabled())
   {
     AddressScoreExtractor addressScorer;
     addressScorer.setConfiguration((conf()));

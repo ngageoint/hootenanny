@@ -124,7 +124,6 @@ public:
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
     LOG_VART(e->getElementId());
-    //LOG_VART(e);
 
     std::shared_ptr<Envelope> env(e->getEnvelope(_map));
     env->expandBy(e->getCircularError());
@@ -312,7 +311,7 @@ private:
   int _memoryCheckUpdateInterval;
 
   void _markNonOneToOneMatchesAsReview(std::vector<MatchPtr>& matches) const
-  {      
+  {
     for (std::vector<MatchPtr>::iterator it = matches.begin(); it != matches.end(); ++it)
     {
       MatchPtr match = *it;

@@ -1,73 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="18.544216" minlon="-72.34875099833999" maxlat="18.549036" maxlon="-72.340941"/>
-    <node visible="true" id="-41751" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5457684563325884" lon="-72.3442374727948732"/>
-    <node visible="true" id="-41715" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5466478874399954" lon="-72.3473433557199854"/>
-    <node visible="true" id="-40995" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5455867051699954" lon="-72.3476116699099947"/>
-    <node visible="true" id="1" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5463604999999916" lon="-72.3472852000000017"/>
-    <node visible="true" id="5" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5463306999999951" lon="-72.3468486999999811"/>
-    <node visible="true" id="6" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5463742000000025" lon="-72.3469943000000058"/>
+    <node visible="true" id="-41752" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5457684555839606" lon="-72.3442374687488012"/>
+    <node visible="true" id="-41735" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5463639902279880" lon="-72.3473543437009994"/>
+    <node visible="true" id="-41715" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5466478874399989" lon="-72.3473433557199996"/>
+    <node visible="true" id="-40995" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5455867051699990" lon="-72.3476116699099947"/>
+    <node visible="true" id="1" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5463605000000022" lon="-72.3472852000000017"/>
+    <node visible="true" id="5" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5463306999999986" lon="-72.3468486999999953"/>
+    <node visible="true" id="6" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5463741999999989" lon="-72.3469943000000058"/>
     <node visible="true" id="7" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5489995571299993" lon="-72.3466758285599951"/>
     <node visible="true" id="8" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5475853312299996" lon="-72.3470325986200038"/>
-    <node visible="true" id="13" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5466397696399952" lon="-72.3472697109899912"/>
-    <node visible="true" id="15" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5466065000000029" lon="-72.3472294999999974"/>
-    <node visible="true" id="16" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5465656999999915" lon="-72.3471934999999888"/>
+    <node visible="true" id="13" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5466397696399952" lon="-72.3472697109900054"/>
+    <node visible="true" id="15" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5466064999999993" lon="-72.3472294999999974"/>
+    <node visible="true" id="16" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5465656999999986" lon="-72.3471935000000030"/>
     <node visible="true" id="17" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5465194999999987" lon="-72.3471851000000044"/>
-    <node visible="true" id="18" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5464517999999963" lon="-72.3471875999999980"/>
-    <node visible="true" id="19" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5464157999999948" lon="-72.3472036000000003"/>
-    <node visible="true" id="20" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5463824999999964" lon="-72.3472366000000022"/>
+    <node visible="true" id="18" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5464517999999998" lon="-72.3471875999999980"/>
+    <node visible="true" id="19" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5464157999999983" lon="-72.3472036000000003"/>
+    <node visible="true" id="20" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5463825000000000" lon="-72.3472366000000022"/>
     <node visible="true" id="21" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5463570000000004" lon="-72.3473331999999942"/>
-    <node visible="true" id="22" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5463771999999949" lon="-72.3473943000000048"/>
-    <node visible="true" id="23" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5464067999999997" lon="-72.3474285999999864"/>
+    <node visible="true" id="22" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5463771999999985" lon="-72.3473943000000048"/>
+    <node visible="true" id="23" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5464067999999997" lon="-72.3474286000000006"/>
     <node visible="true" id="24" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5464469999999970" lon="-72.3474513000000030"/>
     <node visible="true" id="25" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5465072000000006" lon="-72.3474671000000029"/>
-    <node visible="true" id="26" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5466037999999962" lon="-72.3474214999999958"/>
-    <node visible="true" id="27" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5488974999999954" lon="-72.3487492999999944"/>
-    <node visible="true" id="28" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5485582999999963" lon="-72.3486496000000017"/>
-    <node visible="true" id="29" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5483135999999966" lon="-72.3485107999999997"/>
-    <node visible="true" id="30" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5467543999999975" lon="-72.3474721000000045"/>
-    <node visible="true" id="31" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5466247999999965" lon="-72.3473883000000058"/>
-    <node visible="true" id="58" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5486539430799979" lon="-72.3467616052100055"/>
+    <node visible="true" id="26" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5466037999999998" lon="-72.3474214999999958"/>
+    <node visible="true" id="27" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5488974999999989" lon="-72.3487492999999944"/>
+    <node visible="true" id="28" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5485583000000034" lon="-72.3486496000000017"/>
+    <node visible="true" id="29" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5483136000000037" lon="-72.3485107999999997"/>
+    <node visible="true" id="30" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5467544000000011" lon="-72.3474721000000045"/>
+    <node visible="true" id="31" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5466248000000000" lon="-72.3473883000000058"/>
+    <node visible="true" id="58" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5486539430800015" lon="-72.3467616052100055"/>
     <node visible="true" id="63" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5461508999999971" lon="-72.3474597999999958"/>
-    <node visible="true" id="78" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5462543999999916" lon="-72.3464747000000017"/>
+    <node visible="true" id="78" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5462543999999951" lon="-72.3464747000000017"/>
     <node visible="true" id="81" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5451784999999987" lon="-72.3416548999999947"/>
-    <node visible="true" id="82" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5454871999999966" lon="-72.3430367999999930"/>
+    <node visible="true" id="82" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5454872000000002" lon="-72.3430367999999930"/>
     <node visible="true" id="83" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5457570999999994" lon="-72.3441762000000068"/>
-    <node visible="true" id="84" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5445850000000014" lon="-72.3478640999999953"/>
-    <node visible="true" id="89" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5471023999999964" lon="-72.3477086000000043"/>
-    <node visible="true" id="99" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5487046999999947" lon="-72.3487044000000026"/>
-    <node visible="true" id="100" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5460012999999968" lon="-72.3454937999999999"/>
+    <node visible="true" id="84" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5445850000000050" lon="-72.3478640999999953"/>
+    <node visible="true" id="89" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5471024000000000" lon="-72.3477086000000185"/>
+    <node visible="true" id="99" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5487046999999983" lon="-72.3487044000000168"/>
+    <node visible="true" id="100" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5460013000000039" lon="-72.3454937999999999"/>
     <node visible="true" id="103" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5465459999999993" lon="-72.3474619999999931"/>
     <node visible="true" id="110" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5451003000000014" lon="-72.3477426000000037"/>
-    <node visible="true" id="118" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5450276523399964" lon="-72.3409410000000008"/>
+    <node visible="true" id="118" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5450276523399999" lon="-72.3409410000000008"/>
     <node visible="true" id="131" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5490360000000010" lon="-72.3487509983399946"/>
     <node visible="true" id="132" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5442159999999987" lon="-72.3479753262299994"/>
-    <node visible="true" id="142" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5465998999999968" lon="-72.3472215000000034"/>
-    <way visible="true" id="-71" timestamp="2017-06-07T15:16:56Z" version="1">
+    <node visible="true" id="142" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5465999000000004" lon="-72.3472215000000034"/>
+    <way visible="true" id="-73" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="7"/>
         <nd ref="58"/>
         <nd ref="8"/>
         <nd ref="13"/>
-        <tag k="source" v="Unknown"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="Unknown"/>
         <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-68" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="22"/>
-        <nd ref="63"/>
-        <nd ref="-40995"/>
-        <nd ref="110"/>
-        <nd ref="84"/>
+    <way visible="true" id="-69" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="132"/>
-        <tag k="source" v="Unknown"/>
+        <nd ref="84"/>
+        <nd ref="110"/>
+        <nd ref="-40995"/>
+        <nd ref="63"/>
+        <nd ref="22"/>
+        <nd ref="-41735"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="Unknown"/>
         <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-65" timestamp="2017-06-07T15:16:56Z" version="1">
+    <way visible="true" id="-66" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="31"/>
         <nd ref="30"/>
         <nd ref="89"/>
@@ -76,11 +78,11 @@
         <nd ref="99"/>
         <nd ref="27"/>
         <nd ref="131"/>
-        <tag k="source" v="Unknown"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="Unknown"/>
         <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="6" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="31"/>
@@ -102,12 +104,12 @@
         <nd ref="13"/>
         <nd ref="-41715"/>
         <nd ref="31"/>
-        <tag k="source" v="Unknown"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:datetime" v="2017-06-07T15:16:56Z"/>
-        <tag k="junction" v="roundabout"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="junction" v="roundabout"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="Unknown"/>
+        <tag k="source:datetime" v="2017-06-07T15:16:56Z"/>
     </way>
     <way visible="true" id="22" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="18"/>
@@ -115,15 +117,15 @@
         <nd ref="5"/>
         <nd ref="78"/>
         <nd ref="100"/>
-        <nd ref="-41751"/>
+        <nd ref="-41752"/>
         <nd ref="83"/>
         <nd ref="82"/>
         <nd ref="81"/>
         <nd ref="118"/>
-        <tag k="source" v="Unknown"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="Unknown"/>
         <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
 </osm>

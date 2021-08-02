@@ -220,7 +220,7 @@ public:
 
     // Try to create a waystring with sublines with different ways that are not
     // consecutive
-    // re-enable this as part of #1312
+    // TODO: re-enable this as part of #1312
 //    exThrown = false;
 //    try
 //    {
