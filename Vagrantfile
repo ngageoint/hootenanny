@@ -30,7 +30,7 @@ $vbCpu = ENV['VBCPU']
 if $vbCpu.nil?
   $vbCpu = 4
 else
-  puts "# Allocating #{$vbCpu} CPU cores to the VM"
+  puts "## Allocating #{$vbCpu} CPU cores to the VM"
 end
 
 $vbRam = ENV['VBRAM']
