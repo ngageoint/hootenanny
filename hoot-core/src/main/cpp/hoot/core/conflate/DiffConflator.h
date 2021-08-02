@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/algorithms/changeset/MemChangesetProvider.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/conflate/AbstractConflator.h>
 
@@ -249,7 +250,18 @@ private:
   QSet<ElementId> _getElementIdsInvolvedInOnlyIntraDatasetMatches(
     const std::vector<ConstMatchPtr>& matches);
 
+  /**
+   * @brief _removeRefData removes reference data from the differential output.
+   */
   void _removeRefData();
+  /**
+   * @brief _cleanSecData cleans secondary ways out of the differential output based on specified
+   * criteria.
+   * @param baseCriteria criteria for determining which secondary ways to remove; Generally, this
+   * would be a ConflatableElementCriterion (HighwayCriterion, etc.)
+   * @param maxSize only ways up to this size are removed
+   */
+  void _cleanSecData(QStringList& baseCriteria, const double maxSize) const;
   /*
    * The element criteria that must be met in order for an element involved in a match to be
    * completely removed

@@ -52,8 +52,8 @@ void ElementTranslatorThread::run()
   // Setup writer used for translation
   std::shared_ptr<OgrWriter> ogrWriter;
   { // Mutex Scope
-    // We use this init mutex as a bandaid. Hoot uses a lot of problematic
-    // singletons that cause issues when you try to multithread stuff.
+    // We use this init mutex as a bandaid. Hoot uses a lot of problematic Singletons that cause
+    // issues when you try to multithread stuff.
     QMutexLocker lock(_pInitMutex);
     ogrWriter = std::make_shared<OgrWriter>();
     ogrWriter->setSchemaTranslationScript(_translation);

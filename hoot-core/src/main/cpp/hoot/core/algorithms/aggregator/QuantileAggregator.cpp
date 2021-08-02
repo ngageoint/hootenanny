@@ -59,9 +59,7 @@ void QuantileAggregator::setConfiguration(const Settings& conf)
 double QuantileAggregator::aggregate(vector<double>& d) const
 {
   sort(d.begin(), d.end());
-
   size_t index = floor(double(d.size()) * _quantile);
-
   return d[index];
 }
 

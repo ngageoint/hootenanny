@@ -34,6 +34,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ElementCountVisitor)
 
+ElementCountVisitor::ElementCountVisitor() :
+_count(0)
+{
+}
+
 void ElementCountVisitor::visit(const ConstElementPtr& e)
 {
   LOG_VART(e->getElementId());
