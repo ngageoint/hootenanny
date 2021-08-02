@@ -260,16 +260,14 @@ bool BufferedLineSegmentIntersector::intersect(
   }
 
   // intersect with the two circles
-  {
-    Coordinate p0, p1;
-    circleIntersection(a.p0, buffer, b, p0, p1);
-    lsr.addCoordinate(p0);
-    lsr.addCoordinate(p1);
+  Coordinate p0, p1;
+  circleIntersection(a.p0, buffer, b, p0, p1);
+  lsr.addCoordinate(p0);
+  lsr.addCoordinate(p1);
 
-    circleIntersection(a.p1, buffer, b, p0, p1);
-    lsr.addCoordinate(p0);
-    lsr.addCoordinate(p1);
-  }
+  circleIntersection(a.p1, buffer, b, p0, p1);
+  lsr.addCoordinate(p0);
+  lsr.addCoordinate(p1);
 
   result = lsr.toLineSegment();
   return lsr.isValid();

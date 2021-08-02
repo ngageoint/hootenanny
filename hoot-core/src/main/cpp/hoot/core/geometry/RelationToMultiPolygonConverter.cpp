@@ -178,7 +178,7 @@ void RelationToMultiPolygonConverter::_addWayToSequence(
   for (int i = start; i < (int)w->getNodeCount() && i >= 0; i += increment)
   {
     Coordinate c = _provider->getNode(w->getNodeId(i))->toCoordinate();
-    if (points.size() == 0 || c != points.operator [](points.size() - 1))
+    if (points.empty() || c != points.operator [](points.size() - 1))
     {
       points.push_back(c);
     }
