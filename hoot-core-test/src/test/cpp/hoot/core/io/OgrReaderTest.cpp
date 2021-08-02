@@ -94,7 +94,7 @@ public:
         // resulting bounding box is
         // 19403.28m wide
         // 111385.6m tall
-        HOOT_STR_EQUALS("Env[-9701.64:9701.64,-55659:55726.6]",
+        HOOT_STR_EQUALS("Env[-9734.03:9734.03,-55842.4:55911]",
           uut.getBoundingBoxFromConfig(s, ortho1.get())->toString());
       }
 

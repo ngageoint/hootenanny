@@ -39,6 +39,7 @@ namespace hoot
 class KeyValuePair
 {
 public:
+
   KeyValuePair(QString kvp)
   {
     // this is faster than using split
@@ -69,6 +70,7 @@ public:
   QString toString() const { return _name; }
 
 private:
+
   QString _name;
   QString _key;
   QString _value;

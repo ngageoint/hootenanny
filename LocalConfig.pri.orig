@@ -55,3 +55,5 @@ QMAKE_CXXFLAGS+=-Werror
 # Temporarily turn off compiler warning for "Incompatible Function Types"
 QMAKE_CXXFLAGS+=-Wno-cast-function-type
 
+# Enable the GEOS C++ API
+DEFINES += USE_UNSTABLE_GEOS_CPP_API

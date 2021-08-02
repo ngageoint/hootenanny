@@ -11,7 +11,7 @@ hoot conflate --warn -C ReferenceConflation.conf -C NetworkAlgorithm.conf -C Tes
  test-files/DcGisRoads.osm test-files/DcTigerRoads.osm \
  test-output/cmd/glacial/NetworkConflateCmdTest/output.osm
 
-hoot diff -C Testing.conf  test-output/cmd/glacial/NetworkConflateCmdTest/output.osm \
+hoot diff -C Testing.conf test-output/cmd/glacial/NetworkConflateCmdTest/output.osm \
           test-files/cmd/glacial/NetworkConflateCmdTest/output.osm || \
      diff test-output/cmd/glacial/NetworkConflateCmdTest/output.osm \
           test-files/cmd/glacial/NetworkConflateCmdTest/output.osm
