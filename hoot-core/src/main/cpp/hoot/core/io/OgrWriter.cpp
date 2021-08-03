@@ -629,6 +629,7 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
     // Loop through the fields making sure that they exist in the output. Print a warning if
     // they don't exist
     const OGRFeatureDefn* poFDefn = poLayer->GetLayerDefn();
+    std::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
     for (size_t i = 0; i < fd->getFieldCount(); i++)
     {
       std::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
