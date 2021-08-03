@@ -39,8 +39,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 
-HighwayCriterion::HighwayCriterion(ConstOsmMapPtr map) :
-_map(map)
+HighwayCriterion::HighwayCriterion(const bool includeRelations) :
+_includeRelations(includeRelations)
+{
+}
+
+HighwayCriterion::HighwayCriterion(ConstOsmMapPtr map, const bool includeRelations) :
+_map(map),
+_includeRelations(includeRelations)
 {
 }
 
@@ -66,7 +72,8 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
   const bool containsHighwayTag = it != tags.end() && it.value() != "";
 
   // Is it a legit highway?
-  if ((type == ElementType::Way || type == ElementType::Relation) && containsHighwayTag)
+  if ((type == ElementType::Way || (type == ElementType::Relation && _includeRelations)) &&
+      containsHighwayTag)
   {
     result = true;
     LOG_VART(result);
