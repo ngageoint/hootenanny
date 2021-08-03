@@ -109,8 +109,9 @@ void ElementStreamer::stream(
     }
     else
     {
-      // TODO
-      _streamOgr(*ogrReader, input, *streamWriter);
+      // Need to run separate logic for streaming from an OGR source in order to support the layer
+      // syntax.
+      _streamFromOgr(*ogrReader, input, *streamWriter);
     }
   }
 
@@ -127,7 +128,7 @@ void ElementStreamer::stream(
     "Streaming element I/O took: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
-void ElementStreamer::_streamOgr(
+void ElementStreamer::_streamFromOgr(
   const OgrReader& reader, QString& input, ElementOutputStream& writer,
   const QStringList& convertOps, Progress /*progress*/)
 {
@@ -160,13 +161,14 @@ void ElementStreamer::_streamOgr(
 
   for (int i = 0; i < layers.size(); i++)
   {
-    LOG_DEBUG("Reading: " << input + " " << layers[i] << "...");
+    LOG_TRACE("Reading: " << input + " " << layers[i] << "...");
 
     std::shared_ptr<ElementIterator> iterator(reader.createIterator(input, layers[i]));
     while (iterator->hasNext())
     {
       std::shared_ptr<Element> e = iterator->next();
 
+      // run any convert ops present
       foreach (ElementVisitorPtr op, ops)
       {
         op->visit(e);

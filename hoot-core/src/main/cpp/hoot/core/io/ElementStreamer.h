@@ -48,8 +48,8 @@ class ElementStreamer
 public:
 
   /**
-   * @brief ElementStreamer TODO
-   * @param translationScript
+   * @brief ElementStreamer Constructor
+   * @param translationScript optional translation script used to translated elements
    */
   ElementStreamer(const QString& translationScript = "");
 
@@ -86,14 +86,14 @@ private:
   QString _translationScript;
 
   /**
-   * @brief _streamOgr TODO
-   * @param reader
-   * @param input
-   * @param writer
-   * @param convertOps
-   * @param progress
+   * @brief _streamFromOgr streams an OGR input to output
+   * @param reader an OgrReader
+   * @param input path to the input data
+   * @param writer a streamable writer
+   * @param convertOps conversion operations to apply to data
+   * @param progress tracks operation progress
    */
-  void _streamOgr(
+  void _streamFromOgr(
     const OgrReader& reader, QString& input, ElementOutputStream& writer,
     const QStringList& convertOps = QStringList(), Progress progress = Progress());
 };
