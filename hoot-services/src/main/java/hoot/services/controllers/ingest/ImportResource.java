@@ -234,8 +234,8 @@ public class ImportResource {
             // if id is used for translation then set translation to the file path of that file
             try {
                 long translationId = Long.parseLong(translation);
-                TranslationFolder folder = CustomScriptResource.getTranslationFolderForUser(user, translationId);
-                Translations translationFile = DbUtils.getTranslation(translationId);
+                Translations translationFile = CustomScriptResource.getTranslationForUser(user, translationId);
+                TranslationFolder folder = CustomScriptResource.getTranslationFolderForUser(user, translationFile.getFolderId());
 
                 String translationPath = File.separator + translationFile.getDisplayName();
                 translationPath = folder.getPath() != null ? folder.getPath() + translationPath : translationPath;
