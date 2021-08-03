@@ -24,4 +24,9 @@ may be filtered by class in the same manner that debug logging is filtered. Modi
 `debug.maps.class.include.filter` and `debug.maps.class.exclude.filter` configuration options to do 
 so. See the documentation on those configuration options as well as the class documentation for `OsmMapWriterFactory::writeDebugMap` for additional information.
 
+Additional helpful debugging options:
+
+* `uuid.helper.repeatable=true`
+* `writer.include.debug.tags=true`
+* `writer.include.conflate.score.tags=true`
 
