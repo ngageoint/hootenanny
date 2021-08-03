@@ -33,16 +33,19 @@
 namespace hoot
 {
 
-void ElementOutputStream::writeAllElements(ElementInputStream& eis, ElementOutputStream& eos)
+long ElementOutputStream::writeAllElements(ElementInputStream& eis, ElementOutputStream& eos)
 {
+  long numFeaturesWritten = 0;
   while (eis.hasMoreElements())
   {
     ElementPtr e = eis.readNextElement();
     if (e)
     {
       eos.writeElement(e);
+      numFeaturesWritten++;
     }
   }
+  return numFeaturesWritten;
 }
 
 }

@@ -495,7 +495,7 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
   transThread.setFinishedTranslating(&finishedTranslating);
   transThread.setElementCache(pElementCache);
   transThread.start();
-  LOG_DEBUG("Translation Thread Started");
+  LOG_STATUS("Translation thread started...");
 
   // Setup & start our writer thread.
   OgrWriterThread writerThread;
@@ -506,7 +506,7 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
   writerThread.setTransFeaturesQueue(&transFeaturesQ);
   writerThread.setFinishedTranslating(&finishedTranslating);
   writerThread.start();
-  LOG_DEBUG("OGR Writer Thread Started");
+  LOG_STATUS("Writer thread started...");
 
   LOG_DEBUG("Waiting for writer to finish...");
   writerThread.wait();

@@ -70,6 +70,7 @@ void ElementStreamer::stream(
   partialWriter->initializePartial();
 
   std::shared_ptr<PartialOsmMapReader> partialReader;
+  long numFeaturesWritten = 0;
   for (int i = 0; i < inputs.size(); i++)
   {
     QString input = inputs.at(i);
@@ -98,20 +99,18 @@ void ElementStreamer::stream(
     if (!ogrReader)
     {
       reader->open(input);
-
       // Add visitor/criterion operations if any of the convert ops are visitors.
       LOG_VARD(convertOps);
       ElementInputStreamPtr streamReader =
         IoUtils::getFilteredInputStream(
           std::dynamic_pointer_cast<ElementInputStream>(reader), convertOps);
-
-      ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
+      numFeaturesWritten += ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
     }
     else
     {
       // Need to run separate logic for streaming from an OGR source in order to support the layer
       // syntax.
-      _streamFromOgr(*ogrReader, input, *streamWriter);
+      numFeaturesWritten += _streamFromOgr(*ogrReader, input, *streamWriter);
     }
   }
 
@@ -125,10 +124,11 @@ void ElementStreamer::stream(
   }
 
   LOG_INFO(
-    "Streaming element I/O took: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+    "Streamed " << StringUtils::formatLargeNumber(numFeaturesWritten) << " elements in: " <<
+    StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
-void ElementStreamer::_streamFromOgr(
+long ElementStreamer::_streamFromOgr(
   const OgrReader& reader, QString& input, ElementOutputStream& writer,
   const QStringList& convertOps, Progress /*progress*/)
 {
@@ -159,6 +159,7 @@ void ElementStreamer::_streamFromOgr(
 
   const QList<ElementVisitorPtr> ops = IoUtils::toStreamingOps(convertOps);
 
+  long numFeaturesWritten = 0;
   for (int i = 0; i < layers.size(); i++)
   {
     LOG_TRACE("Reading: " << input + " " << layers[i] << "...");
@@ -177,9 +178,11 @@ void ElementStreamer::_streamFromOgr(
       if (e)
       {
         writer.writeElement(e);
+        numFeaturesWritten++;
       }
     }
   }
+  return numFeaturesWritten;
 }
 
 }
