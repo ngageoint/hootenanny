@@ -37,7 +37,7 @@ class MultiaryMatchTrainingValidator : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::AddressCountVisitor"; }
+  static QString className() { return "hoot::MultiaryMatchTrainingValidator"; }
 
   MultiaryMatchTrainingValidator() = default;
   ~MultiaryMatchTrainingValidator() = default;
@@ -48,9 +48,7 @@ public:
   void apply(std::shared_ptr<OsmMap>& map) override;
 
   QString getDescription() const override { return "TODO"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 

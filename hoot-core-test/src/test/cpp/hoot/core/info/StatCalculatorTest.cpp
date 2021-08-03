@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/info/StatCalculator.h>
-#include <hoot/core/visitors/AddressCountVisitor.h>
+#include <hoot/core/visitors/FeatureCountVisitor.h>
 #include <hoot/core/visitors/NodesPerWayVisitor.h>
 
 namespace hoot
@@ -49,7 +49,7 @@ public:
   void runVisitorUnsupportedStatTypeTest()
   {
     QStringList inputs("blah"); // What the inputs actually are doesn't matter here.
-    QString visClassName = AddressCountVisitor::className();
+    QString visClassName = FeatureCountVisitor::className();
     QString exceptionMsg;
     try
     {

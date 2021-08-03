@@ -382,7 +382,7 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
       geomvect->push_back(_polyByWayId[wayId].get());
     }
 
-    Geometry *mp = GeometryFactory::getDefaultInstance()->createMultiPolygon(geomvect);
+    const Geometry* mp = GeometryFactory::getDefaultInstance()->createMultiPolygon(geomvect);
     std::shared_ptr<Geometry> pCombinedPoly = geos::operation::geounion::UnaryUnionOp::Union(*mp);
 
     // create a new element with cluster representation
