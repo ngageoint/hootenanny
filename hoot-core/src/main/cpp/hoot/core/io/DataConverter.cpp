@@ -120,9 +120,7 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
     FileUtils::toLogFormat(output, _printLengthMax) + "...");
 
   // OGR format I/O is handled a little different compared to other formats, so we'll pick the
-  // most appropriate I/O logic path here based on the formats involved. This has been simplfied
-  // several times but there still seems to be some logic duplication, and this can probably still
-  // be simplified more.
+  // most appropriate I/O logic path here based on the formats involved.
 
   // If we're writing to an OGR format and multi-threaded processing was specified or if both input
   // and output formats are OGR formats, we'll need to run the _convertToOgr method in order to
@@ -133,9 +131,7 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
   {
     _convertToOgr(inputs, output);
   }
-  // If none of the above conditions was satisfied, we'll call the generic convert routine. Note
-  // that _convert may still be passed some OGR formats, which is a bit confusing and further
-  // refactoring could change that.
+  // If the above condition wasn't satisfied, we'll call the generic convert routine.
   else
   {
     _convert(inputs, output);
