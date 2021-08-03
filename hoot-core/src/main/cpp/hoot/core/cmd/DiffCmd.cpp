@@ -136,13 +136,16 @@ public:
         mapCompare.setUseDateTime();
       if (setErrorLimit)
         mapCompare.setErrorLimit(errorLimit);
+      mapCompare.setIgnoreTagKeys(ConfigOptions().getMapComparatorIgnoreTagKeys());
 
       OsmMapPtr map1 = std::make_shared<OsmMap>();
-      IoUtils::loadMap(map1, pathname1, true, Status::Unknown1);
+      IoUtils::loadMap(
+        map1, pathname1, true, Status::Unknown1, ConfigOptions().getSchemaTranslationScript());
       //  Some maps that don't have IDs cooked in will fail comparison if the IDs aren't reset.
       OsmMap::resetCounters();
       OsmMapPtr map2 = std::make_shared<OsmMap>();
-      IoUtils::loadMap(map2, pathname2, true, Status::Unknown1);
+      IoUtils::loadMap(
+        map2, pathname2, true, Status::Unknown1, ConfigOptions().getSchemaTranslationScript());
 
       if (mapCompare.isMatch(map1, map2))
         result = 0;
