@@ -45,7 +45,7 @@ bool ReversedRoadCriterion::isSatisfied(const ConstElementPtr& e) const
   // The only time reversed road relations have been seen so far is as a result of cropping, but
   // think that it still needs to be supported.
 
-  if (!HighwayCriterion(_map).isSatisfied(e))
+  if (!HighwayCriterion(_map, true).isSatisfied(e))
   {
     return false;
   }

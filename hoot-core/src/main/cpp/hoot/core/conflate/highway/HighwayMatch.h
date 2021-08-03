@@ -84,10 +84,11 @@ public:
   QString toString() const override;
 
   QString getName() const override { return getHighwayMatchName(); }
-  static QString getHighwayMatchName() { return MATCH_NAME; }
   QString getClassName() const override { return className(); }
   QString getDescription() const override
   { return "Matches roads with the 2nd Generation (Unifying) Algorithm"; }
+
+  static QString getHighwayMatchName() { return MATCH_NAME; }
 
 private:
 

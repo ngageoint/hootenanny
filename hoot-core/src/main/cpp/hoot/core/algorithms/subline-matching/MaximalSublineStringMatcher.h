@@ -95,9 +95,6 @@ private:
     ScoredMatch() : score(0.0) { }
     ScoredMatch(double s, const std::vector<WaySublineMatch>& m) : score(s), matches(m) { }
 
-    double score;
-    std::vector<WaySublineMatch> matches;
-
     QString toString() const
     {
       QString result;
@@ -111,6 +108,9 @@ private:
       result += l.join("\n");
       return result;
     }
+
+    double score;
+    std::vector<WaySublineMatch> matches;
   };
 
   std::vector<WayPtr> _changeMap(const std::vector<ConstWayPtr>& ways, OsmMapPtr map) const;
@@ -120,9 +120,6 @@ private:
   ScoredMatch _evaluateMatch(const ConstOsmMapPtr &map, Meters maxDistance,
     const std::vector<ConstWayPtr>& ways1, const std::vector<ConstWayPtr>& ways2,
     const std::vector<bool>& reversed1, const std::vector<bool>& reversed2) const;
-
-  std::vector<ConstWayPtr> _extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e) const;
-
   ScoredMatch _findBestMatch(const ConstOsmMapPtr& map, Meters maxDistance,
     std::vector<ConstWayPtr>& ways1, std::vector<ConstWayPtr>& ways2, std::vector<bool>& reversed1,
     std::vector<bool>& reversed2, size_t i = 0, size_t j = 0) const;
@@ -134,6 +131,7 @@ private:
    * If reversed is true then the nodes in the corresponding way are reversed.
    */
   void _reverseWays(const std::vector<WayPtr>& ways, const std::vector<bool>& reversed) const;
+  std::vector<ConstWayPtr> _extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e) const;
 
   void _configureSublineMatcher();
 

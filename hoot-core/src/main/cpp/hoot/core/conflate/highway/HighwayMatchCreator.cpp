@@ -86,7 +86,7 @@ public:
   }
 
   /**
-   * @param matchStatus If the element's status matches this status then it is checked for a match.
+   * @param matchStatus If the element's status matches this status, then it is checked for a match.
    */
   HighwayMatchVisitor(const ConstOsmMapPtr& map,
     vector<ConstMatchPtr>& result, std::shared_ptr<HighwayClassifier> c,
@@ -94,24 +94,23 @@ public:
     ConstMatchThresholdPtr threshold,
     std::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
     ElementCriterionPtr filter = ElementCriterionPtr()):
-    _map(map),
-    _result(result),
-    _c(c),
-    _sublineMatcher(sublineMatcher),
-    _matchStatus(matchStatus),
-    _threshold(threshold),
-    _tagAncestorDiff(tagAncestorDiff),
-    _filter(filter)
+  _map(map),
+  _result(result),
+  _c(c),
+  _sublineMatcher(sublineMatcher),
+  _matchStatus(matchStatus),
+  _neighborCountMax(-1),
+  _neighborCountSum(0),
+  _elementsEvaluated(0),
+  _searchRadius(ConfigOptions().getSearchRadiusHighway()),
+  _threshold(threshold),
+  _tagAncestorDiff(tagAncestorDiff),
+  _filter(filter),
+  _numElementsVisited(0),
+  _numMatchCandidatesVisited(0),
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+  _memoryCheckUpdateInterval(ConfigOptions().getMemoryUsageCheckerInterval())
   {
-    ConfigOptions opts = ConfigOptions();
-    _neighborCountMax = -1;
-    _neighborCountSum = 0;
-    _elementsEvaluated = 0;
-    _searchRadius = opts.getSearchRadiusHighway();
-    _numElementsVisited = 0;
-    _numMatchCandidatesVisited = 0;
-    _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
-    _memoryCheckUpdateInterval = opts.getMemoryUsageCheckerInterval();
   }
 
   ~HighwayMatchVisitor()
@@ -120,14 +119,9 @@ public:
               (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
-  QString getDescription() const override { return ""; }
-  QString getName() const override { return ""; }
-  QString getClassName() const override { return ""; }
-
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
     LOG_VART(e->getElementId());
-    //LOG_VART(e);
 
     std::shared_ptr<Envelope> env(e->getEnvelope(_map));
     env->expandBy(getSearchRadius(e));
@@ -295,8 +289,11 @@ public:
     return _index;
   }
 
-  ConstOsmMapPtr getMap() const { return _map; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
+  ConstOsmMapPtr getMap() const { return _map; }
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
 
 private:
