@@ -1358,6 +1358,25 @@ Overrides +differential.remove.linear.partial.matches.as.whole+ when dealing wit
 If true Differential Conflation will remove all elements from output which Hootenanny is unable to
 match. If false, the unconflatable data will pass through to the output.
 
+=== differential.sec.way.removal.criteria
+
+* Data Type: list
+* Default Value:
+** ``
+
+Optional criteria used to clean small secondary ways that are not connected to a reference way in
+the differential output. The classes specified must inherit from `ConflatableElementCriterion`. An
+example is: `HighwayCriterion`. The default value of an empty list causes no secondary way removal
+to occur.
+
+=== differential.sec.way.removal.length.threshold
+
+* Data Type: double
+* Default Value: `5.0`
+
+The largest size, in meters, a secondary way may have in order to be removed when criteria are
+specified in `differential.sec.way.removal.criteria`.
+
 === differential.snap.unconnected.features
 
 * Data Type: bool
