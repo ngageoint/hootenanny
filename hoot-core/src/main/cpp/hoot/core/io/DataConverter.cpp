@@ -117,9 +117,6 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
     "Converting ..." + FileUtils::toLogFormat(inputs, _printLengthMax) + " to ..." +
     FileUtils::toLogFormat(output, _printLengthMax) + "...");
 
-  // OGR format I/O is handled a little different compared to other formats, so we'll pick the
-  // most appropriate I/O logic path here based on the formats involved.
-
   // If we're writing to an OGR format and multi-threaded processing was specified or if both input
   // and output formats are OGR formats, we'll need to run the _convertToOgr method in order to
   // handle the layers correctly.
@@ -204,32 +201,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
 {
   LOG_DEBUG("_convertToOgr");
 
-  // This code path has always assumed translation to OGR and never reads the direction, but let's
-  // warn callers that the opposite direction they specified won't be used.
-  if (conf().getString(ConfigOptions::getSchemaTranslationDirectionKey()) == "toosm")
-  {
-    LOG_INFO(
-      "Ignoring specified schema.translation.direction=toosm and using toogr to write to " <<
-      "OGR output...");
-  }
-
-  // Set a config option so the translation script knows what the output format is. For this,
-  // output format == file extension. We are going to grab everything after the last "." in the
-  // output file name and use it as the file extension.
-  QString outputFormat = "";
-  if (output.lastIndexOf(".") > -1)
-  {
-    outputFormat = output.right(output.size() - output.lastIndexOf(".") - 1).toLower();
-  }
-  conf().set(ConfigOptions::getOgrOutputFormatKey(), outputFormat);
-
-  LOG_DEBUG(conf().getString(ConfigOptions::getOgrOutputFormatKey()));
-
-  // Translation for going to OGR is always required and happens in the writer itself. It is not to
-  // be done with convert ops, so let's ignore any translation ops that were specified.
-  _convertOps.removeAll(SchemaTranslationOp::className());
-  _convertOps.removeAll(SchemaTranslationVisitor::className());
-  LOG_VARD(_convertOps);
+  _setToOgrOptions(output);
 
   // Check to see if all of the i/o can be streamed.
   LOG_VARD(IoUtils::areStreamableInputs(inputs));
@@ -305,7 +277,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
 
 void DataConverter::_convert(const QStringList& inputs, const QString& output)
 {
-  LOG_DEBUG("general convert");
+  LOG_DEBUG("_convert");
 
   // This keeps the status and the tags.
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
@@ -507,7 +479,6 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
     // Read all elements from an input.
     _fillElementCacheMT(input, pElementCache, elementQ);
   }
-
   LOG_DEBUG("Element Cache Filled");
 
   // Note the OGR writer is the slowest part of this whole operation, but it's relatively opaque
