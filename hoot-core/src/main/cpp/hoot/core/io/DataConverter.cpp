@@ -50,7 +50,6 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
@@ -60,7 +59,6 @@
 
 // Qt
 #include <QElapsedTimer>
-#include <QMutex>
 
 namespace hoot
 {
