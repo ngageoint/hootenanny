@@ -1139,7 +1139,7 @@ inputs (false).
 
 This is the minimum valid manipulation score in the legacy greedy optimization routine. Setting
 the value lower will create more (likely overzealous) matches. Setting the value higher will drop
-less confident matches.
+less confident matches. TODO: rename this
 
 === contains.node.criterion.id
 
@@ -2675,6 +2675,14 @@ trigger warning log messages.
 
 A list of map operations to be applied to a map for cleaning purposes, in order.
 'hoot info --operators' displays information about the available transforms.
+
+=== map.comparator.ignore.tag.keys
+
+* Data Type: list
+* Default Value: ``
+
+A list of tag keys that `MapComparator`, used by the `diff` command, will ignore when comparing
+maps.
 
 === map.comparator.print.full.mismatch.elements.on.map.size.diff
 

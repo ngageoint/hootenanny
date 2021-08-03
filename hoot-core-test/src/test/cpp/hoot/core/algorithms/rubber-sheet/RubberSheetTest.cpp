@@ -167,7 +167,7 @@ public:
       writer.setPrecision(7);
       writer.write(map, _outputPath + "RubberSheetIo.osm");
 
-      HOOT_FILE_EQUALS( _inputPath + "RubberSheetIo.osm",
+      HOOT_FILE_EQUALS(_inputPath + "RubberSheetIo.osm",
                        _outputPath + "RubberSheetIo.osm");
     }
   }

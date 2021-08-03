@@ -58,7 +58,6 @@ public:
    * @param changesetProvider changeset provider to stream the changes from
    */
   virtual void write(const QString& path, const ChangesetProviderPtr& changesetProvider) = 0;
-
   /**
    * Write the changeset out to the specified file
    *
@@ -92,7 +91,6 @@ public:
    * OsmMapConsumer?
    */
   virtual void setMap1List(const QList<ConstOsmMapPtr>& /*map*/) {}
-
   /**
    * Sets all maps corresponding to the changed state of the datasets
    */

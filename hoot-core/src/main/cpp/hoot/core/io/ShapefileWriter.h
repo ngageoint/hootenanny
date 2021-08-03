@@ -48,7 +48,8 @@ class Way;
 class Relation;
 
 /**
- * Writes an OsmMap to Shapefile file format.
+ * ShapefileWriter writes an OsmMap to Shapefile file format, and is capable of custom handling of
+ * columns. It is not capable of using translations. For that, use OgrWriter.
  */
 class ShapefileWriter : public OsmMapWriter, public Configurable
 {

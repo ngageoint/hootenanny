@@ -189,7 +189,6 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(
   try
   {
     WaySublineMatchString result = scoredResult.matches;
-    // TODO: This likely shouldn't be necessary. See issue #157.
     result.removeEmptyMatches();
     LOG_VART(result);
     return result;
@@ -209,7 +208,7 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
 {
   vector<WaySublineMatch> matches;
 
-  // make a copy of the map and the ways we need so we can reverse the ways as needed.
+  // Make a copy of the map and the ways we need so we can reverse the ways as needed.
   LOG_TRACE("Copying map subset...");
   set<ElementId> eids;
   _insertElementIds(ways1, eids);
@@ -277,7 +276,7 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
 
     if (wayIdToReversed2[m2Id])
     {
-      // make sure the way subline is pointed to the right way (not reversed)
+      // Make sure the way subline is pointed to the right way (not reversed).
       ConstWayPtr w = map->getWay(matches[i].getSubline2().getElementId());
       ws2 = matches[i].getSubline2().reverse(w);
     }
@@ -317,7 +316,7 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_findBestM
     reversed1[i] = false;
     ScoredMatch r2 = _findBestMatch(map, maxDistance, ways1, ways2, reversed1, reversed2, i + 1, j);
 
-    // only keep the reverse if it is significantly better
+    // Only keep the reverse if it is significantly better.
     if (r1.score - r2.score > epsilon)
     {
       return r1;
@@ -334,7 +333,7 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_findBestM
     reversed2[j] = false;
     ScoredMatch r2 = _findBestMatch(map, maxDistance, ways1, ways2, reversed1, reversed2, i, j + 1);
 
-    // only keep the reverse if it is significantly better
+    // Only keep the reverse if it is significantly better.
     if (r1.score - r2.score > epsilon)
     {
       return r1;

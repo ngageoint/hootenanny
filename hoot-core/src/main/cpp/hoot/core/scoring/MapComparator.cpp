@@ -84,15 +84,16 @@ public:
    * Defaults to 5cm threshold
    */
   CompareVisitor(
-    std::shared_ptr<OsmMap> refMap, bool ignoreUUID, bool useDateTime, int errorLimit = 5,
-    Meters threshold = 0.05)
-    : _refMap(refMap),
-      _threshold(threshold),
-      _matches(true),
-      _ignoreUUID(ignoreUUID),
-      _useDateTime(useDateTime),
-      _errorCount(0),
-      _errorLimit(errorLimit)
+    std::shared_ptr<OsmMap> refMap, bool ignoreUUID, bool useDateTime,
+    const QStringList& ignoreTagKeys, int errorLimit = 5, Meters threshold = 0.05) :
+  _refMap(refMap),
+  _threshold(threshold),
+  _matches(true),
+  _ignoreUUID(ignoreUUID),
+  _useDateTime(useDateTime),
+  _errorCount(0),
+  _errorLimit(errorLimit),
+  _ignoreTagKeys(ignoreTagKeys)
   {
   }
   ~CompareVisitor() = default;
@@ -129,6 +130,13 @@ public:
 
       refTags.set(MetadataTags::SourceDateTime(), "None");  // Wipe out the ingest datetime
       testTags.set(MetadataTags::SourceDateTime(), "None");
+    }
+
+    for (int i = 0; i < _ignoreTagKeys.size(); i++)
+    {
+      const QString key = _ignoreTagKeys.at(i);
+      refTags.set(key, "None");  // Wipe out the tag
+      testTags.set(key, "None");
     }
 
     if (refTags != testTags)
@@ -263,12 +271,13 @@ private:
   bool _useDateTime;
   int _errorCount;
   int _errorLimit;
+  QStringList _ignoreTagKeys;
 };
 
-MapComparator::MapComparator():
-  _ignoreUUID(false),
-  _useDateTime(false),
-  _errorLimit(ConfigOptions().getLogWarnMessageLimit())
+MapComparator::MapComparator() :
+_ignoreUUID(false),
+_useDateTime(false),
+_errorLimit(ConfigOptions().getLogWarnMessageLimit())
 {
 }
 
@@ -424,7 +433,7 @@ bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
     return false;
   }
 
-  CompareVisitor compareVis(refMap, _ignoreUUID, _useDateTime, _errorLimit);
+  CompareVisitor compareVis(refMap, _ignoreUUID, _useDateTime, _ignoreTagKeys, _errorLimit);
   testMap->visitRo(compareVis);
   return compareVis.isMatch();
 }

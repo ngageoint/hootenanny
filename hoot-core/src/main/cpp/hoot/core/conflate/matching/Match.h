@@ -161,7 +161,7 @@ public:
     const std::set<std::pair<ElementId, ElementId>>& matchPairs);
 
   /**
-   * TODO: This already exists in ApiEntityInfo
+   * @todo This already exists in ApiEntityInfo
    */
   virtual QString toString() const = 0;
 
