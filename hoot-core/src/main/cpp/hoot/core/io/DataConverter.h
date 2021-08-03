@@ -108,7 +108,7 @@ private:
   void _convert(const QStringList& inputs, const QString& output);
 
   // sets ogr options for _convert
-  void _setFromOgrOptions();
+  void _setFromOgrOptions(const QStringList& inputs);
   void _setToOgrOptions(const QString& output);
   void _handleNonOgrOutputTranslationOpts();
   QString _outputFormatToTranslationDirection(const QString& output) const;

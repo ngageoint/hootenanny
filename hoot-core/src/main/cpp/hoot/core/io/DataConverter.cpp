@@ -317,7 +317,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   }
   else if (IoUtils::anyAreSupportedOgrFormats(inputs, true))
   {
-    _setFromOgrOptions();
+    _setFromOgrOptions(inputs);
   }
   else if (!_translationScript.trimmed().isEmpty())
   {
@@ -541,7 +541,7 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
   writerThread.wait();
 }
 
-void DataConverter::_setFromOgrOptions()
+void DataConverter::_setFromOgrOptions(const QStringList& inputs)
 {
   // The ordering for these added ops matters. Let's run them after any user specified convert ops
   // to avoid unnecessary processing time. Also, if any of these ops gets added here, then we never
@@ -576,7 +576,12 @@ void DataConverter::_setFromOgrOptions()
 
   // We require that a translation be present when converting from OGR, since OgrReader is tightly
   // coupled to the translation logic.
-  if (_translationScript.isEmpty())
+  QStringList justPaths = inputs;
+  IoUtils::ogrPathsAndLayersToPaths(justPaths);
+  if (_translationScript.isEmpty() &&
+      // This check doesn't seem to make a lot of sense, so may not be correct. Without it, however,
+      // some conversion test from APIDB to shape file will fail with fewer tags written.
+      (StringUtils::endsWithAny(justPaths, ".gdb") || FileUtils::anyAreDirs(justPaths)))
   {
     _translationScript = "translations/quick.js";
   }
