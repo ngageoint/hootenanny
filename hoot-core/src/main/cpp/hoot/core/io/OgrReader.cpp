@@ -451,7 +451,7 @@ std::vector<float> OgrReader::_getInputProgressWeights(
 
 QStringList OgrReader::_getLayersFromPath(QString& input) const
 {
-  LOG_VART(input);
+  LOG_DEBUG("Retrieving layers from: " << input << "...");
 
   QStringList layers;
 
@@ -496,13 +496,13 @@ void OgrReader::read(
   // These are the OGR inputs types for which we need to iterate through layers. This list may
   // eventually need to be expanded. May be able to tighten the dir condition to dirs with shape
   // files only.
-  // TODO: Can we only check to see if layer is empty here instead?
-  if (layer.isEmpty() &&
+  if (layer.trimmed().isEmpty() &&
       (path.endsWith(".gdb") || QFileInfo(path).isDir() || path.endsWith(".zip")))
   {
+    LOG_DEBUG("Loading one or more layers...");
+
     QString pathCopy = path;
     const QStringList layers = _getLayersFromPath(pathCopy);
-    LOG_VARD(layers);
     const std::vector<float> progressWeights = _getInputProgressWeights(path, layers);
     // Read each layer's data.
     for (int j = 0; j < layers.size(); j++)
@@ -523,6 +523,8 @@ void OgrReader::read(
   }
   else
   {
+    LOG_DEBUG("Loading a single layer...");
+
     // For other OGR types, just assume only a single layer.
     _d->open(path, layer);
     _d->read(map);

@@ -552,7 +552,8 @@ void DataConverter::_setFromOgrOptions(const QStringList& inputs)
   if (_translationScript.isEmpty() &&
       // This check doesn't seem to make a lot of sense, so may not be correct. Without it, however,
       // some conversion test from APIDB to shape file will fail with fewer tags written.
-      (StringUtils::endsWithAny(justPaths, ".gdb") || FileUtils::anyAreDirs(justPaths)))
+      (StringUtils::endsWithAny(justPaths, ".gdb") || StringUtils::endsWithAny(justPaths, ".zip") ||
+       FileUtils::anyAreDirs(justPaths)))
   {
     _translationScript = "translations/quick.js";
   }
