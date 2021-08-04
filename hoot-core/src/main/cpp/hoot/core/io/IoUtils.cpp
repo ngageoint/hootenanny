@@ -361,7 +361,7 @@ bool IoUtils::areValidStreamingOps(const QStringList& ops)
           return false;
         }
       }
-      // OsmMapOperation isn't streamable.
+      // An OsmMapOperation isn't streamable.
       else
       {
         LOG_INFO(unstreamableMsg);
@@ -371,6 +371,51 @@ bool IoUtils::areValidStreamingOps(const QStringList& ops)
   }
 
   return true;
+}
+
+QList<ElementVisitorPtr> IoUtils::toStreamingOps(const QStringList& ops)
+{
+  LOG_VARD(ops);
+
+  QList<ElementVisitorPtr> opsToReturn;
+  // add visitor/criterion operations if any of the convert ops are visitors.
+  foreach (QString opName, ops)
+  {
+    if (!opName.trimmed().isEmpty())
+    {
+      if (!Factory::getInstance().hasBase<ElementVisitor>(opName) &&
+          !Factory::getInstance().hasBase<ConstElementVisitor>(opName))
+      {
+        throw IllegalArgumentException(
+          "Streaming operations must be an ElementVisitor or a ConstElementVisitor.");
+      }
+
+      // When streaming we can't provide a reliable OsmMap.
+      const QString osmMapConsumerErrorMsg = "A streaming operations may not be an OsmMapConsumer.";
+      if (Factory::getInstance().hasBase<ElementVisitor>(opName))
+      {
+        ElementVisitorPtr vis =
+          Factory::getInstance().constructObject<ElementVisitor>(opName);
+        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
+        {
+          throw IllegalArgumentException(osmMapConsumerErrorMsg);
+        }
+        opsToReturn.append(vis);
+      }
+      else if (Factory::getInstance().hasBase<ConstElementVisitor>(opName))
+      {
+        ConstElementVisitorPtr vis =
+          Factory::getInstance().constructObject<ConstElementVisitor>(opName);
+        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
+        {
+          throw IllegalArgumentException(osmMapConsumerErrorMsg);
+        }
+        opsToReturn.append(vis);
+      }
+    }
+  }
+
+  return opsToReturn;
 }
 
 ElementInputStreamPtr IoUtils::getFilteredInputStream(
