@@ -288,7 +288,8 @@ public class AdvancedConflationOptionsResource {
             JSONObject obj = (JSONObject) memberObj;
 
             // add list of options for SnapUnconnectedWaysSnapCriteria
-            if (obj.get("id") != null && obj.get("id").equals("SnapUnconnectedWaysSnapCriteria")) {
+            if (obj.get("id") != null &&
+                    (obj.get("id").equals("SnapUnconnectedWaysSnapCriteria") || obj.get("id").equals("DifferentialSecWayRemovalCriteria"))) {
                 HootWaySnapCriteria hootCriteriaCommand = new HootWaySnapCriteria(this.getClass());
                 CommandResult commandResult = hootCriteriaCommand.execute();
                 String output = commandResult.getStdout().replace("\n", "");
