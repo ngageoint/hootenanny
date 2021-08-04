@@ -74,9 +74,7 @@ public:
   { _diffConflator.setRemoveLinearPartialMatchesAsWhole(remove); }
   void setDiffRemoveRiverPartialMatchesAsWhole(bool remove)
   { _diffConflator.setRemoveRiverPartialMatchesAsWhole(remove); }
-
   void setOsmApiDbUrl(QString url) { _osmApiDbUrl = url; }
-
   void setDisplayStats(bool display) { _displayStats = display; }
   void setOutputStatsFile(QString file) { _outputStatsFile = file; }
   void setDisplayChangesetStats(bool display) { _displayChangesetStats = display; }
@@ -86,6 +84,8 @@ private:
 
   bool _isDiffConflate;
   bool _diffConflateSeparateOutput;
+  // TODO: its cleaner to create an AbstractConflator dynamically instead to handle both Diff and
+  // other types of conflate
   DiffConflator _diffConflator;
   ChangesetProviderPtr _pTagChanges;
 

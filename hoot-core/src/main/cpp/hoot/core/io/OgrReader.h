@@ -108,8 +108,8 @@ public:
    * Returns the bounding box for the specified projection and configuration settings. This is
    * likely only useful in unit tests.
    */
-  virtual std::shared_ptr<geos::geom::Envelope> getBoundingBoxFromConfig(const Settings& s,
-    OGRSpatialReference* srs);
+  virtual std::shared_ptr<geos::geom::Envelope> getBoundingBoxFromConfig(
+    const Settings& s, const OGRSpatialReference* srs);
 
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 

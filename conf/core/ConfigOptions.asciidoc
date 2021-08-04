@@ -1139,7 +1139,7 @@ inputs (false).
 
 This is the minimum valid manipulation score in the legacy greedy optimization routine. Setting
 the value lower will create more (likely overzealous) matches. Setting the value higher will drop
-less confident matches.
+less confident matches. TODO: rename this
 
 === contains.node.criterion.id
 
@@ -1357,6 +1357,25 @@ Overrides +differential.remove.linear.partial.matches.as.whole+ when dealing wit
 
 If true Differential Conflation will remove all elements from output which Hootenanny is unable to
 match. If false, the unconflatable data will pass through to the output.
+
+=== differential.sec.way.removal.criteria
+
+* Data Type: list
+* Default Value:
+** ``
+
+Optional criteria used to clean small secondary ways that are not connected to a reference way in
+the differential output. The classes specified must inherit from `ConflatableElementCriterion`. An
+example is: `HighwayCriterion`. The default value of an empty list causes no secondary way removal
+to occur.
+
+=== differential.sec.way.removal.length.threshold
+
+* Data Type: double
+* Default Value: `5.0`
+
+The largest size, in meters, a secondary way may have in order to be removed when criteria are
+specified in `differential.sec.way.removal.criteria`.
 
 === differential.snap.unconnected.features
 
@@ -2658,6 +2677,14 @@ trigger warning log messages.
 
 A list of map operations to be applied to a map for cleaning purposes, in order.
 'hoot info --operators' displays information about the available transforms.
+
+=== map.comparator.ignore.tag.keys
+
+* Data Type: list
+* Default Value: ``
+
+A list of tag keys that `MapComparator`, used by the `diff` command, will ignore when comparing
+maps.
 
 === map.comparator.print.full.mismatch.elements.on.map.size.diff
 

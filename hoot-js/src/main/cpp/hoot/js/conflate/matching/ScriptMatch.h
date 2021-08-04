@@ -84,9 +84,6 @@ public:
    */
   std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
 
-  v8::Local<v8::Object> getPlugin() const { return ToLocal(&_plugin); }
-  std::shared_ptr<PluginContext> getScript() const { return _script; }
-
   QString toString() const override;
 
   std::map<QString, double> getFeatures(const ConstOsmMapPtr& map) const override;
@@ -102,6 +99,10 @@ public:
   QString getClassName() const override { return className(); }
   QString getDescription() const override
   { return "Matches elements using Generic Conflation via Javascript"; }
+
+  v8::Local<v8::Object> getPlugin() const { return ToLocal(&_plugin); }
+
+  std::shared_ptr<PluginContext> getScript() const { return _script; }
 
 private:
 

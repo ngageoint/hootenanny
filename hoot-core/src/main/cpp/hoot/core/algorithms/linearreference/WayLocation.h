@@ -108,9 +108,6 @@ public:
   static geos::geom::Coordinate pointAlongSegmentByFraction(
     const geos::geom::Coordinate& p0, const geos::geom::Coordinate& p1, double frac);
 
-  const ConstOsmMapPtr& getMap() const { return _map; }
-  const ConstWayPtr& getWay() const { return _way; }
-
   /**
    * @brief getNode returns the node at this WayLocation. If isNode() returns false, this will throw
    * an exception.
@@ -132,7 +129,6 @@ public:
   bool isFirst(double epsilon = 0.0) const
   { return _segmentIndex == 0 && _segmentFraction <= epsilon; }
   bool isLast(double epsilon = 0.0) const;
-
   bool isValid() const { return _segmentIndex != -1; }
 
   geos::geom::Coordinate getCoordinate() const;
@@ -147,6 +143,9 @@ public:
   WayLocation move(Meters distance) const;
 
   QString toString() const;
+
+  const ConstOsmMapPtr& getMap() const { return _map; }
+  const ConstWayPtr& getWay() const { return _way; }
 
 private:
 
