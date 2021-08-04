@@ -104,6 +104,14 @@ private:
    * This method handles all non OGR output conversions.
    */
   void _convert(const QStringList& inputs, const QString& output);
+  /*
+   * streams I/O one feature at a time
+   */
+  void _convertStreamable(const QStringList& inputs, const QString& output) const;
+  /*
+   * reads entire input into memory before converting
+   */
+  void _convertMemoryBound(const QStringList& inputs, const QString& output);
   // Runs the translator in a separate thread for a performance increase if certain pre-conditions
   // are met.
   void _convertToOgrMT(const QStringList& inputs, const QString& output);
