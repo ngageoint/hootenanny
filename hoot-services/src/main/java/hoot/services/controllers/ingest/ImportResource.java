@@ -28,6 +28,7 @@ package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.IMPORT_OPTIONS;
+import static hoot.services.HootProperties.SCRIPT_FOLDER;
 import static hoot.services.HootProperties.UPLOAD_FOLDER;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB_ZIP;
@@ -84,7 +85,10 @@ import hoot.services.controllers.osm.map.UpdateParentCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.job.JobType;
+import hoot.services.models.db.TranslationFolder;
+import hoot.services.models.db.Translations;
 import hoot.services.models.db.Users;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.MultipartSerializer;
 
 
@@ -226,6 +230,17 @@ public class ImportResource {
                     geojsonCnt, geonamesCnt, gpkgCnt);
 
             List<Command> workflow = new LinkedList<>();
+
+            // if id is used for translation then set translation to the file path of that file
+            try {
+                long translationId = Long.parseLong(translation);
+                Translations translationFile = CustomScriptResource.getTranslationForUser(user, translationId);
+                TranslationFolder folder = CustomScriptResource.getTranslationFolderForUser(user, translationFile.getFolderId());
+
+                String translationPath = File.separator + translationFile.getDisplayName();
+                translationPath = folder.getPath() != null ? folder.getPath() + translationPath : translationPath;
+                translation = translationPath + ".js";
+            } catch (NumberFormatException exc) {}
 
             ExternalCommand importCommand = fileETLCommandFactory.build(jobId, workDir, filesToImport, zipsToImport, translation, advUploadOpts,
                     etlName, noneTranslation, debugLevel, finalUploadClassification, this.getClass(), user);
