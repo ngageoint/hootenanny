@@ -149,7 +149,7 @@ std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
   if (driver == nullptr)
     throw HootException("Error getting driver by name: " + QString(driverInfo._driverName));
 
-  // if the user specifies a shapefile then crop off the .shp and create a directory.
+  // If the user specifies a shapefile, then crop off the .shp and create a directory.
   if (url.toLower().endsWith(".shp"))
     source = url.mid(0, url.length() - 4);
 
@@ -185,7 +185,7 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
 
   // With GDALOpenEx, we need to specify the GDAL_OF_UPDATE option or the dataset will get opened
   // Read Only.
-  if (! readonly)
+  if (!readonly)
   {
     driverInfo._driverType = driverInfo._driverType | GDAL_OF_UPDATE;
   }
@@ -205,10 +205,9 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
   }
   else if (QString(driverInfo._driverName) == "OGR_OGDI")
   {
-    // From the GDAL docs:
-    // From GDAL/OGR 1.8.0, setting the OGR_OGDI_LAUNDER_LAYER_NAMES configuration option
-    // (or environment variable) to YES causes the layer names to be simplified.
-    // For example : watrcrsl_hydro instead of 'watrcrsl@hydro(*)_line'
+    // From GDAL/OGR 1.8.0 on, setting the OGR_OGDI_LAUNDER_LAYER_NAMES configuration option (or
+    // environment variable) to YES causes the layer names to be simplified. For example,
+    // watrcrsl_hydro instead of 'watrcrsl@hydro(*)_line'.
     options["OGR_OGDI_LAUNDER_LAYER_NAMES"] = ConfigOptions().getOgrReaderOgdiLaunderLayerNames();
   }
   else if (QString(driverInfo._driverName) == "LIBKML")
@@ -217,16 +216,15 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
   }
   else if (QString(driverInfo._driverName) == "S57")
   {
-    // From the GDAL docs:
     // SPLIT_MULTIPOINT=ON/OFF: Should multipoint soundings be split into many single point sounding
-    //    features. Multipoint geometries are not well handle by many formats, so it can be convenient
-    //    to split single sounding features with many points into many single point features.
-    //    Default is OFF.
+    // features. Multipoint geometries are not well handle by many formats, so it can be convenient
+    // to split single sounding features with many points into many single point features.Default is
+    // OFF.
     options["SPLIT_MULTIPOINT"] = "ON";
 
     // ADD_SOUNDG_DEPTH=ON/OFF: Should a DEPTH attribute be added on SOUNDG features and assign the
-    //    depth of the sounding. This should only be enabled with SPLIT_MULTIPOINT is also enabled.
-    //    Default is OFF.
+    // depth of the sounding. This should only be enabled with SPLIT_MULTIPOINT is also enabled.
+    // Default is OFF.
     options["ADD_SOUNDG_DEPTH"] = "ON";
   }
 
@@ -237,7 +235,14 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
           (driverInfo._driverName != nullptr ? drivers : nullptr),
           options.getCrypticOptions(), nullptr)));
   if (!result)
-    throw HootException("Unable to open: " + url);
+  {
+    QString errorMsg = "Unable to open: " + url + ".";
+    if (url.contains(".zip"))
+    {
+      errorMsg += " Is your path within the zip file correct?";
+    }
+    throw HootException(errorMsg);
+  }
   return result;
 }
 
