@@ -46,9 +46,6 @@ void ElementTranslatorThread::run()
   threadIsolate->Enter();
   v8::Locker v8Lock(threadIsolate);
 
-  ElementPtr pNewElement(nullptr);
-  ElementProviderPtr cacheProvider(_pElementCache);
-
   // Setup writer used for translation
   std::shared_ptr<OgrWriter> ogrWriter;
   { // Mutex Scope
@@ -61,18 +58,27 @@ void ElementTranslatorThread::run()
     ogrWriter->setCache(_pElementCache);
   }
 
+  ElementPtr pNewElement;
+  ElementProviderPtr cacheProvider(_pElementCache);
   while (!_pElementQ->empty())
   {
     pNewElement = _pElementQ->dequeue();
 
+    // Run any convert ops present.
+    foreach (ElementVisitorPtr op, _conversionOps)
+    {
+      op->visit(pNewElement);
+    }
+
     std::shared_ptr<geos::geom::Geometry> g;
     std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> tf;
-    ogrWriter->translateToFeatures(cacheProvider, pNewElement, g, tf);
+    ogrWriter->translateToFeatures(cacheProvider, pNewElement, g, tf);  
 
     { // Mutex Scope
       QMutexLocker lock(_pTransFeaturesQMutex);
-      _pTransFeaturesQ->enqueue(std::pair<std::shared_ptr<geos::geom::Geometry>,
-                                std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>(g, tf));
+      _pTransFeaturesQ->enqueue(
+        std::pair<std::shared_ptr<geos::geom::Geometry>,
+        std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>(g, tf));
     }
   }
 

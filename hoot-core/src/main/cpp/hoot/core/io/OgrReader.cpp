@@ -369,7 +369,7 @@ QStringList OgrReader::getFilteredLayerNames(const QString& path) const
   QStringList result;
 
   QStringList allLayers = _d->getLayersWithGeometry(path);
-  LOG_VARD(allLayers);
+  LOG_VART(allLayers);
 
   for (int i = 0; i < allLayers.size(); i++)
   {
@@ -451,7 +451,7 @@ std::vector<float> OgrReader::_getInputProgressWeights(
 
 QStringList OgrReader::_getLayersFromPath(QString& input) const
 {
-  LOG_VART(input);
+  LOG_DEBUG("Retrieving layers from: " << input << "...");
 
   QStringList layers;
 
@@ -496,13 +496,13 @@ void OgrReader::read(
   // These are the OGR inputs types for which we need to iterate through layers. This list may
   // eventually need to be expanded. May be able to tighten the dir condition to dirs with shape
   // files only.
-  // TODO: Can we only check to see if layer is empty here instead?
-  if (layer.isEmpty() &&
+  if (layer.trimmed().isEmpty() &&
       (path.endsWith(".gdb") || QFileInfo(path).isDir() || path.endsWith(".zip")))
   {
+    LOG_DEBUG("Loading one or more layers...");
+
     QString pathCopy = path;
     const QStringList layers = _getLayersFromPath(pathCopy);
-    LOG_VARD(layers);
     const std::vector<float> progressWeights = _getInputProgressWeights(path, layers);
     // Read each layer's data.
     for (int j = 0; j < layers.size(); j++)
@@ -523,6 +523,8 @@ void OgrReader::read(
   }
   else
   {
+    LOG_DEBUG("Loading a single layer...");
+
     // For other OGR types, just assume only a single layer.
     _d->open(path, layer);
     _d->read(map);
@@ -576,7 +578,9 @@ bool OgrReader::isSupported(const QString& url)
   LOG_VART(url);
   QString justPath = url;
   IoUtils::ogrPathAndLayerToPath(justPath); // in case the layer syntax is in use
-  return OgrUtilities::getInstance().isReasonableUrl(justPath);
+  return
+    OgrUtilities::getInstance().isReasonableUrl(justPath) ||
+    IoUtils::isSupportedOgrFormat(url, true);
 }
 
 void OgrReader::setUseDataSourceIds(bool useDataSourceIds)
@@ -1041,7 +1045,7 @@ void OgrReaderInternal::_initTranslate()
   LOG_VART(_translatePath);
   LOG_VART(_translator.get());
 
-  if (_translatePath != "" && _translator.get() == nullptr)
+  if (_translatePath != "" && !_translator)
   {
     _translator = ScriptSchemaTranslatorFactory::getInstance().createTranslator(_translatePath);
     if (_translator.get() == nullptr)

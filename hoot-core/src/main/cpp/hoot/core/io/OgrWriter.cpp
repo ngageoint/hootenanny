@@ -286,9 +286,9 @@ void OgrWriter::translateToFeatures(
 
   if (e->getTags().getInformationCount() > 0)
   {
-    // There is probably a cleaner way of doing this.
-    // convertToGeometry calls getGeometryType which will throw an exception if it gets a relation
-    // that it doesn't know about. E.g. "route", "superroute", "turnlanes:turns", etc
+    // There is probably a cleaner way of doing this. convertToGeometry calls getGeometryType which
+    // will throw an exception if it gets a relation that it doesn't know about. E.g. "route",
+    // "superroute", "turnlanes:turns", etc.
 
     try
     {
@@ -527,7 +527,7 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
   _writePartial(cacheProvider, newRelation);
 }
 
-void OgrWriter::writeElement(ElementPtr &element)
+void OgrWriter::writeElement(ElementPtr& element)
 {
   //  Do not attempt to write empty elements
   if (!element)
