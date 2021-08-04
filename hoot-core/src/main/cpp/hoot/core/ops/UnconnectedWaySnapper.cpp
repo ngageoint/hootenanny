@@ -428,9 +428,9 @@ ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriterion(
     typeCrit = Factory::getInstance().constructObject<ElementCriterion>(typeCriterion);
     LOG_VART(typeCrit);
 
-    // TODO: I think requiring that the criteria be ConflatableElementCriterion is a little kludy,
-    // as they don't necessary have to be conflatable. Doing so is needed for now, though, so that
-    // we can call getChildCriteria when isNode=true.
+    // Requiring that the criteria be ConflatableElementCriterion is a little misleading, as they
+    // don't necessary have to be conflatable, but that's the only use case we have so far. Also, it
+    // allows us to call getChildCriteria when isNode=true.
     std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
       std::dynamic_pointer_cast<ConflatableElementCriterion>(typeCrit);
     if (!conflatableCrit)
