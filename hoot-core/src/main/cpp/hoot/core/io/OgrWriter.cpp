@@ -527,7 +527,7 @@ void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
   _writePartial(cacheProvider, newRelation);
 }
 
-void OgrWriter::writeElement(ElementPtr &element)
+void OgrWriter::writeElement(ElementPtr& element)
 {
   //  Do not attempt to write empty elements
   if (!element)

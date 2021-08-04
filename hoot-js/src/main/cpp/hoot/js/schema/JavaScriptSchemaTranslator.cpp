@@ -163,7 +163,6 @@ std::shared_ptr<Feature> JavaScriptSchemaTranslator::_createFeature(const QVaria
     {
       QString error("The specified field/column is not part of this table definition."
                     " table: " + tableName + " column: " + it.key());
-
       if (_strict == StrictOn)
       {
         throw FieldDefinition::InvalidValueException(it.key(), error);
@@ -200,7 +199,7 @@ void JavaScriptSchemaTranslator::_finalize()
     if (tObj->Has(context, toV8("finalize")).ToChecked())
     {
       TryCatch trycatch(current);
-      Local<Value> finalize = _gContext->call(tObj,"finalize");
+      Local<Value> finalize = _gContext->call(tObj, "finalize");
       HootExceptionJs::checkV8Exception(finalize, trycatch);
     }
   }
@@ -930,7 +929,8 @@ void JavaScriptSchemaTranslator::_translateToOsm(
   Local<Object> tObj = _gContext->getContext(current)->Global();
 
   // This has a variable since we don't know if it will be "translateToOsm" or "translateAttributes"
-  Local<Function> tFunc = Local<Function>::Cast(tObj->Get(context, toV8(_toOsmFunctionName)).ToLocalChecked());
+  Local<Function> tFunc =
+    Local<Function>::Cast(tObj->Get(context, toV8(_toOsmFunctionName)).ToLocalChecked());
   TryCatch trycatch(current);
 
   // NOTE: the "3" here is the number of arguments

@@ -36,8 +36,11 @@
 namespace hoot
 {
 
+class OgrReader;
+class ElementOutputStream;
+
 /**
- * Streams elements to output
+ * Streams elements from input to output
  */
 class ElementStreamer
 {
@@ -45,16 +48,22 @@ class ElementStreamer
 public:
 
   /**
+   * @brief ElementStreamer Constructor
+   * @param translationScript optional translation script used to translated elements
+   */
+  ElementStreamer(const QString& translationScript = "");
+
+  /**
    * Streams data sources from input to output.
    *
-   * Associated readers/writers must implemented the partial map interfaces
+   * Associated readers/writers must implemented the partial map interfaces.
    *
    * @param inputs data sources
    * @param out data destination
    * @param convertOps a list of map ops/visitors to perform against the data during conversion
    * @param progress optional for tracking I/O job progress
    */
-  static void stream(
+  void stream(
     const QStringList& inputs, const QString& out, const QStringList& convertOps = QStringList(),
     Progress progress = Progress());
 
@@ -68,9 +77,26 @@ public:
    * @param convertOps a list of map ops/visitors to perform against the data during conversion
    * @param progress optional for tracking I/O job progress
    */
-  static void stream(
+  void stream(
     const QString& input, const QString& out, const QStringList& convertOps = QStringList(),
     Progress progress = Progress());
+
+private:
+
+  QString _translationScript;
+
+  /**
+   * @brief _streamFromOgr streams an OGR input to output
+   * @param reader an OgrReader
+   * @param input path to the input data
+   * @param writer a streamable writer
+   * @param convertOps conversion operations to apply to data
+   * @param progress tracks operation progress
+   * @return the number of elements written
+   */
+  long _streamFromOgr(
+    const OgrReader& reader, QString& input, ElementOutputStream& writer,
+    const QStringList& convertOps = QStringList(), Progress progress = Progress());
 };
 
 }

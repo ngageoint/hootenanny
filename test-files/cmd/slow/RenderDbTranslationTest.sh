@@ -8,8 +8,7 @@ function compareFiles {
     hoot diff -C Testing.conf $1 $2 || diff $1 $2
 }
 
-# CONFIG="-C Testing.conf"
-CONFIG="-C NodeExport.conf"
+CONFIG="-C NodeExport.conf -C Testing.conf"
 
 # LOTS of debug output
 #CONFIG="-D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
