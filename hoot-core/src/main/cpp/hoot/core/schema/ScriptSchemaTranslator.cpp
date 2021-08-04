@@ -78,7 +78,7 @@ void ScriptSchemaTranslator::strictError(const QString& s) const
   }
 }
 
-void ScriptSchemaTranslator::translateToOsm(Tags& tags, const char *layerName, const char* geomType)
+void ScriptSchemaTranslator::translateToOsm(Tags& tags, const char* layerName, const char* geomType)
 {
   if (!_initialized)
   {

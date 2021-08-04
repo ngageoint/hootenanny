@@ -201,6 +201,11 @@ void PertyOp::setConfiguration(const Settings& conf)
 
 void PertyOp::apply(std::shared_ptr<OsmMap>& map)
 {
+  if (map->size() == 0)
+  {
+    throw EmptyMapInputException();
+  }
+
   _numAffected = 0;
 
   // permute the data first
@@ -232,7 +237,7 @@ std::shared_ptr<OsmMap> PertyOp::generateDebugMap(const OsmMapPtr& map)
   std::shared_ptr<OsmMap> result = std::make_shared<OsmMap>(map->getProjection());
 
   geos::geom::Envelope env = CalculateMapBoundsVisitor::getGeosBounds(map);
-  LOG_INFO("env: " << env.toString());
+  LOG_VARD(env);
 
   int rows, cols;
   Mat EX = _calculatePermuteGrid(env, rows, cols);
@@ -271,6 +276,7 @@ std::shared_ptr<OsmMap> PertyOp::generateDebugMap(const OsmMapPtr& map)
 
 void PertyOp::permute(const std::shared_ptr<OsmMap>& map)
 {
+  LOG_VART(map->size());
   MapProjector::projectToPlanar(map);
 
   geos::geom::Envelope env = CalculateMapBoundsVisitor::getGeosBounds(map);

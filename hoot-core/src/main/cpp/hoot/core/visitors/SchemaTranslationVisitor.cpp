@@ -116,7 +116,6 @@ void SchemaTranslationVisitor::visit(const ElementPtr& e)
     Tags& tags = e->getTags();
 
     GeometryTypeId gtype = ElementToGeometryConverter::getGeometryType(e, false);
-
     // If we don't know what it is, no point in translating it.
     if (gtype == ElementToGeometryConverter::UNKNOWN_GEOMETRY)
     {
@@ -126,14 +125,12 @@ void SchemaTranslationVisitor::visit(const ElementPtr& e)
     if (_toOgr)
     {
       vector<Tags> allTags = _ogrTranslator->translateToOgrTags(tags, e->getElementType(), gtype);
-
       if (!allTags.empty())
       {
         if (allTags.size() > 1)
         {
           LOG_WARN("More than one feature was returned, only keeping the first feature.");
         }
-
         e->setTags(allTags[0]);
       }
     }

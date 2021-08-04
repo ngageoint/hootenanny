@@ -39,7 +39,7 @@ long ElementOutputStream::writeAllElements(ElementInputStream& eis, ElementOutpu
   while (eis.hasMoreElements())
   {
     ElementPtr e = eis.readNextElement();
-    if (e.get())
+    if (e)
     {
       eos.writeElement(e);
       numFeaturesWritten++;
