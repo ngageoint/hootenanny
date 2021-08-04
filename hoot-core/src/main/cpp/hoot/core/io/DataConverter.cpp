@@ -120,9 +120,10 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
   // If we're writing to an OGR format and multi-threaded processing was specified or if both input
   // and output formats are OGR formats, we'll need to run the _convertToOgr method in order to
   // handle the layers correctly.
-  if ((IoUtils::isSupportedOgrFormat(output, true) && _translateMultithreaded) ||
-      (IoUtils::areSupportedOgrFormats(inputs, true) &&
-       IoUtils::isSupportedOgrFormat(output, true)))
+//  if ((IoUtils::isSupportedOgrFormat(output, true) && _translateMultithreaded) ||
+//      (IoUtils::areSupportedOgrFormats(inputs, true) &&
+//       IoUtils::isSupportedOgrFormat(output, true)))
+  if (IoUtils::isSupportedOgrFormat(output, true))
   {
     _convertToOgr(inputs, output);
   }
@@ -203,14 +204,15 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
 
   _setToOgrOptions(output);
 
-  // Check to see if all of the i/o can be streamed.
   LOG_VARD(IoUtils::areStreamableInputs(inputs));
-  if (IoUtils::areStreamableInputs(inputs, true) &&
+  if (_translateMultithreaded && // TODO
+      // Check to see if all of the i/o can be streamed.
+      IoUtils::areStreamableInputs(inputs, true) //&&
       // Multi-threaded code doesn't support conversion ops. Could it?
-      _convertOps.empty() &&
+      //_convertOps.empty() &&
       // Multi-threaded code doesn't support a bounds...not sure if it could be made to at some
       // point.
-      !ConfigUtils::boundsOptionEnabled())
+      /*!ConfigUtils::boundsOptionEnabled()*/)
   {
     _progress.set(0.0, "Loading and translating maps: ...");
     _transToOgrMT(inputs, output);
