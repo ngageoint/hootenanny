@@ -31,6 +31,7 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OgrReader.h>
+#include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
@@ -95,8 +96,22 @@ void ElementStreamer::stream(
     partialReader = std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
     partialReader->initializePartial();
     std::shared_ptr<OgrReader> ogrReader = std::dynamic_pointer_cast<OgrReader>(reader);
+    std::shared_ptr<OgrWriter> ogrWriter = std::dynamic_pointer_cast<OgrWriter>(writer);
 
-    if (!ogrReader)
+    // #4899 would relax this to only require a translation if only one or the other of the
+    // input/output was OGR and not require one when both are.
+    if ((ogrReader || ogrWriter) && _translationScript.isEmpty())
+    {
+      throw IllegalArgumentException("No translation script specified.");
+    }
+
+    if (ogrReader && input.contains(";"))
+    {
+      // Need to run separate logic for streaming from an OGR source with layers in order to support
+      // the layer syntax.
+      numFeaturesWritten += _streamFromOgr(*ogrReader, input, *streamWriter);
+    }
+    else
     {
       reader->open(input);
       // Add visitor/criterion operations if any of the convert ops are visitors.
@@ -105,12 +120,6 @@ void ElementStreamer::stream(
         IoUtils::getFilteredInputStream(
           std::dynamic_pointer_cast<ElementInputStream>(reader), convertOps);
       numFeaturesWritten += ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
-    }
-    else
-    {
-      // Need to run separate logic for streaming from an OGR source in order to support the layer
-      // syntax.
-      numFeaturesWritten += _streamFromOgr(*ogrReader, input, *streamWriter);
     }
   }
 
@@ -130,14 +139,10 @@ void ElementStreamer::stream(
 
 long ElementStreamer::_streamFromOgr(
   const OgrReader& reader, QString& input, ElementOutputStream& writer,
-  const QStringList& convertOps, Progress /*progress*/)
+  const QStringList& convertOps, Progress /*progress*/) const
 {
-  // TODO: progress
+  // TODO: run a separate progress for _streamFromOgr as part of #4856?
 
-  if (_translationScript.isEmpty())
-  {
-    throw IllegalArgumentException("No translation script specified.");
-  }
   reader.setSchemaTranslationScript(_translationScript);
 
   QStringList layers;
@@ -151,7 +156,6 @@ long ElementStreamer::_streamFromOgr(
   {
     layers = reader.getFilteredLayerNames(input);
   }
-
   if (layers.empty())
   {
     LOG_WARN("Could not find any valid layers to read from in " + input + ".");
@@ -169,7 +173,7 @@ long ElementStreamer::_streamFromOgr(
     {
       std::shared_ptr<Element> e = iterator->next();
 
-      // run any convert ops present
+      // Run any convert ops present.
       foreach (ElementVisitorPtr op, ops)
       {
         op->visit(e);
