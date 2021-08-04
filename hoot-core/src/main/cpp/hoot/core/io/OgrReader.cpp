@@ -369,7 +369,7 @@ QStringList OgrReader::getFilteredLayerNames(const QString& path) const
   QStringList result;
 
   QStringList allLayers = _d->getLayersWithGeometry(path);
-  LOG_VARD(allLayers);
+  LOG_VART(allLayers);
 
   for (int i = 0; i < allLayers.size(); i++)
   {
@@ -578,7 +578,9 @@ bool OgrReader::isSupported(const QString& url)
   LOG_VART(url);
   QString justPath = url;
   IoUtils::ogrPathAndLayerToPath(justPath); // in case the layer syntax is in use
-  return OgrUtilities::getInstance().isReasonableUrl(justPath);
+  return
+    OgrUtilities::getInstance().isReasonableUrl(justPath) ||
+    IoUtils::isSupportedOgrFormat(url, true);
 }
 
 void OgrReader::setUseDataSourceIds(bool useDataSourceIds)

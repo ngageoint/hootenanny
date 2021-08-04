@@ -158,7 +158,7 @@ public:
     }
 
     // Check that we can access a value from a Javascript function
-    HOOT_STR_EQUALS("Papa Smurf",uut->getLayerNameFilter());
+    HOOT_STR_EQUALS("Papa Smurf", uut->getLayerNameFilter());
   }
 
   void runSchemaTest()
@@ -180,8 +180,6 @@ public:
 
     QString result;
     // handy for creating the c formatted version.
-    //QString sep1 = "\"";
-    //QString sep2 = "\\n\"";
     QString sep1, sep2;
     for (size_t i = 0; i < schema->getLayerCount(); i++)
     {
