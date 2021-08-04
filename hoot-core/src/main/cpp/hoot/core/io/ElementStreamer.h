@@ -91,12 +91,11 @@ private:
    * @param input path to the input data
    * @param writer a streamable writer
    * @param convertOps conversion operations to apply to data
-   * @param progress tracks operation progress
    * @return the number of elements written
    */
   long _streamFromOgr(
     const OgrReader& reader, QString& input, ElementOutputStream& writer,
-    const QStringList& convertOps = QStringList(), Progress progress = Progress());
+    const QStringList& convertOps = QStringList(), Progress progress = Progress()) const;
 };
 
 }

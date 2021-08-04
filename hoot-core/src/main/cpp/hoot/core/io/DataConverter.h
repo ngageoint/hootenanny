@@ -43,8 +43,9 @@ namespace hoot
 /**
  * Converts data from one supported format to another
  *
- * OGR output formats are handled with custom logic and all other formats are handled generically,
- * with the exception of shape files written with explicitly specified columns.
+ * OGR output using the multithreaded option or shape files written with explicitly specified output
+ * columns use custom logic. All other I/O is handled generically with the same code streaming or
+ * non-streaming code.
  */
 class DataConverter : public Configurable
 {
@@ -99,15 +100,23 @@ private:
 
   void _validateInput(const QStringList& inputs, const QString& output) const;
 
-  // converts from any input to an OGR output; A translation is required and operations are memory
-  // bound.
-  void _convertToOgr(const QStringList& inputs, const QString& output);
   /*
    * This method handles all non OGR output conversions.
    */
   void _convert(const QStringList& inputs, const QString& output);
+  /*
+   * streams I/O one feature at a time
+   */
+  void _convertStreamable(const QStringList& inputs, const QString& output) const;
+  /*
+   * reads entire input into memory before converting
+   */
+  void _convertMemoryBound(const QStringList& inputs, const QString& output);
+  // Runs the translator in a separate thread for a performance increase if certain pre-conditions
+  // are met.
+  void _convertToOgrMT(const QStringList& inputs, const QString& output);
 
-  // sets ogr options for _convert
+  // sets OGR I/O options for
   void _setFromOgrOptions(const QStringList& inputs);
   void _setToOgrOptions(const QString& output);
   void _handleNonOgrOutputTranslationOpts();
@@ -119,9 +128,6 @@ private:
     const QString& output, const QStringList& cols, const OsmMapPtr& map) const;
   bool _shapeFileColumnsSpecified() const { return !_shapeFileColumns.isEmpty(); }
 
-  // _convertToOgr will call this to run the translator in a separate thread for a performance
-  // increase if certain pre-conditions are met.
-  void _transToOgrMT(const QStringList& inputs, const QString& output) const;
   void _fillElementCacheMT(
     const QString& inputUrl, ElementCachePtr cachePtr, QQueue<ElementPtr>& workQ) const;
 };
