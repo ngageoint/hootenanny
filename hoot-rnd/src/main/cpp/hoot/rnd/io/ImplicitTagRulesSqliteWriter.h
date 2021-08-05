@@ -30,7 +30,7 @@
 // Qt
 #include <QString>
 #include <QMap>
-#include <QHash>
+#include <QCache>
 #include <QtSql/QSqlDatabase>
 #include <QSqlQuery>
 #include <QSet>
@@ -89,10 +89,9 @@ private:
   QSqlQuery _getLastTagIdQuery;
 
   //cache word strings to their database ids
-  QHash<QString, long> _wordsToWordIds;
+  QCache<QString, long> _wordsToWordIds;
   //cache tag key=value strings to their database ids
-  QHash<QString, long> _tagsToTagIds;
-  QSet<QString> _words;
+  QCache<QString, long> _tagsToTagIds;
 
   long _statusUpdateInterval;
 
