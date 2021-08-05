@@ -6,7 +6,7 @@ OUT_DIR=test-output/cmd/slow/ConflateInlineTranslationTest
 rm -rf $OUT_DIR
 mkdir -p $OUT_DIR
 
-CONFIG="-C Testing.conf -C AttributeConflation.conf -C UnifyingAlgorithm.conf"
+CONFIG="-C AttributeConflation.conf -C UnifyingAlgorithm.conf -C Testing.conf"
 LOG_LEVEL="--warn"
 
 # Note that 

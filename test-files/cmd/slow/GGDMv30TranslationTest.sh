@@ -40,62 +40,11 @@ hoot convert $HOOT_OPT \
 
 # Compare the new and old OSM files
 # NOTE: ZI031 DATASET_S does not have a UUID (UFI) but it gets one on import which screws up the test
-hoot diff --error-limit 20 --ignore-uuid $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.osm  || diff $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.osm
+hoot diff -C Testing.conf --error-limit 20 --ignore-uuid $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.osm  || diff $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.osm
 
 # Make shapefiles from the new OSM file
 # NOTE: This assumes that outputDir does not have any shapefiles in it!
 hoot convert $HOOT_OPT \
   -D schema.translation.script=$TRANS \
   $outputDir/new_GGDMv30.osm $outputDir".shp" # > tmp/GGDM30_to_GGDM.txt
-
-
-# Sanity check
-# hoot convert $HOOT_OPT \
-#   -D schema.translation.script=$TRANS \
-#   $outputDir/*.shp $outputDir/back_GGDMv30.osm  > tmp/GGDM30_back_to_OSM.txt
-
-
-##### This set of tests: comparing the individual shapefiles works!
-# Make individual shapefiles from the new OSM file
-# NOTE: These are 1 x FCODE / file and are in a subdirectory!
-#hoot convert-osm2ogr $HOOT_OPT -D ogr.thematic.structure=false $TRANS $outputDir/new_GGDMv30.osm $outputDir/"new_files.shp" # > tmp/GGDM30_to_IndGGDM.txt
-
-# Make individual shapefiles from the old OSM file
-# NOTE: These are 1 x FCODE / file and are in a subdirectory!
-#hoot convert-osm2ogr $HOOT_OPT -D ogr.thematic.structure=false $TRANS $inputDir/GGDMv30.osm $outputDir/"old_files.shp" # > tmp/GGDM30_to_IndGGDM2.txt
-
-# Now look at the individual shapefiles
-# for x in $outputDir/old_files/*.shp; do
-#    echo $(basename $x) "  Forward"
-#    $COMPARE_SHAPE  $x $outputDir/new_files/$(basename $x)
-#    echo $(basename $x) "  Backward"
-#    $COMPARE_SHAPE  $outputDir/new_files/$(basename $x) $x
-#    echo
-# done
-
-
-#####
-# More testing needed before enableing this section.
-# Jam all of the shapefiles into one OSM file
-# hoot convert-ogr2osm $HOOT_OPT $TRANS $outputDir/second_GGDMv30.osm $inputDir/*.shp > tmp/GGDM30_to_second_OSM.txt
-#
-# echo
-# echo "Compare the second with orig"
-# hoot diff --ignore-uuid $outputDir/second_GGDMv30.osm $inputDir/GGDMv30.osm || diff $outputDir/second_GGDMv30.osm $inputDir/GGDMv30.osm
-# echo
-# echo "Compare the second with new"
-# hoot diff --ignore-uuid $outputDir/second_GGDMv30.osm $outputDir/new_GGDMv30.osm || diff $outputDir/second_GGDMv30.osm $outputDir/new_GGDMv30.osm
-# echo
-# echo
-
-# This is commented out until Jenkins has python-gdal support
-#
-# Now look at the individual shapefiles
-# for x in $inputDir/*.shp; do
-#    echo $(basename $x) "  Forward"
-#    $COMPARE_SHAPE  $x $outputDir/$(basename $x)
-#    echo $(basename $x) "  Backward"
-#    $COMPARE_SHAPE  $outputDir/$(basename $x) $x
-#    echo
-# done
 
