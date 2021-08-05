@@ -156,7 +156,7 @@ pipeline {
                 // Unfortunately, the code coverage report generation slows down tests and results in a lot of "Waiting 
                 // for process to finish..." messages to be displayed that you wouldn't see otherwise. So, we may want
                 // to make a change that runs this as --error here or increase the wait time when generating the report.
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --error --glacial --diff --parallel --names'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --error --glacial --diff --parallel'"
             }
         }
         stage("Translations Tests") {
