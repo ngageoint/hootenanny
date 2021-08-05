@@ -183,7 +183,7 @@ QList<EdgeSublineMatchPtr> NetworkDetails::calculateMatchingSublines(
 
   const NetworkDetails::SublineCache& cache = _getSublineCache(toWay(e1), toWay(e2));
 
-  const WaySublineMatchString::MatchCollection& matches = cache.matches->getMatches();
+  const WaySublineMatchString::MatchCollection& matches = cache.getMatches()->getMatches();
   LOG_VART(matches);
 
   foreach (const WaySublineMatch& wsm, matches)
@@ -351,8 +351,6 @@ NetworkDetails::SublineCache NetworkDetails::_calculateSublineScore(
 {
   LOG_TRACE("Calculating subline score...");
 
-  SublineCache result;
-
   Meters searchRadiusHighway = ConfigOptions().getSearchRadiusHighway();
   double searchRadius = searchRadiusHighway <= 0.0 ? getSearchRadius(w1, w2) : searchRadiusHighway;
 
@@ -374,11 +372,7 @@ NetworkDetails::SublineCache NetworkDetails::_calculateSublineScore(
     c = _classifier->classify(map, w1->getElementId(), w2->getElementId(), sublineMatch);
   }
 
-  result.p = c.getMatchP();
-  result.matches = std::make_shared<WaySublineMatchString>(sublineMatch);
-
-  LOG_VART(result);
-  return result;
+  return SublineCache(c.getMatchP(), std::make_shared<WaySublineMatchString>(sublineMatch));
 }
 
 QList<ConstNetworkVertexPtr> NetworkDetails::getCandidateMatches(ConstNetworkVertexPtr v)
@@ -452,15 +446,15 @@ EdgeMatchPtr NetworkDetails::extendEdgeMatch(
   LOG_VART(ElementToGeometryConverter(map).convertToLineString(w2)->toString());
   // - calculate the matching subline of the two ways
   SublineCache sc = _calculateSublineScore(map, w1, w2);
-  LOG_VART(sc.p);
+  LOG_VART(sc.getP());
   // - use the length along the way to convert back to the edge string and crop as needed.
-  if (sc.p == 0)
+  if (sc.getP() == 0)
   {
     return result;
   }
 
-  LOG_VART(sc.matches);
-  const WaySublineMatchString::MatchCollection& mc = sc.matches->getMatches();
+  LOG_VART(sc.getMatches());
+  const WaySublineMatchString::MatchCollection& mc = sc.getMatches()->getMatches();
   foreach (const WaySublineMatch& wsm, mc)
   {
     EdgeStringPtr tmp1 = es1->clone();
@@ -794,9 +788,9 @@ double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNet
     }
 
     const SublineCache& sc = _getSublineCache(w1, w2);
-    LOG_VART(sc.p);
+    LOG_VART(sc.getP());
     LOG_VART(bestScore);
-    result = sc.p * bestScore;
+    result = sc.getP() * bestScore;
   }
 
   return result;
@@ -885,22 +879,31 @@ Meters NetworkDetails::getSearchRadius(ConstWayPtr w1, ConstWayPtr w2) const
   return result;
 }
 
-const NetworkDetails::SublineCache& NetworkDetails::_getSublineCache(ConstWayPtr w1, ConstWayPtr w2)
+const NetworkDetails::SublineCache NetworkDetails::_getSublineCache(ConstWayPtr w1, ConstWayPtr w2)
 {
   ElementId e1 = w1->getElementId();
   ElementId e2 = w2->getElementId();
+
   LOG_VART(e1);
   LOG_VART(e2);
   LOG_VART(_sublineCache[e1]);
   LOG_VART(_sublineCache[e1].contains(e2));
+
   if (_sublineCache[e1].contains(e2))
   {
     return _sublineCache[e1][e2];
   }
-
-  _sublineCache[e1][e2] = _calculateSublineScore(_map, w1, w2);
-
-  return _sublineCache[e1][e2];
+  // This is just here to keep runaway caches sizes from happening during testing. It can be
+  // converted over to an actual cache with QQache if needed.
+  if (_sublineCache.size() < ConfigOptions().getNetworkSublineMaxCacheSize())
+  {
+    _sublineCache[e1][e2] = _calculateSublineScore(_map, w1, w2);
+    return _sublineCache[e1][e2];
+  }
+  else
+  {
+    return _calculateSublineScore(_map, w1, w2);
+  }
 }
 
 double NetworkDetails::getVertexMatchScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2)
@@ -986,12 +989,12 @@ bool NetworkDetails::isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
     const SublineCache& sc = _getSublineCache(w1, w2);
 
     // this will only make sense if there is a single match between two edges.
-    if (sc.matches->getReverseVector1().size() != 1)
+    if (sc.getMatches()->getReverseVector1().size() != 1)
     {
       throw NotImplementedException("This method should be avoided. Please change upstream logic.");
     }
 
-    result = sc.matches->getMatches()[0].isReverseMatch();
+    result = sc.getMatches()->getMatches()[0].isReverseMatch();
   }
 
   return result;
