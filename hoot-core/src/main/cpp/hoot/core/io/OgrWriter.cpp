@@ -141,12 +141,6 @@ void OgrWriter::setConfiguration(const Settings& conf)
   _statusUpdateInterval = configOptions.getTaskStatusUpdateInterval() * 10;
 }
 
-void OgrWriter::setCacheCapacity(const unsigned long maxNodes, const unsigned long maxWays,
-                                 const unsigned long maxRelations)
-{
-  _elementCache = std::make_shared<ElementCacheLRU>(maxNodes, maxWays, maxRelations);
-}
-
 void OgrWriter::_strictError(const QString& warning) const
 {
   if (_strictChecking == StrictOn)

@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
-#include <hoot/core/io/ElementCache.h>
 
 // Qt
 #include <QQueue>
