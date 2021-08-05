@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/io/ElementCache.h>
 
 // Qt
@@ -57,6 +58,7 @@ public:
   { _pTransFeaturesQ = queue; }
   void setFinishedTranslating(bool* finished) { _pFinishedTranslating = finished; }
   void setElementCache(const ElementCachePtr& cache) { _pElementCache = cache; }
+  void setConversionOps(const QList<ElementVisitorPtr>& ops) { _conversionOps = ops; }
 
 private:
 
@@ -68,6 +70,7 @@ private:
          std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
   bool* _pFinishedTranslating;
   ElementCachePtr _pElementCache;
+  QList<ElementVisitorPtr> _conversionOps;
 };
 
 }

@@ -240,11 +240,11 @@ bool IoUtils::isStreamableIo(const QString& input, const QString& output)
   {
     writerName = OsmMapWriterFactory::getWriterName(output);
   }
-  LOG_VARD(writerName);
-  LOG_VARD(isStreamableInput(input));
-  LOG_VARD(isStreamableOutput(output));
-  LOG_VARD(ConfigUtils::boundsOptionEnabled());
-  LOG_VARD(ConfigOptions().getWriterXmlSortById());
+  LOG_VART(writerName);
+  LOG_VART(isStreamableInput(input));
+  LOG_VART(isStreamableOutput(output));
+  LOG_VART(ConfigUtils::boundsOptionEnabled());
+  LOG_VART(ConfigOptions().getWriterXmlSortById());
 
   return
     isStreamableInput(input) && isStreamableOutput(output) &&
@@ -252,7 +252,9 @@ bool IoUtils::isStreamableIo(const QString& input, const QString& output)
     // option be specified in order to stream when writing that format
     (writerName != OsmXmlWriter::className() ||
      (writerName == OsmXmlWriter::className() && !ConfigOptions().getWriterXmlSortById())) &&
-    // No readers when using the bounds option are able to do streaming I/O at this point.
+    // No readers when using the bounds option are able to do streaming I/O at this point due to
+    // that for lines and polys, you need the entire feature in memory before you can determine
+    // whether its within bounds. Technically, could relax this for all point datasets.
     !ConfigUtils::boundsOptionEnabled();
 }
 

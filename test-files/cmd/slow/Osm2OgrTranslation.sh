@@ -27,25 +27,26 @@ rm -rf $OUTPUT
 mkdir -p $OUTPUT
 
 CONFIG="-C Testing.conf"
+LOG_LEVEL="--warn"
 
 echo "#### Shapefile Output ####"
-hoot convert --debug $CONFIG -D schema.translation.script=test-files/io/SampleTranslation.js test-files/io/SampleTranslation.osm $OUTPUT/output.shp
+hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script=test-files/io/SampleTranslation.js test-files/io/SampleTranslation.osm $OUTPUT/output.shp
 printLayerInfo $OUTPUT/output/
 
 echo "#### FileGDB Output ####"
-hoot convert --debug $CONFIG -D schema.translation.script=test-files/io/SampleTranslation.js test-files/io/SampleTranslation.osm $OUTPUT/output.gdb
+hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script=test-files/io/SampleTranslation.js test-files/io/SampleTranslation.osm $OUTPUT/output.gdb
 printLayerInfo $OUTPUT/output.gdb/
 
 echo "#### Test prepending layer names and lazy layer creation ####"
-hoot convert --debug $CONFIG -D schema.translation.script=test-files/io/SampleTranslation.js -D ogr.writer.pre.layer.name=bar_ test-files/io/SampleTranslation.osm $OUTPUT/options.shp
-hoot convert --debug $CONFIG -D schema.translation.script=test-files/io/SampleTranslation.js -D ogr.writer.pre.layer.name=foo_ -D ogr.writer.create.all.layers=true test-files/io/SampleTranslation.osm $OUTPUT/options.shp
+hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script=test-files/io/SampleTranslation.js -D ogr.writer.pre.layer.name=bar_ test-files/io/SampleTranslation.osm $OUTPUT/options.shp
+hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script=test-files/io/SampleTranslation.js -D ogr.writer.pre.layer.name=foo_ -D ogr.writer.create.all.layers=true test-files/io/SampleTranslation.osm $OUTPUT/options.shp
 printLayerInfo $OUTPUT/options/
 
 echo "#### Test to make sure all layers are read from a data source. ####"
 rm -rf test-output/cmd/slow/delaware-tds test-output/cmd/slow/delaware-tds.shp
 mkdir -p test-output/cmd/slow
 export SHAPE_ENCODING=UTF-8
-hoot convert --warn $CONFIG -D schema.translation.script=test-files/io/O2sTranslation.js test-files/cmd/slow/delaware.shp test-output/cmd/slow/delaware-tds.shp
+hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script=test-files/io/O2sTranslation.js test-files/cmd/slow/delaware.shp test-output/cmd/slow/delaware-tds.shp
 mv test-output/cmd/slow/delaware-tds test-output/cmd/slow/delaware-tds.shp
-hoot stats $CONFIG --brief test-output/cmd/slow/delaware-tds.shp
+hoot stats $LOG_LEVEL $CONFIG --brief test-output/cmd/slow/delaware-tds.shp
 
