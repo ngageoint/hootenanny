@@ -271,6 +271,20 @@ void DiffConflator::_cleanSecData(QStringList& baseCriteria, const double maxSiz
   ElementCounter counter;
   counter.setCountFeaturesOnly(false);
 
+  ElementCriterionPtr baseCrit = CriterionUtils::constructCriterion(baseCriteria, true, false);
+  criteria.append(baseCrit);
+  counter.setCriteria(baseCrit);
+  LOG_VARD(counter.count(_map));
+  // See related note in UnconnectedWaySnapper::_getTypeCriterion.
+  std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
+    std::dynamic_pointer_cast<ConflatableElementCriterion>(baseCrit);
+  if (!conflatableCrit)
+  {
+    throw IllegalArgumentException(
+      "Only classes inheriting from ConflatableElementCriterion are valid as secondary "
+      "differential output removal criteria.");
+  }
+
   ElementCriterionPtr secCrit = std::make_shared<StatusCriterion>(Status::Unknown2);
   criteria.append(secCrit);
   counter.setCriteria(secCrit);
@@ -280,11 +294,6 @@ void DiffConflator::_cleanSecData(QStringList& baseCriteria, const double maxSiz
     std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::HootSnapped()));
   criteria.append(notSnappedCrit);
   counter.setCriteria(notSnappedCrit);
-  LOG_VARD(counter.count(_map));
-
-  ElementCriterionPtr baseCrit = CriterionUtils::constructCriterion(baseCriteria, true, false);
-  criteria.append(baseCrit);
-  counter.setCriteria(baseCrit);
   LOG_VARD(counter.count(_map));
 
   ElementCriterionPtr lengthCrit =
