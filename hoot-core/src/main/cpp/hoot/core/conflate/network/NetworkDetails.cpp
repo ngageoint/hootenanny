@@ -965,7 +965,7 @@ bool NetworkDetails::isPartialCandidateMatch(ConstNetworkVertexPtr v1, ConstNetw
 {
   double score = getPartialEdgeMatchScore(e1, e2);
   score *= _getEdgeAngleScore(v1, v2, e1, e2);
-  return score >= ConfigOptions().getConflatorMinValidScore();
+  return score >= ConfigOptions().getNetworkPartialMatchMinValidScore();
 }
 
 bool NetworkDetails::isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)

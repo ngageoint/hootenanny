@@ -68,7 +68,6 @@ public:
   static QString className() { return "hoot::MostEnglishName"; }
 
   static const MostEnglishNamePtr& getInstance();
-
   ~MostEnglishName() = default;
 
   void setConfiguration(const Settings& conf) override;
