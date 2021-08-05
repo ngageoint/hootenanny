@@ -117,16 +117,15 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
     "Converting ..." + FileUtils::toLogFormat(inputs, _printLengthMax) + " to ..." +
     FileUtils::toLogFormat(output, _printLengthMax) + "...");
 
-  // If we're writing to an OGR format and multi-threaded processing was specified or if both input
-  // and output formats are OGR formats, we'll need to run the _convertToOgr method in order to
-  // handle the layers correctly.
-  if ((IoUtils::isSupportedOgrFormat(output, true) && _translateMultithreaded) ||
-      (IoUtils::areSupportedOgrFormats(inputs, true) &&
-       IoUtils::isSupportedOgrFormat(output, true)))
+  const bool isStreamable =
+    IoUtils::areValidStreamingOps(_convertOps) && IoUtils::areStreamableIo(inputs, output);
+  LOG_VARD(isStreamable);
+  // Running the translator in a separate thread from the writer is an option for OGR, but the I/O
+  // formats must be streamable.
+  if (_translateMultithreaded && IoUtils::isSupportedOgrFormat(output, true) && isStreamable)
   {
-    _convertToOgr(inputs, output);
+    _convertToOgrMT(inputs, output);
   }
-  // If the above condition wasn't satisfied, we'll call the generic convert routine.
   else
   {
     _convert(inputs, output);
@@ -197,84 +196,6 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
   }
 }
 
-void DataConverter::_convertToOgr(const QStringList& inputs, const QString& output)
-{
-  LOG_DEBUG("_convertToOgr");
-
-  _setToOgrOptions(output);
-
-  // Check to see if all of the i/o can be streamed.
-  LOG_VARD(IoUtils::areStreamableInputs(inputs));
-  if (IoUtils::areStreamableInputs(inputs, true) &&
-      // Multi-threaded code doesn't support conversion ops. Could it?
-      _convertOps.empty() &&
-      // Multi-threaded code doesn't support a bounds...not sure if it could be made to at some
-      // point.
-      !ConfigUtils::boundsOptionEnabled())
-  {
-    _progress.set(0.0, "Loading and translating maps: ...");
-    _transToOgrMT(inputs, output);
-  }
-  else
-  {
-    // The number of task steps here must be updated as you add/remove job steps in the logic.
-    int numTasks = 2;
-    if (!_convertOps.empty())
-    {
-      numTasks++;
-    }
-    int currentTask = 1;
-    const float taskWeight = 1.0 / (float)numTasks;
-
-    Progress inputLoadProgress(
-      ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0, taskWeight);
-    OsmMapPtr map = std::make_shared<OsmMap>();
-    for (int i = 0; i < inputs.size(); i++)
-    {
-      inputLoadProgress.setFromRelative(
-        (float)i / (float)inputs.size(), Progress::JobState::Running,
-        "Loading map: ..." + FileUtils::toLogFormat(inputs.at(i), _printLengthMax) + "...");
-      IoUtils::loadMap(
-        map, inputs.at(i), ConfigOptions().getReaderUseDataSourceIds(),
-        Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
-    }
-    currentTask++;
-
-    if (!_convertOps.empty())
-    {
-      QElapsedTimer timer;
-      timer.start();
-      OpExecutor convertOps(_convertOps);
-      convertOps.setProgress(
-        Progress(
-          ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-          (float)(currentTask - 1) / (float)numTasks, 1.0f / (float)numTasks));
-      convertOps.apply(map);
-      currentTask++;
-      LOG_STATUS(
-        "Convert operations ran in " + StringUtils::millisecondsToDhms(timer.elapsed()) <<
-        " total.");
-    }
-
-    QElapsedTimer timer;
-    timer.start();
-    _progress.set(
-      (float)(currentTask - 1) / (float)numTasks,
-      "Writing map: ..." + FileUtils::toLogFormat(output, _printLengthMax) + "...");
-    MapProjector::projectToWgs84(map);
-    std::shared_ptr<OgrWriter> writer = std::make_shared<OgrWriter>();
-    writer->setSchemaTranslationScript(_translationScript);
-    writer->open(output);
-    writer->write(map);
-    writer->close();
-    currentTask++;
-
-    LOG_INFO(
-      "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-      " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
-  }
-}
-
 void DataConverter::_convert(const QStringList& inputs, const QString& output)
 {
   LOG_DEBUG("_convert");
@@ -304,95 +225,97 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
     conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), _translationDirection);
   }
 
-  LOG_VARD(_shapeFileColumnsSpecified());
-
   // Check to see if all of the i/o can be streamed.
   const bool isStreamable =
-    IoUtils::areValidStreamingOps(_convertOps) &&
-    IoUtils::areStreamableIo(inputs, output);
+    IoUtils::areValidStreamingOps(_convertOps) && IoUtils::areStreamableIo(inputs, output);
   LOG_VARD(isStreamable);
-
-  // The number of steps here must be updated as you add/remove job steps in the logic.
-  int numTasks = 0;
   if (isStreamable)
   {
-    numTasks = 1;   // Streaming combines reading/writing into a single step.
+    _convertStreamable(inputs, output);
   }
   else
   {
-    numTasks = 2;
-    if (!_convertOps.empty())
-    {
-      numTasks++;
-    }
+    _convertMemoryBound(inputs, output);
+  }
+}
+
+void DataConverter::_convertStreamable(const QStringList& inputs, const QString& output) const
+{
+  // Shape file output currently isn't streamable, so we know we won't see export cols here. If
+  // it is ever made streamable, then we'd have to refactor this and remove the assertion.
+  LOG_VARD(_shapeFileColumnsSpecified());
+  assert(!_shapeFileColumnsSpecified());
+
+  int numTasks = 1;  // Streaming combines reading/writing into a single step.
+  int currentTask = 1;
+  const float taskWeight = 1.0 / (float)numTasks;
+
+  // stream the i/o
+  ElementStreamer(_translationScript).stream(
+    inputs, output, _convertOps,
+    Progress(
+      ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+      (float)(currentTask - 1) / (float)numTasks, taskWeight));
+  currentTask++;
+}
+
+void DataConverter::_convertMemoryBound(const QStringList& inputs, const QString& output)
+{
+  int numTasks = 2;
+  if (!_convertOps.empty())
+  {
+    numTasks++;
   }
   int currentTask = 1;
   const float taskWeight = 1.0 / (float)numTasks;
 
-  if (isStreamable)
+  Progress inputLoadProgress(
+    ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0, taskWeight);
+  OsmMapPtr map = std::make_shared<OsmMap>();
+  for (int i = 0; i < inputs.size(); i++)
   {
-    // Shape file output currently isn't streamable, so we know we won't see export cols here. If
-    // it is ever made streamable, then we'd have to refactor this and remove the assertion.
-    assert(!_shapeFileColumnsSpecified());
+    inputLoadProgress.setFromRelative(
+      (float)i / (float)inputs.size(), Progress::JobState::Running,
+      "Loading map: ..." + FileUtils::toLogFormat(inputs.at(i), _printLengthMax) + "...");
+    IoUtils::loadMap(
+      map, inputs.at(i), ConfigOptions().getReaderUseDataSourceIds(),
+      Status::fromString(ConfigOptions().getReaderSetDefaultStatus()), _translationScript,
+      _ogrFeatureReadLimit, JOB_SOURCE, numTasks);
+  }
+  currentTask++;
 
-    // stream the i/o
-    ElementStreamer(_translationScript).stream(
-      inputs, output, _convertOps,
+  if (!_convertOps.empty())
+  {
+    QElapsedTimer timer;
+    timer.start();
+    OpExecutor convertOps(_convertOps);
+    convertOps.setProgress(
       Progress(
         ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
         (float)(currentTask - 1) / (float)numTasks, taskWeight));
+    convertOps.apply(map);
     currentTask++;
+    LOG_STATUS(
+      "Convert operations ran in " + StringUtils::millisecondsToDhms(timer.elapsed()) <<
+      " total.");
+  }
+
+  _progress.set(
+    (float)(currentTask - 1) / (float)numTasks,
+    "Writing map: ..." + FileUtils::toLogFormat(output, _printLengthMax) + "...");
+  MapProjector::projectToWgs84(map);
+  if (output.toLower().endsWith(".shp") && _shapeFileColumnsSpecified())
+  {
+    // If the user specified cols, then we want to export them. This requires a separate logic
+    // path from the generic convert logic.
+    _exportToShapeWithCols(output, _shapeFileColumns, map);
   }
   else
   {
-    Progress inputLoadProgress(
-      ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0, taskWeight);
-    OsmMapPtr map = std::make_shared<OsmMap>();
-    for (int i = 0; i < inputs.size(); i++)
-    {
-      inputLoadProgress.setFromRelative(
-        (float)i / (float)inputs.size(), Progress::JobState::Running,
-        "Loading map: ..." + FileUtils::toLogFormat(inputs.at(i), _printLengthMax) + "...");
-      IoUtils::loadMap(
-        map, inputs.at(i), ConfigOptions().getReaderUseDataSourceIds(),
-        Status::fromString(ConfigOptions().getReaderSetDefaultStatus()), _translationScript,
-        _ogrFeatureReadLimit, JOB_SOURCE, numTasks);
-    }
-    currentTask++;
-
-    if (!_convertOps.empty())
-    {
-      QElapsedTimer timer;
-      timer.start();
-      OpExecutor convertOps(_convertOps);
-      convertOps.setProgress(
-        Progress(
-          ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-          (float)(currentTask - 1) / (float)numTasks, taskWeight));
-      convertOps.apply(map);
-      currentTask++;
-      LOG_STATUS(
-        "Convert operations ran in " + StringUtils::millisecondsToDhms(timer.elapsed()) <<
-        " total.");
-    }
-
-    _progress.set(
-      (float)(currentTask - 1) / (float)numTasks,
-      "Writing map: ..." + FileUtils::toLogFormat(output, _printLengthMax) + "...");
-    MapProjector::projectToWgs84(map);
-    if (output.toLower().endsWith(".shp") && _shapeFileColumnsSpecified())
-    {
-      // If the user specified cols, then we want to export them. This requires a separate logic
-      // path from the generic convert logic.
-      _exportToShapeWithCols(output, _shapeFileColumns, map);
-    }
-    else
-    {
-      LOG_DEBUG("General conversion with: _convert (the original convert command)");
-      IoUtils::saveMap(map, output);
-    }
-    currentTask++;
+    LOG_DEBUG("General conversion with: _convert (the original convert command)");
+    IoUtils::saveMap(map, output);
   }
+  currentTask++;
 }
 
 void DataConverter::_exportToShapeWithCols(
@@ -437,11 +360,13 @@ void DataConverter::_fillElementCacheMT(
     visitor.initialize(projection);
   }
 
+  std::shared_ptr<geos::geom::Geometry> bounds = ConfigUtils::getBounds();
   while (streamReader->hasMoreElements())
   {
     ElementPtr pNewElement = streamReader->readNextElement();
     if (!pNewElement)
       continue;
+
     if (notGeographic)
     {
       visitor.visit(pNewElement);
@@ -455,9 +380,11 @@ void DataConverter::_fillElementCacheMT(
   LOG_DEBUG("Done Reading");
 }
 
-void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& output) const
+void DataConverter::_convertToOgrMT(const QStringList& inputs, const QString& output)
 {
-  LOG_DEBUG("_transToOgrMT");
+  LOG_DEBUG("_convertToOgrMT");
+
+  _setToOgrOptions(output);
 
   QQueue<ElementPtr> elementQ;
   ElementCachePtr pElementCache =
@@ -481,6 +408,8 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
   }
   LOG_DEBUG("Element Cache Filled");
 
+  const QList<ElementVisitorPtr> ops = IoUtils::toStreamingOps(_convertOps);
+
   // Note the OGR writer is the slowest part of this whole operation, but it's relatively opaque
   // to us as a 3rd party library. So the best we can do right now is try to translate & write in
   // parallel.
@@ -494,6 +423,7 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
   transThread.setTransFeaturesQueue(&transFeaturesQ);
   transThread.setFinishedTranslating(&finishedTranslating);
   transThread.setElementCache(pElementCache);
+  transThread.setConversionOps(ops);
   transThread.start();
   LOG_STATUS("Translation thread started...");
 
