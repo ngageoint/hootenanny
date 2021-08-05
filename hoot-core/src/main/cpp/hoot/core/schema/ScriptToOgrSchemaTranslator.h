@@ -66,11 +66,11 @@ public:
 
   virtual std::shared_ptr<const Schema> getOgrOutputSchema() = 0;
 
-  virtual std::vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
-    geos::geom::GeometryTypeId geometryType) = 0;
+  virtual std::vector<TranslatedFeature> translateToOgr(
+    Tags& tags, ElementType elementType, geos::geom::GeometryTypeId geometryType) = 0;
 
-  virtual std::vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
-    geos::geom::GeometryTypeId geometryType) = 0;
+  virtual std::vector<Tags> translateToOgrTags(
+    Tags& tags, ElementType elementType, geos::geom::GeometryTypeId geometryType) = 0;
 };
 
 using ScriptToOgrSchemaTranslatorPtr = std::shared_ptr<ScriptToOgrSchemaTranslator>;
