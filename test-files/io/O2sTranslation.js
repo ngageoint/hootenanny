@@ -29,12 +29,6 @@
 // This translation file converts out to Out of spec layers.
 //
 
-// Layer filter test - Test passing a string from Javascript back to Hoot
-function layerNameFilter()
-{
-    return "Papa Smurf";
-}
-
 function translateToOgr(tags, elementType, geometryType) 
 { 
     var attrs = {};
