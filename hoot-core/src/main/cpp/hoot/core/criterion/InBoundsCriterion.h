@@ -62,6 +62,9 @@ public:
    * @see ElementCriterion
    */
   bool isSatisfied(const ConstElementPtr& e) const override;
+  /**
+   * @see ElementCriterion
+   */
   ElementCriterionPtr clone() override { return std::make_shared<InBoundsCriterion>(); }
 
   /**

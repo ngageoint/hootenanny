@@ -240,11 +240,11 @@ bool IoUtils::isStreamableIo(const QString& input, const QString& output)
   {
     writerName = OsmMapWriterFactory::getWriterName(output);
   }
-  LOG_VARD(writerName);
-  LOG_VARD(isStreamableInput(input));
-  LOG_VARD(isStreamableOutput(output));
-  LOG_VARD(ConfigUtils::boundsOptionEnabled());
-  LOG_VARD(ConfigOptions().getWriterXmlSortById());
+  LOG_VART(writerName);
+  LOG_VART(isStreamableInput(input));
+  LOG_VART(isStreamableOutput(output));
+  LOG_VART(ConfigUtils::boundsOptionEnabled());
+  LOG_VART(ConfigOptions().getWriterXmlSortById());
 
   return
     isStreamableInput(input) && isStreamableOutput(output) &&
@@ -252,7 +252,9 @@ bool IoUtils::isStreamableIo(const QString& input, const QString& output)
     // option be specified in order to stream when writing that format
     (writerName != OsmXmlWriter::className() ||
      (writerName == OsmXmlWriter::className() && !ConfigOptions().getWriterXmlSortById())) &&
-    // No readers when using the bounds option are able to do streaming I/O at this point.
+    // No readers when using the bounds option are able to do streaming I/O at this point due to
+    // that for lines and polys, you need the entire feature in memory before you can determine
+    // whether its within bounds. Technically, could relax this for all point datasets.
     !ConfigUtils::boundsOptionEnabled();
 }
 
@@ -361,7 +363,7 @@ bool IoUtils::areValidStreamingOps(const QStringList& ops)
           return false;
         }
       }
-      // OsmMapOperation isn't streamable.
+      // An OsmMapOperation isn't streamable.
       else
       {
         LOG_INFO(unstreamableMsg);
@@ -371,6 +373,51 @@ bool IoUtils::areValidStreamingOps(const QStringList& ops)
   }
 
   return true;
+}
+
+QList<ElementVisitorPtr> IoUtils::toStreamingOps(const QStringList& ops)
+{
+  LOG_VARD(ops);
+
+  QList<ElementVisitorPtr> opsToReturn;
+  // add visitor/criterion operations if any of the convert ops are visitors.
+  foreach (QString opName, ops)
+  {
+    if (!opName.trimmed().isEmpty())
+    {
+      if (!Factory::getInstance().hasBase<ElementVisitor>(opName) &&
+          !Factory::getInstance().hasBase<ConstElementVisitor>(opName))
+      {
+        throw IllegalArgumentException(
+          "Streaming operations must be an ElementVisitor or a ConstElementVisitor.");
+      }
+
+      // When streaming we can't provide a reliable OsmMap.
+      const QString osmMapConsumerErrorMsg = "A streaming operations may not be an OsmMapConsumer.";
+      if (Factory::getInstance().hasBase<ElementVisitor>(opName))
+      {
+        ElementVisitorPtr vis =
+          Factory::getInstance().constructObject<ElementVisitor>(opName);
+        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
+        {
+          throw IllegalArgumentException(osmMapConsumerErrorMsg);
+        }
+        opsToReturn.append(vis);
+      }
+      else if (Factory::getInstance().hasBase<ConstElementVisitor>(opName))
+      {
+        ConstElementVisitorPtr vis =
+          Factory::getInstance().constructObject<ConstElementVisitor>(opName);
+        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
+        {
+          throw IllegalArgumentException(osmMapConsumerErrorMsg);
+        }
+        opsToReturn.append(vis);
+      }
+    }
+  }
+
+  return opsToReturn;
 }
 
 ElementInputStreamPtr IoUtils::getFilteredInputStream(

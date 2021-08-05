@@ -40,13 +40,8 @@ class FeatureDefinition;
 class Feature
 {
 public:
+
   Feature(const std::shared_ptr<const FeatureDefinition>& d);
-
-  const std::shared_ptr<const FeatureDefinition>& getFeatureDefinition() const { return _definition; }
-
-  const QVariantMap& getValues() const { return _values; }
-
-  void setField(const QString& key, const QVariant& value) { _values[key] = value; }
 
   /**
    * If f is valid then nothing happens, if f is invalid then an exception is thrown.
@@ -56,7 +51,14 @@ public:
 
   QString toString() const;
 
+  const std::shared_ptr<const FeatureDefinition>& getFeatureDefinition() const
+  { return _definition; }
+  const QVariantMap& getValues() const { return _values; }
+
+  void setField(const QString& key, const QVariant& value) { _values[key] = value; }
+
 private:
+
   const std::shared_ptr<const FeatureDefinition>& _definition;
   QVariantMap _values;
 };

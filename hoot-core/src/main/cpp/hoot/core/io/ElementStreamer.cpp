@@ -30,6 +30,8 @@
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/OgrReader.h>
+#include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
@@ -42,6 +44,11 @@
 
 namespace hoot
 {
+
+ElementStreamer::ElementStreamer(const QString& translationScript) :
+_translationScript(translationScript)
+{
+}
 
 void ElementStreamer::stream(
   const QString& input, const QString& out, const QStringList& convertOps, Progress progress)
@@ -63,11 +70,12 @@ void ElementStreamer::stream(
     std::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
   partialWriter->initializePartial();
 
+  std::shared_ptr<PartialOsmMapReader> partialReader;
   long numFeaturesWritten = 0;
   for (int i = 0; i < inputs.size(); i++)
   {
-    const QString in = inputs.at(i);
-    const QString message = "Streaming data conversion from ..." + in + " to ..." + out + "...";
+    QString input = inputs.at(i);
+    const QString message = "Streaming data conversion from ..." + input + " to ..." + out + "...";
     // Always check for a valid task weight and that the job was set to running. Otherwise, this is
     // just an empty progress object, and we shouldn't log progress.
     if (progress.getTaskWeight() != 0.0 && progress.getState() == Progress::JobState::Running)
@@ -82,24 +90,36 @@ void ElementStreamer::stream(
 
     std::shared_ptr<OsmMapReader> reader =
       OsmMapReaderFactory::createReader(
-        in, ConfigOptions().getReaderUseDataSourceIds(),
+        input, ConfigOptions().getReaderUseDataSourceIds(),
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
     reader->setConfiguration(conf());
-    reader->open(in);
+    partialReader = std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+    partialReader->initializePartial();
+    std::shared_ptr<OgrReader> ogrReader = std::dynamic_pointer_cast<OgrReader>(reader);
+    std::shared_ptr<OgrWriter> ogrWriter = std::dynamic_pointer_cast<OgrWriter>(writer);
 
-    // add visitor/criterion operations if any of the convert ops are visitors.
-    LOG_VARD(convertOps);
-    ElementInputStreamPtr streamReader =
-      IoUtils::getFilteredInputStream(
-        std::dynamic_pointer_cast<ElementInputStream>(reader), convertOps);
-
-    numFeaturesWritten += ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
-
-    std::shared_ptr<PartialOsmMapReader> partialReader =
-      std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
-    if (partialReader.get())
+    // #4899 would relax this to only require a translation if only one or the other of the
+    // input/output was OGR and not require one when both are.
+    if ((ogrReader || ogrWriter) && _translationScript.isEmpty())
     {
-      partialReader->finalizePartial();
+      throw IllegalArgumentException("No translation script specified.");
+    }
+
+    if (ogrReader && input.contains(";"))
+    {
+      // Need to run separate logic for streaming from an OGR source with layers in order to support
+      // the layer syntax.
+      numFeaturesWritten += _streamFromOgr(*ogrReader, input, *streamWriter);
+    }
+    else
+    {
+      reader->open(input);
+      // Add visitor/criterion operations if any of the convert ops are visitors.
+      LOG_VARD(convertOps);
+      ElementInputStreamPtr streamReader =
+        IoUtils::getFilteredInputStream(
+          std::dynamic_pointer_cast<ElementInputStream>(reader), convertOps);
+      numFeaturesWritten += ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
     }
   }
 
@@ -107,10 +127,66 @@ void ElementStreamer::stream(
   {
     partialWriter->finalizePartial();
   }
+  if (partialReader.get())
+  {
+    partialReader->finalizePartial();
+  }
 
   LOG_INFO(
     "Streamed " << StringUtils::formatLargeNumber(numFeaturesWritten) << " elements in: " <<
     StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+}
+
+long ElementStreamer::_streamFromOgr(
+  const OgrReader& reader, QString& input, ElementOutputStream& writer,
+  const QStringList& convertOps, Progress /*progress*/) const
+{
+  // TODO: run a separate progress for _streamFromOgr as part of #4856?
+
+  reader.setSchemaTranslationScript(_translationScript);
+
+  QStringList layers;
+  if (input.contains(";"))
+  {
+    QStringList list = input.split(";");
+    input = list.at(0);
+    layers.append(list.at(1));
+  }
+  else
+  {
+    layers = reader.getFilteredLayerNames(input);
+  }
+  if (layers.empty())
+  {
+    LOG_WARN("Could not find any valid layers to read from in " + input + ".");
+  }
+
+  const QList<ElementVisitorPtr> ops = IoUtils::toStreamingOps(convertOps);
+
+  long numFeaturesWritten = 0;
+  for (int i = 0; i < layers.size(); i++)
+  {
+    LOG_TRACE("Reading: " << input + " " << layers[i] << "...");
+
+    std::shared_ptr<ElementIterator> iterator(reader.createIterator(input, layers[i]));
+    while (iterator->hasNext())
+    {
+      std::shared_ptr<Element> e = iterator->next();
+
+      // Run any convert ops present.
+      foreach (ElementVisitorPtr op, ops)
+      {
+        op->visit(e);
+      }
+
+      if (e)
+      {
+        writer.writeElement(e);
+        numFeaturesWritten++;
+      }
+    }
+  }
+  return numFeaturesWritten;
 }
 
 }

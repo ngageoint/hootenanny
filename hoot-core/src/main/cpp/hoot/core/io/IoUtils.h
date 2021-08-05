@@ -182,10 +182,20 @@ public:
    * There are some ops that require the whole map be available in RAM (e.g. remove duplicate
    * nodes). These operations are not applicable for streaming.
    *
-   * @param ops
-   * @return
+   * @param ops class names of operation to determine streamability of
+   * @return true if all inputs represent streamable operations; false otherwise
    */
   static bool areValidStreamingOps(const QStringList& ops);
+
+  /**
+   * @brief toStreamingOps returns a list of instantiated streaming operation objects
+   * @param ops the class names of the operations to instantiate
+   * @return a list of instantiated visitor objects (OsmMapOperations are not streamable)
+   * @throws IllegalArgumentException if a class name is passed in that does not represent a
+   * streamable operation (not ElementVisitor or ConstElementVisitor) or a class name represents a
+   * class that is an OsmMap consumer (implements OsmMapConsumer or ConstOsmMapConsumer)
+   */
+  static QList<ElementVisitorPtr> toStreamingOps(const QStringList& ops);
 
   /**
    * Determines if a URL points to a valid streamable input
