@@ -1583,7 +1583,7 @@ words will be silently ignored.
 * Data Type: int
 * Default Value: `100000`
 
-TODO
+The maximum size of any cache used by `ExpectationIntersection` or classes it depends on.
 
 === generic.line.matcher.heading.delta
 
@@ -2132,7 +2132,7 @@ debugging only.
 * Data Type: int
 * Default Value: `10000`
 
-TODO
+The maximum cache size used by the implicit tag raw rules/database derivers.
 
 === implicit.tagging.name.cleaning.tokens.file
 
@@ -3134,7 +3134,7 @@ See also:
 * Data Type: int
 * Default Value: `100000`
 
-TODO
+The maximum subline cache size used by the Network Algorithm during conflation.
 
 === node.comparison.circular.error.sensitivity
 
