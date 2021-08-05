@@ -127,6 +127,8 @@ any configuration option customization necessary for the test after it.
 * Tests within the `hoot-rnd` module are generally always run in the `--glacial` test suite.
 * Tests which use the single test OSM API database instance or have any other reason to run in 
 isolation should be run serially by placing them in the "serial" folder.
+* If you write a class that uses caching, make the cache size configurable and set the size to the 
+lowest possible value in order for tests to pass within `Testing.conf`.
 
 **What Do Command Line Tests Do?**
 
