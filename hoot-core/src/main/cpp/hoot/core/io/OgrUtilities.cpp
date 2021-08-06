@@ -90,6 +90,8 @@ OgrUtilities::OgrUtilities()
 {
   GDALAllRegister();
   loadDriverInfo();
+  //  Turn off writing a properties file for GZIP operations in GDAL
+  CPLSetConfigOption("CPL_VSIL_GZIP_WRITE_PROPERTIES", "NO");
 }
 
 OgrUtilities::~OgrUtilities()
