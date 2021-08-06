@@ -121,9 +121,11 @@ public:
   QSet<QString> getSupportedFormats(const bool readOnly) const;
 
   /**
-   * @brief getValidFilesInContainer
-   * @param url
-   * @return
+   * Returns a list of valid ORG files inside of the container, if the 'url' file isn't
+   *  a ZIP, GZIP, or TAR file then an empty list is returned
+   *
+   * @param url URL of the container file, may or may not be prefixed by /vsizip/, etc.
+   * @return list of valid files or empty list if not a container
    */
   QStringList getValidFilesInContainer(const QString& url) const;
 

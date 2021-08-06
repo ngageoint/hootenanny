@@ -146,7 +146,7 @@ public:
     const QStringList& topLevelPaths, const QStringList& nameFilters = QStringList());
 
   /**
-   * Returns all valid input file paths expanding any paths by looking inside of ZIP files
+   * Returns all valid input file paths expanding any paths by looking inside of VSI files
    *
    * @param inputs one or more input files
    * @return a list of file paths
