@@ -633,9 +633,6 @@ private:
   geos::geom::Envelope _changesetEnvelope;
   long _changesetChangeCount;
 
-  unsigned long _nodesAddedToCache;
-  unsigned long _nodesFlushedFromCache;
-
   int _precision;
 
   long _maxInsertNodeId;

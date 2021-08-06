@@ -79,6 +79,24 @@ the following is placed at the end of the test class:
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AlphaShapeTest, "quick");
 -----------------
 
+To ensure a test runs serially, a line similar to the following is placed at the end of the test 
+class:
+
+-----------------
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AlphaShapeTest, "serial");
+-----------------
+
+Tests which make use of the Hootenanny or OSM API databases should have their class name prefixed 
+with `Service` and also have a line similar to the following is placed at the end of the test class:
+
+-----------------
+#ifdef HOOT_HAVE_SERVICES
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbTest, "slow");
+#endif  
+-----------------
+
+Tests within the `hoot-rnd` module are generally always run in the `--glacial` test suite.
+
 ==== Core Command Line Tests
 
 The C++ portion of Hootenanny exposes functionality via a command line interface. This command line
@@ -99,6 +117,19 @@ the system. When you write a test it will likely be run thousands of times by a 
 over its lifetime. No need to make them all wait 20sec for a test that could run in .1sec. It is
 likely worth taking an extra 20min to write an efficient test.
 
+Additional details:
+
+* All command line tests should add `Testing.conf` as their final configuration file and then add
+any configuration option customization necessary for the test after it. 
+* Most tests should run at the `--warn` log level by default.
+* Tests making use of the Hooteanny API services database should start with the prefix `Service`.
+* Tests testing code in `hoot-rnd` should start with the prefix `Rnd`.
+* Tests within the `hoot-rnd` module are generally always run in the `--glacial` test suite.
+* Tests which use the single test OSM API database instance or have any other reason to run in 
+isolation should be run serially by placing them in the "serial" folder.
+* If you write a class that uses caching, make the cache size configurable and set the size to the 
+lowest possible value in order for tests to pass within `Testing.conf`.
+
 **What Do Command Line Tests Do?**
 
 The basic principal of the command line tests is that they verify that the stdout and stderr are
@@ -112,7 +143,8 @@ consistent with a given baseline. To do this the following must occur:
 When your test runs it will do the following:
 
 * Find all the scripts to execute (the scripts to run are determined by looking for all executable
-files in the test-files/cmd/[current|quick|slow|glacial] directories. If the file ends in +.off+ it will be ignored.)
+files in the test-files/cmd/[current|quick|slow|glacial] directories. If the file ends in +.off+ it 
+will be ignored.)
 * Run a script and capture the stdout and stderr
 * Remove meaningless bits from the stdout and stderr such as INFO statements, DEBUG statements and
 the elapsed time print outs.
@@ -131,11 +163,14 @@ and the success/failure should be determined by the output. For instance:
 # stop on error
 set -e
 
+LOG_LEVEL="--warn"
+CONFIG="-C Testing.conf"
+
 # Make sure our output directory exists.
 mkdir -p test-output/cmd/example
 
 # perform the operation we're testing.
-hoot convert test-files/jakarta_raya_coastline.shp test-output/cmd/example/jakarta.osm
+hoot convert $LOG_LEVEL $CONFIG test-files/jakarta_raya_coastline.shp test-output/cmd/example/jakarta.osm
 
 # Write the output to stdout. When this run in the future it'll compare the old output
 # to the new input to verify the test is consistent

@@ -57,45 +57,43 @@ class TDistribution
 public:
 
   TDistribution() = default;
-  virtual ~TDistribution() = default;
-
   /**
    * Similar to calling initialize.
    */
-  TDistribution(const cv::Mat& m);
-
-  /**
-   * Returns the likelihood at a given point.
-   */
-  double getLikelihood(const cv::Mat &p) const;
-
-  double getLogLikelihood(const cv::Mat &p) const;
+  TDistribution(const cv::Mat& m, const int maxCacheSize = 100000);
+  virtual ~TDistribution() = default;
 
   /**
    * Creates a TDistribution for the provided Matrix. Each row is a sample and each column is a
    * dimension.
    */
-  void initialize(const cv::Mat& m);
+  void initialize(const cv::Mat& m, const int maxCacheSize = 100000);
+
+  /**
+   * Returns the likelihood at a given point.
+   */
+  double getLikelihood(const cv::Mat &p) const;
+  double getLogLikelihood(const cv::Mat &p) const;
 
 private:
+
   int _D;
   cv::Mat _mu;
   cv::Mat _sigma;
   double _v;
+  int _maxCacheSize;
 
   friend class CostT;
 
-  double _calculateDataLogLikelihood(const cv::Mat& m, double v) const;
-
-  void _calculateNewMuAndSigma(const std::vector<double>& EH, const cv::Mat& m);
-
-  void _calculateNewV(const cv::Mat& m, const std::vector<double>& EH, const std::vector<double>& ELogH);
-
-  double _calculateTCost(double v, const std::vector<double> &EH, const std::vector<double> &ELogH) const;
-
   void _initMu(const cv::Mat& m);
-
   void _initSigma(const cv::Mat& m);
+
+  double _calculateDataLogLikelihood(const cv::Mat& m, double v) const;
+  void _calculateNewMuAndSigma(const std::vector<double>& EH, const cv::Mat& m);
+  void _calculateNewV(
+    const cv::Mat& m, const std::vector<double>& EH, const std::vector<double>& ELogH);
+  double _calculateTCost(
+    double v, const std::vector<double> &EH, const std::vector<double> &ELogH) const;
 
   cv::Mat _log(const cv::Mat& m) const;
 };
