@@ -27,16 +27,16 @@
 
 // Hoot
 #include <hoot/core/cmd/BoundedCommand.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/DataConverter.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QElapsedTimer>

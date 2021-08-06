@@ -32,8 +32,8 @@
 #include <geos/geom/Geometry.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
 
 // Qt
