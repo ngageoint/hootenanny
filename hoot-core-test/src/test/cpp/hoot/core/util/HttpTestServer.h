@@ -119,6 +119,8 @@ public:
   static const int DEFAULT_SERVER_PORT = 8910;
   /** Constructor */
   HttpTestServer(int port = DEFAULT_SERVER_PORT);
+  /** Destructor */
+  ~HttpTestServer();
   /** Function to start the HTTP server */
   void start();
   /** Function to wait for the HTTP server to finish processing */
