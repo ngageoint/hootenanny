@@ -478,7 +478,7 @@ public:
       it != _name2Vertex.end(); ++it)
     {
       result.insert(it.key());
-    }\
+    }
     return result;
   }
 

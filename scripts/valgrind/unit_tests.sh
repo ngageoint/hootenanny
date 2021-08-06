@@ -112,7 +112,7 @@ merge_lists() {
     # Output the command with all options
     if [[ "$GENERATE_SUPPRESSION_LOGS" == "no" ]]; then
       cat << EOF
-valgrind -s --trace-children=yes --vgdb=no --track-origins=yes \
+valgrind -q --trace-children=yes --vgdb=no --track-origins=yes \
 ${DEMANGLE} \
 ${NUM_CALLERS} \
 ${ERROR_LIMIT} \

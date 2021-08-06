@@ -77,7 +77,6 @@ public:
   Meters calculateLength(ConstEdgeStringPtr e) const;
 
   Radians calculateHeading(ConstEdgeLocationPtr el) const;
-
   /**
    * Callers to this method are responsible for filtering out invalid edges.
    */
@@ -131,10 +130,6 @@ public:
   geos::geom::Envelope getEnvelope(ConstNetworkEdgePtr e) const override;
   geos::geom::Envelope getEnvelope(ConstNetworkVertexPtr v) const override;
 
-  ConstOsmMapPtr getMap() const { return _map; }
-
-  ConstOsmNetworkPtr getNetwork1() const { return _n1; }
-
   Meters getSearchRadius(ConstNetworkEdgePtr e1) const override;
   Meters getSearchRadius(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const override;
   Meters getSearchRadius(ConstNetworkVertexPtr v1) const override;
@@ -146,7 +141,6 @@ public:
 
   bool isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
   bool isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
-
   /**
    * Starting at v1, v2, are e1 and e2 partial edge match candidates?
    *
@@ -160,7 +154,6 @@ public:
    */
   bool isPartialCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
     ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
-
   bool isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
   /**
@@ -173,8 +166,10 @@ public:
   bool isStringCandidate(ConstEdgeStringPtr es, ConstEdgeSublinePtr esl) const;
 
   ConstWayPtr toWay(ConstNetworkEdgePtr e) const;
-
   WayStringPtr toWayString(ConstEdgeStringPtr e, const EidMapper& mapper = EidMapper()) const;
+
+  ConstOsmMapPtr getMap() const { return _map; }
+  ConstOsmNetworkPtr getNetwork1() const { return _n1; }
 
 private:
 
@@ -191,13 +186,28 @@ private:
   {
     public:
 
-      QString toString() const
+      SublineCache() :
+      _p(-1.0)
       {
-        return  "p: " + QString::number(p) + " " + matches->toString();
+      }
+      SublineCache(double p, const WaySublineMatchStringPtr& matches) :
+      _p(p),
+      _matches(matches)
+      {
       }
 
-      double p;
-      WaySublineMatchStringPtr matches;
+      QString toString() const
+      {
+        return  "p: " + QString::number(_p) + " " + _matches->toString();
+      }
+
+      double getP() const { return _p; }
+      WaySublineMatchStringPtr getMatches() const { return _matches; }
+
+    private:
+
+      double _p;
+      WaySublineMatchStringPtr _matches;
   };
 
   QHash<ElementId, QHash<ElementId, SublineCache>> _sublineCache;
@@ -209,13 +219,13 @@ private:
    * relative angles.
    * @param v1 - vertex in e1
    * @param v2 - vertex in e2
-   * @return
+   * @return a score
    */
   double _getEdgeAngleScore(
     ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2, ConstNetworkEdgePtr e1,
     ConstNetworkEdgePtr e2) const;
 
-  const SublineCache& _getSublineCache(ConstWayPtr w1, ConstWayPtr w2);
+  const SublineCache _getSublineCache(ConstWayPtr w1, ConstWayPtr w2);
 
   LegacyVertexMatcherPtr _getVertexMatcher();
 

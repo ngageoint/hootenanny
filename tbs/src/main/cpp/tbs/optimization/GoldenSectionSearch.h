@@ -48,19 +48,21 @@ namespace tbs
 class GoldenSectionSearch : public LineSearch
 {
 public:
+
   /**
    * @param epsilon Find x within epsilon of a local minimum.
    */
-  GoldenSectionSearch(double epsilon);
-
+  GoldenSectionSearch(double epsilon, const int maxCacheSize = 100000);
   ~GoldenSectionSearch() = default;
 
   double argmin(Function& f, double minx, double maxx) override;
 
 private:
+
   double _phi;
   double _resphi;
   std::map<double, double> _cache;
+  int _maxCacheSize;
   double _epsilon;
   Function* _userF;
   int _iterations;

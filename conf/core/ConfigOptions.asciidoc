@@ -1088,14 +1088,6 @@ See also:
 Determines which type of features are rubbersheeted during conflation when rubbersheeting is part
 of the conflation pre-operations. An empty list will rubbersheet all types of features.
 
-=== conflate.stats.types
-
-* Data Type: string
-* Default Value: ``
-
-The string that lists the types of conflation used in the user interface.  The possible values
-are: reference, cookieCutter, average, and advancedConflation. TODO: Is this used anywhere?
-
 === conflate.tag.disable.value.truncation
 
 * Data Type: bool
@@ -1131,15 +1123,6 @@ inputs (false).
 Determines whether the reader used by the conflate command to read the second input dataset will
 use the element ID's specified by the input datasets (true) or use internal ID management for the
 inputs (false).
-
-=== conflator.min.valid.score
-
-* Data Type: double
-* Default Value: `0.01`
-
-This is the minimum valid manipulation score in the legacy greedy optimization routine. Setting
-the value lower will create more (likely overzealous) matches. Setting the value higher will drop
-less confident matches. TODO: rename this
 
 === contains.node.criterion.id
 
@@ -1594,6 +1577,13 @@ indicates no limit.
 Absolute file path to dictionaries of English words. The first file found will be loaded into the
 dictionary of English words and used by some algorithms. If the files are not found then the English
 words will be silently ignored.
+
+=== expectation.intersection.max.cache.size
+
+* Data Type: int
+* Default Value: `100000`
+
+The maximum size of any cache used by `ExpectationIntersection` or classes it depends on.
 
 === generic.line.matcher.heading.delta
 
@@ -2136,6 +2126,13 @@ pass in more nested criterion, use the Hootenanny Javascript interface instead.
 
 If true, the implicit tag raw rules/database derivers will keep all temporary file output.  For
 debugging only.
+
+=== implicit.tagging.max.cache.size
+
+* Data Type: int
+* Default Value: `10000`
+
+The maximum cache size used by the implicit tag raw rules/database derivers.
 
 === implicit.tagging.name.cleaning.tokens.file
 
@@ -3111,6 +3108,15 @@ See also:
 The number of optimization iterations the network match creator will run when performing network
 conflation.
 
+=== network.partial.match.min.valid.score
+
+* Data Type: double
+* Default Value: `0.01`
+
+This is the minimum valid similarity score for partial matches created by the Network Algorithm
+during conflation. Setting the value lower will create more (likely overzealous) matches. Setting
+the value higher will drop less confident matches.
+
 === network.review.threshold
 
 * Data Type: double
@@ -3122,6 +3128,13 @@ other situations when the relationship is not clear. The valid range is (0.0, 1.
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== network.subline.max.cache.size
+
+* Data Type: int
+* Default Value: `100000`
+
+The maximum subline cache size used by the Network Algorithm during conflation.
 
 === node.comparison.circular.error.sensitivity
 

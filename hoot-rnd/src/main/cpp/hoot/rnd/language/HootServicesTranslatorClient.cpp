@@ -73,7 +73,7 @@ _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _untranslatableWords(0),
 _numDetectionsMade(0),
 _cacheHits(0),
-_cacheMaxSize(-1),
+_cacheMaxSize(100),
 _cacheSize(0),
 _timeout(500)
 {

@@ -4,7 +4,7 @@ set -e
 mkdir -p $HOOT_HOME/tmp/
 mkdir -p test-output/cmd/slow/ConflateCmdTest
 
-export CONFLATE_OPTS="-C Testing.conf -C UnifyingAlgorithm.conf -C ReferenceConflation.conf"
+export CONFLATE_OPTS="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf -C Testing.conf"
 
 hoot conflate $CONFLATE_OPTS test-files/conflate/unified/AllDataTypesA.osm test-files/conflate/unified/AllDataTypesB.osm test-output/cmd/slow/ConflateCmdTest/output.osm
 hoot diff -C Testing.conf test-output/cmd/slow/ConflateCmdTest/output.osm test-files/cmd/slow/ConflateCmdTest/output.osm || diff test-output/cmd/slow/ConflateCmdTest/output.osm test-files/cmd/slow/ConflateCmdTest/output.osm

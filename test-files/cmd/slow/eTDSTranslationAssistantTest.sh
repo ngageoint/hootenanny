@@ -28,7 +28,7 @@ do
     # Uncomment this line to update the input files when there is a schema change
     # cp $TA_OUT/$TA_FILE-$schema.osm $TA_IN/$TA_FILE-$schema.osm
 
-    hoot diff --error-limit 20 --ignore-uuid $TA_OUT/$TA_FILE-$schema.osm $TA_IN/$TA_FILE-$schema.osm
+    hoot diff -C Testing.conf --error-limit 20 --ignore-uuid $TA_OUT/$TA_FILE-$schema.osm $TA_IN/$TA_FILE-$schema.osm
 
     # Debug
     # echo "##### End ${schema} #####"
