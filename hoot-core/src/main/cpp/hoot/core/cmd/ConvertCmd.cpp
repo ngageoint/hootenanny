@@ -109,7 +109,7 @@ public:
     QStringList inputs;
     if (!recursive)
     {
-      inputs = args;
+      inputs = IoUtils::expandInputs(args);
     }
     else
     {

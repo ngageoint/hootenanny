@@ -146,6 +146,14 @@ public:
     const QStringList& topLevelPaths, const QStringList& nameFilters = QStringList());
 
   /**
+   * Returns all valid input file paths expanding any paths by looking inside of ZIP files
+   *
+   * @param inputs one or more input files
+   * @return a list of file paths
+   */
+  static QStringList expandInputs(const QStringList& inputs);
+
+  /**
    * Determines whether both input and output are streamable data sources (associated
    * readers/writers must implemented the partial map interfaces)
    *

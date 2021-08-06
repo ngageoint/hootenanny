@@ -1,0 +1,1801 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-25.48013833250663" minlon="153.0554985197095" maxlat="-25.34897528463788" maxlon="153.1502724838575"/>
+    <node visible="true" id="-217" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3555298865151677" lon="153.1145008958809228">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.494Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="railway" v="station"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{12449bc4-c059-4270-8d72-134fcf54291d}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-216" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3551949011322542" lon="153.1335083893151818">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.494Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="tourism" v="hostel"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{11489fd2-31fe-40f1-9417-6c4e2fa2194f}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-215" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3552021923494273" lon="153.1274780365120023">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.493Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="tourism" v="inn"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{10a5246e-415f-4b1d-9c12-4c15ab1c10b4}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-214" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3554206209093209" lon="153.1207850041601830">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.493Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="military" v="administration"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{105cd149-462a-40d4-a322-8e835d38d1cc}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-213" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553478113893576" lon="153.1088703282009362">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.492Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="military" v="armory"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{0fc73078-0292-4ced-a3c0-e435c31721a0}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-212" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3554352033436707" lon="153.1032988088208526">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.492Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="military" v="range"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{0f53d97d-d8d6-4ea6-ab8c-30cfa8aa9e88}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-211" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3552385457835143" lon="153.0972030403666793">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="amenity" v="mission"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.492Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{0f148704-b6ef-4b6c-999a-4d4a951aa6f9}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="material" v="metal"/>
+        <tag k="operator" v="joint_military_civilian"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-210" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3552604194350408" lon="153.0898108723803261">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="amenity" v="police"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.491Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{0f084b8f-6f96-4054-bc66-c63036bbc709}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="operator" v="joint_military_civilian"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-209" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3549035604006008" lon="153.0818797702337406">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.491Z"/>
+        <tag k="product" v="bamboo"/>
+        <tag k="angle" v="0"/>
+        <tag k="industrial" v="manufacturing"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{0e72cd5b-1eaf-4519-b636-78ea7007d353}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="operator" v="joint_military_civilian"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-208" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3551730274807241" lon="153.0721789553492727">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.490Z"/>
+        <tag k="product" v="explosive"/>
+        <tag k="angle" v="0"/>
+        <tag k="industrial" v="manufacturing"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{0da92afb-67cd-4dd6-9945-1d74dc8f7445}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="material" v="other"/>
+        <tag k="operator" v="joint_military_civilian"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-207" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498055595297842" lon="153.1331954828873734">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.490Z"/>
+        <tag k="product" v="oil"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{0d5f9fd2-a93a-4ce8-9d96-b21dac915367}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="operator" v="military"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-206" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3497181675754639" lon="153.1273836612958803">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.489Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="wind_tunnel"/>
+        <tag k="uuid" v="{0d4d26bb-2b1a-4238-94dd-fc59fb6cdd4b}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="operator" v="military"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-205" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498783690497511" lon="153.1208289567668146">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.489Z"/>
+        <tag k="product" v="desalinated_water"/>
+        <tag k="angle" v="0"/>
+        <tag k="industrial" v="manufacturing"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{0d408edf-ebc0-4647-a93f-b8d6f7f962e2}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="operator" v="military"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-204" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3496817114895876" lon="153.1146748585752277">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.488Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="stupa"/>
+        <tag k="uuid" v="{0d2eae0f-4e9f-4622-bedb-7550a298e0d3}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="material" v="other"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-203" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495215100153075" lon="153.1088703282009362">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.488Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="pagoda"/>
+        <tag k="uuid" v="{0d2229c6-e6f1-476b-8904-34a9c4cda37b}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-202" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495215100153111" lon="153.1033206824723720">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.487Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="religion" v="muslim"/>
+        <tag k="building" v="mosque"/>
+        <tag k="uuid" v="{0c499734-9e93-419f-9b43-eb748d019f00}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-201" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3494414092781675" lon="153.0971884579323614">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.487Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="religion" v="muslim"/>
+        <tag k="building" v="marabout"/>
+        <tag k="uuid" v="{0bf75068-c554-4863-9c65-7f1e049364ac}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-200" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3494268268438177" lon="153.0896943155573240">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.486Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="religion" v="christian"/>
+        <tag k="building" v="cathedral"/>
+        <tag k="uuid" v="{0bb7eed1-542a-4317-a83f-0bb8e9074c9a}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-199" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3492447517180075" lon="153.0816103031536102">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="office" v="government"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.486Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{0b9811ee-4e0d-43a9-9798-465458776db5}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-198" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3489752846378842" lon="153.0721789553492727">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="amenity" v="embassy"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.485Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{0b5a6bf6-341e-4d5e-9cdc-1467e4e5eed0}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="material" v="other"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-197" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3610353743334898" lon="153.0727033070751872">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="amenity" v="courthouse"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.485Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{0aae9176-488f-4b64-9e57-ccf37ccf053a}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="operator" v="national"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-196" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3613048414136131" lon="153.0821346548795248">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.484Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="palace"/>
+        <tag k="uuid" v="{09f74b4b-6af8-438d-9475-ed7dec4fbe95}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="operator" v="national"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-195" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3614869165394232" lon="153.0902186672832386">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.484Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="college"/>
+        <tag k="uuid" v="{09e52823-d8af-4217-b6d9-93cf311b6195}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="operator" v="national"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-194" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3615014989737730" lon="153.0977128096582760">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.483Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="university"/>
+        <tag k="uuid" v="{09ac9b8a-e8fb-4796-8e1d-ef544550aedd}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="operator" v="national"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-193" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3615815997109166" lon="153.1038450341982866">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.483Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="school"/>
+        <tag k="uuid" v="{09561dbe-032a-42dd-9b17-beed2fa15be0}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="operator" v="state"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-192" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3615815997109131" lon="153.1093946799268508">
+        <tag k="social_facility" v="senior"/>
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.483Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{093f327f-1070-4ca6-a938-3d74cc3ca2b9}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="material" v="metal"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-191" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3617418011851932" lon="153.1151992103011423">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.482Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="apartments"/>
+        <tag k="uuid" v="{0922a751-b140-4653-8cfc-c994d8ce8329}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-190" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3619384587453567" lon="153.1213533084927292">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.482Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="caravan"/>
+        <tag k="uuid" v="{088f49df-66ba-4e69-a955-dc7e0a7a574e}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="operator" v="civilian"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-189" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3617782572710695" lon="153.1279080130217949">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.481Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="residential"/>
+        <tag k="uuid" v="{0843d412-a3ca-492f-82cc-09ae667f9f1d}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-188" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3618656492253898" lon="153.1337198346132880">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.481Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="ground_station"/>
+        <tag k="uuid" v="{079234b2-d394-43be-ba0e-cfa026788660}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-187" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3672331171763297" lon="153.0727033070751872">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="amenity" v="bank"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.480Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{0770748d-7961-439b-afa8-3db918a97609}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-186" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3669636500962064" lon="153.0824041219596552">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.480Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="shop" v="mall"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{073147b2-6bff-481e-87da-39adf0562a88}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="material" v="metal"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-185" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3673205091306464" lon="153.0903352241062407">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="amenity" v="parking"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.479Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{05c95d85-aaa1-41ef-814d-87bc3c887d45}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-184" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3672986354791199" lon="153.0977273920925938">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="amenity" v="jail"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.479Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{02e80255-eb75-4f39-ba4c-d955cb5fe617}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-183" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674952930392763" lon="153.1038231605467672">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="amenity" v="prison"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.478Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{02a15efc-6f77-4485-b274-89215bb4b2f3}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="operator" v="joint_military_civilian"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-182" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674079010849631" lon="153.1093946799268508">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.478Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="lyceum"/>
+        <tag k="uuid" v="{0271a5a2-256b-43f4-8b1c-150fce18eb8a}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="operator" v="military"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-181" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674807106049265" lon="153.1213093558860976">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="amenity" v="community_centre"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.477Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{01c74358-4715-4b41-a7de-52214c32b078}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="operator" v="military"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-180" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3672622820450329" lon="153.1280023882379169">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="historic" v="castle"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.476Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{011307d1-d235-4180-8f74-0c77f432e9fa}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="material" v="metal"/>
+        <tag k="operator" v="national"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-179" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3672549908278597" lon="153.1340327410410964">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.476Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="barn"/>
+        <tag k="uuid" v="{00c22ccb-2045-4070-bbcb-da26613a6f61}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-178" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3675899762107733" lon="153.1150252476068374">
+        <tag k="source:name" v="compressed_arc_digitized_raster_graphic_(cadrg)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.475Z"/>
+        <tag k="angle" v="0"/>
+        <tag k="building" v="farm"/>
+        <tag k="uuid" v="{fd5605a3-70b6-492b-896a-6bdb2e5e439c}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:pal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </node>
+    <node visible="true" id="-177" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900596" lon="153.1170190376930975"/>
+    <node visible="true" id="-176" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760454300832663" lon="153.1170190376930975"/>
+    <node visible="true" id="-175" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900596" lon="153.1126494399773321"/>
+    <node visible="true" id="-174" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760454300832663" lon="153.1126494399773321"/>
+    <node visible="true" id="-173" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3910409033986895" lon="153.1080176663985526"/>
+    <node visible="true" id="-172" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3762202139918962" lon="153.1080176663985526"/>
+    <node visible="true" id="-171" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3912156873073229" lon="153.1034732847741395"/>
+    <node visible="true" id="-170" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3763949979005297" lon="153.1034732847741395"/>
+    <node visible="true" id="-169" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3910409033986930" lon="153.0993658629212746"/>
+    <node visible="true" id="-168" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3762202139918998" lon="153.0993658629212746"/>
+    <node visible="true" id="-167" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3909535114443727" lon="153.0917627628958542"/>
+    <node visible="true" id="-166" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3761328220375795" lon="153.0917627628958542"/>
+    <node visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814297" lon="153.0875679490886512"/>
+    <node visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746364" lon="153.0875679490886512"/>
+    <node visible="true" id="-163" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3907787275357428" lon="153.0828487835555620"/>
+    <node visible="true" id="-162" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3759580381289496" lon="153.0828487835555620"/>
+    <node visible="true" id="-161" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906039436271094" lon="153.0780422260681917"/>
+    <node visible="true" id="-160" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3757832542203161" lon="153.0780422260681917"/>
+    <node visible="true" id="-159" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906039436271129" lon="153.0723617490376682"/>
+    <node visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3757832542203197" lon="153.0723617490376682"/>
+    <node visible="true" id="-157" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814297" lon="153.1332739411958812"/>
+    <node visible="true" id="-156" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746364" lon="153.1332739411958812"/>
+    <node visible="true" id="-155" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900596" lon="153.1290791273887066"/>
+    <node visible="true" id="-154" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760454300832663" lon="153.1290791273887066"/>
+    <node visible="true" id="-153" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814261" lon="153.1250590974901797"/>
+    <node visible="true" id="-152" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746328" lon="153.1250590974901797"/>
+    <node visible="true" id="-151" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814297" lon="153.1207768917286955"/>
+    <node visible="true" id="-150" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746364" lon="153.1207768917286955"/>
+    <node visible="true" id="-149" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3907787275357428" lon="153.0956080088857050"/>
+    <node visible="true" id="-148" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3759580381289496" lon="153.0956080088857050"/>
+    <node visible="true" id="-147" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3904649990361229" lon="153.1412475549687144"/>
+    <node visible="true" id="-146" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3757598710388486" lon="153.1411066089687836"/>
+    <node visible="true" id="-145" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3904487964764556" lon="153.1366504568273683"/>
+    <node visible="true" id="-144" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3757436684791813" lon="153.1365095108274375"/>
+    <node visible="true" id="-143" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3905875864485644" lon="153.1394262562695587"/>
+    <node visible="true" id="-142" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758824584512901" lon="153.1392853102696279"/>
+    <node visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4062739494416903" lon="153.0727091505837905"/>
+    <node visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3941264677917751" lon="153.0727965425381001"/>
+    <node visible="true" id="-139" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4059243816244305" lon="153.0955184506601938"/>
+    <node visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3937768999745153" lon="153.0956058426145034"/>
+    <node visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4061865574873771" lon="153.0918479885789623"/>
+    <node visible="true" id="-136" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3940390758374619" lon="153.0919353805332719"/>
+    <node visible="true" id="-135" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4060991655330568" lon="153.0873909989088588"/>
+    <node visible="true" id="-134" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3939516838831416" lon="153.0874783908631684"/>
+    <node visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4063613413960070" lon="153.0827592253301077"/>
+    <node visible="true" id="-132" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3942138597460918" lon="153.0828466172844173"/>
+    <node visible="true" id="-131" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4063613413960070" lon="153.0780400597970470"/>
+    <node visible="true" id="-130" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3942138597460918" lon="153.0781274517513566"/>
+    <node visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054874218528504" lon="153.1207747254575224"/>
+    <node visible="true" id="-128" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3935147241115651" lon="153.1206873335032128"/>
+    <node visible="true" id="-127" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054874218528504" lon="153.1172790472848817"/>
+    <node visible="true" id="-126" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3935147241115651" lon="153.1171916553305721"/>
+    <node visible="true" id="-125" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4055748138071671" lon="153.1129094495690879"/>
+    <node visible="true" id="-124" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3936021160658818" lon="153.1128220576147783"/>
+    <node visible="true" id="-123" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054874218528504" lon="153.1083650679446464"/>
+    <node visible="true" id="-122" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3935147241115651" lon="153.1082776759903368"/>
+    <node visible="true" id="-121" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4059243816244305" lon="153.1037332943659237"/>
+    <node visible="true" id="-120" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3939516838831452" lon="153.1036459024116141"/>
+    <node visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4059243816244305" lon="153.0994510886044395"/>
+    <node visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3939516838831452" lon="153.0993636966501299"/>
+    <node visible="true" id="-117" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4049630701269535" lon="153.1252317151276543"/>
+    <node visible="true" id="-115" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3934273321572483" lon="153.1252317151276543"/>
+    <node visible="true" id="-114" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4045261103553770" lon="153.1337087346963131"/>
+    <node visible="true" id="-112" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3929903723856718" lon="153.1337087346963131"/>
+    <node visible="true" id="-111" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4043513264467400" lon="153.1294265289348004"/>
+    <node visible="true" id="-109" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3928155884770348" lon="153.1294265289348004"/>
+    <node visible="true" id="-108" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4187709989088724" lon="153.0952562747972934"/>
+    <node visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4187709989088724" lon="153.0954310587059126"/>
+    <node visible="true" id="-106" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4083713563452740" lon="153.0956058426145319"/>
+    <node visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4188583908631891" lon="153.0912362448987665"/>
+    <node visible="true" id="-104" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4188583908631891" lon="153.0914110288073857"/>
+    <node visible="true" id="-103" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4084587482995907" lon="153.0915858127160050"/>
+    <node visible="true" id="-102" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4188583908631891" lon="153.0866918632743534"/>
+    <node visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4188583908631891" lon="153.0868666471829727"/>
+    <node visible="true" id="-100" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4084587482995907" lon="153.0870414310915919"/>
+    <node visible="true" id="-99" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4185962150002389" lon="153.0824096575128692"/>
+    <node visible="true" id="-98" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4185962150002389" lon="153.0825844414214885"/>
+    <node visible="true" id="-97" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4081965724366405" lon="153.0827592253301077"/>
+    <node visible="true" id="-96" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4189457828175058" lon="153.0774283161168512"/>
+    <node visible="true" id="-95" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4189457828175058" lon="153.0776031000254704"/>
+    <node visible="true" id="-94" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4085461402539075" lon="153.0777778839340897"/>
+    <node visible="true" id="-93" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4189457828175058" lon="153.0722721908122139"/>
+    <node visible="true" id="-92" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4189457828175058" lon="153.0724469747208332"/>
+    <node visible="true" id="-91" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4085461402539075" lon="153.0726217586294524"/>
+    <node visible="true" id="-90" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4769078352165259" lon="153.0554985197094595"/>
+    <node visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4770778613896880" lon="153.0554985197094595"/>
+    <node visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4775879399091778" lon="153.0663801947919183"/>
+    <node visible="true" id="-87" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4629656890171425" lon="153.0667202471382211"/>
+    <node visible="true" id="-86" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4629656890171425" lon="153.0561786244021221"/>
+    <node visible="true" id="-85" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4602452702465314" lon="153.0881435449568073"/>
+    <node visible="true" id="-84" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4604152964196935" lon="153.0881435449568073"/>
+    <node visible="true" id="-83" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609253749391833" lon="153.0990252200392661"/>
+    <node visible="true" id="-82" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471480" lon="153.0993652723855689"/>
+    <node visible="true" id="-81" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471480" lon="153.0888236496494699"/>
+    <node visible="true" id="-80" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4602452702465349" lon="153.1056562407926265"/>
+    <node visible="true" id="-79" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4604152964196970" lon="153.1056562407926265"/>
+    <node visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609253749391868" lon="153.1165379158750852"/>
+    <node visible="true" id="-77" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.1168779682213881"/>
+    <node visible="true" id="-76" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.1063363454852890"/>
+    <node visible="true" id="-75" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4605853225928627" lon="153.1209585963773065"/>
+    <node visible="true" id="-74" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4607553487660248" lon="153.1209585963773065"/>
+    <node visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4612654272855146" lon="153.1318402714597653"/>
+    <node visible="true" id="-72" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4466431763934793" lon="153.1321803238060681"/>
+    <node visible="true" id="-71" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4466431763934793" lon="153.1216387010699691"/>
+    <node visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4765677828702017" lon="153.0704608229478083"/>
+    <node visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4767378090433638" lon="153.0704608229478083"/>
+    <node visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4772478875628536" lon="153.0813424980302671"/>
+    <node visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4626256366708184" lon="153.0816825503765699"/>
+    <node visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4626256366708184" lon="153.0711409276404709"/>
+    <node visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4782680446018333" lon="153.0867833355715106"/>
+    <node visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4784380707749953" lon="153.0867833355715106"/>
+    <node visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4789481492944851" lon="153.0976650106539694"/>
+    <node visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4643258984024499" lon="153.0980050630002722"/>
+    <node visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4643258984024499" lon="153.0874634402641732"/>
+    <node visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4780980184286712" lon="153.1044660575804812"/>
+    <node visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4782680446018333" lon="153.1044660575804812"/>
+    <node visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4787781231213231" lon="153.1153477326629400"/>
+    <node visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4641558722292878" lon="153.1156877850092428"/>
+    <node visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4641558722292878" lon="153.1051461622731438"/>
+    <node visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4794582278139750" lon="153.1199384393383127"/>
+    <node visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4796282539871370" lon="153.1199384393383127"/>
+    <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4801383325066269" lon="153.1308201144207715"/>
+    <node visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4655160816145916" lon="153.1311601667670743"/>
+    <node visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4655160816145916" lon="153.1206185440309753"/>
+    <node visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4600752440733729" lon="153.0563486505752735"/>
+    <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4602452702465349" lon="153.0563486505752735"/>
+    <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4607553487660248" lon="153.0672303256577322"/>
+    <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4461330978739895" lon="153.0675703780040351"/>
+    <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4461330978739895" lon="153.0570287552679360"/>
+    <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4602452702465349" lon="153.0709709014673194"/>
+    <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4604152964196970" lon="153.0709709014673194"/>
+    <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609253749391868" lon="153.0818525765497782"/>
+    <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.0821926288960810"/>
+    <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.0716510061599820"/>
+    <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242756585497993" lon="153.1358865193191434"/>
+    <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4244426160690189" lon="153.1485752907798314"/>
+    <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4102512269353582" lon="153.1487422482990439"/>
+    <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4104181844545778" lon="153.1357195617999309"/>
+    <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4416183282124457" lon="153.1374167548776200"/>
+    <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4417852857316653" lon="153.1501055263383080"/>
+    <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4275938965980046" lon="153.1502724838575205"/>
+    <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4277608541172242" lon="153.1372497973584075"/>
+    <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4409382235197938" lon="153.1052818081497833"/>
+    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4411051810390134" lon="153.1179705796104713"/>
+    <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4269137919053527" lon="153.1181375371296838"/>
+    <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4270807494245723" lon="153.1051148506305708"/>
+    <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4404281450003040" lon="153.0884492170066267"/>
+    <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4405951025195236" lon="153.1011379884673147"/>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4264037133858629" lon="153.1013049459865272"/>
+    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4265706709050825" lon="153.0882822594874142"/>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4399180664808142" lon="153.0712765735171388"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4400850240000338" lon="153.0839653449778268"/>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4258936348663731" lon="153.0841323024970393"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4260605923855927" lon="153.0711096159979263"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242756585497993" lon="153.1165035355785449"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4244426160690189" lon="153.1291923070392329"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4102512269353582" lon="153.1293592645584454"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4104181844545778" lon="153.1163365780593324"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4405981711734661" lon="153.1210942422539745"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4407651286926857" lon="153.1337830137146625"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4265737395590250" lon="153.1339499712338750"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4267406970782446" lon="153.1209272847347620"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4241056323766372" lon="153.1003510491280508"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242725898958568" lon="153.1130398205887388"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4100812007621961" lon="153.1132067781079513"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4102481582814157" lon="153.1001840916088383"/>
+    <way visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-176"/>
+        <nd ref="-177"/>
+        <tag k="covered" v="no"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.454Z"/>
+        <tag k="width" v="3"/>
+        <tag k="intermittent" v="no"/>
+        <tag k="waterway" v="river"/>
+        <tag k="uuid" v="{17d4bdfa-4508-4a09-87c6-26be3a713130}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="channel:type" v="braided_stream"/>
+        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-174"/>
+        <nd ref="-175"/>
+        <tag k="covered" v="no"/>
+        <tag k="water:sink:type" v="dissipating"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.454Z"/>
+        <tag k="width" v="3"/>
+        <tag k="name" v="Amazon"/>
+        <tag k="waterway" v="river"/>
+        <tag k="uuid" v="{17c10dcb-5bc0-4f3e-8fa2-b9666a3b8a2f}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="tidal" v="yes"/>
+        <tag k="channel:type" v="braided_stream"/>
+        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-172"/>
+        <nd ref="-173"/>
+        <tag k="covered" v="no"/>
+        <tag k="water:sink:type" v="dissipating"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="wadi" v="yes"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.453Z"/>
+        <tag k="width" v="3"/>
+        <tag k="waterway" v="river"/>
+        <tag k="uuid" v="{17305d07-ec01-4a73-b77a-590a11ced055}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-170"/>
+        <nd ref="-171"/>
+        <tag k="covered" v="no"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.453Z"/>
+        <tag k="width" v="3"/>
+        <tag k="intermittent" v="no"/>
+        <tag k="name" v="Murray"/>
+        <tag k="waterway" v="river"/>
+        <tag k="uuid" v="{1716f6b6-d17a-4dc7-b4a6-5864a1aafd66}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="tidal" v="yes"/>
+        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-168"/>
+        <nd ref="-169"/>
+        <tag k="covered" v="no"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.452Z"/>
+        <tag k="width" v="3"/>
+        <tag k="intermittent" v="no"/>
+        <tag k="waterway" v="river"/>
+        <tag k="uuid" v="{162abddf-bb8a-470a-8986-afdf5a171d45}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-166"/>
+        <nd ref="-167"/>
+        <tag k="covered" v="no"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.452Z"/>
+        <tag k="width" v="3"/>
+        <tag k="intermittent" v="no"/>
+        <tag k="waterway" v="river"/>
+        <tag k="uuid" v="{16006a93-ad6c-451e-b5ae-b530e6c5427a}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="waterway:bank2:cover" v="14"/>
+        <tag k="channel:type" v="channelized_stream"/>
+        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="waterway:bank1:cover" v="14"/>
+    </way>
+    <way visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-164"/>
+        <nd ref="-165"/>
+        <tag k="covered" v="no"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.452Z"/>
+        <tag k="width" v="3"/>
+        <tag k="intermittent" v="dry"/>
+        <tag k="name" v="Nile"/>
+        <tag k="waterway:bank2:type" v="stony"/>
+        <tag k="waterway" v="river"/>
+        <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="tidal" v="yes"/>
+        <tag k="channel:type" v="channelized_stream"/>
+        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="waterway:bank1:type" v="stony"/>
+    </way>
+    <way visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-162"/>
+        <nd ref="-163"/>
+        <tag k="covered" v="no"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.451Z"/>
+        <tag k="width" v="3"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="name" v="Mighty"/>
+        <tag k="waterway" v="river"/>
+        <tag k="uuid" v="{149e733e-626f-45db-bfcc-56ad12de425a}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="tidal" v="yes"/>
+        <tag k="channel:type" v="gorge"/>
+        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-160"/>
+        <nd ref="-161"/>
+        <tag k="covered" v="no"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="wadi" v="yes"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.451Z"/>
+        <tag k="width" v="3"/>
+        <tag k="intermittent" v="dry"/>
+        <tag k="waterway" v="river"/>
+        <tag k="uuid" v="{143203aa-06b0-49b2-9fcd-98c0f89e2fcb}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="tidal" v="yes"/>
+        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-158"/>
+        <nd ref="-159"/>
+        <tag k="covered" v="no"/>
+        <tag k="water:sink:type" v="disappearing"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="wadi" v="yes"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.450Z"/>
+        <tag k="width" v="3"/>
+        <tag k="intermittent" v="dry"/>
+        <tag k="waterway" v="river"/>
+        <tag k="uuid" v="{14093e3a-29da-41e5-a13f-e8e43ef5d9cc}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-156"/>
+        <nd ref="-157"/>
+        <tag k="covered" v="no"/>
+        <tag k="water:sink:type" v="disappearing"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.450Z"/>
+        <tag k="width" v="3"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="waterway" v="river"/>
+        <tag k="uuid" v="{1339103f-9a67-4dc1-aa67-b590b33b3000}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="waterway:bank2:cover" v="6"/>
+        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="waterway:bank1:cover" v="6"/>
+    </way>
+    <way visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-154"/>
+        <nd ref="-155"/>
+        <tag k="covered" v="no"/>
+        <tag k="water:sink:type" v="dissipating"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.449Z"/>
+        <tag k="width" v="3"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="waterway" v="river"/>
+        <tag k="uuid" v="{13389c28-59ac-4d20-9c29-d34fe8f84cc6}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-152"/>
+        <nd ref="-153"/>
+        <tag k="water:sink:type" v="dissipating"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.449Z"/>
+        <tag k="width" v="3"/>
+        <tag k="intermittent" v="no"/>
+        <tag k="waterway:bank2:type" v="mangrove"/>
+        <tag k="waterway" v="river"/>
+        <tag k="uuid" v="{128252cc-d3f2-4bdb-ba3d-dbe2dc69fef2}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="waterway:bank2:cover" v="10"/>
+        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="waterway:bank1:cover" v="10"/>
+        <tag k="waterway:bank1:type" v="mangrove"/>
+    </way>
+    <way visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-150"/>
+        <nd ref="-151"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.448Z"/>
+        <tag k="width" v="3"/>
+        <tag k="intermittent" v="no"/>
+        <tag k="waterway" v="river"/>
+        <tag k="uuid" v="{127b406c-964f-4403-a275-40f096adcabe}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-148"/>
+        <nd ref="-149"/>
+        <tag k="covered" v="yes"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.448Z"/>
+        <tag k="width" v="3"/>
+        <tag k="name" v="Covered Drain test"/>
+        <tag k="waterway" v="river"/>
+        <tag k="uuid" v="{6928c36d-69a3-43f4-ab53-4e1ac7e2ffba}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-146"/>
+        <nd ref="-147"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.418Z"/>
+        <tag k="uuid" v="{0d2eae0f-4e9f-4622-bedb-7550a298e0d3}"/>
+        <tag k="source" v="mgcp:laq040"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-144"/>
+        <nd ref="-145"/>
+        <tag k="bridge:span_count" v="1"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="transport:type" v="road"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.418Z"/>
+        <tag k="width" v="5"/>
+        <tag k="uuid" v="{c287d07a-d796-4083-ae87-1451e24c2e96}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="bridge:structure" v="deck"/>
+        <tag k="source:copyright" v="Copyright 2014 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="source" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="source:datetime" v="2013-01-01T00:00:00Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="bridge:movable" v="no"/>
+        <tag k="condition" v="functional"/>
+    </way>
+    <way visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-142"/>
+        <nd ref="-143"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.417Z"/>
+        <tag k="bridge:movable" v="lift"/>
+        <tag k="source" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="name" v="Troll"/>
+        <tag k="bridge:span_count" v="5"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:datetime" v="2013-01-01T00:00:00Z"/>
+        <tag k="construction" v="movable"/>
+        <tag k="transport:type" v="road"/>
+        <tag k="uuid" v="{94b89763-543b-4b0e-967f-fecb55396e37}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="bridge:structure" v="girder"/>
+        <tag k="bridge" v="construction"/>
+        <tag k="width" v="5"/>
+        <tag k="material" v="part_metal"/>
+        <tag k="source:copyright" v="Copyright 2014 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+    </way>
+    <way visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-140"/>
+        <nd ref="-141"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="highway" v="path"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.391Z"/>
+        <tag k="name" v="Big"/>
+        <tag k="uuid" v="{19be4629-4298-4c8f-b5d2-ed055959b2d3}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:lap050"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-138"/>
+        <nd ref="-139"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="highway" v="path"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.390Z"/>
+        <tag k="uuid" v="{19970a9b-192c-40db-ad07-5a3ed4204f65}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source" v="mgcp:lap050"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-136"/>
+        <nd ref="-137"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="highway" v="path"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.390Z"/>
+        <tag k="name" v="Short"/>
+        <tag k="uuid" v="{1928b7ce-4e2c-4e77-abeb-e583c356d58d}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="seasonal" v="winter"/>
+        <tag k="source" v="mgcp:lap050"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-134"/>
+        <nd ref="-135"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="highway" v="path"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.390Z"/>
+        <tag k="uuid" v="{18e878ca-61ff-4f2d-8845-89e8d40260f4}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="seasonal" v="winter"/>
+        <tag k="source" v="mgcp:lap050"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-132"/>
+        <nd ref="-133"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="highway" v="path"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.389Z"/>
+        <tag k="name" v="Long"/>
+        <tag k="uuid" v="{184536a1-6a47-45a0-b7b3-3d2f98b1f26b}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:lap050"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-130"/>
+        <nd ref="-131"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="highway" v="path"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.389Z"/>
+        <tag k="uuid" v="{17ecda60-7c32-439f-8d76-ba2690726874}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source" v="mgcp:lap050"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-128"/>
+        <nd ref="-129"/>
+        <tag k="median" v="no"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="lanes" v="1"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.367Z"/>
+        <tag k="width" v="4"/>
+        <tag k="uuid" v="{1c214fc8-c843-44b0-b6f4-cdd8649bc5a0}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source" v="mgcp:lap030"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-126"/>
+        <nd ref="-127"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.367Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp:lap030"/>
+        <tag k="name" v="back"/>
+        <tag k="seasonal" v="not_winter"/>
+        <tag k="surface" v="paved"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
+        <tag k="construction" v="tertiary"/>
+        <tag k="highway" v="construction"/>
+        <tag k="uuid" v="{1b54f920-9fd6-4247-9e4b-8081f12d8125}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="lanes" v="1"/>
+        <tag k="location" v="surface"/>
+        <tag k="width" v="4"/>
+        <tag k="median" v="yes"/>
+    </way>
+    <way visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-124"/>
+        <nd ref="-125"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.366Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp:lap030"/>
+        <tag k="name" v="Beach"/>
+        <tag k="seasonal" v="winter"/>
+        <tag k="surface" v="earth"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="uuid" v="{1b39a7bf-7ac1-4ec8-b7ad-6c2db72e7cb4}"/>
+        <tag k="condition" v="damaged"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="lanes" v="1"/>
+        <tag k="location" v="surface"/>
+        <tag k="width" v="4"/>
+        <tag k="median" v="yes"/>
+    </way>
+    <way visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-122"/>
+        <nd ref="-123"/>
+        <tag k="median" v="no"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="lanes" v="2"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="location" v="underground"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.366Z"/>
+        <tag k="width" v="4"/>
+        <tag k="uuid" v="{1a9f676d-5ffa-4776-9712-2fa11078036e}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="source" v="mgcp:lap030"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-120"/>
+        <nd ref="-121"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="construction" v="primary"/>
+        <tag k="lanes" v="2"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="highway" v="construction"/>
+        <tag k="location" v="overground"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.365Z"/>
+        <tag k="width" v="4"/>
+        <tag k="name" v="Main"/>
+        <tag k="uuid" v="{19ee9b5c-6011-4093-a2a7-a304d62381db}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="surface" v="paved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source" v="mgcp:lap030"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-118"/>
+        <nd ref="-119"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="lanes" v="1"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="highway" v="road"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.365Z"/>
+        <tag k="width" v="4"/>
+        <tag k="name" v="Sesame"/>
+        <tag k="uuid" v="{54698b56-a6c0-454d-a77f-fbc9a92cb6e6}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:lap030"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="condition" v="functional"/>
+    </way>
+    <way visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-115"/>
+        <nd ref="-117"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="highway" v="track"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.344Z"/>
+        <tag k="width" v="3"/>
+        <tag k="name" v="Dirt"/>
+        <tag k="uuid" v="{1d717c8a-7883-47a2-befe-7e18a2fe3a72}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="source" v="mgcp:lap010"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-112"/>
+        <nd ref="-114"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="highway" v="track"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.344Z"/>
+        <tag k="width" v="4"/>
+        <tag k="name" v="Kokoda"/>
+        <tag k="uuid" v="{1d1127be-1934-40af-9e2d-af265f9405ad}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source" v="mgcp:lap010"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-109"/>
+        <nd ref="-111"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="width:minimum_traveled_way" v="2.5"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="highway" v="track"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.343Z"/>
+        <tag k="width" v="2.5"/>
+        <tag k="name" v="Jinglemoney"/>
+        <tag k="uuid" v="{1c362077-a802-41f3-97e5-193db7df1a0b}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:lap010"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-106"/>
+        <nd ref="-107"/>
+        <nd ref="-108"/>
+        <tag k="gauge" v="2"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.318Z"/>
+        <tag k="gauge:type" v="narrow"/>
+        <tag k="railway" v="carline"/>
+        <tag k="uuid" v="{1f223636-e82b-4c63-8224-24c2e701577f}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:lan010"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="condition" v="functional"/>
+    </way>
+    <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-103"/>
+        <nd ref="-104"/>
+        <nd ref="-105"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.318Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="source" v="mgcp:lan010"/>
+        <tag k="name" v="Steam Train"/>
+        <tag k="uuid" v="{1ea0b3a4-8ad2-4eb6-b523-8207d4da5b2e}"/>
+        <tag k="arrangement" v="juxtaposition"/>
+        <tag k="electrified" v="rail"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="gauge" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="location" v="surface"/>
+        <tag k="railway:in_road" v="separated"/>
+    </way>
+    <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-100"/>
+        <nd ref="-101"/>
+        <nd ref="-102"/>
+        <tag k="demolished:railway" v="Other"/>
+        <tag k="gauge" v="4"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.317Z"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="electrified" v="no"/>
+        <tag k="uuid" v="{1e982638-ad7d-4850-89dd-cd0aaf7b5e9b}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="railway:in_road" v="yes"/>
+        <tag k="source" v="mgcp:lan010"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-97"/>
+        <nd ref="-98"/>
+        <nd ref="-99"/>
+        <tag k="gauge" v="2"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.317Z"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="railway" v="rail"/>
+        <tag k="uuid" v="{1e953118-1f79-4dd3-add7-181bdfece9bf}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="automated_transit_system" v="yes"/>
+        <tag k="source" v="mgcp:lan010"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="condition" v="destroyed"/>
+    </way>
+    <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-94"/>
+        <nd ref="-95"/>
+        <nd ref="-96"/>
+        <tag k="gauge" v="3"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.316Z"/>
+        <tag k="gauge:type" v="broad"/>
+        <tag k="name" v="Choo Choo Train"/>
+        <tag k="electrified" v="rail"/>
+        <tag k="abandoned:railway" v="funicular"/>
+        <tag k="uuid" v="{1ddc1109-9eef-442d-b959-4b973b429c8e}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="source" v="mgcp:lan010"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-91"/>
+        <nd ref="-92"/>
+        <nd ref="-93"/>
+        <tag k="gauge" v="1"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="construction" v="logging"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.316Z"/>
+        <tag k="gauge:type" v="narrow"/>
+        <tag k="name" v="Santa Train"/>
+        <tag k="railway" v="construction"/>
+        <tag k="uuid" v="{ae014362-8c96-46b2-8149-d377ed03f334}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="source" v="mgcp:lan010"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-86"/>
+        <nd ref="-87"/>
+        <nd ref="-88"/>
+        <nd ref="-89"/>
+        <nd ref="-90"/>
+        <nd ref="-86"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.287Z"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="place" v="yes"/>
+        <tag k="uuid" v="{20e36268-9fa7-4f18-b8f3-d0cea7710455}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="building:density" v="sparse"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="condition" v="destroyed"/>
+    </way>
+    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-81"/>
+        <nd ref="-82"/>
+        <nd ref="-83"/>
+        <nd ref="-84"/>
+        <nd ref="-85"/>
+        <nd ref="-81"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="use" v="education"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="capital" v="yes"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.287Z"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="place:importance" v="first"/>
+        <tag k="place" v="city"/>
+        <tag k="uuid" v="{20c1223a-4735-4f7f-95db-13362a07d216}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="building:density" v="dense"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="condition" v="functional"/>
+    </way>
+    <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-76"/>
+        <nd ref="-77"/>
+        <nd ref="-78"/>
+        <nd ref="-79"/>
+        <nd ref="-80"/>
+        <nd ref="-76"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="use" v="healthcare"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="capital" v="yes"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.286Z"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="place:importance" v="first"/>
+        <tag k="place" v="city"/>
+        <tag k="uuid" v="{20bba864-bc5f-47c5-97fc-eae9b4c60c67}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="building:density" v="dense"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-71"/>
+        <nd ref="-72"/>
+        <nd ref="-73"/>
+        <nd ref="-74"/>
+        <nd ref="-75"/>
+        <nd ref="-71"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="use" v="urbanised"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.286Z"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="place:importance" v="fifth"/>
+        <tag k="place" v="village"/>
+        <tag k="uuid" v="{20b02702-078b-4daa-a649-31c28a3d3086}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="building:density" v="sparse"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="condition" v="functional"/>
+    </way>
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-66"/>
+        <nd ref="-67"/>
+        <nd ref="-68"/>
+        <nd ref="-69"/>
+        <nd ref="-70"/>
+        <nd ref="-66"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="use" v="correctional"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.285Z"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="place:importance" v="fifth"/>
+        <tag k="place" v="village"/>
+        <tag k="uuid" v="{206c3ef8-34ab-46cb-a9c8-6bab1c21be7e}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="condition" v="functional"/>
+    </way>
+    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-61"/>
+        <nd ref="-62"/>
+        <nd ref="-63"/>
+        <nd ref="-64"/>
+        <nd ref="-65"/>
+        <nd ref="-61"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.285Z"/>
+        <tag k="landuse" v="residential"/>
+        <tag k="place:importance" v="fourth"/>
+        <tag k="place" v="town"/>
+        <tag k="uuid" v="{200ee386-f54b-4188-9383-ea93a9b90d29}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="building:density" v="sparse"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="condition" v="damaged"/>
+    </way>
+    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-56"/>
+        <nd ref="-57"/>
+        <nd ref="-58"/>
+        <nd ref="-59"/>
+        <nd ref="-60"/>
+        <nd ref="-56"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="use" v="institute"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.284Z"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="name" v="Yet Again"/>
+        <tag k="place:importance" v="third"/>
+        <tag k="place" v="town"/>
+        <tag k="uuid" v="{2005b758-e63c-41a3-8f91-ab84d8e0a149}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="building:density" v="dense"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="condition" v="destroyed"/>
+    </way>
+    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-51"/>
+        <nd ref="-52"/>
+        <nd ref="-53"/>
+        <nd ref="-54"/>
+        <nd ref="-55"/>
+        <nd ref="-51"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.283Z"/>
+        <tag k="landuse" v="commercial"/>
+        <tag k="name" v="test1"/>
+        <tag k="place:importance" v="second"/>
+        <tag k="place" v="city"/>
+        <tag k="uuid" v="{1feb8ee5-b54a-46ce-b9c5-8b48b92e0cd5}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="building:density" v="dense"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="condition" v="functional"/>
+    </way>
+    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46"/>
+        <nd ref="-47"/>
+        <nd ref="-48"/>
+        <nd ref="-49"/>
+        <nd ref="-50"/>
+        <nd ref="-46"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="capital" v="yes"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.283Z"/>
+        <tag k="landuse" v="industrial"/>
+        <tag k="name" v="bua02"/>
+        <tag k="place:importance" v="first"/>
+        <tag k="place" v="city"/>
+        <tag k="uuid" v="{1fb8791d-2a98-4c2f-b5c2-01885e4d0b47}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="building:density" v="sparse"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="condition" v="functional"/>
+    </way>
+    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-41"/>
+        <nd ref="-42"/>
+        <nd ref="-43"/>
+        <nd ref="-44"/>
+        <nd ref="-45"/>
+        <nd ref="-41"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.282Z"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="name" v="BUA01"/>
+        <tag k="place" v="yes"/>
+        <tag k="uuid" v="{1fb144c2-de51-4b5f-874b-b309a22afe0a}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-36"/>
+        <nd ref="-37"/>
+        <nd ref="-38"/>
+        <nd ref="-40"/>
+        <nd ref="-36"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="abandoned:building" v="yes"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="area" v="yes"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.258Z"/>
+        <tag k="width" v="25"/>
+        <tag k="military" v="barracks"/>
+        <tag k="name" v="Barracks"/>
+        <tag k="uuid" v="{22ddf733-e638-4738-a52c-f3ca6f4f3789}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:aal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-31"/>
+        <nd ref="-32"/>
+        <nd ref="-33"/>
+        <nd ref="-35"/>
+        <nd ref="-31"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.257Z"/>
+        <tag k="width" v="25"/>
+        <tag k="product" v="petroleum"/>
+        <tag k="name" v="Petroleum Facility"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{22595df6-147c-4b6c-96ae-1b71036df59d}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:aal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="condition" v="damaged"/>
+    </way>
+    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-26"/>
+        <nd ref="-27"/>
+        <nd ref="-28"/>
+        <nd ref="-30"/>
+        <nd ref="-26"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.256Z"/>
+        <tag k="width" v="25"/>
+        <tag k="religion" v="muslim"/>
+        <tag k="building" v="mosque"/>
+        <tag k="uuid" v="{21b59de9-1a5c-4afd-a235-36740d8c7b2a}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:aal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="condition" v="functional"/>
+    </way>
+    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-21"/>
+        <nd ref="-22"/>
+        <nd ref="-23"/>
+        <nd ref="-25"/>
+        <nd ref="-21"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.256Z"/>
+        <tag k="width" v="25"/>
+        <tag k="building" v="school"/>
+        <tag k="uuid" v="{21acae65-f5e3-417a-a1bc-4765a030c507}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="operator" v="international"/>
+        <tag k="source" v="mgcp:aal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="condition" v="functional"/>
+    </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-16"/>
+        <nd ref="-17"/>
+        <nd ref="-18"/>
+        <nd ref="-20"/>
+        <nd ref="-16"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="amenity" v="bank"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.255Z"/>
+        <tag k="width" v="25"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{2167f8ac-6eb9-419e-bbd0-83249f186b1c}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="operator" v="joint_military_civilian"/>
+        <tag k="source" v="mgcp:aal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="condition" v="destroyed"/>
+    </way>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-11"/>
+        <nd ref="-12"/>
+        <nd ref="-13"/>
+        <nd ref="-15"/>
+        <nd ref="-11"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="amenity" v="prison"/>
+        <tag k="construction" v="yes"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.255Z"/>
+        <tag k="width" v="25"/>
+        <tag k="building" v="construction"/>
+        <tag k="uuid" v="{2144e43d-52f7-439b-a7af-0f87139c196b}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="note" v="Prison"/>
+        <tag k="operator" v="military"/>
+        <tag k="source" v="mgcp:aal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6"/>
+        <nd ref="-7"/>
+        <nd ref="-8"/>
+        <nd ref="-10"/>
+        <nd ref="-6"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.254Z"/>
+        <tag k="width" v="25"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{2101f750-eb73-4c93-85bc-1193f8522ec0}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="note" v="Sports Centre"/>
+        <tag k="operator" v="national"/>
+        <tag k="source" v="mgcp:aal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="leisure" v="sports_centre"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="-5"/>
+        <nd ref="-1"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="amenity" v="community_centre"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-08-05T22:00:35.159Z"/>
+        <tag k="width" v="25"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{f9f1e2e7-7699-4dd7-8271-586970f42122}"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="note" v="Community Centre"/>
+        <tag k="source" v="mgcp:aal015"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+    </way>
+</osm>

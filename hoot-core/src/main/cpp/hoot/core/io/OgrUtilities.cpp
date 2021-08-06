@@ -49,7 +49,7 @@ void OgrUtilities::loadDriverInfo()
   //  Load the extension-based driver info
   //                    EXT          DESCRIPTION       EXT/PRE   R/W     VECTOR/RASTER/BOTH
   _drivers.emplace_back(".shp",      "ESRI Shapefile", true,     true,   GDAL_OF_VECTOR);
-  _drivers.emplace_back(".dbf",      "ESRI Shapefile", true,     true,   GDAL_OF_VECTOR);
+//  _drivers.emplace_back(".dbf",      "ESRI Shapefile", true,     true,   GDAL_OF_VECTOR);
   _drivers.emplace_back(".sqlite",   "SQLite",         true,     true,   GDAL_OF_VECTOR);
   _drivers.emplace_back(".db",       "SQLite",         true,     true,   GDAL_OF_VECTOR);
   _drivers.emplace_back(".mif",      "MapInfo File",   true,     true,   GDAL_OF_VECTOR);
@@ -100,10 +100,10 @@ OgrUtilities::~OgrUtilities()
     CPLDumpSharedList(nullptr);
   }
 
-  LOG_TRACE("Destroying driver manager...");
-  GDALDestroyDriverManager();
   LOG_TRACE("Cleaning up OGR...");
   OGRCleanupAll();
+  LOG_TRACE("Destroying driver manager...");
+  GDALDestroyDriverManager();
 }
 
 OgrUtilities& OgrUtilities::getInstance()
@@ -113,10 +113,10 @@ OgrUtilities& OgrUtilities::getInstance()
   return instance;
 }
 
-QSet<QString> OgrUtilities::getSupportedFormats(const bool readOnly)
+QSet<QString> OgrUtilities::getSupportedFormats(const bool readOnly) const
 {
   QSet<QString> formats;
-  for (vector<OgrDriverInfo>::iterator it = _drivers.begin(); it != _drivers.end(); ++it)
+  for (vector<OgrDriverInfo>::const_iterator it = _drivers.begin(); it != _drivers.end(); ++it)
   {
     if (readOnly || it->_is_rw)
     {
@@ -126,9 +126,9 @@ QSet<QString> OgrUtilities::getSupportedFormats(const bool readOnly)
   return formats;
 }
 
-OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly)
+OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly) const
 {
-  for (vector<OgrDriverInfo>::iterator it = _drivers.begin(); it != _drivers.end(); ++it)
+  for (vector<OgrDriverInfo>::const_iterator it = _drivers.begin(); it != _drivers.end(); ++it)
   {
     if (((it->_is_ext && url.endsWith(it->_indicator)) ||
          (!it->_is_ext && url.startsWith(it->_indicator))) && (readonly || it->_is_rw))
@@ -139,7 +139,7 @@ OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly)
   return OgrDriverInfo();
 }
 
-std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
+std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url) const
 {
   QString source = url;
   OgrDriverInfo driverInfo = getDriverInfo(url, false);
@@ -163,19 +163,17 @@ std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
   return result;
 }
 
-bool OgrUtilities::isReasonableUrl(const QString& url)
+bool OgrUtilities::isReasonableUrl(const QString& url) const
 {
-  // Not a pretty way to sort out the /vsizip/ driver problem. We are searching for "/vsi" which
-  // will match /vsizip, /vsigzip, /vsitar, /vsicurl. I am not sure if matching this many things is
-  // a good idea.
+  QString relative_url = url;
+  //  /vsi* files should have the "/vsi*/" portion of the URL removed before checking the file type
   if (url.startsWith("/vsi"))
-  {
-    return true;
-  }
-  return getDriverInfo(url, true)._driverName != nullptr;
+    relative_url = url.right(url.length() - url.indexOf("/", 4) - 1);
+  //  Check if there is a valid driver for this file type
+  return getDriverInfo(relative_url, true)._driverName != nullptr;
 }
 
-std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bool readonly)
+std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bool readonly) const
 {
   /* Check for the correct driver name, if unknown try all drivers.
    * This can be an issue because drivers are tried in the order that they are
@@ -244,6 +242,59 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
     throw HootException(errorMsg);
   }
   return result;
+}
+
+QStringList OgrUtilities::getValidFilesInContainer(const QString& url) const
+{
+  QString path = url;
+  QStringList files;
+  //  Ignore anything but files with these extensions
+  QStringList extensions({".zip", ".tar", ".tar.gz", ".tgz", ".gz"});
+  bool found = false;
+  for (int i = 0; i < extensions.length(); ++i)
+  {
+    if (path.endsWith(extensions[i], Qt::CaseInsensitive))
+      found = true;
+  }
+  //  If this file doesn't end with any of the above extensions return an empty list
+  if (!found)
+    return files;
+  //  Prepend /vsizip/ to the URL if needed
+  if (path.endsWith(".zip", Qt::CaseInsensitive))
+  {
+    if (!path.startsWith("/vsizip/"))
+      path.prepend("/vsizip/");
+  }
+  else if (path.endsWith(".tar", Qt::CaseInsensitive) ||
+           path.endsWith(".tar.gz", Qt::CaseInsensitive) ||
+           path.endsWith(".tgz", Qt::CaseInsensitive))
+  {
+    if (!path.startsWith("/vsitar/"))
+      path.prepend("/vsitar/");
+  }
+  else if (path.endsWith(".gz", Qt::CaseInsensitive))
+  {
+    if (!path.startsWith("/vsigzip/"))
+      path.prepend("/vsitar/");
+  }
+  //  Open the container file with GDAL
+  char** file_list = VSIReadDirRecursive(path.toStdString().c_str());
+  if (file_list)
+  {
+    //  Iterate all of the files found
+    int count = CSLCount(file_list);
+    for (int i = 0; i < count; ++i)
+    {
+      //  Check if the file found is a reasonable filename and store it
+      QString file = path + "/" + file_list[i];
+      if (isReasonableUrl(file))
+        files.append(file);
+    }
+    //  Destroy the GDAL memory buffer
+    CSLDestroy(file_list);
+  }
+  //  Return the list of valid files, if any
+  return files;
 }
 
 }
