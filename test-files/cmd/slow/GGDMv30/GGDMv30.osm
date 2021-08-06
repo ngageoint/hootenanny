@@ -2822,7 +2822,7 @@
         <tag k="electrified" v="contact_line"/>
         <tag k="error:circular" v="15"/>
         <tag k="feature_area" v="0"/>
-        <tag k="gauge" v="2"/>
+        <tag k="gauge" v="2000"/>
         <tag k="gradient:length" v="0"/>
         <tag k="height" v="0"/>
         <tag k="height:feature" v="0"/>
@@ -2870,7 +2870,7 @@
         <tag k="electrified" v="no"/>
         <tag k="error:circular" v="15"/>
         <tag k="feature_area" v="0"/>
-        <tag k="gauge" v="1"/>
+        <tag k="gauge" v="1000"/>
         <tag k="gauge:type" v="narrow"/>
         <tag k="gradient:length" v="0"/>
         <tag k="height" v="0"/>
@@ -2919,7 +2919,7 @@
         <tag k="electrified" v="unknown"/>
         <tag k="error:circular" v="15"/>
         <tag k="feature_area" v="0"/>
-        <tag k="gauge" v="2"/>
+        <tag k="gauge" v="2000"/>
         <tag k="gauge:type" v="narrow"/>
         <tag k="gradient:length" v="0"/>
         <tag k="height" v="0"/>
@@ -2967,7 +2967,7 @@
         <tag k="electrified" v="no"/>
         <tag k="error:circular" v="15"/>
         <tag k="feature_area" v="0"/>
-        <tag k="gauge" v="4"/>
+        <tag k="gauge" v="4000"/>
         <tag k="gauge:type" v="standard"/>
         <tag k="gradient:length" v="0"/>
         <tag k="height" v="0"/>
@@ -3015,7 +3015,7 @@
         <tag k="electrified" v="rail"/>
         <tag k="error:circular" v="15"/>
         <tag k="feature_area" v="0"/>
-        <tag k="gauge" v="3"/>
+        <tag k="gauge" v="3000"/>
         <tag k="gauge:type" v="broad"/>
         <tag k="gradient:length" v="0"/>
         <tag k="height" v="0"/>

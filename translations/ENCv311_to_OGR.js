@@ -735,12 +735,12 @@ enc311 = {
         // Throw a warning that text will get truncated.
         if (str.length > 900) hoot.logWarn('o2s tags truncated to fit in available space.');
 
-        // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
-        // which means that it returns an empty string.
-        attrs = {tag1:str.substring(0,225),
-          tag2:str.substring(225,450),
-          tag3:str.substring(450,675),
-          tag4:str.substring(675,900)};
+        attrs = {};
+        var tList = translate.packText(tags,4,225);
+        for (var i = 1; i < 5; i++)
+        {
+          attrs['tag'+i] = tList[i];
+        }
       }
       else
       {
