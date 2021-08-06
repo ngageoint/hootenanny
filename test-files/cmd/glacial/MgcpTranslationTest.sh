@@ -17,11 +17,6 @@ hoot convert --warn $CONFIG -D schema.translation.script=translations/MgcpTest.j
 
 compareFiles test-output/cmd/glacial/translation/MgcpTranslated.osm test-files/translation/MgcpTranslated.osm
 
-#
-# Added commands to build the MGCPv3 OSM test files
-#
-# Mattj Oct 13
-
 # LOTS of debug output
 # CONFIG="--debug -C Testing.conf -D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
 

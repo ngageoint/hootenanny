@@ -79,18 +79,6 @@ public:
   // leaving this empty for the time being
   QString supportedFormats() override { return ""; }
 
-  /**
-   * @brief setCacheCapacity
-   *
-   * @param maxNodes Number of entries for the node cache.
-   * @param maxWays Number of entries for the ways cache.
-   * @param maxRelations Number of entries for the relations cache.
-   * @note This call deletes the existing cache and creates an entirely new one -- make sure
-   *    this function is called BEFORE any data is stored in the cache
-   */
-  void setCacheCapacity(
-    const unsigned long maxNodes, const unsigned long maxWays, const unsigned long maxRelations);
-
   void initTranslator();
 
   void openOutput(const QString& url);

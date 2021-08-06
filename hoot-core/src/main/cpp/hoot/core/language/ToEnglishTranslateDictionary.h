@@ -61,7 +61,8 @@ public:
   std::shared_ptr<Transliterator> getTitler() const { return _titler; }
 
   bool getFromTransliterationCache(const QString& originalText, QString& transliteratedText) const;
-  void insertIntoTransliterationCache(const QString& originalText, const QString& transliteratedText) const;
+  void insertIntoTransliterationCache(
+    const QString& originalText, const QString& transliteratedText) const;
 
   bool transliterationCachingEnabled() const { return _transliterationCachingEnabled; }
 

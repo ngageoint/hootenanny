@@ -42,6 +42,8 @@ namespace hoot
 {
 
 ImplicitTagRulesSqliteWriter::ImplicitTagRulesSqliteWriter() :
+_wordsToWordIds(ConfigOptions().getImplicitTaggingMaxCacheSize()),
+_tagsToTagIds(ConfigOptions().getImplicitTaggingMaxCacheSize()),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
@@ -125,8 +127,9 @@ void ImplicitTagRulesSqliteWriter::write(const QString& inputUrl)
     LOG_VART(kvp);
 
     //only insert a word record if it already hasn't been inserted
-    long wordId = _wordsToWordIds.value(word, -1);
-    if (wordId == -1)
+    long wordId = -1;
+    const long* cachedWordId = _wordsToWordIds[word];
+    if (cachedWordId == nullptr || *cachedWordId == -1)
     {
       wordId = _insertWord(word);
       if (wordId == -1)
@@ -135,25 +138,28 @@ void ImplicitTagRulesSqliteWriter::write(const QString& inputUrl)
       }
       else
       {
-        _wordsToWordIds[word] = wordId;
+        _wordsToWordIds.insert(word, new long(wordId));
         LOG_TRACE("Created new word with ID: " << wordId);
       }
     }
     else
     {
+      wordId = *cachedWordId;
       LOG_TRACE("Found existing word with ID: " << wordId);
     }
 
     //only insert a tag record if it already hasn't been inserted
-    long tagId = _tagsToTagIds.value(kvp, -1);
-    if (tagId == -1)
+    long tagId = -1;
+    const long* cachedTagId = _tagsToTagIds[kvp];
+    if (cachedTagId == nullptr || *cachedTagId == -1)
     {
       tagId = _insertTag(kvp);
-      _tagsToTagIds[kvp] = tagId;
+      _tagsToTagIds.insert(kvp, new long(tagId));
       LOG_TRACE("Created new tag with ID: " << tagId);
     }
     else
     {
+      tagId = *cachedTagId;
       LOG_TRACE("Found existing tag with ID: " << tagId);
     }
 

@@ -1,9 +1,11 @@
 #!/bin/bash
 set -e
 
-# This translation portion of this test requires Joshua, and its not feasible to install it automatically with hoot right now.  So, 
-# this test remains turned off and just gets checked manually from time to time.  German and Spanish Joshua translation services need 
-# to be enabled in the config and then Tomcat restarted to enable them for this test to pass.  Also, populate your OAuth keys in HOOT_OPTS.
+# This translation portion of this test requires Joshua, and its not feasible to install it 
+# automatically with hoot right now.  So, this test remains turned off and just gets checked 
+# manually from time to time.  German and Spanish Joshua translation services need to be enabled in 
+# the config and then Tomcat restarted to enable them for this test to pass.  Also, populate your 
+OAuth keys in HOOT_OPTS.
 
 INPUT_DIR=test-files/cmd/glacial/RndServiceLanguageConvertCmdTest
 #TODO: will eventually need a better input file that supports testing detection and multiple translation languages

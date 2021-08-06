@@ -2,11 +2,8 @@
 set -e
 
 inputDir=test-files/cmd/glacial/PoiPolygonConflateStandaloneTest
-
 checkDir=test-files/cmd/glacial/PoiPolygonConflateCombinedTest
-
 outputDir=test-output/cmd/glacial/PoiPolygonConflateCombinedTest
-
 
 mkdir -p $HOOT_HOME/tmp/
 mkdir -p $outputDir

@@ -66,7 +66,7 @@ _undetectableWords(0),
 _minConfidence(LanguageDetectionConfidenceLevel::Level::None),
 _cacheHits(0),
 _cacheSize(0),
-_cacheMaxSize(0),
+_cacheMaxSize(100),
 _timeout(500)
 {
 }

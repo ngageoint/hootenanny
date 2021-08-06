@@ -53,7 +53,6 @@ public:
     _EH(EH),
     _ELogH(ELogH)
   {
-
   }
 
   double operator()(double x) override
@@ -63,14 +62,16 @@ public:
   }
 
 private:
+
   TDistribution* _td;
   const vector<double>& _EH;
   const vector<double>& _ELogH;
 };
 
-TDistribution::TDistribution(const Mat& m)
+TDistribution::TDistribution(const Mat& m, const int maxCacheSize) :
+_maxCacheSize(maxCacheSize)
 {
-  initialize(m);
+  initialize(m, maxCacheSize);
 }
 
 double TDistribution::_calculateDataLogLikelihood(const Mat& m, double v) const
@@ -121,11 +122,12 @@ void TDistribution::_calculateNewMuAndSigma(const vector<double>& EH, const Mat&
   _sigma = sumSigmaNum / sumDen;
 }
 
-void TDistribution::_calculateNewV(const Mat& m, const vector<double>& EH, const vector<double>& ELogH)
+void TDistribution::_calculateNewV(
+  const Mat& m, const vector<double>& EH, const vector<double>& ELogH)
 {
   // Use Line Search to search for the best v.
   CostT ct(this, m, EH, ELogH);
-  GoldenSectionSearch gss(0.1);
+  GoldenSectionSearch gss(0.1, _maxCacheSize);
   _v = gss.argmin(ct, 0, 10000);
 }
 
@@ -177,8 +179,10 @@ double TDistribution::getLogLikelihood(const Mat& p) const
   return result;
 }
 
-void TDistribution::initialize(const Mat& m)
+void TDistribution::initialize(const Mat& m, const int maxCacheSize)
 {
+  _maxCacheSize = maxCacheSize;
+
   // This algorithm is layed out in [2], page 12
   // Further explanation is in [1], page 86
   // intialize sigma and mu to reasonable values.

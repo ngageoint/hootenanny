@@ -46,7 +46,7 @@ class ExpectationIntersection
 {
 public:
 
-  ExpectationIntersection();
+  ExpectationIntersection(const int maxCacheSize = 100000);
 
   /**
    * @brief snapMatches Given a set of matches along a line, determine a good split point using an
@@ -65,6 +65,7 @@ public:
 private:
 
   int _maxIterations;
+  int _maxCacheSize;
 
   void _calculateTDistribution(const cv::Mat &matches, int start, int end,
     tbs::TDistribution& t);
