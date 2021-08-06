@@ -335,7 +335,7 @@ def addImgAttrs(schema):
             schema[featureName]['columns']['ZI001_SDP'] = {}
             schema[featureName]['columns']['ZI001_SDP'] = {'name':'ZI001_SDP','desc':'Source Information : Source Description',
                                                 'type':'String',
-                                                'defValue':'noInformation','optional':'R'}
+                                                'defValue':'noInformation','length':'254','optional':'R'}
 
     return schema
 # End addImgAttrs

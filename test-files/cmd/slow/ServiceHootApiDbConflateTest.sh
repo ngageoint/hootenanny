@@ -28,7 +28,7 @@ hoot convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesB.osm "$DB_URL/A
 wait
 
 hoot conflate $HOOT_OPTS $CONFLATE_OPTS -D conflate.post.ops++="hoot::RemoveTagsVisitor;hoot::RemoveAttributesVisitor" -D tag.filter.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" test-output/cmd/slow/ServiceHootApiDbConflateTest/output1.osm
-hoot diff test-files/cmd/slow/ServiceHootApiDbConflateTest/output1.osm test-output/cmd/slow/ServiceHootApiDbConflateTest/output1.osm
+hoot diff -C Testing.conf test-files/cmd/slow/ServiceHootApiDbConflateTest/output1.osm test-output/cmd/slow/ServiceHootApiDbConflateTest/output1.osm
 
 hoot db-delete $HOOT_OPTS "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" &
 wait

@@ -13,5 +13,5 @@ hoot convert -C Testing.conf \
  $TA_IN/$TA_FILE.shp \
  $TA_OUT/$TA_FILE.osm
 
-hoot diff --ignore-uuid $TA_IN/$TA_FILE.osm $TA_OUT/$TA_FILE.osm 
+hoot diff -C Testing.conf --ignore-uuid $TA_IN/$TA_FILE.osm $TA_OUT/$TA_FILE.osm 
 

@@ -40,9 +40,10 @@ using namespace tbs;
 namespace hoot
 {
 
-ExpectationIntersection::ExpectationIntersection()
+ExpectationIntersection::ExpectationIntersection(const int maxCacheSize) :
+_maxIterations(100),
+_maxCacheSize(maxCacheSize)
 {
-  _maxIterations = 100;
 }
 
 double ExpectationIntersection::_findSplit(const TDistribution& t1, const TDistribution& t2,
@@ -129,9 +130,10 @@ vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Ma
     // calculate the pdfs.
     vector<TDistribution> pdfs(ranges.rows);
     int nextStart = 0;
+    const int maxCacheSize = ConfigOptions().getExpectationIntersectionMaxCacheSize();
     for (size_t i = 0; i < splits.size(); i++)
     {
-      pdfs[i].initialize(matches.rowRange(nextStart, splits[i]));
+      pdfs[i].initialize(matches.rowRange(nextStart, splits[i]), maxCacheSize);
       nextStart = splits[i];
     }
     pdfs[pdfs.size() - 1].initialize(matches.rowRange(nextStart, matches.rows - 1));

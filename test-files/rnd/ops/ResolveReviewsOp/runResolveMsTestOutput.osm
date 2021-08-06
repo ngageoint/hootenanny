@@ -1,0 +1,1823 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="12.0516999656835" minlon="8.475099999999999" maxlat="12.05399990847761" maxlon="8.476800000000001"/>
+    <node visible="true" id="-13030" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0532681607619576" lon="8.4760813233619867">
+        <tag k="hoot:id" v="-13030"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-13028" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0532903621525449" lon="8.4759761819068533">
+        <tag k="hoot:id" v="-13028"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-13026" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0526633685320430" lon="8.4755860080141066">
+        <tag k="hoot:id" v="-13026"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-13023" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0523147064554035" lon="8.4760010843689582">
+        <tag k="hoot:id" v="-13023"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12931" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0532219313889275" lon="8.4760067439977433">
+        <tag k="hoot:id" v="-12931"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-12920" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521857654066533" lon="8.4767966320153363">
+        <tag k="hoot:id" v="-12920"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-12919" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521926304439262" lon="8.4767783937880914">
+        <tag k="hoot:id" v="-12919"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-12912" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521751387751817" lon="8.4768000000000008">
+        <tag k="hoot:id" v="-12912"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-12903" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0529299218729591" lon="8.4753278893768655">
+        <tag k="hoot:id" v="-12903"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12899" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0526226635905118" lon="8.4756096895809439">
+        <tag k="hoot:id" v="-12899"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12896" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0520988508552112" lon="8.4755905974615562">
+        <tag k="hoot:id" v="-12896"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12771" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0516999656835022" lon="8.4761491530327611">
+        <tag k="hoot:id" v="-12771"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12770" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0516999656835022" lon="8.4756192567514574">
+        <tag k="hoot:id" v="-12770"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12769" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0516999656835022" lon="8.4762399559281594">
+        <tag k="hoot:id" v="-12769"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12768" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0519016883974519" lon="8.4766778744278604">
+        <tag k="hoot:id" v="-12768"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12765" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0526597930478072" lon="8.4755880881812509">
+        <tag k="hoot:id" v="-12765"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12707" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0530055923048405" lon="8.4754435912639217">
+        <tag k="hoot:id" v="-12707"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12686" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521746932178857" lon="8.4767910457508204">
+        <tag k="hoot:id" v="-12686"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12685" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521856846437512" lon="8.4767657899425242">
+        <tag k="hoot:id" v="-12685"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12684" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521926154589814" lon="8.4767825995254018">
+        <tag k="hoot:id" v="-12684"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12679" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521607676398546" lon="8.4768000000000008">
+        <tag k="hoot:id" v="-12679"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12670" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0520929556010863" lon="8.4763303697514605">
+        <tag k="hoot:id" v="-12670"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12668" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521991791560286" lon="8.4753904385864995">
+        <tag k="hoot:id" v="-12668"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12663" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0532719177576837" lon="8.4759377592197733">
+        <tag k="hoot:id" v="-12663"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12660" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0526244352107934" lon="8.4756086588771460">
+        <tag k="hoot:id" v="-12660"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12658" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0520586840742059" lon="8.4755225464356680">
+        <tag k="hoot:id" v="-12658"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12490" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0524940785232442" lon="8.4758769078374776">
+        <tag k="hoot:id" v="-12490"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12487" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0523832328727636" lon="8.4756902959988540">
+        <tag k="hoot:id" v="-12487"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12485" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521711491365515" lon="8.4753397106105357">
+        <tag k="hoot:id" v="-12485"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12481" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0538634173052124" lon="8.4754926775728769">
+        <tag k="hoot:id" v="-12481"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12310" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0527610585802147" lon="8.4763309463059926">
+        <tag k="hoot:id" v="-12310"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12181" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0539402301982630" lon="8.4764497607924394">
+        <tag k="hoot:id" v="-12181"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12162" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0536535348013736" lon="8.4759449861924363">
+        <tag k="hoot:id" v="-12162"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12131" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0539999084776124" lon="8.4765708267368147">
+        <tag k="hoot:id" v="-12131"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12118" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0536006843390506" lon="8.4757200847231946">
+        <tag k="hoot:id" v="-12118"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12017" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0518807569218627" lon="8.4766378153804336">
+        <tag k="hoot:id" v="-12017"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12013" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0531267843756797" lon="8.4762821362578631">
+        <tag k="hoot:id" v="-12013"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-12008" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0517281722976985" lon="8.4756670549331989">
+        <tag k="hoot:id" v="-12008"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11905" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521905840363583" lon="8.4758101577678548">
+        <tag k="hoot:id" v="-11905"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11867" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0527382941516503" lon="8.4762922319961103">
+        <tag k="hoot:id" v="-11867"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11864" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521699652094956" lon="8.4753375465590768">
+        <tag k="hoot:id" v="-11864"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11862" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0520725545706355" lon="8.4762901409066220">
+        <tag k="hoot:id" v="-11862"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11857" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0532947404107649" lon="8.4759875660370927">
+        <tag k="hoot:id" v="-11857"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11681" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0527295140575834" lon="8.4762773001390848">
+        <tag k="hoot:id" v="-11681"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11678" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521652700010478" lon="8.4753289643816441">
+        <tag k="hoot:id" v="-11678"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11523" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0528613366324890" lon="8.4764456327409139">
+        <tag k="hoot:id" v="-11523"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11458" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0527641999298432" lon="8.4763362886411677">
+        <tag k="hoot:id" v="-11458"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11452" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0532718704926083" lon="8.4759376607590848">
+        <tag k="hoot:id" v="-11452"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11341" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0518916856158906" lon="8.4760317554125706">
+        <tag k="hoot:id" v="-11341"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11326" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0539031345383574" lon="8.4755928239429874">
+        <tag k="hoot:id" v="-11326"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11324" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0520822083706509" lon="8.4763091772577148">
+        <tag k="hoot:id" v="-11324"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11192" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0529303523344815" lon="8.4765792933861679">
+        <tag k="hoot:id" v="-11192"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11145" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0530214951513717" lon="8.4768000000000008">
+        <tag k="hoot:id" v="-11145"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11132" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0536085559153268" lon="8.4757330177064478">
+        <tag k="hoot:id" v="-11132"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-11008" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521905942956060" lon="8.4757676150074879">
+        <tag k="hoot:id" v="-11008"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10913" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0533533096561616" lon="8.4768000000000008">
+        <tag k="hoot:id" v="-10913"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10900" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0526701847378988" lon="8.4755007625177914">
+        <tag k="hoot:id" v="-10900"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10898" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0528300467575082" lon="8.4751626001037366">
+        <tag k="hoot:id" v="-10898"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10896" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0536397574485488" lon="8.4758236566846232">
+        <tag k="hoot:id" v="-10896"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10894" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0519883308145523" lon="8.4761240600483561">
+        <tag k="hoot:id" v="-10894"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10782" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0527891575186850" lon="8.4763580635288935">
+        <tag k="hoot:id" v="-10782"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10738" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0527661248616376" lon="8.4763395622760047">
+        <tag k="hoot:id" v="-10738"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10614" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521905773883997" lon="8.4758377106178173">
+        <tag k="hoot:id" v="-10614"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10595" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0537205687791111" lon="8.4756356678429778">
+        <tag k="hoot:id" v="-10595"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10556" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0530161879195106" lon="8.4760567516493150">
+        <tag k="hoot:id" v="-10556"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10554" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0531343260577088" lon="8.4752970228100626">
+        <tag k="hoot:id" v="-10554"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10550" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0532912856002117" lon="8.4759781055996140">
+        <tag k="hoot:id" v="-10550"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10395" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0530015045702488" lon="8.4760274550921810">
+        <tag k="hoot:id" v="-10395"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10393" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0532887804311102" lon="8.4766615989825826">
+        <tag k="hoot:id" v="-10393"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10389" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0532859055230723" lon="8.4759668980183385">
+        <tag k="hoot:id" v="-10389"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10386" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0538645420879149" lon="8.4756777681520852">
+        <tag k="hoot:id" v="-10386"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10383" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0524823965079868" lon="8.4758570409183669">
+        <tag k="hoot:id" v="-10383"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10232" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0533369004404829" lon="8.4768000000000008">
+        <tag k="hoot:id" v="-10232"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10223" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0517756011752137" lon="8.4757474267074500">
+        <tag k="hoot:id" v="-10223"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10220" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0531089315468591" lon="8.4762899440545940">
+        <tag k="hoot:id" v="-10220"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10217" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0523256749798282" lon="8.4760234990272281">
+        <tag k="hoot:id" v="-10217"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10121" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0531700173946934" lon="8.4763993826041606">
+        <tag k="hoot:id" v="-10121"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10118" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0536574244275556" lon="8.4758348637069769">
+        <tag k="hoot:id" v="-10118"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10116" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0537296689848326" lon="8.4758954699006761">
+        <tag k="hoot:id" v="-10116"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10114" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0537144421480900" lon="8.4759053731617033">
+        <tag k="hoot:id" v="-10114"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10112" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0539176912546235" lon="8.4756420100378804">
+        <tag k="hoot:id" v="-10112"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10091" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0539081347824375" lon="8.4756465188112351">
+        <tag k="hoot:id" v="-10091"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10087" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0524386936987380" lon="8.4757827181468635">
+        <tag k="hoot:id" v="-10087"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10086" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0525882295553100" lon="8.4760370251332890">
+        <tag k="hoot:id" v="-10086"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10001" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0538059830253452" lon="8.4755934441035023">
+        <tag k="hoot:id" v="-10001"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-10000" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0538694032755345" lon="8.4755652824228456">
+        <tag k="hoot:id" v="-10000"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9970" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0524532532801185" lon="8.4758074787558417">
+        <tag k="hoot:id" v="-9970"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9925" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0533124593436707" lon="8.4760360864735311">
+        <tag k="hoot:id" v="-9925"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9897" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0528262594810709" lon="8.4757525535983174">
+        <tag k="hoot:id" v="-9897"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9821" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0532296521706215" lon="8.4758497131589259">
+        <tag k="hoot:id" v="-9821"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9789" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0524641635955998" lon="8.4758260332807378">
+        <tag k="hoot:id" v="-9789"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9786" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0538816297268649" lon="8.4755265629484189">
+        <tag k="hoot:id" v="-9786"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9733" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0530939674101969" lon="8.4756116497498084">
+        <tag k="hoot:id" v="-9733"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9709" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0539198339528131" lon="8.4755129518176471">
+        <tag k="hoot:id" v="-9709"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9705" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0528408513449019" lon="8.4764605199611118">
+        <tag k="hoot:id" v="-9705"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9704" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0526512945917155" lon="8.4765847013497790">
+        <tag k="hoot:id" v="-9704"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9701" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0530938611513108" lon="8.4761928498074219">
+        <tag k="hoot:id" v="-9701"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9530" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0519655008538074" lon="8.4768000000000008">
+        <tag k="hoot:id" v="-9530"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9525" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0518069290081709" lon="8.4750999999999994">
+        <tag k="hoot:id" v="-9525"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9524" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0520400061190536" lon="8.4750999999999994">
+        <tag k="hoot:id" v="-9524"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9523" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0523226510770023" lon="8.4768000000000008">
+        <tag k="hoot:id" v="-9523"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9522" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0533526674204534" lon="8.4768000000000008">
+        <tag k="hoot:id" v="-9522"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9521" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0537050886965460" lon="8.4768000000000008">
+        <tag k="hoot:id" v="-9521"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9519" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0524437799569455" lon="8.4750999999999994">
+        <tag k="hoot:id" v="-9519"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9518" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0527968961484770" lon="8.4750999999999994">
+        <tag k="hoot:id" v="-9518"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9517" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0532288195959261" lon="8.4750999999999994">
+        <tag k="hoot:id" v="-9517"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9516" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0534286814455598" lon="8.4750999999999994">
+        <tag k="hoot:id" v="-9516"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9515" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0536523638452948" lon="8.4750999999999994">
+        <tag k="hoot:id" v="-9515"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9514" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0539996796715840" lon="8.4754625458223476">
+        <tag k="hoot:id" v="-9514"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9513" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0539996796716355" lon="8.4757198595758716">
+        <tag k="hoot:id" v="-9513"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9512" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0539996796716355" lon="8.4756033276320633">
+        <tag k="hoot:id" v="-9512"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9094" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521966275152455" lon="8.4753862815001373">
+        <tag k="hoot:id" v="-9094"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9092" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521834830750940" lon="8.4757339825075171">
+        <tag k="hoot:id" v="-9092"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9091" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0518429537007439" lon="8.4751570543641002">
+        <tag k="hoot:id" v="-9091"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9089" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521837203210751" lon="8.4758601546027705">
+        <tag k="hoot:id" v="-9089"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9088" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521517050915925" lon="8.4764462181220885">
+        <tag k="hoot:id" v="-9088"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9087" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0519301076204286" lon="8.4760092498833668">
+        <tag k="hoot:id" v="-9087"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-9015" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0517846786323783" lon="8.4764539391830382">
+        <tag k="hoot:id" v="-9015"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1129" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0537041915262844" lon="8.4757927150405319">
+        <tag k="hoot:id" v="-1129"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1126" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0533736552781523" lon="8.4761270144667034">
+        <tag k="hoot:id" v="-1126"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1125" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0530263339543264" lon="8.4763407803399975">
+        <tag k="hoot:id" v="-1125"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1120" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0536517783975654" lon="8.4758040321849037">
+        <tag k="hoot:id" v="-1120"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1119" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0536242657987227" lon="8.4758489471841081">
+        <tag k="hoot:id" v="-1119"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1118" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0534864602444483" lon="8.4759445454994484">
+        <tag k="hoot:id" v="-1118"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1110" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0529573836851220" lon="8.4763633447821078">
+        <tag k="hoot:id" v="-1110"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1100" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0538858462196057" lon="8.4755344080044797">
+        <tag k="hoot:id" v="-1100"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1094" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0532835993286032" lon="8.4751991161621589">
+        <tag k="hoot:id" v="-1094"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1092" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0533210313413210" lon="8.4760261780790849">
+        <tag k="hoot:id" v="-1092"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1090" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0529544712408345" lon="8.4762820389883036">
+        <tag k="hoot:id" v="-1090"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1081" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0529748933954739" lon="8.4754015927426813">
+        <tag k="hoot:id" v="-1081"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1080" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0529324674150260" lon="8.4763213354556637">
+        <tag k="hoot:id" v="-1080"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1078" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0528364811276596" lon="8.4751747504807380">
+        <tag k="hoot:id" v="-1078"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1073" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0530507813821348" lon="8.4761332484964846">
+        <tag k="hoot:id" v="-1073"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1072" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0530064418087051" lon="8.4760351999952057">
+        <tag k="hoot:id" v="-1072"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1071" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0527047439141786" lon="8.4755619363857679">
+        <tag k="hoot:id" v="-1071"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1068" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0527918387796813" lon="8.4763832926561182">
+        <tag k="hoot:id" v="-1068"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1064" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0524097781500128" lon="8.4757335432227894">
+        <tag k="hoot:id" v="-1064"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1062" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0525628998452294" lon="8.4764454209895597">
+        <tag k="hoot:id" v="-1062"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1061" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0524965302154392" lon="8.4763726498642580">
+        <tag k="hoot:id" v="-1061"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1060" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0523559226218069" lon="8.4764458222344174">
+        <tag k="hoot:id" v="-1060"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1059" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0522333474067551" lon="8.4758348237744752">
+        <tag k="hoot:id" v="-1059"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-983" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0535812540711760" lon="8.4764574659527554">
+        <tag k="hoot:id" v="-983"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-979" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0531948966119149" lon="8.4764582149851080">
+        <tag k="hoot:id" v="-979"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-954" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0528540609659842" lon="8.4764518661382393">
+        <tag k="hoot:id" v="-954"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-946" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0526912388867196" lon="8.4764521817887850">
+        <tag k="hoot:id" v="-946"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-945" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0521891227326172" lon="8.4767741284762330">
+        <tag k="hoot:id" v="-945"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <way visible="true" id="-16391" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-13030"/>
+        <nd ref="-9701"/>
+        <nd ref="-1090"/>
+        <nd ref="-1080"/>
+        <nd ref="-1068"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-16391"/>
+        <tag k="hoot:status" v="1"/>
+    </way>
+    <way visible="true" id="-16390" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1120"/>
+        <nd ref="-10896"/>
+        <nd ref="-1119"/>
+        <nd ref="-1118"/>
+        <nd ref="-1092"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-16390"/>
+        <tag k="hoot:status" v="1"/>
+    </way>
+    <way visible="true" id="-16388" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-13028"/>
+        <nd ref="-12931"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:dual_highway" v="yes"/>
+        <tag k="hoot:hash" v="sha1sum:1e632f077b7028a533a04896dd4c2a3e3b4f64d3;sha1sum:8620b7d635eeee4ec85a593498e8206c80ee1d0c"/>
+        <tag k="hoot:id" v="-16388"/>
+        <tag k="hoot:layername" v="2013-03-07_1030010020251600"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="lanes" v="2"/>
+        <tag k="length_m" v="6.9724485219314793"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="ref" v="A2"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z;2017-01-14T00:00:00Z"/>
+        <tag k="source:imagery" v="2013-03-07_1030010020251600;2017-01-14_10400100274F8700;2017-11-08_104001003463A000;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.551Z;2021-03-10T15:49:18.599Z"/>
+        <tag k="surface" v="paved"/>
+        <tag k="travel_time_s" v="0.89100000000000001"/>
+    </way>
+    <way visible="true" id="-16381" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9516"/>
+        <nd ref="-1094"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:286a3108213b9f2eae3870ba446f3483b66d9ae4;sha1sum:694f0c61340ed25edea26c94de31124d5813d3e1;sha1sum:4e0b34e89ba0e66f0a8053c9d6aa6ab57ebed072;sha1sum:af409b1c161a204b78964825f9b4c7df6ab1cf47;sha1sum:7464b6bf4990abfbd0350e65b6bcad227574f4c2"/>
+        <tag k="hoot:id" v="-16381"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="40.047853946512888"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2017-08-26_1040010031B2A800;2017-11-08_104001003463A000;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2018-10-25_10400100437B1B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.550Z"/>
+        <tag k="travel_time_s" v="5.1189999999999998"/>
+    </way>
+    <way visible="true" id="-16378" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9015"/>
+        <nd ref="-12769"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:0223218f4315aeba7f9d65c6209cfdf35110bb19;sha1sum:1837005f698fb78ac9ae5d829a27bfdbf705d484;sha1sum:330f68e5d87963de3d71c0a88020be4fb930b95c;sha1sum:853fdee93f919124cbad2ee54243cace945d869f;sha1sum:9f216b1427868469f89fa681b54bd58282903a6b"/>
+        <tag k="hoot:id" v="-16378"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="32.670362871076819"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2016-07-31_104001001F677300;2016-09-18_10400100216CBD00;2017-04-04_104001002A2BF200;2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2018-03-01_1040010039838B00;2019-09-23_10400100524A6B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.228Z"/>
+        <tag k="travel_time_s" v="4.1760000000000002"/>
+    </way>
+    <way visible="true" id="-16375" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9088"/>
+        <nd ref="-12670"/>
+        <nd ref="-11324"/>
+        <nd ref="-11862"/>
+        <nd ref="-10894"/>
+        <nd ref="-9087"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:f325c99e6f384e7560cdf7caed486cd9e41b0372;sha1sum:3a2c24d2653183e7cae7d367f1769b3b42d17fb4;sha1sum:fb5f8a576dcd71a46d49e10bac1272ebe26da611;sha1sum:7e65b5da231dec3a4e6e0cc13cf8550caeef34d8;sha1sum:ffbfa275d41e7e1ff972215873e94f2251ef6f52"/>
+        <tag k="hoot:id" v="-16375"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="53.566825799421181"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2016-09-18_10400100216CBD00;2017-01-14_10400100274F8700;2017-04-04_104001002A2BF200;2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.227Z"/>
+        <tag k="travel_time_s" v="6.8470000000000004"/>
+    </way>
+    <way visible="true" id="-16372" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1120"/>
+        <nd ref="-11132"/>
+        <nd ref="-12118"/>
+        <nd ref="-1094"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:2bea3ad158da4ae8fde4ee1f395ec7f4a8abc003;sha1sum:19d885d16b88d8311d57504f210d64a948cba33d;sha1sum:0d038cd3ed235d55007d3b6aefbb4ac7f2c7eca3;sha1sum:6e0134e9563f09a06b6ba794c1d376eda930fb1b;sha1sum:d954cc51f64adc691bce454b8380d9211df2b1be"/>
+        <tag k="hoot:id" v="-16372"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="77.435705207114012"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-08-26_1040010031B2A800;2017-11-08_104001003463A000;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2018-10-25_10400100437B1B00;2018-12-14_1040010045D0B600;2019-09-23_10400100524A6B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.548Z"/>
+        <tag k="travel_time_s" v="9.8979999999999997"/>
+    </way>
+    <way visible="true" id="-16369" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9087"/>
+        <nd ref="-10223"/>
+        <nd ref="-12008"/>
+        <nd ref="-12770"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:66b86b360df08b1fc60ad615a80c1abfb6885233;sha1sum:3ef478801da7b760ed6ae026bd7f6bc92a1c7193;sha1sum:348e77a8d8a3a3959458ddca7e54c6e248384bd5;sha1sum:db4a4080a91c9a014444a64bc1cd7d3cd5252a0f;sha1sum:1f65c6cd5e84c9886d9474d585eac334f1925dc7"/>
+        <tag k="hoot:id" v="-16369"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="98.633228444731316"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-04-04_104001002A2BF200;2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2017-11-08_104001003463A000;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2018-10-25_10400100437B1B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.227Z"/>
+        <tag k="travel_time_s" v="12.608000000000001"/>
+    </way>
+    <way visible="true" id="-16366" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9530"/>
+        <nd ref="-12768"/>
+        <nd ref="-12017"/>
+        <nd ref="-9015"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:ba2891635a00e48c7e4214ac7eb767bda7de9658;sha1sum:ff873b2b2ee8598adebf2016ffec046396d7448d;sha1sum:42fc1f4d5bd80cf84619e7c275d73dd0d52e6b7e;sha1sum:905a844d4f2bc0482e06ffb28bcecb99831f5dfc;sha1sum:9ad4148845e35b7bdd1b176d08f3bccf8757ef41"/>
+        <tag k="hoot:id" v="-16366"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="32.670362871076819"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2017-08-26_1040010031B2A800;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2018-10-25_10400100437B1B00;2019-09-23_10400100524A6B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.235Z"/>
+        <tag k="travel_time_s" v="4.1760000000000002"/>
+    </way>
+    <way visible="true" id="-16363" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10614"/>
+        <nd ref="-9089"/>
+        <nd ref="-9087"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:0d6034b4116498afdb7a14a76859129dec73dcec;sha1sum:495804d6c53d5b0501b86b5845e7988b156c4f6f;sha1sum:8ce631e0b2c61f449f403871d4b24d387b43c966"/>
+        <tag k="hoot:id" v="-16363"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="32.40185084801643"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2017-08-26_1040010031B2A800;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2018-10-25_10400100437B1B00;2019-09-23_10400100524A6B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.227Z"/>
+        <tag k="travel_time_s" v="4.1420000000000003"/>
+    </way>
+    <way visible="true" id="-16360" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9821"/>
+        <nd ref="-9733"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:21ca66fcb5ace9f483cca922ed8d161daa3c6238;sha1sum:9eb04cc479eab4af47223175ce9c8d8be83bd10d;sha1sum:e5368c72373688335ded105236bbbc594b36bd64;sha1sum:4eb8dded102216ec4e2a7dcd385c33e2f75ef303"/>
+        <tag k="hoot:id" v="-16360"/>
+        <tag k="hoot:layername" v="2018-12-14_1040010045D0B600"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="29.908783541528603"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-04-04_104001002A2BF200;2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2017-08-26_1040010031B2A800;2017-11-08_104001003463A000;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2018-10-25_10400100437B1B00;2018-12-14_1040010045D0B600"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.551Z"/>
+        <tag k="travel_time_s" v="3.823"/>
+    </way>
+    <way visible="true" id="-16356" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9733"/>
+        <nd ref="-1081"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:3ddac7d6a7cc24dce2054e331c95472f8206e638;sha1sum:9eb04cc479eab4af47223175ce9c8d8be83bd10d;sha1sum:e5368c72373688335ded105236bbbc594b36bd64;sha1sum:4eb8dded102216ec4e2a7dcd385c33e2f75ef303"/>
+        <tag k="hoot:id" v="-16356"/>
+        <tag k="hoot:layername" v="2019-09-23_10400100524A6B00"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="25.966854719461239"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-04-04_104001002A2BF200;2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2017-08-26_1040010031B2A800;2017-11-08_104001003463A000;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2018-10-25_10400100437B1B00;2019-09-23_10400100524A6B00"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.551Z"/>
+        <tag k="travel_time_s" v="3.319"/>
+    </way>
+    <way visible="true" id="-16345" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1081"/>
+        <nd ref="-12903"/>
+        <nd ref="-1078"/>
+        <nd ref="-10898"/>
+        <nd ref="-9518"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-16345"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="110.43360847205449"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2017-08-26_1040010031B2A800;2017-11-08_104001003463A000;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2018-10-25_10400100437B1B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.551Z"/>
+        <tag k="travel_time_s" v="14.116"/>
+    </way>
+    <way visible="true" id="-16342" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1094"/>
+        <nd ref="-10554"/>
+        <nd ref="-1081"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:bc0395900de189007c8910b5f0dd839fe767ac1f;sha1sum:c05f1c20f39307dbc1e83017436db576b0f21f74;sha1sum:f7eb5be451912b270a8a99c8593657bd000ff1bd;sha1sum:5f6d796e4fc0f4d66ee652c0dc3f3e03f7d43315;sha1sum:ea8fb1473c837c8aeb1708d65b29bcc7674cab5b"/>
+        <tag k="hoot:id" v="-16342"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="39.410235443431411"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-04-04_104001002A2BF200;2017-08-26_1040010031B2A800;2017-11-08_104001003463A000;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2018-10-25_10400100437B1B00;2019-09-23_10400100524A6B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.550Z"/>
+        <tag k="travel_time_s" v="5.0380000000000003"/>
+    </way>
+    <way visible="true" id="-16334" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1081"/>
+        <nd ref="-1071"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:cf4aeecc7aa48f7cdab40831116530a84bd23983;sha1sum:e91c4dbbba198a98f611433c21ec8409f8105daa;sha1sum:6077482f60ccdd34a6af6b8f443bc058f4bf7288;sha1sum:080fecded4628a33c3ef3fd02eaafca6a888677c;sha1sum:f8a48a35f73f57230a7379301a7e42e43feb34f8"/>
+        <tag k="hoot:id" v="-16334"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="34.598105513644427"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-08-26_1040010031B2A800;2017-11-08_104001003463A000;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2018-10-25_10400100437B1B00;2018-12-14_1040010045D0B600;2019-09-23_10400100524A6B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.551Z"/>
+        <tag k="travel_time_s" v="4.4219999999999997"/>
+    </way>
+    <way visible="true" id="-16331" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1094"/>
+        <nd ref="-9517"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:856e1804fa1a7ce8162814497d35d84b25c6287d;sha1sum:fa96809b57bbe0d95f600af18b267f2fe0f7de16;sha1sum:066d187e6cca784d9638d4b414fc8d99977dc11c;sha1sum:0d038cd3ed235d55007d3b6aefbb4ac7f2c7eca3;sha1sum:57d8b6f76339599a2b63d5728e3ff883f0fa319f"/>
+        <tag k="hoot:id" v="-16331"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="111.95703373150383"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-08-26_1040010031B2A800;2017-11-08_104001003463A000;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2018-10-25_10400100437B1B00;2018-12-14_1040010045D0B600;2019-09-23_10400100524A6B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.551Z"/>
+        <tag k="travel_time_s" v="14.311"/>
+    </way>
+    <way visible="true" id="-16320" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1062"/>
+        <nd ref="-1061"/>
+        <nd ref="-10217"/>
+        <nd ref="-13023"/>
+        <nd ref="-1059"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:7c2be744371dbc28ef5bee16a94f7e9c15c5d989;sha1sum:cda4602b89355911cec0d21a80d4cd86f5a81cee;sha1sum:006b2f62fbadb5c2665a028080bd55aeceb9cacf;sha1sum:ee8b378c1143ddbbe49434168d0a9e3dce4306b3;sha1sum:36def99d33fe521b36777dacc57f4dc0c8347b64"/>
+        <tag k="hoot:id" v="-16320"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="11.009220892753511"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2017-08-26_1040010031B2A800;2017-11-08_104001003463A000;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2019-09-23_10400100524A6B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.552Z"/>
+        <tag k="travel_time_s" v="1.407"/>
+    </way>
+    <way visible="true" id="-16072" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-12919"/>
+        <nd ref="-12920"/>
+        <nd ref="-12912"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-16072"/>
+        <tag k="hoot:layername" v="2013-03-07_1030010020251600"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="inferred_speed_mph" v="45"/>
+        <tag k="length_m" v="22.68858013245114"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2013-03-07_1030010020251600"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.234Z"/>
+        <tag k="travel_time_s" v="1.1279999999999999"/>
+    </way>
+    <way visible="true" id="-16062" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10116"/>
+        <nd ref="-1120"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:05513365bb8f467e0caba4e5f1e5b8d343c813d9;sha1sum:9c8ed8c5b93c5e1fe86058410ac9f4954543db8c;sha1sum:08ad1120b66b454a7a770aabb1faf13e62581b8d;sha1sum:e5070f2ea3782d1646e7eba3e7ee5511079ef70e;sha1sum:6224fe640538b33f3ee9cab4e6f4730e24ad410e"/>
+        <tag k="hoot:id" v="-16062"/>
+        <tag k="hoot:layername" v="2017-11-08_104001003463A000"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="length_m" v="6.6930274044509019"/>
+        <tag k="source:datetime" v="2013-10-29T00:00:00Z"/>
+        <tag k="source:imagery" v="2013-10-29_1030010028126300;2014-01-02_103001002A310600;2015-06-04_104001000B629600;2016-07-31_104001001F677300;2017-11-08_104001003463A000"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:43.721Z"/>
+        <tag k="travel_time_s" v="0.42799999999999999"/>
+    </way>
+    <way visible="true" id="-16051" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9925"/>
+        <nd ref="-11857"/>
+        <nd ref="-10550"/>
+        <nd ref="-13028"/>
+        <nd ref="-10389"/>
+        <nd ref="-12663"/>
+        <nd ref="-11452"/>
+        <nd ref="-9821"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:c9a55da8b116a876f14dcea204a66e479384e28b;sha1sum:9eb04cc479eab4af47223175ce9c8d8be83bd10d"/>
+        <tag k="hoot:id" v="-16051"/>
+        <tag k="hoot:layername" v="2018-10-25_10400100437B1B00"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="79.41577030611316"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-01-14_10400100274F8700;2017-04-04_104001002A2BF200;2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2017-08-26_1040010031B2A800;2017-11-08_104001003463A000;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2018-10-25_10400100437B1B00"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.551Z"/>
+        <tag k="travel_time_s" v="10.151"/>
+    </way>
+    <way visible="true" id="-16031" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9522"/>
+        <nd ref="-10393"/>
+        <nd ref="-979"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:02a42a2b858690c09a3e4cf83c4d794590800d52;sha1sum:adfdb49958a4106fccaaf142730fb83985bbb6df;sha1sum:5d425762f1d2df99b363683e39a78ace5ffcf454;sha1sum:b63c845ae68e4fab2b89e62c6571852e34f086cc;sha1sum:fe4674a3456481f6e4046ce82482684d1495dbd5"/>
+        <tag k="hoot:id" v="-16031"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="114.11599963881255"/>
+        <tag k="source:datetime" v="2013-10-29T00:00:00Z"/>
+        <tag k="source:imagery" v="2016-07-31_104001001F677300;2016-09-18_10400100216CBD00;2017-04-04_104001002A2BF200;2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2017-08-26_1040010031B2A800;2018-03-01_1040010039838B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:43.729Z"/>
+        <tag k="travel_time_s" v="14.587"/>
+    </way>
+    <way visible="true" id="-15744" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-11341"/>
+        <nd ref="-12771"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:df1b0f8bcb117c291e9c6072a926a4663ba9a35d;sha1sum:6a568aa6a328e32075902fef93e6507011348157;sha1sum:239778c01641ea6b4594b9fdcc0d254d6457f583;sha1sum:797f9e1ac8540a06531d66c399197bc98d77a1a4;sha1sum:080b526b894713e0695653fab8d7499e309d50d4"/>
+        <tag k="hoot:id" v="-15744"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="32.549390383507735"/>
+        <tag k="source:datetime" v="2014-03-14T00:00:00Z"/>
+        <tag k="source:imagery" v="2016-07-31_104001001F677300;2016-09-18_10400100216CBD00;2017-04-04_104001002A2BF200;2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2018-03-01_1040010039838B00;2019-09-23_10400100524A6B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:47.941Z"/>
+        <tag k="travel_time_s" v="4.1609999999999996"/>
+    </way>
+    <way visible="true" id="-15732" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1064"/>
+        <nd ref="-1059"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:0bdc8ca879506cdf58e08e5b3ef8f27d71242c4e;sha1sum:6a31bb304edaf12650307908750d800d9ff089cf;sha1sum:90be100b1b0db0d578c363b36e49e607b5182236;sha1sum:080fecded4628a33c3ef3fd02eaafca6a888677c;sha1sum:2159da9545ba42feba268415f7b42565cd5a343b"/>
+        <tag k="hoot:id" v="-15732"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="21.353583599396796"/>
+        <tag k="source:datetime" v="2014-01-02T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-04-04_104001002A2BF200;2017-11-08_104001003463A000;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2018-10-25_10400100437B1B00;2018-12-14_1040010045D0B600;2019-09-23_10400100524A6B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:46.260Z"/>
+        <tag k="travel_time_s" v="2.73"/>
+    </way>
+    <way visible="true" id="-15716" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1100"/>
+        <nd ref="-10000"/>
+        <nd ref="-10001"/>
+        <nd ref="-10595"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:dual_highway" v="yes"/>
+        <tag k="hoot:hash" v="sha1sum:abc927ec4bfa09ad8ab0d6e002cf507e6dad635a;sha1sum:2c867cb0f1641067266a90ddbbcb53364e11d3ab;sha1sum:36f5af0194dc6000e5a5ecbb1a81888e85e0d948;sha1sum:d111be86c8861f73511068e7b9d4f8e582a81267;sha1sum:f70d541d9bfe724209075f983797a6a81b363f07"/>
+        <tag k="hoot:id" v="-15716"/>
+        <tag k="hoot:layername" v="2017-11-08_1040010034671C00"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="lanes" v="2"/>
+        <tag k="length_m" v="11.34122265056825"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="ref" v="A2"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2014-01-02T00:00:00Z"/>
+        <tag k="source:imagery" v="2015-09-25_104001001131BE00;2016-07-31_104001001F677300;2016-09-18_10400100216CBD00;2017-04-04_104001002A2BF200;2017-08-26_1040010031B2A800;2017-11-08_1040010034671C00;2018-12-14_1040010045D0B600;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:46.258Z"/>
+        <tag k="surface" v="paved"/>
+        <tag k="travel_time_s" v="1.45"/>
+    </way>
+    <way visible="true" id="-15537" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-12707"/>
+        <nd ref="-1081"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-15537"/>
+        <tag k="hoot:layername" v="2014-01-02_103001002A310600"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="4.1057202290537509"/>
+        <tag k="source:datetime" v="2014-01-02T00:00:00Z"/>
+        <tag k="source:imagery" v="2014-01-02_103001002A310600"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:46.259Z"/>
+        <tag k="travel_time_s" v="0.52500000000000002"/>
+    </way>
+    <way visible="true" id="-15530" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-12684"/>
+        <nd ref="-945"/>
+        <nd ref="-12685"/>
+        <nd ref="-12686"/>
+        <nd ref="-12679"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-15530"/>
+        <tag k="hoot:layername" v="2014-01-02_103001002A310600"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="45"/>
+        <tag k="length_m" v="234.58171077606502"/>
+        <tag k="source:datetime" v="2014-01-02T00:00:00Z"/>
+        <tag k="source:imagery" v="2014-01-02_103001002A310600"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:46.026Z"/>
+        <tag k="travel_time_s" v="11.661"/>
+    </way>
+    <way visible="true" id="-15523" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1064"/>
+        <nd ref="-12487"/>
+        <nd ref="-12668"/>
+        <nd ref="-9094"/>
+        <nd ref="-12485"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:35950548e98e665e4b77c653727631630f6e172c;sha1sum:3c872db4c87cae8fa7ed5a6dc4a0cf7e6beedef1;sha1sum:7e6b072fc3829b6b8ddf333ae0846966319cfadd;sha1sum:814cf25aeb68da355f7281f055b20cca176e6fce;sha1sum:7f5b2866fec492cf682b965446233a2ff23ecfdf"/>
+        <tag k="hoot:id" v="-15523"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="157.82013058279261"/>
+        <tag k="source:datetime" v="2014-03-14T00:00:00Z"/>
+        <tag k="source:imagery" v="2016-07-31_104001001F677300;2016-09-18_10400100216CBD00;2017-04-04_104001002A2BF200;2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2017-08-26_1040010031B2A800;2018-03-01_1040010039838B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:48.338Z"/>
+        <tag k="travel_time_s" v="20.172999999999998"/>
+    </way>
+    <way visible="true" id="-15505" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9514"/>
+        <nd ref="-9709"/>
+        <nd ref="-1100"/>
+        <nd ref="-9786"/>
+        <nd ref="-12481"/>
+        <nd ref="-9515"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:680be9462af49bde487d338006f7da21452b9f15;sha1sum:c427e4c9aed2d89f59aa21379a1a334be3b6d16a;sha1sum:584dc9e967cad5f7af5d2292e63c6861c5d75212;sha1sum:0de921eaa00c92fe4ac67825a8a3c59edde3e175;sha1sum:f8f5146fd27aa19d6f197ef021f3e971a08d68b2"/>
+        <tag k="hoot:id" v="-15505"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="117.14032245210774"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-08-26_1040010031B2A800;2017-11-08_104001003463A000;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2018-10-25_10400100437B1B00;2018-12-14_1040010045D0B600;2019-09-23_10400100524A6B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.550Z"/>
+        <tag k="travel_time_s" v="14.973000000000001"/>
+    </way>
+    <way visible="true" id="-15479" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1071"/>
+        <nd ref="-10900"/>
+        <nd ref="-9519"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:fb67d00b6c26d698ba2cb32b12018610e206c201;sha1sum:de52fe9879b29f546bab43aa2db6f327d0ca5324;sha1sum:95404c6ba8374147698b3579850f6f28006838f2;sha1sum:438b91230bccaf614d80800b4e9d47d2be440bc7;sha1sum:5eecc5415bf24672e97ff3491be9d55b0b1b32a9"/>
+        <tag k="hoot:id" v="-15479"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="146.67600970206834"/>
+        <tag k="source:datetime" v="2014-03-14T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2017-08-26_1040010031B2A800;2017-11-08_104001003463A000;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2019-09-23_10400100524A6B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:48.337Z"/>
+        <tag k="travel_time_s" v="18.748999999999999"/>
+    </way>
+    <way visible="true" id="-15124" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9092"/>
+        <nd ref="-12896"/>
+        <nd ref="-12658"/>
+        <nd ref="-9091"/>
+        <nd ref="-9525"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:347b7f9cecce69eac3f67350c230176691d47740;sha1sum:054ee12e36f69ee4690f18a2b391ce0f14c0cc1a;sha1sum:6e313b14a0f52ea82d232aac63b2c93aa7ba032e;sha1sum:e2860b92425d6a6f099d2e4b9698b9682d6d7283;sha1sum:60bce3c141d38710ca9443d06793b19f5636c077"/>
+        <tag k="hoot:id" v="-15124"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="194.64331286561827"/>
+        <tag k="source:datetime" v="2013-10-29T00:00:00Z"/>
+        <tag k="source:imagery" v="2016-07-31_104001001F677300;2016-09-18_10400100216CBD00;2017-01-14_10400100274F8700;2017-04-04_104001002A2BF200;2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2017-08-26_1040010031B2A800;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:43.237Z"/>
+        <tag k="travel_time_s" v="24.879999999999999"/>
+    </way>
+    <way visible="true" id="-15112" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1064"/>
+        <nd ref="-12490"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:a84368acff3585a11917d9178088f4416641ec72"/>
+        <tag k="hoot:id" v="-15112"/>
+        <tag k="hoot:layername" v="2014-07-01_1050410010C69A00"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="47.508888344555785"/>
+        <tag k="source:datetime" v="2014-07-01T00:00:00Z"/>
+        <tag k="source:imagery" v="2014-07-01_1050410010C69A00"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:50.645Z"/>
+        <tag k="travel_time_s" v="6.0730000000000004"/>
+    </way>
+    <way visible="true" id="-15097" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1071"/>
+        <nd ref="-13026"/>
+        <nd ref="-12765"/>
+        <nd ref="-12660"/>
+        <nd ref="-12899"/>
+        <nd ref="-1064"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:a70003a88234c99a6e247866caeeea34af61bcb7;sha1sum:debcc748741574b9505da92b6411e2655a194a88;sha1sum:6e909b8a4e4114f571580901a22aa51785165215;sha1sum:080fecded4628a33c3ef3fd02eaafca6a888677c;sha1sum:f8a48a35f73f57230a7379301a7e42e43feb34f8"/>
+        <tag k="hoot:id" v="-15097"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="37.587449310738641"/>
+        <tag k="source:datetime" v="2013-03-07T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-08-26_1040010031B2A800;2017-11-08_104001003463A000;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2018-10-25_10400100437B1B00;2018-12-14_1040010045D0B600;2019-09-23_10400100524A6B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:41.551Z"/>
+        <tag k="travel_time_s" v="4.8049999999999997"/>
+    </way>
+    <way visible="true" id="-14754" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1064"/>
+        <nd ref="-12487"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-14754"/>
+        <tag k="hoot:layername" v="2014-07-01_1050410010C69A00"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="47.508888344555785"/>
+        <tag k="source:datetime" v="2014-07-01T00:00:00Z"/>
+        <tag k="source:imagery" v="2014-07-01_1050410010C69A00"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:50.645Z"/>
+        <tag k="travel_time_s" v="6.0730000000000004"/>
+    </way>
+    <way visible="true" id="-14717" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10232"/>
+        <nd ref="-9522"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-14717"/>
+        <tag k="hoot:layername" v="2014-07-01_1050410010C69A00"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="75.639061029189065"/>
+        <tag k="source:datetime" v="2014-07-01T00:00:00Z"/>
+        <tag k="source:imagery" v="2014-07-01_1050410010C69A00"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:50.654Z"/>
+        <tag k="travel_time_s" v="9.6690000000000005"/>
+    </way>
+    <way visible="true" id="-14716" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9522"/>
+        <nd ref="-10232"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-14716"/>
+        <tag k="hoot:layername" v="2014-07-01_1050410010C69A00"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="23.874032245481239"/>
+        <tag k="source:datetime" v="2014-07-01T00:00:00Z"/>
+        <tag k="source:imagery" v="2014-07-01_1050410010C69A00"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:50.654Z"/>
+        <tag k="travel_time_s" v="3.052"/>
+    </way>
+    <way visible="true" id="-14704" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1059"/>
+        <nd ref="-11905"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:697a1f2ba2121de792662cc9b4c1eddd20cdbf7b;sha1sum:637c0f01f1cb6fe507f1f889c2f754f2f1185541;sha1sum:eb113b3abc3d79ead234292b172e6b523a91112e;sha1sum:5bd92a7a501f2b4acd99eb63748b13fe21280218;sha1sum:0a5748486179f05776274d35ff6152fbc4eca6c9"/>
+        <tag k="hoot:id" v="-14704"/>
+        <tag k="hoot:layername" v="2015-02-16_104001000751AD00"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="4.094362752029947"/>
+        <tag k="source:datetime" v="2014-10-12T00:00:00Z"/>
+        <tag k="source:imagery" v="2015-02-16_104001000751AD00;2015-06-04_104001000B629600;2015-09-25_104001001131BE00;2016-04-09_104001001AC95700;2016-07-31_104001001F677300;2016-09-18_10400100216CBD00;2017-04-04_104001002A2BF200;2017-08-26_1040010031B2A800;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:53.369Z"/>
+        <tag k="travel_time_s" v="0.52300000000000002"/>
+    </way>
+    <way visible="true" id="-14698" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1100"/>
+        <nd ref="-10091"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:2b4426f266e18ba42e0be761c8d0a2d85888c863;sha1sum:205d26f00d4f07f60b4fdcfcd7a20bb2dcc34bcd"/>
+        <tag k="hoot:id" v="-14698"/>
+        <tag k="hoot:layername" v="2014-12-27_1040010006919E00"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="length_m" v="89.904241888512843"/>
+        <tag k="source:datetime" v="2014-10-12T00:00:00Z"/>
+        <tag k="source:imagery" v="2014-10-12_1040010002A06700;2014-12-27_1040010006919E00"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:53.363Z"/>
+        <tag k="travel_time_s" v="5.7460000000000004"/>
+    </way>
+    <way visible="true" id="-14680" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-11145"/>
+        <nd ref="-11192"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:c10bdc74c4ff58df51bd6820a947eb14809e6dd3;sha1sum:55cd1889873837975285a7caa7428977e8aa1f46;sha1sum:24ea31a58dc16d517ee51d61dc8452b9c23fecfd"/>
+        <tag k="hoot:id" v="-14680"/>
+        <tag k="hoot:layername" v="2016-04-09_104001001AC95700"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="110.8806186129804"/>
+        <tag k="source:datetime" v="2014-10-12T00:00:00Z"/>
+        <tag k="source:imagery" v="2014-10-12_1040010002A06700;2015-06-04_104001000B629600;2015-09-25_104001001131BE00;2016-04-09_104001001AC95700"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:53.380Z"/>
+        <tag k="travel_time_s" v="14.173"/>
+    </way>
+    <way visible="true" id="-14676" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-11523"/>
+        <nd ref="-11192"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:55cd1889873837975285a7caa7428977e8aa1f46"/>
+        <tag k="hoot:id" v="-14676"/>
+        <tag k="hoot:layername" v="2015-09-25_104001001131BE00"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="length_m" v="186.79017599556033"/>
+        <tag k="source:datetime" v="2014-10-12T00:00:00Z"/>
+        <tag k="source:imagery" v="2014-10-12_1040010002A06700;2015-09-25_104001001131BE00"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:53.380Z"/>
+        <tag k="travel_time_s" v="11.938000000000001"/>
+    </way>
+    <way visible="true" id="-14656" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-12485"/>
+        <nd ref="-11864"/>
+        <nd ref="-11678"/>
+        <nd ref="-9524"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:32cc13e63aee9fb91e7d0fd2775947ae9988f005;sha1sum:720c819e267b3ef552eee8a3bcb5d4ef82397593;sha1sum:bb43793815fd22c87f77efc3fa8981af9c921951"/>
+        <tag k="hoot:id" v="-14656"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="157.82013058279261"/>
+        <tag k="source:datetime" v="2014-07-01T00:00:00Z"/>
+        <tag k="source:imagery" v="2015-09-25_104001001131BE00;2016-04-09_104001001AC95700;2016-07-31_104001001F677300;2016-09-18_10400100216CBD00;2017-04-04_104001002A2BF200;2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:50.143Z"/>
+        <tag k="travel_time_s" v="20.172999999999998"/>
+    </way>
+    <way visible="true" id="-14608" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9701"/>
+        <nd ref="-1073"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:b3f5ec70a6751c57523340292a665e384f58303d;sha1sum:3a1a9a1fc7eb6c6a2d1c16d832cb90ad5da6cbc7;sha1sum:66c811d766c55375c5a2b8688a55b313e2378dcc"/>
+        <tag k="hoot:id" v="-14608"/>
+        <tag k="hoot:layername" v="2020-04-05_10400100593CB500"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="75.539109987325077"/>
+        <tag k="source:datetime" v="2014-10-12T00:00:00Z"/>
+        <tag k="source:imagery" v="2015-12-29_1040010017B37C00;2016-04-09_104001001AC95700;2016-07-31_104001001F677300;2016-09-18_10400100216CBD00;2017-04-04_104001002A2BF200;2017-11-08_104001003463A000;2018-03-01_1040010039838B00;2018-12-14_1040010045D0B600;2020-04-05_10400100593CB500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:53.367Z"/>
+        <tag k="travel_time_s" v="9.6560000000000006"/>
+    </way>
+    <way visible="true" id="-14202" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-12181"/>
+        <nd ref="-12162"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-14202"/>
+        <tag k="hoot:layername" v="2014-10-12_1040010002A06700"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="59.904092376855509"/>
+        <tag k="source:datetime" v="2014-10-12T00:00:00Z"/>
+        <tag k="source:imagery" v="2014-10-12_1040010002A06700"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:53.365Z"/>
+        <tag k="travel_time_s" v="7.657"/>
+    </way>
+    <way visible="true" id="-14186" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-12131"/>
+        <nd ref="-12181"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-14186"/>
+        <tag k="hoot:layername" v="2014-10-12_1040010002A06700"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="53.614752090268965"/>
+        <tag k="source:datetime" v="2014-10-12T00:00:00Z"/>
+        <tag k="source:imagery" v="2014-10-12_1040010002A06700"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:53.376Z"/>
+        <tag k="travel_time_s" v="6.8529999999999998"/>
+    </way>
+    <way visible="true" id="-13852" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10220"/>
+        <nd ref="-10121"/>
+        <nd ref="-12013"/>
+        <nd ref="-9701"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-13852"/>
+        <tag k="hoot:layername" v="2017-11-08_104001003463A000"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="116.22475339175971"/>
+        <tag k="source:datetime" v="2015-02-16T00:00:00Z"/>
+        <tag k="source:imagery" v="2015-02-16_104001000751AD00;2017-11-08_104001003463A000"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:58.421Z"/>
+        <tag k="travel_time_s" v="14.856"/>
+    </way>
+    <way visible="true" id="-13440" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1061"/>
+        <nd ref="-1060"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:7719509d51e7744a9bf2c49953da8da9c2cab66a;sha1sum:d48a4ea2fa48333b8ab832aea3cd990299d87501;sha1sum:4538b9f85678b4e9c98df54b8d656f4abb73369b;sha1sum:1d47de958ce071fe98ba2226a36cd0f079798ef9;sha1sum:31600234d3722e47ec56f7f8997688e49db192d1"/>
+        <tag k="hoot:id" v="-13440"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="17.538173140182941"/>
+        <tag k="source:datetime" v="2015-06-04T00:00:00Z"/>
+        <tag k="source:imagery" v="2015-06-04_104001000B629600;2015-09-25_104001001131BE00;2015-12-29_1040010017B37C00;2016-04-09_104001001AC95700;2016-09-18_10400100216CBD00;2017-04-04_104001002A2BF200;2017-08-26_1040010031B2A800;2018-03-01_1040010039838B00;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:01.127Z"/>
+        <tag k="travel_time_s" v="2.242"/>
+    </way>
+    <way visible="true" id="-12508" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10118"/>
+        <nd ref="-1120"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-12508"/>
+        <tag k="hoot:layername" v="2015-09-25_104001001131BE00"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="11.902953406620878"/>
+        <tag k="source:datetime" v="2015-09-25T00:00:00Z"/>
+        <tag k="source:imagery" v="2015-09-25_104001001131BE00"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:03.852Z"/>
+        <tag k="travel_time_s" v="1.5209999999999999"/>
+    </way>
+    <way visible="true" id="-12481" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9087"/>
+        <nd ref="-11341"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:df1b0f8bcb117c291e9c6072a926a4663ba9a35d;sha1sum:6a568aa6a328e32075902fef93e6507011348157;sha1sum:239778c01641ea6b4594b9fdcc0d254d6457f583;sha1sum:797f9e1ac8540a06531d66c399197bc98d77a1a4;sha1sum:080b526b894713e0695653fab8d7499e309d50d4"/>
+        <tag k="hoot:id" v="-12481"/>
+        <tag k="hoot:layername" v="2015-12-29_1040010017B37C00"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="4.5776367185288107"/>
+        <tag k="source:datetime" v="2016-04-09T00:00:00Z"/>
+        <tag k="source:imagery" v="2015-12-29_1040010017B37C00;2016-07-31_104001001F677300;2016-09-18_10400100216CBD00;2017-04-04_104001002A2BF200;2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2018-03-01_1040010039838B00;2019-09-23_10400100524A6B00;2020-04-05_10400100593CB500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:08.182Z"/>
+        <tag k="travel_time_s" v="0.58499999999999996"/>
+    </way>
+    <way visible="true" id="-12451" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10112"/>
+        <nd ref="-11326"/>
+        <nd ref="-1100"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:bd89a5b13799eb7ea9f2b6a1ad7ade51d8fbb51d;sha1sum:f8f5146fd27aa19d6f197ef021f3e971a08d68b2"/>
+        <tag k="hoot:id" v="-12451"/>
+        <tag k="hoot:layername" v="2017-11-08_104001003463A000"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="77.565595175498231"/>
+        <tag k="source:datetime" v="2015-12-29T00:00:00Z"/>
+        <tag k="source:imagery" v="2015-12-29_1040010017B37C00;2016-04-09_104001001AC95700;2017-11-08_104001003463A000"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:06.513Z"/>
+        <tag k="travel_time_s" v="9.9149999999999991"/>
+    </way>
+    <way visible="true" id="-12449" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1059"/>
+        <nd ref="-10614"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-12449"/>
+        <tag k="hoot:layername" v="2015-12-29_1040010017B37C00"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="27.145473620646552"/>
+        <tag k="source:datetime" v="2015-12-29T00:00:00Z"/>
+        <tag k="source:imagery" v="2015-12-29_1040010017B37C00"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:06.517Z"/>
+        <tag k="travel_time_s" v="3.4700000000000002"/>
+    </way>
+    <way visible="true" id="-12071" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1068"/>
+        <nd ref="-10738"/>
+        <nd ref="-11458"/>
+        <nd ref="-12310"/>
+        <nd ref="-11867"/>
+        <nd ref="-11681"/>
+        <nd ref="-10086"/>
+        <nd ref="-12490"/>
+        <nd ref="-10383"/>
+        <nd ref="-9789"/>
+        <nd ref="-9970"/>
+        <nd ref="-10087"/>
+        <nd ref="-1064"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:1f2cd94ecf7c4eb0278794693cfce80ff623f2e5;sha1sum:265fafbcc4c33112534e6ff6dda06a9903b8d11d;sha1sum:0e2ae2ef2cac558b32561f3a552f0f527dad488e"/>
+        <tag k="hoot:id" v="-12071"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="82.421132139974034"/>
+        <tag k="source:datetime" v="2014-07-01T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-04-04_104001002A2BF200;2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2017-08-26_1040010031B2A800;2017-11-08_1040010034671C00;2018-10-25_10400100437B1B00;2019-09-23_10400100524A6B00;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:50.645Z"/>
+        <tag k="travel_time_s" v="10.535"/>
+    </way>
+    <way visible="true" id="-11656" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9521"/>
+        <nd ref="-983"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:bca33b9ed9e8580e35c12c7f2fb02579567bc174;sha1sum:9316253f789909cfb42fe0d316a632aa03d7f668"/>
+        <tag k="hoot:id" v="-11656"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="78.343204305063367"/>
+        <tag k="source:datetime" v="2016-07-31T00:00:00Z"/>
+        <tag k="source:imagery" v="2016-07-31_104001001F677300;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:11.943Z"/>
+        <tag k="travel_time_s" v="10.013999999999999"/>
+    </way>
+    <way visible="true" id="-11580" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10614"/>
+        <nd ref="-11905"/>
+        <nd ref="-11008"/>
+        <nd ref="-9092"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-11580"/>
+        <tag k="hoot:layername" v="2016-07-31_104001001F677300"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="5.4335003089133798"/>
+        <tag k="source:datetime" v="2016-07-31T00:00:00Z"/>
+        <tag k="source:imagery" v="2016-07-31_104001001F677300"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:11.239Z"/>
+        <tag k="travel_time_s" v="0.69499999999999995"/>
+    </way>
+    <way visible="true" id="-10660" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10913"/>
+        <nd ref="-9522"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-10660"/>
+        <tag k="hoot:layername" v="2016-09-18_10400100216CBD00"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="75.309427243486468"/>
+        <tag k="source:datetime" v="2016-09-18T00:00:00Z"/>
+        <tag k="source:imagery" v="2016-09-18_10400100216CBD00"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:15.365Z"/>
+        <tag k="travel_time_s" v="9.6259999999999994"/>
+    </way>
+    <way visible="true" id="-10659" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9522"/>
+        <nd ref="-10232"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-10659"/>
+        <tag k="hoot:layername" v="2016-09-18_10400100216CBD00"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="60.174363360773874"/>
+        <tag k="source:datetime" v="2016-09-18T00:00:00Z"/>
+        <tag k="source:imagery" v="2016-09-18_10400100216CBD00"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:15.366Z"/>
+        <tag k="travel_time_s" v="7.6920000000000002"/>
+    </way>
+    <way visible="true" id="-10277" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10782"/>
+        <nd ref="-1068"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-10277"/>
+        <tag k="hoot:layername" v="2017-01-14_10400100274F8700"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="length_m" v="0.96505055526883154"/>
+        <tag k="source:datetime" v="2017-01-14T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-01-14_10400100274F8700"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:18.602Z"/>
+        <tag k="travel_time_s" v="0.062"/>
+    </way>
+    <way visible="true" id="-9042" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10232"/>
+        <nd ref="-9522"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-9042"/>
+        <tag k="hoot:layername" v="2017-08-26_1040010031B2A800"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="75.179269270025259"/>
+        <tag k="source:datetime" v="2017-08-26T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-08-26_1040010031B2A800"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:30.515Z"/>
+        <tag k="travel_time_s" v="9.6099999999999994"/>
+    </way>
+    <way visible="true" id="-9041" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9522"/>
+        <nd ref="-10232"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-9041"/>
+        <tag k="hoot:layername" v="2017-08-26_1040010031B2A800"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="33.532214321529992"/>
+        <tag k="source:datetime" v="2017-08-26T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-08-26_1040010031B2A800"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:30.516Z"/>
+        <tag k="travel_time_s" v="4.2859999999999996"/>
+    </way>
+    <way visible="true" id="-8986" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10220"/>
+        <nd ref="-1126"/>
+        <nd ref="-12162"/>
+        <nd ref="-10114"/>
+        <nd ref="-10116"/>
+        <nd ref="-9513"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="hoot:dual_highway" v="yes"/>
+        <tag k="hoot:hash" v="sha1sum:aeea3212231dd51ed9cc190a179e8600ec858704;sha1sum:bcc10be2b877c68c0f747a1f2f9799d822be4f47"/>
+        <tag k="hoot:id" v="-8986"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="45"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="lanes" v="2"/>
+        <tag k="length_m" v="14.395894042507623"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="ref" v="A2"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2020-04-05T00:00:00Z"/>
+        <tag k="source:imagery" v="2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:47.827Z"/>
+        <tag k="surface" v="paved"/>
+        <tag k="travel_time_s" v="0.71599999999999997"/>
+    </way>
+    <way visible="true" id="-8737" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1068"/>
+        <nd ref="-946"/>
+        <nd ref="-945"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="hoot:dual_highway" v="yes"/>
+        <tag k="hoot:id" v="-8737"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="lanes" v="2"/>
+        <tag k="length_m" v="12.681879258325154"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="ref" v="A2"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2020-04-05T00:00:00Z"/>
+        <tag k="source:imagery" v="2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:47.825Z"/>
+        <tag k="surface" v="paved"/>
+        <tag k="travel_time_s" v="0.81100000000000005"/>
+    </way>
+    <way visible="true" id="-8732" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10220"/>
+        <nd ref="-1125"/>
+        <nd ref="-1110"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="hoot:dual_highway" v="yes"/>
+        <tag k="hoot:hash" v="sha1sum:aeea3212231dd51ed9cc190a179e8600ec858704;sha1sum:bcc10be2b877c68c0f747a1f2f9799d822be4f47;sha1sum:8620b7d635eeee4ec85a593498e8206c80ee1d0c"/>
+        <tag k="hoot:id" v="-8732"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="45"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="lanes" v="2"/>
+        <tag k="length_m" v="14.395894042507623"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="ref" v="A2"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2017-11-08T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-11-08_104001003463A000;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:33.221Z"/>
+        <tag k="surface" v="paved"/>
+        <tag k="travel_time_s" v="0.71599999999999997"/>
+    </way>
+    <way visible="true" id="-8730" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10118"/>
+        <nd ref="-10114"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-8730"/>
+        <tag k="hoot:layername" v="2017-11-08_104001003463A000"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="length_m" v="8.4407450474630625"/>
+        <tag k="source:datetime" v="2017-11-08T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-11-08_104001003463A000"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:33.219Z"/>
+        <tag k="travel_time_s" v="0.53900000000000003"/>
+    </way>
+    <way visible="true" id="-8718" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1120"/>
+        <nd ref="-10118"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-8718"/>
+        <tag k="hoot:layername" v="2017-11-08_104001003463A000"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="length_m" v="2.2217132229990604"/>
+        <tag k="source:datetime" v="2017-11-08T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-11-08_104001003463A000"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:33.220Z"/>
+        <tag k="travel_time_s" v="0.14199999999999999"/>
+    </way>
+    <way visible="true" id="-8701" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9512"/>
+        <nd ref="-10112"/>
+        <nd ref="-10091"/>
+        <nd ref="-10386"/>
+        <nd ref="-1129"/>
+        <nd ref="-1120"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="hoot:dual_highway" v="yes"/>
+        <tag k="hoot:hash" v="sha1sum:abc927ec4bfa09ad8ab0d6e002cf507e6dad635a;sha1sum:2c867cb0f1641067266a90ddbbcb53364e11d3ab;sha1sum:36f5af0194dc6000e5a5ecbb1a81888e85e0d948;sha1sum:9eed7d95aa5225b0fa51b3ed30af87c80e6e329c;sha1sum:f70d541d9bfe724209075f983797a6a81b363f07"/>
+        <tag k="hoot:id" v="-8701"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="lanes" v="2"/>
+        <tag k="length_m" v="166.45611716054728"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="ref" v="A2"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2014-12-27T00:00:00Z"/>
+        <tag k="source:imagery" v="2014-12-27_1040010006919E00;2015-09-25_104001001131BE00;2016-07-31_104001001F677300;2017-01-14_10400100274F8700;2017-08-26_1040010031B2A800;2018-12-14_1040010045D0B600;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:56.239Z"/>
+        <tag k="surface" v="paved"/>
+        <tag k="travel_time_s" v="10.638999999999999"/>
+    </way>
+    <way visible="true" id="-7433" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9704"/>
+        <nd ref="-1062"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:bcc10be2b877c68c0f747a1f2f9799d822be4f47"/>
+        <tag k="hoot:id" v="-7433"/>
+        <tag k="hoot:layername" v="2020-04-05_10400100593CB500"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="102.54247394531858"/>
+        <tag k="source:datetime" v="2020-04-05T00:00:00Z"/>
+        <tag k="source:imagery" v="2020-04-05_10400100593CB500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:47.827Z"/>
+        <tag k="travel_time_s" v="13.106999999999999"/>
+    </way>
+    <way visible="true" id="-7083" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10091"/>
+        <nd ref="-10112"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-7083"/>
+        <tag k="hoot:layername" v="2020-04-05_10400100593CB500"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="7.789359953799555"/>
+        <tag k="source:datetime" v="2020-04-05T00:00:00Z"/>
+        <tag k="source:imagery" v="2020-04-05_10400100593CB500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:47.821Z"/>
+        <tag k="travel_time_s" v="0.996"/>
+    </way>
+    <way visible="true" id="-7045" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9523"/>
+        <nd ref="-9704"/>
+        <nd ref="-9705"/>
+        <nd ref="-954"/>
+        <nd ref="-11523"/>
+        <nd ref="-1110"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="hoot:dual_highway" v="yes"/>
+        <tag k="hoot:hash" v="sha1sum:aeea3212231dd51ed9cc190a179e8600ec858704;sha1sum:bcc10be2b877c68c0f747a1f2f9799d822be4f47"/>
+        <tag k="hoot:id" v="-7045"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="45"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="lanes" v="2"/>
+        <tag k="length_m" v="14.395894042507623"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="ref" v="A2"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2020-04-05T00:00:00Z"/>
+        <tag k="source:imagery" v="2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:47.827Z"/>
+        <tag k="surface" v="paved"/>
+        <tag k="travel_time_s" v="0.71599999999999997"/>
+    </way>
+    <way visible="true" id="-1014" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1110"/>
+        <nd ref="-1080"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-1014"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="45"/>
+        <tag k="length_m" v="5.3383958996021317"/>
+        <tag k="source:datetime" v="2020-06-20T00:00:00Z"/>
+        <tag k="source:imagery" v="2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:50.955Z"/>
+        <tag k="travel_time_s" v="0.26500000000000001"/>
+    </way>
+    <way visible="true" id="290369250" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1073"/>
+        <nd ref="-10556"/>
+        <nd ref="-1072"/>
+        <nd ref="-10395"/>
+        <nd ref="-9897"/>
+        <nd ref="-1071"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:hash" v="sha1sum:c4fad70d1f349badba1d694099ddc58f4e579c40;sha1sum:d1b7ab9e9d98393cef721ed1210aa3b68eb1da3b;sha1sum:3a1a9a1fc7eb6c6a2d1c16d832cb90ad5da6cbc7;sha1sum:66c811d766c55375c5a2b8688a55b313e2378dcc"/>
+        <tag k="hoot:id" v="290369250"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="73.153008235979826"/>
+        <tag k="source:datetime" v="2014-07-01T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-06-15_c491aad5-fc0c-44ab-b1cf-68f030ff60f6-inv;2017-08-26_1040010031B2A800;2017-11-08_104001003463A000;2017-11-08_1040010034671C00;2018-03-01_1040010039838B00;2018-12-14_1040010045D0B600;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:48:50.644Z"/>
+        <tag k="travel_time_s" v="9.3510000000000009"/>
+    </way>
+    <relation visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-16390" role=""/>
+        <member type="way" ref="-16391" role=""/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="hoot:dual_highway" v="yes"/>
+        <tag k="hoot:hash" v="sha1sum:1e632f077b7028a533a04896dd4c2a3e3b4f64d3;sha1sum:8620b7d635eeee4ec85a593498e8206c80ee1d0c"/>
+        <tag k="hoot:id" v="-7"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:multilinestring" v="yes"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="inferred_speed_mph" v="35"/>
+        <tag k="int_name" v="Trans-Sahara Highway/Trans Sahelian Highway"/>
+        <tag k="int_ref" v="TAH 2;TAH 5"/>
+        <tag k="lanes" v="2"/>
+        <tag k="length_m" v="12.681879258325154"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="ref" v="A2"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2017-01-14T00:00:00Z"/>
+        <tag k="source:imagery" v="2017-01-14_10400100274F8700;2017-11-08_104001003463A000;2020-04-05_10400100593CB500;2020-06-20_104001005D526500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:18.599Z"/>
+        <tag k="surface" v="paved"/>
+        <tag k="travel_time_s" v="0.81100000000000005"/>
+        <tag k="type" v="multilinestring"/>
+    </relation>
+</osm>

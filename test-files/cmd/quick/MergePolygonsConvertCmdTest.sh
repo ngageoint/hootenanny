@@ -8,7 +8,6 @@ OUTPUTFILEDIR=test-output/cmd/quick/MergePolygonsConvertCmdTest
 
 mkdir -p $OUTPUTFILEDIR
 
-
 # Input: 2 x polygons
 # Output: 1 x polygon 
 INPUTFILE1=$INPUTFILEDIR/square_polygon.osm

@@ -167,5 +167,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RandomWaySplitterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RandomWaySplitterTest, "serial");
 
 }

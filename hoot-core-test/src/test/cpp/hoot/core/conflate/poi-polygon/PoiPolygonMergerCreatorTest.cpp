@@ -92,10 +92,10 @@ public:
     n1->getTags()["amenity"] = "cafe";
     map->addNode(n1);
 
-    std::shared_ptr<PoiPolygonMatch> match1(
-          new PoiPolygonMatch(map, std::shared_ptr<MatchThreshold>(),
-                              std::shared_ptr<PoiPolygonRfClassifier>(),
-                              std::make_shared<PoiPolygonInfoCache>(map)));
+    std::shared_ptr<PoiPolygonMatch> match1 =
+      std::make_shared<PoiPolygonMatch>(
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
+        std::make_shared<PoiPolygonInfoCache>(map));
     match1->setMatchEvidenceThreshold(3);
     match1->setReviewEvidenceThreshold(1);
     match1->calculateMatch(w1->getElementId(), n1->getElementId());
@@ -141,11 +141,10 @@ public:
 
     vector<ConstMatchPtr> matchesV;
 
-    std::shared_ptr<PoiPolygonMatch> match1(
-          new PoiPolygonMatch(map, std::shared_ptr<MatchThreshold>(),
-                              std::shared_ptr<PoiPolygonRfClassifier>(),
-                              std::make_shared<PoiPolygonInfoCache>(map)));
-    //match1->setConfiguration(conf());
+    std::shared_ptr<PoiPolygonMatch> match1 =
+      std::make_shared<PoiPolygonMatch>(
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
+        std::make_shared<PoiPolygonInfoCache>(map));
     match1->setMatchEvidenceThreshold(3);
     match1->setReviewEvidenceThreshold(1);
     match1->calculateMatch(w1->getElementId(), n1->getElementId());
@@ -154,11 +153,10 @@ public:
       std::make_shared<MatchThreshold>(0.5, 0.5, 0.5);
     BuildingMatchCreator().createMatches(map, matchesV, threshold);
 
-    std::shared_ptr<PoiPolygonMatch> match2(
-          new PoiPolygonMatch(map, std::shared_ptr<MatchThreshold>(),
-                              std::shared_ptr<PoiPolygonRfClassifier>(),
-                              std::make_shared<PoiPolygonInfoCache>(map)));
-    //match2->setConfiguration(conf());
+    std::shared_ptr<PoiPolygonMatch> match2 =
+      std::make_shared<PoiPolygonMatch>(
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
+        std::make_shared<PoiPolygonInfoCache>(map));
     match2->setMatchEvidenceThreshold(3);
     match2->setReviewEvidenceThreshold(1);
     match2->calculateMatch(w2->getElementId(), n1->getElementId());

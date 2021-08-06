@@ -1,0 +1,33 @@
+[[conflate-cumulative]]
+== conflate-cumulative
+
+=== Description
+
+The +conflate-cumulative+ command conflates multiple maps into a single map in a cumulative fashion.
+
+This command must be run with the following configuration options:
+* writer.clean.review.tags=false
+* tag.merger.default=hoot::ProvenanceAwareOverwriteTagMerger
+
+This command does not work with the --stats option.
+
+* +inputDir+ - Input directory; may contain any supported input format.
+* +output+ - The output path.
+
+=== Usage
+
+--------------------------------------
+conflate-cumulative (inputDir) (output)
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot conflate-cumulative -D review.tags.treat.as.metadata=false -D tag.merger.default=hoot::ProvenanceAwareOverwriteTagMerger input1.osm input2.osm input3.osm input4.osm output.osm
+--------------------------------------
+
+=== See Also
+
+* _Unifying Conflation_, <<hootalgo,Hootenanny - Algorithms>>
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+

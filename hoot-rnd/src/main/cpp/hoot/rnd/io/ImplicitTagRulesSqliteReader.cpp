@@ -49,9 +49,8 @@ _secondRoundTagsCacheHits(0),
 _addTopTagOnly(true),
 _allowWordsInvolvedInMultipleRules(false),
 //Since we're inserting all objects with cost = 1, the cost passed into the constructor
-//of QCache behaves as a max size.  Assigning an arbitrary max size here...actually haven't seen
-//anything close to this in practice yet, so this may eventually need some tuning.
-_tagsCache(100000)
+//of QCache behaves as a max size.
+_tagsCache(ConfigOptions().getImplicitTaggingMaxCacheSize())
 {
 }
 
