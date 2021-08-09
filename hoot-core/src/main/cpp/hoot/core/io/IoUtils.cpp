@@ -31,27 +31,27 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/WayCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/ElementCriterionInputStream.h>
+#include <hoot/core/io/HootApiDb.h>
+#include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
 #include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/OgrReader.h>
-#include <hoot/core/elements/OsmMapConsumer.h>
-#include <hoot/core/io/ElementCriterionInputStream.h>
-#include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/io/HootApiDb.h>
-#include <hoot/core/io/ShapefileWriter.h>
-#include <hoot/core/util/ConfPath.h>
-#include <hoot/core/util/DbUtils.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 // Qt
 #include <QFileInfo>
@@ -222,6 +222,23 @@ QStringList IoUtils::getSupportedInputsRecursively(
   validInputs.sort();
   return validInputs;
 }
+
+QStringList IoUtils::expandInputs(const QStringList& inputs)
+{
+  QStringList validInputs;
+  for (int i = 0; i < inputs.size(); ++i)
+  {
+    //  Get the list of all files in the container, if the file is a container
+    QStringList files = OgrUtilities::getInstance().getValidFilesInContainer(inputs[i]);
+    //  `files` is empty if the file isn't a container file so add the filename
+    if (files.isEmpty())
+      files.append(inputs[i]);
+    //  Append all files to the list of valid inputs
+    validInputs.append(files);
+  }
+  return validInputs;
+}
+
 
 bool IoUtils::isSupportedInputFormat(const QString& url)
 {

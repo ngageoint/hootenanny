@@ -561,6 +561,24 @@ See the User Guide for more specific details on command usage. Most of these exa
     hoot convert /vsizip//gis-data/input.zip/tds/LAP030.shp output.osm
 -----
 
+==== Convert all shape files inside of a zip file:
+
+-----
+    hoot convert /gis-data/input.zip output.osm
+-----
+
+==== Convert a shape file that is stored inside a compressed tar file:
+
+-----
+    hoot convert /vsitar//gis-data/input.tar.gz output.osm
+-----
+
+==== Convert all shape files stored inside a compressed tar file:
+
+-----
+    hoot convert /gis-data/input.tar.gz output.osm
+-----
+
 ==== Convert an OSM file to a shape file, allowing the export columns to be automatically selected based on frequency:
 
 -----
