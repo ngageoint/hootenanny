@@ -133,7 +133,7 @@ vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Ma
     const int maxCacheSize = ConfigOptions().getExpectationIntersectionMaxCacheSize();
     for (size_t i = 0; i < splits.size(); i++)
     {
-      pdfs[i].initialize(matches.rowRange(nextStart, splits[i]), maxCacheSize);
+      pdfs[i].initialize(matches.rowRange(nextStart, static_cast<int>(splits[i])), maxCacheSize);
       nextStart = splits[i];
     }
     pdfs[pdfs.size() - 1].initialize(matches.rowRange(nextStart, matches.rows - 1));

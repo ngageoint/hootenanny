@@ -131,7 +131,7 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
     // lower the score, the more different the two maps are from each other and potentially the more
     // we've added to the initial map via conflation.
     LOG_STATUS("Reading output map for creating comparison score: ... " << output << "...");
-    OsmMapPtr outputMap(new OsmMap());
+    OsmMapPtr outputMap = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(outputMap, true, true, output);
     _printOutputScore(firstInputMap, outputMap);
   }
@@ -220,7 +220,7 @@ int CumulativeConflator2::_getNumIterations(const QStringList& inputs) const
   return numIterations;
 }
 
-void CumulativeConflator2::_resetInitConfig(const QStringList& args)
+void CumulativeConflator2::_resetInitConfig(const QStringList& args) const
 {
   MatchFactory::getInstance().reset();
   MergerFactory::getInstance().reset();
@@ -234,7 +234,7 @@ void CumulativeConflator2::_resetInitConfig(const QStringList& args)
   LOG_VARD(ConfigOptions().getWayJoiner());
 }
 
-void CumulativeConflator2::_initDropDividedRoadsConfig()
+void CumulativeConflator2::_initDropDividedRoadsConfig() const
 {
   // Set the conflate config up to tag all divided roads first. Then, drop all secondary roads
   // tagged as divided from input before conflation. That leaves us just with divided roads from the
@@ -319,12 +319,12 @@ void CumulativeConflator2::_transferTagsToInputs(
     "Tag transfer ran in " << StringUtils::millisecondsToDhms(totalTimer.elapsed()) << " total.");
 }
 
-void CumulativeConflator2::_removeTransferredTags(const QString& url)
+void CumulativeConflator2::_removeTransferredTags(const QString& url) const
 {
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
   LOG_STATUS("Removing transferred tags from ..." << url.right(maxFilePrintLength) << "...");
 
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   OsmMapReaderFactory::read(map, true, true, url);
 
   SetTagValueVisitor roadUpdater("highway", "road");
@@ -345,7 +345,7 @@ void CumulativeConflator2::_removeTransferredTags(const QString& url)
 }
 
 void CumulativeConflator2::_sortInputsByScore(
-  const QDir& input, QStringList& inputs, OsmMapPtr& firstInputMap)
+  const QDir& input, QStringList& inputs, OsmMapPtr& firstInputMap) const
 {
   QElapsedTimer totalTimer;
   totalTimer.start();
@@ -374,7 +374,7 @@ void CumulativeConflator2::_sortInputsByScore(
     LOG_STATUS(
       "Loading comparison map (" << i << "/" << (inputs.size() - 1) << "): " + inputs.at(i) +
       "...");
-    OsmMapPtr map2(new OsmMap());
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
     if (!TEST_RUN)
     {
       OsmMapReaderFactory::read(map2, true, true, input.path() + "/" + inputs.at(i));
@@ -443,7 +443,7 @@ void CumulativeConflator2::_sortInputsByScore(
 }
 
 void CumulativeConflator2::_printOutputScore(
-  const OsmMapPtr& firstInputMap, const OsmMapPtr& outputMap)
+  const OsmMapPtr& firstInputMap, const OsmMapPtr& outputMap) const
 {
   LOG_STATUS("Scoring initial input against final output...");
   int graphInputOutputComparisonScore = -1;

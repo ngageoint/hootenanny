@@ -225,7 +225,7 @@ private:
     ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2, ConstNetworkEdgePtr e1,
     ConstNetworkEdgePtr e2) const;
 
-  const SublineCache _getSublineCache(ConstWayPtr w1, ConstWayPtr w2);
+  SublineCache _getSublineCache(ConstWayPtr w1, ConstWayPtr w2);
 
   LegacyVertexMatcherPtr _getVertexMatcher();
 

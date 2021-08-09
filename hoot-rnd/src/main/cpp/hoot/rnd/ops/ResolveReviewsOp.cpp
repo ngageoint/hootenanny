@@ -65,7 +65,7 @@ void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
   //  Bail out when keeping reviews
-  if (_type == KeepReviews)
+  if (_type == ResolveType::KeepReviews)
   {
     LOG_INFO("ResolveReviews operator keeping reviews");
     return;
@@ -83,7 +83,7 @@ void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
   _numProcessed = _numAffected = reviews.size();
 
   //  Remove all of the review relations
-  if (_type == RemoveReviews)
+  if (_type == ResolveType::RemoveReviews)
   {
     LOG_INFO("ResolveReviews operator removing reviews");
     //  Remove all of the review relations one by one
@@ -107,9 +107,9 @@ void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
       {
         //  Check if any elements are part of multiple reviews
         bool multipleReviews = false;
-        for (set<ElementId>::iterator it = elements.begin(); it != elements.end(); ++it)
+        for (set<ElementId>::iterator eit = elements.begin(); eit != elements.end(); ++eit)
         {
-          if (ReviewMarker::getReviewUids(map, *it).size() > 1)
+          if (ReviewMarker::getReviewUids(map, *eit).size() > 1)
             multipleReviews = true;
         }
         std::vector<ElementId> eids(elements.begin(), elements.end());
@@ -178,8 +178,8 @@ void ResolveReviewsOp::_resolveMultipleReviews(std::shared_ptr<OsmMap>& map, con
   _resolveMatchReview(match, map, relation_id, eid1, eid2);
 }
 
-void ResolveReviewsOp::_resolveMatchReview(std::shared_ptr<Match>& match,
-                                           std::shared_ptr<OsmMap>& map,
+void ResolveReviewsOp::_resolveMatchReview(const std::shared_ptr<Match>& match,
+                                           const std::shared_ptr<OsmMap>& map,
                                            const ElementId& relation_id,
                                            const ElementId& eid1,
                                            const ElementId& eid2)
@@ -200,7 +200,7 @@ void ResolveReviewsOp::_resolveMatchReview(std::shared_ptr<Match>& match,
       std::vector<MergerPtr> mergers;
       //  Matches and reviews are going to both be merged here
       set<pair<ElementId, ElementId>> eids;
-      eids.emplace(pair<ElementId, ElementId>(eid1, eid2));
+      eids.emplace(std::make_pair(eid1, eid2));
       MergerFactory::getInstance().createMergers(map, matches, mergers);
 
       for (std::vector<MergerPtr>::iterator it = mergers.begin(); it != mergers.end(); ++it)
@@ -220,8 +220,8 @@ void ResolveReviewsOp::_resolveMatchReview(std::shared_ptr<Match>& match,
   }
 }
 
-void ResolveReviewsOp::_resolveManualReview(std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
-                                            const ElementId& eid1, const ElementId& eid2)
+void ResolveReviewsOp::_resolveManualReview(const std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
+                                            const ElementId& eid1, const ElementId& eid2) const
 {
   LOG_TRACE(
     "Manually resolving review: " << relation_id << ", elements: " << eid1 << ", " << eid2 << "...");
@@ -242,7 +242,7 @@ void ResolveReviewsOp::_resolveManualReview(std::shared_ptr<OsmMap>& map, const 
   ReviewMarker::removeElement(map, relation_id);
 }
 
-MatchPtr ResolveReviewsOp::_getCachedMatch(std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
+MatchPtr ResolveReviewsOp::_getCachedMatch(const std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
                                            const ElementId& eid1, const ElementId& eid2)
 {
   MatchPtr match;
@@ -252,7 +252,7 @@ MatchPtr ResolveReviewsOp::_getCachedMatch(std::shared_ptr<OsmMap>& map, const E
   else
   {
     //  Copy elements to a temporary map for matching
-    OsmMapPtr copy_score(new OsmMap());
+    OsmMapPtr copy_score = std::make_shared<OsmMap>();
     CopyMapSubsetOp(map, eid1, eid2).apply(copy_score);
     copy_score->getElement(eid1)->setStatus(Status::Unknown1);
     copy_score->getElement(eid2)->setStatus(Status::Unknown2);
@@ -263,7 +263,7 @@ MatchPtr ResolveReviewsOp::_getCachedMatch(std::shared_ptr<OsmMap>& map, const E
   return match;
 }
 
-ResolveReviewsOp::ResolveType ResolveReviewsOp::_resolveString(const QString& type)
+ResolveReviewsOp::ResolveType ResolveReviewsOp::_resolveString(const QString& type) const
 {
   if (type == "resolve")
     return ResolveType::ResolveReviews;

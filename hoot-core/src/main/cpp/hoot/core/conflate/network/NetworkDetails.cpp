@@ -879,7 +879,7 @@ Meters NetworkDetails::getSearchRadius(ConstWayPtr w1, ConstWayPtr w2) const
   return result;
 }
 
-const NetworkDetails::SublineCache NetworkDetails::_getSublineCache(ConstWayPtr w1, ConstWayPtr w2)
+NetworkDetails::SublineCache NetworkDetails::_getSublineCache(ConstWayPtr w1, ConstWayPtr w2)
 {
   ElementId e1 = w1->getElementId();
   ElementId e2 = w2->getElementId();
