@@ -80,7 +80,7 @@ void CumulativeConflator2::setInputSortScoreType(QString scoreTypeStr)
   _inputSortScoreType = scoreTypeStr;
 }
 
-void CumulativeConflator2::conflate(const QDir& input, const QString& output)
+void CumulativeConflator2::conflate(const QDir& input, const QString& output) const
 {
   QDir::SortFlags sortFlags;
   if (!_reverseInputs)
@@ -138,7 +138,8 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
 }
 
 void CumulativeConflator2::_conflate(
-  const QDir& input, const QStringList& inputs, const QString& output, const bool transferTags)
+  const QDir& input, const QStringList& inputs, const QString& output,
+  const bool transferTags) const
 {
   QElapsedTimer totalTimer;
   totalTimer.start();
@@ -234,7 +235,7 @@ void CumulativeConflator2::_resetInitConfig(const QStringList& args) const
   LOG_VARD(ConfigOptions().getWayJoiner());
 }
 
-void CumulativeConflator2::_initDropDividedRoadsConfig()
+void CumulativeConflator2::_initDropDividedRoadsConfig() const
 {
   // Set the conflate config up to tag all divided roads first. Then, drop all secondary roads
   // tagged as divided from input before conflation. That leaves us just with divided roads from the
@@ -264,7 +265,7 @@ void CumulativeConflator2::_initDropDividedRoadsConfig()
 }
 
 void CumulativeConflator2::_transferTagsToInputs(
-  const QDir& input, QStringList& inputs, const QString& output)
+  const QDir& input, QStringList& inputs, const QString& output) const
 {
   QElapsedTimer totalTimer;
   totalTimer.start();
