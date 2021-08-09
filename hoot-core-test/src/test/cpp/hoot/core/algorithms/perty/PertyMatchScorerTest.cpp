@@ -53,7 +53,7 @@ public:
     : HootTestFixture("test-files/algorithms/perty/PertyMatchScorerTest/",
                       "test-output/algorithms/perty/PertyMatchScorerTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   void runLoadReferenceMapTest()

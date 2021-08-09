@@ -47,7 +47,7 @@ public:
 
   MultiaryReviewCommandTest()
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   OsmMapPtr getTestMap()
