@@ -113,7 +113,7 @@ public:
   void setPrecision(int p) { _precision = p; }
   void setFormatXml(const bool format) { _formatXml = format; }
 
-  bool getSortSourceImageryTag() { return _sortSourceImageryTag; }
+  bool getSortSourceImageryTag() const { return _sortSourceImageryTag; }
   void setSortSourceImageryTag(bool sort) { _sortSourceImageryTag = sort; }
 
 private:
