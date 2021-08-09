@@ -179,10 +179,10 @@ void ResolveReviewsOp::_resolveMultipleReviews(std::shared_ptr<OsmMap>& map, con
 }
 
 void ResolveReviewsOp::_resolveMatchReview(const std::shared_ptr<Match>& match,
-                                           std::shared_ptr<OsmMap>& map,
+                                           const std::shared_ptr<OsmMap>& map,
                                            const ElementId& relation_id,
                                            const ElementId& eid1,
-                                           const ElementId& eid2)
+                                           const ElementId& eid2) const
 {
   LOG_TRACE(
     "Resolving match review: " << relation_id << ", for match: " << match << ", elements: " <<

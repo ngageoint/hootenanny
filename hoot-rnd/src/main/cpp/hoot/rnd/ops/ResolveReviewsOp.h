@@ -128,9 +128,9 @@ private:
    * @param eid1
    * @param eid2
    */
-  void _resolveMatchReview(const std::shared_ptr<Match>& match, std::shared_ptr<OsmMap>& map,
+  void _resolveMatchReview(const std::shared_ptr<Match>& match, const std::shared_ptr<OsmMap>& map,
                            const ElementId& relation_id, const ElementId& eid1,
-                           const ElementId& eid2);
+                           const ElementId& eid2) const;
   /**
    * @brief _resolveManualReview
    * @param map
