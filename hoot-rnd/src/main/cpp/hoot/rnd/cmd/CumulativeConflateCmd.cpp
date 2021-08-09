@@ -51,14 +51,12 @@ public:
   {
   }
 
-  virtual QString getName() const override { return "conflate-cumulative"; }
-
-  virtual QString getDescription() const override
+  QString getName() const override { return "conflate-cumulative"; }
+  QString getDescription() const override
   { return "Conflates multiple maps in a cumulative fashion (experimental)"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual QString getType() const { return "rnd"; }
-
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

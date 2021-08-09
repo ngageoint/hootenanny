@@ -107,9 +107,9 @@ void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
       {
         //  Check if any elements are part of multiple reviews
         bool multipleReviews = false;
-        for (set<ElementId>::iterator it = elements.begin(); it != elements.end(); ++it)
+        for (set<ElementId>::iterator it2 = elements.begin(); it2 != elements.end(); ++it2)
         {
-          if (ReviewMarker::getReviewUids(map, *it).size() > 1)
+          if (ReviewMarker::getReviewUids(map, *it2).size() > 1)
             multipleReviews = true;
         }
         std::vector<ElementId> eids(elements.begin(), elements.end());
@@ -165,9 +165,9 @@ void ResolveReviewsOp::_resolveMultipleReviews(std::shared_ptr<OsmMap>& map, con
         continue;
       //  Get the match object for the other review item
       std::vector<ElementId> ids(elements.begin(), elements.end());
-      MatchPtr match = _getCachedMatch(map, relation_id, ids[0], ids[1]);
+      MatchPtr match2 = _getCachedMatch(map, relation_id, ids[0], ids[1]);
       //  Check if there is a better review score in another review
-      if (match && match->getScore() > score)
+      if (match2 && match2->getScore() > score)
       {
         ReviewMarker::removeElement(map, relation_id);
         return;
@@ -178,7 +178,7 @@ void ResolveReviewsOp::_resolveMultipleReviews(std::shared_ptr<OsmMap>& map, con
   _resolveMatchReview(match, map, relation_id, eid1, eid2);
 }
 
-void ResolveReviewsOp::_resolveMatchReview(std::shared_ptr<Match>& match,
+void ResolveReviewsOp::_resolveMatchReview(const std::shared_ptr<Match>& match,
                                            std::shared_ptr<OsmMap>& map,
                                            const ElementId& relation_id,
                                            const ElementId& eid1,
@@ -200,7 +200,7 @@ void ResolveReviewsOp::_resolveMatchReview(std::shared_ptr<Match>& match,
       std::vector<MergerPtr> mergers;
       //  Matches and reviews are going to both be merged here
       set<pair<ElementId, ElementId>> eids;
-      eids.emplace(pair<ElementId, ElementId>(eid1, eid2));
+      eids.emplace(eid1, eid2);
       MergerFactory::getInstance().createMergers(map, matches, mergers);
 
       for (std::vector<MergerPtr>::iterator it = mergers.begin(); it != mergers.end(); ++it)
@@ -220,8 +220,9 @@ void ResolveReviewsOp::_resolveMatchReview(std::shared_ptr<Match>& match,
   }
 }
 
-void ResolveReviewsOp::_resolveManualReview(std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
-                                            const ElementId& eid1, const ElementId& eid2)
+void ResolveReviewsOp::_resolveManualReview(
+  const std::shared_ptr<OsmMap>& map, const ElementId& relation_id, const ElementId& eid1,
+  const ElementId& eid2) const
 {
   LOG_TRACE(
     "Manually resolving review: " << relation_id << ", elements: " << eid1 << ", " << eid2 << "...");
@@ -242,8 +243,9 @@ void ResolveReviewsOp::_resolveManualReview(std::shared_ptr<OsmMap>& map, const 
   ReviewMarker::removeElement(map, relation_id);
 }
 
-MatchPtr ResolveReviewsOp::_getCachedMatch(std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
-                                           const ElementId& eid1, const ElementId& eid2)
+MatchPtr ResolveReviewsOp::_getCachedMatch(
+  const std::shared_ptr<OsmMap>& map, const ElementId& relation_id, const ElementId& eid1,
+  const ElementId& eid2)
 {
   MatchPtr match;
   //  Check for a previously cached match
@@ -252,7 +254,7 @@ MatchPtr ResolveReviewsOp::_getCachedMatch(std::shared_ptr<OsmMap>& map, const E
   else
   {
     //  Copy elements to a temporary map for matching
-    OsmMapPtr copy_score(new OsmMap());
+    OsmMapPtr copy_score = std::make_shared<OsmMap>();
     CopyMapSubsetOp(map, eid1, eid2).apply(copy_score);
     copy_score->getElement(eid1)->setStatus(Status::Unknown1);
     copy_score->getElement(eid2)->setStatus(Status::Unknown2);
@@ -263,7 +265,7 @@ MatchPtr ResolveReviewsOp::_getCachedMatch(std::shared_ptr<OsmMap>& map, const E
   return match;
 }
 
-ResolveReviewsOp::ResolveType ResolveReviewsOp::_resolveString(const QString& type)
+ResolveReviewsOp::ResolveType ResolveReviewsOp::_resolveString(const QString& type) const
 {
   if (type == "resolve")
     return ResolveType::ResolveReviews;
