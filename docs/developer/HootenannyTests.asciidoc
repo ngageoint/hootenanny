@@ -95,7 +95,15 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbTest, "slow");
 #endif  
 -----------------
 
-Tests within the `hoot-rnd` module are generally always run in the `--glacial` test suite.
+Additional details:
+
+* Tests within the `hoot-rnd` module are generally always run in the `--glacial` test suite.
+* If your test must make any changes to the global configuration (`conf()`), you need to add: 
+`setResetType(ResetAll);` to the constructor of your test to properly reset the environment between 
+tests. When possible, avoid using `ResetAll` as it adds resource overhead to the tests.
+* If your test only needs basic environment cleanup between tests, like resetting the element ID 
+counter in `OsmMap` for comparing map file output, then add: `setResetType(ResetBasic);` to your 
+test constructor.
 
 ==== Core Command Line Tests
 
