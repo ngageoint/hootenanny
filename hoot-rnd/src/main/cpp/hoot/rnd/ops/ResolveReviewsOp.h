@@ -49,19 +49,19 @@ public:
   static QString className() { return "hoot::ResolveReviewsOp"; }
 
   ResolveReviewsOp();
-  ~ResolveReviewsOp() = default;
+  virtual ~ResolveReviewsOp() = default;
 
   /**
    * @brief The ResolveType enum Keep, Resolve, or Remove all reviews
    */
-  enum class ResolveType
+  enum ResolveType
   {
     KeepReviews,
     ResolveReviews,
     RemoveReviews
   };
 
-  ResolveType getResolveType() const { return _type; }
+  ResolveType getResolveType() { return _type; }
   void setResolveType(ResolveType type) { _type = type; }
 
   /**
@@ -124,7 +124,7 @@ private:
    * @param eid1
    * @param eid2
    */
-  void _resolveMatchReview(const std::shared_ptr<Match>& match, const std::shared_ptr<OsmMap>& map,
+  void _resolveMatchReview(std::shared_ptr<Match>& match, std::shared_ptr<OsmMap>& map,
                            const ElementId& relation_id, const ElementId& eid1, const ElementId& eid2);
   /**
    * @brief _resolveManualReview
@@ -133,8 +133,8 @@ private:
    * @param eid1
    * @param eid2
    */
-  void _resolveManualReview(const std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
-                            const ElementId& eid1, const ElementId& eid2) const;
+  void _resolveManualReview(std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
+                            const ElementId& eid1, const ElementId& eid2);
   /**
    * @brief _getCachedMatch
    * @param map
@@ -143,14 +143,14 @@ private:
    * @param eid2
    * @return
    */
-  MatchPtr _getCachedMatch(const std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
+  MatchPtr _getCachedMatch(std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
                            const ElementId& eid1, const ElementId& eid2);
   /**
    * @brief _resolveString Convert text string to ResolveType
    * @param type Must be one of "Keep" (default), "Remove", or "Resolve"
    * @return ResolveType equivalent of string
    */
-  ResolveType _resolveString(const QString& type) const;
+  ResolveType _resolveString(const QString& type);
 
   int _taskStatusUpdateInterval;
   /** Type of resolve operation, keep all, remove all, or resolve all */

@@ -46,14 +46,19 @@ public:
 
   static QString className() { return "hoot::ConflateCumulativeCmd"; }
 
-  QString getName() const override { return "conflate-cumulative"; }
+  ConflateCumulativeCmd() :
+  BoundedCommand()
+  {
+  }
 
-  QString getDescription() const override
+  virtual QString getName() const override { return "conflate-cumulative"; }
+
+  virtual QString getDescription() const override
   { return "Conflates multiple maps in a cumulative fashion (experimental)"; }
 
-  QString getType() const override { return "rnd"; }
+  virtual QString getType() const { return "rnd"; }
 
-  int runSimple(QStringList& args) override
+  virtual int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

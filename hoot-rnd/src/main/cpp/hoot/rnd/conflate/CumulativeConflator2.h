@@ -125,17 +125,17 @@ private:
 
   int _getNumIterations(const QStringList& inputs) const;
 
-  void _resetInitConfig(const QStringList& args) const;
-  void _initDropDividedRoadsConfig() const;
+  void _resetInitConfig(const QStringList& args);
+  void _initDropDividedRoadsConfig();
 
   void _transferTagsToInputs(const QDir& input, QStringList& inputs, const QString& output);
-  void _removeTransferredTags(const QString& url) const;
+  void _removeTransferredTags(const QString& url);
 
   void _conflate(
     const QDir& input, const QStringList& inputs, const QString& output, const bool transferTags);
 
-  void _sortInputsByScore(const QDir& input, QStringList& inputs, OsmMapPtr& firstInputMap) const;
-  void _printOutputScore(const OsmMapPtr& firstInputMap, const OsmMapPtr& outputMap) const;
+  void _sortInputsByScore(const QDir& input, QStringList& inputs, OsmMapPtr& firstInputMap);
+  void _printOutputScore(const OsmMapPtr& firstInputMap, const OsmMapPtr& outputMap);
 };
 
 }

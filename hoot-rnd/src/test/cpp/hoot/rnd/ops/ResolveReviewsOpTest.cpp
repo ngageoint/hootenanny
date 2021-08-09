@@ -73,7 +73,7 @@ public:
 
     ResolveReviewsOp uut;
     uut.setConfiguration(conf());
-    uut.setResolveType(ResolveReviewsOp::ResolveType::KeepReviews);
+    uut.setResolveType(ResolveReviewsOp::KeepReviews);
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -97,7 +97,7 @@ public:
 
     ResolveReviewsOp uut;
     uut.setConfiguration(conf());
-    uut.setResolveType(ResolveReviewsOp::ResolveType::RemoveReviews);
+    uut.setResolveType(ResolveReviewsOp::RemoveReviews);
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -121,7 +121,7 @@ public:
 
     ResolveReviewsOp uut;
     uut.setConfiguration(conf());
-    uut.setResolveType(ResolveReviewsOp::ResolveType::ResolveReviews);
+    uut.setResolveType(ResolveReviewsOp::ResolveReviews);
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -151,7 +151,7 @@ public:
 
     ResolveReviewsOp uut;
     uut.setConfiguration(conf());
-    uut.setResolveType(ResolveReviewsOp::ResolveType::ResolveReviews);
+    uut.setResolveType(ResolveReviewsOp::ResolveReviews);
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
