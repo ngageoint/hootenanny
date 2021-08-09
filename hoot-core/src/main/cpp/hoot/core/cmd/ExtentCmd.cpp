@@ -26,14 +26,14 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -73,7 +73,7 @@ public:
     QStringList inputs;
     if (!recursive)
     {
-      inputs = args;
+      inputs = IoUtils::expandInputs(args);
     }
     else
     {
