@@ -534,36 +534,26 @@ public:
 
   void invalidFeatureCombinationTest1()
   {
-    testMerge(
-      "building-too-few-in.osm", "building-too-few-out.osm",
-      "Invalid inputs passed to the element merger");
+    testMerge("building-too-few-in.osm", "", "Invalid inputs passed to the element merger");
   }
 
   void invalidFeatureCombinationTest2()
   {
-    testMerge(
-      "building-too-few-in.osm", "building-too-few-out.osm",
-      "Invalid inputs passed to the element merger");
+    testMerge("building-too-few-in.osm", "", "Invalid inputs passed to the element merger");
   }
 
   void invalidFeatureCombinationTest3()
   {
-    testMerge(
-      "building-too-few-in.osm", "building-too-few-out.osm",
-      "Invalid inputs passed to the element merger");
+    testMerge("building-too-few-in.osm", "", "Invalid inputs passed to the element merger");
   }
 
   void invalidFeatureCombinationTest4()
   {
-    testMerge(
-      "building-too-few-in.osm", "building-too-few-out.osm",
-      "Invalid inputs passed to the element merger");
+    testMerge("building-too-few-in.osm", "", "Invalid inputs passed to the element merger");
   }
 
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementMergerJsTest, "quick");
-// This needs to be run serially since output file names are shared across tests.
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementMergerJsTest, "serial");
 
 }
