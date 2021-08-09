@@ -48,19 +48,19 @@ namespace hoot
 class MatchCandidateCountVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MatchCandidateCountVisitorTest);
-  // TODO: These tests cause crashes when run serially with other tests, but not when they are run
-  // in parallel with other tests. The crashes do not occur when the tests are run in isolation
-  // either serially or in parallel. This may have to do with repeated calls to
-  // ScriptMatchCreator::setArguments from MatchFactory::_setMatchCreators. Possibly rewriting this
-  // as a command line test will make the problem go away.
-  //CPPUNIT_TEST(runBuildingMatchCandidateCountTest);
-  //CPPUNIT_TEST(runHighwayMatchCandidateCountTest);
-  //CPPUNIT_TEST(runCombinedMatchCandidateCountTest);
-  //CPPUNIT_TEST(runScriptMatchCreatorTest);
-  //CPPUNIT_TEST(runMultipleScriptMatchCreatorTest);
-  //CPPUNIT_TEST(runDualPoiScriptMatchCreatorTest);
-  //CPPUNIT_TEST(runFilteredPoiMatchCreatorTest);
-  //CPPUNIT_TEST(runFilteredMultipleMatchCreatorTest);
+  // TODO: These tests cause crashes when run serially with other tests in the quick suitte, but not
+  // when they are run in parallel with other tests in the quick suite. The crashes do not occur
+  // when the tests are run in isolation either serially or in parallel. This may have to do with
+  // repeated calls to ScriptMatchCreator::setArguments from MatchFactory::_setMatchCreators.
+  // Possibly, rewriting this as a command line test will make the problem go away.
+  CPPUNIT_TEST(runBuildingMatchCandidateCountTest);
+  CPPUNIT_TEST(runHighwayMatchCandidateCountTest);
+  CPPUNIT_TEST(runCombinedMatchCandidateCountTest);
+  CPPUNIT_TEST(runScriptMatchCreatorTest);
+  CPPUNIT_TEST(runMultipleScriptMatchCreatorTest);
+  CPPUNIT_TEST(runDualPoiScriptMatchCreatorTest);
+  CPPUNIT_TEST(runFilteredPoiMatchCreatorTest);
+  CPPUNIT_TEST(runFilteredMultipleMatchCreatorTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -69,7 +69,7 @@ public:
   {
     setResetType(ResetAll);
   }
-
+s
   void runBuildingMatchCandidateCountTest()
   {
     OsmXmlReader reader;
