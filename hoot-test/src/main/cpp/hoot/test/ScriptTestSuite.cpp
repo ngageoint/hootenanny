@@ -43,7 +43,7 @@ ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff, double waitTimeSec
 TestSuite((ConfPath::getHootHome() + "/" + dir).toStdString())
 {
   QDir d(ConfPath::getHootHome() + "/" + dir);
-  QStringList files = d.entryList(QDir::Files);
+  QStringList files = d.entryList(QDir::Files, QDir::Name);
   QStringList ignorePrefix;
 
   // if the web services are disabled, then ignore all script tests that start with Service
