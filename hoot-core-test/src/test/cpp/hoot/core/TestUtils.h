@@ -253,7 +253,6 @@ protected:
     if (outputPath != UNUSED_PATH)
       FileUtils::makeDir(_outputPath);
   }
-
   virtual ~HootTestFixture() = default;
 
   /**
