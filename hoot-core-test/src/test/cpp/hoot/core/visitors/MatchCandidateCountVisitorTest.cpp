@@ -69,7 +69,7 @@ public:
   {
     setResetType(ResetAll);
   }
-s
+
   void runBuildingMatchCandidateCountTest()
   {
     OsmXmlReader reader;
