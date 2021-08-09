@@ -48,7 +48,7 @@ public:
   HootTestFixture(
     "test-files/algorithms/WayAveragerTest/", "test-output/algorithms/WayAveragerTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   void runSimpleTest()
@@ -76,10 +76,12 @@ private:
     OsmMapPtr& targetMap)
   {
     WayPtr way1 =
-      std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithTag(sourceMap, "uuid", input1Uuid));
+      std::dynamic_pointer_cast<Way>(
+        MapUtils::getFirstElementWithTag(sourceMap, "uuid", input1Uuid));
     way1->setTag("note", "average input 1");
     WayPtr way2 =
-      std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithTag(sourceMap, "uuid", input2Uuid));
+      std::dynamic_pointer_cast<Way>(
+        MapUtils::getFirstElementWithTag(sourceMap, "uuid", input2Uuid));
     way2->setTag("note", "average input 2");
     std::set<ElementId> elementIds;
     elementIds.insert(way1->getElementId());

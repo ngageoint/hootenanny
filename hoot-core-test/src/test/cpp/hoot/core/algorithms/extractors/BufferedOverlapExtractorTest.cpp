@@ -61,7 +61,7 @@ public:
 
   BufferedOverlapExtractorTest()
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   OsmMapPtr _map;

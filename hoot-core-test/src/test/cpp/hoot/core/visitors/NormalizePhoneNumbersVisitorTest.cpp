@@ -56,7 +56,7 @@ public:
     "test-files/visitors/NormalizePhoneNumbersVisitorTest/",
     "test-output/visitors/NormalizePhoneNumbersVisitorTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   void runBasicTest()

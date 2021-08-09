@@ -149,9 +149,6 @@ public:
 
     CPPUNIT_ASSERT(hashString == QString(hashBytes.toHex()));
   }
-
-  // TODO: Create a test that applies commands to a map
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryReviewCommandTest, "glacial");

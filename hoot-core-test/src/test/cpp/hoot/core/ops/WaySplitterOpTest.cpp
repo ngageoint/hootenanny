@@ -54,9 +54,8 @@ class WaySplitterOpTest : public HootTestFixture
 
 public:
 
-  WaySplitterOpTest()
-    : HootTestFixture("test-files/ops/WaySplitterOp/",
-                      "test-output/ops/WaySplitterOp/")
+  WaySplitterOpTest() :
+  HootTestFixture("test-files/ops/WaySplitterOp/", "test-output/ops/WaySplitterOp/")
   {
     setResetType(ResetAll);
   }
@@ -65,7 +64,6 @@ public:
   {
     QString inputFile  = "ToyWGS84.osm";
     QString outputFile = "ToySplit.osm";
-
 
     OsmXmlReader reader;
     OsmMapPtr map = std::make_shared<OsmMap>();
@@ -78,13 +76,10 @@ public:
 
     OsmXmlWriter writer;
     writer.write(map, _outputPath + outputFile);
-    HOOT_FILE_EQUALS(_inputPath + outputFile,
-                     _outputPath + outputFile);
+    HOOT_FILE_EQUALS(_inputPath + outputFile, _outputPath + outputFile);
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WaySplitterOpTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WaySplitterOpTest, "current");
 
 }

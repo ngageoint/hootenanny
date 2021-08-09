@@ -57,7 +57,7 @@ public:
     : HootTestFixture("test-files/algorithms/WayMatchStringMergerTest/",
                       "test-output/algorithms/WayMatchStringMergerTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   WayStringPtr createWayString1(OsmMapPtr map)

@@ -59,6 +59,7 @@ public:
   ResolveReviewsOpTest() :
   HootTestFixture("test-files/rnd/ops/ResolveReviewsOp/", "test-output/rnd/ops/ResolveReviewsOp/")
   {
+    setResetType(ResetBasic);
   }
 
   void runKeepTest()
