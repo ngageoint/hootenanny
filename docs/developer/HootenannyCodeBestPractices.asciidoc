@@ -12,7 +12,9 @@ getters/setters are ok in a header file.
 * Use forward declarations where possible to mimimize build dependencies.
 * Use default constructors and destructors where applicable.
 * Use `std::make_shared` to create shared pointers when possible.
-* Pass variables to methods as const references when possible.
+* If a variable being passed to a method should never be null, pass a reference instead of a 
+pointer.
+* When passing references to methods, pass them as const references when possible.
 * Make methods const when possible.
 * Keep classes focused on a single primary functionality.
 * Public class member variables are generally discouraged, with the exception of `const` or 
