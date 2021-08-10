@@ -21,9 +21,9 @@ zip -q ../AllDataTypesA.zip *
 cd $HOOT_HOME
 
 echo "Converting zip to osm..."
-hoot convert --warn $HOOT_OPTS -D schema.translation.script=translations/Identity.js /vsizip/./test-output/AllDataTypesA.zip test-output/AllDataTypesA.osm
+hoot convert --warn $HOOT_OPTS -D schema.translation.script=translations/Identity.js test-output/AllDataTypesA.zip test-output/AllDataTypesA.osm
 hoot stats $HOOT_OPTS --brief test-output/AllDataTypesA.osm | grep -w 'Nodes\|Ways\|Relations'
 
 echo "Converting zip to osm with bounds..."
-hoot convert --warn $HOOT_OPTS -D schema.translation.script=translations/Identity.js -D bounds=-104.931,38.823,-104.869,38.877 /vsizip/./test-output/AllDataTypesA.zip test-output/AllDataTypesABBox.osm
+hoot convert --warn $HOOT_OPTS -D schema.translation.script=translations/Identity.js -D bounds=-104.931,38.823,-104.869,38.877 test-output/AllDataTypesA.zip test-output/AllDataTypesABBox.osm
 hoot stats $HOOT_OPTS --brief test-output/AllDataTypesABBox.osm | grep -w 'Nodes\|Ways\|Relations'

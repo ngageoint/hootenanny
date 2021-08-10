@@ -32,8 +32,8 @@
 #include <geos/geom/Geometry.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
 
 // Qt
@@ -144,6 +144,14 @@ public:
    */
   static QStringList getSupportedInputsRecursively(
     const QStringList& topLevelPaths, const QStringList& nameFilters = QStringList());
+
+  /**
+   * Returns all valid input file paths expanding any paths by looking inside of VSI files
+   *
+   * @param inputs one or more input files
+   * @return a list of file paths
+   */
+  static QStringList expandInputs(const QStringList& inputs);
 
   /**
    * Determines whether both input and output are streamable data sources (associated

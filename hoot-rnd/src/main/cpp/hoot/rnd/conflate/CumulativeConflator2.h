@@ -92,7 +92,7 @@ public:
    * @param input input directory with files to conflate
    * @param output output path to write conflated data
    */
-  void conflate(const QDir& input, const QString& output);
+  void conflate(const QDir& input, const QString& output) const;
 
   void setReverseInputs(bool reverse) { _reverseInputs = reverse; }
   void setTransferTagsInput(QString input) { _transferTagsInput = input; }
@@ -125,17 +125,18 @@ private:
 
   int _getNumIterations(const QStringList& inputs) const;
 
-  void _resetInitConfig(const QStringList& args);
-  void _initDropDividedRoadsConfig();
+  void _resetInitConfig(const QStringList& args) const;
+  void _initDropDividedRoadsConfig() const;
 
-  void _transferTagsToInputs(const QDir& input, QStringList& inputs, const QString& output);
-  void _removeTransferredTags(const QString& url);
+  void _transferTagsToInputs(const QDir& input, QStringList& inputs, const QString& output) const;
+  void _removeTransferredTags(const QString& url) const;
 
   void _conflate(
-    const QDir& input, const QStringList& inputs, const QString& output, const bool transferTags);
+    const QDir& input, const QStringList& inputs, const QString& output,
+    const bool transferTags) const;
 
-  void _sortInputsByScore(const QDir& input, QStringList& inputs, OsmMapPtr& firstInputMap);
-  void _printOutputScore(const OsmMapPtr& firstInputMap, const OsmMapPtr& outputMap);
+  void _sortInputsByScore(const QDir& input, QStringList& inputs, OsmMapPtr& firstInputMap) const;
+  void _printOutputScore(const OsmMapPtr& firstInputMap, const OsmMapPtr& outputMap) const;
 };
 
 }

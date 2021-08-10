@@ -61,31 +61,6 @@ public:
     RemoveReviews
   };
 
-  ResolveType getResolveType() { return _type; }
-  void setResolveType(ResolveType type) { _type = type; }
-
-  /**
-   * ApiEntityInfo interface overrides
-   */
-  QString getClassName() const override { return className(); }
-
-  QString getName() const override { return className(); }
-
-  QString getDescription() const override { return "Resolves conflation reviews"; }
-
-  /**
-   * OperationStatus interface overrides
-   */
-  QString getInitStatusMessage() const override
-  { return "Resolving conflation reviews..."; }
-
-  QString getCompletedStatusMessage() const override
-  {
-    return
-      "Resolved " + StringUtils::formatLargeNumber(_numAffected) +
-      " conflation review relations";
-  }
-
   /**
    * OsmMapOperation interface overrides
    */
@@ -96,7 +71,36 @@ public:
    */
   void setConfiguration(const Settings& conf) override;
 
+  /**
+   * ApiEntityInfo interface overrides
+   */
+  QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getDescription() const override { return "Resolves conflation reviews"; }
+
+  /**
+   * OperationStatus interface overrides
+   */
+  QString getInitStatusMessage() const override
+  { return "Resolving conflation reviews..."; }
+  QString getCompletedStatusMessage() const override
+  {
+    return
+      "Resolved " + StringUtils::formatLargeNumber(_numAffected) +
+      " conflation review relations";
+  }
+
+  ResolveType getResolveType() const { return _type; }
+
+  void setResolveType(ResolveType type) { _type = type; }
+
 private:
+
+  int _taskStatusUpdateInterval;
+  /** Type of resolve operation, keep all, remove all, or resolve all */
+  ResolveType _type;
+  /** Cache matches that have already been calculated so it doesn't have to be repeated */
+  std::map<long, std::shared_ptr<Match>> _matchCache;
 
   /**
    * @brief _resolveReview
@@ -124,8 +128,9 @@ private:
    * @param eid1
    * @param eid2
    */
-  void _resolveMatchReview(std::shared_ptr<Match>& match, std::shared_ptr<OsmMap>& map,
-                           const ElementId& relation_id, const ElementId& eid1, const ElementId& eid2);
+  void _resolveMatchReview(const std::shared_ptr<Match>& match, const std::shared_ptr<OsmMap>& map,
+                           const ElementId& relation_id, const ElementId& eid1,
+                           const ElementId& eid2) const;
   /**
    * @brief _resolveManualReview
    * @param map
@@ -133,8 +138,8 @@ private:
    * @param eid1
    * @param eid2
    */
-  void _resolveManualReview(std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
-                            const ElementId& eid1, const ElementId& eid2);
+  void _resolveManualReview(const std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
+                            const ElementId& eid1, const ElementId& eid2) const;
   /**
    * @brief _getCachedMatch
    * @param map
@@ -143,20 +148,14 @@ private:
    * @param eid2
    * @return
    */
-  MatchPtr _getCachedMatch(std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
+  MatchPtr _getCachedMatch(const std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
                            const ElementId& eid1, const ElementId& eid2);
   /**
    * @brief _resolveString Convert text string to ResolveType
    * @param type Must be one of "Keep" (default), "Remove", or "Resolve"
    * @return ResolveType equivalent of string
    */
-  ResolveType _resolveString(const QString& type);
-
-  int _taskStatusUpdateInterval;
-  /** Type of resolve operation, keep all, remove all, or resolve all */
-  ResolveType _type;
-  /** Cache matches that have already been calculated so it doesn't have to be repeated */
-  std::map<long, std::shared_ptr<Match>> _matchCache;
+  ResolveType _resolveString(const QString& type) const;
 };
 
 }
