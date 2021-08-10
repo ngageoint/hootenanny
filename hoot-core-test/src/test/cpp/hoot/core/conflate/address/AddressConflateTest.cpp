@@ -1046,6 +1046,5 @@ private:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AddressConflateTest, "slow");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AddressConflateTest, "serial");
 
 }

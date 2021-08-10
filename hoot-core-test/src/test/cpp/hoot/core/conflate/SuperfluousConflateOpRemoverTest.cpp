@@ -56,7 +56,7 @@ public:
 
   SuperfluousConflateOpRemoverTest()
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runOpFilter1Test()

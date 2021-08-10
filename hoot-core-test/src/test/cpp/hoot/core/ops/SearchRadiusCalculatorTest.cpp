@@ -55,8 +55,12 @@ namespace hoot
 class SearchRadiusCalculatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SearchRadiusCalculatorTest);
+  // This test yields different results when run with other tests in series vs when run with other
+  // tests in parallel for currently unknown reasons (#4945). The problem is not exhibited when run
+  // in isolation.
   CPPUNIT_TEST(runCalcResultTest);
   CPPUNIT_TEST(runNotEnoughTiePointsTest);
+  // Same problem as mentioned above for runCalcResultTest.
   CPPUNIT_TEST(runPreviouslyConflatedDataTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -87,11 +91,8 @@ public:
     searchRadiusCalculator.setConfiguration(testSettings);
 
     searchRadiusCalculator.apply(map);
-    // TODO: This test oddly yields different output when it is run in parallel with other tests vs
-    // when it is run serially with other tests. To get it to pass in series, you have to loosen the
-    // comparison restriction. The test doesn't have the same behavior when run in isolation.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      34.334701, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6/*1e-1*/);
+      34.334701, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
   }
 
   void runNotEnoughTiePointsTest()
@@ -109,8 +110,8 @@ public:
     searchRadiusCalculator.setConfiguration(testSettings);
 
     searchRadiusCalculator._calculateSearchRadius(tiePointDistances);
-    //if the search radius calculator can't find enough tie points, it will use the specified
-    //default search radius
+    // If the search radius calculator can't find enough tie points, it will use the specified
+    // default search radius.
     CPPUNIT_ASSERT_EQUAL(
       ConfigOptions().getCircularErrorDefaultValue(), searchRadiusCalculator._result);
   }
@@ -126,8 +127,8 @@ public:
 
     MapCleaner().apply(map);
 
-    //If any data in the dataset has already been conflated (or is invalid), the operation
-    //shouldn't fail.  The data should just be skipped.
+    // If any data in the dataset has already been conflated (or is invalid), the operation
+    // shouldn't fail. The data should just be skipped.
     map->getWay(
       ElementIdsVisitor::findElementsByTag(
         map, ElementType::Way, MetadataTags::Ref1(), "001952")[0])->setStatus(Status::Conflated);
@@ -143,7 +144,6 @@ public:
     searchRadiusCalculator.setConfiguration(testSettings);
 
     searchRadiusCalculator.apply(map);
-    // See related note in runCalcResultTest.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       32.675050, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6/*1e-1*/);
   }

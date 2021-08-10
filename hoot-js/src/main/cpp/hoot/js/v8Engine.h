@@ -34,7 +34,7 @@ namespace hoot
 
 /**
  * A singleton to initialize v8 JavaScript library. You should call getInstance() on this before
- * any other use of v8Engine. You can call getInstance multiple times without any ill effects.
+ * using any JS conflate scripts or translations.
  */
 class v8Engine
 {
@@ -46,25 +46,7 @@ public:
    */
   static v8Engine& getInstance();
 
-  /**
-   * @brief init - A no-op that makes the code a little easier to read.
-   */
-  void init() const {}
-
-  static v8::Isolate* getIsolate();
-
-  static void setPlatformInit(bool needsPlatform = true);
-
 private:
-  /** static flag for platform initialization */
-  static bool _needPlatform;
-
-  /** private constructor/destructor */
-  v8Engine();
-  ~v8Engine();
-  /** Delete copy constructor and assignment operator */
-  v8Engine(const v8Engine&) = delete;
-  v8Engine& operator=(const v8Engine&) = delete;
 
   /** Creation parameters allocator for main isolate */
   std::shared_ptr<v8::ArrayBuffer::Allocator> _allocator;
@@ -78,6 +60,12 @@ private:
   std::shared_ptr<v8::Persistent<v8::Context>> _context;
   std::shared_ptr<v8::Context::Scope> _scopeContext;
 
+  /** private constructor/destructor */
+  v8Engine();
+  ~v8Engine();
+  /** Delete copy constructor and assignment operator */
+  v8Engine(const v8Engine&) = delete;
+  v8Engine& operator=(const v8Engine&) = delete;
 };
 
 }

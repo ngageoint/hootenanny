@@ -1388,6 +1388,10 @@ _d(std::make_shared<OsmSchemaData>())
 {
 }
 
+OsmSchema::~OsmSchema()
+{
+}
+
 void OsmSchema::addAssociatedWith(const QString& name1, const QString& name2) const
 {
   _d->addAssociatedWith(name1, name2);

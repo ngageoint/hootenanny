@@ -57,7 +57,7 @@ public:
   WaySplitterOpTest() :
   HootTestFixture("test-files/ops/WaySplitterOp/", "test-output/ops/WaySplitterOp/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runTest()

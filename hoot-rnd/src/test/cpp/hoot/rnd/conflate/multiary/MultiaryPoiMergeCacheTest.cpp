@@ -51,7 +51,7 @@ public:
 
   MultiaryPoiMergeCacheTest()
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   /**

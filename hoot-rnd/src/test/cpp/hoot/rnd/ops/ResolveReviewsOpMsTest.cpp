@@ -31,6 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/rnd/ops/ResolveReviewsOp.h>
@@ -44,80 +45,41 @@
 namespace hoot
 {
 
-class ResolveReviewsOpTest : public HootTestFixture
+/**
+ * @brief The ResolveReviewsOpTest class tests ResolveReviewsOp.
+ *
+ * This is separated from ResolveReviewsOpTest to avoid unnecessary environment resets.
+ */
+class ResolveReviewsOpMsTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(ResolveReviewsOpTest);
-  CPPUNIT_TEST(runKeepTest);
-  CPPUNIT_TEST(runRemoveTest);
-  CPPUNIT_TEST(runResolveTest);
+  CPPUNIT_TEST_SUITE(ResolveReviewsOpMsTest);
+  CPPUNIT_TEST(runResolveMsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  ResolveReviewsOpTest() :
+  ResolveReviewsOpMsTest() :
   HootTestFixture(
-    "test-files/rnd/ops/ResolveReviewsOpTest/", "test-output/rnd/ops/ResolveReviewsOpTest/")
+    "test-files/rnd/ops/ResolveReviewsOpMsTest/", "test-output/rnd/ops/ResolveReviewsOpMsTest/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAll);
   }
 
-  void runKeepTest()
+  void runResolveMsTest()
   {
+    // This test is here to illustrate the fact that calling a linear merger may leave
+    // multilinestring relations in the output. Generally, this is not desirable and
+    // MultilineStringMergeRelationCollapser can be called to remove them.
+
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setPreserveAllTags(true);
     reader.setUseDataSourceIds(true);
     reader.setUseFileStatus(true);
-    reader.read(_inputPath + "input.osm", map);
-
-    ResolveReviewsOp uut;
-    uut.setConfiguration(conf());
-    uut.setResolveType(ResolveReviewsOp::KeepReviews);
-    uut.apply(map);
-
-    MapProjector::projectToWgs84(map);
-    OsmXmlWriter writer;
-    writer.setIncludeIds(true);
-    writer.setIncludeHootInfo(true);
-    writer.write(map, _outputPath + "KeepOutput.osm");
-    HOOT_FILE_EQUALS(_inputPath + "KeepExpected.osm",
-                     _outputPath + "KeepOutput.osm");
-  }
-
-  void runRemoveTest()
-  {
-    OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
-    reader.setDefaultStatus(Status::Unknown1);
-    reader.setPreserveAllTags(true);
-    reader.setUseDataSourceIds(true);
-    reader.setUseFileStatus(true);
-    reader.read(_inputPath + "input.osm", map);
-
-    ResolveReviewsOp uut;
-    uut.setConfiguration(conf());
-    uut.setResolveType(ResolveReviewsOp::RemoveReviews);
-    uut.apply(map);
-
-    MapProjector::projectToWgs84(map);
-    OsmXmlWriter writer;
-    writer.setIncludeIds(true);
-    writer.setIncludeHootInfo(true);
-    writer.write(map, _outputPath + "RemoveOutput.osm");
-    HOOT_FILE_EQUALS(_inputPath + "RemoveExpected.osm",
-                     _outputPath + "RemoveOutput.osm");
-  }
-
-  void runResolveTest()
-  {
-    OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
-    reader.setDefaultStatus(Status::Unknown1);
-    reader.setPreserveAllTags(true);
-    reader.setUseDataSourceIds(true);
-    reader.setUseFileStatus(true);
-    reader.read(_inputPath + "input.osm", map);
+    reader.read(_inputPath + "runResolveMsTestInput.osm", map);
+    // The input test data was already in planar, so make that happen.
+    MapProjector::projectToPlanar(map);
 
     ResolveReviewsOp uut;
     uut.setConfiguration(conf());
@@ -128,11 +90,12 @@ public:
     OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.setIncludeHootInfo(true);
-    writer.write(map, _outputPath + "ResolveOutput.osm");
-    HOOT_FILE_EQUALS(_inputPath + "ResolveExpected.osm", _outputPath + "ResolveOutput.osm");
+    writer.write(map, _outputPath + "runResolveMsTestOutput.osm");
+    HOOT_FILE_EQUALS(
+      _inputPath + "runResolveMsTestOutput.osm", _outputPath + "runResolveMsTestOutput.osm");
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ResolveReviewsOpTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ResolveReviewsOpMsTest, "quick");
 
 }

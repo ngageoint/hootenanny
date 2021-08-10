@@ -29,7 +29,6 @@
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/schema/TagMergerFactory.h>
@@ -314,8 +313,9 @@ void TestUtils::resetEnvironment(const QStringList confs)
   // projection and subtly change the results.
   conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), true);
 
-  // these factories cache the creators. Flush them so they get any config changes.
-  MatchFactory::getInstance().reset();
+  // These factories cache the creators. Flush them so they get any config changes. Note that we're
+  // not resetting MatchFactory here. Its call to ScriptMatchCreator::setArguments is expensive and
+  // not many tests require it, so tests must specifically decide to reset it via ResetAll.
   MergerFactory::getInstance().reset();
   TagMergerFactory::getInstance().reset();
 

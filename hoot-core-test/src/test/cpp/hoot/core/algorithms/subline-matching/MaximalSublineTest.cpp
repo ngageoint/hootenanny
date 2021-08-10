@@ -85,7 +85,7 @@ public:
     : HootTestFixture("test-files/algorithms/subline-matching/",
                       "test-output/algorithms/subline-matching/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void addEndNode(OsmMapPtr map, Coordinate c, QString note)

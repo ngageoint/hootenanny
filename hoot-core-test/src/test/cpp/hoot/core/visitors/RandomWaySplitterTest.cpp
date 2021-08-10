@@ -60,7 +60,7 @@ public:
     : HootTestFixture("test-files/visitors/RandomWaySplitterTest/",
                       "test-output/visitors/RandomWaySplitterTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runWaySplitTest()

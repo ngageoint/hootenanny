@@ -55,7 +55,7 @@ public:
     "test-files/rnd/conflate/multiary/MultiaryPoiMergerTest/",
     "test-output/rnd/conflate/multiary/MultiaryPoiMergerTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   /**

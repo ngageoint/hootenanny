@@ -80,7 +80,6 @@ public:
   void averageTest()
   {
     OsmSchema uut;
-
     uut.createTestingGraph();
 
     double score;
@@ -131,7 +130,6 @@ public:
   void categoryTest()
   {
     OsmSchema uut;
-
     uut.createTestingGraph();
 
     Tags tags;
@@ -169,46 +167,6 @@ public:
     CPPUNIT_ASSERT_EQUAL(string("road"), v4.getValue().toStdString());
   }
 
-  void dumpAsCsv(OsmSchema& schema, QString tag)
-  {
-    vector<SchemaVertex> surfaces = schema.getChildTagsAsVertices(tag);
-    QString csvDistance;
-    QString csvAverage;
-
-    for (size_t i = 0; i < surfaces.size(); i++)
-    {
-      csvDistance += ", " + surfaces[i].getName();
-    }
-    csvDistance += "\n";
-    csvAverage = csvDistance;
-
-    for (size_t i = 0; i < surfaces.size(); i++)
-    {
-      csvDistance += surfaces[i].getName();
-      csvAverage += surfaces[i].getName();
-      for (size_t j = 0; j < surfaces.size(); j++)
-      {
-        double d = schema.score(surfaces[i].getName(), surfaces[j].getName());
-        csvDistance += QString(", %1").arg(d);
-        double best;
-        QString avg = schema.average(surfaces[i].getName(), surfaces[j].getName(), best);
-        csvAverage += QString(", %1").arg(avg);
-      }
-      csvDistance += "\n";
-      csvAverage += "\n";
-    }
-
-    QFile csvFp("test-output/" + tag + ".csv");
-    csvFp.open(QFile::WriteOnly);
-    csvFp.write(csvDistance.toUtf8());
-    csvFp.close();
-
-    QFile csvAverageFp("test-output/" + tag + "-average.csv");
-    csvAverageFp.open(QFile::WriteOnly);
-    csvAverageFp.write(csvAverage.toUtf8());
-    csvAverageFp.close();
-  }
-
   void getChildTagsTest()
   {
     OsmSchema& uut = OsmSchema::getInstance();
@@ -218,28 +176,17 @@ public:
     CPPUNIT_ASSERT_EQUAL(2, (int)gravel.size());
   }
 
-  QStringList tagsToNames(const vector<SchemaVertex>& v)
-  {
-    QStringList l;
-    for (size_t i = 0; i < v.size(); i++)
-    {
-      l << v[i].getName();
-    }
-
-    return l;
-  }
-
   void getSimilarTagsTest()
   {
     OsmSchema uut;
     uut.createTestingGraph();
 
     HOOT_STR_EQUALS("[3]{highway=road, highway=primary, highway=secondary}",
-      tagsToNames(uut.getSimilarTagsAsVertices("highway=primary", 0.8)));
+      _tagsToNames(uut.getSimilarTagsAsVertices("highway=primary", 0.8)));
     HOOT_STR_EQUALS("[4]{highway=road, highway=primary, highway=secondary, highway=residential}",
-      tagsToNames(uut.getSimilarTagsAsVertices("highway=primary", 0.5)));
+      _tagsToNames(uut.getSimilarTagsAsVertices("highway=primary", 0.5)));
     HOOT_STR_EQUALS("[1]{highway=road}",
-      tagsToNames(uut.getSimilarTagsAsVertices("highway=road", 0.1)));
+      _tagsToNames(uut.getSimilarTagsAsVertices("highway=road", 0.1)));
   }
 
   /**
@@ -254,8 +201,8 @@ public:
     fp.write(uut.toGraphvizString().toUtf8());
     fp.close();
 
-//    dumpAsCsv(uut, "surface=unknown");
-//    dumpAsCsv(uut, "highway");
+//    _dumpAsCsv(uut, "surface=unknown");
+//    _dumpAsCsv(uut, "highway");
 
     double d;
     d = uut.score("highway=trunk", "highway=motorway");
@@ -343,7 +290,6 @@ public:
     avg = uut.average("highway=track", "highway=secondary", score);
     HOOT_STR_EQUALS("highway=unclassified", avg.toStdString());
 
-
     HOOT_STR_EQUALS(0.3, uut.score("highway=residential", "highway=construction"));
 
     // expecting the first tag as a result if there is only one hop between the two.
@@ -357,7 +303,6 @@ public:
   void distanceTest()
   {
     OsmSchema uut;
-
     uut.createTestingGraph();
 
     double d = uut.score("highway=primary", "highway=secondary");
@@ -567,6 +512,59 @@ public:
     tags["highway"] = "secondary";
     tags["surface"] = "asphalt";
     HOOT_STR_EQUALS("highway=secondary", uut.mostSpecificType(tags));
+  }
+
+private:
+
+  QStringList _tagsToNames(const vector<SchemaVertex>& v)
+  {
+    QStringList l;
+    for (size_t i = 0; i < v.size(); i++)
+    {
+      l << v[i].getName();
+    }
+    return l;
+  }
+
+  // TODO: move to OsmSchema and test
+  void _dumpAsCsv(OsmSchema& schema, QString tag)
+  {
+    vector<SchemaVertex> surfaces = schema.getChildTagsAsVertices(tag);
+    QString csvDistance;
+    QString csvAverage;
+
+    for (size_t i = 0; i < surfaces.size(); i++)
+    {
+      csvDistance += ", " + surfaces[i].getName();
+    }
+    csvDistance += "\n";
+    csvAverage = csvDistance;
+
+    for (size_t i = 0; i < surfaces.size(); i++)
+    {
+      csvDistance += surfaces[i].getName();
+      csvAverage += surfaces[i].getName();
+      for (size_t j = 0; j < surfaces.size(); j++)
+      {
+        double d = schema.score(surfaces[i].getName(), surfaces[j].getName());
+        csvDistance += QString(", %1").arg(d);
+        double best;
+        QString avg = schema.average(surfaces[i].getName(), surfaces[j].getName(), best);
+        csvAverage += QString(", %1").arg(avg);
+      }
+      csvDistance += "\n";
+      csvAverage += "\n";
+    }
+
+    QFile csvFp("test-output/" + tag + ".csv");
+    csvFp.open(QFile::WriteOnly);
+    csvFp.write(csvDistance.toUtf8());
+    csvFp.close();
+
+    QFile csvAverageFp("test-output/" + tag + "-average.csv");
+    csvAverageFp.open(QFile::WriteOnly);
+    csvAverageFp.write(csvAverage.toUtf8());
+    csvAverageFp.close();
   }
 };
 
