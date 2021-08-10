@@ -35,8 +35,6 @@ namespace hoot
 v8Engine::v8Engine()
 {
   //  Setup and initialize the platform
-  //LOG_WARN("v8Engine constructor");
-
   V8::InitializeICUDefaultLocation(nullptr);
   V8::InitializeExternalStartupData(nullptr);
   _platform = platform::NewDefaultPlatform();
@@ -59,9 +57,6 @@ v8Engine::v8Engine()
 
 v8Engine::~v8Engine()
 {
-  //LOG_WARN("v8Engine destructor");
-  //std::cout << "v8Engine destructor" << std::endl;
-
   _scopeContext.reset();
   _locker.reset();
   _isolateScope.reset();

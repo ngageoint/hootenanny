@@ -57,7 +57,7 @@ public:
 
   PoiPolygonMergerCreatorTest()
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   virtual void setUp()

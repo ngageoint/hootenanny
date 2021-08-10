@@ -83,7 +83,7 @@ public:
     : HootTestFixture("test-files/io/ServiceHootApiDbReaderTest/",
                       "test-output/io/ServiceHootApiDbReaderTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void setUpTest(const QString& testName, bool adminUser = false)

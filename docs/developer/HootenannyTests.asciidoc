@@ -18,7 +18,6 @@ in this directory.
 
 If you want to run the tests for all codebases at the same time, first configure as described in a
 previous section, then run one of the following commands:
-
 -------------------
 make -sj$(nproc) test-quick # quick tests
 make -sj$(nproc) test       # slow tests
@@ -41,7 +40,6 @@ that there is also C++ code labeled "services".  That is code which writes to th
 API services database and is not affiliated with the Hootenanny Web Services Java code.
 
 To run all the Core Tests in a suite, choose one of the following after running configure:
-
 --------------------
 HootTest --current
 HootTest --quick
@@ -53,7 +51,6 @@ HootTest --glacial-only
 -------------------
 
 Here are some examples of more granularity when running Core Tests:
-
 ---------------
 # Runs the glacial tests but excludes any test with 'Big' in the test file name.
 HootTest --glacial '--exclude=.*Big.*'
@@ -68,42 +65,68 @@ HootTest --single hoot::AlphaShapeTest
 ==== Core Unit Tests
 
 The core unit tests use CPPUnit. The goal is to have one test class for each functional class, but
-in many cases the coverage from the command line tests (described later) preven this from being 
+in many cases the coverage from the command line tests (described later) prevent this from being 
 necessary. See hoot-core-test/src/test/cpp project for examples. One CPPUnit test class may contain 
 multiple CPPUnit tests.
 
 To place a test into one of the four test suites listed in the previous section, a line similar to
 the following is placed at the end of the test class:
-
 -----------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AlphaShapeTest, "quick");
 -----------------
 
 To ensure a test runs serially, a line similar to the following is placed at the end of the test 
-class:
-
+class in addition to the line assigning the test class to a test suite:
 -----------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AlphaShapeTest, "serial");
 -----------------
 
 Tests which make use of the Hootenanny or OSM API databases should have their class name prefixed 
-with `Service` and also have a line similar to the following is placed at the end of the test class:
-
+with `Service` and also have an include condition added similar to the following:
 -----------------
 #ifdef HOOT_HAVE_SERVICES
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbTest, "slow");
 #endif  
 -----------------
 
+Due to use of the configuration, some tests may require an environment reset before they can run.
+You are encouraged to create your configuration locally within each test method and pass it into the
+Unit Under Test (UUT), however sometimes that is not possible. These are the options for resetting
+the environment between CPPUnit test runs:
+
+* `ResetNone` - Use this when you test requires no environment reset, meaning that no environment 
+change made by another test can affect it. Generally, this is for tests that make no use of the 
+`OsmMap` class. This is the default and does not need to be explicitly specified.
+* `ResetBasic` - This resets element ID counters within `OsmMap`, the random number seed generator, 
+and the UUID generator. Resetting all of this is generally necessary to compare map output within a 
+test.
+* `ResetAllNoMatchFactory` - In addition to what is reset in `ResetBasic`, this resets the 
+configuration along with many other internal settings but does not reset the `MatchFactory` class 
+(expensive to do in the tests; see code for details). This reset option is discouraged overall but 
+necessary for some tests.
+* `ResetAll` - This does all the resetting done in `ResetAllNoMatchFactory` and additionally resets 
+the `MatchFactory` class. This is the most resource expensive reset option.
+
+To specify these reset options within a CPPUnit test, add something similar to the following to your 
+test constructor:
+-----------
+WayJoinerConflateTest() :
+HootTestFixture(
+  "test-files/algorithms/WayJoinerConflateTest/", "test-output/algorithms/WayJoinerConflateTest/")
+{
+  setResetType(ResetAll);
+}
+-----------
+
+Note in the above example that two directories are specified. The first is the directory under 
+`HOOT_HOME` where the test's input files reside. The second is the directory under `HOOT_HOME` to
+write test output files. If not input and/or output directories are required by the test, you can
+use `UNUSED_PATH`, which is the default.
+
 Additional details:
 
 * Tests within the `hoot-rnd` module are generally always run in the `--glacial` test suite.
-* If your test must make any changes to the global configuration (`conf()`), you need to add: 
-`setResetType(ResetAll);` to the constructor of your test to properly reset the environment between 
-tests. When possible, avoid using `ResetAll` as it adds resource overhead to the tests.
-* If your test only needs basic environment cleanup between tests, like resetting the element ID 
-counter in `OsmMap` for comparing map file output, then add: `setResetType(ResetBasic);` to your 
-test constructor.
+* Tests which use the single test OSM API database instance must be run in series.
 
 ==== Core Command Line Tests
 

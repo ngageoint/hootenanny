@@ -67,7 +67,7 @@ public:
 
   MatchCandidateCountVisitorTest() : HootTestFixture("test-files/conflate/unified/", UNUSED_PATH)
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runBuildingMatchCandidateCountTest()

@@ -45,8 +45,6 @@ LibPostalInit::LibPostalInit()
       "libpostal cannot be initialized due to address matching being disabled.");
   }
 
-  //LOG_WARN("libpostal constructor");
-
   // This init can take up to ~5 seconds.
   if (!libpostal_setup_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||
       !libpostal_setup_parser_datadir(ConfigOptions().getLibpostalDataDir().toUtf8().data()) ||
@@ -59,9 +57,6 @@ LibPostalInit::LibPostalInit()
 
 LibPostalInit::~LibPostalInit()
 {
-  //LOG_WARN("libpostal destructor");
-  //std::cout << "libpostal destructor" << std::endl;
-
   libpostal_teardown();
   libpostal_teardown_parser();
   libpostal_teardown_language_classifier();
