@@ -2,19 +2,23 @@
 == Hootenanny Tests
 
 Hootenanny contains three distinct codebases: the core, the web services, and the user interface.
-Each employs a different testing technologies, which are described here. Before building Hootenanny and 
-running its tests, the application must be configured. See the Building Hootenanny section in this 
-document for details.
+Each employs a different testing technologies, which are described here. Before building Hootenanny 
+and running its tests, the application must be configured. See the Building Hootenanny section in 
+this document for details.
 
 === Test Suites
 
 Tests are divided into the following groups: current, quick, slow, and glacial.
 
-* **current** - Used when you want to isolate a single test and work on it. No tests should be committed
-in this directory.
+* **current** - Used when you want to isolate a single test and work on it. No tests should be 
+committed in this directory.
 * **quick** - Individual tests that each run in less than 1 sec.
 * **slow** - Individual tests that each run in less than 30 sec.
-* **glacial** - Individual tests that each run in less than 15 min. You shouldn't need unit tests that take longer than 15min. If you're writing a regression test that uses large input data and runs longer than 15min, then put it with the regression tests, not the unit tests.  Also, hoot-rnd tests usually get placed in this suite, since they employ non-production based functionality that changes less frequently than code in hoot-core.
+* **glacial** - Individual tests that each run in less than 15 min. You shouldn't need unit tests 
+that take longer than 15min. If you're writing a regression test that uses large input data and runs 
+longer than 15min, then put it with the regression tests, not the unit tests.  Also, hoot-rnd tests 
+usually get placed in this suite, since they employ non-production based functionality that changes 
+less frequently than code in hoot-core.
 
 If you want to run the tests for all codebases at the same time, first configure as described in a
 previous section, then run one of the following commands:
@@ -123,7 +127,7 @@ Note in the above example that two directories are specified. The first is the d
 write test output files. If not input and/or output directories are required by the test, you can
 use `UNUSED_PATH`, which is the default.
 
-Additional details:
+===== Additional Details
 
 * Tests within the `hoot-rnd` module are generally always run in the `--glacial` test suite.
 * Tests which use the single test OSM API database instance must be run in series.
@@ -148,20 +152,11 @@ the system. When you write a test it will likely be run thousands of times by a 
 over its lifetime. No need to make them all wait 20sec for a test that could run in .1sec. It is
 likely worth taking an extra 20min to write an efficient test.
 
-Additional details:
+Core command line tests may be forced to run in series by placing them in a directory named "serial" 
+in their respective test suite directory. e.g. `$HOOT_HOME/tests-files/cmd/slow/serial`. Any test
+not in the "serial" subdirectory is eligible for parallel execution.
 
-* All command line tests should add `Testing.conf` as their final configuration file and then add
-any configuration option customization necessary for the test after it. 
-* Most tests should run at the `--warn` log level by default.
-* Tests making use of the Hooteanny API services database should start with the prefix `Service`.
-* Tests testing code in `hoot-rnd` should start with the prefix `Rnd`.
-* Tests within the `hoot-rnd` module are generally always run in the `--glacial` test suite.
-* Tests which use the single test OSM API database instance or have any other reason to run in 
-isolation should be run serially by placing them in the "serial" folder.
-* If you write a class that uses caching, make the cache size configurable and set the size to the 
-lowest possible value in order for tests to pass within `Testing.conf`.
-
-**What Do Command Line Tests Do?**
+===== What Do Command Line Tests Do?
 
 The basic principal of the command line tests is that they verify that the stdout and stderr are
 consistent with a given baseline. To do this the following must occur:
@@ -187,7 +182,6 @@ an error.
 To create a test make a shell script that is executable and place it in the
 +test-files/cmd/current/+ directory. The shell script should exercise some aspect of the system
 and the success/failure should be determined by the output. For instance:
-
 ------------
 #!/bin/bash
 
@@ -209,7 +203,6 @@ cat jakarta.osm
 ------------
 
 Running HootTest will give an error similar to the one below:
-
 ----------------
 [hoot2] yubyub:~/dg/src/hoot2$ HootTest --current
 .18:27:35.009 WARN  src/main/cpp/hoot/test/ScriptTest.cpp(130) - STDOUT or STDERR don't exist for \
@@ -237,7 +230,6 @@ Elapsed: 0.126034
 ----------------
 
 As the error message suggests you need to verify the output and then create a new baseline:
-
 -------------
 #  verify. Don't skip this!
 less /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout.first
@@ -245,20 +237,17 @@ less /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/E
 -------------
 
 In this case we goofed in the script and revealed this error in the Example.sh.stderr.first file:
-
 -------------
 cat: jakarta.osm: No such file or directory
 -------------
 
 Fix the script by changing the last line to:
-
 ------------
 cat test-output/cmd/example/jakarta.osm
 ------------
 
 When you rerun +HootTest --current+ you'll see the .osm file in the .stdout.first file. If
 everything looks good create the new baseline.
-
 ------------
 # Make a new baseline:
 mv /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout.first \
@@ -268,7 +257,6 @@ mv /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Exa
 ------------
 
 Now run the test again and you should get something like:
-
 -------------
 [hoot2] yubyub:~/dg/src/hoot2$ HootTest --current
 ./home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh - 0.146189
@@ -280,12 +268,11 @@ This shows that the test run matches the baseline.
 
 We don't want the test to live in +current+ so we'll move it over to the appropriate test set. In
 this case +quick+.
-
 ------------
 mv test-files/cmd/current/Example* test-files/cmd/quick/
 ------------
 
-**Inconsistent Output**
+===== Inconsistent Output
 
 Sometimes scripts have output values that change from run to run such as data/time stamps. Many of
 these values get stripped out automatically, but if there is something relevant to just your test
@@ -293,7 +280,20 @@ you can remove it via grep/sed. If that isn't an option you may need to modify S
 be knowledgeable of your situation. Be careful, because it will modify the way that all tests are
 verified.
 
-==== Core Micro Conflate Tests (Case Tests)
+===== Additional Details
+
+* All command line tests should add `Testing.conf` as their final configuration file and then add
+any configuration option customization necessary for the test after it. 
+* Most tests should run at the `--warn` log level by default.
+* Tests making use of the Hooteanny API services database should start with the prefix `Service`.
+* Tests testing code in `hoot-rnd` should start with the prefix `Rnd`.
+* Tests within the `hoot-rnd` module are generally always run in the `--glacial` test suite.
+* Tests which use the single test OSM API database instance or have any other reason to run in 
+isolation should be run serially by placing them in the "serial" folder.
+* If you write a class that uses caching, make the cache size configurable and set the size to the 
+lowest possible value in order for tests to pass within `Testing.conf`.
+
+==== Core Case Tests (Micro Conflate Tests)
 
 Frequently it is desirable to test one aspect of the conflation routines. E.g. did the names get
 merged properly? Did two buildings get matched/merged? etc. The micro conflate tests are designed
@@ -302,7 +302,8 @@ these 15 roads get conflated properly?" tests. They're intended to test one situ
 correctness. Primarily they're tiny so they don't all break constantly, and it is very easy to
 determine what happened.
 
-These tests are discovered/created from +test-files/cases+. The test creation process goes as follows:
+These tests are discovered/created from +test-files/cases+. The test creation process goes as 
+follows:
 
 * Search +test-files/cases+ for a config file (+Config.conf+), if there is one, push it
 onto the config file stack.
@@ -322,20 +323,18 @@ This approach makes it very fast/easy to create new micro tests and run them wit
 test routines. At this time the micro tests run as part of _quick_ and up.
 
 To only run case tests execute:
-
 ------------
 HootTest --case-only
 ------------
 
 See +test-files/cases/README+ for additional information on case tests.
 
-==== Running Core Unit Tests in Parallel
+==== Running Core Tests in Parallel
 
-Hootenanny can run certain unit tests in parallel.  This is accomplished by `--parallel [n]` flag
-where the optional `[n]` specifies the number of worker processes to spawn.  Leaving off the `[n]`
-parameter makes an implicit call to the operating system to get the total number of online processing units.
-(The same as +$(nproc)+ )
-
+Hootenanny can run all Core tests in parallel, except those in the Translation test suite. This is 
+accomplished with the `HootTest` option, `--parallel [n]`, where the optional `[n]` specifies the 
+number of worker processes to spawn.  Leaving off the `[n]` parameter makes an implicit call to the 
+operating system to get the total number of online processing units (The same as +$(nproc)+ ).
 --------------
 # Runs quick tests serially
 HootTest --quick
@@ -344,46 +343,32 @@ HootTest --quick
 HootTest --quick --parallel 2
 
 # Runs quick tests in parallel with one process per processing unit
-HootTest --quick --parallel $(nproc)
-# Or implicit call to nproc
 HootTest --quick --parallel
 --------------
 
-Initial testing shows using `$(nproc)` or leaving the parameter empty is the optimal setting for speed
-as any more than that causes processes to wait for significantly longer for CPU time and give no real benefit.
+These worker processes are QProcess objects that spawn `HootTest --listen`.  This "listening" 
+process accepts single unit test names (similar to `--single`) from standard in, runs the test and 
+then sends an end-of-test output command. The master process listens for this command and once 
+received it sends another single unit test from the queue. Once the queue is empty, the master 
+process shuts down the listen processes and ends.
 
-These worker processes are QProcess objects that spawn `HootTest --listen`.  This "listening" process
-accepts single unit test names (similar to `--single`) from standard in, runs the test and then sends
-an end-of-test output command.  The master process listens for this command and once received it sends
-another single unit test from the queue.  Once the queue is empty, the master process shuts down the
-listen processes and ends.
+All tests, other than those in the aforementioned test suites, are capable of running in parallel 
+with `--parallel`. See the "Core Unit Tests" and "Core Command Line Tests" sections for details 
+about forcing tests in those suites to run in series when necessary. Case tests may not be force to 
+run in series when specifying `--parallel` (#4908).
 
-Some tests that use particular database tables and users have to run serially or they will fail so all
-of the code-based tests are marked and added to a `serial` test suite.  Those tests are also added to
-their respective test suite based on complexity and time (i.e. `quick`, `slow` or `glacial`).
+Serial unit tests are all passed off to the first worker process and run serially while the rest of 
+the tests are run on the other parallel processes.  Once the first worker process completes the 
+serial tests it will continue to help the other processes with the parallel queue.
 
------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GlacialUnitTestThatMustBeRunSeriallyTest, "serial");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GlaicalUnitTestThatMustBeRunSeriallyTest, "glacial");
------------------
-
-Core command line tests, or script-based tests, that can be run in parallel are located in
-`$HOOT_HOME/tests-files/cmd/slow/` and `$HOOT_HOME/test-files/cmd/glacial/`.  Those command line tests
-that must be run serially are in a sub-directory under those locations, i.e.
-`$HOOT_HOME/test-files/cmd/slow/serial/` and `$HOOT_HOME/test-files/cmd/glacial/serial/`.
-
-Serial unit tests are all passed off to the first worker process and run serially while the rest of the
-tests are run on the other parallel processes.  Once the first worker process completes the serial
-tests it will continue to help the other processes with the parallel queue.
-
-NOTE:  While creating new unit tests every effort should be made to allow for the tests to be run
-in parallel.  Do not reuse output filenames to avoid stomping on files.  Input files can be reused
+NOTE: While creating new unit tests every effort should be made to allow for the tests to be run
+in parallel. Do not reuse output filenames to avoid stomping on files. Input files can be reused
 though.
 
-==== Core Plugins Tests
+==== Core Translation Tests
 
-The Plugins Test test various translation related operations.  They may be invoked in isolation with:
-
+Formerly known as the "Plugins" tests, these test a variety of `hoot-js` functionality. Not all of 
+the tests are strictly translation related. Tests may be invoked in isolation with:
 --------------
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure
@@ -395,6 +380,17 @@ To run an individual test:
 cd $HOOT_HOME/translations/test
 mocha <test name>.js
 --------------
+
+=== Core Regression Tests
+
+The Regression Tests run Hootenanny command line operations against specific datasets to measure
+Hootenanny performance against particular scenarios. The tests are run against non-public data and,
+therefore, are kept in a private Maxar repository and run on a nightly basis only. For
+more information about the tests, create an issue at https://github.com/ngageoint/hootenanny.
+
+Many of the regression tests score Hootenanny's conflation accuracy on a dataset and mark the test
+as passing or failing based on an allowable score range.  See
+hoot-tests/release_test.child/jakarta-spaghetti.release as an example.
 
 === Web Services Tests
 
@@ -415,7 +411,6 @@ The UnitTest suite corresponds to the slow test suite in the Core Tests, and the
 suite corresponds to the glacial test suite.
 
 To run web services unit tests:
-
 ---------
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure --with-services
@@ -423,7 +418,6 @@ make -sj$(nproc) test
 ---------
 
 To run both web services unit and integration tests:
-
 ---------
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure --with-services
@@ -443,7 +437,6 @@ See hoot-services/src/test/java for test examples.
 
 To mark a web service test method as a Unit Test, place the following annotation in front of the
 method declaration:
-
 -----------
 @Test
 @Category(UnitTest.class)
@@ -456,7 +449,6 @@ boundaries, such as HTTP, Postgres, OGC, etc.  See hoot-services/src/test/java f
 
 To mark a web service test method as a Integration Test, place the following annotation in front
 of the method declaration:
-
 -----------
 @Test
 @Category(IntegrationTest.class)
@@ -476,27 +468,36 @@ The second type uses mocha to test at a more granular level.
 
 ==== Cucumber User Interface Tests
 
-The purpose of these tests is to catch relatively simple errors that get introduced into UI workflows inadvertently, and not to be a bulletproof set of tests for the user interface. Achieving such a thing really isn't feasible.  Also, since these tests exercise code in all three Hootenanny codebases, they can quickly reveal inconsistencies between both what the web services expect the command line API to be and what it actually is and what the user interface expects the web service API to be and what it actually is. With this set of tests in place to catch basic errors, we can allow testers to spend more time testing complicated conflation scenarios instead of, for example, waiting for a typo on a single line of code to be fixed before they can complete regression testing.
+The purpose of these tests is to catch relatively simple errors that get introduced into UI 
+workflows inadvertently, and not to be a bulletproof set of tests for the user interface. Achieving 
+such a thing really isn't feasible.  Also, since these tests exercise code in all three Hootenanny 
+codebases, they can quickly reveal inconsistencies between both what the web services expect the 
+command line API to be and what it actually is and what the user interface expects the web service 
+API to be and what it actually is. With this set of tests in place to catch basic errors, we can 
+allow testers to spend more time testing complicated conflation scenarios instead of, for example, 
+waiting for a typo on a single line of code to be fixed before they can complete regression testing.
 
-link:$$https://cukes.info$$[Cucumber] is the technology used to simulate browser interactions in the tests.
-Cucumber is the top level interpreter of the
+link:$$https://cukes.info$$[Cucumber] is the technology used to simulate browser interactions in 
+the tests. Cucumber is the top level interpreter of the
 link:$$https://github.com/cucumber/cucumber/wiki/Gherkin$$[gherkin language] that describes each test.
 There are many
-link:$$https://github.com/cucumber/cucumber/wiki/Tutorials-and-Related-Blog-Posts$$[good tutorials] on the
-web to get you started,
+link:$$https://github.com/cucumber/cucumber/wiki/Tutorials-and-Related-Blog-Posts$$[good tutorials] 
+on the web to get you started,
 
 * Hootenanny Cucumber User Interface Tests can be found in test-files/ui.
 * Cucumber settings may be changed in `features/support/env.rb`.
-* Place common test methods in `features/conflate.feature` and `features/step_definitions/custom_steps.rb`.
+* Place common test methods in `features/conflate.feature` and 
+`features/step_definitions/custom_steps.rb`.
 * Each piece of functionality being tested should be placed into its own *.feature file.
 * When running silent mode (+make -s+), Cucumber output will be written to
 `test-files/ui/tmp/TestRun.log`.  When running without silent mode, Cucumber test output is written
 to the screen.
 
-The User Interface Tests run as part of the glacial test suite by default. You must start Tomcat and then deploy the Hootenanny web services and user interface code to Tomcat yourself before running these tests, as shown below.
+The User Interface Tests run as part of the glacial test suite by default. You must start Tomcat 
+and then deploy the Hootenanny web services and user interface code to Tomcat yourself before 
+running these tests, as shown below.
 
 To run the User Interface tests with all other glacial tests:
-
 -----------------------
 cd $HOOT_HOME
 # configure step required once per configuration only
@@ -507,7 +508,6 @@ make -sj$(nproc) test-all
 -----------------------
 
 To run the User Interface Tests by themselves:
-
 -----------------------
 cd $HOOT_HOME
 # configure step required once per configuration only
@@ -517,11 +517,18 @@ sudo -u tomcat8 scripts/tomcat/CopyWebAppsToTomcat.sh
 make -sj$(nproc) ui-test
 -----------------------
 
-You have to add the --with-services option since the UI tests rely on the services to be deployed before they're run. The tests will fail with an error message otherwise.
+You have to add the --with-services option since the UI tests rely on the services to be deployed 
+before they're run. The tests will fail with an error message otherwise.
 
-If a test errors out, you'll see the error message on the screen if you're not running in silent mode (-s).  If you are running the tests in silent mode, then you can look in test-files/ui/tmp for the error log. Browser screenshots should also get written out in the tests directory when tests fail, if that's helpful.
+If a test errors out, you'll see the error message on the screen if you're not running in silent 
+mode (-s).  If you are running the tests in silent mode, then you can look in test-files/ui/tmp for 
+the error log. Browser screenshots should also get written out in the tests directory when tests 
+fail, if that's helpful.
 
-When writing tests, try to avoid creating test scenarios that are likely to change over time due to changes in other parts of the hoot code.  e.g. A test that expects an exact number of reviews from a conflation job.  However, this type of thing is not always completely possible to avoid in order to write good tests.
+When writing tests, try to avoid creating test scenarios that are likely to change over time due to 
+changes in other parts of the hoot code.  e.g. A test that expects an exact number of reviews from 
+a conflation job.  However, this type of thing is not always completely possible to avoid in order 
+to write good tests.
 
 ==== Mocha User Interface Tests
 
@@ -533,17 +540,6 @@ cd hoot-ui/test/spec/hoot
 npm install
 npm test
 ---------------
-
-=== Regression Tests
-
-The Regression Tests run Hootenanny command line operations against specific datasets to measure
-Hootenanny performance against particular scenarios.  The tests are run against non-public data and,
-therefore, are kept in a private Maxar repository and run on a nightly basis only. For
-more information about the tests, create an issue at https://github.com/ngageoint/hootenanny.
-
-Many of the regression tests score Hootenanny's conflation accuracy on a dataset and mark the test
-as passing or failing based on an allowable score range.  See
-hoot-tests/release_test.child/jakarta-spaghetti.release as an example.
 
 === Load Tests
 
@@ -568,31 +564,29 @@ report (core only) by selecting: "Build with Parameters" and checking the "Core_
 "Configure_coverage" checkboxes. The coverage report can be downloaded from the Jenkins job page as 
 `coverage.tar.gz`.
 
-*Coverage report generation has the pre-requisite of running all tests associated with the code 
-being profiled.* For the Java Web Services code, this is done automatically by Cobertura, but for 
+Coverage report generation has the pre-requisite of running all tests associated with the code 
+being profiled. For the Java Web Services code, this is done automatically by Cobertura, but for 
 the Hootenanny Core code, 'make test' must be made explicit as described below.
 
 To generate a report for just the Hootenanny Core code:
-
 ----------------
 ./configure --with-rnd --with-josm --with-services --with-coverage && make clean-coverage && make -j$(nproc) && HootTest --glacial --parallel && make -j$(nproc) core-coverage
 ----------------
 
 To generate a report for just the Hootenanny Java web services code:
-
 ----------------
 ./configure --with-services --with-coverage && make services-clean-coverage && make -j$(nproc) services-coverage
 ----------------
 
-To generate a report for all Hootenanny Core code and the Hootenanny Java Web Services code together:
-
------------
+To generate a report for all Hootenanny Core code and the Hootenanny Java Web Services code 
+together:
+----------------
 ./configure --with-rnd --with-josm --with-services --with-coverage && make clean-coverage && make -j$(nproc) && make -j$(nproc) test-all && make -j$(nproc) coverage
------------
+----------------
 
 The test coverage reports will be output to _$HOOT_HOME/coverage_.
 
-*NOTES:*
+Additional notes:
 
 * Running tests `--with-coverage` may signficantly slow down their runtime and increase their memory
 usage. Therefore, its recommended to use `--with-coverage` only when you need to generate a test

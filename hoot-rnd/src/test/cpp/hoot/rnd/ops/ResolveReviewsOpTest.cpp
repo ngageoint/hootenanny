@@ -133,6 +133,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ResolveReviewsOpTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ResolveReviewsOpTest, "quick");
 
 }

@@ -132,6 +132,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayJoinerTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayJoinerTest, "quick");
 
 }

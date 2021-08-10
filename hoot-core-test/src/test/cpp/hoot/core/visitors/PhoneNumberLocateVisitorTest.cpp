@@ -39,6 +39,8 @@ class PhoneNumberLocateVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PhoneNumberLocateVisitorTest);
   CPPUNIT_TEST(runBasicTest);
+  // This test is having either concurrency or environment issues and haven't figure out which one
+  // or both yet, so setting it both to clear out its config and run in series for now.
   CPPUNIT_TEST(runConfigurationTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -49,7 +51,7 @@ public:
     "test-files/visitors/PhoneNumberLocateVisitorTest/",
     "test-output/visitors/PhoneNumberLocateVisitorTest/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runBasicTest()
@@ -96,6 +98,7 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PhoneNumberLocateVisitorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PhoneNumberLocateVisitorTest, "serial");
 
 }
 

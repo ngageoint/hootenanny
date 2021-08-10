@@ -57,7 +57,9 @@ public:
 
   PoiPolygonMergerCreatorTest()
   {
-    setResetType(ResetAllNoMatchFactory);
+    // This test passes with ResetAllNoMatchFactory in parallel but crashes in series without
+    // ResetAll.
+    setResetType(ResetAll);
   }
 
   virtual void setUp()
@@ -69,8 +71,10 @@ public:
 
   virtual void tearDown()
   {
-    conf().set(ConfigOptions().getMatchCreatorsKey(), ConfigOptions().getMatchCreatorsDefaultValue());
-    conf().set(ConfigOptions().getMergerCreatorsKey(), ConfigOptions().getMergerCreatorsDefaultValue());
+    conf().set(
+      ConfigOptions().getMatchCreatorsKey(), ConfigOptions().getMatchCreatorsDefaultValue());
+    conf().set(
+      ConfigOptions().getMergerCreatorsKey(), ConfigOptions().getMergerCreatorsDefaultValue());
   }
 
   void basicTest()
