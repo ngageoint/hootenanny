@@ -49,35 +49,9 @@ namespace hoot
 
 HOOT_JS_REGISTER(FeatureExtractorJs)
 
-void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
+FeatureExtractorJs::FeatureExtractorJs(FeatureExtractorPtr fe) :
+_fe(fe)
 {
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-  Local<Context> context = current->GetCurrentContext();
-
-  const FeatureExtractorJs* feJs = ObjectWrap::Unwrap<FeatureExtractorJs>(args.This());
-
-  if (args.Length() != 3)
-  {
-    throw IllegalArgumentException("Expected exactly three argument in extract (map, e1, e2)");
-  }
-
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
-  const ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked());
-  const ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject(context).ToLocalChecked());
-
-  double result =
-    feJs->getFeatureExtractor()->extract(
-      *(mapJs->getConstMap()), e1Js->getConstElement(), e2Js->getConstElement());
-
-  if (result == FeatureExtractor::nullValue())
-  {
-    args.GetReturnValue().SetNull();
-  }
-  else
-  {
-    args.GetReturnValue().Set(Number::New(current, result));
-  }
 }
 
 void FeatureExtractorJs::Init(Local<Object> target)
@@ -94,18 +68,52 @@ void FeatureExtractorJs::Init(Local<Object> target)
     const char* n = utf8.data();
 
     // Prepare constructor template
-    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
+    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, _new);
+    tpl->SetClassName(
+      String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
-    tpl->PrototypeTemplate()->Set(current, "extract", FunctionTemplate::New(current, extract));
+    tpl->PrototypeTemplate()->Set(current, "extract", FunctionTemplate::New(current, _extract));
 
     Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
     target->Set(context, toV8(n), ToLocal(&constructor));
   }
 }
 
-void FeatureExtractorJs::New(const FunctionCallbackInfo<Value>& args)
+void FeatureExtractorJs::_extract(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
+
+  const FeatureExtractorJs* feJs = ObjectWrap::Unwrap<FeatureExtractorJs>(args.This());
+
+  if (args.Length() != 3)
+  {
+    throw IllegalArgumentException("Expected exactly three argument in extract (map, e1, e2)");
+  }
+
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
+  const ElementJs* e1Js =
+    ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked());
+  const ElementJs* e2Js =
+    ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject(context).ToLocalChecked());
+
+  double result =
+    feJs->getFeatureExtractor()->extract(
+      *(mapJs->getConstMap()), e1Js->getConstElement(), e2Js->getConstElement());
+
+  if (result == FeatureExtractor::nullValue())
+  {
+    args.GetReturnValue().SetNull();
+  }
+  else
+  {
+    args.GetReturnValue().Set(Number::New(current, result));
+  }
+}
+
+void FeatureExtractorJs::_new(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(v8::Isolate::GetCurrent());
 

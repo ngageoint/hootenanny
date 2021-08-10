@@ -46,9 +46,8 @@ class FindIntersectionsOpTest : public HootTestFixture
 
 public:
 
-  FindIntersectionsOpTest()
-    : HootTestFixture("test-files/ops/FindIntersectionsOp/",
-                      "test-output/ops/FindIntersectionsOp/")
+  FindIntersectionsOpTest() :
+  HootTestFixture("test-files/ops/FindIntersectionsOp/", "test-output/ops/FindIntersectionsOp/")
   {
     setResetType(ResetAll);
   }
@@ -88,7 +87,6 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "RailIntersections-Expected.osm",
                      _outputPath + "RailIntersections-Output.osm");
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FindIntersectionsOpTest, "quick");

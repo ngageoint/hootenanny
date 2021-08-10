@@ -56,7 +56,7 @@ public:
 
   CentroidDistanceExtractorTest()
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   OsmMapPtr _map;
@@ -90,9 +90,11 @@ public:
 
     CentroidDistanceExtractor uut;
     const OsmMap* constMap = const_cast<const OsmMap*>(_map.get());
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00515218,
-                                 uut.distance(*constMap, std::const_pointer_cast<const Way>(w1), std::const_pointer_cast<const Way>(w2)),
-                                 0.000001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.00515218,
+      uut.distance(
+        *constMap, std::const_pointer_cast<const Way>(w1), std::const_pointer_cast<const Way>(w2)),
+        0.000001);
   }
 };
 

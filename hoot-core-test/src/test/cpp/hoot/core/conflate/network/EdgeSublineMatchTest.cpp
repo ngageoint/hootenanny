@@ -66,7 +66,6 @@ public:
       "{subline1: { _start: { _e: (0) Node(-1) --  --> (1) Node(-2), _portion: 0 }, _end: { _e: (0) Node(-1) --  --> (1) Node(-2), _portion: 0.7 } }, subline2: { _start: { _e: (0) Node(-1) --  --> (1) Node(-2), _portion: 0.7 }, _end: { _e: (0) Node(-1) --  --> (1) Node(-2), _portion: 0 } }}",
       edgeSublineMatch.toString());
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(EdgeSublineMatchTest, "quick");

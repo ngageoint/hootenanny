@@ -59,7 +59,7 @@ public:
     : HootTestFixture("test-files/scoring/MatchFeatureExtractorTest/",
                       "test-output/scoring/MatchFeatureExtractorTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   OsmMapPtr load(QString s1, QString s2)
@@ -97,8 +97,7 @@ public:
     fp.close();
 
     // check for consistency with previous versions.
-    HOOT_FILE_EQUALS(_inputPath + "Buildings.arff",
-                     _outputPath + "Buildings.arff");
+    HOOT_FILE_EQUALS(_inputPath + "Buildings.arff", _outputPath + "Buildings.arff");
   }
 };
 

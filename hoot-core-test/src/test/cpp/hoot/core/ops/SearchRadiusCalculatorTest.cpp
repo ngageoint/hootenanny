@@ -62,8 +62,8 @@ class SearchRadiusCalculatorTest : public HootTestFixture
 
 public:
 
-  SearchRadiusCalculatorTest()
-    : HootTestFixture("test-files/ops/SearchRadiusCalculatorTest/", UNUSED_PATH)
+  SearchRadiusCalculatorTest() :
+  HootTestFixture("test-files/ops/SearchRadiusCalculatorTest/", UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -87,8 +87,11 @@ public:
     searchRadiusCalculator.setConfiguration(testSettings);
 
     searchRadiusCalculator.apply(map);
+    // TODO: This test oddly yields different output when it is run in parallel with other tests vs
+    // when it is run serially with other tests. To get it to pass in series, you have to loosen the
+    // comparison restriction. The test doesn't have the same behavior when run in isolation.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      34.334701, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
+      34.334701, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6/*1e-1*/);
   }
 
   void runNotEnoughTiePointsTest()
@@ -140,8 +143,9 @@ public:
     searchRadiusCalculator.setConfiguration(testSettings);
 
     searchRadiusCalculator.apply(map);
+    // See related note in runCalcResultTest.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      32.675050, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
+      32.675050, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6/*1e-1*/);
   }
 
 };

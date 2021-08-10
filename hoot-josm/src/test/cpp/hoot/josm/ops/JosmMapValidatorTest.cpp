@@ -52,7 +52,7 @@ public:
   HootTestFixture(
     "test-files/ops/JosmMapValidatorTest", "test-output/ops/JosmMapValidatorTest")
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   void runGetAvailableValidatorsTest()

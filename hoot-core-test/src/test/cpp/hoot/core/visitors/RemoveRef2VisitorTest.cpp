@@ -52,11 +52,11 @@ class RemoveRef2VisitorTest : public HootTestFixture
 
 public:
 
-  RemoveRef2VisitorTest()
-    : HootTestFixture("test-files/visitors/RemoveRef2VisitorTest/",
-                      "test-output/visitors/RemoveRef2VisitorTest/")
+  RemoveRef2VisitorTest() :
+  HootTestFixture(
+    "test-files/visitors/RemoveRef2VisitorTest/", "test-output/visitors/RemoveRef2VisitorTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   void runToyTest()

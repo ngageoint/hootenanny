@@ -62,10 +62,7 @@ class ClosePointHashTest : public HootTestFixture
 
 public:
 
-  ClosePointHashTest()
-  {
-    setResetType(ResetBasic);
-  }
+  ClosePointHashTest() = default;
 
   void runBasicTest()
   {

@@ -59,7 +59,7 @@ public:
     : HootTestFixture("test-files/algorithms/WayJoinerTest/",
                       "test-output/algorithms/WayJoinerTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   void runSimpleTest()

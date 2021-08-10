@@ -43,11 +43,10 @@ class PhoneNumberCountVisitorTest : public HootTestFixture
 
 public:
 
-  PhoneNumberCountVisitorTest()
-    : HootTestFixture("test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/",
-                      UNUSED_PATH)
+  PhoneNumberCountVisitorTest() :
+  HootTestFixture("test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/", UNUSED_PATH)
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   void runBasicTest()
@@ -71,7 +70,7 @@ public:
     settings.set(ConfigOptions::getPhoneNumberRegionCodeKey(), "US");
     settings.set(ConfigOptions::getPhoneNumberAdditionalTagKeysKey(), QStringList());
     settings.set(ConfigOptions::getPhoneNumberSearchInTextKey(), false);
-    uut.setConfiguration(conf());
+    uut.setConfiguration(/*conf()*/settings);
 
     map->visitRo(uut);
 
