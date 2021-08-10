@@ -97,12 +97,18 @@ by Hootenanny only.
 
 Only changesets may be written to an OSM API Web Service (http://).
 
-=== Compressed
+=== Archive Files (Compressed or Uncompressed)
 
-* The format for specifying zip file data is: "/vsizip/<path to Zip file>/<path to the shape file INSIDE the Zip file>. 
+* For the `hoot convert` command zip files (.ZIP), tar files (.TAR and compressed .TAR.GZ and .TGZ), and gzip files (.GZ)
+can be used as input using regular path syntax.  When used this way, all GDAL compatible files are read from the file and
+loaded appropriately.  When only one file in the archive is desired use the syntax below.
+* To specifying a single file within an archive file: "/vsi<type>/<path to archive file>/<path to the file INSIDE the archive>.
 The "/" are field separators. If you get errors using absolute paths, check that you have the right number of "/".
-* A Zip file located at /gis-data/test_data.zip:
+* Valid archive prefixes are as follows:
+** `/vsizip/`
+** `/vsitar/`
+** `/vsigzip/`
+* EXAMPLE: A Zip file located at /gis-data/test_data.zip:
 ** The path to the shapefile inside the Zip file: "dir/LAP010.shp
 ** The input is: "/vsizip//gis-data/test_data.zip/dir/LAP010.shp"
 ** If the Zip file is in the current directory, the input will be: /vsizip/./test_data.zip/dir/LAP010.shp
-** If you do not specify a specific shapefile then, it will read in all shapefiles in the given directory.

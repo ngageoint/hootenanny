@@ -26,14 +26,15 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OgrReader.h>
+#include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Progress.h>
 
 using namespace geos::geom;
@@ -50,6 +51,7 @@ class OgrReaderTest : public HootTestFixture
     CPPUNIT_TEST(runPythonTranslateTest);
     CPPUNIT_TEST(runStreamHasMoreElementsTest);
     CPPUNIT_TEST(runStreamReadNextElementTest);
+    CPPUNIT_TEST(runOgrZipTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -200,6 +202,33 @@ public:
       }
 
       CPPUNIT_ASSERT_EQUAL(610, numberOfElements);
+    }
+
+    void runOgrZipTest()
+    {
+      QStringList files_extensions({".zip", ".tar", ".tar.gz"});
+      QStringList files_prefixes({"/vsizip/", "/vsitar/", "/vsitar/"});
+
+      for (int ext = 0; ext < files_extensions.length(); ++ext)
+      {
+        QString file = _inputPath + "MGCPv3" + files_extensions[ext];
+        QStringList files = OgrUtilities::getInstance().getValidFilesInContainer(file);
+        //  The MGCPv3 container files contain 9 Shapefiles
+        CPPUNIT_ASSERT_EQUAL(9, files.length());
+        //  Make sure all of them begin will the correct prefix
+        for (int f = 0; f < files.length(); ++f)
+          CPPUNIT_ASSERT(files[f].startsWith(files_prefixes[ext]));
+        //  Check the files in alphabetical order
+        CPPUNIT_ASSERT(files[0].endsWith("MGCPv3" + files_extensions[ext] + "/AAL015.shp"));
+        CPPUNIT_ASSERT(files[1].endsWith("MGCPv3" + files_extensions[ext] + "/AAL020.shp"));
+        CPPUNIT_ASSERT(files[2].endsWith("MGCPv3" + files_extensions[ext] + "/LAN010.shp"));
+        CPPUNIT_ASSERT(files[3].endsWith("MGCPv3" + files_extensions[ext] + "/LAP010.shp"));
+        CPPUNIT_ASSERT(files[4].endsWith("MGCPv3" + files_extensions[ext] + "/LAP030.shp"));
+        CPPUNIT_ASSERT(files[5].endsWith("MGCPv3" + files_extensions[ext] + "/LAP050.shp"));
+        CPPUNIT_ASSERT(files[6].endsWith("MGCPv3" + files_extensions[ext] + "/LAQ040.shp"));
+        CPPUNIT_ASSERT(files[7].endsWith("MGCPv3" + files_extensions[ext] + "/LBH140.shp"));
+        CPPUNIT_ASSERT(files[8].endsWith("MGCPv3" + files_extensions[ext] + "/PAL015.shp"));
+      }
     }
 };
 

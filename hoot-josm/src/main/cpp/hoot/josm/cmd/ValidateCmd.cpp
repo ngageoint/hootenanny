@@ -26,14 +26,14 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/josm/ops/JosmMapValidator.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/info/ApiEntityDisplayInfo.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/info/ApiEntityDisplayInfo.h>
+#include <hoot/josm/ops/JosmMapValidator.h>
 
 namespace hoot
 {
@@ -101,7 +101,7 @@ public:
       QStringList inputs;
       if (!recursive)
       {
-        inputs = args;
+        inputs = IoUtils::expandInputs(args);
       }
       else
       {

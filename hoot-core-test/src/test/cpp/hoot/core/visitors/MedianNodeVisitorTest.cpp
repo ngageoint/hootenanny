@@ -44,9 +44,7 @@ class MedianNodeVisitorTest : public HootTestFixture
 
 public:
 
-  MedianNodeVisitorTest()
-    : HootTestFixture("test-files/",
-                      UNUSED_PATH)
+  MedianNodeVisitorTest() : HootTestFixture("test-files/", UNUSED_PATH)
   {
     setResetType(ResetAll);
   }

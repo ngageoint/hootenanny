@@ -55,7 +55,7 @@ public:
   CookieCutterOpTest() :
   HootTestFixture("test-files/ops/CookieCutterOp/", "test-output/ops/CookieCutterOp/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   void runTest()
@@ -86,7 +86,6 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "CookieCutterOpTest.osm",
                      _outputPath + "CookieCutterOpTest.osm");
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterOpTest, "quick");

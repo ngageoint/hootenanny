@@ -70,6 +70,7 @@ class MaximalSublineTest : public HootTestFixture
   CPPUNIT_TEST(runDiagonalOffsetTest);
   CPPUNIT_TEST(runJoinTest);
   CPPUNIT_TEST(runRealWorld3Test);
+  // See #5408
   //CPPUNIT_TEST(runRealWorld4Test);
   CPPUNIT_TEST(runSmallLengthDiffTest);
   CPPUNIT_TEST(runToyTest);
@@ -111,7 +112,6 @@ public:
     OsmMap::resetCounters();
     std::shared_ptr<OGREnvelope> env = GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1));
     MapProjector::projectToPlanar(map, *env);
-
     return map;
   }
 

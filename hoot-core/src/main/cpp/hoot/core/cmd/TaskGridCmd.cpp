@@ -26,14 +26,15 @@
  */
 
 // Hoot
+#include <hoot/core/algorithms/changeset/NodeDensityTaskGridGenerator.h>
+#include <hoot/core/algorithms/changeset/UniformTaskGridGenerator.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/algorithms/changeset/NodeDensityTaskGridGenerator.h>
-#include <hoot/core/algorithms/changeset/UniformTaskGridGenerator.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -138,7 +139,7 @@ private:
     }
     else
     {
-      inputs = args;
+      inputs = IoUtils::expandInputs(args);
     }
 
     if (!bounds.trimmed().isEmpty())
@@ -291,7 +292,7 @@ private:
     _validateOutput(output);
 
     // Everything left is an input.
-    const QStringList inputs = args;
+    const QStringList inputs = IoUtils::expandInputs(args);
 
     LOG_STATUS(
       "Generating node density based task grid for " << inputs.size() << " inputs and " <<

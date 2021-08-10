@@ -70,7 +70,7 @@ public:
     : HootTestFixture("test-files/ops/DuplicateWayRemoverTest/",
                       "test-output/ops/DuplicateWayRemoverTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   void runTest()
@@ -154,6 +154,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DuplicateWayRemoverTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DuplicateWayRemoverTest, "current");
 
 }

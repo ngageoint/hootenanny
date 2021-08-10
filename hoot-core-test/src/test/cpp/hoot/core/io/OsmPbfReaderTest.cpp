@@ -78,11 +78,10 @@ class OsmPbfReaderTest : public HootTestFixture
 
 public:
 
-  OsmPbfReaderTest()
-    : HootTestFixture("test-files/io/OsmPbfReaderTest/",
-                      "test-output/io/OsmPbfReaderTest/")
+  OsmPbfReaderTest() :
+  HootTestFixture("test-files/io/OsmPbfReaderTest/", "test-output/io/OsmPbfReaderTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   void runOffsetsTest()

@@ -51,11 +51,12 @@ class ImplicitPoiTypeTaggerTest : public HootTestFixture
 
 public:
 
-  ImplicitPoiTypeTaggerTest()
-    : HootTestFixture("test-files/visitors/ImplicitPoiTypeTaggerTest/",
-                      "test-output/visitors/ImplicitPoiTypeTaggerTest/")
+  ImplicitPoiTypeTaggerTest() :
+  HootTestFixture(
+    "test-files/visitors/ImplicitPoiTypeTaggerTest/",
+    "test-output/visitors/ImplicitPoiTypeTaggerTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   void runBasicTest()

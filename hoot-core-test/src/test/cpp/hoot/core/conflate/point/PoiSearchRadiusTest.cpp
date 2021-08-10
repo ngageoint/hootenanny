@@ -51,7 +51,6 @@ public:
   PoiSearchRadiusTest() :
   HootTestFixture("test-files/conflate/point/PoiSearchRadiusTest/", UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void runFileTest()

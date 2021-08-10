@@ -57,9 +57,8 @@ class ReprojectToPlanarOpTest : public HootTestFixture
 
 public:
 
-  ReprojectToPlanarOpTest()
-    : HootTestFixture("test-files/ops/ReprojectToPlanarOp/",
-                      "test-output/ops/ReprojectToPlanarOp/")
+  ReprojectToPlanarOpTest() :
+  HootTestFixture("test-files/ops/ReprojectToPlanarOp/", "test-output/ops/ReprojectToPlanarOp/")
   {
     setResetType(ResetAll);
   }
@@ -79,14 +78,11 @@ public:
 
     OsmXmlWriter writer;
     writer.write(map, _outputPath + outputFile);
-    HOOT_FILE_EQUALS(_inputPath + outputFile,
-                     _outputPath + outputFile);
+    HOOT_FILE_EQUALS(_inputPath + outputFile, _outputPath + outputFile);
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ReprojectToPlanarOpTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ReprojectToPlanarOpTest, "current");
 
 }
 
