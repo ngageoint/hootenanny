@@ -617,15 +617,15 @@ tests that interface with external entities should then become integration tests
 * Care should be taken to categorize tests based on the amount of time they complete. e.g. don't
 put a longer running test in the C++ quick tests. For the Java tests, longer running tests should
 most likely be put into the integration tests.
-* Small amounts of test data should be used for testing if possible. Do not check very large test data
-files into the repository. Keep test files to <= 1MB when possible.
-* During testing you can verify test output via CPPUnit asserts against the state of the output data or via
-file comparison (`HOOT_FILE_EQUALS`) of the output with known good output. An advantage to using file 
-comparison for testing output is that the test code is less verbose and tedious to maintain as the 
-class evolves. A disadvantage of using file comparison is that it is not always clear what the 
-intentions of your test are and individuals can inadvertently overwrite your intended test output if 
-they do not understand why they broke the test. Weigh these pros and cons when selecting which one 
-of these test output verification methods you will use.
+* Small amounts of test data should be used for testing if possible. Do not check very large test 
+data files into the repository. Keep test files to <= 1MB when possible.
+* During testing you can verify test output via CPPUnit asserts against the state of the output data 
+or via file comparison (`HOOT_FILE_EQUALS`) of the output with known good output. An advantage to 
+using file comparison for testing output is that the test code is less verbose and tedious to 
+maintain as the class evolves. A disadvantage of using file comparison is that it is not always 
+clear what the intentions of your test are and individuals can inadvertently overwrite your intended 
+test output if they do not understand why they broke the test. Weigh these pros and cons when 
+selecting which one of these test output verification methods you will use.
 * Do not overwrite generated test output used to verify a test unless you are sure that in doing
 so you are still preserving the integrity of the test.
 * In Java, mock objects are your friends when writing tests.
@@ -633,7 +633,13 @@ so you are still preserving the integrity of the test.
 to expose members only to the tests. e.g. Use C++ friend keyword, etc.; or in Java, Mockito may
 help with this.
 
-=== Testing with Address Data
+=== Hootenanny Specific Test Writing Guidelines
+
+* When configuring tests that run conflation, run them with the minimal number of conflate matchers
+that are necessary. e.g. If only conflating roads, only use a road matcher. This helps increase the 
+overall runtime performance of the tests and reduce their memory footprint.
+
+==== Testing with Address Data
 
 Any tests that manipulate address data must use the third party library, libpostal. libpostal 
 requires a large amount of data at initialization time and is treated as a Singleton with the 
