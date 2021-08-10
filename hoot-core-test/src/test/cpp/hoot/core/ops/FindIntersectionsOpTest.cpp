@@ -49,7 +49,7 @@ public:
   FindIntersectionsOpTest() :
   HootTestFixture("test-files/ops/FindIntersectionsOp/", "test-output/ops/FindIntersectionsOp/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runToyTest()

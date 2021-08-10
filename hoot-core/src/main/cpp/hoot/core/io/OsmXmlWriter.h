@@ -100,9 +100,9 @@ public:
    */
   void setIncludeCompatibilityTags(bool includeCompatibility)
   { _includeCompatibilityTags = includeCompatibility; }
-  void setIncludeIds(bool includeIds) { _addExportTagsVisitor.setIncludeIds( includeIds ); }
+  void setIncludeIds(bool includeIds) { _addExportTagsVisitor.setIncludeIds(includeIds); }
   void setIncludeHootInfo(bool includeInfo)
-  { _addExportTagsVisitor.setIncludeHootInfo( includeInfo ); }
+  { _addExportTagsVisitor.setIncludeHootInfo(includeInfo); }
   void setIncludePid(bool includePid) { _includePid = includePid; }
   /**
    * Includes the x/y location of the node with the nd element. This is not standard for OSM

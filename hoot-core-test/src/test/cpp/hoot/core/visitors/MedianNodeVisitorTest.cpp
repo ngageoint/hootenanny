@@ -46,7 +46,7 @@ public:
 
   MedianNodeVisitorTest() : HootTestFixture("test-files/", UNUSED_PATH)
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runTest()

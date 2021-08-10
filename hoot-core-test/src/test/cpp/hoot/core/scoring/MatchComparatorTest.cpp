@@ -99,7 +99,6 @@ public:
     double tpr = comparator.evaluateMatches(map, copy);
     LOG_TRACE(comparator.toString());
 
-
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.75, tpr, 0.001);
     CPPUNIT_ASSERT_EQUAL(6, comparator.getTp());
     CPPUNIT_ASSERT_EQUAL(1, comparator.getFn());

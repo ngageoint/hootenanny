@@ -56,7 +56,7 @@ public:
   EdgeMatchSetFinderTest() :
   HootTestFixture("test-files/conflate/network/", "test-files/conflate/network/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   EdgeMatchSetFinderPtr loadTest(int testNumber)

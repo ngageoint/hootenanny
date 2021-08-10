@@ -35,6 +35,7 @@
 #include <cppunit/TestFixture.h>
 
 // hoot
+#include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfPath.h>
@@ -237,8 +238,10 @@ protected:
   enum HootTestReset
   {
     ResetNone,
-    ResetBasic, // resets counters
-    ResetAll    // resets entire environment (config, etc.)
+    ResetBasic,             // resets counters
+    ResetAllNoMatchFactory, // resets entire environment except for MatchFactory (see additional
+                            // explanation in resetEnvironment)
+    ResetAll                // resets entire environment (config, etc.)
   };
 
   /**
@@ -276,6 +279,11 @@ public:
     if (_reset == ResetAll)
     {
       // resetEnvironment reloads Testing.conf, so we don't need to do it here.
+      TestUtils::resetEnvironment();
+      MatchFactory::getInstance().reset();
+    }
+    else if (_reset == ResetAllNoMatchFactory)
+    {
       TestUtils::resetEnvironment();
     }
     else

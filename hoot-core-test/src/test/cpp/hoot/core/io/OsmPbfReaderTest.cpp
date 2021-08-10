@@ -81,7 +81,9 @@ public:
   OsmPbfReaderTest() :
   HootTestFixture("test-files/io/OsmPbfReaderTest/", "test-output/io/OsmPbfReaderTest/")
   {
-    setResetType(ResetBasic);
+    // Strangely, this only needs ResetAllNoMatchFactory for runFactoryReadMapTest to pass in
+    // series, but not parallel.
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runOffsetsTest()
@@ -294,8 +296,7 @@ public:
     writer.setIncludeHootInfo(false);
     writer.write(map, _outputPath + "OsmPbfReaderTest_1.osm");
 
-    HOOT_FILE_EQUALS(_inputPath + "OsmPbfReaderTest.osm",
-                     _outputPath + "OsmPbfReaderTest_1.osm");
+    HOOT_FILE_EQUALS(_inputPath + "OsmPbfReaderTest.osm", _outputPath + "OsmPbfReaderTest_1.osm");
   }
 
   void runToyRelationTest()
@@ -335,7 +336,7 @@ public:
     CPPUNIT_ASSERT(!reader.isSupported("test-files/fileDoesntExist.osm"));
   }
 
-  //in the future might try to support dir urls with this interface, but for now we don't
+  // In the future might try to support dir urls with this interface, but for now we don't.
   void runIsSupportedUrlIsDirTest()
   {
     OsmPbfReader reader(false);
@@ -378,8 +379,7 @@ public:
     writer.setIncludeHootInfo(false);
     writer.write(map, _outputPath + "OsmPbfReaderTest_2.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "OsmPbfReaderTest.osm",
-                     _outputPath + "OsmPbfReaderTest_2.osm");
+    HOOT_FILE_EQUALS(_inputPath + "OsmPbfReaderTest.osm", _outputPath + "OsmPbfReaderTest_2.osm");
   }
 
   void runFactoryReadMapTest()
@@ -391,8 +391,7 @@ public:
     writer.setIncludeHootInfo(false);
     writer.write(map, _outputPath + "OsmPbfReaderTest_3.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "OsmPbfReaderTest.osm",
-                     _outputPath + "OsmPbfReaderTest_3.osm");
+    HOOT_FILE_EQUALS(_inputPath + "OsmPbfReaderTest.osm", _outputPath + "OsmPbfReaderTest_3.osm");
   }
 
   void runReadMapPartialTest()

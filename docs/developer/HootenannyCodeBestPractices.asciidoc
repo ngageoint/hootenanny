@@ -12,7 +12,9 @@ getters/setters are ok in a header file.
 * Use forward declarations where possible to mimimize build dependencies.
 * Use default constructors and destructors where applicable.
 * Use `std::make_shared` to create shared pointers when possible.
-* Pass variables to methods as const references when possible.
+* If a variable being passed to a method should never be null, pass a reference instead of a 
+pointer.
+* When passing references to methods, pass them as const references when possible.
 * Make methods const when possible.
 * Keep classes focused on a single primary functionality.
 * Public class member variables are generally discouraged, with the exception of `const` or 
@@ -28,6 +30,7 @@ getter methods.
 logic needed to be executed by the command.
 * Make use of configuration options via the `Configurable` interface to keep functionality adapatable 
 to a broad range of data inputs.
+* Avoid setting the configuration in a global manner with `conf().set(...)` when possible.
 * Favor the visitor pattern via classes ineriting `ElementVisitor` for map data processing. Use 
 `OsmMapOperation` only when the data processor needs a copy of a complete map to performs its logic.
 * Use classes inheriting `ElementCriterion` to identify data based on its properties.

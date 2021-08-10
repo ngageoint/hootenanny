@@ -147,7 +147,7 @@ public:
   HootTestFixture(
     "test-files/js/conflate/ElementMergerJsTest/", "test-output/js/conflate/ElementMergerJsTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void testMerge(const QString& inFileName, const QString& outFileName,

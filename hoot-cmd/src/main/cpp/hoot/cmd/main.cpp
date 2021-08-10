@@ -54,10 +54,8 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-  Hoot::getInstance().init();
-
-  v8Engine::setPlatformInit();
-  v8Engine::getInstance().init();
+  Hoot::getInstance();
+  v8Engine::getInstance();
 
   QCoreApplication app(argc, argv);
 

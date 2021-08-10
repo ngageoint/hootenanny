@@ -64,9 +64,10 @@ class PoiPolygonMergerTest : public HootTestFixture
 
 public:
 
-  PoiPolygonMergerTest()
-    : HootTestFixture("test-files/conflate/poi-polygon/PoiPolygonMergerTest/",
-                      "test-output/conflate/poi-polygon/PoiPolygonMergerTest/")
+  PoiPolygonMergerTest() :
+  HootTestFixture(
+    "test-files/conflate/poi-polygon/PoiPolygonMergerTest/",
+    "test-output/conflate/poi-polygon/PoiPolygonMergerTest/")
   {
     setResetType(ResetBasic);
   }

@@ -49,14 +49,17 @@ namespace hoot
 class SampledAngleHistogramExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SampledAngleHistogramExtractorTest);
+  // This test yields different results when run with other tests in series vs when run with other
+  // tests in parallel for currently unknown reasons (#4945). The problem is not exhibited when run
+  // in isolation.
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  SampledAngleHistogramExtractorTest()
-    : HootTestFixture("test-files/algorithms/extractors/SampledAngleHistogramExtractorTest/",
-                      UNUSED_PATH)
+  SampledAngleHistogramExtractorTest() :
+  HootTestFixture(
+    "test-files/algorithms/extractors/SampledAngleHistogramExtractorTest/", UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }

@@ -59,10 +59,33 @@ public:
     : HootTestFixture("test-files/scoring/MatchFeatureExtractorTest/",
                       "test-output/scoring/MatchFeatureExtractorTest/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAllNoMatchFactory);
   }
 
-  OsmMapPtr load(QString s1, QString s2)
+  void runBuildingTest()
+  {
+    // This test is primarily useful as an input to Weka for training models.
+    MatchFeatureExtractor uut;
+    std::shared_ptr<BuildingMatchCreator> matchCreator = std::make_shared<BuildingMatchCreator>();
+    matchCreator->getMatchThreshold(); // This inits the threshold on the match creator.
+    uut.addMatchCreator(matchCreator);
+    uut.processMap(_load(_inputPath + "BuildingsA.osm", _inputPath + "BuildingsB.osm"));
+
+    LOG_TRACE(uut.getResults().toStdString());
+
+    QFile fp(_outputPath + "Buildings.arff");
+    CPPUNIT_ASSERT(fp.open(QIODevice::WriteOnly | QIODevice::Text));
+    QByteArray arr = uut.getResults().toUtf8();
+    fp.write(arr);
+    fp.close();
+
+    // check for consistency with previous versions.
+    HOOT_FILE_EQUALS(_inputPath + "Buildings.arff", _outputPath + "Buildings.arff");
+  }
+
+private:
+
+  OsmMapPtr _load(QString s1, QString s2)
   {
     OsmXmlReader reader;
 
@@ -77,27 +100,6 @@ public:
     MapCleaner().apply(map);
 
     return map;
-  }
-
-  void runBuildingTest()
-  {
-    // This test is primarily useful as an input to Weka for training models.
-    MatchFeatureExtractor uut;
-    std::shared_ptr<BuildingMatchCreator> matchCreator = std::make_shared<BuildingMatchCreator>();
-    matchCreator->getMatchThreshold(); // This inits the threshold on the match creator.
-    uut.addMatchCreator(matchCreator);
-    uut.processMap(load(_inputPath + "BuildingsA.osm", _inputPath + "BuildingsB.osm"));
-
-    LOG_TRACE(uut.getResults().toStdString());
-
-    QFile fp(_outputPath + "Buildings.arff");
-    CPPUNIT_ASSERT(fp.open(QIODevice::WriteOnly | QIODevice::Text));
-    QByteArray arr = uut.getResults().toUtf8();
-    fp.write(arr);
-    fp.close();
-
-    // check for consistency with previous versions.
-    HOOT_FILE_EQUALS(_inputPath + "Buildings.arff", _outputPath + "Buildings.arff");
   }
 };
 

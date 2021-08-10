@@ -71,7 +71,7 @@ public:
   RubberSheetTest() :
   HootTestFixture("test-files/algorithms/rubber-sheet/", "test-output/algorithms/rubber-sheet/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runSimpleTest()
