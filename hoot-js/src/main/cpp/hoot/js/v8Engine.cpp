@@ -32,51 +32,47 @@ using namespace v8;
 namespace hoot
 {
 
-bool v8Engine::_needPlatform = false;
-
 v8Engine::v8Engine()
 {
   //  Setup and initialize the platform
-  if (v8Engine::_needPlatform)
-  {
-    V8::InitializeICUDefaultLocation(nullptr);
-    V8::InitializeExternalStartupData(nullptr);
-    _platform = platform::NewDefaultPlatform();
-    V8::InitializePlatform(_platform.get());
-    //  Initialize v8
-    V8::Initialize();
-    //  Create the main isolate
-    _allocator.reset(ArrayBuffer::Allocator::NewDefaultAllocator());
-    Isolate::CreateParams params;
-    params.array_buffer_allocator = _allocator.get();
-    _isolate = Isolate::New(params);
-    _isolateScope = std::make_shared<Isolate::Scope>(_isolate);
-    //  Create the main context
-    _locker = std::make_shared<Locker>(_isolate);
-    HandleScope handleScope(_isolate);
-    _context = std::make_shared<Persistent<Context>>(_isolate, Context::New(_isolate));
-    Local<Context> context = ToLocal(_context.get());
-    _scopeContext = std::make_shared<Context::Scope>(context);
-  }
-  else
-  {
-    _isolate = v8::Isolate::GetCurrent();
-  }
+  //LOG_WARN("v8Engine constructor");
+
+  V8::InitializeICUDefaultLocation(nullptr);
+  V8::InitializeExternalStartupData(nullptr);
+  _platform = platform::NewDefaultPlatform();
+  V8::InitializePlatform(_platform.get());
+  //  Initialize v8
+  V8::Initialize();
+  //  Create the main isolate
+  _allocator.reset(ArrayBuffer::Allocator::NewDefaultAllocator());
+  Isolate::CreateParams params;
+  params.array_buffer_allocator = _allocator.get();
+  _isolate = Isolate::New(params);
+  _isolateScope = std::make_shared<Isolate::Scope>(_isolate);
+  //  Create the main context
+  _locker = std::make_shared<Locker>(_isolate);
+  HandleScope handleScope(_isolate);
+  _context = std::make_shared<Persistent<Context>>(_isolate, Context::New(_isolate));
+  Local<Context> context = ToLocal(_context.get());
+  _scopeContext = std::make_shared<Context::Scope>(context);
 }
 
 v8Engine::~v8Engine()
 {
-  if (v8Engine::_needPlatform)
+  //LOG_WARN("v8Engine destructor");
+  //std::cout << "v8Engine destructor" << std::endl;
+
+  _scopeContext.reset();
+  _locker.reset();
+  _isolateScope.reset();
+  if (_isolate != nullptr)
   {
-    _scopeContext.reset();
-    _locker.reset();
-    _isolateScope.reset();
     //  Dispose of the v8 subsystem
     _isolate->Dispose();
-    V8::Dispose();
-    //  Shutdown the platform
-    V8::ShutdownPlatform();
   }
+  V8::Dispose();
+  //  Shutdown the platform
+  V8::ShutdownPlatform();
 }
 
 v8Engine& v8Engine::getInstance()
@@ -85,16 +81,5 @@ v8Engine& v8Engine::getInstance()
   static v8Engine instance;
   return instance;
 }
-
-Isolate* v8Engine::getIsolate()
-{
-  return getInstance()._isolate;
-}
-
-void v8Engine::setPlatformInit(bool needsPlatform)
-{
-  _needPlatform = needsPlatform;
-}
-
 
 }

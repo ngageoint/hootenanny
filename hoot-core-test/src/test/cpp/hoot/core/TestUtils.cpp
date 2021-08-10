@@ -314,7 +314,7 @@ void TestUtils::resetEnvironment(const QStringList confs)
   // projection and subtly change the results.
   conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), true);
 
-  // these factories cache the creators. Flush them so they get any config changes.
+  // These factories cache the creators. Flush them so they get any config changes.
   MatchFactory::getInstance().reset();
   MergerFactory::getInstance().reset();
   TagMergerFactory::getInstance().reset();

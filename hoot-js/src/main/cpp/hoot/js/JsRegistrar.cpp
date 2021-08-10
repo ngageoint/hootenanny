@@ -53,7 +53,7 @@ JsRegistrar& JsRegistrar::getInstance()
 void JsRegistrar::Init(Local<Object> exports)
 {
   LOG_DEBUG("JS registrar init...");
-  Hoot::getInstance().init();
+  Hoot::getInstance();
   getInstance().initAll(exports);
 }
 

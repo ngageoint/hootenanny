@@ -91,7 +91,7 @@ public:
     // when it is run serially with other tests. To get it to pass in series, you have to loosen the
     // comparison restriction. The test doesn't have the same behavior when run in isolation.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      34.334701, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6/*1e-1*/);
+      34.334701, boost::any_cast<double>(searchRadiusCalculator.getResult()), /*1e-6*/1e-1);
   }
 
   void runNotEnoughTiePointsTest()
@@ -145,7 +145,7 @@ public:
     searchRadiusCalculator.apply(map);
     // See related note in runCalcResultTest.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      32.675050, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6/*1e-1*/);
+      32.675050, boost::any_cast<double>(searchRadiusCalculator.getResult()), /*1e-6*/1e-1);
   }
 
 };

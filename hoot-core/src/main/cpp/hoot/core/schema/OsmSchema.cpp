@@ -1386,6 +1386,13 @@ std::shared_ptr<OsmSchema> OsmSchema::_theInstance = nullptr;
 OsmSchema::OsmSchema() :
 _d(std::make_shared<OsmSchemaData>())
 {
+  //LOG_WARN("OsmSchema constructor");
+}
+
+OsmSchema::~OsmSchema()
+{
+  //LOG_WARN("OsmSchema destructor");
+  //std::cout << "OsmSchema destructor" << std::endl;
 }
 
 void OsmSchema::addAssociatedWith(const QString& name1, const QString& name2) const
