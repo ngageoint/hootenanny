@@ -201,6 +201,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapCleanerTest, "slow");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapCleanerTest, "serial");
 
 }
