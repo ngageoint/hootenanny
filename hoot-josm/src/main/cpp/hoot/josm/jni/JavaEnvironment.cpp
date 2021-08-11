@@ -72,7 +72,7 @@ JavaEnvironment& JavaEnvironment::getInstance()
 
 void JavaEnvironment::_initVm()
 {
-  bool verbose = true;
+  bool verbose = false;
   JavaVMInitArgs vm_args;
   int numOptions = 5;
   if (verbose)
@@ -114,18 +114,11 @@ void JavaEnvironment::_initVm()
   vm_args.options = options;
   vm_args.ignoreUnrecognized = 1;
 
-  //_attachedHere = false;
   jint status = JNI_CreateJavaVM(&_vm, (void**)&_env, &vm_args);
   if (status != JNI_OK)
   {
     throw HootException("Unable to initialize JVM. Error code: " + QString::number(status));
   }
-//  status = _vm->AttachCurrentThreadAsDaemon((void**)&_env, &vm_args);
-//  if (status != JNI_OK)
-//  {
-//    throw HootException(
-//      "Unable to attach daemon thread to JVM. Error code: " + QString::number(status));
-//  }
 }
 
 }

@@ -44,11 +44,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, SearchRadiusCalculator)
 
-SearchRadiusCalculator::SearchRadiusCalculator()
-{
-  setConfiguration(conf());
-}
-
 void SearchRadiusCalculator::setConfiguration(const Settings& conf)
 {
   ConfigOptions config(conf);

@@ -59,7 +59,6 @@ tds70 = {
       tds70.attrLookup = translate.makeAttrLookup(translate.addSingleTagFeature(tds70.rawSchema));
     }
 
-
     // Debug:
     // print("tds70.attrLookup");
     // translate.dumpLookup(tds70.attrLookup);
@@ -695,6 +694,11 @@ tds70 = {
       }
     } // End of Find an FCode
 
+    // Convert Rasilway guage widths
+    if (attrs.ZI017_GAW)
+    {
+      attrs.ZI017_GAW = Number(attrs.ZI017_GAW) * 1000; // Convert M to MM
+    }
   }, // End of applyToOsmPreProcessing
 
 
@@ -721,21 +725,11 @@ tds70 = {
 
       if (attrs.OSMTAGS)
       {
-        try
+        var tmp = translate.unpackText(attrs,'OSMTAGS',4);
+        for (var i in tmp)
         {
-          var tStr = attrs.OSMTAGS;
-          ['OSMTAGS2','OSMTAGS3','OSMTAGS4'].forEach( item => { if (attrs[item]) tStr = tStr.concat(attrs[item]); });
-
-          var tmp = JSON.parse(tStr);
-          for (var i in tmp)
-          {
-            if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
-            tTags[i] = tmp[i];
-          }
-        }
-        catch (error)
-        {
-          hoot.logError('Unable to parse OSM tags from one of the OSMTAGS attributes');
+          if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
+          tTags[i] = tmp[i];
         }
       }
 
@@ -2649,6 +2643,63 @@ tds70 = {
         notUsedTags.railway = tags.railway; // Preserving this
         break;
     }
+
+    // Fix Railway gauges
+    if (tags.gauge)
+    {
+      // First, see if we have a range
+      if (~tags['gauge'].indexOf(';'))
+      {
+        notUsedTags.gauge = tags.gauge; // Save the raw value
+        tags.gauge = tags['gauge'].split(';')[0]; // Grab the first value
+      }
+
+      // Handle "standard" text values
+      switch (tags.gauge)
+      {
+        case 'standard':
+          tags.gauge = 1435;
+          break;
+
+        case 'narrow':
+          notUsedTags.gauge = tags.gauge;
+          tags.gauge = 0;
+          attrs.ZI017_RGC = '2';
+          break;
+
+        case 'broad':
+          notUsedTags.gauge = tags.gauge;
+          tags.gauge = 0;
+          attrs.ZI017_RGC = '1';
+          break;
+      }
+
+      // Now work on the numbers
+      var gWidth = parseInt(tags.gauge,10);
+
+      if (!isNaN(gWidth) && gWidth > 0)
+      {
+        if (gWidth == 1435)
+        {
+          attrs.ZI017_RGC = '3';
+        }
+        else if (gWidth < 1435) // Narrow
+        {
+          attrs.ZI017_RGC = '2';
+        }
+        else
+        {
+          attrs.ZI017_RGC = '1';
+        }
+        attrs.ZI017_GAW = (gWidth / 1000).toFixed(3);  // Convert to Metres
+      }
+      else  // Not a number, cleanup time
+      {
+        // Dont use the value, just punt it to the OSMTAGS attribute
+        delete attrs.ZI017_GAW;
+        notUsedTags.gauge = tags.gauge;
+      }
+    }
   }, // End applyToOgrPostProcessing
 
   // #####################################################################################################
@@ -2680,7 +2731,7 @@ tds70 = {
     // See if we have an o2s_X layer and try to unpack it.
     if (~layerName.indexOf('o2s_'))
     {
-      tags = translate.parseO2S(attrs);
+      tags = translate.unpackText(attrs,'tag',4);
 
       // Add some metadata
       if (!tags.uuid && tds70.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
@@ -2924,71 +2975,14 @@ tds70 = {
     // tds70.applyToOgrPostProcessing(tags, attrs, geometryType);
     tds70.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
 
+    if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
+
     // Now check for invalid feature geometry
     // E.g. If the spec says a runway is a polygon and we have a line, throw error and
     // push the feature to o2s layer
     var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-    if (!(tds70.attrLookup[gFcode.toUpperCase()]))
-    {
-      // For the UI: Throw an error and die if we don't have a valid feature
-      if (tds70.configOut.OgrThrowError == 'true')
-      {
-        if (! attrs.F_CODE)
-        {
-          returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
-          return returnData;
-        }
-        else
-        {
-          //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
-          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv70'}, tableName: ''});
-          return returnData;
-        }
-      }
-
-      hoot.logTrace('FCODE and Geometry: ' + gFcode + ' is not in the schema');
-
-      tableName = 'o2s_' + geometryType.toString().charAt(0);
-
-      // Debug:
-      // Dump out what attributes we have converted before they get wiped out
-      if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
-
-      // We want to keep the hoot:id if present
-      if (tags['hoot:id'])
-      {
-        tags.raw_id = tags['hoot:id'];
-        delete tags['hoot:id'];
-      }
-
-      // Convert all of the Tags to a string so we can jam it into an attribute
-      // var str = JSON.stringify(tags);
-      var str = JSON.stringify(tags,Object.keys(tags).sort());
-
-      // Shapefiles can't handle fields > 254 chars.
-      // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
-      // A nicer thing would be to arrange the tags until they fit neatly
-      if (tds70.configOut.OgrFormat == 'shp')
-      {
-        // Throw a warning that text will get truncated.
-        if (str.length > 1012) hoot.logWarn('o2s tags truncated to fit in available space.');
-
-        // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
-        // which means that it returns an empty string.
-        attrs = {tag1:str.substring(0,225),
-          tag2:str.substring(225,450),
-          tag3:str.substring(450,675),
-          tag4:str.substring(675,900)};
-      }
-      else
-      {
-        attrs = {tag1:str};
-      }
-
-      returnData.push({attrs: attrs, tableName: tableName});
-    }
-    else // We have a feature
+    if (tds70.attrLookup[gFcode.toUpperCase()])
     {
       // Check if we need to make more features.
       // NOTE: This returns the structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
@@ -3014,19 +3008,20 @@ tds70 = {
             // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             // returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
             var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
-            if (tds70.configOut.OgrFormat == 'shp')
+            if (tds61.configOut.OgrFormat == 'shp')
             {
-              returnData[i]['attrs']['OSMTAGS'] = str.substring(0,225);
-              returnData[i]['attrs']['OSMTAGS2'] = str.substring(225,450);
-              returnData[i]['attrs']['OSMTAGS3'] = str.substring(450,675);
-              returnData[i]['attrs']['OSMTAGS4'] = str.substring(675,900);
+              // Split the tags into a maximum of 4 fields, each no greater than 225 char long.
+              var tList = translate.packText(notUsedTags,4,225);
+              returnData[i]['attrs']['OSMTAGS'] = tList[1];
+              for (var j = 2; j < 5; j++)
+              {
+                returnData[i]['attrs']['OSMTAGS' + j] = tList[j];
+              }
             }
             else
             {
               returnData[i]['attrs']['OSMTAGS'] = str;
             }
-
-
           }
 
           // Now set the FCSubtype.
@@ -3083,7 +3078,67 @@ tds70 = {
         var reviewTable = 'review_' + geometryType.toString().charAt(0);
         returnData.push({attrs: reviewAttrs, tableName: reviewTable});
       } // End ReviewTags
-    } // End else We have a feature
+    }
+    else // We don't have a feature
+    {
+      // For the UI: Throw an error and die if we don't have a valid feature
+      if (tds70.configOut.OgrThrowError == 'true')
+      {
+        if (! attrs.F_CODE)
+        {
+          returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
+          return returnData;
+        }
+        else
+        {
+          //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
+          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv70'}, tableName: ''});
+          return returnData;
+        }
+      }
+
+      hoot.logTrace('FCODE and Geometry: ' + gFcode + ' is not in the schema');
+
+      tableName = 'o2s_' + geometryType.toString().charAt(0);
+
+      // Debug:
+      // Dump out what attributes we have converted before they get wiped out
+      if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
+
+      // We want to keep the hoot:id if present
+      if (tags['hoot:id'])
+      {
+        tags.raw_id = tags['hoot:id'];
+        delete tags['hoot:id'];
+      }
+
+      // Convert all of the Tags to a string so we can jam it into an attribute
+      // var str = JSON.stringify(tags);
+      var str = JSON.stringify(tags,Object.keys(tags).sort());
+
+      // Shapefiles can't handle fields > 254 chars.
+      // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
+      // A nicer thing would be to arrange the tags until they fit neatly
+      if (tds70.configOut.OgrFormat == 'shp')
+      {
+        // Throw a warning that text will get truncated.
+        if (str.length > 900) hoot.logWarn('o2s tags truncated to fit in available space.');
+
+        attrs = {};
+        var tList = translate.packText(tags,4,225);
+        for (var i = 1; i < 5; i++)
+        {
+          attrs['tag'+i] = tList[i];
+        }
+      }
+      else
+      {
+        attrs = {tag1:str};
+      }
+
+      returnData.push({attrs: attrs, tableName: tableName});
+
+    } // End we don't have a feature
 
     // Debug:
     if (tds70.configOut.OgrDebugDumptags == 'true')

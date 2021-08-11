@@ -1,2 +1,3 @@
-Tests in this directory need to be moved under the appropriate conflation workflow dir (reference, attribute, etc.). In some cases, they are
-failing when that's done, so they are in purgatory here for awhile.
+TODO: Tests in this directory need to be moved under the appropriate conflation workflow dir 
+(reference, attribute, etc.). In some cases, they are failing when that's done, so they are in 
+purgatory here for awhile.

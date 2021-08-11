@@ -110,7 +110,7 @@ public:
     "test-output/algorithms/changeset/ServiceChangesetReplacementGridTest"),
   _originalDataSize(0)
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   virtual void setUp()

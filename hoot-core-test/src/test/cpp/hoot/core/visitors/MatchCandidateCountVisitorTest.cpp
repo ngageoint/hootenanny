@@ -45,10 +45,6 @@
 namespace hoot
 {
 
-/*
- * None of the tests in this class will run on a VM for me when the test class isn't run in parallel
- * (whole test hangs)...very strange (1/13/21) - BDW.
- */
 class MatchCandidateCountVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MatchCandidateCountVisitorTest);
@@ -64,11 +60,9 @@ class MatchCandidateCountVisitorTest : public HootTestFixture
 
 public:
 
-  MatchCandidateCountVisitorTest()
-    : HootTestFixture("test-files/conflate/unified/",
-                      UNUSED_PATH)
+  MatchCandidateCountVisitorTest() : HootTestFixture("test-files/conflate/unified/", UNUSED_PATH)
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runBuildingMatchCandidateCountTest()
@@ -143,7 +137,7 @@ public:
     QMap<QString, long> matchCandidateCountsByMatchCreator =
       boost::any_cast<QMap<QString, long>>(uut.getData());
     CPPUNIT_ASSERT_EQUAL(2, matchCandidateCountsByMatchCreator.size());
-    //These don't add up to the total...is there some overlap here?
+    // These don't seem to add up to the correct total. Is there some overlap here?
     CPPUNIT_ASSERT_EQUAL((long)18, matchCandidateCountsByMatchCreator["hoot::BuildingMatchCreator"]);
     CPPUNIT_ASSERT_EQUAL((long)8, matchCandidateCountsByMatchCreator["hoot::HighwayMatchCreator"]);
   }

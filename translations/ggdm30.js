@@ -51,7 +51,14 @@ ggdm30 = {
     if (config.getOgrNoteExtra() == 'file') ggdm30.rawSchema = translate.addExtraFeature(ggdm30.rawSchema);
 
     // Build the GGDM fcode/attrs lookup table. Note: This is <GLOBAL>
-    ggdm30.ggdmAttrLookup = translate.makeAttrLookup(ggdm30.rawSchema);
+    if (config.getOgrOutputFormat() == 'shp')
+    {
+      ggdm30.ggdmAttrLookup = translate.makeAttrLookup(translate.addTagFeatures(ggdm30.rawSchema));
+    }
+    else
+    {
+      ggdm30.ggdmAttrLookup = translate.makeAttrLookup(translate.addSingleTagFeature(ggdm30.rawSchema));
+    }
 
     // Debug:
     // print("ggdm30.ggdmAttrLookup: Start");
@@ -681,48 +688,76 @@ ggdm30 = {
       }
     } // End of Find an FCode
 
+    // Convert Rasilway guage widths
+    if (attrs.ZI017_GAW)
+    {
+      attrs.ZI017_GAW = Number(attrs.ZI017_GAW) * 1000; // Convert M to MM
+    }
+
   }, // End of applyToOsmPreProcessing
 
 
   // #####################################################################################################
   applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
   {
-    // Unpack the MEMO field
-    if (tags.note)
+    // Unpack the ZI006_MEM field or OSMTAGS
+    if (tags.note || attrs.OSMTAGS)
     {
+      var tTags = {};
       var tObj = translate.unpackMemo(tags.note);
 
       if (tObj.tags !== '')
       {
-        var tTags = JSON.parse(tObj.tags);
-        for (i in tTags)
+        try
         {
-          if (tags[tTags[i]]) hoot.logDebug('Unpacking ZI006_MEM, overwriteing ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
-          tags[i] = tTags[i];
+          tTags = JSON.parse(tObj.tags);
+        }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags in TXT attribute: ' + tObj.tags);
+        }
+      }
 
-          // Now check if this is a synonym etc. If so, remove the other tag.
-          if (i in ggdm30.fcodeLookupOut) // tag -> FCODE table
+      if (attrs.OSMTAGS)
+      {
+        var tmp = translate.unpackText(attrs,'OSMTAGS',4);
+        for (var i in tmp)
+        {
+          if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
+          tTags[i] = tmp[i];
+        }
+      }
+
+      // Now add the unpacked tags to the main list
+      for (var i in tTags)
+      {
+        // Debug
+        // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+        if (tags[tTags[i]]) hoot.logDebug('Unpacking tags, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+        tags[i] = tTags[i];
+
+        // Now check if this is a synonym etc. If so, remove the other tag.
+        if (i in ggdm30.fcodeLookupOut) // tag -> FCODE table
+        {
+          if (tags[i] in ggdm30.fcodeLookupOut[i])
           {
-            if (tags[i] in ggdm30.fcodeLookupOut[i])
-            {
-              var row = ggdm30.fcodeLookupOut[i][tags[i]];
+            var row = ggdm30.fcodeLookupOut[i][tags[i]];
 
-              // Now find the "real" tag that comes frm the FCode
-              if (row[1] in ggdm30.fcodeLookup['F_CODE'])
+            // Now find the "real" tag that comes frm the FCode
+            if (row[1] in ggdm30.fcodeLookup['F_CODE'])
+            {
+              var row2 = ggdm30.fcodeLookup['F_CODE'][row[1]];
+              // If the tags match, delete it
+              if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
               {
-                var row2 = ggdm30.fcodeLookup['F_CODE'][row[1]];
-                // If the tags match, delete it
-                if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
-                {
-                  delete tags[row2[0]];
-                }
+                delete tags[row2[0]];
               }
             }
           }
-        } // End nTags
-      }
+        }
+      } // End nTags
 
-      if (tObj.text && tObj.text !== '')
+      if (tObj.text !== '')
       {
         tags.note = tObj.text;
       }
@@ -2553,7 +2588,62 @@ ggdm30 = {
         break;
     } // End switch F_CODE
 
+    // Fix Railway gauges
+    if (tags.gauge)
+    {
+      // First, see if we have a range
+      if (~tags['gauge'].indexOf(';'))
+      {
+        notUsedTags.gauge = tags.gauge; // Save the raw value
+        tags.gauge = tags['gauge'].split(';')[0]; // Grab the first value
+      }
 
+      // Handle "standard" text values
+      switch (tags.gauge)
+      {
+        case 'standard':
+          tags.gauge = 1435;
+          break;
+
+        case 'narrow':
+          notUsedTags.gauge = tags.gauge;
+          tags.gauge = 0;
+          attrs.ZI017_RGC = '2';
+          break;
+
+        case 'broad':
+          notUsedTags.gauge = tags.gauge;
+          tags.gauge = 0;
+          attrs.ZI017_RGC = '1';
+          break;
+      }
+
+      // Now work on the numbers
+      var gWidth = parseInt(tags.gauge,10);
+
+      if (!isNaN(gWidth) && gWidth > 0)
+      {
+        if (gWidth == 1435)
+        {
+          attrs.ZI017_RGC = '3';
+        }
+        else if (gWidth < 1435) // Narrow
+        {
+          attrs.ZI017_RGC = '2';
+        }
+        else
+        {
+          attrs.ZI017_RGC = '1';
+        }
+        attrs.ZI017_GAW = (gWidth / 1000).toFixed(3);  // Convert to Metres
+      }
+      else  // Not a number, cleanup time
+      {
+        // Dont use the value, just punt it to the OSMTAGS attribute
+        delete attrs.ZI017_GAW;
+        notUsedTags.gauge = tags.gauge;
+      }
+    }
   }, // End applyToOgrPostProcessing
 
   // #####################################################################################################
@@ -2585,7 +2675,7 @@ ggdm30 = {
     // See if we have an o2s_X layer and try to unpack it
     if (layerName.indexOf('o2s_') > -1)
     {
-      tags = translate.parseO2S(attrs);
+      tags = translate.unpackText(attrs,'tag',4);
 
       // Add some metadata
       if (!tags.uuid && ggdm30.config.OgrAddUuid == 'true') tags.uuid = createUuid();
@@ -2846,17 +2936,22 @@ ggdm30 = {
           // If we have unused tags, add them to the memo field
           if (Object.keys(notUsedTags).length > 0 && ggdm30.config.OgrNoteExtra == 'attribute')
           {
-            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-
-            // there is always one.....
-            // ZI031 (Dataset) has MEM instead of ZI006_MEM.  Why???????
-            if (returnData[i]['attrs']['F_CODE'] == 'ZI031')
+            // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+            // returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
+            var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
+            if (ggdm30.config.OgrFormat == 'shp')
             {
-              returnData[i]['attrs']['MEM'] = translate.appendValue(returnData[i]['attrs']['MEM'],tStr,';');
+              // Split the tags into a maximum of 4 fields, each no greater than 225 char long.
+              var tList = translate.packText(notUsedTags,4,225);
+              returnData[i]['attrs']['OSMTAGS'] = tList[1];
+              for (var j = 2; j < 5; j++)
+              {
+                returnData[i]['attrs']['OSMTAGS' + j] = tList[j];
+              }
             }
             else
             {
-              returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
+              returnData[i]['attrs']['OSMTAGS'] = str;
             }
           }
 
@@ -2884,6 +2979,7 @@ ggdm30 = {
           // Debug
           // print('## Skipping: ' + gFcode);
           returnData.splice(i,1);
+          fLen = returnData.length;
         }
       } // End returnData loop
 
@@ -2959,12 +3055,12 @@ ggdm30 = {
         // Throw a warning that text will get truncated.
         if (str.length > 900) hoot.logWarn('o2s tags truncated to fit in available space.');
 
-        // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
-        // which means that it returns an empty string.
-        attrs = {tag1:str.substring(0,225),
-          tag2:str.substring(225,450),
-          tag3:str.substring(450,675),
-          tag4:str.substring(675,900)};
+        attrs = {};
+        var tList = translate.packText(tags,4,225);
+        for (var i = 1; i < 5; i++)
+        {
+          attrs['tag'+i] = tList[i];
+        }
       }
       else
       {

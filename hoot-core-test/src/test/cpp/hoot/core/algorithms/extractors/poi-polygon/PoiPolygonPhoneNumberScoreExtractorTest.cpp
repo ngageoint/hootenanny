@@ -58,7 +58,7 @@ public:
 
   PoiPolygonPhoneNumberScoreExtractorTest() : HootTestFixture(UNUSED_PATH, UNUSED_PATH)
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   void basicTest()

@@ -264,7 +264,7 @@ class OsmSchema
 public:
 
   static OsmSchema& getInstance();
-  virtual ~OsmSchema() = default;
+  ~OsmSchema() = default;
 
   /**
    * Loads the default configuration. This should only be used by unit tests.

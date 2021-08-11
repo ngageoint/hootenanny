@@ -64,7 +64,7 @@ public:
     "test-files/algorithms/alpha-shape/AlphaShapeGeneratorTest/",
     "test-output/algorithms/alpha-shape/AlphaShapeGeneratorTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runBasicTest()

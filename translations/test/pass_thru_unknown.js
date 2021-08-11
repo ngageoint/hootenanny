@@ -63,7 +63,7 @@ describe('TranslationServer', function () {
         assert.equal(tags["ZSAX_RS0"], "U");
         assert.equal(tags["UFI"], "0d8b2563-81cf-44d4-8ef7-52c0e862651f");
         // assert.equal(tags["ZI006_MEM"], "<OSM>{\"FOO\":\"1\"}</OSM>");
-        assert.equal(tags["ZI006_MEM"], "<OSM>{\"FOO\":\"1\",\"source\":\"DigitalGlobe\"}</OSM>");
+        assert.equal(tags["OSMTAGS"], "{\"FOO\":\"1\",\"source\":\"DigitalGlobe\"}");
 
     });
 

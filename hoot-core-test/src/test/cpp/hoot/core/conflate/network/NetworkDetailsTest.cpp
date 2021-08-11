@@ -59,7 +59,7 @@ public:
 
   NetworkDetailsTest()
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   NetworkDetailsPtr createSampleDetails()

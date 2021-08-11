@@ -25,7 +25,7 @@
         <nd ref="-18"/>
         <tag k="condition" v="functional"/>
         <tag k="error:circular" v="28.65"/>
-        <tag k="gauge" v="2"/>
+        <tag k="gauge" v="2000"/>
         <tag k="gauge:type" v="narrow"/>
         <tag k="location" v="surface"/>
         <tag k="railway" v="carline"/>
@@ -47,7 +47,7 @@
         <tag k="condition" v="functional"/>
         <tag k="electrified" v="rail"/>
         <tag k="error:circular" v="28.65"/>
-        <tag k="gauge" v="1"/>
+        <tag k="gauge" v="1000"/>
         <tag k="gauge:type" v="standard"/>
         <tag k="location" v="surface"/>
         <tag k="name" v="Steam Train"/>
@@ -69,7 +69,7 @@
         <tag k="demolished:railway" v="Other"/>
         <tag k="electrified" v="no"/>
         <tag k="error:circular" v="28.65"/>
-        <tag k="gauge" v="4"/>
+        <tag k="gauge" v="4000"/>
         <tag k="gauge:type" v="standard"/>
         <tag k="location" v="surface"/>
         <tag k="railway:in_road" v="yes"/>
@@ -90,7 +90,7 @@
         <tag k="condition" v="destroyed"/>
         <tag k="electrified" v="contact_line"/>
         <tag k="error:circular" v="28.65"/>
-        <tag k="gauge" v="2"/>
+        <tag k="gauge" v="2000"/>
         <tag k="location" v="surface"/>
         <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
@@ -111,7 +111,7 @@
         <tag k="arrangement" v="single"/>
         <tag k="electrified" v="rail"/>
         <tag k="error:circular" v="28.65"/>
-        <tag k="gauge" v="3"/>
+        <tag k="gauge" v="3000"/>
         <tag k="gauge:type" v="broad"/>
         <tag k="location" v="surface"/>
         <tag k="name" v="Choo Choo Train"/>
@@ -132,7 +132,7 @@
         <tag k="arrangement" v="single"/>
         <tag k="construction" v="logging"/>
         <tag k="error:circular" v="28.65"/>
-        <tag k="gauge" v="1"/>
+        <tag k="gauge" v="1000"/>
         <tag k="gauge:type" v="narrow"/>
         <tag k="location" v="surface"/>
         <tag k="name" v="Santa Train"/>

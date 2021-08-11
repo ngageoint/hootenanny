@@ -57,7 +57,7 @@ public:
 
   EdgeStringTest()
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void basicTest()

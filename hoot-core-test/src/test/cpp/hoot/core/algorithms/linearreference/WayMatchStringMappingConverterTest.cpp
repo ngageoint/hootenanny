@@ -43,7 +43,7 @@ public:
 
   WayMatchStringMappingConverterTest()
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   /**
@@ -73,8 +73,8 @@ public:
     wstr2->append(WaySubline(WayLocation::createAtEndOfWay(map, w4), WayLocation(map, w4, 0)));
 
     WayMatchStringMappingPtr mapping = std::make_shared<NaiveWayMatchStringMapping>(wstr1, wstr2);
-    WaySublineMatchStringPtr wsms = WayMatchStringMappingConverter().
-      toWaySublineMatchString(mapping);
+    WaySublineMatchStringPtr wsms =
+      WayMatchStringMappingConverter().toWaySublineMatchString(mapping);
 
     //LOG_VAR(TestUtils::toQuotedString(hoot::toString(wsms)));
     HOOT_STR_EQUALS("matches:\n"

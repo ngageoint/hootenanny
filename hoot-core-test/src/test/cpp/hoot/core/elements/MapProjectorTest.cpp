@@ -68,7 +68,7 @@ public:
 
   MapProjectorTest()
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   virtual void setUp()

@@ -26,16 +26,17 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapReader.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/rnd/ops/RandomMapCropper.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/OsmMapReader.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/rnd/ops/RandomMapCropper.h>
 
 // Qt
 #include <QFileInfo>
@@ -117,7 +118,7 @@ public:
     args.removeAt(pixelSizeIndex);
 
     // Everything left is an input.
-    const QStringList inputs = args;
+    const QStringList inputs = IoUtils::expandInputs(args);
 
     QString tileOutputFootprintPath;
     if (writeTileFootprints)

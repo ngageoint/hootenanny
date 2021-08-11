@@ -44,6 +44,9 @@ namespace hoot
 class RiverMaximalSublineSettingOptimizerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RiverMaximalSublineSettingOptimizerTest);
+  // This test yields different results when run with other tests in series vs when run with other
+  // tests in parallel for currently unknown reasons (#4945). The problem is not exhibited when run
+  // in isolation.
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
