@@ -310,7 +310,7 @@ void DiffConflator::_cleanSecData(QStringList& baseCriteria, const double maxSiz
   RemoveElementsVisitor removeRef1Visitor;
   removeRef1Visitor.setRecursive(true);
   removeRef1Visitor.addCriterion(removalCrit);
-  const int mapSizeBefore = _map->size();
+  const size_t mapSizeBefore = _map->size();
   _map->visitRw(removeRef1Visitor);
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-cleaning-sec-elements");
 
@@ -322,13 +322,13 @@ void DiffConflator::_cleanSecData(QStringList& baseCriteria, const double maxSiz
 void DiffConflator::_discardUnconflatableElements()
 {
   LOG_STATUS("Discarding unconflatable elements...");
-  const int mapSizeBefore = _map->size();
+  const size_t mapSizeBefore = _map->size();
   NonConflatableElementRemover().apply(_map);
   MemoryUsageChecker::getInstance().check();
   _stats.append(
     SingleStat("Remove Non-conflatable Elements Time (sec)", _timer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-removing-non-conflatable");
-  _numUnconflatableElementsDiscarded = mapSizeBefore - _map->size();
+  _numUnconflatableElementsDiscarded = (int)(mapSizeBefore - _map->size());
   LOG_INFO(
     "Discarded " << StringUtils::formatLargeNumber(_numUnconflatableElementsDiscarded) <<
     " unconflatable elements.");

@@ -71,7 +71,7 @@ public:
 
   BuildingMatchCreatorTest() : HootTestFixture("test-files/", UNUSED_PATH)
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   ConstWayPtr getWay(ConstOsmMapPtr map, const QString& key, const QString& value)

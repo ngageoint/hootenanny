@@ -188,6 +188,13 @@ private:
   double _testTimeout;
 };
 
+void init()
+{
+  v8Engine::getInstance();
+  // initialize OSM Schema so the time expense doesn't print in other tests.
+  OsmSchema::getInstance();
+}
+
 void getTestVector(CppUnit::Test* from, vector<CppUnit::Test*>& to)
 {
   for (int i = 0; i < from->getChildTestCount(); i++)
@@ -460,6 +467,7 @@ QMap<QString, QString> getAllowedOptions()
   options["--current"] = "Run the 'current' level tests";
   options["--debug"] = "Show debug level log messages and above";
   options["--diff"] = "Print a diff when a script test fails";
+  options["--disable-failure-retries"] = "Disables retrying test runs when they fail in parallel";
   options["--error"] = "Show error log level messages and above";
   options["--exclude=[regex]"] =
     "Exclude tests that match the specified regex; e.g. HootTest '--exclude=.*building.*'";
@@ -582,10 +590,8 @@ int main(int argc, char* argv[])
   }
   else
   {
-    Hoot::getInstance().init();
-
-    v8Engine::setPlatformInit();
-    v8Engine::getInstance().init();
+    Hoot::getInstance();
+    Log::getInstance().setLevel(Log::Warn);
 
     QCoreApplication app(argc, argv);
 
@@ -593,6 +599,12 @@ int main(int argc, char* argv[])
     for (int i = 1; i < argc; i++)
     {
       args << argv[i];
+    }
+
+    // This will run on a subsequent pass as part of --listen if --parallel was used.
+    if (!args.contains("--parallel"))
+    {
+      init();
     }
 
     const QStringList allowedOptions = getAllowedOptionNames();
@@ -606,13 +618,9 @@ int main(int argc, char* argv[])
       }
     }
 
-    Log::getInstance().setLevel(Log::Warn);
     std::vector<TestPtr> vAllTests;
     std::vector<CppUnit::Test*> vTestsToRun;
     CppUnit::TextTestResult result;
-
-    // initialize OSM Schema so the time expense doesn't print in other tests.
-    OsmSchema::getInstance();
 
     std::shared_ptr<HootTestListener> listener;
 
@@ -743,7 +751,8 @@ int main(int argc, char* argv[])
       ProcessPool pool(nproc, listener->getTestTimeout(),
                        (bool)args.contains("--names"),
                        (bool)args.contains("--suppress-failure-detail"),
-                       (bool)args.contains("--diff"));
+                       (bool)args.contains("--diff"),
+                       (bool)args.contains("--disable-failure-retries"));
 
       //  Get the names of all of the tests to run
       vector<string> allNames;

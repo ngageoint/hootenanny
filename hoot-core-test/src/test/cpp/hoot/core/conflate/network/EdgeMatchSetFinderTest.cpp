@@ -56,18 +56,7 @@ public:
   EdgeMatchSetFinderTest() :
   HootTestFixture("test-files/conflate/network/", "test-files/conflate/network/")
   {
-    setResetType(ResetAll);
-  }
-
-  void writeDebugMap(OsmMapPtr map, int testNumber)
-  {
-    FileUtils::makeDir("tmp");
-    OsmMapPtr copy = std::make_shared<OsmMap>(map);
-
-    MapProjector::projectToWgs84(copy);
-    conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
-    OsmMapWriterFactory::write(
-      copy, QString(_outputPath + "EdgeMatchSetFinderTest-%1.osm").arg(testNumber));
+    setResetType(ResetAllNoMatchFactory);
   }
 
   EdgeMatchSetFinderPtr loadTest(int testNumber)
@@ -79,8 +68,6 @@ public:
     OsmMapReaderFactory::read(map, _inputPath + "ParitalEdgeMatch.osm",
       false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
-
-    //writeDebugMap(map, testNumber);
 
     OsmNetworkExtractor one;
 
@@ -105,7 +92,6 @@ public:
 
     return uut;
   }
-
 
   /**
    * Verify that two lines that start at the same vertex, but only have a partial match still work.
@@ -196,7 +182,6 @@ public:
     HOOT_STR_EQUALS("[1]{(s1: [1]{{ _start: { _e: (0) Node(-38) -- Way(-14) -- (1) Node(-39), _portion: 0.531148 }, _end: { _e: (0) Node(-38) -- Way(-14) -- (1) Node(-39), _portion: 1 } }} s2: [1]{{ _start: { _e: (2) Node(-36) -- Way(-13) -- (3) Node(-37), _portion: 0 }, _end: { _e: (2) Node(-36) -- Way(-13) -- (3) Node(-37), _portion: 1 } }}, 0.108275)}",
       matchSet);
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(EdgeMatchSetFinderTest, "quick");

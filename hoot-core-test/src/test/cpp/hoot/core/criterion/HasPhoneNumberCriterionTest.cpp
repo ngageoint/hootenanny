@@ -42,7 +42,7 @@ public:
 
   HasPhoneNumberCriterionTest() : HootTestFixture(UNUSED_PATH, UNUSED_PATH)
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   void runBasicTest()

@@ -26,6 +26,8 @@
  */
 #include "ProcessPool.h"
 
+#include <hoot/js/v8Engine.h>
+
 #include <iostream>
 
 using namespace std;
@@ -84,6 +86,7 @@ void JobQueue::push(const QString& job)
 ProcessThread::ProcessThread(bool showTestName,
                              bool suppressFailureDetail,
                              bool printDiff,
+                             bool disableFailureRetries,
                              double waitTime,
                              QMutex* outMutex,
                              JobQueue* parallelJobs,
@@ -91,6 +94,7 @@ ProcessThread::ProcessThread(bool showTestName,
   : _showTestName(showTestName),
     _suppressFailureDetail(suppressFailureDetail),
     _printDiff(printDiff),
+    _disableFailureRetries(disableFailureRetries),
     _waitTime(waitTime),
     _outMutex(outMutex),
     _parallelJobs(parallelJobs),
@@ -107,6 +111,8 @@ int ProcessThread::getFailures()
 
 void ProcessThread::resetProcess()
 {
+  //std::cout << "resetting process" << std::endl;
+
   //  Kill the process
   _proc->write(QString("%1\n").arg(HOOT_TEST_FINISHED).toLatin1());
   _proc->waitForFinished();
@@ -116,6 +122,8 @@ void ProcessThread::resetProcess()
 
 QProcess* ProcessThread::createProcess()
 {
+  //std::cout << "Creating process" << std::endl;
+
   QProcess* proc = new QProcess();
   proc->setProcessChannelMode(QProcess::MergedChannels);
   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -123,14 +131,17 @@ QProcess* ProcessThread::createProcess()
   QString names = (_showTestName ? "--names" : "");
   QString suppressFailureDetail = (_suppressFailureDetail ? "--suppress-failure-detail" : "");
   QString diff = (_printDiff ? "--diff" : "");
+
   proc->start(
     QString("HootTest %1 %2 %3 --listen %4")
-    .arg(names).arg(suppressFailureDetail).arg(diff).arg((int)_waitTime));
+      .arg(names).arg(suppressFailureDetail).arg(diff).arg((int)_waitTime));
   return proc;
 }
 
 void ProcessThread::run()
 {
+  //std::cout << "running process" << std::endl;
+
   _proc.reset(createProcess());
   if (_serialJobs != nullptr)
   {
@@ -165,7 +176,7 @@ void ProcessThread::processJobs(JobQueue* queue)
       QString line = QString(_proc->readLine()).trimmed();
       while (line != HOOT_TEST_FINISHED)
       {
-        if (_proc->state() == QProcess::NotRunning)
+        if (_proc->state() == QProcess::NotRunning && !_disableFailureRetries)
         {
           //  Put this job that failed back on the queue
           queue->push(test);
@@ -190,7 +201,8 @@ void ProcessThread::processJobs(JobQueue* queue)
           if (output != "" && output != "." && !output.endsWith("\n"))
             output.append("\n");
         }
-        else if (line.contains(" ERROR ") || line.contains("Failure: "))
+        else if ((line.contains(" ERROR ") || line.contains("Failure: ")) &&
+                 !_disableFailureRetries)
         {
           ++_failures;
           line.append("\n");
@@ -234,9 +246,10 @@ void ProcessThread::processJobs(JobQueue* queue)
   }
 }
 
-ProcessPool::ProcessPool(int nproc, double waitTime,
-                         bool showTestName, bool suppressFailureDetail, bool printDiff)
-  : _failed(0)
+ProcessPool::ProcessPool(
+  int nproc, double waitTime, bool showTestName, bool suppressFailureDetail, bool printDiff,
+  bool disableFailureRetries) :
+_failed(0)
 {
   for (int i = 0; i < nproc; ++i)
   {
@@ -244,7 +257,8 @@ ProcessPool::ProcessPool(int nproc, double waitTime,
     JobQueue* serial = (i == 0) ? &_serialJobs : nullptr;
     ProcessThreadPtr thread =
       std::make_shared<ProcessThread>(
-        showTestName, suppressFailureDetail, printDiff, waitTime, &_mutex, &_parallelJobs, serial);
+        showTestName, suppressFailureDetail, printDiff, disableFailureRetries, waitTime, &_mutex,
+        &_parallelJobs, serial);
     _threads.push_back(thread);
   }
 }

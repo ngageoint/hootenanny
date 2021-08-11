@@ -45,8 +45,8 @@ using QProcessPtr = std::shared_ptr<QProcess>;
 #define HOOT_TEST_FINISHED "HOOT_TEST_FINISHED"
 
 /**
- * @brief The JobQueue class that is thread-safe queue class implemented with a std::set so it can be
- *  searched in non-linear time for the contains() method
+ * @brief The JobQueue class that is thread-safe queue class implemented with a std::set so it can
+ * be searched in non-linear time for the contains() method
  *
  */
 class JobQueue
@@ -97,26 +97,34 @@ private:
 
 
 /**
- * @brief The ProcessThread class is a process manager class that runs in a separate execution thread
- *  so that it can wait on output from the thread without holding up other test threads or without requiring
- *  polling of all processes
+ * @brief The ProcessThread class is a process manager class that runs in a separate execution
+ * thread so that it can wait on output from the thread without holding up other test threads or
+ * without requiring polling of all processes
  */
 class ProcessThread : public QThread
 {
 public:
   /**
    * @brief ProcessThread constructor
-   * @param showTestName - boolean flag indicating if the thread should pass the '--names' flag to the process
-   * @param suppressFailureDetail If true, only the failing test name gets logged and none of the failure detail is logged.
-   * @param printDiff - boolean flag indicating if the thread should pass the '--diff' flag to the process
-   * @param waitTime - number of seconds to wait before reporting that a test took too long
-   * @param outMutex - mutex for preserving output ordering to standard out
-   * @param parallelJobs - JobQueue object that contains a set of jobs that can all be run in parallel
-   * @param serialJobs - JobQueue object (nullptr for all threads but one) that contains a set of all jobs
-   *  that cannot be run in parallel but must be run serially
+   * @param showTestName boolean flag indicating if the thread should pass the '--names' flag to
+   * the process
+   * @param suppressFailureDetail If true, only the failing test name gets logged and none of the
+   * failure detail is logged.
+   * @param printDiff boolean flag indicating if the thread should pass the '--diff' flag to the
+   * process
+   * @param disableFailureRetries If true, tests will never be run a subsequent time after a
+   * failure; useful for debugging
+   * @param waitTime number of seconds to wait before reporting that a test took too long
+   * @param outMutex mutex for preserving output ordering to standard out
+   * @param parallelJobs JobQueue object that contains a set of jobs that can all be run in
+   * parallel
+   * @param serialJobs JobQueue object (nullptr for all threads but one) that contains a set of
+   * all jobs that cannot be run in parallel but must be run serially
    */
-  ProcessThread(bool showTestName, bool suppressFailureDetail, bool printDiff, double waitTime, QMutex* outMutex, JobQueue* parallelJobs, JobQueue* serialJobs = nullptr);
-  //~ProcessThread();
+  ProcessThread(
+    bool showTestName, bool suppressFailureDetail, bool printDiff, bool disableFailureRetries,
+    double waitTime, QMutex* outMutex, JobQueue* parallelJobs, JobQueue* serialJobs = nullptr);
+  virtual ~ProcessThread() = default;
 
   /**
    * @brief run method for thread, called by ::start()
@@ -132,13 +140,15 @@ public:
 private:
 
   /**
-   * @brief createProcess actually creates a HootTest process that is listening for tests on standard in to run
+   * @brief createProcess actually creates a HootTest process that is listening for tests on
+   * standard in to run
    * @return pointer to the process created, ownership is passed back
    */
   QProcess* createProcess();
 
   /**
-   * @brief resetProcess shutsdown the current process and starts a new one in its place for error handling
+   * @brief resetProcess shutsdown the current process and starts a new one in its place for error
+   * handling
    */
   void resetProcess();
 
@@ -154,6 +164,8 @@ private:
   bool _suppressFailureDetail;
   /** Flag for showing diff for script test failures in output */
   bool _printDiff;
+  /** Disables the rerunning of tests when they fail **/
+  bool _disableFailureRetries;
   /** Time (in seconds) to wait before reporting a tests is "taking too long" */
   double _waitTime;
   /** Mutex guarding standard out so that output messages aren't scrambled */
@@ -181,15 +193,20 @@ class ProcessPool
 public:
   /**
    * @brief ProcessPool constructor
-   * @param nproc - number of threads/processes to add to the pool
-   * @param waitTime - number of seconds to wait before reporting that a test took too long
-   * @param showTestName - boolean flag indicating if the thread should pass the '--names' flag to the process
-   * @param suppressFailureDetail - If true, only the failing test name gets logged and none of the
+   * @param nproc number of threads/processes to add to the pool
+   * @param waitTime number of seconds to wait before reporting that a test took too long
+   * @param showTestName boolean flag indicating if the thread should pass the '--names' flag to
+   * the process
+   * @param suppressFailureDetail If true, only the failing test name gets logged and none of the
    * failure detail is logged.
-   * @param printDiff - boolean flag indicating if the thread should pass the '--diff' flag to the process
+   * @param printDiff boolean flag indicating if the thread should pass the '--diff' flag to the
+   * process
+   * @param disableFailureRetries If true, tests will never be run a subsequent time after a
+   * failure; useful for debugging
    */
-  ProcessPool(int nproc, double waitTime, bool showTestName, bool suppressFailureDetail, bool printDiff);
-
+  ProcessPool(
+    int nproc, double waitTime, bool showTestName, bool suppressFailureDetail, bool printDiff,
+    bool disableFailureRetries);
   /** Destructor */
   ~ProcessPool();
 

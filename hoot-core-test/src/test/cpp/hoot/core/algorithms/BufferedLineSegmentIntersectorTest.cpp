@@ -61,10 +61,7 @@ class BufferedLineSegmentIntersectorTest : public HootTestFixture
 
 public:
 
-  BufferedLineSegmentIntersectorTest()
-  {
-    setResetType(ResetBasic);
-  }
+  BufferedLineSegmentIntersectorTest() = default;
 
   bool geosIntersect(const LineSegment& ls1, Meters buffer, const LineSegment& ls2,
                      LineSegment& result)

@@ -29,13 +29,13 @@
 
 //  hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OsmApiReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/OsmApiUtils.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 
 //  Run tests against a local test server
 #define RUN_LOCAL_TEST_SERVER

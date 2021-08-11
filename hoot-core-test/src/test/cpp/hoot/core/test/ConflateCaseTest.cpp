@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/cmd/ConflateCmd.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/test/TestSetup.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
@@ -192,6 +193,7 @@ void ConflateCaseTest::runTest()
 
   // configures and cleans up the conf() environment
   TestSetup st(_confs);
+  MatchFactory::getInstance().reset();
 
   if (ConfigOptions().getTestCaseConflateCmd() == ConflateCmd::className())
   {

@@ -57,7 +57,7 @@ public:
     : HootTestFixture("test-files/visitors/RemoveRef2VisitorMultipleCriterionTest/",
                       "test-output/visitors/RemoveRef2VisitorMultipleCriterionTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   void runToyTest1()

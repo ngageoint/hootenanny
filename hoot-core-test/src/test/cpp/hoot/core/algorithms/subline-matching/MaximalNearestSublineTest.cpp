@@ -63,11 +63,11 @@ class MaximalNearestSublineTest : public HootTestFixture
 
 public:
 
-  MaximalNearestSublineTest()
-    : HootTestFixture("test-files/algorithms/subline-matching/",
-                      "test-output/algorithms/subline-matching/")
+  MaximalNearestSublineTest() :
+  HootTestFixture(
+    "test-files/algorithms/subline-matching/", "test-output/algorithms/subline-matching/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   void runTest()
@@ -117,7 +117,6 @@ public:
     fp.open(QIODevice::ReadOnly);
     QString s = fp.readAll();
     CPPUNIT_ASSERT_EQUAL(s.toStdString(), ss.str());
-
   }
 
   void funnyCurveTest()

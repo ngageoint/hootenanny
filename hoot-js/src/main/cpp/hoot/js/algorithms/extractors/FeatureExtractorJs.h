@@ -48,20 +48,19 @@ class FeatureExtractorJs : public HootBaseJs
 public:
 
   static void Init(v8::Local<v8::Object> target);
+  virtual ~FeatureExtractorJs() = default;
 
   FeatureExtractorPtr getFeatureExtractor() const { return _fe; }
 
-  virtual ~FeatureExtractorJs() = default;
-
 private:
-
-  FeatureExtractorJs(FeatureExtractorPtr fe) : _fe(fe) { }
-
-  static void extract(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   QString _className;
   FeatureExtractorPtr _fe;
+
+  FeatureExtractorJs(FeatureExtractorPtr fe);
+
+  static void _extract(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void _new(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 }

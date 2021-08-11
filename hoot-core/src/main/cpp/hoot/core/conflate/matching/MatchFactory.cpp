@@ -197,10 +197,8 @@ ElementCriterionPtr MatchFactory::_createFilter() const
 void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
 {
   LOG_DEBUG("MatchFactory creators: " << matchCreatorsList);
-
   //  Setting the match creators replaces the previous creators
   _creators.clear();
-
   for (int i = 0; i < matchCreatorsList.size(); i++)
   {
     registerCreator(matchCreatorsList[i]);

@@ -43,7 +43,7 @@ public:
 
   OsmMapReaderFactoryTest() : HootTestFixture("test-files/", UNUSED_PATH)
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runUnsupportedBoundingBoxRead()

@@ -57,7 +57,7 @@ public:
 
   DuplicateNodeRemoverTest() : HootTestFixture("test-files/", UNUSED_PATH)
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runBasicTest()

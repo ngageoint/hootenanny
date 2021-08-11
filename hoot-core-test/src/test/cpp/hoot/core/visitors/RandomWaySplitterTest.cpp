@@ -60,7 +60,7 @@ public:
     : HootTestFixture("test-files/visitors/RandomWaySplitterTest/",
                       "test-output/visitors/RandomWaySplitterTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runWaySplitTest()
@@ -167,6 +167,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RandomWaySplitterTest, "quick");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RandomWaySplitterTest, "serial");
 
 }

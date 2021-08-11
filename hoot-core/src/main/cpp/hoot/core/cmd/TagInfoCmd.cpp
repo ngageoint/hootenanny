@@ -26,11 +26,11 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/IoUtils.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/schema/TagInfo.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -136,7 +136,7 @@ public:
     QStringList inputs;
     if (!recursive)
     {
-      inputs = args;
+      inputs = IoUtils::expandInputs(args);
     }
     else
     {

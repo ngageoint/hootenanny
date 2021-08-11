@@ -58,11 +58,12 @@ class MatchComparatorTest : public HootTestFixture
 
 public:
 
-  MatchComparatorTest()
-    : HootTestFixture("test-files/",
-                      UNUSED_PATH)
+  MatchComparatorTest() : HootTestFixture("test-files/", UNUSED_PATH)
   {
     setResetType(ResetAll);
+
+    conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::BuildingMatchCreator");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::BuildingMergerCreator");
   }
 
   void runTest()
@@ -101,19 +102,12 @@ public:
     double tpr = comparator.evaluateMatches(map, copy);
     LOG_TRACE(comparator.toString());
 
-    // for debugging
-//    MapProjector::projectToWgs84(copy);
-//    FileUtils::makeDir("test-output/scoring");
-//    OsmXmlWriter writer;
-//    writer.write(copy, "test-output/scoring/MatchComparatorTest.osm");
-
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.75, tpr, 0.001);
     CPPUNIT_ASSERT_EQUAL(6, comparator.getTp());
     CPPUNIT_ASSERT_EQUAL(1, comparator.getFn());
     CPPUNIT_ASSERT_EQUAL(1, comparator.getFp());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.857143, comparator.getPertyScore(), 0.000001);
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MatchComparatorTest, "quick");

@@ -55,7 +55,8 @@ public:
   CookieCutterOpTest() :
   HootTestFixture("test-files/ops/CookieCutterOp/", "test-output/ops/CookieCutterOp/")
   {
-    setResetType(ResetAll);
+    // Strangely, this only needs ResetAllNoMatchFactory fto pass in series, but not parallel.
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runTest()
@@ -83,10 +84,8 @@ public:
 
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "CookieCutterOpTest.osm");
-    HOOT_FILE_EQUALS(_inputPath + "CookieCutterOpTest.osm",
-                     _outputPath + "CookieCutterOpTest.osm");
+    HOOT_FILE_EQUALS(_inputPath + "CookieCutterOpTest.osm", _outputPath + "CookieCutterOpTest.osm");
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterOpTest, "quick");

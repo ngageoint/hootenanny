@@ -734,8 +734,8 @@ void ScriptMatchCreator::setArguments(QStringList args)
     "Set arguments for: " << className() << " - rules: " << QFileInfo(_scriptPath).fileName());
 }
 
-MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
-                                         ElementId eid2)
+MatchPtr ScriptMatchCreator::createMatch(
+  const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
   LOG_VART(eid1);
   LOG_VART(eid2);

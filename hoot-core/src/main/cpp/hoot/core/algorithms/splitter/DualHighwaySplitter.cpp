@@ -106,10 +106,7 @@ std::shared_ptr<Way> DualHighwaySplitter::_createOneWay(const std::shared_ptr<co
                                                         Meters bufferSize, bool left) const
 {
   std::shared_ptr<const LineString> ls = ElementToGeometryConverter(_result).convertToLineString(w);
-
-  BufferParameters bp(8, BufferParameters::CAP_FLAT, BufferParameters::JOIN_ROUND,
-                      bufferSize * 2);
-
+  BufferParameters bp(8, BufferParameters::CAP_FLAT, BufferParameters::JOIN_ROUND, bufferSize * 2);
   BufferBuilder* bb = new BufferBuilder(bp);
   std::shared_ptr<Geometry> g(bb->bufferLineSingleSided(ls.get(), bufferSize, left));
   const LineString* newLs = dynamic_cast<const LineString*>(g.get());
@@ -136,7 +133,8 @@ std::shared_ptr<Way> DualHighwaySplitter::_createOneWay(const std::shared_ptr<co
     }
     logWarnCount++;
 
-    std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
+    std::shared_ptr<Point> p(
+      GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
     std::shared_ptr<Geometry> unioned(ls->Union(p.get()));
     std::shared_ptr<Geometry> cleaned(GeometryUtils::validateGeometry(ls.get()));
     std::shared_ptr<Geometry> buffered(ls->buffer(0));
