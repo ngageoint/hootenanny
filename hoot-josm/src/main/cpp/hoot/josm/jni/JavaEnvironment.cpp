@@ -72,7 +72,7 @@ JavaEnvironment& JavaEnvironment::getInstance()
 
 void JavaEnvironment::_initVm()
 {
-  bool verbose = true;
+  bool verbose = false;
   JavaVMInitArgs vm_args;
   int numOptions = 5;
   if (verbose)
