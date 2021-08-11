@@ -58,6 +58,9 @@ public:
     "test-files/algorithms/WayJoinerConflateTest/", "test-output/algorithms/WayJoinerConflateTest/")
   {
     setResetType(ResetAll);
+
+    conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::HighwayMatchCreator");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::HighwayMergerCreator");
   }
 
   void runConflateTest()

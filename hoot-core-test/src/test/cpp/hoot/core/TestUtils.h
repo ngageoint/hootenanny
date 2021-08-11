@@ -241,7 +241,9 @@ protected:
     ResetBasic,             // resets counters
     ResetAllNoMatchFactory, // resets entire environment except for MatchFactory (see additional
                             // explanation in resetEnvironment)
-    ResetAll                // resets entire environment (config, etc.)
+    ResetAll                // resets entire environment (config, etc.); This can be fairly resource
+                            // expensive due to the call to ScriptMatchCreator::setArguments but
+                            // only if you have script matchers configured to run.
   };
 
   /**

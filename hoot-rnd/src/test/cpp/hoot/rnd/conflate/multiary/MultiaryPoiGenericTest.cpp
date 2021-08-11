@@ -103,7 +103,6 @@ public:
                     actual);
     CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryPoiGenericTest, "glacial");

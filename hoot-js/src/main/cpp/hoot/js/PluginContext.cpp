@@ -126,8 +126,7 @@ Local<Object> PluginContext::loadScript(QString filename, QString loadInto)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope escapableHandleScope(current);
-  // Enter the created context for compiling and
-  // running the hello world script.
+  // Enter the created context for compiling and running the hello world script.
   Context::Scope context_scope(ToLocal(&_context));
 
   QFile fp(filename);
@@ -136,7 +135,6 @@ Local<Object> PluginContext::loadScript(QString filename, QString loadInto)
     throw HootException("Error opening script: " + filename);
 
   QString text = QString::fromUtf8(fp.readAll());
-
   Local<Object> result = loadText(text, loadInto, filename);
 
   return escapableHandleScope.Escape(result);

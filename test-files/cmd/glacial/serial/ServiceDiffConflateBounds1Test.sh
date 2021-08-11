@@ -56,6 +56,7 @@ LOG_FILTER=""
 GENERAL_OPTS="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999" 
 BOUNDS="-117.729492166,40.9881915574,-117.718505838,40.996484138672"
+# Note that we're specifically not filtering out any matchers in the conflate config.
 CONFLATE_OPTS="-D bounds=$BOUNDS -D bounds.output.file=$OUTPUT_DIR/bounds.osm"
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds=$BOUNDS"
 
