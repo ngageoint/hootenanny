@@ -61,6 +61,9 @@ public:
   MatchComparatorTest() : HootTestFixture("test-files/", UNUSED_PATH)
   {
     setResetType(ResetAll);
+
+    conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::BuildingMatchCreator");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::BuildingMergerCreator");
   }
 
   void runTest()

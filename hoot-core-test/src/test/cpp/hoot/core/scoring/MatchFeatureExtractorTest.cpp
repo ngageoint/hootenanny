@@ -55,9 +55,10 @@ class MatchFeatureExtractorTest : public HootTestFixture
 
 public:
 
-  MatchFeatureExtractorTest()
-    : HootTestFixture("test-files/scoring/MatchFeatureExtractorTest/",
-                      "test-output/scoring/MatchFeatureExtractorTest/")
+  MatchFeatureExtractorTest() :
+  HootTestFixture(
+    "test-files/scoring/MatchFeatureExtractorTest/",
+    "test-output/scoring/MatchFeatureExtractorTest/")
   {
     setResetType(ResetAll);
   }
@@ -79,7 +80,7 @@ public:
     fp.write(arr);
     fp.close();
 
-    // check for consistency with previous versions.
+    // Check for consistency with previous versions.
     HOOT_FILE_EQUALS(_inputPath + "Buildings.arff", _outputPath + "Buildings.arff");
   }
 

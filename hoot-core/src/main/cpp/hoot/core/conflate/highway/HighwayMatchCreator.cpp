@@ -322,14 +322,14 @@ private:
   int _memoryCheckUpdateInterval;
 };
 
-HighwayMatchCreator::HighwayMatchCreator()
+HighwayMatchCreator::HighwayMatchCreator() :
+_classifier(
+  Factory::getInstance().constructObject<HighwayClassifier>(
+    ConfigOptions().getConflateMatchHighwayClassifier())),
+_sublineMatcher(
+  SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway)),
+_tagAncestorDiff(std::make_shared<TagAncestorDifferencer>("highway"))
 {
-  _classifier =
-    Factory::getInstance().constructObject<HighwayClassifier>(
-      ConfigOptions().getConflateMatchHighwayClassifier());
-  _sublineMatcher =
-    SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
-  _tagAncestorDiff = std::make_shared<TagAncestorDifferencer>("highway");
 }
 
 MatchPtr HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
