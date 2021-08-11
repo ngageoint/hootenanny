@@ -123,16 +123,18 @@ void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
   }
 }
 
-void ResolveReviewsOp::_resolveReview(std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
-                                      const ElementId& eid1, const ElementId& eid2)
+void ResolveReviewsOp::_resolveReview(
+  const std::shared_ptr<OsmMap>& map, const ElementId& relation_id, const ElementId& eid1,
+  const ElementId& eid2)
 {
   MatchPtr match = _getCachedMatch(map, relation_id, eid1, eid2);
   //  Resolve the match review
   _resolveMatchReview(match, map, relation_id, eid1, eid2);
 }
 
-void ResolveReviewsOp::_resolveMultipleReviews(std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
-                                               const ElementId& eid1, const ElementId& eid2)
+void ResolveReviewsOp::_resolveMultipleReviews(
+  const std::shared_ptr<OsmMap>& map, const ElementId& relation_id, const ElementId& eid1,
+  const ElementId& eid2)
 {
   LOG_TRACE(
     "Resolving multiple reviews for review: " << relation_id << ", elements: " <<
