@@ -10,6 +10,8 @@ HOOT_OPTS="--warn -D uuid.helper.repeatable=true -C Testing.conf"
 
 hoot conflate $HOOT_OPTS \
  -C UnifyingAlgorithm.conf -C ReferenceConflation.conf \
+ -D match.creators="hoot::HighwayMatchCreator;hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,Poi.js" \
+ -D merger.creators="hoot::HighwayMergerCreator;hoot::BuildingMergerCreator;hoot::ScriptMergerCreator" \
  -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"name=starbucks\" } ] }" \
  $IN_DIR/AllDataTypesA.osm $IN_DIR/AllDataTypesB.osm $OUT_DIR/out.osm
 

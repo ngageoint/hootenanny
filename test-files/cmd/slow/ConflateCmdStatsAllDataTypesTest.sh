@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+# This test collects statistics on a variety of data types.
+#
+# Note: The input data doesn't have *all* of the data types hoot is able to conflate. Purposefully
+# not reducing any conflate matchers here so we can see how stats for types with overlapping 
+# properties get handled.
+
 IN_DIR=test-files/cmd/slow/ConflateCmdStatsTest
 OUT_DIR=test-output/cmd/slow/ConflateCmdStatsTest
 mkdir -p $OUT_DIR

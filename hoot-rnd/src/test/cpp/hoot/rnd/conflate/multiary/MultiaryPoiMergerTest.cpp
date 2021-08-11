@@ -102,7 +102,6 @@ public:
     writer.close();
     HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryPoiMergerTest, "glacial");

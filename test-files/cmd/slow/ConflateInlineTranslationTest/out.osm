@@ -380,7 +380,9 @@
     <node visible="true" id="-788" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1334285030015145" lon="-97.7610286628169547"/>
     <node visible="true" id="-787" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1334284284418423" lon="-97.7610287219687422"/>
     <node visible="true" id="-785" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1373921401030103" lon="-97.7618562909770503"/>
+    <node visible="true" id="-779" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1363161003010731" lon="-97.7634000001080210"/>
     <node visible="true" id="-778" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1363932003801516" lon="-97.7635207998318947"/>
+    <node visible="true" id="-777" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1365456004840411" lon="-97.7633234999336764"/>
     <node visible="true" id="-773" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1366203004033544" lon="-97.7631974999422368"/>
     <node visible="true" id="-769" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1349428670976849" lon="-97.7595507945772937"/>
     <node visible="true" id="-766" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1334098004425037" lon="-97.7618144001993130"/>
@@ -951,7 +953,7 @@
     <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1277365449533399" lon="-97.7637000000822951"/>
     <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1269000000881562" lon="-97.7617269755744900"/>
     <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1331522167462751" lon="-97.7637000001202381"/>
-    <way visible="true" id="-2325" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2320" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-473"/>
         <nd ref="-472"/>
         <tag k="bridge" v="yes"/>
@@ -1686,7 +1688,8 @@
         <tag k="source:datetime" v="2019-02-20T21:49:05Z"/>
         <tag k="surface" v="paved"/>
     </way>
-    <way visible="true" id="-188" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-189" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-745"/>
         <nd ref="-746"/>
         <nd ref="-743"/>
         <nd ref="-742"/>
@@ -1757,6 +1760,7 @@
         <tag k="surface" v="paved"/>
     </way>
     <way visible="true" id="-182" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-745"/>
         <nd ref="-711"/>
         <nd ref="-706"/>
         <tag k="highway" v="unclassified"/>
@@ -1811,15 +1815,6 @@
         <tag k="surface" v="paved"/>
         <tag k="tiger:zip_left" v="76544"/>
         <tag k="tiger:zip_right" v="76544"/>
-    </way>
-    <way visible="true" id="-177" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-745"/>
-        <nd ref="-711"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="Red Ball Road"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2019-02-20T21:49:05Z"/>
-        <tag k="surface" v="paved"/>
     </way>
     <way visible="true" id="-175" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53"/>
@@ -2882,15 +2877,6 @@
         <tag k="source:datetime" v="2019-02-20T21:49:05Z"/>
         <tag k="surface" v="paved"/>
     </way>
-    <way visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-746"/>
-        <nd ref="-745"/>
-        <tag k="highway" v="service"/>
-        <tag k="service" v="parking_aisle"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2012-11-23T19:07:17Z"/>
-        <tag k="surface" v="paved"/>
-    </way>
     <way visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-52"/>
         <nd ref="-817"/>
@@ -2956,7 +2942,7 @@
     </way>
     <way visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-56"/>
-        <nd ref="-746"/>
+        <nd ref="-777"/>
         <tag k="highway" v="service"/>
         <tag k="service" v="parking_aisle"/>
         <tag k="source" v="osm"/>
@@ -2964,7 +2950,7 @@
         <tag k="surface" v="paved"/>
     </way>
     <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-711"/>
+        <nd ref="-779"/>
         <nd ref="-778"/>
         <nd ref="-57"/>
         <tag k="highway" v="service"/>
