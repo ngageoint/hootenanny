@@ -52,8 +52,7 @@ public:
   /**
    * @see OperationStatus
    */
-  virtual QString getInitStatusMessage() const
-  { return "Validating elements with JOSM..."; }
+  virtual QString getInitStatusMessage() const { return "Validating elements with JOSM..."; }
 
   /**
    * @see ApiEntityInfo

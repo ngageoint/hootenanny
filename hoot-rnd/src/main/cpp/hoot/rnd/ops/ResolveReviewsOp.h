@@ -109,7 +109,7 @@ private:
    * @param eid1
    * @param eid2
    */
-  void _resolveReview(std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
+  void _resolveReview(const std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
                       const ElementId& eid1, const ElementId& eid2);
   /**
    * @brief _resolveMultipleReviews
@@ -118,7 +118,7 @@ private:
    * @param eid1
    * @param eid2
    */
-  void _resolveMultipleReviews(std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
+  void _resolveMultipleReviews(const std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
                                const ElementId& eid1, const ElementId& eid2);
   /**
    * @brief _resolveMatchReview

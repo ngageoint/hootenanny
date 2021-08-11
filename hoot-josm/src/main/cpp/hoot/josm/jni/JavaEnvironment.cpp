@@ -38,18 +38,29 @@ namespace hoot
 {
 
 JavaEnvironment::JavaEnvironment() :
-_vm(0),
-_env(0)
+_vm(nullptr),
+_env(nullptr)
 {
   _initVm();
 }
 
 JavaEnvironment::~JavaEnvironment()
 {
-  if (_vm != 0)
+  if (_vm != nullptr)
   {
-    _vm->DetachCurrentThread();
-    _vm->DestroyJavaVM();
+    jint status;
+    LOG_TRACE("Detaching current thread...");
+    status = _vm->DetachCurrentThread();
+    if (status != JNI_OK)
+    {
+      LOG_ERROR("Unable to detach JVM from current thread. Error code: " << QString::number(status));
+    }
+    LOG_TRACE("Destroying Java env...");
+    status = _vm->DestroyJavaVM();
+    if (status != JNI_OK)
+    {
+      LOG_ERROR("Unable to destroy JVM. Error code: " << QString::number(status));
+    }
   }
 }
 
@@ -61,8 +72,13 @@ JavaEnvironment& JavaEnvironment::getInstance()
 
 void JavaEnvironment::_initVm()
 {
+  bool verbose = false;
   JavaVMInitArgs vm_args;
-  const int numOptions = 5;
+  int numOptions = 5;
+  if (verbose)
+  {
+    numOptions++;
+  }
   JavaVMOption options[numOptions];
 
   const QString classPathStr = "-Djava.class.path=" + ConfigOptions().getJniClassPath().join(":");
@@ -86,19 +102,22 @@ void JavaEnvironment::_initVm()
   LOG_VART(options[4].optionString);
 
   // for debugging only
-//  const QString verboseStr = "-verbose:jni";
-//  options[5].optionString = strdup(verboseStr.toStdString().c_str());
-//  LOG_VART(options[5].optionString);
+  if (verbose)
+  {
+    const QString verboseStr = "-verbose:jni";
+    options[5].optionString = strdup(verboseStr.toStdString().c_str());
+    LOG_VART(options[5].optionString);
+  }
 
   vm_args.version = JNI_VERSION_1_8;
   vm_args.nOptions = numOptions;
   vm_args.options = options;
   vm_args.ignoreUnrecognized = 1;
 
-  jint res = JNI_CreateJavaVM(&_vm, (void**)&_env, &vm_args);
-  if (res != 0)
+  jint status = JNI_CreateJavaVM(&_vm, (void**)&_env, &vm_args);
+  if (status != JNI_OK)
   {
-    throw HootException("Unable to initialize JVM. Error code: " + QString::number(res));
+    throw HootException("Unable to initialize JVM. Error code: " + QString::number(status));
   }
 }
 
