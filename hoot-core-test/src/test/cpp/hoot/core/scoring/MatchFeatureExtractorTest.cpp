@@ -59,7 +59,7 @@ public:
     : HootTestFixture("test-files/scoring/MatchFeatureExtractorTest/",
                       "test-output/scoring/MatchFeatureExtractorTest/")
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetAll);
   }
 
   void runBuildingTest()
