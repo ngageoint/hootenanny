@@ -31,7 +31,7 @@ pipeline {
         booleanParam(name: 'UI_hoot2_tests', defaultValue: true)
         booleanParam(name: 'Sonar', defaultValue: false)
         booleanParam(name: 'Halt_on_failure', defaultValue: true)
-        string(name: 'Box', defaultValue: 'hoot_centos7', description: 'Vagrant Box')
+        string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
         string(name: 'HOOT_AWS_ENV_TAG', defaultValue: 'testing')
         string(name: 'HOOT_AWS_USE_TAG', defaultValue: 'jenkins')
         string(name: 'HOOT_AWS_GROUP_TAG', defaultValue: 'devops')
@@ -153,7 +153,7 @@ pipeline {
         stage("Core Tests") {
             when { expression { return params.Core_tests } }
             steps {
-                // Unfortunately, the code coverage report generation slows down tests and results in a lot of "Waiting 
+                // Unfortunately, the code coverage report generation slows down tests and results in a lot of "Waiting
                 // for process to finish..." messages to be displayed that you wouldn't see otherwise. So, we may want
                 // to make a change that runs this as --error here or increase the wait time when generating the report.
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --error --glacial --diff --parallel'"
