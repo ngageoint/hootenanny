@@ -49,7 +49,7 @@ public:
   JosmMapCleanerTest() :
   HootTestFixture("test-files/ops/JosmMapCleanerTest", "test-output/ops/JosmMapCleanerTest")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAll);
   }
 
   void runCleanNoErrorsTest()
@@ -201,5 +201,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapCleanerTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapCleanerTest, "serial");
 
 }

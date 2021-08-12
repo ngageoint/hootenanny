@@ -1,6 +1,7 @@
 # -------------------------------------------------
-# Any code that makes calls to JOSM via JNI should go into this project. JOSM integration is the only functionality that currently uses JOSM.
-# If that changes at any point, then JNI classes may need to be moved to their own project.
+# Any code that makes calls to JOSM via JNI should go into this project. This library has the only 
+# functionality that currently uses JOSM. If that changes at any point, then JNI classes may need to 
+# be moved to their own project or up to hoot-core.
 # -------------------------------------------------
 
 QT += testlib \
@@ -9,6 +10,7 @@ QT += testlib \
 TARGET = HootJosm
 QMAKE_POST_LINK += ../scripts/core/make-hoot-josm-java.sh
 QMAKE_CLEAN += target/hoot-josm.jar
+QMAKE_CLEAN += target/dependency-jars/*
 TEMPLATE = lib
 
 DEPENDPATH += \

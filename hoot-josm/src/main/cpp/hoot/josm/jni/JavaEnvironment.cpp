@@ -31,6 +31,9 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
 
+// Qt
+#include <QFile>
+
 // Std
 #include <string.h>
 
@@ -53,8 +56,11 @@ JavaEnvironment::~JavaEnvironment()
     status = _vm->DetachCurrentThread();
     if (status != JNI_OK)
     {
-      LOG_ERROR("Unable to detach JVM from current thread. Error code: " << QString::number(status));
+      LOG_ERROR(
+        "Unable to detach JVM from current thread. Error code: " << QString::number(status));
     }
+    // If this call hangs, its very likely there is a thread other than the one that launched this
+    // JVM that is still running due to holding onto a reference, etc.
     LOG_TRACE("Destroying Java env...");
     status = _vm->DestroyJavaVM();
     if (status != JNI_OK)
@@ -82,6 +88,16 @@ void JavaEnvironment::_initVm()
   JavaVMOption options[numOptions];
 
   const QString classPathStr = "-Djava.class.path=" + ConfigOptions().getJniClassPath().join(":");
+  QString classPathStrTemp = classPathStr;
+  const QStringList jars = classPathStrTemp.remove("-Djava.class.path=").split(":");
+  for (int i = 0; i < jars.size(); i++)
+  {
+    QFile jarFile(jars.at(i));
+    if (!jarFile.exists())
+    {
+      throw IllegalArgumentException("JAR file does not exist: " + jars.at(i));
+    }
+  }
   options[0].optionString = strdup(classPathStr.toStdString().c_str());
   LOG_VART(options[0].optionString);
 
@@ -119,6 +135,13 @@ void JavaEnvironment::_initVm()
   {
     throw HootException("Unable to initialize JVM. Error code: " + QString::number(status));
   }
+
+//  status = _vm->AttachCurrentThreadAsDaemon((void**)&_env, &vm_args);
+//  if (status != JNI_OK)
+//  {
+//    throw HootException(
+//      "Unable to attach current thread as daemon. Error code: " + QString::number(status));
+//  }
 }
 
 }

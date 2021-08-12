@@ -52,7 +52,7 @@ public:
   HootTestFixture(
     "test-files/ops/JosmMapValidatorTest", "test-output/ops/JosmMapValidatorTest")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAll);
   }
 
   void runGetAvailableValidatorsTest()
@@ -63,7 +63,7 @@ public:
     LOG_VART(validators.values());
     CPPUNIT_ASSERT(validators.size() > 0);
     CPPUNIT_ASSERT(validators.contains("DuplicatedWayNodes"));
-    // we replace the inner class separator, '$', with '.' for readability...so check that
+    // We replace the inner class separator, '$', with '.' for readability, so check that.
     CPPUNIT_ASSERT(validators.contains("CrossingWays.SelfCrossing"));
   }
 
@@ -188,5 +188,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapValidatorTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapValidatorTest, "serial");
 
 }
