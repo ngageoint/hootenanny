@@ -19,10 +19,10 @@ OUTPUT_FILE_MULTIPLE=$OUTPUT_DIR/out-multiple.osm
 SEPARATE_OUTPUT_INPUT=$OUTPUT_DIR/runCleanTest-in.osm
 SEPARATE_OUTPUT_OUTPUT=$OUTPUT_DIR/runCleanTest-in-validated.osm
 
-#echo ""
-#echo "Listing available validators..."
-#echo ""
-#hoot validate $LOG_LEVEL $CONFIG --available-validators #| grep "DuplicatedWayNodes"
+echo ""
+echo "Listing available validators..."
+echo ""
+hoot validate $LOG_LEVEL $CONFIG --available-validators | grep "DuplicatedWayNodes"
 
 echo ""
 echo "Validating a single input..."

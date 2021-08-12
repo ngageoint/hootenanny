@@ -23,6 +23,8 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
+ *
+ * Adapted from JOSM: https://josm.openstreetmap.de/
  */
 package hoot.josm;
 
@@ -112,9 +114,15 @@ import org.openstreetmap.josm.data.validation.TestError;
 import org.openstreetmap.josm.data.validation.Severity;
 
 /**
- * A OSM data validator.
- *
- * @author Francisco R. Santos &lt;frsantos@gmail.com&gt;
+ * This is merely a version of OsmValidator that omits validators that are not currently working
+   when instantiated via JNI.
+
+   Sadly, up until JOSM 17702 this worked just fine. From 17833 on the MapCSSTagChecker validator
+   class is involved in holding onto a ListenableWeakReference somehow, which prevents the JVM from
+   shutting down after this method is called. Event just instantiating it causes the problem.
+   Inheritance is not an option since there is a static validator instantiation block by default.
+   Hopefully, will be able to remove this soon. In the meantime, this class will have to be manually
+   updated with each upgrade of JOSM.
  */
 public final class OsmValidator {
 
@@ -171,7 +179,7 @@ public final class OsmValidator {
         Highways.class, // ID 2701 .. 2799
         BarriersEntrances.class, // ID 2801 .. 2899
         OpeningHourTest.class, // 2901 .. 2999
-        MapCSSTagChecker.class, // 3000 .. 3099
+        //MapCSSTagChecker.class, // 3000 .. 3099; see note in JosmMapValidator
         Lanes.class, // 3100 .. 3199
         ConditionalKeys.class, // 3200 .. 3299
         InternetTags.class, // 3300 .. 3399
@@ -214,11 +222,11 @@ public final class OsmValidator {
         return removed;
     }
 
-    /*static {
+    static {
         for (Class<? extends Test> testClass : CORE_TEST_CLASSES) {
             addTest(testClass);
         }
-    }*/
+    }
 
     /**
      * Initializes {@code OsmValidator}.

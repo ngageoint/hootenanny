@@ -20,7 +20,7 @@
 		
     <josm.artifactId>josm</josm.artifactId>
 		<!-- josm.version>17702</josm.version --> <!-- 4/2/21; working -->
-		<josm.version>17833</josm.version> <!-- 4/28/21; hangs on program exit -->
+		<josm.version>17833</josm.version> <!-- 4/28/21; MapCssChecker makes the JVM hang on program exit -->
 		
 	  <!-- josm.artifactId>me-josm</josm.artifactId -->
 		<!-- josm.version>4.4.9</josm.version --> <!-- working -->

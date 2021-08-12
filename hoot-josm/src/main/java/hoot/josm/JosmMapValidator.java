@@ -44,13 +44,10 @@ import java.util.HashSet;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Method;
-import java.lang.reflect.Constructor;
 
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 //import org.openstreetmap.josm.data.validation.OsmValidator;
-import hoot.josm.OsmValidator;
-import hoot.josm.TagChecker2;
 import org.openstreetmap.josm.data.validation.Test;
 import org.openstreetmap.josm.data.validation.TestError;
 import org.openstreetmap.josm.tools.Logging;
@@ -58,10 +55,10 @@ import org.openstreetmap.josm.io.OsmApi;
 import org.openstreetmap.josm.io.OsmWriter;
 import org.openstreetmap.josm.io.OsmWriterFactory;
 import org.openstreetmap.josm.data.osm.DataSet;
-import org.openstreetmap.josm.spi.preferences.Config;
-import org.openstreetmap.josm.data.preferences.sources.ValidatorPrefHelper;
-import org.openstreetmap.josm.data.Preferences;
-import org.openstreetmap.josm.tools.ListenableWeakReference;
+import org.openstreetmap.josm.data.validation.tests.MapCSSTagChecker;
+
+import hoot.josm.OsmValidator;
+
 
 /**
  * Validates a map using JOSM validators
@@ -184,7 +181,6 @@ public class JosmMapValidator
    */
   public Map<String, String> getAvailableValidators() throws Exception
   {
-    //Logging.debug("test4");
     Logging.debug("Retrieving available validators...");
     Map<String, String> validators = new HashMap<String, String>();
     try
@@ -192,81 +188,11 @@ public class JosmMapValidator
       Field modifiersField = Field.class.getDeclaredField("modifiers");
       modifiersField.setAccessible(true);
 
-      //OsmValidator.initialize();
-      //OsmValidator.resetErrorList();
-      //OsmValidator.initializeErrorLayer();
-      //OsmValidator.resetErrorLayer();
-      //OsmValidator.initializeTests();
-
-      //Collection<Test> validationTests = OsmValidator.getTests();
-
-      /*Field field15 = OsmValidator.class.getDeclaredField("allTests");
-      modifiersField.setInt(field15, field15.getModifiers() & ~Modifier.FINAL);
-      field15.setAccessible(true);
-      Collection<Class<? extends Test>> validationTests =
-        (Collection<Class<? extends Test>>)field15.get(null);*/
-      /*Field field16 = OsmValidator.class.getDeclaredField("allTestsMap");
-      modifiersField.setInt(field16, field16.getModifiers() & ~Modifier.FINAL);
-      field16.setAccessible(true);
-      Map<String, Test> validationTestsMap = (Map<String, Test>)field16.get(null);
-      Collection<Test> validationTests = validationTestsMap.values();*/
-
-      /*Collection<Class<? extends Test>> validationTestClasses =
-        OsmValidator.getAllAvailableTestClasses();
-      Collection<Test> validationTests = new ArrayList<Test>();
-      for (Class<? extends Test> testClass : validationTestClasses)
-      {
-        validationTests.add(testClass.getConstructor().newInstance());
-      }*/
-
-      /*
-      bad:
-
-      TagChecker
-      */
-
-      Collection<Test> validationTests = new ArrayList<Test>();
-      Field field17 = hoot.josm.OsmValidator.class.getDeclaredField("CORE_TEST_CLASSES");
-      modifiersField.setInt(field17, field17.getModifiers() & ~Modifier.FINAL);
-      field17.setAccessible(true);
-      Class<Test>[] validationTestClasses = (Class<Test>[])field17.get(null);
-      for (int i = 0; i < validationTestClasses.length; i++)
-      {
-        Logging.debug(validationTestClasses[i].getName());
-        Class<Test> cls = validationTestClasses[i];
-        if (cls.getName().endsWith("TagChecker"))
-        {
-          cls = TagChecker2.class;
-        }
-        validationTests.add(cls.getConstructor().newInstance());
-      }
-
-      /*Constructor<OsmValidator> constructor = OsmValidator.class.getDeclaredConstructor();
-      constructor.setAccessible(true);
-      OsmValidator osmValidator = constructor.newInstance();
-      Collection<Test> validationTests = osmValidator.getTests();
-      osmValidator = null;*/
-
-      //Collection<Test> validationTests = new ArrayList<Test>();
-
-      //Collection<Test> validationTests = OsmValidator.getTests().clone();
-
-      //ArrayList<Test> validationTests = new ArrayList<Test>(OsmValidator.getTests());
-
-      //List<Test> validationTests = new ArrayList<Test>();
-      //Collections.copy(validationTests, OsmValidator.getTests());
-
+      Collection<Test> validationTests = hoot.josm.OsmValidator.getTests();
       for (Test validationTest : validationTests)
-      //for (Class<? extends Test> validationTest : validationTests)
       {
         if (validationTest != null)
         {
-          /*Logging.debug(validationTest.getClass().getName());
-          if (!validationTest.getClass().getName().endsWith("BarriersEntrances"))
-          {
-            continue;
-          }*/
-
           String testName = validationTest.toString().split("@")[0];
           // converting inner class '$' char over to '.' for readability
           testName = testName.replace("$", ".");
@@ -276,151 +202,15 @@ public class JosmMapValidator
           String testDescription = validationTest.getName();
           validators.put(testName, testDescription);
 
-          //if (testName.endsWith("TagChecker"))
-          //{
-
-          //}
-
-          /*Field field1 = Test.class.getDeclaredField("name");
-          modifiersField.setInt(field1, field1.getModifiers() & ~Modifier.FINAL);
-          field1.setAccessible(true);
-          field1.set(validationTest, null);
-          Field field2 =Test.class.getDeclaredField("description");
-          modifiersField.setInt(field2, field2.getModifiers() & ~Modifier.FINAL);
-          field2.setAccessible(true);
-          field2.set(validationTest, null);
-          Field field3 = Test.class.getDeclaredField("checkEnabled");
-          field3.setAccessible(true);
-          field3.set(validationTest, null);
-          Field field4 = Test.class.getDeclaredField("checkBeforeUpload");
-          field4.setAccessible(true);
-          field4.set(validationTest, null);
-          Field field5 = Test.class.getDeclaredField("errors");
-          field5.setAccessible(true);
-          field5.set(validationTest, null);
-          Field field6 = Test.class.getDeclaredField("progressMonitor");
-          field6.setAccessible(true);
-          field6.set(validationTest, null);
-          Field field7 = Test.class.getDeclaredField("stopwatch");
-          field7.setAccessible(true);
-          field7.set(validationTest, null);
-          Field field8 = Test.class.getDeclaredField("IN_DOWNLOADED_AREA");
-          modifiersField.setInt(field8, field8.getModifiers() & ~Modifier.FINAL);
-          field8.setAccessible(true);
-          field8.set(null, null);
-          Field field9 = Test.class.getDeclaredField("IN_DOWNLOADED_AREA_STRICT");
-          modifiersField.setInt(field9, field9.getModifiers() & ~Modifier.FINAL);
-          field9.setAccessible(true);
-          field9.set(null, null);
-
-          validationTest = null;*/
+          /*if (testName.endsWith("MapCSSTagChecker"))
+          {
+            Field field1 = MapCSSTagChecker.class.getDeclaredField("PREF_OTHER");
+            modifiersField.setInt(field1, field1.getModifiers() & ~Modifier.FINAL);
+            field1.setAccessible(true);
+            field1.set(null, null);
+          }*/
         }
       }
-      /*validationTests.clear();
-      validationTests = null;
-
-      OsmValidator.resetErrorLayer();
-      OsmValidator.resetErrorList();
-      Method method1 = OsmValidator.class.getDeclaredMethod("removeLegacyEntries", Boolean.TYPE);
-      method1.setAccessible(true);
-      method1.invoke(null, true);
-      Method method2 = OsmValidator.class.getDeclaredMethod("cleanupIgnoredErrors", null);
-      method2.setAccessible(true);
-      method2.invoke(null, null);
-      Method method3 = OsmValidator.class.getDeclaredMethod("clearIgnoredErrors", null);
-      method3.setAccessible(true);
-      method3.invoke(null, null);
-
-      Field field1 = OsmValidator.class.getDeclaredField("allTestsMap");
-      modifiersField.setInt(field1, field1.getModifiers() & ~Modifier.FINAL);
-      field1.setAccessible(true);
-
-      Map<String, Test> allTestsMap = (Map<String, Test>)field1.get(null);
-      for (Map.Entry<String, Test> entry : allTestsMap.entrySet())
-      {
-        Test test = entry.getValue();
-        test = null;
-      }
-      allTestsMap.clear();
-
-      field1.set(null, null);
-      field1 = null;
-      Field field2 = OsmValidator.class.getDeclaredField("allTests");
-      modifiersField.setInt(field2, field2.getModifiers() & ~Modifier.FINAL);
-      field2.setAccessible(true);
-
-      Collection<Class<? extends Test>> allTests =
-        (Collection<Class<? extends Test>>)field2.get(null);
-      for (Class<? extends Test> validationTest : allTests)
-      {
-        validationTest = null;
-      }
-      allTests.clear();
-
-      field2.set(null, null);
-      field2 = null;
-      Field field3 = OsmValidator.class.getDeclaredField("errorLayer");
-      modifiersField.setInt(field3, field3.getModifiers() & ~Modifier.FINAL);
-      field3.setAccessible(true);
-      field3.set(null, null);
-      field3 = null;
-      Field field4 = OsmValidator.class.getDeclaredField("ignoredErrors");
-      modifiersField.setInt(field4, field4.getModifiers() & ~Modifier.FINAL);
-      field4.setAccessible(true);
-      field4.set(null, null);
-      field4 = null;
-      Field field5 = OsmValidator.class.getDeclaredField("CORE_TEST_CLASSES");
-      modifiersField.setInt(field5, field5.getModifiers() & ~Modifier.FINAL);
-      field5.setAccessible(true);
-      field5.set(null, null);
-      field5 = null;
-      modifiersField = null;*/
-
-      //Thread.currentThread().stop();
-
-      /*if (Thread.currentThread().isAlive()) {
-          ThreadGroup group = Thread.currentThread().getThreadGroup();
-          while (group != null) {
-              group.interrupt();
-              group = Thread.currentThread().getThreadGroup();
-          }
-          Thread.currentThread().interrupt();
-      }*/
-
-      //Thread.currentThread().interrupt();
-
-      //Config.setPreferencesInstance(null);
-
-      /*Field field10 = Config.class.getDeclaredField("preferences");
-      field10.setAccessible(true);
-      field10.set(null, null);
-      Field field11 = Config.class.getDeclaredField("baseDirectories");
-      field11.setAccessible(true);
-      field11.set(null, null);
-      Field field12 = Config.class.getDeclaredField("urls");
-      field12.setAccessible(true);
-      field12.set(null, null);*/
-      //Field field13 = ValidatorPrefHelper.class.getDeclaredField("INSTANCE");
-      //modifiersField.setInt(field13, field13.getModifiers() & ~Modifier.FINAL);
-      //field13.setAccessible(true);
-      //field13.set(null, null);
-
-      //Preferences pref = Preferences.main();
-      //pref.resetToInitialState();
-
-      /*Field field14 = ListenableWeakReference.class.getDeclaredField("GLOBAL_QUEUE");
-      modifiersField.setInt(field14, field14.getModifiers() & ~Modifier.FINAL);
-      field14.setAccessible(true);
-      field14.set(null, null);
-      Field field15 = ListenableWeakReference.class.getDeclaredField("thread");
-      field15.setAccessible(true);
-      field15.set(null, null);*/
-      /*Method method4 = ListenableWeakReference.class.getDeclaredMethod("clean", null);
-      method4.setAccessible(true);
-      method4.invoke(null, null);*/
-      /*Method method5 = ListenableWeakReference.class.getDeclaredMethod("clear", null);
-      method5.setAccessible(true);
-      method5.invoke(null, null);*/
     }
     catch (Exception e)
     {
