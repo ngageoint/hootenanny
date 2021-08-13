@@ -28,6 +28,7 @@ pipeline {
         HOOT_AWS_ENV_TAG="${params.HOOT_AWS_ENV_TAG}"
         HOOT_AWS_USE_TAG="${params.HOOT_AWS_USE_TAG}"
         HOOT_AWS_GROUP_TAG="${params.HOOT_AWS_GROUP_TAG}"
+        YUMUPDATE = "yes"
     }
 
     options { disableConcurrentBuilds() }
