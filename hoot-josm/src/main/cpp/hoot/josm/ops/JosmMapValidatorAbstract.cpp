@@ -33,6 +33,7 @@
 #include <hoot/josm/jni/JniConversion.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/josm/jni/JniUtils.h>
+#include <hoot/core/util/FileUtils.h>
 
 namespace hoot
 {
@@ -50,9 +51,8 @@ _numFailingValidators(0)
 void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
-  _josmValidatorsExclude = opts.getJosmValidatorsExclude();
-  _josmValidatorsInclude = opts.getJosmValidatorsInclude();
-  _josmValidatorsRequiringUserCert = opts.getJosmValidatorsRequiringUserCertificate();
+  LOG_VARD(opts.getJosmValidatorsFile());
+  _josmValidators = FileUtils::readFileToList(opts.getJosmValidatorsFile());
   _maxElementsForMapString = opts.getJosmMaxElementsForMapString();
 }
 
@@ -89,53 +89,13 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
   LOG_DEBUG("JOSM implementation initialized.");
 }
 
-void JosmMapValidatorAbstract::_initJosmValidatorsList()
+QMap<QString, QString> JosmMapValidatorAbstract::getValidatorDetail()
 {
-  LOG_DEBUG("Initializing validators...");
-
-  _josmValidatorsInclude.sort();
-  _josmValidatorsExclude.sort();
-
-  if (_josmValidatorsInclude.size() > 0)
-  {
-    // If an include list was specified, let's start with that.
-    _josmValidators = _josmValidatorsInclude;
-  }
-  else
-  {
-    // If no include list was specified, let's grab all the validators.
-    _josmValidators = getAvailableValidators();
-  }
-
-  if (StringUtils::containsAny(_josmValidators, _josmValidatorsRequiringUserCert))
-  {
-    LOG_WARN(
-      "Validator include list contained one or more validators requiring a user certificate " <<
-      "which is not supported by the Hootenanny JOSM validation client. Removing validators.");
-    StringUtils::removeAll(_josmValidators, _josmValidatorsRequiringUserCert);
-  }
-
-  // The exclude list overrides the include list, so subtract it from our current list.
-  StringUtils::removeAll(_josmValidators, _josmValidatorsExclude);
-
-  // make sure the include/exclude lists didn't conflict
-  if (!_josmValidatorsInclude.isEmpty() && _josmValidators.isEmpty())
-  {
-    throw IllegalArgumentException(
-      "Cleaner include/exclude lists resulted in no JOSM cleaners specified.");
-  }
-
-  // If validators are empty by this point, then just use them all.
   if (_josmValidators.isEmpty())
   {
-    _josmValidators = getAvailableValidators();
+    throw IllegalArgumentException("No validators configured.");
   }
 
-  LOG_VARD(_josmValidators);
-}
-
-QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescription()
-{
   LOG_DEBUG("Retrieving available validators...");
 
   if (!_josmInterfaceInitialized)
@@ -147,27 +107,26 @@ QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescr
     _javaEnv->CallObjectMethod(
       _josmInterface,
       // JNI sig format: (input params...)return type
-      // Java sig: Map<String, String> getAvailableValidators()
-      _javaEnv->GetMethodID(_josmInterfaceClass, "getAvailableValidators", "()Ljava/util/Map;"));
+      // Java sig: Map<String, String> getValidatorDetail(List<String> validators)
+      _javaEnv->GetMethodID(
+        _josmInterfaceClass, "getValidatorDetail", "(Ljava/util/List;)Ljava/util/Map;"),
+        JniConversion::toJavaStringList(_javaEnv, _josmValidators));
   if (_javaEnv->ExceptionCheck())
   {
     _javaEnv->ExceptionDescribe();
     _javaEnv->ExceptionClear();
-    throw HootException("Error calling getAvailableValidators.");
+    throw HootException("Error calling getValidatorDetail.");
   }
-
-  QMap<QString, QString> validators = JniConversion::fromJavaStringMap(_javaEnv, validatorsJavaMap);
-  StringUtils::removeAllWithKey(validators, _josmValidatorsRequiringUserCert);
-  return validators;
-}
-
-QStringList JosmMapValidatorAbstract::getAvailableValidators()
-{
-  return getAvailableValidatorsWithDescription().keys();
+  return JniConversion::fromJavaStringMap(_javaEnv, validatorsJavaMap);
 }
 
 void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
 {
+  if (_josmValidators.isEmpty())
+  {
+    throw IllegalArgumentException("No validators configured.");
+  }
+
   LOG_VARD(map->size());
   //LOG_TRACE("Input map: " << OsmXmlWriter::toString(map, true));
 
@@ -178,10 +137,6 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
   if (!_josmInterfaceInitialized)
   {
     _initJosmImplementation();
-  }
-  if (_josmValidators.isEmpty())
-  {
-    _initJosmValidatorsList();
   }
 
   // Pass the map to JOSM for updating.
@@ -204,7 +159,7 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
   {
     _javaEnv->ExceptionDescribe();
     _javaEnv->ExceptionClear();
-    throw HootException("Error calling getAvailableValidatorsWithDescription.");
+    throw HootException("Error calling getValidatorDetail.");
   }
 
   if (Log::getInstance().getLevel() > Log::Debug)

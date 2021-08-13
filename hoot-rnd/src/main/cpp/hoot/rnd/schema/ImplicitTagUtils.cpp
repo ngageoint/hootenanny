@@ -67,7 +67,7 @@ void ImplicitTagUtils::_modifyUndesirableTokens(QString& name)
   if (_nameCleaningTokens.isEmpty())
   {
     _nameCleaningTokens =
-      FileUtils::readFileToList(ConfigOptions().getImplicitTaggingNameCleaningTokensFile());
+      FileUtils::readFileToList(ConfigOptions().getImplicitTaggingNameCleaningTokensFile(), true);
   }
 
   for (int i = 0; i < _nameCleaningTokens.size(); i++)
@@ -117,7 +117,7 @@ void ImplicitTagUtils::_filterOutStreets(QString& name)
     // see related note in _modifyUndesirableTokens
     if (_streetTypes.isEmpty())
     {
-      _streetTypes = FileUtils::readFileToList(ConfigOptions().getStreetTypesFile());
+      _streetTypes = FileUtils::readFileToList(ConfigOptions().getStreetTypesFile(), true);
     }
 
     // This list could be expanded.  See the note in the associated config file.

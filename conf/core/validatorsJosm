@@ -1,0 +1,53 @@
+# Configuration file containing a line delimited list of JOSM validator Java class names without
+# namespace prefixes or file extensions (e.g. 'DuplicatedWayNodes') to use during validation or
+# cleaning. This is configured within Hootenanny rather than loaded from the JOSM configuration due 
+# to the fact the auto-instantiation of validators by OsmValidator can cause the JVM to hang. With 
+# each JOSM upgrade a check needs to be made for new available validators by looking at the 
+# hardcoded list in the OsmValidator::CORE_TEST_CLASSES member variable and this file updated 
+# accordingly.
+#
+# Note: We're currently explicitly skipping the following due to current lack of support in 
+# hoot-josm for security certificates:
+#
+# ApiCapabilitiesTest
+# MapCssTagCheckerTest (this also breaks for other reasons; see #4951)
+
+Addresses
+BarriersEntrances
+Coastlines
+ConditionalKeys
+ConnectivityRelations
+CrossingWays.Boundaries
+CrossingWays.SelfCrossing
+CrossingWays.Ways
+DirectionNodes
+DuplicateRelation
+DuplicateWay
+DuplicatedWayNodes
+Highways
+InternetTags
+Lanes
+LongSegment
+MultipolygonTest
+NameMismatch
+OpeningHourTest
+OverlappingWays
+PowerLines
+PublicTransportRouteTest
+RelationChecker
+RightAngleBuildingTest
+SelfIntersectingWay
+SharpAngles
+SimilarNamedWays
+TagChecker
+TurnrestrictionTest
+UnclosedWays
+UnconnectedWays.UnconnectedHighways
+UnconnectedWays.UnconnectedNaturalOrLanduse
+UnconnectedWays.UnconnectedPower
+UnconnectedWays.UnconnectedRailways
+UnconnectedWays.UnconnectedWaterways
+UntaggedNode
+UntaggedWay
+WayConnectedToArea
+WronglyOrderedWays

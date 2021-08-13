@@ -60,7 +60,8 @@ JavaEnvironment::~JavaEnvironment()
         "Unable to detach JVM from current thread. Error code: " << QString::number(status));
     }
     // If this call hangs, its very likely there is a thread other than the one that launched this
-    // JVM that is still running due to holding onto a reference, etc.
+    // JVM that is still running due to holding onto a reference, etc. Use kill -3 on the hoot or
+    // HootTest process ID to determine what in JOSM is holding onto the memory.
     LOG_TRACE("Destroying Java env...");
     status = _vm->DestroyJavaVM();
     if (status != JNI_OK)

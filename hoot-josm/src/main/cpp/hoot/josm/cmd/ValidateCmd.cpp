@@ -182,8 +182,9 @@ private:
 
   void _printJosmValidators()
   {
-    const QMap<QString, QString> validators =
-      JosmMapValidator().getAvailableValidatorsWithDescription();
+    JosmMapValidator validator;
+    validator.setConfiguration(conf());
+    const QMap<QString, QString> validators = validator.getValidatorDetail();
     for (QMap<QString, QString>::const_iterator itr = validators.begin(); itr != validators.end();
          ++itr)
     {

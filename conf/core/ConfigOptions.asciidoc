@@ -2260,34 +2260,14 @@ Java class to use as the JOSM Java map validator/cleaner implementation.
 The maximum size in elements for a map allowed to be passed as a string between Hootenanny and JOSM.
 The default value was determined experimentally and may need tweaking per environment.
 
-=== josm.validators.exclude
+=== josm.validators.file
 
-* Data Type: list
-* Default Value:
-** ``
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/validatorsJosm`
 
-A list of JOSM validator Java class names without namespace prefixes or file extensions
-(e.g. 'DuplicatedWayNodes') to explicitly exclude use of during validation or cleaning using JOSM.
-Overrides values set in josm.validators.include.
-
-=== josm.validators.include
-
-* Data Type: list
-* Default Value:
-** ``
-
-A list of JOSM validator Java class names without namespace prefixes or file extensions
-(e.g. 'DuplicatedWayNodes') to explicitly include use of during validation or cleaning using JOSM.
-Overridden by values set in josm.validators.exclude.
-
-=== josm.validators.requiring.user.certificate
-
-* Data Type: list
-* Default Value:
-** `ApiCapabilitiesTest`
-** `MapCSSTagChecker`
-
-A list of JOSM validators known to require a user certificate. These validators will be skipped.
+A path to a file containing a line delimited list of JOSM validator Java class names without
+namespace prefixes or file extensions (e.g. 'DuplicatedWayNodes') to use during validation or
+cleaning.
 
 === json.format.hootenanny
 

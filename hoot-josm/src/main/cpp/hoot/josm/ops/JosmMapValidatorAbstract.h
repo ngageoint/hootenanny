@@ -59,7 +59,6 @@ class JosmMapValidatorAbstract : public OsmMapOperation, public Configurable
 public:
 
   JosmMapValidatorAbstract();
-
   virtual ~JosmMapValidatorAbstract() = default;
 
   /**
@@ -68,18 +67,11 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * Returns a collection of available JOSM validators
-   *
-   * @return collection of validator Java class names
-   */
-  QStringList getAvailableValidators();
-
-  /**
    * Returns a collection of available JOSM validators with descriptions
    *
    * @return collection of validator Java class names with descriptions
    */
-  QMap<QString, QString> getAvailableValidatorsWithDescription();
+  QMap<QString, QString> getValidatorDetail();
 
   /**
    * @see OsmMapOperation
@@ -97,10 +89,7 @@ public:
   int getNumFailingValidators() const { return _numFailingValidators; }
 
   QStringList getJosmValidatorsUsed() const { return _josmValidators; }
-  void setJosmValidatorsExclude(const QStringList& validators)
-  { _josmValidatorsExclude = validators; }
-  void setJosmValidatorsInclude(const QStringList& validators)
-  { _josmValidatorsInclude = validators; }
+  void setJosmValidators(const QStringList& validators) { _josmValidators = validators; }
   void setMaxElementsForMapString(int max) { _maxElementsForMapString = max; }
 
 protected:
@@ -156,16 +145,6 @@ private:
   friend class JosmMapValidatorTest;
   friend class JosmMapCleanerTest;
 
-  // a list of explicit JOSM validator class names without prefixed namespace to be used as
-  // validators; can be overridden by _josmValidatorsExclude
-  QStringList _josmValidatorsInclude;
-  // a list of explicit JOSM validator class name excludes without prefixed namespace to be excluded
-  // as validators; overrides _josmValidatorsInclude
-  QStringList _josmValidatorsExclude;
-  // a known list of validators that need a user cert to operate; will skip them
-  QStringList _josmValidatorsRequiringUserCert;
-
-  void _initJosmValidatorsList();
   void _initJosmImplementation();
 };
 

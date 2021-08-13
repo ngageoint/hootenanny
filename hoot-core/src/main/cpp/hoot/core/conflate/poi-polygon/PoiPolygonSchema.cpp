@@ -58,7 +58,7 @@ QMultiHash<QString, QString> PoiPolygonSchema::_readTypeToNames()
 
   QMultiHash<QString, QString> typeToNames;
   const QStringList typeToNamesRaw =
-    FileUtils::readFileToList(ConfigOptions().getPoiPolygonTypeToNamesFile());
+    FileUtils::readFileToList(ConfigOptions().getPoiPolygonTypeToNamesFile(), true);
   for (int i = 0; i < typeToNamesRaw.size(); i++)
   {
     const QString typeToNamesRawEntry = typeToNamesRaw.at(i);

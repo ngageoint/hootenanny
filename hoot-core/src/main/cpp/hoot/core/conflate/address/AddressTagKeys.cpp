@@ -58,7 +58,7 @@ AddressTagKeys::AddressTagKeys()
 
 void AddressTagKeys::_readAddressTagKeys(const QString& configFile) const
 {
-  const QStringList addressTagKeyEntries = FileUtils::readFileToList(configFile);
+  const QStringList addressTagKeyEntries = FileUtils::readFileToList(configFile, true);
   for (int i = 0; i < addressTagKeyEntries.size(); i++)
   {
     const QString addressTagKeyEntry = addressTagKeyEntries.at(i);

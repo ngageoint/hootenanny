@@ -41,13 +41,9 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.util.Set;
 import java.util.HashSet;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Method;
 
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
-//import org.openstreetmap.josm.data.validation.OsmValidator;
 import org.openstreetmap.josm.data.validation.Test;
 import org.openstreetmap.josm.data.validation.TestError;
 import org.openstreetmap.josm.tools.Logging;
@@ -55,10 +51,6 @@ import org.openstreetmap.josm.io.OsmApi;
 import org.openstreetmap.josm.io.OsmWriter;
 import org.openstreetmap.josm.io.OsmWriterFactory;
 import org.openstreetmap.josm.data.osm.DataSet;
-import org.openstreetmap.josm.data.validation.tests.MapCSSTagChecker;
-
-import hoot.josm.OsmValidator;
-
 
 /**
  * Validates a map using JOSM validators
@@ -177,20 +169,20 @@ public class JosmMapValidator
    * Returns the available JOSM validators
    *
    * @return a delimited string of the form:
-   * "<validator1ClassName>:<validator1Description>;<validator2ClassName>:<validator2Description>..."
+   * "<validator1Name>:<validator1Description>;<validator2Name>:<validator2Description>..."
    */
-  public Map<String, String> getAvailableValidators() throws Exception
+  public Map<String, String> getValidatorDetail(List<String> validators) throws Exception
   {
     Logging.debug("Retrieving available validators...");
-    Map<String, String> validators = new HashMap<String, String>();
+    Map<String, String> validatorsDetail = new HashMap<String, String>();
     try
     {
-      Field modifiersField = Field.class.getDeclaredField("modifiers");
-      modifiersField.setAccessible(true);
-
-      Collection<Test> validationTests = hoot.josm.OsmValidator.getTests();
-      for (Test validationTest : validationTests)
+      for (String validatorClassName : validators)
       {
+
+        Test validationTest =
+          (Test)Class.forName(
+            VALIDATORS_NAMESPACE + "." + validatorClassName.replace(".", "$")).newInstance();
         if (validationTest != null)
         {
           String testName = validationTest.toString().split("@")[0];
@@ -200,15 +192,7 @@ public class JosmMapValidator
           testName = testName.replace(VALIDATORS_NAMESPACE + ".", "");
           Logging.trace("testName: " + testName);
           String testDescription = validationTest.getName();
-          validators.put(testName, testDescription);
-
-          /*if (testName.endsWith("MapCSSTagChecker"))
-          {
-            Field field1 = MapCSSTagChecker.class.getDeclaredField("PREF_OTHER");
-            modifiersField.setInt(field1, field1.getModifiers() & ~Modifier.FINAL);
-            field1.setAccessible(true);
-            field1.set(null, null);
-          }*/
+          validatorsDetail.put(testName, testDescription);
         }
       }
     }
@@ -218,8 +202,8 @@ public class JosmMapValidator
       throw e;
     }
 
-    Logging.debug("validators size: " + String.valueOf(validators.size()));
-    return validators;
+    Logging.debug("validators size: " + String.valueOf(validatorsDetail.size()));
+    return validatorsDetail;
   }
 
   /**

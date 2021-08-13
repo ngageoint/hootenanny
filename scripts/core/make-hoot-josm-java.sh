@@ -9,12 +9,13 @@ JOSM_VERSION=`awk -F '[<>]' '/<josm.version>/{print $3}' pom.xml`
 JOSM_JAR=$JOSM_ARTIFACT_ID-$JOSM_VERSION.jar
 
 # Install a local josm jar if its not available from a repo. This needs to be done first time for 
-# each new version of a local jar only.
-# wget --quiet http://josm-jar-url # replace this URL
-# mvn install:install-file -Dfile=/home/vagrant/hoot/tmp/$JOSM_JAR -DgroupId=org.openstreetmap.josm -DartifactId=$JOSM_ARTIFACT_ID -Dversion=$JOSM_VERSION -Dpackaging=jar -DgeneratePom=true
+# each new version of a local jar only. Download the jar and install it with the mvn line below. 
+# You can check to see if your public josm jar is already installed by looking at the contents of 
+# ~/.m2/repository/org/openstreetmap/josm/josm (the last directoy may differ based on your flavor of 
+# josm).
+# mvn install:install-file -Dfile=<path>/$JOSM_JAR -DgroupId=org.openstreetmap.josm -DartifactId=$JOSM_ARTIFACT_ID -Dversion=$JOSM_VERSION -Dpackaging=jar -DgeneratePom=true
 
 # Build the hoot josm integration jar and copy over the josm jar.
-#make clean
 mvn -q package
 
 # Rename the josm jar to match what's in the hoot config.

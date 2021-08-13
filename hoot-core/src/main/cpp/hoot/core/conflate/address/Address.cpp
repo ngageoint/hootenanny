@@ -124,7 +124,7 @@ QSet<QString> Address::getStreetTypes(const bool includeAbbreviations)
   if (_streetTypes.isEmpty())
   {
     const QStringList streetTypesRaw =
-      FileUtils::readFileToList(ConfigOptions().getStreetTypesFile());
+      FileUtils::readFileToList(ConfigOptions().getStreetTypesFile(), true);
     // This list could be expanded.  See the note in the associated config file.
     for (int i = 0; i < streetTypesRaw.size(); i++)
     {
@@ -149,7 +149,7 @@ QMap<QString, QString> Address::getStreetFullTypesToTypeAbbreviations()
   if (_streetFullTypesToTypeAbbreviations.isEmpty())
   {
     const QStringList streetTypesRaw =
-      FileUtils::readFileToList(ConfigOptions().getStreetTypesFile());
+      FileUtils::readFileToList(ConfigOptions().getStreetTypesFile(), true);
     // This list could be expanded.  See the note in the associated config file.
     for (int i = 0; i < streetTypesRaw.size(); i++)
     {
@@ -171,7 +171,7 @@ QMap<QString, QString> Address::getStreetTypeAbbreviationsToFullTypes()
   if (_streetTypeAbbreviationsToFullTypes.isEmpty())
   {
     const QStringList streetTypesRaw =
-      FileUtils::readFileToList(ConfigOptions().getStreetTypesFile());
+      FileUtils::readFileToList(ConfigOptions().getStreetTypesFile(), true);
     // This list could be expanded.  See the note in the associated config file.
     for (int i = 0; i < streetTypesRaw.size(); i++)
     {
