@@ -53,10 +53,10 @@ public:
   virtual int runSimple(QStringList& args) override
   {
     bool showAvailableValidatorsOnly = false;
-    if (args.contains("--available-validators"))
+    if (args.contains("--validators"))
     {
       showAvailableValidatorsOnly = true;
-      args.removeAt(args.indexOf("--available-validators"));
+      args.removeAt(args.indexOf("--validators"));
     }
 
     bool separateOutput = false;

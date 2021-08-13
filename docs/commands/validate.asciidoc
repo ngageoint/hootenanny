@@ -3,37 +3,42 @@
 
 === Description
 
-The +validate+ command uses https://josm.openstreetmap.de/[JOSM] to identify map data with erroneous aspects.
+The +validate+ command uses https://josm.openstreetmap.de/[JOSM] to identify map data with erroneous 
+aspects.
 
-* +input(s)+               - Input(s); may be any supported input format (e.g. .osm file).
-* +--output+               - Optional output; may be any supported output format (e.g. .osm file). If specified, elements 
-                             with validation will be marked with tags in the output file. If not specified, then only 
-                             a validation error summary will be displayed. This parameter may not be specified with the 
-                             `--separate-output` parameter.
-* +--available-validators+ - Displays available JOSM validators for use in validation. Not all validators have cleaning 
-                             (auto-fix) capabilities. If this option is selected, neither an input or output need be specified.
-* +--recursive+            - Allows for processing the files contained in any directories specified in +input(s)+ 
-                             recursively. This parameter has no effect on the processing of non-directory inputs. This must 
-                             be followed by either "*" to denote no filtering or one or more wildcard name filters. 
-                             e.g. "*.osm;*.json" or "*myFile*". This parameter is not compatible with the OGR layer 
-                             input syntax.
-* +--separate-output+      - This parameter replaces the `--output` parameter and will result in no validation summary to
-                             be displayed on the screen. The default behavior when processing multiple inputs is to 
-                             combine them into the same single output. With this parameter specified, each input is 
-                             processed and written to a separate output. The +output+ parameter is invalid in combination 
-                             with this parameter, and output is written back to a new URL with the same base name as 
-                             each input with the text "-validated" appended to it. This parameter cannot be used with OSM 
-                             API database (osmapidb://) or OSM API (http://) inputs. This parameter is not compatible with 
-                             the OGR layer input syntax.
+To list information about the available validators use the following options:
+
+* +--validators+      - Displays available JOSM validators for use in validation.
+* +--cleaners+        - Displays available JOSM validators that are capable of cleaning.
+                        
+To generate validation reports and mark data with validation errors use the following options:
+
+* +input(s)+          - Input(s); may be any supported input format (e.g. .osm file) or a directory 
+                        if `--recursive` is specified.
+* +--report-output+   - Writes combined report output to a file instead of writing it to the display.
+* +--output+          - Optional single validated file output; may be any supported output format 
+                        (e.g. .osm file). If specified, all inputs will be combined and elements 
+                        with validation errors will be marked with tags in the output file. Not
+                        compatible with `--separate-output`.
+* +--separate-output+ - Optional multiple validated file outputs. Each input is processed and 
+                        written to a separate output location with the same base name as each input 
+                        with the text "-validated" appended to it. Not compatible with `--output`, 
+                        OSM API database (osmapidb://) or OSM API (http://) formats, or the OGR layer 
+                        input syntax.
+ * +--recursive+       - Allows for processing the files contained in any directories specified in 
+                        +input(s)+ recursively. This parameter must be followed by either "*" to 
+                        denote no filtering or one or more wildcard name filters. e.g. 
+                        "*.osm;*.json" or "*myFile*". This parameter is not compatible with the OGR 
+                        layer input syntax.                      
 
 === Usage
 
 --------------------------------------
 # list the available validators
-hoot validate [--available-validators]
+hoot validate [--validators]
 
 # perform validation
-hoot validate (input1) [input2...] [--output path] [--recursive "*"|"filter1;filter2..."]
+hoot validate (input1) [input2...] [--report-output path] [--output path] [--recursive "*"|"filter1;filter2..."]
 
 # perform validation and write to separate outputs
 hoot validate (input1) [input2...] [--recursive "*"|"filter1;filter2..."] [--separate-output]

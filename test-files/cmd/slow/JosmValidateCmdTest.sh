@@ -22,7 +22,7 @@ SEPARATE_OUTPUT_GOLD=$IN_DIR/separate-out.osm
 echo ""
 echo "Listing available validators..."
 echo ""
-hoot validate $LOG_LEVEL $CONFIG --available-validators | grep "DuplicatedWayNodes"
+hoot validate $LOG_LEVEL $CONFIG --validators | grep "DuplicatedWayNodes"
 
 echo ""
 echo "Validating a single input..."
