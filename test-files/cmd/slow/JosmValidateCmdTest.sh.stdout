@@ -19,6 +19,9 @@ Unclosed Ways errors: 2
 Untagged, empty and one node ways errors: 1
 Total failing JOSM validators: 0
 
+Validating a single input and writing the report to a file...
+
+
 Validating multiple inputs...
 
 Total JOSM validation errors: 8 found in 90 total features.
@@ -35,5 +38,5 @@ Unclosed Ways errors: 2
 Untagged, empty and one node ways errors: 1
 Total failing JOSM validators: 0
 
-Validating files and writing to separate outputs...
+Validating files, writing to separate outputs, and writing the report to a file...
 

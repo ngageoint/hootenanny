@@ -165,7 +165,7 @@ private:
       IoUtils::loadMaps(map, inputs, false, Status::Unknown1);
     }
 
-    progress->set(1.0f / 3.0f, Progress::JobState::Running, "Cleaning map...");
+    progress->set(1.0f / 3.0f, Progress::JobState::Running, "Cleaning map(s)...");
     MapCleaner(*progress).apply(map);
 
     progress->set(

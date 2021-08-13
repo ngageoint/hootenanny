@@ -9,7 +9,6 @@ aspects.
 To list information about the available validators use the following options:
 
 * +--validators+      - Displays available JOSM validators for use in validation.
-* +--cleaners+        - Displays available JOSM validators that are capable of cleaning.
                         
 To generate validation reports and mark data with validation errors use the following options:
 
