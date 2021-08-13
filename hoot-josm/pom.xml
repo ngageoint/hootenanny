@@ -18,11 +18,11 @@
 		brittle interface that is difficult to debug. Think long and hard before you update the JOSM 
 		version here. -->
 		
-    <!-- josm.artifactId>josm</josm.artifactId -->
-		<!-- josm.version>18118</josm.version-->
+    <josm.artifactId>josm</josm.artifactId>
+		<josm.version>18118</josm.version>
 		
-	  <josm.artifactId>me-josm</josm.artifactId>
-		<josm.version>10.0.3</josm.version>
+	  <!-- josm.artifactId>me-josm</josm.artifactId -->
+		<!-- josm.version>10.0.3</josm.version -->
 		
 	</properties>
 
