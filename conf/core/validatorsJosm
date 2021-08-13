@@ -10,7 +10,9 @@
 # hoot-josm for security certificates:
 #
 # ApiCapabilitiesTest
-# MapCssTagCheckerTest (this also breaks for other reasons; see #4951)
+# MapCssTagCheckerTest
+#
+# All others (and MapCssTagCheckerTest) are commented out due to bug in #4951.
 
 Addresses
 BarriersEntrances
@@ -18,8 +20,8 @@ Coastlines
 ConditionalKeys
 ConnectivityRelations
 CrossingWays.Boundaries
-CrossingWays.SelfCrossing
-CrossingWays.Ways
+#CrossingWays.SelfCrossing
+#CrossingWays.Ways
 DirectionNodes
 DuplicateRelation
 DuplicateWay
@@ -28,18 +30,18 @@ Highways
 InternetTags
 Lanes
 LongSegment
-MultipolygonTest
+#MultipolygonTest
 NameMismatch
-OpeningHourTest
-OverlappingWays
+#OpeningHourTest 
+#OverlappingWays
 PowerLines
 PublicTransportRouteTest
-RelationChecker
+#RelationChecker
 RightAngleBuildingTest
 SelfIntersectingWay
 SharpAngles
-SimilarNamedWays
-TagChecker
+#SimilarNamedWays
+#TagChecker
 TurnrestrictionTest
 UnclosedWays
 UnconnectedWays.UnconnectedHighways
