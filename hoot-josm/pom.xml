@@ -18,12 +18,11 @@
 		brittle interface that is difficult to debug. Think long and hard before you update the JOSM 
 		version here. -->
 		
-    <josm.artifactId>josm</josm.artifactId>
-		<josm.version>18118</josm.version> <!-- 4/28/21; MapCssChecker makes the JVM hang on program exit; problem began at 17833 -->
+    <!-- josm.artifactId>josm</josm.artifactId -->
+		<!-- josm.version>18118</josm.version-->
 		
-	  <!--josm.artifactId>me-josm</josm.artifactId-->
-		<!-- josm.version>4.4.9</josm.version --> <!-- working -->
-		<!--josm.version>10.0.3</josm.version--> <!-- untested -->
+	  <josm.artifactId>me-josm</josm.artifactId>
+		<josm.version>10.0.3</josm.version>
 		
 	</properties>
 
