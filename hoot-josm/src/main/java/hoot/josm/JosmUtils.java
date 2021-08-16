@@ -86,6 +86,11 @@ public class JosmUtils
     Logging.debug("JOSM initialized.");
   }
 
+  public static void deactivateJosm()
+  {
+    Preferences.main().resetToDefault();
+  }
+
   /**
    * Sets the verbosity of JOSM logging
    *

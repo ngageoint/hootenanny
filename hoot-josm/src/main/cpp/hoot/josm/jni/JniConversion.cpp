@@ -70,6 +70,9 @@ jobject JniConversion::toJavaStringList(JNIEnv* javaEnv, const QStringList& cppS
     javaEnv->CallObjectMethod(result, arrayListAddMethod, str);
     javaEnv->DeleteLocalRef(str);
   }
+
+  javaEnv->DeleteLocalRef(arrayListJavaClass);
+
   return result;
 }
 
@@ -98,6 +101,8 @@ QStringList JniConversion::fromJavaStringList(JNIEnv* javaEnv, jobject javaStrLi
     javaEnv->DeleteLocalRef(javaStrObj);
   }
 
+  javaEnv->DeleteLocalRef(listClass);
+
   return result;
 }
 
@@ -123,6 +128,9 @@ QSet<QString> JniConversion::fromJavaStringSet(JNIEnv* javaEnv, jobject javaStrS
 
     hasNext = (bool)javaEnv->CallBooleanMethod(iterator, hasNextMethod);
   }
+
+  javaEnv->DeleteLocalRef(setClass);
+  javaEnv->DeleteLocalRef(iteratorClass);
   javaEnv->DeleteLocalRef(iterator);
 
   return result;
@@ -175,6 +183,12 @@ QMap<QString, QString> JniConversion::fromJavaStringMap(JNIEnv* javaEnv, jobject
 
     hasNext = (bool)javaEnv->CallBooleanMethod(iterator, hasNextMethod);
   }
+
+  javaEnv->DeleteLocalRef(mapClass);
+  javaEnv->DeleteLocalRef(entrySetClass);
+  javaEnv->DeleteLocalRef(iteratorClass);
+  javaEnv->DeleteLocalRef(entryClass);
+  javaEnv->DeleteLocalRef(stringClass);
   javaEnv->DeleteLocalRef(entrySet);
   javaEnv->DeleteLocalRef(iterator);
   javaEnv->DeleteLocalRef(javaMap);

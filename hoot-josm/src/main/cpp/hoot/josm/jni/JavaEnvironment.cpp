@@ -61,6 +61,7 @@ JavaEnvironment::~JavaEnvironment()
       _env->ExceptionDescribe();
       _env->ExceptionClear();
     }
+    _env->DeleteLocalRef(systemClass);
   }
 
   if (_vm != nullptr)

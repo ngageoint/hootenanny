@@ -146,6 +146,7 @@ private:
   friend class JosmMapCleanerTest;
 
   void _initJosmImplementation();
+  void _deactivateJosm();
 };
 
 }

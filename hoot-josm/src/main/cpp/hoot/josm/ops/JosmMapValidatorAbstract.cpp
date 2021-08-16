@@ -95,6 +95,16 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
   LOG_DEBUG("JOSM implementation initialized.");
 }
 
+void JosmMapValidatorAbstract::_deactivateJosm()
+{
+  LOG_DEBUG("Deactivating JOSM implementation...");
+  jclass utilsCls = _javaEnv->FindClass("hoot/josm/JosmUtils");
+  jmethodID deactivateMethod = _javaEnv->GetStaticMethodID(utilsCls, "deactivateJosm", "()V");
+  _javaEnv->CallStaticVoidMethod(utilsCls, deactivateMethod);
+  JniUtils::checkForErrors(_javaEnv, "_deactivateJosm");
+  _javaEnv->DeleteLocalRef(utilsCls);
+}
+
 QMap<QString, QString> JosmMapValidatorAbstract::getValidatorDetail()
 {
   if (_josmValidators.isEmpty())
@@ -118,6 +128,7 @@ QMap<QString, QString> JosmMapValidatorAbstract::getValidatorDetail()
         _josmInterfaceClass, "getValidatorDetail", "(Ljava/util/List;)Ljava/util/Map;"),
         JniConversion::toJavaStringList(_javaEnv, _josmValidators));
   JniUtils::checkForErrors(_javaEnv, "getValidatorDetail");
+  _deactivateJosm();
   return JniConversion::fromJavaStringMap(_javaEnv, validatorsJavaMap);
 }
 
@@ -157,6 +168,8 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
   }
 
   JniUtils::checkForErrors(_javaEnv, "JosmMapValidatorAbstract::apply");
+
+  _deactivateJosm();
 
   if (Log::getInstance().getLevel() > Log::Debug)
   {
