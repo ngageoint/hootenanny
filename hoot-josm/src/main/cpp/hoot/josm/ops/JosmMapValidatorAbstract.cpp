@@ -48,6 +48,12 @@ _numFailingValidators(0)
   _josmInterfaceName = ConfigOptions().getJosmMapValidatorJavaImplementation();
 }
 
+JosmMapValidatorAbstract::~JosmMapValidatorAbstract()
+{
+  _josmInterface = nullptr;
+  _josmInterfaceClass = nullptr;
+}
+
 void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
@@ -77,7 +83,7 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
     // running against large inputs so not using it.
     _javaEnv->NewObject(
       _josmInterfaceClass,
-      // Java sig: <ClassName>(String logLevel, String userCertPath, String userCertPassword)
+      // Java sig: <ClassName>(String logLevel)
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "<init>", "(Ljava/lang/String;)V"),
       // logLevel

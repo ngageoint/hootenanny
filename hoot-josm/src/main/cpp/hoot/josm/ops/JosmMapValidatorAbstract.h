@@ -59,7 +59,7 @@ class JosmMapValidatorAbstract : public OsmMapOperation, public Configurable
 public:
 
   JosmMapValidatorAbstract();
-  virtual ~JosmMapValidatorAbstract() = default;
+  ~JosmMapValidatorAbstract();
 
   /**
    * @see Configurable
