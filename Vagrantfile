@@ -59,10 +59,9 @@ else
 end
 
 
-# By default, don't try to add software repos or run "yum upgrade" in the VM's
-# Not sure if this need to be able to be triggered from the commandline
+# By default, don't try to add software repos in the VM's
+# Not sure if this needs to be able to be triggered from the commandline
 $addRepos = "no"
-$yumUpdate = "no"
 
 # Hootenanny port mapping
 # If this is set, the VM will not forward any ports to the host
@@ -86,6 +85,11 @@ end
 $nodeExportPort = ENV['NODE_EXPORT_PORT']
 if $nodeExportPort.nil?
   $nodeExportPort = 8101
+end
+
+$yumUpdate = ENV['YUMUPDATE']
+if $yumUpdate.nil?
+  $yumUpdate = "no"
 end
 
 Vagrant.configure(2) do |config|
