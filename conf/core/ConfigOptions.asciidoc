@@ -2205,7 +2205,7 @@ satisfy the criterion.
 
 * Data Type: list
 * Default Value:
-** `${HOOT_HOME}/hoot-josm/target/dependency-jars/josm.jar;${HOOT_HOME}/hoot-josm/target/hoot-josm.jar`
+** `${HOOT_HOME}/hoot-josm/target/hoot-josm.jar;${HOOT_HOME}/hoot-josm/target/dependency-jars/josm.jar`
 
 A list of JAR files to place on the JAVA classpath when Hootenanny C++ code in the hoot-josm project
 interacts with Hootenany and JOSM Java code via JNI. At a minimum this path includes the JOSM jar

@@ -174,14 +174,21 @@ private:
   {      
     LOG_STATUS("Loading " << inputs.size() << " map(s)...");
     OsmMapPtr map = std::make_shared<OsmMap>();
+    QString inputName;
     // We need the whole map in memory to validate it, so no point in trying to stream it in.
     if (inputs.size() == 1)
     {
+      inputName = inputs.at(0);
       IoUtils::loadMap(map, inputs.at(0), true, Status::Unknown1);
     }
     else
     {
       // Avoid ID conflicts across multiple inputs.
+      for (int i = 0; i < inputs.size(); i++)
+      {
+        inputName += inputs.at(i) + ";";
+      }
+      inputName.chop(1);
       IoUtils::loadMaps(map, inputs, false, Status::Unknown1);
     }
 
@@ -194,7 +201,7 @@ private:
       IoUtils::saveMap(map, output);
     }
 
-    return validator->getSummary();
+    return "Input: " + inputName + "\n" + validator->getSummary();
   }
 
   QString _validateSeparateOutput(const QStringList& inputs)
@@ -213,6 +220,7 @@ private:
       LOG_STATUS(
         "Validating map " << i + 1 << " of " << inputs.size() << ": ..." << input.right(25) <<
         "...");
+      validationSummary += "Input: " + input + "\n";
       validationSummary += _validate(map)->getSummary() + "\n\n";
 
       // Write the output to a similarly named path as the input with some text appended to the

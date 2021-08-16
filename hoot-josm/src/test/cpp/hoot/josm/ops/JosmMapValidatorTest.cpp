@@ -63,7 +63,7 @@ public:
     CPPUNIT_ASSERT(validators.size() > 0);
     CPPUNIT_ASSERT(validators.contains("DuplicatedWayNodes"));
     // We replace the inner class separator, '$', with '.' for readability, so check that.
-    CPPUNIT_ASSERT(validators.contains("CrossingWays.SelfCrossing"));
+    CPPUNIT_ASSERT(validators.contains("CrossingWays.Boundaries"));
   }
 
   void runEmptyValidatorsTest()

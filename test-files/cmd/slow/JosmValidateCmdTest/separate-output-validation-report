@@ -1,9 +1,11 @@
+Input: test-output/cmd/slow/JosmValidateCmdTest/runCleanTest1-in.osm
 Total JOSM validation errors: 4 found in 45 total features.
 Duplicated way nodes errors: 1
 Unclosed Ways errors: 2
 Untagged, empty and one node ways errors: 1
 Total failing JOSM validators: 0
 
+Input: test-output/cmd/slow/JosmValidateCmdTest/runCleanTest2-in.osm
 Total JOSM validation errors: 4 found in 45 total features.
 Duplicated way nodes errors: 1
 Unclosed Ways errors: 2

@@ -30,6 +30,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/josm/jni/JniUtils.h>
 
 // Qt
 #include <QFile>
@@ -49,9 +50,23 @@ _env(nullptr)
 
 JavaEnvironment::~JavaEnvironment()
 {
+  if (_env != nullptr)
+  {
+    LOG_TRACE("Calling garbage collector...");
+    jclass systemClass = _env->FindClass("java/lang/System");
+    jmethodID systemGCMethod = _env->GetStaticMethodID(systemClass, "gc", "()V");
+    _env->CallStaticVoidMethod(systemClass, systemGCMethod);
+    if (_env->ExceptionCheck())
+    {
+      _env->ExceptionDescribe();
+      _env->ExceptionClear();
+    }
+  }
+
   if (_vm != nullptr)
   {
     jint status;
+
     LOG_TRACE("Detaching current thread...");
     status = _vm->DetachCurrentThread();
     if (status != JNI_OK)
@@ -59,6 +74,7 @@ JavaEnvironment::~JavaEnvironment()
       LOG_ERROR(
         "Unable to detach JVM from current thread. Error code: " << QString::number(status));
     }
+
     // If this call hangs, its very likely there is a thread other than the one that launched this
     // JVM that is still running due to holding onto a reference, etc. Use kill -3 on the hoot or
     // HootTest process ID to determine what in JOSM is holding onto the memory.
