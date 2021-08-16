@@ -76,7 +76,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailingValidators());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
     HOOT_STR_EQUALS(
-      "Total JOSM validation errors: 0 found in 40 total features.\n"
+      "Found 0 validation errors in 40 features.\n"
       "Total elements cleaned: 0\n"
       "Total elements deleted: 0\n"
       "Total failing JOSM validators: 0\n"
@@ -111,7 +111,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
     HOOT_STR_EQUALS(
-      "Total JOSM validation errors: 4 found in 45 total features.\n"
+      "Found 4 validation errors in 45 features.\n"
       "Total elements cleaned: 1\n"
       "Total elements deleted: 0\n"
       "Total failing JOSM validators: 0\n"
@@ -149,7 +149,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
     HOOT_STR_EQUALS(
-      "Total JOSM validation errors: 4 found in 45 total features.\n"
+      "Found 4 validation errors in 45 features.\n"
       "Total elements cleaned: 1\n"
       "Total elements deleted: 0\n"
       "Total failing JOSM validators: 0\n"
@@ -187,7 +187,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
     HOOT_STR_EQUALS(
-      "Total JOSM validation errors: 4 found in 45 total features.\n"
+      "Found 4 validation errors in 45 features.\n"
       "Total elements cleaned: 1\n"
       "Total elements deleted: 0\n"
       "Total failing JOSM validators: 0\n"

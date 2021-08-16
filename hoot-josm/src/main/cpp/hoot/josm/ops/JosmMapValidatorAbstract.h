@@ -132,7 +132,7 @@ protected:
   virtual void _getStats();
 
   QMap<QString, int> _getValidationErrorCountsByType();
-  int _getNumFailingValidators();
+  QMap<QString, QString> _getFailingValidatorInfo();
   int _getNumValidationErrors();
 
   /*
@@ -146,7 +146,6 @@ private:
   friend class JosmMapCleanerTest;
 
   void _initJosmImplementation();
-  void _deactivateJosm();
 };
 
 }

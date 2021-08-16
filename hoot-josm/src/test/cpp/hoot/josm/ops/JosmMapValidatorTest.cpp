@@ -103,7 +103,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailingValidators());
     HOOT_STR_EQUALS(
-      "Total JOSM validation errors: 4 found in 45 total features.\n"
+      "Found 4 validation errors in 45 features.\n"
       "Duplicated way nodes errors: 1\n"
       "Unclosed Ways errors: 2\n"
       "Untagged, empty and one node ways errors: 1\n"
@@ -137,7 +137,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailingValidators());
     HOOT_STR_EQUALS(
-      "Total JOSM validation errors: 4 found in 45 total features.\n"
+      "Found 4 validation errors in 45 features.\n"
       "Duplicated way nodes errors: 1\n"
       "Unclosed Ways errors: 2\n"
       "Untagged, empty and one node ways errors: 1\n"

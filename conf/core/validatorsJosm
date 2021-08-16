@@ -1,27 +1,20 @@
 # Configuration file containing a line delimited list of JOSM validator Java class names without
 # namespace prefixes or file extensions (e.g. 'DuplicatedWayNodes') to use during validation or
 # cleaning. This is configured within Hootenanny rather than loaded from the JOSM configuration due 
-# to the fact the auto-instantiation of validators by OsmValidator can cause the JVM to hang. With 
-# each JOSM upgrade a check needs to be made for new available validators by looking at the 
-# hardcoded list in the OsmValidator::CORE_TEST_CLASSES member variable and this file updated 
-# accordingly.
-#
-# Note: We're currently explicitly skipping the following due to current lack of support in 
-# hoot-josm for security certificates:
-#
-# ApiCapabilitiesTest
-# MapCssTagCheckerTest
-#
-# All others (and MapCssTagCheckerTest) are commented out due to bug in #4951.
+# to the fact the auto-instantiation of some validators by OsmValidator can cause the JVM to hang at 
+# shutdown. This config file also allows us to tailor the validators for use with hoot. With each 
+# JOSM upgrade a check needs to be made for new available validators by looking at the hardcoded 
+# list in the OsmValidator::CORE_TEST_CLASSES member variable and this file updated accordingly.
 
 Addresses
+ApiCapabilitiesTest
 BarriersEntrances
 Coastlines
 ConditionalKeys
 ConnectivityRelations
 CrossingWays.Boundaries
-#CrossingWays.SelfCrossing
-#CrossingWays.Ways
+CrossingWays.SelfCrossing
+CrossingWays.Ways
 DirectionNodes
 DuplicateRelation
 DuplicateWay
@@ -30,18 +23,19 @@ Highways
 InternetTags
 Lanes
 LongSegment
-#MultipolygonTest
+MapCSSTagChecker
+MultipolygonTest
 NameMismatch
-#OpeningHourTest 
-#OverlappingWays
+OpeningHourTest 
+OverlappingWays
 PowerLines
 PublicTransportRouteTest
-#RelationChecker
+RelationChecker
 RightAngleBuildingTest
 SelfIntersectingWay
 SharpAngles
-#SimilarNamedWays
-#TagChecker
+SimilarNamedWays
+TagChecker
 TurnrestrictionTest
 UnclosedWays
 UnconnectedWays.UnconnectedHighways

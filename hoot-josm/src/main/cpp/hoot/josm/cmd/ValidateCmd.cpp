@@ -166,7 +166,6 @@ private:
     validator->setConfiguration(conf());
     LOG_STATUS(validator->getInitStatusMessage());
     validator->apply(map);
-    LOG_INFO(validator->getCompletedStatusMessage());
     return validator;
   }
 

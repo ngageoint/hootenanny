@@ -42,6 +42,12 @@ jstring JniConversion::toJavaString(JNIEnv* javaEnv, const QString& cppStr)
 QString JniConversion::fromJavaString(JNIEnv* javaEnv, jstring javaStr)
 {
   LOG_TRACE("Converting from java string...");
+
+  if (javaStr == nullptr)
+  {
+    return "";
+  }
+
   jboolean isCopy;
   const char* data = javaEnv->GetStringUTFChars(javaStr, &isCopy);
   QString result = QString::fromUtf8(data);
@@ -80,6 +86,11 @@ QStringList JniConversion::fromJavaStringList(JNIEnv* javaEnv, jobject javaStrLi
 {
   LOG_TRACE("Converting from java string list...");
 
+  if (javaStrList == nullptr)
+  {
+    return QStringList();
+  }
+
   // see related note about method mappings in fromJavaStringMap
   jclass listClass = javaEnv->FindClass("java/util/List");
   jmethodID listSizeMethod = javaEnv->GetMethodID(listClass, "size", "()I");
@@ -109,6 +120,11 @@ QStringList JniConversion::fromJavaStringList(JNIEnv* javaEnv, jobject javaStrLi
 QSet<QString> JniConversion::fromJavaStringSet(JNIEnv* javaEnv, jobject javaStrSet)
 {
   QSet<QString> result;
+
+  if (javaStrSet == nullptr)
+  {
+    return result;
+  }
 
   // see related note about method mappings in fromJavaStringMap
   jclass setClass = javaEnv->GetObjectClass(javaStrSet);
@@ -141,6 +157,11 @@ QMap<QString, QString> JniConversion::fromJavaStringMap(JNIEnv* javaEnv, jobject
   LOG_TRACE("Converting from java string string map...");
 
   QMap<QString, QString> result;
+
+  if (javaMap == nullptr)
+  {
+    return result;
+  }
 
   // Creating these method mappings each time for now. If that proves to be a performance bottleneck
   // at some point, we can create some global refs.
@@ -201,6 +222,11 @@ QMap<QString, int> JniConversion::fromJavaStringIntMap(JNIEnv* javaEnv, jobject 
   LOG_TRACE("Converting from java string int map...");
 
   QMap<QString, int> result;
+
+  if (javaMap == nullptr)
+  {
+    return result;
+  }
 
   // yes, this is kind of kludgy...could time to come up with a templated version at some point
   QMap<QString, QString> tempResult = fromJavaStringMap(javaEnv, javaMap);

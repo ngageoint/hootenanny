@@ -84,10 +84,7 @@ public class JosmMapCleaner
 
   public int getNumElementsCleaned() { return numElementsCleaned; }
 
-  public int getNumFailedCleaningOperations()
-  {
-    return failedCleaningOps.size();
-  }
+  public Map<String, String> getFailingCleanerInfo() { return failedCleaningOps; }
 
   /**
    * Returns the counts of elements that were cleaned, organized by validation error type, during

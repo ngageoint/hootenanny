@@ -54,6 +54,8 @@ import org.openstreetmap.josm.data.Preferences;
 import org.openstreetmap.josm.io.OsmWriter;
 import org.openstreetmap.josm.io.OsmWriterFactory;
 import org.openstreetmap.josm.data.osm.DataSet;
+import org.openstreetmap.josm.tools.HttpClient;
+import org.openstreetmap.josm.tools.Http1Client;
 
 /**
  * Various utilities for use when using JOSM from hoot-josm
@@ -77,6 +79,7 @@ public class JosmUtils
     Config.setUrlsProvider(JosmUrls.getInstance());
     DeleteCommand.setDeletionCallback(DeleteAction.defaultDeletionCallback);
     ProjectionPreference.setProjection(ProjectionPreference.wgs84.getId(), null, true);
+    HttpClient.setFactory(Http1Client::new);
 
     Logging.debug(
       "base directory: " +
@@ -84,11 +87,6 @@ public class JosmUtils
     Logging.debug("Proj: " + ProjectionRegistry.getProjection().toString());
 
     Logging.debug("JOSM initialized.");
-  }
-
-  public static void deactivateJosm()
-  {
-    Preferences.main().resetToDefault();
   }
 
   /**

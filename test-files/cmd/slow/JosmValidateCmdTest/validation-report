@@ -1,5 +1,4 @@
-Input: test-files/ops/JosmMapCleanerTest/runCleanTest-in.osm
-Found 4 validation errors in 45 features.
+Total JOSM validation errors: 4 found in 45 total features.
 Duplicated way nodes errors: 1
 Unclosed Ways errors: 2
 Untagged, empty and one node ways errors: 1

@@ -52,7 +52,7 @@ JavaEnvironment::~JavaEnvironment()
 {
   if (_env != nullptr)
   {
-    LOG_TRACE("Calling garbage collector...");
+    LOG_DEBUG("Calling garbage collector...");
     jclass systemClass = _env->FindClass("java/lang/System");
     jmethodID systemGCMethod = _env->GetStaticMethodID(systemClass, "gc", "()V");
     _env->CallStaticVoidMethod(systemClass, systemGCMethod);
@@ -68,7 +68,7 @@ JavaEnvironment::~JavaEnvironment()
   {
     jint status;
 
-    LOG_TRACE("Detaching current thread...");
+    LOG_DEBUG("Detaching current thread...");
     status = _vm->DetachCurrentThread();
     if (status != JNI_OK)
     {
@@ -79,7 +79,7 @@ JavaEnvironment::~JavaEnvironment()
     // If this call hangs, its very likely there is a thread other than the one that launched this
     // JVM that is still running due to holding onto a reference, etc. Use kill -3 on the hoot or
     // HootTest process ID to determine what in JOSM is holding onto the memory.
-    LOG_TRACE("Destroying Java env...");
+    LOG_DEBUG("Destroying Java env...");
     status = _vm->DestroyJavaVM();
     if (status != JNI_OK)
     {

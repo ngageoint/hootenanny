@@ -6,7 +6,7 @@ DuplicatedWayNodes                              Duplicated way nodes
 Validating a single input...
 
 Input: test-files/ops/JosmMapCleanerTest/runCleanTest-in.osm
-Total JOSM validation errors: 4 found in 45 total features.
+Found 4 validation errors in 45 features.
 Duplicated way nodes errors: 1
 Unclosed Ways errors: 2
 Untagged, empty and one node ways errors: 1
@@ -15,7 +15,7 @@ Total failing JOSM validators: 0
 Validating a single input and using an output file...
 
 Input: test-files/ops/JosmMapCleanerTest/runCleanTest-in.osm
-Total JOSM validation errors: 4 found in 45 total features.
+Found 4 validation errors in 45 features.
 Duplicated way nodes errors: 1
 Unclosed Ways errors: 2
 Untagged, empty and one node ways errors: 1
@@ -27,7 +27,7 @@ Validating a single input and writing the report to a file...
 Validating multiple inputs...
 
 Input: test-files/ops/JosmMapCleanerTest/runCleanTest-in.osm;test-files/ops/JosmMapCleanerTest/runCleanTest-in.osm
-Total JOSM validation errors: 8 found in 90 total features.
+Found 8 validation errors in 90 features.
 Duplicated way nodes errors: 2
 Unclosed Ways errors: 4
 Untagged, empty and one node ways errors: 2
@@ -36,7 +36,7 @@ Total failing JOSM validators: 0
 Validating recursively in a directory structure with a filter...
 
 Input: test-files/ops/JosmMapCleanerTest/runCleanTest-in.json
-Total JOSM validation errors: 4 found in 45 total features.
+Found 4 validation errors in 45 features.
 Duplicated way nodes errors: 1
 Unclosed Ways errors: 2
 Untagged, empty and one node ways errors: 1

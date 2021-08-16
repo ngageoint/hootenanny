@@ -95,16 +95,6 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
   LOG_DEBUG("JOSM implementation initialized.");
 }
 
-void JosmMapValidatorAbstract::_deactivateJosm()
-{
-  LOG_DEBUG("Deactivating JOSM implementation...");
-  jclass utilsCls = _javaEnv->FindClass("hoot/josm/JosmUtils");
-  jmethodID deactivateMethod = _javaEnv->GetStaticMethodID(utilsCls, "deactivateJosm", "()V");
-  _javaEnv->CallStaticVoidMethod(utilsCls, deactivateMethod);
-  JniUtils::checkForErrors(_javaEnv, "_deactivateJosm");
-  _javaEnv->DeleteLocalRef(utilsCls);
-}
-
 QMap<QString, QString> JosmMapValidatorAbstract::getValidatorDetail()
 {
   if (_josmValidators.isEmpty())
@@ -128,7 +118,6 @@ QMap<QString, QString> JosmMapValidatorAbstract::getValidatorDetail()
         _josmInterfaceClass, "getValidatorDetail", "(Ljava/util/List;)Ljava/util/Map;"),
         JniConversion::toJavaStringList(_javaEnv, _josmValidators));
   JniUtils::checkForErrors(_javaEnv, "getValidatorDetail");
-  _deactivateJosm();
   return JniConversion::fromJavaStringMap(_javaEnv, validatorsJavaMap);
 }
 
@@ -140,6 +129,11 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
   }
 
   LOG_VARD(map->size());
+  if (map->isEmpty())
+  {
+    LOG_DEBUG("Skipping processing of empty map.");
+    return;
+  }
   //LOG_TRACE("Input map: " << OsmXmlWriter::toString(map, true));
 
   _numAffected = map->size();
@@ -169,8 +163,6 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
 
   JniUtils::checkForErrors(_javaEnv, "JosmMapValidatorAbstract::apply");
 
-  _deactivateJosm();
-
   if (Log::getInstance().getLevel() > Log::Debug)
   {
     LOG_INFO(getCompletedStatusMessage());
@@ -184,16 +176,23 @@ void JosmMapValidatorAbstract::_getStats()
   // JNI sig format: (input params...)return type
 
   _numValidationErrors = _getNumValidationErrors();
-  _numFailingValidators = _getNumFailingValidators();
+  const QMap<QString, QString> failingValidatorInfo = _getFailingValidatorInfo();
+  _numFailingValidators = failingValidatorInfo.size();
 
   // TODO: Try to simplify this with SingleStat.
   _errorSummary =
-    "Total JOSM validation errors: " + StringUtils::formatLargeNumber(_numValidationErrors) +
-    " found in " + StringUtils::formatLargeNumber(_numAffected) + " total features.\n";
+    "Found " + StringUtils::formatLargeNumber(_numValidationErrors) +
+    " validation errors in " + StringUtils::formatLargeNumber(_numAffected) + " features.\n";
   // convert the validation error info to a readable summary string
   _errorSummary += _errorCountsByTypeToSummaryStr(_getValidationErrorCountsByType());
   _errorSummary +=
-    "Total failing JOSM validators: " + QString::number(_numFailingValidators);
+    "Total failing JOSM validators: " + QString::number(_numFailingValidators) + "\n";
+  foreach (QString validatorName, failingValidatorInfo.keys())
+  {
+    _errorSummary +=
+      "Validator: " + validatorName + " failed with error: " +
+      failingValidatorInfo[validatorName] + ".\n";
+  }
   _errorSummary = _errorSummary.trimmed();
   LOG_VART(_errorSummary);
 }
@@ -209,15 +208,16 @@ int JosmMapValidatorAbstract::_getNumValidationErrors()
   return numValidationErrors;
 }
 
-int JosmMapValidatorAbstract::_getNumFailingValidators()
-{
-  const int numFailingValidators =
-    (int)_javaEnv->CallIntMethod(
+QMap<QString, QString> JosmMapValidatorAbstract::_getFailingValidatorInfo()
+{ 
+  jobject failingValidatorInfo =
+    _javaEnv->CallObjectMethod(
       _josmInterface,
-      // Java sig: int getNumFailingValidators()
-      _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailingValidators", "()I"));
-  JniUtils::checkForErrors(_javaEnv, "getNumFailingValidators");
-  return numFailingValidators;
+      // Java sig: Map<String, String> getFailingValidatorInfo()
+      _javaEnv->GetMethodID(
+        _josmInterfaceClass, "getFailingValidatorInfo", "()Ljava/util/Map;"));
+  JniUtils::checkForErrors(_javaEnv, "getFailingValidatorInfo");
+  return JniConversion::fromJavaStringMap(_javaEnv, failingValidatorInfo);
 }
 
 QMap<QString, int> JosmMapValidatorAbstract::_getValidationErrorCountsByType()
