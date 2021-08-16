@@ -196,6 +196,7 @@ pipeline {
                 stage("Core Coverage") {
                     when { expression { return params.Core_coverage } }
                     steps {
+                        sh "sleep 10s"
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; make -j`nproc` core-coverage; tar czf coverage.tar.gz coverage || touch coverage.tar.gz'"
                         sh "vagrant scp ${params.Box}:~/hoot/coverage.tar.gz ./"
                         archiveArtifacts artifacts: '**/coverage.tar.gz'
@@ -212,15 +213,16 @@ pipeline {
                             }
                         }
                     }
-                    steps{
-                            sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; \
-                                JAVA_HOME=/usr/lib/jvm/java-11-openjdk \
-                                mvn sonar:sonar \
-                                -Dsonar.host.url=https://sonarcloud.io \
-                                -Dsonar.organization=hootenanny \
-                                -Dsonar.login=${env.SONAR_CLOUD_KEY} \
-                                -Dsonar.projectKey=hoot-services \
-                                -Dsonar.branch.name=${env.BRANCH_NAME}'"
+                    steps {
+                        sh "sleep 20s"
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; \
+                            JAVA_HOME=/usr/lib/jvm/java-11-openjdk \
+                            mvn sonar:sonar \
+                            -Dsonar.host.url=https://sonarcloud.io \
+                            -Dsonar.organization=hootenanny \
+                            -Dsonar.login=${env.SONAR_CLOUD_KEY} \
+                            -Dsonar.projectKey=hoot-services \
+                            -Dsonar.branch.name=${env.BRANCH_NAME}'"
 
                         script {
                             if (env.BRANCH_NAME.startsWith("PR-")) {
