@@ -76,6 +76,7 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
   LOG_VART(_josmInterfaceClass == 0);
   _javaEnv->ReleaseStringUTFChars(interfaceJavaStr, interfaceChars);
 
+  jstring logLevel = JniConversion::toJavaString(_javaEnv, Log::getInstance().getLevelAsString());
   _josmInterface =
     // Thought it would be best to wrap this in a global ref, since its possible it could be garbage
     // collected at any time. Then it could have been cleaned up in the destructor. However, that's
@@ -84,12 +85,11 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
     _javaEnv->NewObject(
       _josmInterfaceClass,
       // Java sig: <ClassName>(String logLevel)
-      _javaEnv->GetMethodID(
-        _josmInterfaceClass, "<init>", "(Ljava/lang/String;)V"),
-      // logLevel
-      JniConversion::toJavaString(_javaEnv, Log::getInstance().getLevelAsString()));
+      _javaEnv->GetMethodID(_josmInterfaceClass, "<init>", "(Ljava/lang/String;)V"),
+      logLevel);
   LOG_VART(_josmInterface == 0);
   JniUtils::checkForErrors(_javaEnv, _josmInterfaceName + " constructor");
+  _javaEnv->DeleteLocalRef(logLevel);
   _josmInterfaceInitialized = true;
 
   LOG_DEBUG("JOSM implementation initialized.");
@@ -117,12 +117,7 @@ QMap<QString, QString> JosmMapValidatorAbstract::getValidatorDetail()
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "getValidatorDetail", "(Ljava/util/List;)Ljava/util/Map;"),
         JniConversion::toJavaStringList(_javaEnv, _josmValidators));
-  if (_javaEnv->ExceptionCheck())
-  {
-    _javaEnv->ExceptionDescribe();
-    _javaEnv->ExceptionClear();
-    throw HootException("Error calling getValidatorDetail.");
-  }
+  JniUtils::checkForErrors(_javaEnv, "getValidatorDetail");
   return JniConversion::fromJavaStringMap(_javaEnv, validatorsJavaMap);
 }
 
@@ -161,12 +156,7 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
     LOG_ERROR("No map returned from JOSM validation.");
   }
 
-  if (_javaEnv->ExceptionCheck())
-  {
-    _javaEnv->ExceptionDescribe();
-    _javaEnv->ExceptionClear();
-    throw HootException("Error calling getValidatorDetail.");
-  }
+  JniUtils::checkForErrors(_javaEnv, "JosmMapValidatorAbstract::apply");
 
   if (Log::getInstance().getLevel() > Log::Debug)
   {
