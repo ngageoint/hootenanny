@@ -425,6 +425,7 @@ rebuild-db:
 
 HOOT_TARNAME=hootenanny-$(HOOT_VERSION)
 JAVADOC_TARBALL=docs/hootenanny-services-javadoc-$(HOOT_VERSION).tar.gz
+dist: archive
 archive: js-make services-docs docs
 	mkdir -p $(HOOT_TARNAME)/docs/
 	if [ "$(BUILD_SERVICES)" == "services" ]; then \

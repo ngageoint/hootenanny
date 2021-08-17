@@ -63,6 +63,7 @@ help:
 	@echo "core-coverage           - If configured '--with-coverage', then create coverage reports for the core."
 	@echo "coverage                - If configured '--with-coverage', then create test coverage reports."
 	@echo "docs                    - Build all project documentation."
+	@echo "dist                    - Make a distributable tarball."
 	@echo "eclipse                 - If configured '--with-services', then build Eclipse IDE project files."
 	@echo "osmapidb                - If configured '--with-services', then build a clean copy of an OSM API database."
 	@echo "translations-test       - Run the mocha translations tests. Should take less than five minutes."
