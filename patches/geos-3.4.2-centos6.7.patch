@@ -1,0 +1,463 @@
+diff -Nuar geos-3.4.2/include/geos/geom/Geometry.h geos-3.4.2-patched/include/geos/geom/Geometry.h
+--- geos-3.4.2/include/geos/geom/Geometry.h	2013-08-25 09:10:31.000000000 -0600
++++ geos-3.4.2-patched/include/geos/geom/Geometry.h	2016-01-18 12:48:16.226096676 -0700
+@@ -832,13 +832,10 @@
+ 
+ 	int getClassSortIndex() const;
+ 
+-	class GeometryChangedFilter : public GeometryComponentFilter
++	class GEOS_DLL GeometryChangedFilter : public GeometryComponentFilter
+ 	{
+ 	public:
+-		void filter_rw(Geometry* geom)
+-		{
+-			geom->geometryChangedAction();
+-		}
++		void filter_rw(Geometry* geom);
+ 	};
+ 
+ 	static GeometryChangedFilter geometryChangedFilter;
+diff -Nuar geos-3.4.2/include/geos/geom/util/ComponentCoordinateExtracter.h geos-3.4.2-patched/include/geos/geom/util/ComponentCoordinateExtracter.h
+--- geos-3.4.2/include/geos/geom/util/ComponentCoordinateExtracter.h	2013-08-25 09:10:31.000000000 -0600
++++ geos-3.4.2-patched/include/geos/geom/util/ComponentCoordinateExtracter.h	2016-01-18 12:48:16.226096676 -0700
+@@ -45,44 +45,17 @@
+ 	 * efficient to create a single ComponentCoordinateFilter instance
+ 	 * and pass it to multiple geometries.
+ 	 */
+-	static void getCoordinates(const Geometry &geom, std::vector<const Coordinate*> &ret)
+-	{
+-		ComponentCoordinateExtracter cce(ret);
+-		geom.apply_ro(&cce);
+-	}
++	static void getCoordinates(const Geometry &geom, std::vector<const Coordinate*> &ret);
+ 
+ 	/**
+ 	 * Constructs a ComponentCoordinateFilter with a list in which
+ 	 * to store Coordinates found.
+ 	 */
+-	ComponentCoordinateExtracter( std::vector<const Coordinate*> &newComps)
+-		:
+-		comps(newComps)
+-		{}
++	ComponentCoordinateExtracter( std::vector<const Coordinate*> &newComps);
+ 
+-	void filter_rw( Geometry * geom)
+-	{
+-		if (	geom->getGeometryTypeId() == geos::geom::GEOS_LINEARRING 
+-			||	geom->getGeometryTypeId() == geos::geom::GEOS_LINESTRING
+-			||	geom->getGeometryTypeId() == geos::geom::GEOS_POINT ) 
+-			comps.push_back( geom->getCoordinate() );
+-		//if (	typeid( *geom ) == typeid( LineString )
+-		//	||	typeid( *geom ) == typeid( Point ) )
+-		//if ( const Coordinate *ls=dynamic_cast<const Coordinate *>(geom) )
+-		//	comps.push_back(ls);
+-	}
++	void filter_rw( Geometry * geom);
+ 
+-	void filter_ro( const Geometry * geom)
+-	{
+-		//if (	typeid( *geom ) == typeid( LineString )
+-		//	||	typeid( *geom ) == typeid( Point ) )
+-		if (	geom->getGeometryTypeId() == geos::geom::GEOS_LINEARRING 
+-			||	geom->getGeometryTypeId() == geos::geom::GEOS_LINESTRING
+-			||	geom->getGeometryTypeId() == geos::geom::GEOS_POINT ) 
+-			comps.push_back( geom->getCoordinate() );
+-		//if ( const Coordinate *ls=dynamic_cast<const Coordinate *>(geom) )
+-		//	comps.push_back(ls);
+-	}
++	void filter_ro( const Geometry * geom);
+ 
+ private:
+ 
+diff -Nuar geos-3.4.2/include/geos/geom/util/LinearComponentExtracter.h geos-3.4.2-patched/include/geos/geom/util/LinearComponentExtracter.h
+--- geos-3.4.2/include/geos/geom/util/LinearComponentExtracter.h	2013-08-25 09:10:31.000000000 -0600
++++ geos-3.4.2-patched/include/geos/geom/util/LinearComponentExtracter.h	2016-01-18 12:48:16.226096676 -0700
+@@ -50,32 +50,16 @@
+ 	 * efficient to create a single LinearComponentExtracterFilter instance
+ 	 * and pass it to multiple geometries.
+ 	 */
+-	static void getLines(const Geometry &geom, std::vector<const LineString*> &ret)
+-	{
+-		LinearComponentExtracter lce(ret);
+-		geom.apply_ro(&lce);
+-	}
+-
++	static void getLines(const Geometry &geom, std::vector<const LineString*> &ret);
+ 	/**
+ 	 * Constructs a LinearComponentExtracterFilter with a list in which
+ 	 * to store LineStrings found.
+ 	 */
+-	LinearComponentExtracter(std::vector<const LineString*> &newComps)
+-		:
+-		comps(newComps)
+-		{}
++	LinearComponentExtracter(std::vector<const LineString*> &newComps);
+ 
+-	void filter_rw(Geometry *geom)
+-	{
+-if ( const LineString *ls=dynamic_cast<const LineString *>(geom) )
+-		comps.push_back(ls);
+-	}
++	void filter_rw(Geometry *geom);
+ 
+-	void filter_ro(const Geometry *geom)
+-	{
+-if ( const LineString *ls=dynamic_cast<const LineString *>(geom) )
+-		comps.push_back(ls);
+-	}
++	void filter_ro(const Geometry *geom);
+ 
+ };
+ 
+diff -Nuar geos-3.4.2/include/geos/geom/util/PointExtracter.h geos-3.4.2-patched/include/geos/geom/util/PointExtracter.h
+--- geos-3.4.2/include/geos/geom/util/PointExtracter.h	2013-08-25 09:10:31.000000000 -0600
++++ geos-3.4.2-patched/include/geos/geom/util/PointExtracter.h	2016-01-18 12:48:16.226096676 -0700
+@@ -38,32 +38,17 @@
+ 	 * efficient to create a single PointExtracter filter instance
+ 	 * and pass it to multiple geometries.
+ 	 */
+-	static void getPoints(const Geometry &geom, Point::ConstVect &ret)
+-	{
+-		PointExtracter pe(ret);
+-		geom.apply_ro(&pe);
+-	}
++	static void getPoints(const Geometry &geom, Point::ConstVect &ret);
+ 
+ 	/**
+ 	 * Constructs a PointExtracterFilter with a list in which
+ 	 * to store Points found.
+ 	 */
+-	PointExtracter(Point::ConstVect& newComps)
+-		:
+-		comps(newComps)
+-		{}
++	PointExtracter(Point::ConstVect& newComps);
+ 
+-	void filter_rw(Geometry *geom)
+-	{
+-if ( const Point *p=dynamic_cast<const Point *>(geom) )
+-		comps.push_back(p);
+-	}
++	void filter_rw(Geometry *geom);
+ 
+-	void filter_ro(const Geometry *geom)
+-	{
+-if ( const Point *p=dynamic_cast<const Point *>(geom) )
+-		comps.push_back(p);
+-	}
++	void filter_ro(const Geometry *geom);
+ 
+ private:
+ 
+diff -Nuar geos-3.4.2/include/geos/geom/util/PolygonExtracter.h geos-3.4.2-patched/include/geos/geom/util/PolygonExtracter.h
+--- geos-3.4.2/include/geos/geom/util/PolygonExtracter.h	2013-08-25 09:10:31.000000000 -0600
++++ geos-3.4.2-patched/include/geos/geom/util/PolygonExtracter.h	2016-01-18 12:48:16.226096676 -0700
+@@ -40,35 +40,17 @@
+ 	 * efficient to create a single PolygonExtracterFilter instance
+ 	 * and pass it to multiple geometries.
+ 	 */
+-	static void getPolygons(const Geometry &geom, std::vector<const Polygon*>& ret)
+-	{
+-		PolygonExtracter pe(ret);
+-		geom.apply_ro(&pe);
+-	}
++	static void getPolygons(const Geometry &geom, std::vector<const Polygon*>& ret);
+ 
+ 	/**
+ 	 * Constructs a PolygonExtracterFilter with a list in which
+ 	 * to store Polygons found.
+ 	 */
+-	PolygonExtracter(std::vector<const Polygon*>& newComps)
+-		:
+-		comps(newComps)
+-		{}
++	PolygonExtracter(std::vector<const Polygon*>& newComps);
+ 
+-	void filter_rw(Geometry *geom) {
+-		if ( const Polygon *p=dynamic_cast<const Polygon *>(geom) )
+-		{
+-			comps.push_back(p);
+-		}
+-	}
++	void filter_rw(Geometry *geom);
+ 
+-	void filter_ro(const Geometry *geom)
+-	{
+-		if ( const Polygon *p=dynamic_cast<const Polygon *>(geom) )
+-		{
+-			comps.push_back(p);
+-		}
+-	}
++	void filter_ro(const Geometry *geom);
+ 
+ private:
+ 
+diff -Nuar geos-3.4.2/src/geom/Geometry.cpp geos-3.4.2-patched/src/geom/Geometry.cpp
+--- geos-3.4.2/src/geom/Geometry.cpp	2013-08-25 09:10:29.000000000 -0600
++++ geos-3.4.2-patched/src/geom/Geometry.cpp	2016-01-18 12:48:16.226096676 -0700
+@@ -687,6 +687,11 @@
+ #endif
+ }
+ 
++void Geometry::GeometryChangedFilter::filter_rw(Geometry* geom)
++{
++   geom->geometryChangedAction();
++}
++
+ int
+ Geometry::compare(vector<Coordinate> a, vector<Coordinate> b) const
+ {
+diff -Nuar geos-3.4.2/src/geom/util/ComponentCoordinateExtracter.cpp geos-3.4.2-patched/src/geom/util/ComponentCoordinateExtracter.cpp
+--- geos-3.4.2/src/geom/util/ComponentCoordinateExtracter.cpp	2013-08-25 09:10:29.000000000 -0600
++++ geos-3.4.2-patched/src/geom/util/ComponentCoordinateExtracter.cpp	2016-01-18 13:08:27.242241204 -0700
+@@ -1,7 +1,8 @@
+ /**********************************************************************
++ * $Id: ComponentCoordinateExtracter.cpp 2161 2008-08-18 16:29:09Z mloskot $
+  *
+  * GEOS - Geometry Engine Open Source
+- * http://geos.osgeo.org
++ * http://geos.refractions.net
+  *
+  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+  *
+@@ -20,6 +21,48 @@
+ namespace geom { // geos.geom
+ namespace util { // geos.geom.util
+ 
++         ComponentCoordinateExtracter::ComponentCoordinateExtracter( std::vector<const Coordinate*> &newComps)
++            :
++         comps(newComps)
++         {}
++
++         void ComponentCoordinateExtracter::filter_rw( Geometry * geom)
++         {
++            if (   geom->getGeometryTypeId() == geos::geom::GEOS_LINEARRING 
++               ||  geom->getGeometryTypeId() == geos::geom::GEOS_LINESTRING
++               ||  geom->getGeometryTypeId() == geos::geom::GEOS_POINT ) 
++               comps.push_back( geom->getCoordinate() );
++            //if ( typeid( *geom ) == typeid( LineString )
++            // ||  typeid( *geom ) == typeid( Point ) )
++            //if ( const Coordinate *ls=dynamic_cast<const Coordinate *>(geom) )
++            // comps.push_back(ls);
++         }
++
++         void ComponentCoordinateExtracter::filter_ro( const Geometry * geom)
++         {
++            //if ( typeid( *geom ) == typeid( LineString )
++            // ||  typeid( *geom ) == typeid( Point ) )
++            if (   geom->getGeometryTypeId() == geos::geom::GEOS_LINEARRING 
++               ||  geom->getGeometryTypeId() == geos::geom::GEOS_LINESTRING
++               ||  geom->getGeometryTypeId() == geos::geom::GEOS_POINT ) 
++               comps.push_back( geom->getCoordinate() );
++            //if ( const Coordinate *ls=dynamic_cast<const Coordinate *>(geom) )
++            // comps.push_back(ls);
++         }
++
++
++         void ComponentCoordinateExtracter::getCoordinates(const Geometry &geom, std::vector<const Coordinate*> &ret)
++         {
++            ComponentCoordinateExtracter cce(ret);
++            geom.apply_ro(&cce);
++         }
++
++
+ } // namespace geos.geom.util
+ } // namespace geos.geom
+ } // namespace geos
++
++/**********************************************************************
++ * $Log$
++ *
++ **********************************************************************/
+diff -Nuar geos-3.4.2/src/geom/util/LinearComponentExtracter.cpp geos-3.4.2-patched/src/geom/util/LinearComponentExtracter.cpp
+--- geos-3.4.2/src/geom/util/LinearComponentExtracter.cpp	1969-12-31 17:00:00.000000000 -0700
++++ geos-3.4.2-patched/src/geom/util/LinearComponentExtracter.cpp	2016-01-18 12:54:36.456838754 -0700
+@@ -0,0 +1,41 @@
++//LinearComponentExtracter.cpp
++
++
++#include <geos/export.h>
++#include <vector>
++
++#include <geos/geom/GeometryComponentFilter.h>
++#include <geos/geom/util/LinearComponentExtracter.h>
++
++namespace geos {
++   namespace geom { // geos.geom
++      namespace util { // geos.geom.util
++
++         LinearComponentExtracter::LinearComponentExtracter(std::vector<const LineString*> &newComps)
++            :
++         comps(newComps)
++         {}
++
++         void LinearComponentExtracter::getLines(const Geometry &geom, std::vector<const LineString*> &ret)
++         {
++            LinearComponentExtracter lce(ret);
++            geom.apply_ro(&lce);
++         }
++
++         void LinearComponentExtracter::filter_rw(Geometry *geom)
++         {
++            if ( const LineString *ls=dynamic_cast<const LineString *>(geom) )
++               comps.push_back(ls);
++         }
++
++         void LinearComponentExtracter::filter_ro(const Geometry *geom)
++         {
++            if ( const LineString *ls=dynamic_cast<const LineString *>(geom) )
++               comps.push_back(ls);
++         }
++
++      }
++   }
++}
++
++   
+\ No newline at end of file
+diff -Nuar geos-3.4.2/src/geom/util/Makefile.am geos-3.4.2-patched/src/geom/util/Makefile.am
+--- geos-3.4.2/src/geom/util/Makefile.am	2013-08-25 09:10:29.000000000 -0600
++++ geos-3.4.2-patched/src/geom/util/Makefile.am	2016-01-18 12:48:16.226096676 -0700
+@@ -12,4 +12,7 @@
+     GeometryTransformer.cpp \
+     ShortCircuitedGeometryVisitor.cpp \
+     SineStarFactory.cpp \
+-    GeometryCombiner.cpp
++    GeometryCombiner.cpp \
++    LinearComponentExtracter.cpp \
++    PointExtracter.cpp \
++    PolygonExtracter.cpp
+diff -Nuar geos-3.4.2/src/geom/util/Makefile.in geos-3.4.2-patched/src/geom/util/Makefile.in
+--- geos-3.4.2/src/geom/util/Makefile.in	2013-08-25 09:10:43.000000000 -0600
++++ geos-3.4.2-patched/src/geom/util/Makefile.in	2016-01-18 12:48:16.230096663 -0700
+@@ -59,7 +59,9 @@
+ am_libgeomutil_la_OBJECTS = ComponentCoordinateExtracter.lo \
+ 	CoordinateOperation.lo GeometryEditor.lo \
+ 	GeometryTransformer.lo ShortCircuitedGeometryVisitor.lo \
+-	SineStarFactory.lo GeometryCombiner.lo
++	SineStarFactory.lo GeometryCombiner.lo \
++	LinearComponentExtracter.lo PointExtracter.lo \
++	PolygonExtracter.lo
+ libgeomutil_la_OBJECTS = $(am_libgeomutil_la_OBJECTS)
+ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include -I$(top_builddir)/include/geos
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+@@ -262,7 +264,10 @@
+     GeometryTransformer.cpp \
+     ShortCircuitedGeometryVisitor.cpp \
+     SineStarFactory.cpp \
+-    GeometryCombiner.cpp
++    GeometryCombiner.cpp \
++    LinearComponentExtracter.cpp \
++    PointExtracter.cpp \
++    PolygonExtracter.cpp
+ 
+ all: all-am
+ 
+@@ -321,6 +326,9 @@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GeometryCombiner.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GeometryEditor.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GeometryTransformer.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/LinearComponentExtracter.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PointExtracter.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PolygonExtracter.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ShortCircuitedGeometryVisitor.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SineStarFactory.Plo@am__quote@
+ 
+diff -Nuar geos-3.4.2/src/geom/util/PointExtracter.cpp geos-3.4.2-patched/src/geom/util/PointExtracter.cpp
+--- geos-3.4.2/src/geom/util/PointExtracter.cpp	1969-12-31 17:00:00.000000000 -0700
++++ geos-3.4.2-patched/src/geom/util/PointExtracter.cpp	2016-01-18 13:05:26.002757047 -0700
+@@ -0,0 +1,43 @@
++//PointExtracter.cpp
++
++
++#include <geos/export.h>
++#include <vector>
++
++#include <geos/geom/GeometryComponentFilter.h>
++#include <geos/geom/util/PointExtracter.h>
++
++namespace geos {
++   namespace geom { // geos.geom
++      namespace util { // geos.geom.util
++
++
++          void PointExtracter::getPoints(const Geometry &geom, Point::ConstVect &ret)
++         {
++            PointExtracter pe(ret);
++            geom.apply_ro(&pe);
++         }
++
++         /**
++         * Constructs a PointExtracterFilter with a list in which
++         * to store Points found.
++         */
++         PointExtracter::PointExtracter(Point::ConstVect& newComps)
++            :
++         comps(newComps)
++         {}
++
++         void PointExtracter::filter_rw(Geometry *geom)
++         {
++            if ( const Point *p=dynamic_cast<const Point *>(geom) )
++               comps.push_back(p);
++         }
++
++         void PointExtracter::filter_ro(const Geometry *geom)
++         {
++            if ( const Point *p=dynamic_cast<const Point *>(geom) )
++               comps.push_back(p);
++         }
++      }
++   }
++}
+\ No newline at end of file
+diff -Nuar geos-3.4.2/src/geom/util/PolygonExtracter.cpp geos-3.4.2-patched/src/geom/util/PolygonExtracter.cpp
+--- geos-3.4.2/src/geom/util/PolygonExtracter.cpp	1969-12-31 17:00:00.000000000 -0700
++++ geos-3.4.2-patched/src/geom/util/PolygonExtracter.cpp	2016-01-18 13:08:16.910270729 -0700
+@@ -0,0 +1,45 @@
++//PointExtracter.cpp
++
++
++#include <geos/export.h>
++#include <vector>
++
++#include <geos/geom/GeometryComponentFilter.h>
++#include <geos/geom/util/PolygonExtracter.h>
++
++namespace geos {
++namespace geom { // geos.geom
++namespace util { // geos.geom.util
++
++         void PolygonExtracter::getPolygons(const Geometry &geom, std::vector<const Polygon*>& ret)
++         {
++            PolygonExtracter pe(ret);
++            geom.apply_ro(&pe);
++         }
++
++         /**
++         * Constructs a PointExtracterFilter with a list in which
++         * to store Points found.
++         */
++         PolygonExtracter::PolygonExtracter(std::vector<const Polygon*>& newComps)
++         :
++         comps(newComps)
++         {}
++
++         void PolygonExtracter::filter_rw(Geometry *geom) {
++            if ( const Polygon *p=dynamic_cast<const Polygon *>(geom) )
++            {
++               comps.push_back(p);
++            }
++         }
++
++         void PolygonExtracter::filter_ro(const Geometry *geom)
++         {     
++            if ( const Polygon *p=dynamic_cast<const Polygon *>(geom) )
++            {
++               comps.push_back(p);
++            }
++         }
++}
++}
++}
+\ No newline at end of file

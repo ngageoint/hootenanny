@@ -23,11 +23,8 @@ default: build
 all: build
 always:
 
-# builds everything
 build: core ui-build
 
-# This is a bit of misnomer, as it builds core and services. It should be modified to build core and 
-# the services db only.
 core: makedirs js-make qt-make services-build model-build conf/dictionary/words.sqlite osmapidb \
 	conf/dictionary/WordsAbridged.sqlite hoot-services/src/main/resources/language-translation/langdetect-183.bin
 
@@ -92,8 +89,8 @@ ifneq (, $(shell command -v ccache))
 endif
 
 check: test
-test: build services-test-all translations-test
-	bin/HootTest $(HOOT_TEST_DIFF) --glacial --parallel
+test: build services-test translations-test
+	bin/HootTest $(HOOT_TEST_DIFF) --slow --parallel
 
 docs: always HOOT_VERSION_FILE services-docs
 	echo Building documentation...

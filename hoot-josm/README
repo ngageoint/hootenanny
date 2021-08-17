@@ -1,6 +1,0 @@
-This project contains code that makes calls to JOSM via JNI. This project is the only functionality 
-that currently uses JOSM. If that changes at any point, then JNI classes may need to be moved to 
-their own project.
-
-
-

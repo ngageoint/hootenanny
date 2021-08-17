@@ -31,5 +31,3 @@ This description is for a quick overview of the conflation advanced option meta 
 8. reference, average and horizontal rest endpoint consists of subset of options used to be in UnifyingRoads.json
 9. reference, average and horizontal rest endpoint output is meant to override corresponding fields in custom rest endpoint when corresponding conflation type is selected on UI. (For example, for reference conflation, the fields in reference rest endpoint will override the matching fields from custom rest end point output)
 
-https://github.com/ngageoint/hootenanny/blob/master/hoot-services/CONTRIBUTING.md[Also see this]
-

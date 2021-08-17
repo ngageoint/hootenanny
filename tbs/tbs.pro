@@ -1,3 +1,6 @@
+##########################
+# General statistics and machine learning utilities
+##########################
 
 TEMPLATE = lib
 win32:CONFIG += dll

@@ -1,9 +1,6 @@
-
 == Hootenanny Debugging
 
-=== Core
-
-==== Debug Logging
+=== Debug Logging
 
 While there is no substitute for debugging with breakpoints added to an IDE, sometimes using debug 
 logging can allow you to diagnose and fix a conflation bug more quickly. Hootenanny allows for log 
@@ -14,7 +11,7 @@ by class, the `log.class.include.filter` and `log.class.exclude.filter` configur
 utilized. Filtering by wildcard with '*' is supported. See the documentation on those configuration 
 options as well as the class documentation for `Log` and `LogGeneric` for additional information.
 
-==== Debug Map Writing
+=== Debug Map Writing
 
 At times, it can be difficult to determine where in the conflate process a particular map
 data change is made. To assist with debugging, map files may be output at various places in
@@ -32,8 +29,4 @@ Additional helpful debugging options:
 * `uuid.helper.repeatable=true`
 * `writer.include.debug.tags=true`
 * `writer.include.conflate.score.tags=true`
-
-=== Services
-
-https://github.com/ngageoint/hootenanny/blob/master/hoot-services/DEBUG.md[See this]
 
