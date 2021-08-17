@@ -8,9 +8,9 @@ QT += testlib \
     xml \
 
 TARGET = HootJosm
-QMAKE_POST_LINK += ../scripts/core/make-hoot-josm-java.sh
+QMAKE_POST_LINK += ./make-hoot-josm-java.sh
 QMAKE_CLEAN += target/hoot-josm.jar
-QMAKE_CLEAN += target/dependency-jars/*
+QMAKE_CLEAN += target/dependency-jars/*.jar
 TEMPLATE = lib
 
 DEPENDPATH += \
