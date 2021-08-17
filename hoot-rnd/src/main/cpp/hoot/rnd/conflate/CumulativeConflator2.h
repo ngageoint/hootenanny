@@ -41,7 +41,7 @@ namespace hoot
 /**
  * Allows for conflating multiple maps in a cumulative fashion. This is hooked up to the
  * cumulative-conflate command and primarily used for prototyping which ultimately gets implemented
- * in scripts/conflate/ConflateDirectory.sh.
+ * in production fashion within scripts/conflate/ConflateDirectory.sh.
  *
  * Best test command (v7):
  *
