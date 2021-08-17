@@ -64,7 +64,6 @@ for FILENAME in \
   "hoot-josm/hoot-josm.pro" \
   "hoot-js/hoot-js.pro" \
   "hoot-rnd/hoot-rnd.pro" \
-  "hoot-swig/hoot-swig.pro" \
   "tgs/src/test/cpp/tgs/TgsTest.pro" \
   "tgs/src/test/cpp/tgs/TgsTestLib.pro" \
   "tgs/tgs.pro"
