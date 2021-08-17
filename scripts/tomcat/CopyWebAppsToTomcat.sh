@@ -13,6 +13,7 @@ else # Centos
   source ~/.bash_profile
 fi
 
+echo "user: "$USER
 sudo -u $USER -g tomcat rm -f $TOMCAT8_HOME/webapps/hoot-services.war
 
 # Need to make sure we don't die due to nfs funkyness
