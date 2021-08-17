@@ -36,8 +36,7 @@ the Hootenanny `.tar.gz` installation file and locate the documentation within t
 
 # Installation
 
-If you want to install from source using Vagrant and thus do not need to download the release, please follow guide [Vagrand.md](https://github.com/ngageoint/hootenanny/blob/master/docs/user/VAGRANT.md)
-For installation from RPMs, please follow [guide in rpms repo](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md)
+If you want to install from source using Vagrant without downloading the release, please follow [VAGRANT.md](https://github.com/ngageoint/hootenanny/blob/master/docs/user/VAGRANT.md). For installation from RPMs, please follow the [guide in the rpms repo](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md)
 
 # Conflatable Feature Types
 
