@@ -20,16 +20,15 @@ Hootenanny is thoroughly tested against the Virtualbox provider.  You are welcom
 
 Once the prerequisites have been installed, you can set up the Hootenanny environment.
 
-
-    # Windows users will need to uncomment the line ending configuration option.
-    git clone git@github.com:ngageoint/hootenanny.git hoot #--config core.autocrlf=input
+    git clone git@github.com:ngageoint/hootenanny.git hoot
     cd hoot
     git submodule init
     git submodule update
     vagrant up
     
-Please note, cloning using ssh is supported only authenticated GitHub account. To use anonymous cloning, replace first line with SSL clonnig like this:
-    git clone https://github.com/ngageoint/hootenanny.git  hoot --config core.autocrlf=input
+Please note, cloning using SSH is supported only with an authenticated GitHub account. To use anonymous cloning, replace the first line with SSL cloning like this:
+    
+    git clone https://github.com/ngageoint/hootenanny.git hoot --config core.autocrlf=input
 
 ~~Once initialization is complete, uncomment the `#, group: "tomcat8"` portion of the in Vagrantfile to allow the webapp to write to shared folders.~~  The previous workaround step is no longer needed as the provision script adds vagrant and tomcat8 users to each others group.
 
