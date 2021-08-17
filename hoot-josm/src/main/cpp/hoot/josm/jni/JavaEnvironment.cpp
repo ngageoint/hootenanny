@@ -52,6 +52,8 @@ JavaEnvironment::~JavaEnvironment()
 {
   if (_env != nullptr)
   {
+    // This isn't absolutely necessary, as there may be nothing left to collect or the JVM will do
+    // it at shutdown anyway. But maybe it will help us clean up and prevent a hangup.
     LOG_DEBUG("Calling garbage collector...");
     jclass systemClass = _env->FindClass("java/lang/System");
     jmethodID systemGCMethod = _env->GetStaticMethodID(systemClass, "gc", "()V");
