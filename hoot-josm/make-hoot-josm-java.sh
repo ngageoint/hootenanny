@@ -17,10 +17,10 @@ JOSM_JAR=$JOSM_ARTIFACT_ID-$JOSM_VERSION.jar
 # Build the hoot josm integration jar and copy over the josm jar.
 mvn -q package
 
-# In order for our monkey patching of the josm jar to work, we need to remove the jar signature so 
-# we don't get a security error.
+# In order for our monkey patching of the josm jar to work, we need to remove the josm jar signature 
+# so we don't get a security error.
 DEP_DIR=target/dependency-jars
-zip -qd $DEP_DIR/$JOSM_JAR "META-INF/resources/*" "META-INF/*.RSA" "META-INF/*.SF" "META-INF/*.MF"
+zip -qd $DEP_DIR/$JOSM_JAR "META-INF/*.MF"
 # Rename the josm jar to match what's in the hoot config.
 mv $DEP_DIR/$JOSM_JAR $DEP_DIR/josm.jar
 
