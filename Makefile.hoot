@@ -90,7 +90,7 @@ endif
 
 check: test
 test: build services-test translations-test
-	bin/HootTest $(HOOT_TEST_DIFF) --slow --parallel
+	bin/HootTest $(HOOT_TEST_DIFF) --glacial --parallel
 
 docs: always HOOT_VERSION_FILE services-docs
 	echo Building documentation...
