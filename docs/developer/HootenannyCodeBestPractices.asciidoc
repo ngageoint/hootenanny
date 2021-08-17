@@ -10,6 +10,16 @@ Many of these come directly from https://sonarcloud.io/dashboard?id=hoot[Sonar] 
 * Keep as much implementation out of header files as possible. The implementations of simple 
 getters/setters are ok in a header file.
 * Use forward declarations where possible to mimimize build dependencies.
+* Similar class methods/variables should be grouped together in the header file with 
+constructors/destructors being toward the top.
+* Per class member access type, list member variables before member methods.
+* Place getters/setters at the end of the public documentation in the header file.
+* Prepend private member variables and methods with "_".
+* Place private member variables before member methods in the function file.
+* Group header includes by type. e.g. hoot includes together, Qt includes together, etc.
+* Header includes should be alphabetized.
+* Keep as much logic out of classes inheriting `BaseCommand` as possible. Create a new class to hold
+logic needed to be executed by the command.
 * Use default constructors and destructors where applicable.
 * Use `std::make_shared` to create shared pointers when possible.
 * If a variable being passed to a method should never be null, pass a reference instead of a 
@@ -23,6 +33,8 @@ pointer.
 * Favor constructors with signatures that force the client of a class to set it up properly vs many 
 getter methods.
 * Use interface inheritance with a focus on simple, skinny interface definitions.
+* Avoid "magic" strings. Tie strings whose values may change to a class member variable or 
+configuration option when possible.
 * See the "General Test Writing Guidelines" section in the 
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[testing document] 
 for some test writing tips.

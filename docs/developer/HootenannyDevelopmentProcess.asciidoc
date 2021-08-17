@@ -15,7 +15,8 @@ as part of the pull request job.
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyAPI.asciidoc[API documentation] 
 may be generated from the command line or as part of the pull request job.
 * Ensure your changes are adequately documented in the Algorithms, Developer, and/or User Guide(s).
-* If you are making significant changes to the conflation algorithms, you may want to run the regressions tests at this point. They will run automatically nightly against the master branch.
+* If you are making significant changes to the conflation algorithms, you may want to run the 
+regression tests at this point. They will run automatically nightly against the master branch.
 * Create a https://github.com/ngageoint/hootenanny/pulls[pull request] to merge the work branch into 
 the master branch and assign it to yourself. Link the pull request to the original issue and add any 
 additional required detail to the pull request description. Tests will automatically run as part of 

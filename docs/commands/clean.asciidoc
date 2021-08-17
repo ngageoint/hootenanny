@@ -4,7 +4,9 @@
 === Description
 
 The +clean+ command corrects common erroneous data scenarios from input and writes to output by applying the 
-operations specified in the `map.cleaner.transforms` configuration option. The operation is memory bound.
+operations specified in the `map.cleaner.transforms` configuration option. Optionally, 
+https://josm.openstreetmap.de/[JOSM] cleaning operations may be used in addition to Hootenanny cleaning operations. 
+The operation is memory bound.
 
 * +input(s)+          - One or more inputs(s); may be any supported input format (e.g. .osm file).
 * +output+            - Output; may be any supported output format (e.g. .osm file). This parameter may not be specified with 
@@ -40,4 +42,6 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExample
 
 * `map.cleaner.transforms` configuration option
 * <<hootalgo, IngestAndClean>>
+* josm.* and jni.* configuration options
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidationAndCleaning.asciidoc[JOSM configuration details]
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
