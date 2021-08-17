@@ -1,0 +1,9 @@
+This project stores experimental code that isn't quite ready for prime time or code meant strictly 
+for use by developers and/or power users for research or testing purposes only. Anything below 
+TRL5 [1] should be put in this project, as well as all test code for the classes in this project. 
+Note: This project probably should be disabled by default but currently is not.
+
+1. TRL5 - Module and/or subsystem validation in a relevant environment
+
+
+
