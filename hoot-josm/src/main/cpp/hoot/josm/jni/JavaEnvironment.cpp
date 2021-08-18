@@ -155,13 +155,6 @@ void JavaEnvironment::_initVm()
   {
     throw HootException("Unable to initialize JVM. Error code: " + QString::number(status));
   }
-
-//  status = _vm->AttachCurrentThreadAsDaemon((void**)&_env, &vm_args);
-//  if (status != JNI_OK)
-//  {
-//    throw HootException(
-//      "Unable to attach current thread as daemon. Error code: " + QString::number(status));
-//  }
 }
 
 }

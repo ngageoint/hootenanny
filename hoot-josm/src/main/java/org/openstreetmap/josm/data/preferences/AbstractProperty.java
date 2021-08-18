@@ -39,7 +39,7 @@ import org.openstreetmap.josm.tools.bugreport.BugReport;
 
 /**
  * This is an implementation of AbstractProperty that doesn't allow weak references to be created.
-   The weak references
+   The weak references prevent the JVM from being shutdown when created via JNI.
  */
 public abstract class AbstractProperty<T> {
 
