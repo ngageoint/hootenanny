@@ -2319,7 +2319,6 @@ mgcp.rules = {
       'DA010':{'MCC':'SMC'},
       'DB010':{'MCC':'SMC'},
       'DB070':{'MCC':'SMC'},
-
     },
 
     // ##### Start of intList #####

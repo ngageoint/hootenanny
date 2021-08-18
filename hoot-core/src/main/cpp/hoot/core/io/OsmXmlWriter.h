@@ -100,9 +100,9 @@ public:
    */
   void setIncludeCompatibilityTags(bool includeCompatibility)
   { _includeCompatibilityTags = includeCompatibility; }
-  void setIncludeIds(bool includeIds) { _addExportTagsVisitor.setIncludeIds( includeIds ); }
+  void setIncludeIds(bool includeIds) { _addExportTagsVisitor.setIncludeIds(includeIds); }
   void setIncludeHootInfo(bool includeInfo)
-  { _addExportTagsVisitor.setIncludeHootInfo( includeInfo ); }
+  { _addExportTagsVisitor.setIncludeHootInfo(includeInfo); }
   void setIncludePid(bool includePid) { _includePid = includePid; }
   /**
    * Includes the x/y location of the node with the nd element. This is not standard for OSM
@@ -112,6 +112,9 @@ public:
   void setIncludePointsInWays(bool includePoints) { _includePointInWays = includePoints; }
   void setPrecision(int p) { _precision = p; }
   void setFormatXml(const bool format) { _formatXml = format; }
+
+  bool getSortSourceImageryTag() const { return _sortSourceImageryTag; }
+  void setSortSourceImageryTag(bool sort) { _sortSourceImageryTag = sort; }
 
 private:
 
@@ -138,6 +141,7 @@ private:
   int _numWritten;
   int _statusUpdateInterval;
   AddExportTagsVisitor _addExportTagsVisitor;
+  bool _sortSourceImageryTag;
 
   static QString _typeName(ElementType e);
 

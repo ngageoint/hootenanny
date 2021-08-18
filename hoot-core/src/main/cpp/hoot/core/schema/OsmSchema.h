@@ -257,33 +257,47 @@ class Relation;
 class Way;
 
 /**
- * This class is reentrant, but not thread safe (Singleton).
+ * This class is re-entrant, but not thread safe (Singleton).
  */
 class OsmSchema
 {
 public:
 
-  virtual ~OsmSchema() = default;
+  static OsmSchema& getInstance();
+  ~OsmSchema() = default;
 
-  void addAssociatedWith(const QString& name1, const QString& name2) const;
-  void addIsA(const QString& name1, const QString& name2) const;
-  void addSimilarTo(const QString& name1, const QString& name2, double weight, bool oneway = false) const;
-
-  QString average(const QString& kvp1, double w1, const QString& kvp2, double w2, double& best) const;
-  QString average(const QString& kvp1, const QString& kvp2, double& best) const;
- 
+  /**
+   * Loads the default configuration. This should only be used by unit tests.
+   */
+  void loadDefault();
   /**
    * ONLY FOR UNIT TESTING. Be a good neighbor and call loadDefault() when you're done.
    */
   void createTestingGraph() const;
+
+  void addAssociatedWith(const QString& name1, const QString& name2) const;
+  void addIsA(const QString& name1, const QString& name2) const;
+  void addSimilarTo(
+    const QString& name1, const QString& name2, double weight, bool oneway = false) const;
+
+  void update() const;
+  void updateOrCreateVertex(const SchemaVertex& tv) const;
+
+  QString average(
+    const QString& kvp1, double w1, const QString& kvp2, double w2, double& best) const;
+  QString average(const QString& kvp1, const QString& kvp2, double& best) const;
 
   /**
    * Searches for the first common ancestor between two key value pairs. If there is no common
    * ancestor then an empty TagVertex is returned.
    */
   const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2) const;
+  bool isAncestor(const QString& childKvp, const QString& parentKvp) const;
 
-  std::vector<SchemaVertex> getAssociatedTagsAsVertices(const QString& name) const;
+  OsmSchemaCategory getCategories(const Tags& t) const;
+  OsmSchemaCategory getCategories(const QString& k, const QString& v) const;
+  OsmSchemaCategory getCategories(const QString& kvp) const;
+
   /**
    * Retrieves a set of tags that are associated with the input tags, as defined by the hoot schema
    *
@@ -291,31 +305,6 @@ public:
    * @return a set of tags
    */
   Tags getAssociatedTags(const Tags& tags);
-
-  OsmSchemaCategory getCategories(const Tags& t) const;
-  OsmSchemaCategory getCategories(const QString& k, const QString& v) const;
-  OsmSchemaCategory getCategories(const QString& kvp) const;
-
-  std::vector<SchemaVertex> getAllTags() const;
-
-  /**
-   * Retrieves all possible tag keys from the schema
-   *
-   * @return a collection of key strings
-   */
-  QSet<QString> getAllTagKeys();
-
-  /**
-   * Retrieves all possible tag keys from the schema that are associated with a type
-   *
-   * @return a collection of key strings
-   */
-  QSet<QString> getAllTypeKeys();
-
-  bool hasTagKey(const QString& key);
-
-  std::vector<SchemaVertex> getChildTagsAsVertices(const QString& name) const;
-
   /**
    * Retrieves all child tags for the given input tags
    *
@@ -323,18 +312,6 @@ public:
    * @return a set of tags
    */
   Tags getChildTags(const Tags& tags);
-
-  static OsmSchema& getInstance();
-
-  double getIsACost() const;
-
-  /**
-   * Returns all tags that have a similar score >= minimumScore.
-   *
-   * minimumScore must be > 0.
-   */
-  std::vector<SchemaVertex> getSimilarTagsAsVertices(const QString& name, double minimumScore) const;
-
   /**
    * Retrieves tags similar to the input tag
    *
@@ -344,8 +321,64 @@ public:
    */
   Tags getSimilarTags(const QString& name, double minimumScore);
 
-  std::vector<SchemaVertex> getTagByCategory(const OsmSchemaCategory& c) const;
+  /**
+   * Retrieves all possible tag keys from the schema
+   *
+   * @return a collection of key strings
+   */
+  QSet<QString> getAllTagKeys();
+  /**
+   * Retrieves all possible tag keys from the schema that are associated with a type
+   *
+   * @return a collection of key strings
+   */
+  QSet<QString> getAllTypeKeys();
+  bool hasTagKey(const QString& key);
+  /**
+   * Returns a collection of tag key/value pairs that represent generic feature types
+   *
+   * @return a collection of tag key/value pairs
+   */
+  QSet<QString> getGenericKvps() const;
+  /**
+   * Determines tags are contained in a list of tags
+   *
+   * @param tags tags to examine
+   * @param tagList string tag list to check against
+   * @return true if any tag in a set of input tags is contained in a string list of tags; false
+   * otherwise
+   * @note If we came up with a way to support key=* wildcards in the Tags class, then we could
+   * probably get rid of this method altogether and just check against the tags whereever this
+   * method is being called.
+   */
+  bool containsTagFromList(const Tags& tags, const QStringList& tagList) const;
+  /**
+   * Retrieves tags that are aliases of the input tags
+   *
+   * @param tags tags to search aliases for
+   * @return a set of tags
+   */
+  Tags getAliasTags(const Tags& tags);
+  /**
+   * Determine the ancestor between two tags
+   *
+   * @param kvp1 first tag to examine
+   * @param kvp2 second tag to examine
+   * @return tag that is the ancestor of the other or the first tag if neither is an ancestor of
+   * each other
+   */
+  QString getParentKvp(const QString& kvp1, const QString& kvp2) const;
 
+  std::vector<SchemaVertex> getAllTags() const;
+  /**
+   * Returns all tags that have a similar score >= minimumScore.
+   *
+   * minimumScore must be > 0.
+   */
+  std::vector<SchemaVertex> getSimilarTagsAsVertices(const QString& name, double minimumScore) const;
+  std::vector<SchemaVertex> getTagByCategory(const OsmSchemaCategory& c) const;
+  std::vector<SchemaVertex> getChildTagsAsVertices(const QString& name) const;
+  std::vector<SchemaVertex> getAssociatedTagsAsVertices(const QString& name) const;
   /**
    * Returns the tag vertex for a given kvp. If the vertex is compound then an empty vertex will
    * be returned.
@@ -357,7 +390,6 @@ public:
    * compound vertices and tag vertices.
    */
   std::vector<SchemaVertex> getSchemaVertices(const Tags& tags) const;
-
   /**
    * Returns all the schema vertices in the set of tags that do not also have parent vertices in the
    * set of tags. E.g. returns railway_platform, but not public_transit=platform.
@@ -372,23 +404,19 @@ public:
    * category.
    */
   bool hasCategory(const Tags& t, const QString& category) const;
-
   /**
    * Returns true if the specified kvp is part of the specified category.
    */
   bool hasCategory(const QString& kvp, const QString& category) const;
-
   /**
    * Returns true if at least one tag in the set of specified tags is part of the specified
    * category.
    */
   bool hasCategory(const Tags& t, const OsmSchemaCategory& category) const;
-
   /**
    * Returns true if the specified kvp is part of the specified category.
    */
   bool hasCategory(const QString& kvp, const OsmSchemaCategory& category) const;
-
   /**
    * Determines if the key is part of any category in the schema
    *
@@ -398,8 +426,6 @@ public:
    */
   bool hasAnyCategory(const QString& key, const QString& val) const;
 
-  bool isAncestor(const QString& childKvp, const QString& parentKvp) const;
-
   bool allowsFor(const Tags& t, const ElementType& type, OsmGeometries::Type geometries) const;
   bool allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries) const;
 
@@ -408,7 +434,6 @@ public:
    * but in the future the list of valid list keys may be stored in the schema file.
    */
   bool isList(const QString& key, const QString& value) const;
-
   /**
    * Returns true if the kvp contains metadata about the feature as opposed to real information
    * about the features.
@@ -418,30 +443,22 @@ public:
    * Tags such as "name", "highway" and "height" are not metadata.
    */
   bool isMetaData(const QString& key, const QString& value);
-
   /**
    * Returns true if this is a reversed unidirectional way. (E.g. oneway=reverse)
    */
   bool isReversed(const Element& e) const;
-
   /**
    * Return true if this tag can contain free-form text.
    */
   bool isTextTag(const QString& key) const;
-
   /**
    * Return true if this tag can contain numeric text.
    */
   bool isNumericTag(const QString& key) const;
-
-  /**
-   * Loads the default configuration. This should only be used by unit tests.
-   */
-  void loadDefault();
+  double getIsACost() const;
 
   double score(const QString& kvp1, const QString& kvp2) const;
   double score(const SchemaVertex& v1, const SchemaVertex& v2) const;
-
   /**
    * Scores a particular kvp against an element's tags
    *
@@ -450,13 +467,21 @@ public:
    * @return the highest similarity score found in tags when compared to kvp
    */
   double score(const QString& kvp, const Tags& tags) const;
-
   /**
-   * Returns a collection of tag key/value pairs that represent generic feature types
+   * Scores the type similarity between two sets of tags
    *
-   * @return a collection of tag key/value pairs
+   * @param tags1 the first set of tags to score
+   * @param tags2 the second set of tags to score
+   * @param ignoreGenericTypes if true, generic types such as 'poi=yes' are ignored during
+   * comparison
+   * @return a similarity score from 0.0 to 1.0
    */
-  QSet<QString> getGenericKvps() const;
+  double scoreTypes(const Tags& tags1, const Tags& tags2, const bool ignoreGenericTypes = false);
+  /**
+   * @brief scoreOneWay Returns a oneway score. E.g. highway=primary is similar to highway=road,
+   *  but a highway=road isn't necessarily similar to a highway=primary (so it gets a low score).
+   */
+  double scoreOneWay(const QString& kvp1, const QString& kvp2) const;
 
   /**
    * Returns the first type key/value pair found in a set of tags
@@ -478,7 +503,6 @@ public:
    * @return true if the tags explicitly mismatch; false otherwise
    */
   bool explicitTypeMismatch(const Tags& tags1, const Tags& tags2, const double minTypeScore);
-
   /**
    * Determines if two sets of tags have an explicit type mismatch. Empty tags and generic types
    * are not ignored during the comparison
@@ -490,7 +514,6 @@ public:
    * @return true if the tags mismatch; false otherwise
    */
   bool typeMismatch(const Tags& tags1, const Tags& tags2, const double minTypeScore);
-
   /**
    * Determines if a key/value pair represents a generic feature type
    *
@@ -498,7 +521,6 @@ public:
    * @return true if the input key/value pair represents a generic type; false otherwise
    */
   bool isGenericKvp(const QString& kvp) const;
-
   /**
    * Determines whether a set of tags represents a generic feature type
    *
@@ -506,7 +528,6 @@ public:
    * @return true if the tags contain only a generic feature type; false otherwise
    */
   bool isGeneric(const Tags& tags);
-
   /**
    * Determines if a set of tags has a feature type
    *
@@ -514,7 +535,6 @@ public:
    * @return true if the tags have at least one type tag
    */
   bool hasType(const Tags& tags);
-
   /**
    * Determines if a set of tags have more than one feature type
    *
@@ -522,7 +542,6 @@ public:
    * @return true if the tags have at least two type tags
    */
   bool hasMoreThanOneType(const Tags& tags);
-
   /**
    * Returns the most specific type in a set of tags according to the schema
    *
@@ -530,24 +549,6 @@ public:
    * @return a single key/value pair string
    */
   QString mostSpecificType(const Tags& tags);
-
-  /**
-   * Scores the type similarity between two sets of tags
-   *
-   * @param tags1 the first set of tags to score
-   * @param tags2 the second set of tags to score
-   * @param ignoreGenericTypes if true, generic types such as 'poi=yes' are ignored during
-   * comparison
-   * @return a similarity score from 0.0 to 1.0
-   */
-  double scoreTypes(const Tags& tags1, const Tags& tags2, const bool ignoreGenericTypes = false);
-
-  /**
-   * @brief scoreOneWay Returns a oneway score. E.g. highway=primary is similar to highway=road,
-   *  but a highway=road isn't necessarily similar to a highway=primary (so it gets a low score).
-   */
-  double scoreOneWay(const QString& kvp1, const QString& kvp2) const;
-
   /**
    * Determines if a tag key corresponds to a type in the schema
    *
@@ -556,50 +557,15 @@ public:
    */
   bool isTypeKey(const QString& key);
 
+  QString toGraphvizString() const;
+
+  static QString toKvp(const QString& key, const QString& value);
+
   /**
    * Sets the cost when traversing up the tree to a parent node. This is useful for strict score
    * checking rather than equivalent tags.
    */
   void setIsACost(double cost) const;
-
-  QString toGraphvizString() const;
-
-  static QString toKvp(const QString& key, const QString& value);
-
-  void update() const;
-
-  void updateOrCreateVertex(const SchemaVertex& tv) const;
-
-  /**
-   * Determines tags are contained in a list of tags
-   *
-   * @param tags tags to examine
-   * @param tagList string tag list to check against
-   * @return true if any tag in a set of input tags is contained in a string list of tags; false
-   * otherwise
-   * @note If we came up with a way to support key=* wildcards in the Tags class, then we could
-   * probably get rid of this method altogether and just check against the tags whereever this
-   * method is being called.
-   */
-  bool containsTagFromList(const Tags& tags, const QStringList& tagList) const;
-
-  /**
-   * Retrieves tags that are aliases of the input tags
-   *
-   * @param tags tags to search aliases for
-   * @return a set of tags
-   */
-  Tags getAliasTags(const Tags& tags);
-
-  /**
-   * Determine the ancestor between two tags
-   *
-   * @param kvp1 first tag to examine
-   * @param kvp2 second tag to examine
-   * @return tag that is the ancestor of the other or the first tag if neither is an ancestor of
-   * each other
-   */
-  QString getParentKvp(const QString& kvp1, const QString& kvp2) const;
 
 private:
 

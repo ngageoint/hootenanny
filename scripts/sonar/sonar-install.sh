@@ -61,11 +61,9 @@ JAVA_HOME=/usr/lib/jvm/java-11-openjdk sonar-scanner --version
 for FILENAME in \
   "hoot-core/hoot-core.pro" \
   "hoot-core-test/hoot-core-test.pro" \
-  "hoot-hadoop/hoot-hadoop.pro" \
   "hoot-josm/hoot-josm.pro" \
   "hoot-js/hoot-js.pro" \
   "hoot-rnd/hoot-rnd.pro" \
-  "hoot-swig/hoot-swig.pro" \
   "tgs/src/test/cpp/tgs/TgsTest.pro" \
   "tgs/src/test/cpp/tgs/TgsTestLib.pro" \
   "tgs/tgs.pro"

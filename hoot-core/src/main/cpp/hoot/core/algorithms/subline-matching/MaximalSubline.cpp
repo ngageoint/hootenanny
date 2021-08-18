@@ -819,7 +819,7 @@ void MaximalSubline::_calculatePointPairMatches(
 
     if (currentSubline < rawSublineMatches.size())
     {
-      // figure out the first and last match for this subline.
+      // Figure out the first and last match for this subline.
       if (rawSublineMatches[currentSubline].getSubline1().touches(ws1) ||
           rawSublineMatches[currentSubline].getSubline2().touches(ws2))
       {
@@ -828,7 +828,7 @@ void MaximalSubline::_calculatePointPairMatches(
       }
       else
       {
-        // if this is past the current subline, advance to the right subline.
+        // If this is past the current subline, advance to the right subline.
         while (currentSubline < rawSublineMatches.size() &&
                rawSublineMatches[currentSubline].getSubline1().getEnd() < ws1.getStart() &&
                rawSublineMatches[currentSubline].getSubline2().getEnd() < ws2.getStart())
@@ -855,10 +855,10 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(
   const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2,
   vector<WaySublineMatch>& rawSublineMatches) const
 {
-  // this only works if the rawSublineMatches are in order. We order by subline1
+  // This only works if the rawSublineMatches are in order. We order by subline1.
   sort(rawSublineMatches.begin(), rawSublineMatches.end(), lessThan);
 
-  // make sure that ordering by subline1 results in sorted subline2s. If this isn't the case then
+  // Make sure that ordering by subline1 results in sorted subline2s. If this isn't the case then
   // there isn't much we can do.
   if (!_checkForSortedSecondSubline(rawSublineMatches))
   {
@@ -875,7 +875,7 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(
     return rawSublineMatches;
   }
 
-  // if any of the raw sublines are crazy small, then don't try to snap the intersections.
+  // If any of the raw sublines are crazy small, then don't try to snap the intersections.
   if (_rawSublinesTooSmall(rawSublineMatches))
   {
     return rawSublineMatches;
@@ -890,7 +890,6 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(
   pairs = _discretizePointPairs(map, w1, w2, rawSublineMatches);
   LOG_VART(pairs.size());
   assert(pairs.size() > 0);
-  //LOG_VART(pairs);
 
   vector<int> starts(rawSublineMatches.size(), numeric_limits<int>::max());
   vector<int> ends(rawSublineMatches.size(), 0);
@@ -898,8 +897,8 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(
   _calculatePointPairMatches(
     w1->getCircularError(), w2->getCircularError(), rawSublineMatches, pairs, m, starts, ends);
 
-  // this maps finalStarts indexes to the rawSublineMatches indexes. E.g.
-  // rawSublineMatches[i] maps to finalStarts[matchIndexes[i]]
+  // This maps finalStarts indexes to the rawSublineMatches indexes. E.g. rawSublineMatches[i] maps
+  // to finalStarts[matchIndexes[i]]
   vector<int> matchIndexes(starts.size());
   cv::Mat ranges;
   try
@@ -923,7 +922,6 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(
   // run ExpectationIntersection to determine new intersection points.
   ExpectationIntersection ei;
   vector<double> splits = ei.snapMatches(m, ranges);
-
   LOG_VART(splits);
 
   vector<WaySublineMatch> result = rawSublineMatches;

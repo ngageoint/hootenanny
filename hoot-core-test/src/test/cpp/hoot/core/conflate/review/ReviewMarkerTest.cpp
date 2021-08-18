@@ -53,7 +53,7 @@ public:
   HootTestFixture(
     "test-files/conflate/review/ReviewMarkerTest/", "test-output/conflate/review/ReviewMarkerTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runNeedsReviewTest()

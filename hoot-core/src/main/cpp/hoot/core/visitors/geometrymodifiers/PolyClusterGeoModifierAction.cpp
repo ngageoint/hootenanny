@@ -376,12 +376,12 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
     // combine polys from this cluster with AlphaShape
     vector<Geometry*>* geomvect = new vector<Geometry*>();
     geomvect->push_back(pAlphaGeom.get());
-
     foreach (long wayId, cluster)
     {
       geomvect->push_back(_polyByWayId[wayId].get());
     }
 
+    // GeometryFactory takes ownership of geomvect here.
     const Geometry* mp = GeometryFactory::getDefaultInstance()->createMultiPolygon(geomvect);
     std::shared_ptr<Geometry> pCombinedPoly = geos::operation::geounion::UnaryUnionOp::Union(*mp);
 

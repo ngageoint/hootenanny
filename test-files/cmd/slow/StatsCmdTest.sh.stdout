@@ -316,33 +316,33 @@ Full stats from multiple files to json...
     ],
     "Area Translated Populated Tag Percent":
     [
-        "0.0505050505050505",
-        "0.04924242424242424"
+        "0.05",
+        "0.04875"
     ],
     "Building Translated Populated Tag Percent":
     [
-        "0.0505050505050505",
-        "0.04924242424242424"
+        "0.05",
+        "0.04875"
     ],
     "Road Translated Populated Tag Percent":
     [
-        "0.03184713375796178",
-        "0.03184713375796178"
+        "0.0379746835443038",
+        "0.03164556962025317"
     ],
     "POI Translated Populated Tag Percent":
     [
-        "0.06649937264742785",
-        "0.06557377049180328"
+        "0.07196029776674938",
+        "0.07162162162162163"
     ],
     "Polygon Conflatable POI Translated Populated Tag Percent":
     [
-        "0.06557377049180328",
-        "0.06312292358803986"
+        "0.07162162162162163",
+        "0.07072368421052631"
     ],
     "Polygon Translated Populated Tag Percent":
     [
-        "0.0505050505050505",
-        "0.04924242424242424"
+        "0.05",
+        "0.04875"
     ],
     "Power Line Translated Populated Tag Percent":
     [
@@ -1424,18 +1424,18 @@ Full stats from multiple files to json...
     ],
     "Translated Populated Tag Percent":
     [
-        "0.05093167701863354",
-        "0.04972118959107807"
+        "0.05414273995077933",
+        "0.05156537753222836"
     ],
     "Translated Populated Tags":
     [
-        "123",
-        "107"
+        "132",
+        "112"
     ],
     "Translated Default Tags":
     [
-        "1748",
-        "1535"
+        "1762",
+        "1550"
     ],
     "Translated Null Tags":
     [

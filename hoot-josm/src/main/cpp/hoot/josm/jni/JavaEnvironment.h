@@ -40,7 +40,7 @@ namespace hoot
  * Creates a Java Virtual Machine for use by Hootenanny C++ code that calls Java code in the
  * hoot-josm library via JNI (Singleton)
  *
- *  Helpful JNI reference:
+ * Helpful JNI reference:
  *
  * https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/invocation.html
  */

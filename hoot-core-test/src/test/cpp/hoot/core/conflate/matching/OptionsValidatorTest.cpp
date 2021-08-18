@@ -63,7 +63,7 @@ public:
 
   OptionsValidatorTest()
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runValidateSizeUnequalTest()

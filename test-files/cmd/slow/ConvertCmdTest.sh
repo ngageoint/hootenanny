@@ -15,6 +15,8 @@ SEPARATE_OUTPUT_OUTPUT_2=$OUTPUT_DIR/ToyTestB-converted.osm
 GOLD_FILE_SEPARATE_OUTPUT_1=$OUTPUT_DIR/ToyTestAShp.osm
 GOLD_FILE_SEPARATE_OUTPUT_2=test-files/ToyTestB.osm.pbf
 
+GOLD_FILE_CONTAINER_OUTPUT=$INPUT_DIR/combined_shapefile.osm
+
 CONFIG="-C Testing.conf"
 LOG_LEVEL="--warn"
 
@@ -106,7 +108,7 @@ hoot convert $LOG_LEVEL $CONFIG $SEPARATE_OUTPUT_INPUT_1 $SEPARATE_OUTPUT_INPUT_
 hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_SEPARATE_OUTPUT_1 $SEPARATE_OUTPUT_OUTPUT_1
 hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_SEPARATE_OUTPUT_2 $SEPARATE_OUTPUT_OUTPUT_2
 
-# This has proven unstable some of the time both locally and on Jenkins...not sure why yet.
+# TODO: This has proven unstable some of the time both locally and on Jenkins...not sure why yet.
 #echo ""
 #echo "OSM to GPKG..."
 #echo ""
@@ -117,3 +119,24 @@ hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_SEPARATE_OUTPUT_2 $SEPARATE_OUTPUT_OUTPU
 #  test-files/ToyTestA.osm $OUTPUT_DIR/ToyTestA.gpkg
 #hoot diff $LOG_LEVEL $CONFIG -D map.comparator.ignore.tag.keys="UFI" \
 #  $INPUT_DIR/ToyTestA.gpkg $OUTPUT_DIR/ToyTestA.gpkg
+
+echo ""
+echo "ZIP of SHP to OSM..."
+echo ""
+hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script="translations/MgcpTest.js" \
+  test-files/MGCPv3.zip $OUTPUT_DIR/zip_convert.osm
+hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_CONTAINER_OUTPUT $OUTPUT_DIR/zip_convert.osm
+
+echo ""
+echo "TAR of SHP to OSM..."
+echo ""
+hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script="translations/MgcpTest.js" \
+  test-files/MGCPv3.tar $OUTPUT_DIR/tar_convert.osm
+hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_CONTAINER_OUTPUT $OUTPUT_DIR/tar_convert.osm
+
+echo ""
+echo "TAR GZ of SHP to OSM..."
+echo ""
+hoot convert $LOG_LEVEL $CONFIG -D schema.translation.script="translations/MgcpTest.js" \
+  test-files/MGCPv3.tar.gz $OUTPUT_DIR/tar_gz_convert.osm
+hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_CONTAINER_OUTPUT $OUTPUT_DIR/tar_gz_convert.osm

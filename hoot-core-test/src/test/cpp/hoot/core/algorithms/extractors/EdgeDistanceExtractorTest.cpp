@@ -67,7 +67,7 @@ public:
     : HootTestFixture("test-files/algorithms/extractors/EdgeDistanceExtractor/",
                       UNUSED_PATH)
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   void runBuildingsTest()

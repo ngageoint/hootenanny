@@ -256,6 +256,8 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   {
     _phoneNumberScorer.setConfiguration(conf);
   }
+
+  _infoCache->setConfiguration(conf);
 }
 
 void PoiPolygonMatch::_categorizeElementsByGeometryType()

@@ -34,6 +34,10 @@ No automated map conflation technology is perfect. If you are conflating a relat
 Documentation is included as [PDF files](https://github.com/ngageoint/hootenanny/releases) with each release. Download 
 the Hootenanny `.tar.gz` installation file and locate the documentation within the "docs" directory.
 
+# Installation
+
+If you want to install from source using Vagrant without downloading the release, please follow [VAGRANT.md](https://github.com/ngageoint/hootenanny/blob/master/docs/user/VAGRANT.md). For installation from RPMs, please follow the [guide in the rpms repo](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md)
+
 # Conflatable Feature Types
 
 Hootenanny has specifically tailored conflation algorithms available for the following data types:

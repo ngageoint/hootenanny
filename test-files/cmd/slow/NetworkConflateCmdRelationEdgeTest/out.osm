@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="15.26519999995645" minlon="-16.53779999998709" maxlat="15.29620000000916" maxlon="-16.50481226205428"/>
-    <node visible="true" id="-1374" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2797613049499930" lon="-16.5237492506735890"/>
-    <node visible="true" id="-1337" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2848796683204764" lon="-16.5236242904054116"/>
-    <node visible="true" id="-1188" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2788841582914063" lon="-16.5237769207280856"/>
+    <node visible="true" id="-1168" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2797613049499930" lon="-16.5237492506735890"/>
+    <node visible="true" id="-1131" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2848796683204764" lon="-16.5236242904054116"/>
+    <node visible="true" id="-982" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2788841582914063" lon="-16.5237769207280856"/>
+    <node visible="true" id="-127" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2766830999862275" lon="-16.5160412999558943"/>
+    <node visible="true" id="-126" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2669540999968039" lon="-16.5225645000137291"/>
+    <node visible="true" id="-125" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2806986999877612" lon="-16.5154834000194626"/>
+    <node visible="true" id="-124" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2825202999668868" lon="-16.5157838000400652"/>
+    <node visible="true" id="-123" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2835966000231629" lon="-16.5161271999842647"/>
+    <node visible="true" id="-122" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2787529999739604" lon="-16.5155263999607911"/>
+    <node visible="true" id="-121" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2666229000004137" lon="-16.5234228002497296"/>
+    <node visible="true" id="-120" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2864096000244611" lon="-16.5194090001157647"/>
+    <node visible="true" id="-119" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2692869999821852" lon="-16.5306739000011689"/>
+    <node visible="true" id="-118" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2853084000101340" lon="-16.5175734000839682"/>
+    <node visible="true" id="-117" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2858547999896004" lon="-16.5184832000575597"/>
+    <node visible="true" id="-116" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2846832999633495" lon="-16.5168287999235268"/>
+    <node visible="true" id="-115" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2778008999739257" lon="-16.5156980001104188"/>
+    <node visible="true" id="-114" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2678441999965990" lon="-16.5216675001367079"/>
+    <node visible="true" id="-113" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2665400999733070" lon="-16.5247960998157772"/>
     <node visible="true" id="-95" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2873114999911319" lon="-16.5176339998812480">
         <tag k="error:circular" v="15"/>
         <tag k="place" v="hamlet"/>
@@ -13,6 +28,18 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="source:datetime" v="2015-07-27T15:26:14.000Z"/>
+    </node>
+    <node visible="true" id="-80" timestamp="2016-02-03T00:05:54Z" version="1" lat="15.2809854999924148" lon="-16.5258059000825526"/>
+    <node visible="true" id="-79" timestamp="2016-02-03T00:05:54Z" version="1" lat="15.2809126999764899" lon="-16.5256901000171936"/>
+    <node visible="true" id="-78" timestamp="2016-02-03T00:05:54Z" version="1" lat="15.2808323999835363" lon="-16.5259093000384603"/>
+    <node visible="true" id="-77" timestamp="2016-02-03T00:05:54Z" version="1" lat="15.2807595999952284" lon="-16.5257936000047287"/>
+    <node visible="true" id="-76" timestamp="2016-02-03T00:05:43Z" version="1" lat="15.2806881999960531" lon="-16.5250745001148864">
+        <tag k="capital" v="7"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="loc_name" v="Ndande"/>
+        <tag k="name" v="Ndande"/>
+        <tag k="place" v="town"/>
+        <tag k="source:datetime" v="2015-07-27T15:27:54.000Z"/>
     </node>
     <node visible="true" id="-74" timestamp="2016-02-02T23:33:13Z" version="1" lat="15.2818796858052934" lon="-16.5220511167618085">
         <tag k="error:circular" v="15"/>
@@ -46,7 +73,17 @@
         <tag k="error:circular" v="15"/>
         <tag k="source" v="Microsoft Bing satellite imagery 2012"/>
     </node>
+    <node visible="true" id="-32" timestamp="2016-02-02T23:32:31Z" version="1" lat="15.2803194000001934" lon="-16.5234801998681782">
+        <tag k="disused" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Ndande"/>
+        <tag k="public_transport" v="stop_position"/>
+        <tag k="railway" v="station"/>
+        <tag k="source:datetime" v="2015-07-27T15:26:15.000Z"/>
+        <tag k="train" v="yes"/>
+    </node>
     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2782238189801429" lon="-16.5048122620542834"/>
+    <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2948240063036529" lon="-16.5138244843448767"/>
     <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2731524273982657" lon="-16.5341234421567762"/>
     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2651999999708927" lon="-16.5143222285645273"/>
     <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2651999999913865" lon="-16.5333386643915077"/>
@@ -82,7 +119,6 @@
         <tag k="name" v="Ndande"/>
         <tag k="public_transport" v="stop_position"/>
         <tag k="railway" v="station"/>
-        <tag k="source:datetime" v="2015-07-27T15:26:15.000Z"/>
         <tag k="train" v="yes"/>
     </node>
     <node visible="true" id="1977199876" timestamp="2015-07-27T15:20:40Z" version="5" changeset="32910570" user="ulilu" uid="16881" lat="15.2898009999886249" lon="-16.5223010995145856"/>
@@ -249,7 +285,6 @@
         <tag k="loc_name" v="Ndande"/>
         <tag k="name" v="Ndande"/>
         <tag k="place" v="town"/>
-        <tag k="source:datetime" v="2015-07-27T15:27:54.000Z"/>
         <tag k="wikidata" v="Q3337444"/>
     </node>
     <node visible="true" id="2154617125" timestamp="2013-02-14T15:38:07Z" version="1" changeset="15030509" user="augustind" uid="667690" lat="15.2807595999952284" lon="-16.5257936000047287"/>
@@ -1154,6 +1189,11 @@
     <node visible="true" id="5379038097" timestamp="2018-02-01T20:14:12Z" version="1" changeset="55976640" user="CRCulver" uid="340741" lat="15.2752138999993985" lon="-16.5319650999490584"/>
     <node visible="true" id="5379038098" timestamp="2018-02-01T20:14:12Z" version="1" changeset="55976640" user="CRCulver" uid="340741" lat="15.2752557999988099" lon="-16.5319341000088293"/>
     <node visible="true" id="5379038099" timestamp="2018-02-01T20:14:12Z" version="1" changeset="55976640" user="CRCulver" uid="340741" lat="15.2752765999804190" lon="-16.5319643999861583"/>
+    <node visible="true" id="5379038100" timestamp="2018-02-01T20:14:12Z" version="1" changeset="55976640" user="CRCulver" uid="340741" lat="15.2755561999445852" lon="-16.5316262999376988">
+        <tag k="amenity" v="school"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Lycée d'enseignement général de Ndande"/>
+    </node>
     <node visible="true" id="6364306827" timestamp="2019-03-27T08:40:10Z" version="1" changeset="68576544" user="dancingVJL" uid="8392762" lat="15.2723212999812912" lon="-16.5345890000164175"/>
     <node visible="true" id="6364306828" timestamp="2019-03-27T08:40:10Z" version="1" changeset="68576544" user="dancingVJL" uid="8392762" lat="15.2683924999453104" lon="-16.5373585000102175"/>
     <node visible="true" id="6517545894" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2780322999757789" lon="-16.5302904999934412"/>
@@ -1183,37 +1223,16 @@
     <node visible="true" id="6517545920" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2798059999788052" lon="-16.5237392003290857"/>
     <node visible="true" id="6517545921" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2797400000114525" lon="-16.5237406002949463"/>
     <node visible="true" id="6517545922" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2812692999740243" lon="-16.5258931999718399"/>
-    <way visible="true" id="-3190" timestamp="2016-02-03T08:20:34Z" version="1">
+    <way visible="true" id="-2670" timestamp="2016-02-03T08:20:34Z" version="1">
         <nd ref="5189643559"/>
-        <nd ref="-1188"/>
+        <nd ref="-982"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="oneway" v="no"/>
         <tag k="source:datetime" v="2015-07-27T15:27:54.000Z"/>
         <tag k="surface" v="unpaved"/>
     </way>
-    <way visible="true" id="-3184" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="5189643472"/>
-        <nd ref="1977199876"/>
-        <nd ref="2142498121"/>
-        <nd ref="3668857778"/>
-        <nd ref="3668857781"/>
-        <nd ref="-23"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:c1670e83f51261fa4b835637618bc0f1ac3859d6"/>
-        <tag k="int_ref" v="TAH 1"/>
-        <tag k="is_in:country_code" v="SN"/>
-        <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="90"/>
-        <tag k="name" v="Route de Saint-Louis"/>
-        <tag k="nat_ref" v="N 2"/>
-        <tag k="oneway" v="no"/>
-        <tag k="source" v="Microsoft Bing orbital imagery"/>
-        <tag k="source:datetime" v="2019-06-03T05:49:37Z;2015-09-11T12:28:29.000Z"/>
-        <tag k="surface" v="asphalt"/>
-    </way>
-    <way visible="true" id="-3182" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2662" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-30"/>
         <nd ref="-19"/>
         <tag k="error:circular" v="15"/>
@@ -1222,13 +1241,13 @@
         <tag k="source:datetime" v="2015-07-27T15:26:17.000Z"/>
         <tag k="surface" v="unpaved"/>
     </way>
-    <way visible="true" id="-3175" timestamp="2019-06-03T05:49:37Z" version="3">
+    <way visible="true" id="-2655" timestamp="2019-06-03T05:49:37Z" version="3">
         <nd ref="3668874734"/>
         <nd ref="6517545919"/>
         <nd ref="5189643551"/>
         <nd ref="6517545920"/>
         <nd ref="3668874733"/>
-        <nd ref="-1374"/>
+        <nd ref="-1168"/>
         <nd ref="6517545921"/>
         <nd ref="3668874736"/>
         <tag k="error:circular" v="15"/>
@@ -1237,7 +1256,7 @@
         <tag k="source:datetime" v="2019-06-03T05:49:37Z;2015-07-27T15:27:54.000Z"/>
         <tag k="surface" v="ground"/>
     </way>
-    <way visible="true" id="-3169" timestamp="2016-02-03T10:44:26Z" version="1">
+    <way visible="true" id="-2649" timestamp="2016-02-03T10:44:26Z" version="1">
         <nd ref="-93"/>
         <nd ref="5294730924"/>
         <tag k="error:circular" v="15"/>
@@ -1246,12 +1265,11 @@
         <tag k="source:datetime" v="2015-07-27T15:26:15.000Z"/>
         <tag k="surface" v="unpaved"/>
     </way>
-    <way visible="true" id="-3131" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2611" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-28"/>
         <nd ref="6517545899"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="primary"/>
-        <tag k="hoot:hash" v="sha1sum:9ad9520d527361b162c91a45f7facfe878ce4210"/>
         <tag k="lanes" v="2"/>
         <tag k="maxspeed" v="90"/>
         <tag k="name" v="Route de Saint-Louis"/>
@@ -1260,9 +1278,9 @@
         <tag k="source:datetime" v="2015-09-11T12:28:29.000Z"/>
         <tag k="surface" v="asphalt"/>
     </way>
-    <way visible="true" id="-3116" timestamp="2017-10-27T01:16:29Z" version="1">
+    <way visible="true" id="-2596" timestamp="2017-10-27T01:16:29Z" version="1">
         <nd ref="5189643552"/>
-        <nd ref="-1188"/>
+        <nd ref="-982"/>
         <nd ref="5192494442"/>
         <nd ref="5192494437"/>
         <nd ref="1980157166"/>
@@ -1272,6 +1290,64 @@
         <tag k="oneway" v="no"/>
         <tag k="source:datetime" v="2017-10-27T01:16:29Z;2015-07-27T15:27:55.000Z"/>
         <tag k="surface" v="unpaved"/>
+    </way>
+    <way visible="true" id="-49" timestamp="2016-02-03T10:44:27Z" version="1">
+        <nd ref="-120"/>
+        <nd ref="-117"/>
+        <nd ref="-118"/>
+        <nd ref="-116"/>
+        <nd ref="-123"/>
+        <nd ref="-124"/>
+        <nd ref="-125"/>
+        <nd ref="-122"/>
+        <nd ref="-115"/>
+        <nd ref="-127"/>
+        <nd ref="-114"/>
+        <nd ref="-126"/>
+        <nd ref="-121"/>
+        <nd ref="-113"/>
+        <nd ref="-119"/>
+        <tag k="admin_level" v="3"/>
+        <tag k="boundary" v="administrative"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source" v="estimated"/>
+        <tag k="source:datetime" v="2015-07-27T16:17:43.000Z"/>
+    </way>
+    <way visible="true" id="-48" timestamp="2016-02-03T10:44:27Z" version="1">
+        <nd ref="-120"/>
+        <nd ref="3668857771"/>
+        <nd ref="-32"/>
+        <nd ref="-119"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1000"/>
+        <tag k="railway" v="disused"/>
+        <tag k="source:datetime" v="2015-07-27T16:17:42.000Z"/>
+        <tag k="usage" v="main"/>
+    </way>
+    <way visible="true" id="-36" timestamp="2016-02-03T08:35:21Z" version="1">
+        <nd ref="-78"/>
+        <nd ref="-80"/>
+        <nd ref="-79"/>
+        <nd ref="-77"/>
+        <nd ref="-78"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source" v="bing"/>
+        <tag k="source:datetime" v="2013-02-14T15:38:07.000Z"/>
+    </way>
+    <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-29"/>
+        <nd ref="-120"/>
+        <tag k="admin_level" v="3"/>
+        <tag k="boundary" v="administrative"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1000"/>
+        <tag k="railway" v="disused"/>
+        <tag k="source" v="estimated"/>
+        <tag k="source:datetime" v="2015-07-27T16:17:43.000Z"/>
+        <tag k="usage" v="main"/>
     </way>
     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4747826969"/>
@@ -1344,9 +1420,13 @@
         <nd ref="5192494421"/>
         <nd ref="5189643495"/>
         <nd ref="5189643472"/>
+        <nd ref="1977199876"/>
+        <nd ref="2142498121"/>
+        <nd ref="3668857778"/>
+        <nd ref="3668857781"/>
+        <nd ref="-23"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:ea7d9b95e86bb9b15ebe6d087931c4db7c53d90c;sha1sum:4a1670e54c6e32fdea9bff080e56a4981bc80431;sha1sum:1e42d5cbb5c75c99a2af7dcb205c457fdb978f96;sha1sum:f25158cb271c55b3466c4a90f3d2eafe3bfde246;sha1sum:71505b9b6c97aec97da37bff39f66d892d479cda;sha1sum:595f2a9bb491f57f99172a1798d74bc243590f08;sha1sum:d8cee04c9e0f874f7f70ecec5364ea1b8b945618;sha1sum:6795543466fcccf48c2b6d32a42289206e4a4f09;sha1sum:8e242d41c04b0b042bbc5a0a36a17d9df4b53aec;sha1sum:fba088bdeed46e07d11b0c090a8a1a0d3516d895;sha1sum:78a8ba00e64592be8a537c4eef1453a7ec3e60e6"/>
         <tag k="int_ref" v="TAH 1"/>
         <tag k="is_in:country_code" v="SN"/>
         <tag k="lanes" v="2"/>
@@ -1769,7 +1849,7 @@
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
         <tag k="source" v="bing"/>
-        <tag k="source:datetime" v="2013-02-14T15:38:07Z;2013-02-14T15:38:07.000Z"/>
+        <tag k="source:datetime" v="2013-02-14T15:38:07Z"/>
     </way>
     <way visible="true" id="362615138" timestamp="2019-06-03T05:49:37Z" version="6">
         <nd ref="3668869262"/>
@@ -1901,7 +1981,7 @@
         <nd ref="5189643494"/>
         <nd ref="5189643499"/>
         <nd ref="3668874732"/>
-        <nd ref="-1337"/>
+        <nd ref="-1131"/>
         <nd ref="5189643474"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
@@ -3493,13 +3573,8 @@
         <nd ref="5379038091"/>
         <nd ref="5379038090"/>
         <nd ref="5379038093"/>
-        <tag k="amenity" v="school"/>
         <tag k="building" v="school"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:poipolygon:poismerged" v="1"/>
-        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
-        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
-        <tag k="name" v="Lycée d'enseignement général de Ndande"/>
         <tag k="source:datetime" v="2018-02-01T20:14:15Z"/>
     </way>
     <way visible="true" id="557761354" timestamp="2018-02-01T20:14:15Z" version="1" changeset="55976640" user="CRCulver" uid="340741">
@@ -3526,7 +3601,7 @@
         <tag k="source:datetime" v="2019-06-03T05:49:37Z"/>
         <tag k="surface" v="sand"/>
     </way>
-    <relation visible="true" id="-350" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-300" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="281183768" role="reviewee"/>
         <member type="way" ref="-17" role="reviewee"/>
         <tag k="hoot:review:members" v="2"/>
@@ -3537,9 +3612,50 @@
         <tag k="hoot:review:type" v="Highway"/>
         <tag k="type" v="review"/>
     </relation>
+    <relation visible="true" id="-17" timestamp="2016-02-03T11:12:44Z" version="1">
+        <member type="way" ref="-2611" role=""/>
+        <member type="way" ref="535381757" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <tag k="error:circular" v="15"/>
+        <tag k="from" v="Pout"/>
+        <tag k="highway" v="primary"/>
+        <tag k="network" v="Route Nationale du Sénégal"/>
+        <tag k="ref" v="N 2"/>
+        <tag k="route" v="road"/>
+        <tag k="source" v="Microsoft Bing orbital imagery"/>
+        <tag k="source:datetime" v="2015-09-20T16:49:17.000Z"/>
+        <tag k="to" v="Kidira"/>
+        <tag k="type" v="route"/>
+    </relation>
+    <relation visible="true" id="-15" timestamp="2016-02-03T11:10:45Z" version="1">
+        <member type="way" ref="-49" role="outer"/>
+        <member type="way" ref="-22" role="outer"/>
+        <tag k="admin_level" v="3"/>
+        <tag k="boundary" v="administrative"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Thiès"/>
+        <tag k="name:en" v="Thiès Region"/>
+        <tag k="source" v="http://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/"/>
+        <tag k="source:datetime" v="2015-07-29T15:29:58.000Z"/>
+        <tag k="type" v="boundary"/>
+        <tag k="wikipedia" v="en:Thiès Region"/>
+    </relation>
+    <relation visible="true" id="-10" timestamp="2016-02-03T11:10:45Z" version="1">
+        <member type="way" ref="-49" role="outer"/>
+        <member type="way" ref="-22" role="outer"/>
+        <tag k="admin_level" v="3"/>
+        <tag k="boundary" v="administrative"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Louga"/>
+        <tag k="name:en" v="Louga Region"/>
+        <tag k="source" v="http://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/"/>
+        <tag k="source:datetime" v="2015-07-29T08:19:50.000Z"/>
+        <tag k="type" v="boundary"/>
+        <tag k="wikipedia" v="en:Louga Region"/>
+    </relation>
     <relation visible="true" id="-2" timestamp="2016-02-03T11:08:15Z" version="1">
-        <member type="relation" ref="2908172" role="subarea"/>
-        <member type="relation" ref="2906477" role="subarea"/>
+        <member type="relation" ref="-10" role="subarea"/>
+        <member type="relation" ref="-15" role="subarea"/>
         <tag k="ISO3166-1" v="SN"/>
         <tag k="ISO3166-1:alpha2" v="SN"/>
         <tag k="ISO3166-1:alpha3" v="SEN"/>
@@ -3746,7 +3862,7 @@
         <tag k="name:es" v="Thiès"/>
         <tag k="name:fr" v="Thiès"/>
         <tag k="source" v="http://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/"/>
-        <tag k="source:datetime" v="2019-02-06T09:46:07Z;2015-07-29T15:29:58.000Z"/>
+        <tag k="source:datetime" v="2019-02-06T09:46:07Z"/>
         <tag k="type" v="boundary"/>
         <tag k="wikidata" v="Q847682"/>
         <tag k="wikipedia" v="en:Thiès Region"/>
@@ -3765,30 +3881,24 @@
         <tag k="name:es" v="Louga"/>
         <tag k="name:fr" v="Louga"/>
         <tag k="source" v="http://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/"/>
-        <tag k="source:datetime" v="2019-02-06T09:46:07Z;2015-07-29T08:19:50.000Z"/>
+        <tag k="source:datetime" v="2019-02-06T09:46:07Z"/>
         <tag k="type" v="boundary"/>
         <tag k="wikidata" v="Q738061"/>
         <tag k="wikipedia" v="en:Louga Region"/>
     </relation>
     <relation visible="true" id="4828569" timestamp="2019-07-13T01:47:04Z" version="114" changeset="72201144" user="geo_roads" uid="6849512">
         <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-3184" role=""/>
-        <member type="way" ref="-3131" role=""/>
-        <member type="way" ref="535381757" role=""/>
         <tag k="error:circular" v="15"/>
         <tag k="from" v="Pout"/>
-        <tag k="highway" v="primary"/>
         <tag k="network" v="Route Nationale du Sénégal"/>
         <tag k="ref" v="N 2"/>
         <tag k="route" v="road"/>
-        <tag k="source" v="Microsoft Bing orbital imagery"/>
-        <tag k="source:datetime" v="2019-07-13T01:47:04Z;2015-09-20T16:49:17.000Z"/>
+        <tag k="source:datetime" v="2019-07-13T01:47:04Z"/>
         <tag k="to" v="Kidira"/>
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="6134983" timestamp="2019-04-17T01:34:32Z" version="48" changeset="69291497" user="dancingVJL" uid="8392762">
         <member type="way" ref="-17" role=""/>
-        <member type="way" ref="-3184" role=""/>
         <tag k="error:circular" v="15"/>
         <tag k="int_name" v="TAH 1-SN"/>
         <tag k="int_ref" v="TAH 1"/>

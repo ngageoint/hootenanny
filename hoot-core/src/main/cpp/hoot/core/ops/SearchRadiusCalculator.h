@@ -49,7 +49,7 @@ public:
 
   static QString className() { return "hoot::SearchRadiusCalculator"; }
 
-  SearchRadiusCalculator();
+  SearchRadiusCalculator() = default;
   ~SearchRadiusCalculator() = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;

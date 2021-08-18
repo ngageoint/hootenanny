@@ -1,6 +1,3 @@
-# -------------------------------------------------
-# Main project for hoot production code
-# -------------------------------------------------
 
 QT += \
     sql \
@@ -40,6 +37,8 @@ OTHER_FILES = \
     ../scripts/jenkins/Jenkinsfile \
     $$files(../scripts/copyright/*, true) \
     $$files(../scripts/sonar/*, true) \
+    $$files(../scripts/conflate/*, true) \
+    $$files(../scripts/util/*, true) \
     ../sonar-project.properties \
     $$files(../Vagrant*)
 

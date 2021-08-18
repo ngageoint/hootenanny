@@ -39,7 +39,6 @@ _confs(confs)
 
 TestSetup::~TestSetup()
 {
-  reset();
 }
 
 void TestSetup::reset()

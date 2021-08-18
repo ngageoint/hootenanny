@@ -353,7 +353,6 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementCacheLruTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementCacheLruTest, "quick");
 
 }

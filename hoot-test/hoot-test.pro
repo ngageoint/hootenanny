@@ -1,6 +1,3 @@
-# -------------------------------------------------
-# Exposes the HootTest command line interface
-# -------------------------------------------------
 
 include(../Configure.pri)
 

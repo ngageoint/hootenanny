@@ -83,7 +83,7 @@ public:
     : HootTestFixture("test-files/io/ServiceHootApiDbReaderTest/",
                       "test-output/io/ServiceHootApiDbReaderTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void setUpTest(const QString& testName, bool adminUser = false)
@@ -429,8 +429,6 @@ public:
     conf().set("api.db.email", userEmail(_testName));
     OsmMapReaderFactory::read(map, ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
     verifyFullReadOutput(map);
-
-    TestUtils::resetEnvironment();
   }
 
   void runPartialReadTest()

@@ -3,7 +3,7 @@
 
 === Description
 
-The +validate+ command uses JOSM to identify map data with erroneous aspects.
+The +validate+ command uses https://josm.openstreetmap.de/[JOSM] to identify map data with erroneous aspects.
 
 * +input(s)+               - Input(s); may be any supported input format (e.g. .osm file).
 * +--output+               - Optional output; may be any supported output format (e.g. .osm file). If specified, elements 
@@ -15,7 +15,8 @@ The +validate+ command uses JOSM to identify map data with erroneous aspects.
 * +--recursive+            - Allows for processing the files contained in any directories specified in +input(s)+ 
                              recursively. This parameter has no effect on the processing of non-directory inputs. This must 
                              be followed by either "*" to denote no filtering or one or more wildcard name filters. 
-                             e.g. "*.osm;*.json" or "*myFile*". This parameter is not compatible with the OGR layer input syntax.
+                             e.g. "*.osm;*.json" or "*myFile*". This parameter is not compatible with the OGR layer 
+                             input syntax.
 * +--separate-output+      - This parameter replaces the `--output` parameter and will result in no validation summary to
                              be displayed on the screen. The default behavior when processing multiple inputs is to 
                              combine them into the same single output. With this parameter specified, each input is 
@@ -42,5 +43,6 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExample
 
 ==== See Also
 
-* josm.* configuration options
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidationAndCleaning.asciidoc[JOSM configuration details]
+* josm.* and jni.* configuration options
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

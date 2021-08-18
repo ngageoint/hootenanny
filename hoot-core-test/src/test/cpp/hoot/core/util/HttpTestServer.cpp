@@ -99,6 +99,12 @@ HttpTestServer::HttpTestServer(int port)
 {
 }
 
+HttpTestServer::~HttpTestServer()
+{
+  //  Shutdown the server if it hasn't been shutdown already
+  shutdown();
+}
+
 void HttpTestServer::start()
 {
   //  Kick off the run_server thread
@@ -108,7 +114,8 @@ void HttpTestServer::start()
 void HttpTestServer::wait()
 {
   //  Wait for the thread to end
-  _thread->join();
+  if (_thread && _thread->joinable())
+    _thread->join();
 }
 
 void HttpTestServer::stop()
@@ -116,10 +123,14 @@ void HttpTestServer::stop()
   //  Interupt the threads
   _interupt = true;
   //  Close the acceptor
-  boost::system::error_code ec;
-  _acceptor->close(ec);
+  if (_acceptor->is_open())
+  {
+    boost::system::error_code ec;
+    _acceptor->close(ec);
+  }
   //  Stop the IO service
-  _io_service.stop();
+  if (!_io_service.stopped())
+    _io_service.stop();
 }
 
 void HttpTestServer::shutdown()
@@ -128,6 +139,8 @@ void HttpTestServer::shutdown()
   stop();
   //  Wait for the server to shutdown
   wait();
+  //  Reset the thread pointer
+  _thread.reset();
 }
 
 void HttpTestServer::run_server(int port)

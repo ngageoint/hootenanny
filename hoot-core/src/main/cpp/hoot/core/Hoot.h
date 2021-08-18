@@ -47,11 +47,6 @@ public:
   static Hoot& getInstance();
 
   /**
-   * @brief init A no-op that makes the code a little easier to read.
-   */
-  void init() const {}
-
-  /**
    * @brief loadLibrary Load the specified library if it exists using QLibrary.
    */
   void loadLibrary(const QString& name) const;

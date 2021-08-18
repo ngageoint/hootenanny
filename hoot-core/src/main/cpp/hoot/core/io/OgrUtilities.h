@@ -86,14 +86,14 @@ public:
    * Returns true if this is likely a data source OGR can open. This will just do a quick check
    * and doesn't verify that the source exists or is a proper format.
    */
-  bool isReasonableUrl(const QString& url);
+  bool isReasonableUrl(const QString& url) const;
 
   /**
    * @brief createDataSource - Create an OGR datasource from the url to write to
    * @param url - Location of the datasource to create, pathname or API URL
    * @return pointer to the datasource created
    */
-  std::shared_ptr<GDALDataset> createDataSource(const QString& url);
+  std::shared_ptr<GDALDataset> createDataSource(const QString& url) const;
 
   /**
    * @brief openDataSource - Open an OGR datasource from the url
@@ -101,7 +101,7 @@ public:
    * @param readonly - Indicate if the datasource is read/write or read-only
    * @return pointer to the datasource opened
    */
-  std::shared_ptr<GDALDataset> openDataSource(const QString& url, bool readonly);
+  std::shared_ptr<GDALDataset> openDataSource(const QString& url, bool readonly) const;
 
   /**
    * @brief getDriverInfo - Select the GDAL driver to use to open/create the datasource
@@ -109,7 +109,7 @@ public:
    * @param readonly - Indicate if the datasource is read/write or read-only
    * @return OGR driver information based on the URL and read-only flag
    */
-  OgrDriverInfo getDriverInfo(const QString& url, bool readonly);
+  OgrDriverInfo getDriverInfo(const QString& url, bool readonly) const;
 
   /**
    * Returns a collection of supported OGR formats
@@ -118,7 +118,16 @@ public:
    * formats
    * @return a list of data formats
    */
-  QSet<QString> getSupportedFormats(const bool readOnly);
+  QSet<QString> getSupportedFormats(const bool readOnly) const;
+
+  /**
+   * Returns a list of valid ORG files inside of the container, if the 'url' file isn't
+   *  a ZIP, GZIP, or TAR file then an empty list is returned
+   *
+   * @param url URL of the container file, may or may not be prefixed by /vsizip/, etc.
+   * @return list of valid files or empty list if not a container
+   */
+  QStringList getValidFilesInContainer(const QString& url) const;
 
 private:
 

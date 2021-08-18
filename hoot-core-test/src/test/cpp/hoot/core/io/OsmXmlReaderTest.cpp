@@ -54,7 +54,7 @@ public:
   OsmXmlReaderTest() :
   HootTestFixture("test-files/io/OsmXmlReaderTest/", "test-output/io/OsmXmlReaderTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runTest()

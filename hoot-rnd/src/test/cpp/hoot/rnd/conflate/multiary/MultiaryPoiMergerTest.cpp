@@ -55,7 +55,7 @@ public:
     "test-files/rnd/conflate/multiary/MultiaryPoiMergerTest/",
     "test-output/rnd/conflate/multiary/MultiaryPoiMergerTest/")
   {
-    setResetType(ResetAll);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   /**
@@ -102,7 +102,6 @@ public:
     writer.close();
     HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryPoiMergerTest, "glacial");

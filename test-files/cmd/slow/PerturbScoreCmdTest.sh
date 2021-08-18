@@ -6,7 +6,7 @@ mkdir -p $HOOT_HOME/test-output/cmd/slow/PerturbScoreCmdTest
 inputfile=$HOOT_HOME/test-files/DcGisRoads.osm
 outdir=$HOOT_HOME/test-output/cmd/slow/PerturbScoreCmdTest/
 
-myCmd="hoot perturb -D random.seed=1 -D perty.systematic.error.x=1 \
+myCmd="hoot perturb -C Testing.conf -D random.seed=1 -D perty.systematic.error.x=1 \
                         -D perty.systematic.error.y=1 \
                         $inputfile $outdir --score"
 score=`$myCmd | grep "PERTY" | sed "s/PERTY Score: //g"`

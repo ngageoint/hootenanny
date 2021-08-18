@@ -58,9 +58,7 @@ _hasCriterionCache(CACHE_SIZE_DEFAULT),
 _numAddressesCache(CACHE_SIZE_DEFAULT),
 _conflatableElementCache(CACHE_SIZE_DEFAULT)
 {
-  _geometryCache =
-    std::make_shared<Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>>(
-      CACHE_SIZE_DEFAULT);
+  setConfiguration(conf());
 }
 
 void ConflateInfoCache::setConfiguration(const Settings& conf)

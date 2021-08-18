@@ -50,7 +50,7 @@ public:
 
   MultiaryUtilitiesTest()
   {
-    setResetType(ResetAll);
+    setResetType(ResetBasic);
   }
 
   QByteArray convertJsonToPbf(QString json)

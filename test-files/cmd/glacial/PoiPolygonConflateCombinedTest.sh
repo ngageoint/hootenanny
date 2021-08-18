@@ -2,11 +2,8 @@
 set -e
 
 inputDir=test-files/cmd/glacial/PoiPolygonConflateStandaloneTest
-
 checkDir=test-files/cmd/glacial/PoiPolygonConflateCombinedTest
-
 outputDir=test-output/cmd/glacial/PoiPolygonConflateCombinedTest
-
 
 mkdir -p $HOOT_HOME/tmp/
 mkdir -p $outputDir
@@ -15,6 +12,8 @@ mkdir -p $outputDir
 hoot conflate -C UnifyingAlgorithm.conf \
   -C ReferenceConflation.conf \
   -C Testing.conf \
+  -D match.creators="hoot::BuildingMatchCreator;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Poi.js" \
+  -D merger.creators="hoot::BuildingMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator" \
   -D uuid.helper.repeatable=true \
   -D address.scorer.enable.caching=true \
   $inputDir/PoiPolygon1.osm \

@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/io/InternalIdReserver.h>
 #include <hoot/core/io/ServicesJobStatus.h>
 #include <hoot/core/io/SqlBulkDelete.h>
