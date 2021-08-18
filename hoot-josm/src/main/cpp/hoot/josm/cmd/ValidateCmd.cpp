@@ -27,15 +27,10 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/info/ApiEntityDisplayInfo.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/josm/ops/JosmMapValidator.h>
-#include <hoot/josm/ops/JosmMapCleaner.h>
+#include <hoot/josm/validation/MapValidator.h>
 
 namespace hoot
 {
@@ -63,7 +58,7 @@ public:
 
     if (showAvailableValidatorsOnly)
     {
-      _printJosmValidators();
+      MapValidator::printValidators();
     }
     else
     {
@@ -93,20 +88,16 @@ public:
         throw IllegalArgumentException("--output and --separate-output cannot both be specified.");
       }
 
-      QString reportOutput;
+      MapValidator validator;
+
+      bool reportOutput = false;
       if (args.contains("--report-output"))
       {
+        reportOutput = true;
         const int outputIndex = args.indexOf("--report-output");
-        reportOutput = args.at(outputIndex + 1).trimmed();
+        validator.setReportFile(args.at(outputIndex + 1).trimmed());
         args.removeAt(outputIndex + 1);
         args.removeAt(outputIndex);
-
-        if (!IoUtils::isUrl(reportOutput))
-        {
-          // Write the output dir the report is in now so we don't get a nasty surprise at the end
-          // of a long job that it can't be written.
-          IoUtils::writeOutputDir(reportOutput);
-        }
       }
 
       bool recursive = false;
@@ -132,127 +123,14 @@ public:
       }
       LOG_VARD(inputs);
 
-      QString validationSummary;
-      if (!separateOutput)
-      {
-        // combines all inputs, writes them all to the same optional output, and displays a combined
-        // validation summary for all the inputs
-        validationSummary = _validate(inputs, output);
-      }
-      else
-      {
-        // writes a separate output for each input and prints the combined validation summary
-        validationSummary = _validateSeparateOutput(inputs);
-      }
-      if (reportOutput.isEmpty())
+      const QString validationSummary = validator.validate(inputs, output);
+      if (!reportOutput)
       {
         std::cout << validationSummary << std::endl;
-      }
-      else
-      {
-        LOG_STATUS("Writing validation report summary to: ..." << reportOutput.left(25) << "...");
-        FileUtils::writeFully(reportOutput, validationSummary);
       }
     }
 
     return 0;
-  }
-
-private:
-
-  std::shared_ptr<JosmMapValidator> _validate(OsmMapPtr& map)
-  {
-    std::shared_ptr<JosmMapValidator> validator = std::make_shared<JosmMapValidator>();
-    validator->setConfiguration(conf());
-    LOG_STATUS(validator->getInitStatusMessage());
-    validator->apply(map);
-    return validator;
-  }
-
-  QString _validate(const QStringList& inputs, const QString& output)
-  {      
-    LOG_STATUS("Loading " << inputs.size() << " map(s)...");
-    OsmMapPtr map = std::make_shared<OsmMap>();
-    QString inputName;
-    // We need the whole map in memory to validate it, so no point in trying to stream it in.
-    if (inputs.size() == 1)
-    {
-      inputName = inputs.at(0);
-      IoUtils::loadMap(map, inputs.at(0), true, Status::Unknown1);
-    }
-    else
-    {
-      // Avoid ID conflicts across multiple inputs.
-      for (int i = 0; i < inputs.size(); i++)
-      {
-        inputName += inputs.at(i) + ";";
-      }
-      inputName.chop(1);
-      IoUtils::loadMaps(map, inputs, false, Status::Unknown1);
-    }
-
-    LOG_STATUS("Validating combined map...");
-    std::shared_ptr<JosmMapValidator> validator = _validate(map);
-
-    if (!output.isEmpty())
-    {
-      MapProjector::projectToWgs84(map);
-      IoUtils::saveMap(map, output);
-    }
-
-    return "Input: " + inputName + "\n" + validator->getSummary();
-  }
-
-  QString _validateSeparateOutput(const QStringList& inputs)
-  {
-    QString validationSummary;
-    for (int i = 0; i < inputs.size(); i++)
-    {
-      const QString input = inputs.at(i);
-
-      LOG_STATUS(
-        "Loading map " << i + 1 << " of " << inputs.size() << ": ..." << input.right(25) <<
-        "...");
-      OsmMapPtr map = std::make_shared<OsmMap>();
-      IoUtils::loadMap(map, input, true, Status::Unknown1);
-
-      LOG_STATUS(
-        "Validating map " << i + 1 << " of " << inputs.size() << ": ..." << input.right(25) <<
-        "...");
-      validationSummary += "Input: " + input + "\n";
-      validationSummary += _validate(map)->getSummary() + "\n\n";
-
-      // Write the output to a similarly named path as the input with some text appended to the
-      // input name.
-      const QString output = IoUtils::getOutputUrlFromInput(input, "-validated");
-      LOG_STATUS(
-        "Saving map " << i + 1 << " of " << inputs.size() << ": ..." << output.right(25) <<
-        "...");
-      MapProjector::projectToWgs84(map);
-      IoUtils::saveMap(map, output);
-    }
-    return validationSummary.trimmed();
-  }
-
-  void _printJosmValidators()
-  {
-    JosmMapValidator validator;
-    validator.setConfiguration(conf());
-    _printValidatorOutput(validator.getValidatorDetail());
-  }
-
-  void _printValidatorOutput(const QMap<QString, QString>& validatorInfo)
-  {
-    for (QMap<QString, QString>::const_iterator itr = validatorInfo.begin();
-         itr != validatorInfo.end(); ++itr)
-    {
-      const QString name = itr.key();
-      const QString description = itr.value();
-      const int indentAfterName = ApiEntityDisplayInfo::MAX_NAME_SIZE - name.size();
-      const int indentAfterDescription = ApiEntityDisplayInfo::MAX_TYPE_SIZE - description.size();
-      std::cout << name << QString(indentAfterName, ' ') << description <<
-                   QString(indentAfterDescription, ' ') << std::endl;
-    }
   }
 };
 

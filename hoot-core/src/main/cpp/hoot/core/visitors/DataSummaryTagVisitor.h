@@ -55,6 +55,9 @@ public:
    */
   void visit(const ElementPtr& e) override;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& conf) override;
 
   QString getName() const override { return className(); }
