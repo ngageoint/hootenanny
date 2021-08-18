@@ -59,7 +59,7 @@ void ImplicitTagUtils::cleanName(QString& name)
 
 void ImplicitTagUtils::_modifyUndesirableTokens(QString& name)
 {
-  const QStringList nameCleaningTokens; = ConfigOptions().getImplicitTaggingNameCleaningTokens();
+  const QStringList nameCleaningTokens = ConfigOptions().getImplicitTaggingNameCleaningTokens();
   for (int i = 0; i < nameCleaningTokens.size(); i++)
   {
     const QString replacementEntry = nameCleaningTokens.at(i);
