@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/address/AddressParser.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/string/StringDistanceConsumer.h>
@@ -123,15 +122,16 @@ QSet<QString> Address::getStreetTypes(const bool includeAbbreviations)
 {
   if (_streetTypes.isEmpty())
   {
-    const QStringList streetTypesRaw =
-      FileUtils::readFileToList(ConfigOptions().getStreetTypesFile(), true);
-    // This list could be expanded.  See the note in the associated config file.
+    // Possibly, this could be expanded to use something like:
+    // https://pe.usps.com/text/pub28/28apc_002.htm[this] instead.
+    const QStringList streetTypesRaw;// = ConfigOptions().getAddressStreetTypes();
     for (int i = 0; i < streetTypesRaw.size(); i++)
     {
       const QString streetTypeEntry = streetTypesRaw.at(i);
-      const QStringList streetTypeEntryParts = streetTypeEntry.split("\t");
+      const QStringList streetTypeEntryParts = streetTypeEntry.split("=");
       if (streetTypeEntryParts.size() != 2)
       {
+        // Currently we only support 1:1 street type to abbreviation pairings.
         throw HootException("Invalid street type entry: " + streetTypeEntry);
       }
       _streetTypes.insert(streetTypeEntryParts.at(0).toLower());
@@ -148,15 +148,14 @@ QMap<QString, QString> Address::getStreetFullTypesToTypeAbbreviations()
 {
   if (_streetFullTypesToTypeAbbreviations.isEmpty())
   {
-    const QStringList streetTypesRaw =
-      FileUtils::readFileToList(ConfigOptions().getStreetTypesFile(), true);
-    // This list could be expanded.  See the note in the associated config file.
+    const QStringList streetTypesRaw;// = ConfigOptions().getAddressStreetTypes();
     for (int i = 0; i < streetTypesRaw.size(); i++)
     {
       const QString streetTypeEntry = streetTypesRaw.at(i);
-      const QStringList streetTypeEntryParts = streetTypeEntry.split("\t");
+      const QStringList streetTypeEntryParts = streetTypeEntry.split("=");
       if (streetTypeEntryParts.size() != 2)
       {
+        // Currently we only support 1:1 street type to abbreviation pairings.
         throw HootException("Invalid street type entry: " + streetTypeEntry);
       }
       _streetFullTypesToTypeAbbreviations[streetTypeEntryParts.at(0).toLower()] =
@@ -170,15 +169,14 @@ QMap<QString, QString> Address::getStreetTypeAbbreviationsToFullTypes()
 {
   if (_streetTypeAbbreviationsToFullTypes.isEmpty())
   {
-    const QStringList streetTypesRaw =
-      FileUtils::readFileToList(ConfigOptions().getStreetTypesFile(), true);
-    // This list could be expanded.  See the note in the associated config file.
+    const QStringList streetTypesRaw;// = ConfigOptions().getAddressStreetTypes();
     for (int i = 0; i < streetTypesRaw.size(); i++)
     {
       const QString streetTypeEntry = streetTypesRaw.at(i);
-      const QStringList streetTypeEntryParts = streetTypeEntry.split("\t");
+      const QStringList streetTypeEntryParts = streetTypeEntry.split("=");
       if (streetTypeEntryParts.size() != 2)
       {
+        // Currently we only support 1:1 street type to abbreviation pairings.
         throw HootException("Invalid street type entry: " + streetTypeEntry);
       }
       _streetTypeAbbreviationsToFullTypes[streetTypeEntryParts.at(1).toLower()] =

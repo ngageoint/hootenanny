@@ -31,7 +31,6 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QSet>
@@ -54,11 +53,28 @@ QMultiHash<QString, QString> PoiPolygonSchema::_getTypeToNames()
 
 QMultiHash<QString, QString> PoiPolygonSchema::_readTypeToNames()
 {
-  // see related note in ImplicitTagUtils::_modifyUndesirableTokens
+  /* poi.polygon.type.to.names allows for more granularity when comparing elements with the same OSM
+   * type. This is different than what is contained in the Hootenanny schema files, as this deals
+   * with name text and not just feature types. Possibly, a more robust framework could eventually
+   * be created for this capability if its proven more widely useful (more than just POI/Polygon
+   * conflation).
+
+    example 1; two features with tags: 1) name=Bristow High School, amenity=school,
+    2) name=Bristow Elementary School, amenity=school. These two have matching types, and depending
+    upon how name matching is configured, you could end up with a match/review between these two
+    features when you should (most of the time) end up with a miss.
+
+    example 2; two features with tags: 1) name=Bristow High School, amenity=school,
+    2) name=Bristow College, amenity=school. In this case the college was mistakenly tagged as
+    amenity=school, when it should have been tagged as amenity=university. These two should not
+    match either.
+
+    Format: <OSM tag>;<name text 1>,<name text 2>,... List one entry per line in alphabetical order
+    by tag. Keep subtypes in alphabetical order and in lower case.  Each name text should correspond
+    to text commonly associated with a unique subtype of the OSM type.*/
 
   QMultiHash<QString, QString> typeToNames;
-  const QStringList typeToNamesRaw =
-    FileUtils::readFileToList(ConfigOptions().getPoiPolygonTypeToNamesFile(), true);
+  const QStringList typeToNamesRaw;// = ConfigOptions().getPoiPolygonTypeToNames();
   for (int i = 0; i < typeToNamesRaw.size(); i++)
   {
     const QString typeToNamesRawEntry = typeToNamesRaw.at(i);

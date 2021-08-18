@@ -57,8 +57,7 @@ JosmMapValidatorAbstract::~JosmMapValidatorAbstract()
 void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
-  LOG_VARD(opts.getJosmValidatorsFile());
-  _josmValidators = FileUtils::readFileToList(opts.getJosmValidatorsFile());
+  _josmValidators = QStringList();//opts.getJosmValidators();
   _maxElementsForMapString = opts.getJosmMaxElementsForMapString();
 }
 

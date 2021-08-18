@@ -42,41 +42,27 @@ class ImplicitTagCustomRules
 
 public:
 
-  ImplicitTagCustomRules() = default;
-
-  void init();
-
-  QString getCustomRuleFile() const { return _customRuleFile; }
-  void setCustomRuleFile(const QString& file) { _customRuleFile = file; }
-
-  QString getTagIgnoreFile() const { return _tagIgnoreFile; }
-  void setTagIgnoreFile(const QString& file) { _tagIgnoreFile = file; }
-
-  QString getWordIgnoreFile() const { return _wordIgnoreFile; }
-  void setWordIgnoreFile(const QString& file) { _wordIgnoreFile = file; }
+  ImplicitTagCustomRules();
+  ~ImplicitTagCustomRules() = default;
 
   QStringList getTagIgnoreList() const { return _tagIgnoreList; }
   QStringList getWordIgnoreList() const { return _wordIgnoreList; }
-
   QMap<QString, QString> getCustomRulesList() const { return _customRulesList; }
+
+  void setTagIgnoreList(const QStringList& list) { _tagIgnoreList = list; }
+  void setWordIgnoreList(const QStringList& list) { _wordIgnoreList = list; }
+  void setCustomRules(const QStringList& rawRules);
 
 private:
 
-  //file which contains tag rules to be applied manually to the rules database
-  QString _customRuleFile;
-  //file which contains tags that are to be ignored when building the rules database
-  QString _tagIgnoreFile;
-  //file which contains words (name tokens) that are to be ignored when building the rules database
-  QString _wordIgnoreFile;
-
+  // tags that are to be ignored when building the rules database
   QStringList _tagIgnoreList;
+  // words (name tokens) that are to be ignored when building the rules database
   QStringList _wordIgnoreList;
+  // tag rules to be applied manually to the rules database
   QMap<QString, QString> _customRulesList;
 
-  void _readIgnoreLists();
-  void _readAllowLists();
   void _clear();
-  void _readCustomRuleFile();
 };
 
 }

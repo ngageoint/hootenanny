@@ -58,10 +58,6 @@ void ImplicitTagRulesDatabaseDeriver::setConfiguration(const Settings& conf)
   setMinWordLength(confOptions.getImplicitTaggingDatabaseDeriverMinimumWordLength());
   setUseSchemaTagValuesForWordsOnly(
     confOptions.getImplicitTaggingDatabaseDeriverUseSchemaTagValuesForWordsOnly());
-
-  setCustomRuleFile(confOptions.getImplicitTaggingDatabaseDeriverCustomRuleFile());
-  setTagIgnoreFile(confOptions.getImplicitTaggingDatabaseDeriverTagIgnoreFile());
-  setWordIgnoreFile(confOptions.getImplicitTaggingDatabaseDeriverWordIgnoreFile());
 }
 
 void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString& input, const QString& output)
@@ -74,12 +70,7 @@ void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString& input, 
 
   LOG_VARD(_minTagOccurrencesPerWord);
   LOG_VARD(_minWordLength);
-  LOG_VARD(_customRules.getWordIgnoreFile());
-  LOG_VARD(_customRules.getTagIgnoreFile());
-  LOG_VARD(_customRules.getCustomRuleFile());
   LOG_VARD(_useSchemaTagValuesForWordsOnly);
-
-  _customRules.init();
 
   LOG_VARD(_customRules.getWordIgnoreList().size());
   LOG_VARD(_customRules.getWordIgnoreList());

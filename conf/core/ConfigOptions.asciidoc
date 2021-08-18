@@ -110,15 +110,6 @@ the review will receive them as well.
 
 Tag key used by AddUuidVisitor for adding custom unique ID's to data.
 
-=== address.additional.tag.keys
-
-* Data Type: list
-* Default Value:
-** ``
-
-By default,conflation examines standard OSM tags for address comparisons (see the addressTagKeys
-file).  You can expand the tag keys searched by populating this list.
-
 === address.allow.lenient.house.number.matching
 
 * Data Type: bool
@@ -153,13 +144,6 @@ turned off when running certain unit tests which are incompatible with it being 
 String comparison algorithm to use for address comparison during conflation. Must be an
 implementation of `StringDistance`.
 
-=== address.tag.keys.file
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/addressTagKeys`
-
-Flat file containing tag keys that make up feature address components.
-
 === address.translate.to.english
 
 * Data Type: bool
@@ -178,7 +162,7 @@ if the source data is known to have non-English addresses.  The configuration op
 * Default Value: `true`
 
 If true, conflation using address matching will use only libpostal for translating languages in
-addresses, which occurs during address normalization.  If false, and  address.translate.to.english
+addresses, which occurs during address normalization.  If false, and `address.translate.to.english`
 is enabled, POI/Polygon conflation will use additional to English language translation before
 address normalization.  Disable this only if libpostal's language translation is not adequate for
 your language translation needs.
@@ -243,10 +227,10 @@ ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is se
 * Data Type: long
 * Default Value: `1`
 
-First record ID to assign to written ways when writing to an OSM/Hootenanny API database or SQL file.
-Must be a positive number.  Use this when working with an offline database and know the ID range you
-want to assign to way records.  If writing to an OSM API databse, this option is
-ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
+First record ID to assign to written ways when writing to an OSM/Hootenanny API database or SQL
+file. Must be a positive number.  Use this when working with an offline database and know the ID
+range you want to assign to way records.  If writing to an OSM API databse, this option is ignored
+if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
 
 === apidb.bulk.inserter.starting.relation.id
 
@@ -2071,21 +2055,159 @@ to be created that is associated with it.
 
 The minimum allowed word length when associating word tokens with tags.
 
-=== implicit.tagging.database.deriver.custom.rule.file
+=== implicit.tagging.database.deriver.word.ignore.list
 
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesCustomRuleList`
+* Data Type: list
+* Default Value:
+** `air`
+** `and`
+** `animal`
+** `area`
+** `art`
+** `bake`
+** `basin`
+** `beach`
+** `bed`
+** `before`
+** `bin`
+** `block`
+** `boat`
+** `boutique`
+** `box`
+** `building`
+** `buildings`
+** `bureau`
+** `bus`
+** `camp`
+** `car`
+** `care`
+** `center`
+** `centre`
+** `club`
+** `city`
+** `community`
+** `community service`
+** `company`
+** `corner`
+** `county`
+** `country`
+** `course`
+** `court`
+** `cross`
+** `dairy`
+** `dean`
+** `department`
+** `depot`
+** `discount`
+** `district`
+** `dry`
+** `education`
+** `eng`
+** `engineering`
+** `entrance`
+** `estate`
+** `facility`
+** `faculty`
+** `fast`
+** `first`
+** `fish`
+** `food`
+** `for`
+** `former`
+** `free`
+** `game`
+** `garage`
+** `gas`
+** `gate`
+** `general`
+** `gold`
+** `government`
+** `ground`
+** `guest`
+** `hall`
+** `health`
+** `historical`
+** `home`
+** `homes`
+** `host`
+** `house`
+** `housing`
+** `hut`
+** `information`
+** `inlet`
+** `institute`
+** `island`
+** `junction`
+** `landing`
+** `lane`
+** `life`
+** `light`
+** `lot`
+** `mini`
+** `motor`
+** `mud lake`
+** `municipal`
+** `national`
+** `neighborhood`
+** `number historical`
+** `ocean`
+** `office historical`
+** `oil`
+** `parish`
+** `park road`
+** `parts`
+** `pet`
+** `place`
+** `plant`
+** `platform`
+** `plaza`
+** `point`
+** `post`
+** `public`
+** `recreation`
+** `rental`
+** `repair`
+** `rescue`
+** `reservoir number`
+** `residence`
+** `rest`
+** `ride`
+** `ring`
+** `road`
+** `rock`
+** `sales`
+** `sea`
+** `service`
+** `service station`
+** `sport`
+** `sports`
+** `stand`
+** `state`
+** `station`
+** `stop`
+** `store`
+** `street`
+** `strip`
+** `studio`
+** `subdivision`
+** `terminal`
+** `the`
+** `the box`
+** `town`
+** `track`
+** `tree`
+** `under`
+** `village`
+** `water`
+** `wood`
+** `zone`
 
-Flat file containing tab separated word key/value pairs to use as custom rules when deriving an
-implicit tags database from POI names.
-
-=== implicit.tagging.database.deriver.tag.ignore.file
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesTagIgnoreList`
-
-Flat file containing key/value pairs to ignore when deriving an implicit tags database from POI
-names.  Use 'key=*' to ignore all tags for a given key.
+Exact match words in names to always ignore when deriving an implicit tags database from POI names
+(longer phrases containing these words will not be ignored). Use this list to fine tune tagging
+rules behavior based on the auto-generated rules database. Items in this list generally are too
+common and/or often have multiple meanings/applications. Keep the list alphabetized and in lower
+case. Notes: 1) Would like to bring this one back and only match it at the end of the name: mission
+2) Want to ignore this: center
 
 === implicit.tagging.database.deriver.translate.names.to.english
 
@@ -2094,13 +2216,6 @@ names.  Use 'key=*' to ignore all tags for a given key.
 
 If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
 rules are derived.
-
-=== implicit.tagging.database.deriver.word.ignore.file
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesWordIgnoreList`
-
-Flat file containing words to ignore when deriving an implicit tags database from POI names.
 
 === implicit.tagging.database.deriver.use.schema.tag.values.for.words.only
 
@@ -2115,8 +2230,8 @@ value in the Hootenanny schema.
 * Data Type: string
 * Default Value: `hoot::ImplicitTagEligiblePoiPolyCriterion`
 
-Criterion class inheriting from hoot::ImplicitTagEligibleCriterion; The default,
-ImplicitTagEligiblePoiPolyCriterion, derives tag information from POIs, buildings, and areas.  To
+Criterion class inheriting from `hoot::ImplicitTagEligibleCriterion`; The default,
+`ImplicitTagEligiblePoiPolyCriterion`, derives tag information from POIs, buildings, and areas. To
 pass in more nested criterion, use the Hootenanny Javascript interface instead.
 
 === implicit.tagging.keep.temp.files
@@ -2124,7 +2239,7 @@ pass in more nested criterion, use the Hootenanny Javascript interface instead.
 * Data Type: bool
 * Default Value: `false`
 
-If true, the implicit tag raw rules/database derivers will keep all temporary file output.  For
+If true, the implicit tag raw rules/database derivers will keep all temporary file output. For
 debugging only.
 
 === implicit.tagging.max.cache.size
@@ -2134,13 +2249,28 @@ debugging only.
 
 The maximum cache size used by the implicit tag raw rules/database derivers.
 
-=== implicit.tagging.name.cleaning.tokens.file
+=== implicit.tagging.name.cleaning.tokens
 
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesNameCleaningTokens`
+* Data Type: list
+* Default Value:
+** `(;e`
+** `);e`
+** `.;e`
+** `/;s`
+** `<;e`
+** `>;e`
+** `[;e`
+** `];e`
+** `@;e`
+** `&;and`
+** `(historical);e`
+** `-;s`
 
-Flat file containing tokens that should be ignored in names when deriving implicit type tagging
-rules or when determining whether to type tag an element using implicit tagging.
+Tokens that should be ignored in names when deriving implicit type tagging rules or when
+determining whether to type tag an element using implicit tagging. The format is:
+"<token to replace>;<token to replace with>", where "e" is used to replace the token with an empty
+string and "s" is used to replace the token with a single space. Anything else entered as replaced
+text will be used as is.
 
 === implicit.tagging.raw.rules.deriver.skip.filtering
 
@@ -2261,15 +2391,6 @@ Java class to use as the JOSM Java map validator/cleaner implementation.
 The maximum size in elements for a map allowed to be passed as a string between Hootenanny and JOSM.
 The default value was determined experimentally and may need tweaking per environment.
 
-=== josm.validators.file
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/validatorsJosm`
-
-A path to a file containing a line delimited list of JOSM validator Java class names without
-namespace prefixes or file extensions (e.g. 'DuplicatedWayNodes') to use during validation or
-cleaning.
-
 === json.format.hootenanny
 
 * Data Type: bool
@@ -2367,6 +2488,57 @@ Write out empty OSM tags to JSON such as `"text":""`
 * Default Value: `false`
 
 Write out JSON in a more legible manner
+
+=== josm.validators
+
+* Data Type: list
+* Default Value:
+** `Addresses`
+** `ApiCapabilitiesTest`
+** `BarriersEntrances`
+** `Coastlines`
+** `ConditionalKeys`
+** `ConnectivityRelations`
+** `CrossingWays.Boundaries`
+** `CrossingWays.SelfCrossing`
+** `CrossingWays.Ways`
+** `DirectionNodes`
+** `DuplicateRelation`
+** `DuplicateWay`
+** `DuplicatedWayNodes`
+** `Highways`
+** `InternetTags`
+** `Lanes`
+** `LongSegment`
+** `MapCSSTagChecker`
+** `MultipolygonTest`
+** `NameMismatch`
+** `OpeningHourTest `
+** `OverlappingWays`
+** `PowerLines`
+** `PublicTransportRouteTest`
+** `RelationChecker`
+** `RightAngleBuildingTest`
+** `SelfIntersectingWay`
+** `SharpAngles`
+** `SimilarNamedWays`
+** `TagChecker`
+** `TurnrestrictionTest`
+** `UnclosedWays`
+** `UnconnectedWays.UnconnectedHighways`
+** `UnconnectedWays.UnconnectedNaturalOrLanduse`
+** `UnconnectedWays.UnconnectedPower`
+** `UnconnectedWays.UnconnectedRailways`
+** `UnconnectedWays.UnconnectedWaterways`
+** `UntaggedNode`
+** `UntaggedWay`
+** `WayConnectedToArea`
+** `WronglyOrderedWays`
+
+List of JOSM validator Java class names without namespace prefixes or file extensions (e.g.
+'DuplicatedWayNodes') to use during validation or cleaning. With each JOSM upgrade a check needs to
+be made for new available validators by looking at the hardcoded list in the
+`OsmValidator::CORE_TEST_CLASSES` member variable. Last updated version: 18118.
 
 === language.detection.detector
 
@@ -3713,7 +3885,7 @@ runtime performance implications.
 
 If true, POI/Polygon conflation will attempt to search for phone numbers within tag value text
 that may contain things other than phone numbers.  If false, the conflation will assume the tag
-value is a phone number and will not search within it.  poi.polygon.phone.number.region.code must
+value is a phone number and will not search within it. `poi.polygon.phone.number.region.code` must
 be set to a valid region code when enabling this option.  Enabling this option may have runtime
 performance implications.
 
@@ -3882,22 +4054,6 @@ If true, POI/Polygon conflation will compare phone number as one of the criteria
 features.  If the data being conflated is known to have poor telephone number data, disabling this
 option may speed up conflation runtime performance.
 
-=== poi.polygon.poi.ignore.tags.file
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/poi-polygon/poiPolygonPoiTagIgnoreList`
-
-Path to a file containing a list of POI feature ignore tags.  Any POIs containing tags in the file
-will be skipped by POI to Polygon conflation.
-
-=== poi.polygon.poly.ignore.tags.file
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/poi-polygon/poiPolygonPolyTagIgnoreList`
-
-Path to a file containing a list of polygon feature ignore tags.  Any polygons containing tags in
-the file will be skipped by POI to Polygon conflation.
-
 === poi.polygon.calculate.match.distance.truth
 
 * Data Type: bool
@@ -3977,14 +4133,6 @@ is always used and changes to this option value are ignore.
 
 The minimum similarity the type scores, in the range (0.0,1.0], a POI and polygon can have and be
 considered a type match, with 0.0 being the least similar and 1.0 being the most similar.
-
-=== poi.polygon.type.to.names.file
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/poi-polygon/poiPolygonTypeToNames`
-
-Flat file containing OSM types and lists of possible texts features having such a type might
-contain.
 
 === poi.polygon.type.translate.to.english
 
@@ -5132,13 +5280,6 @@ status is 'Invalid'.
 Adds the specified status to elements.  Valid values are: 'Conflated', 'Invalid', 'Unknown1',
 'Unknown2'. If left empty, all elements will receive tag additions.
 
-=== street.types.file
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/streetTypes`
-
-Flat file containing street types and their abbreviations.
-
 === subline.matcher.secondary
 
 * Data Type: string
@@ -5716,7 +5857,7 @@ generally it should be `1 >= p >= 0`.
 * Default Value: `true`
 
 If true, Hootenanny review tags are treated as metadata tags and will be removed by the
-NoInformationElementRemover cleaning operation.
+`NoInformationElementRemover` cleaning operation.
 
 === writer.include.circular.error.tags
 
