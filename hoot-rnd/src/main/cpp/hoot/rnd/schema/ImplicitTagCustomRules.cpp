@@ -38,7 +38,7 @@ ImplicitTagCustomRules::ImplicitTagCustomRules()
   LOG_DEBUG("Intializing POI implicit tag custom rules...");
   _clear();
   ConfigOptions opts;
-  setCustomRules(QStringList()/*opts.getImplicitTaggingDatabaseDeriverCustomRules()*/);
+  setCustomRules(opts.getImplicitTaggingDatabaseDeriverCustomRules());
   setTagIgnoreList(opts.getImplicitTaggingDatabaseDeriverTagIgnoreList());
   setWordIgnoreList(opts.getImplicitTaggingDatabaseDeriverWordIgnoreList());
 }
