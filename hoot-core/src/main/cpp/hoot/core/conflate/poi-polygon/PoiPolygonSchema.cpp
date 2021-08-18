@@ -67,18 +67,14 @@ QMultiHash<QString, QString> PoiPolygonSchema::_readTypeToNames()
     example 2; two features with tags: 1) name=Bristow High School, amenity=school,
     2) name=Bristow College, amenity=school. In this case the college was mistakenly tagged as
     amenity=school, when it should have been tagged as amenity=university. These two should not
-    match either.
-
-    Format: <OSM tag>;<name text 1>,<name text 2>,... List one entry per line in alphabetical order
-    by tag. Keep subtypes in alphabetical order and in lower case.  Each name text should correspond
-    to text commonly associated with a unique subtype of the OSM type.*/
+    match either.*/
 
   QMultiHash<QString, QString> typeToNames;
   const QStringList typeToNamesRaw = ConfigOptions().getPoiPolygonTypeToNames();
   for (int i = 0; i < typeToNamesRaw.size(); i++)
   {
     const QString typeToNamesRawEntry = typeToNamesRaw.at(i);
-    const QStringList typeToNamesRawEntryParts = typeToNamesRawEntry.split(";");
+    const QStringList typeToNamesRawEntryParts = typeToNamesRawEntry.split("|");
     if (typeToNamesRawEntryParts.size() != 2)
     {
       throw HootException("Invalid POI/Polygon type to names entry: " + typeToNamesRawEntry);

@@ -63,7 +63,7 @@ void ImplicitTagUtils::_modifyUndesirableTokens(QString& name)
   for (int i = 0; i < nameCleaningTokens.size(); i++)
   {
     const QString replacementEntry = nameCleaningTokens.at(i);
-    const QStringList replacementEntryParts = replacementEntry.split(";");
+    const QStringList replacementEntryParts = replacementEntry.split("|");
     if (replacementEntryParts.size() != 2)
     {
       throw HootException(
