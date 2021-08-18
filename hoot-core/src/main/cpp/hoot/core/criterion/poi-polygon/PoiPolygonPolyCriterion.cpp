@@ -42,7 +42,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, PoiPolygonPolyCriterion)
 
 PoiPolygonPolyCriterion::PoiPolygonPolyCriterion() :
-_tagIgnoreList(QStringList()/*ConfigOptions().getPoiPolygonPolyIgnoreTags()*/)
+_tagIgnoreList(ConfigOptions().getPoiPolygonPolyIgnoreTags())
 {
   LOG_VART(_tagIgnoreList);
 }

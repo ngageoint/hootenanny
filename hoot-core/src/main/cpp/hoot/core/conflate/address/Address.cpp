@@ -124,7 +124,7 @@ QSet<QString> Address::getStreetTypes(const bool includeAbbreviations)
   {
     // Possibly, this could be expanded to use something like:
     // https://pe.usps.com/text/pub28/28apc_002.htm[this] instead.
-    const QStringList streetTypesRaw;// = ConfigOptions().getAddressStreetTypes();
+    const QStringList streetTypesRaw; = ConfigOptions().getAddressStreetTypes();
     for (int i = 0; i < streetTypesRaw.size(); i++)
     {
       const QString streetTypeEntry = streetTypesRaw.at(i);
@@ -148,7 +148,7 @@ QMap<QString, QString> Address::getStreetFullTypesToTypeAbbreviations()
 {
   if (_streetFullTypesToTypeAbbreviations.isEmpty())
   {
-    const QStringList streetTypesRaw;// = ConfigOptions().getAddressStreetTypes();
+    const QStringList streetTypesRaw; = ConfigOptions().getAddressStreetTypes();
     for (int i = 0; i < streetTypesRaw.size(); i++)
     {
       const QString streetTypeEntry = streetTypesRaw.at(i);
@@ -169,7 +169,7 @@ QMap<QString, QString> Address::getStreetTypeAbbreviationsToFullTypes()
 {
   if (_streetTypeAbbreviationsToFullTypes.isEmpty())
   {
-    const QStringList streetTypesRaw;// = ConfigOptions().getAddressStreetTypes();
+    const QStringList streetTypesRaw; = ConfigOptions().getAddressStreetTypes();
     for (int i = 0; i < streetTypesRaw.size(); i++)
     {
       const QString streetTypeEntry = streetTypesRaw.at(i);

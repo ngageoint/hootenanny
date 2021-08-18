@@ -136,6 +136,26 @@ well as the loading of a fairly large amount of address data.
 Allows address comparison to score addresses parsed from elements. This is generally only to be
 turned off when running certain unit tests which are incompatible with it being enabled.
 
+=== address.street.types
+
+* Data Type: list
+* Default Value:
+** `highway=crossing`
+** `avenue=ave`
+** `boulevard=blvd`
+** `circle=cir`
+** `freeway=fwy`
+** `highway=hwy`
+** `lane=ln`
+** `place=pl`
+** `plaza=plz`
+** `road=rd`
+** `street=st`
+** `tollway=twy`
+
+Maps street types to their abbreviations. The token before '=' is the street type. Abbreviations
+follow after the '='.
+
 === address.string.comparer
 
 * Data Type: string
@@ -143,6 +163,19 @@ turned off when running certain unit tests which are incompatible with it being 
 
 String comparison algorithm to use for address comparison during conflation. Must be an
 implementation of `StringDistance`.
+
+=== address.tag.keys
+
+* Data Type: list
+* Default Value:
+** `full_address=address,addr:full,ref:addr,source:addr,source:address`
+** `house_number=addr:conscriptionnumber,addr:door,addr:housenumber,addr:provisionalnumber,addr:street:sym_ul,addr:streetnumber,addr:housename`
+** `street=addr:street,addr:street:name`
+** `street_prefix=addr:street:prefix`
+** `street_suffix=addr:street:suffix,addr:street:type`
+
+Maps a set of address components to OSM address tag keys. The token  before '=' is the address
+component type. Mapped tag keys follow after the '=' and are delimited with ','.
 
 === address.translate.to.english
 
@@ -3935,6 +3968,14 @@ If true, instances where multiple POIs were matched to a single polygon will res
 POIs being automatically merged into the polygon.  If false, then each matched POI will generate a
 review against the polygon instead.
 
+=== poi.polygon.calculate.match.distance.truth
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, debug match distance output will be obtained from manually matched source data if running
+'hoot score-matches' with POI to Polygon conflation.
+
 === poi.polygon.disable.intradataset.conflation.1
 
 * Data Type: bool
@@ -4035,6 +4076,14 @@ The minimum similarity the name scores, in the range (0.0,1.0], of two features 
 considered a name match, with 0.0 being the least similar and 1.0 being the most similar (-1.0 if
 there are no names present (null).
 
+=== poi.polygon.name.string.comparer
+
+* Data Type: string
+* Default Value: `hoot::KskipBigramDistance`
+
+String comparison algorithm to use for name comparison with POI/Polygon conflation. Must be an
+implementation of `StringDistance`.
+
 === poi.polygon.name.translate.to.english
 
 * Data Type: bool
@@ -4054,13 +4103,75 @@ If true, POI/Polygon conflation will compare phone number as one of the criteria
 features.  If the data being conflated is known to have poor telephone number data, disabling this
 option may speed up conflation runtime performance.
 
-=== poi.polygon.calculate.match.distance.truth
+=== poi.polygon.poi.ignore.tags
 
-* Data Type: bool
-* Default Value: `false`
+* Data Type: list
+* Default Value:
+** `aeroway=gate`
+** `amenity=atm`
+** `amenity=bench`
+** `amenity=drinking_water`
+** `amenity=parking_entrance`
+** `amenity=post_box`
+** `amenity=recycling`
+** `amenity=sanitary_dump_station`
+** `amenity=shower`
+** `amenity=telephone`
+** `amenity=vending_machine`
+** `amenity=waste_basket`
+** `barrier=entrance`
+** `barrier=gate`
+** `barrier=obstacle`
+** `barrier=toll_booth`
+** `barrier=wall`
+** `building=entrance`
+** `emergency=fire_hydrant`
+** `emergency=suction_point`
+** `highway=*`
+** `information=guidepost`
+** `landuse=grass`
+** `leisure=firepit`
+** `leisure=picnic_table`
+** `man_made=surveillance`
+** `natural=tree`
+** `place=city`
+** `place=village`
+** `power=pole`
+** `public_transport=stop_position`
+** `railway=crossing`
+** `railway=platform`
+** `railway=tram_stop`
+** `railway=turntable`
+** `traffic_sign=*`
 
-If true, debug match distance output will be obtained from manually matched source data if running
-'hoot score-matches' with POI to Polygon conflation.
+A list of POI feature tags to ignore. Any POIs containing these tags will be skipped by POI to
+Polygon conflation matching. Supports value wildcards; e.g. amenity=*. Keep the list alphabetized
+and in lower case. Note: removed "railway=subway_entrance" for POI/Poly regression test D.
+
+=== poi.polygon.poly.ignore.tags
+
+* Data Type: list
+* Default Value:
+** `barrier=city_wall`
+** `barrier=fence`
+** `barrier=wall`
+** `boundary=administrative`
+** `highway=residential`
+** `landuse=grass`
+** `landuse=residential`
+** `leisure=bleachers`
+** `natural=coastline`
+** `natural=fell`
+** `natural=glacier`
+** `natural=scrub`
+** `natural=tree_row`
+** `place=city`
+** `place=neighbourhood`
+** `railway=platform`
+
+A list of polygon feature tags to ignore. Any polygons containing these tags will be skipped by POI
+to Polygon conflation matching. Supports value wildcards; e.g. amenity=*. Keep the list alphabetized
+and in lower case.
 
 === poi.polygon.promote.points.with.addresses.to.pois
 
@@ -4109,14 +4220,6 @@ controlled by the Hootenanny schema.
 
 The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.
 
-=== poi.polygon.name.string.comparer
-
-* Data Type: string
-* Default Value: `hoot::KskipBigramDistance`
-
-String comparison algorithm to use for name comparison with POI/Polygon conflation. Must be an
-implementation of `StringDistance`.
-
 === poi.polygon.tag.merger
 
 * Data Type: string
@@ -4133,6 +4236,15 @@ is always used and changes to this option value are ignore.
 
 The minimum similarity the type scores, in the range (0.0,1.0], a POI and polygon can have and be
 considered a type match, with 0.0 being the least similar and 1.0 being the most similar.
+
+=== poi.polygon.type.to.names
+
+* Data Type: list
+* Default Value:
+** `amenity=school;college,elementary school,junior high,high school,middle school,university`
+
+This list maps common name texts that represent different types of features to specific OSM types
+for POI to Polygon matching.
 
 === poi.polygon.type.translate.to.english
 

@@ -74,7 +74,7 @@ QMultiHash<QString, QString> PoiPolygonSchema::_readTypeToNames()
     to text commonly associated with a unique subtype of the OSM type.*/
 
   QMultiHash<QString, QString> typeToNames;
-  const QStringList typeToNamesRaw;// = ConfigOptions().getPoiPolygonTypeToNames();
+  const QStringList typeToNamesRaw = ConfigOptions().getPoiPolygonTypeToNames();
   for (int i = 0; i < typeToNamesRaw.size(); i++)
   {
     const QString typeToNamesRawEntry = typeToNamesRaw.at(i);

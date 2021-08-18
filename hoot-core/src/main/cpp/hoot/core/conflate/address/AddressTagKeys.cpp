@@ -53,7 +53,7 @@ AddressTagKeys::AddressTagKeys()
 
 void AddressTagKeys::_readAddressTagKeys() const
 {
-  const QStringList addressTagKeyEntries;//= ConfigOptions().getAddressTagKeys();
+  const QStringList addressTagKeyEntries = ConfigOptions().getAddressTagKeys();
   for (int i = 0; i < addressTagKeyEntries.size(); i++)
   {
     const QString addressTagKeyEntry = addressTagKeyEntries.at(i);
