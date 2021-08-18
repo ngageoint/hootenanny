@@ -1,7 +1,3 @@
-# -------------------------------------------------
-# Any code that makes calls to JOSM via JNI should go into this project. JOSM integration is the only functionality that currently uses JOSM.
-# If that changes at any point, then JNI classes may need to be moved to their own project.
-# -------------------------------------------------
 
 QT += testlib \
     xml \

@@ -1,0 +1,7 @@
+This project contains V8 Javascript engine compatibility.
+
+Most if not all of the files end in Js. This is to avoid confusion w/ the wrapped class that may 
+have a similar or identical object name w/o the Js.
+
+
+
