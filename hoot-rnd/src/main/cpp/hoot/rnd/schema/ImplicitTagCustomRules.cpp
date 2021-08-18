@@ -39,7 +39,7 @@ ImplicitTagCustomRules::ImplicitTagCustomRules()
   _clear();
   ConfigOptions opts;
   setCustomRules(QStringList()/*opts.getImplicitTaggingDatabaseDeriverCustomRules()*/);
-  setTagIgnoreList(QStringList()/*opts.getImplicitTaggingDatabaseDeriverTagIgnoreList()*/);
+  setTagIgnoreList(opts.getImplicitTaggingDatabaseDeriverTagIgnoreList());
   setWordIgnoreList(opts.getImplicitTaggingDatabaseDeriverWordIgnoreList());
 }
 

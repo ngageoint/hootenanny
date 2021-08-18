@@ -105,7 +105,7 @@ void ImplicitTagUtils::_filterOutStreets(QString& name)
   else
   {
     // This list could be expanded.  See the note in the associated config file.
-    const QStringList streetTypes;// = ConfigOptions().getAddressStreetTypes();
+    const QStringList streetTypes = ConfigOptions().getAddressStreetTypes();
     for (int i = 0; i < streetTypes.size(); i++)
     {
       const QString streetTypeEntry = streetTypes.at(i);

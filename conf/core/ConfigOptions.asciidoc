@@ -2088,6 +2088,48 @@ to be created that is associated with it.
 
 The minimum allowed word length when associating word tokens with tags.
 
+=== implicit.tagging.database.deriver.tag.ignore.list
+
+* Data Type: list
+* Default Value:
+** `abandoned:place=populated`
+** `bridge=yes`
+** `capital=yes`
+** `historic=yes`
+** `junction=yes`
+** `place=county`
+** `place=hamlet`
+** `place=locality`
+** `place=municipality`
+** `place=neighbourhood`
+** `place=populated`
+** `place=province`
+** `place=region`
+** `place=state`
+** `place=suburb`
+** `place=town`
+** `place=village`
+
+Key/value pairs to ignore when deriving an implicit tags database from POI names. Use this list to
+fine tune tagging rules behavior based on the auto-generated rules database. Format: 'key=value'.
+Use 'key=*' to ignore all tags for a given key. Keep the list alphabetized and in lower case.
+
+=== implicit.tagging.database.deriver.translate.names.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
+rules are derived.
+
+=== implicit.tagging.database.deriver.use.schema.tag.values.for.words.only
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the implicit tag raw rules generator will only consider words that correspond to a OSM tag
+value in the Hootenanny schema.
+
 === implicit.tagging.database.deriver.word.ignore.list
 
 * Data Type: list
@@ -2241,22 +2283,6 @@ rules behavior based on the auto-generated rules database. Items in this list ge
 common and/or often have multiple meanings/applications. Keep the list alphabetized and in lower
 case. Notes: 1) Would like to bring this one back and only match it at the end of the name: mission
 2) Want to ignore this: center
-
-=== implicit.tagging.database.deriver.translate.names.to.english
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
-rules are derived.
-
-=== implicit.tagging.database.deriver.use.schema.tag.values.for.words.only
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, the implicit tag raw rules generator will only consider words that correspond to a OSM tag
-value in the Hootenanny schema.
 
 === implicit.tagging.element.criterion
 
