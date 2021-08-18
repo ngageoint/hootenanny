@@ -179,6 +179,7 @@ public class JosmMapValidator
     {
       for (String validatorClassName : validators)
       {
+        validatorClassName = validatorClassName.trim();
         Test validationTest =
           (Test)Class.forName(
             VALIDATORS_NAMESPACE + "." + validatorClassName.replace(".", "$")).newInstance();
@@ -425,9 +426,10 @@ public class JosmMapValidator
     long startTime = System.currentTimeMillis();
 
     //Logging.trace("elements size: " + elements.size());
-    for (String validator : validators)
+    for (String validatorClassName : validators)
     {
-      runValidation((Test)Class.forName(validator).newInstance(), map);
+      validatorClassName = validatorClassName.trim();
+      runValidation((Test)Class.forName(validatorClassName).newInstance(), map);
     }
 
     Logging.debug(

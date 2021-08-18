@@ -2783,7 +2783,7 @@ The default value was determined experimentally and may need tweaking per enviro
 ** `MapCSSTagChecker`
 ** `MultipolygonTest`
 ** `NameMismatch`
-** `OpeningHourTest `
+** `OpeningHourTest`
 ** `OverlappingWays`
 ** `PowerLines`
 ** `PublicTransportRouteTest`
