@@ -66,7 +66,7 @@ HootTest --glacial '--include=.*Big.*'
 HootTest --single hoot::AlphaShapeTest
 ---------------
 
-==== Core Unit Tests
+==== Unit Tests
 
 The core unit tests use CPPUnit. The goal is to have one test class for each functional class, but
 in many cases the coverage from the command line tests (described later) prevent this from being 
@@ -127,12 +127,42 @@ Note in the above example that two directories are specified. The first is the d
 write test output files. If not input and/or output directories are required by the test, you can
 use `UNUSED_PATH`, which is the default.
 
+===== Testing with Address Data
+
+Any tests that manipulate address data must use the third party library, libpostal. libpostal 
+requires a large amount of data at initialization time and is treated as a Singleton with the 
+`LibPostalInit` class in code to ensure only loading that data once. When writing tests that call 
+`LibPostalInit`, additional care must taken to make sure it is only being initialized once during 
+multi-threaded test execution. Each test process thread potentially can call `LibPostalInit` if it 
+launches a test that manipulates address data. 
+
+To cut down on calls to `LibPostalInit`, by default address matching is turned of via the option 
+`address.match.enabled=false`. The option is to be enabled only for tests that require using address 
+data. To absolutely ensure that we are only creating one `LibPostalInit`
+instance, all address related tests are executed within a single CPPUnit test method within the 
+class `AddressConflateTest` which is executed as part of the serial test queue. This solution is a 
+little kludgy, but works. This makes tracking down address related test failures more difficult, but 
+it can still be done via the CPPUnit test failure line number reported. No address related tests 
+should be created as command line tests, which will run in a separate process each. Also, no address 
+related tests should be created as case tests, since there is no mechanism to run them serially.
+
+Going forward there here are some things that may make usage of libpostal in tests easier:
+
+* Several of the tests using `LibPostalInit` could possibly be mocked to reduce
+potential calls to it. However, Hootenanny currently does not have a mock testing framework 
+available. 
+* The Hootenanny test framework could possibly be manipulated to ensure all address related tests
+run within the same process via some address test registry mechanism. That would obviate the need
+for the combined `AddressConflateTest`. (related: #4908)
+* Possibly there is a way to load and work with a reduced subset of libpostal data for testing 
+purposes.
+
 ===== Additional Details
 
 * Tests within the `hoot-rnd` module are generally always run in the `--glacial` test suite.
 * Tests which use the single test OSM API database instance must be run in series.
 
-==== Core Command Line Tests
+==== Command Line Tests
 
 The C++ portion of Hootenanny exposes functionality via a command line interface. This command line
 interface is tested via simple shell scripts. The shell scripts output is compared against a known
@@ -293,7 +323,7 @@ isolation should be run serially by placing them in the "serial" folder.
 * If you write a class that uses caching, make the cache size configurable and set the size to the 
 lowest possible value in order for tests to pass within `Testing.conf`.
 
-==== Core Case Tests (Micro Conflate Tests)
+==== Case Tests (Micro Conflate)
 
 Frequently it is desirable to test one aspect of the conflation routines. E.g. did the names get
 merged properly? Did two buildings get matched/merged? etc. The micro conflate tests are designed
@@ -329,7 +359,7 @@ HootTest --case-only
 
 See +test-files/cases/README+ for additional information on case tests.
 
-==== Running Core Tests in Parallel
+==== Running Tests in Parallel
 
 Hootenanny can run all Core tests in parallel, except those in the Translation test suite. This is 
 accomplished with the `HootTest` option, `--parallel [n]`, where the optional `[n]` specifies the 
@@ -365,7 +395,7 @@ NOTE: While creating new unit tests every effort should be made to allow for the
 in parallel. Do not reuse output filenames to avoid stomping on files. Input files can be reused
 though.
 
-==== Core Translation Tests
+==== Translation Tests
 
 Formerly known as the "Plugins" tests, these test a variety of `hoot-js` functionality. Not all of 
 the tests are strictly translation related. Tests may be invoked in isolation with:
@@ -381,7 +411,7 @@ cd $HOOT_HOME/translations/test
 mocha <test name>.js
 --------------
 
-=== Core Regression Tests
+==== Regression Tests
 
 The Regression Tests run Hootenanny command line operations against specific datasets to measure
 Hootenanny performance against particular scenarios. The tests are run against non-public data and,
@@ -430,7 +460,7 @@ complete.  There currently is no means to separate the two.
 The mocha based web services tests (see node-export-server/test as an example) are not
 currently aligned with the test suites.
 
-===== Java Web Services Unit Tests
+===== Web Services Unit Tests
 
 The Web Services Unit Tests are meant to test the Java web service code at the class level.
 See hoot-services/src/test/java for test examples.
@@ -442,7 +472,7 @@ method declaration:
 @Category(UnitTest.class)
 -----------
 
-===== Java Web Services Integration Tests
+===== Web Services Integration Tests
 
 The Web Services Integration Tests are meant to test the Java web service code across logical
 boundaries, such as HTTP, Postgres, OGC, etc.  See hoot-services/src/test/java for test examples.
@@ -587,7 +617,6 @@ together:
 The test coverage reports will be output to _$HOOT_HOME/coverage_.
 
 Additional notes:
-
 * Running tests `--with-coverage` may signficantly slow down their runtime and increase their memory
 usage. Therefore, its recommended to use `--with-coverage` only when you need to generate a test
 coverage report, and you may need to use a lower `--parallel` test count in conjunction with it.
@@ -602,30 +631,22 @@ run with all compile configuration options enabled (--with-rnd, --with-services,
 run 'make test-all', or if you don't want to run the Java web services tests then run something 
 like: 'HootTest --glacial --parallel && make translations-test'.
 
-=== General Test Writing Guidelines
+=== Test Writing Guidelines
+
+==== General
 
 * Unit tests should strive to test at the single class level only, when possible.
 * Unit tests should have nearly a one to one mapping to each class in code. Use the code coverage
 report to see where your tests are deficient.
 * Unit tests should avoid interfacing with external entities, when possible. e.g. databases,
-web servers (Note: Many of the Java services tests violate this and should be updated).  Such
-tests that interface with external entities should then become integration tests instead.
+web servers. Such tests that interface with external entities should then become integration tests 
+instead.
 * Unit tests should cover as many exceptional error handling cases as is reasonable.
 * Use clear test method names to state what you are testing.
 * Make gratuitous use of asserts during testing.
 * Use comments in test methods where its not obvious in the code how/why you're testing something.
-* Care should be taken to categorize tests based on the amount of time they complete. e.g. don't
-put a longer running test in the C++ quick tests. For the Java tests, longer running tests should
-most likely be put into the integration tests.
 * Small amounts of test data should be used for testing if possible. Do not check very large test 
 data files into the repository. Keep test files to <= 1MB when possible.
-* During testing you can verify test output via CPPUnit asserts against the state of the output data 
-or via file comparison (`HOOT_FILE_EQUALS`) of the output with known good output. An advantage to 
-using file comparison for testing output is that the test code is less verbose and tedious to 
-maintain as the class evolves. A disadvantage of using file comparison is that it is not always 
-clear what the intentions of your test are and individuals can inadvertently overwrite your intended 
-test output if they do not understand why they broke the test. Weigh these pros and cons when 
-selecting which one of these test output verification methods you will use.
 * Do not overwrite generated test output used to verify a test unless you are sure that in doing
 so you are still preserving the integrity of the test.
 * In Java, mock objects are your friends when writing tests.
@@ -633,40 +654,24 @@ so you are still preserving the integrity of the test.
 to expose members only to the tests. e.g. Use C++ friend keyword, etc.; or in Java, Mockito may
 help with this.
 
-=== Hootenanny Specific Test Writing Guidelines
+==== Core Specific
 
+* During testing you can verify test output via CPPUnit asserts against the state of the output data 
+or via file comparison (`HOOT_FILE_EQUALS`) of the output with known good output. An advantage to 
+using file comparison for testing output is that the test code is less verbose and tedious to 
+maintain as the class evolves. A disadvantage of using file comparison is that it is not always 
+clear what the intentions of your test are and individuals can inadvertently overwrite your intended 
+test output if they do not understand why they broke the test. Weigh these pros and cons when 
+selecting which one of these test output verification methods you will use.
 * When configuring tests that run conflation, run them with the minimal number of conflate matchers
 that are necessary. e.g. If only conflating roads, only use a road matcher. This helps increase the 
 overall runtime performance of the tests and reduce their memory footprint.
+* Care should be taken to categorize tests based on the amount of time they complete. e.g. don't
+put a longer running test in the C++ quick tests.
+* Keep test using address data with libpostal confined to a single CPPUnit test (see Testing with 
+Address Data section).
 
-==== Testing with Address Data
+==== Services Specific
 
-Any tests that manipulate address data must use the third party library, libpostal. libpostal 
-requires a large amount of data at initialization time and is treated as a Singleton with the 
-`LibPostalInit` class in code to ensure only loading that data once. When writing tests that call 
-`LibPostalInit`, additional care must taken to make sure it is only being initialized once during 
-multi-threaded test execution. Each test process thread potentially can call `LibPostalInit` if it 
-launches a test that manipulates address data. 
-
-To cut down on calls to `LibPostalInit`, by default address matching is turned of via the option 
-`address.match.enabled=false`. The option is to be enabled only for tests that require using address 
-data. To absolutely ensure that we are only creating one `LibPostalInit`
-instance, all address related tests are executed within a single CPPUnit test method within the 
-class `AddressConflateTest` which is executed as part of the serial test queue. This solution is a 
-little kludgy, but works. This makes tracking down address related test failures more difficult, but 
-it can still be done via the CPPUnit test failure line number reported. No address related tests 
-should be created as command line tests, which will run in a separate process each. Also, no address 
-related tests should be created as case tests, since there is no mechanism to run them serially.
-
-Going forward there here are some things that may make usage of libpostal in tests easier:
-
-* Several of the tests using `LibPostalInit` could possibly be mocked to reduce
-potential calls to it. However, Hootenanny currently does not have a mock testing framework 
-available. 
-* The Hootenanny test framework could possibly be manipulated to ensure all address related tests
-run within the same process via some address test registry mechanism. That would obviate the need
-for the combined `AddressConflateTest`. (related: #4908)
-* Possibly there is a way to load and work with a reduced subset of libpostal data for testing 
-purposes.
-
+* For the Java tests, longer running tests should most likely be put into the integration tests.
 

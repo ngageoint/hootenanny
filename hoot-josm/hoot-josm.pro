@@ -1,8 +1,3 @@
-# -------------------------------------------------
-# Any code that makes calls to JOSM via JNI should go into this project. This library has the only 
-# functionality that currently uses JOSM. If that changes at any point, then JNI classes may need to 
-# be moved to their own project or up to hoot-core.
-# -------------------------------------------------
 
 QT += testlib \
     xml \

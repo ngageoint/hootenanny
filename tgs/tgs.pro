@@ -1,6 +1,3 @@
-##########################
-# General statistics and machine learning utilities
-##########################
 
 QT += xml \
     testlib \
