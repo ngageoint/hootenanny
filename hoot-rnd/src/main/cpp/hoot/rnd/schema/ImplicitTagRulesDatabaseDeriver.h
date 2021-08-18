@@ -71,7 +71,7 @@ public:
   void setUseSchemaTagValuesForWordsOnly(bool use) { _useSchemaTagValuesForWordsOnly = use; } 
   void setTagIgnoreList(const QStringList& list) { _customRules.setTagIgnoreList(list); }
   void setWordIgnoreList(const QStringList& list) { _customRules.setWordIgnoreList(list); }
-  void setCustomRules(const QStringList& rawRules) { _customRules.setCustomRules(rawRules);}
+  void setCustomRuleFile(const QString& file) { _customRules.setCustomRuleFile(file); }
 
 private:
 

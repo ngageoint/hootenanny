@@ -51,7 +51,7 @@ public:
 
   void setTagIgnoreList(const QStringList& list) { _tagIgnoreList = list; }
   void setWordIgnoreList(const QStringList& list) { _wordIgnoreList = list; }
-  void setCustomRules(const QStringList& rawRules);
+  void setCustomRuleFile(const QString& file);
 
 private:
 
@@ -61,8 +61,11 @@ private:
   QStringList _wordIgnoreList;
   // tag rules to be applied manually to the rules database
   QMap<QString, QString> _customRulesList;
+  // file which contains tag rules to be applied manually to the rules database
+  QString _customRuleFile;
 
   void _clear();
+  void _readCustomRuleFile();
 };
 
 }

@@ -1,0 +1,311 @@
+# A list of custom implicit tagging rules based on name.  These rules override any rules associated 
+# with the same word in the rules database. Use this list to fine tune tagging rules behavior. To 
+# assign multiple tags to a single word, delimit the tags with a semicolon.
+
+# Format: word\tkey1=value1;key2=value2 
+
+# Keep the list alphabetized by tag value and in lower case.
+#
+# Note: The decision was made to keep this in its own configuration file vs putting it in a list 
+# within ConfigOptions.asciidoc in order for the format to be able to directly mimic that of 
+# *.implicitTagRules .
+
+academy	amenity=school
+administration building	office=government
+administrative building	office=administrative
+administrative buildings	office=administrative
+airport	aeroway=aerodrome
+alteration	shop=alteration
+ambulance station	emergency=ambulance_station
+and resort	leisure=resort
+apartment	building=apartment
+apartments	building=apartment
+arboretum	building=greenhouse
+art supply	shop=art
+association	building=office
+auditorium	amenity=auditorium
+auto center	shop=car
+auto parts	shop=car_parts
+auto repair	shop=car_repair
+auto service	shop=car_repair
+bagels	amenity=restaurant
+bar and grill	amenity=restaurant
+baseball	sport=baseball
+baseball field	leisure=pitch;sport=baseball
+basketball	sport=basketball
+basketball court	leisure=pitch;sport=basketball
+beauty salon	shop=hairdresser
+boathouse	amenity=boathouse
+book store	shop=books
+bicycle shop	shop=bicycle
+bicycle rental	amenity=bicycle_rental
+bicycle trail	route=bicycle
+bicycles	shop=bicycle
+bike rental	amenity=bicycle_rental
+bike shop	shop=bicycle
+bike trail	route=bicycle
+bistro	amenity=restaurant
+bleachers	leisure=bleachers
+boutique	shop=boutique
+brewery	craft=brewery
+brewing	craft=brewery
+buffalo wings	amenity=restaurant
+burger	amenity=restaurant;cuisine=burger
+burrito	amenity=restaurant;cuisine=mexican
+bus station	amenity=bus_station
+business park	landuse=industrial
+cabin	building=cabin
+camp	tourism=camp_site
+campground	tourism=camp_site
+campsite	tourism=camp_site
+candies	shop=candy
+car parts	shop=car_parts
+car rental	amenity=car_rental
+carport	parking=carports
+car repair	shop=car_repair
+cathedral	amenity=place_of_worship
+cemetery	amenity=grave_yard
+cemeteries	amenity=grave_yard
+check cashing	amenity=check_cashing
+child care	amenity=school
+child development	amenity=school
+child development center	amenity=school
+childrens center	amenity=school
+chop house	amenity=restaurant;cuisine=steak
+cigar bar	shop=cigar
+civic center	building=civic
+clinic	amenity=clinic
+clothing	shop=clothes
+clubhouse	amenity=community_center
+club house	amenity=community_center
+coffee bar	amenity=cafe
+coffee house	amenity=cafe
+college dormitory	building=dormitory
+community center	amenity=community_centre
+community garden	leisure=garden
+computer shop	shop=computer
+computers	shop=computer
+consignment	shop=consignment
+condo	building=apartment
+condos	building=apartment
+conference center	amenity=conference_centre
+conferences center	amenity=conference_centre
+credit union	amenity=bank
+cuisine	amenity=restaurant
+cultural center	building=civic
+cupcakes	amenity=restaurant;cuisine=cupcake
+cyclery	shop=bicycle
+day care	amenity=kindergarten
+day care center	amenity=kindergarten
+day school	amenity=shool
+deli	amenity=restaurant
+delicatessen	amenity=restaurant
+dental	amenity=dentist
+dentist	amenity=dentist
+dentistry	amenity=dentist
+department of	office=government
+detention center	amenity=prison
+diner	amenity=restaurant;cuisine=american
+disc golf course	sport=disc_golf
+dog play area	leisure=dog_park
+donuts	amenity=restaurant;cuisine=donut
+dormitory	building=dormitory
+drug store	amenity=pharmacy
+dry clean	shop=dry_cleaning
+dry cleaner	shop=dry_cleaning
+dry cleaning	shop=dry_cleaning
+early learning	amenity=school
+eatery	amentity=restaurant
+engine house	amenity=fire_station
+equestrian	sport=equestrian
+equitation	sport=equestrian
+fashion institute	amenity=school
+ferry	amenity=ferry_terminal
+fire department	amenity=fire_station
+food bank	social_facility=food_bank
+food mart	shop=grocery
+foods	shop=grocery
+football	sport=football
+football field	leisure=pitch
+footwear	shop=shoes
+forestry center	office=forestry
+fort	historic=fort
+frisbee golf course	sport=disc_golf
+frozen yogurt	amenity=restaurant;cuisine=frozen_yogurt
+education center	amenity=school
+garage	building=garage
+garden	leisure=garden
+gelato	amenity=ice_cream
+gentlemen's club	amenity=stripclub
+gift shop	shop=yes
+glassworks	shop=yes
+greenhouse	building=greenhouse
+grill	amenity=restaurant
+grocery	shop=grocery
+gymnasium	leisure=fitness_centre
+hair accessories	shop=yes
+hair studio	shop=hairdresser
+handball	sport=handball
+headquarters	building=office
+health center	amenity=clinic
+heliport	aeroway=helipad
+house of	building=house
+home of	building=house
+ice cream	amenity=ice_cream
+ice skating rink	leisure=ice_rink
+imax theater	amenity=cinema
+information center	tourism=information
+inn	tourism=hotel
+institute	amenity=school
+insurance company	office=insurance
+internet cafe	amenity=internet_cafe
+junction	junction=yes
+junior high	amenity=school
+justice center	amenity=courthouse
+korean barbecue	amenity=resturant;cuisine=korean
+korean bbq	amenity=resturant;cuisine=korea
+lake	water=lake
+launderette	shop=laundry
+learning center	amenity=school
+lighthouse	man_made=lighthouse
+liquors	shop=liquors
+lodge	tourism=hotel
+mansion	building=yes
+meats	shop=meat
+medical school	amenity=school
+marina	leisure=marina
+market	shop=supermarket
+metro station	railway=subway
+ministry of	office=government
+motel	tourism=motel
+motor inn	amenity=trailer_park
+movie theater	amenity=cinema
+moving storage	shop=storage_rental
+music concourse	amenity=auditorium
+nail spa	beauty=nails
+natural area	leisure=park
+neighborhood center	building=civic
+net cafe	amenity=internet_cafe
+night club	amenity=club
+nightclub	amenity=club
+nursery	amenity=kindergarten;nursery=yes
+nursing home	amenity=nursing_home
+office building	building=office
+opera house	amenity=theatre
+optometry	healthcare=optometrist
+optometrist	healthcare=optometrist
+paints	shop=paint
+park fieldhouse	amenity=community_centre
+park pavilion	building=pavilion
+parking garage	amenity=parking
+pasta	amenity=restaurant
+pastry	shop=pastry
+pastries	shop=pastry
+petroleumeum	amenity=fuel
+petroleumeum station	amenity=fuel
+pet shop	shop=pet
+pho	amenity=restaurant;cuisine=noodle
+picnic area	tourism=picnic_site
+picnic table	leisure=picnic_table
+pies	amenity=restaurant;cuisine=pies
+pizza	amenity=restaurant;cuisine=pizza
+pizzeria	amenity=restaurant;cuisine=pizza
+planetarium	amenity=planetarium
+plant nursery	landuse=plant_nursery
+play area	leisure=playground
+playground	leisure=playground
+playground clubhouse	building=civic
+playing field	leisure=pitch
+plumbing	shop=plumbing
+pool	sport=swimming
+pool building	sport=swimming
+power plant	power=plant
+power substation	power=substation
+power sub station	power=substation
+preschool	amenity=preschool
+project area	landuse=construction
+putting green	sport=golf
+quarters	building=yes
+rec center	amenity=community_centre
+recreation center	amenity=community_centre
+recreation ctr	amenity=community_centre
+recreation hall	amenity=community_centre
+reservoir	water=reservoir
+residential housing	building=housing
+restaurant and lounge	amenity=restaurant
+restaurant and sports bar	amenity=restaurant
+restroom	amenity=toilets
+retirement home	amenity=nursing_home
+ristorante	amenity=restaurant
+roof	building=yes
+ruins	historic=ruins
+sailing	sport=sailing
+saloon	amenity=bar
+sandwiches	amenity=restaurant;cuisine=sandwich
+scuba supply	shop=scuba_diving
+senior center	amenity=community_centre
+sewage plant	pumping_station=sewage
+shoe repair	shop=shoe_repair
+shop	shop=yes
+shops	shop=yes
+smoke shop	tobacco=shop
+soccer	sport=soccer
+soccer field	leisure=pitch;sport=soccer
+soccer stadium	leisure=stadium;sport=soccer
+soul food	amenity=restaurant;cuisine=soul_food
+soup	amenity=restaurant;cuisine=soup
+spa	amenity=spa
+spa hotel	tourism=hotel
+sport center	leisure=sports_centre
+sport club	leisure=sports_centre
+sporting club	leisure=sports_centre
+sporting goods	shop=yes
+sports center	leisure=sports_centre
+sports club	leisure=sports_centre
+stables	amenity=stables
+station	station=yes
+steak house	amenity=restaurant;cuisine=steak
+steakhouse	amenity=restaurant;cuisine=steak
+steam laundry	shop=dry_cleaning
+strip club	amenity=stripclub
+substation	substation=yes
+# putting this in to counteract subway restaurant in the db; possibly need a better way to handle
+subway	railway=subway
+sub station	substation=yes
+sushi	amenity=restaurant;cusine=sushi
+sushi bar	amenity=restaurant;cusine=sushi
+surgical center	amenity=hospital
+synagogue	amenity=synagogue;religion=jewish
+taqueria	amenity=restaurant;cuisine=mexican
+tavern	amenity=pub
+teahouse	amenity=restaurant
+tea room	amenity=restaurant
+teaching center	amenity=school
+temple	amenity=place_of_worship
+tennis	sport=tennis
+tennis court	leisure=pitch;sport=tennis
+tennis courts	leisure=pitch;sport=tennis
+thrift store	shop=yes
+toll booth	barrier=toll_booth
+university dormitory	building=dormitory
+university hospital	amenity=hospital
+university medical center	amenity=hospital
+vacant	vacant=yes
+visitor bureau	tourism=information
+visitors bureau	tourism=information
+visitor center	tourism=information
+visitor information center	tourism=information
+visitors center	tourism=information
+visitors information center	tourism=information
+warehouse	building=warehouse
+wash dry	shop=dry_cleaning
+water tower	man_made=water_tower
+wellness center	amenity=community_centre
+windmill	man_made=windmill
+wine bar	amenity=bar
+wine and spirits	shop=liquor
+wine and liquors	shop=liquor
+wok	amenity=restaurant;cuisine=chinese
+yacht club	amenity=bar
+youth center	amenity=community_centre
+zoo	tourism=zoo

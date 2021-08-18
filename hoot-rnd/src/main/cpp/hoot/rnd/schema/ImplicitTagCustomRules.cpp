@@ -30,6 +30,9 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
+// Qt
+#include <QFile>
+
 namespace hoot
 {
 
@@ -37,8 +40,8 @@ ImplicitTagCustomRules::ImplicitTagCustomRules()
 {
   LOG_DEBUG("Intializing POI implicit tag custom rules...");
   _clear();
+  _readCustomRuleFile();
   ConfigOptions opts;
-  setCustomRules(opts.getImplicitTaggingDatabaseDeriverCustomRules());
   setTagIgnoreList(opts.getImplicitTaggingDatabaseDeriverTagIgnoreList());
   setWordIgnoreList(opts.getImplicitTaggingDatabaseDeriverWordIgnoreList());
 }
@@ -50,22 +53,40 @@ void ImplicitTagCustomRules::_clear()
   _customRulesList.clear();
 }
 
-void ImplicitTagCustomRules::setCustomRules(const QStringList& rawRules)
+void ImplicitTagCustomRules::setCustomRuleFile(const QString& file)
 {
-  for (int i = 0; i < rawRules.size(); i++)
+  _customRuleFile = file;
+  _readCustomRuleFile();
+}
+
+void ImplicitTagCustomRules::_readCustomRuleFile()
+{
+  LOG_VARD(_customRuleFile);
+  if (!_customRuleFile.trimmed().isEmpty())
   {
-    const QString rule = rawRules.at(i).trimmed();
-    LOG_VART(rule);
-    if (!rule.trimmed().isEmpty() && !rule.startsWith("#"))
+    QFile customRulesFile(_customRuleFile);
+    if (!customRulesFile.open(QIODevice::ReadOnly))
     {
-      const QStringList ruleParts = rule.trimmed().split("|");
-      LOG_VART(ruleParts);
-      if (ruleParts.size() != 2)
-      {
-        throw HootException("Invalid custom rule: " + rule);
-      }
-      _customRulesList[ruleParts[0].trimmed()] = ruleParts[1].trimmed();
+      throw HootException(
+        QObject::tr("Error opening %1 for writing.").arg(customRulesFile.fileName()));
     }
+    _customRulesList.clear();
+    while (!customRulesFile.atEnd())
+    {
+      const QString line = QString::fromUtf8(customRulesFile.readLine().constData()).trimmed();
+      LOG_VART(line);
+      if (!line.trimmed().isEmpty() && !line.startsWith("#"))
+      {
+        const QStringList lineParts = line.trimmed().split("\t");
+        LOG_VART(lineParts);
+        if (lineParts.size() != 2)
+        {
+          throw HootException("Invalid custom rule: " + line);
+        }
+        _customRulesList[lineParts[0].trimmed()] = lineParts[1].trimmed();
+      }
+    }
+    customRulesFile.close();
   }
   LOG_VART(_customRulesList);
 }

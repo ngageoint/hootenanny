@@ -66,7 +66,7 @@ public:
     rulesDeriver.setMinTagOccurrencesPerWord(1);
     rulesDeriver.setMinWordLength(1);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
-    rulesDeriver.setCustomRules(QStringList());
+    rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setTagIgnoreList(QStringList());
     rulesDeriver.setWordIgnoreList(QStringList());
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
@@ -83,7 +83,7 @@ public:
     rulesDeriver.setMinTagOccurrencesPerWord(1);
     rulesDeriver.setMinWordLength(1);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
-    rulesDeriver.setCustomRules(QStringList());
+    rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setTagIgnoreList(QStringList());
     rulesDeriver.setWordIgnoreList(QStringList());
 
@@ -126,7 +126,7 @@ public:
     rulesDeriver.setMinTagOccurrencesPerWord(4);
     rulesDeriver.setMinWordLength(1);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
-    rulesDeriver.setCustomRules(QStringList());
+    rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setTagIgnoreList(QStringList());
     rulesDeriver.setWordIgnoreList(QStringList());
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
@@ -147,7 +147,7 @@ public:
     rulesDeriver.setMinTagOccurrencesPerWord(1);
     rulesDeriver.setMinWordLength(10);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
-    rulesDeriver.setCustomRules(QStringList());
+    rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setTagIgnoreList(QStringList());
     rulesDeriver.setWordIgnoreList(QStringList());
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
@@ -168,7 +168,7 @@ public:
     rulesDeriver.setMinTagOccurrencesPerWord(1);
     rulesDeriver.setMinWordLength(1);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
-    rulesDeriver.setCustomRules(QStringList());
+    rulesDeriver.setCustomRuleFile("");
     QStringList tagIgnore;
     tagIgnore.append("amenity=bank");
     tagIgnore.append("tourism=*");
@@ -193,9 +193,8 @@ public:
     rulesDeriver.setMinTagOccurrencesPerWord(1);
     rulesDeriver.setMinWordLength(1);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
-    rulesDeriver.setCustomRules(QStringList());
+    rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setTagIgnoreList(QStringList());
-    rulesDeriver.setCustomRules(QStringList());
     QStringList wordIgnore;
     wordIgnore.append("bank");
     wordIgnore.append("Ali Voyages");
@@ -219,13 +218,9 @@ public:
     rulesDeriver.setMinTagOccurrencesPerWord(1);
     rulesDeriver.setMinWordLength(1);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
-    rulesDeriver.setCustomRules(QStringList());
     rulesDeriver.setTagIgnoreList(QStringList());
-    QStringList customRules;
-    customRules.append("wine and liquors|shop=liquor");
-    customRules.append("youth center|amenity=community_centre");
-    customRules.append("zoo|tourism=zoo");
-    rulesDeriver.setCustomRules(customRules);
+    rulesDeriver.setCustomRuleFile(
+      _inputPath + "ImplicitTagRulesDatabaseDeriverTest-custom-rules-list");
     rulesDeriver.setWordIgnoreList(QStringList());
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
 
@@ -245,7 +240,7 @@ public:
     rulesDeriver.setMinTagOccurrencesPerWord(1);
     rulesDeriver.setMinWordLength(1);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(false);
-    rulesDeriver.setCustomRules(QStringList());
+    rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setTagIgnoreList(QStringList());
     rulesDeriver.setWordIgnoreList(QStringList());
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
