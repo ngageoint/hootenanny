@@ -1,38 +1,38 @@
 //
-// The ConfigOptions.asciidoc is a specially formatted file that is parsed
-// during the build process to generate the ConfigOptions.h header file and
-// user documentation. Changing the default values in this file will change
-// the way Hootenanny runs so be careful, this isn't just documentation.
+// The ConfigOptions.asciidoc is a specially formatted file that is parsed during the build process
+// to generate the ConfigOptions.h header file, services JSON config files, and user documentation.
+// Changing the default values in this file will change the way Hootenanny runs so be careful, this
+// isn't just documentation.
 //
-// This file is also parsed by asciidoc to generate the user documentation. Look
-// at that; our docs and code are in lock step! Nice. Please keep this in mind
-// when writing documentation. This isn't just comments, this is user
-// documentation. Try to include the following information in the description:
+// This file is also parsed by asciidoc to generate the user documentation. Look at that; our docs
+// and code are in lock step! Nice. Please keep this in mind when writing documentation. This isn't
+// just comments, this is user documentation. Try to include the following information in the
+// description:
 //
 // * What does this configuration change?
 // * If relevant, what are the units of the config option (e.g. meters)?
-// * Where can the user go to get more information? Please reference the
-//   appropriate document. E.g. "See `convert` in the _Command Line
-//   Reference_ for more information."
-// * What other options may be of interest? E.g. "See also
-//   `big.perty.op.sigma`"
+// * Where can the user go to get more information? Please reference the appropriate document. E.g.
+//   "See `convert` in the _Command Line Reference_ for more information."
+// * What other options may be of interest? E.g. "See also `big.perty.op.sigma`"
 // * Please keep the list in Alphabetical order.
 //
 // The format is as follows:
 //
-// The section name is all lowercase and separated by periods. This shouldn't
-// contain any special characters.
+// The section name is all lowercase and separated by periods. This shouldn't contain any special
+// characters.
 // === key.name
 //
 // * Data Type: <string, double, list, bool, int, long>
 // * Default Value: <value>
 //
-// If the default value is for a list then the default value should be followed
-// by a number of sub items in the list. E.g.
+// If the default value is for a list then the default value should be followed by a number of sub
+// items in the list. E.g.
 // * Default Value:
 // ** `<Value 1>`
 // ** `<Value 2>`
 // The left ticks provide proper formatting in the documentation.
+//
+// Note that list entries may not contain the ';' character.
 //
 // Finally the section that contains the documentation. This is free-form
 // asciidoc just make sure you don't start any lines with "=== ".
@@ -2374,6 +2374,47 @@ Database used by the POI implicit tagger to derive POI type tags implicitly base
 ** `yacht club|amenity=bar`
 ** `youth center|amenity=community_centre`
 ** `zoo|tourism=zoo`
+
+Key/value pairs to ignore when deriving an implicit tags database from POI names. Use this list to
+fine tune tagging rules behavior based on the auto-generated rules database. Format: 'key=value'.
+Use 'key=*' to ignore all tags for a given key. Keep the list alphabetized and in lower case.
+
+=== implicit.tagging.database.deriver.minimum.tag.occurrences.per.word
+
+* Data Type: int
+* Default Value: `1000`
+
+The minimum number of times a tag must be associated with a word in order for an implicit tag rule
+to be created that is associated with it.
+
+=== implicit.tagging.database.deriver.minimum.word.length
+
+* Data Type: int
+* Default Value: `3`
+
+The minimum allowed word length when associating word tokens with tags.
+
+=== implicit.tagging.database.deriver.tag.ignore.list
+
+* Data Type: list
+* Default Value:
+** `abandoned:place=populated`
+** `bridge=yes`
+** `capital=yes`
+** `historic=yes`
+** `junction=yes`
+** `place=county`
+** `place=hamlet`
+** `place=locality`
+** `place=municipality`
+** `place=neighbourhood`
+** `place=populated`
+** `place=province`
+** `place=region`
+** `place=state`
+** `place=suburb`
+** `place=town`
+** `place=village`
 
 Key/value pairs to ignore when deriving an implicit tags database from POI names. Use this list to
 fine tune tagging rules behavior based on the auto-generated rules database. Format: 'key=value'.

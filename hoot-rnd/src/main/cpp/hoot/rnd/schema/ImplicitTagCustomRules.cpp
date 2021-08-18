@@ -58,7 +58,7 @@ void ImplicitTagCustomRules::setCustomRules(const QStringList& rawRules)
     LOG_VART(rule);
     if (!rule.trimmed().isEmpty() && !rule.startsWith("#"))
     {
-      const QStringList ruleParts = rule.trimmed().split(",");
+      const QStringList ruleParts = rule.trimmed().split("|");
       LOG_VART(ruleParts);
       if (ruleParts.size() != 2)
       {

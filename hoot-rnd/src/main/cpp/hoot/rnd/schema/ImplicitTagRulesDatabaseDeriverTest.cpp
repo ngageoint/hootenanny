@@ -222,9 +222,9 @@ public:
     rulesDeriver.setCustomRules(QStringList());
     rulesDeriver.setTagIgnoreList(QStringList());
     QStringList customRules;
-    customRules.append("wine and liquors	shop=liquor");
-    customRules.append("youth center	amenity=community_centre");
-    customRules.append("zoo	tourism=zoo");
+    customRules.append("wine and liquors|shop=liquor");
+    customRules.append("youth center|amenity=community_centre");
+    customRules.append("zoo|tourism=zoo");
     rulesDeriver.setCustomRules(customRules);
     rulesDeriver.setWordIgnoreList(QStringList());
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);

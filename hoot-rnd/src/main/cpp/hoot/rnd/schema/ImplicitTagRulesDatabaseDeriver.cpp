@@ -334,7 +334,8 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString& input)
 
       if (!ignoreTag)
       {
-        const QString customRuleTag = _customRules.getCustomRulesList().value(word.toLower(), "");
+        QString customRuleTag = _customRules.getCustomRulesList().value(word.toLower(), "");
+        customRuleTag = customRuleTag.replace(",", ";");
         if (customRuleTag == kvp)
         {
           LOG_TRACE(
