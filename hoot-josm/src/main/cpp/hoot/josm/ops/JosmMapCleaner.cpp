@@ -161,7 +161,7 @@ void JosmMapCleaner::_getStats()
 {
   LOG_DEBUG("Retrieving stats...");
 
-  // call back into the hoot-josm validator to get the stats after validation
+  // Call back into the hoot-josm validator to get the stats after validation.
 
   JosmMapValidatorAbstract::_getStats();
   _numElementsCleaned = _getNumElementsCleaned();
@@ -176,7 +176,8 @@ void JosmMapCleaner::_getStats()
 
   _errorSummary =
     "Found " + StringUtils::formatLargeNumber(_numValidationErrors) +
-    " validation errors in " + StringUtils::formatLargeNumber(_numAffected) + " features.\n";
+    " validation errors in " + StringUtils::formatLargeNumber(_numAffected) +
+    " features with JOSM.\n";
   _errorSummary +=
     "Total elements cleaned: " + StringUtils::formatLargeNumber(_numElementsCleaned) + "\n";
   _errorSummary +=

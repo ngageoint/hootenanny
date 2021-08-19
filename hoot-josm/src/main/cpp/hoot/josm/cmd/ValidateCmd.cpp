@@ -45,7 +45,7 @@ public:
 
   QString getName() const override { return "validate"; }
   QString getType() const override { return "josm"; }
-  QString getDescription() const override { return "Checks map data for validation errors"; }
+  QString getDescription() const override { return "Checks maps for validation errors"; }
 
   virtual int runSimple(QStringList& args) override
   {

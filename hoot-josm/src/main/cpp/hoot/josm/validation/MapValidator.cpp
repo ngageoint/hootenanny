@@ -27,11 +27,16 @@
 #include "MapValidator.h"
 
 // hoot
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/info/ApiEntityDisplayInfo.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/validation/Validator.h>
+#include <hoot/josm/ops/JosmMapValidator.h>
 
 namespace hoot
 {
@@ -49,14 +54,49 @@ void MapValidator::setReportFile(const QString& file)
 
 void MapValidator::printValidators()
 {
-  _printJosmValidators();
+  QMap<QString, QString> josmValidators = _getJosmValidators();
+  QMap<QString, QString> hootValidators = _getHootValidators();
+  QMap<QString, QString> validators = josmValidators;
+  validators.unite(hootValidators);
+  _printValidatorOutput(validators);
 }
 
-void MapValidator::_printJosmValidators()
+QString MapValidator::validate(const QStringList& inputs, const QString& output) const
+{
+  if (output.trimmed().isEmpty())
+  {
+    return _validateSeparateOutput(inputs);
+  }
+  else
+  {
+    return _validate(inputs, output);
+  }
+}
+
+QMap<QString, QString> MapValidator::_getJosmValidators()
 {
   JosmMapValidator validator;
   validator.setConfiguration(conf());
-  _printValidatorOutput(validator.getValidatorDetail());
+  return validator.getValidatorDetail();
+}
+
+QMap<QString, QString> MapValidator::_getHootValidators()
+{
+  const QStringList hootValidators = ConfigOptions().getHootValidators();
+  LOG_VARD(hootValidators);
+  QMap<QString, QString> validatorsInfo;
+  for (int i = 0; i < hootValidators.size(); i++)
+  {
+    std::shared_ptr<ApiEntityInfo> validatorInfo =
+      std::dynamic_pointer_cast<ApiEntityInfo>(
+        Factory::getInstance().constructObject<OsmMapOperation>(hootValidators.at(i)));
+    if (validatorInfo)
+    {
+      validatorsInfo[validatorInfo->getName().replace("hoot::", "")] =
+        validatorInfo->getDescription();
+    }
+  }
+  return validatorsInfo;
 }
 
 void MapValidator::_printValidatorOutput(const QMap<QString, QString>& validatorInfo)
@@ -73,25 +113,49 @@ void MapValidator::_printValidatorOutput(const QMap<QString, QString>& validator
   }
 }
 
-QString MapValidator::validate(const QStringList& inputs, const QString& output) const
+QString MapValidator::_validate(OsmMapPtr& map) const
 {
-  if (output.trimmed().isEmpty())
-  {
-    return _validateSeparateOutput(inputs);
-  }
-  else
-  {
-    return _validate(inputs, output);
-  }
+  return _validateWithJosm(map) + "\n\n" + _validateWithHoot(map);
 }
 
-std::shared_ptr<JosmMapValidator> MapValidator::validate(OsmMapPtr& map) const
+QString MapValidator::_validateWithJosm(OsmMapPtr& map) const
 {
   std::shared_ptr<JosmMapValidator> validator = std::make_shared<JosmMapValidator>();
   validator->setConfiguration(conf());
   LOG_STATUS(validator->getInitStatusMessage());
   validator->apply(map);
-  return validator;
+  return validator->getSummary().trimmed();
+}
+
+QString MapValidator::_validateWithHoot(OsmMapPtr& map) const
+{
+  const QStringList hootValidators = ConfigOptions().getHootValidators();
+  QString validationSummary;
+  int numFeaturesValidated = 0;
+  int numValidationErrors = 0;
+  for (int i = 0; i < hootValidators.size(); i++)
+  {
+    std::shared_ptr<OsmMapOperation> op =
+      Factory::getInstance().constructObject<OsmMapOperation>(hootValidators.at(i));
+    if (op)
+    {
+      std::shared_ptr<Validator> validator = std::dynamic_pointer_cast<Validator>(op);
+      if (validator)
+      {
+        validator->enableValidation();
+        op->apply(map);
+        validationSummary += validator->getValidationErrorMessage() + "\n";
+        numFeaturesValidated += validator->getNumFeaturesValidated();
+        numValidationErrors += validator->getNumValidationErrors();
+      }
+    }
+  }
+  validationSummary.prepend(
+    "Found " + QString::number(numValidationErrors) + " validation errors in " +
+    QString::number(numFeaturesValidated) + " features with Hootenanny.");
+  // hardcoding this for now
+  validationSummary += "Total failing Hootenanny validators: 0";
+  return validationSummary.trimmed();
 }
 
 QString MapValidator::_validate(const QStringList& inputs, const QString& output) const
@@ -117,7 +181,7 @@ QString MapValidator::_validate(const QStringList& inputs, const QString& output
   }
 
   LOG_STATUS("Validating combined map...");
-  std::shared_ptr<JosmMapValidator> validator = validate(map);
+  const QString validationSummary = "Input: " + inputName + "\n\n" + _validate(map);
 
   if (!output.isEmpty())
   {
@@ -125,7 +189,6 @@ QString MapValidator::_validate(const QStringList& inputs, const QString& output
     IoUtils::saveMap(map, output);
   }
 
-  const QString validationSummary = "Input: " + inputName + "\n" + validator->getSummary();
   if (!_reportFile.isEmpty())
   {
     LOG_STATUS("Writing validation report summary to: ..." << _reportFile.left(25) << "...");
@@ -150,8 +213,8 @@ QString MapValidator::_validateSeparateOutput(const QStringList& inputs) const
     LOG_STATUS(
       "Validating map " << i + 1 << " of " << inputs.size() << ": ..." << input.right(25) <<
       "...");
-    validationSummary += "Input: " + input + "\n";
-    validationSummary += validate(map)->getSummary() + "\n\n";
+    validationSummary += "Input: " + input + "\n\n";
+    validationSummary += _validate(map) + "\n\n";
 
     // Write the output to a similarly named path as the input with some text appended to the
     // input name.

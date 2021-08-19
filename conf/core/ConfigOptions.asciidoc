@@ -1040,7 +1040,7 @@ See also:
 ** `hoot::RemoveEmptyRelationsOp`
 ** `hoot::RelationCircularRefRemover`
 ** `hoot::MultilineStringMergeRelationCollapser`
-** `hoot::RoadCrossingPolyReviewMarker`
+** `hoot::RoadCrossingPolyMarker`
 ** `hoot::ApiTagTruncateVisitor`
 ** `hoot::AddHilbertReviewSortOrderOp`
 
@@ -1774,7 +1774,7 @@ Threshold in degrees between the heading of two way segments that constitutes a 
 * Default Value: `${HOOT_HOME}/conf/core/RoadCrossingPolyRules.json`
 
 Rules for which types of polygon features to check for roads crossing over them to flag as reviews
-by RoadCrossingPolyReviewMarker. See the "Crossing Roads" section in the "Feature Validation"
+by RoadCrossingPolyMarker. See the "Crossing Roads" section in the "Feature Validation"
 documentation for detail on the rule file format.
 
 === highway.match.threshold
@@ -1917,6 +1917,14 @@ used.
 * Default Value: ``
 
 Hootenanny Web Services user name associated with an authenticated login.
+
+=== hoot.validators
+
+* Data Type: list
+* Default Value:
+** `RoadCrossingPolyMarker`
+
+List of Hootenanny validators to use during validation. See also: `josm.validators`.
 
 === hootapi.db.writer.copy.bulk.insert
 
@@ -2507,7 +2515,8 @@ The default value was determined experimentally and may need tweaking per enviro
 List of JOSM validator Java class names without namespace prefixes or file extensions (e.g.
 'DuplicatedWayNodes') to use during validation or cleaning. With each JOSM upgrade a check needs to
 be made for new available validators by looking at the hardcoded list in the
-`OsmValidator::CORE_TEST_CLASSES` member variable. Last updated version: 18118.
+`OsmValidator::CORE_TEST_CLASSES` member variable. Last updated version: 18118. See also:
+`hoot.validators`.
 
 === json.format.hootenanny
 

@@ -29,13 +29,15 @@
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/josm/ops/JosmMapValidator.h>
 
 namespace hoot
 {
 
 /**
  * This is a wrapper around both JOSM and hoot validators.
+ *
+ * Note: DataQualityMetricTagger has some validator type logic in it, but think there's a lot of
+ * overlap between the JOSM validators. May be worth looking into using parts of it.
  */
 class MapValidator
 {
@@ -45,7 +47,6 @@ public:
   MapValidator() = default;
   ~MapValidator() = default;
 
-  std::shared_ptr<JosmMapValidator> validate(OsmMapPtr& map) const;
   QString validate(const QStringList& inputs, const QString& output = QString()) const;
 
   static void printValidators();
@@ -57,13 +58,17 @@ private:
   QString _reportFile;
 
   static void _printValidatorOutput(const QMap<QString, QString>& validatorInfo);
-  static void _printJosmValidators();
+  static QMap<QString, QString> _getJosmValidators();
+  static QMap<QString, QString> _getHootValidators();
 
   // This combines all inputs, writes them all to the same optional output, and calculates a
   // combined validation summary for all the inputs.
   QString _validate(const QStringList& inputs, const QString& output) const;
   // This writes a separate output for each input and calculates the combined validation summary.
   QString _validateSeparateOutput(const QStringList& inputs) const;
+  QString _validate(OsmMapPtr& map) const;
+  QString _validateWithJosm(OsmMapPtr& map) const;
+  QString _validateWithHoot(OsmMapPtr& map) const;
 };
 
 }
