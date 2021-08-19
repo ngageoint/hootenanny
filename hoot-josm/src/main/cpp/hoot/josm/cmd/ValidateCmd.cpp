@@ -35,6 +35,10 @@
 namespace hoot
 {
 
+/*
+ * @todo think there's still a but here with certain combinations of --report-output, --output,
+ * --separate-output, and --recursive
+ */
 class ValidateCmd : public BaseCommand
 {
 public:

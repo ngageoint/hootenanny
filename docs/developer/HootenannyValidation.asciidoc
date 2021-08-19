@@ -11,11 +11,9 @@ integration code resides in the `hoot-josm` library and is used by the `validate
 uses the `JosmMapValidator` class, and the `JosmMapCleaner` class.
 
 The Hootenanny/JOSM integration is a useful tool to detect undesirable changes to conflated output 
-caused by code changes before they make it to the production environment. The 
-https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[Hootenanny tests] 
-have options to aid with such tasks. We have elected to make validation checks a voluntary part of
-the development process vs having them performed automatically within tests for the following 
-reasons:
+caused by code changes before they make it to the production environment. We have elected to make 
+validation checks a voluntary part of the testing process for now vs having them performed 
+automatically within tests for the following reasons (the decision may be reversed at some point):
 
 * Not all validation failures are critical and some may be unavoidable in conflated output under 
 certain circumstances.
@@ -38,7 +36,7 @@ hoot validate test-output/cmd/slow/AreaConflateStandaloneTest --recursive "*"--r
 `validate` as used above will generate a single validation report at the specified report output 
 location with multiple entries for each test output geospatial file encountered in the input 
 directory. The file `conf/core/validationReportExclude` can be used to configure any test output 
-file that should not have a validation report generated for it.
+file that should not have a validation report generated for it (TODO: future).
 
 === Comparing Validation Reports Against Different Code Versions
 

@@ -54,10 +54,8 @@ void MapValidator::setReportFile(const QString& file)
 
 void MapValidator::printValidators()
 {
-  QMap<QString, QString> josmValidators = _getJosmValidators();
-  QMap<QString, QString> hootValidators = _getHootValidators();
-  QMap<QString, QString> validators = josmValidators;
-  validators.unite(hootValidators);
+  QMap<QString, QString> validators = _getJosmValidators();
+  validators.unite(_getHootValidators());
   _printValidatorOutput(validators);
 }
 
@@ -124,11 +122,11 @@ QString MapValidator::_validate(OsmMapPtr& map) const
 
 QString MapValidator::_validateWithJosm(OsmMapPtr& map) const
 {
-  std::shared_ptr<JosmMapValidator> validator = std::make_shared<JosmMapValidator>();
-  validator->setConfiguration(conf());
-  LOG_STATUS(validator->getInitStatusMessage());
-  validator->apply(map);
-  return validator->getSummary().trimmed();
+  JosmMapValidator validator;
+  validator.setConfiguration(conf());
+  LOG_STATUS(validator.getInitStatusMessage());
+  validator.apply(map);
+  return validator.getSummary().trimmed();
 }
 
 QString MapValidator::_validateWithHoot(OsmMapPtr& map) const
