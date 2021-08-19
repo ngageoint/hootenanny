@@ -27,7 +27,6 @@
 #include "PoiPolygonPolyCriterion.h"
 
 // hoot
-#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyWayNodeCriterion.h>
 #include <hoot/core/schema/MetadataTags.h>
@@ -43,7 +42,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, PoiPolygonPolyCriterion)
 
 PoiPolygonPolyCriterion::PoiPolygonPolyCriterion() :
-_tagIgnoreList(PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList())
+_tagIgnoreList(ConfigOptions().getPoiPolygonPolyIgnoreTags())
 {
   LOG_VART(_tagIgnoreList);
 }

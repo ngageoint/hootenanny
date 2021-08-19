@@ -96,7 +96,6 @@ public:
     _addressScoreExtractorTranslateTagValueTest();
     _addressScoreExtractorInvalidFullAddressTest();
     _addressScoreExtractorInvalidComponentAddressTest();
-    _addressScoreExtractorAdditionalTagsTest();
     _addressScoreExtractorNoStreetNumberTest();
     _addressScoreExtractorPartialMatchTest();
 
@@ -702,48 +701,6 @@ private:
     way1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     way1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
-  }
-
-  void _addressScoreExtractorAdditionalTagsTest()
-  {
-    QStringList additionalTagKeys;
-    additionalTagKeys.append("note");
-    additionalTagKeys.append("description");
-    conf().set(ConfigOptions::getAddressAdditionalTagKeysKey(), additionalTagKeys);
-
-    AddressScoreExtractor uut;
-    uut.setConfiguration(conf());
-    uut.setCacheEnabled(false);
-
-    OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
-    map->addNode(node1);
-    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
-    map->addWay(way1);
-
-    node1->getTags().set("note", "123 Main Street");
-    way1->getTags().set("note", "123 main St");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
-
-    node1->getTags().clear();
-    node1->getTags().set("description", "123 Main Street");
-    way1->getTags().clear();
-    way1->getTags().set("description", "123 main St");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
-
-    node1->getTags().clear();
-    node1->getTags().set("blah", "123 Main Street");
-    way1->getTags().clear();
-    way1->getTags().set("blah", "123 main St");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
-
-    // name gets parsed by default
-    node1->getTags().clear();
-    node1->getTags().set("name", "123 Main Street");
-    way1->getTags().clear();
-    way1->getTags().set("name", "123 main St");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
   }
 
   void _addressScoreExtractorNoStreetNumberTest()

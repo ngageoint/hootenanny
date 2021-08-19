@@ -58,13 +58,11 @@ void ImplicitTagRulesDatabaseDeriver::setConfiguration(const Settings& conf)
   setMinWordLength(confOptions.getImplicitTaggingDatabaseDeriverMinimumWordLength());
   setUseSchemaTagValuesForWordsOnly(
     confOptions.getImplicitTaggingDatabaseDeriverUseSchemaTagValuesForWordsOnly());
-
   setCustomRuleFile(confOptions.getImplicitTaggingDatabaseDeriverCustomRuleFile());
-  setTagIgnoreFile(confOptions.getImplicitTaggingDatabaseDeriverTagIgnoreFile());
-  setWordIgnoreFile(confOptions.getImplicitTaggingDatabaseDeriverWordIgnoreFile());
 }
 
-void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString& input, const QString& output)
+void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(
+  const QString& input, const QString& output)
 {
   _validateInputs(input, output);
 
@@ -74,12 +72,7 @@ void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString& input, 
 
   LOG_VARD(_minTagOccurrencesPerWord);
   LOG_VARD(_minWordLength);
-  LOG_VARD(_customRules.getWordIgnoreFile());
-  LOG_VARD(_customRules.getTagIgnoreFile());
-  LOG_VARD(_customRules.getCustomRuleFile());
   LOG_VARD(_useSchemaTagValuesForWordsOnly);
-
-  _customRules.init();
 
   LOG_VARD(_customRules.getWordIgnoreList().size());
   LOG_VARD(_customRules.getWordIgnoreList());
@@ -318,13 +311,13 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString& input)
     QString word = lineParts[1].trimmed();
     LOG_VART(word);
 
-    //this won't come back true unless _useSchemaTagValuesForWordsOnly = true.
+    // this won't come back true unless _useSchemaTagValuesForWordsOnly = true.
     const bool wordNotASchemaTagValue = _wordIsNotASchemaTagValue(word);
 
     const bool wordTooSmall = word.length() < _minWordLength;
 
-    //Skip the word if we already have a custom rule that is associated with it (they're applied
-    //to the database after this filtering).
+    // Skip the word if we already have a custom rule that is associated with it (they're applied
+    // to the database after this filtering).
     if (!wordTooSmall && !_customRules.getWordIgnoreList().contains(word, Qt::CaseInsensitive) &&
         !wordNotASchemaTagValue)
     {
@@ -343,7 +336,7 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString& input)
 
       if (!ignoreTag)
       {
-        const QString customRuleTag = _customRules.getCustomRulesList().value(word.toLower(), "");
+        QString customRuleTag = _customRules.getCustomRulesList().value(word.toLower(), "");
         if (customRuleTag == kvp)
         {
           LOG_TRACE(
@@ -429,7 +422,7 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString& input)
     LOG_VART(wordsNotInSchemaList);
   }
 
-  //technically this could be done outside of this filtering...
+  // technically this could be done outside of this filtering...
   _writeCustomRules(linesWrittenCount);
 
   LOG_INFO(

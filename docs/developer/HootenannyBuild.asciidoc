@@ -102,6 +102,8 @@ CONFIG -= release
 
 === Integrated Development Environment
 
+# TODO: We should move developer environment setup to its own doc and enhance it with more detail.
+
 ==== Core
 
 For Hootenanny core development, Qt Creator is an excellent choice for an IDE. Details on its installation and 

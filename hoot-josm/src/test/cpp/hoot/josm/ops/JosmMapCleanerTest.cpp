@@ -35,6 +35,9 @@
 namespace hoot
 {
 
+/**
+ * @brief The JosmMapCleanerTest class tests JosmMapCleaner.
+ */
 class JosmMapCleanerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmMapCleanerTest);
@@ -61,7 +64,7 @@ public:
 
     JosmMapCleaner uut;
     uut.setAddDetailTags(true);
-    uut.setJosmValidatorsInclude(QStringList("UntaggedWay"));
+    uut.setJosmValidators(QStringList("UntaggedWay"));
     LOG_INFO(uut.getInitStatusMessage());
     uut.apply(map);
     LOG_INFO(uut.getCompletedStatusMessage());
@@ -73,7 +76,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailingValidators());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
     HOOT_STR_EQUALS(
-      "Total JOSM validation errors: 0 found in 40 total features.\n"
+      "Found 0 validation errors in 40 features with JOSM.\n"
       "Total elements cleaned: 0\n"
       "Total elements deleted: 0\n"
       "Total failing JOSM validators: 0\n"
@@ -99,23 +102,23 @@ public:
     validators.append("UntaggedWay");   // triggers "One node way"
     validators.append("UnclosedWays");
     validators.append("DuplicatedWayNodes");
-    uut.setJosmValidatorsInclude(validators);
+    uut.setJosmValidators(validators);
     uut.apply(map);
 
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
-    CPPUNIT_ASSERT_EQUAL(3, uut.getNumElementsCleaned());
-    CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
+    CPPUNIT_ASSERT_EQUAL(1, uut.getNumElementsCleaned());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
     HOOT_STR_EQUALS(
-      "Total JOSM validation errors: 4 found in 45 total features.\n"
-      "Total elements cleaned: 3\n"
-      "Total elements deleted: 2\n"
+      "Found 4 validation errors in 45 features with JOSM.\n"
+      "Total elements cleaned: 1\n"
+      "Total elements deleted: 0\n"
       "Total failing JOSM validators: 0\n"
       "Total failing JOSM cleaning operations: 0\n"
-      "Duplicated way nodes errors:               1            elements cleaned: 0\n"
+      "Duplicated way nodes errors:               1            elements cleaned: 1\n"
       "Unclosed Ways errors:                      2            elements cleaned: 0\n"
-      "Untagged, empty and one node ways errors:  1            elements cleaned: 1",
+      "Untagged, empty and one node ways errors:  1            elements cleaned: 0",
       uut.getSummary());
 
     const QString outTestFileName = testName + "-out.osm";
@@ -137,23 +140,23 @@ public:
     validators.append("UntaggedWay");   // triggers "One node way"
     validators.append("UnclosedWays");
     validators.append("DuplicatedWayNodes");
-    uut.setJosmValidatorsInclude(validators);
+    uut.setJosmValidators(validators);
     uut.apply(map);
 
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
-    CPPUNIT_ASSERT_EQUAL(3, uut.getNumElementsCleaned());
-    CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
+    CPPUNIT_ASSERT_EQUAL(1, uut.getNumElementsCleaned());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
     HOOT_STR_EQUALS(
-      "Total JOSM validation errors: 4 found in 45 total features.\n"
-      "Total elements cleaned: 3\n"
-      "Total elements deleted: 2\n"
+      "Found 4 validation errors in 45 features with JOSM.\n"
+      "Total elements cleaned: 1\n"
+      "Total elements deleted: 0\n"
       "Total failing JOSM validators: 0\n"
       "Total failing JOSM cleaning operations: 0\n"
-      "Duplicated way nodes errors:               1            elements cleaned: 0\n"
+      "Duplicated way nodes errors:               1            elements cleaned: 1\n"
       "Unclosed Ways errors:                      2            elements cleaned: 0\n"
-      "Untagged, empty and one node ways errors:  1            elements cleaned: 1",
+      "Untagged, empty and one node ways errors:  1            elements cleaned: 0",
       uut.getSummary());
 
     const QString outTestFileName = testName + "-out.osm";
@@ -175,23 +178,23 @@ public:
     validators.append("UntaggedWay");   // triggers "One node way"
     validators.append("UnclosedWays");
     validators.append("DuplicatedWayNodes");
-    uut.setJosmValidatorsInclude(validators);
+    uut.setJosmValidators(validators);
     uut.apply(map);
 
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
-    CPPUNIT_ASSERT_EQUAL(3, uut.getNumElementsCleaned());
-    CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
+    CPPUNIT_ASSERT_EQUAL(1, uut.getNumElementsCleaned());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
     HOOT_STR_EQUALS(
-      "Total JOSM validation errors: 4 found in 45 total features.\n"
-      "Total elements cleaned: 3\n"
-      "Total elements deleted: 2\n"
+      "Found 4 validation errors in 45 features with JOSM.\n"
+      "Total elements cleaned: 1\n"
+      "Total elements deleted: 0\n"
       "Total failing JOSM validators: 0\n"
       "Total failing JOSM cleaning operations: 0\n"
-      "Duplicated way nodes errors:               1            elements cleaned: 0\n"
+      "Duplicated way nodes errors:               1            elements cleaned: 1\n"
       "Unclosed Ways errors:                      2            elements cleaned: 0\n"
-      "Untagged, empty and one node ways errors:  1            elements cleaned: 1",
+      "Untagged, empty and one node ways errors:  1            elements cleaned: 0",
       uut.getSummary());
 
     const QString outTestFileName = testName + "-out.osm";

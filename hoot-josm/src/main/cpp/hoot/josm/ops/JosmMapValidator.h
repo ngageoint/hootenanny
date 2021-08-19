@@ -80,7 +80,6 @@ private:
    * validate the map and return it as an xml string
    */
   QString _validate(const QStringList& validators, const QString& map);
-
   /*
    * validate the map from a file and write the validated map out to another file
    */
