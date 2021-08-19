@@ -5,6 +5,9 @@
 
 The +conflate-cumulative+ command conflates multiple maps into a single map in a cumulative fashion.
 
+It is primarily used as a research test bed for prototyping which ultimately gets implemented in 
+production fashion within scripts/conflate/ConflateDirectory.sh.
+
 This command must be run with the following configuration options:
 * writer.clean.review.tags=false
 * tag.merger.default=hoot::ProvenanceAwareOverwriteTagMerger
@@ -12,7 +15,7 @@ This command must be run with the following configuration options:
 This command does not work with the --stats option.
 
 * +inputDir+ - Input directory; may contain any supported input format.
-* +output+ - The output path.
+* +output+   - The output path.
 
 === Usage
 

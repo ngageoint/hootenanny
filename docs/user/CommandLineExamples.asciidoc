@@ -131,20 +131,6 @@ See the User Guide for more specific details on command usage. Most of these exa
     hoot clean -D map.cleaner.transforms++=JosmMapCleaner input.osm output.osm
 -----
 
-==== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus a subset of JOSM's cleaning capabilities via exclusion:
-
------
-    hoot clean -D map.cleaner.transforms++=JosmMapCleaner \
-      -D josm.validators.exclude="UntaggedWay;DuplicatedWayNodes" input.osm output.osm
------
-
-==== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus a subset of JOSM's cleaning capabilities via inclusion:
-
------
-    hoot clean -D map.cleaner.transforms++=JosmMapCleaner \
-      -D josm.validators.include="UntaggedWay;DuplicatedWayNodes" input.osm output.osm
------
-
 ==== Run JOSM cleaning only on a map:
 
 -----
@@ -1744,12 +1730,6 @@ hoot task-grid test-files/MyInputFile.osm MyOutputFile.geojson --maxNodesPerCell
 ==== List the available JOSM validators:
 
 -----
-    hoot validate --available-validators
------
-
-==== Run customized JOSM validation on a map:
-
------
-    hoot validate -D josm.validators.include="DuplicatedWayNodes" input.osm
+    hoot validate --validators
 -----
 

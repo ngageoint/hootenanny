@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
 	http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>hoot.core.josm</groupId>
+	<groupId>hoot.josm</groupId>
 	<artifactId>hoot-josm</artifactId>
 	<packaging>jar</packaging>
 	<version>0.0.1</version>
@@ -11,11 +11,19 @@
 	<url>http://hootenanny.org</url>
 
 	<properties>
+	
 		<jdk.version>1.8</jdk.version>
-                <josm.artifactId>josm</josm.artifactId>
-		<!-- josm.artifactId>me-josm</josm.artifactId -->
-		<josm.version>15628</josm.version>
-		<!-- josm.version>4.4.9</josm.version -->
+		
+		<!-- The hoot/JOSM integration is via JNI, which has no compile time checks and can be a fairly 
+		brittle interface that is difficult to debug. Think long and hard before you update the JOSM 
+		version here. -->
+		
+    <josm.artifactId>josm</josm.artifactId>
+		<josm.version>18118</josm.version>
+		
+	  <!-- josm.artifactId>me-josm</josm.artifactId -->
+		<!-- josm.version>10.0.3</josm.version -->
+		
 	</properties>
 
   <repositories>
@@ -34,7 +42,7 @@
   </repositories>
 
 	<dependencies>
-                <dependency>
+    <dependency>
     			<groupId>org.openstreetmap.josm</groupId>
     			<artifactId>${josm.artifactId}</artifactId>
     			<version>${josm.version}</version>
@@ -60,7 +68,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-                                <version>3.2.0</version>
+        <version>3.2.0</version>
 				<configuration>
 				  <excludes>
 					<exclude>**/log4j.properties</exclude>
@@ -68,7 +76,6 @@
 				  <archive>
 				    <manifest>
 					<addClasspath>true</addClasspath>
-					<!-- mainClass></mainClass -->
 					<classpathPrefix>dependency-jars/</classpathPrefix>
 				    </manifest>
 				  </archive>

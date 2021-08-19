@@ -343,7 +343,7 @@ void ImplicitTagRawRulesDeriver::_parseNames(const QStringList& names, const QSt
     QString name = names.at(i);
     LOG_VART(name);
 
-    //'=' is used in the map key for kvps, so it needs to be escaped in the word
+    // '=' is used in the map key for kvps, so it needs to be escaped in the word
     if (name.contains("="))
     {
       name = name.replace("=", "%3D");
@@ -356,7 +356,7 @@ void ImplicitTagRawRulesDeriver::_parseNames(const QStringList& names, const QSt
     QStringList nameTokens = _tokenizer.tokenize(name);
     LOG_VART(nameTokens.size());
 
-    //tokenization
+    // tokenization
 
     for (int j = 0; j < nameTokens.size(); j++)
     {
@@ -364,8 +364,8 @@ void ImplicitTagRawRulesDeriver::_parseNames(const QStringList& names, const QSt
       _parseNameToken(nameToken, kvps);
     }
 
-    //going up to a token group size of two; tested up to group size three, but three didn't seem to
-    //yield any better tagging results
+    // going up to a token group size of two; tested up to group size three, but three didn't seem
+    // to yield any better tagging results
     if (nameTokens.size() > 2)
     {
       for (int j = 0; j < nameTokens.size() - 1; j++)

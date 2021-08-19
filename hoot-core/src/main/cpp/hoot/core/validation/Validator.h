@@ -22,34 +22,51 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "PoiPolygonTagIgnoreListReader.h"
-
-// hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/TagListReader.h>
+#ifndef VALIDATOR_H
+#define VALIDATOR_H
 
 namespace hoot
 {
 
-PoiPolygonTagIgnoreListReader::PoiPolygonTagIgnoreListReader()
+/**
+ * Interface for implementation by validators performing data validation
+ */
+class Validator
 {
-  LOG_DEBUG("Reading ignore lists...");
-  _poiTagIgnoreList =
-    TagListReader::readList(ConfigOptions().getPoiPolygonPoiIgnoreTagsFile());
-  LOG_VARD(_poiTagIgnoreList.size());
-  _polyTagIgnoreList =
-    TagListReader::readList(ConfigOptions().getPoiPolygonPolyIgnoreTagsFile());
-  LOG_VARD(_polyTagIgnoreList.size());
+public:
+
+  /**
+   * @brief Enables validation on the validator.
+   *
+   * Some validators have dual purposes and have the need to have validation capabilities toggled.
+   */
+  virtual void enableValidation() = 0;
+
+    /**
+     * @brief Disables validation on the validator.
+     *
+     * Some validators have dual purposes and have the need to have validation capabilities toggled.
+     */
+  virtual void disableValidation() = 0;
+
+  /**
+    * @brief Returns a message with a description of validation errors
+    */
+  virtual QString getValidationErrorMessage() const = 0;
+
+  /**
+    * @brief Returns the total number of validation errors encountered
+    */
+  virtual int getNumValidationErrors() const = 0;
+
+  /**
+    * @brief Returns the total number of features validated
+    */
+  virtual int getNumFeaturesValidated() const = 0;
+};
+
 }
 
-PoiPolygonTagIgnoreListReader& PoiPolygonTagIgnoreListReader::getInstance()
-{
-  //  Local static singleton instance
-  static PoiPolygonTagIgnoreListReader instance;
-  return instance;
-}
-
-}
+#endif // VALIDATOR_H

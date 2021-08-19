@@ -161,19 +161,23 @@ void JosmMapCleaner::_getStats()
 {
   LOG_DEBUG("Retrieving stats...");
 
-  // call back into the hoot-josm validator to get the stats after validation
+  // Call back into the hoot-josm validator to get the stats after validation.
 
   JosmMapValidatorAbstract::_getStats();
   _numElementsCleaned = _getNumElementsCleaned();
   _deletedElementIds = _getDeletedElementIds();
-  _numFailingValidators = _getNumFailingValidators();
-  _numFailedCleaningOperations = _getNumFailedCleaningOperations();
+  const QMap<QString, QString> failingValidatorInfo = _getFailingValidatorInfo();
+  _numFailingValidators = failingValidatorInfo.size();
+  const QMap<QString, QString> failingCleanerInfo = _getFailingCleanerInfo();
+
+  _numFailedCleaningOperations = failingCleanerInfo.size();
 
   // create a readable error summary
 
   _errorSummary =
-    "Total JOSM validation errors: " + StringUtils::formatLargeNumber(_numValidationErrors) +
-    " found in " + StringUtils::formatLargeNumber(_numAffected) + " total features.\n";
+    "Found " + StringUtils::formatLargeNumber(_numValidationErrors) +
+    " validation errors in " + StringUtils::formatLargeNumber(_numAffected) +
+    " features with JOSM.\n";
   _errorSummary +=
     "Total elements cleaned: " + StringUtils::formatLargeNumber(_numElementsCleaned) + "\n";
   _errorSummary +=
@@ -185,7 +189,19 @@ void JosmMapCleaner::_getStats()
     "\n";
   _errorSummary +=
      _errorCountsByTypeToSummaryStr(
-       _getValidationErrorCountsByType(), _getValidationErrorFixCountsByType());
+       _getValidationErrorCountsByType(), _getValidationErrorFixCountsByType()) + "\n";
+  foreach (QString validatorName, failingValidatorInfo.keys())
+  {
+    _errorSummary +=
+      "Validator: " + validatorName + " failed with error: " +
+      failingValidatorInfo[validatorName] + ".\n";
+  }
+  foreach (QString cleanerName, failingCleanerInfo.keys())
+  {
+    _errorSummary +=
+      "Cleaner: " + cleanerName + " failed with error: " +
+      failingCleanerInfo[cleanerName] + ".\n";
+  }
   _errorSummary = _errorSummary.trimmed();
   LOG_VART(_errorSummary);
 }
@@ -225,19 +241,19 @@ QMap<QString, int> JosmMapCleaner::_getValidationErrorFixCountsByType()
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "getValidationErrorFixCountsByType", "()Ljava/util/Map;"));
   JniUtils::checkForErrors(_javaEnv, "getValidationErrorFixCountsByType");
-  JniUtils::checkForErrors(_javaEnv, "getValidationErrorFixCountsByType");
   return JniConversion::fromJavaStringIntMap(_javaEnv, validationErrorFixCountsByTypeJavaMap);
 }
 
-int JosmMapCleaner::_getNumFailedCleaningOperations()
+QMap<QString, QString> JosmMapCleaner::_getFailingCleanerInfo()
 {
-  const int numFailedCleaningOperations =
-    (int)_javaEnv->CallIntMethod(
+  jobject failingCleanerInfo =
+    _javaEnv->CallObjectMethod(
       _josmInterface,
-      // Java sig: int getNumFailedCleaningOperations()
-      _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailedCleaningOperations", "()I"));
-  JniUtils::checkForErrors(_javaEnv, "getNumFailedCleaningOperations");
-  return numFailedCleaningOperations;
+      // Java sig: Map<String, String> getFailingCleanerInfo()
+      _javaEnv->GetMethodID(
+        _josmInterfaceClass, "getFailingCleanerInfo", "()Ljava/util/Map;"));
+  JniUtils::checkForErrors(_javaEnv, "getFailingCleanerInfo");
+  return JniConversion::fromJavaStringMap(_javaEnv, failingCleanerInfo);
 }
 
 QSet<ElementId> JosmMapCleaner::_elementIdStringsToElementIds(

@@ -38,9 +38,7 @@ namespace hoot
 class JosmMapValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmMapValidatorTest);
-  CPPUNIT_TEST(runGetAvailableValidatorsTest);
-  CPPUNIT_TEST(runValidatorInclusionTest);
-  CPPUNIT_TEST(runValidatorExclusionTest);
+  CPPUNIT_TEST(runGetAvailableValidatorDetailTest);
   CPPUNIT_TEST(runEmptyValidatorsTest);
   CPPUNIT_TEST(runValidateTest);
   CPPUNIT_TEST(runValidateFileTest);
@@ -55,67 +53,32 @@ public:
     setResetType(ResetBasic);
   }
 
-  void runGetAvailableValidatorsTest()
+  void runGetAvailableValidatorDetailTest()
   {
     JosmMapValidator uut;
-    const QMap<QString, QString> validators = uut.getAvailableValidatorsWithDescription();
+    uut.setConfiguration(conf());
+    const QMap<QString, QString> validators = uut.getValidatorDetail();
     LOG_VART(validators.keys());
     LOG_VART(validators.values());
     CPPUNIT_ASSERT(validators.size() > 0);
     CPPUNIT_ASSERT(validators.contains("DuplicatedWayNodes"));
-    // we replace the inner class separator, '$', with '.' for readability...so check that
-    CPPUNIT_ASSERT(validators.contains("CrossingWays.SelfCrossing"));
-  }
-
-  void runValidatorInclusionTest()
-  {
-    JosmMapValidator uut;
-    QStringList validators;
-    validators.append("UntaggedWay");
-    validators.append("UnclosedWays");
-    validators.append("DuplicatedWayNodes");
-    uut.setJosmValidatorsInclude(validators);
-    uut._initJosmValidatorsList();
-
-    const QStringList validatorsUsed = uut.getJosmValidatorsUsed();
-    LOG_VARD(validatorsUsed);
-    CPPUNIT_ASSERT_EQUAL(3, validatorsUsed.size());
-    CPPUNIT_ASSERT(validatorsUsed.contains("UntaggedWay"));
-    CPPUNIT_ASSERT(validatorsUsed.contains("UnclosedWays"));
-    CPPUNIT_ASSERT(validatorsUsed.contains("DuplicatedWayNodes"));
-  }
-
-  void runValidatorExclusionTest()
-  {
-    JosmMapValidator uut;
-
-    QStringList validators;
-    validators.append("UntaggedWay");
-    validators.append("UnclosedWays");
-    validators.append("DuplicatedWayNodes");
-    uut.setJosmValidatorsInclude(validators);
-
-    validators.clear();
-    // exclude overrides include
-    validators.append("UntaggedWay");
-    uut.setJosmValidatorsExclude(validators);
-
-    uut._initJosmValidatorsList();
-
-    const QStringList validatorsUsed = uut.getJosmValidatorsUsed();
-    CPPUNIT_ASSERT_EQUAL(2, validatorsUsed.size());
-    CPPUNIT_ASSERT(validatorsUsed.contains("UnclosedWays"));
-    CPPUNIT_ASSERT(validatorsUsed.contains("DuplicatedWayNodes"));
+    // We replace the inner class separator, '$', with '.' for readability, so check that.
+    CPPUNIT_ASSERT(validators.contains("CrossingWays.Boundaries"));
   }
 
   void runEmptyValidatorsTest()
-  {
+  {   
     JosmMapValidator uut;
-    uut._initJosmValidatorsList();
-
-    const QStringList validatorsUsed = uut.getJosmValidatorsUsed();
-    CPPUNIT_ASSERT(validatorsUsed.size() > 0);
-    CPPUNIT_ASSERT(validatorsUsed.contains("DuplicatedWayNodes"));
+    QString exceptionMsg;
+    try
+    {
+      uut.getValidatorDetail();
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    HOOT_STR_EQUALS("No validators configured.", exceptionMsg);
   }
 
   void runValidateTest()
@@ -131,7 +94,7 @@ public:
     validators.append("UntaggedWay");   // triggers "One node way"
     validators.append("UnclosedWays");
     validators.append("DuplicatedWayNodes");
-    uut.setJosmValidatorsInclude(validators);
+    uut.setJosmValidators(validators);
     LOG_INFO(uut.getInitStatusMessage());
     uut.apply(map);
     LOG_INFO(uut.getCompletedStatusMessage());
@@ -140,7 +103,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailingValidators());
     HOOT_STR_EQUALS(
-      "Total JOSM validation errors: 4 found in 45 total features.\n"
+      "Found 4 validation errors in 45 features with JOSM.\n"
       "Duplicated way nodes errors: 1\n"
       "Unclosed Ways errors: 2\n"
       "Untagged, empty and one node ways errors: 1\n"
@@ -165,7 +128,7 @@ public:
     validators.append("UntaggedWay");   // triggers "One node way"
     validators.append("UnclosedWays");
     validators.append("DuplicatedWayNodes");
-    uut.setJosmValidatorsInclude(validators);
+    uut.setJosmValidators(validators);
     LOG_INFO(uut.getInitStatusMessage());
     uut.apply(map);
     LOG_INFO(uut.getCompletedStatusMessage());
@@ -174,7 +137,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailingValidators());
     HOOT_STR_EQUALS(
-      "Total JOSM validation errors: 4 found in 45 total features.\n"
+      "Found 4 validation errors in 45 features with JOSM.\n"
       "Duplicated way nodes errors: 1\n"
       "Unclosed Ways errors: 2\n"
       "Untagged, empty and one node ways errors: 1\n"
