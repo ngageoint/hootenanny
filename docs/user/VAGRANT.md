@@ -35,7 +35,7 @@ Log into the Hootenanny virtual machine:
     
 # Known issues
 
-A) If you get error like this, it might be that you need to install VirtualBox Guest Addittions manually.
+A) If you get error like this, it might be that you need to install VirtualBox Guest Addittions manually:
 
 ```
 Vagrant was unable to mount VirtualBox shared folders. <...>
@@ -48,25 +48,22 @@ The error output from the command was:
 
 ```
 Follow these steps:
-1. Login into VM
+1. Login into the VM:
      
     vagrant ssh
     
-2. Run setup of VBoxGuestAdditions like this:
+2. Run the setup of VBoxGuestAdditions:
 
     cd /opt/VBoxGuestAdditions-*/init  
     sudo ./vboxadd setup
     sudo /sbin/rcvboxadd quicksetup all
     sudo reboot
     
-3. Try again.
+3. Bring the box up again:
     
     vagrant up --provision
-    
-You might need to check errors and/or try command multiple times. 
 
-B) If you see build to freeze at this point, be patient ` default: hoot-services/src/main/resources/language-translation/langdetect-183.bin: OK`
-It may take an hour and more to finish this step, even on a decent PC.
+B) The compilation of C++ code is fairly slow with the default VirtualBox instance. The compilation time can take up to an hour. The code is built in silent logging mode, so if you see a long pause at some point after seeing the message: "Building Hoot...", compilation is what is occurring. To see more information from the compiler, you can add the environment variable, `BUILD_VERBOSE = 'yes'`, to `VagrantProvisionCentOS7.sh` before provisioning. See the "Faster C++ Compilation" section below for information on speeding this process up during development.
 
 # Windows hints
 
@@ -78,7 +75,6 @@ To install using Vagrant, first, make sure you have tools above. If you don't, t
     
 Tt may be beneficial to disable Windows Defender (temporarily), otherwise build can fail with message "unable to ruby install some Ruby gem".
 Make sure you are using PowerShell and not PSCore to run Vagrant, otherwise it will complain that Powershell cannot be found.
-  
    
 # Using Hootenanny
 
@@ -118,3 +114,13 @@ If you run into permission errors running the Tomcat deployment script, remove f
     sudo rm -rf /usr/share/tomcat8/webapps/hoot-services.war
     sudo rm -rf /usr/share/tomcat8/webapps/hoot-services
     scripts/tomcat/CopyWebAppsToTomcat.sh
+
+# Faster C++ Compilation
+
+Running a Hootenanny C++ development environment on bare metal against CentOS is recommended for the best performance. However if you want to do it with Vagrant, the following describes a way to speed up the C++ compile time with a RAM disk:
+
+Add the something like the following line to your `VagrantfileLocal`:
+
+`config.vm.provision "hoot-ramdisk", type: "shell", :privileged => false, :inline => "/home/vagrant/hoot/scripts/developer/MakeHootRamDisk.sh <size>", run: "always"`
+
+where `<size>` is the size in MB of the RAM disk. Then bring up the instance with Vagrant. This will cause the contents of the `hoot` directory to be copied over to `/ramdisk/hoot`. The initial copy time can take a minute or two, but you only pay that penalty when the instance is created. The necessary disk size can change over time and can get fairly large with use of `ccache`. This setup has not been tested successfully with the UI.
