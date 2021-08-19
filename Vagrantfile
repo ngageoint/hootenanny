@@ -211,7 +211,8 @@ Vagrant.configure(2) do |config|
     mount_shares(hoot_centos7_rpm)
 
     # NOTE: For commandline only Hootenanny, set COREONLY to "yes"
-    hoot_centos7_rpm.vm.provision "hootrpm", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7Rpm.sh", :env => {"YUMUPDATE" => $yumUpdate, "COREONLY" => $coreOnly, "NIGHTLY" => $nightly}
+    hoot_centos7_rpm.vm.provision "hootrpm", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7Rpm.sh", :env => {"HOOT_HOME" => "/home/vagrant/hoot", "YUMUPDATE" => $yumUpdate, "COREONLY" => $coreOnly, "NIGHTLY" => $nightly}
+    hoot_centos7_rpm.vm.provision 'tomcat', type: 'shell', :privileged => false, :inline => 'sudo systemctl restart tomcat8'
   end
 
   # Centos7 box - Preprovisioned for compiling hootenanny
