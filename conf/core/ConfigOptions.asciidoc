@@ -1341,7 +1341,19 @@ Unifying Algorithm.
 * Default Value: `true`
 
 If false, when running Differential Conflation the reference elements will not be dropped from the
-output. Setting this to false is primarily useful when debugging unconnected way snapping issues.
+output. Setting this to true will not remove reference data in the output involved in snapping to
+secondary features. Disabling this can be useful useful when debugging unconnected way snapping
+issues.
+
+=== differential.remove.reference.snapped.data
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, when running Differential Conflation all reference elements will be dropped from the
+output regardless of whether they were snapped to a secondary feature. This overrides the
+`differential.remove.reference.data` option. Do not enable this if Differential Conflation is to be
+used to generate changeset output that will be written back to an authoritative data store.
 
 === differential.remove.river.partial.matches.as.whole
 
