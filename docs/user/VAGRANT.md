@@ -10,7 +10,7 @@ In some cases, you may have to install a newer version of Vagrant or VirtualBox 
 
 You will also need some Vagrant plugins:
 
-    vagrant plugin install vagrant-bindfs
+    vagrant plugin install vagrant-bindfs vagrant-sshfs
 
 You may also need to enable hardware virtualization extensions in your BIOS.
 
@@ -32,7 +32,50 @@ Once the prerequisites have been installed, you can set up the Hootenanny enviro
 Log into the Hootenanny virtual machine:
 
     vagrant ssh
+    
+# Known issues
 
+A) If you get error like this, it might be that you need to install VirtualBox Guest Addittions manually:
+
+```
+Vagrant was unable to mount VirtualBox shared folders. <...>
+
+mount -t vboxsf -o uid=1000,gid=1000 home_vagrant_hoot /home/vagrant/hoot
+
+The error output from the command was:
+
+/sbin/mount.vboxsf: mounting failed with the error: Invalid argument
+
+```
+Follow these steps:
+1. Login into the VM:
+     
+    vagrant ssh
+    
+2. Run the setup of VBoxGuestAdditions:
+
+    cd /opt/VBoxGuestAdditions-*/init  
+    sudo ./vboxadd setup
+    sudo /sbin/rcvboxadd quicksetup all
+    sudo reboot
+    
+3. Bring the box up again:
+    
+    vagrant up --provision
+
+B) The compilation of C++ code is fairly slow with the default VirtualBox instance. The compilation time can take up to an hour. The code is built in silent logging mode, so if you see a long pause at some point after seeing the message: "Building Hoot...", compilation is what is occurring. To see more information from the compiler, you can add the environment variable, `BUILD_VERBOSE = 'yes'`, to `VagrantProvisionCentOS7.sh` before provisioning. See the "Faster C++ Compilation" section below for information on speeding this process up during development.
+
+# Windows hints
+
+It is possible to install Hootenanny on Windows using Vagrant. Alternatively, you can use WSL2 + [CentOS7 image](https://github.com/mishamosher/CentOS-WSL) and [RPM install](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md), which is somewhat easier, faster and light on PC requirements. However, at the moment, RPM version is w/o JOSM validation integrations.
+
+To install using Vagrant, first, make sure you have tools above. If you don't, then, if you have [Chocolatey](https://chocolatey.org/install), run in the elevated shell:
+
+    cinst git vagrant virtualbox 
+    
+Tt may be beneficial to disable Windows Defender (temporarily), otherwise build can fail with message "unable to ruby install some Ruby gem".
+Make sure you are using PowerShell and not PSCore to run Vagrant, otherwise it will complain that Powershell cannot be found.
+   
 # Using Hootenanny
 
 To access the Hoot2x iD Editor web user interface: [local Chrome browser](http://localhost:8888/hootenanny-id/).
@@ -71,3 +114,13 @@ If you run into permission errors running the Tomcat deployment script, remove f
     sudo rm -rf /usr/share/tomcat8/webapps/hoot-services.war
     sudo rm -rf /usr/share/tomcat8/webapps/hoot-services
     scripts/tomcat/CopyWebAppsToTomcat.sh
+
+# Faster C++ Compilation
+
+Running a Hootenanny C++ development environment on bare metal against CentOS is recommended for the best performance. However if you want to do it with Vagrant, the following describes a way to speed up the C++ compile time with a RAM disk:
+
+Add the something like the following line to your `VagrantfileLocal`:
+
+`config.vm.provision "hoot-ramdisk", type: "shell", :privileged => false, :inline => "/home/vagrant/hoot/scripts/developer/MakeHootRamDisk.sh <size>", run: "always"`
+
+where `<size>` is the size in MB of the RAM disk. Then bring up the instance with Vagrant. This will cause the contents of the `hoot` directory to be copied over to `/ramdisk/hoot`. The initial copy time can take a minute or two, but you only pay that penalty when the instance is created. The necessary disk size can change over time and can get fairly large with use of `ccache`. This setup has not been tested successfully with the UI.
