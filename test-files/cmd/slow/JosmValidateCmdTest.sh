@@ -15,6 +15,7 @@ INPUT=test-files/ops/JosmMapCleanerTest/runCleanTest-in.osm
 
 OUT_SINGLE=$OUT_DIR/single-out.osm
 GOLD_SINGLE=$IN_DIR/single-out.osm
+OUT_RECURSIVE=$OUT_DIR/recursive-out.osm
 
 OUT_FILE_MULTIPLE=$OUT_DIR/multiple-out.osm
 GOLD_MULTIPLE=$IN_DIR/multiple-out.osm
@@ -60,11 +61,13 @@ hoot validate $LOG_LEVEL $CONFIG -D josm.validators=$JOSM_VALIDATORS \
   -D hoot.validators=$HOOT_VALIDATORS $INPUT $INPUT --output $OUT_FILE_MULTIPLE
 hoot diff $LOG_LEVEL $CONFIG $GOLD_MULTIPLE $OUT_FILE_MULTIPLE
 
-#echo ""
-#echo "Validating recursively in a directory structure with a filter..."
-#echo ""
-#hoot validate $LOG_LEVEL $CONFIG -D josm.validators=$JOSM_VALIDATORS \
-#  -D hoot.validators=$HOOT_VALIDATORS test-files/ops/JosmMapCleanerTest --recursive "*.json"
+echo ""
+echo "Validating recursively in a directory structure with a filter..."
+echo ""
+hoot validate $LOG_LEVEL $CONFIG -D josm.validators=$JOSM_VALIDATORS \
+  -D hoot.validators=$HOOT_VALIDATORS test-files/ops/JosmMapCleanerTest --output $OUT_RECURSIVE \
+  --recursive "*.json"
+hoot diff $LOG_LEVEL $CONFIG $GOLD_SINGLE $OUT_RECURSIVE
 
 echo ""
 echo "Validating files, writing to separate outputs, and writing the report to a file..."

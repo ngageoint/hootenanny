@@ -10,21 +10,21 @@ To list information about the available validators use the following options:
 
 * +--validators+      - Displays available JOSM validators for use in validation.
                         
-To generate validation reports and mark data with validation errors use the following options:
+To generate validation reports and/or mark data with validation errors use the following options:
 
 * +input(s)+          - Input(s); may be any supported input format (e.g. .osm file) or a directory 
                         if `--recursive` is specified.
 * +--report-output+   - Writes combined report output to a file instead of writing it to the display.
 * +--output+          - Optional single validated file output; may be any supported output format 
                         (e.g. .osm file). If specified, all inputs will be combined and elements 
-                        with validation errors will be marked with tags in the output file. Not
-                        compatible with `--separate-output`.
+                        with validation errors will be marked with tags in the output file. Required 
+                        if `--recursive` is specified. Not compatible with `--separate-output`.
 * +--separate-output+ - Optional multiple validated file outputs. Each input is processed and 
                         written to a separate output location with the same base name as each input 
                         with the text "-validated" appended to it. Not compatible with `--output`, 
-                        OSM API database (osmapidb://) or OSM API (http://) formats, or the OGR layer 
-                        input syntax.
- * +--recursive+       - Allows for processing the files contained in any directories specified in 
+                        OSM API database (osmapidb://) or OSM API (http://) formats, or the OGR 
+                        layer input syntax.
+ * +--recursive+      - Allows for processing the files contained in any directories specified in 
                         +input(s)+ recursively. This parameter must be followed by either "*" to 
                         denote no filtering or one or more wildcard name filters. e.g. 
                         "*.osm;*.json" or "*myFile*". This parameter is not compatible with the OGR 

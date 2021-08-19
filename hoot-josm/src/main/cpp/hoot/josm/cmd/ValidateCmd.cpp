@@ -76,16 +76,21 @@ public:
         output = args.at(outputIndex + 1).trimmed();
         args.removeAt(outputIndex + 1);
         args.removeAt(outputIndex);
-
-        if (!IoUtils::isSupportedOutputFormat(output))
-        {
-          throw IllegalArgumentException("Invalid output location: " + output);
-        }
       }
 
       if (separateOutput && !output.isEmpty())
       {
         throw IllegalArgumentException("--output and --separate-output cannot both be specified.");
+      }
+
+      bool recursive = false;
+      const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+      LOG_VARD(recursive);
+      LOG_VARD(inputFilters);
+
+      if (recursive && output.isEmpty())
+      {
+        throw IllegalArgumentException("--output must be specified with --recursive is specified.");
       }
 
       MapValidator validator;
@@ -99,11 +104,6 @@ public:
         args.removeAt(outputIndex + 1);
         args.removeAt(outputIndex);
       }
-
-      bool recursive = false;
-      const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
-      LOG_VARD(recursive);
-      LOG_VARD(inputFilters);
 
       if (args.size() < 1)
       {

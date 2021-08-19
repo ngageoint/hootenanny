@@ -69,6 +69,10 @@ QString MapValidator::validate(const QStringList& inputs, const QString& output)
   }
   else
   {
+    if (!IoUtils::isSupportedOutputFormat(output))
+    {
+      throw IllegalArgumentException("Invalid output location: " + output);
+    }
     return _validate(inputs, output);
   }
 }
