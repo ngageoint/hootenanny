@@ -57,6 +57,7 @@ processed.
 `OsmMapOperation` only when the data processor needs a copy of a complete map to performs its logic.
 * Use classes inheriting `ElementCriterion` to identify data based on its properties.
 * Use streaming I/O whereever possible to avoid loading large maps into memory all at once.
+* Use `OsmMapReaderFactory`, `OsmMapWriterFactory`, and `IoUtils` for I/O purposes when applicable.
 * Place experimental code into the `hoot-rnd` library. This code is expected to be at a lower TRL 
 than code in `hoot-core`, and we can be a little lenient on test coverage.
 * Make use of the `ApiEntityInfo` interface to appropriately describe map operators (classes 
