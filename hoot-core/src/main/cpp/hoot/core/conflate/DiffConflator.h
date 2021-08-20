@@ -253,7 +253,7 @@ private:
   /**
    * @brief _removeRefData removes reference data from the differential output.
    */
-  void _removeRefData();
+  void _removeRefData(const bool removeSnapped = false);
   /**
    * @brief _cleanSecData cleans secondary ways out of the differential output based on specified
    * criteria.
