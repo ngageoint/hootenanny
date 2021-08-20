@@ -9,6 +9,7 @@ information about matches. As a pre-requisite to this section, you should read t
 Conflation" section in the Algorithms document.
 
 Run your conflation job with the following options: 
+
 * `conflate.match.only=true` - This will prevent matches from merging during conflation, which is 
 necessary for you to be able to examine the corresponding features in the output.
 * `writer.include.debug.tags=true` - This will give you extra information about elements in the 
@@ -21,6 +22,7 @@ unmerged output clean.
 
 Adding the aforementioned options will cause the following tags of note to be added to element 
 output:
+
 * `hoot:uuid` - Unique ID assigned to an element. Note that When `conflate.match.only=false` 
 (default) this ID may be concatenated with the ID of any feature merged into the feature. Such 
 concatenation may make determining feature provenance difficult, which is why we enabled the option.
@@ -34,6 +36,7 @@ element provenance can be difficult, however, because some linear features may h
 after they were split pre-conflation for match performance purposes.
 
 The following configuration options determine how conflation scores are interpreted:
+
 * `conflate.match.threshold.default` - This is the default threshold at or above which match scores 
 can be classified as a feature match.
 * `conflate.miss.threshold.default` - This is the default threshold at or above which match scores 
