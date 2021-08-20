@@ -90,13 +90,14 @@ public:
     {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
     }
+    LOG_VARD(inputs);
 
     ElementCounter counter;
     counter.setCountFeaturesOnly(countFeaturesOnly);
     counter.setCriteria(criteriaClassNames);
     const long totalCount = counter.count(inputs);
 
-    // putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end
+    // Putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end.
     QString displayStr = "Total count ";
     if (!criteriaClassNames.isEmpty())
     {

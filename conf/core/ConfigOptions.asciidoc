@@ -253,7 +253,7 @@ features, an out of memory error will occur.
 First record ID to assign to written nodes when writing to an OSM/Hootenanny API database or SQL
 file.  Must be a positive number.  Use this when working with an offline database and know the
 ID range you want to assign to node records.  If writing to an OSM API databse, this option is
-ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
+ignored if `osmapidb.bulk.inserter.reserve.record.ids.before.writing.data` is set to true.
 
 === apidb.bulk.inserter.starting.way.id
 
@@ -263,7 +263,7 @@ ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is se
 First record ID to assign to written ways when writing to an OSM/Hootenanny API database or SQL
 file. Must be a positive number.  Use this when working with an offline database and know the ID
 range you want to assign to way records.  If writing to an OSM API databse, this option is ignored
-if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
+if `osmapidb.bulk.inserter.reserve.record.ids.before.writing.data` is set to true.
 
 === apidb.bulk.inserter.starting.relation.id
 
@@ -273,7 +273,7 @@ if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to tru
 First record ID to assign to written relations when writing to an OSM/Hootenanny API database or
 SQL file.  Must be a positive number.  Use this when working with an offline database and know the
 ID range you want to assign to relation records.  If writing to an OSM API database, this option is
-ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
+ignored if `osmapidb.bulk.inserter.reserve.record.ids.before.writing.data` is set to true.
 
 === apidb.bulk.inserter.stxxl.map.min.size
 

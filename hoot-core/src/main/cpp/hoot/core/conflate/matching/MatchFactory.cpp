@@ -82,7 +82,9 @@ void MatchFactory::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMat
       "Running matcher: " << i + 1 << " of " << _creators.size() << ": " <<
       matchCreator->getName()
         .replace(MetadataTags::HootNamespacePrefix(), "")
-        .replace("hoot::ScriptMatchCreator;", "") << "...");
+        // Don't need to see this. The class is in hoot-js, so can't ref the static name var.
+        .replace("hoot::ScriptMatchCreator;", "")
+        .replace("ScriptMatchCreator;", "")<< "...");
     _checkMatchCreatorBoundable(matchCreator, bounds);
     if (threshold.get())
     {
