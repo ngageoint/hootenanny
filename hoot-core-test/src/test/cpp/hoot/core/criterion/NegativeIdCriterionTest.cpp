@@ -22,37 +22,37 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef HAS_NAME_CRITERION_H
-#define HAS_NAME_CRITERION_H
 
-#include <hoot/core/criterion/ElementCriterion.h>
+// Hoot
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/criterion/NegativeIdCriterion.h>
 
 namespace hoot
 {
 
-/**
- * @brief The HasNameCriterion class determines whether an element has a name tag.
- */
-class HasNameCriterion : public ElementCriterion
+class NegativeIdCriterionTest : public HootTestFixture
 {
+  CPPUNIT_TEST_SUITE(NegativeIdCriterionTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
+
 public:
 
-  static QString className() { return "hoot::HasNameCriterion"; }
+  void runBasicTest()
+  {
+    NegativeIdCriterion uut;
 
-  HasNameCriterion() = default;
-  ~HasNameCriterion() = default;
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
 
-  bool isSatisfied(const ConstElementPtr& e) const override;
-  ElementCriterionPtr clone() override { return std::make_shared<HasNameCriterion>(); }
-
-  QString getDescription() const override { return "Identifies features that contain any name"; }
-  QString getName() const override { return className(); }
-  QString getClassName() const override { return className(); }
-  QString toString() const override { return className(); }
+    node = std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
 };
 
-}
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NegativeIdCriterionTest, "quick");
 
-#endif // HAS_NAME_CRITERION_H
+}

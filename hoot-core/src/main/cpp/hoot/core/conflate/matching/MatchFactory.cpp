@@ -82,7 +82,8 @@ void MatchFactory::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMat
       "Running matcher: " << i + 1 << " of " << _creators.size() << ": " <<
       matchCreator->getName()
         .replace(MetadataTags::HootNamespacePrefix(), "")
-        .replace("hoot::ScriptMatchCreator;", "") << "...");
+        .replace("hoot::ScriptMatchCreator;", "")
+        .replace("ScriptMatchCreator;", "")<< "...");
     _checkMatchCreatorBoundable(matchCreator, bounds);
     if (threshold.get())
     {

@@ -22,37 +22,22 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef HAS_NAME_CRITERION_H
-#define HAS_NAME_CRITERION_H
+#include "PositiveIdCriterion.h"
 
-#include <hoot/core/criterion/ElementCriterion.h>
+// hoot
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-/**
- * @brief The HasNameCriterion class determines whether an element has a name tag.
- */
-class HasNameCriterion : public ElementCriterion
+HOOT_FACTORY_REGISTER(ElementCriterion, PositiveIdCriterion)
+
+bool PositiveIdCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-public:
-
-  static QString className() { return "hoot::HasNameCriterion"; }
-
-  HasNameCriterion() = default;
-  ~HasNameCriterion() = default;
-
-  bool isSatisfied(const ConstElementPtr& e) const override;
-  ElementCriterionPtr clone() override { return std::make_shared<HasNameCriterion>(); }
-
-  QString getDescription() const override { return "Identifies features that contain any name"; }
-  QString getName() const override { return className(); }
-  QString getClassName() const override { return className(); }
-  QString toString() const override { return className(); }
-};
+  return e && e->getId() > 0;
+}
 
 }
 
-#endif // HAS_NAME_CRITERION_H
