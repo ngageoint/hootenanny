@@ -269,24 +269,9 @@ public class CustomScriptResource {
 
             Set<Long> visibleFolders = DbUtils.getTranslationFolderIdsForUser(user.getId());
             for (Tuple translationRecord: mappings) {
-                JSONObject json = new JSONObject();
                 String translationName = translationRecord.get(translations.displayName);
                 Long folderId = translationRecord.get(translations.folderId);
                 Boolean parentFolderIsPublic = translationRecord.get(translationFolders.publicCol);
-
-                json.put("id", translationRecord.get(translations.id));
-                json.put("name", translationName);
-                json.put("userId", translationRecord.get(translations.userId));
-                json.put("date", translationRecord.get(translations.createdAt).toString());
-                json.put("folderId", folderId);
-                json.put("displayPath", translationRecord.get(translationFolders.path) + File.separator + translationName);
-
-                if (parentFolderIsPublic == null) {
-                    parentFolderIsPublic = true;
-                }
-                if (folderId == null || folderId.equals(0L) || visibleFolders.contains(folderId)) {
-                    json.put("public", parentFolderIsPublic);
-                }
 
                 String path = translationRecord.get(translationFolders.path);
                 String translationPath = File.separator + translationName;
@@ -296,6 +281,21 @@ public class CustomScriptResource {
                 if (translationFile.exists()) {
                     String content = FileUtils.readFileToString(translationFile, "UTF-8");
                     JSONObject oScript = getScriptObject(content);
+
+                    JSONObject json = new JSONObject();
+                    json.put("id", translationRecord.get(translations.id));
+                    json.put("name", translationName);
+                    json.put("userId", translationRecord.get(translations.userId));
+                    json.put("date", translationRecord.get(translations.createdAt).toString());
+                    json.put("folderId", folderId);
+                    json.put("displayPath", translationPath);
+
+                    if (parentFolderIsPublic == null) {
+                        parentFolderIsPublic = true;
+                    }
+                    if (folderId == null || folderId.equals(0L) || visibleFolders.contains(folderId)) {
+                        json.put("public", parentFolderIsPublic);
+                    }
 
                     if (oScript != null) {
                         JSONObject header = (JSONObject) oScript.get("HEADER");
