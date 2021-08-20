@@ -1,0 +1,46 @@
+
+[[Obtaining Match Information]]
+== Obtaining Match Information
+
+There are times when you may be more interested in the matches Hootenanny calculates instead of the
+final conflated output. With regular conflation tracking such matches is difficult as features are
+merged at the end of the conflation process. The following describes a process for obtaining more 
+information about matches. As a pre-requisite to this section, you should read the "Unifying 
+Conflation" section in the Algorithms document.
+
+Run your conflation job with the following options: 
+* `conflate.match.only=true` - This will prevent matches from merging during conflation, which is 
+necessary for you to be able to examine the corresponding features in the output.
+* `writer.include.debug.tags=true` - This will give you extra information about elements in the 
+output element tags.
+* `writer.include.conflate.score.tags=true` - This will give you extra information about conflation 
+results in the output element tags.
+* (optional) `conflate.post.ops-=WayJoiner` - This will prevent post conflate way joining that
+restores ways split pre-conflation to ease in matching. You may find this helpful in keeping the 
+unmerged output clean.
+
+Adding the aforementioned options will cause the following tags of note to be added to element 
+output:
+* `hoot:uuid` - Unique ID assigned to an element. Note that When `conflate.match.only=false` 
+(default) this ID may be concatenated with the ID of any feature merged into the feature. Such 
+concatenation may make determining feature provenance difficult, which is why we enabled the option.
+* `hoot:score:uuid` - The unique ID of the feature that matched to the feature with ID `hoot:uuid`.
+* `hoot:score:match` - The match likelihood score assigned by conflation. 
+* `hoot:score:miss` - The miss (non-match) likelihood score assigned by conflation.
+* `hoot:score:review` - The review likelihood score assigned by conflation.  
+
+With this added tag information you will be able to track match and feature provenance. Following 
+element provenance can be difficult, however, because some linear features may have been modified 
+after they were split pre-conflation for match performance purposes.
+
+The following configuration options determine how conflation scores are interpreted:
+* `conflate.match.threshold.default` - This is the default threshold at or above which match scores 
+can be classified as a feature match.
+* `conflate.miss.threshold.default` - This is the default threshold at or above which match scores 
+can be classified as a feature miss (non-match).
+* `conflate.review.threshold.default` - This is the default threshold at or above which match scores 
+can be classified as needing manual review.
+
+Note that each conflate matcher may override these default, so look at the configuration options for
+more detail on which value is actually used.
+

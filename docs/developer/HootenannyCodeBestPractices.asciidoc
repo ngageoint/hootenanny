@@ -78,4 +78,7 @@ geometry types a map operator (classes inheriting `OsmMapOperation`, `ElementVis
 * See the "Hootenanny Specific Test Writing Guidelines" section in the 
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[testing document] 
 for some test writing tips.
+* Not specifically code related, but all asciidoc files used in the documentation must have at least
+one blank line at the beginning and end of the document in order for the PDF documentation to 
+generate correctly.
 
