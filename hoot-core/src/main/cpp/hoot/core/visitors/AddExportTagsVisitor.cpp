@@ -26,6 +26,7 @@
  */
 #include "AddExportTagsVisitor.h"
 
+// hoot
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
 

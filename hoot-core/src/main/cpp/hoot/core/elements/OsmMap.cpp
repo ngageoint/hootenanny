@@ -45,6 +45,7 @@
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/SignalCatcher.h>
 #include <hoot/core/util/StringUtils.h>

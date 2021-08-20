@@ -32,6 +32,7 @@
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 

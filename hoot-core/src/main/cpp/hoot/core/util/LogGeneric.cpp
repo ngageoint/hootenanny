@@ -28,6 +28,7 @@
 #include "Log.h"
 
 // Hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/StringUtils.h>

@@ -31,6 +31,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/address/LibPostalInit.h>
 #include <hoot/core/conflate/address/Address.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 
 // libpostal

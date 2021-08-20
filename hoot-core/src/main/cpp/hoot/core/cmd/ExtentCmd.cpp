@@ -30,6 +30,7 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>

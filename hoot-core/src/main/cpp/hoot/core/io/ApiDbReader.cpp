@@ -33,6 +33,7 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>

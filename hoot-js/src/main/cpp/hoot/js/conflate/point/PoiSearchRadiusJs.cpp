@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/conflate/point/PoiSearchRadius.h>
 #include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/io/DataConvertJs.h>

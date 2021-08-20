@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/Hoot.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/util/Settings.h>

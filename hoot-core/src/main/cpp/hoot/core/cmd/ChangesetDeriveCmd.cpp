@@ -31,6 +31,7 @@
 #include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>

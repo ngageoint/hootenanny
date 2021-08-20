@@ -28,6 +28,7 @@
 
 // Hoot
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 

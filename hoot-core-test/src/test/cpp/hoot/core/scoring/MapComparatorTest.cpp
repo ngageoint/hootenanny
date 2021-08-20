@@ -42,12 +42,6 @@ using namespace hoot;
 // Tgs
 #include <tgs/Statistics/Random.h>
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 namespace hoot
 {
 

@@ -30,12 +30,6 @@
 #include <hoot/core/conflate/matching/OptionsValidator.h>
 #include <hoot/core/util/Settings.h>
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 namespace hoot
 {
 

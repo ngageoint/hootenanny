@@ -39,6 +39,7 @@
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Standard
 #include <vector>

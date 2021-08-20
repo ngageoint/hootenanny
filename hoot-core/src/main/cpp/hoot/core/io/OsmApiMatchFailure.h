@@ -30,6 +30,7 @@
 
 //  Qt
 #include <QString>
+#include <QRegularExpression>
 
 //  Standard
 #include <vector>

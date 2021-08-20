@@ -32,6 +32,7 @@
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
