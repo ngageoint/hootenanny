@@ -36,6 +36,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>

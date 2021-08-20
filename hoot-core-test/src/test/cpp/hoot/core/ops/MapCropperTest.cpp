@@ -39,12 +39,6 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/criterion/ElementIdCriterion.h>
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // geos
 #include <geos/io/WKTReader.h>
 #include <geos/geom/Point.h>

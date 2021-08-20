@@ -28,6 +28,7 @@
 
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 
 // Tgs

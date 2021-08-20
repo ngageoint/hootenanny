@@ -40,7 +40,6 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
@@ -48,7 +47,6 @@
 #include <hoot/core/criterion/BridgeCriterion.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
-
 
 // Tgs
 #include <tgs/StreamUtils.h>

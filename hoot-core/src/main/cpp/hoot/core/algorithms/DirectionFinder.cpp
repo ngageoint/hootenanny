@@ -37,6 +37,7 @@
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 

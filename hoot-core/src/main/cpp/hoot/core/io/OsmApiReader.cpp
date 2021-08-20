@@ -31,6 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>

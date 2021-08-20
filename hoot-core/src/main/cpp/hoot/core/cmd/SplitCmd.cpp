@@ -29,6 +29,7 @@
 #include <hoot/core/algorithms/splitter/OsmMapSplitter.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>

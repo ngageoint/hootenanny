@@ -36,6 +36,7 @@
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;

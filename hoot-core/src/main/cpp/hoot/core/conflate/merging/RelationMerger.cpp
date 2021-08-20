@@ -33,6 +33,7 @@
 #include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 
 namespace hoot

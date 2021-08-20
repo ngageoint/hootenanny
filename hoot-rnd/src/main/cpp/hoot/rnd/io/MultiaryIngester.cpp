@@ -43,9 +43,7 @@
 #include <hoot/rnd/io/MultiaryIngestChangesetReader.h>
 #include <hoot/rnd/io/OsmFileSorter.h>
 #include <hoot/core/io/OgrReader.h>
-
-// tgs
-#include <tgs/System/Time.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QFileInfo>

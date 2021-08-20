@@ -32,12 +32,6 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 //  Geos
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>

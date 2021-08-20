@@ -33,7 +33,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/scoring/MapComparator.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>

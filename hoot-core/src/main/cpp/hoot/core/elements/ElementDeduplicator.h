@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {

@@ -27,6 +27,8 @@
 
 #include "FindNodesInWayFactory.h"
 
+// hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 
 using namespace geos::geom;

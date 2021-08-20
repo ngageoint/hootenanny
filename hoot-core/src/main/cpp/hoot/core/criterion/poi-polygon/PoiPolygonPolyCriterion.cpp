@@ -31,6 +31,7 @@
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyWayNodeCriterion.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 

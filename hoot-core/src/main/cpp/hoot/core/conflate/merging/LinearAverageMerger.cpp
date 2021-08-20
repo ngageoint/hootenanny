@@ -31,6 +31,7 @@
 
 // hoot
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/WayAverager.h>

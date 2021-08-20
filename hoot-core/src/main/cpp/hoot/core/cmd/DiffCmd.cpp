@@ -33,6 +33,7 @@
 #include <hoot/core/io/OsmApiChangeset.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/scoring/MapComparator.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>

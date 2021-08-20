@@ -27,6 +27,7 @@
 #include "ApiTagTruncateVisitor.h"
 
 //  Hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
 

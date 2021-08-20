@@ -43,6 +43,7 @@
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
 #include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/ConfPath.h>

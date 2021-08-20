@@ -28,11 +28,9 @@
 #include "ImplicitTagRulesSqliteReader.h"
 
 // hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-
-// Tgs
-#include <tgs/System/Time.h>
 
 // Qt
 #include <QSet>

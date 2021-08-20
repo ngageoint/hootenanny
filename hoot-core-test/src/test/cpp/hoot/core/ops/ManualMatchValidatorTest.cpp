@@ -31,12 +31,6 @@
 #include <hoot/core/ops/ManualMatchValidator.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 
-// CPPUnit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 namespace hoot
 {
 
