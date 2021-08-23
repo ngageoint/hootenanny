@@ -34,7 +34,6 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/scoring/MapComparator.h>
 #include <hoot/core/util/FileUtils.h>
-
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
@@ -70,17 +69,12 @@
 #include <hoot/core/visitors/RemoveEmptyAreasVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>
 #include <hoot/core/ops/RelationCircularRefRemover.h>
-#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/visitors/RemoveDuplicateAreasVisitor.h>
 #include <hoot/core/ops/NoInformationElementRemover.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 
 //  tgs
 #include <tgs/Statistics/Random.h>
-
-// Qt
-
-
 
 using namespace geos::geom;
 using namespace std;

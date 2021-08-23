@@ -36,12 +36,9 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/DbUtils.h>
-
-
 #include <hoot/core/util/UuidHelper.h>
 
-// qt
-
+// Qt
 #include <QVariant>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlRecord>
@@ -397,39 +394,39 @@ void HootApiDb::deleteUser(long userId)
   _exec("DELETE FROM " + ApiDb::getUsersTableName() + " WHERE id=:id", (qlonglong)userId);
 }
 
-QString HootApiDb::_escapeTags(const Tags& tags)
-{
-  QStringList l;
-  static QChar f1('\\'), f2('"');
+//QString HootApiDb::_escapeTags(const Tags& tags)
+//{
+//  QStringList l;
+//  static QChar f1('\\'), f2('"');
 
-  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
-  {
-    QString key = it.key();
-    QString val = it.value().trimmed();
-    if (val.isEmpty() == false)
-    {
-      // this doesn't appear to be working, but I think it is implementing the spec as described here:
-      // http://www.postgresql.org/docs/9.0/static/hstore.html
-      // The spec described above does seem to work on the psql command line. Curious.
-      QString k = QString(key).replace(f1, "\\\\").replace(f2, "\\\"").replace("'", "''");
-      QString v = QString(val).replace(f1, "\\\\").replace(f2, "\\\"").replace("'", "''");
+//  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
+//  {
+//    QString key = it.key();
+//    QString val = it.value().trimmed();
+//    if (val.isEmpty() == false)
+//    {
+//      // this doesn't appear to be working, but I think it is implementing the spec as described here:
+//      // http://www.postgresql.org/docs/9.0/static/hstore.html
+//      // The spec described above does seem to work on the psql command line. Curious.
+//      QString k = QString(key).replace(f1, "\\\\").replace(f2, "\\\"").replace("'", "''");
+//      QString v = QString(val).replace(f1, "\\\\").replace(f2, "\\\"").replace("'", "''");
 
-      l << QString("'%1'").arg(k);
-      l << QString("'%1'").arg(v);
-    }
-  }
+//      l << QString("'%1'").arg(k);
+//      l << QString("'%1'").arg(v);
+//    }
+//  }
 
-  QString hstoreStr = l.join(",");
-  if (!hstoreStr.isEmpty())
-  {
-     hstoreStr = "hstore(ARRAY[" + hstoreStr + "])";
-  }
-  else
-  {
-     hstoreStr = "''";
-  }
-  return hstoreStr;
-}
+//  QString hstoreStr = l.join(",");
+//  if (!hstoreStr.isEmpty())
+//  {
+//     hstoreStr = "hstore(ARRAY[" + hstoreStr + "])";
+//  }
+//  else
+//  {
+//     hstoreStr = "''";
+//  }
+//  return hstoreStr;
+//}
 
 QString HootApiDb::execToString(QString sql, QVariant v1, QVariant v2, QVariant v3) const
 {
@@ -560,7 +557,7 @@ void HootApiDb::beginChangeset()
   return beginChangeset(emptyTags);
 }
 
-void HootApiDb::beginChangeset(const Tags& tags)
+void HootApiDb::beginChangeset(const Tags& /*tags*/)
 {
   LOG_TRACE("Starting changeset...");
 
@@ -573,13 +570,13 @@ void HootApiDb::beginChangeset(const Tags& tags)
   if (_insertChangeSet == nullptr)
   {
     _insertChangeSet = std::make_shared<QSqlQuery>(_db);
-    _insertChangeSet->prepare(
-      QString("INSERT INTO %1 (user_id, created_at, min_lat, max_lat, min_lon, max_lon, "
-        "closed_at, tags) "
-        "VALUES (:user_id, NOW(), :min_lat, :max_lat, :min_lon, :max_lon, NOW(), " +
-        _escapeTags(tags) + ") "
-        "RETURNING id")
-        .arg(getChangesetsTableName(mapId)));
+//    _insertChangeSet->prepare(
+//      QString("INSERT INTO %1 (user_id, created_at, min_lat, max_lat, min_lon, max_lon, "
+//        "closed_at, tags) "
+//        "VALUES (:user_id, NOW(), :min_lat, :max_lat, :min_lon, :max_lon, NOW(), " +
+//        _escapeTags(tags) + ") "
+//        "RETURNING id")
+//        .arg(getChangesetsTableName(mapId)));
   }
   _insertChangeSet->bindValue(":user_id", (qlonglong)userId);
   _insertChangeSet->bindValue(":min_lat", _changesetEnvelope.getMinY());
@@ -595,7 +592,7 @@ void HootApiDb::beginChangeset(const Tags& tags)
   LOG_TRACE("Started new changeset " << QString::number(_currChangesetId));
 }
 
-long HootApiDb::insertChangeset(const geos::geom::Envelope& bounds, const Tags& tags,
+long HootApiDb::insertChangeset(const geos::geom::Envelope& bounds, const Tags& /*tags*/,
                                 const long numChanges)
 {
   LOG_TRACE("Inserting and closing changeset...");
@@ -607,13 +604,13 @@ long HootApiDb::insertChangeset(const geos::geom::Envelope& bounds, const Tags& 
   if (_insertChangeSet2 == nullptr)
   {
     _insertChangeSet2 = std::make_shared<QSqlQuery>(_db);
-    _insertChangeSet2->prepare(
-      QString("INSERT INTO %1 (user_id, created_at, min_lat, max_lat, min_lon, max_lon, "
-        "closed_at, num_changes, tags) "
-        "VALUES (:user_id, NOW(), :min_lat, :max_lat, :min_lon, :max_lon, NOW(), :num_changes, " +
-        _escapeTags(tags) + ") "
-        "RETURNING id")
-        .arg(getChangesetsTableName(mapId)));
+//    _insertChangeSet2->prepare(
+//      QString("INSERT INTO %1 (user_id, created_at, min_lat, max_lat, min_lon, max_lon, "
+//        "closed_at, num_changes, tags) "
+//        "VALUES (:user_id, NOW(), :min_lat, :max_lat, :min_lon, :max_lon, NOW(), :num_changes, " +
+//        _escapeTags(tags) + ") "
+//        "RETURNING id")
+//        .arg(getChangesetsTableName(mapId)));
   }
   _insertChangeSet2->bindValue(":user_id", (qlonglong)userId);
   _insertChangeSet2->bindValue(":min_lat", bounds.getMinY());
@@ -755,7 +752,7 @@ bool HootApiDb::insertNode(const double lat, const double lon, const Tags& tags,
   return insertNode(assignedId, lat, lon, tags, version);
 }
 
-bool HootApiDb::insertNode(const long id, const double lat, const double lon, const Tags &tags,
+bool HootApiDb::insertNode(const long id, const double lat, const double lon, const Tags& /*tags*/,
                            long version)
 {
   LOG_TRACE("Inserting node: " << id << "...");
@@ -794,7 +791,7 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
   // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
   // error.
-  v.append(_escapeTags(tags));
+  //v.append(_escapeTags(tags));
 
   _nodeBulkInsert->insert(v);
 
@@ -860,7 +857,7 @@ bool HootApiDb::insertRelation(const Tags &tags, long& assignedId, long version)
   return insertRelation(assignedId, tags, version);
 }
 
-bool HootApiDb::insertRelation(const long relationId, const Tags &tags, long version)
+bool HootApiDb::insertRelation(const long relationId, const Tags &/*tags*/, long version)
 {
   LOG_TRACE("Inserting relation: " << relationId << "...");
 
@@ -892,7 +889,7 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags, long ver
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
   // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
   // error.
-  v.append(_escapeTags(tags));
+  //v.append(_escapeTags(tags));
 
   _relationBulkInsert->insert(v);
 
@@ -2080,7 +2077,7 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
 }
 
 void HootApiDb::updateNode(const long id, const double lat, const double lon, const long version,
-                           const Tags& tags)
+                           const Tags& /*tags*/)
 {
   LOG_TRACE("Updating node: " << id << "...");
 
@@ -2092,11 +2089,11 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
   if (_updateNode == nullptr)
   {
     _updateNode = std::make_shared<QSqlQuery>(_db);
-    _updateNode->prepare(
-      "UPDATE " + getCurrentNodesTableName(mapId) +
-      " SET latitude=:latitude, longitude=:longitude, changeset_id=:changeset_id, "
-      " timestamp=:timestamp, tile=:tile, version=:version, tags=" + _escapeTags(tags) +
-      " WHERE id=:id");
+//    _updateNode->prepare(
+//      "UPDATE " + getCurrentNodesTableName(mapId) +
+//      " SET latitude=:latitude, longitude=:longitude, changeset_id=:changeset_id, "
+//      " timestamp=:timestamp, tile=:tile, version=:version, tags=" + _escapeTags(tags) +
+//      " WHERE id=:id");
   }
 
   _updateNode->bindValue(":id", (qlonglong)id);
@@ -2119,7 +2116,7 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
   LOG_TRACE("Updated node: " << ElementId(ElementType::Node, id));
 }
 
-void HootApiDb::updateRelation(const long id, const long version, const Tags& tags)
+void HootApiDb::updateRelation(const long id, const long version, const Tags& /*tags*/)
 {
   LOG_TRACE("Updating relation: " << id << "...");
 
@@ -2130,10 +2127,10 @@ void HootApiDb::updateRelation(const long id, const long version, const Tags& ta
   if (_updateRelation == nullptr)
   {
     _updateRelation = std::make_shared<QSqlQuery>(_db);
-    _updateRelation->prepare(
-      "UPDATE " + getCurrentRelationsTableName(mapId) +
-      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=" +
-      _escapeTags(tags) + " WHERE id=:id");
+//    _updateRelation->prepare(
+//      "UPDATE " + getCurrentRelationsTableName(mapId) +
+//      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=" +
+//      _escapeTags(tags) + " WHERE id=:id");
   }
 
   _updateRelation->bindValue(":id", (qlonglong)id);
@@ -2153,7 +2150,7 @@ void HootApiDb::updateRelation(const long id, const long version, const Tags& ta
   LOG_TRACE("Updated relation: " << ElementId(ElementType::Relation, id));
 }
 
-void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
+void HootApiDb::updateWay(const long id, const long version, const Tags& /*tags*/)
 {
   LOG_TRACE("Updating way: " << id << "...");
 
@@ -2164,10 +2161,10 @@ void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
   if (_updateWay == nullptr)
   {
     _updateWay = std::make_shared<QSqlQuery>(_db);
-    _updateWay->prepare(
-      "UPDATE " + getCurrentWaysTableName(mapId) +
-      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=" +
-      _escapeTags(tags) + " WHERE id=:id");
+//    _updateWay->prepare(
+//      "UPDATE " + getCurrentWaysTableName(mapId) +
+//      " SET changeset_id=:changeset_id, timestamp=:timestamp, version=:version, tags=" +
+//      _escapeTags(tags) + " WHERE id=:id");
   }
 
   _updateWay->bindValue(":id", (qlonglong)id);
@@ -2229,7 +2226,7 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags, long version)
   // escaping tags ensures that we won't introduce a SQL injection vulnerability, however, if a
   // bad tag is passed and it isn't escaped properly (shouldn't happen) it may result in a syntax
   // error.
-  v.append(_escapeTags(tags));
+  //v.append(_escapeTags(tags));
 
   _wayBulkInsert->insert(v);
 

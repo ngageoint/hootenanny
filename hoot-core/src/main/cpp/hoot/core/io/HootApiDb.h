@@ -699,7 +699,10 @@ private:
   void _updateChangesetEnvelopeRelationNodes(const std::vector<long>& relationIds);
   void _updateChangesetEnvelopeRelationWays(const std::vector<long>& relationIds);
 
-  static QString _escapeTags(const Tags& tags);
+  /*
+   * This breaks cppclean.
+   */
+  //static QString _escapeTags(const Tags& tags);
 
   // These delete methods are for testing purposes only, as they don't do any checks for orphaned
   // relationships.  Feel free to harden them and promote to public members that can be used beyond

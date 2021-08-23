@@ -33,8 +33,6 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/UnlikelyRoadRemover.h>
 
-#include <hoot/core/elements/MapProjector.h>
-
 namespace hoot
 {
 
