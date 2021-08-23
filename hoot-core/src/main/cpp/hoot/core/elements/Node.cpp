@@ -28,7 +28,7 @@
 #include "Node.h"
 
 // GEOS
-#include <geos/geom/Coordinate.h>
+
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Point.h>
 

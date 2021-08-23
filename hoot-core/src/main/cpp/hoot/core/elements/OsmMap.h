@@ -31,7 +31,7 @@
 #include <ogrsf_frmts.h>
 
 // GEOS Includes
-#include <geos/geom/Envelope.h>
+
 
 // Hoot
 #include <hoot/core/elements/ElementIterator.h>

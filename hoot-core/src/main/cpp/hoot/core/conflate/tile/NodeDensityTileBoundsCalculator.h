@@ -42,7 +42,7 @@
 
 
 // geos
-#include <geos/geom/Envelope.h>
+
 
 // GDAL
 #include <ogr_geometry.h>

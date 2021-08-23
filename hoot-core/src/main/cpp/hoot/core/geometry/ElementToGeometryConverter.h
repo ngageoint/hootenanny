@@ -29,7 +29,7 @@
 #define ELEMENT_TO_GEOMETRY_CONVERTER_H
 
 // GEOS
-#include <geos/geom/Envelope.h>
+
 #include <geos/geom/Geometry.h>
 
 // GDAL

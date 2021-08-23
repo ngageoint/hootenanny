@@ -29,7 +29,7 @@
 #define WAYSPLITTER_H
 
 // GEOS
-#include <geos/geom/Coordinate.h>
+
 
 // Standard
 

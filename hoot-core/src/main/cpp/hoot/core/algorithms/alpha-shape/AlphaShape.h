@@ -34,7 +34,7 @@
 #include <geos/geom/Polygon.h>
 
 // GDAL
-#include <ogr_core.h>
+
 
 // Qt
 

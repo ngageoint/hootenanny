@@ -28,7 +28,7 @@
 #define CHANGESET_REPLACEMENT_H
 
 //GEOS
-#include <geos/geom/Envelope.h>
+
 #include <geos/geom/Polygon.h>
 
 // Qt

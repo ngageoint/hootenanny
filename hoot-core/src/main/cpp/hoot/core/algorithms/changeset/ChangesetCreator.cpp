@@ -55,7 +55,7 @@
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
 
 //GEOS
-#include <geos/geom/Envelope.h>
+
 
 // Qt
 

@@ -28,10 +28,10 @@
 #define __MAP_PROJECTOR_H__
 
 // GDAL
-#include <ogr_core.h>
+
 
 // GEOS
-#include <geos/geom/Coordinate.h>
+
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/Geometry.h>
 

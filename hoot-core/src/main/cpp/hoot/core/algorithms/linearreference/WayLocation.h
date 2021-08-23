@@ -29,7 +29,7 @@
 #define __WAY_LOCATION_H__
 
 // GEOS
-#include <geos/geom/Coordinate.h>
+
 
 // Hoot
 #include <hoot/core/elements/Node.h>

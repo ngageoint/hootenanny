@@ -29,7 +29,7 @@
 #define WAYHEADING_H
 
 // GEOS
-#include <geos/geom/Coordinate.h>
+
 
 // hoot
 #include <hoot/core/util/Units.h>

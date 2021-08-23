@@ -28,7 +28,7 @@
 #include "KnnWayIterator.h"
 
 // GEOS
-#include <geos/geom/Envelope.h>
+
 #include <geos/geom/GeometryFactory.h>
 
 // hoot

@@ -28,7 +28,7 @@
 #define BBOX_H
 
 
-#include <geos/geom/Envelope.h>
+
 
 namespace hoot
 {

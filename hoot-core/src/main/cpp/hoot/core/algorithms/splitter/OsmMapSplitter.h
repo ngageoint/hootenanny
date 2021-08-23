@@ -33,7 +33,7 @@
 #include <hoot/core/util/Configurable.h>
 
 //  Geos
-#include <geos/geom/Envelope.h>
+
 
 //  Std
 

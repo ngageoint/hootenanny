@@ -33,7 +33,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 
 //  Geos
-#include <geos/geom/Coordinate.h>
+
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Polygon.h>

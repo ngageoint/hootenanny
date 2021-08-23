@@ -28,7 +28,7 @@
 #define APIDB_H
 
 // GEOS
-#include <geos/geom/Envelope.h>
+
 
 // hoot
 #include <hoot/core/elements/RelationData.h>

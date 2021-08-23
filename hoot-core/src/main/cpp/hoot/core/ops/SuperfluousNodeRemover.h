@@ -29,7 +29,7 @@
 #define SUPERFLUOUSNODEREMOVER_H
 
 // GEOS
-#include <geos/geom/Envelope.h>
+
 
 // Hoot
 #include <hoot/core/util/Units.h>

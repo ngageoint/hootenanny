@@ -41,7 +41,7 @@
 #include <tgs/Interpolation/Interpolator.h>
 
 // geos
-#include <geos/geom/Coordinate.h>
+
 
 #include <ogr_spatialref.h>
 

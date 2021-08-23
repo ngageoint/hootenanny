@@ -26,7 +26,7 @@
  */
 
 // geos
-#include <geos/geom/Coordinate.h>
+
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>

@@ -28,7 +28,7 @@
 #include "WayToIntersectionGeoModifier.h"
 
 // geos
-#include <geos/geom/Envelope.h>
+
 
 // Hoot
 #include <hoot/core/index/OsmMapIndex.h>

@@ -42,7 +42,7 @@
 // geos
 #include <geos/io/WKTReader.h>
 #include <geos/geom/Point.h>
-#include <geos/geom/Envelope.h>
+
 #include <geos/geom/Polygon.h>
 
 // TGS

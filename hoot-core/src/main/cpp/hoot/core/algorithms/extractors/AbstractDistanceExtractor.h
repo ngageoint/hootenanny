@@ -29,7 +29,7 @@
 #define ABSTRACTDISTANCEEXTRACTOR_H
 
 // geos
-#include <geos/geom/Envelope.h>
+
 #include <geos/geom/Point.h>
 
 // hoot

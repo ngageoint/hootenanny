@@ -28,7 +28,7 @@
 #define IMMEDIATELY_CONNECTED_OUT_OF_BOUNDS_WAY_TAGGER_H
 
 // GEOS
-#include <geos/geom/Envelope.h>
+
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>

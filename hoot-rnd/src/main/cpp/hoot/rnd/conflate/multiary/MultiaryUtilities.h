@@ -28,7 +28,7 @@
 #define MULTIARYUTILITIES_H
 
 // geos
-#include <geos/geom/Envelope.h>
+
 
 #ifndef SWIG
 // hoot

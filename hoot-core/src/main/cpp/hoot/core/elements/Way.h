@@ -28,7 +28,7 @@
 #define __ELEMENT_WAY_H__
 
 // Geos
-#include <geos/geom/Envelope.h>
+
 
 // Hoot
 #include <hoot/core/elements/Element.h>

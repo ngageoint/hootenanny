@@ -28,7 +28,7 @@
 #define PERTY_H
 
 // geos
-#include <geos/geom/Envelope.h>
+
 
 // hoot
 #include <hoot/core/ops/OsmMapOperation.h>

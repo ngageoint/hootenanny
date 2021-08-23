@@ -32,7 +32,7 @@
 #include <hoot/core/util/Units.h>
 
 // geos
-#include <geos/geom/Envelope.h>
+
 
 // Qt
 

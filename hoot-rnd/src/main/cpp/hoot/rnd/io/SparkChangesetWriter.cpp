@@ -27,7 +27,7 @@
 #include "SparkChangesetWriter.h"
 
 // geos
-#include <geos/geom/Envelope.h>
+
 
 // hoot
 #include <hoot/core/conflate/matching/MatchFactory.h>

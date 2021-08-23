@@ -36,7 +36,7 @@
 #include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // GEOS
-#include <geos/geom/Envelope.h>
+
 
 namespace hoot
 {

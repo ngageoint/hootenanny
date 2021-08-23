@@ -29,7 +29,7 @@
 #define MAPCROPPER_H
 
 // GEOS
-#include <geos/geom/Envelope.h>
+
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h>
 

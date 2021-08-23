@@ -30,7 +30,7 @@
 #define MAXIMALNEARESTSUBLINE_H
 
 // GEOS
-#include <geos/geom/Coordinate.h>
+
 
 // Standard
 

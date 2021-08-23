@@ -41,7 +41,7 @@
 
 
 // geos
-#include <geos/geom/Envelope.h>
+
 
 class QXmlStreamWriter;
 

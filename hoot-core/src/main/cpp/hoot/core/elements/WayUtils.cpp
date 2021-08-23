@@ -41,7 +41,7 @@
 #include <hoot/core/util/Log.h>
 
 // GEOS
-#include <geos/geom/Coordinate.h>
+
 
 // Std
 #include <float.h>

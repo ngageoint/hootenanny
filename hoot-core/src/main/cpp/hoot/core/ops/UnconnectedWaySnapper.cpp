@@ -55,7 +55,7 @@
 #include <tgs/RStarTree/MemoryPageStore.h>
 
 // GEOS
-#include <geos/geom/Coordinate.h>
+
 
 // Standard
 #include <cfloat>

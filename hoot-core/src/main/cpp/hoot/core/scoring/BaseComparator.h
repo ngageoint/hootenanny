@@ -32,7 +32,7 @@
 #include <ogrsf_frmts.h>
 
 // GEOS
-#include <geos/geom/Coordinate.h>
+
 
 // Hoot
 #include <hoot/core/util/OpenCv.h>

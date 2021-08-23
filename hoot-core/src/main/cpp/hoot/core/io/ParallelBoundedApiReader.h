@@ -34,7 +34,7 @@
 #include <queue>
 
 //  Geos
-#include <geos/geom/Envelope.h>
+
 
 //  Qt
 

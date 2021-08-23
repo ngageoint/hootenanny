@@ -32,7 +32,7 @@
 #include <hoot/core/elements/OsmMap.h>
 
 // GEOS
-#include <geos/geom/Coordinate.h>
+
 
 namespace hoot
 {

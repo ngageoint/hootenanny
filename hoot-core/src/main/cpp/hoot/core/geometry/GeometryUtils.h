@@ -38,7 +38,7 @@
 
 
 // GEOS
-#include <geos/geom/Envelope.h>
+
 #include <geos/geom/Polygon.h>
 
 namespace geos
