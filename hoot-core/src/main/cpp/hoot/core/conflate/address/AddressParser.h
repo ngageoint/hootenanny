@@ -34,8 +34,8 @@
 #include <hoot/core/conflate/address/AddressNormalizer.h>
 
 // Qt
-#include <QSet>
-#include <QList>
+
+
 
 namespace hoot
 {

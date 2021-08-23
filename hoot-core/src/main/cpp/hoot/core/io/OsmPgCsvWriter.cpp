@@ -33,7 +33,7 @@
 #include <hoot/core/util/DateTimeUtils.h>
 
 // Qt
-#include <QFileInfo>
+
 
 using namespace std;
 

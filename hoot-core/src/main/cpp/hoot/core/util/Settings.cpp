@@ -46,7 +46,7 @@
 #include <boost/foreach.hpp>
 
 // Qt
-#include <QStringList>
+
 
 // Standard
 #include <fstream>

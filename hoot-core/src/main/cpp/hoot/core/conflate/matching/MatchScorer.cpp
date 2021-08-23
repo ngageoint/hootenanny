@@ -45,7 +45,7 @@
 
 // Qt
 #include <QElapsedTimer>
-#include <QFileInfo>
+
 
 namespace hoot
 {

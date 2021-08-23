@@ -33,7 +33,7 @@
 #include <hoot/core/conflate/optimization/ReleaseTest.h>
 
 // Qt
-#include <QDir>
+
 
 namespace hoot
 {

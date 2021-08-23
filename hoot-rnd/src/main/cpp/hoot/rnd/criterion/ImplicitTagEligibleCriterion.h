@@ -32,7 +32,7 @@
 #include <hoot/core/elements/Tags.h>
 
 // Qt
-#include <QStringList>
+
 
 
 namespace hoot

@@ -34,7 +34,7 @@
 #include <cppunit/TestFixture.h>
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

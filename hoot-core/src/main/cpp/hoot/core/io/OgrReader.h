@@ -33,9 +33,9 @@
 #include <hoot/core/util/ProgressReporter.h>
 
 // Qt
-#include <QHash>
 
-#include <QStringList>
+
+
 
 // geos
 #include <ogr_spatialref.h>

@@ -30,7 +30,7 @@
 // Qt
 #include <QSqlQuery>
 #include <QSqlError>
-#include <QStringList>
+
 
 // Hoot
 #include <hoot/core/schema/MetadataTags.h>

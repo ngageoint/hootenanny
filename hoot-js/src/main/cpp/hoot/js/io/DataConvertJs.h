@@ -33,8 +33,8 @@
 #include <hoot/js/io/StreamUtilsJs.h>
 
 // Qt
-#include <QHash>
-#include <QStringList>
+
+
 
 // v8
 #include <hoot/js/HootJsStable.h>

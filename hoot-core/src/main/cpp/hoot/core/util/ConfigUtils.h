@@ -34,7 +34,7 @@
 #include <hoot/core/criterion/InBoundsCriterion.h>
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

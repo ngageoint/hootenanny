@@ -41,7 +41,7 @@
 #include <hoot/core/util/UuidHelper.h>
 
 // qt
-#include <QStringList>
+
 #include <QVariant>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlRecord>

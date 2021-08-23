@@ -34,7 +34,7 @@
 #include <geos/geom/Envelope.h>
 
 // Qt
-#include <QList>
+
 
 namespace hoot
 {

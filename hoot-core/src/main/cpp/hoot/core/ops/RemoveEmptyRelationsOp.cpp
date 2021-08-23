@@ -32,7 +32,7 @@
 #include <hoot/core/ops/RemoveRelationByEid.h>
 
 // Qt
-#include <QList>
+
 
 namespace hoot
 {

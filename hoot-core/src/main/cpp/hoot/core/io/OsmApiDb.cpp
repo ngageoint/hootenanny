@@ -37,11 +37,11 @@
 #include <hoot/core/util/Log.h>
 
 // qt
-#include <QStringList>
+
 #include <QVariant>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlRecord>
-#include <QFile>
+
 #include <QTextStream>
 
 // Standard

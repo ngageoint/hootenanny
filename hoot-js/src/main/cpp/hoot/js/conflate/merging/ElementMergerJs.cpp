@@ -54,7 +54,7 @@
 
 // Qt
 
-#include <QList>
+
 
 // std
 #include <set>

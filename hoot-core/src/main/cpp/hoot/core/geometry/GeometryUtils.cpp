@@ -48,7 +48,7 @@
 
 // Qt
 
-#include <QStringList>
+
 
 // Standard
 #include <stdint.h>

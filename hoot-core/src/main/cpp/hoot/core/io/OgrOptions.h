@@ -28,7 +28,7 @@
 #define OGROPTIONS_H
 
 // Qt
-#include <QMap>
+
 
 
 // Standard

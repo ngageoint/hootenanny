@@ -57,9 +57,9 @@
 
 // Qt
 #include <QDomDocument>
-#include <QHash>
-#include <QSet>
-#include <QDir>
+
+
+
 #include <QStringBuilder>
 
 // Standard

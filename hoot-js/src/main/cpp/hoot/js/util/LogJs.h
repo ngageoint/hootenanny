@@ -31,7 +31,7 @@
 #include <hoot/js/HootBaseJs.h>
 
 //  Qt
-#include <QHash>
+
 
 
 namespace hoot

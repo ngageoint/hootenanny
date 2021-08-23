@@ -31,9 +31,9 @@
 #include <hoot/core/io/PartialOsmMapWriter.h>
 
 // Qt
-#include <QDir>
-#include <QFile>
-#include <QHash>
+
+
+
 
 #include <QXmlDefaultHandler>
 

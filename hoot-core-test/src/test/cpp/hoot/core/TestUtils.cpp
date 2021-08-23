@@ -79,8 +79,8 @@
 #include <tgs/Statistics/Random.h>
 
 // Qt
-#include <QDir>
-#include <QFile>
+
+
 
 using namespace geos::geom;
 using namespace std;

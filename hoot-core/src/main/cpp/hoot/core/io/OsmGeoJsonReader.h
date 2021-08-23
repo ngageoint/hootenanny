@@ -30,7 +30,7 @@
 
 // Qt
 #include <QUrl>
-#include <QFile>
+
 
 
 // Standard

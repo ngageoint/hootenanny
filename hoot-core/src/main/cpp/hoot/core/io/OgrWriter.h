@@ -40,7 +40,7 @@
 #include <ogr_spatialref.h>
 
 // Qt
-#include <QHash>
+
 
 
 // Standard

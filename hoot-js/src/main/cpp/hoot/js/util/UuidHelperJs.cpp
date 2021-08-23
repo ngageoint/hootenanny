@@ -33,7 +33,7 @@
 #include <hoot/js/io/DataConvertJs.h>
 
 // QT
-#include <QStringList>
+
 
 using namespace v8;
 

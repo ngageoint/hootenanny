@@ -32,7 +32,7 @@
 #include <hoot/core/conflate/address/AddressParser.h>
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

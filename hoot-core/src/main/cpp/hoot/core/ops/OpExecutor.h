@@ -34,8 +34,8 @@
 #include <hoot/core/util/ProgressReporter.h>
 
 // Qt
-#include <QStringList>
-#include <QMap>
+
+
 
 namespace hoot
 {

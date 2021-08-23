@@ -28,7 +28,7 @@
 #define TEXTTABLE_H
 
 // Qt
-#include <QHash>
+
 #include <QVariant>
 
 namespace hoot

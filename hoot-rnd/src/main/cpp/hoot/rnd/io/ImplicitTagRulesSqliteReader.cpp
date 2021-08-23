@@ -33,7 +33,7 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QSet>
+
 #include <QSqlError>
 #include <QTextStream>
 #include <QVariant>

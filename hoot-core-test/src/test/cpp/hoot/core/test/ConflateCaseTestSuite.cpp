@@ -35,8 +35,8 @@
 #include <hoot/core/util/ConfPath.h>
 
 // Qt
-#include <QDir>
-#include <QFileInfo>
+
+
 
 namespace hoot
 {

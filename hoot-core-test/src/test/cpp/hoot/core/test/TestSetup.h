@@ -28,7 +28,7 @@
 #define TESTSETUP_H
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

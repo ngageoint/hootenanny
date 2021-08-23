@@ -39,7 +39,7 @@
 
 // Qt
 #include <QStringBuilder>
-#include <QFileInfo>
+
 
 using namespace geos::geom;
 

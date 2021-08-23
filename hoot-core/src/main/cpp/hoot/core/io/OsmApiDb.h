@@ -34,7 +34,7 @@
 #include <hoot/core/elements/Relation.h>
 
 // Qt
-#include <QFile>
+
 
 namespace hoot
 {

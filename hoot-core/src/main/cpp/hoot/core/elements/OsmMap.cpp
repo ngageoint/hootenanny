@@ -54,7 +54,7 @@
 
 // Qt
 #include <QDebug>
-#include <QFileInfo>
+
 
 using namespace std;
 

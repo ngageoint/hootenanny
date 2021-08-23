@@ -46,7 +46,7 @@
 #include <hoot/js/util/StringUtilsJs.h>
 
 // Qt
-#include <QStringList>
+
 #include <QElapsedTimer>
 
 using namespace std;

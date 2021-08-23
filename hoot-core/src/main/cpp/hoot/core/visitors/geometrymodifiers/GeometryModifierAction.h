@@ -34,7 +34,7 @@
 
 // Qt
 
-#include <QHash>
+
 
 namespace hoot
 {

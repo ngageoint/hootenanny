@@ -44,8 +44,8 @@
 #include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 
 // Qt
-#include <QFileInfo>
-#include <QStringList>
+
+
 #include <QElapsedTimer>
 
 // Standard

@@ -36,8 +36,8 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QMap>
-#include <QStringList>
+
+
 
 // Standard
 #include <fstream>

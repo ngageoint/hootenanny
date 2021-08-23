@@ -30,7 +30,7 @@
 
 // Qt
 
-#include <QSet>
+
 
 // Std
 #include <set>

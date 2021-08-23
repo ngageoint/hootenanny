@@ -37,7 +37,7 @@
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 
 // Qt
-#include <QStringList>
+
 
 // Standard
 #include <math.h>

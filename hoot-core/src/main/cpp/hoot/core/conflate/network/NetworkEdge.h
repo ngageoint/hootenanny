@@ -33,7 +33,7 @@
 #include <hoot/core/elements/ElementProvider.h>
 
 // Qt
-#include <QSet>
+
 
 namespace hoot
 {

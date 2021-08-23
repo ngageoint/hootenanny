@@ -42,7 +42,7 @@
 #include <tgs/System/Time.h>
 
 // Qt
-#include <QSet>
+
 
 using namespace geos::geom;
 using namespace std;

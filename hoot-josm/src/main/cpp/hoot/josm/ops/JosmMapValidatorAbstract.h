@@ -37,7 +37,7 @@
 #include <jni.h>
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

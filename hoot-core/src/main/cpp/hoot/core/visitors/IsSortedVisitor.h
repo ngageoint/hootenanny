@@ -33,7 +33,7 @@
 #include <hoot/core/elements/ElementId.h>
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

@@ -41,8 +41,8 @@
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
-#include <QDir>
-#include <QFileInfo>
+
+
 #include <QElapsedTimer>
 
 using namespace std;

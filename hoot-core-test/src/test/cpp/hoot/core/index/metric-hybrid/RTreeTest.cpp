@@ -32,7 +32,7 @@
 #include <hoot/core/io/OsmPbfReader.h>
 
 // Qt
-#include <QStringList>
+
 
 // Tgs
 #include <tgs/Statistics/Random.h>

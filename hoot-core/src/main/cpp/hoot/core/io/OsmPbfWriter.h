@@ -29,7 +29,7 @@
 #define OSMPBFWRITER_H
 
 // Qt
-#include <QHash>
+
 
 
 // Standard Includes

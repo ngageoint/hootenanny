@@ -29,11 +29,11 @@
 
 // Qt
 
-#include <QMap>
+
 #include <QCache>
 #include <QtSql/QSqlDatabase>
 #include <QSqlQuery>
-#include <QSet>
+
 
 namespace hoot
 {

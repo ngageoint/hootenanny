@@ -34,7 +34,7 @@
 #include <hoot/core/info/SingleStatistic.h>
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

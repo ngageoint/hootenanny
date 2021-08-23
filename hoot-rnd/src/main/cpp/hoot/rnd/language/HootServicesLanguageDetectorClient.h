@@ -34,8 +34,8 @@
 
 // Qt
 #include <QCache>
-#include <QMap>
-#include <QSet>
+
+
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>

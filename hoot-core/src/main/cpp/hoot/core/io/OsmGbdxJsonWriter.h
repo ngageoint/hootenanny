@@ -32,7 +32,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
-#include <QDir>
+
 
 
 namespace hoot

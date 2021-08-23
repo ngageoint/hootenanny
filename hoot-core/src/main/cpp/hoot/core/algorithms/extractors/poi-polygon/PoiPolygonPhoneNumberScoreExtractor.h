@@ -34,7 +34,7 @@
 #include <hoot/core/conflate/phone/PhoneNumberParser.h>
 
 // Qt
-#include <QList>
+
 
 namespace hoot
 {

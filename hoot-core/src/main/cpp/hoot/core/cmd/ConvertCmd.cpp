@@ -40,8 +40,8 @@
 
 // Qt
 #include <QElapsedTimer>
-#include <QStringList>
-#include <QFileInfo>
+
+
 
 using namespace std;
 

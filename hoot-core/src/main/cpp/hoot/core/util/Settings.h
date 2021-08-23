@@ -29,10 +29,10 @@
 #define CONFIGURATION_H
 
 // Qt
-#include <QHash>
+
 #include <QRegularExpression>
 
-#include <QStringList>
+
 #include <QVariant>
 
 // Standard

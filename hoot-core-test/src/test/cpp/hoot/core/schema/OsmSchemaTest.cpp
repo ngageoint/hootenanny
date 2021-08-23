@@ -33,7 +33,7 @@
 
 // Qt
 #include <QDebug>
-#include <QFile>
+
 
 const double epsilon = 1e-6;
 

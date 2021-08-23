@@ -33,7 +33,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 
 // Qt
-#include <QFile>
+
 
 namespace hoot
 {

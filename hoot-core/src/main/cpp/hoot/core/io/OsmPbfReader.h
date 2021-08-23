@@ -29,7 +29,7 @@
 #define OSMPBFREADER_H
 
 // Qt
-#include <QHash>
+
 
 
 // Standard Includes

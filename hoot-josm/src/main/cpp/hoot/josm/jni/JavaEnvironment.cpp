@@ -33,7 +33,7 @@
 #include <hoot/josm/jni/JniUtils.h>
 
 // Qt
-#include <QFile>
+
 
 // Std
 #include <string.h>

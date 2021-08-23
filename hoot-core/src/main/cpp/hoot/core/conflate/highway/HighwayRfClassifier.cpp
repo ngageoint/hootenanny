@@ -44,7 +44,7 @@
 #include <fstream>
 
 // Qt
-#include <QFile>
+
 
 using namespace std;
 using namespace Tgs;

@@ -32,7 +32,7 @@
 #include <hoot/rnd/language/HootServicesLanguageDetectorClient.h>
 
 // Qt
-#include <QMap>
+
 
 namespace hoot
 {

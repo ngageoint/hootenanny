@@ -32,7 +32,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 
 // Qt
-#include <QSet>
+
 
 namespace hoot
 {

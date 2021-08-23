@@ -36,7 +36,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
-#include <QStringList>
+
 
 // Standard
 #include <iomanip>

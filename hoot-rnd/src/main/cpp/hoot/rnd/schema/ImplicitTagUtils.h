@@ -31,7 +31,7 @@
 #include <hoot/core/language/ToEnglishTranslator.h>
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

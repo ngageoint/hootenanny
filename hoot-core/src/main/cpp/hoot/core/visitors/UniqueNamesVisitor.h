@@ -32,7 +32,7 @@
 #include <hoot/core/info/SingleStatistic.h>
 
 // Qt
-#include <QSet>
+
 
 namespace hoot
 {

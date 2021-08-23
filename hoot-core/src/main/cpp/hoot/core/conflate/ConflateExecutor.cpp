@@ -57,8 +57,8 @@
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 // Qt
-#include <QFileInfo>
-#include <QDir>
+
+
 #include <QElapsedTimer>
 
 // Standard

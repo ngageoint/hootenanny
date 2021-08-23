@@ -34,8 +34,8 @@
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
 
 // Qt
-#include <QFile>
-#include <QHash>
+
+
 
 #include <QXmlDefaultHandler>
 

@@ -31,8 +31,8 @@
 #include <hoot/core/algorithms/string/StringDistance.h>
 
 // Qt
-#include <QSet>
-#include <QMap>
+
+
 
 namespace hoot
 {

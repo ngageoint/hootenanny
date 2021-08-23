@@ -33,7 +33,7 @@
 #include <tgs/Statistics/Random.h>
 
 // Qt
-#include <QFile>
+
 
 namespace hoot
 {

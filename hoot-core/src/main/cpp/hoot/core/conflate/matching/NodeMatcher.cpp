@@ -47,7 +47,7 @@
 #include <tgs/Statistics/Normal.h>
 
 // Qt
-#include <QSet>
+
 
 using namespace std;
 using namespace Tgs;

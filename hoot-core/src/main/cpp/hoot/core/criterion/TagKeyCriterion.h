@@ -32,7 +32,7 @@
 #include <hoot/core/util/Configurable.h>
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

@@ -32,7 +32,7 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QFile>
+
 
 namespace hoot
 {

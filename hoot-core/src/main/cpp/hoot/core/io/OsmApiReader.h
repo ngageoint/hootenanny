@@ -34,7 +34,7 @@
 #include <hoot/core/util/Units.h>
 
 // Qt
-#include <QHash>
+
 
 
 namespace hoot

@@ -29,8 +29,8 @@
 #define STRINGUTILS_H
 
 // Qt
-#include <QStringList>
-#include <QSet>
+
+
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>

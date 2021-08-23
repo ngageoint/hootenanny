@@ -35,7 +35,7 @@
 #include <hoot/core/info/OperationStatus.h>
 
 // Qt
-#include <QSet>
+
 
 namespace hoot
 {

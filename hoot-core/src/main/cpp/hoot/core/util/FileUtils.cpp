@@ -32,9 +32,9 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
+
+
+
 #include <QFileInfoList>
 #include <QHostAddress>
 #include <QRegularExpression>

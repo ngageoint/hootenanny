@@ -32,9 +32,9 @@
 #include <hoot/core/util/Units.h>
 
 // Qt
-#include <QHash>
 
-#include <QStringList>
+
+
 #include <QRegExp>
 
 // Standard

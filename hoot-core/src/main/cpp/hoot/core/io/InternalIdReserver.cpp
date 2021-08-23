@@ -27,7 +27,7 @@
 #include "InternalIdReserver.h"
 
 // Qt
-#include <QHash>
+
 #include <QSqlError>
 #include <QSqlQuery>
 

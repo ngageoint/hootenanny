@@ -37,7 +37,7 @@
 
 // Qt
 
-#include <QHash>
+
 #include <QTemporaryFile>
 
 namespace hoot

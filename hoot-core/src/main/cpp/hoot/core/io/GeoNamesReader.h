@@ -31,7 +31,7 @@
 #include <hoot/core/io/PartialOsmMapReader.h>
 
 // Qt
-#include <QFile>
+
 
 namespace hoot
 {

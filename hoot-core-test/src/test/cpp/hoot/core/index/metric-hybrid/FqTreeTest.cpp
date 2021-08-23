@@ -33,7 +33,7 @@
 #include <hoot/core/visitors/UniqueTagValuesVisitor.h>
 
 // Qt
-#include <QStringList>
+
 
 // Tgs
 #include <tgs/System/Time.h>

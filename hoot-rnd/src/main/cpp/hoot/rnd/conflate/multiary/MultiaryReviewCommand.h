@@ -32,7 +32,7 @@
 #include <hoot/core/elements/Element.h>
 
 //QT
-#include <QSet>
+
 #include <QByteArray>
 
 namespace hoot

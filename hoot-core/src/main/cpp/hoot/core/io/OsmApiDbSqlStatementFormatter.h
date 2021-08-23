@@ -34,8 +34,8 @@
 #include <hoot/core/io/ApiDbSqlStatementFormatter.h>
 
 // Qt
-#include <QMap>
-#include <QStringList>
+
+
 
 namespace hoot
 {

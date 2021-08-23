@@ -34,8 +34,8 @@
 
 // Qt
 #include <QMultiHash>
-#include <QSet>
-#include <QMap>
+
+
 
 // Standard
 #include <vector>

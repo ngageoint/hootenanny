@@ -36,7 +36,7 @@
 #include <hoot/js/util/StringUtilsJs.h>
 
 // Qt
-#include <QStringList>
+
 
 using namespace v8;
 

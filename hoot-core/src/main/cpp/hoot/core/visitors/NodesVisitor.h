@@ -32,7 +32,7 @@
 #include <hoot/core/elements/Node.h>
 
 // Qt
-#include <QList>
+
 
 namespace hoot
 {

@@ -31,8 +31,8 @@
 #include <hoot/core/util/HootException.h>
 
 // Qt
-#include <QFile>
-#include <QStringList>
+
+
 
 namespace hoot
 {

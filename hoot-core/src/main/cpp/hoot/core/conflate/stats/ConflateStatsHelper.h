@@ -28,7 +28,7 @@
 #define CONFLATE_STATS_HELPER_H
 
 // Qt
-#include <QList>
+
 
 
 namespace hoot

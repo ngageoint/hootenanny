@@ -31,7 +31,7 @@
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

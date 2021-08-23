@@ -45,7 +45,7 @@
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 // Qt
-#include <QSet>
+
 
 using namespace std;
 

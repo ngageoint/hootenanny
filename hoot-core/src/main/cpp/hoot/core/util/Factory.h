@@ -36,7 +36,7 @@
 
 // Qt
 #include <QMutex>
-
+#include <QString>
 
 // Standard
 #include <map>

@@ -35,7 +35,7 @@
 #include <hoot/core/conflate/ConflateUtils.h>
 
 // Qt
-#include <QFileInfo>
+
 
 using namespace std;
 using namespace Tgs;

@@ -32,7 +32,7 @@
 #include <hoot/core/elements/Element.h>
 
 // Qt
-#include <QHash>
+
 
 namespace hoot
 {

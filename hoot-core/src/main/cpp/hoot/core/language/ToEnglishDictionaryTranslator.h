@@ -33,7 +33,7 @@
 
 // Qt
 #include <QRegExp>
-#include <QSet>
+
 
 
 // ICU

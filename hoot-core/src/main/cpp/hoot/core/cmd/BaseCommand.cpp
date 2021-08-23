@@ -38,8 +38,8 @@
 #include <hoot/core/util/HootException.h>
 
 // Qt
-#include <QFileInfo>
-#include <QDir>
+
+
 
 using namespace geos::geom;
 

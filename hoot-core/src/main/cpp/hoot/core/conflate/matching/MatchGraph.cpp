@@ -52,7 +52,7 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QHash>
+
 
 // Tgs
 #include <tgs/DisjointSet/DisjointSetMap.h>

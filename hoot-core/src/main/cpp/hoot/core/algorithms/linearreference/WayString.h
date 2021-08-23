@@ -31,7 +31,7 @@
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 
 // Qt
-#include <QList>
+
 
 namespace hoot
 {

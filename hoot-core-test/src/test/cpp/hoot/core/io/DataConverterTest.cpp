@@ -31,7 +31,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
-#include <QFileInfo>
+
 
 namespace hoot
 {

@@ -28,7 +28,7 @@
 #define FILTERED_BY_GEOMETRY_TYPE_CRITERIA_H
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

@@ -34,7 +34,7 @@
 #include <hoot/core/io/schema/StrictChecking.h>
 
 // Qt
-#include <QHash>
+
 
 
 namespace hoot

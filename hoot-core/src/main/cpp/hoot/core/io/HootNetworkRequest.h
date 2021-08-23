@@ -29,7 +29,7 @@
 #define HOOT_NETWORK_REQUEST_H
 
 //  Qt
-#include <QList>
+
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 

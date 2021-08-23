@@ -49,8 +49,8 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
 // Qt
-#include <QFileInfo>
-#include <QDir>
+
+
 
 namespace hoot
 {

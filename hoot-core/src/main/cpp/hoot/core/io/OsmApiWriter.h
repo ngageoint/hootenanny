@@ -47,7 +47,7 @@
 #include <thread>
 
 //  Qt
-#include <QList>
+
 
 
 namespace hoot

@@ -34,7 +34,7 @@
 #include <hoot/core/io/IoUtils.h>
 
 // Qt
-#include <QFileInfo>
+
 
 namespace hoot
 {

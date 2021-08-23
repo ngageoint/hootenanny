@@ -29,7 +29,7 @@
 
 // Qt
 
-#include <QStringList>
+
 
 // Standard
 #include <math.h>

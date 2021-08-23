@@ -32,7 +32,7 @@
 #include <hoot/core/conflate/network/NetworkVertex.h>
 
 // Qt
-#include <QList>
+
 
 namespace hoot
 {

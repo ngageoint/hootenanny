@@ -33,7 +33,7 @@
 #include <hoot/core/conflate/SearchBoundsCalculator.h>
 
 // Qt
-#include <QFile>
+
 
 namespace hoot
 {

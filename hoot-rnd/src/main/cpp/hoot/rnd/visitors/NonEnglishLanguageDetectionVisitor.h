@@ -35,8 +35,8 @@
 #include <hoot/rnd/language/LanguageInfoProvider.h>
 
 // Qt
-#include <QMap>
-#include <QSet>
+
+
 
 namespace hoot
 {

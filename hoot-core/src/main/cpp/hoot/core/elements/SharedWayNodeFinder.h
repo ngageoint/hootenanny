@@ -32,7 +32,7 @@
 #include <hoot/core/elements/Way.h>
 
 // Qt
-#include <QSet>
+
 
 namespace hoot
 {

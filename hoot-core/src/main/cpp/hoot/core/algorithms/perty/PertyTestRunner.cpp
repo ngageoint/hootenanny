@@ -35,8 +35,8 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QFileInfo>
-#include <QDir>
+
+
 #include <QTextStream>
 
 // Standard

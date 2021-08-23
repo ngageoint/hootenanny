@@ -32,7 +32,7 @@
 
 // Qt
 
-#include <QSet>
+
 
 #include <vector>
 

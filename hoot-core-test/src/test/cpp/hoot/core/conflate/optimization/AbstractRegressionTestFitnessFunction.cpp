@@ -35,7 +35,7 @@
 #include <hoot/core/conflate/optimization/AbstractRegressionTest.h>
 
 // Qt
-#include <QFileInfo>
+
 
 // Standard
 #include <cassert>

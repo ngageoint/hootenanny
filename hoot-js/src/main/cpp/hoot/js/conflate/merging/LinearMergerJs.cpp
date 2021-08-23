@@ -44,7 +44,7 @@
 #include <hoot/js/SystemNodeJs.h>
 
 // Qt
-#include <QStringList>
+
 
 using namespace std;
 using namespace v8;

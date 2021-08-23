@@ -60,7 +60,7 @@
 //
 // Deliberately not adding ConfigOptions.h here to try to take some of the compile sting out of
 // config options changes when not temporarily updating hoot.json. Please add ConfigOptions.h
-// includes directly to your implementation rather than adding it here.
+// includes directly to the class you are modifying rather than adding it here.
 
 // hoot
 #include <hoot/core/util/HootException.h>

@@ -29,7 +29,7 @@
 #define SHORTESTPATH_H
 
 // Qt
-#include <QHash>
+
 
 // Standard
 #include <memory>

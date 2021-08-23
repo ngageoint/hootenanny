@@ -30,7 +30,7 @@
 #include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
 
 // Qt
-#include <QSet>
+
 
 
 namespace hoot

@@ -33,7 +33,7 @@
 #include <hoot/core/util/HootException.h>
 
 // Qt
-#include <QFile>
+
 #include <QProcess>
 #include <QTextCodec>
 #include <QTextStream>

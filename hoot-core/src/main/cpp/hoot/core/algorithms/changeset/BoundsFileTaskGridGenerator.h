@@ -31,7 +31,7 @@
 #include <hoot/core/algorithms/changeset/TaskGridGenerator.h>
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

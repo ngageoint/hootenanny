@@ -49,8 +49,8 @@
 // Qt
 #include <QCoreApplication>
 #include <QCryptographicHash>
-#include <QDir>
-#include <QFileInfo>
+
+
 #include <QLibraryInfo>
 
 // TBS

@@ -58,8 +58,8 @@
 #include <geos/geom/Envelope.h>
 
 // Qt
-#include <QFileInfo>
-#include <QDir>
+
+
 
 namespace hoot
 {

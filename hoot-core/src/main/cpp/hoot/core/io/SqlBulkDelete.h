@@ -29,7 +29,7 @@
 
 // Qt
 #include <QSqlQuery>
-#include <QStringList>
+
 
 #include <hoot/core/io/BulkDelete.h>
 

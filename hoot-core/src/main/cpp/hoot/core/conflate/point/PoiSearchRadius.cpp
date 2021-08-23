@@ -33,7 +33,7 @@
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
-#include <QFileInfo>
+
 
 // Boost
 #include <boost/bind.hpp>

@@ -30,7 +30,7 @@
 
 // Qt
 
-#include <QDir>
+
 
 namespace hoot
 {

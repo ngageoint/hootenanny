@@ -28,7 +28,7 @@
 #define SERVICESDBTESTUTILS_H
 
 // Qt
-#include <QHash>
+
 #include <QUrl>
 #include <QVariant>
 

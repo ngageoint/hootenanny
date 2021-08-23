@@ -36,8 +36,8 @@
 #include <hoot/js/util/HootExceptionJs.h>
 
 // Qt
-#include <QDir>
-#include <QFile>
+
+
 
 using namespace v8;
 

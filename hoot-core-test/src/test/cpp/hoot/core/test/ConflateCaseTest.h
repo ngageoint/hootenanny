@@ -28,7 +28,7 @@
 #define CONFLATECASETEST_H
 
 // Qt
-#include <QStringList>
+
 
 #include <hoot/core/test/AbstractTest.h>
 

@@ -34,7 +34,7 @@
 // Qt
 
 #include <QTemporaryFile>
-#include <QSet>
+
 
 namespace hoot
 {

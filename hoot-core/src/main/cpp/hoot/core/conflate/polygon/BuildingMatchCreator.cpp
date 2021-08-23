@@ -57,7 +57,7 @@
 #include <tgs/RStarTree/MemoryPageStore.h>
 
 //Qt
-#include <QFile>
+
 #include <QElapsedTimer>
 
 using namespace geos::geom;

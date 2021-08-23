@@ -63,7 +63,7 @@
 #include <hoot/core/visitors/WaysVisitor.h>
 
 // Qt
-#include <QSet>
+
 
 using namespace geos::geom;
 using namespace std;

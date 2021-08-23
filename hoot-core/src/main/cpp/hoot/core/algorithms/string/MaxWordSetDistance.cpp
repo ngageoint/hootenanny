@@ -31,7 +31,7 @@
 #include <hoot/core/schema/ScoreMatrix.h>
 
 // Qt
-#include <QStringList>
+
 
 using namespace std;
 

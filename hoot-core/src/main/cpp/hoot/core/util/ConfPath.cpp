@@ -33,10 +33,10 @@
 #include <hoot/core/util/Settings.h>
 
 // Qt
-#include <QDir>
+
 #include <QDirIterator>
-#include <QFileInfo>
-#include <QSet>
+
+
 
 // Standard
 #include <stdlib.h>

@@ -37,9 +37,9 @@
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
-#include <QFileInfo>
+
 #include <QStringBuilder>
-#include <QDir>
+
 #include <QUuid>
 #include <QLatin1String>
 #include <QTextStream>

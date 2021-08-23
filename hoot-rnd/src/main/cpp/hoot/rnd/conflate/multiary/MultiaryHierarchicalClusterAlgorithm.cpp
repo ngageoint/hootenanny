@@ -31,7 +31,7 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QHash>
+
 
 namespace hoot
 {

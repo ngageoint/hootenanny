@@ -31,7 +31,7 @@
 #include <hoot/core/HootConfig.h>
 
 // Qt
-#include <QMap>
+
 
 #include <QVariant>
 

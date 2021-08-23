@@ -33,7 +33,7 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QFile>
+
 
 // Standard
 #include <limits>

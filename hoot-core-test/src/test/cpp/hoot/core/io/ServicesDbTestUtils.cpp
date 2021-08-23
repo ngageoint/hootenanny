@@ -40,7 +40,7 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QStringList>
+
 
 // Tgs
 #include <tgs/StreamUtils.h>

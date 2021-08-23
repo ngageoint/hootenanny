@@ -36,7 +36,7 @@
 #include <hoot/core/elements/OsmMap.h>
 
 // Qt
-#include <QHash>
+
 
 namespace hoot
 {

@@ -34,7 +34,7 @@
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
 
 // Qt
-#include <QFile>
+
 
 namespace hoot
 {

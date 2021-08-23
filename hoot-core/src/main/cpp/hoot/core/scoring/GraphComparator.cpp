@@ -51,7 +51,7 @@
 
 // Qt
 #include <QDebug>
-#include <QDir>
+
 #include <QPainter>
 
 // TGS

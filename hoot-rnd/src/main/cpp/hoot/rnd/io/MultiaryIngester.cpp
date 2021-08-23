@@ -46,8 +46,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
-#include <QFileInfo>
-#include <QDir>
+
+
 
 namespace hoot
 {

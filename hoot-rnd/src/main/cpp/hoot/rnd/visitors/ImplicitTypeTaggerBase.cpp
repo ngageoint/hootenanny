@@ -37,7 +37,7 @@
 #include <hoot/rnd/schema/ImplicitTagUtils.h>
 
 // Qt
-#include <QSet>
+
 #include <QStringBuilder>
 
 namespace hoot

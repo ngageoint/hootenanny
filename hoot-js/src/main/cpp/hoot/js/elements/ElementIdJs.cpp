@@ -33,7 +33,7 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 
 // Qt
-#include <QStringList>
+
 
 using namespace v8;
 

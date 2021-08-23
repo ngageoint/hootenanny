@@ -55,7 +55,7 @@
 #include <hoot/core/visitors/ConstElementVisitor.h>
 
 // Qt
-#include <QFileInfo>
+
 #include <QDirIterator>
 
 // GEOS

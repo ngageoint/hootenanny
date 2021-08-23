@@ -40,7 +40,7 @@
 #include <hoot/core/util/Settings.h>
 
 // Qt
-#include <QFile>
+
 
 namespace hoot
 {

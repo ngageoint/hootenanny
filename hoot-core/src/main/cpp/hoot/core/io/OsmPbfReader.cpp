@@ -49,8 +49,8 @@
 
 // Qt
 #include <QDateTime>
-#include <QDir>
-#include <QFileInfo>
+
+
 
 // TGS
 #include <tgs/System/Time.h>

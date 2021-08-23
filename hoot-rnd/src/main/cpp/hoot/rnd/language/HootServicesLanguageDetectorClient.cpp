@@ -42,7 +42,7 @@
 // Qt
 #include <QByteArray>
 #include <QVariant>
-#include <QMap>
+
 
 // std
 #include <iostream>

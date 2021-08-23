@@ -34,7 +34,7 @@
 
 // Qt
 
-#include <QSet>
+
 
 namespace hoot
 {

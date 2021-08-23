@@ -35,7 +35,7 @@
 #include <hoot/core/visitors/RandomWayGeneralizer.h>
 
 // Qt
-#include <QFileInfo>
+
 
 using namespace std;
 

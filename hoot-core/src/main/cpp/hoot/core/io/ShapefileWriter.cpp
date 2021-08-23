@@ -50,9 +50,9 @@
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 // Qt
-#include <QFileInfo>
-#include <QHash>
-#include <QMap>
+
+
+
 
 using namespace geos::geom;
 

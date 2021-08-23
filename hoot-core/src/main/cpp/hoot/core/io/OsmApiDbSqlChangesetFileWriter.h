@@ -36,10 +36,10 @@
 
 // Qt
 #include <QUrl>
-#include <QFile>
+
 #include <QtSql/QSqlDatabase>
 
-#include <QSet>
+
 
 namespace hoot
 {

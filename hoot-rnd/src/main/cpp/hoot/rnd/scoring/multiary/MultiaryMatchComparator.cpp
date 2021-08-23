@@ -45,7 +45,7 @@
 #include <hoot/rnd/scoring/multiary/MultiaryMatchTrainingValidator.h>
 
 // Qt
-#include <QSet>
+
 
 using namespace std;
 

@@ -30,7 +30,7 @@
 
 // Qt
 
-#include <QMap>
+
 
 // Boost
 #include <boost/property_tree/ptree.hpp>

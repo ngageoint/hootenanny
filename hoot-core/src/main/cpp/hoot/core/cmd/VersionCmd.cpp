@@ -47,7 +47,7 @@
 
 // Qt
 #include <Qt>
-#include <QStringList>
+
 
 #ifdef HOOT_HAVE_STXXL
 #include <stxxl/bits/version.h>

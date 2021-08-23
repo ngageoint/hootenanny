@@ -38,7 +38,7 @@
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
 
 // Qt
-#include <QList>
+
 
 
 namespace hoot

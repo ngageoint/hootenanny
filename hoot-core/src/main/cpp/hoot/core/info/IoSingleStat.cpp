@@ -31,8 +31,8 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QFile>
-#include <QStringList>
+
+
 #include <QTextStream>
 
 namespace hoot

@@ -28,7 +28,7 @@
 #define TEMPTESTFILENAME_H
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

@@ -33,7 +33,7 @@
 #include <hoot/core/conflate/network/OsmNetwork.h>
 
 // Qt
-#include <QList>
+
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>

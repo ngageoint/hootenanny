@@ -54,8 +54,8 @@
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
-#include <QDir>
-#include <QFileInfo>
+
+
 #include <QDateTime>
 
 using namespace geos::geom;

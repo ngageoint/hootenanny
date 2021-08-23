@@ -28,7 +28,7 @@
 #define APIDBSQLSTATEMENTFORMATTER_H
 
 // Qt
-#include <QMap>
+
 
 
 namespace hoot

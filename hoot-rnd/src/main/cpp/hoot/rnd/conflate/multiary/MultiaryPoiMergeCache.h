@@ -33,7 +33,7 @@
 #include <hoot/rnd/conflate/multiary/MultiaryCluster.h>
 
 // Qt
-#include <QSet>
+
 
 namespace hoot
 {

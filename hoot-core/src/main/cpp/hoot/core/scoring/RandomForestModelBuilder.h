@@ -29,7 +29,7 @@
 #define RANDOMFORESTMODELBUILDER_H
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

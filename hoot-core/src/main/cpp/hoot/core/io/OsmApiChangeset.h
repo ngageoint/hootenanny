@@ -29,10 +29,10 @@
 #define OSM_API_CHANGESET_H
 
 //  Qt
-#include <QList>
+
 
 #include <QTextStream>
-#include <QVector>
+
 #include <QXmlStreamReader>
 
 //  Standard

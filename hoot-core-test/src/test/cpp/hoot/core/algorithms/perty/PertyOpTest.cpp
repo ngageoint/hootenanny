@@ -38,7 +38,7 @@
 #include <tbs/stats/SampleStats.h>
 
 // Qt
-#include <QSet>
+
 
 using namespace std;
 

@@ -32,10 +32,10 @@
 #include <hoot/core/conflate/matching/MatchType.h>
 
 // Qt
-#include <QMap>
-#include <QFile>
+
+
 #include <QTextStream>
-#include <QSet>
+
 
 namespace hoot
 {

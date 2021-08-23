@@ -31,7 +31,7 @@
 #include <hoot/core/test/AbstractTest.h>
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

@@ -35,7 +35,7 @@
 #include <hoot/core/util/FileUtils.h>
 
 // Qt
-#include <QFileInfo>
+
 
 namespace hoot
 {

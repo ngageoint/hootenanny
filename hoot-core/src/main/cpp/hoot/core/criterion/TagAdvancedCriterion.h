@@ -35,7 +35,7 @@
 
 // Qt
 
-#include <QMap>
+
 #include <QRegExp>
 
 namespace hoot

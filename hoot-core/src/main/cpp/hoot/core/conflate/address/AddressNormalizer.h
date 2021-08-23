@@ -33,7 +33,7 @@
 #include <hoot/core/conflate/address/AddressTagKeys.h>
 
 // Qt
-#include <QSet>
+
 
 namespace hoot
 {

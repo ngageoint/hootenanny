@@ -39,8 +39,8 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QFile>
-#include <QFileInfo>
+
+
 #include <QXmlStreamWriter>
 
 using namespace std;

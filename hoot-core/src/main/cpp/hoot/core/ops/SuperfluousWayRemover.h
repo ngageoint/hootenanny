@@ -35,7 +35,7 @@
 #include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // Qt
-#include <QSet>
+
 
 namespace hoot
 {

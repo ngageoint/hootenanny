@@ -55,7 +55,7 @@
 
 // Qt
 
-#include <QStringList>
+
 
 // Standard
 #include <cstdint>

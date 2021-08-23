@@ -34,7 +34,7 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QStringList>
+
 
 // standard
 #include <set>

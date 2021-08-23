@@ -28,7 +28,7 @@
 #define SUPERFLUOUS_CONFLATE_OP_REMOVER_H
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

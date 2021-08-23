@@ -46,12 +46,12 @@
 #include <hoot/core/util/Log.h>
 
 // qt
-#include <QStringList>
+
 #include <QVariant>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlRecord>
-#include <QSet>
-#include <QFile>
+
+
 #include <QRegularExpression>
 
 // Standard

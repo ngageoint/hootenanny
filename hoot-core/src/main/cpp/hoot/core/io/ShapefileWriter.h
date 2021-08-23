@@ -33,9 +33,9 @@
 #include <hoot/core/util/Configurable.h>
 
 // Qt
-#include <QDir>
 
-#include <QStringList>
+
+
 
 // Standard
 #include <vector>

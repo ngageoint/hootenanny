@@ -38,7 +38,7 @@
 #include <hoot/core/conflate/ConflateUtils.h>
 
 // Qt
-#include <QVector>
+
 
 namespace hoot
 {

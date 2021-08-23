@@ -40,7 +40,7 @@
 #include <hoot/core/schema/TagDifferencer.h>
 
 // Qt
-#include <QStringList>
+
 
 using namespace std;
 using namespace v8;

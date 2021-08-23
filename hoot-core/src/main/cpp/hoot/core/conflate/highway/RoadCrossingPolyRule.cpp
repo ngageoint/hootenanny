@@ -41,7 +41,7 @@
 #include <tgs/RStarTree/MemoryPageStore.h>
 
 // Qt
-#include <QFileInfo>
+
 
 // Boost
 #include <boost/bind.hpp>

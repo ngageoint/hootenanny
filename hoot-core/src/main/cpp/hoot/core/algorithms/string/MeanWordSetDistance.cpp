@@ -31,7 +31,7 @@
 #include <hoot/core/util/Factory.h>
 
 // Qt
-#include <QStringList>
+
 
 namespace hoot
 {

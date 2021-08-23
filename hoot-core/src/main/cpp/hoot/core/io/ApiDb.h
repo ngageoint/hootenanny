@@ -41,7 +41,7 @@
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
-#include <QMap>
+
 
 // Standard
 #include <map>

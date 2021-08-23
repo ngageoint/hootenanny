@@ -33,7 +33,7 @@
 #include <hoot/core/schema/SchemaVertex.h>
 
 // Qt
-#include <QSet>
+
 
 
 // Standard

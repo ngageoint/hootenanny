@@ -37,7 +37,7 @@
 #include <vector>
 
 // Qt
-#include <QList>
+
 
 namespace hoot
 {

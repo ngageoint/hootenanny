@@ -42,7 +42,7 @@
 #include <hoot/js/util/HootExceptionJs.h>
 
 // Qt
-#include <QStringList>
+
 
 using namespace v8;
 

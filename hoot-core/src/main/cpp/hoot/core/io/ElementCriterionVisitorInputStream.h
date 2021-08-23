@@ -34,7 +34,7 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 
 // Qt
-#include <QList>
+
 
 namespace hoot
 {

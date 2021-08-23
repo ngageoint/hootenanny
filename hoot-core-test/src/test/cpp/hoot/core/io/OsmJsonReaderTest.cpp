@@ -36,7 +36,7 @@
 #include <hoot/core/geometry/GeometryUtils.h>
 
 // Qt
-#include <QDir>
+
 
 namespace hoot
 {

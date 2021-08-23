@@ -39,7 +39,7 @@
 
 //  Qt
 
-#include <QStringList>
+
 
 //  Standard
 #include <thread>

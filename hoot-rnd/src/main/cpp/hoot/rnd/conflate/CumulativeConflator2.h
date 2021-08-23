@@ -32,8 +32,8 @@
 #include <hoot/core/elements/OsmMap.h>
 
 // Qt
-#include <QStringList>
-#include <QDir>
+
+
 
 namespace hoot
 {

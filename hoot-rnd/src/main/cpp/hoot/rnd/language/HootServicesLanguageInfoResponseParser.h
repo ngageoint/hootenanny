@@ -35,7 +35,7 @@
 
 // Qt
 
-#include <QMap>
+
 
 namespace hoot
 {

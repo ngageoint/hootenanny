@@ -33,7 +33,7 @@
 // Qt
 #include <QtSql/QSqlDatabase>
 #include <QSqlError>
-#include <QStringList>
+
 #include <QStringBuilder>
 
 // tgs

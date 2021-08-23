@@ -37,7 +37,7 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QStringList>
+
 
 using namespace std;
 

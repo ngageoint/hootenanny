@@ -42,7 +42,7 @@
 // Qt
 #include <QByteArray>
 #include <QVariant>
-#include <QMap>
+
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>

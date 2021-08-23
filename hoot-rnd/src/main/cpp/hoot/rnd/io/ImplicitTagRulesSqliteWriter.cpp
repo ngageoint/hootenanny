@@ -35,7 +35,7 @@
 
 // Qt
 #include <QSqlError>
-#include <QFile>
+
 #include <QStringBuilder>
 
 namespace hoot

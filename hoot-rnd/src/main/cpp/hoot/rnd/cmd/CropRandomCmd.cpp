@@ -40,7 +40,7 @@
 #include <hoot/rnd/ops/RandomMapCropper.h>
 
 // Qt
-#include <QFileInfo>
+
 #include <QElapsedTimer>
 
 namespace hoot

@@ -36,8 +36,8 @@
 
 // Qt
 #include <QDebug>
-#include <QSet>
-#include <QStringList>
+
+
 
 // TGS
 #include <tgs/StreamUtils.h>
