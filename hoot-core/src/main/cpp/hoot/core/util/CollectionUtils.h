@@ -33,7 +33,7 @@
 
 
 // Std
-#include <set>
+
 
 namespace hoot
 {

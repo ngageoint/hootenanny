@@ -35,8 +35,8 @@
 #include <hoot/core/criterion/FilteredByGeometryTypeCriteria.h>
 
 // Standard
-#include <string>
-#include <vector>
+
+
 
 // Qt
 

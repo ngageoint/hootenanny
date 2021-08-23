@@ -36,8 +36,8 @@
 #include <QElapsedTimer>
 
 // Standard
-#include <map>
-#include <set>
+
+
 
 namespace hoot
 {

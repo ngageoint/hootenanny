@@ -55,7 +55,7 @@
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
 
 // std
-#include <vector>
+
 
 // Qt
 #include <QElapsedTimer>

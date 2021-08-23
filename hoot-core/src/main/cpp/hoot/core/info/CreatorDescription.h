@@ -33,8 +33,8 @@
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 // Standard
-#include <string>
-#include <vector>
+
+
 
 // QT
 

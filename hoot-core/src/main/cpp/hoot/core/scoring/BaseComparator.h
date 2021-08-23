@@ -46,7 +46,7 @@
 #include <tgs/RasterOps/Image.hpp>
 
 // Standard
-#include <memory>
+
 
 namespace hoot
 {

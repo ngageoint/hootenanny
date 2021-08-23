@@ -32,7 +32,7 @@
 #include <hoot/js/PluginContext.h>
 
 
-#include <string>
+
 
 using namespace v8;
 

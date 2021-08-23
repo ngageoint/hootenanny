@@ -32,7 +32,7 @@
 
 // Std
 #include <cassert>
-#include <string>
+
 
 namespace hoot
 {

@@ -32,7 +32,7 @@
 #include <hoot/core/util/StringUtils.h>
 
 // Standard
-#include <set>
+
 
 namespace hoot
 {

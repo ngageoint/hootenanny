@@ -35,9 +35,9 @@
 #include <hoot/core/info/CreatorDescription.h>
 
 // Standard
-#include <set>
-#include <string>
-#include <vector>
+
+
+
 
 namespace hoot
 {

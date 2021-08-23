@@ -34,7 +34,7 @@
 #include <hoot/core/util/Configurable.h>
 
 // Standard
-#include <vector>
+
 
 // GEOS
 #include <geos/geom/Geometry.h>

@@ -34,7 +34,7 @@
 #include <hoot/js/HootBaseJs.h>
 
 // Standard
-#include <memory>
+
 
 namespace hoot
 {

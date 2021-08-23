@@ -26,7 +26,7 @@
  */
 #include "OgrWriter.h"
 
-#include <vector>
+
 
 // geos
 #include <geos/geom/GeometryFactory.h>

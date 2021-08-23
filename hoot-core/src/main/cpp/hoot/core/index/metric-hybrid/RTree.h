@@ -38,7 +38,7 @@
 // Standard
 #include <assert.h>
 #include <math.h>
-#include <vector>
+
 
 // TGS
 #include <tgs/HashMap.h>

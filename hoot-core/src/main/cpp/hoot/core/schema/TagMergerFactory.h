@@ -28,7 +28,7 @@
 #define TAGMERGERFACTORY_H
 
 // Standard
-#include <memory>
+
 
 // Qt
 

@@ -31,8 +31,8 @@
 #include <csignal>
 #include <cstdio>
 
-#include <map>
-#include <memory>
+
+
 #include <stack>
 
 namespace hoot

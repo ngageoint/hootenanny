@@ -31,7 +31,7 @@
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
 
 // Std
-#include <string>
+
 
 namespace hoot
 {

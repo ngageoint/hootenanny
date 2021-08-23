@@ -40,10 +40,10 @@
 
 
 // Standard
-#include <map>
-#include <memory>
-#include <set>
-#include <vector>
+
+
+
+
 
 class OGRSpatialReference;
 

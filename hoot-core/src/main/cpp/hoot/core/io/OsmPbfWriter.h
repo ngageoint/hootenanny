@@ -34,7 +34,7 @@
 
 // Standard Includes
 #include <istream>
-#include <vector>
+
 
 // TGS
 #include <tgs/HashMap.h>

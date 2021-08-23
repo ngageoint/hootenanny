@@ -27,9 +27,9 @@
 #ifndef OSMAPIDBBULKINSERTER_H
 #define OSMAPIDBBULKINSERTER_H
 
-#include <string>
-#include <map>
-#include <vector>
+
+
+
 
 
 #include <QTemporaryFile>

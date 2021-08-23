@@ -34,7 +34,7 @@
 
 
 
-#include <vector>
+
 
 // Forward declaration
 class GDALDataset;

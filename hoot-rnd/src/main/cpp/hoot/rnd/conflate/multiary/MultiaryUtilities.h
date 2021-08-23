@@ -36,8 +36,8 @@
 #endif
 
 // Standard
-#include <string>
-#include <vector>
+
+
 
 namespace hoot
 {

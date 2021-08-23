@@ -43,7 +43,7 @@
 #include <hoot/js/SystemNodeJs.h>
 
 // Standard
-#include <memory>
+
 
 namespace hoot
 {

@@ -31,7 +31,7 @@
 #include <hoot/js/SystemNodeJs.h>
 
 // Standard
-#include <vector>
+
 
 namespace hoot
 {

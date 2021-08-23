@@ -32,7 +32,7 @@
 #include <hoot/js/v8Engine.h>
 
 // std
-#include <vector>
+
 
 namespace hoot
 {

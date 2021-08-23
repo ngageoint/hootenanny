@@ -41,7 +41,7 @@
 #include <ogr_spatialref.h>
 
 // Standard
-#include <vector>
+
 
 namespace hoot
 {

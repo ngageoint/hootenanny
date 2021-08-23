@@ -39,7 +39,7 @@
 
 // Standard
 #include <stdint.h>
-#include <string>
+
 
 namespace hoot
 {

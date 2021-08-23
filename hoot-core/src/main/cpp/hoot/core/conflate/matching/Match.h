@@ -33,7 +33,7 @@
 #include <hoot/core/info/ApiEntityInfo.h>
 
 // Standard
-#include <set>
+
 
 namespace hoot
 {

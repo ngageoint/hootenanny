@@ -32,8 +32,8 @@
 #include <hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h>
 
 // standard
-#include <set>
-#include <vector>
+
+
 
 namespace hoot
 {

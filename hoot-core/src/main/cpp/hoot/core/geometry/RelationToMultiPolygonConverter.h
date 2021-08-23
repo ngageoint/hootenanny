@@ -36,7 +36,7 @@
 #include <geos/geom/LinearRing.h>
 
 // Standard
-#include <memory>
+
 
 namespace hoot
 {

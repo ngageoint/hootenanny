@@ -32,9 +32,9 @@
 #include <hoot/core/conflate/matching/MatchSet.h>
 
 // Standard
-#include <memory>
-#include <set>
-#include <vector>
+
+
+
 
 namespace hoot
 {

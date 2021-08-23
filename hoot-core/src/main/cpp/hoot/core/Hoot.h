@@ -28,7 +28,7 @@
 #define HOOT_H
 
 // Standard
-#include <memory>
+
 
 class QString;
 

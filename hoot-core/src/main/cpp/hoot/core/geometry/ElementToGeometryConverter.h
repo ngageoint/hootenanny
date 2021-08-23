@@ -43,7 +43,7 @@
 
 
 // Standard
-#include <memory>
+
 
 namespace geos
 {

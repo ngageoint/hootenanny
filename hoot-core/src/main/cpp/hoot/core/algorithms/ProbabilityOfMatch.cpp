@@ -46,7 +46,7 @@
 #include <hoot/core/util/Settings.h>
 
 // Standard
-#include <vector>
+
 
 // Tgs
 #include <tgs/StreamUtils.h>

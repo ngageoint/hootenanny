@@ -36,8 +36,8 @@
 #include <geos/geom/Envelope.h>
 
 //  Std
-#include <set>
-#include <vector>
+
+
 
 namespace hoot
 {

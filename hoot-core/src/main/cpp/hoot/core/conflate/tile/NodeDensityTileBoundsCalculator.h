@@ -39,7 +39,7 @@
 #include <QElapsedTimer>
 
 // Std
-#include <vector>
+
 
 // geos
 #include <geos/geom/Envelope.h>

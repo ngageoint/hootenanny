@@ -34,7 +34,7 @@
 #include <hoot/core/algorithms/string/WordWeightDictionary.h>
 
 // Standart
-#include <vector>
+
 
 namespace hoot
 {

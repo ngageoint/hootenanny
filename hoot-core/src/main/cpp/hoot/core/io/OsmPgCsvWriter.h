@@ -36,7 +36,7 @@
 #include <QTextStream>
 
 // std
-#include <vector>
+
 
 namespace hoot
 {

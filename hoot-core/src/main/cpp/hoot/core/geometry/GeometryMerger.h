@@ -35,9 +35,9 @@
 // Standard Library
 #include <atomic>
 #include <condition_variable>
-#include <memory>
+
 #include <mutex>
-#include <vector>
+
 
 namespace hoot
 {

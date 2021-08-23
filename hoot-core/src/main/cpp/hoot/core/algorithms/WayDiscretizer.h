@@ -32,8 +32,8 @@
 #include <hoot/core/util/Units.h>
 
 // Standard
-#include <memory>
-#include <vector>
+
+
 
 // Tgs
 #include <tgs/HashMap.h>

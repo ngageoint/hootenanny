@@ -34,7 +34,7 @@
 #include <hoot/core/elements/Status.h>
 
 // Standard
-#include <memory>
+
 
 namespace hoot
 {

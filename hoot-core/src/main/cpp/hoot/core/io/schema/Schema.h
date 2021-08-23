@@ -28,8 +28,8 @@
 #define SCHEMA_H
 
 // Standard
-#include <vector>
-#include <map>
+
+
 
 #include <hoot/core/io/schema/Layer.h>
 

@@ -27,7 +27,7 @@
 
 #include "SchemaTranslationVisitor.h"
 
-#include <vector>
+
 
 #include <geos/geom/Geometry.h>
 

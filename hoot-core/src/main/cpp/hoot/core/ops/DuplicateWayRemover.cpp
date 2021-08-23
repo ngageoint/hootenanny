@@ -46,8 +46,8 @@
 
 // Standard
 
-#include <map>
-#include <vector>
+
+
 
 // TGS
 #include <tgs/StreamUtils.h>

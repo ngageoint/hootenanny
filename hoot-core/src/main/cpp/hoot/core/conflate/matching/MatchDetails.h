@@ -33,7 +33,7 @@
 #include <QVariant>
 
 // Standard
-#include <map>
+
 
 namespace hoot
 {

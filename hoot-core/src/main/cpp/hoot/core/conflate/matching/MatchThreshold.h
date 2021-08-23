@@ -32,7 +32,7 @@
 #include <hoot/core/conflate/matching/MatchType.h>
 
 // Standard
-#include <vector>
+
 
 namespace hoot
 {

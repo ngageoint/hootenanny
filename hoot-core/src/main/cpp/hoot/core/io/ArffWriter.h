@@ -33,9 +33,9 @@
 
 // Standard
 #include <fstream>
-#include <map>
-#include <memory>
-#include <vector>
+
+
+
 
 namespace hoot
 {

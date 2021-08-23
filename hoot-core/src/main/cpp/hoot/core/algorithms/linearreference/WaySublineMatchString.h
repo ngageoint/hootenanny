@@ -33,8 +33,8 @@
 #include <hoot/core/elements/OsmMap.h>
 
 // Std
-#include <string>
-#include <vector>
+
+
 
 namespace hoot
 {

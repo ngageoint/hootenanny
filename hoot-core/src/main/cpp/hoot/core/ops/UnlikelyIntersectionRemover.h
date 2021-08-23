@@ -34,8 +34,8 @@
 #include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // Standard
-#include <set>
-#include <vector>
+
+
 
 namespace hoot
 {

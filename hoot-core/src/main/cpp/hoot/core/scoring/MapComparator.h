@@ -27,7 +27,7 @@
 #ifndef MAPCOMPARATOR_H
 #define MAPCOMPARATOR_H
 
-#include <memory>
+
 
 namespace hoot
 {

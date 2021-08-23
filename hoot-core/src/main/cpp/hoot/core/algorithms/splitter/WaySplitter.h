@@ -32,7 +32,7 @@
 #include <geos/geom/Coordinate.h>
 
 // Standard
-#include <vector>
+
 
 // Hoot
 #include <hoot/core/util/Units.h>

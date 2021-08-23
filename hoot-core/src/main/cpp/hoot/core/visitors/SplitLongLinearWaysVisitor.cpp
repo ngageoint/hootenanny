@@ -28,7 +28,7 @@
 
 #include <cstddef>
 
-#include <vector>
+
 
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/Way.h>

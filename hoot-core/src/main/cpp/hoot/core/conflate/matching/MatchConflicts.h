@@ -35,7 +35,7 @@
 #include <QMultiHash>
 
 // Standard
-#include <vector>
+
 
 namespace hoot
 {

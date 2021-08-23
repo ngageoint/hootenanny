@@ -33,7 +33,7 @@
 #include <QRegularExpression>
 
 //  Standard
-#include <vector>
+
 
 //  Hoot
 #include <hoot/core/io/OsmApiChangesetElement.h>

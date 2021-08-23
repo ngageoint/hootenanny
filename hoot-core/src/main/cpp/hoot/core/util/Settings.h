@@ -36,8 +36,8 @@
 #include <QVariant>
 
 // Standard
-#include <set>
-#include <string>
+
+
 
 namespace hoot
 {

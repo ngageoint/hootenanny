@@ -40,7 +40,7 @@
 #include <QVariant>
 
 
-#include <string>
+
 
 using namespace std;
 using namespace v8;

@@ -31,7 +31,7 @@
 #include <hoot/core/conflate/merging/MergerBase.h>
 
 // Standard
-#include <set>
+
 
 namespace hoot
 {

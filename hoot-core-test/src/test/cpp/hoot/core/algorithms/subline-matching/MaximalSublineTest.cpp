@@ -47,7 +47,7 @@
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // Standard
-#include <string>
+
 
 // TGS
 #include <tgs/System/Time.h>

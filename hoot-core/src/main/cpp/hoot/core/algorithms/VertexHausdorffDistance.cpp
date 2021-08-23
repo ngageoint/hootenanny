@@ -36,7 +36,7 @@
 #include <hoot/core/util/Log.h>
 
 // Standard
-#include <memory>
+
 #include <limits>
 
 namespace hoot

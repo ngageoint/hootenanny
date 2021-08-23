@@ -43,8 +43,8 @@
 
 
 // Standard
-#include <memory>
-#include <vector>
+
+
 
 class OGRCoordinateTransformation;
 class OGRSpatialReference;

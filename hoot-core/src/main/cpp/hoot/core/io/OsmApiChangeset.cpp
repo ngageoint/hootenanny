@@ -37,7 +37,7 @@
 //  Standard
 #include <algorithm>
 #include <stack>
-#include <vector>
+
 
 //  Qt
 #include <QRegularExpression>

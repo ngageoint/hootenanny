@@ -34,8 +34,8 @@
 #include <hoot/core/index/ElementToRelationMap.h>
 
 // STL
-#include <vector>
-#include <set>
+
+
 
 // TGS
 #include <tgs/RStarTree/HilbertRTree.h>

@@ -42,7 +42,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 
 // Standard
-#include <vector>
+
 
 namespace hoot
 {

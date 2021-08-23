@@ -35,7 +35,7 @@
 // Standard Includes
 #include <istream>
 #include <stdint.h>
-#include <vector>
+
 
 // hoot
 #include <hoot/core/io/PartialOsmMapReader.h>

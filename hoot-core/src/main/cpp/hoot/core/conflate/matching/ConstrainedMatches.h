@@ -33,9 +33,9 @@
 #include <hoot/core/elements/OsmMap.h>
 
 // Standard
-#include <map>
-#include <set>
-#include <vector>
+
+
+
 
 namespace hoot
 {

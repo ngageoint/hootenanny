@@ -30,7 +30,7 @@
 // Qt
 
 
-#include <memory>
+
 
 namespace hoot
 {

@@ -28,7 +28,7 @@
 #define WAYSUBLINECOLLECTION_H
 
 // Standard
-#include <vector>
+
 
 // Hoot
 #include <hoot/core/algorithms/linearreference/WaySubline.h>

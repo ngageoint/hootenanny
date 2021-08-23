@@ -44,7 +44,7 @@
 #include <tgs/System/SystemInfo.h>
 
 // Std
-#include <set>
+
 
 namespace hoot
 {

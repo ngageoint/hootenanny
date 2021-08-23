@@ -34,7 +34,7 @@
 #include <hoot/core/elements/OsmMap.h>
 
 // Std
-#include <vector>
+
 
 namespace hoot
 {

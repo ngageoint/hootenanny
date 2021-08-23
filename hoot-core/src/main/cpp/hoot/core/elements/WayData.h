@@ -31,7 +31,7 @@
 #include <hoot/core/elements/ElementData.h>
 
 // Standard
-#include <vector>
+
 
 namespace hoot
 {

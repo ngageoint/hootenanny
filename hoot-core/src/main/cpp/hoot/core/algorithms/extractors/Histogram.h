@@ -31,7 +31,7 @@
 #include <hoot/core/util/Units.h>
 
 // standard
-#include <vector>
+
 
 // Qt
 

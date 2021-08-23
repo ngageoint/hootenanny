@@ -32,7 +32,7 @@
 
 // Standard
 
-#include <vector>
+
 using namespace std;
 
 namespace hoot

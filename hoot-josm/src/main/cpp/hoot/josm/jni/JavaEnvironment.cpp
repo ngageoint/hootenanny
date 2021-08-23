@@ -36,7 +36,7 @@
 
 
 // Std
-#include <string.h>
+
 
 namespace hoot
 {

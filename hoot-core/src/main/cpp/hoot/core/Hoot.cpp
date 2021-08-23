@@ -48,7 +48,7 @@
 #include <QNetworkSession>
 
 // System
-#include <memory>
+
 #include <sys/resource.h>
 
 // Tgs

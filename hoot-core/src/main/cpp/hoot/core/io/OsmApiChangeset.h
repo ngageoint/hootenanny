@@ -37,10 +37,10 @@
 
 //  Standard
 #include <array>
-#include <map>
+
 #include <mutex>
-#include <set>
-#include <vector>
+
+
 
 //  Hoot
 #include <hoot/core/elements/ElementId.h>

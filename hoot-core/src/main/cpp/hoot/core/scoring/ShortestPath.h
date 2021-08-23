@@ -32,7 +32,7 @@
 
 
 // Standard
-#include <memory>
+
 #include <queue>
 
 namespace hoot

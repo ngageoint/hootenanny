@@ -43,7 +43,7 @@
 
 // Standard
 
-#include <vector>
+
 
 // TGS
 #include <tgs/StreamUtils.h>

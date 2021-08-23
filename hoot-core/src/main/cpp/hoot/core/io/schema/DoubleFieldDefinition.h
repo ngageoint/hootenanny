@@ -28,7 +28,7 @@
 #define DOUBLEFIELDDEFINITION_H
 
 // Standard
-#include <set>
+
 
 #include <hoot/core/io/schema/FieldDefinition.h>
 

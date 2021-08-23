@@ -33,7 +33,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 
 // Standard
-#include <memory>
+
 
 namespace hoot
 {

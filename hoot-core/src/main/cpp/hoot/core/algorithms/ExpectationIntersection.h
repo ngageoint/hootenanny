@@ -28,7 +28,7 @@
 #define EXPECTATIONINTERSECTION_H
 
 // Standard
-#include <vector>
+
 
 // Tbs
 #include <tbs/stats/TDistribution.h>

@@ -34,8 +34,8 @@
 #include <cassert>
 
 #include <queue>
-#include <set>
-#include <vector>
+
+
 
 //  Hoot
 #include <hoot/core/scoring/TextTable.h>

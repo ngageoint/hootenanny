@@ -47,8 +47,8 @@
 #include <hoot/core/visitors/ElementVisitor.h>
 
 // Standard
-#include <memory>
-#include <vector>
+
+
 
 namespace hoot
 {

@@ -33,8 +33,8 @@
 #include <hoot/core/util/Units.h>
 
 // Standard
-#include <set>
-#include <vector>
+
+
 
 namespace hoot
 {

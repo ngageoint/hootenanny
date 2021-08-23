@@ -35,7 +35,7 @@
 #include <hoot/core/elements/ElementProvider.h>
 
 // standard
-#include <string>
+
 
 namespace hoot
 {

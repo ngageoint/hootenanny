@@ -33,7 +33,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 
 // Standard
-#include <set>
+
 
 
 

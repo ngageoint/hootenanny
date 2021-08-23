@@ -30,7 +30,7 @@
 #include <hoot/core/index/metric-hybrid/Node.h>
 
 // Standard
-#include <set>
+
 
 namespace hoot
 {

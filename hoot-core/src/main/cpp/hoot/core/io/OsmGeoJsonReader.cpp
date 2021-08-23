@@ -50,7 +50,7 @@
 #include <QRegExp>
 
 // Standard
-#include <string>
+
 #include <fstream>
 
 #include <sstream>

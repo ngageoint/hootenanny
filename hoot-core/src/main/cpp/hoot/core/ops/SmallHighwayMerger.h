@@ -34,7 +34,7 @@
 #include <hoot/core/util/Units.h>
 
 // Std
-#include <set>
+
 
 namespace hoot
 {

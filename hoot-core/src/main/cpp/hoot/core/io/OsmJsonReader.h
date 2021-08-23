@@ -35,7 +35,7 @@
 
 // Standard
 #include <mutex>
-#include <string>
+
 
 // Boost
 #include <boost/property_tree/ptree.hpp>

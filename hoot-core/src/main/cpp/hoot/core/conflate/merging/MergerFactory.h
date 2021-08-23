@@ -36,8 +36,8 @@
 
 
 // Standard
-#include <set>
-#include <vector>
+
+
 
 namespace hoot
 {

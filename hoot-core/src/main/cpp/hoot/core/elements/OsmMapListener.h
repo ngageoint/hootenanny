@@ -28,7 +28,7 @@
 #ifndef OSMMAPLISTENER_H
 #define OSMMAPLISTENER_H
 
-#include <memory>
+
 
 namespace hoot
 {

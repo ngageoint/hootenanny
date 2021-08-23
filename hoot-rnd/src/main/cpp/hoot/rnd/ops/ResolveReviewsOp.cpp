@@ -39,7 +39,7 @@
 #include <hoot/core/util/Log.h>
 
 // Standard
-#include <set>
+
 
 using namespace std;
 

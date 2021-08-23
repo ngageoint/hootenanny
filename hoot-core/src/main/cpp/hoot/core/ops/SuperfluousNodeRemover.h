@@ -41,7 +41,7 @@
 #include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // Standard
-#include <set>
+
 
 // Qt
 

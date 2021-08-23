@@ -48,7 +48,7 @@
 
 
 // Standard
-#include <string>
+
 #include <sstream>
 
 inline QString toQString(const QString& s)

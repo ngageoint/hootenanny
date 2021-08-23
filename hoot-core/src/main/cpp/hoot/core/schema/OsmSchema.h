@@ -38,7 +38,7 @@
 
 // Standard
 #include <stdint.h>
-#include <vector>
+
 
 namespace hoot
 {

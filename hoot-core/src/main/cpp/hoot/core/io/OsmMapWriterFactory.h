@@ -35,7 +35,7 @@
 
 
 // Standard
-#include <memory>
+
 
 // GEOS
 #include <geos/geom/Geometry.h>

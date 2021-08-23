@@ -41,7 +41,7 @@
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 // Std
-#include <set>
+
 
 namespace hoot
 {

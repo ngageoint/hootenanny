@@ -34,7 +34,7 @@
 
 
 // Standard
-#include <memory>
+
 
 namespace hoot
 {

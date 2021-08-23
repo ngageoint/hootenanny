@@ -28,7 +28,7 @@
 #define INTEGERFIELDDEFINITION_H
 
 // Standard
-#include <set>
+
 
 #include <hoot/core/io/schema/FieldDefinition.h>
 

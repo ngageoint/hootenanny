@@ -32,7 +32,7 @@
 #include <hoot/core/schema/SchemaVertex.h>
 
 // Std
-#include <vector>
+
 
 namespace hoot
 {

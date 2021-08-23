@@ -31,8 +31,8 @@
 
 
 // Standard
-#include <memory>
-#include <vector>
+
+
 
 namespace hoot
 {

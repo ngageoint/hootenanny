@@ -34,7 +34,7 @@
 #include <hoot/js/conflate/merging/ElementMergerJs.h>
 
 // Std
-#include <string>
+
 
 using namespace v8;
 
