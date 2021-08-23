@@ -29,7 +29,7 @@
 //  Hoot
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/HootException.h>
+
 
 
 //  Qt

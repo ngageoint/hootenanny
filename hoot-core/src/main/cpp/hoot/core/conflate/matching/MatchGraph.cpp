@@ -48,7 +48,7 @@
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
-#include <hoot/core/util/HootException.h>
+
 
 
 // Qt

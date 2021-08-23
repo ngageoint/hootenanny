@@ -28,7 +28,7 @@
 #define POI_POLYGON_SCHEMA_TYPE_H
 
 // Hoot
-#include <hoot/core/util/HootException.h>
+
 
 // Qt
 

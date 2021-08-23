@@ -28,7 +28,7 @@
 #define GEOMETRIC_RELATIONSHIP_H
 
 // Hoot
-#include <hoot/core/util/HootException.h>
+
 
 // Qt
 

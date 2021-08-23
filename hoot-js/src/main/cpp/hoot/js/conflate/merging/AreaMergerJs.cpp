@@ -28,7 +28,7 @@
 
 // Hoot
 #include <hoot/core/util/ConfPath.h>
-#include <hoot/core/util/HootException.h>
+
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>

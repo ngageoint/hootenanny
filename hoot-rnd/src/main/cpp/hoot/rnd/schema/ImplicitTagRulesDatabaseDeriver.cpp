@@ -31,7 +31,7 @@
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/HootException.h>
+
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
 

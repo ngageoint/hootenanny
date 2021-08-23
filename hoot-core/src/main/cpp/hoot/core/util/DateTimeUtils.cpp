@@ -28,7 +28,7 @@
 #include "DateTimeUtils.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
+
 
 
 // Qt

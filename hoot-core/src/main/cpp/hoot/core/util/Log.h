@@ -28,11 +28,10 @@
 #ifndef LOG_H
 #define LOG_H
 
+// Hoot
 #include <hoot/core/HootConfig.h>
 
 // Qt
-
-
 #include <QVariant>
 
 // Standard
@@ -49,7 +48,7 @@ namespace hoot
 {
 
 /**
- * This class is here to abstract out the logging interface(Singleton).
+ * This class is here to abstract out the logging interface (Singleton).
  */
 class Log
 {

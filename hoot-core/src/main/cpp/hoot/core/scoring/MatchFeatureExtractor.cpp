@@ -37,7 +37,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/HootException.h>
+
 
 #include <hoot/core/util/StringUtils.h>
 

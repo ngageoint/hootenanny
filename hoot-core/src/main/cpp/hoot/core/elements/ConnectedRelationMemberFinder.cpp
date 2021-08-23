@@ -28,7 +28,7 @@
 #include "ConnectedRelationMemberFinder.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
+
 
 #include <hoot/core/elements/SharedWayNodeFinder.h>
 

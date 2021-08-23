@@ -31,7 +31,6 @@
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 
-
 using namespace geos::geom;
 using namespace std;
 

@@ -27,7 +27,7 @@
 #include "ScriptSchemaTranslator.h"
 
 // hoot
-#include <hoot/core/util/HootException.h>
+
 
 
 // Standard

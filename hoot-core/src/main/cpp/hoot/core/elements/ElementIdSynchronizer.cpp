@@ -28,7 +28,7 @@
 #include "ElementIdSynchronizer.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
+
 
 #include <hoot/core/visitors/ElementHashVisitor.h>
 #include <hoot/core/util/CollectionUtils.h>

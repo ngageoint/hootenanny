@@ -30,7 +30,7 @@
 #include <hoot/core/criterion/ReviewScoreCriterion.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/HootException.h>
+
 
 namespace hoot
 {

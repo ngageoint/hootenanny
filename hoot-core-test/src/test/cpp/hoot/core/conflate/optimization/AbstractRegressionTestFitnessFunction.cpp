@@ -28,7 +28,7 @@
 #include "AbstractRegressionTestFitnessFunction.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
+
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/conflate/optimization/RegressionTestSuite.h>

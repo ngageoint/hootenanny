@@ -42,7 +42,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/HootException.h>
+
 
 
 // qt

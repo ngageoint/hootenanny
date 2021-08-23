@@ -28,7 +28,7 @@
 #include "TextFileWordWeightDictionary.h"
 
 // hoot
-#include <hoot/core/util/HootException.h>
+
 
 // Qt
 

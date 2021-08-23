@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/util/HootException.h>
+
 #include <hoot/core/test/SimpleTestListener.h>
 #include <hoot/core/test/TempTestFileName.h>
 

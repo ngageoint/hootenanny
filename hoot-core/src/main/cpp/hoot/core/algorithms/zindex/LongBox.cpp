@@ -31,7 +31,7 @@
 #include <cmath>
 
 //hoot includes
-#include <hoot/core/util/HootException.h>
+
 
 
 using namespace std;

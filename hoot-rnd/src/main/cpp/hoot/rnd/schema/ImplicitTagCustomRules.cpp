@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/util/HootException.h>
+
 
 
 // Qt

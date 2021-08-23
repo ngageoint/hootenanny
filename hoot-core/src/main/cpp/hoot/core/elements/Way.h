@@ -33,7 +33,7 @@
 // Hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/WayData.h>
-#include <hoot/core/util/HootException.h>
+
 
 // Standard
 

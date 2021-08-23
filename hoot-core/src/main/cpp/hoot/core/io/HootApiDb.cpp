@@ -36,7 +36,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/DbUtils.h>
-#include <hoot/core/util/HootException.h>
+
 
 #include <hoot/core/util/UuidHelper.h>
 

@@ -28,7 +28,7 @@
 #define STREAMUTILSJS_H
 
 // hoot
-#include <hoot/core/util/HootException.h>
+
 
 
 // v8

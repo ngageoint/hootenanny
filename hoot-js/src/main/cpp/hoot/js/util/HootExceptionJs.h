@@ -28,7 +28,7 @@
 #define HOOTEXCEPTIONJS_H
 
 // hoot
-#include <hoot/core/util/HootException.h>
+
 
 
 // node.js

@@ -28,7 +28,7 @@
 
 // hoot
 
-#include <hoot/core/util/HootException.h>
+
 
 namespace hoot
 {

@@ -50,13 +50,11 @@
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 // Qt
-
 #include <qnumeric.h>
 #include <QStringBuilder>
 #include <QElapsedTimer>
 
 // Standard
-
 #include <functional>
 #include <cmath>
 

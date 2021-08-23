@@ -28,7 +28,7 @@
 #define PERTY_TEST_RUNNER_H
 
 // hoot
-#include <hoot/core/util/HootException.h>
+
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Settings.h>
 

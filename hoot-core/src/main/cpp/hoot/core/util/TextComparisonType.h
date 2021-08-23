@@ -28,7 +28,7 @@
 #define TEXT_COMPARISON_TYPE_H
 
 // Hoot
-#include <hoot/core/util/HootException.h>
+
 
 // Qt
 

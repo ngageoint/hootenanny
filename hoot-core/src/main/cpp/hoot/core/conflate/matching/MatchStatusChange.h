@@ -28,7 +28,7 @@
 #define MATCH_STATUS_CHANGE_H
 
 // Hoot
-#include <hoot/core/util/HootException.h>
+
 
 namespace hoot
 {

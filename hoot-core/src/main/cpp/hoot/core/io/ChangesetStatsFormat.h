@@ -28,7 +28,7 @@
 #define CHANGESET_STATS_FORMAT_H
 
 // Hoot
-#include <hoot/core/util/HootException.h>
+
 
 // Qt
 

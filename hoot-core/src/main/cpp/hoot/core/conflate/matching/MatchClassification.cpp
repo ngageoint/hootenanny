@@ -27,7 +27,7 @@
 #include "MatchClassification.h"
 
 // hoot
-#include <hoot/core/util/HootException.h>
+
 
 // standard
 #include <algorithm>

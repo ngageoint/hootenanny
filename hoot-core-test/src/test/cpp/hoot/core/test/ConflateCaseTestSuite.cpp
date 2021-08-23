@@ -30,7 +30,7 @@
 #include <hoot/core/HootConfig.h>
 #include <hoot/core/cmd/ConflateCmd.h>
 #include <hoot/core/test/ConflateCaseTest.h>
-#include <hoot/core/util/HootException.h>
+
 
 #include <hoot/core/util/ConfPath.h>
 

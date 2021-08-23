@@ -28,7 +28,7 @@
 
 // hoot
 
-#include <hoot/core/util/HootException.h>
+
 #include <hoot/core/conflate/optimization/PertyTest.h>
 #include <hoot/core/conflate/optimization/ReleaseTest.h>
 

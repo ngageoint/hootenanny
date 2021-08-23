@@ -38,7 +38,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
-#include <hoot/core/util/HootException.h>
+
 
 
 using namespace std;

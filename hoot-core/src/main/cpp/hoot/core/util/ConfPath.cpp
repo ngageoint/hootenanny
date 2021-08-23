@@ -28,7 +28,7 @@
 #include "ConfPath.h"
 
 // hoot
-#include <hoot/core/util/HootException.h>
+
 
 #include <hoot/core/util/Settings.h>
 

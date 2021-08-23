@@ -28,7 +28,7 @@
 #include "ElementIdUtils.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
+
 
 #include <hoot/core/criterion/AttributeValueCriterion.h>
 #include <hoot/core/visitors/FilteredVisitor.h>

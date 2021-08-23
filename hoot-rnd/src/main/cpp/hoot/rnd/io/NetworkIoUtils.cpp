@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/io/HootApiDb.h>
-#include <hoot/core/util/HootException.h>
+
 
 
 namespace hoot

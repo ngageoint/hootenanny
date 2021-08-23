@@ -34,7 +34,7 @@
 #include <hoot/core/io/OsmApiChangesetElement.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/HootException.h>
+
 #include <hoot/core/util/HootNetworkUtils.h>
 
 #include <hoot/core/util/OsmApiUtils.h>

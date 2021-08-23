@@ -33,7 +33,7 @@
 // hoot
 #include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/HootException.h>
+
 
 
 // Qt

@@ -30,7 +30,7 @@
 #include <math.h>
 
 //Hoot Includes
-#include <hoot/core/util/HootException.h>
+
 
 
 using namespace std;

@@ -27,7 +27,7 @@
 #include "BufferedLineSegmentIntersector.h"
 
 // hoot
-#include <hoot/core/util/HootException.h>
+
 
 
 // opencv

@@ -34,7 +34,7 @@
 
 // Hoot
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/HootException.h>
+
 
 
 namespace hoot

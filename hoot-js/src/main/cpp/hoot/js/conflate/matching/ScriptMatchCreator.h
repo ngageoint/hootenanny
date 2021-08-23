@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/conflate/SearchRadiusProvider.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
-#include <hoot/core/util/NotImplementedException.h>
+
 #include <hoot/core/criterion/ElementCriterion.h>
 
 #include <hoot/js/PluginContext.h>

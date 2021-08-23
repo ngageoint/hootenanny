@@ -40,7 +40,7 @@
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/HootException.h>
+
 
 
 using namespace geos::geom;

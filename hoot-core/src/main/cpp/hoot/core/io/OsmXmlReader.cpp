@@ -39,7 +39,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/HootException.h>
+
 
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>

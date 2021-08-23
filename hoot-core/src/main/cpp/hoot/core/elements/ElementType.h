@@ -30,9 +30,6 @@
 // Hoot
 #include <hoot/core/util/HootException.h>
 
-// Qt
-
-
 namespace hoot
 {
 

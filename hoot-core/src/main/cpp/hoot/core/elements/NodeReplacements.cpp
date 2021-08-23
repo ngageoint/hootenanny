@@ -28,7 +28,7 @@
 #include "NodeReplacements.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
+
 
 
 // Qt

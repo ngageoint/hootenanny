@@ -28,7 +28,7 @@
 #include "TagUtils.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
+
 
 
 namespace hoot

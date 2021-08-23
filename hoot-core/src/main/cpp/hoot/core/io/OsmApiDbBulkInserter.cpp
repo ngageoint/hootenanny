@@ -28,7 +28,7 @@
 #include "OsmApiDbBulkInserter.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
+
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/DbUtils.h>

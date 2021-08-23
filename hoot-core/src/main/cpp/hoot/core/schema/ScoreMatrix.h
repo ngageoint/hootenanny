@@ -39,7 +39,7 @@
 
 //  Hoot
 #include <hoot/core/scoring/TextTable.h>
-#include <hoot/core/util/HootException.h>
+
 
 namespace hoot
 {

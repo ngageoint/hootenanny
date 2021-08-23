@@ -31,14 +31,10 @@
 // hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/schema/SchemaVertex.h>
-
-// Qt
-
-
+#include <hoot/core/util/HootException.h>
 
 // Standard
 #include <stdint.h>
-
 
 namespace hoot
 {
