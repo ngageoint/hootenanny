@@ -41,7 +41,7 @@
 #include <hoot/core/criterion/HighwayCriterion.h>
 
 // Qt
-#include <QDebug>
+
 
 using namespace std;
 

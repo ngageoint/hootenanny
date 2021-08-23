@@ -35,7 +35,6 @@
 #include <hoot/core/test/AbstractTestSuite.h>
 #include <hoot/core/test/AbstractTest.h>
 
-
 // Qt
 #include <QTemporaryFile>
 

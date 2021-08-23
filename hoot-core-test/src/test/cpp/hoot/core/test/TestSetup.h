@@ -27,9 +27,6 @@
 #ifndef TESTSETUP_H
 #define TESTSETUP_H
 
-// Qt
-
-
 namespace hoot
 {
 

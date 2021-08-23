@@ -27,9 +27,7 @@
 #ifndef CONFLATECASETEST_H
 #define CONFLATECASETEST_H
 
-// Qt
-
-
+// Hoot
 #include <hoot/core/test/AbstractTest.h>
 
 namespace hoot

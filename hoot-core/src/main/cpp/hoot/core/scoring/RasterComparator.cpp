@@ -42,7 +42,7 @@
 #include <hoot/core/visitors/WaysVisitor.h>
 
 // Qt
-#include <QDebug>
+
 #include <QImage>
 #include <QPainter>
 

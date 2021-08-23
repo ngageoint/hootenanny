@@ -31,9 +31,6 @@
 #include <hoot/core/index/metric-hybrid/RTree.h>
 #include <hoot/core/io/OsmPbfReader.h>
 
-// Qt
-
-
 // Tgs
 #include <tgs/Statistics/Random.h>
 #include <tgs/System/Time.h>

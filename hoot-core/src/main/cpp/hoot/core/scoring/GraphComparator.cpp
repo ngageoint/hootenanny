@@ -50,7 +50,7 @@
 
 
 // Qt
-#include <QDebug>
+
 
 #include <QPainter>
 

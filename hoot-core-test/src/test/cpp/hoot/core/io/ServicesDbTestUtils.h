@@ -28,7 +28,6 @@
 #define SERVICESDBTESTUTILS_H
 
 // Qt
-
 #include <QUrl>
 #include <QVariant>
 

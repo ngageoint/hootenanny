@@ -30,11 +30,6 @@
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchema.h>
 
-
-// Qt
-#include <QDebug>
-
-
 const double epsilon = 1e-6;
 
 using namespace geos::geom;

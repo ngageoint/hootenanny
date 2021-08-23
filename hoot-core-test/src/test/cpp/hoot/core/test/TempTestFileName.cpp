@@ -26,14 +26,8 @@
  */
 #include "TempTestFileName.h"
 
-// Hoot
-
-
 // Tgs
 #include <tgs/Statistics/Random.h>
-
-// Qt
-
 
 namespace hoot
 {

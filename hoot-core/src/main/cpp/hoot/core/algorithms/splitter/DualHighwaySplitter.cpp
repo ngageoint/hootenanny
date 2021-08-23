@@ -58,7 +58,7 @@
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // Qt
-#include <QDebug>
+
 
 // Standard
 #include <limits>

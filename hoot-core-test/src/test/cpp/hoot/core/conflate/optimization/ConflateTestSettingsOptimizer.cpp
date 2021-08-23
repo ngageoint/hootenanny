@@ -29,8 +29,6 @@
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-
-
 #include <hoot/core/conflate/optimization/AbstractRegressionTestFitnessFunction.h>
 
 // Qt

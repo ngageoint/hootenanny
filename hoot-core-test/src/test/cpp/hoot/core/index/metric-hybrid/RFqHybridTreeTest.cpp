@@ -36,9 +36,6 @@
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 
-// Qt
-
-
 // Standard
 #include <math.h>
 

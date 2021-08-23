@@ -45,7 +45,7 @@
 #include <geos/geom/LineString.h>
 
 // Qt
-#include <QDebug>
+
 #include <QTextStream>
 
 using namespace geos::geom;

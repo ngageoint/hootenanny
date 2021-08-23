@@ -35,7 +35,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
-#include <QDebug>
+
 
 
 

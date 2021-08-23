@@ -41,7 +41,7 @@
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
-#include <QDebug>
+
 
 using namespace std;
 

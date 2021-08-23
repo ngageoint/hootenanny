@@ -38,10 +38,6 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/ReprojectToPlanarOp.h>
 
-
-// Qt
-#include <QDebug>
-
 // TGS
 #include <tgs/Statistics/Random.h>
 using namespace Tgs;

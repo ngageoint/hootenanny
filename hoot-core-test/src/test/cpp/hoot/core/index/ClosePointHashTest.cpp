@@ -30,11 +30,10 @@
 #include <hoot/core/index/ClosePointHash.h>
 
 // Qt
-#include <QDebug>
+
 #include <QTime>
 
 // Standard
-
 #include <math.h>
 #include <sstream>
 using namespace std;

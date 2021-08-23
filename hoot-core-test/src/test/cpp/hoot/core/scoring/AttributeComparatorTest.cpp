@@ -37,9 +37,6 @@
 // Tgs
 #include <tgs/Statistics/Random.h>
 
-// Qt
-#include <QDebug>
-
 // Standard
 #include <stdio.h>
 

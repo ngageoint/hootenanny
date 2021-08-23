@@ -31,7 +31,6 @@
 #include <ogrsf_frmts.h>
 
 // GEOS
-// contains geosversion()
 #include <geos/geom/Geometry.h>
 #include <geos/version.h>
 
@@ -40,7 +39,6 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
-
 #include <hoot/core/util/SignalCatcher.h>
 
 // Qt
@@ -48,7 +46,6 @@
 #include <QNetworkSession>
 
 // System
-
 #include <sys/resource.h>
 
 // Tgs

@@ -32,9 +32,6 @@
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/visitors/UniqueTagValuesVisitor.h>
 
-// Qt
-
-
 // Tgs
 #include <tgs/System/Time.h>
 

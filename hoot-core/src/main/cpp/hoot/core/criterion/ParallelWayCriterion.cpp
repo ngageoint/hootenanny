@@ -43,7 +43,7 @@
 #include <hoot/core/util/Factory.h>
 
 // Qt
-#include <QDebug>
+
 
 using namespace geos::geom;
 using namespace geos::operation::distance;

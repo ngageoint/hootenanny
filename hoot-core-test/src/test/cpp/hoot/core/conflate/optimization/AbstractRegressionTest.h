@@ -30,9 +30,6 @@
 // Hoot
 #include <hoot/core/test/AbstractTest.h>
 
-// Qt
-
-
 namespace hoot
 {
 

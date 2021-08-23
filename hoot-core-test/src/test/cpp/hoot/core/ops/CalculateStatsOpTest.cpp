@@ -32,7 +32,6 @@
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
 // Qt
 #include <qnumeric.h>
 

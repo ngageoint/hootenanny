@@ -27,13 +27,8 @@
 #include "RegressionTestSuite.h"
 
 // hoot
-
-
 #include <hoot/core/conflate/optimization/PertyTest.h>
 #include <hoot/core/conflate/optimization/ReleaseTest.h>
-
-// Qt
-
 
 namespace hoot
 {

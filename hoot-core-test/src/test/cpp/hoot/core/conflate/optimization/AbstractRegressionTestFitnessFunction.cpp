@@ -28,14 +28,10 @@
 #include "AbstractRegressionTestFitnessFunction.h"
 
 // Hoot
-
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/conflate/optimization/RegressionTestSuite.h>
 #include <hoot/core/conflate/optimization/AbstractRegressionTest.h>
-
-// Qt
-
 
 // Standard
 #include <cassert>

@@ -33,10 +33,6 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-
-
-
 namespace hoot
 {
 

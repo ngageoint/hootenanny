@@ -34,11 +34,10 @@
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-
 #include <tgs/Statistics/Random.h>
 
 // Qt
-#include <QDebug>
+
 #include <QBuffer>
 #include <QByteArray>
 

@@ -33,7 +33,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 
-
 // Qt
 #include <QDateTime>
 

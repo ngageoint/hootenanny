@@ -33,10 +33,6 @@
 #include <hoot/core/algorithms/string/Soundex.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 
-
-// Qt
-
-
 namespace hoot
 {
 

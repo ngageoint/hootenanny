@@ -26,10 +26,6 @@
  */
 #include "ReleaseTest.h"
 
-// hoot
-
-
-
 // Qt
 #include <QTextStream>
 

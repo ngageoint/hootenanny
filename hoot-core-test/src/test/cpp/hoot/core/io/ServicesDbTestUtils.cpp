@@ -38,10 +38,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DbUtils.h>
 
-
-// Qt
-
-
 // Tgs
 #include <tgs/StreamUtils.h>
 

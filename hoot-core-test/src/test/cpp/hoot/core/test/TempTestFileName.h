@@ -27,9 +27,6 @@
 #ifndef TEMPTESTFILENAME_H
 #define TEMPTESTFILENAME_H
 
-// Qt
-
-
 namespace hoot
 {
 
