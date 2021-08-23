@@ -34,6 +34,15 @@
 
 // Qt
 #include <QString>
+#include <QVector>
+#include <QMap>
+#include <QSet>
+#include <QList>
+#include <QHash>
+#include <QFile>
+#include <QDir>
+#include <QFileInfo>
+#include <QStringList>
 
 // Standard
 #include <deque>
@@ -49,9 +58,9 @@
 // Note that any hoot include for a frequently updated class added here may have a detrimental
 // effect on compile times.
 //
-// Not adding ConfigOptions.h here to try to take some of the compile sting out of config options
-// changes when not temporarily updating hoot.json. Please add ConfigOptions.h includes directly to
-// your implementation rather than adding it here.
+// Deliberately not adding ConfigOptions.h here to try to take some of the compile sting out of
+// config options changes when not temporarily updating hoot.json. Please add ConfigOptions.h
+// includes directly to your implementation rather than adding it here.
 
 // hoot
 #include <hoot/core/util/HootException.h>
