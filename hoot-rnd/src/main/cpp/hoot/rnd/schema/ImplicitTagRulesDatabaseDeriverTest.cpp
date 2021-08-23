@@ -49,9 +49,10 @@ class ImplicitTagRulesDatabaseDeriverTest : public HootTestFixture
 public:
 
 
-  ImplicitTagRulesDatabaseDeriverTest()
-    : HootTestFixture("test-files/schema/ImplicitTagRulesDatabaseDeriverTest/",
-                      "test-output/schema/ImplicitTagRulesDatabaseDeriverTest/")
+  ImplicitTagRulesDatabaseDeriverTest() :
+  HootTestFixture(
+    "test-files/schema/ImplicitTagRulesDatabaseDeriverTest/",
+    "test-output/schema/ImplicitTagRulesDatabaseDeriverTest/")
   {
   }
 
@@ -66,8 +67,8 @@ public:
     rulesDeriver.setMinWordLength(1);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
     rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setTagIgnoreFile("");
-    rulesDeriver.setWordIgnoreFile("");
+    rulesDeriver.setTagIgnoreList(QStringList());
+    rulesDeriver.setWordIgnoreList(QStringList());
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
 
     ImplicitTagRulesSqliteReader dbReader;
@@ -83,8 +84,8 @@ public:
     rulesDeriver.setMinWordLength(1);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
     rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setTagIgnoreFile("");
-    rulesDeriver.setWordIgnoreFile("");
+    rulesDeriver.setTagIgnoreList(QStringList());
+    rulesDeriver.setWordIgnoreList(QStringList());
 
     QString exceptionMsg("");
 
@@ -126,8 +127,8 @@ public:
     rulesDeriver.setMinWordLength(1);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
     rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setTagIgnoreFile("");
-    rulesDeriver.setWordIgnoreFile("");
+    rulesDeriver.setTagIgnoreList(QStringList());
+    rulesDeriver.setWordIgnoreList(QStringList());
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
 
     ImplicitTagRulesSqliteReader dbReader;
@@ -147,8 +148,8 @@ public:
     rulesDeriver.setMinWordLength(10);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
     rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setTagIgnoreFile("");
-    rulesDeriver.setWordIgnoreFile("");
+    rulesDeriver.setTagIgnoreList(QStringList());
+    rulesDeriver.setWordIgnoreList(QStringList());
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
 
     ImplicitTagRulesSqliteReader dbReader;
@@ -168,9 +169,12 @@ public:
     rulesDeriver.setMinWordLength(1);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
     rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setTagIgnoreFile(
-      _inputPath + "ImplicitTagRulesDatabaseDeriverTest-tag-ignore-list");
-    rulesDeriver.setWordIgnoreFile("");
+    QStringList tagIgnore;
+    tagIgnore.append("amenity=bank");
+    tagIgnore.append("tourism=*");
+    tagIgnore.append("building=mosque");
+    rulesDeriver.setTagIgnoreList(tagIgnore);
+    rulesDeriver.setWordIgnoreList(QStringList());
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
 
     ImplicitTagRulesSqliteReader dbReader;
@@ -190,10 +194,12 @@ public:
     rulesDeriver.setMinWordLength(1);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
     rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setTagIgnoreFile("");
-    rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setWordIgnoreFile(
-      _inputPath + "ImplicitTagRulesDatabaseDeriverTest-word-ignore-list");
+    rulesDeriver.setTagIgnoreList(QStringList());
+    QStringList wordIgnore;
+    wordIgnore.append("bank");
+    wordIgnore.append("Ali Voyages");
+    wordIgnore.append("Center");
+    rulesDeriver.setWordIgnoreList(wordIgnore);
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
 
     ImplicitTagRulesSqliteReader dbReader;
@@ -212,11 +218,10 @@ public:
     rulesDeriver.setMinTagOccurrencesPerWord(1);
     rulesDeriver.setMinWordLength(1);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
-    rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setTagIgnoreFile("");
+    rulesDeriver.setTagIgnoreList(QStringList());
     rulesDeriver.setCustomRuleFile(
       _inputPath + "ImplicitTagRulesDatabaseDeriverTest-custom-rules-list");
-    rulesDeriver.setWordIgnoreFile("");
+    rulesDeriver.setWordIgnoreList(QStringList());
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
 
     ImplicitTagRulesSqliteReader dbReader;
@@ -236,9 +241,8 @@ public:
     rulesDeriver.setMinWordLength(1);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(false);
     rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setTagIgnoreFile("");
-    rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setWordIgnoreFile("");
+    rulesDeriver.setTagIgnoreList(QStringList());
+    rulesDeriver.setWordIgnoreList(QStringList());
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
 
     ImplicitTagRulesSqliteReader dbReader;

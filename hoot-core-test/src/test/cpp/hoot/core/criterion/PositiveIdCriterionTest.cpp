@@ -22,34 +22,37 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "PoiPolygonTagIgnoreListReader.h"
 
-// hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/TagListReader.h>
+// Hoot
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/criterion/PositiveIdCriterion.h>
 
 namespace hoot
 {
 
-PoiPolygonTagIgnoreListReader::PoiPolygonTagIgnoreListReader()
+class PositiveIdCriterionTest : public HootTestFixture
 {
-  LOG_DEBUG("Reading ignore lists...");
-  _poiTagIgnoreList =
-    TagListReader::readList(ConfigOptions().getPoiPolygonPoiIgnoreTagsFile());
-  LOG_VARD(_poiTagIgnoreList.size());
-  _polyTagIgnoreList =
-    TagListReader::readList(ConfigOptions().getPoiPolygonPolyIgnoreTagsFile());
-  LOG_VARD(_polyTagIgnoreList.size());
-}
+  CPPUNIT_TEST_SUITE(PositiveIdCriterionTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
 
-PoiPolygonTagIgnoreListReader& PoiPolygonTagIgnoreListReader::getInstance()
-{
-  //  Local static singleton instance
-  static PoiPolygonTagIgnoreListReader instance;
-  return instance;
-}
+public:
+
+  void runBasicTest()
+  {
+    PositiveIdCriterion uut;
+
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node = std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+  }
+};
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PositiveIdCriterionTest, "quick");
 
 }

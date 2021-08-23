@@ -50,14 +50,12 @@ hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
  $OUTPUT_DIR/output.osc --differential --include-tags --changeset-stats --separate-output
 
-# Check differential output
 echo ""
 echo "Checking differential output..."
 echo ""
 hoot diff --warn -C Testing.conf $OUTPUT_DIR/output.osm $INPUT_DIR/output.osm || \
      diff $OUTPUT_DIR/output.osm $INPUT_DIR/output.osm
 
-# Check changeset output
 echo ""
 echo "Checking Changeset..."
 echo ""
@@ -72,7 +70,6 @@ else
   diff $OUTPUT_DIR/output.osc $INPUT_DIR/output.osc
 fi
 
-# Check tag output
 echo ""
 echo "Checking tag diff"
 echo ""
@@ -87,7 +84,6 @@ else
   diff $OUTPUT_DIR/output.tags.osc $INPUT_DIR/output.tags.osc
 fi
 
-# Check unified changeset output
 echo ""
 echo "Checking unified geometry+tag diff changeset..."
 echo ""
@@ -102,14 +98,12 @@ else
   diff $OUTPUT_DIR/output_unified.osc $INPUT_DIR/output_unified.osc
 fi
 
-# Check unified osm output
 echo ""
 echo "Checking unified geometry+tag diff osm..."
 echo ""
 hoot diff --warn -C Testing.conf  $OUTPUT_DIR/output_unified.osm $INPUT_DIR/output_unified.osm || \
      diff $OUTPUT_DIR/output_unified.osm $INPUT_DIR/output_unified.osm
 
-# Check unified changeset stats output
 echo ""
 echo "Checking Unified Changeset Stats..."
 echo ""
@@ -124,7 +118,6 @@ else
   diff $OUTPUT_DIR/output_unified_changeset_stats.json $INPUT_DIR/output_unified_changeset_stats.json
 fi
 
-# Check changeset stats output
 echo ""
 echo "Checking Changeset Stats..."
 echo ""
@@ -139,42 +132,53 @@ else
   diff $OUTPUT_DIR/output_changeset_stats.json $INPUT_DIR/output_changeset_stats.json
 fi
 
-# Check to make sure we don't bomb out on empty files
 echo ""
 echo "Checking conflation of empty files..."
 echo ""
 hoot conflate $LOG_LEVEL $CONFIG test-files/Empty.osm test-files/Empty.osm $OUTPUT_DIR/Empty.osm
 hoot diff --warn -C Testing.conf test-files/Empty.osm $OUTPUT_DIR/Empty.osm || cat $OUTPUT_DIR/Empty.osm
 
-# Run with the road snapper
 echo ""
 echo "Checking conflation with road snapping..."
 echo ""
 hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
- -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=hoot::HighwayCriterion \
+ -D writer.include.debug.tags=true -D differential.snap.unconnected.features=true \
+ -D snap.unconnected.ways.snap.criteria=hoot::HighwayCriterion \
  $INPUT_DIR/input3.osm $INPUT_DIR/input4.osm \
  $OUTPUT_DIR/snapped-output.osm --differential
 hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-output.osm $INPUT_DIR/snapped-output.osm || \
      diff $OUTPUT_DIR/snapped-output.osm $INPUT_DIR/snapped-output.osm
 
-# Run with the road snapper and keep the ref data
 echo ""
 echo "Checking conflation with road snapping and keeping ref data..."
 echo ""
 hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
- -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=hoot::HighwayCriterion \
+ -D writer.include.debug.tags=true -D differential.snap.unconnected.features=true \
+ -D snap.unconnected.ways.snap.criteria=hoot::HighwayCriterion \
  -D differential.remove.reference.data=false \
  $INPUT_DIR/input3.osm $INPUT_DIR/input4.osm \
  $OUTPUT_DIR/snapped-with-ref-output.osm --differential
 hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-with-ref-output.osm $INPUT_DIR/snapped-with-ref-output.osm || \
      diff $OUTPUT_DIR/snapped-with-ref-output.osm $INPUT_DIR/snapped-with-ref-output.osm
+     
+echo ""
+echo "Checking conflation with road snapping and remove all ref data, even snapped..."
+echo ""
+hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
+ -D writer.include.debug.tags=true -D differential.snap.unconnected.features=true \
+ -D snap.unconnected.ways.snap.criteria=hoot::HighwayCriterion \
+ -D differential.remove.reference.snapped.data=true \
+ $INPUT_DIR/input3.osm $INPUT_DIR/input4.osm \
+ $OUTPUT_DIR/snapped-with-all-ref-removed.osm --differential
+hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-with-all-ref-removed.osm \
+  $INPUT_DIR/snapped-with-all-ref-removed-output.osm || \
+  diff $OUTPUT_DIR/snapped-with-all-ref-removed.osm $INPUT_DIR/snapped-with-all-ref-removed.osm
 
-# Run differential conflation and keep unconflatable features - The only difference you'll see here between this and the 
-# first diff conflate execution is that the retaining wall from the second dataset, which hoot is unable to conflate, 
-# will pass through to output.
 echo ""
 echo "Running diff and passing unconflatable data through to output..."
 echo ""
+# The only difference you'll see here between this and the first diff conflate execution is that the 
+# retaining wall from the second dataset, which hoot is unable to conflate, will pass through to output.
 hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
  -D differential.remove.unconflatable.data=false $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
  $OUTPUT_DIR/output-keep-unconflatable.osm --differential

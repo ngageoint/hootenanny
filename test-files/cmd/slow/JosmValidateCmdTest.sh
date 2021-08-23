@@ -1,58 +1,85 @@
 #!/bin/bash
 set -e
 
-IN_DIR=test-files/ops/JosmMapValidatorTest
-OUTPUT_DIR=test-output/cmd/slow/JosmValidateCmdTest
-mkdir -p $OUTPUT_DIR
+IN_DIR=test-files/cmd/slow/JosmValidateCmdTest
+OUT_DIR=test-output/cmd/slow/JosmValidateCmdTest
+rm -rf $OUT_DIR
+mkdir -p $OUT_DIR
 
 LOG_LEVEL=--warn
 CONFIG="-C Testing.conf"
+JOSM_VALIDATORS="DuplicatedWayNodes;UnclosedWays;UntaggedWay"
+HOOT_VALIDATORS="RoadCrossingPolyMarker"
 
-VALIDATORS="UntaggedWay;UnclosedWays;DuplicatedWayNodes"
+INPUT=test-files/ops/JosmMapCleanerTest/runCleanTest-in.osm
 
-inputfile=test-files/ops/JosmMapCleanerTest/runCleanTest-in.osm
-comparefile=$IN_DIR/runValidateTest-out.osm
-outputfile=$OUTPUT_DIR/out.osm
-COMPARE_FILE_MULTIPLE=$IN_DIR/runValidateTest-multiple-out.osm
-OUTPUT_FILE_MULTIPLE=$OUTPUT_DIR/out-multiple.osm
+OUT_SINGLE=$OUT_DIR/single-out.osm
+GOLD_SINGLE=$IN_DIR/single-out.osm
+OUT_RECURSIVE=$OUT_DIR/recursive-out.osm
 
-SEPARATE_OUTPUT_INPUT=$OUTPUT_DIR/runCleanTest-in.osm
-SEPARATE_OUTPUT_OUTPUT=$OUTPUT_DIR/runCleanTest-in-validated.osm
+OUT_FILE_MULTIPLE=$OUT_DIR/multiple-out.osm
+GOLD_MULTIPLE=$IN_DIR/multiple-out.osm
+
+SEPARATE_OUTPUT_OUT_1=$OUT_DIR/runCleanTest1-in-validated.osm
+SEPARATE_OUTPUT_OUT_2=$OUT_DIR/runCleanTest2-in-validated.osm
+SEPARATE_OUTPUT_GOLD_1=$IN_DIR/runCleanTest1-in-validated.osm
+SEPARATE_OUTPUT_GOLD_2=$IN_DIR/runCleanTest2-in-validated.osm
 
 echo ""
 echo "Listing available validators..."
 echo ""
-hoot validate $LOG_LEVEL $CONFIG --available-validators | grep "DuplicatedWayNodes"
+# Let's just check for one each of a JOSM and a hoot validator.
+hoot validate $LOG_WARN $CONFIG --validators | egrep "DuplicatedWayNodes|RoadCrossingPolyMarker"
 
 echo ""
 echo "Validating a single input..."
 echo ""
-hoot validate $LOG_LEVEL $CONFIG -D josm.validators.include=$VALIDATORS $inputfile
+# No output being compared here, just making sure it runs.
+hoot validate $LOG_LEVEL $CONFIG -D josm.validators=$JOSM_VALIDATORS \
+  -D hoot.validators=$HOOT_VALIDATORS $INPUT
 
 echo ""
 echo "Validating a single input and using an output file..."
 echo ""
-hoot validate $LOG_LEVEL $CONFIG -D josm.validators.include=$VALIDATORS $inputfile --output $outputfile
-hoot diff $LOG_LEVEL $CONFIG $comparefile $outputfile || diff $comparefile $outputfile
+hoot validate $LOG_LEVEL $CONFIG -D josm.validators=$JOSM_VALIDATORS \
+  -D hoot.validators=$HOOT_VALIDATORS $INPUT --output $OUT_SINGLE
+hoot diff $LOG_LEVEL $CONFIG $GOLD_SINGLE $OUT_SINGLE
+
+echo ""
+echo "Validating a single input and writing the report to a file..."
+echo ""
+hoot validate $LOG_LEVEL $CONFIG -D josm.validators=$JOSM_VALIDATORS \
+  -D hoot.validators=$HOOT_VALIDATORS $INPUT --report-output $OUT_DIR/single-validation-report
+diff $IN_DIR/single-validation-report $OUT_DIR/single-validation-report
 
 echo ""
 echo "Validating multiple inputs..."
 echo ""
 # Just loading the same file twice for now...could eventually get a second input file. Should get 
 # double the number of validation errors compared to the single input file.
-hoot validate $LOG_LEVEL $CONFIG -D josm.validators.include=$VALIDATORS $inputfile $inputfile --output $OUTPUT_FILE_MULTIPLE
-hoot diff $LOG_LEVEL $CONFIG $COMPARE_FILE_MULTIPLE $OUTPUT_FILE_MULTIPLE || diff $COMPARE_FILE_MULTIPLE $OUTPUT_FILE_MULTIPLE
+hoot validate $LOG_LEVEL $CONFIG -D josm.validators=$JOSM_VALIDATORS \
+  -D hoot.validators=$HOOT_VALIDATORS $INPUT $INPUT --output $OUT_FILE_MULTIPLE
+hoot diff $LOG_LEVEL $CONFIG $GOLD_MULTIPLE $OUT_FILE_MULTIPLE
 
 echo ""
 echo "Validating recursively in a directory structure with a filter..."
 echo ""
-hoot validate $LOG_LEVEL $CONFIG -D josm.validators.include=$VALIDATORS test-files/ops/JosmMapCleanerTest --recursive "*.json"
+hoot validate $LOG_LEVEL $CONFIG -D josm.validators=$JOSM_VALIDATORS \
+  -D hoot.validators=$HOOT_VALIDATORS test-files/ops/JosmMapCleanerTest --output $OUT_RECURSIVE \
+  --recursive "*.json"
+hoot diff $LOG_LEVEL $CONFIG $GOLD_SINGLE $OUT_RECURSIVE
 
 echo ""
-echo "Validating files and writing to separate outputs..."
+echo "Validating files, writing to separate outputs, and writing the report to a file..."
 echo ""
 # Copy the inputs to the output directory and work from there, so we don't write to the input dir 
-# under source control.
-cp $inputfile $OUTPUT_DIR
-hoot validate $LOG_LEVEL $CONFIG -D josm.validators.include=$VALIDATORS $SEPARATE_OUTPUT_INPUT --separate-output
-hoot diff $LOG_LEVEL $CONFIG $comparefile $SEPARATE_OUTPUT_OUTPUT || diff $comparefile $SEPARATE_OUTPUT_OUTPUT
+# under source control. Just loading the same file twice for now...could eventually get a second 
+# input file. Should get two identical validation reports in the output.
+cp $INPUT $OUT_DIR/runCleanTest1-in.osm
+cp $INPUT $OUT_DIR/runCleanTest2-in.osm
+hoot validate $LOG_LEVEL $CONFIG -D josm.validators=$JOSM_VALIDATORS \
+  -D hoot.validators=$HOOT_VALIDATORS $OUT_DIR/runCleanTest1-in.osm $OUT_DIR/runCleanTest2-in.osm \
+  --separate-output --report-output $OUT_DIR/separate-output-validation-report
+hoot diff $LOG_LEVEL $CONFIG $SEPARATE_OUTPUT_GOLD_1 $SEPARATE_OUTPUT_OUT_1
+hoot diff $LOG_LEVEL $CONFIG $SEPARATE_OUTPUT_GOLD_2 $SEPARATE_OUTPUT_OUT_2
+diff $IN_DIR/separate-output-validation-report $OUT_DIR/separate-output-validation-report

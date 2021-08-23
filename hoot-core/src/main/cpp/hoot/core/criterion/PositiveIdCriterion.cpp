@@ -22,43 +22,22 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "TagListReader.h"
+#include "PositiveIdCriterion.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/HootException.h>
-
-// Qt
-#include <QFile>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-QStringList TagListReader::readList(const QString& inputPath, const bool keysOnly)
-{  
-  LOG_VARD(inputPath);
-  QStringList outputList;
-  if (!inputPath.trimmed().isEmpty())
-  {
-    QFile inputFile(inputPath);
-    if (!inputFile.open(QIODevice::ReadOnly))
-    {
-      throw HootException(QObject::tr("Error opening %1 for writing.").arg(inputFile.fileName()));
-    }
-    while (!inputFile.atEnd())
-    {
-      const QString line = QString::fromUtf8(inputFile.readLine().constData()).trimmed();
-      if (!line.trimmed().isEmpty() && !line.startsWith("#") && (keysOnly || line.contains("=")))
-      {
-        outputList.append(line.toLower());
-      }
-    }
-    inputFile.close();
-  }
-  LOG_VART(outputList);
-  return outputList;
+HOOT_FACTORY_REGISTER(ElementCriterion, PositiveIdCriterion)
+
+bool PositiveIdCriterion::isSatisfied(const ConstElementPtr& e) const
+{
+  return e && e->getId() > 0;
 }
 
 }
+

@@ -131,20 +131,6 @@ See the User Guide for more specific details on command usage. Most of these exa
     hoot clean -D map.cleaner.transforms++=JosmMapCleaner input.osm output.osm
 -----
 
-==== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus a subset of JOSM's cleaning capabilities via exclusion:
-
------
-    hoot clean -D map.cleaner.transforms++=JosmMapCleaner \
-      -D josm.validators.exclude="UntaggedWay;DuplicatedWayNodes" input.osm output.osm
------
-
-==== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus a subset of JOSM's cleaning capabilities via inclusion:
-
------
-    hoot clean -D map.cleaner.transforms++=JosmMapCleaner \
-      -D josm.validators.include="UntaggedWay;DuplicatedWayNodes" input.osm output.osm
------
-
 ==== Run JOSM cleaning only on a map:
 
 -----
@@ -1073,14 +1059,14 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Count the number of features containing a node by specifying its ID:
 
 -----
-    hoot count -D contains.node.criterion.id=-234 input.osm ContainsNodeCriterion
+    hoot count -D contains.node.criterion.id=-234 input.osm --criteria ContainsNodeCriterion
 -----
 
 ==== Count the number of nodes within 25 meters of a coordinate:
 
 -----
     hoot count -D distance.node.criterion.center=-77.3453,38.3456 \
-      -D distance.node.criterion.distance=25.0 input.osm DistanceNodeCriterion
+      -D distance.node.criterion.distance=25.0 input.osm --criteria DistanceNodeCriterion
 -----
 
 ==== Count the number of elements with a version greater than or equal to one:
@@ -1088,7 +1074,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 -----
     hoot count -D attribute.value.criterion.type=version \
       -D attribute.value.criterion.comparison.type=NumericGreaterThanOrEqualTo \
-      -D attribute.value.criterion.comparison.value=1 input.osm AttributeValueCriterion
+      -D attribute.value.criterion.comparison.value=1 input.osm --criteria AttributeValueCriterion
 -----
 
 ==== Count the number of elements authored by a particular user:
@@ -1096,26 +1082,27 @@ Requires a language translation server installation.  See the Hootenanny Install
 -----
     hoot count -D attribute.value.criterion.type=user \
       -D attribute.value.criterion.comparison.type=TextEqualTo \
-      -D attribute.value.criterion.comparison.value="username" input.osm AttributeValueCriterion
+      -D attribute.value.criterion.comparison.value="username" input.osm \
+      --criteria AttributeValueCriterion
 -----
 
 ==== Count the number of elements with valid phone number tags in a map:
 
 -----
-    hoot count input.osm HasPhoneNumberCriterion
+    hoot count input.osm --criteria HasPhoneNumberCriterion
 -----
 
 ==== Count how many roads intersect two other roads given their IDs:
 
 -----
     hoot count -D intersecting.way.criterion.source.way.ids="-76;-985" input.osm \
-      IntersectingWayCriterion
+      --criteria IntersectingWayCriterion
 -----
 
 ==== Count the number of elements with valid address tags in a map:
 
 -----
-    hoot count input.osm HasAddressCriterion
+    hoot count input.osm --criteria HasAddressCriterion
 -----
 
 ==== Calculate the average number of nodes for a set of buildings:
@@ -1141,6 +1128,12 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 -----
     hoot stat input.osm PhoneNumberCountVisitor
+-----
+
+==== Count the total number of postive element IDs in a map:
+
+-----
+    hoot count input.osm --criteria PositiveIdCriterion
 -----
 
 ==== Display a set of statistics for a map:
@@ -1744,12 +1737,6 @@ hoot task-grid test-files/MyInputFile.osm MyOutputFile.geojson --maxNodesPerCell
 ==== List the available JOSM validators:
 
 -----
-    hoot validate --available-validators
------
-
-==== Run customized JOSM validation on a map:
-
------
-    hoot validate -D josm.validators.include="DuplicatedWayNodes" input.osm
+    hoot validate --validators
 -----
 

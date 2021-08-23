@@ -36,6 +36,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 

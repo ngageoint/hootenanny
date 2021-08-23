@@ -73,9 +73,6 @@ public:
 
 private:
 
-  static QStringList _nameCleaningTokens;
-  static QStringList _streetTypes;
-
   static void _modifyUndesirableTokens(QString& name);
   static void _filterOutStreets(QString& name);
 };

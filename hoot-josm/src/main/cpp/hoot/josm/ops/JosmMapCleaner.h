@@ -133,7 +133,7 @@ private:
   int _getNumElementsCleaned();
   QSet<ElementId> _getDeletedElementIds();
   QMap<QString, int> _getValidationErrorFixCountsByType();
-  int _getNumFailedCleaningOperations();
+  QMap<QString, QString> _getFailingCleanerInfo();
 
   /*
    * Converts the error status info returned by hoot-josm into a readable string

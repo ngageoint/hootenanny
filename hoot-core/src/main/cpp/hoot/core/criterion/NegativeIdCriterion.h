@@ -22,36 +22,43 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef TAGLISTREADER_H
-#define TAGLISTREADER_H
+#ifndef NEGATIVE_ID_CRITERION_H
+#define NEGATIVE_ID_CRITERION_H
 
-// Qt
-#include <QStringList>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
 /**
- * Reads tag lists from a file
+ * @brief The PositiveIdCriterion class is satisfied when elements have a positive ID.
  */
-class TagListReader
+class NegativeIdCriterion : public ElementCriterion
 {
-
 public:
 
+  static QString className() { return "hoot::NegativeIdCriterion"; }
+
+  NegativeIdCriterion() = default;
+  ~NegativeIdCriterion() = default;
+
   /**
-   * Reads a list of tags from a newline delimited file
-   *
-   * @param inputPath path to the input file
-   * @param keysOnly if true; assumes line is made up of the tag key only and doesn't require a kvp
-   * with '=' per record
-   * @return a string list of tags
+   * @see ElementCriterion
    */
-  static QStringList readList(const QString& inputPath, const bool keysOnly = false);
+  bool isSatisfied(const ConstElementPtr& e) const override;
+  /**
+   * @see ElementCriterion
+   */
+  ElementCriterionPtr clone() override { return std::make_shared<NegativeIdCriterion>(); }
+
+  QString getDescription() const override { return "Identifies elements with a negative ID"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 }
 
-#endif // TAGLISTREADER_H
+#endif // NEGATIVE_ID_CRITERION_H

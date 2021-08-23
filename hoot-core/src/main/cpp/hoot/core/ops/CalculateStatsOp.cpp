@@ -35,6 +35,7 @@
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/CalculateAreaForStatsVisitor.h>

@@ -28,6 +28,7 @@
 //  Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmApiChangesetElement.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 
 namespace hoot
@@ -234,6 +235,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiChangesetElementTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiChangesetElementTest, "current");
 
 }

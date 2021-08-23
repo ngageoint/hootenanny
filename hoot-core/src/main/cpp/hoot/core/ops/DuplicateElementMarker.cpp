@@ -28,6 +28,7 @@
 #include "DuplicateElementMarker.h"
 
 // Hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/ElementDeduplicator.h>
 #include <hoot/core/schema/MetadataTags.h>

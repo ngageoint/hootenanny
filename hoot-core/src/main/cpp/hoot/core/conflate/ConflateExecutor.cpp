@@ -45,7 +45,7 @@
 #include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
-#include <hoot/core/ops/RoadCrossingPolyReviewMarker.h>
+#include <hoot/core/ops/RoadCrossingPolyMarker.h>
 #include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
@@ -675,7 +675,7 @@ void ConflateExecutor::_updateConfigOptionsForDifferentialConflation() const
   // The list option removal being done here could be made obsolete by handling it in the JSON
   // config instead with custom syntax (#3442).
   ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePostOpsKey(), RoadCrossingPolyReviewMarker::className());
+    ConfigOptions::getConflatePostOpsKey(), RoadCrossingPolyMarker::className());
 }
 
 void ConflateExecutor::_updateConfigOptionsForBounds() const

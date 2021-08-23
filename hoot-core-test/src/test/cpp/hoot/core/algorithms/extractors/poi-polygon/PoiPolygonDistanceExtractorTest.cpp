@@ -35,12 +35,6 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 using namespace geos::geom;
 
 namespace hoot

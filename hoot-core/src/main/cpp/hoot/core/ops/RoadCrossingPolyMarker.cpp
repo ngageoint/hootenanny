@@ -25,9 +25,10 @@
  * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-#include "RoadCrossingPolyReviewMarker.h"
+#include "RoadCrossingPolyMarker.h"
 
 // Hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
@@ -46,20 +47,21 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, RoadCrossingPolyReviewMarker)
+HOOT_FACTORY_REGISTER(OsmMapOperation, RoadCrossingPolyMarker)
 
-RoadCrossingPolyReviewMarker::RoadCrossingPolyReviewMarker() :
+RoadCrossingPolyMarker::RoadCrossingPolyMarker() :
+_addValidationTags(false),
 _numRoads(0),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
-void RoadCrossingPolyReviewMarker::setConfiguration(const Settings& conf)
+void RoadCrossingPolyMarker::setConfiguration(const Settings& conf)
 {
   _crossingRulesFile = ConfigOptions(conf).getHighwayCrossingPolyRules().trimmed();
 }
 
-void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
+void RoadCrossingPolyMarker::apply(const OsmMapPtr& map)
 {
   _numAffected = 0; // roads we mark for review
   _numProcessed = 0; // all ways
@@ -83,6 +85,7 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
 
   ReviewMarker reviewMarker;
   const WayMap& ways = _map->getWays();
+  LOG_VARD(ways.size());
   HighwayCriterion highwayCrit(_map);
   for (WayMap::const_iterator waysItr = ways.begin(); waysItr != ways.end(); ++waysItr)
   {
@@ -107,7 +110,7 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
           std::shared_ptr<geos::geom::Envelope> env(way->getEnvelope(_map));
           LOG_VART(env);
 
-          // get all nearby polys to the road that pass our poly filter
+          // Get all nearby polys to the road that pass our poly filter.
           const std::set<ElementId> neighborIdsSet =
             SpatialIndexer::findNeighbors(
               *env, rule.getIndex(), rule.getIndexToEid(), _map, ElementType::Way, false);
@@ -121,7 +124,7 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
             LOG_VART(neighborId);
             ConstElementPtr neighbor = _map->getElement(neighborId);
 
-            // if the road intersects the poly, flag it for review
+            // If the road intersects the poly, mark it.
             if (neighbor && rule.getPolyFilter()->isSatisfied(neighbor) &&
                 ElementGeometryUtils::haveGeometricRelationship(
                   way, neighbor, GeometricRelationship::Crosses, _map))
@@ -131,11 +134,20 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
               LOG_VART(rule.getPolyFilterString());
               LOG_VART(rule.getAllowedRoadTagFilterString());
 
-              reviewMarker.mark(
-                _map, way,
+              const QString description =
                 "Road crossing polygon: " + rule.getPolyFilterString() + "; " +
-                  rule.getAllowedRoadTagFilterString(),
-                MetadataTags::HootReviewRoadCrossingPolygon(), 1.0);
+                rule.getAllowedRoadTagFilterString();
+              if (!_addValidationTags)
+              {
+                reviewMarker.mark(
+                  _map, way, description,
+                  MetadataTags::HootReviewRoadCrossingPolygon(), 1.0);
+              }
+              else
+              {
+                way->setTag(MetadataTags::HootValidationError(), description);
+                way->setTag(MetadataTags::HootValidationSource(), "Hootenanny");
+              }
               _markedRoads.insert(way->getElementId());
               _numAffected++;
             }
@@ -154,13 +166,19 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
         StringUtils::formatLargeNumber(ways.size())  << " total ways.");
     }
   }
+  LOG_VARD(_numProcessed);
 }
 
-QStringList RoadCrossingPolyReviewMarker::getCriteria() const
+QStringList RoadCrossingPolyMarker::getCriteria() const
 {
   QStringList criteria;
   criteria.append(HighwayCriterion::className());
   return criteria;
+}
+
+QString RoadCrossingPolyMarker::getValidationErrorMessage() const
+{
+  return _numAffected == 0 ? "" : "Roads crossing polygons: " + QString::number(_numAffected);
 }
 
 }

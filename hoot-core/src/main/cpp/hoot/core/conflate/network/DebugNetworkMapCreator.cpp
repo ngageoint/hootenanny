@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/MedianNodeVisitor.h>
 
 namespace hoot

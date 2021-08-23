@@ -49,12 +49,6 @@
 #include <hoot/core/conflate/matching/MatchGraph.h>
 #include <hoot/core/util/Log.h>
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // Standard
 #include <iostream>
 

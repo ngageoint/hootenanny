@@ -22,43 +22,51 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef POIPOLYGONTAGIGNORELISTREADER_H
-#define POIPOLYGONTAGIGNORELISTREADER_H
-
-// Qt
-#include <QStringList>
+#ifndef VALIDATOR_H
+#define VALIDATOR_H
 
 namespace hoot
 {
 
 /**
- * Reads tag ignore lists for POI/Polygon conflation (Singleton)
+ * Interface for implementation by validators performing data validation
  */
-class PoiPolygonTagIgnoreListReader
+class Validator
 {
-
 public:
 
-  static PoiPolygonTagIgnoreListReader& getInstance();
+  /**
+   * @brief Enables validation on the validator.
+   *
+   * Some validators have dual purposes and have the need to have validation capabilities toggled.
+   */
+  virtual void enableValidation() = 0;
 
-  QStringList getPoiTagIgnoreList() const { return _poiTagIgnoreList; }
-  QStringList getPolyTagIgnoreList() const { return _polyTagIgnoreList; }
+    /**
+     * @brief Disables validation on the validator.
+     *
+     * Some validators have dual purposes and have the need to have validation capabilities toggled.
+     */
+  virtual void disableValidation() = 0;
 
-private:
+  /**
+    * @brief Returns a message with a description of validation errors
+    */
+  virtual QString getValidationErrorMessage() const = 0;
 
-  PoiPolygonTagIgnoreListReader();
-  /** Default destructor */
-  ~PoiPolygonTagIgnoreListReader() = default;
-  /** Delete copy constructor and assignment operator */
-  PoiPolygonTagIgnoreListReader(const PoiPolygonTagIgnoreListReader&) = delete;
-  PoiPolygonTagIgnoreListReader& operator=(const PoiPolygonTagIgnoreListReader&) = delete;
+  /**
+    * @brief Returns the total number of validation errors encountered
+    */
+  virtual long getNumValidationErrors() const = 0;
 
-  QStringList _poiTagIgnoreList;
-  QStringList _polyTagIgnoreList;
+  /**
+    * @brief Returns the total number of features validated
+    */
+  virtual long getNumFeaturesValidated() const = 0;
 };
 
 }
 
-#endif // POIPOLYGONTAGIGNORELISTREADER_H
+#endif // VALIDATOR_H

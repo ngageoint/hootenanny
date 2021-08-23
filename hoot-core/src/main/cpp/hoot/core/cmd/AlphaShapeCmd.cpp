@@ -34,6 +34,7 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmGeoJsonWriter.h>
 #include <hoot/core/io/ShapefileWriter.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>

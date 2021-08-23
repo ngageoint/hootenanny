@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-#ifndef ROAD_CROSSING_POLY_REVIEW_MARKER_H
-#define ROAD_CROSSING_POLY_REVIEW_MARKER_H
+#ifndef ROAD_CROSSING_POLY_MARKER_H
+#define ROAD_CROSSING_POLY_MARKER_H
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -34,6 +34,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/conflate/highway/RoadCrossingPolyRule.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/validation/Validator.h>
 
 // Qt
 #include <QSet>
@@ -42,19 +43,20 @@ namespace hoot
 {
 
 /**
- * Marks roads for review in instances where the cross over polygons and is governed by a set of
- * rules (see RoadCrossingPolyRule).
+ * Marks roads in instances where they cross over polygons and is governed by a set of rules (see
+ * RoadCrossingPolyRule). By default such roads are marked for review. If validation is enabled,
+ * then validation tags are added instead of reviews.
  *
  * We could extend this to other linear types, like rivers, once we see a need.
  */
-class RoadCrossingPolyReviewMarker : public ConstOsmMapOperation, public Configurable
+class RoadCrossingPolyMarker : public ConstOsmMapOperation, public Configurable, public Validator
 {
 public:
 
-  static QString className() { return "hoot::RoadCrossingPolyReviewMarker"; }
+  static QString className() { return "hoot::RoadCrossingPolyMarker"; }
 
-  RoadCrossingPolyReviewMarker();
-  ~RoadCrossingPolyReviewMarker() = default;
+  RoadCrossingPolyMarker();
+  ~RoadCrossingPolyMarker() = default;
 
   /**
    * @see ConstOsmMapOperation
@@ -75,8 +77,7 @@ public:
       "out of " + StringUtils::formatLargeNumber(_numRoads) + " total roads .";
   }
 
-  QString getDescription() const override
-  { return "Marks roads crossing polygons for review during conflation"; }
+  QString getDescription() const override { return "Marks roads crossing polygons"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
 
@@ -85,12 +86,34 @@ public:
    */
   QStringList getCriteria() const override;
 
+  /**
+   * @see Validator
+   */
+  void enableValidation() override { _addValidationTags = true; }
+  /**
+   * @see Validator
+   */
+  void disableValidation() override { _addValidationTags = false; }
+  /**
+   * @see Validator
+   */
+  QString getValidationErrorMessage() const override;
+  /**
+   * @see Validator
+   */
+  long getNumValidationErrors() const override { return _numAffected; }
+  /**
+   * @see Validator
+   */
+  long getNumFeaturesValidated() const override { return _numProcessed; }
+
  private:
 
   OsmMapPtr _map;
 
   QString _crossingRulesFile;
   QList<RoadCrossingPolyRule> _crossingRules;
+  bool _addValidationTags;
 
   QSet<ElementId> _markedRoads;
   int _numRoads;
@@ -100,4 +123,4 @@ public:
 
 }
 
-#endif // ROAD_CROSSING_POLY_REVIEW_MARKER_H
+#endif // ROAD_CROSSING_POLY_MARKER_H

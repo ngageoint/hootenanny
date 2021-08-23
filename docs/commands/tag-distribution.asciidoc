@@ -5,32 +5,42 @@
 
 The +tag-distribution+ command displays a distribution of values for tags in one or more maps.
 
-* +input(s)+                 - Input(s); may be any supported input format (e.g. .osm file).
-* +--criteria+               - Optional filtering criteria for the inputs; May be one or more class names inheriting from 
-                               `ElementCriterion`. By default, multiple criteria are logically OR'd together. Set the 
-                               `tag.distribution.chain.element.criteria` option to true to have the criteria logically 
-                               AND'd together. The criteria can be negated with the option `element.criteria.negate`.
-                               Use the +info --operators+ command to obtain a list of available criteria.
+* +input(s)+                 - Input(s); may be any supported input format (e.g. .osm file) or a 
+                               directory if `--recursive` is specified.
+* +--criteria+               - Optional filtering criteria for the inputs; May be one or more class 
+                               names inheriting from 
+                               `ElementCriterion`. By default, multiple criteria are logically OR'd
+                               together. Set the `tag.distribution.chain.element.criteria` option to 
+                               true to have the criteria logically AND'd together. The criteria can 
+                               be negated with the option `element.criteria.negate`.
+                               Use the +info --operators+ command to obtain a list of available 
+                               criteria.
 * +--limit+                  - Limits the number of results returned.
-* +--names+                  - If specified, name tags, as defined by Hootenanny's schema, are used as the tag keys to 
+* +--names+                  - If specified, name tags, as defined by Hootenanny's schema, are used 
+                               as the tag keys to 
                                gather statistics for. This is incompatible with the `--types` option.
-* +--percentage-of-matching+ - By default with this option omitted, tag distribution percentages are based on all elements
-                               parsed. Elements not possessing the tags specified in `tagKeys`, `--names`, or `--types` are
-                               counted in the element total. With this option enabled, only elements which have one of the
-                               specified tags are counted in the element total. Enabling this option has no effect if
-                               all tag keys are parsed (nothing specified for `tagKeys`).
-* +--recursive+              - Allows for processing the files contained in any directories specified in 
-                               +input(s)+ recursively. This parameter has no effect on the processing of non-directory 
-                               inputs. This must be followed by either "*" to denote no filtering or one or more wildcard 
-                               name filters. e.g. "*.osm;*.json" or "*myFile*". This parameter is not compatible with the 
-                               OGR layer input syntax.
-* +--sort-by-value +         - Sorts results alphabetically by tag value. If not specified, results are sorted by decreasing 
-                               tag value occurrence frequency.
-* +--tagKeys+                - The tag keys to gather statistics for. If this parameter is omitted, all tag keys are 
-                               processed. This parameter is ignored if `--names` or `--types` are used.
+* +--percentage-of-matching+ - By default with this option omitted, tag distribution percentages are 
+                               based on all elements
+                               parsed. Elements not possessing the tags specified in `tagKeys`, 
+                               `--names`, or `--types` are counted in the element total. With this 
+                               option enabled, only elements which have one of the specified tags 
+                               are counted in the element total. Enabling this option has no effect 
+                               if all tag keys are parsed (nothing specified for `tagKeys`).
+* +--recursive+              - Allows for processing the files contained in any directories 
+                               specified in +input(s)+ recursively. This parameter has no effect on 
+                               the processing of non-directory inputs. This must be followed by 
+                               either "*" to denote no filtering or one or more wildcard name 
+                               filters. e.g. "*.osm;*.json" or "*myFile*". This parameter is not 
+                               compatible with the OGR layer input syntax.
+* +--sort-by-value +         - Sorts results alphabetically by tag value. If not specified, results 
+                               are sorted by decreasing tag value occurrence frequency.
+* +--tagKeys+                - The tag keys to gather statistics for. If this parameter is omitted, 
+                               all tag keys are processed. This parameter is ignored if `--names` or 
+                               `--types` are used.
 * +--tokenize+               - Breaks tag values up into individual tokens before counting them.
-* +--types+                  - If specified, type tags, as defined by Hootenanny's schema, are used as the tag keys to 
-                               gather statistics for. This is incompatible with the `--names` option.
+* +--types+                  - If specified, type tags, as defined by Hootenanny's schema, are used 
+                               as the tag keys to gather statistics for. This is incompatible with 
+                               the `--names` option.
 
 === Usage
 
@@ -57,11 +67,12 @@ Total elements processed: 8,707. Total tags processed: 6,529.
 56	(<1%)	highway=secondary
 -----
 
-The above results reflect the percentage of "highway" tags found among all feature in the map, which include road ways, 
-road nodes, etc.
+The above results reflect the percentage of "highway" tags found among all feature in the map, which 
+include road ways, road nodes, etc.
 
-Now, we run the same calculation, but restrict the elements parsed to only those that Hootenanny classifies as roads
-(`HighwayCriterion`). Hootenanny classifies roads as way elements possessing a "highway" tag.
+Now, we run the same calculation, but restrict the elements parsed to only those that Hootenanny 
+classifies as roads (`HighwayCriterion`). Hootenanny classifies roads as way elements possessing a 
+"highway" tag.
 
 -----
 hoot tag-distribution input.osm --tagKeys highway --criteria HighwayCriterion --limit 3
@@ -72,11 +83,12 @@ Total elements processed: 673. Total tags processed: 5,565. Filtered by: hoot::H
 56	(8.32%)	highway=secondary
 -----
 
-In the above results, the lower total number of elements and changed percentage values are a result of restricting the 
-counting to only road features. 
+In the above results, the lower total number of elements and changed percentage values are a result 
+of restricting the counting to only road features. 
 
-Finally, we have a third option for counting "highway" tags where we only count elements that have the tag but without
-without restricting the elements parsed to those that Hootenanny deems to be roads (`HighwayCriterion`).
+Finally, we have a third option for counting "highway" tags where we only count elements that have 
+the tag but without without restricting the elements parsed to those that Hootenanny deems to be 
+roads (`HighwayCriterion`).
 
 -----
 hoot tag-distribution input.osm --tagKeys highway --percentage-of-matching --limit 3
@@ -87,8 +99,8 @@ Total elements processed: 721. Total tags processed: 6,529.
 56	(7.77%)	highway=secondary
 -----
 
-The increased total element count includes non-way elements with a "highway" tag, e.g. `highway=traffic_signals` and
-`highway=turning_circle` nodes.
+The increased total element count includes non-way elements with a "highway" tag, e.g. 
+`highway=traffic_signals` and `highway=turning_circle` nodes.
 
 === See Also
 

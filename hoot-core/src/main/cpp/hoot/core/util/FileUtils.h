@@ -104,9 +104,10 @@ public:
    * Reads file lines into a string list
    *
    * @param inputPath file to read
+   * @param toLowerCase if true, converts each line to lower case
    * @return a list of strings
    */
-  static QStringList readFileToList(const QString& inputPath);
+  static QStringList readFileToList(const QString& inputPath, const bool toLowerCase = false);
 
   /**
    * Determines if any path in a collection of paths are directories

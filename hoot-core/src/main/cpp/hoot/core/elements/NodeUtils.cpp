@@ -28,6 +28,7 @@
 #include "NodeUtils.h"
 
 // Hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 

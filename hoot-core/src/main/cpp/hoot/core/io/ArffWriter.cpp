@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/conflate/matching/MatchType.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 

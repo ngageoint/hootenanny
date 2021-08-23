@@ -1,7 +1,14 @@
-# A list of custom implicit tagging rules based on name.  These rules override any rules associated with the same word in the rules database.
-# Use this list to fine tune tagging rules behavior.  To assign multiple tags to a single word, delimit the tags with a semicolon.
-# tab separated: word	key1=value1;key2=value2 
-# keep list alphabetized by tag value and in lower case
+# A list of custom implicit tagging rules based on name.  These rules override any rules associated 
+# with the same word in the rules database. Use this list to fine tune tagging rules behavior. To 
+# assign multiple tags to a single word, delimit the tags with a semicolon.
+
+# Format: word\tkey1=value1;key2=value2 
+
+# Keep the list alphabetized by tag value and in lower case.
+#
+# Note: The decision was made to keep this in its own configuration file vs putting it in a list 
+# within ConfigOptions.asciidoc in order for the format to be able to directly mimic that of 
+# *.implicitTagRules .
 
 academy	amenity=school
 administration building	office=government

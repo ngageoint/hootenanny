@@ -37,6 +37,9 @@
 // hoot
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/elements/OsmMap.h>
+// It would be nice if we could get rid of this ConfigOptions include since this class is included
+// in every test class.
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/FileUtils.h>
@@ -222,7 +225,6 @@ public:
   {
     TestUtils::getInstance().registerReset(this);
   }
-
   virtual ~AutoRegisterResetInstance() = default;
 
   virtual void reset()
@@ -233,44 +235,6 @@ public:
 
 class HootTestFixture : public CppUnit::TestFixture
 {
-protected:
-
-  enum HootTestReset
-  {
-    ResetNone,
-    ResetBasic,             // resets counters
-    ResetAllNoMatchFactory, // resets entire environment except for MatchFactory (see additional
-                            // explanation in resetEnvironment)
-    ResetAll                // resets entire environment (config, etc.); This can be fairly resource
-                            // expensive due to the call to ScriptMatchCreator::setArguments but
-                            // only if you have script matchers configured to run.
-  };
-
-  /**
-   *  @brief Constructor to set the paths to begin with $HOOT_HOME if used, default reset to none,
-   *  and create the output path if needed
-   */
-  HootTestFixture(const QString& inputPath = UNUSED_PATH, const QString& outputPath = UNUSED_PATH) :
-  _inputPath((inputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + inputPath : inputPath),
-  _outputPath((outputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + outputPath : outputPath),
-  _reset(ResetNone)
-  {
-    if (outputPath != UNUSED_PATH)
-      FileUtils::makeDir(_outputPath);
-  }
-  virtual ~HootTestFixture() = default;
-
-  /**
-   * @brief setResetType Set the reset type to do basic, all, or none
-   * @param reset Enum type to resent
-   */
-  void setResetType(HootTestReset reset) { _reset = reset; }
-
-  /** Path relative from $HOOT_HOME to the input folder of the test */
-  const QString _inputPath;
-  /** Path relative from $HOOT_HOME to the output folder of the test */
-  const QString _outputPath;
-
 public:
 
   /**
@@ -302,6 +266,44 @@ public:
   }
 
   static const QString UNUSED_PATH;
+
+protected:
+
+  enum HootTestReset
+  {
+    ResetNone,
+    ResetBasic,             // resets counters
+    ResetAllNoMatchFactory, // resets entire environment except for MatchFactory (see additional
+                            // explanation in resetEnvironment)
+    ResetAll                // resets entire environment (config, etc.); This can be fairly resource
+                            // expensive due to the call to ScriptMatchCreator::setArguments but
+                            // only if you have script matchers configured to run.
+  };
+
+  /**
+   * @brief Constructor to set the paths to begin with $HOOT_HOME if used, default reset to none,
+   * and create the output path if needed
+   */
+  HootTestFixture(const QString& inputPath = UNUSED_PATH, const QString& outputPath = UNUSED_PATH) :
+  _inputPath((inputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + inputPath : inputPath),
+  _outputPath((outputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + outputPath : outputPath),
+  _reset(ResetNone)
+  {
+    if (outputPath != UNUSED_PATH)
+      FileUtils::makeDir(_outputPath);
+  }
+  virtual ~HootTestFixture() = default;
+
+  /**
+   * @brief setResetType Set the reset type to do basic, all, or none
+   * @param reset Enum type to resent
+   */
+  void setResetType(HootTestReset reset) { _reset = reset; }
+
+  /** Path relative from $HOOT_HOME to the input folder of the test */
+  const QString _inputPath;
+  /** Path relative from $HOOT_HOME to the output folder of the test */
+  const QString _outputPath;
 
 private:
 

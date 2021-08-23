@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collection;
+import java.util.Collections;
 import java.lang.Exception;
 import java.io.ByteArrayInputStream;
 import java.lang.Class;
@@ -43,7 +44,6 @@ import java.util.HashSet;
 
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
-import org.openstreetmap.josm.data.validation.OsmValidator;
 import org.openstreetmap.josm.data.validation.Test;
 import org.openstreetmap.josm.data.validation.TestError;
 import org.openstreetmap.josm.tools.Logging;
@@ -78,13 +78,12 @@ public class JosmMapValidator
     return errorCount;
   }
 
-  public int getNumFailingValidators()
+  /**
+   * Returns information about failed validation operations
+   */
+  public Map<String, String> getFailingValidatorInfo()
   {
-    if (failingValidators != null)
-    {
-      return failingValidators.size();
-    }
-    return 0;
+    return failingValidators;
   }
 
   /**
@@ -137,15 +136,16 @@ public class JosmMapValidator
   }
 
   /**
-   * Returns the number of failed cleaning operations if the map was also cleaned during validation
+   * Returns information about failed cleaning operations if the map was also cleaned during
+     validation
    */
-  public int getNumFailedCleaningOperations()
+  public Map<String, String> getFailingCleanerInfo()
   {
     if (cleaner == null)
     {
-      return 0;
+      return null;
     }
-    return cleaner.getNumFailedCleaningOperations();
+    return cleaner.getFailingCleanerInfo();
   }
 
   /**
@@ -169,17 +169,20 @@ public class JosmMapValidator
    * Returns the available JOSM validators
    *
    * @return a delimited string of the form:
-   * <validator 1 class name>:<validator 1 description>;<validator 2 class name>:<validator 2 description>
+   * "<validator1Name>:<validator1Description>;<validator2Name>:<validator2Description>..."
    */
-  public Map<String, String> getAvailableValidators() throws Exception
+  public Map<String, String> getValidatorDetail(List<String> validators) throws Exception
   {
     Logging.debug("Retrieving available validators...");
-    Map<String, String> validators = new HashMap<String, String>();
+    Map<String, String> validatorsDetail = new HashMap<String, String>();
     try
     {
-      Collection<Test> validationTests = OsmValidator.getTests();
-      for (Test validationTest : validationTests)
+      for (String validatorClassName : validators)
       {
+        validatorClassName = validatorClassName.trim();
+        Test validationTest =
+          (Test)Class.forName(
+            VALIDATORS_NAMESPACE + "." + validatorClassName.replace(".", "$")).newInstance();
         if (validationTest != null)
         {
           String testName = validationTest.toString().split("@")[0];
@@ -189,7 +192,7 @@ public class JosmMapValidator
           testName = testName.replace(VALIDATORS_NAMESPACE + ".", "");
           Logging.trace("testName: " + testName);
           String testDescription = validationTest.getName();
-          validators.put(testName, testDescription);
+          validatorsDetail.put(testName, testDescription);
         }
       }
     }
@@ -198,7 +201,9 @@ public class JosmMapValidator
       System.out.println(e.getMessage());
       throw e;
     }
-    return validators;
+
+    Logging.debug("validators size: " + String.valueOf(validatorsDetail.size()));
+    return validatorsDetail;
   }
 
   /**
@@ -210,7 +215,8 @@ public class JosmMapValidator
    * @return modified OSM map XML string if validation errors were found; otherwise a map identical
    * to the input map
    */
-  public String validate(List<String> validators, String elementsXml, boolean cleanValidated,
+  public String validate(
+    List<String> validators, String elementsXml, boolean cleanValidated,
     boolean addTags) throws Exception
   {
     //Logging.trace("elementsXml: " + elementsXml);
@@ -386,7 +392,7 @@ public class JosmMapValidator
 
       // NOTE: Unlike hoot core's logging, JOSM's will still execute any code in the logging
       // statement despite the log level and simply not log the statement. So, you definitely don't
-      // want anything like this making its way into a production environment that wil cause
+      // want anything like this making its way into a production environment that will cause
       // performance issues.
       //Logging.trace(
       // "input elements: " + JosmUtils.elementsToString(inputDataset.allPrimitives()));
@@ -420,17 +426,18 @@ public class JosmMapValidator
     long startTime = System.currentTimeMillis();
 
     //Logging.trace("elements size: " + elements.size());
-    for (String validator : validators)
+    for (String validatorClassName : validators)
     {
-      runValidation((Test)Class.forName(validator).newInstance(), map);
+      validatorClassName = validatorClassName.trim();
+      runValidation((Test)Class.forName(validatorClassName).newInstance(), map);
     }
 
     Logging.debug(
       "Found " + getNumValidationErrors() + " validation errors in: " +
       String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
-    if (failingValidators.size() > 0)
+    for (Map.Entry<String, String> entry : failingValidators.entrySet())
     {
-      Logging.warn("The following JOSM validators failed: " + failingValidators.keySet());
+      Logging.warn("Validator: " + entry.getKey() + " failed with error: " + entry.getValue());
     }
   }
 
@@ -459,10 +466,15 @@ public class JosmMapValidator
     }
     catch (Exception e)
     {
-      failingValidators.put(validator.getName(), JosmUtils.getErrorMessage(validator, e));
+      String errorMsg = JosmUtils.getErrorMessage(validator, e);
+      Logging.warn(errorMsg);
+      failingValidators.put(validator.getName(), errorMsg);
     }
 
-    parseValidationErrors(validator.getName(), errors, map);
+    if (errors != null)
+    {
+      parseValidationErrors(validator.getName(), errors, map);
+    }
 
     // This will clear out any errors, so call it last.
     validator.clear();
@@ -488,6 +500,11 @@ public class JosmMapValidator
     int numCleaned = 0;
     for (TestError error : validationErrors)
     {
+      if (error == null)
+      {
+        continue;
+      }
+
       Collection<? extends OsmPrimitive> elementGroupWithError = error.getPrimitives();
       Logging.trace(
         "Processing validation results for " + error.getPrimitives().size() + " elements for " +

@@ -27,7 +27,7 @@
 #include "ImplicitTagCustomRules.h"
 
 // hoot
-#include <hoot/core/schema/TagListReader.h>
+#include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
@@ -37,12 +37,14 @@
 namespace hoot
 {
 
-void ImplicitTagCustomRules::init()
+ImplicitTagCustomRules::ImplicitTagCustomRules()
 {
   LOG_DEBUG("Intializing POI implicit tag custom rules...");
   _clear();
-  _readAllowLists();
-  _readIgnoreLists();
+  _readCustomRuleFile();
+  ConfigOptions opts;
+  setTagIgnoreList(opts.getImplicitTaggingDatabaseDeriverTagIgnoreList());
+  setWordIgnoreList(opts.getImplicitTaggingDatabaseDeriverWordIgnoreList());
 }
 
 void ImplicitTagCustomRules::_clear()
@@ -50,6 +52,12 @@ void ImplicitTagCustomRules::_clear()
   _tagIgnoreList.clear();
   _wordIgnoreList.clear();
   _customRulesList.clear();
+}
+
+void ImplicitTagCustomRules::setCustomRuleFile(const QString& file)
+{
+  _customRuleFile = file;
+  _readCustomRuleFile();
 }
 
 void ImplicitTagCustomRules::_readCustomRuleFile()
@@ -82,20 +90,6 @@ void ImplicitTagCustomRules::_readCustomRuleFile()
     customRulesFile.close();
   }
   LOG_VART(_customRulesList);
-}
-
-void ImplicitTagCustomRules::_readAllowLists()
-{
-  LOG_DEBUG("Reading allow lists...");
-  _readCustomRuleFile();
-}
-
-void ImplicitTagCustomRules::_readIgnoreLists()
-{
-  LOG_DEBUG("Reading ignore lists...");
-  _tagIgnoreList = TagListReader::readList(_tagIgnoreFile);
-  //Words really aren't tags, but the tag list reader works fine for this.
-  _wordIgnoreList = TagListReader::readList(_wordIgnoreFile, true);
 }
 
 }

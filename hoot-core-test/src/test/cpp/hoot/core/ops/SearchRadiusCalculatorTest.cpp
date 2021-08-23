@@ -37,12 +37,6 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // Qt
 #include <QBuffer>
 #include <QByteArray>

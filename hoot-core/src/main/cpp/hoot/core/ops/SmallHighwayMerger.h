@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Units.h>
 
 // Std
@@ -72,8 +73,9 @@ public:
   /**
    * Remove parts of ways that are duplicates.
    */
-  static void mergeWays(std::shared_ptr<OsmMap> map,
-                        const Meters threshold = ConfigOptions().getSmallHighwayMergerThreshold());
+  static void mergeWays(
+    std::shared_ptr<OsmMap> map,
+    const Meters threshold = ConfigOptions().getSmallHighwayMergerThreshold());
 
   QString getInitStatusMessage() const override { return "Merging very small roads..."; }
   QString getCompletedStatusMessage() const override
