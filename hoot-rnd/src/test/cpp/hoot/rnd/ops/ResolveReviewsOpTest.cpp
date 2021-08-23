@@ -52,7 +52,7 @@ public:
   HootTestFixture(
     "test-files/rnd/ops/ResolveReviewsOpTest/", "test-output/rnd/ops/ResolveReviewsOpTest/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAllNoMatchFactory);
   }
 
   void runKeepTest()
