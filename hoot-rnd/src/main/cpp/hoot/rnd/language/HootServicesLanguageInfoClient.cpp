@@ -35,7 +35,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/HootNetworkUtils.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/StringUtils.h>
 
 // Qt

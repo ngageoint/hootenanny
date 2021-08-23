@@ -34,7 +34,7 @@
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/Progress.h>
 
 using namespace geos::geom;

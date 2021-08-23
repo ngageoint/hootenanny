@@ -42,7 +42,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/info/Version.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/OpenCv.h>
 
 // Qt

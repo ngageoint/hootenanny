@@ -31,7 +31,7 @@
 #include <boost/pool/pool_alloc.hpp>
 
 // Hoot
-#include <hoot/core/util/Log.h>
+
 
 // Standard
 

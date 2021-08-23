@@ -41,7 +41,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/schema/TagDifferencer.h>
 #include <hoot/core/criterion/BridgeCriterion.h>

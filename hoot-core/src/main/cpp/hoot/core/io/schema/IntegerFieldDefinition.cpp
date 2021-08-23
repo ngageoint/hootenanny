@@ -27,7 +27,7 @@
 #include "IntegerFieldDefinition.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
+
 
 // Standard
 #include <limits>

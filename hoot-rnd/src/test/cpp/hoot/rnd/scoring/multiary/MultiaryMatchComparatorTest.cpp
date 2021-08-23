@@ -31,7 +31,7 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/rnd/scoring/multiary/MultiaryMatchComparator.h>
 #include <hoot/core/util/ConfPath.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/TestUtils.h>
 
 using namespace hoot;

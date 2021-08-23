@@ -35,7 +35,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/StringUtils.h>
 
 // tgs

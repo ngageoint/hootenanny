@@ -31,7 +31,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 
 using namespace geos::geom;

@@ -32,7 +32,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/Soundex.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
-#include <hoot/core/util/Log.h>
+
 
 // Qt
 

@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/Log.h>
+
 
 using namespace geos::geom;
 

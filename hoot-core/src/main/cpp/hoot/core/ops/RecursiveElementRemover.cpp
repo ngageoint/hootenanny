@@ -34,7 +34,7 @@
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 using namespace std;

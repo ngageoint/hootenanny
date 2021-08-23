@@ -37,7 +37,7 @@
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>

@@ -31,7 +31,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/zindex/LongBox.h>
-#include <hoot/core/util/Log.h>
+
 
 using namespace std;
 

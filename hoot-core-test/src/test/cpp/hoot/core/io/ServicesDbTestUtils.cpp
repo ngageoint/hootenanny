@@ -37,7 +37,7 @@
 #include <hoot/core/io/OsmApiDbReader.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DbUtils.h>
-#include <hoot/core/util/Log.h>
+
 
 // Qt
 

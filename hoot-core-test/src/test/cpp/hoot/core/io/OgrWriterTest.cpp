@@ -30,7 +30,7 @@
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
+
 
 namespace hoot
 {

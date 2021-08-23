@@ -30,7 +30,7 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
+
 
 namespace hoot
 {

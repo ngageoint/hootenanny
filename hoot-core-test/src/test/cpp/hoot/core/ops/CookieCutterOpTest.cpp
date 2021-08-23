@@ -32,7 +32,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CookieCutterOp.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/elements/MapProjector.h>
 
 namespace hoot

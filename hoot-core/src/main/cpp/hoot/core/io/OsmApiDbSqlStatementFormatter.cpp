@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/io/OsmApiDb.h>
-#include <hoot/core/util/Log.h>
+
 
 // Qt
 #include <QDateTime>

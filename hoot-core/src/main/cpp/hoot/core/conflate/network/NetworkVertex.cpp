@@ -27,7 +27,7 @@
 #include "NetworkVertex.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/elements/Node.h>
 
 namespace hoot

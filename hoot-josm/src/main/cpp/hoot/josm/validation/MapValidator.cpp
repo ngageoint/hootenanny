@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/info/ApiEntityDisplayInfo.h>

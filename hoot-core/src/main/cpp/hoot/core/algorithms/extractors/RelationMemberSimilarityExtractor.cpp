@@ -30,7 +30,7 @@
 #include <hoot/core/elements/RelationMemberComparison.h>
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
+
 
 namespace hoot
 {

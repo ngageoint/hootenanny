@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/criterion/NotCriterion.h>
 

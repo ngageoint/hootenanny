@@ -30,7 +30,7 @@
 #include <hoot/core/algorithms/linearreference/WayString.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/util/Log.h>
+
 
 using namespace geos::geom;
 using namespace std;

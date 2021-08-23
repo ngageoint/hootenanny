@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
-#include <hoot/core/util/Log.h>
+
 
 namespace hoot
 {

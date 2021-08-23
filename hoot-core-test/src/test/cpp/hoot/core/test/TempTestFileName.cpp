@@ -27,7 +27,7 @@
 #include "TempTestFileName.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
+
 
 // Tgs
 #include <tgs/Statistics/Random.h>

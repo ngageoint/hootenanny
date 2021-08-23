@@ -32,7 +32,7 @@
 
 //hoot includes
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+
 
 using namespace std;
 

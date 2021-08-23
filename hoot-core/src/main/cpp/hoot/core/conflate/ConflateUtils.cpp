@@ -33,7 +33,7 @@
 #include <hoot/core/criterion/NonConflatableCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 

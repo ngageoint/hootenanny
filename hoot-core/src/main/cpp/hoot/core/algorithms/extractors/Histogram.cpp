@@ -34,7 +34,7 @@
 #include <geos/geom/Geometry.h>
 
 // hoot
-#include <hoot/core/util/Log.h>
+
 
 // Qt
 

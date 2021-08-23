@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
+
 
 // Qt
 #include <QDateTime>

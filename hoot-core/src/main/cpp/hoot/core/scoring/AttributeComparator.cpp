@@ -36,7 +36,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/StringUtils.h>
 
 // TGS

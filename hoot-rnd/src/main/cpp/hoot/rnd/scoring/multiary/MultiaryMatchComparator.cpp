@@ -37,7 +37,7 @@
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>

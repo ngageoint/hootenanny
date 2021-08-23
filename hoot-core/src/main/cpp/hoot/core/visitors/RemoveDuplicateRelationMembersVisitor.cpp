@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
+
 
 // Qt
 

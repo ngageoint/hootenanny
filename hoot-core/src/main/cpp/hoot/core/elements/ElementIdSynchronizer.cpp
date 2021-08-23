@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/visitors/ElementHashVisitor.h>
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/elements/WayUtils.h>

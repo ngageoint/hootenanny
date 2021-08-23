@@ -39,7 +39,7 @@
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+
 
 using namespace std;
 

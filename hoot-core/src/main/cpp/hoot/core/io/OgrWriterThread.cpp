@@ -28,7 +28,7 @@
 
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/js/v8Engine.h>
 
 // std

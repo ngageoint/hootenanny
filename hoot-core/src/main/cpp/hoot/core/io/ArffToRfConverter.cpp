@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/io/ArffReader.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/scoring/DataSamples.h>
 
 // Standard

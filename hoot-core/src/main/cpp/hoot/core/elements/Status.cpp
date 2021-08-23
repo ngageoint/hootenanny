@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/schema/MetadataTags.h>
 
 using namespace std;

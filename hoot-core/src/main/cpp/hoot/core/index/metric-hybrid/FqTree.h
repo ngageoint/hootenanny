@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/index/metric-hybrid/Node.h>
 #include <hoot/core/index/metric-hybrid/SubTreeCallback.h>
-#include <hoot/core/util/Log.h>
+
 
 // Standard
 #include <assert.h>

@@ -34,7 +34,7 @@
 // Hoot
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/scoring/DataSamples.h>
-#include <hoot/core/util/Log.h>
+
 
 // Qt
 

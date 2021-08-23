@@ -33,7 +33,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/util/Log.h>
+
 
 using namespace geos::geom;
 using namespace std;

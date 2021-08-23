@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+
 
 // opencv
 #include <hoot/core/util/OpenCv.h>

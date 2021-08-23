@@ -34,7 +34,7 @@
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementConsumer.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/ElementVisitorConsumer.h>
 #include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>

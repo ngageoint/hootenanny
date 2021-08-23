@@ -49,7 +49,7 @@
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/geometry/RelationToMultiPolygonConverter.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
 

@@ -28,7 +28,7 @@
 #include "Factory.h"
 
 // Hoot Includes
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/SignalCatcher.h>
 
 // Standard Include

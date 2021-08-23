@@ -29,7 +29,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
+
 
 namespace hoot
 {

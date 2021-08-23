@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h>
-#include <hoot/core/util/Log.h>
+
 
 // Standard
 #include <fstream>

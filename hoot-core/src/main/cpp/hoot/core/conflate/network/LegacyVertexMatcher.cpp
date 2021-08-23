@@ -30,7 +30,7 @@
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/conflate/network/SearchRadiusProvider.h>
-#include <hoot/core/util/Log.h>
+
 
 // tgs
 #include <tgs/RStarTree/IntersectionIterator.h>

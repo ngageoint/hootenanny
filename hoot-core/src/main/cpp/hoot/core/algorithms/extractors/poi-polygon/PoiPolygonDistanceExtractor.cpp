@@ -29,7 +29,7 @@
 // hoot
 //#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
+
 
 // geos
 #include <geos/util/TopologyException.h>

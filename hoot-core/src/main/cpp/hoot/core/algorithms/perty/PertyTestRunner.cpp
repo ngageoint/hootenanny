@@ -32,7 +32,7 @@
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
+
 
 // Qt
 

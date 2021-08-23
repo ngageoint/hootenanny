@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
-#include <hoot/core/util/Log.h>
+
 
 // Qt
 #include <QStringBuilder>

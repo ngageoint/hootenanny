@@ -31,7 +31,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/Soundex.h>
-#include <hoot/core/util/Log.h>
+
 
 namespace hoot
 {

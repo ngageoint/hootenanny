@@ -34,7 +34,7 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/scoring/MapComparator.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>

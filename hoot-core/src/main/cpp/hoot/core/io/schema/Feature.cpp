@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/FieldDefinition.h>
-#include <hoot/core/util/Log.h>
+
 
 namespace hoot
 {

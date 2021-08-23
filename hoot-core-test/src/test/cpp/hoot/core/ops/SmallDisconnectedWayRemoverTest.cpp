@@ -31,7 +31,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/SmallDisconnectedWayRemover.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/elements/MapProjector.h>
 
 namespace hoot

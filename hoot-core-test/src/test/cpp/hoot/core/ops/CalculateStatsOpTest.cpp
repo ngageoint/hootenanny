@@ -31,7 +31,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
+
 
 // Qt
 #include <qnumeric.h>

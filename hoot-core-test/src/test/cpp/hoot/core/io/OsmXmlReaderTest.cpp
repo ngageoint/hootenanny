@@ -30,7 +30,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/geometry/GeometryUtils.h>
 
 namespace hoot

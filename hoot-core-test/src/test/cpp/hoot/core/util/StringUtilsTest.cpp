@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot

@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/JsRegistrar.h>
 

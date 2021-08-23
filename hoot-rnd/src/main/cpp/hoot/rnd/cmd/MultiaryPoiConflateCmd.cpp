@@ -38,7 +38,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 #include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>

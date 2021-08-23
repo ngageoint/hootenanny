@@ -31,7 +31,7 @@
 #include <hoot/core/elements/ElementData.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/StringUtils.h>
 
 //  Standard

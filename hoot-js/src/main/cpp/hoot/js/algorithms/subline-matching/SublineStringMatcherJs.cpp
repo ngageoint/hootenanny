@@ -34,7 +34,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/js/JsRegistrar.h>

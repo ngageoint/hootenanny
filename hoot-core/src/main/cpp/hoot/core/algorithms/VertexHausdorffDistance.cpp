@@ -33,7 +33,7 @@
 
 // Hoot
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/Log.h>
+
 
 // Standard
 

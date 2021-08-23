@@ -27,7 +27,7 @@
 #include "NetworkMatcher.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/StringUtils.h>
 
 // Tgs

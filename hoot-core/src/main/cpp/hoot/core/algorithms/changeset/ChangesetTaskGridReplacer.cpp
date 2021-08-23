@@ -37,7 +37,7 @@
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>

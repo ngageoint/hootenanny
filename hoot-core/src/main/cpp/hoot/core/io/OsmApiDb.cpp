@@ -34,7 +34,7 @@
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+
 
 // qt
 

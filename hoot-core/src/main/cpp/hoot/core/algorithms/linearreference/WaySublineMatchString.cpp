@@ -27,7 +27,7 @@
 #include "WaySublineMatchString.h"
 
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
-#include <hoot/core/util/Log.h>
+
 
 using namespace std;
 

@@ -27,7 +27,7 @@
 #include "MultiaryPoiMergerCreator.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
+
 #include <hoot/rnd/conflate/multiary/MultiaryPoiMerger.h>
 
 using namespace std;

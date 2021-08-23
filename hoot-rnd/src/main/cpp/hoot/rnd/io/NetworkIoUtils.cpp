@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+
 
 namespace hoot
 {

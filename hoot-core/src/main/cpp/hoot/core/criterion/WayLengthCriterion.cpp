@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/elements/ElementGeometryUtils.h>
 
 namespace hoot

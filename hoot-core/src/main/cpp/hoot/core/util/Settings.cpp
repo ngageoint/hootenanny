@@ -37,7 +37,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/visitors/ElementVisitor.h>
 
 // Boost

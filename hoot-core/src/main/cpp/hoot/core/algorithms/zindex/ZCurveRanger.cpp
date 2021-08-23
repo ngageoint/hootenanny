@@ -34,7 +34,7 @@
 #include <hoot/core/algorithms/zindex/BBox.h>
 #include <hoot/core/algorithms/zindex/Range.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+
 
 //Qt includes
 

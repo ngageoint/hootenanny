@@ -29,7 +29,7 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/criterion/ReversedRoadCriterion.h>

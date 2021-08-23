@@ -30,7 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
-#include <hoot/core/util/Log.h>
+
 
 namespace hoot
 {

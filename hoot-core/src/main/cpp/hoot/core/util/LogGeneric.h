@@ -30,7 +30,7 @@
 // Standard
 #include <sstream>
 
-#include <hoot/core/util/Log.h>
+
 
 #define LOG_LEVEL(level, message) {\
   if ((level) >= hoot::Log::getInstance().getLevel()) \

@@ -34,7 +34,7 @@
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/ElementHashVisitor.h>
 

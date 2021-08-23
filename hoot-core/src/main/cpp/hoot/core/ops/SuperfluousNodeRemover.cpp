@@ -31,7 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>

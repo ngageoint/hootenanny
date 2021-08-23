@@ -33,7 +33,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
 using namespace geos::geom;

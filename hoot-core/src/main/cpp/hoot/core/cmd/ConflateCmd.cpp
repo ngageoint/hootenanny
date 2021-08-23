@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/conflate/ConflateExecutor.h>
 #include <hoot/core/conflate/ConflateUtils.h>
 

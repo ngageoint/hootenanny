@@ -27,7 +27,7 @@
 #include "TextTable.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
+
 
 // Qt
 

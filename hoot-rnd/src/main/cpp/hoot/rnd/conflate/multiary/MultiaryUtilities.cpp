@@ -34,7 +34,7 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmPbfWriter.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.h>
 #include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 

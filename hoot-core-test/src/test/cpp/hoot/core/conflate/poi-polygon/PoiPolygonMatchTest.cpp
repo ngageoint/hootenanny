@@ -29,7 +29,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/util/Log.h>
+
 
 using namespace geos::geom;
 

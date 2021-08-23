@@ -40,7 +40,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
+
 
 using namespace geos::geom;
 using namespace std;
