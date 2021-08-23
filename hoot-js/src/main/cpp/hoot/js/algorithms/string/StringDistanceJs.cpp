@@ -32,9 +32,6 @@
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 
-// Qt
-
-
 using namespace std;
 using namespace v8;
 

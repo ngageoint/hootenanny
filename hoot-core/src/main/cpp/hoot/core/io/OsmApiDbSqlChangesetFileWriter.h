@@ -36,10 +36,7 @@
 
 // Qt
 #include <QUrl>
-
 #include <QtSql/QSqlDatabase>
-
-
 
 namespace hoot
 {

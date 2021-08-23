@@ -34,11 +34,8 @@
 // Qt
 #include <QRegExp>
 
-
-
 // ICU
 #include <unicode/translit.h>
-
 
 namespace hoot
 {

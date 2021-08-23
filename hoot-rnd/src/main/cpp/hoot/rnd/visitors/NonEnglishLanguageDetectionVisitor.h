@@ -34,10 +34,6 @@
 #include <hoot/rnd/language/LanguageDetector.h>
 #include <hoot/rnd/language/LanguageInfoProvider.h>
 
-// Qt
-
-
-
 namespace hoot
 {
 

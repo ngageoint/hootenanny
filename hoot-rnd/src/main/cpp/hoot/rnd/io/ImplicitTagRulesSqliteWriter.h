@@ -28,12 +28,9 @@
 #define IMPLICITTAGRULESSQLITEWRITER_H
 
 // Qt
-
-
 #include <QCache>
 #include <QtSql/QSqlDatabase>
 #include <QSqlQuery>
-
 
 namespace hoot
 {

@@ -27,9 +27,6 @@
 #ifndef OSM_CHANGESET_FILE_WRITER_FACTORY_H
 #define OSM_CHANGESET_FILE_WRITER_FACTORY_H
 
-// Qt
-
-
 namespace hoot
 {
 class OsmChangesetFileWriter;

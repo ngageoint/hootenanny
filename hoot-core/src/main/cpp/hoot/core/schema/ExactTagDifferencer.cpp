@@ -31,9 +31,6 @@
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchema.h>
 
-// Qt
-
-
 namespace hoot
 {
 

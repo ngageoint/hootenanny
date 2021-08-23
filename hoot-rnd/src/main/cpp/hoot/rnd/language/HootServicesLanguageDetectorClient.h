@@ -28,14 +28,13 @@
 #ifndef HOOT_SERVICES_LANGUAGE_DETECTOR_CLIENT_H
 #define HOOT_SERVICES_LANGUAGE_DETECTOR_CLIENT_H
 
+#include "LanguageDetectionConfidenceLevel.h"
+
 // hoot
 #include <hoot/rnd/language/LanguageDetector.h>
-#include "LanguageDetectionConfidenceLevel.h"
 
 // Qt
 #include <QCache>
-
-
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>

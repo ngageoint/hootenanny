@@ -42,7 +42,6 @@
 #include <hoot/core/visitors/WaysVisitor.h>
 
 // Qt
-
 #include <QImage>
 #include <QPainter>
 

@@ -33,9 +33,6 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 
-// Qt
-
-
 namespace hoot
 {
 

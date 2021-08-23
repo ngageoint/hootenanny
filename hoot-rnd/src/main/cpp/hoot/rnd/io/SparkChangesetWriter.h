@@ -34,9 +34,6 @@
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
 #include <hoot/core/conflate/SearchBoundsCalculator.h>
 
-// Qt
-
-
 namespace hoot
 {
 

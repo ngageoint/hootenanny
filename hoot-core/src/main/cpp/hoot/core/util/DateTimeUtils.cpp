@@ -27,10 +27,6 @@
 
 #include "DateTimeUtils.h"
 
-// Hoot
-
-
-
 // Qt
 #include <QDateTime>
 #include <QRegExp>

@@ -27,14 +27,7 @@
 
 #include "FileUtils.h"
 
-// Hoot
-
-
-
 // Qt
-
-
-
 #include <QFileInfoList>
 #include <QHostAddress>
 #include <QRegularExpression>

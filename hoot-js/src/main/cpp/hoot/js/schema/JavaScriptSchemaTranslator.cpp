@@ -40,7 +40,6 @@
 #include <hoot/core/io/schema/StringFieldDefinition.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/js/PluginContext.h>
 #include <hoot/js/io/DataConvertJs.h>
@@ -49,8 +48,6 @@
 // Qt
 #include <QCoreApplication>
 #include <QCryptographicHash>
-
-
 #include <QLibraryInfo>
 
 // TBS

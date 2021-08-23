@@ -39,9 +39,6 @@
 #include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/core/schema/TagDifferencer.h>
 
-// Qt
-
-
 using namespace std;
 using namespace v8;
 

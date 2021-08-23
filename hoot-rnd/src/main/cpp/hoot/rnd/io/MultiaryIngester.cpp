@@ -45,10 +45,6 @@
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-// Qt
-
-
-
 namespace hoot
 {
 

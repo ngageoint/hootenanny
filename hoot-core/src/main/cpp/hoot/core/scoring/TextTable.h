@@ -28,7 +28,6 @@
 #define TEXTTABLE_H
 
 // Qt
-
 #include <QVariant>
 
 namespace hoot
@@ -43,7 +42,6 @@ public:
   TextTable(const Data& d) : _data(d) {}
 
   QString toWikiString();
-
   QString toJsonString();
 
 private:

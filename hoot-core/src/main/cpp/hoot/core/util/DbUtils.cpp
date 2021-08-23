@@ -31,11 +31,8 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
-
 // Hoot
 #include <hoot/core/schema/MetadataTags.h>
-
-
 
 namespace hoot
 {

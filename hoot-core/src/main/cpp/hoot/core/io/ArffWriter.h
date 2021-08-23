@@ -28,14 +28,8 @@
 #ifndef ARFFWRITER_H
 #define ARFFWRITER_H
 
-// Qt
-
-
 // Standard
 #include <fstream>
-
-
-
 
 namespace hoot
 {

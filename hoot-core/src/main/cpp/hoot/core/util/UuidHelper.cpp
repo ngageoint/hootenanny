@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
 
-
 // Qt
 #include <QCryptographicHash>
 

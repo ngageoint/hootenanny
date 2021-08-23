@@ -26,10 +26,6 @@
  */
 #include "SqlBulkDelete.h"
 
-// hoot
-
-
-
 // Qt
 #include <QtSql/QSqlDatabase>
 #include <QSqlError>

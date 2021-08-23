@@ -27,12 +27,6 @@
 #ifndef CHANGESET_STATS_FORMAT_H
 #define CHANGESET_STATS_FORMAT_H
 
-// Hoot
-
-
-// Qt
-
-
 namespace hoot
 {
 

@@ -28,9 +28,6 @@
 #ifndef ARFFTORFCONVERTER_H
 #define ARFFTORFCONVERTER_H
 
-// Qt
-
-
 namespace hoot
 {
 

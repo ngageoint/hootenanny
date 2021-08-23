@@ -26,13 +26,7 @@
  */
 #include "IoSingleStat.h"
 
-// hoot
-
-
-
 // Qt
-
-
 #include <QTextStream>
 
 namespace hoot

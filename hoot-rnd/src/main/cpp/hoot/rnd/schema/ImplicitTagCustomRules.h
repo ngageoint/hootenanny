@@ -27,10 +27,6 @@
 #ifndef IMPLICITTAGCUSTOMRULES_H
 #define IMPLICITTAGCUSTOMRULES_H
 
-// Qt
-
-
-
 namespace hoot
 {
 

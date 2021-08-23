@@ -27,16 +27,11 @@
 
 #include "Progress.h"
 
-// std
-
-
 // Qt
 #include <QtCore/QStringBuilder>
 
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
-
-
 
 using namespace std;
 

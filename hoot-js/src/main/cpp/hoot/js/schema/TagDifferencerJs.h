@@ -30,12 +30,6 @@
 // hoot
 #include <hoot/js/HootBaseJs.h>
 
-// Qt
-
-
-// Std
-
-
 namespace hoot
 {
 

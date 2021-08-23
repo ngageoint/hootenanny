@@ -28,9 +28,6 @@
 #ifndef METADATA_TAGS_H
 #define METADATA_TAGS_H
 
-// Qt
-
-
 namespace hoot
 {
 

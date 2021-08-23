@@ -28,7 +28,7 @@
 #ifndef OSMPBFWRITER_H
 #define OSMPBFWRITER_H
 
-// Standard Includes
+// Standard
 #include <istream>
 
 // TGS

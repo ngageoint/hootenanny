@@ -34,9 +34,6 @@
 #include <hoot/core/language/ToEnglishTranslator.h>
 #include <hoot/core/info/OperationStatus.h>
 
-// Qt
-
-
 namespace hoot
 {
 

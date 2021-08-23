@@ -34,11 +34,6 @@
 #include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
-
-// Qt
-
-
 using namespace std;
 
 namespace hoot

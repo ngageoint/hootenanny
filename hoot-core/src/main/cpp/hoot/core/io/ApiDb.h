@@ -27,9 +27,6 @@
 #ifndef APIDB_H
 #define APIDB_H
 
-// GEOS
-
-
 // hoot
 #include <hoot/core/elements/RelationData.h>
 #include <hoot/core/elements/Status.h>

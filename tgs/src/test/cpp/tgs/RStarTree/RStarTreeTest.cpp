@@ -25,21 +25,22 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
-// Standard Includes
+// Standard
 #include <stdlib.h>
 #include <iostream>
 
-// CPP Unit Includes
+// CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
 #ifdef WIN32
-// Qt Includes
+// Qt
 #include <QFile>
 #endif
 
+// Tgs
 #include "../PluginFactory.h"
 #include <tgs/RStarTree/FilePageStore.h>
 #include <tgs/RStarTree/MemoryPageStore.h>

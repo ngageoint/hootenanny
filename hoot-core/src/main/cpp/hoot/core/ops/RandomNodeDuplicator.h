@@ -33,9 +33,6 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/RngConsumer.h>
 
-// Qt
-
-
 namespace hoot
 {
 

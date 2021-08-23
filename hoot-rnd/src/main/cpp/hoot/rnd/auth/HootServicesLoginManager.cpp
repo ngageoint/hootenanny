@@ -32,12 +32,7 @@
 #include <hoot/core/io/HootNetworkCookieJar.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootNetworkUtils.h>
-
 #include <hoot/core/util/StringUtils.h>
-
-// Std
-
-
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>

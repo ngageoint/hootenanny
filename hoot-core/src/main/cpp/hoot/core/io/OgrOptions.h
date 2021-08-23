@@ -27,10 +27,6 @@
 #ifndef OGROPTIONS_H
 #define OGROPTIONS_H
 
-// Qt
-
-
-
 // Standard
 #include <stdlib.h>
 
@@ -48,7 +44,6 @@ class OgrOptions : public QMap<QString, QString>
 public:
 
   OgrOptions();
-
   virtual ~OgrOptions();
 
   void deleteCrypticOptions();

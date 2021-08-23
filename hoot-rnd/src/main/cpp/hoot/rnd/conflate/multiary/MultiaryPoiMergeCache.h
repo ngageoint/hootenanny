@@ -32,9 +32,6 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/rnd/conflate/multiary/MultiaryCluster.h>
 
-// Qt
-
-
 namespace hoot
 {
 

@@ -31,14 +31,8 @@
 // boost
 #include <boost/iostreams/filtering_stream.hpp>
 
-// Qt
-
-
 // Standard
 #include <fstream>
-
-
-
 
 namespace hoot
 {

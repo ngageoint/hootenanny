@@ -28,9 +28,6 @@
 #ifndef RANDOMFORESTMODELBUILDER_H
 #define RANDOMFORESTMODELBUILDER_H
 
-// Qt
-
-
 namespace hoot
 {
 

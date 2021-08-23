@@ -36,8 +36,6 @@
 #include <hoot/core/language/ToEnglishTranslator.h>
 
 // Qt
-
-
 #include <QTemporaryFile>
 
 namespace hoot

@@ -33,9 +33,6 @@
 #include <hoot/core/geometry/GeometricRelationship.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 
-// Qt
-
-
 namespace hoot
 {
 

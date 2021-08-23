@@ -34,14 +34,10 @@
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 
-
-
-// qt
-
+// Qt
 #include <QVariant>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlRecord>
-
 #include <QTextStream>
 
 // Standard

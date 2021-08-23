@@ -34,9 +34,6 @@
 // node.js
 #include <hoot/js/SystemNodeJs.h>
 
-// Qt
-
-
 namespace hoot
 {
 

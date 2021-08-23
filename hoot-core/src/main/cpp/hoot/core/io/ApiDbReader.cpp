@@ -35,14 +35,10 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-
 #include <hoot/core/util/StringUtils.h>
 
 // tgs
 #include <tgs/System/Time.h>
-
-// Qt
-
 
 using namespace geos::geom;
 using namespace std;

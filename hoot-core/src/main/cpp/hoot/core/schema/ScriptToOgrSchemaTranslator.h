@@ -35,9 +35,6 @@
 #include <hoot/core/io/schema/StrictChecking.h>
 #include <hoot/core/io/schema/Feature.h>
 
-// Qt
-
-
 namespace hoot
 {
 

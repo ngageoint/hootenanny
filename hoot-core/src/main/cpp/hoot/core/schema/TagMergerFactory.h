@@ -27,13 +27,6 @@
 #ifndef TAGMERGERFACTORY_H
 #define TAGMERGERFACTORY_H
 
-// Standard
-
-
-// Qt
-
-
-
 namespace hoot
 {
 
@@ -54,11 +47,9 @@ public:
    * Returns the default TagMerger.
    */
   const TagMerger& getDefault() { return *getDefaultPtr(); }
-
   std::shared_ptr<TagMerger> getDefaultPtr();
 
   const TagMerger& getMerger(const QString& name) { return *getMergerPtr(name); }
-
   std::shared_ptr<TagMerger> getMergerPtr(const QString& name);
 
   /**

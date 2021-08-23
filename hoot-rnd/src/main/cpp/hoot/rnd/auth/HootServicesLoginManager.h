@@ -31,9 +31,6 @@
 // Hoot
 #include <hoot/core/io/HootNetworkRequest.h>
 
-// Qt
-
-
 namespace hoot
 {
 

@@ -32,11 +32,7 @@
 #include <hoot/core/io/PartialOsmMapWriter.h>
 
 // Qt
-
 #include <QTextStream>
-
-// std
-
 
 namespace hoot
 {

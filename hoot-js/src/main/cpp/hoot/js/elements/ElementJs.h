@@ -33,9 +33,6 @@
 // node.js
 #include <hoot/js/HootBaseJs.h>
 
-// Qt
-
-
 namespace hoot
 {
 

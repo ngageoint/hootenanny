@@ -31,9 +31,6 @@
 // GDAL Includes
 #include <ogrsf_frmts.h>
 
-// GEOS
-
-
 // Hoot
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/util/Units.h>
@@ -41,12 +38,8 @@
 // Qt
 #include <QRgb>
 
-
 // TGS
 #include <tgs/RasterOps/Image.hpp>
-
-// Standard
-
 
 namespace hoot
 {

@@ -34,11 +34,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-// Qt
-
-
-
-
 // TGS
 #include <tgs/StreamUtils.h>
 

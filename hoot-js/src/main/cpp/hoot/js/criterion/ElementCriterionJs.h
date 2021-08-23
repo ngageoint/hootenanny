@@ -31,9 +31,6 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/js/HootBaseJs.h>
 
-// Qt
-
-
 namespace hoot
 {
 

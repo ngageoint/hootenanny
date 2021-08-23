@@ -31,9 +31,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
 
-// Qt
-
-
 namespace hoot
 {
 

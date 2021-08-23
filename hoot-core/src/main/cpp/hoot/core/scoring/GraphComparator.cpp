@@ -48,10 +48,7 @@
 #include <hoot/core/scoring/ShortestPath.h>
 #include <hoot/core/util/FileUtils.h>
 
-
 // Qt
-
-
 #include <QPainter>
 
 // TGS

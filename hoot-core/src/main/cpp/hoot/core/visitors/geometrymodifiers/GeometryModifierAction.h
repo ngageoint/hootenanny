@@ -32,17 +32,12 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/OsmMap.h>
 
-// Qt
-
-
-
 namespace hoot
 {
 
-/*
- * Base class for all geometry modifier actions.
- * Any derived action registered in the hoot catory with this base class will be
- * available to use by the GeometryModifierOp hoot operation.
+/**
+ * Base class for all geometry modifier actions. Any derived action registered in the hoot catory
+ * with this base class will be available to use by the GeometryModifierOp hoot operation.
  */
 class GeometryModifierAction
 {

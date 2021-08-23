@@ -28,9 +28,6 @@
 #ifndef HOOT_PROGRESS_H
 #define HOOT_PROGRESS_H
 
-// Qt
-
-
 namespace hoot
 {
 

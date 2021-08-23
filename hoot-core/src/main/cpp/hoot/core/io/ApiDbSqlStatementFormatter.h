@@ -27,10 +27,6 @@
 #ifndef APIDBSQLSTATEMENTFORMATTER_H
 #define APIDBSQLSTATEMENTFORMATTER_H
 
-// Qt
-
-
-
 namespace hoot
 {
 

@@ -28,15 +28,10 @@
 #include "ConfPath.h"
 
 // hoot
-
-
 #include <hoot/core/util/Settings.h>
 
 // Qt
-
 #include <QDirIterator>
-
-
 
 // Standard
 #include <stdlib.h>

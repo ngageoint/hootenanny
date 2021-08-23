@@ -33,9 +33,6 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
 
-// Qt
-
-
 namespace hoot
 {
 

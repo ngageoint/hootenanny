@@ -40,9 +40,6 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 
-// Qt
-
-
 using namespace std;
 
 namespace hoot

@@ -27,9 +27,6 @@
 #ifndef LANGUAGE_DETECTION_CONFIDENCE_LEVEL_H
 #define LANGUAGE_DETECTION_CONFIDENCE_LEVEL_H
 
-// Qt
-
-
 namespace hoot
 {
 

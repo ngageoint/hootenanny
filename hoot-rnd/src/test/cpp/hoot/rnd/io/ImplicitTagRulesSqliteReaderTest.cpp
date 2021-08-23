@@ -29,10 +29,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
 
-// Qt
-
-
-
 namespace hoot
 {
 

@@ -26,13 +26,6 @@
  */
 #include "TextTable.h"
 
-// hoot
-
-
-// Qt
-
-
-
 // Standard
 #include <algorithm>
 

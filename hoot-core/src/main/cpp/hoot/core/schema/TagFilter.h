@@ -31,9 +31,6 @@
 // Hoot
 #include <hoot/core/schema/OsmSchema.h>
 
-// Qt
-
-
 // Boost
 #include <boost/property_tree/json_parser.hpp>
 

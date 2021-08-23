@@ -28,11 +28,7 @@
 #ifndef SHORTESTPATH_H
 #define SHORTESTPATH_H
 
-// Qt
-
-
 // Standard
-
 #include <queue>
 
 namespace hoot

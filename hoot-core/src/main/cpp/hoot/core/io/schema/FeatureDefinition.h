@@ -27,13 +27,6 @@
 #ifndef FEATUREDEFINITION_H
 #define FEATUREDEFINITION_H
 
-// Qt
-
-
-// Standard
-
-
-
 namespace hoot
 {
 
@@ -42,6 +35,7 @@ class FieldDefinition;
 class FeatureDefinition
 {
 public:
+
   FeatureDefinition() = default;
 
   void addField(const std::shared_ptr<FieldDefinition>& fd) { _fields.push_back(fd); }

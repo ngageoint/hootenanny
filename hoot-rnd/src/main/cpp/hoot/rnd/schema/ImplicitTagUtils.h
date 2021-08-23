@@ -30,9 +30,6 @@
 // Hoot
 #include <hoot/core/language/ToEnglishTranslator.h>
 
-// Qt
-
-
 namespace hoot
 {
 

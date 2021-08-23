@@ -28,15 +28,8 @@
 #define DATACONVERTJS_H
 
 // hoot
-
 #include <hoot/core/util/Units.h>
 #include <hoot/js/io/StreamUtilsJs.h>
-
-// Qt
-
-
-
-// v8
 #include <hoot/js/HootJsStable.h>
 
 namespace hoot

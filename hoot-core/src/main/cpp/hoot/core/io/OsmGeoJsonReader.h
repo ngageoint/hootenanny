@@ -31,11 +31,8 @@
 // Qt
 #include <QUrl>
 
-
-
 // Standard
 #include <queue>
-
 
 // Boost
 #include <boost/property_tree/ptree.hpp>

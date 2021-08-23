@@ -39,9 +39,6 @@
 // Qt
 #include <QVariant>
 
-
-
-
 using namespace std;
 using namespace v8;
 

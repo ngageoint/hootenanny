@@ -27,13 +27,10 @@
 #ifndef MAP_STATS_WRITER
 #define MAP_STATS_WRITER
 
-// Qt
-
-
-
 namespace hoot
 {
-  class SingleStat;
+
+class SingleStat;
 
 /**
   Writes map stats

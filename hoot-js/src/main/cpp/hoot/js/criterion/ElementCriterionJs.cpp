@@ -29,15 +29,11 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
-
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
-
-// Qt
-
 
 using namespace std;
 using namespace v8;

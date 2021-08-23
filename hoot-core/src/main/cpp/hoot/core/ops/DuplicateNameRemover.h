@@ -28,9 +28,6 @@
 #ifndef DUPLICATENAMEREMOVER_H
 #define DUPLICATENAMEREMOVER_H
 
-// Qt
-
-
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>

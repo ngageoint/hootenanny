@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
-
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/conflate/ConflateExecutor.h>
 #include <hoot/core/util/StringUtils.h>

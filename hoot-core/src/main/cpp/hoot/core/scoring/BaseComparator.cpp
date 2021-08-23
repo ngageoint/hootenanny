@@ -44,7 +44,6 @@
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
-
 #include <QImage>
 #include <QPainter>
 

@@ -37,9 +37,6 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/conflate/ConflateUtils.h>
 
-// Qt
-
-
 namespace hoot
 {
 

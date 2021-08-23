@@ -33,10 +33,6 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ProgressReporter.h>
 
-// Qt
-
-
-
 namespace hoot
 {
 

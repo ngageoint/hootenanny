@@ -30,9 +30,6 @@
 // hoot
 #include <hoot/core/info/VersionDefines.h>
 
-// Qt
-
-
 namespace hoot
 {
 

@@ -27,7 +27,6 @@
 #include "JosmMapCleaner.h"
 
 // hoot
-
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/ConfigOptions.h>

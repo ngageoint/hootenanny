@@ -28,7 +28,6 @@
 // Hoot
 #include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/rnd/conflate/CumulativeConflator2.h>
 #include <hoot/core/util/StringUtils.h>
 

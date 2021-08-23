@@ -27,14 +27,8 @@
 #ifndef OSMMAPOPERATIONJS_H
 #define OSMMAPOPERATIONJS_H
 
-// node.js
+// Hoot
 #include <hoot/js/HootBaseJs.h>
-
-// Qt
-
-
-// Standard
-
 
 namespace hoot
 {
@@ -55,7 +49,7 @@ private:
 
   OsmMapOperationJs(std::shared_ptr<OsmMapOperation> op);
 
-    static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void apply(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void applyAndGetResult(const v8::FunctionCallbackInfo<v8::Value>& args);
 

@@ -33,10 +33,6 @@
 // hoot
 #include <hoot/core/io/schema/StrictChecking.h>
 
-// Qt
-
-
-
 namespace hoot
 {
 
@@ -53,7 +49,6 @@ public:
   static QString className() { return "hoot::ScriptSchemaTranslator"; }
 
   ScriptSchemaTranslator();
-
   virtual ~ScriptSchemaTranslator();
 
   /**

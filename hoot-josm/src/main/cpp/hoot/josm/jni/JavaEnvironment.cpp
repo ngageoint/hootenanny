@@ -28,15 +28,7 @@
 
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
-
-
 #include <hoot/josm/jni/JniUtils.h>
-
-// Qt
-
-
-// Std
-
 
 namespace hoot
 {

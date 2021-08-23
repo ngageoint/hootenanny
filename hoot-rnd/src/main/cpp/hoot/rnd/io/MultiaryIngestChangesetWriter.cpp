@@ -26,16 +26,12 @@
  */
 #include "MultiaryIngestChangesetWriter.h"
 
-// geos
-
-
 // hoot
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-
 
 // Qt
 #include <QStringBuilder>

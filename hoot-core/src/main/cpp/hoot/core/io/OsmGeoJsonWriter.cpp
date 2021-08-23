@@ -46,7 +46,6 @@
 // Qt
 #include <QBuffer>
 #include <QDateTime>
-
 #include <QXmlStreamWriter>
 #include <QtCore/QStringBuilder>
 

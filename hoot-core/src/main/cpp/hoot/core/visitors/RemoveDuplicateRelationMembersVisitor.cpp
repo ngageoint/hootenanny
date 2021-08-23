@@ -31,10 +31,6 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/util/Factory.h>
 
-
-// Qt
-
-
 namespace hoot
 {
 

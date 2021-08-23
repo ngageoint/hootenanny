@@ -28,9 +28,6 @@
 #ifndef DATE_TIME_UTILS_H
 #define DATE_TIME_UTILS_H
 
-// Qt
-
-
 namespace hoot
 {
 

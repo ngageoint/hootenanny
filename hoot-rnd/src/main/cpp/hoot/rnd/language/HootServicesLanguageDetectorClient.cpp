@@ -32,9 +32,7 @@
 #include <hoot/rnd/io/NetworkIoUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/core/util/HootNetworkUtils.h>
-
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/rnd/auth/HootServicesLoginManager.h>
 #include <hoot/rnd/language/LanguageUtils.h>
@@ -43,9 +41,7 @@
 #include <QByteArray>
 #include <QVariant>
 
-
 // std
-
 #include <sstream>
 
 namespace hoot

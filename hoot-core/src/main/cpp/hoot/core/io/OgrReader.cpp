@@ -49,13 +49,9 @@
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-
-
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
-
-
 #include <QDateTime>
 
 using namespace geos::geom;

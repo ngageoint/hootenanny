@@ -45,14 +45,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
-
-
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-
-// Qt
-
-
-
 
 using namespace geos::geom;
 

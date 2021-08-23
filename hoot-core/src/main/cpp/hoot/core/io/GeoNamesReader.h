@@ -30,9 +30,6 @@
 // hoot
 #include <hoot/core/io/PartialOsmMapReader.h>
 
-// Qt
-
-
 namespace hoot
 {
 

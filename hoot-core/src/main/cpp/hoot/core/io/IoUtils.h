@@ -36,9 +36,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
 
-// Qt
-
-
 namespace hoot
 {
 

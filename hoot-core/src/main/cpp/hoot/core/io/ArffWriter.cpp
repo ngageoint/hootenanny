@@ -32,13 +32,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 
-
-// Qt
-
-
-// standard
-
-
 using namespace std;
 
 namespace hoot

@@ -30,9 +30,6 @@
 // JNI
 #include <jni.h>
 
-// Qt
-
-
 namespace hoot
 {
 

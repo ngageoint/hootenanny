@@ -30,7 +30,6 @@
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
 // Qt
 #include <QDateTime>
 #include <QStringBuilder>

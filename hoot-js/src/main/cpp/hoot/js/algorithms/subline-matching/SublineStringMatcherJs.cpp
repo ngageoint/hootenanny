@@ -34,7 +34,6 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/js/JsRegistrar.h>
@@ -46,7 +45,6 @@
 #include <hoot/js/util/StringUtilsJs.h>
 
 // Qt
-
 #include <QElapsedTimer>
 
 using namespace std;

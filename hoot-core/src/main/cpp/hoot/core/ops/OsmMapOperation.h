@@ -33,14 +33,8 @@
 #include <hoot/core/criterion/FilteredByGeometryTypeCriteria.h>
 #include <hoot/core/info/OperationStatus.h>
 
-// Standard
-
-
 // Boost
 #include <boost/any.hpp>
-
-// Qt
-
 
 namespace hoot
 {

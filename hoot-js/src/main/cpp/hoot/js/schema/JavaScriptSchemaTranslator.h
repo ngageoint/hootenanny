@@ -42,9 +42,6 @@
 // NodeJs
 #include <hoot/js/SystemNodeJs.h>
 
-// Standard
-
-
 namespace hoot
 {
 

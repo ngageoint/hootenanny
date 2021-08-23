@@ -28,17 +28,7 @@
 #define HOOTEXCEPTIONJS_H
 
 // hoot
-
-
-
-// node.js
 #include <hoot/js/HootBaseJs.h>
-
-// Qt
-
-
-// Standard
-
 
 namespace hoot
 {

@@ -44,11 +44,6 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
 
-
-// Qt
-
-
-
 // Python version before 2.4 don't have a Py_ssize_t typedef.
 #if PY_VERSION_HEX < 0x02050000 && !defined(PY_SSIZE_T_MIN)
 using Py_ssize_t = int;

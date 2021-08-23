@@ -27,10 +27,6 @@
 
 #include "StringUtils.h"
 
-// Hoot
-
-
-
 // Qt
 #include <QLocale>
 

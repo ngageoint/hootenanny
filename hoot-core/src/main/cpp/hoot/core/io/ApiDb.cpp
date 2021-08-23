@@ -43,15 +43,10 @@
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/FileUtils.h>
 
-
-
-// qt
-
+// Qt
 #include <QVariant>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlRecord>
-
-
 #include <QRegularExpression>
 
 // Standard
@@ -61,7 +56,6 @@
 
 // tgs
 #include <tgs/System/Time.h>
-
 
 using namespace geos::geom;
 using namespace std;

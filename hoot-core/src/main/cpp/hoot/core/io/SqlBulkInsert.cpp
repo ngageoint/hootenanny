@@ -26,14 +26,9 @@
  */
 #include "SqlBulkInsert.h"
 
-// hoot
-
-
-
 // Qt
 #include <QtSql/QSqlDatabase>
 #include <QSqlError>
-
 #include <QStringBuilder>
 
 // tgs

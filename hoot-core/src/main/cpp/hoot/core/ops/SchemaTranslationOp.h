@@ -32,9 +32,6 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
 
-// Qt
-
-
 namespace hoot
 {
 

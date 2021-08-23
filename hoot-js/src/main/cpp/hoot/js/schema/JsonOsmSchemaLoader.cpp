@@ -36,8 +36,6 @@
 // Qt
 #include <QByteArray>
 
-
-
 using namespace v8;
 
 namespace hoot

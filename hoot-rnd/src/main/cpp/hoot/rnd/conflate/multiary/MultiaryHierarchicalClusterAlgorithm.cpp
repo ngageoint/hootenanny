@@ -29,10 +29,6 @@
 // hoot
 #include <hoot/core/conflate/matching/MatchClassification.h>
 
-
-// Qt
-
-
 namespace hoot
 {
 

@@ -30,9 +30,6 @@
 // Hoot
 #include <hoot/core/util/Progress.h>
 
-// Qt
-
-
 namespace hoot
 {
 

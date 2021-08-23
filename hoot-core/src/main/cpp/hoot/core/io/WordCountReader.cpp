@@ -27,10 +27,6 @@
 
 #include "WordCountReader.h"
 
-// hoot
-
-
-
 // Qt
 #include <QSqlError>
 #include <QVariant>

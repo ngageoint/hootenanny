@@ -33,10 +33,6 @@
 #include <boost/foreach.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
-// Qt
-
-
-
 namespace hoot
 {
 

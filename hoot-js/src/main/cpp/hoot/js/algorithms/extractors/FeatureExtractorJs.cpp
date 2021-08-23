@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Configurable.h>
-
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>
@@ -37,9 +36,6 @@
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
-
-// Qt
-
 
 using namespace std;
 using namespace v8;

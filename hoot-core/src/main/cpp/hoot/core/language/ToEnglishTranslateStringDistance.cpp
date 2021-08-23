@@ -31,11 +31,6 @@
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
-// Qt
-
-
-
 namespace hoot
 {
 

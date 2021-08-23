@@ -33,7 +33,6 @@
 #include <hoot/core/visitors/ElementVisitor.h>
 
 // Qt
-
 #include <QMutex>
 
 namespace hoot

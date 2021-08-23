@@ -27,15 +27,12 @@
 #include "ImplicitTagRulesSqliteWriter.h"
 
 // hoot
-
 #include <hoot/core/util/DbUtils.h>
-
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QSqlError>
-
 #include <QStringBuilder>
 
 namespace hoot

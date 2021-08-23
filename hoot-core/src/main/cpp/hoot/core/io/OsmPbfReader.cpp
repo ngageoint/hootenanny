@@ -40,8 +40,6 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-
-
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 
 // Standard Includes
@@ -50,11 +48,10 @@
 // Qt
 #include <QDateTime>
 
-
-
 // TGS
 #include <tgs/System/Time.h>
 
+// OGR
 #include <ogr_spatialref.h>
 
 // ZLib Includes
@@ -483,8 +480,6 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
 
         if (timestamp != 0 && _denseNodeTmp[i]->getTags().hasInformationTag())
         {
-          // QT 4.6 does not have fromMSecsSinceEpoch
-          //QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
           // same time, but friendly to earlier Qt version
           QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
           QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");

@@ -31,10 +31,6 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/Tags.h>
 
-// Qt
-
-
-
 namespace hoot
 {
 

@@ -34,8 +34,6 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-
-
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 
@@ -50,7 +48,6 @@
 
 // Standard
 #include <fstream>
-
 #include <sstream>
 #include <thread>
 #include <unistd.h>

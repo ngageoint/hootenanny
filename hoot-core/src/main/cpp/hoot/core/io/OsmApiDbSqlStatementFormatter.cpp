@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/io/OsmApiDb.h>
 
-
 // Qt
 #include <QDateTime>
 #include <QStringBuilder>

@@ -33,12 +33,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 
-
-
-// Qt
-
-
-
 // Standard
 #include <fstream>
 

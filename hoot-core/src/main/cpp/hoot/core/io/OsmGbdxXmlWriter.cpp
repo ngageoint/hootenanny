@@ -46,7 +46,6 @@
 // Qt
 #include <QBuffer>
 #include <QDateTime>
-
 #include <QXmlStreamWriter>
 
 using namespace geos::geom;

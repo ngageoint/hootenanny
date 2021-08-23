@@ -29,15 +29,8 @@
 #define CONFIGURATION_H
 
 // Qt
-
 #include <QRegularExpression>
-
-
 #include <QVariant>
-
-// Standard
-
-
 
 namespace hoot
 {

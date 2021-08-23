@@ -30,12 +30,6 @@
 // geos
 #include <geos/geom/Geometry.h>
 
-// Qt
-
-
-// Standard
-
-
 namespace hoot
 {
 

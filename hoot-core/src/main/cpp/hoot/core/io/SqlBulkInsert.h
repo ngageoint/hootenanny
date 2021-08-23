@@ -27,12 +27,11 @@
 #ifndef SQLBULKINSERT_H
 #define SQLBULKINSERT_H
 
-// Qt
-#include <QSqlQuery>
-
-
+// Hoot
 #include <hoot/core/io/BulkInsert.h>
 
+// Qt
+#include <QSqlQuery>
 class QSqlDatabase;
 
 namespace hoot

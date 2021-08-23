@@ -36,7 +36,6 @@
 #include <hoot/core/schema/ScoreMatrix.h>
 
 // Qt
-
 class QXmlStreamWriter;
 
 namespace hoot

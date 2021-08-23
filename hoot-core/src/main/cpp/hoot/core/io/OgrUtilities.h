@@ -30,13 +30,6 @@
 // GDAL
 #include <gdal.h>
 
-// Qt
-
-
-
-
-
-// Forward declaration
 class GDALDataset;
 
 namespace hoot

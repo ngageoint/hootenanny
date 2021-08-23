@@ -37,10 +37,7 @@
 #include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/Factory.h>
 
-
 // Qt
-
-
 #include <QXmlStreamWriter>
 
 using namespace std;

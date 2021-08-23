@@ -28,9 +28,6 @@
 #ifndef SUPERFLUOUSNODEREMOVER_H
 #define SUPERFLUOUSNODEREMOVER_H
 
-// GEOS
-
-
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/Boundable.h>
@@ -39,12 +36,6 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
-
-// Standard
-
-
-// Qt
-
 
 namespace hoot
 {

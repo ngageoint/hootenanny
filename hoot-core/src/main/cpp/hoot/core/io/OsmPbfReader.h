@@ -28,14 +28,9 @@
 #ifndef OSMPBFREADER_H
 #define OSMPBFREADER_H
 
-// Qt
-
-
-
 // Standard Includes
 #include <istream>
 #include <stdint.h>
-
 
 // hoot
 #include <hoot/core/io/PartialOsmMapReader.h>

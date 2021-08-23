@@ -28,7 +28,6 @@
 #include "HootServicesLanguageInfoResponseParser.h"
 
 // Qt
-
 #include <QUrl>
 
 namespace hoot

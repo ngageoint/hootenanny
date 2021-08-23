@@ -26,9 +26,6 @@
  */
 #include "SparkChangesetWriter.h"
 
-// geos
-
-
 // hoot
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/schema/MetadataTags.h>
@@ -39,7 +36,6 @@
 
 // Qt
 #include <QStringBuilder>
-
 
 using namespace geos::geom;
 

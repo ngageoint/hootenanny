@@ -31,9 +31,6 @@
 // hoot
 #include <hoot/rnd/language/HootServicesLanguageDetectorClient.h>
 
-// Qt
-
-
 namespace hoot
 {
 

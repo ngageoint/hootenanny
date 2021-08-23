@@ -35,13 +35,6 @@
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/scoring/DataSamples.h>
 
-
-// Qt
-
-
-// standard
-
-
 using namespace std;
 
 namespace hoot

@@ -26,9 +26,6 @@
  */
 #include "SparkJsonWriter.h"
 
-// geos
-
-
 // hoot
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/io/OsmJsonWriter.h>

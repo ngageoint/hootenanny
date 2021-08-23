@@ -26,18 +26,17 @@
  */
 #include "ImplicitTypeTaggerBase.h"
 
+// hoot
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/rnd/schema/ImplicitTagUtils.h>
 
 // Qt
-
 #include <QStringBuilder>
 
 namespace hoot
