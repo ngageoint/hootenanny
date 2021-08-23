@@ -32,7 +32,7 @@
 #include <hoot/js/HootBaseJs.h>
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

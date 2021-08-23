@@ -37,7 +37,7 @@
 #include <hoot/core/util/Units.h>
 
 // Qt
-#include <QString>
+
 #include <QStringList>
 
 namespace hoot

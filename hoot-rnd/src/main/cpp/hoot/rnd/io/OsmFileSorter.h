@@ -28,7 +28,7 @@
 #define OSMFILESORTER_H
 
 // Qt
-#include <QString>
+
 #include <QTemporaryFile>
 
 namespace hoot

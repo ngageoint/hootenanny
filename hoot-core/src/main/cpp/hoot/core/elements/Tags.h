@@ -33,7 +33,7 @@
 
 // Qt
 #include <QHash>
-#include <QString>
+
 #include <QStringList>
 #include <QRegExp>
 

@@ -28,7 +28,7 @@
 #define MAP_STATS_WRITER
 
 // Qt
-#include <QString>
+
 #include <QStringList>
 
 namespace hoot

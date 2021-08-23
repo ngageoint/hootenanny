@@ -42,7 +42,7 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QString>
+
 #include <QStringList>
 
 // Standard

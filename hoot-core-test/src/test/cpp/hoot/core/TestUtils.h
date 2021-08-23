@@ -45,7 +45,7 @@
 #include <hoot/core/util/FileUtils.h>
 
 // Qt
-#include <QString>
+
 
 // Standard
 #include <string>

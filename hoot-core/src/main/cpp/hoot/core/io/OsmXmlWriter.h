@@ -34,7 +34,7 @@
 // Qt
 #include <QFile>
 #include <QHash>
-#include <QString>
+
 #include <QXmlDefaultHandler>
 
 // Standard

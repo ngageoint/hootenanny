@@ -28,7 +28,7 @@
 #define LIB_POSTAL_INIT_H
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

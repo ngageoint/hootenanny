@@ -29,7 +29,7 @@
 #define COLLECTION_UTILS_H
 
 // Qt
-#include <QString>
+
 #include <QSet>
 
 // Std

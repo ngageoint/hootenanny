@@ -32,7 +32,7 @@
 #include <hoot/core/scoring/DataSamples.h>
 
 // Qt
-#include <QString>
+
 #include <QVariant>
 
 // Standard

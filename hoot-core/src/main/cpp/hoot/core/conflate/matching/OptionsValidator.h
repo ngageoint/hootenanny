@@ -28,7 +28,7 @@
 #define OPTIONS_VALIDATOR_H
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

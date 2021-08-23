@@ -34,7 +34,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 // Qt
-#include <QString>
+
 #include <QMap>
 
 namespace hoot

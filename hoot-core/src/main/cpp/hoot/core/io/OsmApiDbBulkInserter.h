@@ -31,7 +31,7 @@
 #include <map>
 #include <vector>
 
-#include <QString>
+
 #include <QTemporaryFile>
 #include <QElapsedTimer>
 

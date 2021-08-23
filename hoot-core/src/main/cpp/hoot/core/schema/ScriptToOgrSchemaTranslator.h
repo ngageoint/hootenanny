@@ -36,7 +36,7 @@
 #include <hoot/core/io/schema/Feature.h>
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

@@ -29,7 +29,7 @@
 
 // Qt
 #include <QMap>
-#include <QString>
+
 
 // Standard
 #include <stdlib.h>

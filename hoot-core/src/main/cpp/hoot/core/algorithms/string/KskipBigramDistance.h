@@ -33,7 +33,7 @@
 
 //  Qt
 #include <QSet>
-#include <QString>
+
 
 //  Standard
 #include <vector>

@@ -32,7 +32,7 @@
 
 // Qt
 #include <QMap>
-#include <QString>
+
 #include <QVariant>
 
 // Standard

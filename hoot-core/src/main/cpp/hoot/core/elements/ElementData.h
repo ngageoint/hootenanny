@@ -35,7 +35,7 @@
 // Standard
 #include <set>
 
-#include <QString>
+
 
 namespace hoot
 {

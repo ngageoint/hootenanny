@@ -35,7 +35,7 @@
 #include <hoot/js/SystemNodeJs.h>
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

@@ -33,7 +33,7 @@
 #include <hoot/core/elements/OsmMap.h>
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

@@ -31,7 +31,7 @@
 // Qt
 #include <QUrl>
 #include <QFile>
-#include <QString>
+
 
 // Standard
 #include <queue>

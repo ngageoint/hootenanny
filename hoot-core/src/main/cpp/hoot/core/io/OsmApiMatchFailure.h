@@ -29,7 +29,7 @@
 #define OSM_API_MATCH_FAILURE_H
 
 //  Qt
-#include <QString>
+
 #include <QRegularExpression>
 
 //  Standard

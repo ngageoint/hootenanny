@@ -31,7 +31,7 @@
 #include <geos/geom/Geometry.h>
 
 // Qt
-#include <QString>
+
 
 // Standard
 #include <vector>

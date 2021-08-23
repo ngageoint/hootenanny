@@ -29,7 +29,7 @@
 #define RUBBERSHEETAPPLIER_H
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

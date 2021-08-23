@@ -34,7 +34,7 @@
 // Qt
 #include <QRegExp>
 #include <QSet>
-#include <QString>
+
 
 // ICU
 #include <unicode/translit.h>

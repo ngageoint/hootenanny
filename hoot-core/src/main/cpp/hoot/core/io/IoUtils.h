@@ -37,7 +37,7 @@
 #include <hoot/core/io/ElementVisitorInputStream.h>
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

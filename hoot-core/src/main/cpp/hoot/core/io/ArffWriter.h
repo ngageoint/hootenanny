@@ -29,7 +29,7 @@
 #define ARFFWRITER_H
 
 // Qt
-#include <QString>
+
 
 // Standard
 #include <fstream>

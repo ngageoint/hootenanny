@@ -32,7 +32,7 @@
 #include <hoot/rnd/schema/ImplicitTagCustomRules.h>
 
 // Qt
-#include <QString>
+
 #include <QTemporaryFile>
 #include <QSet>
 

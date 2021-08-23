@@ -34,7 +34,7 @@
 #include <hoot/core/schema/TagFilter.h>
 
 // Qt
-#include <QString>
+
 #include <QMap>
 #include <QRegExp>
 

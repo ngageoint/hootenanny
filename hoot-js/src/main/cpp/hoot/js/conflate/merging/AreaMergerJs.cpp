@@ -37,7 +37,7 @@
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 
 // Qt
-#include <QString>
+
 
 // std
 #include <set>

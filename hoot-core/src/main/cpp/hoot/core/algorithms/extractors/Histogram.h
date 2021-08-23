@@ -34,7 +34,7 @@
 #include <vector>
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

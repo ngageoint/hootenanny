@@ -31,7 +31,7 @@
 #include <hoot/core/info/ApiEntityInfo.h>
 
 // Qt
-#include <QString>
+
 
 // Standard
 #include <vector>

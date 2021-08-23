@@ -28,7 +28,7 @@
 #define REQUIREJS_H
 
 // Qt
-#include <QString>
+
 
 // node.js
 #include <hoot/js/HootBaseJs.h>

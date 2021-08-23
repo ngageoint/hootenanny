@@ -29,7 +29,7 @@
 #define HOOTEXCEPTION_H
 
 // Qt
-#include <QString>
+
 #include <QVector>
 
 // Standard

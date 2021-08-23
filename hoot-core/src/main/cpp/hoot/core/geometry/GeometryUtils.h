@@ -35,7 +35,7 @@
 #include <hoot/core/elements/OsmMap.h>
 
 // Qt
-#include <QString>
+
 
 // GEOS
 #include <geos/geom/Envelope.h>

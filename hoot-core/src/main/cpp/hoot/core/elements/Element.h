@@ -43,7 +43,7 @@
 #include <string>
 
 // Qt
-#include <QString>
+
 
 namespace geos
 {

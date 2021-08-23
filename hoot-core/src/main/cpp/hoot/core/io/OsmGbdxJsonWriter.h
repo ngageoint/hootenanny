@@ -33,7 +33,7 @@
 
 // Qt
 #include <QDir>
-#include <QString>
+
 
 namespace hoot
 {

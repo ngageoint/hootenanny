@@ -29,7 +29,7 @@
 #define FILEUTILS_H
 
 // Qt
-#include <QString>
+
 #include <QDir>
 
 namespace hoot

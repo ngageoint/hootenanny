@@ -32,7 +32,7 @@
 #include <hoot/core/cmd/BoundedCommand.h>
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

@@ -41,7 +41,7 @@
 
 // Qt
 #include <QHash>
-#include <QString>
+
 
 // Standard
 #include <vector>

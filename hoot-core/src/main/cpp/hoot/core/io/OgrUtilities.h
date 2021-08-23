@@ -31,7 +31,7 @@
 #include <gdal.h>
 
 // Qt
-#include <QString>
+
 #include <QSet>
 
 #include <vector>

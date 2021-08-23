@@ -29,7 +29,7 @@
 #define APIENTITYDISPLAYINFO_H
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

@@ -29,7 +29,7 @@
 #define DATE_TIME_UTILS_H
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

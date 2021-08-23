@@ -32,7 +32,7 @@
 #include <hoot/core/io/ElementInputStream.h>
 
 // Qt
-#include <QString>
+
 
 // Standard
 #include <memory>

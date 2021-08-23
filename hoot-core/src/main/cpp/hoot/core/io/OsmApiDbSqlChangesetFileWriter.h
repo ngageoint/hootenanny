@@ -38,7 +38,7 @@
 #include <QUrl>
 #include <QFile>
 #include <QtSql/QSqlDatabase>
-#include <QString>
+
 #include <QSet>
 
 namespace hoot

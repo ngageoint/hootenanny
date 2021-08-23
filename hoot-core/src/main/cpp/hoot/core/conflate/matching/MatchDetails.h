@@ -29,7 +29,7 @@
 
 
 // Qt
-#include <QString>
+
 #include <QVariant>
 
 // Standard

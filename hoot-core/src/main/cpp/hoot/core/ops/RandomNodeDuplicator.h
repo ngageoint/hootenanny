@@ -34,7 +34,7 @@
 #include <hoot/core/util/RngConsumer.h>
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

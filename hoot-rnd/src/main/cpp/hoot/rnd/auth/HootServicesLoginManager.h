@@ -32,7 +32,7 @@
 #include <hoot/core/io/HootNetworkRequest.h>
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

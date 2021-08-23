@@ -35,7 +35,7 @@
 #include <hoot/core/util/OpenCv.h>
 
 // Qt
-#include <QString>
+
 #include <QElapsedTimer>
 
 // Std

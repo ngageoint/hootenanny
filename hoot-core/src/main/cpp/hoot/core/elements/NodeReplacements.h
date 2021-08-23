@@ -29,7 +29,7 @@
 #define NODEREPLACEMENTS_H
 
 // Qt
-#include <QString>
+
 
 // TGS
 #include <tgs/HashMap.h>

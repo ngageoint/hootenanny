@@ -28,7 +28,7 @@
 #define MAP_MATCH_SCORING_UTILS_H
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

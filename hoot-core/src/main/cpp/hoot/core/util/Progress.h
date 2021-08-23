@@ -29,7 +29,7 @@
 #define HOOT_PROGRESS_H
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

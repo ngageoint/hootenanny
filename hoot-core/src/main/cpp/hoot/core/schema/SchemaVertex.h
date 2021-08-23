@@ -28,7 +28,7 @@
 #define __SCHEMA_VERTEX_H__
 
 // Qt
-#include <QString>
+
 #include <QStringList>
 
 // Standard

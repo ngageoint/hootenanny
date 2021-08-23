@@ -40,7 +40,7 @@
 
 // Qt
 #include <QRgb>
-#include <QString>
+
 
 // TGS
 #include <tgs/RasterOps/Image.hpp>

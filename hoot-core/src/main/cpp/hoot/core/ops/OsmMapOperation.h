@@ -40,7 +40,7 @@
 #include <boost/any.hpp>
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

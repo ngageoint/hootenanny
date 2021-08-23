@@ -32,7 +32,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 
 // Qt
-#include <QString>
+
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>

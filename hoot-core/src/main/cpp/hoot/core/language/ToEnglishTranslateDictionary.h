@@ -29,7 +29,7 @@
 #define TO_ENGLISH_TRANSLATE_DICTIONARY_H
 
 // Qt
-#include <QString>
+
 #include <QMap>
 
 // Boost

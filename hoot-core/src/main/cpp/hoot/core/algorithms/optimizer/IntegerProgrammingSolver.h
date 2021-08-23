@@ -39,7 +39,7 @@
 #endif
 
 // Qt
-#include <QString>
+
 
 // Standard
 #include <vector>

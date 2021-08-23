@@ -33,7 +33,7 @@
 #include <hoot/core/util/Progress.h>
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

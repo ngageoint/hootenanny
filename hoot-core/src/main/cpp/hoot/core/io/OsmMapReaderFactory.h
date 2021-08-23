@@ -28,7 +28,7 @@
 #define OSMMAPREADERFACTORY_H
 
 // Qt
-#include <QString>
+
 
 // hoot
 #include <hoot/core/elements/Status.h>

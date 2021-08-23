@@ -29,7 +29,7 @@
 
 // Qt
 #include <QList>
-#include <QString>
+
 
 namespace hoot
 {

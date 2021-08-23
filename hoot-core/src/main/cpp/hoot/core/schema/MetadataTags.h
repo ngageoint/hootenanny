@@ -29,7 +29,7 @@
 #define METADATA_TAGS_H
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

@@ -53,7 +53,7 @@
 #include <hoot/js/util/HootExceptionJs.h>
 
 // Qt
-#include <QString>
+
 #include <QList>
 
 // std

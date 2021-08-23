@@ -32,7 +32,7 @@
 #include <QList>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QString>
+
 #include <QUrl>
 #include <QtNetwork/QNetworkRequest>
 

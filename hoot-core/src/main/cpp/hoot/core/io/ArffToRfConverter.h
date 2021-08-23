@@ -29,7 +29,7 @@
 #define ARFFTORFCONVERTER_H
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

@@ -54,7 +54,7 @@
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
 
 // Qt
-#include <QString>
+
 #include <QStringList>
 
 // Standard

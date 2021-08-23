@@ -28,7 +28,7 @@
 #define SCOREMATRIX_H
 
 // Qt
-#include <QString>
+
 
 // Standard
 #include <cassert>

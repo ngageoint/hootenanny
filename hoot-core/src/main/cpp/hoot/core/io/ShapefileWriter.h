@@ -34,7 +34,7 @@
 
 // Qt
 #include <QDir>
-#include <QString>
+
 #include <QStringList>
 
 // Standard

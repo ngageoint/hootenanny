@@ -31,7 +31,7 @@
 #include <hoot/core/elements/Element.h>
 
 // Qt
-#include <QString>
+
 #include <QMultiMap>
 
 namespace hoot

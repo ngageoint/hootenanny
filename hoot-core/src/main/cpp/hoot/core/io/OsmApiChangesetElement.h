@@ -35,7 +35,7 @@
 #include <QList>
 #include <QMap>
 #include <QPair>
-#include <QString>
+
 #include <QTextStream>
 #include <QVector>
 #include <QXmlStreamReader>

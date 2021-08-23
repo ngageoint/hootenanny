@@ -29,7 +29,7 @@
 #define CONFPATH_H
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

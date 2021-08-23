@@ -29,7 +29,7 @@
 #define DBUTILS_H
 
 // Qt
-#include <QString>
+
 #include <QtSql/QSqlDatabase>
 
 namespace hoot

@@ -31,7 +31,7 @@
 // Qt
 #include <QHash>
 #include <QRegularExpression>
-#include <QString>
+
 #include <QStringList>
 #include <QVariant>
 

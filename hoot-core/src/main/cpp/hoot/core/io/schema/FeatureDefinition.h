@@ -28,7 +28,7 @@
 #define FEATUREDEFINITION_H
 
 // Qt
-#include <QString>
+
 
 // Standard
 #include <memory>

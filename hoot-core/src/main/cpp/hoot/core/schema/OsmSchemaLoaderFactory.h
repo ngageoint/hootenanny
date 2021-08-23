@@ -28,7 +28,7 @@
 #define OSMSCHEMALOADERFACTORY_H
 
 // Qt
-#include <QString>
+
 
 #include <memory>
 

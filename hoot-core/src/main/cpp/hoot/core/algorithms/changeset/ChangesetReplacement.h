@@ -32,7 +32,7 @@
 #include <geos/geom/Polygon.h>
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

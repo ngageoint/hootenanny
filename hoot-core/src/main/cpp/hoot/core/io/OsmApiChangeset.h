@@ -30,7 +30,7 @@
 
 //  Qt
 #include <QList>
-#include <QString>
+
 #include <QTextStream>
 #include <QVector>
 #include <QXmlStreamReader>

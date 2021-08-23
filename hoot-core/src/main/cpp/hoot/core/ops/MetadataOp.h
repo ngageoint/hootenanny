@@ -40,7 +40,7 @@
 #include <hoot/core/util/Configurable.h>
 
 // Qt
-#include <QString>
+
 #include <QPair>
 
 // geos

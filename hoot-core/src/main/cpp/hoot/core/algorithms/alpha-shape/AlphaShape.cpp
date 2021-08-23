@@ -46,7 +46,7 @@
 #include <geos/util/IllegalArgumentException.h>
 
 // Qt
-#include <QString>
+
 
 // Standard
 #include <stdlib.h>

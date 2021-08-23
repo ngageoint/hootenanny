@@ -30,7 +30,7 @@
 
 // Qt
 #include <QHash>
-#include <QString>
+
 
 // Standard Includes
 #include <istream>

@@ -32,7 +32,7 @@
 
 //  Qt
 #include <QHash>
-#include <QString>
+
 
 namespace hoot
 {

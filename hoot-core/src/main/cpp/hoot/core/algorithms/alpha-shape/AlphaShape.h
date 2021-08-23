@@ -37,7 +37,7 @@
 #include <ogr_core.h>
 
 // Qt
-#include <QString>
+
 
 // Standard
 #include <map>

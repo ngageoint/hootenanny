@@ -35,7 +35,7 @@
 
 // Qt
 #include <QHash>
-#include <QString>
+
 #include <QXmlDefaultHandler>
 #include <QXmlStreamReader>
 

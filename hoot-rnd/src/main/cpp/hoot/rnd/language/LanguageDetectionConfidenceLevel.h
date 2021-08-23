@@ -28,7 +28,7 @@
 #define LANGUAGE_DETECTION_CONFIDENCE_LEVEL_H
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

@@ -32,7 +32,7 @@
 #include <hoot/core/elements/Tags.h>
 
 // Qt
-#include <QString>
+
 #include <QtSql/QSqlDatabase>
 #include <QSqlQuery>
 #include <QCache>

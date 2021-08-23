@@ -28,7 +28,7 @@
 #define HOOT_HYBRID_NODE_H
 
 // Qt
-#include <QString>
+
 
 // Standard
 #include <sstream>

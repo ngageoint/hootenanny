@@ -34,7 +34,7 @@
 #include <hoot/js/io/DataConvertJs.h>
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

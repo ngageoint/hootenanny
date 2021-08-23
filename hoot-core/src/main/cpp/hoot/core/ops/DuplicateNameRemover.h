@@ -29,7 +29,7 @@
 #define DUPLICATENAMEREMOVER_H
 
 // Qt
-#include <QString>
+
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>

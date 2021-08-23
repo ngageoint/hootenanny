@@ -33,7 +33,7 @@
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

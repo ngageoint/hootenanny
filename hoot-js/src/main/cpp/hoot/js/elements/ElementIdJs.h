@@ -34,7 +34,7 @@
 #include <hoot/js/util/PopulateConsumersJs.h>
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

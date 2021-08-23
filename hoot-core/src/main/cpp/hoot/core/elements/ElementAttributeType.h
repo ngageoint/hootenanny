@@ -32,7 +32,7 @@
 #include <hoot/core/elements/ElementType.h>
 
 // Qt
-#include <QString>
+
 
 namespace hoot
 {

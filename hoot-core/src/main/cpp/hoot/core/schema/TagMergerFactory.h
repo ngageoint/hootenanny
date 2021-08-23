@@ -31,7 +31,7 @@
 #include <memory>
 
 // Qt
-#include <QString>
+
 #include <QHash>
 
 namespace hoot

@@ -38,7 +38,7 @@
 #include <hoot/core/util/Log.h>
 
 //Qt
-#include <QString>
+
 
 using namespace geos::geom;
 using namespace std;
