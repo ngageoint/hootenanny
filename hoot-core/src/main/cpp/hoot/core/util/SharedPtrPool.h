@@ -34,7 +34,7 @@
 #include <hoot/core/util/Log.h>
 
 // Standard
-#include <deque>
+
 #include <functional>
 #include <memory>
 

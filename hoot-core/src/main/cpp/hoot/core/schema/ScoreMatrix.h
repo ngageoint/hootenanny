@@ -32,7 +32,7 @@
 
 // Standard
 #include <cassert>
-#include <deque>
+
 #include <queue>
 #include <set>
 #include <vector>

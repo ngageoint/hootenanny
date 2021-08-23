@@ -40,7 +40,7 @@
 #include <QXmlStreamReader>
 
 // Standard
-#include <deque>
+
 
 namespace hoot
 {

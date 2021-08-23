@@ -40,7 +40,7 @@
 #include <QXmlDefaultHandler>
 
 // Standard
-#include <deque>
+
 
 class QXmlStreamWriter;
 

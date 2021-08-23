@@ -37,7 +37,7 @@
 
 // Standard
 #include <assert.h>
-#include <deque>
+
 #include <queue>
 #include <set>
 

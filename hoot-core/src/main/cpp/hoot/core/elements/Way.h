@@ -36,7 +36,7 @@
 #include <hoot/core/util/HootException.h>
 
 // Standard
-#include <deque>
+
 #include <memory>
 
 namespace hoot

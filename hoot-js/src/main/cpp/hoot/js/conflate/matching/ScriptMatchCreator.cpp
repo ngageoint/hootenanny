@@ -56,7 +56,7 @@
 #include <QElapsedTimer>
 
 // Standard
-#include <deque>
+
 #include <functional>
 #include <cmath>
 

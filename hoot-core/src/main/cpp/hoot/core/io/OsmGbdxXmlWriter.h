@@ -38,7 +38,7 @@
 #include <QXmlDefaultHandler>
 
 // Standard
-#include <deque>
+
 
 // geos
 #include <geos/geom/Envelope.h>

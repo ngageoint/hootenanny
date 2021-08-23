@@ -28,7 +28,7 @@
 #define SUBLINESTRINGMATCHER_H
 
 // Standard
-#include <deque>
+
 
 // hoot
 #include <hoot/core/util/Configurable.h>
