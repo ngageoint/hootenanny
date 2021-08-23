@@ -31,7 +31,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 
-
 using namespace geos::geom;
 using namespace std;
 

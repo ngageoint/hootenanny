@@ -36,7 +36,6 @@
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
-
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 

@@ -29,8 +29,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/NodeReplacements.h>
 
-
-
 namespace hoot
 {
 

@@ -22,60 +22,37 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/criterion/PositiveIdCriterion.h>
 
 namespace hoot
 {
 
-class TagMergerFactoryTest : public HootTestFixture
+class PositiveIdCriterionTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(TagMergerFactoryTest);
-  CPPUNIT_TEST(averageTest);
+  CPPUNIT_TEST_SUITE(PositiveIdCriterionTest);
+  CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void averageTest()
+  void runBasicTest()
   {
-    {
-      Tags t1;
-      t1["source"] = "ufd";
-      t1["status"] = "construction";
-      t1["uuid"] = "foo";
+    PositiveIdCriterion uut;
 
-      Tags t2;
-      t2["source"] = "mgcp";
-      t2["status"] = "functional";
-      t2["uuid"] = "bar";
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
 
-      Tags expected;
-      expected["source"] = "ufd;mgcp";
-      expected["status"] = "construction";
-      expected["uuid"] = "foo;bar";
-
-      Tags avg = TagMergerFactory::mergeTags(t1, t2, ElementType::Node);
-      compareTags(expected, avg);
-    }
+    node = std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
   }
-
-  void compareTags(const Tags& t1, const Tags& t2)
-  {
-    CPPUNIT_ASSERT_EQUAL(t1.size(), t2.size());
-
-    for (Tags::const_iterator it = t1.begin(); it != t1.end(); ++it)
-    {
-      CPPUNIT_ASSERT_EQUAL(t1[it.key()].toStdString(), t2[it.key()].toStdString());
-    }
-  }
-
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TagMergerFactoryTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PositiveIdCriterionTest, "quick");
 
 }

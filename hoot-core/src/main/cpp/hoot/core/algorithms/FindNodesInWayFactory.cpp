@@ -30,7 +30,6 @@
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
 
-
 using namespace geos::geom;
 using namespace std;
 

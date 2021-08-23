@@ -30,7 +30,6 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>
 

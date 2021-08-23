@@ -32,9 +32,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/DateTimeUtils.h>
 
-// Qt
-
-
 using namespace std;
 
 namespace hoot

@@ -22,10 +22,10 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef HAS_NAME_CRITERION_H
-#define HAS_NAME_CRITERION_H
+#ifndef POSITIVE_ID_CRITERION_H
+#define POSITIVE_ID_CRITERION_H
 
 #include <hoot/core/criterion/ElementCriterion.h>
 
@@ -33,21 +33,27 @@ namespace hoot
 {
 
 /**
- * @brief The HasNameCriterion class determines whether an element has a name tag.
+ * @brief The PositiveIdCriterion class is satisfied when elements have a positive ID.
  */
-class HasNameCriterion : public ElementCriterion
+class PositiveIdCriterion : public ElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::HasNameCriterion"; }
+  static QString className() { return "hoot::PositiveIdCriterion"; }
 
-  HasNameCriterion() = default;
-  ~HasNameCriterion() = default;
+  PositiveIdCriterion() = default;
+  ~PositiveIdCriterion() = default;
 
+  /**
+   * @see ElementCriterion
+   */
   bool isSatisfied(const ConstElementPtr& e) const override;
-  ElementCriterionPtr clone() override { return std::make_shared<HasNameCriterion>(); }
+  /**
+   * @see ElementCriterion
+   */
+  ElementCriterionPtr clone() override { return std::make_shared<PositiveIdCriterion>(); }
 
-  QString getDescription() const override { return "Identifies features that contain any name"; }
+  QString getDescription() const override { return "Identifies elements with a positive ID"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
@@ -55,4 +61,4 @@ public:
 
 }
 
-#endif // HAS_NAME_CRITERION_H
+#endif // POSITIVE_ID_CRITERION_H

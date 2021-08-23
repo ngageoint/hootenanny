@@ -34,9 +34,6 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/io/DataConvertJs.h>
 
-// Qt
-
-
 using namespace v8;
 
 namespace hoot

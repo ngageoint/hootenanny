@@ -31,7 +31,6 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/SchemaChecker.h>
 
-
 const double epsilon = 1e-6;
 
 namespace hoot

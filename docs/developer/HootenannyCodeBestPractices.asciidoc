@@ -91,5 +91,5 @@ cd $HOOT_HOME
 cppclean .
 -----
 
-Some hoot code causes it to crash and it doesn't pick up unnecessary includes in .cpp files.
+Some hoot code causes it to crash, and it also doesn't pick up unnecessary includes in .cpp files.
 

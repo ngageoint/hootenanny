@@ -29,11 +29,6 @@
 // hoot
 #include <hoot/core/util/ConfigUtils.h>
 
-
-
-// Qt
-
-
 namespace hoot
 {
 

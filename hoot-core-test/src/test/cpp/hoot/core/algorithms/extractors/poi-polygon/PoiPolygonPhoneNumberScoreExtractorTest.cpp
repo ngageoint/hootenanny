@@ -32,7 +32,6 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonPhoneNumberScoreExtractor.h>
 
-
 namespace hoot
 {
 

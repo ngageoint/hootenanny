@@ -30,7 +30,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/ops/DuplicateNameRemover.h>
 
-
 using namespace geos::geom;
 
 namespace hoot

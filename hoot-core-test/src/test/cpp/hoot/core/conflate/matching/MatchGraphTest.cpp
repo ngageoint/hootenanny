@@ -48,10 +48,6 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchGraph.h>
 
-
-// Standard
-
-
 // Tgs
 #include <tgs/StreamUtils.h>
 

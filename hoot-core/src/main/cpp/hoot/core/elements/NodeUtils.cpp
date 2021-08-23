@@ -30,8 +30,6 @@
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
 
-
-
 namespace hoot
 {
 

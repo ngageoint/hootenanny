@@ -30,10 +30,7 @@
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
 
-
-
 // Qt
-
 #include <QSqlError>
 #include <QTextStream>
 #include <QVariant>

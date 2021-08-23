@@ -30,7 +30,6 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/OverwriteTagMerger.h>
 
-
 namespace hoot
 {
 

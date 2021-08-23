@@ -29,8 +29,6 @@
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
 
-
-
 // Tbs
 #include <tbs/stats/TDistribution.h>
 

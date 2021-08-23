@@ -161,8 +161,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
             {
               // Since this class operates on elements with generic types, an additional check must
               // be performed here during conflation to enure we don't modify any element not
-              // associated with an active conflate matcher in the current conflation
-              // configuration.
+              // associated with an active conflate matcher in the current conflation configuration.
               if (_conflateInfoCache &&
                   (!_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n1, className()) ||
                    !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n2, className())))

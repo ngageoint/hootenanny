@@ -32,7 +32,6 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/RelationCircularRefRemover.h>
 
-
 namespace hoot
 {
 

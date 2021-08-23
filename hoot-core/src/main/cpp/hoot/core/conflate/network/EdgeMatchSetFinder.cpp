@@ -31,7 +31,6 @@
 #include <hoot/core/conflate/network/EdgeSublineMatch.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
 namespace hoot
 {
 

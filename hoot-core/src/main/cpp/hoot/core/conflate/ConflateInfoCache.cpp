@@ -510,7 +510,7 @@ bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(
 {
   if (_cachingEnabled)
   {
-    // Check the element can be conflated cache first.
+    // Check the cache to see if the element can be conflated first.
     const bool* cachedVal = _conflatableElementCache[element->getElementId()];
     if (cachedVal != nullptr)
     {

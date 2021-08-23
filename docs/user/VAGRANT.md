@@ -27,7 +27,10 @@ Once the prerequisites have been installed, you can set up the Hootenanny enviro
     git submodule update
     vagrant up
 
-~~Once initialization is complete, uncomment the `#, group: "tomcat8"` portion of the in Vagrantfile to allow the webapp to write to shared folders.~~  The previous workaround step is no longer needed as the provision script adds vagrant and tomcat8 users to each others group.
+Please note, cloning using SSH is supported only with an authenticated GitHub account. To use anonymous cloning, replace the first line with SSL cloning like this:
+
+    git clone https://github.com/ngageoint/hootenanny.git hoot --config core.autocrlf=input
+    
 
 Log into the Hootenanny virtual machine:
 
@@ -35,7 +38,7 @@ Log into the Hootenanny virtual machine:
     
 # Known issues
 
-A) If you get error like this, it might be that you need to install VirtualBox Guest Addittions manually:
+A) If you get error like this, it might be that you need to install VirtualBox Guest Additions manually:
 
 ```
 Vagrant was unable to mount VirtualBox shared folders. <...>
@@ -62,19 +65,21 @@ Follow these steps:
 3. Bring the box up again:
     
     vagrant up --provision
+    
+    If you get SSH error, retry same command.
 
 B) The compilation of C++ code is fairly slow with the default VirtualBox instance. The compilation time can take up to an hour. The code is built in silent logging mode, so if you see a long pause at some point after seeing the message: "Building Hoot...", compilation is what is occurring. To see more information from the compiler, you can add the environment variable, `BUILD_VERBOSE = 'yes'`, to `VagrantProvisionCentOS7.sh` before provisioning. See the "Faster C++ Compilation" section below for information on speeding this process up during development.
 
 # Windows hints
 
-It is possible to install Hootenanny on Windows using Vagrant. Alternatively, you can use WSL2 + [CentOS7 image](https://github.com/mishamosher/CentOS-WSL) and [RPM install](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md), which is somewhat easier, faster and light on PC requirements. However, at the moment, RPM version is w/o JOSM validation integrations.
+It is possible to install Hootenanny on Windows using Vagrant. Alternatively, you can use WSL2 + [CentOS7 image](https://github.com/mishamosher/CentOS-WSL) and [RPM install](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md). It is somewhat easier, faster and light on PC requirements. However, at the moment, this version does not have JOSM validation integrations. Also, WebUI won't work, because WSL2 does not yet support systemd that is needed to start Hootenanny-services (also Postgre and Tomcat).
 
 To install using Vagrant, first, make sure you have tools above. If you don't, then, if you have [Chocolatey](https://chocolatey.org/install), run in the elevated shell:
 
     cinst git vagrant virtualbox 
     
-Tt may be beneficial to disable Windows Defender (temporarily), otherwise build can fail with message "unable to ruby install some Ruby gem".
-Make sure you are using PowerShell and not PSCore to run Vagrant, otherwise it will complain that Powershell cannot be found.
+It may be beneficial to disable Windows Defender (temporarily), otherwise build can fail with message "unable to ruby install some Ruby gem". Looks like false positive.
+Make sure you are using PowerShell and not PSCore to run Vagrant, otherwise it will complain that Powershell cannot be found. For some reason, Powershell started from ConEmu does not work, Vagrant cannot detect version. Use Windows Terminal or plain Powershell.
    
 # Using Hootenanny
 
@@ -119,7 +124,7 @@ If you run into permission errors running the Tomcat deployment script, remove f
 
 Running a Hootenanny C++ development environment on bare metal against CentOS is recommended for the best performance. However if you want to do it with Vagrant, the following describes a way to speed up the C++ compile time with a RAM disk:
 
-Add the something like the following line to your `VagrantfileLocal`:
+Add the something like the following line to your `Vagrantfile.Local`:
 
 `config.vm.provision "hoot-ramdisk", type: "shell", :privileged => false, :inline => "/home/vagrant/hoot/scripts/developer/MakeHootRamDisk.sh <size>", run: "always"`
 
