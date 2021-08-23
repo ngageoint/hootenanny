@@ -54,13 +54,6 @@
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
 
-//GEOS
-
-
-// Qt
-
-
-
 namespace hoot
 {
 

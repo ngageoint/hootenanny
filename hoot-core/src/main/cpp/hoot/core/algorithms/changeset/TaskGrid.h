@@ -27,12 +27,6 @@
 #ifndef TASK_GRID_H
 #define TASK_GRID_H
 
-// Hoot
-
-
-// Qt
-
-
 namespace hoot
 {
 

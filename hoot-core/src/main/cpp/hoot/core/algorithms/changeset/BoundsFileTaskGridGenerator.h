@@ -30,9 +30,6 @@
 // Hoot
 #include <hoot/core/algorithms/changeset/TaskGridGenerator.h>
 
-// Qt
-
-
 namespace hoot
 {
 

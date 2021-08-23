@@ -36,7 +36,6 @@
 // Qt
 #include <QElapsedTimer>
 
-
 namespace hoot
 {
 

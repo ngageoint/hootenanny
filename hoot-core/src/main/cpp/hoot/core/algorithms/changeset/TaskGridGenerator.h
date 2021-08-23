@@ -30,12 +30,6 @@
 // Hoot
 #include <hoot/core/algorithms/changeset/TaskGrid.h>
 
-// GEOS
-
-
-// Qt
-
-
 namespace hoot
 {
 

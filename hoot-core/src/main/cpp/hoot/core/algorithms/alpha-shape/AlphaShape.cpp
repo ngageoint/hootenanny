@@ -34,7 +34,6 @@
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
-
 #include <hoot/core/util/StringUtils.h>
 
 // GEOS
@@ -44,9 +43,6 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Point.h>
 #include <geos/util/IllegalArgumentException.h>
-
-// Qt
-
 
 // Standard
 #include <stdlib.h>

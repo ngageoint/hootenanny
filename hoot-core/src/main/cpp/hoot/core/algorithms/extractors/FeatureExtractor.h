@@ -34,9 +34,6 @@
 // Qt
 #include <qnumeric.h>
 
-// Standard
-
-
 // tgs
 #include <tgs/RandomForest/DataFrame.h>
 

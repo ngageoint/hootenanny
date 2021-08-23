@@ -30,12 +30,6 @@
 // hoot
 #include <hoot/core/util/Units.h>
 
-// standard
-
-
-// Qt
-
-
 namespace hoot
 {
 

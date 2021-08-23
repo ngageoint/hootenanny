@@ -27,11 +27,9 @@
 #ifndef WAYSTRING_H
 #define WAYSTRING_H
 
+// Hoot
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
-
-// Qt
-
 
 namespace hoot
 {
