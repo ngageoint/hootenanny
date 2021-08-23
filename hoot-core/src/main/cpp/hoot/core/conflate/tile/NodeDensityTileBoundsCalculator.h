@@ -31,18 +31,10 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-
 #include <hoot/core/util/OpenCv.h>
 
 // Qt
-
 #include <QElapsedTimer>
-
-// Std
-
-
-// geos
-
 
 // GDAL
 #include <ogr_geometry.h>
@@ -50,7 +42,6 @@
 namespace hoot
 {
 
-class OsmMap;
 class Node;
 
 /**

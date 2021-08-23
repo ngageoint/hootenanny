@@ -34,13 +34,8 @@
 // Qt
 #include <QMultiHash>
 
-// Standard
-
-
 namespace hoot
 {
-
-class Match;
 
 class MatchConflicts
 {

@@ -32,18 +32,8 @@
 #include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/elements/OsmMap.h>
 
-// Qt
-
-
-// Standard
-
-
-
 namespace hoot
 {
-
-class Match;
-class Merger;
 
 /**
  * A factory for creating a merger from a set of matches (Singleton).

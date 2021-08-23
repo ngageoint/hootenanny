@@ -42,21 +42,10 @@
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
 
-
-// Standard
-
-
-
-
 namespace hoot
 {
 
-class Element;
 class Tags;
-class ElementId;
-class Node;
-class Way;
-class Relation;
 class ElementType;
 class Range;
 class TableType;

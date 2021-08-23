@@ -40,15 +40,10 @@
 // It would be nice if we could get rid of this ConfigOptions include since this class is included
 // in every test class.
 #include <hoot/core/util/ConfigOptions.h>
-
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/FileUtils.h>
 
-// Qt
-
-
 // Standard
-
 #include <sstream>
 
 inline QString toQString(const QString& s)

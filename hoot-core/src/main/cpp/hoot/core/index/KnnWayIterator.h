@@ -40,10 +40,6 @@
 namespace hoot
 {
 
-class Way;
-
-/**
- */
 class KnnWayIterator : public Tgs::KnnIterator
 {
 public:

@@ -42,7 +42,6 @@ class OGRLinearRing;
 class OGRLineString;
 class OGRPoint;
 class OGRPolygon;
-class OGRMultiPoint;
 
 namespace hoot
 {

@@ -37,7 +37,6 @@ namespace hoot
 {
 
 class FeatureExtractor;
-class WaySublineMatchString;
 class MatchClassification;
 
 class RfExtractorClassifier

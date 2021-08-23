@@ -27,16 +27,11 @@
 #ifndef EXPECTATIONINTERSECTION_H
 #define EXPECTATIONINTERSECTION_H
 
-// Standard
-
-
 // Tbs
 #include <tbs/stats/TDistribution.h>
 
 namespace hoot
 {
-
-class Settings;
 
 /**
  * @brief The ExpectationIntersection class provides the ability to segement an ordered set of

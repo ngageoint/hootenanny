@@ -38,9 +38,6 @@
 namespace hoot
 {
 
-class Way;
-class OsmMap;
-
 /**
  * @author RoadMatcher
  * @copyright GPL

@@ -33,10 +33,6 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/address/AddressNormalizer.h>
 
-// Qt
-
-
-
 namespace hoot
 {
 
@@ -44,7 +40,6 @@ class Tags;
 class Way;
 class OsmMap;
 class Address;
-class Node;
 class ElementId;
 class Relation;
 

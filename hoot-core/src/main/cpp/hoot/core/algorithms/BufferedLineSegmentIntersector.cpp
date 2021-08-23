@@ -26,10 +26,6 @@
  */
 #include "BufferedLineSegmentIntersector.h"
 
-// hoot
-
-
-
 // opencv
 #include <hoot/core/util/OpenCv.h>
 

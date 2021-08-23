@@ -34,19 +34,12 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 
-// Qt
-
-
-// GEOS
-
-
 namespace geos
 {
   namespace geom
   {
     class Geometry;
     class GeometryCollection;
-    class LinearRing;
     class LineString;
     class MultiLineString;
     class MultiPolygon;

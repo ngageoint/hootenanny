@@ -33,14 +33,10 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/conflate/phone/PhoneNumberParser.h>
 
-// Qt
-
-
 namespace hoot
 {
 
 class OsmMap;
-class Element;
 
 /**
  * @brief The PoiPolygonPhoneNumberScoreExtractor class scores phone number similarity between
