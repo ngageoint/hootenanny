@@ -37,9 +37,6 @@
 // Qt
 #include <QMultiHash>
 
-
-
-
 namespace hoot
 {
 

@@ -27,9 +27,6 @@
 #ifndef SUPERFLUOUS_CONFLATE_OP_REMOVER_H
 #define SUPERFLUOUS_CONFLATE_OP_REMOVER_H
 
-// Qt
-
-
 namespace hoot
 {
 

@@ -32,7 +32,6 @@
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonAlphaShapeDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonDistanceExtractor.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
-
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/MultiUseBuildingCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>

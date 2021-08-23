@@ -27,10 +27,6 @@
 #ifndef PERTY_TEST_RUN_RESULT_H
 #define PERTY_TEST_RUN_RESULT_H
 
-// Qt
-
-
-
 // Standard
 #include <math.h>
 

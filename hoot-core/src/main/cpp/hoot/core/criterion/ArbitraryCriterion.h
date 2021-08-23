@@ -31,10 +31,6 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/Element.h>
 
-
-// Qt
-
-
 // Standard
 #include <functional>
 

@@ -54,11 +54,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-
-// Qt
-
 
 // Standard
 #include <limits>

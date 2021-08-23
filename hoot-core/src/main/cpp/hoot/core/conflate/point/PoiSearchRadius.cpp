@@ -28,12 +28,7 @@
 #include "PoiSearchRadius.h"
 
 // Hoot
-
-
 #include <hoot/core/util/StringUtils.h>
-
-// Qt
-
 
 // Boost
 #include <boost/bind.hpp>

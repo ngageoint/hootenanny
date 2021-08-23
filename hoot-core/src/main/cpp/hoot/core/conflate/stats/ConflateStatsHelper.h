@@ -27,10 +27,6 @@
 #ifndef CONFLATE_STATS_HELPER_H
 #define CONFLATE_STATS_HELPER_H
 
-// Qt
-
-
-
 namespace hoot
 {
 

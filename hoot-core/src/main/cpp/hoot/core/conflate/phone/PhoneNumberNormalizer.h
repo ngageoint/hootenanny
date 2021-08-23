@@ -32,9 +32,6 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/Element.h>
 
-// Qt
-
-
 // libphonenumber
 #include <phonenumbers/phonenumberutil.h>
 

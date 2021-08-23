@@ -30,9 +30,6 @@
 // hoot
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 
-// Qt
-
-
 namespace hoot
 {
 

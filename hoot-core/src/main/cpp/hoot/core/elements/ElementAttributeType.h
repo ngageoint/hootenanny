@@ -28,11 +28,7 @@
 #define ELEMENTATTRIBUTETYPE_H
 
 // Hoot
-
 #include <hoot/core/elements/ElementType.h>
-
-// Qt
-
 
 namespace hoot
 {

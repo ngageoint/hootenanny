@@ -30,10 +30,6 @@
 // Hoot
 #include <hoot/core/algorithms/string/StringDistance.h>
 
-// Qt
-
-
-
 namespace hoot
 {
 

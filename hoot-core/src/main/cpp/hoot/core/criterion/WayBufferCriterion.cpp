@@ -35,11 +35,7 @@
 // Hoot
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
-
 #include <hoot/core/util/Factory.h>
-
-// Qt
-
 
 using namespace geos::geom;
 using namespace std;

@@ -27,13 +27,6 @@
 
 #include "TextFileWordWeightDictionary.h"
 
-// hoot
-
-
-// Qt
-
-
-
 namespace hoot
 {
 

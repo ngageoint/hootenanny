@@ -33,7 +33,6 @@
 // Qt
 #include <QMultiMap>
 
-
 namespace hoot
 {
 

@@ -35,9 +35,6 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-// Qt
-
-
 // Standard
 #include <iomanip>
 #include <math.h>

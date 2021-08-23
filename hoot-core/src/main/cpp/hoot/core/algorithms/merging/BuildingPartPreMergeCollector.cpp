@@ -31,7 +31,6 @@
 
 // Hoot
 #include <hoot/core/geometry/GeometryUtils.h>
-
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/StringUtils.h>
 

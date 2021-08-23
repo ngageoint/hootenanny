@@ -32,9 +32,6 @@
 #include <hoot/core/conflate/network/NetworkVertex.h>
 #include <hoot/core/elements/ElementProvider.h>
 
-// Qt
-
-
 namespace hoot
 {
 

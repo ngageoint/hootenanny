@@ -35,12 +35,6 @@
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/util/Settings.h>
 
-
-
-// Qt
-
-
-
 using namespace geos::geom;
 
 namespace hoot

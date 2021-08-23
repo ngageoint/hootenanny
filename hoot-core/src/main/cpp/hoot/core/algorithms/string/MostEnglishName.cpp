@@ -30,11 +30,6 @@
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
-
-// Qt
-
-
 // Standard
 #include <limits>
 

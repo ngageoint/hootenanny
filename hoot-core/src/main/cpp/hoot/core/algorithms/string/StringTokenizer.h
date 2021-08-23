@@ -31,9 +31,6 @@
 // Hoot
 #include <hoot/core/util/Configurable.h>
 
-// Qt
-
-
 namespace hoot
 {
 

@@ -27,18 +27,11 @@
 #ifndef PERTY_H
 #define PERTY_H
 
-// geos
-
-
 // hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/util/Units.h>
-
-// Qt
-
-
 
 namespace hoot
 {

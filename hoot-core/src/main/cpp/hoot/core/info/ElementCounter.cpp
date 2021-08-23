@@ -44,7 +44,6 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 
 // Qt
-
 #include <QElapsedTimer>
 
 namespace hoot

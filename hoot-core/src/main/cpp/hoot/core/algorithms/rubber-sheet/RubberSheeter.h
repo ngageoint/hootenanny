@@ -28,9 +28,6 @@
 #ifndef RUBBERSHEETER_H
 #define RUBBERSHEETER_H
 
-// Qt
-
-
 namespace hoot
 {
 

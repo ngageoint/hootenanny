@@ -27,9 +27,6 @@
 #ifndef FILTERED_BY_GEOMETRY_TYPE_CRITERIA_H
 #define FILTERED_BY_GEOMETRY_TYPE_CRITERIA_H
 
-// Qt
-
-
 namespace hoot
 {
 

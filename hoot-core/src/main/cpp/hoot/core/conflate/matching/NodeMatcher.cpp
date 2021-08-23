@@ -42,12 +42,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 
-
 // Tgs
 #include <tgs/Statistics/Normal.h>
-
-// Qt
-
 
 using namespace std;
 using namespace Tgs;

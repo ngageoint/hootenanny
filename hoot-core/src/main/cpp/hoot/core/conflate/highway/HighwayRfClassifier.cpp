@@ -43,9 +43,6 @@
 // Standard
 #include <fstream>
 
-// Qt
-
-
 using namespace std;
 using namespace Tgs;
 

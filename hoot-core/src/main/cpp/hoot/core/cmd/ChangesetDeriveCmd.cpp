@@ -38,7 +38,6 @@
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
-
 #include <QElapsedTimer>
 
 namespace hoot

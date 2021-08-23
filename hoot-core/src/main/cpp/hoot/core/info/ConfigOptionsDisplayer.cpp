@@ -30,10 +30,7 @@
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
 
-
-
 // Qt
-
 #include <QProcess>
 #include <QTextCodec>
 #include <QTextStream>

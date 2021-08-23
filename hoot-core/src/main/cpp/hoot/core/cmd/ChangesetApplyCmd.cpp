@@ -36,8 +36,6 @@
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
-
-
 #include <QElapsedTimer>
 
 using namespace std;

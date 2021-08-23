@@ -27,9 +27,6 @@
 #ifndef OPTIONS_VALIDATOR_H
 #define OPTIONS_VALIDATOR_H
 
-// Qt
-
-
 namespace hoot
 {
 

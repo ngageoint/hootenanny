@@ -28,9 +28,6 @@
 #ifndef RUBBERSHEETAPPLIER_H
 #define RUBBERSHEETAPPLIER_H
 
-// Qt
-
-
 namespace hoot
 {
 

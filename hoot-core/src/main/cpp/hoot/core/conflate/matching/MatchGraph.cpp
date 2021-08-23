@@ -26,8 +26,6 @@
  */
 #include "MatchGraph.h"
 
-#include <hoot/core/HootConfig.h>
-
 // Boost
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
@@ -45,14 +43,10 @@
 #endif
 
 // hoot
+#include <hoot/core/HootConfig.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
-
-
-
-// Qt
-
 
 // Tgs
 #include <tgs/DisjointSet/DisjointSetMap.h>

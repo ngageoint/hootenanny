@@ -27,23 +27,16 @@
 #ifndef ELEMENT_H
 #define ELEMENT_H
 
+// Hoot
 #include <hoot/core/elements/ElementData.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Status.h>
 #include <hoot/core/elements/Tags.h>
-
-// Hoot
 #include <hoot/core/util/Units.h>
 
 // Standard
 #include <cassert>
-
-
-
-
-// Qt
-
 
 namespace geos
 {

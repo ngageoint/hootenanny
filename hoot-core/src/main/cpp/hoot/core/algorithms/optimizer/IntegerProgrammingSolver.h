@@ -27,6 +27,7 @@
 #ifndef INTEGERPROGRAMMINGSOLVER_H
 #define INTEGERPROGRAMMINGSOLVER_H
 
+// Hoot
 #include <hoot/core/HootConfig.h>
 
 // GLPK
@@ -37,12 +38,6 @@
 #else
 # error "A valid glpk.h was not found during configure."
 #endif
-
-// Qt
-
-
-// Standard
-
 
 namespace hoot
 {

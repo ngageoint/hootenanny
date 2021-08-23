@@ -28,9 +28,6 @@
 #ifndef CONFIGOPTIONSDISPLAYER_H
 #define CONFIGOPTIONSDISPLAYER_H
 
-// Qt
-
-
 namespace hoot
 {
 

@@ -28,7 +28,6 @@
 #include "RoadCrossingPolyRule.h"
 
 // Hoot
-
 #include <hoot/core/visitors/SpatialIndexer.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
@@ -39,9 +38,6 @@
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
-
-// Qt
-
 
 // Boost
 #include <boost/bind.hpp>

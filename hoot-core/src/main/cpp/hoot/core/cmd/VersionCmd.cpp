@@ -42,12 +42,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/info/Version.h>
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/core/util/OpenCv.h>
-
-// Qt
-#include <Qt>
-
 
 #ifdef HOOT_HAVE_STXXL
 #include <stxxl/bits/version.h>

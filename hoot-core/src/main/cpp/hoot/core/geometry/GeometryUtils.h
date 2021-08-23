@@ -34,11 +34,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 
-// Qt
-
-
 // GEOS
-
 #include <geos/geom/Polygon.h>
 
 namespace geos

@@ -28,7 +28,6 @@
 #ifndef NODE_DENSITY_TILE_BOUNDS_CALCULATOR_H
 #define NODE_DENSITY_TILE_BOUNDS_CALCULATOR_H
 
-
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/OpenCv.h>

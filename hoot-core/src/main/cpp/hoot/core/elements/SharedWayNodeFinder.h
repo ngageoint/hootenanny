@@ -31,9 +31,6 @@
 // Hoot
 #include <hoot/core/elements/Way.h>
 
-// Qt
-
-
 namespace hoot
 {
 

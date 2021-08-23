@@ -27,18 +27,8 @@
 
 #include "NodeReplacements.h"
 
-// Hoot
-
-
-
-// Qt
-
-
-
-
 // Standard
 #include <fstream>
-
 
 using namespace std;
 

@@ -28,9 +28,6 @@
 #ifndef WORDWEIGHTDICTIONARY_H
 #define WORDWEIGHTDICTIONARY_H
 
-// Qt
-
-
 namespace hoot
 {
 

@@ -27,13 +27,6 @@
 
 #include "SqliteWordWeightDictionary.h"
 
-// hoot
-
-
-// Qt
-
-
-
 namespace hoot
 {
 

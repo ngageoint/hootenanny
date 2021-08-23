@@ -31,12 +31,6 @@
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/util/Units.h>
 
-// geos
-
-
-// Qt
-
-
 namespace hoot
 {
 

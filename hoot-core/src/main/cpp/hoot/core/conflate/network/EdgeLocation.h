@@ -30,9 +30,6 @@
 // hoot
 #include <hoot/core/conflate/network/NetworkEdge.h>
 
-// Qt
-
-
 // Tgs
 #include <tgs/HashMap.h>
 
