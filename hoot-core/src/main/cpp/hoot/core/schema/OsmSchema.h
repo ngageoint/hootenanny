@@ -249,8 +249,6 @@ public:
 };
 
 class OsmSchemaData;
-class Relation;
-class Way;
 
 /**
  * This class is re-entrant, but not thread safe (Singleton).

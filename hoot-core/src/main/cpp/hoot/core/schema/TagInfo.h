@@ -31,14 +31,8 @@
 // Hoot
 #include <hoot/core/elements/Element.h>
 
-// Qt
-
-
 namespace hoot
 {
-
-class OgrReader;
-class OsmMapReader;
 
 /**
  * Prints information about a set of tags

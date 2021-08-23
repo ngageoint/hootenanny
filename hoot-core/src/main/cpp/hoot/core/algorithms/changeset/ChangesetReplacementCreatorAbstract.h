@@ -37,12 +37,8 @@ namespace hoot
 {
 
 class ChangesetCreator;
-class ChainCriterion;
 class Settings;
 
-/**
- *
- */
 /**
  * @brief The ChangesetReplacementCreatorAbstract class is a high level abstract class for prepping
  * data for replacement changeset generation (changesets which replace features inside of a

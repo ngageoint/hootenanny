@@ -32,16 +32,8 @@
 #include <hoot/js/HootBaseJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 
-// Qt
-
-
-// Standard
-
-
 namespace hoot
 {
-
-class OsmMapOperation;
 
 class FeatureExtractorJs : public HootBaseJs
 {

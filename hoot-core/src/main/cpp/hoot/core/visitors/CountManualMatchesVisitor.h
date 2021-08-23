@@ -34,7 +34,6 @@
 namespace hoot
 {
 
-class OsmMap;
 
 /**
  * Counts matches made with ref tags by a manual matcher
@@ -47,7 +46,6 @@ public:
   static QString className() { return "hoot::CountManualMatchesVisitor"; }
 
   CountManualMatchesVisitor() : _numManualMatches(0) { }
-
   ~CountManualMatchesVisitor() = default;
 
   double getStat() const override { return _numManualMatches; }
@@ -55,9 +53,7 @@ public:
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override { return "Counts manual matches"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

@@ -41,7 +41,6 @@ namespace OAuth
 {
 class Consumer;
 class Token;
-class Client;
 }
 
 namespace hoot

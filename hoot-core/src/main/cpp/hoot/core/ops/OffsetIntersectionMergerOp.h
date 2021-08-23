@@ -32,15 +32,10 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
 
-// Standard
-
-
-
 namespace hoot
 {
 
 class OsmMap;
-class Way;
 
 /**
  * Locates intersections of a very specific type where each endpoint of a small way

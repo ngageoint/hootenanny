@@ -35,14 +35,10 @@
 // Qt
 #include <QMultiHash>
 
-
-
-
 namespace hoot
 {
 
 class OsmMap;
-class Way;
 
 /**
  * @brief The ReplaceRoundabouts class is being developed to handle roundabouts

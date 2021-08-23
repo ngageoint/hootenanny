@@ -34,18 +34,12 @@
 #include <hoot/core/util/Units.h>
 
 // Qt
-
-
 #include <QXmlDefaultHandler>
 #include <QXmlStreamReader>
-
-// Standard
-
 
 namespace hoot
 {
 
-class OsmMap;
 class Element;
 
 /**

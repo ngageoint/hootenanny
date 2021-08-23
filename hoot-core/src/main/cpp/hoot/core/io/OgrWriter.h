@@ -39,19 +39,11 @@
 // GDAL
 #include <ogr_spatialref.h>
 
-// Qt
-
-
-
-// Standard
-
-
 namespace hoot
 {
 
 class Feature;
 class Layer;
-class ElementProvider;
 
 /**
  * Writes a file to an OGR data source.

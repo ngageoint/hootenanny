@@ -28,13 +28,8 @@
 #ifndef OSMPBFWRITER_H
 #define OSMPBFWRITER_H
 
-// Qt
-
-
-
 // Standard Includes
 #include <istream>
-
 
 // TGS
 #include <tgs/HashMap.h>
@@ -47,9 +42,7 @@ namespace hoot
   namespace pb
   {
     class DenseNodes;
-    class Node;
     class PrimitiveGroup;
-    class Way;
   }
 
 class OsmPbfWriterData;

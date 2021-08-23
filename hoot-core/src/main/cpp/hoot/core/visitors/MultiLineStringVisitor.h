@@ -34,14 +34,8 @@
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementProvider.h>
 
-// standard
-
-
 namespace hoot
 {
-
-class Way;
-
 /**
  * Creates a multi-linestring out of all ways that are visited. There are no checks to be certain
  * that the ways are actually linear ways. Any way with < 2 nodes will be skipped.

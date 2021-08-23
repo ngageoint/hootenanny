@@ -33,15 +33,8 @@
 #include <hoot/core/io/ParallelBoundedApiReader.h>
 #include <hoot/core/util/Units.h>
 
-// Qt
-
-
-
 namespace hoot
 {
-
-class OsmMap;
-class Element;
 
 /**
  * Reads OSM XML output from an OSM API map call by bounding box.  Reading will fail without a bounding box
