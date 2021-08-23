@@ -45,7 +45,7 @@
 #include <QTime>
 
 // Standard
-#include <iostream>
+
 
 // TGS
 #include <tgs/StreamUtils.h>

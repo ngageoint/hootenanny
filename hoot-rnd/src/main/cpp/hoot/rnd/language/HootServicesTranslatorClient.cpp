@@ -49,7 +49,7 @@
 #include <boost/foreach.hpp>
 
 // std
-#include <iostream>
+
 #include <sstream>
 
 namespace hoot

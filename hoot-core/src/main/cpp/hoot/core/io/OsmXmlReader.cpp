@@ -50,7 +50,7 @@
 #include <QDateTime>
 
 // Standard
-#include <iostream>
+
 #include <cstdlib> // std::system()
 #include <cstdio> // for std::remove()
 

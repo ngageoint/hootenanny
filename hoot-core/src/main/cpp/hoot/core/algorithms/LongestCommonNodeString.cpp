@@ -31,7 +31,7 @@
 #include <hoot/core/elements/Way.h>
 
 // Standard
-#include <iostream>
+
 #include <vector>
 using namespace std;
 

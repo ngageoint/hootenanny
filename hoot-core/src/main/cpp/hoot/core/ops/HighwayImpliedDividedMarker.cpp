@@ -39,7 +39,7 @@
 #include <hoot/core/criterion/HighwayCriterion.h>
 
 // Standard
-#include <iostream>
+
 
 // TGS
 #include <tgs/StreamUtils.h>

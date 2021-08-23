@@ -39,7 +39,7 @@
 #include <hoot/core/conflate/ConflateUtils.h>
 
 // Standard
-#include <iostream>
+
 
 // TGS
 #include <tgs/StreamUtils.h>

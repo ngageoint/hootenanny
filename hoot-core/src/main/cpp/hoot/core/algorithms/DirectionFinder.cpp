@@ -42,7 +42,7 @@
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 // Standard
-#include <iostream>
+
 #include <vector>
 
 // TGS

@@ -36,7 +36,7 @@
 
 
 // Standard
-#include <iostream>
+
 #include <vector>
 
 namespace hoot

@@ -26,7 +26,7 @@
  */
 #include "HootApiDbWriter.h"
 
-#include <iostream>
+
 #include <fstream>
 
 // hoot

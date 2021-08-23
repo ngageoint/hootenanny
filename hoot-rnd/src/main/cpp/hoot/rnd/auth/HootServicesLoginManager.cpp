@@ -36,7 +36,7 @@
 #include <hoot/core/util/StringUtils.h>
 
 // Std
-#include <iostream>
+
 #include <string>
 
 // Boost

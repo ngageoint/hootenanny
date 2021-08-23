@@ -63,7 +63,7 @@
 #include <QStringBuilder>
 
 // Standard
-#include <iostream>
+
 #include <fstream>
 
 // TGS

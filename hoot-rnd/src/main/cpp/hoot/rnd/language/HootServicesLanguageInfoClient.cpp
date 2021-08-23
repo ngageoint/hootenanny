@@ -42,7 +42,7 @@
 #include <QVariant>
 
 // std
-#include <iostream>
+
 #include <sstream>
 
 namespace hoot

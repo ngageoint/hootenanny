@@ -34,7 +34,7 @@
 #include <hoot/core/util/HootException.h>
 
 // Standard
-#include <iostream>
+
 #include <math.h>
 
 using namespace std;

@@ -41,7 +41,7 @@
 
 // Standard
 #include <fstream>
-#include <iostream>
+
 using namespace std;
 
 namespace hoot

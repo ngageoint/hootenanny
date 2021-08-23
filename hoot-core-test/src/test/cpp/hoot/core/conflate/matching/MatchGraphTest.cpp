@@ -50,7 +50,7 @@
 #include <hoot/core/util/Log.h>
 
 // Standard
-#include <iostream>
+
 
 // Tgs
 #include <tgs/StreamUtils.h>

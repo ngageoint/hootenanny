@@ -28,7 +28,7 @@
 #include "Progress.h"
 
 // std
-#include <iostream>
+
 
 // Qt
 #include <QtCore/QStringBuilder>

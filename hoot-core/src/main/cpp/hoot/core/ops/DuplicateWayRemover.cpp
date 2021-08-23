@@ -45,7 +45,7 @@
 #include <hoot/core/util/Log.h>
 
 // Standard
-#include <iostream>
+
 #include <map>
 #include <vector>
 
