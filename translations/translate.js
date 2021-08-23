@@ -48,7 +48,8 @@ translate = {
       }
       else
       {
-        if (config.getOgrDebugLookupclash() == 'true')
+        // if (config.getOgrDebugLookupclash() == 'true')
+        if (hoot.Settings.get('ogr.debug.lookupclash') == 'true')
         {
           if (lookup[item[0]][item[1]] != ('' + item[2] + ',' + item[3]))
           {
@@ -146,7 +147,8 @@ translate = {
         }
         else
         {
-          if (config.getOgrDebugLookupclash() == 'true') print('Bkwd Clash: ' + item[2] + ' ' + item[3] + '  is ' + lookup[item[2]][item[3]] + '  tried to change to ' + [item[0], item[1]]);
+          // if (config.getOgrDebugLookupclash() == 'true') print('Bkwd Clash: ' + item[2] + ' ' + item[3] + '  is ' + lookup[item[2]][item[3]] + '  tried to change to ' + [item[0], item[1]]);
+          if (hoot.Settings.get('ogr.debug.lookupclash') == 'true') print('Bkwd Clash: ' + item[2] + ' ' + item[3] + '  is ' + lookup[item[2]][item[3]] + '  tried to change to ' + [item[0], item[1]]);
         }
       }
     } );
@@ -414,7 +416,8 @@ translate = {
         }
         else
         {
-          if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: ' + key + '=' + value);
+          // if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: ' + key + '=' + value);
+          if (hoot.Settings.get('ogr.debug.lookupcolumn') == 'true') hoot.logTrace('Column not found:: ' + key + '=' + value);
         }
       } // End !key in lookup
     } // End for key in inList

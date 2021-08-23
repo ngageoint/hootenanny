@@ -480,9 +480,9 @@ gifd = {
     if (gifd.configIn == undefined)
     {
       gifd.configIn = {};
-      gifd.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
-      gifd.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
-      gifd.configIn.OgrAddUuid = config.getOgrAddUuid();
+      gifd.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
+      gifd.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
+      gifd.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
 
       // Get any changes
       gifd.toChange = hoot.Settings.get('schema.translation.override');

@@ -58,7 +58,8 @@ mgcp = {
   // mgcp.fcodeList = translate.makeFcodeList(mgcp.rawSchema);
 
   // Now add an o2s[A,L,P] feature to the mgcp.rawSchema and an attribute to hold OSM tags
-  if (config.getOgrOutputFormat() == 'shp')
+  // if (config.getOgrOutputFormat() == 'shp')
+  if (hoot.Settings.get('ogr.output.format') == 'shp')
   {
     // Add OSMTAGS1-4 attributes
     // Build the MGCP fcode/attrs lookup table
@@ -82,7 +83,8 @@ mgcp = {
   mgcp.rawSchema = translate.addReviewFeature(mgcp.rawSchema);
 
   // Add empty "extra" feature layers if needed
-  if (config.getOgrNoteExtra() == 'file') mgcp.rawSchema = translate.addExtraFeature(mgcp.rawSchema);
+  // if (config.getOgrNoteExtra() == 'file') mgcp.rawSchema = translate.addExtraFeature(mgcp.rawSchema);
+  if (hoot.Settings.get('ogr.note.extra') == 'file') mgcp.rawSchema = translate.addExtraFeature(mgcp.rawSchema);
 
   // This function dumps the schema to the screen for debugging
   // translate.dumpSchema(mgcp.rawSchema);
@@ -2224,9 +2226,10 @@ mgcp = {
     if (mgcp.configIn == undefined)
     {
       mgcp.configIn = {};
-      mgcp.configIn.OgrAddUuid = config.getOgrAddUuid();
-      mgcp.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
-      mgcp.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+      mgcp.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
+      mgcp.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
+      mgcp.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      mgcp.configIn.ReaderInputFormat = hoot.Settings.get('reader.input.format');
 
       // Get any changes
       mgcp.toChange = hoot.Settings.get("schema.translation.override");
@@ -2393,15 +2396,15 @@ mgcp = {
     if (mgcp.configOut == undefined)
     {
       mgcp.configOut = {};
-      mgcp.configOut.OgrAddUuid = config.getOgrAddUuid();
-      mgcp.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
-      mgcp.configOut.OgrFormat = config.getOgrOutputFormat();
-      mgcp.configOut.OgrNoteExtra = config.getOgrNoteExtra();
-      mgcp.configOut.OgrThrowError = config.getOgrThrowError();
+      mgcp.configOut.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
+      mgcp.configOut.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      mgcp.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
+      mgcp.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
+      mgcp.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon
-      mgcp.toChange = hoot.Settings.get("schema.translation.override");
+      mgcp.toChange = hoot.Settings.get('schema.translation.override');
     }
 
     // Check if we have a schema. This is a quick way to workout if various lookup tables have been built

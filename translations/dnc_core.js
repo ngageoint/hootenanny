@@ -51,7 +51,7 @@ dnc = {
 
     // Now add an o2s[A,L,P] feature to the dnc.rawSchema
     // We can drop features but this is a nice way to see what we would drop
-    if (config.getOgrOutputFormat() == 'shp')
+    if (hoot.Settings.get('ogr.output.format') == 'shp')
     {
       // Add tag1, tag2, tag3 and tag4
       dnc.rawSchema = translate.addO2sFeatures(translate.addTagFeatures(dnc.rawSchema));
@@ -1330,9 +1330,9 @@ dnc = {
     if (dnc.configIn == undefined)
     {
       dnc.configIn = {};
-      dnc.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
-      dnc.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
-      dnc.configIn.OgrAddUuid = config.getOgrAddUuid();
+      dnc.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
+      dnc.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
+      dnc.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon
@@ -1461,10 +1461,10 @@ dnc = {
     if (dnc.configOut == undefined)
     {
       dnc.configOut = {};
-      dnc.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
-      dnc.configOut.OgrFormat = config.getOgrOutputFormat();
-      dnc.configOut.OgrThrowError = config.getOgrThrowError();
-      dnc.configOut.OgrAddUuid = config.getOgrAddUuid();
+      dnc.configOut.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      dnc.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
+      dnc.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
+      dnc.configOut.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon

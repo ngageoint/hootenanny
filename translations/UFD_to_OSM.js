@@ -31,7 +31,7 @@
 
 hoot.require('fcode_common');
 hoot.require('translate');
-hoot.require('config');
+// hoot.require('config');
 
 ufd = {
   // ##### Start of One2One Rules #####
@@ -3761,9 +3761,9 @@ function initialize()
   if (ufd.configIn == undefined)
   {
     ufd.configIn = {};
-    ufd.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
-    ufd.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
-    ufd.configIn.OgrAddUuid = config.getOgrAddUuid();
+    ufd.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
+    ufd.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
+    ufd.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
 
     // Get any changes
     ufd.toChange = hoot.Settings.get('schema.translation.override');
