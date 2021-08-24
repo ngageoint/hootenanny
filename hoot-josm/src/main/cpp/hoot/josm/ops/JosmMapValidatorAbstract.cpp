@@ -27,7 +27,6 @@
 #include "JosmMapValidatorAbstract.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/josm/jni/JavaEnvironment.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/josm/jni/JniConversion.h>

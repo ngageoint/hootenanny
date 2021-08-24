@@ -30,7 +30,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/elements/MapUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 
 namespace hoot

@@ -34,8 +34,6 @@
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementHashVisitor.h>
 
 namespace hoot

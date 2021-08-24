@@ -36,9 +36,6 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/validation/Validator.h>
 
-// Qt
-#include <QSet>
-
 namespace hoot
 {
 

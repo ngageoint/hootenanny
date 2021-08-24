@@ -26,13 +26,6 @@
  */
 #include "TextTable.h"
 
-// hoot
-#include <hoot/core/util/Log.h>
-
-// Qt
-#include <QSet>
-#include <QStringList>
-
 // Standard
 #include <algorithm>
 

@@ -27,6 +27,7 @@
 #ifndef GOLDENSECTIONSEARCH_H
 #define GOLDENSECTIONSEARCH_H
 
+// tbs
 #include <tbs/optimization/LineSearch.h>
 
 // Standard

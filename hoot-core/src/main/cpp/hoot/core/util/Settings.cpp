@@ -36,8 +36,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementVisitor.h>
 
 // Boost
@@ -45,12 +43,8 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
 
-// Qt
-#include <QStringList>
-
 // Standard
 #include <fstream>
-#include <iostream>
 #include <sstream>
 #include <unistd.h>
 

@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-/*
+/**
  * Identifies way end nodes, which are end way nodes of non-closed poly ways that may or may not
  * be shared among more than one way.
  *

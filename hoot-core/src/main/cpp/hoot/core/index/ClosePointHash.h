@@ -30,7 +30,6 @@
 
 // Standard
 #include <stdint.h>
-#include <vector>
 
 // TGS
 #include <tgs/HashMap.h>

@@ -38,7 +38,6 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-
 #include <hoot/core/TestUtils.h>
 
 namespace hoot

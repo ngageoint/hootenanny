@@ -32,7 +32,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootNetworkUtils.h>
-#include <hoot/core/util/Log.h>
+
 
 #include "OsmApiWriterTestServer.h"
 

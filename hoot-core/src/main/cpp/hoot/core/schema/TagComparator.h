@@ -28,14 +28,6 @@
 #ifndef TAGCOMPARATOR_H
 #define TAGCOMPARATOR_H
 
-// Standard
-#include <set>
-#include <vector>
-
-// Qt
-#include <QString>
-#include <QSet>
-
 namespace hoot
 {
 

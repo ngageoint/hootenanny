@@ -27,13 +27,14 @@
 
 #include "Box.h"
 
-// Standard Includes
+// Standard
 #include <algorithm>
 #include <assert.h>
 #include <iostream>
 #include <sstream>
 #include <stdlib.h>
 
+// tgs
 #include <tgs/RStarTree/RTreeNode.h>
 
 namespace Tgs

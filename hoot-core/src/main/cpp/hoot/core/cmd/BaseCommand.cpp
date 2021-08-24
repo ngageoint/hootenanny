@@ -34,12 +34,6 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/HootException.h>
-
-// Qt
-#include <QFileInfo>
-#include <QDir>
 
 using namespace geos::geom;
 

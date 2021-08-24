@@ -27,7 +27,6 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/HasAddressCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>

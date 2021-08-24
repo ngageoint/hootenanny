@@ -28,9 +28,6 @@
 #ifndef CONFPATH_H
 #define CONFPATH_H
 
-// Qt
-#include <QString>
-
 namespace hoot
 {
 
@@ -45,6 +42,7 @@ namespace hoot
 class ConfPath
 {
 public:
+
   ConfPath() = default;
 
   /**
@@ -64,6 +62,7 @@ public:
   static QString search(QString baseName, QString searchDir = "conf");
 
 private:
+
   static QStringList _find(QStringList filters, QString path);
   static QString _subDirSearch(QString baseName, QString searchDir);
 

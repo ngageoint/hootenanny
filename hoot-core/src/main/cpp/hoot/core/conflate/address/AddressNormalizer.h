@@ -32,9 +32,6 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/address/AddressTagKeys.h>
 
-// Qt
-#include <QSet>
-
 namespace hoot
 {
 

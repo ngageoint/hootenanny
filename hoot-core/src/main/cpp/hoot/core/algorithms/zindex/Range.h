@@ -27,10 +27,10 @@
 #ifndef RANGE_H
 #define RANGE_H
 
-#include <vector>
+
 
 //Qt includes
-#include <QString>
+
 
 namespace hoot
 {

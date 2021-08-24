@@ -38,7 +38,6 @@
 #include <tgs/RStarTree/HilbertRTree.h>
 
 // Standard
-#include <deque>
 #include <functional>
 
 namespace hoot

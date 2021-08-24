@@ -31,7 +31,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/rnd/language/HootServicesLanguageInfoResponseParser.h>
 
 namespace hoot

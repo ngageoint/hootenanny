@@ -43,7 +43,6 @@ using namespace hoot;
 
 // Qt
 #include <QCoreApplication>
-#include <QString>
 #include <QTime>
 #include <QString>
 

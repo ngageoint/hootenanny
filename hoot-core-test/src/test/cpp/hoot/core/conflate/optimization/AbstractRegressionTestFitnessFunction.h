@@ -31,9 +31,6 @@
 // Hoot
 #include <hoot/core/conflate/optimization/AbstractTestFitnessFunction.h>
 
-// Qt
-#include <QMap>
-
 namespace hoot
 {
 

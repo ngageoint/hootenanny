@@ -36,8 +36,6 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
-
-// node.js
 #include <hoot/js/SystemNodeJs.h>
 
 using namespace v8;

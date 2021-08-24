@@ -28,7 +28,6 @@
 #define CHILD_ELEMENT_CRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>

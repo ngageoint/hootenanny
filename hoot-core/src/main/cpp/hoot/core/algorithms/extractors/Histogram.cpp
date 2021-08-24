@@ -27,17 +27,10 @@
 #include "Histogram.h"
 
 // hoot
-#include <tgs/Statistics/Normal.h>
 #include <hoot/core/algorithms/WayHeading.h>
 
 // geos
 #include <geos/geom/Geometry.h>
-
-// hoot
-#include <hoot/core/util/Log.h>
-
-// Qt
-#include <QStringList>
 
 // Standard
 #include <assert.h>

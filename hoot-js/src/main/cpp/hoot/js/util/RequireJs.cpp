@@ -35,10 +35,6 @@
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 
-// Qt
-#include <QDir>
-#include <QFile>
-
 using namespace v8;
 
 namespace hoot

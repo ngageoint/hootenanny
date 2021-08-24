@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

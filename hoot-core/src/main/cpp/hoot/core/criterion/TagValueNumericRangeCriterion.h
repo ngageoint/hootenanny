@@ -34,8 +34,6 @@
 namespace hoot
 {
 
-class Element;
-
 /**
  * Finds numeric tag values falling within a range
  */

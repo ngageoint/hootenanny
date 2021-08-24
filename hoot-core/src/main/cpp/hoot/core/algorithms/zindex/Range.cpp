@@ -30,7 +30,7 @@
 #include <stdio.h>
 
 //hoot includes
-#include <hoot/core/util/HootException.h>
+
 
 namespace hoot
 {

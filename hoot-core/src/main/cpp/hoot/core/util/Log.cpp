@@ -28,14 +28,10 @@
 #include "Log.h"
 
 // hoot
-#include <hoot/core/util/HootException.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 // GDAL
 #include <cpl_error.h>
-
-// Qt
-#include <QDebug>
 
 // Standard
 #include <iostream>

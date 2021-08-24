@@ -32,7 +32,6 @@
 #include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/js/conflate/merging/ScriptMergerCreator.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/elements/OsmMapJs.h>

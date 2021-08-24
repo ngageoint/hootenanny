@@ -27,17 +27,14 @@
 
 #include "OsmPbfWriter.h"
 
-// Hoot Includes
+// Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/PbfConstants.h>
 #include <hoot/core/proto/FileFormat.pb.h>
 #include <hoot/core/proto/OsmFormat.pb.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-
 //  Version must be included last
 #include <hoot/core/info/Version.h>
 #include <hoot/core/info/VersionDefines.h>
@@ -45,10 +42,10 @@
 // Qt
 #include <qendian.h>
 
-// Standard Includes
+// Standard
 #include <fstream>
 
-// ZLib Includes
+// ZLib
 #include <zlib.h>
 
 //  htonl

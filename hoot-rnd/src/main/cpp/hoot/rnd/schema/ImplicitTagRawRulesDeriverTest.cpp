@@ -24,6 +24,7 @@
  *
  * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
+
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>

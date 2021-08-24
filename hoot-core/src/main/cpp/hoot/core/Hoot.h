@@ -27,9 +27,6 @@
 #ifndef HOOT_H
 #define HOOT_H
 
-// Standard
-#include <memory>
-
 class QString;
 
 namespace hoot

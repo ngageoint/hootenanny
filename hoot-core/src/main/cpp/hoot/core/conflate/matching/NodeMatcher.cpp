@@ -41,13 +41,9 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
-
-// Qt
-#include <QSet>
 
 using namespace std;
 using namespace Tgs;

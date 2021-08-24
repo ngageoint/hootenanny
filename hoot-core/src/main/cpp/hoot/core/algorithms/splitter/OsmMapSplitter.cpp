@@ -35,7 +35,7 @@
 
 //  Qt
 #include <QElapsedTimer>
-#include <QFileInfo>
+
 
 using geos::geom::Envelope;
 using std::vector;

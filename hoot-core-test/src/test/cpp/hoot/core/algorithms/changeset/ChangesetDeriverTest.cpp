@@ -30,7 +30,6 @@
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

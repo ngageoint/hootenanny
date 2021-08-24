@@ -30,8 +30,6 @@
 // Hoot
 #include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/elements/WayUtils.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

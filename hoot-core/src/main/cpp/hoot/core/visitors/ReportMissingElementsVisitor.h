@@ -31,7 +31,6 @@
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 

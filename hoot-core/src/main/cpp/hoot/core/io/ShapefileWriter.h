@@ -32,20 +32,8 @@
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/util/Configurable.h>
 
-// Qt
-#include <QDir>
-#include <QString>
-#include <QStringList>
-
-// Standard
-#include <vector>
-
 namespace hoot
 {
-
-class OsmMap;
-class Way;
-class Relation;
 
 /**
  * ShapefileWriter writes an OsmMap to Shapefile file format, and is capable of custom handling of

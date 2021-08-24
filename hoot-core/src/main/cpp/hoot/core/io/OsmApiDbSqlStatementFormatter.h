@@ -33,10 +33,6 @@
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/io/ApiDbSqlStatementFormatter.h>
 
-// Qt
-#include <QMap>
-#include <QStringList>
-
 namespace hoot
 {
 

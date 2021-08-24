@@ -27,8 +27,6 @@
 #ifndef COORDINATEEXT_H
 #define COORDINATEEXT_H
 
-#include <geos/geom/Coordinate.h>
-
 namespace hoot
 {
 
@@ -68,7 +66,7 @@ public:
 
   double crossProduct(CoordinateExt val) const
   {
-      return x * val.y - y * val.x;
+    return x * val.y - y * val.x;
   }
 
   CoordinateExt operator + (const CoordinateExt  val) const

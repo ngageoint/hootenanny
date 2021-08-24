@@ -28,8 +28,6 @@
 #include "MapUtils.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -39,9 +37,6 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
-
-// Std
-#include <set>
 
 namespace hoot
 {

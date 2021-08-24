@@ -28,9 +28,6 @@
 #ifndef APIENTITYDISPLAYINFO_H
 #define APIENTITYDISPLAYINFO_H
 
-// Qt
-#include <QString>
-
 namespace hoot
 {
 

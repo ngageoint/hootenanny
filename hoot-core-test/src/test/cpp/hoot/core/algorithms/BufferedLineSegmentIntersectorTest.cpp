@@ -33,7 +33,6 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/BufferedLineSegmentIntersector.h>
-#include <hoot/core/util/Log.h>
 
 // Tgs
 #include <tgs/Statistics/Random.h>

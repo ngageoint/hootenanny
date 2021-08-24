@@ -31,12 +31,6 @@
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/util/Configurable.h>
 
-// Qt
-#include <QSet>
-
-// Std
-#include <string>
-
 namespace hoot
 {
 

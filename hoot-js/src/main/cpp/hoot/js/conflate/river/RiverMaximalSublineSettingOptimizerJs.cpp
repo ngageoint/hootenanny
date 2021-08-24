@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/conflate/river/RiverMaximalSublineSettingOptimizer.h>
-#include <hoot/core/util/Log.h>
 
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/io/DataConvertJs.h>

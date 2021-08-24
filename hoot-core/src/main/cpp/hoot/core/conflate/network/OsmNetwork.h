@@ -31,9 +31,6 @@
 #include <hoot/core/conflate/network/NetworkEdge.h>
 #include <hoot/core/conflate/network/NetworkVertex.h>
 
-// Qt
-#include <QList>
-
 namespace hoot
 {
 

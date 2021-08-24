@@ -28,8 +28,6 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/NodeReplacements.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

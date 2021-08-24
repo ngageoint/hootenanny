@@ -30,7 +30,6 @@
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot

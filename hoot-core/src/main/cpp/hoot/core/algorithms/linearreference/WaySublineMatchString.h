@@ -27,14 +27,9 @@
 #ifndef WAYSUBLINEMATCHSTRING_H
 #define WAYSUBLINEMATCHSTRING_H
 
-
 // Hoot
 #include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
 #include <hoot/core/elements/OsmMap.h>
-
-// Std
-#include <string>
-#include <vector>
 
 namespace hoot
 {

@@ -30,7 +30,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/io/OsmJsonReader.h>

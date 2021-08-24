@@ -34,7 +34,6 @@
 #include <hoot/core/algorithms/string/ExactStringDistance.h>
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/language/ToEnglishTranslateStringDistance.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

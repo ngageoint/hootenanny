@@ -26,7 +26,7 @@
  */
 
 // hoot
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/visitors/ElementHashVisitor.h>
 

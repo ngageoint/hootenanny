@@ -27,9 +27,6 @@
 #ifndef OSMCHANGEWRITERFACTORY_H
 #define OSMCHANGEWRITERFACTORY_H
 
-// Qt
-#include <QString>
-
 namespace hoot
 {
 class OsmChangeWriter;

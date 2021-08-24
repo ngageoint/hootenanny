@@ -27,16 +27,11 @@
 
 #include "Progress.h"
 
-// std
-#include <iostream>
-
 // Qt
 #include <QtCore/QStringBuilder>
 
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 
 using namespace std;
 

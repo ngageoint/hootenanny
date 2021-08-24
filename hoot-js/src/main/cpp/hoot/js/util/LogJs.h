@@ -31,8 +31,8 @@
 #include <hoot/js/HootBaseJs.h>
 
 //  Qt
-#include <QHash>
-#include <QString>
+
+
 
 namespace hoot
 {

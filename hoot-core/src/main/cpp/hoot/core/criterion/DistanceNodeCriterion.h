@@ -28,9 +28,6 @@
 #ifndef DISTANCENODECRITERION_H
 #define DISTANCENODECRITERION_H
 
-// GEOS
-#include <geos/geom/Coordinate.h>
-
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/criterion/ElementCriterion.h>
@@ -38,8 +35,6 @@
 
 namespace hoot
 {
-
-class Element;
 
 /**
  * isSatisfied returns true if an element is within the specified distance of the given center

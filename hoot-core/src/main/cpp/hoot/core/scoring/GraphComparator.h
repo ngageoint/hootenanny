@@ -45,7 +45,6 @@ namespace hoot
 
 class DirectedGraph;
 class ShortestPath;
-class Way;
 
 class GraphComparator : public BaseComparator
 {

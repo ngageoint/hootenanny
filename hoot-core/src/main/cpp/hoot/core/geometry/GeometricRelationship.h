@@ -27,12 +27,6 @@
 #ifndef GEOMETRIC_RELATIONSHIP_H
 #define GEOMETRIC_RELATIONSHIP_H
 
-// Hoot
-#include <hoot/core/util/HootException.h>
-
-// Qt
-#include <QString>
-
 namespace hoot
 {
 

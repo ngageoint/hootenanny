@@ -31,9 +31,6 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 
-// GEOS
-#include <geos/geom/Envelope.h>
-
 namespace hoot
 {
 

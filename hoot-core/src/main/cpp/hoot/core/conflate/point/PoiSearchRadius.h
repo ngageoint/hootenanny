@@ -28,9 +28,6 @@
 #ifndef POI_SEARCH_RADIUS_H
 #define POI_SEARCH_RADIUS_H
 
-// Qt
-#include <QList>
-
 namespace hoot
 {
 

@@ -31,9 +31,6 @@
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 
-// Qt
-#include <QList>
-
 namespace hoot
 {
 

@@ -33,9 +33,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
-// geos
-#include <geos/geom/Coordinate.h>
-
 using namespace geos::geom;
 using namespace std;
 

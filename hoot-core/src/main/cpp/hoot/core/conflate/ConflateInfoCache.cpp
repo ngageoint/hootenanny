@@ -37,7 +37,6 @@
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
 

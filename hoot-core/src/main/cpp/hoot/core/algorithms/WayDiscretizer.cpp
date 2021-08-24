@@ -37,9 +37,6 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 
-// Standard
-#include <iostream>
-
 using namespace geos::geom;
 using namespace std;
 

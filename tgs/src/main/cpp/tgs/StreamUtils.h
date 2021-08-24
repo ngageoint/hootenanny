@@ -28,7 +28,7 @@
 #ifndef __TGS__STREAM_UTILS_H__
 #define __TGS__STREAM_UTILS_H__
 
-// Standard Includes
+// Standard
 #include <deque>
 #include <list>
 #include <map>
@@ -37,10 +37,12 @@
 #include <typeinfo>
 #include <vector>
 
+// Tgs
 #include <tgs/HashMap.h>
 #include <tgs/TgsException.h>
 #include <tgs/TgsExport.h>
 
+// Qt
 #ifdef QT_CORE_LIB
 # include <QHash>
 # include <QList>

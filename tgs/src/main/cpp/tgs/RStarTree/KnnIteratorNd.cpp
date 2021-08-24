@@ -27,16 +27,15 @@
 
 #include "KnnIteratorNd.h"
 
-// Standard Includes
+// Standard
 #include <queue>
 #include <vector>
-
-// Standard Includes
 #include <limits.h>
 #include <list>
 #include <queue>
 #include <set>
 
+// Tgs
 #include <tgs/TgsException.h>
 
 namespace Tgs

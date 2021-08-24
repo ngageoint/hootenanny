@@ -29,12 +29,6 @@
 #ifndef MAXIMALNEARESTSUBLINE_H
 #define MAXIMALNEARESTSUBLINE_H
 
-// GEOS
-#include <geos/geom/Coordinate.h>
-
-// Standard
-#include <vector>
-
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>

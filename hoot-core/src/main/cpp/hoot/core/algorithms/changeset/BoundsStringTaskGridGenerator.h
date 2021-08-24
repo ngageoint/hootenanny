@@ -30,9 +30,6 @@
 // Hoot
 #include <hoot/core/algorithms/changeset/TaskGridGenerator.h>
 
-// GEOS
-#include <geos/geom/Envelope.h>
-
 namespace hoot
 {
 

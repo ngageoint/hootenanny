@@ -29,10 +29,10 @@
 #define HOOT_NETWORK_REQUEST_H
 
 //  Qt
-#include <QList>
+
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QString>
+
 #include <QUrl>
 #include <QtNetwork/QNetworkRequest>
 
@@ -41,7 +41,6 @@ namespace OAuth
 {
 class Consumer;
 class Token;
-class Client;
 }
 
 namespace hoot

@@ -33,15 +33,11 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 
-// qt
-#include <QStringList>
+// Qt
 #include <QVariant>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlRecord>
-#include <QFile>
 #include <QTextStream>
 
 // Standard

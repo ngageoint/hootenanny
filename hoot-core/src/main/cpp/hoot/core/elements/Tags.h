@@ -32,14 +32,10 @@
 #include <hoot/core/util/Units.h>
 
 // Qt
-#include <QHash>
-#include <QString>
-#include <QStringList>
 #include <QRegExp>
 
 // Standard
 #include <stdint.h>
-#include <string>
 
 namespace hoot
 {

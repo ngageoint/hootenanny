@@ -27,7 +27,6 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>

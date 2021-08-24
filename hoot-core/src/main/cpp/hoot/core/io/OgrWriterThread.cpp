@@ -26,13 +26,11 @@
  */
 #include "OgrWriterThread.h"
 
+// hoot
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/js/v8Engine.h>
 
-// std
-#include <vector>
+#include <hoot/js/v8Engine.h>
 
 namespace hoot
 {

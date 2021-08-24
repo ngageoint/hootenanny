@@ -27,7 +27,7 @@
 #include "MatchCandidateCountVisitor.h"
 
 #include <hoot/core/conflate/matching/MatchCreator.h>
-#include <hoot/core/util/Log.h>
+
 
 using namespace std;
 

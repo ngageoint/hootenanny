@@ -31,7 +31,6 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
 
@@ -57,7 +56,6 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(true, g->isEmpty());
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GeometryToElementConverterTest, "quick");

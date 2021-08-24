@@ -27,12 +27,8 @@
 #ifndef __SCHEMA_CHECKER_H__
 #define __SCHEMA_CHECKER_H__
 
-
 // Hoot
 #include <hoot/core/schema/SchemaVertex.h>
-
-// Std
-#include <vector>
 
 namespace hoot
 {

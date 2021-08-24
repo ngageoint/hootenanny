@@ -36,8 +36,6 @@
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
-#include <hoot/core/algorithms/FindNodesInWayFactory.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 
 using namespace std;

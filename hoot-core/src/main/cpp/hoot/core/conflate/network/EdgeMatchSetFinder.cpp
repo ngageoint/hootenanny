@@ -30,7 +30,6 @@
 #include <hoot/core/conflate/network/EdgeMatch.h>
 #include <hoot/core/conflate/network/EdgeSublineMatch.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

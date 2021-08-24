@@ -25,12 +25,12 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-// Standard Includes
+// Standard
 #include <stdlib.h>
 #include <iostream>
 using namespace std;
 
-// CPP Unit Includes
+// CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
@@ -49,6 +49,7 @@ namespace Tgs
 class Tmp
 {
 public:
+
   double d;
   int id;
 

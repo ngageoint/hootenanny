@@ -37,15 +37,11 @@
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueTagValuesVisitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
-
-// Qt
-#include <QSet>
 
 using namespace std;
 

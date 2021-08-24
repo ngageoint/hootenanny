@@ -27,6 +27,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+
 #include <hoot/rnd/io/SparkChangesetWriter.h>
 
 namespace hoot

@@ -35,8 +35,6 @@
 namespace hoot
 {
 
-class Way;
-
 class WayDirectionCriterion : public ElementCriterion
 {
 public:

@@ -33,9 +33,6 @@
 #include <hoot/core/criterion/HasTypeCriterion.h>
 #include <hoot/core/io/IoUtils.h>
 
-// Qt
-#include <QFileInfo>
-
 namespace hoot
 {
 

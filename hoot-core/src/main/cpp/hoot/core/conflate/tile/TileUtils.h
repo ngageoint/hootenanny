@@ -28,9 +28,6 @@
 #ifndef TILE_UTILS_H
 #define TILE_UTILS_H
 
-// GEOS
-#include <geos/geom/Envelope.h>
-
 namespace hoot
 {
 

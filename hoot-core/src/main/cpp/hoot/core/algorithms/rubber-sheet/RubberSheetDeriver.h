@@ -28,9 +28,6 @@
 #ifndef RUBBERSHEETDERIVER_H
 #define RUBBERSHEETDERIVER_H
 
-// Qt
-#include <QString>
-
 namespace hoot
 {
 

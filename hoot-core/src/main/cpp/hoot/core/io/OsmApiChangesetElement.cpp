@@ -29,9 +29,9 @@
 
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/HootException.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 
+// Qt
 #include <QRegularExpression>
 
 namespace hoot
