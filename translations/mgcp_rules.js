@@ -126,6 +126,7 @@ mgcp.rules = {
     ['F_CODE','AP030','highway','trunk'], // Motorway
     ['F_CODE','AP030','highway','trunk_link'], // Motorway
     ['F_CODE','AP030','highway','unclassified'],
+    ['F_CODE','AP030','highway','road'], // Just in case...
     ['F_CODE','AP030','highway','yes'], // Just in case...
     // ['F_CODE','AP030','highway','living_street'],
     // ['F_CODE','AP030','highway','pedestrian'], // It is still a road
@@ -2319,15 +2320,6 @@ mgcp.rules = {
       'DB010':{'MCC':'SMC'},
       'DB070':{'MCC':'SMC'},
     },
-
-    // ##### Start of txtLength #####
-    // This list is for validateing the lengths of text attributes prior to export
-    txtLength : {
-    'CCN':254, 'F_CODE':5, 'IKO':255, 'NA2':80, 'NAM':80, 'NFI':18, 'NFN':18, 'SDP':254, 'SDV':20,
-    'TEXT':254, 'UID':36, 'VOI':11
-    },
-    //  'TXT':254,
-    // ##### End of txtLength #####
 
     // ##### Start of intList #####
     // This list is for validateing the integer attributes prior to export
