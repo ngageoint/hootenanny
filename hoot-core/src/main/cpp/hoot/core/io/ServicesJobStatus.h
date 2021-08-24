@@ -27,9 +27,6 @@
 #ifndef SERVICES_JOB_STATUS_H
 #define SERVICES_JOB_STATUS_H
 
-// Qt
-#include <QString>
-
 namespace hoot
 {
 

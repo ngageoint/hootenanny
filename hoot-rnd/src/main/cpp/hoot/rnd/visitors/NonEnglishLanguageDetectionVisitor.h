@@ -31,12 +31,9 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementVisitor.h>
+
 #include <hoot/rnd/language/LanguageDetector.h>
 #include <hoot/rnd/language/LanguageInfoProvider.h>
-
-// Qt
-#include <QMap>
-#include <QSet>
 
 namespace hoot
 {

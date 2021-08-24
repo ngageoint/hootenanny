@@ -29,7 +29,7 @@
 #ifndef __TGS__KNN_ITERATOR_ND_H__
 #define __TGS__KNN_ITERATOR_ND_H__
 
-// Standard Includes
+// Standard
 #include <cassert>
 #include <climits>
 #include <list>
@@ -37,6 +37,7 @@
 #include <set>
 #include <math.h>
 
+// tgs
 #include <tgs/HashMap.h>
 #include <tgs/TgsExport.h>
 #include <tgs/RStarTree/Iterator.h>

@@ -27,12 +27,6 @@
 #ifndef CHANGESET_STATS_FORMAT_H
 #define CHANGESET_STATS_FORMAT_H
 
-// Hoot
-#include <hoot/core/util/HootException.h>
-
-// Qt
-#include <QString>
-
 namespace hoot
 {
 

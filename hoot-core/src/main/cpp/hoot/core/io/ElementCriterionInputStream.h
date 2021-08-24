@@ -27,13 +27,12 @@
 #ifndef ELEMENTCRITERIONINPUTSTREAM_H
 #define ELEMENTCRITERIONINPUTSTREAM_H
 
+// Hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/io/ElementInputStream.h>
 
 namespace hoot
 {
-
-class ConstElementVisitor;
 
 class ElementCriterionInputStream : public ElementInputStream
 {

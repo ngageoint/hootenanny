@@ -27,7 +27,7 @@
 
 #include "SchemaTranslationVisitor.h"
 
-#include <vector>
+
 
 #include <geos/geom/Geometry.h>
 
@@ -40,8 +40,8 @@
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+
+
 
 using namespace geos::geom;
 using namespace std;

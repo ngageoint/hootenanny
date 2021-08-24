@@ -37,6 +37,7 @@
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/elements/Element.h>
 
+// Qt
 #include <QElapsedTimer>
 
 using namespace geos::geom;

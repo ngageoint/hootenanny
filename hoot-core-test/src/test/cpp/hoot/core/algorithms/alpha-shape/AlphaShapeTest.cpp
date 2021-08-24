@@ -30,7 +30,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/alpha-shape/AlphaShape.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/Log.h>
 
 // Standard
 #include <fstream>

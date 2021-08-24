@@ -32,7 +32,6 @@
 #include <hoot/core/io/ElementInputStream.h>
 
 // Qt
-#include <QFile>
 #include <QUrl>
 
 namespace hoot

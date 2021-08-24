@@ -33,7 +33,6 @@
 
 namespace hoot
 {
-class Element;
 
 /**
  * Does the element satisfy some crierion? If so, it'll return true.

@@ -40,9 +40,6 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Factory.h>
 
-// Qt
-#include <QDebug>
-
 using namespace std;
 
 namespace hoot

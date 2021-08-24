@@ -28,6 +28,21 @@
 #ifndef DELAUNAYTRIANGULATION_H
 #define DELAUNAYTRIANGULATION_H
 
+// Standard
+#include <list>
+#include <map>
+#include <set>
+#include <string>
+#include <vector>
+
+// tgs
+#include <tgs/DelaunayTriangulation/geom2d.h>
+
+namespace Tgs
+{
+
+class InternalEdge;
+
 /**
  * @copyright (Text Below)
  * @author Dani Lischinski
@@ -41,23 +56,7 @@
  * The code comes as-is, and if there are any flaws or problems with any Gems code, nobody involved
  * with Gems - authors, editors, publishers, or webmasters - are to be held responsible. Basically,
  * don't be a jerk, and remember that anything free comes with no guarantee.
- */
-
-// Standard Include
-#include <list>
-#include <map>
-#include <set>
-#include <string>
-#include <vector>
-
-#include <tgs/DelaunayTriangulation/geom2d.h>
-
-namespace Tgs
-{
-
-class InternalEdge;
-
-/**
+ *
  * This class is so small that it can be copied and stored willy nilly instead of a pointer.
  */
 class Edge

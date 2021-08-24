@@ -28,10 +28,6 @@
 #define STREAMUTILSJS_H
 
 // hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-
-// v8
 #include <hoot/js/HootJsStable.h>
 
 namespace hoot

@@ -33,9 +33,6 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
 
-// Qt
-#include <QFile>
-
 namespace hoot
 {
 

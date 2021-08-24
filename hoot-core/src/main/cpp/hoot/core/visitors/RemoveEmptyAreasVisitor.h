@@ -27,9 +27,7 @@
 #ifndef REMOVEEMPTYAREASVISITOR_H
 #define REMOVEEMPTYAREASVISITOR_H
 
-// Standard
-#include <memory>
-
+// hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
 

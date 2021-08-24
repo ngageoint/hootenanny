@@ -27,13 +27,6 @@
 #ifndef SCRIPT_SCHEMA_TRANSLATOR_FACTORY_H
 #define SCRIPT_SCHEMA_TRANSLATOR_FACTORY_H
 
-// Qt
-#include <QString>
-
-// Standard
-#include <string>
-#include <vector>
-
 namespace hoot
 {
 

@@ -30,7 +30,6 @@
 // Hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 // libphonenumber

@@ -31,19 +31,7 @@
 #include <hoot/core/io/PartialOsmMapWriter.h>
 
 // Qt
-#include <QDir>
-#include <QFile>
-#include <QHash>
-#include <QString>
 #include <QXmlDefaultHandler>
-
-// Standard
-#include <deque>
-
-// geos
-#include <geos/geom/Envelope.h>
-
-// Qt
 #include <QXmlStreamWriter>
 
 namespace hoot

@@ -27,7 +27,7 @@
 #ifndef ENVELOPEPROVIDER_H
 #define ENVELOPEPROVIDER_H
 
-#include <geos/geom/Envelope.h>
+
 
 namespace hoot
 {

@@ -27,14 +27,14 @@
 
 #include "GeometryPainter.h"
 
-// Local Includes
+// Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 
-// GDAL Includes
+// GDAL
 #include <ogrsf_frmts.h>
 
-// Qt Includes
+// Qt
 #include <QPainter>
 #include <QPainterPath>
 

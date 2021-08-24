@@ -31,11 +31,6 @@
 // GEOS
 #include <geos/geom/Geometry.h>
 
-// Standard
-#include <memory>
-#include <vector>
-
-//  Forward declaration
 namespace Tgs
 {
 class HilbertCurve;

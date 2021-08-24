@@ -28,7 +28,6 @@
 #include "OsmApiDbBulkInserter.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/DbUtils.h>
@@ -37,9 +36,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
-#include <QFileInfo>
 #include <QStringBuilder>
-#include <QDir>
 #include <QUuid>
 #include <QLatin1String>
 #include <QTextStream>

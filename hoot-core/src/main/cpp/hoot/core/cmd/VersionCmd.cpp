@@ -42,12 +42,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/info/Version.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/OpenCv.h>
-
-// Qt
-#include <Qt>
-#include <QStringList>
 
 #ifdef HOOT_HAVE_STXXL
 #include <stxxl/bits/version.h>
@@ -85,6 +80,7 @@
 #if HOOT_HAVE_LIBICUI18N
 #include <unicode/uversion.h>
 #endif
+
 //  Proj4
 #include <proj.h>
 

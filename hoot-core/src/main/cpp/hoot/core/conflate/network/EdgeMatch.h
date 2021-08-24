@@ -27,8 +27,10 @@
 #ifndef EDGEMATCH_H
 #define EDGEMATCH_H
 
+// Tgs
 #include <tgs/HashMap.h>
 
+// Hoot
 #include <hoot/core/conflate/network/EdgeString.h>
 
 // Qt

@@ -32,9 +32,6 @@
 // Hoot
 #include <hoot/core/util/Configurable.h>
 
-// Qt
-#include <QString>
-
 // Boost
 #include <boost/property_tree/json_parser.hpp>
 

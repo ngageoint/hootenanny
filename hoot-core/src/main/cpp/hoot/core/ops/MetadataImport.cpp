@@ -31,9 +31,6 @@
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Factory.h>
 
-// geos
-//#include <geos/geom/GeometryFactory.h>
-
 using namespace geos::geom;
 using namespace std;
 

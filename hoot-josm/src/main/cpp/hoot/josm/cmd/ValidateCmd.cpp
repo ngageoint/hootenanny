@@ -29,7 +29,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/josm/validation/MapValidator.h>
 
 namespace hoot

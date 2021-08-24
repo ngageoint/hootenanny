@@ -34,10 +34,6 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
-#include <hoot/core/util/Log.h>
-
-// Standard
-#include <iostream>
 
 // Tgs
 #include <tgs/StreamUtils.h>

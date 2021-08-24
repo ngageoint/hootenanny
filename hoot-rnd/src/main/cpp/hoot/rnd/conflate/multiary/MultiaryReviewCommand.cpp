@@ -33,7 +33,7 @@
 //  Hoot
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 
 // Boost

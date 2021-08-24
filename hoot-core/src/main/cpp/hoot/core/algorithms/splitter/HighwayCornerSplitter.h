@@ -34,15 +34,11 @@
 
 // Qt
 #include <QMultiHash>
-#include <QSet>
-#include <QMap>
-#include <vector>
 
 namespace hoot
 {
 
 class OsmMap;
-class Way;
 
 /**
  * @brief The HighwayCornerSplitter class given an OsmMap, splits ways at sharp (or rounded, if

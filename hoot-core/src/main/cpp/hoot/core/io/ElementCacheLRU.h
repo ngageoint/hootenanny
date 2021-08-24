@@ -27,7 +27,7 @@
 #ifndef ELEMENTCACHELRU_H
 #define ELEMENTCACHELRU_H
 
-#include <map>
+
 #include <utility>
 
 #include <boost/date_time/posix_time/posix_time.hpp>

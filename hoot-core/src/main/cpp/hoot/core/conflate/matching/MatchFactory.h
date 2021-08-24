@@ -33,9 +33,6 @@
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/util/Configurable.h>
 
-// Standard
-#include <vector>
-
 // GEOS
 #include <geos/geom/Geometry.h>
 

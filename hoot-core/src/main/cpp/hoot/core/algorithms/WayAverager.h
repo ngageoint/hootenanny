@@ -43,8 +43,6 @@ namespace geos
 namespace hoot
 {
 
-class Way;
-
 class WayAverager
 {
 public:

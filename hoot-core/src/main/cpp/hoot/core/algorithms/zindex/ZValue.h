@@ -27,8 +27,8 @@
 #ifndef ZVALUE_H
 #define ZVALUE_H
 
-#include <string>
-#include <vector>
+
+
 
 namespace hoot
 {

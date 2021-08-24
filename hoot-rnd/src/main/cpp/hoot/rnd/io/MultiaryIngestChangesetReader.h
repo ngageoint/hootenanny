@@ -32,9 +32,6 @@
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
 
-// Qt
-#include <QFile>
-
 namespace hoot
 {
 

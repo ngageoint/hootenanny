@@ -27,9 +27,10 @@
 
 #include "Page.h"
 
-// Standard Includes
+// Standard
 #include <malloc.h>
 
+// Tgs
 #include <tgs/RStarTree/PageStore.h>
 
 namespace Tgs

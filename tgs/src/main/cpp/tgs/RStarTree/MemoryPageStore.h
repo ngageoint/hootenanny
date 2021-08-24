@@ -32,6 +32,7 @@
 #include <memory>
 #include <vector>
 
+// tgs
 #include <tgs/TgsExport.h>
 #include <tgs/RStarTree/PageStore.h>
 
@@ -46,7 +47,6 @@ namespace Tgs
   public:
 
     MemoryPageStore(int pageSize);
-
     ~MemoryPageStore() = default;
 
     std::shared_ptr<Page> createPage() override;
@@ -56,7 +56,6 @@ namespace Tgs
     std::shared_ptr<Page> getPage(int id) override;
 
     int getPageCount() const override { return (int)_pages.size(); }
-
     int getPageSize() const override;
 
     void save() override { }

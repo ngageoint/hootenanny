@@ -28,10 +28,6 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/ExpectationIntersection.h>
-#include <hoot/core/util/Log.h>
-
-// OpenCV
-// #include <opencv/cv.h>
 
 // Boost
 #include <boost/random/normal_distribution.hpp>

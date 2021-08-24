@@ -30,7 +30,6 @@
 #include <hoot/core/algorithms/subline-matching/MaximalNearestSublineMatcher.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 
 // Tgs

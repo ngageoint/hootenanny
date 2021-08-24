@@ -35,9 +35,6 @@
 namespace hoot
 {
 
-class Relation;
-class OsmMap;
-
 /**
  * @brief The MultiLineStringLocation class represents a location on a multi-line feature.
  */

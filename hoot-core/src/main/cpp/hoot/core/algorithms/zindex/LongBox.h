@@ -28,10 +28,10 @@
 #define LONGBOX_H
 
 //Std Includes
-#include <vector>
+
 
 //Qt includes
-#include <QString>
+
 
 namespace hoot
 {

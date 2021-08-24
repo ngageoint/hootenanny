@@ -27,7 +27,6 @@
 #include "NodeDensityPlotter.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/EnvelopeProvider.h>
 #include <hoot/core/io/OsmMapReader.h>

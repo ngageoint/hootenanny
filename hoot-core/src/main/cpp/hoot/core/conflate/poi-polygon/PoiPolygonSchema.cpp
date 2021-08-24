@@ -33,7 +33,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
-#include <QSet>
 #include <QStringBuilder>
 
 namespace hoot

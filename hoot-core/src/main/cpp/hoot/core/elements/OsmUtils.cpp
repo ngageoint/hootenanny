@@ -28,7 +28,6 @@
 #include "OsmUtils.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/elements/WayUtils.h>
 

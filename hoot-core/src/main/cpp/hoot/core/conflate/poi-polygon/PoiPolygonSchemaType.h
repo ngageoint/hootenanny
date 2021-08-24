@@ -27,12 +27,6 @@
 #ifndef POI_POLYGON_SCHEMA_TYPE_H
 #define POI_POLYGON_SCHEMA_TYPE_H
 
-// Hoot
-#include <hoot/core/util/HootException.h>
-
-// Qt
-#include <QString>
-
 namespace hoot
 {
 

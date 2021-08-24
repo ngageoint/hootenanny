@@ -32,9 +32,6 @@
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/info/ApiEntityInfo.h>
 
-// Standard
-#include <vector>
-
 namespace hoot
 {
 

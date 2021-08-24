@@ -29,10 +29,10 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmPgCsvWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/util/Log.h>
+
 
 //  Geos
-#include <geos/geom/Coordinate.h>
+
 
 using namespace geos::geom;
 

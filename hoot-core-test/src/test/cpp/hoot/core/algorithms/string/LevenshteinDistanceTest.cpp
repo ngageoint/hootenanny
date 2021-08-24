@@ -32,13 +32,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
-#include <hoot/core/util/Log.h>
-
-// Qt
-#include <QString>
-
-// Standard
-#include <string>
 
 namespace hoot
 {

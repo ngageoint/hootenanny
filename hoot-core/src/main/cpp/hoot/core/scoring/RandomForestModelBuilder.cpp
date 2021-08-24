@@ -37,12 +37,10 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <fstream>
-#include <iostream>
 
 // Tgs
 #include <tgs/RandomForest/RandomForest.h>

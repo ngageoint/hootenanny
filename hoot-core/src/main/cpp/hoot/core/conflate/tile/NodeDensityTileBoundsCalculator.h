@@ -28,21 +28,12 @@
 #ifndef NODE_DENSITY_TILE_BOUNDS_CALCULATOR_H
 #define NODE_DENSITY_TILE_BOUNDS_CALCULATOR_H
 
-
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/HootException.h>
 #include <hoot/core/util/OpenCv.h>
 
 // Qt
-#include <QString>
 #include <QElapsedTimer>
-
-// Std
-#include <vector>
-
-// geos
-#include <geos/geom/Envelope.h>
 
 // GDAL
 #include <ogr_geometry.h>
@@ -50,7 +41,6 @@
 namespace hoot
 {
 
-class OsmMap;
 class Node;
 
 /**

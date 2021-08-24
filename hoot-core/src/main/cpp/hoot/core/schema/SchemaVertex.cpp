@@ -28,7 +28,6 @@
 #include "SchemaVertex.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/Tags.h>
 
 using namespace std;

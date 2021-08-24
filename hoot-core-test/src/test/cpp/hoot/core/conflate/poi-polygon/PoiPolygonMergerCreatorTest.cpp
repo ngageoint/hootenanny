@@ -37,7 +37,6 @@
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
 using namespace std;

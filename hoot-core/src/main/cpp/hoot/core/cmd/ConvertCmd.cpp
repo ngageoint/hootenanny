@@ -35,13 +35,10 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QElapsedTimer>
-#include <QStringList>
-#include <QFileInfo>
 
 using namespace std;
 

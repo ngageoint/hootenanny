@@ -34,7 +34,6 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/schema/TranslatedTagDifferencer.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

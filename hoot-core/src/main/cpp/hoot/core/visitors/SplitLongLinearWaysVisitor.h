@@ -32,14 +32,12 @@
 
 // Std
 #include <cassert>
-#include <string>
 
 namespace hoot
 {
 
 class OsmMap;
 class Element;
-class Settings;
 
 class SplitLongLinearWaysVisitor : public ElementOsmMapVisitor
 {

@@ -30,12 +30,6 @@
 // Hoot
 #include <hoot/core/info/ApiEntityInfo.h>
 
-// Qt
-#include <QString>
-
-// Standard
-#include <string>
-
 namespace hoot
 {
 

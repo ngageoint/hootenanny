@@ -30,7 +30,6 @@
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/util/Log.h>
 
 using namespace std;
 

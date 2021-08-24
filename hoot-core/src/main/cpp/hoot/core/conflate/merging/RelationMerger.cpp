@@ -45,8 +45,7 @@ _deleteRelation2(true)
 {
 }
 
-void RelationMerger::merge(
-  const ElementId& elementId1, const ElementId& elementId2)
+void RelationMerger::merge(const ElementId& elementId1, const ElementId& elementId2)
 {
   if (elementId1 == elementId2)
   {

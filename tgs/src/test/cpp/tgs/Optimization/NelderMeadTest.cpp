@@ -25,18 +25,18 @@
  * @copyright Copyright (C) 2015, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit Includes
+// CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Standard Includes
+// Standard
 #include <iostream>
 #include <math.h>
 using namespace std;
 
-// TGS Includes
+// TGS
 #include <tgs/TgsException.h>
 #include <tgs/Optimization/NelderMead.h>
 
@@ -48,6 +48,7 @@ class NelderMeadTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(NelderMeadTest);
   CPPUNIT_TEST(simpleTest);
   CPPUNIT_TEST_SUITE_END();
+
 public:
 
   // taken from https://github.com/blinry/nelder-mead-optimizer/blob/master/t/test.cpp

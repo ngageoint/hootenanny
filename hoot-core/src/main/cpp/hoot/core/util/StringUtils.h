@@ -28,10 +28,6 @@
 #ifndef STRINGUTILS_H
 #define STRINGUTILS_H
 
-// Qt
-#include <QStringList>
-#include <QSet>
-
 // Boost
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>

@@ -29,7 +29,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/OverwriteTagMerger.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

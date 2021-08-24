@@ -32,7 +32,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Settings.h>

@@ -29,11 +29,8 @@
 
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/HootException.h>
 
 // Qt
-#include <QFile>
 #include <QProcess>
 #include <QTextCodec>
 #include <QTextStream>

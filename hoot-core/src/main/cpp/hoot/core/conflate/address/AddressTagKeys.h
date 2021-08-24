@@ -32,7 +32,6 @@
 
 // Qt
 #include <QMultiMap>
-#include <QSet>
 
 namespace hoot
 {

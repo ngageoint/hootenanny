@@ -41,10 +41,6 @@
 #include <hoot/core/util/Units.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 
-// Standard
-#include <iostream>
-#include <vector>
-
 // TGS
 #include <tgs/StreamUtils.h>
 

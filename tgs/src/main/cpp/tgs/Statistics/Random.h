@@ -28,11 +28,12 @@
 #ifndef __TGS__RANDOM_H__
 #define __TGS__RANDOM_H__
 
-// Standard Includes
+// Standard
 #include <cstdlib>
 #include <memory>
 #include <vector>
 
+// tgs
 #include <tgs/TgsExport.h>
 
 namespace Tgs

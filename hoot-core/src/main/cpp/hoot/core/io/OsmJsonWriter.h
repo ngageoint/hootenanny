@@ -34,15 +34,7 @@
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
 
 // Qt
-#include <QFile>
-#include <QHash>
-#include <QString>
 #include <QXmlDefaultHandler>
-
-// Standard
-#include <deque>
-
-class QXmlStreamWriter;
 
 namespace hoot
 {

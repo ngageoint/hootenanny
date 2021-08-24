@@ -29,7 +29,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/ops/DuplicateNameRemover.h>
-#include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
 

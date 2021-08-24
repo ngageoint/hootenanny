@@ -26,7 +26,6 @@
  */
 #include "QuantileAggregator.h"
 
-
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>

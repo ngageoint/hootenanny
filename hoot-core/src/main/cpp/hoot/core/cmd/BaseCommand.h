@@ -33,6 +33,7 @@
 #include <hoot/core/elements/Status.h>
 
 // Qt
+#include <QString>
 #include <QStringList>
 
 namespace hoot

@@ -25,7 +25,6 @@
  * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
-
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
@@ -36,9 +35,6 @@
 
 // Tgs
 #include <tgs/Statistics/Random.h>
-
-// Qt
-#include <QDebug>
 
 // Standard
 #include <stdio.h>

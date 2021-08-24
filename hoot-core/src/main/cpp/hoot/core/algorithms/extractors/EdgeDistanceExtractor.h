@@ -33,11 +33,7 @@
 
 namespace hoot
 {
-class ValueAggregator;
 
-/**
- *
- */
 /**
  * @brief The EdgeDistanceExtractor class calculates the distance from one set of lines to the other
  * set of lines.

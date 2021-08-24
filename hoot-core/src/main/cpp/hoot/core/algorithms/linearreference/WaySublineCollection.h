@@ -27,15 +27,9 @@
 #ifndef WAYSUBLINECOLLECTION_H
 #define WAYSUBLINECOLLECTION_H
 
-// Standard
-#include <vector>
-
 // Hoot
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/util/Units.h>
-
-// Qt
-#include <QString>
 
 namespace hoot
 {

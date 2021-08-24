@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/rnd/auth/HootServicesLoginManager.h>
 
 namespace hoot

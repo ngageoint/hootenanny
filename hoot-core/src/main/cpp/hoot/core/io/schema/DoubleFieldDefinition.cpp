@@ -26,9 +26,6 @@
  */
 #include "DoubleFieldDefinition.h"
 
-// hoot
-#include <hoot/core/util/Log.h>
-
 // Standard
 #include <limits>
 #include <sstream>

@@ -29,12 +29,7 @@
 
 // Hoot
 #include <hoot/core/elements/Element.h>
-
-// node.js
 #include <hoot/js/HootBaseJs.h>
-
-// Qt
-#include <QString>
 
 namespace hoot
 {

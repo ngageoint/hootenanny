@@ -32,6 +32,7 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 
+// Qt
 #include <QElapsedTimer>
 
 namespace hoot

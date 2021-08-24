@@ -656,6 +656,7 @@ help with this.
 
 ==== Core Specific
 
+* Use the variable name `uut` to denote the class being tested in a test.
 * During testing you can verify test output via CPPUnit asserts against the state of the output data 
 or via file comparison (`HOOT_FILE_EQUALS`) of the output with known good output. An advantage to 
 using file comparison for testing output is that the test code is less verbose and tedious to 

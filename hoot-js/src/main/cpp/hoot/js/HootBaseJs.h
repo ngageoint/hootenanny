@@ -27,7 +27,7 @@
 #ifndef HOOT_BASE_JS_H
 #define HOOT_BASE_JS_H
 
-// node.js
+// hoot
 #include <hoot/js/SystemNodeJs.h>
 
 namespace hoot

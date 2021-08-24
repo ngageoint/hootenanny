@@ -28,13 +28,14 @@
 #ifndef __TGC_KNN_ITERATOR_H__
 #define __TGC_KNN_ITERATOR_H__
 
-// Standard Includes
+// Standard
 #include <climits>
 #include <cmath>
 #include <list>
 #include <queue>
 #include <set>
 
+// tgs
 #include <tgs/HashMap.h>
 #include <tgs/TgsExport.h>
 #include <tgs/RStarTree/Iterator.h>

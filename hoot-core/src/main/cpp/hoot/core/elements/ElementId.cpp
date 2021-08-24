@@ -27,9 +27,6 @@
 
 #include "ElementId.h"
 
-// Hoot
-#include <hoot/core/util/Log.h>
-
 namespace hoot
 {
 

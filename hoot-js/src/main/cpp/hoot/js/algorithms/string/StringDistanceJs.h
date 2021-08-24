@@ -31,8 +31,6 @@
 // hoot
 #include <hoot/core/algorithms/string/StringDistance.h>
 #include <hoot/js/io/DataConvertJs.h>
-
-// node.js
 #include <hoot/js/HootBaseJs.h>
 
 namespace hoot

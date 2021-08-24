@@ -33,7 +33,6 @@
 namespace hoot
 {
 
-class HighwayMatchVisitor;
 class HighwayClassifier;
 class SublineStringMatcher;
 class TagAncestorDifferencer;
