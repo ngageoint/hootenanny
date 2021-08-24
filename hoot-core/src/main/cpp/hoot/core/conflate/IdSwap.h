@@ -29,7 +29,7 @@
 #define IDSWAP_H
 
 #include <array>
-#include <map>
+
 
 //  Hoot
 #include <hoot/core/elements/ElementId.h>

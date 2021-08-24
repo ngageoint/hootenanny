@@ -28,9 +28,6 @@
 #ifndef BOUNDED_COMMAND_H
 #define BOUNDED_COMMAND_H
 
-// geos
-#include <geos/geom/Envelope.h>
-
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
 

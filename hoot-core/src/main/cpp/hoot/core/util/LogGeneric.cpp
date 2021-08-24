@@ -35,11 +35,10 @@
 
 // Qt
 #include <QDateTime>
-#include <QDebug>
 
 // Standard
 #include <iomanip>
-#include <iostream>
+
 using namespace std;
 
 namespace hoot

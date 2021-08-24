@@ -24,9 +24,11 @@
  *
  * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
+
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Node.h>
+
 #include <hoot/rnd/io/MultiaryIngestChangesetReader.h>
 
 namespace hoot

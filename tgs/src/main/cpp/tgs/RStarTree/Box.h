@@ -28,11 +28,12 @@
 #ifndef __TGS__BOX_H__
 #define __TGS__BOX_H__
 
-// Standard Includes
+// Standard
 #include <string>
 #include <string.h> // includes memcpy on Linux
 #include <vector>
 
+// tgs
 #include <tgs/TgsExport.h>
 
 namespace Tgs
@@ -46,48 +47,37 @@ public:
   static const int MAX_DIMENSIONS = 4;
 
   Box();
-
   Box(const Box& b);
-
   Box(int dimensions);
-
+  // yes, technically this introduces a circular dependency, but the alternative is horribly
+  // slow. Bleh! :P
+  Box& expand(const BoxInternalData& b);
+  Box& expand(const Box& b);
   ~Box() = default;
 
   double calculateOverlap(const Box& b) const;
-
   double calculateOverlap(const BoxInternalData& b) const;
 
   double calculatePerimeter() const;
 
   double calculateVolume() const;
 
-  // yes, technically this introduces a circular dependency, but the alternative is horribly
-  // slow. Bleh! :P
-  Box& expand(const BoxInternalData& b);
-
-  Box& expand(const Box& b);
-
-  void setBounds(int d, double lower, double upper);
-
-  int getDimensions() const { return _dimensions; }
-
-  double getLowerBound(int d) const;
-
-  double getUpperBound(int d) const;
-
-  double getLowerBoundRaw(int d) const;
-
-  double getUpperBoundRaw(int d) const;
-
   bool isValid() const;
 
   bool operator==(const Box& b) const;
 
-  void setDimensions(int d);
-
   std::string toString() const;
 
   bool isContained(const Box& b) const;
+
+  int getDimensions() const { return _dimensions; }
+  double getLowerBound(int d) const;
+  double getUpperBound(int d) const;
+  double getLowerBoundRaw(int d) const;
+  double getUpperBoundRaw(int d) const;
+
+  void setDimensions(int d);
+  void setBounds(int d, double lower, double upper);
 
 private:
 

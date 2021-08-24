@@ -29,15 +29,8 @@
 #define CONFIGURATION_H
 
 // Qt
-#include <QHash>
 #include <QRegularExpression>
-#include <QString>
-#include <QStringList>
 #include <QVariant>
-
-// Standard
-#include <set>
-#include <string>
 
 namespace hoot
 {

@@ -26,7 +26,7 @@
  */
 #include "Schema.h"
 
-#include <hoot/core/util/HootException.h>
+
 
 namespace hoot
 {

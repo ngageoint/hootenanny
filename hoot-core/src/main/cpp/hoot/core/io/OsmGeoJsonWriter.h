@@ -31,9 +31,6 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-// Qt
-#include <QString>
-
 namespace hoot
 {
 
@@ -170,6 +167,6 @@ private:
 
 };
 
-} // hoot
+}
 
 #endif // OSM_GEOJSON_WRITER_H

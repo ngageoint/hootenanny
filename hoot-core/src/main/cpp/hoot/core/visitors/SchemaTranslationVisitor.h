@@ -34,9 +34,6 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
 
-// Qt
-#include <QString>
-
 namespace hoot
 {
 

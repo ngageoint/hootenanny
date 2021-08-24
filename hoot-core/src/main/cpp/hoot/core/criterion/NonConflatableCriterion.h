@@ -34,9 +34,6 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
 
-// Qt
-#include <QList>
-
 namespace hoot
 {
 

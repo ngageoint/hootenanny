@@ -27,9 +27,6 @@
 #ifndef DISTANCE_H
 #define DISTANCE_H
 
-// GEOS
-#include <geos/geom/Coordinate.h>
-
 // Hoot
 #include <hoot/core/elements/Node.h>
 
@@ -41,7 +38,6 @@ class Distance
 public:
 
   double static euclidean(const Node& n1, const Node& n2);
-
   double static euclidean(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
 };
 

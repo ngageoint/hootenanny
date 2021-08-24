@@ -31,7 +31,6 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
 
-
 namespace hoot
 {
 

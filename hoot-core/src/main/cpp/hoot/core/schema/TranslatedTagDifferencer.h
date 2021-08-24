@@ -32,9 +32,6 @@
 #include <hoot/core/schema/TagDifferencer.h>
 #include <hoot/core/util/Configurable.h>
 
-// Qt
-#include <QSet>
-
 namespace hoot
 {
 

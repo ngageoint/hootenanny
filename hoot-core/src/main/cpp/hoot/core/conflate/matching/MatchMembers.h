@@ -27,9 +27,6 @@
 #ifndef MATCHMEMBERS_H
 #define MATCHMEMBERS_H
 
-// Hoot
-#include <hoot/core/util/HootException.h>
-
 // Standard
 #include <math.h>
 

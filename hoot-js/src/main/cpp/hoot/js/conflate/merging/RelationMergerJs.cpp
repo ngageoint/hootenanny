@@ -27,7 +27,7 @@
 #include "RelationMergerJs.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/conflate/merging/RelationMerger.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/OsmMap.h>

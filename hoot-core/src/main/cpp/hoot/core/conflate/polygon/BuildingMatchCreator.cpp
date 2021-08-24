@@ -41,7 +41,6 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
-#include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
@@ -56,8 +55,7 @@
 #include <tgs/RStarTree/IntersectionIterator.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
 
-//Qt
-#include <QFile>
+// Qt
 #include <QElapsedTimer>
 
 using namespace geos::geom;

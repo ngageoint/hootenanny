@@ -35,12 +35,7 @@
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-
-// Qt
-#include <QFile>
 
 namespace hoot
 {

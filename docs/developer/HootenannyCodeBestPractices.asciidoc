@@ -3,7 +3,7 @@
 
 === General
 
-Many of these come directly from https://sonarcloud.io/dashboard?id=hoot[Sonar] recommendations.
+Some of these come directly from https://sonarcloud.io/dashboard?id=hoot[Sonar] recommendations.
 
 * Keep as much implementation out of header files as possible. The implementations of simple 
 getters/setters are ok in a header file.
@@ -31,6 +31,8 @@ for some test writing tips.
 
 === Core Specific
 
+* If you're using a commonly used class from a 3rd party library and its already included in 
+`HootCoreStable.h`, then you don't need to add an include for it.
 * Keep as much logic out of classes inheriting `BaseCommand` as possible. Create a new class to hold
 logic needed to be executed by the command.
 * Make use of configuration options via the `Configurable` interface to keep functionality 
@@ -57,6 +59,7 @@ processed.
 `OsmMapOperation` only when the data processor needs a copy of a complete map to performs its logic.
 * Use classes inheriting `ElementCriterion` to identify data based on its properties.
 * Use streaming I/O whereever possible to avoid loading large maps into memory all at once.
+* Use `OsmMapReaderFactory`, `OsmMapWriterFactory`, and `IoUtils` for I/O purposes when applicable.
 * Place experimental code into the `hoot-rnd` library. This code is expected to be at a lower TRL 
 than code in `hoot-core`, and we can be a little lenient on test coverage.
 * Make use of the `ApiEntityInfo` interface to appropriately describe map operators (classes 
@@ -75,4 +78,18 @@ macro.
 * See the "Hootenanny Specific Test Writing Guidelines" section in the 
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[testing document] 
 for some test writing tips.
+
+== Cleaning Up Header Includes
+
+Maybe we work this into the build and/or find a better tool, but this is what has been tried so far:
+
+Use `cppclean`:
+-----
+sudo yum install python-pip
+sudo pip install --upgrade cppclean
+cd $HOOT_HOME
+cppclean .
+-----
+
+Some hoot code causes it to crash, and it also doesn't pick up unnecessary includes in .cpp files.
 

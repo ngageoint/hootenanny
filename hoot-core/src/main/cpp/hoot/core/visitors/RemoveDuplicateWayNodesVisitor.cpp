@@ -30,15 +30,11 @@
 // Hoot
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/conflate/ConflateUtils.h>
-
-// Qt
-#include <QVector>
 
 namespace hoot
 {

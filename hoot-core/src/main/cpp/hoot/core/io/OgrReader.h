@@ -32,16 +32,8 @@
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/util/ProgressReporter.h>
 
-// Qt
-#include <QHash>
-#include <QString>
-#include <QStringList>
-
 // geos
 #include <ogr_spatialref.h>
-
-// Standard
-#include <vector>
 
 namespace hoot
 {

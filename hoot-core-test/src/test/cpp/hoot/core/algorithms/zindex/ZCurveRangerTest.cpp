@@ -25,15 +25,11 @@
  * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
-// geos
-#include <geos/geom/Coordinate.h>
-
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/zindex/ZCurveRanger.h>
 #include <hoot/core/algorithms/zindex/Range.h>
 #include <hoot/core/algorithms/zindex/BBox.h>
-#include <hoot/core/util/Log.h>
 
 using namespace std;
 

@@ -27,11 +27,6 @@
 #ifndef OSMSCHEMALOADERFACTORY_H
 #define OSMSCHEMALOADERFACTORY_H
 
-// Qt
-#include <QString>
-
-#include <memory>
-
 namespace hoot
 {
 

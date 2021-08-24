@@ -26,10 +26,6 @@
  */
 #include "ReleaseTest.h"
 
-// hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/HootException.h>
-
 // Qt
 #include <QTextStream>
 

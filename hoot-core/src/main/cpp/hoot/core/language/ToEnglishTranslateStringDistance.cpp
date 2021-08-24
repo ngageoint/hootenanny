@@ -30,11 +30,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
-
-// Qt
-#include <QString>
-#include <QStringList>
 
 namespace hoot
 {

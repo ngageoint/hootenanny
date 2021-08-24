@@ -27,13 +27,8 @@
 #include "InternalIdReserver.h"
 
 // Qt
-#include <QHash>
 #include <QSqlError>
 #include <QSqlQuery>
-
-// hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

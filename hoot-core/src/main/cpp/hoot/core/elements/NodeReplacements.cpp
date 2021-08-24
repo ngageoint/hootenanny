@@ -27,18 +27,8 @@
 
 #include "NodeReplacements.h"
 
-// Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-
-// Qt
-#include <QDir>
-#include <QFile>
-#include <QStringList>
-
 // Standard
 #include <fstream>
-#include <set>
 
 using namespace std;
 

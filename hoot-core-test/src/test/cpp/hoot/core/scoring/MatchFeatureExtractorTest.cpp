@@ -32,7 +32,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 
 // Tgs

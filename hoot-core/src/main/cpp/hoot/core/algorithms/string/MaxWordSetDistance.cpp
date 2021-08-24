@@ -30,9 +30,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/ScoreMatrix.h>
 
-// Qt
-#include <QStringList>
-
 using namespace std;
 
 namespace hoot

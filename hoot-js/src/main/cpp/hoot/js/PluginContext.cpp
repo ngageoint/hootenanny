@@ -29,13 +29,10 @@
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
-#include <hoot/core/util/HootException.h>
+
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
-
-// Qt
-#include <QFile>
 
 using namespace std;
 using namespace v8;

@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/elements/ElementListener.h>
-#include <hoot/core/util/HootException.h>
 
 namespace hoot
 {

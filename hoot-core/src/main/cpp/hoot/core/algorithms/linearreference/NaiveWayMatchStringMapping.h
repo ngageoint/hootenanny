@@ -32,8 +32,6 @@
 namespace hoot
 {
 
-class WayString;
-
 class NaiveWayMatchStringMapping : public WayMatchStringMapping
 {
 public:

@@ -32,10 +32,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 
-// qt
-#include <QDir>
-#include <QFile>
-
 namespace hoot
 {
 

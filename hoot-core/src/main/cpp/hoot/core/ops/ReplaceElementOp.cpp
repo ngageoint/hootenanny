@@ -30,7 +30,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 
 using namespace std;
 

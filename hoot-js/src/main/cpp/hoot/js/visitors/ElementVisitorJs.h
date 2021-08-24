@@ -27,11 +27,8 @@
 #ifndef VISITORJS_H
 #define VISITORJS_H
 
-// node.js
+// Hoot
 #include <hoot/js/HootBaseJs.h>
-
-// Qt
-#include <QString>
 
 namespace hoot
 {

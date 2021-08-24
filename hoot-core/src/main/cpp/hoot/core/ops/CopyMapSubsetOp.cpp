@@ -29,7 +29,6 @@
 // Hoot
 #include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/util/Factory.h>

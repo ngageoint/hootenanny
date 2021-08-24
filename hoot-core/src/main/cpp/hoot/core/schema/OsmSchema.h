@@ -31,14 +31,10 @@
 // hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/schema/SchemaVertex.h>
-
-// Qt
-#include <QSet>
-#include <QString>
+#include <hoot/core/util/HootException.h>
 
 // Standard
 #include <stdint.h>
-#include <vector>
 
 namespace hoot
 {
@@ -253,8 +249,6 @@ public:
 };
 
 class OsmSchemaData;
-class Relation;
-class Way;
 
 /**
  * This class is re-entrant, but not thread safe (Singleton).

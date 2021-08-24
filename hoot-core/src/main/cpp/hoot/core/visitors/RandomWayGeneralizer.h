@@ -35,8 +35,7 @@
 
 namespace hoot
 {
-  class Way;
-  class RdpWayGeneralizer;
+class RdpWayGeneralizer;
 
 /**
  * Performs random generalization of a map's ways in accordance with [1].  Uses the

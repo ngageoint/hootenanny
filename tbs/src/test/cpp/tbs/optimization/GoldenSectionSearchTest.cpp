@@ -38,6 +38,7 @@
 // TBS
 #include <tbs/optimization/GoldenSectionSearch.h>
 
+// boost
 #include <boost/math/special_functions/digamma.hpp>
 
 namespace tbs

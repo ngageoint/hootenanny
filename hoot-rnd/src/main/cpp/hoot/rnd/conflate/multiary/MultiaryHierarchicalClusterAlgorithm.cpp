@@ -28,10 +28,6 @@
 
 // hoot
 #include <hoot/core/conflate/matching/MatchClassification.h>
-#include <hoot/core/util/Log.h>
-
-// Qt
-#include <QHash>
 
 namespace hoot
 {

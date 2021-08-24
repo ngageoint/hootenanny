@@ -27,9 +27,6 @@
 #ifndef APIDB_H
 #define APIDB_H
 
-// GEOS
-#include <geos/geom/Envelope.h>
-
 // hoot
 #include <hoot/core/elements/RelationData.h>
 #include <hoot/core/elements/Status.h>
@@ -41,22 +38,11 @@
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
-#include <QMap>
-
-// Standard
-#include <map>
-#include <set>
-#include <vector>
 
 namespace hoot
 {
 
-class Element;
 class Tags;
-class ElementId;
-class Node;
-class Way;
-class Relation;
 class ElementType;
 class Range;
 class TableType;

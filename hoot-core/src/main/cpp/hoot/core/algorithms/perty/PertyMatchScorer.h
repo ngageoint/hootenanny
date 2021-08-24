@@ -35,8 +35,6 @@
 namespace hoot
 {
 
-class OsmMap;
-
 /**
  * @brief The PertyMatchScorer class scores the accuracy of conflating an unmodified file with a
  * PERTY perturbed version of that file.
@@ -105,8 +103,8 @@ private:
                          const QString& perturbedMapOutputPath) const;
   OsmMapPtr _combineMapsAndPrepareForConflation(const OsmMapPtr& referenceMap,
                                                 const QString& perturbedMapInputPath) const;
-  std::shared_ptr<MatchComparator> _conflateAndScoreMatches(const OsmMapPtr& combinedDataToConflate,
-                                                            const QString& conflatedMapOutputPath) const;
+  std::shared_ptr<MatchComparator> _conflateAndScoreMatches(
+    const OsmMapPtr& combinedDataToConflate, const QString& conflatedMapOutputPath) const;
 
   /**
    * Prepares map for saving and saves the map. The map will be modified.

@@ -30,7 +30,6 @@
 #include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/rnd/visitors/ImplicitPoiTypeTagger.h>
 
 namespace hoot

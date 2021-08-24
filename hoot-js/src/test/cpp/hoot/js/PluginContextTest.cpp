@@ -31,9 +31,6 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/PluginContext.h>
 
-#include <iostream>
-#include <string>
-
 using namespace v8;
 
 namespace hoot

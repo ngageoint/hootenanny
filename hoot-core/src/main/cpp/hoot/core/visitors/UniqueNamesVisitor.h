@@ -31,9 +31,6 @@
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/SingleStatistic.h>
 
-// Qt
-#include <QSet>
-
 namespace hoot
 {
 

@@ -57,8 +57,8 @@ namespace hoot
 class InternalIdReserver
 {
 public:
-  InternalIdReserver(QSqlDatabase& db, const QString& sequenceName, int margin = 10000);
 
+  InternalIdReserver(QSqlDatabase& db, const QString& sequenceName, int margin = 10000);
   ~InternalIdReserver();
 
   void close();

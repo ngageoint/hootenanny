@@ -37,7 +37,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/ReprojectToGeographicOp.h>
-#include <hoot/core/util/Log.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>

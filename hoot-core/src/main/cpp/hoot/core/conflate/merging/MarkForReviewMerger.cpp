@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/schema/TagComparator.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 
 using namespace std;

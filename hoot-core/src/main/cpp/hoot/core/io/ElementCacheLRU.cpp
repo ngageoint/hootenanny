@@ -26,7 +26,7 @@
  */
 
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/util/Log.h>
+
 
 #include "ElementCacheLRU.h"
 

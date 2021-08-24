@@ -27,11 +27,12 @@
 
 #include "IntersectionIterator.h"
 
-// Standard Includes
+// Standard
 #include <cassert>
 #include <cmath>
 #include <iomanip>
 
+// tgs
 #include <tgs/RStarTree/RStarTree.h>
 #include <tgs/RStarTree/RTreeNode.h>
 

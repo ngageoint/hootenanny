@@ -45,7 +45,6 @@
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/geometry/GeometryToElementConverter.h>
 

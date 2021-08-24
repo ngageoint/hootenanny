@@ -29,11 +29,12 @@
 #ifndef __TGS__FILE_PAGE_STORE_H__
 #define __TGS__FILE_PAGE_STORE_H__
 
-// Standard Includes
+// Standard
 #include <vector>
 #include <stdio.h>
 #include <string>
 
+// tgs
 #include <tgs/HashMap.h>
 #include <tgs/RStarTree/PageStore.h>
 
@@ -45,8 +46,8 @@ namespace Tgs
 class TGS_EXPORT FilePageStore : public PageStore
 {
 public:
-  FilePageStore(int pageSize, const char * fileName, bool readOnly = false);
 
+  FilePageStore(int pageSize, const char * fileName, bool readOnly = false);
   ~FilePageStore();
 
   std::shared_ptr<Page> createPage() override;
@@ -56,7 +57,6 @@ public:
   std::shared_ptr<Page> getPage(int id) override;
 
   int getPageCount() const override;
-
   int getPageSize() const override;
 
   void save() override;

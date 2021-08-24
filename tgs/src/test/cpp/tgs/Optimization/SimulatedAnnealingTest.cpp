@@ -25,16 +25,16 @@
  * @copyright Copyright (C) 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit Includes
+// CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Standard Includes
+// Standard
 #include <math.h>
 
-// TGS Includes
+// TGS Incdes
 #include <tgs/Optimization/SimulatedAnnealing.h>
 
 namespace Tgs
@@ -46,7 +46,9 @@ class SimulatedAnnealingTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(SimulatedAnnealingTest);
   CPPUNIT_TEST(simpleTest);
   CPPUNIT_TEST_SUITE_END();
+
 public:
+
   class TestFitnessFunction : public FitnessFunction
   {
     virtual double f(const ConstStatePtr& s)

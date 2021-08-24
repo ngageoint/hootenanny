@@ -28,7 +28,6 @@
 #define OSMFILESORTER_H
 
 // Qt
-#include <QString>
 #include <QTemporaryFile>
 
 namespace hoot
@@ -67,7 +66,6 @@ private:
   static void _checkForOsmosis();
   static void _sortPbf(const QString& input, const QString& output);
   static std::shared_ptr<QTemporaryFile> _ogrToPbfTemp(const QString& input);
-
 };
 
 }

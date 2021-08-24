@@ -27,11 +27,8 @@
 #ifndef JSREGISTRAR_H
 #define JSREGISTRAR_H
 
-// node.js
+// hoot
 #include <hoot/js/SystemNodeJs.h>
-
-// Standard
-#include <vector>
 
 namespace hoot
 {
@@ -41,7 +38,6 @@ class ClassInitializer
 public:
 
   ClassInitializer() = default;
-
   virtual ~ClassInitializer() = default;
 
   virtual void Init(v8::Local<v8::Object> exports) = 0;
@@ -58,7 +54,6 @@ class ClassInitializerTemplate : public ClassInitializer
 public:
 
   ClassInitializerTemplate() = default;
-
   ~ClassInitializerTemplate() = default;
 
   void Init(v8::Local<v8::Object> exports) override
@@ -77,7 +72,6 @@ public:
   static JsRegistrar& getInstance();
 
   static void Init(v8::Local<v8::Object> exports);
-
   void initAll(v8::Local<v8::Object> exports);
 
   void registerInitializer(const std::shared_ptr<ClassInitializer>& ci);

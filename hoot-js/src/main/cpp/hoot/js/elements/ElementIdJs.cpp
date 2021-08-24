@@ -32,9 +32,6 @@
 #include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 
-// Qt
-#include <QStringList>
-
 using namespace v8;
 
 namespace hoot

@@ -27,11 +27,8 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
 
-// Qt
-#include <QSet>
-#include <QString>
+#include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
 
 namespace hoot
 {

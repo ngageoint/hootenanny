@@ -38,7 +38,6 @@ namespace hoot
 {
 
 class MatchThreshold;
-class ConflateInfoCache;
 
 /**
  * @brief The DiffConflator class calculates the difference between two inputs and adds to the

@@ -31,9 +31,6 @@
 // hoot
 #include <hoot/rnd/language/LanguageInfoProvider.h>
 
-// Qt
-#include <QStringList>
-
 namespace hoot
 {
 

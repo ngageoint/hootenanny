@@ -28,10 +28,6 @@
 #ifndef TO_ENGLISH_TRANSLATE_DICTIONARY_H
 #define TO_ENGLISH_TRANSLATE_DICTIONARY_H
 
-// Qt
-#include <QString>
-#include <QMap>
-
 // Boost
 #include <boost/property_tree/ptree.hpp>
 
@@ -57,14 +53,13 @@ public:
 
   void load(const QString& path);
 
-  std::shared_ptr<Transliterator> getTransliterator() const { return _transliterator; }
-  std::shared_ptr<Transliterator> getTitler() const { return _titler; }
-
   bool getFromTransliterationCache(const QString& originalText, QString& transliteratedText) const;
   void insertIntoTransliterationCache(
     const QString& originalText, const QString& transliteratedText) const;
 
   bool transliterationCachingEnabled() const { return _transliterationCachingEnabled; }
+  std::shared_ptr<Transliterator> getTransliterator() const { return _transliterator; }
+  std::shared_ptr<Transliterator> getTitler() const { return _titler; }
 
 private:
 

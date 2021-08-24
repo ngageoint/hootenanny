@@ -29,7 +29,7 @@
 
 //  Hootenanny
 #include <hoot/core/util/HootNetworkUtils.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/core/util/OsmApiUtils.h>
 
 namespace hoot

@@ -27,6 +27,7 @@
 
 // hoot
 #include <hoot/core/TestUtils.h>
+
 #include <hoot/rnd/language/HootServicesLanguageInfoClient.h>
 
 // Std

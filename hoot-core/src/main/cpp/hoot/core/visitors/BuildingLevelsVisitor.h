@@ -37,9 +37,6 @@
 namespace hoot
 {
 
-/**
- *
- */
 class BuildingLevelsVisitor : public ConstElementVisitor, public NumericStatistic
 {
 public:

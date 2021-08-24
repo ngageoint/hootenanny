@@ -36,10 +36,6 @@
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
-
-// Standard
-#include <set>
 
 using namespace std;
 

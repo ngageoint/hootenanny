@@ -32,13 +32,6 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Units.h>
 
-// Std
-#include <set>
-#include <vector>
-
-// Qt
-#include <QList>
-
 namespace hoot
 {
 

@@ -33,18 +33,13 @@
 #include <hoot/core/util/Factory.h>
 
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/algorithms/subline-matching//SublineStringMatcherJs.h>
+#include <hoot/js/algorithms/subline-matching/SublineStringMatcherJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
-
-// node.js
 #include <hoot/js/SystemNodeJs.h>
-
-// Qt
-#include <QStringList>
 
 using namespace std;
 using namespace v8;

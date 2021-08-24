@@ -25,21 +25,19 @@
  * @copyright Copyright (C) 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
-// Standard Includes
+// Standard
 #include <limits>
 #include <vector>
 using namespace std;
 
-// CPP Unit Includes
+// CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-//  TGS test
-#include "../PluginFactory.h"
-
 //  TGS
+#include "../PluginFactory.h"
 #include <tgs/ProbablePath/ProbablePathCalculator.h>
 
 namespace Tgs
@@ -52,21 +50,12 @@ class ProbablePathCalculatorTest : public CppUnit::TestFixture
   CPPUNIT_TEST( testImpassible );
   CPPUNIT_TEST( testUpdateCostSurface );
   CPPUNIT_TEST_SUITE_END();
+
 public:
+
   void test1()
   {
     ProbablePathCalculator uut;
-
-//     GdalRasterLoader loader("C:\\GIS_Data\\sa_test_data\\nova\\NOVA_Friction.img");
-//     vector<float> friction;
-//     friction.reserve(loader.getHeight() * loader.getWidth());
-//     for (int row = 0; row < loader.getHeight(); row++)
-//     {
-//       for (int col = 0; col < loader.getWidth(); col++)
-//       {
-//         friction.push_back(loader.getValueByPixel(row, col, 0));
-//       }
-//     }
 
     vector<float> friction;
     int w = 50, h = 50;

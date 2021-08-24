@@ -29,7 +29,7 @@
 #define HTTP_TEST_SERVER_H
 
 //  Standard
-#include <memory>
+
 #include <thread>
 
 //  Boost

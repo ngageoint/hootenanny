@@ -32,11 +32,11 @@
 #include <hoot/core/algorithms/string/StringDistance.h>
 
 //  Qt
-#include <QSet>
-#include <QString>
+
+
 
 //  Standard
-#include <vector>
+
 
 namespace hoot
 {

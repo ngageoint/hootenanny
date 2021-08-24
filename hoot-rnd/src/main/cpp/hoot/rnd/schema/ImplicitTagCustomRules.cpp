@@ -28,11 +28,6 @@
 
 // hoot
 #include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-
-// Qt
-#include <QFile>
 
 namespace hoot
 {

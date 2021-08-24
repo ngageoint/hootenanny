@@ -27,6 +27,7 @@
 
 #include "HootException.h"
 
+// Hoot
 #include <hoot/core/util/Factory.h>
 
 namespace hoot

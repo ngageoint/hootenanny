@@ -33,11 +33,11 @@
 #include <hoot/core/util/Configurable.h>
 
 //  Geos
-#include <geos/geom/Envelope.h>
+
 
 //  Std
-#include <set>
-#include <vector>
+
+
 
 namespace hoot
 {

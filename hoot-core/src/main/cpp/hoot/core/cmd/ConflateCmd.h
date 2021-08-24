@@ -31,13 +31,8 @@
 // Hoot
 #include <hoot/core/cmd/BoundedCommand.h>
 
-// Qt
-#include <QString>
-
 namespace hoot
 {
-
-class SingleStat;
 
 /**
  * @brief The ConflateCmd class executes conflation.

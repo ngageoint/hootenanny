@@ -33,24 +33,9 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Polygon.h>
 
-// GDAL
-#include <ogr_core.h>
-
-// Qt
-#include <QString>
-
-// Standard
-#include <map>
-#include <memory>
-#include <set>
-#include <vector>
-
-class OGRSpatialReference;
-
 namespace Tgs
 {
 class DelaunayTriangulation;
-class DisjointSet;
 class Edge;
 class Face;
 }
@@ -58,9 +43,7 @@ class Face;
 namespace hoot
 {
 
-class FaceGroup;
 class OsmMap;
-class Way;
 
 using GeometryPtr = std::shared_ptr<geos::geom::Geometry>;
 

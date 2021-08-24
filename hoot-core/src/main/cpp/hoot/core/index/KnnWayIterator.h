@@ -40,10 +40,6 @@
 namespace hoot
 {
 
-class Way;
-
-/**
- */
 class KnnWayIterator : public Tgs::KnnIterator
 {
 public:
@@ -53,7 +49,6 @@ public:
   ~KnnWayIterator() = default;
 
   long getWayId() const { return _treeIdToWid[getId()]; }
-
   ConstWayPtr getWay() const { return _map.getWay(getWayId()); }
 
   bool hasNext() override;

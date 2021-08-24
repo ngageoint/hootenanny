@@ -28,10 +28,6 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
-
-//  Qt
-#include <QFileInfo>
 
 namespace hoot
 {

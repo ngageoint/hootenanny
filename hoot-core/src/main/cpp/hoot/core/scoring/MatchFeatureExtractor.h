@@ -32,14 +32,10 @@
 #include <hoot/core/scoring/DataSamples.h>
 
 // Qt
-#include <QString>
 #include <QVariant>
 
 // Standard
 #include <list>
-#include <map>
-#include <set>
-#include <vector>
 
 namespace hoot
 {

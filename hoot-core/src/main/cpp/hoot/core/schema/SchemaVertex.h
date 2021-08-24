@@ -27,10 +27,6 @@
 #ifndef __SCHEMA_VERTEX_H__
 #define __SCHEMA_VERTEX_H__
 
-// Qt
-#include <QString>
-#include <QStringList>
-
 // Standard
 #include <stdint.h>
 

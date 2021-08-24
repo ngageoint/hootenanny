@@ -32,11 +32,6 @@
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-// Standard
-#include <set>
-
-#include <QString>
-
 namespace hoot
 {
 
