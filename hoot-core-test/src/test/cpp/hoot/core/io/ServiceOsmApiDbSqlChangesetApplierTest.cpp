@@ -56,12 +56,13 @@ public:
 
   long mapId;
 
-  virtual void setUp()
+  void setUp() override
   {
+    HootTestFixture::setUp();
     deleteUser(userEmail());
   }
 
-  virtual void tearDown()
+  void tearDown() override
   {
     deleteUser(userEmail());
 
@@ -69,6 +70,7 @@ public:
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
     database.close();
+    HootTestFixture::tearDown();
   }
 
   void deleteUser(QString email)

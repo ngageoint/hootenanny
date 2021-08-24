@@ -57,6 +57,7 @@ public:
   ScriptMatchCreatorTest() :
   HootTestFixture("test-files/js/conflate/matching/", UNUSED_PATH)
   {
+    setResetType(ResetConfigs);
   }
 
   void runIsCandidateTest()

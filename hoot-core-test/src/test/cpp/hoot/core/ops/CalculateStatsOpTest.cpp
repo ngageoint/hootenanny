@@ -66,17 +66,10 @@ public:
     setResetType(ResetAll);
   }
 
-  virtual void setUp()
+  void setUp() override
   {
     HootTestFixture::setUp();
     conf().set(ConfigOptions::getStatsTranslateScriptKey(), "${HOOT_HOME}/translations/HootTest.js");
-  }
-
-  virtual void tearDown()
-  {
-    conf().set(
-      ConfigOptions::getStatsTranslateScriptKey(),
-      ConfigOptions::getStatsTranslateScriptDefaultValue());
   }
 
   void runStatsNumTest()

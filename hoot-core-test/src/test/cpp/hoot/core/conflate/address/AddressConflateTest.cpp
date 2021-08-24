@@ -27,17 +27,17 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
+#include <hoot/core/conflate/ConflateExecutor.h>
 #include <hoot/core/criterion/HasAddressCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/visitors/AddressCountVisitor.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
-#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/AddressCountVisitor.h>
 #include <hoot/core/visitors/NormalizeAddressesVisitor.h>
-#include <hoot/core/conflate/ConflateExecutor.h>
 
 namespace hoot
 {
@@ -126,6 +126,7 @@ private:
     AddressCountVisitor uut;
     map->visitRo(uut);
     CPPUNIT_ASSERT_EQUAL(28, (int)uut.getStat());
+    OsmMap::resetCounters();
   }
 
   void _hasAddressCriterionBasicTest()
@@ -149,7 +150,6 @@ private:
 
   void _normalizeAddressesVisitorBasicTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map,
@@ -165,6 +165,7 @@ private:
 
     CPPUNIT_ASSERT_EQUAL(21, uut._addressNormalizer.getNumNormalized());
     HOOT_FILE_EQUALS(_inputPath + "normalizeAddressesVisitorBasicTest-out.osm", outputFile);
+    OsmMap::resetCounters();
   }
 
   void _addressScoreExtractorTagTest()
@@ -590,9 +591,9 @@ private:
     Settings settings = conf();
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    settings.set("address.translate.to.english", "true");
-    settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
-    settings.set("address.use.default.language.translation.only", "false");
+    settings.set(ConfigOptions::getAddressTranslateToEnglishKey(), "true");
+    settings.set(ConfigOptions::getLanguageTranslationTranslatorKey(), ToEnglishDictionaryTranslator::className());
+    settings.set(ConfigOptions::getAddressUseDefaultLanguageTranslationOnlyKey(), "false");
     uut.setConfiguration(settings);
     uut.setCacheEnabled(false);
     std::shared_ptr<ToEnglishDictionaryTranslator> dictTranslator =
@@ -622,7 +623,7 @@ private:
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node2, way2), 0.0);
 
-    settings.set("address.translate.to.english", "false");
+    settings.set(ConfigOptions::getAddressTranslateToEnglishKey(), "false");
     uut.setConfiguration(settings);
     uut.setCacheEnabled(false);
      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
@@ -942,6 +943,7 @@ private:
       _inputPath + "building-3441-addresses-1-in-2.osm", outFile);
 
     HOOT_FILE_EQUALS(_inputPath + "building-3441-addresses-1-out.osm", outFile);
+    tearDown();
   }
 
   void _building3441Addresses2Test()
@@ -956,6 +958,7 @@ private:
       _inputPath + "building-3441-addresses-2-in-2.osm", outFile);
 
     HOOT_FILE_EQUALS(_inputPath + "building-3441-addresses-2-out.osm", outFile);
+    tearDown();
   }
 
   void _poiPolygon10Test()
@@ -975,6 +978,7 @@ private:
       _inputPath + "poi-polygon-10-in-1.osm", _inputPath + "poi-polygon-10-in-2.osm", outFile);
 
     HOOT_FILE_EQUALS(_inputPath + "poi-polygon-10-out.osm", outFile);
+    tearDown();
   }
 
   void _poiPolygonAutoMerge13Test()
@@ -993,6 +997,7 @@ private:
       _inputPath + "poi-polygon-auto-merge-13-in-2.osm", outFile);
 
     HOOT_FILE_EQUALS(_inputPath + "poi-polygon-auto-merge-13-out.osm", outFile);
+    tearDown();
   }
 
   void _poiPolygonAutoMerge14Test()
@@ -1009,6 +1014,7 @@ private:
       _inputPath + "poi-polygon-auto-merge-14-in-2.osm", outFile);
 
     HOOT_FILE_EQUALS(_inputPath + "poi-polygon-auto-merge-14-out.osm", outFile);
+    tearDown();
   }
 
   void _poiPolygonRecursiveWayAddress3267_1Test()
@@ -1023,6 +1029,7 @@ private:
       _inputPath + "poi-polygon-recursive-way-address-3267-1-in-2.osm", outFile);
 
     HOOT_FILE_EQUALS(_inputPath + "poi-polygon-recursive-way-address-3267-1-out.osm", outFile);
+    tearDown();
   }
 
   void _poiPolygonReviewConflict4331_3Test()
@@ -1042,6 +1049,7 @@ private:
       _inputPath + "poi-polygon-review-conflict-4331-3-in-2.osm", outFile);
 
     HOOT_FILE_EQUALS(_inputPath + "poi-polygon-review-conflict-4331-3-out.osm", outFile);
+    tearDown();
   }
 };
 

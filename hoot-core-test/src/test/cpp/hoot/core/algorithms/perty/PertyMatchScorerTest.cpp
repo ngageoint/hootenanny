@@ -27,13 +27,13 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/algorithms/perty/PertyMatchScorer.h>
 #include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/scoring/MapMatchScoringUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/TagKeyCountVisitor.h>
-#include <hoot/core/algorithms/perty/PertyMatchScorer.h>
-#include <hoot/core/scoring/MapMatchScoringUtils.h>
 
 namespace hoot
 {
@@ -53,7 +53,7 @@ public:
     : HootTestFixture("test-files/algorithms/perty/PertyMatchScorerTest/",
                       "test-output/algorithms/perty/PertyMatchScorerTest/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetConfigs);
   }
 
   void runLoadReferenceMapTest()
@@ -71,9 +71,9 @@ public:
   void runLoadPerturbedMapTest()
   {
     Settings testSettings = conf();
-    testSettings.set("random.seed", QString::number(1));
-    testSettings.set("perty.systematic.error.x", QString::number(1));
-    testSettings.set("perty.systematic.error.y", QString::number(1));
+    testSettings.set(ConfigOptions::getRandomSeedKey(), QString::number(1));
+    testSettings.set(ConfigOptions::getPertySystematicErrorXKey(), QString::number(1));
+    testSettings.set(ConfigOptions::getPertySystematicErrorYKey(), QString::number(1));
     PertyMatchScorer matchScorer;
     matchScorer.setConfiguration(testSettings);
     matchScorer.setSearchDistance(15.0);
@@ -118,7 +118,6 @@ public:
   void runConflateTest()
   {
     Settings testSettings = conf();
-    testSettings.set("conflate.enable.old.roads", "false");
 
     OsmXmlReader reader;
     OsmMapPtr combinedMap = std::make_shared<OsmMap>();

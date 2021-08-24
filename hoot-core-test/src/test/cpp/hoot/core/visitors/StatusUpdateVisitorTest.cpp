@@ -54,7 +54,6 @@ public:
     : HootTestFixture("test-files/visitors/StatusUpdateVisitorTest/",
                       "test-output/visitors/StatusUpdateVisitorTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runUpdateTest()

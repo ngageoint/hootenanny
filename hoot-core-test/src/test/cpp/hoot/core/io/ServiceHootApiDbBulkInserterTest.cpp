@@ -64,7 +64,6 @@ public:
     : HootTestFixture("test-files/io/ServiceHootApiDbBulkInserterTest/",
                       "test-output/io/ServiceHootApiDbBulkInserterTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void setUpTest(const QString& testName)
@@ -79,7 +78,7 @@ public:
     database.close();
   }
 
-  virtual void tearDown()
+  void tearDown() override
   {
     ServicesDbTestUtils::deleteUser(userEmail());
 
@@ -90,6 +89,7 @@ public:
       database.deleteMap(_mapId);
       database.close();
     }
+    HootTestFixture::tearDown();
   }
 
   void runPsqlDbOfflineTest()

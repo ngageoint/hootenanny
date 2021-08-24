@@ -62,6 +62,7 @@ public:
 
   ChangesetReplacementCreatorTest()
   {
+    setResetType(ResetConfigs);
   }
 
   void runNonBoundableReaderTest()

@@ -32,8 +32,8 @@
 #include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/visitors/TagCountVisitor.h>
 
@@ -53,7 +53,6 @@ public:
     : HootTestFixture("test-files/visitors/",
                       UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void totalTagCountTest()

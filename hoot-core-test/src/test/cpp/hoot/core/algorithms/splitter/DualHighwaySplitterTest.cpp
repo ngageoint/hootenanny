@@ -32,12 +32,12 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/splitter/DualHighwaySplitter.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/elements/MapProjector.h>
 
 // TGS
 #include <tgs/StreamUtils.h>
@@ -59,7 +59,6 @@ public:
     : HootTestFixture("test-files/algorithms/splitter/",
                       "test-output/algorithms/splitter/")
   {
-    setResetType(ResetBasic);
   }
 
   void simpleTest()

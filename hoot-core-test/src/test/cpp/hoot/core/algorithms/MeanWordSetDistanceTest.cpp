@@ -54,6 +54,11 @@ class MeanWordSetDistanceTest : public HootTestFixture
 
 public:
 
+  MeanWordSetDistanceTest()
+  {
+    setResetType(ResetConfigs);
+  }
+
   void runTest()
   {
     MeanWordSetDistance uut(std::make_shared<ExactStringDistance>());
@@ -70,7 +75,7 @@ public:
     MeanWordSetDistance uut(std::make_shared<LevenshteinDistance>(1.5));
 
     Settings s;
-    s.set("token.separator", "[\\s-,';]+");
+    s.set(ConfigOptions::getTokenSeparatorKey(), "[\\s-,';]+");
     uut.setConfiguration(s);
 
     HOOT_STR_EQUALS(1, uut.compare("Sheraton hotel", "Sheraton Sana'a Hotel"));

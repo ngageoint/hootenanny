@@ -30,9 +30,9 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
@@ -49,11 +49,6 @@ class WaySublineTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  WaySublineTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   OsmMapPtr createTestMap()
   {

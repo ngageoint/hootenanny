@@ -32,12 +32,14 @@
 #include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/visitors/NonEnglishLanguageDetectionVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/rnd/language/HootServicesLanguageDetectorMockClient.h>
+#include <hoot/rnd/language/HootServicesLanguageInfoMockClient.h>
+#include <hoot/rnd/visitors/NonEnglishLanguageDetectionVisitor.h>
 
 namespace hoot
 {
@@ -60,7 +62,6 @@ public:
     : HootTestFixture("test-files/visitors/NonEnglishLanguageDetectionVisitorTest/",
                       "test-output/visitors/NonEnglishLanguageDetectionVisitorTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runDetectTest()
@@ -77,7 +78,7 @@ public:
   {
     const QString testName = "runIgnorePreTranslatedTagsTest";
     Settings conf = _getDefaultConfig();
-    conf.set("language.ignore.pre.translated.tags", true);
+    conf.set(ConfigOptions::getLanguageIgnorePreTranslatedTagsKey(), true);
     std::shared_ptr<NonEnglishLanguageDetectionVisitor> visitor =
       _runDetectTest(
         conf,
@@ -97,7 +98,7 @@ public:
   {
     const QString testName = "runNoTagKeysTest";
     Settings conf = _getDefaultConfig();
-    conf.set("language.tag.keys", QStringList());
+    conf.set(ConfigOptions::getLanguageTagKeysKey(), QStringList());
     QString exceptionMsg("");
     try
     {
@@ -117,7 +118,7 @@ public:
   {
     const QString testName = "runNamesTest";
     Settings conf = _getDefaultConfig();
-    conf.set("language.parse.names", true);
+    conf.set(ConfigOptions::getLanguageParseNamesKey(), true);
     _runDetectTest(
       conf,
       _outputPath + testName + ".osm",
@@ -128,8 +129,8 @@ public:
   {
     const QString testName = "runNamesTestWithAdditionalTagKeys";
     Settings conf = _getDefaultConfig();
-    conf.set("language.parse.names", true);
-    conf.set("language.tag.keys", "tag1;tag2");
+    conf.set(ConfigOptions::getLanguageParseNamesKey(), true);
+    conf.set(ConfigOptions::getLanguageTagKeysKey(), "tag1;tag2");
     _runDetectTest(
       conf,
       _outputPath + testName + ".osm",
@@ -142,16 +143,16 @@ private:
   {
     Settings conf;
 
-    conf.set("language.skip.words.in.english.dictionary", true);
-    conf.set("language.ignore.pre.translated.tags", false);
+    conf.set(ConfigOptions::getLanguageSkipWordsInEnglishDictionaryKey(), true);
+    conf.set(ConfigOptions::getLanguageIgnorePreTranslatedTagsKey(), false);
     QStringList tagKeys;
     tagKeys.append("name");
     tagKeys.append("alt_name");
-    conf.set("language.tag.keys", tagKeys);
-    conf.set("language.detection.detector", "hoot::HootServicesLanguageDetectorMockClient");
-    conf.set("language.info.provider", "hoot::HootServicesLanguageInfoMockClient");
-    conf.set("language.hoot.services.detection.min.confidence.threshold", "none");
-    conf.set("language.detection.write.detected.lang.tags", "true");
+    conf.set(ConfigOptions::getLanguageTagKeysKey(), tagKeys);
+    conf.set(ConfigOptions::getLanguageDetectionDetectorKey(), HootServicesLanguageDetectorMockClient::className());
+    conf.set(ConfigOptions::getLanguageInfoProviderKey(), HootServicesLanguageInfoMockClient::className());
+    conf.set(ConfigOptions::getLanguageHootServicesDetectionMinConfidenceThresholdKey(), "none");
+    conf.set(ConfigOptions::getLanguageDetectionWriteDetectedLangTagsKey(), "true");
 
     return conf;
   }

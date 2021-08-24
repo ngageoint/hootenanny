@@ -33,10 +33,12 @@
 
 // hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/language/HootServicesTranslatorMockClient.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/rnd/language/HootServicesLanguageInfoMockClient.h>
+#include <hoot/rnd/language/HootServicesTranslatorClient.h>
+#include <hoot/rnd/language/HootServicesTranslatorMockClient.h>
 
 namespace hoot
 {
@@ -123,14 +125,14 @@ private:
       std::make_shared<HootServicesTranslatorMockClient>();
 
     Settings conf;
-    conf.set("language.translation.translator", "hoot::HootServicesTranslatorClient");
-    conf.set("hoot.services.auth.host", "localhost");
-    conf.set("hoot.services.auth.port", "8080");
-    conf.set("language.hoot.services.translator", "HootLanguageTranslator");
-    conf.set("language.hoot.services.detectors", QStringList("TikaLanguageDetector"));
-    conf.set("language.translation.detected.language.overrides.specified.source.languages", false);
-    conf.set("language.translation.perform.exhaustive.search.with.no.detection", true);
-    conf.set("language.info.provider", "hoot::HootServicesLanguageInfoMockClient");
+    conf.set(ConfigOptions::getLanguageTranslationTranslatorKey(), HootServicesTranslatorClient::className());
+    conf.set(ConfigOptions::getHootServicesAuthHostKey(), "localhost");
+    conf.set(ConfigOptions::getHootServicesAuthPortKey(), "8080");
+    conf.set(ConfigOptions::getLanguageTranslationHootServicesTranslatorKey(), "HootLanguageTranslator");
+    conf.set(ConfigOptions::getLanguageHootServicesDetectorsKey(), QStringList("TikaLanguageDetector"));
+    conf.set(ConfigOptions::getLanguageTranslationDetectedLanguageOverridesSpecifiedSourceLanguagesKey(), false);
+    conf.set(ConfigOptions::getLanguageTranslationPerformExhaustiveSearchWithNoDetectionKey(), true);
+    conf.set(ConfigOptions::getLanguageInfoProviderKey(), HootServicesLanguageInfoMockClient::className());
     client->setConfiguration(conf);
 
     QStringList sourceLangs;

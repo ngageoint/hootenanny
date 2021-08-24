@@ -74,8 +74,9 @@ public:
   {
   }
 
-  virtual void setUp()
+  void setUp() override
   {
+    HootTestFixture::setUp();
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
   }
 

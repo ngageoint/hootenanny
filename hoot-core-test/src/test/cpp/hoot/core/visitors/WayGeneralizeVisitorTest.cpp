@@ -33,10 +33,10 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/visitors/WayGeneralizeVisitor.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
 {
@@ -58,7 +58,6 @@ public:
     "test-files/visitors/WayGeneralizeVisitorTest/",
     "test-output/visitors/WayGeneralizeVisitorTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runBasicTest()

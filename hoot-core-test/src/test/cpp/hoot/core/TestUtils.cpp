@@ -28,53 +28,53 @@
 #include "TestUtils.h"
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/splitter/DualHighwaySplitter.h>
+#include <hoot/core/algorithms/splitter/HighwayCornerSplitter.h>
+#include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
+#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
+#include <hoot/core/conflate/network/NetworkVertex.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/ops/AddHilbertReviewSortOrderOp.h>
+#include <hoot/core/ops/BuildingOutlineRemoveOp.h>
+#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
+#include <hoot/core/ops/DuplicateNameRemover.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
+#include <hoot/core/ops/DuplicateWayRemover.h>
+#include <hoot/core/ops/HighwayImpliedDividedMarker.h>
+#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/ops/NoInformationElementRemover.h>
+#include <hoot/core/ops/RelationCircularRefRemover.h>
+#include <hoot/core/ops/RemoveDuplicateReviewsOp.h>
+#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
+#include <hoot/core/ops/RemoveRoundabouts.h>
+#include <hoot/core/ops/ReplaceRoundabouts.h>
+#include <hoot/core/ops/ReprojectToPlanarOp.h>
+#include <hoot/core/ops/SmallHighwayMerger.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/ops/SuperfluousWayRemover.h>
+#include <hoot/core/ops/UnlikelyIntersectionRemover.h>
+#include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/scoring/MapComparator.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
-#include <hoot/core/util/ConfPath.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/ops/BuildingOutlineRemoveOp.h>
-#include <hoot/core/ops/RemoveRoundabouts.h>
-#include <hoot/core/ops/MapCleaner.h>
-#include <hoot/core/algorithms/splitter/HighwayCornerSplitter.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/ops/SmallHighwayMerger.h>
-#include <hoot/core/ops/ReplaceRoundabouts.h>
-#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
-#include <hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.h>
-#include <hoot/core/ops/RemoveDuplicateReviewsOp.h>
-#include <hoot/core/ops/WayJoinerOp.h>
-#include <hoot/core/visitors/RemoveInvalidRelationVisitor.h>
-#include <hoot/core/visitors/RemoveInvalidMultilineStringMembersVisitor.h>
-#include <hoot/core/ops/SuperfluousWayRemover.h>
-#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
-#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
-#include <hoot/core/ops/AddHilbertReviewSortOrderOp.h>
-#include <hoot/core/ops/ReprojectToPlanarOp.h>
-#include <hoot/core/ops/DuplicateNodeRemover.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/OneWayRoadStandardizer.h>
-#include <hoot/core/ops/DuplicateWayRemover.h>
-#include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
-#include <hoot/core/ops/UnlikelyIntersectionRemover.h>
-#include <hoot/core/algorithms/splitter/DualHighwaySplitter.h>
-#include <hoot/core/ops/HighwayImpliedDividedMarker.h>
-#include <hoot/core/ops/DuplicateNameRemover.h>
-#include <hoot/core/visitors/RemoveEmptyAreasVisitor.h>
-#include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>
-#include <hoot/core/ops/RelationCircularRefRemover.h>
-#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/visitors/RemoveDuplicateAreasVisitor.h>
-#include <hoot/core/ops/NoInformationElementRemover.h>
-#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
+#include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>
+#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
+#include <hoot/core/visitors/RemoveEmptyAreasVisitor.h>
+#include <hoot/core/visitors/RemoveInvalidMultilineStringMembersVisitor.h>
+#include <hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.h>
+#include <hoot/core/visitors/RemoveInvalidRelationVisitor.h>
+#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 
 //  tgs
 #include <tgs/Statistics/Random.h>
@@ -281,23 +281,22 @@ void TestUtils::resetBasic()
   UuidHelper::resetRepeatableKey();
   //  Reset the pseudo random number generator seed
   Tgs::Random::instance()->seed();
+  // Reset the debug map count used to name output files
+  OsmMapWriterFactory::resetDebugMapCount();
+  // Reset static IDs for testing
+  NetworkVertex::reset();
 }
 
-void TestUtils::resetEnvironment(const QStringList confs)
+void TestUtils::resetConfigs(const QStringList confs)
 {
-  LOG_DEBUG("Resetting test environment...");
-
-  // provide the most basic configuration
-
-  OsmMap::resetCounters();
-
+  //  Provide the most basic configuration
+  resetBasic();
+  //  Reset the configuration
   conf().clear();
   ConfigOptions::populateDefaults(conf());
-
   // We require that all tests use Testing.conf as a starting point and any conf values
   // specified by it may be overridden when necessary.
   conf().loadJson(ConfPath::search("Testing.conf"));
-
   // The primary reason for allowing custom configs to be loaded here is in certain situations to
   // prevent the ConfigOptions defaults from being loaded, as they may be too bulky when running
   // many hoot commands at once.
@@ -312,25 +311,20 @@ void TestUtils::resetEnvironment(const QStringList confs)
   // Sometimes we add new projections to the MapProjector, when this happens it may pick a new
   // projection and subtly change the results.
   conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), true);
+}
 
+void TestUtils::resetEnvironment(const QStringList confs)
+{
+  //  Reset the configuration
+  resetConfigs(confs);
   // These factories cache the creators. Flush them so they get any config changes. Note that we're
   // not resetting MatchFactory here. Its call to ScriptMatchCreator::setArguments is expensive and
   // not many tests require it, so tests must specifically decide to reset it via ResetAll.
   MergerFactory::getInstance().reset();
   TagMergerFactory::getInstance().reset();
-
-  // make sure the UUIDs are repeatable
-  UuidHelper::resetRepeatableKey();
-
+  //  Reset the registered resets
   foreach (RegisteredReset* rr, getInstance()._resets)
-  {
     rr->reset();
-  }
-  //  Reset the pseudo random number generator seed
-  Tgs::Random::instance()->seed();
-
-  // Reset the debug map count used to name output files
-  OsmMapWriterFactory::resetDebugMapCount();
 }
 
 QString TestUtils::toQuotedString(QString str)
@@ -453,6 +447,71 @@ void TestUtils::runConflateOpReductionTest(
   actualOps = conf().getList(ConfigOptions::getMapCleanerTransformsKey());
   LOG_VART(actualOps);
   CPPUNIT_ASSERT_EQUAL(expectedCleaningOpsSize, actualOps.size());
+}
+
+bool HootTestFixture::_compareEnv = false;
+
+HootTestFixture::HootTestFixture(const QString& inputPath, const QString& outputPath) :
+  _inputPath((inputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + inputPath : inputPath),
+  _outputPath((outputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + outputPath : outputPath),
+  _reset(ResetBasic)
+{
+  if (outputPath != UNUSED_PATH)
+    FileUtils::makeDir(_outputPath);
+}
+
+void HootTestFixture::setUp()
+{
+  if (HootTestFixture::_compareEnv)
+    _defaultEnv = getEnvString();
+  TestUtils::resetBasic();
+}
+
+void HootTestFixture::tearDown()
+{
+  switch(_reset)
+  {
+  case ResetAll:
+    //  Reset the environment
+    TestUtils::resetEnvironment();
+    //  Additionally reset the match factory
+    MatchFactory::getInstance().reset();
+    break;
+  case ResetEnvironment:
+    //  Reset the environment
+    TestUtils::resetEnvironment();
+    break;
+  case ResetConfigs:
+    //  Reset the configurations
+    TestUtils::resetConfigs();
+    break;
+  case ResetBasic:
+  default:
+    TestUtils::resetBasic();
+    //  Reset the counters, this is a very lightweight operation
+    break;
+  }
+  //  Test the environment
+  if (HootTestFixture::_compareEnv)
+  {
+    QString currentEnv = getEnvString();
+    HOOT_STR_EQUALS(_defaultEnv, currentEnv);
+  }
+}
+
+QString HootTestFixture::getEnvString()
+{
+  ostringstream oss;
+  //  First comes the config settings
+  oss << Settings::getInstance().toString().toStdString() << std::endl;
+  //  Check the merger factory mergers
+  oss << MergerFactory::getInstance().toString() << std::endl;
+  //  Check the tag merger factory mergers
+  oss << TagMergerFactory::getInstance().toString() << std::endl;
+  //  Check the match factory
+  //  TODO:  Implement this
+//  oss << MatchFactory::getInstance().toString() << std::endl;
+  return QString(oss.str().c_str());
 }
 
 }

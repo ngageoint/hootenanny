@@ -32,10 +32,10 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/RandomTagModifier.h>
 
 using namespace std;
@@ -52,11 +52,6 @@ class RandomTagModifierTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  RandomTagModifierTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   void runBasicTest()
   {

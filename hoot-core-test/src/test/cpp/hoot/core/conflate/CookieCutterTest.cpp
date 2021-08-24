@@ -61,7 +61,7 @@ public:
     : HootTestFixture("test-files/conflate/CookieCutterTest/",
                       "test-output/conflate/CookieCutterTest/")
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void runTest()

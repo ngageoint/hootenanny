@@ -110,20 +110,21 @@ public:
     "test-output/algorithms/changeset/ServiceChangesetReplacementGridTest"),
   _originalDataSize(0)
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
-  virtual void setUp()
+  void setUp() override
   {
     HootTestFixture::setUp(); // Be sure the parent cleans out the config before each test.
     _subTaskTimer.start();
     _initConfig();
   }
 
-  virtual void tearDown()
+  void tearDown() override
   {
     _cleanupDataToReplace();
     _cleanupReplacementData();
+    HootTestFixture::tearDown();
   }
 
   void badPolyIdSync1Test()

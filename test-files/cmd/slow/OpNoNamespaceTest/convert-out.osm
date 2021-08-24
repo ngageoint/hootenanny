@@ -1,1240 +1,1240 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="38.88456368866604" minlon="-77.05504778747105" maxlat="38.90305787658473" maxlon="-77.02811572481133"/>
-    <node visible="true" id="-131114" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8886090350044711" lon="-77.0319724881462236">
+    <bounds minlat="38.88456368872016" minlon="-77.05504778747968" maxlat="38.90305787655043" maxlon="-77.02811572477961"/>
+    <node visible="true" id="-131114" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8886090350560565" lon="-77.0319724881651240">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="95.4735"/>
-        <tag k="MinAngle" v="86.0673"/>
+        <tag k="MaxAngle" v="95.4598"/>
+        <tag k="MinAngle" v="86.0872"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-131113" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8849757656828814" lon="-77.0296167224459509">
+    <node visible="true" id="-131113" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8849757657224799" lon="-77.0296167223629737">
         <tag k="IntersectionWayCount" v="3"/>
         <tag k="MaxAngle" v="180.009"/>
         <tag k="MinAngle" v="88.7369"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-130441" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8849750541556247" lon="-77.0281243658432118">
+    <node visible="true" id="-130441" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8849750541625028" lon="-77.0281243659132997">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="180.353"/>
-        <tag k="MinAngle" v="87.8361"/>
+        <tag k="MaxAngle" v="180.355"/>
+        <tag k="MinAngle" v="87.8379"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-126446" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845636886660415" lon="-77.0337269616529738">
+    <node visible="true" id="-126446" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845636887201564" lon="-77.0337269615114053">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="140.237"/>
-        <tag k="MinAngle" v="41.7703"/>
+        <tag k="MaxAngle" v="140.125"/>
+        <tag k="MinAngle" v="41.8902"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-123960" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8953872464782435" lon="-77.0537451223185741">
+    <node visible="true" id="-123960" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8953872464903228" lon="-77.0537451222796079">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="164.02"/>
-        <tag k="MinAngle" v="32.3123"/>
+        <tag k="MaxAngle" v="163.954"/>
+        <tag k="MinAngle" v="32.3898"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-123890" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8930979825348757" lon="-77.0533046366614656">
+    <node visible="true" id="-123890" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8930979825373200" lon="-77.0533046366741985">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="121.671"/>
-        <tag k="MinAngle" v="58.3142"/>
+        <tag k="MaxAngle" v="121.481"/>
+        <tag k="MinAngle" v="58.5044"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-123885" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8929948278556594" lon="-77.0534287443098833">
+    <node visible="true" id="-123885" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8929948278449729" lon="-77.0534287442498851">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="113.287"/>
-        <tag k="MinAngle" v="66.6889"/>
+        <tag k="MaxAngle" v="113.092"/>
+        <tag k="MinAngle" v="66.8842"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-119083" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8859711908855914" lon="-77.0296209390876214">
+    <node visible="true" id="-119083" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8859711908736330" lon="-77.0296209391171800">
         <tag k="IntersectionWayCount" v="3"/>
         <tag k="MaxAngle" v="180.064"/>
-        <tag k="MinAngle" v="89.316"/>
+        <tag k="MinAngle" v="89.3131"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-117978" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8870389127508105" lon="-77.0354921435168620">
+    <node visible="true" id="-117978" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8870389127644671" lon="-77.0354921434691704">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="130.285"/>
-        <tag k="MinAngle" v="48.2146"/>
+        <tag k="MaxAngle" v="130.446"/>
+        <tag k="MinAngle" v="48.0617"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-114581" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8880101463860370" lon="-77.0394937501336443">
+    <node visible="true" id="-114581" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8880101464287833" lon="-77.0394937497220980">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="175.65"/>
-        <tag k="MinAngle" v="91.3954"/>
+        <tag k="MaxAngle" v="175.668"/>
+        <tag k="MinAngle" v="91.3898"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-114572" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8877096708523453" lon="-77.0375525749838062">
+    <node visible="true" id="-114572" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8877096708957097" lon="-77.0375525750107215">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="173.305"/>
-        <tag k="MinAngle" v="32.4112"/>
+        <tag k="MaxAngle" v="173.333"/>
+        <tag k="MinAngle" v="32.3023"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-114383" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8979580047079025" lon="-77.0530283413241506">
+    <node visible="true" id="-114383" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8979580047068794" lon="-77.0530283413892789">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="175.745"/>
-        <tag k="MinAngle" v="22.4452"/>
+        <tag k="MaxAngle" v="175.708"/>
+        <tag k="MinAngle" v="22.5094"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-102566" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8885619545780301" lon="-77.0521053114715784">
+    <node visible="true" id="-102566" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8885619546322587" lon="-77.0521053114259331">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="178.518"/>
-        <tag k="MinAngle" v="11.7702"/>
+        <tag k="MaxAngle" v="178.523"/>
+        <tag k="MinAngle" v="11.7336"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-99747" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8884702521832679" lon="-77.0523621029587957">
+    <node visible="true" id="-99747" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8884702521791752" lon="-77.0523621029938539">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="93.3397"/>
-        <tag k="MinAngle" v="87.1199"/>
+        <tag k="MaxAngle" v="93.523"/>
+        <tag k="MinAngle" v="86.9355"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-99716" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8871365204266652" lon="-77.0501766362388878">
+    <node visible="true" id="-99716" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8871365204028194" lon="-77.0501766362734628">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="118.534"/>
-        <tag k="MinAngle" v="62.1372"/>
+        <tag k="MaxAngle" v="118.549"/>
+        <tag k="MinAngle" v="62.1196"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-97556" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8888519680216049" lon="-77.0330025010341473">
+    <node visible="true" id="-97556" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8888519679983062" lon="-77.0330025010704276">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="174.085"/>
-        <tag k="MinAngle" v="89.3858"/>
+        <tag k="MaxAngle" v="174.057"/>
+        <tag k="MinAngle" v="89.5566"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-97514" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8849656525406360" lon="-77.0319622767522247">
+    <node visible="true" id="-97514" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8849656525728378" lon="-77.0319622767630534">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="179.122"/>
-        <tag k="MinAngle" v="88.6225"/>
+        <tag k="MaxAngle" v="179.116"/>
+        <tag k="MinAngle" v="88.625"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-97511" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8859676021883658" lon="-77.0319572753672475">
+    <node visible="true" id="-97511" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8859676022402780" lon="-77.0319572752858903">
         <tag k="IntersectionWayCount" v="3"/>
         <tag k="MaxAngle" v="180.178"/>
-        <tag k="MinAngle" v="89.8389"/>
+        <tag k="MinAngle" v="89.8381"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-96070" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8883066914567763" lon="-77.0501764917673881">
+    <node visible="true" id="-96070" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8883066914987623" lon="-77.0501764917434855">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="170.924"/>
-        <tag k="MinAngle" v="92.6004"/>
+        <tag k="MaxAngle" v="170.972"/>
+        <tag k="MinAngle" v="92.5846"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-93889" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8946309734088871" lon="-77.0319636503526795">
+    <node visible="true" id="-93889" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8946309734234035" lon="-77.0319636503243004">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="183.117"/>
-        <tag k="MinAngle" v="87.8523"/>
+        <tag k="MaxAngle" v="183.132"/>
+        <tag k="MinAngle" v="87.8429"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-87202" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8859700296614292" lon="-77.0281230293160206">
+    <node visible="true" id="-87202" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8859700297176190" lon="-77.0281230292247301">
         <tag k="IntersectionWayCount" v="3"/>
         <tag k="MaxAngle" v="179.991"/>
-        <tag k="MinAngle" v="88.7911"/>
+        <tag k="MinAngle" v="88.7899"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-87193" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8886485651607074" lon="-77.0281893242937912">
+    <node visible="true" id="-87193" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8886485651918647" lon="-77.0281893242355693">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="178.962"/>
-        <tag k="MinAngle" v="90.3844"/>
+        <tag k="MaxAngle" v="178.966"/>
+        <tag k="MinAngle" v="90.3817"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-83547" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8877730174252463" lon="-77.0336875757928397">
+    <node visible="true" id="-83547" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8877730175023686" lon="-77.0336875756700010">
         <tag k="IntersectionWayCount" v="5"/>
-        <tag k="MaxAngle" v="102.61"/>
-        <tag k="MinAngle" v="32.8915"/>
+        <tag k="MaxAngle" v="102.601"/>
+        <tag k="MinAngle" v="32.9965"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-83544" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8875672218069255" lon="-77.0319516200139844">
+    <node visible="true" id="-83544" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8875672218460835" lon="-77.0319516199554926">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="105.363"/>
-        <tag k="MinAngle" v="73.1632"/>
+        <tag k="MaxAngle" v="105.302"/>
+        <tag k="MinAngle" v="73.2179"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-83532" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8875662183602202" lon="-77.0281157248113288">
+    <node visible="true" id="-83532" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8875662184457909" lon="-77.0281157247796102">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="109.434"/>
-        <tag k="MinAngle" v="70.4544"/>
+        <tag k="MaxAngle" v="109.503"/>
+        <tag k="MinAngle" v="70.3854"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-80648" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8870561952319278" lon="-77.0484677931108592">
+    <node visible="true" id="-80648" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8870561952873075" lon="-77.0484677932181228">
         <tag k="IntersectionWayCount" v="3"/>
         <tag k="MaxAngle" v="180"/>
-        <tag k="MinAngle" v="70.4152"/>
+        <tag k="MinAngle" v="70.3219"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-80647" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8869250683136300" lon="-77.0449577519868569">
+    <node visible="true" id="-80647" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8869250683293473" lon="-77.0449577521962965">
         <tag k="IntersectionWayCount" v="3"/>
         <tag k="MaxAngle" v="180"/>
-        <tag k="MinAngle" v="87.8645"/>
+        <tag k="MinAngle" v="87.8782"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-80631" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8868953690243728" lon="-77.0441631539250693">
+    <node visible="true" id="-80631" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8868953690605395" lon="-77.0441631538424190">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="127.795"/>
-        <tag k="MinAngle" v="115.461"/>
+        <tag k="MaxAngle" v="127.611"/>
+        <tag k="MinAngle" v="115.533"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-80543" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8869280797264167" lon="-77.0366485446301823">
+    <node visible="true" id="-80543" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8869280796935968" lon="-77.0366485447665781">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="174.659"/>
-        <tag k="MinAngle" v="24.1857"/>
+        <tag k="MaxAngle" v="174.681"/>
+        <tag k="MinAngle" v="24.0928"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-77942" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025259787926316" lon="-77.0507802624482565">
+    <node visible="true" id="-77942" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025259788635012" lon="-77.0507802623175735">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="97.9669"/>
-        <tag k="MinAngle" v="82.5143"/>
+        <tag k="MaxAngle" v="98.0072"/>
+        <tag k="MinAngle" v="82.4721"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-77941" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025259806460326" lon="-77.0494503883377462">
+    <node visible="true" id="-77941" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025259806823698" lon="-77.0494503882680561">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="97.861"/>
-        <tag k="MinAngle" v="82.1407"/>
+        <tag k="MaxAngle" v="97.9078"/>
+        <tag k="MinAngle" v="82.0939"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-76182" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8964061991341552" lon="-77.0401045636569251">
+    <node visible="true" id="-76182" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8964061991339634" lon="-77.0401045637266577">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="173.407"/>
-        <tag k="MinAngle" v="26.3079"/>
+        <tag k="MaxAngle" v="173.425"/>
+        <tag k="MinAngle" v="26.2156"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-73965" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9029694457854660" lon="-77.0497273781283099">
+    <node visible="true" id="-73965" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9029694457893171" lon="-77.0497273781208349">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="169.829"/>
-        <tag k="MinAngle" v="92.6221"/>
+        <tag k="MaxAngle" v="169.844"/>
+        <tag k="MinAngle" v="92.3972"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-73964" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9020961892688177" lon="-77.0505318860569730">
+    <node visible="true" id="-73964" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9020961892249488" lon="-77.0505318860977297">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="171.403"/>
-        <tag k="MinAngle" v="90.1338"/>
+        <tag k="MaxAngle" v="171.412"/>
+        <tag k="MinAngle" v="90.3462"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-73958" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9006914602708136" lon="-77.0518310922938241">
+    <node visible="true" id="-73958" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9006914603148886" lon="-77.0518310923121135">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="130.468"/>
-        <tag k="MinAngle" v="49.5029"/>
+        <tag k="MaxAngle" v="130.567"/>
+        <tag k="MinAngle" v="49.4076"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-71054" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8896452354290503" lon="-77.0512787223570541">
+    <node visible="true" id="-71054" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8896452354914146" lon="-77.0512787223770061">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="174.2"/>
-        <tag k="MinAngle" v="91.9059"/>
+        <tag k="MaxAngle" v="174.172"/>
+        <tag k="MinAngle" v="91.7514"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-66368" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9023390391620651" lon="-77.0495064034617485">
+    <node visible="true" id="-66368" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9023390392053372" lon="-77.0495064035415851">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="178.849"/>
-        <tag k="MinAngle" v="83.918"/>
+        <tag k="MaxAngle" v="178.832"/>
+        <tag k="MinAngle" v="84.0846"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-65580" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027352076713484" lon="-77.0507226981968927">
+    <node visible="true" id="-65580" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027352077271971" lon="-77.0507226981892899">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="168.245"/>
-        <tag k="MinAngle" v="94.3254"/>
+        <tag k="MaxAngle" v="168.201"/>
+        <tag k="MinAngle" v="94.5105"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-49583" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8955039740698822" lon="-77.0307692418986107">
+    <node visible="true" id="-49583" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8955039740517776" lon="-77.0307692418563477">
         <tag k="IntersectionWayCount" v="3"/>
         <tag k="MaxAngle" v="180"/>
-        <tag k="MinAngle" v="89.9914"/>
+        <tag k="MinAngle" v="89.994"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-34034" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8990523079608224" lon="-77.0536557305954801">
+    <node visible="true" id="-34034" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8990523080223767" lon="-77.0536557305777592">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="161.433"/>
-        <tag k="MinAngle" v="18.5666"/>
+        <tag k="MaxAngle" v="161.436"/>
+        <tag k="MinAngle" v="18.5641"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-34033" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8988300962736275" lon="-77.0532452225878473">
+    <node visible="true" id="-34033" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8988300962850531" lon="-77.0532452226339473">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="154.346"/>
-        <tag k="MinAngle" v="25.6744"/>
+        <tag k="MaxAngle" v="154.337"/>
+        <tag k="MinAngle" v="25.6835"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-32732" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8951929023531449" lon="-77.0361415093357635">
+    <node visible="true" id="-32732" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8951929023652383" lon="-77.0361415092820749">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="167.331"/>
-        <tag k="MinAngle" v="31.8305"/>
+        <tag k="MaxAngle" v="167.383"/>
+        <tag k="MinAngle" v="31.7077"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-28924" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8995775988936927" lon="-77.0528844221306883">
+    <node visible="true" id="-28924" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8995775988911703" lon="-77.0528844220850715">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="126.56"/>
-        <tag k="MinAngle" v="52.3139"/>
+        <tag k="MaxAngle" v="126.669"/>
+        <tag k="MinAngle" v="52.2058"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-28676" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8982168163929884" lon="-77.0521106090141359">
+    <node visible="true" id="-28676" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8982168163881568" lon="-77.0521106090864549">
         <tag k="IntersectionWayCount" v="3"/>
         <tag k="MaxAngle" v="180"/>
-        <tag k="MinAngle" v="85.1725"/>
+        <tag k="MinAngle" v="84.9348"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-28670" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8960166969248817" lon="-77.0480234115984643">
+    <node visible="true" id="-28670" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8960166969308574" lon="-77.0480234117102043">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="148.045"/>
-        <tag k="MinAngle" v="31.9817"/>
+        <tag k="MaxAngle" v="148.145"/>
+        <tag k="MinAngle" v="31.8816"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-28664" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8938513141432551" lon="-77.0440872155695899">
+    <node visible="true" id="-28664" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8938513140925011" lon="-77.0440872154319720">
         <tag k="IntersectionWayCount" v="3"/>
         <tag k="MaxAngle" v="179.44"/>
-        <tag k="MinAngle" v="85.5705"/>
+        <tag k="MinAngle" v="85.7808"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-28051" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8956846325120011" lon="-77.0473870144817710">
+    <node visible="true" id="-28051" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8956846325545911" lon="-77.0473870144298303">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="180.586"/>
-        <tag k="MinAngle" v="84.9676"/>
+        <tag k="MaxAngle" v="180.585"/>
+        <tag k="MinAngle" v="85.1765"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-27680" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8962628937759618" lon="-77.0540423832696320">
+    <node visible="true" id="-27680" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8962628937549084" lon="-77.0540423832892856">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="175.212"/>
-        <tag k="MinAngle" v="25.1975"/>
+        <tag k="MaxAngle" v="175.209"/>
+        <tag k="MinAngle" v="25.2548"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-27625" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8957052406489012" lon="-77.0474264132612348">
+    <node visible="true" id="-27625" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8957052406579891" lon="-77.0474264132647448">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="152.459"/>
-        <tag k="MinAngle" v="27.5418"/>
+        <tag k="MaxAngle" v="152.541"/>
+        <tag k="MinAngle" v="27.4593"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-27563" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8956945713138111" lon="-77.0540005632229281">
+    <node visible="true" id="-27563" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8956945713103366" lon="-77.0540005632748404">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="103.209"/>
-        <tag k="MinAngle" v="78.2895"/>
+        <tag k="MaxAngle" v="103.006"/>
+        <tag k="MinAngle" v="78.5318"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-27556" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8958658063109581" lon="-77.0536976003806870">
+    <node visible="true" id="-27556" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8958658063150367" lon="-77.0536976003518816">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="141.51"/>
-        <tag k="MinAngle" v="38.7081"/>
+        <tag k="MaxAngle" v="141.491"/>
+        <tag k="MinAngle" v="38.7255"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-27508" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8958072450791477" lon="-77.0476218054962345">
+    <node visible="true" id="-27508" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8958072451027164" lon="-77.0476218054848232">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="153.247"/>
-        <tag k="MinAngle" v="26.7528"/>
+        <tag k="MaxAngle" v="153.327"/>
+        <tag k="MinAngle" v="26.6734"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-25713" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973466242796349" lon="-77.0548710779932833">
+    <node visible="true" id="-25713" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973466242245607" lon="-77.0548710780086594">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="183.424"/>
-        <tag k="MinAngle" v="65.9803"/>
+        <tag k="MaxAngle" v="183.405"/>
+        <tag k="MinAngle" v="65.9175"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-25606" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8951967225700770" lon="-77.0368441613872221">
+    <node visible="true" id="-25606" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8951967225489881" lon="-77.0368441613529882">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="175.803"/>
-        <tag k="MinAngle" v="22.7805"/>
+        <tag k="MaxAngle" v="175.825"/>
+        <tag k="MinAngle" v="22.6896"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-24733" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8954408575459212" lon="-77.0350237093550732">
+    <node visible="true" id="-24733" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8954408575149486" lon="-77.0350237093274615">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="174.079"/>
-        <tag k="MinAngle" v="91.5512"/>
+        <tag k="MaxAngle" v="174.108"/>
+        <tag k="MinAngle" v="91.6317"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-24723" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8927902150762108" lon="-77.0544602335279620">
+    <node visible="true" id="-24723" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8927902150443003" lon="-77.0544602335253472">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="170.67"/>
-        <tag k="MinAngle" v="19.5758"/>
+        <tag k="MaxAngle" v="170.708"/>
+        <tag k="MinAngle" v="19.4961"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-24688" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921011516609525" lon="-77.0479716857111896">
+    <node visible="true" id="-24688" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921011516693582" lon="-77.0479716857462620">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="179.758"/>
-        <tag k="MinAngle" v="66.2201"/>
+        <tag k="MaxAngle" v="179.759"/>
+        <tag k="MinAngle" v="66.1324"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-24676" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920997761810341" lon="-77.0406759527212017">
+    <node visible="true" id="-24676" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920997761821710" lon="-77.0406759528593881">
         <tag k="IntersectionWayCount" v="3"/>
         <tag k="MaxAngle" v="179.987"/>
-        <tag k="MinAngle" v="17.1047"/>
+        <tag k="MinAngle" v="17.0334"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-21838" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8987473448829846" lon="-77.0379473785195188">
+    <node visible="true" id="-21838" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8987473449014800" lon="-77.0379473787822207">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="106.869"/>
-        <tag k="MinAngle" v="72.6815"/>
+        <tag k="MaxAngle" v="106.935"/>
+        <tag k="MinAngle" v="72.6171"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-21830" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8987607442167729" lon="-77.0351174494051492">
+    <node visible="true" id="-21830" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8987607441771885" lon="-77.0351174493966226">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="108.226"/>
-        <tag k="MinAngle" v="71.5446"/>
+        <tag k="MaxAngle" v="108.303"/>
+        <tag k="MinAngle" v="71.4689"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-21470" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8996907749628420" lon="-77.0419869407470088">
+    <node visible="true" id="-21470" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8996907749535765" lon="-77.0419869388120162">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="180.013"/>
-        <tag k="MinAngle" v="62.6233"/>
+        <tag k="MaxAngle" v="180.014"/>
+        <tag k="MinAngle" v="62.4226"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-21465" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002015417339848" lon="-77.0379551350555687">
+    <node visible="true" id="-21465" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002015416821578" lon="-77.0379551348656122">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="113.857"/>
-        <tag k="MinAngle" v="66.1433"/>
+        <tag k="MaxAngle" v="113.943"/>
+        <tag k="MinAngle" v="66.0569"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-21460" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002020084573985" lon="-77.0351290285530723">
+    <node visible="true" id="-21460" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002020084756808" lon="-77.0351290285973391">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="114.444"/>
-        <tag k="MinAngle" v="65.5561"/>
+        <tag k="MaxAngle" v="114.526"/>
+        <tag k="MinAngle" v="65.4737"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-21445" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8999792525501178" lon="-77.0303409386667539">
+    <node visible="true" id="-21445" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8999792525687766" lon="-77.0303409387097275">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="105.238"/>
-        <tag k="MinAngle" v="67.8794"/>
+        <tag k="MaxAngle" v="105.437"/>
+        <tag k="MinAngle" v="67.678"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-21334" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8963904703548096" lon="-77.0379893320314721">
+    <node visible="true" id="-21334" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8963904703982735" lon="-77.0379893320017999">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="176.627"/>
-        <tag k="MinAngle" v="89.2868"/>
+        <tag k="MaxAngle" v="176.616"/>
+        <tag k="MinAngle" v="89.3195"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-21301" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8964058369339014" lon="-77.0350709831267153">
+    <node visible="true" id="-21301" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8964058369174808" lon="-77.0350709830333358">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="176.606"/>
-        <tag k="MinAngle" v="5.96657"/>
+        <tag k="MaxAngle" v="176.579"/>
+        <tag k="MinAngle" v="5.9905"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-15036" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8922220501511475" lon="-77.0550477874710538">
+    <node visible="true" id="-15036" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8922220501690674" lon="-77.0550477874796798">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="178.454"/>
-        <tag k="MinAngle" v="52.4258"/>
+        <tag k="MaxAngle" v="178.45"/>
+        <tag k="MinAngle" v="52.3958"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-14590" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8911757620431899" lon="-77.0523519127425232">
+    <node visible="true" id="-14590" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8911757620832432" lon="-77.0523519128128953">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="179.175"/>
-        <tag k="MinAngle" v="26.2037"/>
+        <tag k="MaxAngle" v="179.177"/>
+        <tag k="MinAngle" v="26.1889"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-14577" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8905037313339506" lon="-77.0521247918032799">
+    <node visible="true" id="-14577" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8905037313719077" lon="-77.0521247918527052">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="181.352"/>
-        <tag k="MinAngle" v="3.03101"/>
+        <tag k="MaxAngle" v="181.359"/>
+        <tag k="MinAngle" v="3.03743"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-14575" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8900091376369232" lon="-77.0523879893184755">
+    <node visible="true" id="-14575" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8900091376988968" lon="-77.0523879893623729">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.1898"/>
-        <tag k="MinAngle" v="88.8102"/>
+        <tag k="MaxAngle" v="91.025"/>
+        <tag k="MinAngle" v="88.9749"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-13686" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025284756581300" lon="-77.0533059865252170">
+    <node visible="true" id="-13686" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025284756571210" lon="-77.0533059865429522">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.3924"/>
-        <tag k="MinAngle" v="89.6075"/>
+        <tag k="MaxAngle" v="90.3945"/>
+        <tag k="MinAngle" v="89.6053"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-13677" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9006968670392865" lon="-77.0533074393676145">
+    <node visible="true" id="-13677" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9006968670547479" lon="-77.0533074393826354">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="92.3509"/>
-        <tag k="MinAngle" v="88.2596"/>
+        <tag k="MaxAngle" v="92.3584"/>
+        <tag k="MinAngle" v="88.2692"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-13676" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8996653280971501" lon="-77.0533077558361015">
+    <node visible="true" id="-13676" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8996653280856606" lon="-77.0533077557783912">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="165.095"/>
-        <tag k="MinAngle" v="47.4593"/>
+        <tag k="MaxAngle" v="165.043"/>
+        <tag k="MinAngle" v="47.6512"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-13592" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025232123602009" lon="-77.0514144551983549">
+    <node visible="true" id="-13592" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025232123637608" lon="-77.0514144552525408">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.1163"/>
-        <tag k="MinAngle" v="89.8832"/>
+        <tag k="MaxAngle" v="90.1157"/>
+        <tag k="MinAngle" v="89.8838"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-13464" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8985752639956317" lon="-77.0537782684596380">
+    <node visible="true" id="-13464" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8985752639798079" lon="-77.0537782685156003">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="166.992"/>
-        <tag k="MinAngle" v="78.5868"/>
+        <tag k="MaxAngle" v="166.951"/>
+        <tag k="MinAngle" v="78.8288"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-13446" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8991462079321622" lon="-77.0538292004641363">
+    <node visible="true" id="-13446" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8991462079511194" lon="-77.0538292004728049">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="102.956"/>
-        <tag k="MinAngle" v="77.0437"/>
+        <tag k="MaxAngle" v="102.766"/>
+        <tag k="MinAngle" v="77.2339"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-12881" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8995752915928747" lon="-77.0514330739443523">
+    <node visible="true" id="-12881" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8995752915779889" lon="-77.0514330739720066">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.4298"/>
-        <tag k="MinAngle" v="88.6989"/>
+        <tag k="MaxAngle" v="91.4306"/>
+        <tag k="MinAngle" v="88.7025"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-12457" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9011171751412164" lon="-77.0514231588798992">
+    <node visible="true" id="-12457" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9011171751717981" lon="-77.0514231588139467">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="146.571"/>
-        <tag k="MinAngle" v="33.4287"/>
+        <tag k="MaxAngle" v="146.467"/>
+        <tag k="MinAngle" v="33.5333"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-12451" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9006951950097601" lon="-77.0514256286056423">
+    <node visible="true" id="-12451" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9006951949876196" lon="-77.0514256286160446">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="180.43"/>
-        <tag k="MinAngle" v="87.77"/>
+        <tag k="MaxAngle" v="180.431"/>
+        <tag k="MinAngle" v="87.7654"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-12450" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983275441954461" lon="-77.0514324049755572">
+    <node visible="true" id="-12450" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983275442726182" lon="-77.0514324049119921">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="92.8306"/>
-        <tag k="MinAngle" v="88.5996"/>
+        <tag k="MaxAngle" v="92.8274"/>
+        <tag k="MinAngle" v="88.6086"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-12440" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8978799989967357" lon="-77.0514878158019627">
+    <node visible="true" id="-12440" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8978799990311970" lon="-77.0514878158029859">
         <tag k="IntersectionWayCount" v="3"/>
         <tag k="MaxAngle" v="179.999"/>
-        <tag k="MinAngle" v="68.6638"/>
+        <tag k="MinAngle" v="68.8261"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-11175" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025230999489224" lon="-77.0394458283964525">
+    <node visible="true" id="-11175" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025230999768397" lon="-77.0394458287292139">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.9708"/>
-        <tag k="MinAngle" v="88.9444"/>
+        <tag k="MaxAngle" v="90.9801"/>
+        <tag k="MinAngle" v="88.9355"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-10925" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025232040654103" lon="-77.0385095622158786">
+    <node visible="true" id="-10925" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025232040280216" lon="-77.0385095622235667">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.9468"/>
-        <tag k="MinAngle" v="89.053"/>
+        <tag k="MaxAngle" v="90.9508"/>
+        <tag k="MinAngle" v="89.0491"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-10920" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013449096604091" lon="-77.0385224141731157">
+    <node visible="true" id="-10920" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013449096228996" lon="-77.0385224143575016">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.4472"/>
-        <tag k="MinAngle" v="87.2177"/>
+        <tag k="MaxAngle" v="91.434"/>
+        <tag k="MinAngle" v="87.2247"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-10919" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013400489692671" lon="-77.0394473361946837">
+    <node visible="true" id="-10919" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013400489410017" lon="-77.0394473361033789">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.5736"/>
-        <tag k="MinAngle" v="89.036"/>
+        <tag k="MaxAngle" v="90.5679"/>
+        <tag k="MinAngle" v="89.0401"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-10913" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002078101626338" lon="-77.0394481511630573">
+    <node visible="true" id="-10913" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002078100998077" lon="-77.0394481510132607">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.6683"/>
-        <tag k="MinAngle" v="88.3057"/>
+        <tag k="MaxAngle" v="91.6626"/>
+        <tag k="MinAngle" v="88.3114"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-10906" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8988134813009481" lon="-77.0394603495269337">
+    <node visible="true" id="-10906" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8988134813074424" lon="-77.0394603489629333">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="111.541"/>
-        <tag k="MinAngle" v="67.6346"/>
+        <tag k="MaxAngle" v="111.441"/>
+        <tag k="MinAngle" v="67.7277"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-10902" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983216772052813" lon="-77.0394719656763129">
+    <node visible="true" id="-10902" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983216771412970" lon="-77.0394719650872162">
         <tag k="IntersectionWayCount" v="3"/>
         <tag k="MaxAngle" v="179.833"/>
-        <tag k="MinAngle" v="89.4331"/>
+        <tag k="MinAngle" v="89.4367"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-10901" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973562337980638" lon="-77.0394725115576762">
+    <node visible="true" id="-10901" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973562338262013" lon="-77.0394725116216250">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="179.925"/>
-        <tag k="MinAngle" v="88.4071"/>
+        <tag k="MaxAngle" v="179.924"/>
+        <tag k="MinAngle" v="88.3958"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-10895" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8966088251491087" lon="-77.0394605711947378">
+    <node visible="true" id="-10895" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8966088251464868" lon="-77.0394605704223494">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="180.165"/>
-        <tag k="MinAngle" v="70.7588"/>
+        <tag k="MaxAngle" v="180.166"/>
+        <tag k="MinAngle" v="70.83"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-10449" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9015013716635067" lon="-77.0547532728801627">
+    <node visible="true" id="-10449" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9015013716308076" lon="-77.0547532728954536">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="179.368"/>
-        <tag k="MinAngle" v="89.5159"/>
+        <tag k="MaxAngle" v="179.365"/>
+        <tag k="MinAngle" v="89.5221"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-9641" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8993493085327557" lon="-77.0535309116022802">
+    <node visible="true" id="-9641" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8993493084607778" lon="-77.0535309116637279">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="146.786"/>
-        <tag k="MinAngle" v="71.9717"/>
+        <tag k="MaxAngle" v="146.843"/>
+        <tag k="MinAngle" v="71.7683"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-9628" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8991508676286202" lon="-77.0532318660986562">
+    <node visible="true" id="-9628" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8991508676083413" lon="-77.0532318661565938">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="162.866"/>
-        <tag k="MinAngle" v="70.9653"/>
+        <tag k="MaxAngle" v="162.799"/>
+        <tag k="MinAngle" v="71.1922"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-9616" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8987543760904373" lon="-77.0531051982289057">
+    <node visible="true" id="-9616" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8987543760507535" lon="-77.0531051982627417">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="143.503"/>
-        <tag k="MinAngle" v="36.4951"/>
+        <tag k="MaxAngle" v="143.465"/>
+        <tag k="MinAngle" v="36.5333"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-9615" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8984635947019157" lon="-77.0534062667601489">
+    <node visible="true" id="-9615" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8984635946916981" lon="-77.0534062668382944">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="165.609"/>
-        <tag k="MinAngle" v="91.5742"/>
+        <tag k="MaxAngle" v="165.674"/>
+        <tag k="MinAngle" v="91.6272"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-9532" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9029774493616500" lon="-77.0514164816429457">
+    <node visible="true" id="-9532" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9029774493498124" lon="-77.0514164816963216">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="114.527"/>
-        <tag k="MinAngle" v="65.4728"/>
+        <tag k="MaxAngle" v="114.442"/>
+        <tag k="MinAngle" v="65.5584"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-9084" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025251957131388" lon="-77.0365420460652786">
+    <node visible="true" id="-9084" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025251957034044" lon="-77.0365420459813066">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.058"/>
-        <tag k="MinAngle" v="89.942"/>
+        <tag k="MaxAngle" v="90.057"/>
+        <tag k="MinAngle" v="89.9429"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-8724" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9030578765847252" lon="-77.0502151538201616">
+    <node visible="true" id="-8724" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9030578765504274" lon="-77.0502151537412203">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="171.278"/>
-        <tag k="MinAngle" v="51.2519"/>
+        <tag k="MaxAngle" v="171.316"/>
+        <tag k="MinAngle" v="51.1543"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-8723" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9019866961607974" lon="-77.0501198975904344">
+    <node visible="true" id="-8723" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9019866961505016" lon="-77.0501198975505730">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="169.3"/>
-        <tag k="MinAngle" v="95.2136"/>
+        <tag k="MaxAngle" v="169.355"/>
+        <tag k="MinAngle" v="95.1836"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-8687" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8971476421329569" lon="-77.0501338512824532">
+    <node visible="true" id="-8687" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8971476421191582" lon="-77.0501338513171419">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="125.203"/>
-        <tag k="MinAngle" v="54.7972"/>
+        <tag k="MaxAngle" v="125.095"/>
+        <tag k="MinAngle" v="54.9049"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-8658" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8934982519237309" lon="-77.0501360366536261">
+    <node visible="true" id="-8658" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8934982519181744" lon="-77.0501360366720576">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="178.453"/>
-        <tag k="MinAngle" v="89.2715"/>
+        <tag k="MaxAngle" v="178.447"/>
+        <tag k="MinAngle" v="89.2771"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-8651" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920952037277274" lon="-77.0501594057320887">
+    <node visible="true" id="-8651" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920952038090988" lon="-77.0501594056152754">
         <tag k="IntersectionWayCount" v="5"/>
-        <tag k="MaxAngle" v="90.7363"/>
-        <tag k="MinAngle" v="58.9815"/>
+        <tag k="MaxAngle" v="90.7337"/>
+        <tag k="MinAngle" v="58.7837"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-8650" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8902111325268578" lon="-77.0501611772758821">
+    <node visible="true" id="-8650" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8902111325947502" lon="-77.0501611773388788">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="174.639"/>
-        <tag k="MinAngle" v="92.5259"/>
+        <tag k="MaxAngle" v="174.667"/>
+        <tag k="MinAngle" v="92.5133"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-8507" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9006917553943339" lon="-77.0488237544635410">
+    <node visible="true" id="-8507" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9006917553647398" lon="-77.0488237543970058">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="92.8448"/>
-        <tag k="MinAngle" v="88.5602"/>
+        <tag k="MaxAngle" v="92.8616"/>
+        <tag k="MinAngle" v="88.5397"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-8459" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8935002345107534" lon="-77.0488587180796429">
+    <node visible="true" id="-8459" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8935002344973952" lon="-77.0488587180961986">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="180.345"/>
-        <tag k="MinAngle" v="89.1284"/>
+        <tag k="MaxAngle" v="180.344"/>
+        <tag k="MinAngle" v="89.1266"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-8449" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921020829906681" lon="-77.0488490021885042">
+    <node visible="true" id="-8449" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921020830332225" lon="-77.0488490022810879">
         <tag k="IntersectionWayCount" v="3"/>
         <tag k="MaxAngle" v="180"/>
-        <tag k="MinAngle" v="87.55"/>
+        <tag k="MinAngle" v="87.5382"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-8148" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983223880961475" lon="-77.0449084617881539">
+    <node visible="true" id="-8148" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983223880952522" lon="-77.0449084619003202">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.0307"/>
-        <tag k="MinAngle" v="88.9379"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-8135" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8954295734128266" lon="-77.0449178081287869">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="104.63"/>
-        <tag k="MinAngle" v="75.4254"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-8124" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8945267938811980" lon="-77.0452104657337884">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="179.994"/>
-        <tag k="MinAngle" v="89.506"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-8123" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8935101924948938" lon="-77.0449220896308020">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="176.713"/>
-        <tag k="MinAngle" v="87.1077"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-8117" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921010068326609" lon="-77.0449380314171179">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="180.006"/>
-        <tag k="MinAngle" v="89.1859"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7886" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025240685435492" lon="-77.0434599446069797">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.2281"/>
-        <tag k="MinAngle" v="89.7721"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7880" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013360912943043" lon="-77.0434606617204736">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.1721"/>
-        <tag k="MinAngle" v="89.918"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7873" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002020227132519" lon="-77.0434624923550899">
-        <tag k="IntersectionWayCount" v="5"/>
-        <tag k="MaxAngle" v="114.369"/>
-        <tag k="MinAngle" v="36.373"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7868" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8995749565943001" lon="-77.0434635515003094">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.4393"/>
-        <tag k="MinAngle" v="89.5311"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7867" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983208213283262" lon="-77.0434689109973618">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.9954"/>
-        <tag k="MinAngle" v="88.9893"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7860" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973549563679271" lon="-77.0434676024255367">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.1143"/>
-        <tag k="MinAngle" v="89.8687"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7851" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8959787884334318" lon="-77.0434660429871343">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.3921"/>
-        <tag k="MinAngle" v="89.5996"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7847" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8953984503370620" lon="-77.0434721743072828">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="92.616"/>
-        <tag k="MinAngle" v="87.4045"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7846" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8935115511148339" lon="-77.0434741654661508">
-        <tag k="IntersectionWayCount" v="5"/>
-        <tag k="MaxAngle" v="125.42"/>
-        <tag k="MinAngle" v="33.5961"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7841" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921008395318424" lon="-77.0434773401606918">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="180.016"/>
-        <tag k="MinAngle" v="89.0357"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7533" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9006913441314950" lon="-77.0501284139364202">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="178.225"/>
-        <tag k="MinAngle" v="85.2277"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7506" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8995737663693788" lon="-77.0501313932334142">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.5924"/>
-        <tag k="MinAngle" v="88.1048"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7505" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983267368543864" lon="-77.0501348931353789">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.5791"/>
-        <tag k="MinAngle" v="88.2648"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7486" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973193307306957" lon="-77.0501354027440328">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="180.493"/>
-        <tag k="MinAngle" v="69.5694"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7485" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8960241168597562" lon="-77.0501174424688458">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="92.444"/>
-        <tag k="MinAngle" v="88.3291"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7482" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8959142264025886" lon="-77.0501189669681423">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.9495"/>
-        <tag k="MinAngle" v="89.0505"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7480" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8958138391669763" lon="-77.0501196840053808">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.4906"/>
-        <tag k="MinAngle" v="88.5095"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7472" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8953511864475843" lon="-77.0501286478909861">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="180"/>
-        <tag k="MinAngle" v="89.3144"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7428" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013442442102075" lon="-77.0365455222563611">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.3843"/>
-        <tag k="MinAngle" v="89.4491"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7422" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002011022681913" lon="-77.0365541662607427">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="180"/>
-        <tag k="MinAngle" v="89.7004"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7421" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8926095412359558" lon="-77.0365440386761406">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="173.922"/>
-        <tag k="MinAngle" v="90.6429"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7416" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920964516086798" lon="-77.0365414628699909">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="180"/>
-        <tag k="MinAngle" v="88.895"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7255" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025248548683109" lon="-77.0416884911648339">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.2574"/>
-        <tag k="MinAngle" v="89.7426"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7249" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013370151397595" lon="-77.0416982661662786">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.7749"/>
-        <tag k="MinAngle" v="89.1772"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7243" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002108288215780" lon="-77.0417004749825907">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.6812"/>
-        <tag k="MinAngle" v="89.3734"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7239" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8995938954229317" lon="-77.0417048066840522">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="113.111"/>
-        <tag k="MinAngle" v="66.8635"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7238" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983145682080007" lon="-77.0417022591149845">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.917"/>
-        <tag k="MinAngle" v="88.1068"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7232" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973540507061912" lon="-77.0417045677162520">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.4356"/>
-        <tag k="MinAngle" v="89.6541"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7224" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8959880138401957" lon="-77.0417124241430145">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="98.3346"/>
-        <tag k="MinAngle" v="81.5785"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7220" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8954049984608972" lon="-77.0417272025715363">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="92.5701"/>
-        <tag k="MinAngle" v="87.4375"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7215" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8943331424355705" lon="-77.0417298224629690">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="180.179"/>
-        <tag k="MinAngle" v="89.8253"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7210" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8935291182357687" lon="-77.0417432562994975">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="98.2176"/>
-        <tag k="MinAngle" v="81.9616"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7205" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8926424228274641" lon="-77.0417472351934975">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="119.348"/>
-        <tag k="MinAngle" v="60.6878"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7204" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920999445031512" lon="-77.0417308937387872">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="179.957"/>
-        <tag k="MinAngle" v="88.6832"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7111" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8943399810945181" lon="-77.0394679608437656">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="180.075"/>
-        <tag k="MinAngle" v="88.2678"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7105" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8935304495401795" lon="-77.0394682622824831">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="179.982"/>
-        <tag k="MinAngle" v="89.4851"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7100" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920997357871059" lon="-77.0394809573233630">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.0317"/>
-        <tag k="MinAngle" v="89.0231"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-6550" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8964016324199164" lon="-77.0394615361332313">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.383"/>
-        <tag k="MinAngle" v="88.7488"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-6544" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8953966358788179" lon="-77.0394635022306034">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.8162"/>
-        <tag k="MinAngle" v="89.1182"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-6341" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973537071009901" lon="-77.0449096531749831">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.8538"/>
-        <tag k="MinAngle" v="89.1403"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-6332" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8959947075402539" lon="-77.0449181638486067">
-        <tag k="IntersectionWayCount" v="5"/>
-        <tag k="MaxAngle" v="96.733"/>
-        <tag k="MinAngle" v="37.757"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-6144" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8995787742696066" lon="-77.0449052898254223">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.2009"/>
-        <tag k="MinAngle" v="89.7491"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-6028" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025259360151736" lon="-77.0466486847756755">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.4574"/>
-        <tag k="MinAngle" v="89.6437"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-6027" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013181102901981" lon="-77.0466525783103720">
-        <tag k="IntersectionWayCount" v="5"/>
-        <tag k="MaxAngle" v="114.402"/>
-        <tag k="MinAngle" v="26.5151"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-6023" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9006925932406205" lon="-77.0466507281080339">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.3273"/>
-        <tag k="MinAngle" v="89.6502"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-6017" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8995771042391851" lon="-77.0466525204093529">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.6117"/>
-        <tag k="MinAngle" v="89.4267"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-6011" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983217026619528" lon="-77.0466574635604360">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.4677"/>
-        <tag k="MinAngle" v="89.5371"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-6005" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973534417260538" lon="-77.0466640352676961">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.2505"/>
-        <tag k="MinAngle" v="89.7653"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-6004" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8960207643766083" lon="-77.0466700079210085">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="92.5764"/>
-        <tag k="MinAngle" v="87.3853"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-6002" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8957326981187563" lon="-77.0466773460294405">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.0513"/>
-        <tag k="MinAngle" v="89.9486"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-6000" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8956456856671409" lon="-77.0466788597587851">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="92.3197"/>
-        <tag k="MinAngle" v="87.8137"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-5996" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8953075498283951" lon="-77.0466817890890354">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="124.8"/>
-        <tag k="MinAngle" v="55.8883"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-5987" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8934995058398201" lon="-77.0466752462648259">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="92.9243"/>
-        <tag k="MinAngle" v="87.0346"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-5982" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921012263338852" lon="-77.0466757144994432">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="179.959"/>
-        <tag k="MinAngle" v="89.3252"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-5863" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025259906271330" lon="-77.0488257173815327">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.9589"/>
-        <tag k="MinAngle" v="88.016"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-5855" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9020878865875375" lon="-77.0488314282338393">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="117.416"/>
-        <tag k="MinAngle" v="62.584"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-5854" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8995750349694873" lon="-77.0488364649692130">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.6921"/>
-        <tag k="MinAngle" v="87.898"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-5826" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983289976998066" lon="-77.0488368087118545">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.8828"/>
-        <tag k="MinAngle" v="86.9077"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-5825" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973597842652268" lon="-77.0488469515910168">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="93.6493"/>
-        <tag k="MinAngle" v="87.16"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-5802" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8964498310227356" lon="-77.0488394797276044">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="180"/>
-        <tag k="MinAngle" v="52.7199"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-5075" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025223950068337" lon="-77.0296261288426081">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.1713"/>
-        <tag k="MinAngle" v="89.8287"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-5067" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8998084411029197" lon="-77.0296326803191675">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="92.7684"/>
-        <tag k="MinAngle" v="87.4256"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-5060" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983128402323501" lon="-77.0296200195111851">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.6375"/>
-        <tag k="MinAngle" v="89.3622"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-5056" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973389463941643" lon="-77.0296192087790814">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.3114"/>
-        <tag k="MinAngle" v="88.7033"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4958" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920853946379097" lon="-77.0281374135483361">
-        <tag k="IntersectionWayCount" v="5"/>
-        <tag k="MaxAngle" v="90.3678"/>
-        <tag k="MinAngle" v="32.2705"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4947" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904606771155770" lon="-77.0281865822273346">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="183.869"/>
-        <tag k="MinAngle" v="87.4949"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4781" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013382308701594" lon="-77.0319628608440325">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.9254"/>
-        <tag k="MinAngle" v="89.2202"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4777" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002045054714571" lon="-77.0319563566214072">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.2254"/>
-        <tag k="MinAngle" v="89.7749"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4772" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8993926676600807" lon="-77.0319520195028815">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="114.075"/>
-        <tag k="MinAngle" v="65.9249"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4766" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983165915918505" lon="-77.0319552984260270">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.4482"/>
-        <tag k="MinAngle" v="89.5518"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4760" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8954986425035614" lon="-77.0319550570857530">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.5409"/>
-        <tag k="MinAngle" v="89.0791"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4759" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920932091632565" lon="-77.0319638388872363">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="92.8013"/>
-        <tag k="MinAngle" v="88.4356"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4751" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904126048772696" lon="-77.0319620010722730">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="93.5783"/>
-        <tag k="MinAngle" v="87.1017"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4098" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025181975944676" lon="-77.0336315901500086">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="92.1084"/>
-        <tag k="MinAngle" v="87.8918"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4092" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013326716244592" lon="-77.0336389743976611">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.041"/>
-        <tag k="MinAngle" v="89.0709"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4083" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983142736557355" lon="-77.0336436398828965">
-        <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="180"/>
+        <tag k="MaxAngle" v="91.0334"/>
         <tag k="MinAngle" v="88.936"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-4080" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973451529801011" lon="-77.0336453428661230">
+    <node visible="true" id="-8135" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8954295734262132" lon="-77.0449178080797594">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="104.572"/>
+        <tag k="MinAngle" v="75.4834"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-8124" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8945267939396970" lon="-77.0452104656071413">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="179.994"/>
+        <tag k="MinAngle" v="89.737"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-8123" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8935101924989866" lon="-77.0449220894032436">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="176.726"/>
+        <tag k="MinAngle" v="87.1117"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-8117" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921010068774322" lon="-77.0449380313858114">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="180.006"/>
+        <tag k="MinAngle" v="89.1824"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7886" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025240685342766" lon="-77.0434599443560586">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.2274"/>
+        <tag k="MinAngle" v="89.7726"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7880" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013360912718582" lon="-77.0434606616297657">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.1715"/>
+        <tag k="MinAngle" v="89.9181"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7873" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002020227413325" lon="-77.0434624924955500">
+        <tag k="IntersectionWayCount" v="5"/>
+        <tag k="MaxAngle" v="114.281"/>
+        <tag k="MinAngle" v="36.2383"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7868" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8995749566243916" lon="-77.0434635514571227">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.4408"/>
+        <tag k="MinAngle" v="89.5301"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7867" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983208212838676" lon="-77.0434689115508888">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.9982"/>
+        <tag k="MinAngle" v="88.9865"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7860" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973549563541354" lon="-77.0434676025221847">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.1096"/>
+        <tag k="MinAngle" v="89.8721"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7851" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8959787884481614" lon="-77.0434660435335985">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.4087"/>
+        <tag k="MinAngle" v="89.5831"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7847" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8953984503117098" lon="-77.0434721741325603">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="92.6106"/>
+        <tag k="MinAngle" v="87.4099"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7846" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8935115510977099" lon="-77.0434741654867565">
+        <tag k="IntersectionWayCount" v="5"/>
+        <tag k="MaxAngle" v="125.307"/>
+        <tag k="MinAngle" v="33.4855"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7841" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921008395773100" lon="-77.0434773402605941">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="180.015"/>
+        <tag k="MinAngle" v="89.0319"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7533" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9006913441523565" lon="-77.0501284139758553">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="178.214"/>
+        <tag k="MinAngle" v="85.2454"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7506" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8995737663439485" lon="-77.0501313932876712">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="91.5901"/>
+        <tag k="MinAngle" v="88.1099"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7505" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983267367946297" lon="-77.0501348932295116">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="91.5805"/>
+        <tag k="MinAngle" v="88.2629"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7486" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973193307419365" lon="-77.0501354028583307">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="180.496"/>
+        <tag k="MinAngle" v="69.636"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7485" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8960241168296932" lon="-77.0501174426375428">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="92.4398"/>
+        <tag k="MinAngle" v="88.3447"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7482" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8959142264932609" lon="-77.0501189670433888">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.948"/>
+        <tag k="MinAngle" v="89.0521"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7480" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8958138392018427" lon="-77.0501196839900615">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="91.4877"/>
+        <tag k="MinAngle" v="88.5124"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7472" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8953511864623067" lon="-77.0501286479098439">
         <tag k="IntersectionWayCount" v="3"/>
         <tag k="MaxAngle" v="180"/>
-        <tag k="MinAngle" v="89.718"/>
+        <tag k="MinAngle" v="89.3098"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-4075" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8964025161065834" lon="-77.0336492341961474">
+    <node visible="true" id="-7428" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013442441786310" lon="-77.0365455220702842">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="93.1004"/>
-        <tag k="MinAngle" v="87.6589"/>
+        <tag k="MaxAngle" v="90.386"/>
+        <tag k="MinAngle" v="89.4482"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-3931" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025227614027926" lon="-77.0319550909155595">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.4969"/>
-        <tag k="MinAngle" v="89.634"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-3930" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973489201007254" lon="-77.0319632340942348">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.4853"/>
-        <tag k="MinAngle" v="89.5148"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-3925" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8961045129885790" lon="-77.0319617902396203">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="104.275"/>
-        <tag k="MinAngle" v="75.725"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-2739" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013257758768489" lon="-77.0296231338894302">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.9333"/>
-        <tag k="MinAngle" v="88.0668"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-2734" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002161617765978" lon="-77.0296344087306153">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="115.816"/>
-        <tag k="MinAngle" v="64.1843"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-2733" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8961256046860271" lon="-77.0296395642207301">
-        <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="92.9768"/>
-        <tag k="MinAngle" v="88.2366"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-2730" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8954466125148173" lon="-77.0296330946255239">
+    <node visible="true" id="-7422" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002011022466974" lon="-77.0365541662104789">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="176.27"/>
-        <tag k="MinAngle" v="74.025"/>
+        <tag k="MaxAngle" v="180"/>
+        <tag k="MinAngle" v="89.6989"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2619" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025250733047585" lon="-77.0448974173066148">
+    <node visible="true" id="-7421" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8926095411880368" lon="-77.0365440389081186">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="173.952"/>
+        <tag k="MinAngle" v="90.6356"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7416" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920964516186416" lon="-77.0365414627787715">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="180"/>
+        <tag k="MinAngle" v="88.8909"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7255" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025248548345672" lon="-77.0416885030624172">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.7321"/>
-        <tag k="MinAngle" v="89.2881"/>
+        <tag k="MaxAngle" v="90.2575"/>
+        <tag k="MinAngle" v="89.7425"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2604" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013375167156923" lon="-77.0449020743512278">
+    <node visible="true" id="-7249" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013370151245823" lon="-77.0416982564883170">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.3246"/>
-        <tag k="MinAngle" v="89.6754"/>
+        <tag k="MaxAngle" v="90.7763"/>
+        <tag k="MinAngle" v="89.176"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2600" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9007051028891127" lon="-77.0448995142580770">
+    <node visible="true" id="-7243" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002108288059887" lon="-77.0417004802375232">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.6808"/>
+        <tag k="MinAngle" v="89.3736"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7239" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8995938953886835" lon="-77.0417048028976268">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="113.019"/>
+        <tag k="MinAngle" v="66.9523"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7238" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983145682683755" lon="-77.0417022537369007">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="91.9154"/>
+        <tag k="MinAngle" v="88.1062"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7232" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973540507466993" lon="-77.0417045741807129">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.4382"/>
+        <tag k="MinAngle" v="89.6506"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7224" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8959880138826506" lon="-77.0417124212553546">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="98.3236"/>
+        <tag k="MinAngle" v="81.5896"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7220" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8954049983931327" lon="-77.0417272101435344">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="92.5739"/>
+        <tag k="MinAngle" v="87.4332"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7215" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8943331424647099" lon="-77.0417298252586278">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="180.174"/>
+        <tag k="MinAngle" v="89.8261"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7210" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8935291181975487" lon="-77.0417432595808975">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="98.233"/>
+        <tag k="MinAngle" v="81.9431"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7205" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8926424228685406" lon="-77.0417472362949951">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="119.262"/>
+        <tag k="MinAngle" v="60.7732"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7204" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920999445673488" lon="-77.0417308964401997">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="179.957"/>
+        <tag k="MinAngle" v="88.6777"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7111" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8943399810735713" lon="-77.0394679609136404">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="180.075"/>
+        <tag k="MinAngle" v="88.2776"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7105" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8935304495182095" lon="-77.0394682623225293">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="179.982"/>
+        <tag k="MinAngle" v="89.4904"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-7100" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920997357734279" lon="-77.0394809573145238">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="91.0337"/>
+        <tag k="MinAngle" v="89.021"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-6550" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8964016324268016" lon="-77.0394615365279662">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="91.3767"/>
+        <tag k="MinAngle" v="88.7558"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-6544" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8953966359422125" lon="-77.0394635022409631">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.8216"/>
+        <tag k="MinAngle" v="89.1125"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-6341" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973537070995974" lon="-77.0449096533071014">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.8479"/>
+        <tag k="MinAngle" v="89.1444"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-6332" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8959947075282102" lon="-77.0449181639116745">
         <tag k="IntersectionWayCount" v="5"/>
-        <tag k="MaxAngle" v="113.928"/>
-        <tag k="MinAngle" v="27.9405"/>
+        <tag k="MaxAngle" v="96.7185"/>
+        <tag k="MinAngle" v="37.9116"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2384" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002063114063432" lon="-77.0336416755485800">
+    <node visible="true" id="-6144" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8995787741968400" lon="-77.0449052900554108">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="90.5254"/>
-        <tag k="MinAngle" v="89.4747"/>
+        <tag k="MaxAngle" v="90.2038"/>
+        <tag k="MinAngle" v="89.7469"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2377" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8987817991584706" lon="-77.0336417883196560">
+    <node visible="true" id="-6028" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025259359934168" lon="-77.0466486848822427">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="129.772"/>
-        <tag k="MinAngle" v="50.2282"/>
+        <tag k="MaxAngle" v="90.4546"/>
+        <tag k="MinAngle" v="89.6458"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2376" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8954790622540827" lon="-77.0336454353997908">
+    <node visible="true" id="-6027" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013181103222934" lon="-77.0466525784354417">
+        <tag k="IntersectionWayCount" v="5"/>
+        <tag k="MaxAngle" v="114.316"/>
+        <tag k="MinAngle" v="26.4186"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-6023" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9006925932013914" lon="-77.0466507283073554">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="98.5114"/>
-        <tag k="MinAngle" v="81.4887"/>
+        <tag k="MaxAngle" v="90.3236"/>
+        <tag k="MinAngle" v="89.6541"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2363" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920895181972028" lon="-77.0336530035995679">
+    <node visible="true" id="-6017" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8995771042291025" lon="-77.0466525205926729">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="91.8336"/>
-        <tag k="MinAngle" v="88.1662"/>
+        <tag k="MaxAngle" v="90.6109"/>
+        <tag k="MinAngle" v="89.4296"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2362" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8901296083305610" lon="-77.0330310173628163">
+    <node visible="true" id="-6011" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983217026498735" lon="-77.0466574635469499">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.4693"/>
+        <tag k="MinAngle" v="89.5354"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-6005" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973534417449756" lon="-77.0466640351196332">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.252"/>
+        <tag k="MinAngle" v="89.7637"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-6004" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8960207643662343" lon="-77.0466700078724784">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="92.5817"/>
+        <tag k="MinAngle" v="87.3801"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-6002" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8957326980908178" lon="-77.0466773461594414">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.0574"/>
+        <tag k="MinAngle" v="89.9425"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-6000" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8956456856733226" lon="-77.0466788598475176">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="92.3061"/>
+        <tag k="MinAngle" v="87.8264"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5996" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8953075498205365" lon="-77.0466817891905293">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="124.692"/>
+        <tag k="MinAngle" v="55.9985"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5987" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8934995058518993" lon="-77.0466752459834083">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="92.9376"/>
+        <tag k="MinAngle" v="87.0214"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5982" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921012262893271" lon="-77.0466757144023120">
         <tag k="IntersectionWayCount" v="3"/>
-        <tag k="MaxAngle" v="178.335"/>
-        <tag k="MinAngle" v="88.4135"/>
+        <tag k="MaxAngle" v="179.959"/>
+        <tag k="MinAngle" v="89.3224"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2185" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025179635155638" lon="-77.0345782669204908">
+    <node visible="true" id="-5863" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025259906228627" lon="-77.0488257174203000">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="92.2373"/>
-        <tag k="MinAngle" v="87.7627"/>
+        <tag k="MaxAngle" v="91.9674"/>
+        <tag k="MinAngle" v="88.0076"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2180" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013355347371785" lon="-77.0345929530679001">
+    <node visible="true" id="-5855" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9020878865466315" lon="-77.0488314282349478">
         <tag k="IntersectionWayCount" v="4"/>
-        <tag k="MaxAngle" v="93.8845"/>
-        <tag k="MinAngle" v="87.5513"/>
+        <tag k="MaxAngle" v="117.333"/>
+        <tag k="MinAngle" v="62.6672"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5854" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8995750349551841" lon="-77.0488364650197468">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="91.698"/>
+        <tag k="MinAngle" v="87.8958"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5826" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983289976938735" lon="-77.0488368087319486">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="91.8803"/>
+        <tag k="MinAngle" v="86.91"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5825" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973597842168530" lon="-77.0488469517798933">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="93.6498"/>
+        <tag k="MinAngle" v="87.1624"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5802" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8964498310243627" lon="-77.0488394798659613">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="180"/>
+        <tag k="MinAngle" v="52.8185"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5075" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025223949685923" lon="-77.0296261288859796">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.1725"/>
+        <tag k="MinAngle" v="89.8275"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5067" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8998084410728922" lon="-77.0296326802279907">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="92.7615"/>
+        <tag k="MinAngle" v="87.4332"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5060" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983128402480034" lon="-77.0296200194923415">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.636"/>
+        <tag k="MinAngle" v="89.3638"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-5056" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973389463902635" lon="-77.0296192087675848">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="91.3039"/>
+        <tag k="MinAngle" v="88.7108"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-4958" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920853946815228" lon="-77.0281374134615788">
+        <tag k="IntersectionWayCount" v="5"/>
+        <tag k="MaxAngle" v="90.368"/>
+        <tag k="MinAngle" v="32.3943"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-4947" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904606771757173" lon="-77.0281865822354774">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="183.853"/>
+        <tag k="MinAngle" v="87.5113"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-4781" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013382308328417" lon="-77.0319628607613396">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="91.9265"/>
+        <tag k="MinAngle" v="89.2238"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-4777" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002045054508301" lon="-77.0319563566534526">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.2278"/>
+        <tag k="MinAngle" v="89.7725"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-4772" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8993926676631503" lon="-77.0319520193806540">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="113.987"/>
+        <tag k="MinAngle" v="66.0128"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-4766" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983165915993041" lon="-77.0319552983834654">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.4494"/>
+        <tag k="MinAngle" v="89.5506"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-4760" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8954986425356921" lon="-77.0319550570273606">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.5404"/>
+        <tag k="MinAngle" v="89.0807"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-4759" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920932092260117" lon="-77.0319638389247956">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="92.8044"/>
+        <tag k="MinAngle" v="88.4375"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-4751" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904126048426377" lon="-77.0319620010315163">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="93.5662"/>
+        <tag k="MinAngle" v="87.1112"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-4098" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025181976205090" lon="-77.0336315902365385">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="92.109"/>
+        <tag k="MinAngle" v="87.8911"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-4092" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013326716397785" lon="-77.0336389743689125">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="91.0366"/>
+        <tag k="MinAngle" v="89.0737"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-4083" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983142736702021" lon="-77.0336436399333309">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="180"/>
+        <tag k="MinAngle" v="88.9397"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-4080" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973451529714183" lon="-77.0336453428979127">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="180"/>
+        <tag k="MinAngle" v="89.7185"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-4075" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8964025160676172" lon="-77.0336492341443062">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="93.0901"/>
+        <tag k="MinAngle" v="87.6723"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-3931" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025227613808227" lon="-77.0319550909391637">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.4956"/>
+        <tag k="MinAngle" v="89.6358"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-3930" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973489201363023" lon="-77.0319632340759171">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.4863"/>
+        <tag k="MinAngle" v="89.5138"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-3925" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8961045129716680" lon="-77.0319617903380873">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="104.227"/>
+        <tag k="MinAngle" v="75.773"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2739" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013257758487896" lon="-77.0296231338445239">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="91.9242"/>
+        <tag k="MinAngle" v="88.0758"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2734" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002161617741820" lon="-77.0296344087901588">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="115.74"/>
+        <tag k="MinAngle" v="64.2599"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2733" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8961256046538892" lon="-77.0296395641307754">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="92.9711"/>
+        <tag k="MinAngle" v="88.2355"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2730" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8954466125531724" lon="-77.0296330946646464">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="176.282"/>
+        <tag k="MinAngle" v="74.0848"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2619" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025250732631065" lon="-77.0448974175640302">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.7331"/>
+        <tag k="MinAngle" v="89.287"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2604" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013375167357367" lon="-77.0449020740541073">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.326"/>
+        <tag k="MinAngle" v="89.674"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2600" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9007051028435527" lon="-77.0448995144150928">
+        <tag k="IntersectionWayCount" v="5"/>
+        <tag k="MaxAngle" v="113.84"/>
+        <tag k="MinAngle" v="27.8379"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2384" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9002063114033589" lon="-77.0336416754410607">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="90.5244"/>
+        <tag k="MinAngle" v="89.4758"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2377" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8987817991525731" lon="-77.0336417882717370">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="129.658"/>
+        <tag k="MinAngle" v="50.3415"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2376" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8954790622846218" lon="-77.0336454354328879">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="98.478"/>
+        <tag k="MinAngle" v="81.522"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2363" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920895182417112" lon="-77.0336530036914695">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="91.8499"/>
+        <tag k="MinAngle" v="88.15"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2362" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8901296083141190" lon="-77.0330310174259694">
+        <tag k="IntersectionWayCount" v="3"/>
+        <tag k="MaxAngle" v="178.328"/>
+        <tag k="MinAngle" v="88.574"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2185" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025179634893732" lon="-77.0345782669268431">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="92.2268"/>
+        <tag k="MinAngle" v="87.7732"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-2180" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013355347201326" lon="-77.0345929530444522">
+        <tag k="IntersectionWayCount" v="4"/>
+        <tag k="MaxAngle" v="93.8871"/>
+        <tag k="MinAngle" v="87.5576"/>
         <tag k="error:circular" v="15"/>
     </node>
 </osm>

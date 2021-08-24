@@ -27,12 +27,12 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OsmJsonReader.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 
 // Qt
 #include <QDir>
@@ -61,7 +61,7 @@ public:
   OsmJsonReaderTest() :
   HootTestFixture("test-files/io/OsmJsonReaderTest/", "test-output/io/OsmJsonReaderTest/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetConfigs);
   }
 
   void nodeTest()

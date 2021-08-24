@@ -56,13 +56,11 @@ public:
   EdgeMatchSetFinderTest() :
   HootTestFixture("test-files/conflate/network/", "test-files/conflate/network/")
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   EdgeMatchSetFinderPtr loadTest(int testNumber)
   {
-    NetworkVertex::reset();
-
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmMapReaderFactory::read(map, _inputPath + "ParitalEdgeMatch.osm",

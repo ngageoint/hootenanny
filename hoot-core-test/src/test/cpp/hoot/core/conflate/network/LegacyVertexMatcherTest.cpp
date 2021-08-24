@@ -46,7 +46,7 @@ public:
 
   LegacyVertexMatcherTest()
   {
-    setResetType(ResetBasic);
+
   }
 
   /**

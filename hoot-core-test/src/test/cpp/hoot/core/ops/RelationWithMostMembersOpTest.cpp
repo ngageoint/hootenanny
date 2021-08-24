@@ -27,13 +27,13 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/RelationWithMostMembersOp.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -52,13 +52,10 @@ class RelationWithMostMembersOpTest : public HootTestFixture
 
 public:
 
-  const QString inputPath = "test-files/ops/RelationWithMostMembersOp/";
-  const QString outputPath = "test-output/ops/RelationWithMostMembersOp/";
-
-  RelationWithMostMembersOpTest()
+  RelationWithMostMembersOpTest() :
+    HootTestFixture("test-files/ops/RelationWithMostMembersOp/",
+                    "test-output/ops/RelationWithMostMembersOp/")
   {
-    setResetType(ResetBasic);
-    FileUtils::makeDir(outputPath);
   }
 
   void runBasicTest()
@@ -75,9 +72,9 @@ public:
 
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
-    writer.write(map, outputPath + "RelationWithMostMembersOpOut.osm");
-    HOOT_FILE_EQUALS(inputPath + "RelationWithMostMembersOpOut.osm",
-                     outputPath + "RelationWithMostMembersOpOut.osm");
+    writer.write(map, _outputPath + "RelationWithMostMembersOpOut.osm");
+    HOOT_FILE_EQUALS(_inputPath + "RelationWithMostMembersOpOut.osm",
+                     _outputPath + "RelationWithMostMembersOpOut.osm");
   }
 
 };

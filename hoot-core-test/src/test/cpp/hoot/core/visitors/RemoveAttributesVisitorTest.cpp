@@ -32,11 +32,11 @@
 #include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/ElementAttributeType.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/elements/ElementAttributeType.h>
 #include <hoot/core/visitors/RemoveAttributesVisitor.h>
 
 namespace hoot
@@ -55,7 +55,6 @@ public:
     : HootTestFixture("test-files/visitors/RemoveAttributesVisitorTest/",
                       "test-output/visitors/RemoveAttributesVisitorTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runRemoveAttributesTest()

@@ -53,7 +53,7 @@ public:
 
   PoiPolygonMatchCreatorTest()
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void basicTest()

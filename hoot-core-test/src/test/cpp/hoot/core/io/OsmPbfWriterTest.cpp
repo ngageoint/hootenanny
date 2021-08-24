@@ -32,8 +32,8 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmPbfWriter.h>
 using namespace hoot::pb;
@@ -62,7 +62,6 @@ public:
 
   OsmPbfWriterTest() : HootTestFixture("test-files/io/", "test-output/io/")
   {
-    setResetType(ResetBasic);
   }
 
   void runToyTest()

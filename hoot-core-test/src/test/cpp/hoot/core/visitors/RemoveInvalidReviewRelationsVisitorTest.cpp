@@ -26,9 +26,9 @@
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.h>
@@ -46,11 +46,6 @@ class RemoveInvalidReviewRelationsVisitorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  RemoveInvalidReviewRelationsVisitorTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   void runInvalidMemberCountTest()
   {

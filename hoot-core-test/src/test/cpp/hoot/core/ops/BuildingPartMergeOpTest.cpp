@@ -65,7 +65,7 @@ public:
   BuildingPartMergeOpTest() :
   HootTestFixture("test-files/ops/BuildingPartMergeOp/", "test-output/ops/BuildingPartMergeOp/")
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void runToyTest()

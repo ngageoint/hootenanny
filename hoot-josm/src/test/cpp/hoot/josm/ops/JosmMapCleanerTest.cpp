@@ -27,10 +27,10 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/josm/ops/JosmMapCleaner.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/josm/ops/JosmMapCleaner.h>
 
 namespace hoot
 {
@@ -49,7 +49,6 @@ public:
   JosmMapCleanerTest() :
   HootTestFixture("test-files/ops/JosmMapCleanerTest", "test-output/ops/JosmMapCleanerTest")
   {
-    setResetType(ResetBasic);
   }
 
   void runCleanNoErrorsTest()

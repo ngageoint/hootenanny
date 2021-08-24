@@ -81,9 +81,9 @@ public:
   OsmPbfReaderTest() :
   HootTestFixture("test-files/io/OsmPbfReaderTest/", "test-output/io/OsmPbfReaderTest/")
   {
-    // Strangely, this only needs ResetAllNoMatchFactory for runFactoryReadMapTest to pass in
+    // Strangely, this only needs ResetEnvironment for runFactoryReadMapTest to pass in
     // series, but not parallel.
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void runOffsetsTest()

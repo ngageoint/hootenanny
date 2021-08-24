@@ -37,9 +37,9 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/FrechetDistance.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
 using namespace geos::geom;
@@ -59,11 +59,6 @@ class FrechetDistanceTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  FrechetDistanceTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   void simpleFrechet()
   {

@@ -72,6 +72,11 @@ public:
    */
   void reset();
 
+  /**
+   * Return the list of mergers as a string
+   */
+  QString toString() const;
+
 private:
 
   QHash<QString, std::shared_ptr<TagMerger>> _mergers;

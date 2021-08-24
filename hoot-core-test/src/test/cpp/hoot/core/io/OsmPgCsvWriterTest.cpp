@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmPgCsvWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
@@ -53,7 +53,6 @@ public:
     : HootTestFixture("test-files/io/PgCsvWriter/",
                       "test-output/io/PgCsvWriter/")
   {
-    setResetType(ResetBasic);
   }
 
   void runBasic()

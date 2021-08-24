@@ -43,7 +43,7 @@ public:
 
   EdgeSublineMatchTest()
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void basicTest()

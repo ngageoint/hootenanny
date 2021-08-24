@@ -83,7 +83,7 @@ public:
     : HootTestFixture("test-files/io/ServiceHootApiDbReaderTest/",
                       "test-output/io/ServiceHootApiDbReaderTest/")
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void setUpTest(const QString& testName, bool adminUser = false)
@@ -98,7 +98,7 @@ public:
     database.close();
   }
 
-  virtual void tearDown()
+  void tearDown() override
   {
     //  Delete the current map
     if (_mapId != -1)
@@ -115,6 +115,7 @@ public:
     }
     //  Delete the current user afterwards
     ServicesDbTestUtils::deleteUser(userEmail(_testName));
+    HootTestFixture::tearDown();
   }
 
   long populateMap(const bool putInFolder = false, const bool folderIsPublic = false)
@@ -426,7 +427,7 @@ public:
     _mapId = populateMap();
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    conf().set("api.db.email", userEmail(_testName));
+    conf().set(ConfigOptions::getApiDbEmailKey(), userEmail(_testName));
     OsmMapReaderFactory::read(map, ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
     verifyFullReadOutput(map);
   }

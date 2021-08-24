@@ -26,13 +26,13 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/BuildingOutlineRemoveOp.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -55,7 +55,6 @@ public:
     : HootTestFixture("test-files/ops/BuildingOutlineRemoveOp/",
                       "test-output/ops/BuildingOutlineRemoveOp/")
   {
-    setResetType(ResetBasic);
   }
 
   void runSelfIntersectingRelationTest()

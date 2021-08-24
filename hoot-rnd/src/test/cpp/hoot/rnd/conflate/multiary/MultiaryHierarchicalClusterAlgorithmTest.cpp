@@ -29,11 +29,11 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithm.h>
 
 using namespace std;
@@ -48,11 +48,6 @@ class MultiaryHierarchicalClusterAlgorithmTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  MultiaryHierarchicalClusterAlgorithmTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   /**
    * Cluster a simple set of nodes and verify that the output is reasonable

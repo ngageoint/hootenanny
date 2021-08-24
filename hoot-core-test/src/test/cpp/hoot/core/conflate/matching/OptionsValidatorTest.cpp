@@ -63,7 +63,7 @@ public:
 
   OptionsValidatorTest()
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void runValidateSizeUnequalTest()
@@ -74,10 +74,10 @@ public:
     QStringList matchers;
     matchers.append("hoot::BuildingMatchCreator");
     matchers.append("hoot::HighwayMatchCreator");
-    conf().set("match.creators", matchers);
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchers);
     QStringList mergers;
     mergers.append("hoot::BuildingMergerCreator");
-    conf().set("merger.creators", mergers);
+    conf().set(ConfigOptions::getMergerCreatorsKey(), mergers);
 
     QString exceptionMsg;
     try
@@ -99,11 +99,11 @@ public:
     QStringList matchers;
     matchers.append("hoot::BuildingMatchCreator");
     matchers.append("hoot::ScriptMatchCreator,Area.js");
-    conf().set("match.creators", matchers);
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchers);
     QStringList mergers;
     mergers.append("hoot::BuildingMergerCreator");
     mergers.append("hoot::PoiPolygonMergerCreator");
-    conf().set("merger.creators", mergers);
+    conf().set(ConfigOptions::getMergerCreatorsKey(), mergers);
 
     QString exceptionMsg;
     try
@@ -121,26 +121,26 @@ public:
 
   void runAutoCorrectGenericTest()
   {
-    conf().set("autocorrect.options", "true");
+    conf().set(ConfigOptions::getAutocorrectOptionsKey(), "true");
 
     QStringList matchers;
     matchers.append("hoot::ScriptMatchCreator,Point.js");
     matchers.append("hoot::ScriptMatchCreator,Area.js");
     matchers.append("hoot::BuildingMatchCreator");
     matchers.append("hoot::ScriptMatchCreator,Line.js");
-    conf().set("match.creators", matchers);
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchers);
     QStringList mergers;
     mergers.append("hoot::ScriptMergerCreator");
     mergers.append("hoot::ScriptMergerCreator");
     mergers.append("hoot::BuildingMergerCreator");
     mergers.append("hoot::ScriptMergerCreator");
-    conf().set("merger.creators", mergers);
+    conf().set(ConfigOptions::getMergerCreatorsKey(), mergers);
 
     OptionsValidator::fixGenericMatcherOrdering();
 
-    matchers = conf().getList("match.creators");
+    matchers = conf().getList(ConfigOptions::getMatchCreatorsKey());
     LOG_VART(matchers);
-    mergers = conf().getList("merger.creators");
+    mergers = conf().getList(ConfigOptions::getMergerCreatorsKey());
     LOG_VART(mergers);
     CPPUNIT_ASSERT_EQUAL(0, matchers.indexOf("hoot::ScriptMatchCreator,Area.js"));
     CPPUNIT_ASSERT_EQUAL(1, matchers.indexOf("hoot::BuildingMatchCreator"));
@@ -154,23 +154,23 @@ public:
 
   void runAutoCorrectRelationScriptTest()
   {
-    conf().set("autocorrect.options", "true");
+    conf().set(ConfigOptions::getAutocorrectOptionsKey(), "true");
 
     QStringList matchers;
     matchers.append("hoot::ScriptMatchCreator,Area.js");
     matchers.append("hoot::ScriptMatchCreator,Relation.js");
     matchers.append("hoot::BuildingMatchCreator");
-    conf().set("match.creators", matchers);
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchers);
     QStringList mergers;
     mergers.append("hoot::ScriptMergerCreator");
     mergers.append("hoot::ScriptMergerCreator");
     mergers.append("hoot::BuildingMergerCreator");
-    conf().set("merger.creators", mergers);
+    conf().set(ConfigOptions::getMergerCreatorsKey(), mergers);
 
     OptionsValidator::fixGenericMatcherOrdering();
 
-    matchers = conf().getList("match.creators");
-    mergers = conf().getList("merger.creators");
+    matchers = conf().getList(ConfigOptions::getMatchCreatorsKey());
+    mergers = conf().getList(ConfigOptions::getMergerCreatorsKey());
     LOG_VART(matchers);
     LOG_VART(mergers);
     CPPUNIT_ASSERT_EQUAL(0, matchers.indexOf("hoot::ScriptMatchCreator,Area.js"));
@@ -183,22 +183,22 @@ public:
 
   void runAutoCorrectMatcherOrderingTest()
   {
-    conf().set("autocorrect.options", "true");
+    conf().set(ConfigOptions::getAutocorrectOptionsKey(), "true");
 
     QStringList matchers;
     matchers.append("hoot::ScriptMatchCreator,Area.js");
     matchers.append("hoot::HighwayMatchCreator");
     matchers.append("hoot::BuildingMatchCreator");
-    conf().set("match.creators", matchers);
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchers);
     QStringList mergers;
     mergers.append("hoot::BuildingMergerCreator");
     mergers.append("hoot::HighwayMergerCreator");
-    conf().set("merger.creators", mergers);
+    conf().set(ConfigOptions::getMergerCreatorsKey(), mergers);
 
     OptionsValidator::fixMisc();
 
-    matchers = conf().getList("match.creators");
-    mergers = conf().getList("merger.creators");
+    matchers = conf().getList(ConfigOptions::getMatchCreatorsKey());
+    mergers = conf().getList(ConfigOptions::getMergerCreatorsKey());
     LOG_VART(matchers);
     LOG_VART(mergers);
     CPPUNIT_ASSERT_EQUAL(0, matchers.indexOf("hoot::ScriptMatchCreator,Area.js"));
@@ -211,122 +211,122 @@ public:
 
   void runAutoCorrectSublineMatcherTest()
   {
-    conf().set("autocorrect.options", "true");
+    conf().set(ConfigOptions::getAutocorrectOptionsKey(), "true");
 
     QStringList matchers;
     matchers.append("hoot::NetworkMatchCreator");
-    conf().set("match.creators", matchers.join(";"));
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchers.join(";"));
     QStringList mergers;
     mergers.append("hoot::NetworkMergerCreator");
-    conf().set("merger.creators", mergers.join(";"));
-    conf().set("highway.subline.matcher", "hoot::FrechetSublineMatcher");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), mergers.join(";"));
+    conf().set(ConfigOptions::getHighwaySublineMatcherKey(), "hoot::FrechetSublineMatcher");
     OptionsValidator::fixMisc();
-    HOOT_STR_EQUALS("hoot::FrechetSublineMatcher", conf().get("highway.subline.matcher"));
+    HOOT_STR_EQUALS("hoot::FrechetSublineMatcher", conf().get(ConfigOptions::getHighwaySublineMatcherKey()));
 
     TestUtils::resetEnvironment();
     matchers.clear();
     matchers.append("hoot::NetworkMatchCreator");
-    conf().set("match.creators", matchers.join(";"));
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchers.join(";"));
     mergers.clear();
     mergers.append("hoot::NetworkMergerCreator");
-    conf().set("merger.creators", mergers.join(";"));
-    conf().set("highway.subline.matcher", "hoot::MaximalSublineMatcher");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), mergers.join(";"));
+    conf().set(ConfigOptions::getHighwaySublineMatcherKey(), "hoot::MaximalSublineMatcher");
     OptionsValidator::fixMisc();
-    HOOT_STR_EQUALS("hoot::MaximalSublineMatcher", conf().get("highway.subline.matcher"));
+    HOOT_STR_EQUALS("hoot::MaximalSublineMatcher", conf().get(ConfigOptions::getHighwaySublineMatcherKey()));
 
     TestUtils::resetEnvironment();
     matchers.clear();
     matchers.append("hoot::NetworkMatchCreator");
-    conf().set("match.creators", matchers.join(";"));
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchers.join(";"));
     mergers.clear();
     mergers.append("hoot::NetworkMergerCreator");
-    conf().set("merger.creators", mergers.join(";"));
-    conf().set("highway.subline.matcher", "blah");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), mergers.join(";"));
+    conf().set(ConfigOptions::getHighwaySublineMatcherKey(), "blah");
     OptionsValidator::fixMisc();
-    HOOT_STR_EQUALS("hoot::MaximalSublineMatcher", conf().get("highway.subline.matcher"));
+    HOOT_STR_EQUALS("hoot::MaximalSublineMatcher", conf().get(ConfigOptions::getHighwaySublineMatcherKey()));
 
     matchers.clear();
     matchers.append("hoot::HighwayMatchCreator");
-    conf().set("match.creators", matchers.join(";"));
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchers.join(";"));
     mergers.clear();
     mergers.append("hoot::HighwayMergerCreator");
-    conf().set("merger.creators", mergers.join(";"));
-    conf().set("highway.subline.matcher", "hoot::FrechetSublineMatcher");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), mergers.join(";"));
+    conf().set(ConfigOptions::getHighwaySublineMatcherKey(), "hoot::FrechetSublineMatcher");
     OptionsValidator::fixMisc();
-    HOOT_STR_EQUALS("hoot::FrechetSublineMatcher", conf().get("highway.subline.matcher"));
+    HOOT_STR_EQUALS("hoot::FrechetSublineMatcher", conf().get(ConfigOptions::getHighwaySublineMatcherKey()));
 
     TestUtils::resetEnvironment();
     matchers.clear();
     matchers.append("hoot::HighwayMatchCreator");
-    conf().set("match.creators", matchers.join(";"));
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchers.join(";"));
     mergers.clear();
     mergers.append("hoot::HighwayMergerCreator");
-    conf().set("merger.creators", mergers.join(";"));
-    conf().set("highway.subline.matcher", "hoot::MaximalNearestSublineMatcher");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), mergers.join(";"));
+    conf().set(ConfigOptions::getHighwaySublineMatcherKey(), "hoot::MaximalNearestSublineMatcher");
     OptionsValidator::fixMisc();
     HOOT_STR_EQUALS(
-      "hoot::MaximalNearestSublineMatcher", conf().get("highway.subline.matcher"));
+      "hoot::MaximalNearestSublineMatcher", conf().get(ConfigOptions::getHighwaySublineMatcherKey()));
 
     TestUtils::resetEnvironment();
     matchers.clear();
     matchers.append("hoot::HighwayMatchCreator");
-    conf().set("match.creators", matchers.join(";"));
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchers.join(";"));
     mergers.clear();
     mergers.append("hoot:HighwayMergerCreator");
-    conf().set("merger.creators", mergers.join(";"));
-    conf().set("highway.subline.matcher", "blah");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), mergers.join(";"));
+    conf().set(ConfigOptions::getHighwaySublineMatcherKey(), "blah");
     OptionsValidator::fixMisc();
     HOOT_STR_EQUALS(
-      "hoot::MaximalNearestSublineMatcher", conf().get("highway.subline.matcher"));
+      "hoot::MaximalNearestSublineMatcher", conf().get(ConfigOptions::getHighwaySublineMatcherKey()));
   }
 
   void runAutoCorrectClassifierTest()
   {
-    conf().set("autocorrect.options", "true");
+    conf().set(ConfigOptions::getAutocorrectOptionsKey(), "true");
 
     QStringList matchers;
     matchers.append("hoot::NetworkMatchCreator");
-    conf().set("match.creators", matchers.join(";"));
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchers.join(";"));
     QStringList mergers;
     mergers.append("hoot::NetworkMergerCreator");
-    conf().set("merger.creators", mergers.join(";"));
-    conf().set("conflate.match.highway.classifier", "hoot::HighwayExpertClassifier");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), mergers.join(";"));
+    conf().set(ConfigOptions::getConflateMatchHighwayClassifierKey(), "hoot::HighwayExpertClassifier");
     OptionsValidator::fixMisc();
     HOOT_STR_EQUALS(
-      "hoot::HighwayExpertClassifier", conf().get("conflate.match.highway.classifier"));
+      "hoot::HighwayExpertClassifier", conf().get(ConfigOptions::getConflateMatchHighwayClassifierKey()));
 
     matchers.clear();
     matchers.append("hoot::NetworkMatchCreator");
-    conf().set("match.creators", matchers.join(";"));
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchers.join(";"));
     mergers.clear();
     mergers.append("hoot::NetworkMergerCreator");
-    conf().set("merger.creators", mergers.join(";"));
-    conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), mergers.join(";"));
+    conf().set(ConfigOptions::getConflateMatchHighwayClassifierKey(), "hoot::HighwayRfClassifier");
     OptionsValidator::fixMisc();
     HOOT_STR_EQUALS(
-      "hoot::HighwayExpertClassifier", conf().get("conflate.match.highway.classifier"));
+      "hoot::HighwayExpertClassifier", conf().get(ConfigOptions::getConflateMatchHighwayClassifierKey()));
 
     matchers.clear();
     matchers.append("hoot::HighwayMatchCreator");
-    conf().set("match.creators", matchers.join(";"));
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchers.join(";"));
     mergers.clear();
     mergers.append("hoot::HighwayMergerCreator");
-    conf().set("merger.creators", mergers.join(";"));
-    conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), mergers.join(";"));
+    conf().set(ConfigOptions::getConflateMatchHighwayClassifierKey(), "hoot::HighwayRfClassifier");
     OptionsValidator::fixMisc();
     HOOT_STR_EQUALS(
-      "hoot::HighwayRfClassifier", conf().get("conflate.match.highway.classifier"));
+      "hoot::HighwayRfClassifier", conf().get(ConfigOptions::getConflateMatchHighwayClassifierKey()));
 
     matchers.clear();
     matchers.append("hoot::HighwayMatchCreator");
-    conf().set("match.creators", matchers.join(";"));
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchers.join(";"));
     mergers.clear();
     mergers.append("hoot::HighwayMergerCreator");
-    conf().set("merger.creators", mergers.join(";"));
-    conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), mergers.join(";"));
+    conf().set(ConfigOptions::getConflateMatchHighwayClassifierKey(), "hoot::HighwayRfClassifier");
     OptionsValidator::fixMisc();
     HOOT_STR_EQUALS(
-      "hoot::HighwayRfClassifier", conf().get("conflate.match.highway.classifier"));
+      "hoot::HighwayRfClassifier", conf().get(ConfigOptions::getConflateMatchHighwayClassifierKey()));
   }
 };
 

@@ -99,7 +99,15 @@ public:
   void registerCreator(MergerCreatorPtr creator) { _creators.push_back(creator); }
   void registerDefaultCreators();
 
+  /**
+   * Reset the the merger creators and then register the default creators
+   */
   void reset();
+
+  /**
+   * Return the list of creators as a string
+   */
+  QString toString() const;
 
 private:
 

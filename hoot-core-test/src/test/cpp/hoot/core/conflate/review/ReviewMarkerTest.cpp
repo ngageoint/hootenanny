@@ -53,7 +53,7 @@ public:
   HootTestFixture(
     "test-files/conflate/review/ReviewMarkerTest/", "test-output/conflate/review/ReviewMarkerTest/")
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void runNeedsReviewTest()
@@ -163,7 +163,7 @@ public:
     map->addElement(n2);
     map->addElement(n3);
 
-    conf().set("add.review.tags.to.features", "true");
+    conf().set(ConfigOptions::getAddReviewTagsToFeaturesKey(), "true");
 
     ReviewMarker uut;
 

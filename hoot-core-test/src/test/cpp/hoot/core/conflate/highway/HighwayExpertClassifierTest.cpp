@@ -32,13 +32,13 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 
 // Tgs
 #include <tgs/StreamUtils.h>
@@ -57,11 +57,6 @@ class HighwayExpertClassifierTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  HighwayExpertClassifierTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   /**
    * Two identical ways that are perpendicular. All straight and 100m long.

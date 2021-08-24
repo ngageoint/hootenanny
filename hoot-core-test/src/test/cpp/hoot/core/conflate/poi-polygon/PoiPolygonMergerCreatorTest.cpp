@@ -57,24 +57,16 @@ public:
 
   PoiPolygonMergerCreatorTest()
   {
-    // This test passes with ResetAllNoMatchFactory in parallel but crashes in series without
+    // This test passes with ResetEnvironment in parallel but crashes in series without
     // ResetAll.
     setResetType(ResetAll);
   }
 
-  virtual void setUp()
+  void setUp() override
   {
     HootTestFixture::setUp();
     conf().set(ConfigOptions().getMatchCreatorsKey(), "hoot::PoiPolygonMatchCreator");
     conf().set(ConfigOptions().getMergerCreatorsKey(), "hoot::PoiPolygonMergerCreator");
-  }
-
-  virtual void tearDown()
-  {
-    conf().set(
-      ConfigOptions().getMatchCreatorsKey(), ConfigOptions().getMatchCreatorsDefaultValue());
-    conf().set(
-      ConfigOptions().getMergerCreatorsKey(), ConfigOptions().getMergerCreatorsDefaultValue());
   }
 
   void basicTest()

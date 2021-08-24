@@ -65,7 +65,7 @@ void ConflateCaseTest::_runConflateCmd()
   }
 
   // This is also set in Testing.conf.
-  conf().set("conflate.tag.disable.value.truncation", "true");
+  conf().set(ConfigOptions::getConflateTagDisableValueTruncationKey(), "true");
 
   QString testOutput = _d.absoluteFilePath("Output.osm");
 

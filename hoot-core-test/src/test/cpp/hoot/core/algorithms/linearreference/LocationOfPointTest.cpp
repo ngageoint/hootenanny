@@ -35,10 +35,10 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -50,11 +50,6 @@ class LocationOfPointTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  LocationOfPointTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   void runLocateAfterTest()
   {

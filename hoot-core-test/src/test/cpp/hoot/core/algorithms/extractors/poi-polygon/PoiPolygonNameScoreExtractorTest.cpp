@@ -26,13 +26,13 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -77,8 +77,8 @@ public:
     Settings settings = conf();
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    settings.set("poi.polygon.name.translate.to.english", "true");
-    settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
+    settings.set(ConfigOptions::getPoiPolygonNameTranslateToEnglishKey(), "true");
+    settings.set(ConfigOptions::getLanguageTranslationTranslatorKey(), ToEnglishDictionaryTranslator::className());
     uut.setConfiguration(settings);
     std::shared_ptr<ToEnglishDictionaryTranslator> dictTranslator =
       std::dynamic_pointer_cast<ToEnglishDictionaryTranslator>(
@@ -93,7 +93,7 @@ public:
     way1->getTags().set("name", "KFC");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    settings.set("poi.polygon.name.translate.to.english", "false");
+    settings.set(ConfigOptions::getPoiPolygonNameTranslateToEnglishKey(), "false");
     uut.setConfiguration(settings);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.001);
   }

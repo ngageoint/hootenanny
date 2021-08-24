@@ -29,14 +29,14 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/DuplicateWayRemover.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // CPP Unit
@@ -70,7 +70,6 @@ public:
     : HootTestFixture("test-files/ops/DuplicateWayRemoverTest/",
                       "test-output/ops/DuplicateWayRemoverTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runTest()

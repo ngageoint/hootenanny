@@ -69,7 +69,6 @@ public:
     : HootTestFixture("test-files/io/OsmApiReaderTest/",
                       "test-output/io/OsmApiReaderTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runSimpleTest()

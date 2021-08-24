@@ -98,18 +98,16 @@ You are encouraged to create your configuration locally within each test method 
 Unit Under Test (UUT), however sometimes that is not possible. These are the options for resetting
 the environment between CPPUnit test runs:
 
-* `ResetNone` - Use this when you test requires no environment reset, meaning that no environment 
-change made by another test can affect it. Generally, this is for tests that make no use of the 
-`OsmMap` class. This is the default and does not need to be explicitly specified.
+
 * `ResetBasic` - This resets element ID counters within `OsmMap`, the random number seed generator, 
 and the UUID generator. Resetting all of this is generally necessary to compare map output within a 
-test.
-* `ResetAllNoMatchFactory` - In addition to what is reset in `ResetBasic`, this resets the 
-configuration along with many other internal settings but does not reset the `MatchFactory` class 
-(expensive to do in the tests; see code for details). This reset option is discouraged overall but 
-necessary for some tests.
-* `ResetAll` - This does all the resetting done in `ResetAllNoMatchFactory` and additionally resets 
-the `MatchFactory` class. This is the most resource expensive reset option.
+test. This is the default and does not need to be explicitly specified.
+* `ResetEnvironment` - In addition to what is reset in `ResetBasic`, this resets the configuration
+along with many other internal settings but does not reset the `MatchFactory` class (expensive to do
+in the tests; see code for details). This reset option is discouraged overall but necessary for some
+tests.
+* `ResetAll` - This does all the resetting done in `ResetEnvironment` and additionally resets the
+`MatchFactory` class. This is the most resource expensive reset option.
 
 To specify these reset options within a CPPUnit test, add something similar to the following to your 
 test constructor:

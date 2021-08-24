@@ -32,12 +32,12 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/RandomElementRenamer.h>
 
 // tbs
@@ -55,11 +55,6 @@ class RandomElementRenamerTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  RandomElementRenamerTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   void runBasicTest()
   {

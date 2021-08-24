@@ -26,22 +26,22 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
-#include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/MapUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/io/OsmJsonReader.h>
+#include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-#include <hoot/core/io/OsmJsonReader.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -75,7 +75,6 @@ public:
     "test-files/conflate/polygon/BuildingMergerTest/",
     "test-output/conflate/polygon/BuildingMergerTest/")
   {
-    setResetType(ResetBasic);
   }
 
   ConstWayPtr getWay(ConstOsmMapPtr map, const QString& key, const QString& value)

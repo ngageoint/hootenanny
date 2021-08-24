@@ -60,7 +60,6 @@ public:
     : HootTestFixture("test-files/ops/RefRemoveOp/",
                       "test-output/ops/RefRemoveOp/")
   {
-    setResetType(ResetBasic);
   }
 
   void runToyTest()

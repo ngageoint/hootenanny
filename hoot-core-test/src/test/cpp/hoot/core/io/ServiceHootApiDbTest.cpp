@@ -88,7 +88,7 @@ public:
     database.close();
   }
 
-  virtual void tearDown()
+  void tearDown() override
   {
     ServicesDbTestUtils::deleteUser(userEmail());
 
@@ -99,6 +99,7 @@ public:
       database.deleteMap(mapId);
       database.close();
     }
+    HootTestFixture::tearDown();
   }
 
   void runOpenTest()

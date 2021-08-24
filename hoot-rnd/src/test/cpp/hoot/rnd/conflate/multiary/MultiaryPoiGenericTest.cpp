@@ -50,7 +50,7 @@ public:
 
   MultiaryPoiGenericTest()
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   /**

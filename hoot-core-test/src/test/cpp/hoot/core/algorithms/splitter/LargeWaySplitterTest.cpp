@@ -26,14 +26,14 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/splitter/LargeWaySplitter.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -55,7 +55,6 @@ public:
   LargeWaySplitterTest() :
   HootTestFixture("test-files/algorithms/splitter/", "test-output/algorithms/splitter/")
   {
-    setResetType(ResetBasic);
   }
 
   void runToyTest()

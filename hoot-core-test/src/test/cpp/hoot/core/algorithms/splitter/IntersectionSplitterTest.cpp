@@ -26,9 +26,9 @@
  */
 
 // Hoot
+#include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 
@@ -51,7 +51,6 @@ public:
     "test-files/algorithms/splitter/IntersectionSplitterTest/",
     "test-output/algorithms/splitter/IntersectionSplitterTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runTest()

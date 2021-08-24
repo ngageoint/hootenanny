@@ -27,8 +27,8 @@
 
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/AttributeComparator.h>
@@ -64,7 +64,6 @@ public:
     : HootTestFixture("test-files/",
                       UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void runTest()

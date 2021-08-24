@@ -26,10 +26,10 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
 #include <hoot/core/elements/MapUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 
 // CPP Unit
@@ -55,7 +55,6 @@ public:
     "test-files/algorithms/extractors/IntersectionOverUnionExtractorTest/",
     "test-output/algorithms/extractors/IntersectionOverUnionExtractorTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runTest()

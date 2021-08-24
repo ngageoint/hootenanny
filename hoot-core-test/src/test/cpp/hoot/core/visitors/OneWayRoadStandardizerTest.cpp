@@ -32,8 +32,8 @@
 #include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/OneWayRoadStandardizer.h>
 
 namespace hoot
@@ -49,11 +49,6 @@ class OneWayRoadStandardizerTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  OneWayRoadStandardizerTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   void runWayTest()
   {

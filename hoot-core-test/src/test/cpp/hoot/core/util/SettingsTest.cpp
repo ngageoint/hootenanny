@@ -27,12 +27,12 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/ops/ReplaceElementOp.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/Settings.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -57,9 +57,9 @@ class SettingsTest : public HootTestFixture
 public:
 
   SettingsTest()
-    : HootTestFixture(UNUSED_PATH,
-                      "test-output/utils/")
+    : HootTestFixture(UNUSED_PATH, "test-output/utils/")
   {
+    setResetType(ResetConfigs);
   }
 
   void envTest()
