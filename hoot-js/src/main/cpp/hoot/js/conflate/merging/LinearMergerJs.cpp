@@ -39,8 +39,6 @@
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
-
-// node.js
 #include <hoot/js/SystemNodeJs.h>
 
 using namespace std;

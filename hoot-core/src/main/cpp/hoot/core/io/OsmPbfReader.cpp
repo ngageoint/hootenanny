@@ -29,7 +29,7 @@
 
 #include <arpa/inet.h>
 
-// Hoot Includes
+// Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -54,7 +54,7 @@
 // OGR
 #include <ogr_spatialref.h>
 
-// ZLib Includes
+// ZLib
 #include <zlib.h>
 
 using namespace geos::geom;

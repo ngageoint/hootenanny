@@ -43,7 +43,6 @@
 #include <hoot/core/ops/UnlikelyIntersectionRemover.h>
 #include <hoot/core/ops/VisitorOp.h>
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/FindIntersectionsVisitor.h>

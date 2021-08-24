@@ -28,8 +28,6 @@
 #include "ConnectedRelationMemberFinder.h"
 
 // Hoot
-
-
 #include <hoot/core/elements/SharedWayNodeFinder.h>
 
 namespace hoot

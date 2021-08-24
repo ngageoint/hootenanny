@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
-
 #include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot

@@ -39,7 +39,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/RandomNumberUtils.h>
 
-
 namespace hoot
 {
 

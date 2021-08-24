@@ -31,6 +31,7 @@
 #include <hoot/core/geometry/CoordinateExt.h>
 #include <hoot/core/util/Factory.h>
 
+// Standard
 #include <math.h>
 
 using namespace geos::geom;

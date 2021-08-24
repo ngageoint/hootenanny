@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/MetadataTags.h>

@@ -35,12 +35,10 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/PluginContext.h>
+#include <hoot/js/SystemNodeJs.h>
 
 // Qt
 #include <QVariant>
-
-// NodeJs
-#include <hoot/js/SystemNodeJs.h>
 
 namespace hoot
 {

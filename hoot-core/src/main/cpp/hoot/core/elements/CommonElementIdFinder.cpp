@@ -28,7 +28,6 @@
 #include "CommonElementIdFinder.h"
 
 // Hoot
-
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/util/CollectionUtils.h>
 

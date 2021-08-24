@@ -165,6 +165,6 @@ private:
   void _writeGeometry(ConstRelationPtr relation);
 };
 
-} // hoot
+}
 
 #endif // OSM_GBDX_JSON_WRITER

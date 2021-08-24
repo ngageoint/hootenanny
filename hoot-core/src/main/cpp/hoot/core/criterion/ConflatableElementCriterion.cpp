@@ -31,7 +31,6 @@
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/util/Factory.h>
 
-
 namespace hoot
 {
 

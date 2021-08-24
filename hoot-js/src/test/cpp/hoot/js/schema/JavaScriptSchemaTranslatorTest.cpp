@@ -35,7 +35,6 @@
 #include <hoot/core/io/schema/FieldDefinition.h>
 #include <hoot/core/io/schema/Schema.h>
 
-
 using namespace geos::geom;
 
 namespace hoot

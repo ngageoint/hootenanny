@@ -30,7 +30,6 @@
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Factory.h>
 
-
 namespace hoot
 {
 

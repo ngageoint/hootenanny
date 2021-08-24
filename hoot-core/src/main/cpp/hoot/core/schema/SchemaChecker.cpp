@@ -31,7 +31,6 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
 namespace hoot
 {
 

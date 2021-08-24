@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/index/OsmMapIndex.h>
 

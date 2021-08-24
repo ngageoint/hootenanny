@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-/*
+/**
  * MetadataImport imports a specific set of tags from one as 'dataset' specified way to all
  * elements contained in it.
  *

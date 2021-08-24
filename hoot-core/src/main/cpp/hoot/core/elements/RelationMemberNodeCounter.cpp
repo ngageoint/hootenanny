@@ -27,9 +27,6 @@
 
 #include "RelationMemberNodeCounter.h"
 
-// hoot
-
-
 namespace hoot
 {
 

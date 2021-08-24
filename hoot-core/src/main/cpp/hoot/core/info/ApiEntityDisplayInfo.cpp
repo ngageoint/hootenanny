@@ -49,7 +49,6 @@
 #include <hoot/core/schema/TagMerger.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/core/visitors/ElementVisitor.h>
 
 //  Qt

@@ -37,7 +37,6 @@
 #include <hoot/core/util/RandomNumberUtils.h>
 #include <hoot/core/elements/OsmMap.h>
 
-
 namespace hoot
 {
 

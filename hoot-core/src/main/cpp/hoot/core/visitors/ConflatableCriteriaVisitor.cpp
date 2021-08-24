@@ -31,7 +31,6 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 
-
 namespace hoot
 {
 

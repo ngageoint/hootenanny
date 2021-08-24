@@ -34,7 +34,6 @@
 namespace hoot
 {
 
-
 /**
  * Counts matches made with ref tags by a manual matcher
  */

@@ -28,8 +28,6 @@
 #include "Status.h"
 
 // Hoot
-
-
 #include <hoot/core/schema/MetadataTags.h>
 
 using namespace std;

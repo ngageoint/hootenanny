@@ -26,10 +26,6 @@
  */
 #include "JniConversion.h"
 
-// Hoot
-
-
-
 namespace hoot
 {
 

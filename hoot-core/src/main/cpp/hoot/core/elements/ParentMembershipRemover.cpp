@@ -31,8 +31,6 @@
 #include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/elements/WayUtils.h>
 
-
-
 namespace hoot
 {
 

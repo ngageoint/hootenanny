@@ -29,7 +29,6 @@
 // Hoot
 #include <hoot/core/elements/Element.h>
 
-
 namespace hoot
 {
 

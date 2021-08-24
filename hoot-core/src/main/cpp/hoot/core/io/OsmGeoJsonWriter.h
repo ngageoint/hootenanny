@@ -167,6 +167,6 @@ private:
 
 };
 
-} // hoot
+}
 
 #endif // OSM_GEOJSON_WRITER_H

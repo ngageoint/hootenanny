@@ -30,8 +30,6 @@
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
 
-
-
 // tgs
 #include <tgs/System/SystemInfo.h>
 

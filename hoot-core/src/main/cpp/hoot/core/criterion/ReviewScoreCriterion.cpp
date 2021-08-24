@@ -32,7 +32,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/MetadataTags.h>
 
-
 namespace hoot
 {
 

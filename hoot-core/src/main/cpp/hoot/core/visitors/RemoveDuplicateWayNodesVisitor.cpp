@@ -30,7 +30,6 @@
 // Hoot
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/ops/RemoveWayByEid.h>

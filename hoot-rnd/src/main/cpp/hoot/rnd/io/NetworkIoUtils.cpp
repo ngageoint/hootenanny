@@ -30,8 +30,6 @@
 // Hoot
 #include <hoot/core/io/HootApiDb.h>
 
-
-
 namespace hoot
 {
 

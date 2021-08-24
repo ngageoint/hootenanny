@@ -28,11 +28,8 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/JsRegistrar.h>
-
-// node.js
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/HootJsStable.h>
 

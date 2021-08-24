@@ -27,7 +27,7 @@
 
 #include "OsmPbfWriter.h"
 
-// Hoot Includes
+// Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/PbfConstants.h>
 #include <hoot/core/proto/FileFormat.pb.h>
@@ -42,10 +42,10 @@
 // Qt
 #include <qendian.h>
 
-// Standard Includes
+// Standard
 #include <fstream>
 
-// ZLib Includes
+// ZLib
 #include <zlib.h>
 
 //  htonl

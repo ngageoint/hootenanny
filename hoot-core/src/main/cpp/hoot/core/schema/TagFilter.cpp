@@ -27,10 +27,6 @@
 
 #include "TagFilter.h"
 
-// Hoot
-
-
-
 namespace hoot
 {
 

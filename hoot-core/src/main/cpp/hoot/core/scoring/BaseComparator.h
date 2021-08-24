@@ -28,7 +28,7 @@
 #ifndef BASE_COMPARATOR_H
 #define BASE_COMPARATOR_H
 
-// GDAL Includes
+// GDAL
 #include <ogrsf_frmts.h>
 
 // Hoot

@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/core/util/Settings.h>
 
 using namespace std;

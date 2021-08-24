@@ -31,8 +31,6 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-
-
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/UuidHelper.h>
 

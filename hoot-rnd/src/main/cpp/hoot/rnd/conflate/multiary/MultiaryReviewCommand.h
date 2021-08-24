@@ -31,8 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Element.h>
 
-//QT
-
+//Qt
 #include <QByteArray>
 
 namespace hoot

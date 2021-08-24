@@ -30,7 +30,6 @@
 // Hoot
 #include <hoot/core/elements/ElementListener.h>
 
-
 namespace hoot
 {
 

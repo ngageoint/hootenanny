@@ -28,8 +28,6 @@
 #include "VersionUtils.h"
 
 // Hoot
-
-
 #include <hoot/core/criterion/AttributeValueCriterion.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>

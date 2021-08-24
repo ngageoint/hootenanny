@@ -28,7 +28,6 @@
 #include "HootServicesLanguageInfoMockClient.h"
 
 // hoot
-
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
 

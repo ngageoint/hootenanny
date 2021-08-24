@@ -30,7 +30,6 @@
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/FieldDefinition.h>
 
-
 namespace hoot
 {
 

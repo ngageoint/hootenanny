@@ -33,16 +33,13 @@
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/geometry/CoordinateExt.h>
 
-
-
 namespace hoot
 {
 
-/*
- * Creates a node at any intersection of the way with another way.
- * Copies the tag of the original way to the node.
- * Deletes the original way if able to merge the original way's segments
- * into an adjacent way.
+/**
+ * Creates a node at any intersection of the way with another way. Copies the tag of the original
+ * way to the node. Deletes the original way if able to merge the original way's segments into an
+ * adjacent way.
  */
 class WayToIntersectionGeoModifier : public GeometryModifierAction
 {

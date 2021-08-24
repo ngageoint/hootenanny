@@ -32,8 +32,8 @@
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/core/elements/MapProjector.h>
+
 #include <hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithm.h>
 
 using namespace std;

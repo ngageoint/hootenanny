@@ -28,7 +28,6 @@
 #include "LanguageUtils.h"
 
 // hoot
-
 #include <hoot/core/algorithms/string/MostEnglishName.h>
 
 namespace hoot

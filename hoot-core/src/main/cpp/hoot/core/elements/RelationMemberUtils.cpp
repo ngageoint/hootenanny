@@ -37,8 +37,6 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/CollectionUtils.h>
 
-
-
 namespace hoot
 {
 

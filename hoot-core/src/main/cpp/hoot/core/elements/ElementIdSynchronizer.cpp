@@ -28,8 +28,6 @@
 #include "ElementIdSynchronizer.h"
 
 // Hoot
-
-
 #include <hoot/core/visitors/ElementHashVisitor.h>
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/elements/WayUtils.h>

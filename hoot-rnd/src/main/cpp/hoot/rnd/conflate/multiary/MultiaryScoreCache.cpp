@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/conflate/matching/MatchClassification.h>
 
-
 namespace hoot
 {
 

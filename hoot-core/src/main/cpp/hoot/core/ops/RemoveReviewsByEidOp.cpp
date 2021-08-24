@@ -32,7 +32,6 @@
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
-
 #include <hoot/core/util/StringUtils.h>
 
 using namespace std;

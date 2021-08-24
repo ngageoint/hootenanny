@@ -27,10 +27,6 @@
 
 #include "SharedWayNodeFinder.h"
 
-// Hoot
-
-
-
 namespace hoot
 {
 

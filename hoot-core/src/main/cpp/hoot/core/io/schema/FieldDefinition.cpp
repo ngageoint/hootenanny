@@ -26,9 +26,6 @@
  */
 #include "FieldDefinition.h"
 
-// hoot
-
-
 namespace hoot
 {
 

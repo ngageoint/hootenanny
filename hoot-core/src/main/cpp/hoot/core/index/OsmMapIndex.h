@@ -33,10 +33,6 @@
 #include <hoot/core/elements/ElementListener.h>
 #include <hoot/core/index/ElementToRelationMap.h>
 
-// STL
-
-
-
 // TGS
 #include <tgs/RStarTree/HilbertRTree.h>
 

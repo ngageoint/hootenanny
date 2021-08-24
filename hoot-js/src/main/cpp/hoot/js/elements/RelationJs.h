@@ -30,8 +30,6 @@
 // hoot
 #include <hoot/core/elements/Relation.h>
 #include <hoot/js/elements/ElementJs.h>
-
-// node.js
 #include <hoot/js/SystemNodeJs.h>
 
 namespace hoot

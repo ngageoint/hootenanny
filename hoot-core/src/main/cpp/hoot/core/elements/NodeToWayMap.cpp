@@ -32,7 +32,6 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
 using namespace std;
 
 namespace hoot

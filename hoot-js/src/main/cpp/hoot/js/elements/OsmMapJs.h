@@ -27,9 +27,8 @@
 #ifndef OSMMAPJS_H
 #define OSMMAPJS_H
 
-#include <hoot/js/HootBaseJs.h>
-
 // hoot
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/js/io/DataConvertJs.h>
 

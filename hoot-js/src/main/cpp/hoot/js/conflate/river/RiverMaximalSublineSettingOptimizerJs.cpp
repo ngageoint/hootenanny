@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/conflate/river/RiverMaximalSublineSettingOptimizer.h>
 
-
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/elements/OsmMapJs.h>

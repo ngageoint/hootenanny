@@ -27,10 +27,6 @@
 
 #include "TagUtils.h"
 
-// Hoot
-
-
-
 namespace hoot
 {
 

@@ -27,9 +27,8 @@
 #ifndef REVIEWMARKERJS_H
 #define REVIEWMARKERJS_H
 
-#include <hoot/js/HootBaseJs.h>
-
 // hoot
+#include <hoot/js/HootBaseJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 
 namespace hoot

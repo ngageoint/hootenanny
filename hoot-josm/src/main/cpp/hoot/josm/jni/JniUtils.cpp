@@ -26,10 +26,6 @@
  */
 #include "JniUtils.h"
 
-// Hoot
-
-
-
 namespace hoot
 {
 

@@ -27,9 +27,6 @@
 
 #include "ElementId.h"
 
-// Hoot
-
-
 namespace hoot
 {
 

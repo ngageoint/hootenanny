@@ -25,7 +25,6 @@
  * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-
 #ifndef TO_ENGLISH_TRANSLATOR_H
 #define TO_ENGLISH_TRANSLATOR_H
 

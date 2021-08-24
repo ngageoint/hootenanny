@@ -32,8 +32,8 @@
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-
 #include <hoot/core/elements/MapProjector.h>
+
 #include <hoot/rnd/conflate/multiary/MultiaryScoreCache.h>
 
 using namespace std;

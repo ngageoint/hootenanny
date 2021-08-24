@@ -30,7 +30,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Way.h>
 
-
 namespace hoot
 {
 

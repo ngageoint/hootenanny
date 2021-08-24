@@ -27,9 +27,6 @@
 
 #include "LanguageDetectionConfidenceLevel.h"
 
-// Hoot
-
-
 namespace hoot
 {
 
