@@ -53,7 +53,7 @@ end
 # Decide if we install the release version or the nightly development version
 $nightly = ENV['NIGHTLY']
 if $nightly.nil?
-  $nightly = "no"
+  $nightly = "yes"
 else
   puts "## Installing from the nightly RPMs"
 end
