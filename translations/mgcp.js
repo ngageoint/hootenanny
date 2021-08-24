@@ -61,22 +61,13 @@ mgcp = {
   // if (config.getOgrOutputFormat() == 'shp')
   if (hoot.Settings.get('ogr.output.format') == 'shp')
   {
-    // Add OSMTAGS1-4 attributes
-    // Build the MGCP fcode/attrs lookup table
-    mgcp.attrLookup = translate.makeAttrLookup(translate.addTagFeatures(mgcp.rawSchema));
-
-    // Add tag1, tag2, tag3 and tag4
-    mgcp.rawSchema = translate.addO2sFeatures(mgcp.rawSchema);
-    ;
+    // Add OSMTAGS1-4 and tag1-4 attributes
+    mgcp.rawSchema = translate.addO2sFeatures(translate.addTagFeatures(mgcp.rawSchema));
   }
   else
   {
-    // Add a single OSMTAGS attributes
-    // Build the MGCP fcode/attrs lookup table
-    mgcp.attrLookup = translate.makeAttrLookup(translate.addSingleTagFeature(mgcp.rawSchema));
-
     // Just add tag1 && OSMTAGS
-    mgcp.rawSchema = translate.addSingleO2sFeature(mgcp.rawSchema);
+    mgcp.rawSchema = translate.addSingleO2sFeature(translate.addSingleTagFeature(mgcp.rawSchema));
   }
 
   // Add empty Review layers
@@ -96,83 +87,90 @@ mgcp = {
   // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
   //        feature
   validateAttrs: function(geometryType,attrs,notUsed,transMap) {
-    var attrList = mgcp.attrLookup[geometryType.toString().charAt(0) + attrs.FCODE];
-
-    if (attrList != undefined)
-    {
-      for (var val in attrs)
-      {
-        if (attrList.indexOf(val) == -1)
-        {
-          if (val in transMap)
-          {
-            notUsed[transMap[val][1]] = transMap[val][2];
-            hoot.logDebug('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
-          }
-
-          hoot.logDebug('Validate: Dropping ' + val + ' from ' + attrs.FCODE);
-          delete attrs[val];
-
-          // Since we deleted the attribute, Skip the text check
-          continue;
-        }
-
-        // Now check the length of the text fields
-        // We need more info from the customer about this: What to do if it is too long
-        if (val in mgcp.rules.txtLength)
-        {
-          if (attrs[val].length > mgcp.rules.txtLength[val])
-          {
-            // First try splitting the attribute and grabbing the first value
-            var tStr = attrs[val].split(';');
-            if (tStr[0].length <= mgcp.rules.txtLength[val])
-            {
-              attrs[val] = tStr[0];
-            }
-            else
-            {
-              hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + mgcp.rules.txtLength[val] + ' characters.');
-              // Still too long. Chop to the maximum length
-              attrs[val] = tStr[0].substring(0,mgcp.rules.txtLength[val]);
-            }
-          } // End text attr length > max length
-        } // End in txtLength
-      }
-    }
-    else
-    {
-      hoot.logDebug('Validate: No attrList for ' + attrs.FCODE + ' ' + geometryType);
-    }
-
-    // No quick and easy way to do this unless we build yet another lookup table
+    // No quick and easy way to do this. Each feature is stored as an object.
     var feature = {};
-
     for (var i=0, sLen = mgcp.rawSchema.length; i < sLen; i++)
     {
-      if (mgcp.rawSchema[i].fcode == attrs.FCODE && mgcp.rawSchema[i].geom == geometryType)
+      if (mgcp.rawSchema[i].name == geometryType.toString().charAt(0) + attrs.FCODE)
       {
         feature = mgcp.rawSchema[i];
         break;
       }
     }
 
-    // Now validate the Enumerated values
+    // If we can't find a feature then print an error and return.
+    if (feature === {})
+    {
+      hoot.logError('Validate: Could not find feature: '+ attrs.FCODE + ' ' + geometryType);
+      return;
+    }
+
+    // Grab a list of all of the attribute names in the feature and validate the what we populated
+    var attrList = [];
+    feature['columns'].forEach( function (column) { attrList.push(column.name); });
+
+    for (var val in attrs)
+    {
+      // Is the attribute valid?
+      if (attrList.indexOf(val) == -1)
+      {
+        // Now. Undo the translation if possible
+        if (val in transMap)
+        {
+          notUsed[transMap[val][1]] = transMap[val][2];
+          hoot.logDebug('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
+        }
+
+        hoot.logDebug('Validate: Dropping ' + val + ' from ' + attrs.FCODE);
+        delete attrs[val];
+
+        continue;
+      }
+    } // End val in attrs
+
+    // Now look through the attributes and values
+    // Yet again, looping through the objects
     for (var i=0, cLen = feature['columns'].length; i < cLen; i++)
     {
-      // Skip non enumeratied attributes
-      if (feature.columns[i].type !== 'enumeration') continue;
-
       var enumName = feature.columns[i].name;
 
-      // Skip stuff that is missing and will end up as a default value
+      // Skip anything we don't have a populated vlaue for
       if (!attrs[enumName]) continue;
 
-      var attrValue = attrs[enumName];
-      var enumList = feature.columns[i].enumerations;
-      var enumValueList = [];
+      // If applicable, check the length of text fields
+      // We need more info from the customer about this: What to do if it is too long
+      if (feature.columns[i].type == 'String')
+      {
+        var maxLength = feature.columns[i].length;
+        // if (attrs[enumName].length > mgcp.rules.txtLength[val])
+        if (attrs[enumName].length > maxLength)
+        {
+          // First try splitting the attribute and grabbing the first value
+          var tStr = attrs[enumName].split(';');
+          // if (tStr[0].length <= mgcp.rules.txtLength[val])
+          if (tStr[0].length <= maxLength)
+          {
+            attrs[enumName] = tStr[0];
+          }
+          else
+          {
+            hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + maxLength + ' characters.');
+            // Still too long. Chop to the maximum length
+            attrs[val] = tStr[0].substring(0,maxLength);
+          }
+        } // End text attr length > max length
 
-      // Pull all of the values out of the enumerated list to make life easier
-      for (var j=0, elen = enumList.length; j < elen; j++) enumValueList.push(enumList[j].value);
+        // Skip to the next attribute
+        continue;
+      } // End String
+
+      // Now check enumerated values
+      if (feature.columns[i].type !== 'enumeration') continue;
+
+      // Now make a list of the enumeration values to check what is valid. More loops.
+      var attrValue = attrs[enumName];
+      var enumValueList = [];
+      feature.columns[i].enumerations.forEach( function (eValue) { enumValueList.push(eValue.value); });
 
       // Check if it is a valid enumerated value
       if (enumValueList.indexOf(attrValue) == -1)
@@ -184,18 +182,23 @@ mgcp = {
         {
           // No: Set the offending enumerated value to the default value
           attrs[enumName] = feature.columns[i].defValue;
-
           hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
         }
         else
         {
           // Yes: Set the offending enumerated value to the "other" value
           attrs[enumName] = '999';
-
           hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
         }
+
+         // Now. Undo the translation if possible
+        if (enumName in transMap)
+        {
+          notUsed[transMap[enumName][1]] = transMap[enumName][2];
+          hoot.logDebug('Validate: Re-Adding ' + transMap[enumName][1] + ' = ' + transMap[enumName][2] + ' to notUsed');
+        }
       }
-    } // End Validate Enumerations
+    } // End enumerations
   }, // End validateAttrs
 
 
@@ -2481,6 +2484,7 @@ mgcp = {
 
     // Debug
     if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
+    if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'After Post: Attrs:: ');
 
     // Set the tablename: [P,A,L]<fcode>
     // tableName = geometryType.toString().substring(0,1) + attrs.F_CODE;
