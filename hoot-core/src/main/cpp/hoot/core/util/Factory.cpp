@@ -27,11 +27,10 @@
 
 #include "Factory.h"
 
-// Hoot Includes
-
+// Hoot
 #include <hoot/core/util/SignalCatcher.h>
 
-// Standard Include
+// Standard
 #include <iostream>
 using namespace std;
 

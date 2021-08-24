@@ -27,9 +27,6 @@
 #ifndef MATCHTYPE_H
 #define MATCHTYPE_H
 
-// Hoot
-
-
 // Standard
 #include <math.h>
 

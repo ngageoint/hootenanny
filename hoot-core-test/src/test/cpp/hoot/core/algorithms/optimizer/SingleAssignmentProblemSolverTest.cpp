@@ -29,7 +29,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 
-
 using namespace std;
 
 namespace hoot

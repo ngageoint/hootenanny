@@ -32,10 +32,6 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
 
-// Standard
-
-
-
 namespace hoot
 {
 

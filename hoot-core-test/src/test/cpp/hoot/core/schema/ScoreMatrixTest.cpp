@@ -29,7 +29,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/schema/ScoreMatrix.h>
 
-
 using namespace std;
 
 namespace hoot

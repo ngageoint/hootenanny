@@ -30,7 +30,6 @@
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 
-
 using namespace std;
 
 namespace hoot

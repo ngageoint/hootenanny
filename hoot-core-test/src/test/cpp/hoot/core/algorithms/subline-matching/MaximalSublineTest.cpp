@@ -26,7 +26,6 @@
  */
 
 // geos
-
 #include <geos/geom/LineString.h>
 
 // Hoot
@@ -42,12 +41,8 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-
-// Standard
-
 
 // TGS
 #include <tgs/System/Time.h>

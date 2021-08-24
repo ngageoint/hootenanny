@@ -32,7 +32,6 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 
-
 using namespace std;
 
 namespace hoot

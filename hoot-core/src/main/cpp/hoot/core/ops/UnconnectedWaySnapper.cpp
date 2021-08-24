@@ -54,9 +54,6 @@
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
 
-// GEOS
-
-
 // Standard
 #include <cfloat>
 #include <functional>

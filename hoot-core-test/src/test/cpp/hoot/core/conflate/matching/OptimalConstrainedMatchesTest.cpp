@@ -34,6 +34,7 @@
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
 #include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
+
 // Tgs
 #include <tgs/StreamUtils.h>
 

@@ -55,8 +55,7 @@
 #include <tgs/RStarTree/IntersectionIterator.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
 
-//Qt
-
+// Qt
 #include <QElapsedTimer>
 
 using namespace geos::geom;

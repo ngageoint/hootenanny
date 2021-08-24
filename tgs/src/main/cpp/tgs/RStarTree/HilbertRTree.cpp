@@ -27,7 +27,7 @@
 
 #include "HilbertRTree.h"
 
-// Standard Includes
+// Standard
 #include <cassert>
 #include <cfloat>
 #include <cmath>

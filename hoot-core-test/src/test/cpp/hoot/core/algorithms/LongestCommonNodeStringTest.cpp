@@ -35,9 +35,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
-// Qt
-
-
 // Standard
 #include <sstream>
 using namespace std;

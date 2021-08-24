@@ -30,13 +30,8 @@
 // Boost
 #include <boost/pool/pool_alloc.hpp>
 
-// Hoot
-
-
 // Standard
-
 #include <functional>
-
 
 namespace hoot
 {

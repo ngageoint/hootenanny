@@ -28,11 +28,6 @@
 #ifndef DATASAMPLES_H
 #define DATASAMPLES_H
 
-// Standard
-
-
-
-
 // Tgs
 #include <tgs/RandomForest/DataFrame.h>
 

@@ -28,12 +28,13 @@
 #ifndef __PROBABLE_PATH_CALCULATOR_H__
 #define __PROBABLE_PATH_CALCULATOR_H__
 
-// Standard Includes
+// Standard
 #include <iostream>
 #include <list>
 #include <sstream>
 #include <vector>
 
+// tgs
 #include <tgs/HashMap.h>
 #include <tgs/TgsExport.h>
 #include <tgs/RasterOps/Image.hpp>

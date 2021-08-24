@@ -31,7 +31,6 @@
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
 #include <hoot/core/util/Factory.h>
 
-
 using namespace std;
 
 namespace hoot

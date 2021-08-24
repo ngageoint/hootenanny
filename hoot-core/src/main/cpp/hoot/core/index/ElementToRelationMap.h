@@ -27,10 +27,6 @@
 #ifndef ELEMENTTORELATIONMAP_H
 #define ELEMENTTORELATIONMAP_H
 
-// Standard
-
-
-
 // Tgs
 #include <tgs/HashMap.h>
 

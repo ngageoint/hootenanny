@@ -28,10 +28,11 @@
 #ifndef __TGS__RTREE_NODE_STORE_H__
 #define __TGS__RTREE_NODE_STORE_H__
 
-// Standard Includes
+// Standard
 #include <list>
 #include <memory>
 
+// tgs
 #include <tgs/HashMap.h>
 #include <tgs/RStarTree/RTreeNode.h>
 #include <tgs/RStarTree/PageStore.h>

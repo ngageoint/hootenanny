@@ -34,9 +34,6 @@ namespace hoot
 {
 
 /**
- *
- */
-/**
  * @brief The UniformTaskGridGenerator class dreates a task grid made up of uniformly distributed,
  * same sized rectangles.
  *

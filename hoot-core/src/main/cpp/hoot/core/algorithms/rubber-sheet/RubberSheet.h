@@ -41,8 +41,6 @@
 #include <tgs/Interpolation/Interpolator.h>
 
 // geos
-
-
 #include <ogr_spatialref.h>
 
 namespace hoot

@@ -35,7 +35,6 @@
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 #include <hoot/core/io/ApiDb.h>
 
-
 // TGS
 #include <tgs/Statistics/Random.h>
 

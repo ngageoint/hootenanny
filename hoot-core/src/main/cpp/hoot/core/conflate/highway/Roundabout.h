@@ -28,10 +28,6 @@
 #ifndef ROUNDABOUT_H
 #define ROUNDABOUT_H
 
-// Standard
-
-
-
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 

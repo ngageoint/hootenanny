@@ -30,9 +30,6 @@
 // GDAL Includes
 #include <ogrsf_frmts.h>
 
-// GEOS Includes
-
-
 // Hoot
 #include <hoot/core/elements/ElementIterator.h>
 #include <hoot/core/elements/ElementProvider.h>
@@ -45,10 +42,6 @@
 #include <hoot/core/util/DefaultIdGenerator.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/visitors/ElementVisitor.h>
-
-// Standard
-
-
 
 namespace hoot
 {

@@ -32,7 +32,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 
-
 // libphonenumber
 #include <phonenumbers/phonenumberutil.h>
 using namespace i18n::phonenumbers;

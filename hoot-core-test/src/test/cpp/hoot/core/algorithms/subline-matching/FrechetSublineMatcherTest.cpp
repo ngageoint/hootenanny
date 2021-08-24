@@ -33,7 +33,6 @@
 #include <hoot/core/algorithms/subline-matching/FrechetSublineMatcher.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 

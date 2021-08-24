@@ -27,9 +27,6 @@
 #ifndef MATCH_STATUS_CHANGE_H
 #define MATCH_STATUS_CHANGE_H
 
-// Hoot
-
-
 namespace hoot
 {
 

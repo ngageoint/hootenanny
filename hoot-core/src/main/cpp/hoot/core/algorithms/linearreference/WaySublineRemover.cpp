@@ -41,9 +41,6 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-// Standard
-
-
 namespace hoot
 {
 

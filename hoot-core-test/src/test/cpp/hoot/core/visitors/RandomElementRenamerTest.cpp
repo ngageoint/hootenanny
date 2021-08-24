@@ -30,7 +30,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/RandomElementRenamer.h>
 

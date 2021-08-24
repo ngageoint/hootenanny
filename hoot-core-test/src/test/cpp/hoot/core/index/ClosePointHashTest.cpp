@@ -30,7 +30,6 @@
 #include <hoot/core/index/ClosePointHash.h>
 
 // Qt
-
 #include <QTime>
 
 // Standard

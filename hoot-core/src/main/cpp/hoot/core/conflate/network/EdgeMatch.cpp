@@ -26,9 +26,6 @@
  */
 #include "EdgeMatch.h"
 
-// hoot
-
-
 namespace hoot
 {
 

@@ -31,7 +31,6 @@
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 
-
 namespace hoot
 {
 

@@ -35,9 +35,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
-// GEOS
-
-
 namespace hoot
 {
 

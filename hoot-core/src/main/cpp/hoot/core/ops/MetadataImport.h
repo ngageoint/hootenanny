@@ -31,9 +31,6 @@
 // Hoot
 #include <hoot/core/ops/MetadataOp.h>
 
-// geos
-
-
 namespace hoot
 {
 

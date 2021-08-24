@@ -26,9 +26,6 @@
  */
 #include "LongIntegerFieldDefinition.h"
 
-// hoot
-
-
 // Standard
 #include <limits>
 #include <sstream>

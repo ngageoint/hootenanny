@@ -28,8 +28,6 @@
 #define _ELEMENTS_NODE_H_
 
 // GEOS
-
-
 #include <geos/geom/Point.h>
 
 // hoot

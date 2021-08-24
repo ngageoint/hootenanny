@@ -34,9 +34,7 @@
 // Hoot
 #include <hoot/core/geometry/GeometryUtils.h>
 
-
 // Standard
-
 #include <limits>
 
 namespace hoot

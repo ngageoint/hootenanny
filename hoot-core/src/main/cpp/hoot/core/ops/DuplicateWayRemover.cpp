@@ -43,12 +43,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 
-
-// Standard
-
-
-
-
 // TGS
 #include <tgs/StreamUtils.h>
 using namespace Tgs;

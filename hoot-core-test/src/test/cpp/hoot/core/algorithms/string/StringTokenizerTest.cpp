@@ -30,7 +30,6 @@
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
 namespace hoot
 {
 

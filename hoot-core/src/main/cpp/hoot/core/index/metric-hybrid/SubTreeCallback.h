@@ -27,10 +27,8 @@
 #ifndef SUBTREECALLBACK_H
 #define SUBTREECALLBACK_H
 
+// hoot
 #include <hoot/core/index/metric-hybrid/Node.h>
-
-// Standard
-
 
 namespace hoot
 {

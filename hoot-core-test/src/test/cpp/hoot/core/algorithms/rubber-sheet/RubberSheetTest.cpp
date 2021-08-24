@@ -37,7 +37,6 @@
 #include <tgs/Statistics/Random.h>
 
 // Qt
-
 #include <QBuffer>
 #include <QByteArray>
 

@@ -28,9 +28,6 @@
 #ifndef WAYHEADING_H
 #define WAYHEADING_H
 
-// GEOS
-
-
 // hoot
 #include <hoot/core/util/Units.h>
 

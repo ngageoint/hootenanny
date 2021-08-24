@@ -35,7 +35,6 @@
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
 // Standard
 #include <iomanip>
 

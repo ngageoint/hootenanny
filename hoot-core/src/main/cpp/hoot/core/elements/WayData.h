@@ -30,9 +30,6 @@
 // Local
 #include <hoot/core/elements/ElementData.h>
 
-// Standard
-
-
 namespace hoot
 {
 

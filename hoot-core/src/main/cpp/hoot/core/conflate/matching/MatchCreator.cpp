@@ -30,7 +30,6 @@
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/OsmMap.h>
-
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 

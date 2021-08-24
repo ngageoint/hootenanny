@@ -26,8 +26,10 @@
  */
 
 #include "FrechetSublineMatcher.h"
+
 // geos
 #include <geos/geom/LineString.h>
+
 // hoot
 #include <hoot/core/algorithms/FrechetDistance.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>

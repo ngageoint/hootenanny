@@ -26,9 +26,6 @@
  */
 #include "IntegerFieldDefinition.h"
 
-// hoot
-
-
 // Standard
 #include <limits>
 #include <sstream>

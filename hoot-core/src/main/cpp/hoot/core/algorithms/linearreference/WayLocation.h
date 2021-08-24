@@ -28,9 +28,6 @@
 #ifndef __WAY_LOCATION_H__
 #define __WAY_LOCATION_H__
 
-// GEOS
-
-
 // Hoot
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/OsmMap.h>

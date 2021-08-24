@@ -30,9 +30,6 @@
 // hoot
 #include <hoot/core/conflate/merging/MergerBase.h>
 
-// Standard
-
-
 namespace hoot
 {
 
@@ -46,12 +43,12 @@ public:
   static QString className() { return "hoot::BuildingMerger"; }
 
   BuildingMerger() = default;
-  ~BuildingMerger() = default;
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
   explicit BuildingMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
+    ~BuildingMerger() = default;
 
   void apply(const OsmMapPtr& map,
              std::vector<std::pair<ElementId, ElementId>>& replaced) override;
@@ -65,9 +62,8 @@ public:
    * building relation
    * @return a building element
    */
-  static std::shared_ptr<Element> buildBuilding(const OsmMapPtr& map,
-                                                const std::set<ElementId>& eids,
-                                                const bool preserveTypes = false);
+  static std::shared_ptr<Element> buildBuilding(
+    const OsmMapPtr& map, const std::set<ElementId>& eids, const bool preserveTypes = false);
 
   QString toString() const override;
 

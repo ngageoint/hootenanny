@@ -31,7 +31,6 @@
 #include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 
-
 using namespace std;
 
 namespace hoot

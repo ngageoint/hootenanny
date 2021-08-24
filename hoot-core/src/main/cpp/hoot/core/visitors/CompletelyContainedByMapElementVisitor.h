@@ -33,9 +33,6 @@
 // hoot
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
-// standard
-
-
 namespace hoot
 {
 

@@ -31,10 +31,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Units.h>
 
-// Standard
-
-
-
 // Tgs
 #include <tgs/HashMap.h>
 

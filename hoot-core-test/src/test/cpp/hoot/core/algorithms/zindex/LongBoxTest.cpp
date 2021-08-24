@@ -25,13 +25,9 @@
  * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
-// geos
-
-
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/zindex/LongBox.h>
-
 
 using namespace std;
 

@@ -27,9 +27,6 @@
 #ifndef SEARCHBOUNDSCALCULATOR_H
 #define SEARCHBOUNDSCALCULATOR_H
 
-// geos
-
-
 // hoot
 #include <hoot/core/conflate/SearchRadiusProvider.h>
 #include <hoot/core/elements/Node.h>

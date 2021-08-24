@@ -26,10 +26,6 @@
  */
 #include "AbstractRegressionTest.h"
 
-// hoot
-
-
-
 namespace hoot
 {
 

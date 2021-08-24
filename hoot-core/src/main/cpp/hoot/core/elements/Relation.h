@@ -32,9 +32,6 @@
 #include <hoot/core/elements/RelationData.h>
 #include <hoot/core/schema/MetadataTags.h>
 
-// Standard
-
-
 namespace hoot
 {
 

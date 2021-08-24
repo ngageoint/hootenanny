@@ -27,7 +27,6 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-
 #include <hoot/core/util/UuidHelper.h>
 
 namespace hoot
@@ -43,8 +42,8 @@ public:
 
   void uuid5Test()
   {
-      QUuid r = UuidHelper::createUuid5("foo", QUuid("{6ba7b812-9dad-11d1-80b4-00c04fd430c8}"));
-      HOOT_STR_EQUALS("{bca95adb-b5f1-564f-96a7-6355c52d1fa7}", r.toString());
+    QUuid r = UuidHelper::createUuid5("foo", QUuid("{6ba7b812-9dad-11d1-80b4-00c04fd430c8}"));
+    HOOT_STR_EQUALS("{bca95adb-b5f1-564f-96a7-6355c52d1fa7}", r.toString());
   }
 };
 

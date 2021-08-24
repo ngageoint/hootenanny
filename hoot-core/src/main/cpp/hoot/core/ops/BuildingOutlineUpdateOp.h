@@ -32,9 +32,6 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
-// Standard
-
-
 namespace hoot
 {
 class OsmMap;

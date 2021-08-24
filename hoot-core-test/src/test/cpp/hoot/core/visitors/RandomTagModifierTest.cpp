@@ -28,7 +28,6 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/RandomTagModifier.h>
 

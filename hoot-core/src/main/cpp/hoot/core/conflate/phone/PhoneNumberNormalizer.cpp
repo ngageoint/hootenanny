@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
-
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/elements/Element.h>
 

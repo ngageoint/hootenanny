@@ -33,7 +33,6 @@
 #include <hoot/core/algorithms/string/KskipBigramDistance.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 
-
 namespace hoot
 {
 

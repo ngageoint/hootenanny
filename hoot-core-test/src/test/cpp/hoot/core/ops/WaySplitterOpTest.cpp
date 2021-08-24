@@ -38,7 +38,6 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/WaySplitterOp.h>
 
-
 // TGS
 #include <tgs/Statistics/Random.h>
 using namespace Tgs;

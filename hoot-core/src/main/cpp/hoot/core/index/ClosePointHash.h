@@ -31,7 +31,6 @@
 // Standard
 #include <stdint.h>
 
-
 // TGS
 #include <tgs/HashMap.h>
 

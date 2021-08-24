@@ -42,11 +42,7 @@
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/ConfigOptions.h>
-
 #include <hoot/core/util/Settings.h>
-
-// Standard
-
 
 // Tgs
 #include <tgs/StreamUtils.h>

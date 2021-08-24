@@ -30,7 +30,6 @@
 #include <hoot/core/algorithms/string/MostEnglishName.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
 namespace hoot
 {
 

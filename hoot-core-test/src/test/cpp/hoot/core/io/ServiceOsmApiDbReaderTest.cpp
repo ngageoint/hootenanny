@@ -37,7 +37,6 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
-
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmApiDbBulkInserter.h>
 #include <hoot/core/visitors/RemoveAttributesVisitor.h>

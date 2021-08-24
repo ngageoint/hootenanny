@@ -40,7 +40,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
 
-// qt
+// Qt
 #include <QStringList>
 #include <QVariant>
 #include <QtSql/QSqlError>

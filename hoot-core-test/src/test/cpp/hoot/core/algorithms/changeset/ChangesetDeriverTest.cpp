@@ -31,7 +31,6 @@
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 
-
 namespace hoot
 {
 

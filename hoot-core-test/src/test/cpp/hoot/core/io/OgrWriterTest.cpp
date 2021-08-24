@@ -31,7 +31,6 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/FileUtils.h>
 
-
 namespace hoot
 {
 

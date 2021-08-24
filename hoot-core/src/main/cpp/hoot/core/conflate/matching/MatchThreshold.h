@@ -31,9 +31,6 @@
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 
-// Standard
-
-
 namespace hoot
 {
 

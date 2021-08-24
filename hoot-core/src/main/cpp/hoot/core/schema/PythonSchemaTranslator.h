@@ -30,9 +30,6 @@
 // Hoot
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
 
-// Std
-
-
 namespace hoot
 {
 

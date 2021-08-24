@@ -32,7 +32,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/Soundex.h>
 
-
 namespace hoot
 {
 
@@ -67,7 +66,6 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SoundexTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SoundexTest, "quick");
 
 }

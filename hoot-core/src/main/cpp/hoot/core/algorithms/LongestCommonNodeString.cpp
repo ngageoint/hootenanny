@@ -30,9 +30,6 @@
 // Hoot
 #include <hoot/core/elements/Way.h>
 
-// Standard
-
-
 using namespace std;
 
 namespace hoot

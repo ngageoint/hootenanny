@@ -49,7 +49,6 @@ public:
   ~KnnWayIterator() = default;
 
   long getWayId() const { return _treeIdToWid[getId()]; }
-
   ConstWayPtr getWay() const { return _map.getWay(getWayId()); }
 
   bool hasNext() override;

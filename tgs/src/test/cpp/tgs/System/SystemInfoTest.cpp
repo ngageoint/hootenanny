@@ -25,19 +25,19 @@
  * @copyright Copyright (C) 2015, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-// Standard Includes
+// Standard
 #include <iostream>
 #include <math.h>
 using namespace std;
 
-// CPP Unit Includes
+// CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
+// tgs
 #include <tgs/System/SystemInfo.h>
-
 #include "../PluginFactory.h"
 
 #define ASSERT_DBL_EQL(expected, actual) CPPUNIT_ASSERT_DOUBLES_EQUAL(expected, actual, 1e-4)

@@ -28,7 +28,6 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/point/PoiSearchRadius.h>
-
 #include <hoot/core/util/FileUtils.h>
 
 namespace hoot

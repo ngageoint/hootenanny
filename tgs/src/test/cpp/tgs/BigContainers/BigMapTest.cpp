@@ -25,19 +25,19 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit Includes
+// CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Standard Includes
+// Standard
 #include <stdlib.h>
 #include <iostream>
 #include <limits>
 using namespace std;
 
-// TGS Includes
+// TGS
 #include <tgs/BigContainers/BigMap.h>
 #include <tgs/Statistics/Random.h>
 #include <tgs/System/Time.h>

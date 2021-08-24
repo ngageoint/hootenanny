@@ -27,17 +27,9 @@
 #ifndef __ELEMENT_WAY_H__
 #define __ELEMENT_WAY_H__
 
-// Geos
-
-
 // Hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/WayData.h>
-
-
-// Standard
-
-
 
 namespace hoot
 {
@@ -54,9 +46,7 @@ public:
       quint64 timestamp = ElementData::TIMESTAMP_EMPTY,
       QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
       bool visible = ElementData::VISIBLE_EMPTY, long pid = WayData::PID_EMPTY);
-
   Way(const Way& way);
-
   ~Way() = default;
 
   void addNode(long id);

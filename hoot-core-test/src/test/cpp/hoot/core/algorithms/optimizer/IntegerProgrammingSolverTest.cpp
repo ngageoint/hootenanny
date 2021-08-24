@@ -29,7 +29,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h>
 
-
 // Standard
 #include <fstream>
 #include <list>

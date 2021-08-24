@@ -80,6 +80,7 @@
 #if HOOT_HAVE_LIBICUI18N
 #include <unicode/uversion.h>
 #endif
+
 //  Proj4
 #include <proj.h>
 

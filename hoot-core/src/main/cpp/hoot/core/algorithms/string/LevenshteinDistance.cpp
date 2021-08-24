@@ -29,12 +29,9 @@
 
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
-
 #include <hoot/core/util/Factory.h>
 
-
 // Standard
-
 #include <math.h>
 
 using namespace std;

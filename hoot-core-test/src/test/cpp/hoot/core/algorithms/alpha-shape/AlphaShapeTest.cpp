@@ -31,7 +31,6 @@
 #include <hoot/core/algorithms/alpha-shape/AlphaShape.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 
-
 // Standard
 #include <fstream>
 #include <list>

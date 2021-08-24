@@ -27,7 +27,7 @@
 
 #include "ProbablePathCalculator.h"
 
-// Standard Includes
+// Standard
 #include <algorithm>
 #include <iostream>
 #include <math.h>

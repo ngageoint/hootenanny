@@ -35,7 +35,6 @@
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
-
 #include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot

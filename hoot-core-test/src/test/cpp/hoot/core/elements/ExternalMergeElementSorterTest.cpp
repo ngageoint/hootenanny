@@ -32,7 +32,6 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 
-
 namespace hoot
 {
 

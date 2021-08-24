@@ -38,9 +38,6 @@
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/conflate/ConflateUtils.h>
 
-// Standard
-
-
 // TGS
 #include <tgs/StreamUtils.h>
 

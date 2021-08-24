@@ -28,7 +28,6 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Tags.h>
-
 #include <hoot/core/elements/Node.h>
 
 // Tgs

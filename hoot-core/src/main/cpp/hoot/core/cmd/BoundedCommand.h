@@ -28,9 +28,6 @@
 #ifndef BOUNDED_COMMAND_H
 #define BOUNDED_COMMAND_H
 
-// geos
-
-
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
 

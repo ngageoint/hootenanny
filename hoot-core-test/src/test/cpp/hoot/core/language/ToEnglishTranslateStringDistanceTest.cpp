@@ -35,7 +35,6 @@
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/language/ToEnglishTranslateStringDistance.h>
 
-
 namespace hoot
 {
 

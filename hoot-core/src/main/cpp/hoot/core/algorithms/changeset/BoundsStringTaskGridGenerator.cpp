@@ -27,7 +27,6 @@
 #include "BoundsStringTaskGridGenerator.h"
 
 // Hoot
-
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 

@@ -37,10 +37,6 @@
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/util/Factory.h>
 
-
-// Standard
-
-
 using namespace std;
 
 namespace hoot

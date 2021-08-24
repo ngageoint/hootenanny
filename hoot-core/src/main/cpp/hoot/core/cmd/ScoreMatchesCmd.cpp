@@ -30,7 +30,6 @@
 #include <hoot/core/conflate/matching/MatchScorer.h>
 #include <hoot/core/util/Factory.h>
 
-
 using namespace std;
 using namespace Tgs;
 

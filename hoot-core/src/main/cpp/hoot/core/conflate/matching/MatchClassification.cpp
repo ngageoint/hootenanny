@@ -26,9 +26,6 @@
  */
 #include "MatchClassification.h"
 
-// hoot
-
-
 // standard
 #include <algorithm>
 #include <math.h>

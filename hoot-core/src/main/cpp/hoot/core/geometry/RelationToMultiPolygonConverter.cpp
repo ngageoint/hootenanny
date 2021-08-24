@@ -43,7 +43,6 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 
-
 // tgs
 #include <tgs/DisjointSet/DisjointSetMap.h>
 

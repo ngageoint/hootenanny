@@ -26,9 +26,6 @@
  */
 #include "PertyTestRunResult.h"
 
-// hoot
-
-
 // TBS
 #include <tbs/stats/SampleStats.h>
 

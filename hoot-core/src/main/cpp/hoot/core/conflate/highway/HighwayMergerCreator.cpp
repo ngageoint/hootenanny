@@ -32,7 +32,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 
-
 using namespace std;
 
 namespace hoot

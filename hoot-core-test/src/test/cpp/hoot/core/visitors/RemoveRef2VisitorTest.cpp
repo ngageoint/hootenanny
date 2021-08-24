@@ -31,7 +31,6 @@
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/RemoveRef2Visitor.h>
 #include <hoot/core/io/OsmJsonReader.h>

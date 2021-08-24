@@ -31,11 +31,6 @@
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchSet.h>
 
-// Standard
-
-
-
-
 namespace hoot
 {
 

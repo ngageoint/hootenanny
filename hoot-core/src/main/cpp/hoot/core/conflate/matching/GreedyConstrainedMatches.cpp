@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/conflate/matching/Match.h>
 
-
 using namespace std;
 
 namespace hoot

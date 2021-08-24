@@ -29,10 +29,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/util/FileUtils.h>
 
-
-//  Qt
-
-
 namespace hoot
 {
 

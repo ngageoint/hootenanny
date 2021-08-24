@@ -38,9 +38,6 @@
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 
-// Standard
-
-
 // TGS
 #include <tgs/StreamUtils.h>
 using namespace Tgs;

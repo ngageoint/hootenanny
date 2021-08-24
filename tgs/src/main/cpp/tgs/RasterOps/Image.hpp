@@ -5,7 +5,7 @@
 #ifndef __TGS__IMAGE_HPP__
 #define __TGS__IMAGE_HPP__
 
-// Standard Includes
+// Standard
 #include <assert.h>
 #include <ostream>
 #include <vector>
@@ -20,21 +20,14 @@ namespace Tgs
   public:
 
     Image();
-
     Image(const Image<_T>& image);
-
     Image(int width, int height) { resize(width, height); }
-
     ~Image() = default;
 
     _T* getData() { return &(_values[0]); }
-
     int getHeight() const { return _height; }
-
     int getPixelCount() const { return _values.size(); }
-
     const std::vector<_T>& getVector() const { return _values; }
-
     int getWidth() const { return _width; }
 
     bool isValid() const { return _width > 0 && _height > 0; }

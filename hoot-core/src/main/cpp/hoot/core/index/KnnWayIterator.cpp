@@ -28,13 +28,11 @@
 #include "KnnWayIterator.h"
 
 // GEOS
-
 #include <geos/geom/GeometryFactory.h>
 
 // hoot
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
-
 
 // Standard
 #include <limits>
@@ -61,8 +59,7 @@ KnnWayIterator::KnnWayIterator(const OsmMap& map, ConstWayPtr way,
   _baseAccuracy = way->getCircularError();
 }
 
-double KnnWayIterator::_calculateDistance(const BoxInternalData&, int id)
-  const
+double KnnWayIterator::_calculateDistance(const BoxInternalData&, int id) const
 {
   // if the id in the index isn't valid, then report the maximum possible distance.
   double result = numeric_limits<double>::max();

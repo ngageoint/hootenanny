@@ -31,7 +31,6 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
-
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Progress.h>
 

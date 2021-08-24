@@ -33,9 +33,6 @@
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/conflate/merging/ElementMergerJs.h>
 
-// Std
-
-
 using namespace v8;
 
 namespace hoot

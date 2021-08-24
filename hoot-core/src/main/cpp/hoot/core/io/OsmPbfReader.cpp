@@ -42,7 +42,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 
-// Standard Includes
+// Standard
 #include <fstream>
 
 // Qt

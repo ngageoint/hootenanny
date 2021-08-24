@@ -32,8 +32,6 @@
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-
-
 #include <hoot/core/util/StringUtils.h>
 
 using namespace std;

@@ -26,10 +26,6 @@
  */
 #include "ScriptSchemaTranslator.h"
 
-// hoot
-
-
-
 // Standard
 #include <assert.h>
 

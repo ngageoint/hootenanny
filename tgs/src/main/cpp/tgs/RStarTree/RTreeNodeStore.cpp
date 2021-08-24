@@ -27,7 +27,7 @@
 
 #include "RTreeNodeStore.h"
 
-// Standard Includes
+// Standard
 #include <cassert>
 #include <iostream>
 

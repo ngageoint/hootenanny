@@ -37,10 +37,6 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Factory.h>
 
-
-// Standard
-
-
 // TGS
 #include <tgs/StreamUtils.h>
 using namespace Tgs;

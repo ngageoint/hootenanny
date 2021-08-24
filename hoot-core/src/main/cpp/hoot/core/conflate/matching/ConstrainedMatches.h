@@ -32,11 +32,6 @@
 #include <hoot/core/conflate/matching/MatchConflicts.h>
 #include <hoot/core/elements/OsmMap.h>
 
-// Standard
-
-
-
-
 namespace hoot
 {
 

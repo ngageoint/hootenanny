@@ -29,7 +29,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Way.h>
 
-
 namespace hoot
 {
 

@@ -27,9 +27,6 @@
 #ifndef SUBLINESTRINGMATCHER_H
 #define SUBLINESTRINGMATCHER_H
 
-// Standard
-
-
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>

@@ -30,7 +30,6 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 
-
 using namespace geos::geom;
 
 namespace hoot

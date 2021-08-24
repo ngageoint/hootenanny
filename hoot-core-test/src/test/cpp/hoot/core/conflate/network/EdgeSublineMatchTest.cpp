@@ -29,7 +29,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/network/EdgeSublineMatch.h>
 
-
 namespace hoot
 {
 

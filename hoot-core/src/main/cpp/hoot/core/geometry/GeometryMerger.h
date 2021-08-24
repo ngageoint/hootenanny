@@ -29,15 +29,12 @@
 #define GEOMETRY_MERGER_H
 
 // GEOS
-
 #include <geos/geom/Geometry.h>
 
-// Standard Library
+// Standard
 #include <atomic>
 #include <condition_variable>
-
 #include <mutex>
-
 
 namespace hoot
 {

@@ -37,7 +37,6 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
-
 #include <hoot/core/elements/MapProjector.h>
 
 // Tgs

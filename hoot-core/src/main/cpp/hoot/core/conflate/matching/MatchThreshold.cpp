@@ -30,7 +30,6 @@
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 
-
 namespace hoot
 {
 

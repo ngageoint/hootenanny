@@ -36,7 +36,6 @@
 // Standard
 #include <fstream>
 
-
 // Tgs
 #include <tgs/RandomForest/RandomForest.h>
 #include <tgs/Statistics/Random.h>

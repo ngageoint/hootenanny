@@ -43,7 +43,6 @@
 #include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-
 #include <hoot/core/util/StringUtils.h>
 
 using namespace geos::geom;

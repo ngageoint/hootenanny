@@ -27,10 +27,7 @@
 #ifndef SCHEMA_H
 #define SCHEMA_H
 
-// Standard
-
-
-
+// hoot
 #include <hoot/core/io/schema/Layer.h>
 
 namespace hoot
@@ -43,6 +40,7 @@ public:
   Schema() = default;
 
   void addLayer(const std::shared_ptr<Layer>& l);
+
   std::shared_ptr<const Layer> getLayer(size_t i) const;
   std::shared_ptr<const Layer> getLayer(const QString& name) const;
   bool hasLayer(const QString& name) const;

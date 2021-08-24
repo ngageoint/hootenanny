@@ -27,14 +27,12 @@
 
 #include "WayToIntersectionGeoModifier.h"
 
-// geos
-
-
 // Hoot
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/Factory.h>
 
+// Standard
 #include <algorithm>
 
 using namespace geos::geom;

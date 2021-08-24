@@ -31,7 +31,6 @@
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/Factory.h>
 
-
 namespace hoot
 {
 

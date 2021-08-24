@@ -28,9 +28,6 @@
 #ifndef LARGEWAYSPLITTER_H
 #define LARGEWAYSPLITTER_H
 
-// Std
-
-
 namespace hoot
 {
 

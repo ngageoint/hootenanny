@@ -29,7 +29,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
 
-
 // Tgs
 #include <tgs/System/SystemInfo.h>
 

@@ -30,9 +30,6 @@
 // hoot
 #include <hoot/core/elements/Element.h>
 
-// geos
-
-
 namespace hoot
 {
 

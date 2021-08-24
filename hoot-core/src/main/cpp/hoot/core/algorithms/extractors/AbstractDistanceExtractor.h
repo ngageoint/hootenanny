@@ -29,12 +29,10 @@
 #define ABSTRACTDISTANCEEXTRACTOR_H
 
 // geos
-
 #include <geos/geom/Point.h>
 
 // hoot
 #include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
-
 
 namespace hoot
 {

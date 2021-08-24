@@ -33,10 +33,6 @@
 #include <hoot/core/util/Units.h>
 #include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
-// Standard
-
-
-
 namespace hoot
 {
 

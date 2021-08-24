@@ -26,8 +26,6 @@
  */
 #include "OgrWriter.h"
 
-
-
 // geos
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/MultiLineString.h>

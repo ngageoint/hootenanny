@@ -30,7 +30,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
 
-
 using namespace std;
 
 namespace hoot

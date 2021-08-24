@@ -39,13 +39,10 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
-
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 #include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 
 // Qt
-
-
 #include <QElapsedTimer>
 
 // Standard

@@ -33,9 +33,6 @@
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/algorithms/string/WordWeightDictionary.h>
 
-// Standart
-
-
 namespace hoot
 {
 

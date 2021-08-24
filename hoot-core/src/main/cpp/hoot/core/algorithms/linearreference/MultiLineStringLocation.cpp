@@ -33,7 +33,6 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
 
-
 using namespace std;
 
 namespace hoot

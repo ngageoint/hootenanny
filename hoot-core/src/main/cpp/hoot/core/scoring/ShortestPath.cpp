@@ -30,7 +30,6 @@
 // Hoot
 #include <hoot/core/scoring/DirectedGraph.h>
 
-
 // Standard
 #include <cassert>
 

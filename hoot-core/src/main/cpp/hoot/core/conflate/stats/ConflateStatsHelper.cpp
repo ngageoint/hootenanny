@@ -27,8 +27,6 @@
 #include "ConflateStatsHelper.h"
 
 // hoot
-
-
 #include <hoot/core/info/SingleStat.h>
 #include <hoot/core/info/CreatorDescription.h>
 

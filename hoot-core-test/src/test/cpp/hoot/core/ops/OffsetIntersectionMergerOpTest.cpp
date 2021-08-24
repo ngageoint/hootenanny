@@ -33,7 +33,6 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/OffsetIntersectionMergerOp.h>
 
-
 using namespace geos::geom;
 
 namespace hoot

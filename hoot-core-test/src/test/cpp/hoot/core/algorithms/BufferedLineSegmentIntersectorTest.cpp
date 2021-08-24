@@ -34,7 +34,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/BufferedLineSegmentIntersector.h>
 
-
 // Tgs
 #include <tgs/Statistics/Random.h>
 #include <tgs/System/Time.h>

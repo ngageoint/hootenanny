@@ -26,9 +26,6 @@
  */
 #include "AbstractTest.h"
 
-// Hoot
-
-
 namespace hoot
 {
 

@@ -33,7 +33,6 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/scoring/MatchComparator.h>
-
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/AddUuidVisitor.h>

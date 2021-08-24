@@ -35,7 +35,6 @@
 #include <hoot/core/schema/TranslatedTagDifferencer.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
 namespace hoot
 {
 

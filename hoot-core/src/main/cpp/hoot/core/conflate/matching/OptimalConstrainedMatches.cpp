@@ -30,7 +30,6 @@
 #include <hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h>
 #include <hoot/core/conflate/matching/Match.h>
 
-
 using namespace std;
 
 namespace hoot

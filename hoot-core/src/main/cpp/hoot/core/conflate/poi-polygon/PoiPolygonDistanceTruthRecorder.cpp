@@ -27,7 +27,6 @@
 #include "PoiPolygonDistanceTruthRecorder.h"
 
 // hoot
-
 #include <hoot/core/schema/MetadataTags.h>
 
 using namespace std;

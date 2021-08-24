@@ -33,9 +33,6 @@
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
 
-// Standard
-
-
 namespace hoot
 {
 

@@ -29,7 +29,6 @@
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
 
-
 // libpostal
 #include <libpostal/libpostal.h>
 

@@ -27,18 +27,13 @@
 #ifndef HOOT_HYBRID_RTREE_H
 #define HOOT_HYBRID_RTREE_H
 
-// geos
-
-
 // hoot
 #include <hoot/core/index/metric-hybrid/Node.h>
 #include <hoot/core/index/metric-hybrid/SubTreeCallback.h>
 
-
 // Standard
 #include <assert.h>
 #include <math.h>
-
 
 // TGS
 #include <tgs/HashMap.h>

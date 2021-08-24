@@ -31,10 +31,6 @@
 // hoot
 #include <hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h>
 
-// standard
-
-
-
 namespace hoot
 {
 

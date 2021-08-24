@@ -35,7 +35,6 @@
 #include <hoot/core/scoring/DataSamples.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 
-
 namespace hoot
 {
 

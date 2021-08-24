@@ -45,7 +45,6 @@
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/Factory.h>
-
 #include <hoot/core/visitors/ConstElementVisitor.h>
 
 using namespace geos::geom;

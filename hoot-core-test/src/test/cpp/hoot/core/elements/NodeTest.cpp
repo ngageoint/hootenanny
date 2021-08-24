@@ -33,12 +33,10 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
-
 #include <hoot/core/visitors/TagCountVisitor.h>
 
 // Tgs
 #include <tgs/HashMap.h>
-
 
 namespace hoot
 {

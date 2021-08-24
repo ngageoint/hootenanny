@@ -27,9 +27,7 @@
 #ifndef DOUBLEFIELDDEFINITION_H
 #define DOUBLEFIELDDEFINITION_H
 
-// Standard
-
-
+// hoot
 #include <hoot/core/io/schema/FieldDefinition.h>
 
 namespace hoot

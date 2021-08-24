@@ -36,10 +36,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 
-
-//Qt
-
-
 using namespace geos::geom;
 using namespace std;
 

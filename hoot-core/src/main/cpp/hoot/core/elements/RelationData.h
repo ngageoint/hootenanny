@@ -27,13 +27,12 @@
 #ifndef RELATIONDATA_H
 #define RELATIONDATA_H
 
+// Hoot
 #include <hoot/core/elements/ElementData.h>
 #include <hoot/core/elements/ElementId.h>
 
-
 // Standard
 #include <ostream>
-
 
 namespace hoot
 {

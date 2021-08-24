@@ -38,11 +38,6 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/CollectionUtils.h>
 
-
-
-// GEOS
-
-
 // Std
 #include <float.h>
 

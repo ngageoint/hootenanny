@@ -38,7 +38,6 @@
 #include <hoot/core/criterion/WayNodeCriterion.h>
 
 // GEOS
-
 #include <geos/geom/Geometry.h>
 
 namespace hoot

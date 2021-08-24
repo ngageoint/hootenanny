@@ -26,9 +26,6 @@
  */
 #include "ChangesetCleaner.h"
 
-// Hoot
-
-
 namespace hoot
 {
 
