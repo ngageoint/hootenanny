@@ -72,9 +72,9 @@ fi
 # Sanity check
 hoot version
 
-# Configure OAuth redirect for port 8888
-sudo -u tomcat sed -i "s|oauthRedirectURL=http://localhost:8080/login.html|# oauthRedirectURL=http://localhost:8080/login.html|" /var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf
-sudo -u tomcat sed -i "s|# oauthRedirectURL=http://localhost:8888/hootenanny-id/login.html|oauthRedirectURL=http://localhost:8888/hootenanny-id/login.html|" /var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf
+echo "### Configure OAuth redirect url for port 8888 ###" | tee -a CentOS_install.txt
+sudo $HOOT_HOME/scripts/tomcat/configure_oauth_8888.sh
+
 
 echo "See VAGRANT.md for additional configuration instructions and then run 'vagrant ssh' to log into the Hootenanny virtual machine."
 echo "See $HOOT_HOME/docs on the virtual machine for Hootenanny documentation files."
