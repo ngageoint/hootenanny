@@ -86,7 +86,7 @@ public:
     // have to do this or getInstance will re-register the default match creators.
     MatchFactory& factory = MatchFactory::getInstance();
     factory.reset();
-    factory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");
+    factory.registerCreator("ScriptMatchCreator,MultiaryPoi.js");
 
     std::shared_ptr<MatchCreator> matchCreator = factory.getCreators()[0];
 

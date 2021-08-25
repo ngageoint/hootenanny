@@ -47,7 +47,7 @@ class BuildingMatch : public Match, public MatchDetails
 {
 public:
 
-  static QString className() { return "hoot::BuildingMatch"; }
+  static QString className() { return "BuildingMatch"; }
 
   static const QString MATCH_NAME;
 

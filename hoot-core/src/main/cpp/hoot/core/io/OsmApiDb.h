@@ -44,7 +44,7 @@ class OsmApiDb : public ApiDb
 
 public:
 
-  static QString className() { return "hoot::OsmApiDb"; }
+  static QString className() { return "OsmApiDb"; }
 
   static int logWarnCount;
 

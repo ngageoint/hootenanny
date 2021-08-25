@@ -40,7 +40,7 @@ namespace hoot
 class OsmPgCsvWriter : public PartialOsmMapWriter, public Configurable
 {
 public:
-  static QString className() { return "hoot::OsmCsvWriter"; }
+  static QString className() { return "OsmCsvWriter"; }
 
   OsmPgCsvWriter();
   ~OsmPgCsvWriter() = default;

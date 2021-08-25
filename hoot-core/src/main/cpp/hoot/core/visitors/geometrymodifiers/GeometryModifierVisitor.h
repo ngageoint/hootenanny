@@ -56,7 +56,7 @@ public:
   // TODO: implement OsmMapConsumer
   void setOsmMap(OsmMap* pMap) { _pMap = pMap; }
 
-  static QString className() { return "hoot::GeometryModifierVisitor"; }
+  static QString className() { return "GeometryModifierVisitor"; }
 
   // visits the element, checks if it matches the filter set in _actionDesc and
   // calls the action's process function

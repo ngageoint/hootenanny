@@ -60,7 +60,7 @@ class Tags : public QHash<QString, QString>
 {
 public:
 
-  static QString className() { return "hoot::Tags"; }
+  static QString className() { return "Tags"; }
   static QString uuidKey() { return "uuid"; }
 
   Tags() = default;

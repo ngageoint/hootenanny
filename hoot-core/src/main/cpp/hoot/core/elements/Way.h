@@ -38,7 +38,7 @@ class Way : public Element
 {
 public:
 
-  static QString className() { return "hoot::Way"; }
+  static QString className() { return "Way"; }
 
   Way(Status s, long id, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY,
       long changeset = ElementData::CHANGESET_EMPTY,

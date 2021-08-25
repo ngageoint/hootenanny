@@ -53,7 +53,7 @@ class CalculateStatsOp : public ConstOsmMapOperation, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::CalculateStatsOp"; }
+  static QString className() { return "CalculateStatsOp"; }
 
   CalculateStatsOp(QString mapName = "", bool inputIsConflatedMapOutput = false);
   CalculateStatsOp(

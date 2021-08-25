@@ -38,7 +38,7 @@ class StatCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::StatCmd"; }
+  static QString className() { return "StatCmd"; }
 
   StatCmd() = default;
 

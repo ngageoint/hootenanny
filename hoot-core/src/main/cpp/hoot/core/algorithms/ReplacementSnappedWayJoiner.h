@@ -42,7 +42,7 @@ class ReplacementSnappedWayJoiner : public WayJoinerAdvanced
 {
 public:
 
-  static QString className() { return "hoot::ReplacementSnappedWayJoiner"; }
+  static QString className() { return "ReplacementSnappedWayJoiner"; }
 
   /**
    * @brief Constructor

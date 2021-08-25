@@ -215,16 +215,16 @@ void Settings::clear()
   _settings.clear();
 }
 
-void Settings::_addNamespacePrefixIfClassNameWithout(QString& val)
-{
-  // If the interal factory recognizes this option value as a factory class name and it doesn't have
-  // the global namespace already prepended to it, we'll do that here.
-  if (!val.isEmpty() && !val.startsWith(MetadataTags::HootNamespacePrefix()) &&
-      Factory::getInstance().hasClass(MetadataTags::HootNamespacePrefix() + val))
-  {
-    val.prepend(MetadataTags::HootNamespacePrefix());
-  }
-}
+//void Settings::_addNamespacePrefixIfClassNameWithout(QString& val)
+//{
+//  // If the interal factory recognizes this option value as a factory class name and it doesn't have
+//  // the global namespace already prepended to it, we'll do that here.
+//  if (!val.isEmpty() && !val.startsWith(MetadataTags::HootNamespacePrefix()) &&
+//      Factory::getInstance().hasClass(MetadataTags::HootNamespacePrefix() + val))
+//  {
+//    val.prepend(MetadataTags::HootNamespacePrefix());
+//  }
+//}
 
 void Settings::_updateClassNamesInList(QStringList& list)
 {
@@ -232,7 +232,7 @@ void Settings::_updateClassNamesInList(QStringList& list)
   for (int i = 0; i < list.size(); i++)
   {
     QString val = list.at(i);
-    _addNamespacePrefixIfClassNameWithout(val);
+    //_addNamespacePrefixIfClassNameWithout(val);
     moddedList.append(val);
   }
   list = moddedList;
@@ -250,7 +250,7 @@ QVariant Settings::get(const QString& key) const
   {
     std::set<QString> used;
     QString val = _replaceVariables(key, used);
-    _addNamespacePrefixIfClassNameWithout(val);
+    //_addNamespacePrefixIfClassNameWithout(val);
     result = val;
   }
   return result;
@@ -496,11 +496,6 @@ void Settings::_validateOperatorRefs(const QStringList& operators)
     operatorName = operatorName.remove("\"");
     LOG_VARD(operatorName);
     const QString errorMsg = "Invalid option operator class name: " + operatorName;
-
-    if (!operatorName.startsWith(MetadataTags::HootNamespacePrefix()))
-    {
-      operatorName.prepend(MetadataTags::HootNamespacePrefix());
-    }
 
     // Should either be a visitor, op, or criterion, but we don't know which one, so check for all
     // of them.
@@ -757,7 +752,6 @@ void Settings::parseCommonArguments(QStringList& args)
           }
           if (!itemRemoved)
           {
-            listItemToRemove = v.replace(MetadataTags::HootNamespacePrefix(), "");
             if (newList.contains(listItemToRemove))
             {
               newList.removeAll(listItemToRemove);
@@ -766,7 +760,7 @@ void Settings::parseCommonArguments(QStringList& args)
           }
           if (!itemRemoved)
           {
-            listItemToRemove = MetadataTags::HootNamespacePrefix() + v;
+            listItemToRemove = v;
             if (newList.contains(listItemToRemove))
             {
               newList.removeAll(listItemToRemove);

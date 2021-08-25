@@ -44,7 +44,7 @@ class UnionPolygonsOp : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::UnionPolygonsOp"; }
+  static QString className() { return "UnionPolygonsOp"; }
 
   UnionPolygonsOp();
   ~UnionPolygonsOp() = default;

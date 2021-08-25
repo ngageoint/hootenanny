@@ -44,7 +44,7 @@ class OsmApiReader : public OsmXmlReader, private ParallelBoundedApiReader
 {
 public:
 
-  static QString className() { return "hoot::OsmApiReader"; }
+  static QString className() { return "OsmApiReader"; }
   /** Constructor */
   OsmApiReader();
   /** Destructor */

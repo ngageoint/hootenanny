@@ -59,8 +59,8 @@ public:
   {
     setResetType(ResetAll);
 
-    conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::HighwayMatchCreator");
-    conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::HighwayMergerCreator");
+    conf().set(ConfigOptions::getMatchCreatorsKey(), "HighwayMatchCreator");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), "HighwayMergerCreator");
   }
 
   void runConflateTest()

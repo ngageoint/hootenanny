@@ -1,1 +1,1 @@
-Use hoot::MaximalSublineMatcher to conflate right angle turn.
+Use MaximalSublineMatcher to conflate right angle turn.

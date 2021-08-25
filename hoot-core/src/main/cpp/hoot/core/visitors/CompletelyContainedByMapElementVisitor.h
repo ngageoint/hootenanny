@@ -49,7 +49,7 @@ class CompletelyContainedByMapElementVisitor : public ElementConstOsmMapVisitor
 {
 public:
 
-  static QString className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
+  static QString className() { return "CompletelyContainedByMapElementVisitor"; }
 
   CompletelyContainedByMapElementVisitor();
   ~CompletelyContainedByMapElementVisitor() = default;

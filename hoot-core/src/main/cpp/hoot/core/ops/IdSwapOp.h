@@ -45,9 +45,9 @@ public:
 
   /**
    * @brief className - Get classname string
-   * @return - "hoot::IdSwapOp"
+   * @return - "IdSwapOp"
    */
-  static QString className() { return "hoot::IdSwapOp"; }
+  static QString className() { return "IdSwapOp"; }
 
   /**
    * @brief IdSwapOp - Default constructor

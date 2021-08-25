@@ -58,7 +58,7 @@ class GeometryToElementConverter
 {
 public:
 
-  static QString className() { return "hoot::GeometryToElementConverter"; }
+  static QString className() { return "GeometryToElementConverter"; }
 
   GeometryToElementConverter(const OsmMapPtr& map);
   virtual ~GeometryToElementConverter() = default;

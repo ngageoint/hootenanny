@@ -38,7 +38,7 @@ class HighwayMergerCreator : public MergerCreator, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::HighwayMergerCreator"; }
+  static QString className() { return "HighwayMergerCreator"; }
 
   HighwayMergerCreator();
   ~HighwayMergerCreator() = default;

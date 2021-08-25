@@ -43,7 +43,7 @@ class MarkForReviewMerger : public Merger
 {
 public:
 
-  static QString className() { return "hoot::MarkForReviewMerger"; }
+  static QString className() { return "MarkForReviewMerger"; }
 
   MarkForReviewMerger() = default;
   ~MarkForReviewMerger() = default;

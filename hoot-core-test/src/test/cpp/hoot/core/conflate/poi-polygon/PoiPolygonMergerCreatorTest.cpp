@@ -64,8 +64,8 @@ public:
   virtual void setUp()
   {
     HootTestFixture::setUp();
-    conf().set(ConfigOptions().getMatchCreatorsKey(), "hoot::PoiPolygonMatchCreator");
-    conf().set(ConfigOptions().getMergerCreatorsKey(), "hoot::PoiPolygonMergerCreator");
+    conf().set(ConfigOptions().getMatchCreatorsKey(), "PoiPolygonMatchCreator");
+    conf().set(ConfigOptions().getMergerCreatorsKey(), "PoiPolygonMergerCreator");
   }
 
   virtual void tearDown()

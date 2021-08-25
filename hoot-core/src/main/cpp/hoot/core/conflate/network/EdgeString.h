@@ -87,7 +87,7 @@ public:
     ConstEdgeSublinePtr _subline;
   };
 
-  static QString className() { return "hoot::EdgeString"; }
+  static QString className() { return "EdgeString"; }
 
   static int logWarnCount;
 

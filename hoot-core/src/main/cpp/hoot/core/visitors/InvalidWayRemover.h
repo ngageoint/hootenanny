@@ -43,7 +43,7 @@ class InvalidWayRemover : public ElementOsmMapVisitor, public ConflateInfoCacheC
 
 public:
 
-  static QString className() { return "hoot::InvalidWayRemover"; }
+  static QString className() { return "InvalidWayRemover"; }
 
   InvalidWayRemover() = default;
   ~InvalidWayRemover() override = default;

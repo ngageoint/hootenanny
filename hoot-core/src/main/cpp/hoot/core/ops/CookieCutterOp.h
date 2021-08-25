@@ -44,7 +44,7 @@ class CookieCutterOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::CookieCutterOp"; }
+  static QString className() { return "CookieCutterOp"; }
 
   CookieCutterOp();
   ~CookieCutterOp() = default;

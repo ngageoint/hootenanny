@@ -48,7 +48,7 @@ class HootException : public std::exception
 {
 public:
 
-  static QString className() { return "hoot::HootException"; }
+  static QString className() { return "HootException"; }
 
   HootException() = default;
   HootException(const char* str) { _what = QString::fromUtf8(str); }
@@ -157,7 +157,7 @@ public:
 class Name : public HootException \
 { \
 public: \
-  static QString className() { return "hoot::" #Name; } \
+  static QString className() { return "" #Name; } \
   Name() : HootException() {} \
   Name(QString str) : HootException(str) { } \
   Name(const Name& e) : HootException(e.getWhat()) { } \
@@ -170,7 +170,7 @@ public: \
 class Name : public HootException \
 { \
 public: \
-  static QString className() { return "hoot::" #Name; } \
+  static QString className() { return "" #Name; } \
   Name() : HootException(Default) {} \
   Name(QString str) : HootException(str) { } \
   Name(const Name& e) : HootException(e.getWhat()) { } \

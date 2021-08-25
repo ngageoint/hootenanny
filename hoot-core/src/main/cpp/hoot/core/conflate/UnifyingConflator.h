@@ -48,7 +48,7 @@ class UnifyingConflator : public AbstractConflator
 {
 public:
 
-  static QString className() { return "hoot::UnifyingConflator"; }
+  static QString className() { return "UnifyingConflator"; }
 
   UnifyingConflator();
   UnifyingConflator(const std::shared_ptr<MatchThreshold>& matchThreshold);

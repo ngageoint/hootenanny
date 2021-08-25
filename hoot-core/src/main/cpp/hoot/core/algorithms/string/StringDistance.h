@@ -40,7 +40,7 @@ class StringDistance : public ApiEntityInfo
 {
 public:
 
-  static QString className() { return "hoot::StringDistance"; }
+  static QString className() { return "StringDistance"; }
 
   StringDistance() = default;
   virtual ~StringDistance() = default;

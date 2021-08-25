@@ -45,7 +45,7 @@ public:
 
   static QString ALT_TYPES_TAG_KEY;
 
-  static QString className() { return "hoot::PreserveTypesTagMerger"; }
+  static QString className() { return "PreserveTypesTagMerger"; }
 
   /**
    * Constructor

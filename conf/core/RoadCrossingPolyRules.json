@@ -3,7 +3,7 @@
   [
     {
       "name": "buildings",
-      "polyCriteriaFilter": "hoot::BuildingCriterion"
+      "polyCriteriaFilter": "BuildingCriterion"
     },
     {
       "name": "parking",

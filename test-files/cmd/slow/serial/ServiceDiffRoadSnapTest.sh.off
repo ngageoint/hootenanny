@@ -15,11 +15,11 @@ SEC_INPUT=$3
 ALG_CONFIG=$4
 # This is a bit of a hack, but just trying to reduce test runtime here.
 if [ "$ALG_CONFIG" == "UnifyingAlgorithm.conf" ]; then
-  MATCHERS="-D match.creators=hoot::HighwayMatchCreator"
-  MERGERS="-D merger.creators=hoot::HighwayMergerCreator"
+  MATCHERS="-D match.creators=HighwayMatchCreator"
+  MERGERS="-D merger.creators=HighwayMergerCreator"
 else
-  MATCHERS="-D match.creators=hoot::NetworkMatchCreator"
-  MERGERS="-D merger.creators=hoot::NetworkMergerCreator"
+  MATCHERS="-D match.creators=NetworkMatchCreator"
+  MERGERS="-D merger.creators=NetworkMergerCreator"
 fi
 # valid params are: "2" for generating an osc from diff conflate or "3" for generating an osm from diff conflate and 
 # generating the changeset in a separate step
@@ -63,7 +63,7 @@ scripts/database/CleanAndInitializeOsmApiDb.sh
 
 # write ref to osmapidb - There's a mix of positive/negative IDs in the input ref source files, so let's treat this like 
 # an authoritative data store and give it all positive IDs.
-hoot convert $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/ref-load-debug.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator $GENERAL_OPTS $DB_OPTS $REF_INPUT $OSM_API_DB_URL
+hoot convert $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/ref-load-debug.osm -D reader.use.data.source.ids=false -D id.generator=PositiveIdGenerator $GENERAL_OPTS $DB_OPTS $REF_INPUT $OSM_API_DB_URL
 if [ "$DEBUG" == "true" ]; then
   hoot convert --warn -D debug.maps.filename=$OUTPUT_DIR/ref-load-debug.osm -D reader.use.data.source.ids=true $GENERAL_OPTS $DB_OPTS $OSM_API_DB_URL $OUTPUT_DIR/ref-original.osm
 fi
@@ -78,13 +78,13 @@ fi
 
 if [ "$NUM_STEPS" == "2" ]; then
   # run diff conflate to changeset w/ road snapping; retain both sets of IDs during conflate
-  hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=hoot::HighwayCriterion -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL --differential
+  hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=HighwayCriterion -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL --differential
   if [ "$DEBUG" == "true" ]; then
     hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc --differential  
   fi
 else
   # run diff conflate to osm w/ road snapping; retain both sets of IDs during conflate
-  hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=hoot::HighwayCriterion -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osm --differential
+  hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=HighwayCriterion -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osm --differential
   # generate a changeset between the original ref data and the diff calculated in the previous step
   hoot changeset-derive $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/diff.osm $OUTPUT_DIR/diff.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL
   if [ "$DEBUG" == "true" ]; then

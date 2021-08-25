@@ -36,7 +36,7 @@ class GeneralizeTagMerger : public TagMerger
 {
 public:
 
-  static QString className() { return "hoot::GeneralizeTagMerger"; }
+  static QString className() { return "GeneralizeTagMerger"; }
 
   GeneralizeTagMerger() = default;
   ~GeneralizeTagMerger() = default;

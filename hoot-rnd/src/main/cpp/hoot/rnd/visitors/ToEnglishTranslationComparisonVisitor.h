@@ -45,7 +45,7 @@ class ToEnglishTranslationComparisonVisitor : public ToEnglishTranslationVisitor
 
 public:
 
-  static QString className() { return "hoot::ToEnglishTranslationComparisonVisitor"; }
+  static QString className() { return "ToEnglishTranslationComparisonVisitor"; }
 
   ToEnglishTranslationComparisonVisitor();
   ~ToEnglishTranslationComparisonVisitor() = default;

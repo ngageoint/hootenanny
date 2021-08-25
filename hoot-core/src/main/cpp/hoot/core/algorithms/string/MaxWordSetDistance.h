@@ -42,7 +42,7 @@ class MaxWordSetDistance : public StringDistance, public StringDistanceConsumer,
 {
 public:
 
-  static QString className() { return "hoot::MaxWordSetDistance"; }
+  static QString className() { return "MaxWordSetDistance"; }
 
   MaxWordSetDistance(StringDistancePtr d);
   MaxWordSetDistance() = default;

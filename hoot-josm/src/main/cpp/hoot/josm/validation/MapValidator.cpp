@@ -94,8 +94,7 @@ QMap<QString, QString> MapValidator::_getHootValidators()
         Factory::getInstance().constructObject<OsmMapOperation>(hootValidators.at(i)));
     if (validatorInfo)
     {
-      validatorsInfo[validatorInfo->getName().replace("hoot::", "")] =
-        validatorInfo->getDescription();
+      validatorsInfo[validatorInfo->getName()] = validatorInfo->getDescription();
     }
   }
   return validatorsInfo;

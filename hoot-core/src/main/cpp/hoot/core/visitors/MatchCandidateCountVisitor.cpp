@@ -110,23 +110,23 @@ void MatchCandidateCountVisitor::visit(const std::shared_ptr<const Element>& e)
   //match creators, if they're present.
   //This is a little brittle by not using the class name methods of the match creators, but was
   //trying to avoid a dependency on specific match creator child classes.
-  if (!_matchCandidateCountsByMatchCreator.contains("hoot::PoiPolygonMatchCreator"))
+  if (!_matchCandidateCountsByMatchCreator.contains("PoiPolygonMatchCreator"))
   {
-    if (_matchCandidateCountsByMatchCreator.contains("hoot::BuildingMatchCreator"))
+    if (_matchCandidateCountsByMatchCreator.contains("BuildingMatchCreator"))
     {
-      _totalCandidateCount += _matchCandidateCountsByMatchCreator["hoot::BuildingMatchCreator"];
+      _totalCandidateCount += _matchCandidateCountsByMatchCreator["BuildingMatchCreator"];
     }
-    if (_matchCandidateCountsByMatchCreator.contains("hoot::ScriptMatchCreator,Poi.js"))
+    if (_matchCandidateCountsByMatchCreator.contains("ScriptMatchCreator,Poi.js"))
     {
       _totalCandidateCount +=
-        _matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,Poi.js"];
+        _matchCandidateCountsByMatchCreator["ScriptMatchCreator,Poi.js"];
     }
   }
   //otherwise, use the poi/poly count only to avoid overlap.  it will always be >= the sum of
   //the poi and building counts
   else
   {
-    _totalCandidateCount += _matchCandidateCountsByMatchCreator["hoot::PoiPolygonMatchCreator"];
+    _totalCandidateCount += _matchCandidateCountsByMatchCreator["PoiPolygonMatchCreator"];
   }
 
   _numAffected++;

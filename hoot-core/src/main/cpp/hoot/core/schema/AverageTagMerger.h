@@ -36,7 +36,7 @@ class AverageTagMerger : public TagMerger
 {
 public:
 
-  static QString className() { return "hoot::AverageTagMerger"; }
+  static QString className() { return "AverageTagMerger"; }
 
   AverageTagMerger() = default;
   ~AverageTagMerger() = default;

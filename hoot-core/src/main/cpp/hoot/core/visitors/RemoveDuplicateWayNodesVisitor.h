@@ -50,7 +50,7 @@ class RemoveDuplicateWayNodesVisitor : public ElementVisitor, public OsmMapConsu
 {
 public:
 
-  static QString className() { return "hoot::RemoveDuplicateWayNodesVisitor"; }
+  static QString className() { return "RemoveDuplicateWayNodesVisitor"; }
 
   RemoveDuplicateWayNodesVisitor() = default;
   ~RemoveDuplicateWayNodesVisitor() = default;

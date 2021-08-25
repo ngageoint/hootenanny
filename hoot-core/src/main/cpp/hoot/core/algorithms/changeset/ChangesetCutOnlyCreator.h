@@ -42,7 +42,7 @@ class ChangesetCutOnlyCreator : public ChangesetReplacementCreatorAbstract
 
 public:
 
-  static QString className() { return "hoot::ChangesetCutOnlyCreator"; }
+  static QString className() { return "ChangesetCutOnlyCreator"; }
 
   ChangesetCutOnlyCreator();
   virtual ~ChangesetCutOnlyCreator() = default;
@@ -68,7 +68,7 @@ public:
   void create(const QString& input1, const QString& input2,
     const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output) override;
 
-  QString toString() const override { return className().remove("hoot::"); }
+  QString toString() const override { return className(); }
 
 protected:
 

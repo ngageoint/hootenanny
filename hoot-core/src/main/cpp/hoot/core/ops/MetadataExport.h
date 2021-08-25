@@ -62,7 +62,7 @@ class MetadataExport : public MetadataOp
 {
 public:
 
-  static QString className() { return "hoot::MetadataExport"; }
+  static QString className() { return "MetadataExport"; }
 
   MetadataExport() = default;
   ~MetadataExport() = default;

@@ -42,7 +42,7 @@ class FindNodesInWayFactory : public GeometryToElementConverter::NodeFactory
 {
 public:
 
-  static QString className() { return "hoot::FindNodesInWayFactory"; }
+  static QString className() { return "FindNodesInWayFactory"; }
 
   FindNodesInWayFactory() = default;
   FindNodesInWayFactory(const ConstWayPtr& w);

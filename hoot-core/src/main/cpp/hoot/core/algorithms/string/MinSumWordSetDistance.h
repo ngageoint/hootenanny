@@ -49,7 +49,7 @@ public:
   MinSumWordSetDistance(StringDistancePtr d);
   ~MinSumWordSetDistance() = default;
 
-  static QString className() { return "hoot::MinSumWordSetDistance"; }
+  static QString className() { return "MinSumWordSetDistance"; }
 
   double compare(const QString& s1, const QString& s2) const override;
 

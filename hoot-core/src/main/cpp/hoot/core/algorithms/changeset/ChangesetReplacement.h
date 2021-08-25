@@ -48,7 +48,7 @@ class ChangesetReplacement
 
 public:
 
-  static QString className() { return "hoot::ChangesetReplacement"; }
+  static QString className() { return "ChangesetReplacement"; }
 
   /**
    * The manner in which replacement boundary conditions are handled. See the

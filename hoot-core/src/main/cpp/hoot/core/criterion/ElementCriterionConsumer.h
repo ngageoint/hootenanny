@@ -36,7 +36,7 @@ class ElementCriterionConsumer
 {
 public:
 
-  static QString className() { return "hoot::ElementCriterionConsumer"; }
+  static QString className() { return "ElementCriterionConsumer"; }
 
   ElementCriterionConsumer() = default;
   virtual ~ElementCriterionConsumer() = default;

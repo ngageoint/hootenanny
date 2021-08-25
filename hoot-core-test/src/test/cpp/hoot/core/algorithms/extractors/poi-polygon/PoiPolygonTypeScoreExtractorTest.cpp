@@ -101,7 +101,7 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     settings.set("poi.polygon.type.translate.to.english", "true");
-    settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
+    settings.set("language.translation.translator", "ToEnglishDictionaryTranslator");
     PoiPolygonInfoCachePtr infoCache = std::make_shared<PoiPolygonInfoCache>(map);
     infoCache->setConfiguration(settings);
     PoiPolygonTypeScoreExtractor uut(infoCache);

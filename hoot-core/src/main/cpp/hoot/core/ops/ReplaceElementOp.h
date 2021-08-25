@@ -53,7 +53,7 @@ class ReplaceElementOp : public ConstOsmMapOperation, public ConstElementConsume
 {
 public:
 
-  static QString className() { return "hoot::ReplaceElementOp"; }
+  static QString className() { return "ReplaceElementOp"; }
 
   /**
    * Constructor

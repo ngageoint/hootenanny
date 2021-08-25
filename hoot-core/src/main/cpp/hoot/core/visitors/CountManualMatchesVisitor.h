@@ -42,7 +42,7 @@ class CountManualMatchesVisitor : public ConstElementVisitor, public SingleStati
 
 public:
 
-  static QString className() { return "hoot::CountManualMatchesVisitor"; }
+  static QString className() { return "CountManualMatchesVisitor"; }
 
   CountManualMatchesVisitor() : _numManualMatches(0) { }
   ~CountManualMatchesVisitor() = default;

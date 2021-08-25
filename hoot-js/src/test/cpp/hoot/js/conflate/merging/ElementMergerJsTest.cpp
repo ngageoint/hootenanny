@@ -154,7 +154,7 @@ public:
     // Poi/poly test output is based on this config for now, despite it being different than the
     // default config.
     conf().set(ConfigOptions::getAddressMatchEnabledKey(), "false");
-    conf().set(ConfigOptions::getPoiPolygonTagMergerKey(), "hoot::OverwriteTag2Merger");
+    conf().set(ConfigOptions::getPoiPolygonTagMergerKey(), "OverwriteTag2Merger");
 
     LOG_VART(inFileName);
     LOG_VART(outFileName);

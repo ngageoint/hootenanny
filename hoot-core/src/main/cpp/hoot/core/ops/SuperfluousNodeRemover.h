@@ -62,7 +62,7 @@ class SuperfluousNodeRemover : public OsmMapOperation, public Boundable, public 
 {
 public:
 
-  static QString className() { return "hoot::SuperfluousNodeRemover"; }
+  static QString className() { return "SuperfluousNodeRemover"; }
 
   SuperfluousNodeRemover();
   ~SuperfluousNodeRemover() = default;

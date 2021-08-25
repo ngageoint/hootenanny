@@ -66,10 +66,6 @@ double StatCalculator::calculateStat(
     "Calculating statistic of type: " << statType << ", using visitor: " << visitorClassName <<
     ", against " << inputs.size() << " inputs...");
 
-  if (!visitorClassName.startsWith(MetadataTags::HootNamespacePrefix()))
-  {
-    visitorClassName.prepend(MetadataTags::HootNamespacePrefix());
-  }
   if (!_isValidStatType(statType))
   {
     throw IllegalArgumentException("Invalid statistic type: " + statType);

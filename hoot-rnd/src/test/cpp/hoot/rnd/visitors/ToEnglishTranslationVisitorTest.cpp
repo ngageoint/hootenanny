@@ -154,8 +154,8 @@ private:
     toTranslateTagKeys.append("name");
     toTranslateTagKeys.append("alt_name");
     conf.set("language.tag.keys", toTranslateTagKeys);
-    conf.set("language.translation.translator", "hoot::HootServicesTranslatorMockClient");
-    conf.set("language.info.provider", "hoot::HootServicesLanguageInfoMockClient");
+    conf.set("language.translation.translator", "HootServicesTranslatorMockClient");
+    conf.set("language.info.provider", "HootServicesLanguageInfoMockClient");
 
     return conf;
   }

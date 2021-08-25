@@ -52,7 +52,7 @@ public:
     Unknown
   };
 
-  static QString className() { return "hoot::GeometryTypeCriterion"; }
+  static QString className() { return "GeometryTypeCriterion"; }
 
   GeometryTypeCriterion() = default;
   virtual ~GeometryTypeCriterion() = default;

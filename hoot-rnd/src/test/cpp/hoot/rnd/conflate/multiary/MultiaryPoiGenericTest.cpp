@@ -85,7 +85,7 @@ public:
     TestUtils::createNode(map, "", Status::fromInput(1), 10.0, 0.0, 15.0, foo);
 
     MatchFactory::getInstance().reset();
-    MatchFactory::getInstance().registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");
+    MatchFactory::getInstance().registerCreator("ScriptMatchCreator,MultiaryPoi.js");
     MergerFactory::getInstance().reset();
 
     // call new conflation routine

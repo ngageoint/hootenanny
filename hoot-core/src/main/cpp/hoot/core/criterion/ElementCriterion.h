@@ -53,7 +53,7 @@ class ElementCriterion : public ApiEntityInfo
 {
 public:
 
-  static QString className() { return "hoot::ElementCriterion"; }
+  static QString className() { return "ElementCriterion"; }
 
   ElementCriterion() = default;
   virtual ~ElementCriterion() = default;

@@ -35,10 +35,10 @@ namespace hoot
 /**
  * Interface to describe the functionality of various Hoot API entities.
  *
- * It would be nice to get rid of getClassName() and just keep getName() (the namespace could be
- * added where needed). The problem with this is that FeatureExtractors use custom behavior for
- * getName() which really should be in toString(). That forces the need for getClassName() in
- * addition to getName(). It will take some fairly deep refactoring to change this.
+ * It would be nice to get rid of getClassName() and just keep getName(). The problem with this is
+ * that FeatureExtractors use custom behavior for getName() which really should be in toString().
+ * That forces the need for getClassName() in addition to getName(). It would take some fairly deep
+ * refactoring to change that.
  */
 class ApiEntityInfo
 {
@@ -48,7 +48,7 @@ public:
   virtual ~ApiEntityInfo() = default;
 
   /**
-   * Returns the entity's full class name
+   * Returns the entity's class name without namespace prefix
    *
    * @return class name string
    */

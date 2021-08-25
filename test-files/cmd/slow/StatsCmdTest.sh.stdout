@@ -394,17 +394,17 @@ Full stats from multiple files to json...
         "13",
         "13"
     ],
-    "Features Conflatable by: hoot::BuildingMatchCreator":
+    "Features Conflatable by: BuildingMatchCreator":
     [
         "10",
         "8"
     ],
-    "Features Conflatable by: hoot::HighwayMatchCreator":
+    "Features Conflatable by: HighwayMatchCreator":
     [
         "4",
         "4"
     ],
-    "Features Conflatable by: hoot::ScriptMatchCreator,Poi":
+    "Features Conflatable by: ScriptMatchCreator,Poi":
     {
         "js":
         [

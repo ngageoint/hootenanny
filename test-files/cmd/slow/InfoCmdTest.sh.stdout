@@ -3731,8 +3731,8 @@ Listing way joiners...
 
 Listing way snap criteria...
 
-hoot::HighwayCriterion;hoot::LinearCriterion;hoot::PowerLineCriterion;hoot::RailwayCriterion;hoot::RiverCriterion
-hoot::HighwayCriterion;hoot::LinearCriterion;hoot::RiverCriterion
+HighwayCriterion;LinearCriterion;PowerLineCriterion;RailwayCriterion;RiverCriterion
+HighwayCriterion;LinearCriterion;RiverCriterion
 
 Listing conflatable criteria...
 

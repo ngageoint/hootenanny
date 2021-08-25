@@ -42,7 +42,7 @@ class BuildModelCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::BuildModelCmd"; }
+  static QString className() { return "BuildModelCmd"; }
 
   BuildModelCmd() = default;
 

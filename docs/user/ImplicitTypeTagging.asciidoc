@@ -10,23 +10,23 @@ This feature should not be used unless the addition of some false type tags to t
 no metrics yet for how many false tags this technique will generate on average, although the number is typically small and 
 will become smaller over time as the feature is refined.
 
-The default implicit feature tagger is `hoot::ImplicitPoiPolygonTypeTagger`, which will tag POIs and building/POI 
-related polygons. You can use any tagger class that inherits from `hoot::ImplicitTypeTaggerBase`, however, it should be 
+The default implicit feature tagger is `ImplicitPoiPolygonTypeTagger`, which will tag POIs and building/POI 
+related polygons. You can use any tagger class that inherits from `ImplicitTypeTaggerBase`, however, it should be 
 an implementation that works with the class used as the element filter specified by the `implicit.tagging.element.criterion` when creating the implicit tag rules database.
 
 To use the feature from the command line with your input data:
 
 --------------------------
-hoot convert -D convert.ops=hoot::ImplicitPoiPolygonTypeTagger input.osm output.osm
+hoot convert -D convert.ops=ImplicitPoiPolygonTypeTagger input.osm output.osm
 --------------------------
 
 To use the feature from the command line during conflation:
 
 ------------------------
-hoot conflate -D conflate.pre.ops="hoot::BuildingOutlineRemoveOp;hoot::MapCleaner;hoot::ImplicitPoiPolygonTypeTagger" input1.osm input2.osm output.osm
+hoot conflate -D conflate.pre.ops="BuildingOutlineRemoveOp;MapCleaner;ImplicitPoiPolygonTypeTagger" input1.osm input2.osm output.osm
 ------------------------
 
-NOTE: In the above command, `hoot::ImplicitPoiPolygonTypeTagger` was appended to the default operations for `conflate.pre.ops` configuration option.  Check your version of Hootenanny configuration options to find the default value for this option.
+NOTE: In the above command, `ImplicitPoiPolygonTypeTagger` was appended to the default operations for `conflate.pre.ops` configuration option.  Check your version of Hootenanny configuration options to find the default value for this option.
 
 Features modified by the implicit feature tagger are marked with the tag `hoot:implicitTags:tagsAdded` to let you know 
 what tags were added to the data and which name tags triggered the additions.  If you have suggestions on how to improve 

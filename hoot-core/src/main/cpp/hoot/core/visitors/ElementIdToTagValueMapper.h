@@ -42,7 +42,7 @@ class ElementIdToTagValueMapper : public ConstElementVisitor
 
 public:
 
-  static QString className() { return "hoot::ElementIdToTagValueMapper"; }
+  static QString className() { return "ElementIdToTagValueMapper"; }
 
   ElementIdToTagValueMapper() = default;
   ~ElementIdToTagValueMapper() = default;

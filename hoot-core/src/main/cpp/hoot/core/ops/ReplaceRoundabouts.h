@@ -52,9 +52,9 @@ public:
 
   /**
    * @brief className - Get classname string
-   * @return "hoot::ReplaceRoundabouts"
+   * @return "ReplaceRoundabouts"
    */
-  static QString className() { return "hoot::ReplaceRoundabouts"; }
+  static QString className() { return "ReplaceRoundabouts"; }
 
   /**
    * @brief ReplaceRoundabouts - default constructor

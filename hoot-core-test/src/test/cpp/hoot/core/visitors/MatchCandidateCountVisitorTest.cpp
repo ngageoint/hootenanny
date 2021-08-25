@@ -69,7 +69,7 @@ public:
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
-    matchCreators.append("hoot::BuildingMatchCreator");
+    matchCreators.append("BuildingMatchCreator");
     MatchFactory::getInstance().reset();
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
 
@@ -79,7 +79,7 @@ public:
     QMap<QString, long> matchCandidateCountsByMatchCreator =
       boost::any_cast<QMap<QString, long>>(uut.getData());
     CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
-    CPPUNIT_ASSERT_EQUAL((long)18, matchCandidateCountsByMatchCreator["hoot::BuildingMatchCreator"]);
+    CPPUNIT_ASSERT_EQUAL((long)18, matchCandidateCountsByMatchCreator["BuildingMatchCreator"]);
   }
 
   void runHighwayMatchCandidateCountTest()
@@ -93,7 +93,7 @@ public:
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
-    matchCreators.append("hoot::HighwayMatchCreator");
+    matchCreators.append("HighwayMatchCreator");
     MatchFactory::getInstance().reset();
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
 
@@ -103,7 +103,7 @@ public:
     QMap<QString, long> matchCandidateCountsByMatchCreator =
       boost::any_cast<QMap<QString, long>>(uut.getData());
     CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
-    CPPUNIT_ASSERT_EQUAL((long)8, matchCandidateCountsByMatchCreator["hoot::HighwayMatchCreator"]);
+    CPPUNIT_ASSERT_EQUAL((long)8, matchCandidateCountsByMatchCreator["HighwayMatchCreator"]);
   }
 
   void runCombinedMatchCandidateCountTest()
@@ -117,9 +117,9 @@ public:
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
-    matchCreators.append("hoot::BuildingMatchCreator");
-    matchCreators.append("hoot::HighwayMatchCreator");
-    matchCreators.append("hoot::ScriptMatchCreator,Line.js");
+    matchCreators.append("BuildingMatchCreator");
+    matchCreators.append("HighwayMatchCreator");
+    matchCreators.append("ScriptMatchCreator,Line.js");
     MatchFactory::getInstance().reset();
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
 
@@ -131,8 +131,8 @@ public:
       boost::any_cast<QMap<QString, long>>(uut.getData());
     CPPUNIT_ASSERT_EQUAL(2, matchCandidateCountsByMatchCreator.size());
     // These don't seem to add up to the correct total. Is there some overlap here?
-    CPPUNIT_ASSERT_EQUAL((long)18, matchCandidateCountsByMatchCreator["hoot::BuildingMatchCreator"]);
-    CPPUNIT_ASSERT_EQUAL((long)8, matchCandidateCountsByMatchCreator["hoot::HighwayMatchCreator"]);
+    CPPUNIT_ASSERT_EQUAL((long)18, matchCandidateCountsByMatchCreator["BuildingMatchCreator"]);
+    CPPUNIT_ASSERT_EQUAL((long)8, matchCandidateCountsByMatchCreator["HighwayMatchCreator"]);
   }
 
   void runScriptMatchCreatorTest()
@@ -150,7 +150,7 @@ public:
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
-    matchCreators.append("hoot::ScriptMatchCreator,Poi.js");
+    matchCreators.append("ScriptMatchCreator,Poi.js");
     MatchFactory::getInstance().reset();
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
 
@@ -161,7 +161,7 @@ public:
       boost::any_cast<QMap<QString, long>>(uut.getData());
     CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
     CPPUNIT_ASSERT_EQUAL(
-      (long)21, matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,Poi.js"]);
+      (long)21, matchCandidateCountsByMatchCreator["ScriptMatchCreator,Poi.js"]);
   }
 
   void runMultipleScriptMatchCreatorTest()
@@ -175,8 +175,8 @@ public:
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
-    matchCreators.append("hoot::ScriptMatchCreator,River.js");
-    matchCreators.append("hoot::ScriptMatchCreator,Poi.js");
+    matchCreators.append("ScriptMatchCreator,River.js");
+    matchCreators.append("ScriptMatchCreator,Poi.js");
     MatchFactory::getInstance().reset();
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
 
@@ -188,7 +188,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
     LOG_VARD(matchCandidateCountsByMatchCreator);
     CPPUNIT_ASSERT_EQUAL(
-      (long)21, matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,Poi.js"]);
+      (long)21, matchCandidateCountsByMatchCreator["ScriptMatchCreator,Poi.js"]);
   }
 
   void runDualPoiScriptMatchCreatorTest()
@@ -202,7 +202,7 @@ public:
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
-    matchCreators.append("hoot::ScriptMatchCreator,Poi.js");
+    matchCreators.append("ScriptMatchCreator,Poi.js");
     MatchFactory::getInstance().reset();
     MatchFactory::getInstance()._setMatchCreators(matchCreators);
 
@@ -213,7 +213,7 @@ public:
       boost::any_cast<QMap<QString, long>>(uut.getData());
     CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
     CPPUNIT_ASSERT_EQUAL(
-      (long)21, matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,Poi.js"]);
+      (long)21, matchCandidateCountsByMatchCreator["ScriptMatchCreator,Poi.js"]);
   }
 
   void runFilteredPoiMatchCreatorTest()
@@ -235,7 +235,7 @@ public:
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
-    matchCreators.append("hoot::ScriptMatchCreator,Poi.js");
+    matchCreators.append("ScriptMatchCreator,Poi.js");
     std::shared_ptr<MatchCandidateCountVisitor> uut;
     const QString poiTagFilter = "{ \"must\": [ { \"tag\": \"poi=yes\" } ] }";
 
@@ -276,8 +276,8 @@ public:
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
-    matchCreators.append("hoot::BuildingMatchCreator");
-    matchCreators.append("hoot::ScriptMatchCreator,Poi.js");
+    matchCreators.append("BuildingMatchCreator");
+    matchCreators.append("ScriptMatchCreator,Poi.js");
     std::shared_ptr<MatchCandidateCountVisitor> uut;
 
     MatchFactory::getInstance().reset();

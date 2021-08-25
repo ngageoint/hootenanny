@@ -60,7 +60,7 @@ class MatchFeatureExtractor
 {
 public:
 
-  static QString className() { return "hoot::MatchFeatureExtractor"; }
+  static QString className() { return "MatchFeatureExtractor"; }
 
   static int logWarnCount;
 

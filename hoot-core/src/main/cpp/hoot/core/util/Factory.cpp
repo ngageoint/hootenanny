@@ -39,12 +39,24 @@ namespace hoot
 
 boost::any Factory::constructObject(const QString& name)
 {
+  QString nameToUse = name;
   QMutexLocker locker(&_mutex);
-  if (_creators.find(name) == _creators.end())
+  if (_creators.find(nameToUse) == _creators.end())
   {
-    throw HootException("Could not find object to construct. (" + name + ")");
+    if (nameToUse.contains(MetadataTags::HootNamespacePrefix()))
+    {
+      nameToUse = nameToUse.remove(MetadataTags::HootNamespacePrefix());
+    }
+    else
+    {
+      nameToUse = MetadataTags::HootNamespacePrefix() + nameToUse;
+    }
+    if (_creators.find(nameToUse) == _creators.end())
+    {
+      throw HootException("Could not find object to construct. (" + name + ")");
+    }
   }
-  std::shared_ptr<ObjectCreator> c = _creators[name];
+  std::shared_ptr<ObjectCreator> c = _creators[nameToUse];
   locker.unlock();
 
   return c->create();

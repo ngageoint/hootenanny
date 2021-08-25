@@ -52,7 +52,7 @@ class DualHighwaySplitter : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::DualHighwaySplitter"; }
+  static QString className() { return "DualHighwaySplitter"; }
 
   enum DrivingSide
   {

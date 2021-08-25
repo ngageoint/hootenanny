@@ -45,7 +45,7 @@ class TagMerger : public ApiEntityInfo, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::TagMerger"; }
+  static QString className() { return "TagMerger"; }
 
   TagMerger() : _caseSensitive(ConfigOptions().getDuplicateNameCaseSensitive()) {}
   virtual ~TagMerger() = default;

@@ -55,7 +55,7 @@ class RubberSheet : public OsmMapOperation, public Configurable, public Conflate
 {
 public:
 
-  static QString className() { return "hoot::RubberSheet"; }
+  static QString className() { return "RubberSheet"; }
 
   /**
    * @brief refKey If this configuration setting is set to true then the first layer is treated as

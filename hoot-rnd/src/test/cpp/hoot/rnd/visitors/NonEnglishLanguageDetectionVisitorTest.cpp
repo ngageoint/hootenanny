@@ -142,8 +142,8 @@ private:
     tagKeys.append("name");
     tagKeys.append("alt_name");
     conf.set("language.tag.keys", tagKeys);
-    conf.set("language.detection.detector", "hoot::HootServicesLanguageDetectorMockClient");
-    conf.set("language.info.provider", "hoot::HootServicesLanguageInfoMockClient");
+    conf.set("language.detection.detector", "HootServicesLanguageDetectorMockClient");
+    conf.set("language.info.provider", "HootServicesLanguageInfoMockClient");
     conf.set("language.hoot.services.detection.min.confidence.threshold", "none");
     conf.set("language.detection.write.detected.lang.tags", "true");
 

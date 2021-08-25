@@ -56,7 +56,7 @@ public:
 
   static int logWarnCount;
 
-  static QString className() { return "hoot::SpatialIndexer"; }
+  static QString className() { return "SpatialIndexer"; }
 
   explicit SpatialIndexer(std::shared_ptr<Tgs::HilbertRTree>& index,
                           std::deque<ElementId>& indexToEid,

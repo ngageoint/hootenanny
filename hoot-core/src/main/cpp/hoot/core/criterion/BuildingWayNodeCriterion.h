@@ -40,7 +40,7 @@ class BuildingWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static QString className() { return "hoot::BuildingWayNodeCriterion"; }
+  static QString className() { return "BuildingWayNodeCriterion"; }
 
   BuildingWayNodeCriterion();
   BuildingWayNodeCriterion(ConstOsmMapPtr map);

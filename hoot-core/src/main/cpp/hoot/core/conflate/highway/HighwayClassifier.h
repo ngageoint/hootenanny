@@ -42,7 +42,7 @@ public:
   HighwayClassifier() = default;
   virtual ~HighwayClassifier() = default;
 
-  static QString className() { return "hoot::HighwayClassifier"; }
+  static QString className() { return "HighwayClassifier"; }
 
   /**
    * Classifies the match type of a subline match and returns the results.

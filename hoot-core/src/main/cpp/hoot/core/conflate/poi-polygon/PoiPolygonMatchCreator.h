@@ -44,7 +44,7 @@ class PoiPolygonMatchCreator : public MatchCreator
 
 public:
 
-  static QString className() { return "hoot::PoiPolygonMatchCreator"; }
+  static QString className() { return "PoiPolygonMatchCreator"; }
 
   PoiPolygonMatchCreator() = default;
   ~PoiPolygonMatchCreator() = default;

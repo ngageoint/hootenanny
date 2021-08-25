@@ -60,7 +60,7 @@ public:
     _addArea(area), _addLength(length), _addWidth(width) { }
   ~AddMeasurementTagsVisitor() = default;
 
-  static QString className() { return "hoot::AddMeasurementTagsVisitor"; }
+  static QString className() { return "AddMeasurementTagsVisitor"; }
 
   void visit(const ElementPtr& e) override;
 

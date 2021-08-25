@@ -85,8 +85,8 @@ public:
     uut.setWayDiscretizationSpacing(1.0);
     uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
     uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
-    uut.setWayToSnapCriteria(QStringList("hoot::HighwayCriterion"));
-    uut.setWayToSnapToCriteria(QStringList("hoot::HighwayCriterion"));
+    uut.setWayToSnapCriteria(QStringList("HighwayCriterion"));
+    uut.setWayToSnapToCriteria(QStringList("HighwayCriterion"));
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(false);
     uut.setTypeExcludeKvps(ConfigOptions().getSnapUnconnectedWaysExcludeTypes());
@@ -123,8 +123,8 @@ public:
     uut.setWayDiscretizationSpacing(1.0);
     uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
     uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
-    QStringList types("hoot::HighwayCriterion");
-    types.append("hoot::RailwayCriterion");
+    QStringList types("HighwayCriterion");
+    types.append("RailwayCriterion");
     uut.setWayToSnapCriteria(types);
     uut.setWayToSnapToCriteria(types);
     uut.setMarkOnly(false);
@@ -162,8 +162,8 @@ public:
     uut.setWayDiscretizationSpacing(1.0);
     uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
     uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
-    uut.setWayToSnapCriteria(QStringList("hoot::RailwayCriterion"));
-    uut.setWayToSnapToCriteria(QStringList("hoot::RailwayCriterion"));
+    uut.setWayToSnapCriteria(QStringList("RailwayCriterion"));
+    uut.setWayToSnapToCriteria(QStringList("RailwayCriterion"));
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(false);
     uut.setTypeExcludeKvps(ConfigOptions().getSnapUnconnectedWaysExcludeTypes());
@@ -201,8 +201,8 @@ public:
     uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
     // Setting this to empty allows untyped sec ways to be snapped back to the ref.
     uut.setWayToSnapCriteria(QStringList());
-    QStringList snapToTypes("hoot::HighwayCriterion");
-    snapToTypes.append("hoot::RailwayCriterion");
+    QStringList snapToTypes("HighwayCriterion");
+    snapToTypes.append("RailwayCriterion");
     uut.setWayToSnapToCriteria(snapToTypes);
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(false);
@@ -240,8 +240,8 @@ public:
     uut.setWayDiscretizationSpacing(1.0);
     uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
     uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
-    uut.setWayToSnapCriteria(QStringList("hoot::HighwayCriterion"));
-    uut.setWayToSnapToCriteria(QStringList("hoot::HighwayCriterion"));
+    uut.setWayToSnapCriteria(QStringList("HighwayCriterion"));
+    uut.setWayToSnapToCriteria(QStringList("HighwayCriterion"));
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(true);
     uut.setTypeExcludeKvps(ConfigOptions().getSnapUnconnectedWaysExcludeTypes());
@@ -280,8 +280,8 @@ public:
     uut.setWayDiscretizationSpacing(1.0);
     uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
     uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
-    uut.setWayToSnapCriteria(QStringList("hoot::HighwayCriterion"));
-    uut.setWayToSnapToCriteria(QStringList("hoot::HighwayCriterion"));
+    uut.setWayToSnapCriteria(QStringList("HighwayCriterion"));
+    uut.setWayToSnapToCriteria(QStringList("HighwayCriterion"));
     uut.setMarkOnly(true);
     uut.setReviewSnappedWays(true);
     uut.setTypeExcludeKvps(ConfigOptions().getSnapUnconnectedWaysExcludeTypes());

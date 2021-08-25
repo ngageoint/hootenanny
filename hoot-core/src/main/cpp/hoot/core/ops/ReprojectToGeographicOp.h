@@ -44,7 +44,7 @@ class ReprojectToGeographicOp : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::ReprojectToGeographicOp"; }
+  static QString className() { return "ReprojectToGeographicOp"; }
 
   ReprojectToGeographicOp() = default;
   ~ReprojectToGeographicOp() = default;

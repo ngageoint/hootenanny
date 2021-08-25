@@ -33,6 +33,7 @@
 
 // Hoot
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 // Qt
 #include <QMutex>
@@ -122,12 +123,24 @@ public:
   template<class ExpectedBase>
   bool hasBase(const QString& name)
   {
+    QString nameToUse = name;
     QMutexLocker locker(&_mutex);
-    if (_creators.find(name) == _creators.end())
+    if (_creators.find(nameToUse) == _creators.end())
     {
-      throw HootException("Could not find object to check. (" + name + ")");
+      if (nameToUse.contains(MetadataTags::HootNamespacePrefix()))
+      {
+        nameToUse = nameToUse.remove(MetadataTags::HootNamespacePrefix());
+      }
+      else
+      {
+        nameToUse = MetadataTags::HootNamespacePrefix() + nameToUse;
+      }
+      if (_creators.find(nameToUse) == _creators.end())
+      {
+        throw HootException("Could not find object to construct. (" + name + ")");
+      }
     }
-    if (_creators[name]->getBaseName() != ExpectedBase::className())
+    if (_creators[nameToUse]->getBaseName() != ExpectedBase::className())
     {
       return false;
     }
@@ -141,12 +154,24 @@ public:
   template<class ExpectedBase>
   void checkClass(const QString& name)
   {
+    QString nameToUse = name;
     QMutexLocker locker(&_mutex);
-    if (_creators.find(name) == _creators.end())
+    if (_creators.find(nameToUse) == _creators.end())
     {
-      throw HootException("Could not find object to check. (" + name + ")");
+      if (nameToUse.contains(MetadataTags::HootNamespacePrefix()))
+      {
+        nameToUse = nameToUse.remove(MetadataTags::HootNamespacePrefix());
+      }
+      else
+      {
+        nameToUse = MetadataTags::HootNamespacePrefix() + nameToUse;
+      }
+      if (_creators.find(nameToUse) == _creators.end())
+      {
+        throw HootException("Could not find object to construct. (" + name + ")");
+      }
     }
-    if (_creators[name]->getBaseName() != ExpectedBase::className())
+    if (_creators[nameToUse]->getBaseName() != ExpectedBase::className())
     {
       throw HootException(
         "Class (" + name + ") does not have a base class of " + ExpectedBase::className());

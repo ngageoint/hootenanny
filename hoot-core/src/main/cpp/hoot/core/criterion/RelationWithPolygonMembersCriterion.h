@@ -41,7 +41,7 @@ class RelationWithPolygonMembersCriterion : public RelationWithMembersOfTypeCrit
 {
 public:
 
-  static QString className() { return "hoot::RelationWithPolygonMembersCriterion"; }
+  static QString className() { return "RelationWithPolygonMembersCriterion"; }
 
   RelationWithPolygonMembersCriterion();
   RelationWithPolygonMembersCriterion(ConstOsmMapPtr map);

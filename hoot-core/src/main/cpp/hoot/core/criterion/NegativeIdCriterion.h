@@ -39,7 +39,7 @@ class NegativeIdCriterion : public ElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::NegativeIdCriterion"; }
+  static QString className() { return "NegativeIdCriterion"; }
 
   NegativeIdCriterion() = default;
   ~NegativeIdCriterion() = default;

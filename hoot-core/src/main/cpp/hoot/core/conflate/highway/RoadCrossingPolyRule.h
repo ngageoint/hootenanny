@@ -64,7 +64,7 @@ public:
    *
    * @param polyCriteriaFilterStr polygon criteria filter string used to determine which types of
    * polygons are checked for crossing roads using Hootenanny criteria of the form:
-   * <criterion 1>;<criterion 2>...; e.g. "hoot::BuildingCriterion;hoot::AreaCriterion"; the
+   * <criterion 1>;<criterion 2>...; e.g. "BuildingCriterion;hoot::AreaCriterion"; the
    * individual type criteria are logically OR'd together
    * @param polyTagFilterStr polygon tag filter string used to determine which types of polygons
    * are checked for crossing roads using tag checks of the form: <key1=value1>;<key2=value2>...;

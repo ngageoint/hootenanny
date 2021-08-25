@@ -54,7 +54,7 @@ class Match : public ApiEntityInfo
 {
 public:
 
-  static QString className() { return "hoot::Match"; }
+  static QString className() { return "Match"; }
 
   Match() = default;
   virtual ~Match() = default;

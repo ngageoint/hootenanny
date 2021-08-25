@@ -46,7 +46,7 @@ class Command
 {
 public:
 
-  static QString className() { return "hoot::Command"; }
+  static QString className() { return "Command"; }
 
   Command() = default;
   virtual ~Command() = default;

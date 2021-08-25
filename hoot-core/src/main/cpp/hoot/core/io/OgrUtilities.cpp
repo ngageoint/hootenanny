@@ -97,10 +97,10 @@ OgrUtilities::~OgrUtilities()
     CPLDumpSharedList(nullptr);
   }
 
-  LOG_TRACE("Cleaning up OGR...");
-  OGRCleanupAll();
-  LOG_TRACE("Destroying driver manager...");
-  GDALDestroyDriverManager();
+  //LOG_TRACE("Cleaning up OGR...");
+  //OGRCleanupAll();
+  //LOG_TRACE("Destroying driver manager...");
+  //GDALDestroyDriverManager();
 }
 
 OgrUtilities& OgrUtilities::getInstance()

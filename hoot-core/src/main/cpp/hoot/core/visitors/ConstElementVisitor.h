@@ -42,7 +42,7 @@ class ConstElementVisitor : public ElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::ConstElementVisitor"; }
+  static QString className() { return "ConstElementVisitor"; }
 
   ConstElementVisitor() = default;
   virtual ~ConstElementVisitor() = default;

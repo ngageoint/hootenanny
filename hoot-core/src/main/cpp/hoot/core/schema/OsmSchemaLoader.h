@@ -35,7 +35,7 @@ namespace hoot
 class OsmSchemaLoader
 {
 public:
-  static QString className() { return "hoot::OsmSchemaLoader"; }
+  static QString className() { return "OsmSchemaLoader"; }
 
   OsmSchemaLoader() = default;
   virtual ~OsmSchemaLoader() = default;

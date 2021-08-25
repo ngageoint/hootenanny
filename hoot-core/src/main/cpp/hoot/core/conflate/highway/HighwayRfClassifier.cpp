@@ -119,8 +119,8 @@ void HighwayRfClassifier::_createTestExtractors() const
   // TODO: At some point names will make sense, but for now there isn't enough name data (#4874).
 }
 
-map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtr& m,
-  ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const
+map<QString, double> HighwayRfClassifier::getFeatures(
+  const ConstOsmMapPtr& m, ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const
 {
   _init();
 
@@ -160,7 +160,7 @@ map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtr& m,
     for (size_t i = 0; i < _extractors.size(); i++)
     {
       double v = _extractors[i]->extract(*copiedMap, match1, match2);
-      // if it isn't null then include it.
+      // If it isn't null then include it.
       if (!FeatureExtractor::isNull(v))
       {
         QString factorName = _extractors[i]->getName().replace(QRegExp("[^\\w]"), "_");

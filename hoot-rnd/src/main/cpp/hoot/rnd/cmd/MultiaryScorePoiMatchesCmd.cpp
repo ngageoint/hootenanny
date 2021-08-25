@@ -57,7 +57,7 @@ class MultiaryScorePoiMatchesCmd : public BaseCommand
 
 public:
 
-  static QString className() { return "hoot::MultiaryScorePoiMatchesCmd"; }
+  static QString className() { return "MultiaryScorePoiMatchesCmd"; }
 
   MultiaryScorePoiMatchesCmd() = default;
 

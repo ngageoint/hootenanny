@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
@@ -65,13 +66,14 @@ void OptionsValidator::fixMisc()
   QStringList mergerCreators = ConfigOptions().getMergerCreators();
   LOG_VART(matchCreators);
   LOG_VART(mergerCreators);
-
   if (matchCreators.empty() || mergerCreators.empty())
   {
     LOG_WARN("Match or merger creators empty.  Setting to defaults.");
     matchCreators = ConfigOptions::getMatchCreatorsDefaultValue();
     mergerCreators = ConfigOptions::getMergerCreatorsDefaultValue();
   }
+  StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), matchCreators);
+  StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), mergerCreators);
 
   // We could also do something here even when the sizes are equal but not doing that yet, since
   // the issue should be fixed in the UI soon.
@@ -81,26 +83,27 @@ void OptionsValidator::fixMisc()
     QStringList fixedMergerCreators;
     for (int i = 0; i < matchCreators.size(); i++)
     {
-      const QString matchCreator = matchCreators.at(i);
-      if (matchCreator == "hoot::BuildingMatchCreator")
+      QString matchCreator = matchCreators.at(i);
+      matchCreator = matchCreator.remove(MetadataTags::HootNamespacePrefix());
+      if (matchCreator == "BuildingMatchCreator")
       {
-        fixedMergerCreators.append("hoot::BuildingMergerCreator");
+        fixedMergerCreators.append("BuildingMergerCreator");
       }
-      else if (matchCreator.contains("hoot::ScriptMatchCreator"))
+      else if (matchCreator.contains("ScriptMatchCreator"))
       {
-        fixedMergerCreators.append("hoot::ScriptMergerCreator");
+        fixedMergerCreators.append("ScriptMergerCreator");
       }
-      else if (matchCreator == "hoot::HighwayMatchCreator")
+      else if (matchCreator == "HighwayMatchCreator")
       {
-        fixedMergerCreators.append("hoot::HighwayMergerCreator");
+        fixedMergerCreators.append("HighwayMergerCreator");
       }
-      else if (matchCreator == "hoot::NetworkMatchCreator")
+      else if (matchCreator == "NetworkMatchCreator")
       {
-        fixedMergerCreators.append("hoot::NetworkMergerCreator");
+        fixedMergerCreators.append("NetworkMergerCreator");
       }
-      else if (matchCreator == "hoot::PoiPolygonMatchCreator")
+      else if (matchCreator == "PoiPolygonMatchCreator")
       {
-        fixedMergerCreators.append("hoot::PoiPolygonMergerCreator");
+        fixedMergerCreators.append("PoiPolygonMergerCreator");
       }
     }
     conf().set("merger.creators", fixedMergerCreators.join(";"));
@@ -109,34 +112,38 @@ void OptionsValidator::fixMisc()
   LOG_VART(mergerCreators);
 
   // fix way subline matcher options - https://github.com/ngageoint/hootenanny-ui/issues/970
-  if (matchCreators.contains("hoot::NetworkMatchCreator") &&
-      ConfigOptions().getHighwaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
-      ConfigOptions().getHighwaySublineMatcher() != "hoot::MaximalSublineMatcher")
+  QString highwaySublineMatcher =
+    ConfigOptions().getHighwaySublineMatcher().remove(MetadataTags::HootNamespacePrefix());
+  if (matchCreators.contains("NetworkMatchCreator") &&
+      highwaySublineMatcher != "FrechetSublineMatcher" &&
+      highwaySublineMatcher != "MaximalSublineMatcher")
   {
     LOG_TRACE("Temp fixing highway.subline.matcher...");
-    conf().set("highway.subline.matcher", "hoot::MaximalSublineMatcher");
+    conf().set("highway.subline.matcher", "MaximalSublineMatcher");
   }
-  else if (matchCreators.contains("hoot::HighwayMatchCreator") &&
-           ConfigOptions().getHighwaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
-           ConfigOptions().getHighwaySublineMatcher() != "hoot::MaximalNearestSublineMatcher")
+  else if (matchCreators.contains("HighwayMatchCreator") &&
+           highwaySublineMatcher != "FrechetSublineMatcher" &&
+           highwaySublineMatcher != "MaximalNearestSublineMatcher")
   {
     LOG_TRACE("Temp fixing highway.subline.matcher...");
-    conf().set("highway.subline.matcher", "hoot::MaximalNearestSublineMatcher");
+    conf().set("highway.subline.matcher", "MaximalNearestSublineMatcher");
   }
   LOG_VART(ConfigOptions().getHighwaySublineMatcher());
 
   // fix highway classifier - https://github.com/ngageoint/hootenanny-ui/issues/971
-  if (matchCreators.contains("hoot::NetworkMatchCreator") &&
-      ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayExpertClassifier")
+  QString conflateMatchHighwayClassifier =
+    ConfigOptions().getConflateMatchHighwayClassifier().remove(MetadataTags::HootNamespacePrefix());
+  if (matchCreators.contains("NetworkMatchCreator") &&
+      conflateMatchHighwayClassifier != "HighwayExpertClassifier")
   {
     LOG_TRACE("Temp fixing conflate.match.highway.classifier...");
-    conf().set("conflate.match.highway.classifier", "hoot::HighwayExpertClassifier");
+    conf().set("conflate.match.highway.classifier", "HighwayExpertClassifier");
   }
-  else if (matchCreators.contains("hoot::HighwayMatchCreator") &&
-           ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayRfClassifier")
+  else if (matchCreators.contains("HighwayMatchCreator") &&
+           conflateMatchHighwayClassifier != "HighwayRfClassifier")
   {
     LOG_TRACE("Temp fixing conflate.match.highway.classifier...");
-    conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
+    conf().set("conflate.match.highway.classifier", "HighwayRfClassifier");
   }
   LOG_VART(ConfigOptions().getConflateMatchHighwayClassifier());
 }
@@ -212,11 +219,10 @@ void OptionsValidator::validateMatchers()
 {
   LOG_DEBUG("Validating matchers...");
 
-  const QStringList matchCreators = ConfigOptions().getMatchCreators();
-  const QStringList mergerCreators = ConfigOptions().getMergerCreators();
+  QStringList matchCreators = ConfigOptions().getMatchCreators();
+  QStringList mergerCreators = ConfigOptions().getMergerCreators();
   LOG_VART(matchCreators);
   LOG_VART(mergerCreators);
-
   if (matchCreators.isEmpty() || mergerCreators.isEmpty())
   {
     // This gets temp fixed in fixMisc, if needed.
@@ -230,6 +236,8 @@ void OptionsValidator::validateMatchers()
       ") does not equal the number of configured merger creators (" +
       QString::number(mergerCreators.size()) + ")");
   }
+  StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), matchCreators);
+  StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), mergerCreators);
 
   for (int i = 0; i < matchCreators.size(); i++)
   {
@@ -238,8 +246,7 @@ void OptionsValidator::validateMatchers()
     // Currently, there is only one kind of ScriptMergerCreator, so this check is useful for finding
     // misuses of the generic conflation engine.  If we add any more script merger creators, we'll
     // need a better check.
-    if (matchCreator.startsWith("hoot::ScriptMatchCreator") &&
-        mergerCreator != "hoot::ScriptMergerCreator")
+    if (matchCreator.startsWith("ScriptMatchCreator") && mergerCreator != "ScriptMergerCreator")
     {
       throw HootException(
         "Attempted to use a ScriptMatchCreator without a ScriptMergerCreator. Match creator: " +

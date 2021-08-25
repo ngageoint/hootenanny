@@ -39,7 +39,7 @@ class BuildingRelationMemberTagMerger : public TagMerger
 {
 public:
 
-  static QString className() { return "hoot::BuildingRelationMemberTagMerger"; }
+  static QString className() { return "BuildingRelationMemberTagMerger"; }
 
   BuildingRelationMemberTagMerger() = default;
   BuildingRelationMemberTagMerger(const QSet<QString>& ignoreTagKeys);

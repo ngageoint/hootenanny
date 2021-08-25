@@ -46,7 +46,7 @@ class JavaEnvironment
 
 public:
 
-  static QString className() { return "hoot::JavaEnvironment"; }
+  static QString className() { return "JavaEnvironment"; }
 
   virtual ~JavaEnvironment();
 

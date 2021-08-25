@@ -589,7 +589,7 @@ private:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     settings.set("address.translate.to.english", "true");
-    settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
+    settings.set("language.translation.translator", "ToEnglishDictionaryTranslator");
     settings.set("address.use.default.language.translation.only", "false");
     uut.setConfiguration(settings);
     uut.setCacheEnabled(false);
@@ -889,8 +889,8 @@ private:
   void _building3441Addresses1Test()
   {
     setUp();
-    conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::BuildingMatchCreator");
-    conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::BuildingMergerCreator");
+    conf().set(ConfigOptions::getMatchCreatorsKey(), "BuildingMatchCreator");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), "BuildingMergerCreator");
 
     const QString outFile = _outputPath + "building-3441-addresses-1-out.osm";
     ConflateExecutor().conflate(
@@ -903,8 +903,8 @@ private:
   void _building3441Addresses2Test()
   {
     setUp();
-    conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::BuildingMatchCreator");
-    conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::BuildingMergerCreator");
+    conf().set(ConfigOptions::getMatchCreatorsKey(), "BuildingMatchCreator");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), "BuildingMergerCreator");
 
     const QString outFile = _outputPath + "building-3441-addresses-2-out.osm";
     ConflateExecutor().conflate(
@@ -919,10 +919,10 @@ private:
     setUp();
     conf().set(
       ConfigOptions::getMatchCreatorsKey(),
-      "hoot::BuildingMatchCreator;hoot::PoiPolygonMatchCreator");
+      "BuildingMatchCreator;hoot::PoiPolygonMatchCreator");
     conf().set(
       ConfigOptions::getMergerCreatorsKey(),
-      "hoot::BuildingMergerCreator;hoot::PoiPolygonMergerCreator");
+      "BuildingMergerCreator;hoot::PoiPolygonMergerCreator");
     conf().set(ConfigOptions::getPoiPolygonMatchEvidenceThresholdKey(), 2);
     conf().set(ConfigOptions::getPoiPolygonPromotePointsWithAddressesToPoisKey(), true);
 
@@ -938,10 +938,10 @@ private:
     setUp();
     conf().set(
       ConfigOptions::getMatchCreatorsKey(),
-      "hoot::BuildingMatchCreator;hoot::PoiPolygonMatchCreator");
+      "BuildingMatchCreator;hoot::PoiPolygonMatchCreator");
     conf().set(
       ConfigOptions::getMergerCreatorsKey(),
-      "hoot::BuildingMergerCreator;hoot::PoiPolygonMergerCreator");
+      "BuildingMergerCreator;hoot::PoiPolygonMergerCreator");
 
     const QString outFile = _outputPath + "poi-polygon-auto-merge-13-out.osm";
     ConflateExecutor().conflate(
@@ -970,8 +970,8 @@ private:
   void _poiPolygonRecursiveWayAddress3267_1Test()
   {
     setUp();
-    conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::PoiPolygonMatchCreator");
-    conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::PoiPolygonMergerCreator");
+    conf().set(ConfigOptions::getMatchCreatorsKey(), "PoiPolygonMatchCreator");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), "PoiPolygonMergerCreator");
 
     const QString outFile = _outputPath + "poi-polygon-recursive-way-address-3267-1-out.osm";
     ConflateExecutor().conflate(
@@ -986,10 +986,10 @@ private:
     setUp();
     conf().set(
       ConfigOptions::getMatchCreatorsKey(),
-      "hoot::BuildingMatchCreator;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Poi.js");
+      "BuildingMatchCreator;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Poi.js");
     conf().set(
       ConfigOptions::getMergerCreatorsKey(),
-      "hoot::BuildingMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator");
+      "BuildingMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator");
     conf().set(ConfigOptions::getPoiPolygonNameStringComparerKey(), "KskipBigramDistance");
 
     const QString outFile = _outputPath + "poi-polygon-review-conflict-4331-3-out.osm";

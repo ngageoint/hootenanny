@@ -40,7 +40,7 @@ class RoundaboutCriterion : public GeometryTypeCriterion
 {
 public:
 
-  static QString className() { return "hoot::RoundaboutCriterion"; }
+  static QString className() { return "RoundaboutCriterion"; }
 
   RoundaboutCriterion() = default;
   ~RoundaboutCriterion() = default;

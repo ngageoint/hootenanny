@@ -36,7 +36,7 @@ class AddBboxVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static QString className() { return "hoot::AddBboxVisitor"; }
+  static QString className() { return "AddBboxVisitor"; }
 
   AddBboxVisitor() = default;
   ~AddBboxVisitor() = default;

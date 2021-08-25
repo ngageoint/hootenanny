@@ -43,7 +43,7 @@ class HootServicesLanguageDetectorMockClient : public HootServicesLanguageDetect
 
 public:
 
-  static QString className() { return "hoot::HootServicesLanguageDetectorMockClient"; }
+  static QString className() { return "HootServicesLanguageDetectorMockClient"; }
 
   HootServicesLanguageDetectorMockClient();
   ~HootServicesLanguageDetectorMockClient() = default;

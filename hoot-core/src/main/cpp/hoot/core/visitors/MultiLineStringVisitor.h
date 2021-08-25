@@ -44,7 +44,7 @@ class MultiLineStringVisitor : public ConstElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::MultiLineStringVisitor"; }
+  static QString className() { return "MultiLineStringVisitor"; }
 
   MultiLineStringVisitor();
   virtual ~MultiLineStringVisitor() = default;

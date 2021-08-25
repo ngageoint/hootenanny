@@ -96,7 +96,7 @@ class BuildingPartMergeOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::BuildingPartMergeOp"; }
+  static QString className() { return "BuildingPartMergeOp"; }
 
 
   BuildingPartMergeOp(bool preserveTypes = false);

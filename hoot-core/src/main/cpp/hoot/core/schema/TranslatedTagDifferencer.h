@@ -56,7 +56,7 @@ class TranslatedTagDifferencer : public TagDifferencer, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::TranslatedTagDifferencer"; }
+  static QString className() { return "TranslatedTagDifferencer"; }
 
   TranslatedTagDifferencer();
   ~TranslatedTagDifferencer() = default;

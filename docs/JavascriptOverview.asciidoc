@@ -123,7 +123,7 @@ the appropriate creators with the following commands:
 ----
 cd $HOOT_HOME
 mkdir -p tmp
-hoot conflate -D match.creators=hoot::ScriptMatchCreator,PolygonBuilding.js -D merger.creators=hoot::ScriptMergerCreator test-files/conflate/unified/AllDataTypesA.osm test-files/conflate/unified/AllDataTypesB.osm tmp/Conflated.osm
+hoot conflate -D match.creators=ScriptMatchCreator,PolygonBuilding.js -D merger.creators=ScriptMergerCreator test-files/conflate/unified/AllDataTypesA.osm test-files/conflate/unified/AllDataTypesB.osm tmp/Conflated.osm
 ----
 
 After the conflation run completes you can see the conflated buildings towards

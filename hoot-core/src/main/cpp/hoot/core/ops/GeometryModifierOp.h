@@ -63,7 +63,7 @@ namespace hoot
     GeometryModifierOp();
     ~GeometryModifierOp() = default;
 
-    static QString className() { return "hoot::GeometryModifierOp"; }
+    static QString className() { return "GeometryModifierOp"; }
 
     // applies all actions specified in the rules file '_rulesFileName' to the map.
     // runs through each action in the sequence they appear in the rules file

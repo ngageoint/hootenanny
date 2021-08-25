@@ -11,8 +11,8 @@ HOOT_OPTS='--warn -D uuid.helper.repeatable=true -C Testing.conf'
 hoot conflate $HOOT_OPTS \
  -C UnifyingAlgorithm.conf \
  -C ReferenceConflation.conf \
- -D match.creators="hoot::BuildingMatchCreator" \
- -D merger.creators="hoot::BuildingMergerCreator" \
+ -D match.creators="BuildingMatchCreator" \
+ -D merger.creators="BuildingMergerCreator" \
  -D conflate.use.data.source.ids.2=true \
  $CONFLATE_OPTS $IN_DIR/BuildingsA.osm $IN_DIR/BuildingsB.osm $OUT_DIR/BuildingsConflated.osm
 

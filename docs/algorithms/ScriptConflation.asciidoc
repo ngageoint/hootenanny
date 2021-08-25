@@ -235,8 +235,8 @@ performance. The `perty-test` command is used with the following configuration:
 
 -----
 {
-  "match.creators" : "hoot::ScriptMatchCreator,Line.js",
-  "merger.creators" : "hoot::ScriptMergerCreator",
+  "match.creators" : "ScriptMatchCreator,Line.js",
+  "merger.creators" : "ScriptMergerCreator",
   "uuid.helper.repeatable": "true",
   "perty.seed" : 0,
   "perty.test.num.runs": 1,

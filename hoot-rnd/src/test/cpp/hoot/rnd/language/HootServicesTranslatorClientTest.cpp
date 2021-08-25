@@ -117,14 +117,14 @@ private:
       std::make_shared<HootServicesTranslatorMockClient>();
 
     Settings conf;
-    conf.set("language.translation.translator", "hoot::HootServicesTranslatorClient");
+    conf.set("language.translation.translator", "HootServicesTranslatorClient");
     conf.set("hoot.services.auth.host", "localhost");
     conf.set("hoot.services.auth.port", "8080");
     conf.set("language.hoot.services.translator", "HootLanguageTranslator");
     conf.set("language.hoot.services.detectors", QStringList("TikaLanguageDetector"));
     conf.set("language.translation.detected.language.overrides.specified.source.languages", false);
     conf.set("language.translation.perform.exhaustive.search.with.no.detection", true);
-    conf.set("language.info.provider", "hoot::HootServicesLanguageInfoMockClient");
+    conf.set("language.info.provider", "HootServicesLanguageInfoMockClient");
     client->setConfiguration(conf);
 
     QStringList sourceLangs;

@@ -43,7 +43,7 @@ class HootServicesLanguageInfoClient : public LanguageInfoProvider
 {
 public:
 
-  static QString className() { return "hoot::HootServicesLanguageInfoClient"; }
+  static QString className() { return "HootServicesLanguageInfoClient"; }
 
   HootServicesLanguageInfoClient() : _useCookies(true), _timeout(500) { }
   virtual ~HootServicesLanguageInfoClient() = default;

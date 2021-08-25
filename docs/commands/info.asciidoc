@@ -35,7 +35,7 @@ Only one of the following options can be passed to the command per invocation:
 All configuration options (-D <option>) added to this command must be added to before the specified option. Example:
 
 --------
-hoot info -D match.creators="hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,River.js" --way-snap-criteria
+hoot info -D match.creators="HighwayMatchCreator;ScriptMatchCreator,River.js" --way-snap-criteria
 --------
 
 Note how "--way-snap-criteria" is specified after the single configuration option.
@@ -283,7 +283,7 @@ hoot info --value-aggregators
 === Way Joiners
 
 The +--way-joiners+ option prints out all way joiner class implementations that may either be used independently or 
-in conjunction with the OsmMapOperation, `hoot::WayJoinerOp`.
+in conjunction with the OsmMapOperation, `WayJoinerOp`.
 
 ==== Usage
 
@@ -295,8 +295,8 @@ hoot info --way-joiners
 
 The +--way-snap-criteria+ option prints out all criterion class implementations that may used with `UnconnectedWaySnapper`
 to filter the types of ways that are snapped to each other. The list is restricted to a criterion that will snap all feature 
-types (hoot::LinearCriterion) or criteria that are both conflatable and represent linear geometry types 
-(e.g. hoot::HighwayCriterion). Unlike most other `info` options this prints out a delimited list of class names only with 
+types (LinearCriterion) or criteria that are both conflatable and represent linear geometry types 
+(e.g. HighwayCriterion). Unlike most other `info` options this prints out a delimited list of class names only with 
 no descriptions. Optionally, this command call takes in the `match.creators` configuration option to determine the 
 appropriate list of criterion that goes with a specific set of matchers. If `match.creators` is not passed in, then a 
 list with all available snapping criteria are returned. The list of available matchers can be obtained with 

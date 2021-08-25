@@ -40,7 +40,7 @@ class BuildingMatchCreator : public MatchCreator
 
 public:
 
-  static QString className() { return "hoot::BuildingMatchCreator"; }
+  static QString className() { return "BuildingMatchCreator"; }
 
   BuildingMatchCreator();
   ~BuildingMatchCreator() = default;

@@ -64,7 +64,7 @@ class AlphaShape
 {
 public:
 
-  static QString className() { return "hoot::AlphaShape"; }
+  static QString className() { return "AlphaShape"; }
 
   static int logWarnCount;
 

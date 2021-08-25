@@ -64,7 +64,7 @@ element.
 * Default Value: ``
 
 One or more element criteria used for selecting elements whose attributes to modify. Delimit names
-with '='. E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
+with '='. E.g. "TagCriterion;ReviewRelationCriterion"
 
 === add.attributes.visitor.kvps
 
@@ -159,7 +159,7 @@ follow after the '='.
 === address.string.comparer
 
 * Data Type: string
-* Default Value: `hoot::ExactStringDistance`
+* Default Value: `ExactStringDistance`
 
 String comparison algorithm to use for address comparison during conflation. Must be an
 implementation of `StringDistance`.
@@ -812,7 +812,7 @@ option will never add delete statements for reference features falling outside o
 === changeset.replacement.cut.only.implementation
 
 * Data Type: string
-* Default Value: `hoot::ChangesetCutOnlyCreator`
+* Default Value: `ChangesetCutOnlyCreator`
 
 The `ChangesetReplacement` implementation used for changeset replacement derivation when
 only cutting data.
@@ -820,7 +820,7 @@ only cutting data.
 === changeset.replacement.implementation
 
 * Data Type: string
-* Default Value: `hoot::ChangesetReplacementCreator`
+* Default Value: `ChangesetReplacementCreator`
 
 The `ChangesetReplacement` implementation used for changeset replacement derivation when
 cutting and replacing data.
@@ -829,11 +829,11 @@ cutting and replacing data.
 
 * Data Type: list
 * Default Value:
-** `hoot::ReprojectToPlanarOp`
-** `hoot::DuplicateNodeRemover`
-** `hoot::UnlikelyIntersectionRemover`
-** `hoot::DualHighwaySplitter`
-** `hoot::RemoveInvalidMultilineStringMembersVisitor`
+** `ReprojectToPlanarOp`
+** `DuplicateNodeRemover`
+** `UnlikelyIntersectionRemover`
+** `DualHighwaySplitter`
+** `RemoveInvalidMultilineStringMembersVisitor`
 
 The map cleaning operations used by replacement changeset generation.
 
@@ -965,7 +965,7 @@ and then `$HOOT_HOME/conf/`.
 === conflate.match.highway.classifier
 
 * Data Type: string
-* Default Value: `hoot::HighwayRfClassifier`
+* Default Value: `HighwayRfClassifier`
 
 The highway match classifier to use. This should only be used for testing and debugging.
 
@@ -976,7 +976,7 @@ The highway match classifier to use. This should only be used for testing and de
 
 Path to the RF highway model. A new model can be created with `build-model`. Searches local path
 and then `$HOOT_HOME/conf/`. This is only relevant if the `conflate.match.highway.classifier` is
-set to `hoot::HighwayRfClassifier`.
+set to `HighwayRfClassifier`.
 
 === conflate.match.only
 
@@ -1020,29 +1020,29 @@ See also:
 
 * Data Type: list
 * Default Value:
-** `hoot::RemoveMissingElementsVisitor`
-** `hoot::InvalidWayRemover`
-** `hoot::PoiPolygonInvalidReviewNodeRemover`
-** `hoot::SuperfluousNodeRemover`
-** `hoot::SmallHighwayMerger`
-** `hoot::ReplaceRoundabouts`
-** `hoot::RemoveMissingElementsVisitor`
-** `hoot::RemoveInvalidReviewRelationsVisitor`
-** `hoot::RemoveDuplicateReviewsOp`
-** `hoot::BuildingOutlineUpdateOp`
-** `hoot::WayJoinerOp`
-** `hoot::RemoveInvalidRelationVisitor`
-** `hoot::RemoveInvalidMultilineStringMembersVisitor`
-** `hoot::SuperfluousWayRemover`
-** `hoot::RemoveDuplicateWayNodesVisitor`
-** `hoot::DuplicateWayRemover`
-** `hoot::RemoveDuplicateRelationMembersVisitor`
-** `hoot::RemoveEmptyRelationsOp`
-** `hoot::RelationCircularRefRemover`
-** `hoot::MultilineStringMergeRelationCollapser`
-** `hoot::RoadCrossingPolyMarker`
-** `hoot::ApiTagTruncateVisitor`
-** `hoot::AddHilbertReviewSortOrderOp`
+** `RemoveMissingElementsVisitor`
+** `InvalidWayRemover`
+** `PoiPolygonInvalidReviewNodeRemover`
+** `SuperfluousNodeRemover`
+** `SmallHighwayMerger`
+** `ReplaceRoundabouts`
+** `RemoveMissingElementsVisitor`
+** `RemoveInvalidReviewRelationsVisitor`
+** `RemoveDuplicateReviewsOp`
+** `BuildingOutlineUpdateOp`
+** `WayJoinerOp`
+** `RemoveInvalidRelationVisitor`
+** `RemoveInvalidMultilineStringMembersVisitor`
+** `SuperfluousWayRemover`
+** `RemoveDuplicateWayNodesVisitor`
+** `DuplicateWayRemover`
+** `RemoveDuplicateRelationMembersVisitor`
+** `RemoveEmptyRelationsOp`
+** `RelationCircularRefRemover`
+** `MultilineStringMergeRelationCollapser`
+** `RoadCrossingPolyMarker`
+** `ApiTagTruncateVisitor`
+** `AddHilbertReviewSortOrderOp`
 
 Runs during conflation just after the data is conflated, but before it is saved. The ordering here
 is sensitive and addition of new operations may take experimentation to produce optimal conflated
@@ -1052,13 +1052,13 @@ output. 'hoot info --operators' displays information about the available operati
 
 * Data Type: list
 * Default Value:
-** `hoot::RemoveMissingElementsVisitor`
-** `hoot::BuildingOutlineRemoveOp`
-** `hoot::RemoveRoundabouts`
-** `hoot::MapCleaner`
-** `hoot::HighwayCornerSplitter`
-** `hoot::RemoveInvalidReviewRelationsVisitor`
-** `hoot::RubberSheet`
+** `RemoveMissingElementsVisitor`
+** `BuildingOutlineRemoveOp`
+** `RemoveRoundabouts`
+** `MapCleaner`
+** `HighwayCornerSplitter`
+** `RemoveInvalidReviewRelationsVisitor`
+** `RubberSheet`
 
 Runs during conflation just after data is loaded. The ordering here is sensitive (although
 generally not as sensitive as with conflate.post.ops) and addition of new operations may take
@@ -1097,10 +1097,10 @@ See also:
 
 * Data Type: list
 * Default Value:
-** `hoot::RiverCriterion`
-** `hoot::RiverWayNodeCriterion`
-** `hoot::PowerLineCriterion`
-** `hoot::PowerLineWayNodeCriterion`
+** `RiverCriterion`
+** `RiverWayNodeCriterion`
+** `PowerLineCriterion`
+** `PowerLineWayNodeCriterion`
 
 Determines which type of features are rubbersheeted during conflation when rubbersheeting is part
 of the conflation pre-operations. An empty list will rubbersheet all types of features.
@@ -1632,7 +1632,7 @@ Sets that maximum angle that is still considered a generic line match. Units in 
 === generic.line.subline.matcher
 
 * Data Type: string
-* Default Value: `hoot::MaximalSublineMatcher`
+* Default Value: `MaximalSublineMatcher`
 
 The way subline matcher to use when determining matching sublines with generic line conflation.
 
@@ -1672,7 +1672,7 @@ conflatable by specific Hootenanny conflation routines is considered to have sim
 === geometry.linear.merger.default
 
 * Data Type: string
-* Default Value: `hoot::LinearSnapMerger`
+* Default Value: `LinearSnapMerger`
 
 The merger to use when merging features with linear geometries during conflation. Must inherit from
 `LinearMergerAbstract`.
@@ -1683,7 +1683,7 @@ The merger to use when merging features with linear geometries during conflation
 * Default Value: `${HOOT_HOME}/conf/core/GeometryModifierRules.json`
 
 Path to a json file containing the actions, filters and arguments used for the
-hoot::GeometryModifierOp.
+GeometryModifierOp.
 
 ==== Rule File Format
 -----
@@ -1993,11 +1993,11 @@ are preserved.
 === id.generator
 
 * Data Type: string
-* Default Value: `hoot::DefaultIdGenerator`
+* Default Value: `DefaultIdGenerator`
 
 Sets the default ID generator class name. This determines how Hootenanny will assign new element
 IDs as they're created. The `DefaultIdGenerator` assigns IDs in a decrementing fashion (e.g. -1,
--2, ...). The `hoot::PositiveIdGenerator` increments the IDs (e.g. 1, 2, 3, ...).
+-2, ...). The `PositiveIdGenerator` increments the IDs (e.g. 1, 2, 3, ...).
 
 Both generators maintain a different count for each element type. E.g. you can have a Node with ID
 1 and a Way with ID 1. This will not cause any problems within Hootenanny and is a legitimate way
@@ -2006,7 +2006,7 @@ of assigning IDs within OSM.
 Example Usage:
 
 ----
-hoot convert -D schema.translation.script=$HOOT_HOME/translations/Identity.js -D id.generator=hoot::PositiveIdGenerator -D id.generator.node.start=100 -D id.generator.relation.start=200 -D id.generator.way.start=300 myinput.osm myoutput.osm
+hoot convert -D schema.translation.script=$HOOT_HOME/translations/Identity.js -D id.generator=PositiveIdGenerator -D id.generator.node.start=100 -D id.generator.relation.start=200 -D id.generator.way.start=300 myinput.osm myoutput.osm
 ----
 
 === id.generator.node.start
@@ -2315,9 +2315,9 @@ case. Notes: 1) Would like to bring this one back and only match it at the end o
 === implicit.tagging.element.criterion
 
 * Data Type: string
-* Default Value: `hoot::ImplicitTagEligiblePoiPolyCriterion`
+* Default Value: `ImplicitTagEligiblePoiPolyCriterion`
 
-Criterion class inheriting from `hoot::ImplicitTagEligibleCriterion`; The default,
+Criterion class inheriting from `ImplicitTagEligibleCriterion`; The default,
 `ImplicitTagEligiblePoiPolyCriterion`, derives tag information from POIs, buildings, and areas. To
 pass in more nested criterion, use the Hootenanny Javascript interface instead.
 
@@ -2631,10 +2631,10 @@ Write out JSON in a more legible manner
 === language.detection.detector
 
 * Data Type: string
-* Default Value: `hoot::HootServicesLanguageDetectorClient`
+* Default Value: `HootServicesLanguageDetectorClient`
 
 LanguageDetector implementation to use for detecting source languages.  If using
-hoot::HootServicesLanguageDetectorClient, a translation server must be set up and valid OAuth
+HootServicesLanguageDetectorClient, a translation server must be set up and valid OAuth
 credentials used.  Also, be sure to use an appropriate value for the 'language.info.provider'
 option.
 
@@ -2652,7 +2652,7 @@ tags are written and only a summary of the source languages found will be printe
 * Default Value: `high`
 
 The minimum language detection confidence threshold to use when detecting languages in text using
-hoot::HootServicesLanguageDetectorClient.  Valid values are: 'low', 'medium', 'high', or 'none'.  A
+HootServicesLanguageDetectorClient.  Valid values are: 'low', 'medium', 'high', or 'none'.  A
 value of 'none' or an empty string disables the threshold.  Not all server side language detectors
 specified in 'language.hoot.services.detectors' support detection confidence.  When listing server
 side detectors via the API, confidence support information is included.
@@ -2674,10 +2674,10 @@ needed, in a pre-determined order, to get a positive detection.
 === language.info.provider
 
 * Data Type: string
-* Default Value: `hoot::HootServicesLanguageInfoClient`
+* Default Value: `HootServicesLanguageInfoClient`
 
 LanguageInfoProvider implementation to use for determining language information needed by to
-English translation. If using hoot::HootServicesLanguageInfoClient, a translation server must be
+English translation. If using HootServicesLanguageInfoClient, a translation server must be
 set up and valid OAuth credentials used.
 
 === language.max.cache.size
@@ -2743,7 +2743,7 @@ language. The list ordering should correspond to that of language.tag.keys.
 === language.translation.comparison.scorer
 
 * Data Type: string
-* Default Value: `hoot::LevenshteinDistance`
+* Default Value: `LevenshteinDistance`
 
 StringDistance implementation used to score to English translated tag values
 
@@ -2761,7 +2761,7 @@ languages.
 * Data Type: string
 * Default Value: `HootLanguageTranslator`
 
-When using 'hoot::HootServicesTranslatorClient' as the to English language translator, a
+When using 'HootServicesTranslatorClient' as the to English language translator, a
 hoot-services Java class names implementing ToEnglishTranslator.  Valid values are
 'JoshuaLanguageTranslator' and 'HootLanguageTranslator'.
 
@@ -2793,24 +2793,24 @@ detection cost.
 * Default Value: `true`
 
 Set to true if the strings should be tokenized (split into words) before translating the values.
-Only applies if language.translation.translator is set to hoot::ToEnglishDictionaryTranslator.
+Only applies if language.translation.translator is set to ToEnglishDictionaryTranslator.
 
 === language.translation.string.distance.translate.all
 
 * Data Type: bool
 * Default Value: `true`
 
-If true and language.translation.translator is set to hoot::ToEnglishDictionaryTranslator, will
+If true and language.translation.translator is set to ToEnglishDictionaryTranslator, will
 attempt to retrieve multiple translations when scoring string comparisons.  Otherwise, only a single
 translation is retrieved.
 
 === language.translation.translator
 
 * Data Type: string
-* Default Value: `hoot::HootServicesTranslatorClient`
+* Default Value: `HootServicesTranslatorClient`
 
 ToEnglishTranslator implementation to use for to English translation.
-hoot::HootServicesTranslatorClient, requires a translation server be set up and valid OAuth
+HootServicesTranslatorClient, requires a translation server be set up and valid OAuth
 credentials used.  Also, be sure to use an appropriate value for the 'language.info.provider'
 option.
 
@@ -2892,26 +2892,26 @@ trigger warning log messages.
 
 * Data Type: list
 * Default Value:
-** `hoot::ReprojectToPlanarOp`
-** `hoot::InvalidWayRemover`
-** `hoot::DuplicateNodeRemover`
-** `hoot::RemoveDuplicateWayNodesVisitor`
-** `hoot::OneWayRoadStandardizer`
-** `hoot::DuplicateWayRemover`
-** `hoot::SuperfluousWayRemover`
-** `hoot::IntersectionSplitter`
-** `hoot::UnlikelyIntersectionRemover`
-** `hoot::DualHighwaySplitter`
-** `hoot::HighwayImpliedDividedMarker`
-** `hoot::DuplicateNameRemover`
-** `hoot::SmallHighwayMerger`
-** `hoot::RemoveEmptyAreasVisitor`
-** `hoot::RemoveDuplicateRelationMembersVisitor`
-** `hoot::RelationCircularRefRemover`
-** `hoot::RemoveInvalidMultilineStringMembersVisitor`
-** `hoot::RemoveEmptyRelationsOp`
-** `hoot::RemoveDuplicateAreasVisitor`
-** `hoot::NoInformationElementRemover`
+** `ReprojectToPlanarOp`
+** `InvalidWayRemover`
+** `DuplicateNodeRemover`
+** `RemoveDuplicateWayNodesVisitor`
+** `OneWayRoadStandardizer`
+** `DuplicateWayRemover`
+** `SuperfluousWayRemover`
+** `IntersectionSplitter`
+** `UnlikelyIntersectionRemover`
+** `DualHighwaySplitter`
+** `HighwayImpliedDividedMarker`
+** `DuplicateNameRemover`
+** `SmallHighwayMerger`
+** `RemoveEmptyAreasVisitor`
+** `RemoveDuplicateRelationMembersVisitor`
+** `RelationCircularRefRemover`
+** `RemoveInvalidMultilineStringMembersVisitor`
+** `RemoveEmptyRelationsOp`
+** `RemoveDuplicateAreasVisitor`
+** `NoInformationElementRemover`
 
 A list of map operations to be applied to a map for cleaning purposes, in order.
 'hoot info --operators' displays information about the available transforms.
@@ -2991,19 +2991,19 @@ file even if the map is empty.
 
 * Data Type: list
 * Default Value:
-** `hoot::BuildingMatchCreator`
-** `hoot::HighwayMatchCreator`
-** `hoot::PoiPolygonMatchCreator`
-** `hoot::ScriptMatchCreator,Area.js`
-** `hoot::ScriptMatchCreator,River.js`
-** `hoot::ScriptMatchCreator,Poi.js`
-** `hoot::ScriptMatchCreator,Railway.js`
-** `hoot::ScriptMatchCreator,PowerLine.js`
-** `hoot::ScriptMatchCreator,Point.js`
-** `hoot::ScriptMatchCreator,Line.js`
-** `hoot::ScriptMatchCreator,Polygon.js`
-** `hoot::ScriptMatchCreator,PointPolygon.js`
-** `hoot::ScriptMatchCreator,Relation.js`
+** `BuildingMatchCreator`
+** `HighwayMatchCreator`
+** `PoiPolygonMatchCreator`
+** `ScriptMatchCreator,Area.js`
+** `ScriptMatchCreator,River.js`
+** `ScriptMatchCreator,Poi.js`
+** `ScriptMatchCreator,Railway.js`
+** `ScriptMatchCreator,PowerLine.js`
+** `ScriptMatchCreator,Point.js`
+** `ScriptMatchCreator,Line.js`
+** `ScriptMatchCreator,Polygon.js`
+** `ScriptMatchCreator,PointPolygon.js`
+** `ScriptMatchCreator,Relation.js`
 
 List of match creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in merger.creators.
@@ -3101,19 +3101,19 @@ notification. The same threshold value is used separately for both used physical
 
 * Data Type: list
 * Default Value:
-** `hoot::BuildingMergerCreator`
-** `hoot::HighwayMergerCreator`
-** `hoot::PoiPolygonMergerCreator`
-** `hoot::ScriptMergerCreator`
-** `hoot::ScriptMergerCreator`
-** `hoot::ScriptMergerCreator`
-** `hoot::ScriptMergerCreator`
-** `hoot::ScriptMergerCreator`
-** `hoot::ScriptMergerCreator`
-** `hoot::ScriptMergerCreator`
-** `hoot::ScriptMergerCreator`
-** `hoot::ScriptMergerCreator`
-** `hoot::ScriptMergerCreator`
+** `BuildingMergerCreator`
+** `HighwayMergerCreator`
+** `PoiPolygonMergerCreator`
+** `ScriptMergerCreator`
+** `ScriptMergerCreator`
+** `ScriptMergerCreator`
+** `ScriptMergerCreator`
+** `ScriptMergerCreator`
+** `ScriptMergerCreator`
+** `ScriptMergerCreator`
+** `ScriptMergerCreator`
+** `ScriptMergerCreator`
+** `ScriptMergerCreator`
 
 List of merger creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
@@ -3311,7 +3311,7 @@ See also:
 === network.matcher
 
 * Data Type: string
-* Default Value: `hoot::ConflictsNetworkMatcher`
+* Default Value: `ConflictsNetworkMatcher`
 
 An internal option for manipulating the way network matching occurs. This should only be used for
 debug and test. The parameter must be a class that is registered with the factory and subclasses
@@ -3816,12 +3816,12 @@ The size of the PERTY grid spacing in meters.
 
 * Data Type: list
 * Default Value:
-** `hoot::RandomWaySplitter`
-** `hoot::RandomWayGeneralizer`
-** `hoot::RandomElementRemover`
-** `hoot::RandomNodeDuplicator`
-** `hoot::RandomTagModifier`
-** `hoot::RandomElementRenamer`
+** `RandomWaySplitter`
+** `RandomWayGeneralizer`
+** `RandomElementRemover`
+** `RandomNodeDuplicator`
+** `RandomTagModifier`
+** `RandomElementRenamer`
 
 A list of operations that should be applied after the geometries have been shifted by PERTY.
 'hoot info --operators | grep Random' displays information about the available operations.
@@ -4134,7 +4134,7 @@ there are no names present (null).
 === poi.polygon.name.string.comparer
 
 * Data Type: string
-* Default Value: `hoot::KskipBigramDistance`
+* Default Value: `KskipBigramDistance`
 
 String comparison algorithm to use for name comparison with POI/Polygon conflation. Must be an
 implementation of `StringDistance`.
@@ -4278,7 +4278,7 @@ The source tag key to be used in conjunction with poi.polygon.disable.same.sourc
 === poi.polygon.tag.merger
 
 * Data Type: string
-* Default Value: `hoot::PreserveTypesTagMerger`
+* Default Value: `PreserveTypesTagMerger`
 
 The tag merger used by POI/Polygon conflation. See 'tag.merger.default' for more information. If
 'poi.polygon.auto.merge.many.poi.to.one.poly.matches' is set to true then 'PreserveTypesTagMerger'
@@ -4390,7 +4390,7 @@ See also:
 === power.line.subline.matcher
 
 * Data Type: string
-* Default Value: `hoot::FrechetSublineMatcher`
+* Default Value: `FrechetSublineMatcher`
 
 The way subline matcher to use when determining matching power line sublines.
 
@@ -4435,7 +4435,7 @@ Sets that maximum angle that is still considered a railway match. Units in degre
 === railway.subline.matcher
 
 * Data Type: string
-* Default Value: `hoot::MaximalSublineMatcher`
+* Default Value: `MaximalSublineMatcher`
 
 The way subline matcher to use when determining matching sublines.
 
@@ -4714,7 +4714,7 @@ timestamp, user, uid, or version.
 === remove.duplicate.areas.diff
 
 * Data Type: string
-* Default Value: `hoot::ExactTagDifferencer`
+* Default Value: `ExactTagDifferencer`
 
 Use this class for calculating the difference between element tags. If the difference is exactly
 0 then they'll be a candidate for merging.
@@ -4857,7 +4857,7 @@ See `rubber.sheet.ref`. Used during river conflation.
 === river.subline.matcher
 
 * Data Type: string
-* Default Value: `hoot::MaximalSublineMatcher`
+* Default Value: `MaximalSublineMatcher`
 
 The way subline matcher to use when determining matching sublines.
 
@@ -5237,7 +5237,7 @@ The maximum length a way can have to be considered for removal by SmallDisconnec
 === small.highway.merger.diff
 
 * Data Type: string
-* Default Value: `hoot::ExactTagDifferencer`
+* Default Value: `ExactTagDifferencer`
 
 Use this class for calculating the difference between element tags. If the difference is exactly 0
 then they'll be a candidate for merging.
@@ -5335,7 +5335,7 @@ correct any snaps made.
 
 Optional criteria used to filter both the types of ways being snapped (sources) and the types of
 ways being snapped to (targets). The classes specified must inherit from
-`ConflatableElementCriterion`. An example is: `hoot::HighwayCriterion`. The default value of an
+`ConflatableElementCriterion`. An example is: `HighwayCriterion`. The default value of an
 empty list allows for snapping any type of linear feature. This option is overridden by the options:
 `snap.unconnected.ways.snap.way.criteria` and/or `snap.unconnected.ways.snap.to.way.criteria` to
 allow for more granularity in selecting the types to snap.
@@ -5347,7 +5347,7 @@ allow for more granularity in selecting the types to snap.
 ** ``
 
 Optional criteria used to filter the types of ways being snapped to (targets). The classes specified
-must inherit from `ConflatableElementCriterion`. An example is: `hoot::HighwayCriterion`. This
+must inherit from `ConflatableElementCriterion`. An example is: `HighwayCriterion`. This
 option overrides `snap.unconnected.ways.snap.criteria`.
 
 === snap.unconnected.ways.snap.to.way.statuses
@@ -5378,7 +5378,7 @@ section of the neighboring way.
 ** ```
 
 Optional criteria used to filter the types of ways being snapped (sources). The classes specified
-must inherit from `ConflatableElementCriterion`. An example is: `hoot::HighwayCriterion`. This
+must inherit from `ConflatableElementCriterion`. An example is: `HighwayCriterion`. This
 option overrides `snap.unconnected.ways.snap.criteria`.
 
 === snap.unconnected.ways.snap.way.statuses
@@ -5452,7 +5452,7 @@ Adds the specified status to elements.  Valid values are: 'Conflated', 'Invalid'
 === subline.matcher.secondary
 
 * Data Type: string
-* Default Value: `hoot::FrechetSublineMatcher`
+* Default Value: `FrechetSublineMatcher`
 
 This subline matcher is used as a backup if the primary linear subline merging runs for too long.
 See `maximal.subline.max.recursions`.
@@ -5492,7 +5492,7 @@ A list of way IDs that `SuperfluousWayRemover` will skip removing, even if they 
 * Data Type: string
 * Default Value: ``
 
-The default ancestor to use when using the hoot::TagAncestorDifferencer class for comparing tags.
+The default ancestor to use when using the TagAncestorDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
 
 === tag.category.differencer.name
@@ -5500,7 +5500,7 @@ Primarily, this is useful within the node.js interface.
 * Data Type: string
 * Default Value: ``
 
-The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
+The default category to use when using the TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
 
 === tag.contains.criterion.case.sensitive
@@ -5571,7 +5571,7 @@ Tag keys that TagKeyCriterion uses to filter elements.
 === tag.merger.default
 
 * Data Type: string
-* Default Value: `hoot::OverwriteTag2Merger`
+* Default Value: `OverwriteTag2Merger`
 
 Specifies the default way of merging tags. This is used by most merge routines, but may be overriden
 depending on the specifics of the merger. 'hoot info --tag-mergers' displays information about the
@@ -5672,7 +5672,7 @@ setting may have a negative impact on performance if set to a very low value.
 === test.case.conflate.cmd
 
 * Data Type: string
-* Default Value: `hoot::ConflateCmd`
+* Default Value: `ConflateCmd`
 
 Set the conflate command that should be used in a test case. This is only useful when writing
 test cases (`test-files/cases/`) and was originally added to support the MultiaryPoiConflateCmd.
@@ -5750,7 +5750,7 @@ options.
 * Default Value: ``
 
 Semi-colon delimited list of tags that should be ignored when comparing a list of tags using the
-hoot::TranslatedTagDifferencer.
+TranslatedTagDifferencer.
 
 See also:
 * `translated.tag.differencer.script`
@@ -5760,7 +5760,7 @@ See also:
 * Data Type: string
 * Default Value: ``
 
-Path to the translation script when using the tag differencer, `hoot::TranslatedTagDifferencer`.
+Path to the translation script when using the tag differencer, `TranslatedTagDifferencer`.
 This tag differencer is most useful when deciding how difference between two sets of tags should be
 calculated. It can be used with:
 
@@ -5877,16 +5877,16 @@ remove them.
 === way.joiner
 
 * Data Type: string
-* Default Value: `hoot::WayJoinerBasic`
+* Default Value: `WayJoinerBasic`
 
 The way joiner implementation used by the `WayJoinerOp` to repair way splits after a conflation job.
 
 This option can use the following implementations:
-* `hoot::WayJoinerBasic`              - default implementation
-* `hoot::WayJoinerAdvanced`           - has some additional features compared to the default
+* `WayJoinerBasic`              - default implementation
+* `WayJoinerAdvanced`           - has some additional features compared to the default
                                         implementation; currently used by Attribute Conflation and
                                         conflation done during Cut and Replace
-* `hoot::ReplacementSnappedWayJoiner` - has way joining features specific to Cut and Replace
+* `ReplacementSnappedWayJoiner` - has way joining features specific to Cut and Replace
 
 === way.joiner.advanced.strict.name.match
 
@@ -5967,21 +5967,21 @@ This configuration option is used by WaySplitterOp. If a way is longer than this
 === way.subline.matcher
 
 * Data Type: string
-* Default Value: `hoot::MaximalNearestSublineMatcher`
+* Default Value: `MaximalNearestSublineMatcher`
 
 The way subline matcher to use when determining matching sublines.
 
 === way.subline.string.matcher
 
 * Data Type: string
-* Default Value: `hoot::MaximalSublineStringMatcher`
+* Default Value: `MaximalSublineStringMatcher`
 
 The way subline string matcher to use when determining matching sublines.
 
 === weighted.metric.distance.extractor.point.aggregator
 
 * Data Type: string
-* Default Value: `hoot::MeanAggregator`
+* Default Value: `MeanAggregator`
 
 Type of point aggregator used by the WeightedMetricDistanceExtractor.
 

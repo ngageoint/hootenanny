@@ -25,7 +25,7 @@ exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 
 // This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
 // culling match candidates.
-exports.matchCandidateCriterion = "hoot::PointCriterion;hoot::PolygonCriterion";
+exports.matchCandidateCriterion = "PointCriterion;PolygonCriterion";
 
 var distanceExtractor = 
   new hoot.EuclideanDistanceExtractor({ "convert.require.area.for.polygon": "false" });

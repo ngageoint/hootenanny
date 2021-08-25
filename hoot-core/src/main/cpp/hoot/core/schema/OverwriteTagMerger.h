@@ -41,7 +41,7 @@ class OverwriteTagMerger : public TagMerger
 {
 public:
 
-  static QString className() { return "hoot::OverwriteTagMerger"; }
+  static QString className() { return "OverwriteTagMerger"; }
 
   /**
    * If swap is set to true then t1 will be overwritten with t2 values.
@@ -83,7 +83,7 @@ class OverwriteTag2Merger : public OverwriteTagMerger
 {
 public:
 
-  static QString className() { return "hoot::OverwriteTag2Merger"; }
+  static QString className() { return "OverwriteTag2Merger"; }
 
   OverwriteTag2Merger() : OverwriteTagMerger(false) { }
   ~OverwriteTag2Merger() = default;
@@ -101,7 +101,7 @@ class OverwriteTag1Merger : public OverwriteTagMerger
 {
 public:
 
-  static QString className() { return "hoot::OverwriteTag1Merger"; }
+  static QString className() { return "OverwriteTag1Merger"; }
 
   OverwriteTag1Merger() : OverwriteTagMerger(true) { }
   ~OverwriteTag1Merger() = default;

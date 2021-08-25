@@ -44,7 +44,7 @@ class RiverMaximalSublineSettingOptimizer
 {
 public:
 
-  static QString className() { return "hoot::RiverMaximalSublineSettingOptimizer"; }
+  static QString className() { return "RiverMaximalSublineSettingOptimizer"; }
 
   RiverMaximalSublineSettingOptimizer();
   virtual ~RiverMaximalSublineSettingOptimizer() = default;

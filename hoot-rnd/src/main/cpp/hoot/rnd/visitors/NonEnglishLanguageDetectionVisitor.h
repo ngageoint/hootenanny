@@ -50,7 +50,7 @@ class NonEnglishLanguageDetectionVisitor : public ElementVisitor, public Configu
 
 public:
 
-  static QString className() { return "hoot::NonEnglishLanguageDetectionVisitor"; }
+  static QString className() { return "NonEnglishLanguageDetectionVisitor"; }
 
   NonEnglishLanguageDetectionVisitor();
   ~NonEnglishLanguageDetectionVisitor();

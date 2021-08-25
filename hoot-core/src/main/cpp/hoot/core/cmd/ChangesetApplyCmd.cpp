@@ -47,7 +47,7 @@ class ChangesetApplyCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::ChangesetApplyCmd"; }
+  static QString className() { return "ChangesetApplyCmd"; }
 
   ChangesetApplyCmd() = default;
 

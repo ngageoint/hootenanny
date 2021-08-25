@@ -45,7 +45,7 @@ class LinearDiffMerger : public LinearMergerAbstract
 
 public:
 
-  static QString className() { return "hoot::LinearDiffMerger"; }
+  static QString className() { return "LinearDiffMerger"; }
 
   LinearDiffMerger();
   LinearDiffMerger(

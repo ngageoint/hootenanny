@@ -52,16 +52,6 @@ ElementCriterionPtr CriterionUtils::constructCriterion(
     return ElementCriterionPtr();
   }
 
-  for (int i = 0; i < criteriaClassNames.size(); i++)
-  {
-    if (!criteriaClassNames.at(i).startsWith(MetadataTags::HootNamespacePrefix()))
-    {
-      QString className = criteriaClassNames[i];
-      className.prepend(MetadataTags::HootNamespacePrefix());
-      criteriaClassNames[i] = className;
-    }
-  }
-
   ChainCriterionPtr crit;
 
   if (criteriaClassNames.size() > 1)

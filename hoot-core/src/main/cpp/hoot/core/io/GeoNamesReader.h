@@ -37,7 +37,7 @@ class GeoNamesReader : public PartialOsmMapReader
 {
 public:
 
-  static QString className() { return "hoot::GeoNamesReader"; }
+  static QString className() { return "GeoNamesReader"; }
 
   GeoNamesReader();
   ~GeoNamesReader() = default;

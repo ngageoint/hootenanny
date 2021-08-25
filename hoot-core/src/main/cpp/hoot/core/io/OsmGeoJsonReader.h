@@ -58,7 +58,7 @@ class OsmGeoJsonReader : public OsmJsonReader
 {
 public:
 
-  static QString className() { return "hoot::OsmGeoJsonReader"; }
+  static QString className() { return "OsmGeoJsonReader"; }
 
   OsmGeoJsonReader() = default;
   ~OsmGeoJsonReader() = default;

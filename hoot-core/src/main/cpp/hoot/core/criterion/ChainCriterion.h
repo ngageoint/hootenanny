@@ -43,7 +43,7 @@ class ChainCriterion : public ElementCriterion, public ElementCriterionConsumer,
 {
 public:
 
-  static QString className() { return "hoot::ChainCriterion"; }
+  static QString className() { return "ChainCriterion"; }
 
   ChainCriterion() = default;
   ChainCriterion(const std::vector<ElementCriterionPtr>& criteria);

@@ -43,7 +43,7 @@ class TagDistributionCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::TagDistributionCmd"; }
+  static QString className() { return "TagDistributionCmd"; }
 
   TagDistributionCmd() = default;
 

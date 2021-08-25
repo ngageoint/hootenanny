@@ -64,7 +64,7 @@ public:
   AddExportTagsVisitor();
   ~AddExportTagsVisitor() = default;
 
-  static QString className() { return "hoot::AddExportTagsVisitor"; }
+  static QString className() { return "AddExportTagsVisitor"; }
 
   void visit(const ElementPtr& pElement) override;
 

@@ -41,7 +41,7 @@ class ToEnglishAddressTranslator : public Configurable
 {
 public:
 
-  static QString className() { return "hoot::ToEnglishAddressTranslator"; }
+  static QString className() { return "ToEnglishAddressTranslator"; }
 
   ToEnglishAddressTranslator() = default;
   ~ToEnglishAddressTranslator() = default;

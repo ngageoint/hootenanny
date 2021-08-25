@@ -50,7 +50,7 @@ void StringDistanceJs::Init(Local<Object> target)
 
   for (size_t i = 0; i < opNames.size(); i++)
   {
-    QByteArray utf8 = opNames[i].replace("hoot::", "").toUtf8();
+    QByteArray utf8 = opNames[i].toUtf8();
     const char* n = utf8.data();
 
     // Prepare constructor template
@@ -69,7 +69,7 @@ void StringDistanceJs::New(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
 
-  const QString className = "hoot::" + str(args.This()->GetConstructorName());
+  const QString className = str(args.This()->GetConstructorName());
 
   StringDistancePtr c = Factory::getInstance().constructObject<StringDistance>(className);
   StringDistanceJs* obj = new StringDistanceJs(c);

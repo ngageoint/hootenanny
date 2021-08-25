@@ -59,7 +59,7 @@ class PoiPolygonMatch : public Match, public MatchDetails, public Configurable
 
 public:
 
-  static QString className() { return "hoot::PoiPolygonMatch"; }
+  static QString className() { return "PoiPolygonMatch"; }
 
   static const QString MATCH_NAME;
 

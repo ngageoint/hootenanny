@@ -44,7 +44,7 @@ class ChangesetReplacementCreator : public ChangesetReplacementCreatorAbstract
 
 public:
 
-  static QString className() { return "hoot::ChangesetReplacementCreator"; }
+  static QString className() { return "ChangesetReplacementCreator"; }
 
   ChangesetReplacementCreator();
 
@@ -73,7 +73,7 @@ public:
   void create(const QString& input1, const QString& input2,
     const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output) override;
 
-  QString toString() const override { return className().remove("hoot::"); }
+  QString toString() const override { return className(); }
 
 protected:
 

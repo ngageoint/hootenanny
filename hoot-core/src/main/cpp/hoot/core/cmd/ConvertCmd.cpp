@@ -49,7 +49,7 @@ class ConvertCmd : public BoundedCommand
 {
 public:
 
-  static QString className() { return "hoot::ConvertCmd"; }
+  static QString className() { return "ConvertCmd"; }
 
   ConvertCmd() = default;
 

@@ -48,7 +48,7 @@ public:
   static const std::string ARGUMENT_TAG;
 
   // Class name for hoot factory
-  static QString className() { return "hoot::GeometryModifierAction"; }
+  static QString className() { return "GeometryModifierAction"; }
 
   GeometryModifierAction() = default;
   virtual ~GeometryModifierAction() = default;

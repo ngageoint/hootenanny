@@ -228,13 +228,13 @@ For 1), you can manually assign the  either the `circular:error` or `accuracy` t
 
 For 2), the default Hootenanny CE value is 15m and is controlled by the `circular.error.default.value` config option. If your feature data has neither the `circular:error` or `accuracy` tags present, hoot will use that value for all features. If you wanted to change the global CE value used for a conflate job to 5.0m, for example, you could do something like this for a conflate job:
 
-`hoot conflate -D conflate.pre.ops++="hoot::SetTagValueVisitor" -D set.tag.value.visitor.keys="error:circular" -D set.tag.value.visitor.values=5.0 input1.osm input2.osm out.osm`
+`hoot conflate -D conflate.pre.ops++="SetTagValueVisitor" -D set.tag.value.visitor.keys="error:circular" -D set.tag.value.visitor.values=5.0 input1.osm input2.osm out.osm`
 
 That will assign a CE of 5m to all features just before they are conflated.
 
 If you just wanted to update your data with CE tags without conflating, you could just do something like:
 
-`hoot convert -D convert.ops="hoot::SetTagValueVisitor"  -D set.tag.value.visitor.keys="error:circular" -D set.tag.value.visitor.values=5.0 -D writer.include.circular.error.tags=true input.osm out.osm`
+`hoot convert -D convert.ops="SetTagValueVisitor"  -D set.tag.value.visitor.keys="error:circular" -D set.tag.value.visitor.values=5.0 -D writer.include.circular.error.tags=true input.osm out.osm`
 
 You can also strictly control the search radius of the conflation routines if you don't want to use CE tags, which may be useful if you're not confident in your CE values and don't want to modify the data. The `search.radius.*` configuration options allow for controlling the conflate search radius. For example, if you wanted to conflate all features with a search radius of 25m:
 
@@ -242,7 +242,7 @@ You can also strictly control the search radius of the conflation routines if yo
 
 Or if you just wanted to conflate buildings at a 25m radius:
 
-`hoot conflate -D search.radius.building=25 -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" input1.osm input2.osm out.osm`
+`hoot conflate -D search.radius.building=25 -D match.creators="BuildingMatchCreator" -D merger.creators="BuildingMergerCreator" input1.osm input2.osm out.osm`
 
 [[Translation]]
 == Translation
@@ -1172,7 +1172,7 @@ hoot convert -D schema.translation.script=GpsTrack "$HOME/MyTracks.gpx;tracks" t
 . Use the special track snapping conflation manipulation to snap your tracks to an existing road network and convert to Shapefile.
 +
 ------
-hoot conflate -D conflator.manipulators=hoot::WaySnapMerger HighQualityRoads.osm tmp/MyTracks.osm tmp/MySnappedTracks.osm
+hoot conflate -D conflator.manipulators=WaySnapMerger HighQualityRoads.osm tmp/MyTracks.osm tmp/MySnappedTracks.osm
 hoot convert -D shape.file.writer.cols "hoot:max:movement;hoot:mean:movement;hoot:score;name;foot" tmp/MySnappedTracks.shp tmp/MySnappedTracks.osm
 ------
 
@@ -1182,15 +1182,15 @@ hoot convert -D shape.file.writer.cols "hoot:max:movement;hoot:mean:movement;hoo
 ==== Maintaining per node attributes
 
 
-If you have node attributes that you want to keep you can use the +hoot::PointsToTracksOp+ operation to join the nodes after translation. This requires two fields on each node:
+If you have node attributes that you want to keep you can use the +PointsToTracksOp+ operation to join the nodes after translation. This requires two fields on each node:
 
 *  +hoot:track:id+ - The id of the track that the node belongs to. The id is simply treated as a string. Nodes with like ids will be grouped together.
-*  +hoot:track:seq+ - The sequence of the nodes within the track (way). This is treated as a string and sorted as a string where the smallest value is at the beginning of the track. Be certain to avoid problems with integers during translation. E.g. "13", "112" will not sort properly, but "013", "112" will sort properly. It is also recommended to use +hoot::MergeNearbyNodes+ as a poor man's line simplification to speed the process up a bit. If this causes problems with your data you can safely drop it.
+*  +hoot:track:seq+ - The sequence of the nodes within the track (way). This is treated as a string and sorted as a string where the smallest value is at the beginning of the track. Be certain to avoid problems with integers during translation. E.g. "13", "112" will not sort properly, but "013", "112" will sort properly. It is also recommended to use +MergeNearbyNodes+ as a poor man's line simplification to speed the process up a bit. If this causes problems with your data you can safely drop it.
 
 The command used with a GPX input file is:
 
 ------
-hoot convert -D "convert.ops+=hoot::PointsToTracksOp" -D schema.translation.script=GpsTrack "$HOME/MyTracks.gpx;track_points" tmp/MyTracks.osm
+hoot convert -D "convert.ops+=PointsToTracksOp" -D schema.translation.script=GpsTrack "$HOME/MyTracks.gpx;track_points" tmp/MyTracks.osm
 ------
 
 An example translation file is:
@@ -1279,15 +1279,15 @@ View the Default Symbology::
 [[Tag-Merging-Configuration]]
 === Tag Merging
 
-When two features/elements are merged into a single feature/element the tags must be merged into a single set of tags. Depending on the use case there may be many different desirable ways to merge tags. Below are the options exposed to the user for merging tags. The default way to set this configuration for many functions is through the +tag.merger.default+ configuration key. Some older operations may not support configurable merging techniques. The default value is +hoot::AverageTagMerger+ .
+When two features/elements are merged into a single feature/element the tags must be merged into a single set of tags. Depending on the use case there may be many different desirable ways to merge tags. Below are the options exposed to the user for merging tags. The default way to set this configuration for many functions is through the +tag.merger.default+ configuration key. Some older operations may not support configurable merging techniques. The default value is +AverageTagMerger+ .
 
 [[Overwrite-Tag-1]]
 ==== Overwrite Tag 1
 
-Use the value +hoot::OverwriteTag1Merger+ . For example:
+Use the value +OverwriteTag1Merger+ . For example:
 
 ------
-hoot conflate -D tag.merger.default=hoot::OverwriteTag1Merger input1.osm input2.osm output.osm
+hoot conflate -D tag.merger.default=OverwriteTag1Merger input1.osm input2.osm output.osm
 ------
 
 Overwrite the values in the first input with the values in the second input. This will still keep all unique names, but all other tags will simply be overwritten. For example:
@@ -1335,10 +1335,10 @@ Overwrite the values in the first input with the values in the second input. Thi
 [[Overwrite-Tag-2]]
 ==== Overwrite Tag 2
 
-Use the value +hoot::OverwriteTag2Merger+ . For example:
+Use the value +OverwriteTag2Merger+ . For example:
 
 ------
-hoot conflate -D tag.merger.default=hoot::OverwriteTag2Merger input1.osm input2.osm output.osm
+hoot conflate -D tag.merger.default=OverwriteTag2Merger input1.osm input2.osm output.osm
 ------
 
 Overwrite the values in the second input with the values in the first input. This will still keep all unique names, but all other tags will simply be overwritten. For example:
@@ -1388,10 +1388,10 @@ Overwrite the values in the second input with the values in the first input. Thi
 
 Use an internal method to average the tags between two features.
 
-Use the value +hoot::AverageTagMerger+ . For example:
+Use the value +AverageTagMerger+ . For example:
 
 ------
-hoot conflate -D tag.merger.default=hoot::AverageTagMerger input1.osm input2.osm output.osm
+hoot conflate -D tag.merger.default=AverageTagMerger input1.osm input2.osm output.osm
 ------
 
 [[Generalize-Tag-Merger]]
@@ -1399,10 +1399,10 @@ hoot conflate -D tag.merger.default=hoot::AverageTagMerger input1.osm input2.osm
 
 Use an internal method to generalize the tags between two features. For instance, generalizing between +highway=primary+ and +highway=secondary+ results in +highway=road+ since road is the least general form that represents both primary and secondary.
 
-Use the value +hoot::GeneralizeTagMerger+ . For example:
+Use the value +GeneralizeTagMerger+ . For example:
 
 ------
-hoot conflate -D tag.merger.default=hoot::GeneralizeTagMerger input1.osm input2.osm output.osm
+hoot conflate -D tag.merger.default=GeneralizeTagMerger input1.osm input2.osm output.osm
 ------
 
 [[Provenance-Aware-Overwrite-Tag-Merger]]
@@ -1412,10 +1412,10 @@ This tag merger assumes features in different input files have their provenance 
 This tag merger will ensure that tag value is not overwritten for either feature being merged.  Instead, the values from both
 features are concatenated together.
 
-Use the value +hoot::ProvenanceAwareOverwriteTagMerger+ . For example:
+Use the value +ProvenanceAwareOverwriteTagMerger+ . For example:
 
 ------
-hoot conflate -D tag.merger.default=hoot::ProvenanceAwareOverwriteTagMerger input1.osm input2.osm output.osm
+hoot conflate -D tag.merger.default=ProvenanceAwareOverwriteTagMerger input1.osm input2.osm output.osm
 ------
 
 [[Preserve-Types-Tag-Merger]]
@@ -1424,10 +1424,10 @@ hoot conflate -D tag.merger.default=hoot::ProvenanceAwareOverwriteTagMerger inpu
 This tag merger preserves tags from both features.  In instances where two features have the same type tag key, the most specific type
 is chosen (or arbitrarily the reference type in a tie) and the unselected type is stored in an `alt_types` field.
 
-Use the value +hoot::PreserveTypesTagMerger+ . For example:
+Use the value +PreserveTypesTagMerger+ . For example:
 
 ------
-hoot conflate -D tag.merger.default=hoot::PreserveTypesTagMerger input1.osm input2.osm output.osm
+hoot conflate -D tag.merger.default=PreserveTypesTagMerger input1.osm input2.osm output.osm
 ------
 
 

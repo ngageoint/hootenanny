@@ -42,7 +42,7 @@ class ReprojectToPlanarOp : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::ReprojectToPlanarOp"; }
+  static QString className() { return "ReprojectToPlanarOp"; }
 
   ReprojectToPlanarOp() = default;
   ~ReprojectToPlanarOp() = default;

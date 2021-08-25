@@ -49,7 +49,7 @@ class WayGeneralizeVisitor : public ElementOsmMapVisitor, public Configurable,
 {
 public:
 
-  static QString className() { return "hoot::WayGeneralizeVisitor"; }
+  static QString className() { return "WayGeneralizeVisitor"; }
 
   WayGeneralizeVisitor();
   ~WayGeneralizeVisitor() = default;

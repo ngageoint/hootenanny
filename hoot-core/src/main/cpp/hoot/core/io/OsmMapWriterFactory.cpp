@@ -160,15 +160,6 @@ void OsmMapWriterFactory::writeDebugMap(
     {
       throw IllegalArgumentException("Empty calling class.");
     }
-    else if (!callingClass.startsWith("hoot::"))
-    {
-      throw IllegalArgumentException("Invalid calling class: " + callingClass);
-    }
-
-    QString callingClassNoNamespace = callingClass;
-    callingClassNoNamespace =
-      callingClassNoNamespace.replace(MetadataTags::HootNamespacePrefix(), "");
-    LOG_VART(callingClassNoNamespace);
 
     // If anything was added to the exclude filter and this class was explicitly excluded, we'll
     // skip writing out the map.
@@ -177,7 +168,7 @@ void OsmMapWriterFactory::writeDebugMap(
     StringUtils::removeEmptyStrings(excludeClassFilter);
     LOG_VART(excludeClassFilter);
     if (!excludeClassFilter.isEmpty() &&
-        StringUtils::matchesWildcard(callingClassNoNamespace, excludeClassFilter))
+        StringUtils::matchesWildcard(callingClass, excludeClassFilter))
     {
       return;
     }
@@ -189,7 +180,7 @@ void OsmMapWriterFactory::writeDebugMap(
     StringUtils::removeEmptyStrings(includeClassFilter);
     LOG_VART(includeClassFilter);
     if (includeClassFilter.isEmpty() ||
-        StringUtils::matchesWildcard(callingClassNoNamespace, includeClassFilter))
+        StringUtils::matchesWildcard(callingClass, includeClassFilter))
     {
       QString debugMapFileName = ConfigOptions().getDebugMapsFilename();
       if (!debugMapFileName.toLower().endsWith(".osm"))
@@ -208,13 +199,12 @@ void OsmMapWriterFactory::writeDebugMap(
       {
         debugMapFileName =
           debugMapFileName.replace(
-            ".osm", "-" + fileNumberStr + "-" + callingClassNoNamespace + "-" + title + ".osm");
+            ".osm", "-" + fileNumberStr + "-" + callingClass + "-" + title + ".osm");
       }
       else
       {
         debugMapFileName =
-          debugMapFileName.replace(
-            ".osm", "-" + fileNumberStr + "-" + callingClassNoNamespace + ".osm");
+          debugMapFileName.replace(".osm", "-" + fileNumberStr + "-" + callingClass + ".osm");
       }
       LOG_INFO("Writing debug output to: ..." << FileUtils::toLogFormat(debugMapFileName, 30));
       OsmMapPtr copy = std::make_shared<OsmMap>(map);

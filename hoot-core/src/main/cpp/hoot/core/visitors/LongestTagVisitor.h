@@ -38,7 +38,7 @@ class LongestTagVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static QString className() { return "hoot::LongestTagVisitor"; }
+  static QString className() { return "LongestTagVisitor"; }
 
   LongestTagVisitor() : _longestTag(0) { }
   ~LongestTagVisitor() = default;

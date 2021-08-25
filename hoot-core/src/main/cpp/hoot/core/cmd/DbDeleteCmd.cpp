@@ -44,7 +44,7 @@ class DbDeleteCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::DbDeleteCmd"; }
+  static QString className() { return "DbDeleteCmd"; }
 
   DbDeleteCmd() = default;
 

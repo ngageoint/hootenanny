@@ -39,7 +39,7 @@ class PositiveIdCriterion : public ElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::PositiveIdCriterion"; }
+  static QString className() { return "PositiveIdCriterion"; }
 
   PositiveIdCriterion() = default;
   ~PositiveIdCriterion() = default;

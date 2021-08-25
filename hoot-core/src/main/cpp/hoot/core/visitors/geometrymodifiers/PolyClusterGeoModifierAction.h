@@ -68,7 +68,7 @@ public:
   static const QString CHECK_INTERSECTIONS_PARAM;
   static const QString CLUSTER_TAG_LIST_PARAM;
 
-  static QString className() { return "hoot::PolyClusterGeoModifierAction"; }
+  static QString className() { return "PolyClusterGeoModifierAction"; }
 
   PolyClusterGeoModifierAction() = default;
   ~PolyClusterGeoModifierAction() = default;

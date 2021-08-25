@@ -40,7 +40,7 @@ class ScriptMergerCreator : public MergerCreator
 {
 public:
 
-  static QString className() { return "hoot::ScriptMergerCreator"; }
+  static QString className() { return "ScriptMergerCreator"; }
 
   ScriptMergerCreator() = default;
   ~ScriptMergerCreator() = default;

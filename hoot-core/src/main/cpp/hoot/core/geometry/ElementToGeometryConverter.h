@@ -59,7 +59,7 @@ public:
 
   static int logWarnCount;
 
-  static QString className() { return "hoot::ElementToGeometryConverter"; }
+  static QString className() { return "ElementToGeometryConverter"; }
 
   /**
    * Constructor
