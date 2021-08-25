@@ -544,6 +544,18 @@ public class CustomScriptResource {
                     pathValidated = true;
                     break;
                 }
+
+                Object importPath = item.get("IMPORTPATH");
+                Object exportPath = item.get("EXPORTPATH");
+                if ((importPath != null) && scriptPath.equals(importPath.toString())) {
+                    pathValidated = true;
+                    scriptPath = importPath.toString();
+                    break;
+                } else if ((exportPath != null) && scriptPath.equals(exportPath.toString())) {
+                    pathValidated = true;
+                    scriptPath = exportPath.toString();
+                    break;
+                }
             }
 
             if (pathValidated) {
