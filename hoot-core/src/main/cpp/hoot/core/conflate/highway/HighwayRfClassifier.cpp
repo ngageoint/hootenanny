@@ -53,8 +53,8 @@ int HighwayRfClassifier::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(HighwayClassifier, HighwayRfClassifier)
 
-MatchClassification HighwayRfClassifier::classify(const ConstOsmMapPtr& map,
-  ElementId eid1, ElementId eid2, const WaySublineMatchString& match)
+MatchClassification HighwayRfClassifier::classify(
+  const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2, const WaySublineMatchString& match)
 {
   _init();
 
@@ -160,7 +160,7 @@ map<QString, double> HighwayRfClassifier::getFeatures(
     for (size_t i = 0; i < _extractors.size(); i++)
     {
       double v = _extractors[i]->extract(*copiedMap, match1, match2);
-      // If it isn't null then include it.
+      // If it isn't null, then include it.
       if (!FeatureExtractor::isNull(v))
       {
         QString factorName = _extractors[i]->getName().replace(QRegExp("[^\\w]"), "_");

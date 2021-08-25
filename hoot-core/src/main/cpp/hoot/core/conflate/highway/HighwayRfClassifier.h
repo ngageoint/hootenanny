@@ -46,8 +46,9 @@ public:
   HighwayRfClassifier() = default;
   ~HighwayRfClassifier() = default;
 
-  MatchClassification classify(const ConstOsmMapPtr& map,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) override;
+  MatchClassification classify(
+    const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2,
+    const WaySublineMatchString& match) override;
 
   std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const override;
