@@ -47,14 +47,14 @@ class ElementId;
 class MatchType;
 
 /**
- * Given an OsmMap and a set of matches the MatchFeatureExtractor will pull out all
- * the scores relevant to determining a match and dump them out for further analysis. This is
- * primarily useful when experimenting with supervised machine learning.
+ * Given an OsmMap and a set of matches the MatchFeatureExtractor will pull out all the scores
+ * relevant to determining a match and dump them out for further analysis. This is primarily useful
+ * when experimenting with supervised machine learning.
  *
- * The input map _must_ have a REF attribute on both maps that matches to determine whether or
- * not the match is correct. All Unknown1 features must have one unique value in REF. Unknown2
- * features may have multiple comma delimited values in REF. If there are multiple values then
- * a match against any of them will be registered as a valid match.
+ * The input map _must_ have a REF attribute on both maps that matches to determine whether or not
+ * the match is correct. All Unknown1 features must have one unique value in REF. Unknown2 features
+ * may have multiple comma delimited values in REF. If there are multiple values then a match
+ * against any of them will be registered as a valid match.
  */
 class MatchFeatureExtractor
 {
@@ -64,17 +64,16 @@ public:
 
   static int logWarnCount;
 
-  MatchFeatureExtractor(bool evenClasses=false);
+  MatchFeatureExtractor(bool evenClasses = false);
 
   /**
-   * Adds a match creator to the list of matches that will be evaluated. There must be at least
-   * one. The match creator's matches must implement MatchDetails.
+   * Adds a match creator to the list of matches that will be evaluated. There must be at least one.
+   * The match creator's matches must implement MatchDetails.
    */
   void addMatchCreator(const std::shared_ptr<MatchCreator>& m);
 
   /**
-   * Returns the results as an ARFF file.
-   * http://www.cs.waikato.ac.nz/ml/weka/arff.html
+   * Returns the results as an ARFF file: http://www.cs.waikato.ac.nz/ml/weka/arff.html
    */
   QString getResults(bool useNulls = true);
 
@@ -89,8 +88,8 @@ private:
 
   DataSamples _samples;
   std::vector<std::shared_ptr<MatchCreator>> _creators;
-  // if true then make sure there is an even representation from each class and only fully populated
-  // records are represented.
+  // If true, then make sure there is an even representation from each class and only fully
+  // populated records are represented.
   bool _evenClasses;
   bool _useNulls;
   const MatchFactory* _matchFactory;

@@ -101,22 +101,21 @@ MatchClassification HighwayRfClassifier::classify(
   return p;
 }
 
-void HighwayRfClassifier::_createTestExtractors() const
+void HighwayRfClassifier::_createExtractors() const
 {
   _extractors.clear();
-
+  // Order can be very important as far as matching quality is concerned. You can check the
+  // resulting output arff file when these are serialized to make sure the order of these extractors
+  // is maintained.
   _extractors.push_back(
     std::make_shared<EdgeDistanceExtractor>(std::make_shared<RmseAggregator>()));
   _extractors.push_back(
      std::make_shared<EdgeDistanceExtractor>(std::make_shared<SigmaAggregator>()));
   _extractors.push_back(std::make_shared<AngleHistogramExtractor>());
-
   _extractors.push_back(
     std::make_shared<WeightedMetricDistanceExtractor>(
       std::make_shared<MeanAggregator>(), std::make_shared<RmseAggregator>(),
       ConfigOptions().getSearchRadiusHighway()));
-
-  // TODO: At some point names will make sense, but for now there isn't enough name data (#4874).
 }
 
 map<QString, double> HighwayRfClassifier::getFeatures(
@@ -176,7 +175,7 @@ void HighwayRfClassifier::_init() const
 {
   if (!_rf)
   {
-    _createTestExtractors();
+    _createExtractors();
 
     QString path = ConfPath::search(ConfigOptions().getConflateMatchHighwayModel());
     LOG_DEBUG("Loading highway model from: " << path);
@@ -229,7 +228,6 @@ void HighwayRfClassifier::_init() const
           "An extractor used by the model is not being calculated. We will still try, but this " <<
           "will undoubtably result in poor quality matches. Missing extractors: " <<
           missingExtractors);
-        LOG_TRACE("Available extractors: " << extractorNames);
       }
       else if (logWarnCount == Log::getWarnMessageLimit())
       {

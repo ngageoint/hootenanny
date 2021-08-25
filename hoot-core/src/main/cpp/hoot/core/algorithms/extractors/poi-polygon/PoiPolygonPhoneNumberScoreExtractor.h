@@ -46,7 +46,7 @@ class PoiPolygonPhoneNumberScoreExtractor : public FeatureExtractorBase, public 
 {
 public:
 
-  static QString className() { return "hoot::PoiPolygonPhoneNumberScoreExtractor"; }
+  static QString className() { return "PoiPolygonPhoneNumberScoreExtractor"; }
 
   PoiPolygonPhoneNumberScoreExtractor();
   ~PoiPolygonPhoneNumberScoreExtractor() = default;

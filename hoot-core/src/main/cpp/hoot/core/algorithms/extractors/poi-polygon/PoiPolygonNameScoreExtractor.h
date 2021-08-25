@@ -45,7 +45,7 @@ class PoiPolygonNameScoreExtractor : public FeatureExtractorBase, public Configu
 {
 public:
 
-  static QString className() { return "hoot::PoiPolygonNameScoreExtractor"; }
+  static QString className() { return "PoiPolygonNameScoreExtractor"; }
 
   PoiPolygonNameScoreExtractor();
   ~PoiPolygonNameScoreExtractor() = default;

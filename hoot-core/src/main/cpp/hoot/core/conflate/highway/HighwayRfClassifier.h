@@ -61,7 +61,10 @@ private:
   mutable QStringList _rfFactorLabels;
   mutable std::vector<std::shared_ptr<const FeatureExtractor>> _extractors;
 
-  void _createTestExtractors() const;
+  /*
+   * @todo At some point names will make sense, but for now there isn't enough name data (#4874).
+   */
+  void _createExtractors() const;
 
   const std::vector<std::shared_ptr<const FeatureExtractor>>& _getExtractors() const;
 

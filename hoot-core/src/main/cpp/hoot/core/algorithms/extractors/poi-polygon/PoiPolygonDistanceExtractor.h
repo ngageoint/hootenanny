@@ -43,7 +43,7 @@ class PoiPolygonDistanceExtractor : public FeatureExtractorBase
 {
 public:
 
-  static QString className() { return "hoot::PoiPolygonDistanceExtractor"; }
+  static QString className() { return "PoiPolygonDistanceExtractor"; }
 
   PoiPolygonDistanceExtractor(PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr());
   ~PoiPolygonDistanceExtractor() = default;
