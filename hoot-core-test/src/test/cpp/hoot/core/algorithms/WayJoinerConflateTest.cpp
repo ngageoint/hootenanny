@@ -63,8 +63,8 @@ public:
   void setUp() override
   {
     HootTestFixture::setUp();
-    conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::HighwayMatchCreator");
-    conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::HighwayMergerCreator");
+//    conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::HighwayMatchCreator");
+//    conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::HighwayMergerCreator");
   }
 
   void runConflateTest()

@@ -223,9 +223,6 @@ int CumulativeConflator2::_getNumIterations(const QStringList& inputs) const
 
 void CumulativeConflator2::_resetInitConfig(const QStringList& args) const
 {
-  MatchFactory::getInstance().reset();
-  MergerFactory::getInstance().reset();
-  TagMergerFactory::getInstance().reset();
   conf().clear();
   ConfigOptions::populateDefaults(conf());
   QStringList tempArgs = args;
@@ -233,6 +230,12 @@ void CumulativeConflator2::_resetInitConfig(const QStringList& args) const
   conf().set("HOOT_HOME", getenv("HOOT_HOME")); 
   LOG_VARD(ConfigOptions().getMatchCreators());
   LOG_VARD(ConfigOptions().getWayJoiner());
+  MatchFactory::getInstance().reset();
+  MatchFactory::getInstance();
+  MergerFactory::getInstance().reset();
+  MergerFactory::getInstance();
+  TagMergerFactory::getInstance().reset();
+  TagMergerFactory::getInstance();
 }
 
 void CumulativeConflator2::_initDropDividedRoadsConfig() const

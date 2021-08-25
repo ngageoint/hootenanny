@@ -266,12 +266,6 @@ protected:
    */
   void setResetType(HootTestReset reset) { _reset = reset; }
 
-  /**
-   * @brief getEnvString Record the current state of the environment for comparison
-   * @return the environment as a string
-   */
-  QString getEnvString();
-
   /** Path relative from $HOOT_HOME to the input folder of the test */
   const QString _inputPath;
   /** Path relative from $HOOT_HOME to the output folder of the test */
@@ -286,6 +280,12 @@ public:
   static void setCompareEnv(bool compare) { _compareEnv = compare; }
 
   static const QString UNUSED_PATH;
+
+  /**
+   * @brief getEnvString Record the current state of the environment for comparison
+   * @return the environment as a string
+   */
+  static QString getEnvString();
 
 private:
 

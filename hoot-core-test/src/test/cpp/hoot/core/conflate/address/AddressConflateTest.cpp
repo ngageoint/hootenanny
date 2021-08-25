@@ -35,6 +35,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
+#include <hoot/core/schema/OverwriteTagMerger.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/AddressCountVisitor.h>
 #include <hoot/core/visitors/NormalizeAddressesVisitor.h>
@@ -74,7 +75,7 @@ public:
     conf().set(ConfigOptions::getAddressMatchEnabledKey(), true);
     conf().set(ConfigOptions::getAddressScorerEnableCachingKey(), false);
     conf().set(ConfigOptions::getUuidHelperRepeatableKey(), true);
-    conf().set(ConfigOptions::getPoiPolygonTagMergerKey(), "OverwriteTag2Merger");
+    conf().set(ConfigOptions::getPoiPolygonTagMergerKey(), OverwriteTag2Merger::className());
   }
 
   void runTest()

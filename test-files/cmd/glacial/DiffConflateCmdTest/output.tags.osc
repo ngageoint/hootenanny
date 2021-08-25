@@ -13,6 +13,42 @@
             <tag k="alt_name" v="Old Name"/>
             <tag k="building" v="yes"/>
         </way>
+        <way id="1" version="1" timestamp="2018-06-11T16:49:01Z">
+            <nd ref="1"/>
+            <nd ref="2"/>
+            <nd ref="3"/>
+            <nd ref="4"/>
+            <nd ref="5"/>
+            <nd ref="6"/>
+            <nd ref="7"/>
+            <nd ref="30"/>
+            <nd ref="29"/>
+            <nd ref="31"/>
+            <nd ref="32"/>
+            <nd ref="33"/>
+            <nd ref="8"/>
+            <nd ref="34"/>
+            <nd ref="9"/>
+            <nd ref="35"/>
+            <nd ref="10"/>
+            <nd ref="36"/>
+            <nd ref="37"/>
+            <nd ref="38"/>
+            <nd ref="11"/>
+            <nd ref="12"/>
+            <nd ref="13"/>
+            <nd ref="14"/>
+            <nd ref="15"/>
+            <tag k="source" v="osm"/>
+            <tag k="highway" v="primary"/>
+            <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+            <tag k="name" v="I-15"/>
+            <tag k="source:imagery" v="Unknown"/>
+            <tag k="uuid" v="{23aeaf18-1427-425c-ac42-8ee203b38f65};{c535233a-4a32-4a88-acc1-27a4d5a1445b}"/>
+            <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
+            <tag k="surface" v="paved"/>
+            <tag k="attribution" v="osm"/>
+        </way>
         <way id="2" version="1" timestamp="2018-06-11T16:49:01Z">
             <nd ref="9"/>
             <nd ref="61"/>
@@ -113,42 +149,6 @@
             <tag k="uuid" v="{71756076-65b1-4e09-ad86-53b3f6483bf8};{2fd871c5-751e-40d1-9749-afcf31df94c9}"/>
             <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
             <tag k="surface" v="cobblestone"/>
-            <tag k="attribution" v="osm"/>
-        </way>
-        <way id="1" version="1" timestamp="2018-06-11T16:49:01Z">
-            <nd ref="1"/>
-            <nd ref="2"/>
-            <nd ref="3"/>
-            <nd ref="4"/>
-            <nd ref="5"/>
-            <nd ref="6"/>
-            <nd ref="7"/>
-            <nd ref="30"/>
-            <nd ref="29"/>
-            <nd ref="31"/>
-            <nd ref="32"/>
-            <nd ref="33"/>
-            <nd ref="8"/>
-            <nd ref="34"/>
-            <nd ref="9"/>
-            <nd ref="35"/>
-            <nd ref="10"/>
-            <nd ref="36"/>
-            <nd ref="37"/>
-            <nd ref="38"/>
-            <nd ref="11"/>
-            <nd ref="12"/>
-            <nd ref="13"/>
-            <nd ref="14"/>
-            <nd ref="15"/>
-            <tag k="source" v="osm"/>
-            <tag k="highway" v="primary"/>
-            <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-            <tag k="name" v="I-15"/>
-            <tag k="source:imagery" v="Unknown"/>
-            <tag k="uuid" v="{23aeaf18-1427-425c-ac42-8ee203b38f65};{c535233a-4a32-4a88-acc1-27a4d5a1445b}"/>
-            <tag k="source:datetime" v="2018-06-11T16:50:55Z;2018-06-11T16:49:01Z"/>
-            <tag k="surface" v="paved"/>
             <tag k="attribution" v="osm"/>
         </way>
         <way id="5" version="1" timestamp="2018-06-11T16:49:01Z">
