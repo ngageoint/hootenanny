@@ -1393,8 +1393,8 @@ Requires a language translation server installation.  See the Hootenanny Install
 -----
     hoot convert -D convert.ops="UnconnectedWaySnapper" \
       -D snap.unconnected.ways.snap.criteria=HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.status=Input1 \
-      -D snap.unconnected.ways.snap.way.status=Input2 \
+      -D snap.unconnected.ways.snap.to.way.statuses=Input1 \
+      -D snap.unconnected.ways.snap.way.statuses=Input2 \
       input1.osm input2.osm output.osm
 -----
 
