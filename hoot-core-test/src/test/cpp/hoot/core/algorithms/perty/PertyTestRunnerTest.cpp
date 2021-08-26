@@ -57,7 +57,7 @@ public:
 
   PertyTestRunnerTest()
     : HootTestFixture("test-files/algorithms/perty/PertyTestRunnerTest/",
-                      "test-output/rnd/algorithms/perty/PertyTestRunnerTest/")
+                      "test-output/algorithms/perty/PertyTestRunnerTest/")
   {
     setResetType(ResetConfigs);
     FileUtils::makeDir(_outputPath + "Dynamic");

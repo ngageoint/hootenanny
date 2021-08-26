@@ -130,6 +130,12 @@ public:
    * ConfigOptions will be loaded
    */
   static void resetEnvironment(const QStringList confs = QStringList());
+  /**
+   * @brief resetAll Resets the test environment and including the MatchFactory
+   * @param confs custom confs to load during reset; if left blank the default config in
+   * ConfigOptions will be loaded
+   */
+  static void resetAll(const QStringList confs = QStringList());
 
   static bool compareMaps(OsmMapPtr map1, OsmMapPtr map2);
   static bool compareMaps(const QString& map1, const QString& map2);

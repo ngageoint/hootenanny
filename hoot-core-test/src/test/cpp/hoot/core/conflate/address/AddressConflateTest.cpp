@@ -72,10 +72,24 @@ public:
   void setUp() override
   {
     HootTestFixture::setUp();
+    setupTestConfig();
+  }
+
+  void setupTestConfig()
+  {
+    //  Enable address matching
     conf().set(ConfigOptions::getAddressMatchEnabledKey(), true);
     conf().set(ConfigOptions::getAddressScorerEnableCachingKey(), false);
     conf().set(ConfigOptions::getUuidHelperRepeatableKey(), true);
     conf().set(ConfigOptions::getPoiPolygonTagMergerKey(), OverwriteTag2Merger::className());
+  }
+
+  void resetTest()
+  {
+    //  Reset the entire environment
+    TestUtils::resetAll();
+    //  Setup the address matching configuration settings
+    setupTestConfig();
   }
 
   void runTest()
@@ -101,9 +115,9 @@ public:
     _addressScoreExtractorNoStreetNumberTest();
     _addressScoreExtractorPartialMatchTest();
 
+    //  Test order in important here, do not change
     _building3441Addresses1Test();
     _building3441Addresses2Test();
-
     _poiPolygon10Test();
     _poiPolygonAutoMerge13Test();
     _poiPolygonAutoMerge14Test();
@@ -934,7 +948,7 @@ private:
 
   void _building3441Addresses1Test()
   {
-    setUp();
+    resetTest();
     conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::BuildingMatchCreator");
     conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::BuildingMergerCreator");
 
@@ -944,12 +958,11 @@ private:
       _inputPath + "building-3441-addresses-1-in-2.osm", outFile);
 
     HOOT_FILE_EQUALS(_inputPath + "building-3441-addresses-1-out.osm", outFile);
-    tearDown();
   }
 
   void _building3441Addresses2Test()
   {
-    setUp();
+    resetTest();
     conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::BuildingMatchCreator");
     conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::BuildingMergerCreator");
 
@@ -959,12 +972,11 @@ private:
       _inputPath + "building-3441-addresses-2-in-2.osm", outFile);
 
     HOOT_FILE_EQUALS(_inputPath + "building-3441-addresses-2-out.osm", outFile);
-    tearDown();
   }
 
   void _poiPolygon10Test()
   {
-    setUp();
+    resetTest();
     conf().set(
       ConfigOptions::getMatchCreatorsKey(),
       "hoot::BuildingMatchCreator;hoot::PoiPolygonMatchCreator");
@@ -979,12 +991,11 @@ private:
       _inputPath + "poi-polygon-10-in-1.osm", _inputPath + "poi-polygon-10-in-2.osm", outFile);
 
     HOOT_FILE_EQUALS(_inputPath + "poi-polygon-10-out.osm", outFile);
-    tearDown();
   }
 
   void _poiPolygonAutoMerge13Test()
   {
-    setUp();
+    resetTest();
     conf().set(
       ConfigOptions::getMatchCreatorsKey(),
       "hoot::BuildingMatchCreator;hoot::PoiPolygonMatchCreator");
@@ -998,12 +1009,11 @@ private:
       _inputPath + "poi-polygon-auto-merge-13-in-2.osm", outFile);
 
     HOOT_FILE_EQUALS(_inputPath + "poi-polygon-auto-merge-13-out.osm", outFile);
-    tearDown();
   }
 
   void _poiPolygonAutoMerge14Test()
   {
-    setUp();
+    resetTest();
     conf().set(ConfigOptions::getMatchCreatorsKey(), "BuildingMatchCreator;PoiPolygonMatchCreator");
     conf().set(
       ConfigOptions::getMergerCreatorsKey(), "BuildingMergerCreator;PoiPolygonMergerCreator");
@@ -1015,12 +1025,11 @@ private:
       _inputPath + "poi-polygon-auto-merge-14-in-2.osm", outFile);
 
     HOOT_FILE_EQUALS(_inputPath + "poi-polygon-auto-merge-14-out.osm", outFile);
-    tearDown();
   }
 
   void _poiPolygonRecursiveWayAddress3267_1Test()
   {
-    setUp();
+    resetTest();
     conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::PoiPolygonMatchCreator");
     conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::PoiPolygonMergerCreator");
 
@@ -1030,12 +1039,11 @@ private:
       _inputPath + "poi-polygon-recursive-way-address-3267-1-in-2.osm", outFile);
 
     HOOT_FILE_EQUALS(_inputPath + "poi-polygon-recursive-way-address-3267-1-out.osm", outFile);
-    tearDown();
   }
 
   void _poiPolygonReviewConflict4331_3Test()
   {
-    setUp();
+    resetTest();
     conf().set(
       ConfigOptions::getMatchCreatorsKey(),
       "hoot::BuildingMatchCreator;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Poi.js");
@@ -1050,7 +1058,6 @@ private:
       _inputPath + "poi-polygon-review-conflict-4331-3-in-2.osm", outFile);
 
     HOOT_FILE_EQUALS(_inputPath + "poi-polygon-review-conflict-4331-3-out.osm", outFile);
-    tearDown();
   }
 };
 

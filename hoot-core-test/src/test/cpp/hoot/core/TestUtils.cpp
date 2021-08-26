@@ -290,7 +290,7 @@ void TestUtils::resetBasic()
 void TestUtils::resetConfigs(const QStringList confs)
 {
   //  Provide the most basic configuration
-  resetBasic();
+  TestUtils::resetBasic();
   //  Reset the configuration
   conf().clear();
   ConfigOptions::populateDefaults(conf());
@@ -316,7 +316,7 @@ void TestUtils::resetConfigs(const QStringList confs)
 void TestUtils::resetEnvironment(const QStringList confs)
 {
   //  Reset the configuration
-  resetConfigs(confs);
+  TestUtils::resetConfigs(confs);
   // These factories cache the creators. Flush them so they get any config changes. Note that we're
   // not resetting MatchFactory here. Its call to ScriptMatchCreator::setArguments is expensive and
   // not many tests require it, so tests must specifically decide to reset it via ResetAll.
@@ -325,6 +325,14 @@ void TestUtils::resetEnvironment(const QStringList confs)
   //  Reset the registered resets
   foreach (RegisteredReset* rr, getInstance()._resets)
     rr->reset();
+}
+
+void TestUtils::resetAll(const QStringList confs)
+{
+  //  Reset the environment
+  TestUtils::resetEnvironment(confs);
+  //  Additionally reset the match factory
+  MatchFactory::getInstance().reset();
 }
 
 QString TestUtils::toQuotedString(QString str)
@@ -472,10 +480,8 @@ void HootTestFixture::tearDown()
   switch(_reset)
   {
   case ResetAll:
-    //  Reset the environment
-    TestUtils::resetEnvironment();
-    //  Additionally reset the match factory
-    MatchFactory::getInstance().reset();
+    //  Reset the all environment settings
+    TestUtils::resetAll();
     break;
   case ResetEnvironment:
     //  Reset the environment

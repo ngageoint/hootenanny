@@ -135,8 +135,6 @@ public:
   {
     OsmMapPtr map = getTestMap();
 
-    conf().set(ConfigOptions::getAddressMatchEnabledKey(), "false");
-
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
 
@@ -155,8 +153,6 @@ public:
 
     OsmXmlReader reader;
     OsmMapPtr map = std::make_shared<OsmMap>();
-
-    conf().set(ConfigOptions::getAddressMatchEnabledKey(), "false");
 
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
@@ -193,7 +189,6 @@ public:
     conf().set(ConfigOptions::getBuildingDateFormatKey(), "yyyy-MM-ddTHH:mm");
     conf().set(ConfigOptions::getBuildingDateTagKeyKey(), "source:date");
     conf().set(ConfigOptions::getBuildingReviewIfSecondaryNewerKey(), "true");
-    conf().set(ConfigOptions::getAddressMatchEnabledKey(), "false");
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
@@ -251,7 +246,6 @@ public:
     MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("source:date", "2018-02-14T10:55");
 
-    conf().set(ConfigOptions::getAddressMatchEnabledKey(), "false");
     conf().set(ConfigOptions::getBuildingDateFormatKey(), "yyyy-MM-ddTHH:mm");
     conf().set(ConfigOptions::getBuildingDateTagKeyKey(), "source:date");
     conf().set(ConfigOptions::getBuildingReviewIfSecondaryNewerKey(), "true");
@@ -280,7 +274,6 @@ public:
     MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("date", "2018-02-14T10:55");
 
-    conf().set(ConfigOptions::getAddressMatchEnabledKey(), "false");
     conf().set(ConfigOptions::getBuildingDateFormatKey(), "yyyy-MM-ddTHH:mm");
     conf().set(ConfigOptions::getBuildingDateTagKeyKey(), "source:date");
     conf().set(ConfigOptions::getBuildingReviewIfSecondaryNewerKey(), "true");
@@ -308,7 +301,6 @@ public:
     MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("source:date", "2018-02-14T10:55");
 
-    conf().set(ConfigOptions::getAddressMatchEnabledKey(), "false");
     conf().set(ConfigOptions::getBuildingDateFormatKey(), "yyyy-MM-ddTHH:mm");
     conf().set(ConfigOptions::getBuildingDateTagKeyKey(), "source:date");
     conf().set(ConfigOptions::getBuildingReviewIfSecondaryNewerKey(), "true");
@@ -333,7 +325,6 @@ public:
   {
     OsmMapPtr map = getTestMap();
 
-    conf().set(ConfigOptions::getAddressMatchEnabledKey(), "false");
     conf().set(ConfigOptions::getBuildingReviewMatchesOtherThanOneToOneKey(), "true");
 
     BuildingMatchCreator uut;
@@ -357,7 +348,6 @@ public:
 
     OsmMapPtr map = getTestMap(false);
 
-    conf().set(ConfigOptions::getAddressMatchEnabledKey(), "false");
     conf().set(ConfigOptions::getBuildingReviewMatchesOtherThanOneToOneKey(), "true");
 
     BuildingMatchCreator uut;

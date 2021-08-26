@@ -777,9 +777,16 @@ int main(int argc, char* argv[])
       //  Get the names of all of the tests to run
       vector<string> allNames;
       getNames(allNames, vTestsToRun);
-      set<string> nameCheck;
-      for (vector<string>::iterator it = allNames.begin(); it != allNames.end(); ++it)
-        nameCheck.insert(*it);
+      set<string> nameCheck(allNames.begin(), allNames.end());
+
+      //  Get a list of all conflate cases jobs that must be processed last
+      vector<TestPtr> conflateCases;
+      populateTests(CASE_ONLY, conflateCases, printDiff, suppressFailureDetail, true);
+      vector<CppUnit::Test*> vConflateCases;
+      getTestVector(conflateCases, vConflateCases);
+      vector<string> casesNames;
+      getNames(casesNames, vConflateCases);
+      set<string> casesSet(casesNames.begin(), casesNames.end());
 
       //  Add all of the jobs that must be done serially and are a part of the selected tests
       vector<TestPtr> serialTests;
@@ -791,12 +798,15 @@ int main(int argc, char* argv[])
       for (vector<string>::iterator it = serialNames.begin(); it != serialNames.end(); ++it)
       {
         if (nameCheck.find(*it) != nameCheck.end())
-          pool.addJob(QString(it->c_str()), false);
+          pool.addJob(QString(it->c_str()), ProcessPool::SerialJob);
       }
-
-      //  Add all of the remaining jobs in the test suite
+      //  Add all of the remaining non-case jobs in the test suite
       for (vector<string>::iterator it = allNames.begin(); it != allNames.end(); ++it)
-        pool.addJob(QString(it->c_str()));
+      {
+        //  Jobs in the casesSet are ConflateJob's and the rest are ParallelJob's
+        pool.addJob(QString(it->c_str()),
+          (casesSet.find(*it) != casesSet.end()) ? ProcessPool::ConflateJob : ProcessPool::ParallelJob);
+      }
 
       pool.startProcessing();
       pool.wait();
