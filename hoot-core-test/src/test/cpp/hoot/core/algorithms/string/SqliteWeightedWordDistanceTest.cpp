@@ -28,7 +28,6 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
-#include <hoot/core/util/Log.h>
 
 // Tgs
 #include <tgs/System/SystemInfo.h>

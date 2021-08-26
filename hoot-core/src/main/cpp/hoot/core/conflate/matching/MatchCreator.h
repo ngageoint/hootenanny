@@ -34,13 +34,6 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/FilteredByGeometryTypeCriteria.h>
 
-// Standard
-#include <string>
-#include <vector>
-
-// Qt
-#include <QString>
-
 namespace hoot
 {
 

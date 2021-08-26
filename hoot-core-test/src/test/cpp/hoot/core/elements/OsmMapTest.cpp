@@ -25,12 +25,6 @@
  * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Element.h>
@@ -45,7 +39,6 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // Qt

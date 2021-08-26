@@ -27,17 +27,16 @@
 
 #include "KnnIterator.h"
 
-// Standard Includes
+// Standard
 #include <queue>
 #include <vector>
-
-// Standard Includes
 #include <cassert>
 #include <climits>
 #include <list>
 #include <queue>
 #include <set>
 
+// tgs
 #include <tgs/TgsException.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
 #include <tgs/RStarTree/FilePageStore.h>

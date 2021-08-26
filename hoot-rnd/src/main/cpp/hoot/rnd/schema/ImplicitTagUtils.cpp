@@ -28,14 +28,11 @@
 
 // Hoot
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/HootException.h>
 
 namespace hoot
 {
-
-QStringList ImplicitTagUtils::_nameCleaningTokens;
-QStringList ImplicitTagUtils::_streetTypes;
 
 bool ImplicitTagUtils::sortCommandExists()
 {
@@ -62,18 +59,11 @@ void ImplicitTagUtils::cleanName(QString& name)
 
 void ImplicitTagUtils::_modifyUndesirableTokens(QString& name)
 {
-  // This assumes these file will be populated with at least one entry.  Having the option of
-  // disabling use of these files completely would require different logic.
-  if (_nameCleaningTokens.isEmpty())
+  const QStringList nameCleaningTokens = ConfigOptions().getImplicitTaggingNameCleaningTokens();
+  for (int i = 0; i < nameCleaningTokens.size(); i++)
   {
-    _nameCleaningTokens =
-      FileUtils::readFileToList(ConfigOptions().getImplicitTaggingNameCleaningTokensFile());
-  }
-
-  for (int i = 0; i < _nameCleaningTokens.size(); i++)
-  {
-    const QString replacementEntry = _nameCleaningTokens.at(i);
-    const QStringList replacementEntryParts = replacementEntry.split("\t");
+    const QString replacementEntry = nameCleaningTokens.at(i);
+    const QStringList replacementEntryParts = replacementEntry.split("|");
     if (replacementEntryParts.size() != 2)
     {
       throw HootException(
@@ -83,7 +73,7 @@ void ImplicitTagUtils::_modifyUndesirableTokens(QString& name)
     if (replaceText.trimmed().isEmpty())
     {
       throw HootException(
-          "Empty text specified for implicit tag rules name cleaning token entry.");
+        "Empty text specified for implicit tag rules name cleaning token entry.");
     }
     else if (replaceText == "e")
     {
@@ -107,26 +97,22 @@ void ImplicitTagUtils::_filterOutStreets(QString& name)
     return;
   }
   // This one seems kind of awkward and probably needs to be rethought or expanded somehow...
-  // apparently its to catch address parts like "2nd" or "3rd"
+  // apparently its to catch address parts like "2nd" or "3rd".
   else if (name.endsWith("th") || name.endsWith("nd"))
   {
     name = "";
   }
   else
   {
-    // see related note in _modifyUndesirableTokens
-    if (_streetTypes.isEmpty())
-    {
-      _streetTypes = FileUtils::readFileToList(ConfigOptions().getStreetTypesFile());
-    }
-
     // This list could be expanded.  See the note in the associated config file.
-    for (int i = 0; i < _streetTypes.size(); i++)
+    const QStringList streetTypes = ConfigOptions().getAddressStreetTypes();
+    for (int i = 0; i < streetTypes.size(); i++)
     {
-      const QString streetTypeEntry = _streetTypes.at(i);
-      const QStringList streetTypeEntryParts = streetTypeEntry.split("\t");
+      const QString streetTypeEntry = streetTypes.at(i);
+      const QStringList streetTypeEntryParts = streetTypeEntry.split("=");
       if (streetTypeEntryParts.size() != 2)
       {
+        // Currently we only support 1:1 street type to abbreviation pairings.
         throw HootException("Invalid street type entry: " + streetTypeEntry);
       }
       if (name.endsWith(streetTypeEntryParts.at(0)) || name.endsWith(streetTypeEntryParts.at(1)))

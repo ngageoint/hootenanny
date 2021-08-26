@@ -27,14 +27,7 @@
 
 #include "FileUtils.h"
 
-// Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-
 // Qt
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
 #include <QFileInfoList>
 #include <QHostAddress>
 #include <QRegularExpression>
@@ -197,7 +190,7 @@ bool FileUtils::dirContainsFileWithExtension(const QDir& dir, const QString& ext
   return false;
 }
 
-QStringList FileUtils::readFileToList(const QString& inputPath)
+QStringList FileUtils::readFileToList(const QString& inputPath, const bool toLowerCase)
 {
   LOG_VARD(inputPath);
   QStringList outputList;
@@ -213,7 +206,14 @@ QStringList FileUtils::readFileToList(const QString& inputPath)
       const QString line = QString::fromUtf8(inputFile.readLine().constData()).trimmed();
       if (!line.trimmed().isEmpty() && !line.startsWith("#"))
       {
-        outputList.append(line.toLower());
+        if (toLowerCase)
+        {
+          outputList.append(line.toLower());
+        }
+        else
+        {
+          outputList.append(line);
+        }
       }
     }
     inputFile.close();

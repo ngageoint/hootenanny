@@ -25,12 +25,13 @@
  * @copyright Copyright (C) 2015, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
+// tgs
 #include <tgs/RStarTree/HilbertCurve.h>
 
-// Standard Includes
+// Standard
 #include <iostream>
 
-// CPP Unit Includes
+// CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>

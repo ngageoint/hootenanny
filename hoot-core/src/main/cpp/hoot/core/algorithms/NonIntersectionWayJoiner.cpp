@@ -37,7 +37,7 @@
 #include <hoot/core/util/StringUtils.h>
 
 #include <unordered_set>
-#include <vector>
+
 
 using namespace std;
 

@@ -34,17 +34,11 @@
 
 // Qt
 #include <QMultiHash>
-#include <QSet>
-#include <QMap>
-
-// Standard
-#include <vector>
 
 namespace hoot
 {
 
 class OsmMap;
-class Way;
 
 /**
  * @brief The RemoveRoundabouts class is being developed to handle roundabouts

@@ -1,6 +1,3 @@
-##############
-# For code contributing to the hoot nodejs interface
-##############
 
 QT += sql \
     testlib \

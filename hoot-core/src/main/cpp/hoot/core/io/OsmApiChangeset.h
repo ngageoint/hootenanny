@@ -29,18 +29,18 @@
 #define OSM_API_CHANGESET_H
 
 //  Qt
-#include <QList>
-#include <QString>
+
+
 #include <QTextStream>
-#include <QVector>
+
 #include <QXmlStreamReader>
 
 //  Standard
 #include <array>
-#include <map>
+
 #include <mutex>
-#include <set>
-#include <vector>
+
+
 
 //  Hoot
 #include <hoot/core/elements/ElementId.h>

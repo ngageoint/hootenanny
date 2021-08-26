@@ -25,12 +25,6 @@
  * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // GEOS
 #include <geos/geom/LineString.h>
 
@@ -49,7 +43,6 @@
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 // Tgs

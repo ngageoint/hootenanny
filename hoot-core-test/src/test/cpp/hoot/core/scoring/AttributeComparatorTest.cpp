@@ -25,7 +25,6 @@
  * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
-
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/OsmMap.h>
@@ -36,15 +35,6 @@
 
 // Tgs
 #include <tgs/Statistics/Random.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
-// Qt
-#include <QDebug>
 
 // Standard
 #include <stdio.h>

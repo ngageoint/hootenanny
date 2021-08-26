@@ -27,13 +27,8 @@
 #ifndef MATCHDETAILS_H
 #define MATCHDETAILS_H
 
-
 // Qt
-#include <QString>
 #include <QVariant>
-
-// Standard
-#include <map>
 
 namespace hoot
 {

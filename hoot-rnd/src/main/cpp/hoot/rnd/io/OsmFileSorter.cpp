@@ -36,7 +36,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
-#include <QDir>
 #include <QThread>
 
 namespace hoot

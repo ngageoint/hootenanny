@@ -32,7 +32,6 @@
 
 // Qt
 #include <QMultiMap>
-#include <QSet>
 
 namespace hoot
 {
@@ -84,19 +83,15 @@ public:
    */
   QString getAddressTagValue(const Tags& tags, const QString& addressTagType) const;
 
-  QSet<QString> getAdditionalTagKeys() const { return _additionalTagKeys; }
-
 private:
 
   /*
    * Reads tag keys used to identify tags as addresses
    */
-  void _readAddressTagKeys(const QString& configFile) const;
+  void _readAddressTagKeys() const;
 
   QString _getAddressTag(const Tags& tags, const QString& addressTagType, bool key) const;
 
-  // extra tags to search for addresses in
-  QSet<QString> _additionalTagKeys;
   // maps address tag types to valid address tag keys
   static QMultiMap<QString, QString> _addressTypeToTagKeys;
 };

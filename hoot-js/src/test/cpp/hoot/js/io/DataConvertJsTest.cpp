@@ -36,9 +36,6 @@
 // Qt
 #include <QVariant>
 
-#include <iostream>
-#include <string>
-
 using namespace v8;
 
 namespace hoot

@@ -36,7 +36,6 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OverwriteTagMerger.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 
 using namespace geos::geom;

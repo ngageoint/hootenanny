@@ -35,8 +35,6 @@
 
 // Qt
 #include <QByteArray>
-#include <QFile>
-#include <QDir>
 
 using namespace v8;
 

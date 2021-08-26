@@ -36,11 +36,8 @@
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 
 // Qt
-#include <QFile>
-#include <QFileInfo>
 #include <QXmlStreamWriter>
 
 using namespace std;

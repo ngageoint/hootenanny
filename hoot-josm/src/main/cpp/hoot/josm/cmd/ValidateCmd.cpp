@@ -27,17 +27,18 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/info/ApiEntityDisplayInfo.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/josm/ops/JosmMapValidator.h>
+
+#include <hoot/josm/validation/MapValidator.h>
 
 namespace hoot
 {
 
+/*
+ * @todo think there's still a but here with certain combinations of --report-output, --output,
+ * --separate-output, and --recursive
+ */
 class ValidateCmd : public BaseCommand
 {
 public:
@@ -48,35 +49,30 @@ public:
 
   QString getName() const override { return "validate"; }
   QString getType() const override { return "josm"; }
-  QString getDescription() const override { return "Checks map data for validation errors"; }
+  QString getDescription() const override { return "Checks maps for validation errors"; }
 
   virtual int runSimple(QStringList& args) override
   {
     bool showAvailableValidatorsOnly = false;
-    if (args.contains("--available-validators"))
+    if (args.contains("--validators"))
     {
       showAvailableValidatorsOnly = true;
-      args.removeAt(args.indexOf("--available-validators"));
+      args.removeAt(args.indexOf("--validators"));
     }
-
-    bool separateOutput = false;
-    if (args.contains("--separate-output"))
-    {
-      separateOutput = true;
-      args.removeAt(args.indexOf("--separate-output"));
-    }
-
-    bool recursive = false;
-    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
-    LOG_VARD(recursive);
-    LOG_VARD(inputFilters);
 
     if (showAvailableValidatorsOnly)
     {
-      _printJosmValidators();
+      MapValidator::printValidators();
     }
     else
     {
+      bool separateOutput = false;
+      if (args.contains("--separate-output"))
+      {
+        separateOutput = true;
+        args.removeAt(args.indexOf("--separate-output"));
+      }
+
       QString output;
       if (args.contains("--output"))
       {
@@ -89,6 +85,28 @@ public:
       if (separateOutput && !output.isEmpty())
       {
         throw IllegalArgumentException("--output and --separate-output cannot both be specified.");
+      }
+
+      bool recursive = false;
+      const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+      LOG_VARD(recursive);
+      LOG_VARD(inputFilters);
+
+      if (recursive && output.isEmpty())
+      {
+        throw IllegalArgumentException("--output must be specified with --recursive is specified.");
+      }
+
+      MapValidator validator;
+
+      bool reportOutput = false;
+      if (args.contains("--report-output"))
+      {
+        reportOutput = true;
+        const int outputIndex = args.indexOf("--report-output");
+        validator.setReportFile(args.at(outputIndex + 1).trimmed());
+        args.removeAt(outputIndex + 1);
+        args.removeAt(outputIndex);
       }
 
       if (args.size() < 1)
@@ -109,91 +127,14 @@ public:
       }
       LOG_VARD(inputs);
 
-      if (!separateOutput)
+      const QString validationSummary = validator.validate(inputs, output);
+      if (!reportOutput)
       {
-        // combines all inputs, generates their validation summary, and optionally writes them all
-        // to the same output
-        std::cout << _validate(inputs, output)->getSummary() << std::endl;
-      }
-      else
-      {
-        // writes a separate output for each input
-        _validateSeparateOutput(inputs);
+        std::cout << validationSummary << std::endl;
       }
     }
 
     return 0;
-  }
-
-private:
-
-  std::shared_ptr<JosmMapValidator> _validate(OsmMapPtr& map)
-  {
-    std::shared_ptr<JosmMapValidator> validator = std::make_shared<JosmMapValidator>();
-    validator->setConfiguration(conf());
-    LOG_STATUS(validator->getInitStatusMessage());
-    validator->apply(map);
-    LOG_INFO(validator->getCompletedStatusMessage());
-    return validator;
-  }
-
-  std::shared_ptr<JosmMapValidator> _validate(const QStringList& inputs, const QString& output)
-  {
-    OsmMapPtr map = std::make_shared<OsmMap>();
-    if (inputs.size() == 1)
-    {
-      IoUtils::loadMap(map, inputs.at(0), true, Status::Unknown1);
-    }
-    else
-    {
-      // Avoid ID conflicts across multiple inputs.
-      IoUtils::loadMaps(map, inputs, false, Status::Unknown1);
-    }
-
-    std::shared_ptr<JosmMapValidator> validator = _validate(map);
-
-    if (!output.isEmpty())
-    {
-      MapProjector::projectToWgs84(map);
-      IoUtils::saveMap(map, output);
-    }
-
-    return validator;
-  }
-
-  void _validateSeparateOutput(const QStringList& inputs)
-  {
-    for (int i = 0; i < inputs.size(); i++)
-    {
-      const QString input = inputs.at(i);
-
-      OsmMapPtr map = std::make_shared<OsmMap>();
-      IoUtils::loadMap(map, input, true, Status::Unknown1);
-
-      /*std::shared_ptr<JosmMapValidator> validator =*/ _validate(map);
-
-      // Write the output to a similarly named path as the input with some text appended to the
-      // input name.
-      const QString output = IoUtils::getOutputUrlFromInput(input, "-validated");
-      MapProjector::projectToWgs84(map);
-      IoUtils::saveMap(map, output);
-    }
-  }
-
-  void _printJosmValidators()
-  {
-    const QMap<QString, QString> validators =
-      JosmMapValidator().getAvailableValidatorsWithDescription();
-    for (QMap<QString, QString>::const_iterator itr = validators.begin(); itr != validators.end();
-         ++itr)
-    {
-      const QString name = itr.key();
-      const QString description = itr.value();
-      const int indentAfterName = ApiEntityDisplayInfo::MAX_NAME_SIZE - name.size();
-      const int indentAfterDescription = ApiEntityDisplayInfo::MAX_TYPE_SIZE - description.size();
-      std::cout << name << QString(indentAfterName, ' ') << description <<
-                   QString(indentAfterDescription, ' ') << std::endl;
-    }
   }
 };
 

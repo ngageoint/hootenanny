@@ -14,7 +14,7 @@ line features using a machine learning based approach that extends [Generic Line
 * **[River Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/GenericLineConflation.asciidoc#river-conflation)** ([detail](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#river-conflation)) conflates linear waterway features using a machine learning based approach that extends [Generic Line Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
 * **[Road Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RoadConflation.asciidoc#road-conflation)** conflates
 linear road features with one of the following algorithms:
-  * The **[Unifying (aka 2nd Generation) Roads Algorithm](https://github.com/ngageoint/hootenanny/blob/develop/docs/algorithms/UnifyingConflation.asciidoc)**, which uses machine learning techniques based on manually matched training data.
+  * The **[Unifying (aka 2nd Generation) Roads Algorithm](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/UnifyingConflation.asciidoc)**, which uses machine learning techniques based on manually matched training data.
   * The **[Network Roads Algorithm](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/NetworkConflation.asciidoc)**, which uses a graph theory derived approach.
 
 ## General Algorithms

@@ -33,9 +33,6 @@
 
 namespace hoot
 {
-
-class Tags;
-
 class TagDifferencer
 {
 public:

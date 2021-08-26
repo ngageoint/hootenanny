@@ -29,17 +29,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Log.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
-// Qt
-#include <QDebug>
-#include <QFile>
 
 const double epsilon = 1e-6;
 

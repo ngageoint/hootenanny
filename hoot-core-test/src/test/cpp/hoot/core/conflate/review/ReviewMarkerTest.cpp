@@ -29,8 +29,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/elements/MapProjector.h>

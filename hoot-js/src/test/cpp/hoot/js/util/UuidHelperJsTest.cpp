@@ -27,6 +27,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/PluginContext.h>
@@ -36,9 +37,6 @@
 
 // Qt
 #include <QVariant>
-
-#include <iostream>
-#include <string>
 
 using namespace v8;
 

@@ -36,19 +36,11 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 // geos
 #include <geos/io/WKTReader.h>
 #include <geos/geom/Point.h>
-#include <geos/geom/Envelope.h>
 #include <geos/geom/Polygon.h>
 
 // TGS

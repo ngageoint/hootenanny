@@ -28,17 +28,7 @@
 #define HOOTEXCEPTIONJS_H
 
 // hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-
-// node.js
 #include <hoot/js/HootBaseJs.h>
-
-// Qt
-#include <QString>
-
-// Standard
-#include <memory>
 
 namespace hoot
 {

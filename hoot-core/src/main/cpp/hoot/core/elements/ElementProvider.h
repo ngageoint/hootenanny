@@ -27,9 +27,7 @@
 #ifndef __ELEMENT_PROVIDER_H__
 #define __ELEMENT_PROVIDER_H__
 
-// std
-#include <memory>
-
+// hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/Node.h>

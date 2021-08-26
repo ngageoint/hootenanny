@@ -34,7 +34,6 @@
 #include <hoot/core/visitors/UnionPolygonsVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/ops/MapCropper.h>
 
 using namespace geos::geom;

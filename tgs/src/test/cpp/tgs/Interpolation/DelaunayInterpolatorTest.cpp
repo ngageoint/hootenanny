@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit Includes
+// CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
@@ -34,12 +34,12 @@
 // Qt
 #include <QBuffer>
 
-// Standard Includes
+// Standard
 #include <iostream>
 #include <math.h>
 using namespace std;
 
-// TGS Includes
+// TGS
 #include <tgs/TgsException.h>
 #include <tgs/StreamUtils.h>
 #include <tgs/Interpolation/DelaunayInterpolator.h>
@@ -57,6 +57,7 @@ class DelaunayInterpolatorTest : public CppUnit::TestFixture
   CPPUNIT_TEST(serializationTest);
   CPPUNIT_TEST(simpleTest);
   CPPUNIT_TEST_SUITE_END();
+
 public:
 
   std::shared_ptr<DelaunayInterpolator> buildRandom()

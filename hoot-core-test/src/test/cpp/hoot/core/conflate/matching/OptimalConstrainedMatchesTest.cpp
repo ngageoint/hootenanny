@@ -34,16 +34,6 @@
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
 #include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
-#include <hoot/core/util/Log.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
-// Standard
-#include <iostream>
 
 // Tgs
 #include <tgs/StreamUtils.h>

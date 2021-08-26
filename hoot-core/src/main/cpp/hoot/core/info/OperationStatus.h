@@ -27,7 +27,7 @@
 #ifndef OPERATION_STATUS_H
 #define OPERATION_STATUS_H
 
-#include <QString>
+
 
 namespace hoot
 {

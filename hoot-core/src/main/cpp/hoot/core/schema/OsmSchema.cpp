@@ -25,8 +25,6 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-#include <hoot/core/HootConfig.h>
-
 // Boost
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
@@ -41,6 +39,7 @@
 #endif
 
 // Hoot
+#include <hoot/core/HootConfig.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
@@ -51,19 +50,13 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QDomDocument>
-#include <QHash>
-#include <QSet>
-#include <QDir>
 #include <QStringBuilder>
 
 // Standard
-#include <iostream>
 #include <fstream>
 
 // TGS

@@ -32,14 +32,10 @@
 #include <hoot/rnd/schema/ImplicitTagCustomRules.h>
 
 // Qt
-#include <QString>
 #include <QTemporaryFile>
-#include <QSet>
 
 namespace hoot
 {
-
-class Tags;
 
 /**
  * Derives an implicit tag rules database for elements, given a set of raw implicit tag rules
@@ -68,10 +64,10 @@ public:
   void setMinTagOccurrencesPerWord(const int minOccurrences)
   { _minTagOccurrencesPerWord = minOccurrences; }
   void setMinWordLength(const int length) { _minWordLength = length; }
-  void setUseSchemaTagValuesForWordsOnly(bool use) { _useSchemaTagValuesForWordsOnly = use; }
+  void setUseSchemaTagValuesForWordsOnly(bool use) { _useSchemaTagValuesForWordsOnly = use; } 
+  void setTagIgnoreList(const QStringList& list) { _customRules.setTagIgnoreList(list); }
+  void setWordIgnoreList(const QStringList& list) { _customRules.setWordIgnoreList(list); }
   void setCustomRuleFile(const QString& file) { _customRules.setCustomRuleFile(file); }
-  void setTagIgnoreFile(const QString& file) { _customRules.setTagIgnoreFile(file); }
-  void setWordIgnoreFile(const QString& file) { _customRules.setWordIgnoreFile(file); }
 
 private:
 

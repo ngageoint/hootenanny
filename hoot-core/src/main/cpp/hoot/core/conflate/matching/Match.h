@@ -32,9 +32,6 @@
 #include <hoot/core/conflate/matching/MatchMembers.h>
 #include <hoot/core/info/ApiEntityInfo.h>
 
-// Standard
-#include <set>
-
 namespace hoot
 {
 

@@ -32,17 +32,7 @@
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
 
 // Qt
-#include <QFile>
-#include <QHash>
-#include <QString>
 #include <QXmlDefaultHandler>
-
-// Standard
-#include <deque>
-
-// geos
-#include <geos/geom/Envelope.h>
-
 class QXmlStreamWriter;
 
 namespace hoot

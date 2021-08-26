@@ -27,17 +27,10 @@
 #ifndef MULTIARYUTILITIES_H
 #define MULTIARYUTILITIES_H
 
-// geos
-#include <geos/geom/Envelope.h>
-
 #ifndef SWIG
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #endif
-
-// Standard
-#include <string>
-#include <vector>
 
 namespace hoot
 {
@@ -53,7 +46,6 @@ class MultiarySimpleMatch
 public:
 
   MultiarySimpleMatch() = default;
-
   MultiarySimpleMatch(int nIndex, double s) : neighborIndex(nIndex), score(s) { }
 
   QString toString() const

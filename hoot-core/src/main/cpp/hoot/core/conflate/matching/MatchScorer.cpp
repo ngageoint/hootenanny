@@ -36,15 +36,14 @@
 #include <hoot/core/scoring/MatchComparator.h>
 #include <hoot/core/scoring/MatchScoringMapPreparer.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/CountManualMatchesVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
-#include <QFileInfo>
 
 namespace hoot
 {

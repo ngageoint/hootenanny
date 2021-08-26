@@ -33,8 +33,8 @@
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/network/NetworkMatch.h>
 #include <hoot/core/conflate/network/PartialNetworkMerger.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 
 // Standard
 #include <typeinfo>

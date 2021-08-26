@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h>
 #include <hoot/core/conflate/matching/Match.h>
-#include <hoot/core/util/Log.h>
 
 using namespace std;
 

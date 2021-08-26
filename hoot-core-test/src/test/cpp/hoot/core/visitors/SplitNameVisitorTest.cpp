@@ -29,7 +29,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/SplitNameVisitor.h>
 
 using namespace geos::geom;

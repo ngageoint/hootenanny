@@ -177,7 +177,7 @@ then
   
     HOOT_ATTRIBUTE_TRANSFER_OPTS=" -C AttributeConflation.conf -C ${ALGORITHM_CONF}"
     # conflate ops we don't need
-    HOOT_ATTRIBUTE_TRANSFER_OPTS+=" -D conflate.post.ops-=hoot::RoadCrossingPolyReviewMarker"
+    HOOT_ATTRIBUTE_TRANSFER_OPTS+=" -D conflate.post.ops-=hoot::RoadCrossingPolyMarker"
     HOOT_ATTRIBUTE_TRANSFER_OPTS+=" -D conflate.post.ops-=hoot::AddHilbertReviewSortOrderOp"
     HOOT_ATTRIBUTE_TRANSFER_OPTS+=$AOI_OPTS
     
@@ -238,7 +238,7 @@ fi
 HOOT_CONFLATE_OPTS="-C ${ALGORITHM_CONF} -C ${CONFLATION_CONF}"
 
 # conflate ops we don't need
-HOOT_CONFLATE_OPTS+=" -D conflate.post.ops-=hoot::RoadCrossingPolyReviewMarker"
+HOOT_CONFLATE_OPTS+=" -D conflate.post.ops-=hoot::RoadCrossingPolyMarker"
 HOOT_CONFLATE_OPTS+=" -D conflate.post.ops-=hoot::AddHilbertReviewSortOrderOp"
 
 HOOT_CONFLATE_OPTS+=" -D writer.sort.tags.imagery.source=true"

@@ -31,12 +31,6 @@
 #include <hoot/core/conflate/network/NetworkMatcher.h>
 #include <hoot/core/io/ElementInputStream.h>
 
-// Qt
-#include <QString>
-
-// Standard
-#include <memory>
-
 // GEOS
 #include <geos/geom/Geometry.h>
 

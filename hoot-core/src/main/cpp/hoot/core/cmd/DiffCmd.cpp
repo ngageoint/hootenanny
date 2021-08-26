@@ -33,15 +33,13 @@
 #include <hoot/core/io/OsmApiChangeset.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/scoring/MapComparator.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
-#include <QDir>
-#include <QFileInfo>
 #include <QElapsedTimer>
 
 using namespace std;

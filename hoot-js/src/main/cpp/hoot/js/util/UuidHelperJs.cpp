@@ -32,9 +32,6 @@
 #include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 
-// QT
-#include <QStringList>
-
 using namespace v8;
 
 namespace hoot

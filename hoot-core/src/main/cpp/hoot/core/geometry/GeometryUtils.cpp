@@ -42,13 +42,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Float.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/StringUtils.h>
-
-// Qt
-#include <QString>
-#include <QStringList>
 
 // Standard
 #include <stdint.h>

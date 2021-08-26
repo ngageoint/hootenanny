@@ -34,8 +34,6 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/schema/ExactTagDifferencer.h>
@@ -43,9 +41,6 @@
 
 // Qt
 #include <QTime>
-
-// Standard
-#include <iostream>
 
 // TGS
 #include <tgs/StreamUtils.h>
@@ -166,8 +161,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
             {
               // Since this class operates on elements with generic types, an additional check must
               // be performed here during conflation to enure we don't modify any element not
-              // associated with an active conflate matcher in the current conflation
-              // configuration.
+              // associated with an active conflate matcher in the current conflation configuration.
               if (_conflateInfoCache &&
                   (!_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n1, className()) ||
                    !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n2, className())))

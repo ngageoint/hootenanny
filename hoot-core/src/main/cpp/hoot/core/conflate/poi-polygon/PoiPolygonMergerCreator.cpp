@@ -33,8 +33,8 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Standard

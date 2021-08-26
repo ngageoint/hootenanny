@@ -28,12 +28,6 @@
 #ifndef NODETOWAYMAP_H
 #define NODETOWAYMAP_H
 
-// Standard
-#include <map>
-#include <memory>
-#include <set>
-#include <string>
-
 namespace hoot
 {
 

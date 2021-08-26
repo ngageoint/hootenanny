@@ -25,19 +25,12 @@
  * @copyright Copyright (C) 2013, 2015, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // GEOS
 #include <geos/geom/LineString.h>
 
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/Soundex.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -73,7 +66,6 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SoundexTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SoundexTest, "quick");
 
 }

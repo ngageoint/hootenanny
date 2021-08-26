@@ -35,7 +35,7 @@
 namespace hoot
 {
 
-/*
+/**
  * MetadataExport exports a specific set of tags collected from all elements into one or more
  * 'dataset' ways.
  *

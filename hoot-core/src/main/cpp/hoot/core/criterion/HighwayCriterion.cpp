@@ -31,7 +31,6 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/HighwayWayNodeCriterion.h>
 
 namespace hoot

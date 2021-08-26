@@ -27,8 +27,8 @@
 #ifndef BBOX_H
 #define BBOX_H
 
-#include <QString>
-#include <geos/geom/Envelope.h>
+
+
 
 namespace hoot
 {

@@ -33,11 +33,6 @@
 // hoot
 #include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-
-// Qt
-#include <QStringList>
 
 using namespace std;
 

@@ -27,24 +27,13 @@
 #ifndef __MAP_PROJECTOR_H__
 #define __MAP_PROJECTOR_H__
 
-// GDAL
-#include <ogr_core.h>
-
 // GEOS
-#include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/Geometry.h>
 
 // Hoot
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/util/Units.h>
-
-// Qt
-#include <QString>
-
-// Standard
-#include <memory>
-#include <vector>
 
 class OGRCoordinateTransformation;
 class OGRSpatialReference;

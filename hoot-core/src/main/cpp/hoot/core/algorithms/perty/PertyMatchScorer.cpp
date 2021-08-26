@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/algorithms/perty/PertyOp.h>
-#include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/elements/OsmMap.h>
@@ -41,16 +40,11 @@
 #include <hoot/core/scoring/MatchScoringMapPreparer.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/AddRef1Visitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/TagRenameKeyVisitor.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-
-// Qt
-#include <QFileInfo>
-#include <QDir>
 
 namespace hoot
 {

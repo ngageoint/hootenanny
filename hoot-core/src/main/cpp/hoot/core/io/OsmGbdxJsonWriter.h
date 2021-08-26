@@ -31,10 +31,6 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-// Qt
-#include <QDir>
-#include <QString>
-
 namespace hoot
 {
 
@@ -169,6 +165,6 @@ private:
   void _writeGeometry(ConstRelationPtr relation);
 };
 
-} // hoot
+}
 
 #endif // OSM_GBDX_JSON_WRITER

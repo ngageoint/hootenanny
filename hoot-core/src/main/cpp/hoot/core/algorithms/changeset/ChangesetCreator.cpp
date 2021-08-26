@@ -54,13 +54,6 @@
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
 
-//GEOS
-#include <geos/geom/Envelope.h>
-
-// Qt
-#include <QFileInfo>
-#include <QDir>
-
 namespace hoot
 {
 

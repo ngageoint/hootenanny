@@ -28,17 +28,17 @@
 #include "Log.h"
 
 // Hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QDateTime>
-#include <QDebug>
 
 // Standard
 #include <iomanip>
-#include <iostream>
+
 using namespace std;
 
 namespace hoot

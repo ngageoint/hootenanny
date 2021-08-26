@@ -27,7 +27,7 @@
 #ifndef API_ENTITY_INFO_H
 #define API_ENTITY_INFO_H
 
-#include <QString>
+
 
 namespace hoot
 {

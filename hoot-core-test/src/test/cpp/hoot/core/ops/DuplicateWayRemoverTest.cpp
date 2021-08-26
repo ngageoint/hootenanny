@@ -36,14 +36,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/DuplicateWayRemover.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 // Standard
 #include <sstream>

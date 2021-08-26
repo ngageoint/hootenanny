@@ -30,6 +30,7 @@
 // Standard
 #include <math.h>
 
+// hoot
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 
 namespace hoot

@@ -25,12 +25,6 @@
  * @copyright Copyright (C) 2013, 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // GEOS
 #include <geos/geom/LineString.h>
 
@@ -39,7 +33,6 @@
 #include <hoot/core/algorithms/string/ExactStringDistance.h>
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/algorithms/string/MeanWordSetDistance.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 
 namespace hoot

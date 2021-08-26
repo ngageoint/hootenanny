@@ -27,7 +27,6 @@
 #include "AddressParser.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/address/LibPostalInit.h>
 #include <hoot/core/algorithms/string/ExactStringDistance.h>
@@ -489,23 +488,7 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
 
   // let's always look in the name field; arguably, we could look in all of them instead of just
   // one...
-  QSet<QString> additionalTagKeys = _addressNormalizer.getAddressTagKeys()->getAdditionalTagKeys();
-  LOG_VART(additionalTagKeys);
-
-  for (QSet<QString>::const_iterator tagItr = additionalTagKeys.begin();
-       tagItr != additionalTagKeys.end(); ++tagItr)
-  {
-    const QString tagKey = *tagItr;
-    QString tagVal = tags.get(tagKey).trimmed();
-    if (!tagVal.isEmpty() && _isValidAddressStr(tagVal, houseNum, street))
-    {
-      parsedAddress = tagVal;
-      LOG_TRACE("Found address: " << parsedAddress << " from additional tag key: " << tagKey << ".");
-      break;
-    }
-  }
-
-  additionalTagKeys = QSet<QString>::fromList(Tags::getNameKeys());
+  const QSet<QString> additionalTagKeys = QSet<QString>::fromList(Tags::getNameKeys());
   LOG_VART(additionalTagKeys);
   for (QSet<QString>::const_iterator tagItr = additionalTagKeys.begin();
        tagItr != additionalTagKeys.end(); ++tagItr)

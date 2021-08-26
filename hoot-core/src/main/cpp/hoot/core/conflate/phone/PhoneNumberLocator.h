@@ -32,9 +32,6 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Configurable.h>
 
-// Qt
-#include <QString>
-
 // libphonenumber
 #include <phonenumbers/geocoding/phonenumber_offline_geocoder.h>
 

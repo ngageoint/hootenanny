@@ -34,14 +34,7 @@
 #include <hoot/core/ops/SearchRadiusCalculator.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 // Qt
 #include <QBuffer>

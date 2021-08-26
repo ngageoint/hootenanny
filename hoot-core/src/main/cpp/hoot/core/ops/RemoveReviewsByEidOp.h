@@ -32,9 +32,6 @@
 #include <hoot/core/elements/ConstElementConsumer.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
 
-// Standard
-#include <set>
-
 namespace hoot
 {
 

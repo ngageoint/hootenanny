@@ -27,10 +27,10 @@
 
 #include "OsmPgCsvWriter.h"
 
+// hoot
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/DateTimeUtils.h>
-#include <QFileInfo>
 
 using namespace std;
 

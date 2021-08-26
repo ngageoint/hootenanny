@@ -26,10 +26,6 @@
  */
 #include "PertyTest.h"
 
-// hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-
 // Qt
 #include <QTextStream>
 

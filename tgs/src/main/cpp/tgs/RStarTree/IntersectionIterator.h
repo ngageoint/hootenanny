@@ -28,9 +28,10 @@
 #ifndef __TGC__INTERSECTION_ITERATOR_H__
 #define __TGC__INTERSECTION_ITERATOR_H__
 
-// Standard Includes
+// Standard
 #include <list>
 
+// tgs
 #include <tgs/RStarTree/Box.h>
 #include <tgs/RStarTree/Iterator.h>
 

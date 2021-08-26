@@ -26,7 +26,6 @@
  */
 
 // geos
-#include <geos/geom/Coordinate.h>
 #include <geos/geom/LineString.h>
 
 // Hoot

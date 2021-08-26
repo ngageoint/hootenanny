@@ -29,11 +29,11 @@
 
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 
 // libphonenumber
 #include <phonenumbers/phonenumberutil.h>
 
+// icu
 #include <unicode/locid.h>
 
 using namespace i18n::phonenumbers;

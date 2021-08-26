@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/conflate/matching/Match.h>
-#include <hoot/core/util/Log.h>
 
 using namespace std;
 

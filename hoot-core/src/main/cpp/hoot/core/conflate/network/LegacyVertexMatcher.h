@@ -32,9 +32,6 @@
 #include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
 
-// Qt
-#include <QList>
-
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
 #include <tgs/RStarTree/IntersectionIterator.h>

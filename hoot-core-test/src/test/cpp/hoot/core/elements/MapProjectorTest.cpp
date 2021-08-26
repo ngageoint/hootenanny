@@ -30,12 +30,6 @@
 #include <boost/random/uniform_real.hpp>
 #include <boost/random/variate_generator.hpp>
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/WayHeading.h>
@@ -43,7 +37,6 @@
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 
 // Tbs
 #include <tbs/stats/SampleStats.h>

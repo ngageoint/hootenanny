@@ -42,16 +42,10 @@
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-
-// Qt
-#include <QFileInfo>
-#include <QHash>
-#include <QMap>
 
 using namespace geos::geom;
 

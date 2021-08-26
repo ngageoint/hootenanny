@@ -31,7 +31,7 @@
 #include <hoot/core/util/Factory.h>
 
 #include <unordered_set>
-#include <vector>
+
 
 using namespace std;
 

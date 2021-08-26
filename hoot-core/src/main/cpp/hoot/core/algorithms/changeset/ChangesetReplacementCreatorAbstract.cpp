@@ -28,7 +28,6 @@
 
 // Hoot
 #include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
-
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacementElementIdSynchronizer.h>
 

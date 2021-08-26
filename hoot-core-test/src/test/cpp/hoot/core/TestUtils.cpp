@@ -59,10 +59,7 @@
 #include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/scoring/MapComparator.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -78,10 +75,6 @@
 
 //  tgs
 #include <tgs/Statistics/Random.h>
-
-// Qt
-#include <QDir>
-#include <QFile>
 
 using namespace geos::geom;
 using namespace std;

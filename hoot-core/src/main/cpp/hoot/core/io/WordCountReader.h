@@ -29,7 +29,6 @@
 #define WORDCOUNTREADER_H
 
 // Qt
-#include <QString>
 #include <QtSql/QSqlDatabase>
 #include <QSqlQuery>
 

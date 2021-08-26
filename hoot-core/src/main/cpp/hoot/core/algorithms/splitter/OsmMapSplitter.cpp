@@ -30,11 +30,12 @@
 //  Hoot
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 
 //  Qt
 #include <QElapsedTimer>
-#include <QFileInfo>
+
 
 using geos::geom::Envelope;
 using std::vector;

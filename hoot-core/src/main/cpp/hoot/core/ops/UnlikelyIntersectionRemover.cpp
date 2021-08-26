@@ -36,10 +36,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
-
-// Standard
-#include <iostream>
 
 // TGS
 #include <tgs/StreamUtils.h>

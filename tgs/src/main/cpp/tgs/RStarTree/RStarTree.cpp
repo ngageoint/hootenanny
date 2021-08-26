@@ -27,13 +27,14 @@
 
 #include "RStarTree.h"
 
-// Standard Includes
+// Standard
 #include <cassert>
 #include <cfloat>
 #include <cmath>
 #include <exception>
 #include <iostream>
 
+// tgs
 #include <tgs/StreamUtils.h>
 #include <tgs/TgsException.h>
 #include <tgs/RStarTree/PageStore.h>

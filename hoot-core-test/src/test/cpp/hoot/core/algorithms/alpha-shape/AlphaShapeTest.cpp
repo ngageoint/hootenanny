@@ -25,18 +25,11 @@
  * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/alpha-shape/AlphaShape.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/Log.h>
 
 // Standard
 #include <fstream>

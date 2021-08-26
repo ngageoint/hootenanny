@@ -28,11 +28,7 @@
 
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/HootException.h>
-
-// Std
-#include <string.h>
+#include <hoot/josm/jni/JniUtils.h>
 
 namespace hoot
 {
@@ -46,16 +42,38 @@ _env(nullptr)
 
 JavaEnvironment::~JavaEnvironment()
 {
+  if (_env != nullptr)
+  {
+    // This isn't absolutely necessary, as there may be nothing left to collect or the JVM will do
+    // it at shutdown anyway. But maybe it will help us clean up and prevent a hangup.
+    LOG_DEBUG("Calling garbage collector...");
+    jclass systemClass = _env->FindClass("java/lang/System");
+    jmethodID systemGCMethod = _env->GetStaticMethodID(systemClass, "gc", "()V");
+    _env->CallStaticVoidMethod(systemClass, systemGCMethod);
+    if (_env->ExceptionCheck())
+    {
+      _env->ExceptionDescribe();
+      _env->ExceptionClear();
+    }
+    _env->DeleteLocalRef(systemClass);
+  }
+
   if (_vm != nullptr)
   {
     jint status;
-    LOG_TRACE("Detaching current thread...");
+
+    LOG_DEBUG("Detaching current thread...");
     status = _vm->DetachCurrentThread();
     if (status != JNI_OK)
     {
-      LOG_ERROR("Unable to detach JVM from current thread. Error code: " << QString::number(status));
+      LOG_ERROR(
+        "Unable to detach JVM from current thread. Error code: " << QString::number(status));
     }
-    LOG_TRACE("Destroying Java env...");
+
+    // If this call hangs, its very likely there is a thread other than the one that launched this
+    // JVM that is still running due to holding onto a reference, etc. Use kill -3 on the hoot or
+    // HootTest process ID to determine what in JOSM is holding onto the memory.
+    LOG_DEBUG("Destroying Java env...");
     status = _vm->DestroyJavaVM();
     if (status != JNI_OK)
     {
@@ -82,6 +100,16 @@ void JavaEnvironment::_initVm()
   JavaVMOption options[numOptions];
 
   const QString classPathStr = "-Djava.class.path=" + ConfigOptions().getJniClassPath().join(":");
+  QString classPathStrTemp = classPathStr;
+  const QStringList jars = classPathStrTemp.remove("-Djava.class.path=").split(":");
+  for (int i = 0; i < jars.size(); i++)
+  {
+    QFile jarFile(jars.at(i));
+    if (!jarFile.exists())
+    {
+      throw IllegalArgumentException("JAR file does not exist: " + jars.at(i));
+    }
+  }
   options[0].optionString = strdup(classPathStr.toStdString().c_str());
   LOG_VART(options[0].optionString);
 

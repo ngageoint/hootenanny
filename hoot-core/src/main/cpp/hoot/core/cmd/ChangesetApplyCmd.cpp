@@ -30,13 +30,12 @@
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
 #include <hoot/core/io/OsmApiWriter.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
-#include <QFile>
-#include <QFileInfo>
 #include <QElapsedTimer>
 
 using namespace std;

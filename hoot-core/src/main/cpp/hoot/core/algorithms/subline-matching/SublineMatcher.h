@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/info/ApiEntityInfo.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {

@@ -29,6 +29,7 @@
 #include "DualHighwayMarker.h"
 
 // Hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>

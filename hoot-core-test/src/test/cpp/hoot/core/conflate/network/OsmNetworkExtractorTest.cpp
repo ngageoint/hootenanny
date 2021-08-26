@@ -30,7 +30,6 @@
 #include <hoot/core/conflate/network/OsmNetworkExtractor.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

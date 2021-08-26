@@ -30,10 +30,6 @@
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/util/Log.h>
-
-// Qt
-#include <QString>
 
 // Standard
 #include <functional>

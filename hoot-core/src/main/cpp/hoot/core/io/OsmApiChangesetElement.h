@@ -32,12 +32,12 @@
 #include <hoot/core/elements/ElementType.h>
 
 //  Qt
-#include <QList>
-#include <QMap>
+
+
 #include <QPair>
-#include <QString>
+
 #include <QTextStream>
-#include <QVector>
+
 #include <QXmlStreamReader>
 
 //  Standard

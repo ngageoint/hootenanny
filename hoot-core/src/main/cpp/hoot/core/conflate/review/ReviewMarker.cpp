@@ -28,7 +28,7 @@
 
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>

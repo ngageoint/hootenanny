@@ -31,6 +31,7 @@
 // hoot
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/util/Factory.h>
+
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/elements/ElementIdJs.h>

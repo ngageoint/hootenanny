@@ -28,14 +28,13 @@
 #include "ElementIdSynchronizer.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementHashVisitor.h>
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 

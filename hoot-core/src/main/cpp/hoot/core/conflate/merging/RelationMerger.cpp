@@ -33,6 +33,7 @@
 #include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 
 namespace hoot
@@ -44,8 +45,7 @@ _deleteRelation2(true)
 {
 }
 
-void RelationMerger::merge(
-  const ElementId& elementId1, const ElementId& elementId2)
+void RelationMerger::merge(const ElementId& elementId1, const ElementId& elementId2)
 {
   if (elementId1 == elementId2)
   {

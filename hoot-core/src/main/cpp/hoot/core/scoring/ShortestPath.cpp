@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/scoring/DirectedGraph.h>
-#include <hoot/core/util/Log.h>
 
 // Standard
 #include <cassert>

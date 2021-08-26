@@ -28,13 +28,11 @@
 #ifndef DUALHIGHWAYSPLITTER_H
 #define DUALHIGHWAYSPLITTER_H
 
-// GEOS
-#include <geos/geom/Coordinate.h>
-
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
+// Standard
 #include <unordered_set>
 
 namespace hoot

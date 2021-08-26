@@ -30,9 +30,6 @@
 // hoot
 #include <hoot/js/io/StreamUtilsJs.h>
 
-// Qt
-#include <QString>
-
 // v8
 #include <hoot/js/HootJsStable.h>
 

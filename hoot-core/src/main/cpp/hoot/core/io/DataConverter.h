@@ -34,7 +34,6 @@
 #include <hoot/core/util/Progress.h>
 
 // Qt
-#include <QStringList>
 #include <QQueue>
 
 namespace hoot

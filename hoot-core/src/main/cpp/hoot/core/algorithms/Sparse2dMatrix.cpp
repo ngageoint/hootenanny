@@ -26,7 +26,7 @@
  */
 #include "Sparse2dMatrix.h"
 
-#include <QStringList>
+
 
 namespace hoot
 {

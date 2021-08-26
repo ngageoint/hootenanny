@@ -30,6 +30,7 @@
 #include <hoot/core/scoring/GraphComparator.h>
 #include <hoot/core/scoring/RasterComparator.h>
 #include <hoot/core/scoring/AttributeComparator.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {

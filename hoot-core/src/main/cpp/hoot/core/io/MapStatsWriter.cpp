@@ -37,7 +37,6 @@
 #include <hoot/core/util/Settings.h>
 
 //Qt
-#include <QFile>
 #include <QTextStream>
 #include <QProcess>
 

@@ -39,9 +39,6 @@
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
-//Qt
-#include <QVector>
-
 using namespace cv;
 using namespace geos::geom;
 

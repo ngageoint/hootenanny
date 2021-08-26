@@ -30,9 +30,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 
-// Qt
-#include <QSet>
-
 namespace hoot
 {
 
@@ -70,7 +67,7 @@ public:
       throw IllegalArgumentException("No test log specified.");
     }
 
-    const QStringList testLines = FileUtils::readFileToList(testLog);
+    const QStringList testLines = FileUtils::readFileToList(testLog, true);
     LOG_VARD(testLines);
     QSet<QString> launchedJobs;
     QSet<QString> completedJobs;

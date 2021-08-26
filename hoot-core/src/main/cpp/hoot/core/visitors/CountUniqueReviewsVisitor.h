@@ -35,8 +35,6 @@
 namespace hoot
 {
 
-class OsmMap;
-
 /**
  * Counts the number of unique feature reviews in a map
  */

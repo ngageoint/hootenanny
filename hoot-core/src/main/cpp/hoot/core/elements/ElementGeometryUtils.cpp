@@ -28,8 +28,6 @@
 #include "ElementGeometryUtils.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/criterion/PolygonCriterion.h>

@@ -28,9 +28,6 @@
 #ifndef FORMATSDISPLAYER_H
 #define FORMATSDISPLAYER_H
 
-// Qt
-#include <QString>
-
 namespace hoot
 {
 

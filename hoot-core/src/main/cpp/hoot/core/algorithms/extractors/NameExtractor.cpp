@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
-#include <hoot/core/util/Log.h>
 
 using namespace std;
 

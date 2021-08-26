@@ -37,15 +37,13 @@
 // hoot
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/elements/OsmMap.h>
+// It would be nice if we could get rid of this ConfigOptions include since this class is included
+// in every test class.
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
-
-// Qt
-#include <QString>
 
 // Standard
-#include <string>
 #include <sstream>
 
 inline QString toQString(const QString& s)
@@ -234,7 +232,6 @@ public:
   {
     TestUtils::getInstance().registerReset(this);
   }
-
   virtual ~AutoRegisterResetInstance() = default;
 
   virtual void reset()
@@ -245,6 +242,38 @@ public:
 
 class HootTestFixture : public CppUnit::TestFixture
 {
+public:
+
+  /**
+   * @brief setUp Overload of the CppUnit::TextFixture::setUp() to reset Hootenanny environment
+   */
+  virtual void setUp()
+  {
+    if (_reset == ResetAll)
+    {
+      // resetEnvironment reloads Testing.conf, so we don't need to do it here.
+      TestUtils::resetEnvironment();
+      MatchFactory::getInstance().reset();
+    }
+    else if (_reset == ResetAllNoMatchFactory)
+    {
+      TestUtils::resetEnvironment();
+    }
+    else
+    {
+      if (_reset == ResetBasic)
+      {
+        TestUtils::resetBasic();
+      }
+
+      // We require that all tests use Testing.conf as a starting point and any conf values
+      // specified by it may be overridden when necessary.
+      conf().loadJson(ConfPath::search("Testing.conf"));
+    }
+  }
+
+  static const QString UNUSED_PATH;
+
 protected:
 
   /** Each Reset* builds on the prior, Configs also resets Basic, Environment rests Basic and Configs, etc. */
@@ -260,8 +289,8 @@ protected:
   };
 
   /**
-   *  @brief Constructor to set the paths to begin with $HOOT_HOME if used, default reset to none,
-   *  and create the output path if needed
+   * @brief Constructor to set the paths to begin with $HOOT_HOME if used, default reset to none,
+   * and create the output path if needed
    */
   HootTestFixture(const QString& inputPath = UNUSED_PATH, const QString& outputPath = UNUSED_PATH);
   virtual ~HootTestFixture() = default;

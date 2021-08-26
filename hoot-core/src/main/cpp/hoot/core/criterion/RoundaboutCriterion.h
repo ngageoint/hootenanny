@@ -33,8 +33,6 @@
 namespace hoot
 {
 
-class Element;
-
 /**
  * Identifies road roundabout junctions
  */

@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- *
+ * @brief The HasNameCriterion class determines whether an element has a name tag.
  */
 class HasNameCriterion : public ElementCriterion
 {
@@ -47,7 +47,7 @@ public:
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<HasNameCriterion>(); }
 
-  QString getDescription() const override { return ""; }
+  QString getDescription() const override { return "Identifies features that contain any name"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }

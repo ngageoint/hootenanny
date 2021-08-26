@@ -37,11 +37,6 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/CollectionUtils.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-
-// GEOS
-#include <geos/geom/Coordinate.h>
 
 // Std
 #include <float.h>

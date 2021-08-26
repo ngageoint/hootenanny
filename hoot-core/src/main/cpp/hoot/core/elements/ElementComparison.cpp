@@ -27,9 +27,6 @@
 
 #include "ElementComparison.h"
 
-// Hoot
-
-
 namespace hoot
 {
 

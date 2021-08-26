@@ -32,18 +32,12 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/elements/MapProjector.h>
 using namespace hoot::pb;
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
+// zip
 #include <zlib.h>
 
 using namespace std;

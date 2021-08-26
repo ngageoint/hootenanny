@@ -34,7 +34,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmGeoJsonWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/util/Log.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>

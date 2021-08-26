@@ -30,9 +30,6 @@
 // hoot
 #include <hoot/core/conflate/matching/Match.h>
 
-// Standard
-#include <set>
-
 namespace hoot
 {
 

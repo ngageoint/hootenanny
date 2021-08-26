@@ -27,9 +27,6 @@
 #ifndef SINGLESTAT_H
 #define SINGLESTAT_H
 
-// Qt
-#include <QString>
-
 namespace hoot
 {
 

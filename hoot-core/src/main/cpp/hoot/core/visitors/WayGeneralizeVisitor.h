@@ -37,7 +37,6 @@
 namespace hoot
 {
 
-class Way;
 class RdpWayGeneralizer;
 
 /**

@@ -27,14 +27,8 @@
 #ifndef OSMMAPREADERFACTORY_H
 #define OSMMAPREADERFACTORY_H
 
-// Qt
-#include <QString>
-
 // hoot
 #include <hoot/core/elements/Status.h>
-
-// Standard
-#include <memory>
 
 namespace hoot
 {

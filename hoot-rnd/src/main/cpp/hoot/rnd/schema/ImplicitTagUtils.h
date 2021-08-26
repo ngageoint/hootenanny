@@ -30,9 +30,6 @@
 // Hoot
 #include <hoot/core/language/ToEnglishTranslator.h>
 
-// Qt
-#include <QStringList>
-
 namespace hoot
 {
 
@@ -72,9 +69,6 @@ public:
   static bool sortCommandExists();
 
 private:
-
-  static QStringList _nameCleaningTokens;
-  static QStringList _streetTypes;
 
   static void _modifyUndesirableTokens(QString& name);
   static void _filterOutStreets(QString& name);

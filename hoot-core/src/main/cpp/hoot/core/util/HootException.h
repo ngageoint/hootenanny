@@ -30,6 +30,7 @@
 
 // Qt
 #include <QString>
+#include <QByteArray>
 #include <QVector>
 
 // Standard

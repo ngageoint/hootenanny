@@ -27,10 +27,8 @@
 #include "AddressTagKeys.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/FileUtils.h>
 
 namespace hoot
 {
@@ -46,19 +44,15 @@ const QString AddressTagKeys::HOUSE_NAME_TAG_NAME = "addr:housename";
 
 AddressTagKeys::AddressTagKeys()
 {
-  ConfigOptions config = ConfigOptions(conf());
-  // only read the config file in once
   if (_addressTypeToTagKeys.isEmpty())
   {
-    _readAddressTagKeys(config.getAddressTagKeysFile());
+    _readAddressTagKeys();
   }
-  _additionalTagKeys = config.getAddressAdditionalTagKeys().toSet();
-  LOG_VART(_additionalTagKeys);
 }
 
-void AddressTagKeys::_readAddressTagKeys(const QString& configFile) const
+void AddressTagKeys::_readAddressTagKeys() const
 {
-  const QStringList addressTagKeyEntries = FileUtils::readFileToList(configFile);
+  const QStringList addressTagKeyEntries = ConfigOptions().getAddressTagKeys();
   for (int i = 0; i < addressTagKeyEntries.size(); i++)
   {
     const QString addressTagKeyEntry = addressTagKeyEntries.at(i);
@@ -91,18 +85,6 @@ QSet<QString> AddressTagKeys::getAddressTagKeys(const Element& element) const
   for (int i = 0; i < addressTagTypeKeys.size(); i++)
   {
     const QString addressTypeTagKey = addressTagTypeKeys.at(i);
-    LOG_VART(addressTypeTagKey);
-    const QString addressTagKey = getAddressTagKey(element.getTags(), addressTypeTagKey);
-    if (!addressTagKey.isEmpty())
-    {
-      LOG_TRACE("Found: " << addressTagKey);
-      foundAddressTagKeys.insert(addressTagKey);
-    }
-  }
-  for (QSet<QString>::const_iterator additionalTagKeyItr = _additionalTagKeys.begin();
-       additionalTagKeyItr != _additionalTagKeys.end(); ++additionalTagKeyItr)
-  {
-    const QString addressTypeTagKey = *additionalTagKeyItr;
     LOG_VART(addressTypeTagKey);
     const QString addressTagKey = getAddressTagKey(element.getTags(), addressTypeTagKey);
     if (!addressTagKey.isEmpty())

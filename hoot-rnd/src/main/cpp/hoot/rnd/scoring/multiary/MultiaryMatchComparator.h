@@ -30,10 +30,6 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 
-// Qt
-#include <QMap>
-#include <QSet>
-
 namespace hoot
 {
 
@@ -65,7 +61,6 @@ public:
   using IdToEid = QMap<QString, ElementId>;
 
   MultiaryMatchComparator();
-
   virtual ~MultiaryMatchComparator() = default;
 
   /**

@@ -26,7 +26,7 @@
  */
 #include "OsmNetwork.h"
 
-#include <hoot/core/util/Log.h>
+
 
 namespace hoot
 {

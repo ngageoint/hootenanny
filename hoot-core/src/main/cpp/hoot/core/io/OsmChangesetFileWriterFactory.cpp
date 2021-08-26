@@ -31,7 +31,6 @@
 #include <hoot/core/io/OsmChangesetFileWriter.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetFileWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

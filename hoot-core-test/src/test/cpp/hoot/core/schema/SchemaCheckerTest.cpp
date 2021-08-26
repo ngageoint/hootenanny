@@ -30,13 +30,6 @@
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/SchemaChecker.h>
-#include <hoot/core/util/Log.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 const double epsilon = 1e-6;
 

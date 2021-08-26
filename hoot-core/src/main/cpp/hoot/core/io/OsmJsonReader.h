@@ -30,12 +30,9 @@
 
 // Qt
 #include <QUrl>
-#include <QFile>
-#include <QString>
 
 // Standard
 #include <mutex>
-#include <string>
 
 // Boost
 #include <boost/property_tree/ptree.hpp>
