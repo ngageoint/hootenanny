@@ -67,7 +67,6 @@ namespace Tgs
     try
     {
       double itrVal = 1.0 / (double)_forest.size();
-
       for (unsigned int i = 0; i < _forest.size(); i++)
       {
         std::string result;

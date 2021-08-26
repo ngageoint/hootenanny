@@ -682,7 +682,7 @@ public:
        secondary input file has one way relation member commented out (unfortunately this makes it
        unreadable in JOSM, so you'll have to temporarily uncomment it to view the input files
        there). Any relations in the output owning the commented out member should be tagged with
-       the 'hoot::missing_child' tag after the changeset is applied.
+       the 'hoot:missing_child' tag after the changeset is applied.
 
        The main one to check here is the large unlabeled green way that is inside the shop=mall way
        named "The Forum Shops at Caesars". That way may get unncessarily duplicated due to

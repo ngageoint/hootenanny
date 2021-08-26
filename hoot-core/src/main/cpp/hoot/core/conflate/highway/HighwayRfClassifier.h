@@ -41,7 +41,7 @@ class HighwayRfClassifier : public HighwayClassifier
 {
 public:
 
-  static QString className() { return "hoot::HighwayRfClassifier"; }
+  static QString className() { return "HighwayRfClassifier"; }
 
   HighwayRfClassifier() = default;
   ~HighwayRfClassifier() = default;

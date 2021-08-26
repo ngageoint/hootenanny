@@ -2,78 +2,63 @@
 [[RegenerateRandomForestModels]]
 == Regenerating Random Forest Models For Conflation
 
-Random Forest models (.rf) are used in Unifying Conflation for Road and Building conflation only.  If changes are made to code
-that affects the extracted features that help create those files, they must be regenerated and replaced in the hoot repository.  POI Generic
-Conflation does not actually use its generated Random Forest model (.rf) and uses the Attribute Relation File (.arff).  The POI Attribute
-Relation File need only be regnerated if you plan to rework the Generic Conflation rules in the generic script file (Poi.js).
+Random Forest models (.rf) are used in Unifying Conflation for Road and Building conflation only. 
+If changes are made to code that affects the extracted features that help create those files, they 
+must be regenerated and replaced in the hoot repository. POI Generic Conflation does not actually 
+use its generated Random Forest model (.rf) and uses its Attribute Relation File (.arff) only.  The 
+POI Attribute Relation File need only be regnerated if you plan to rework the Generic Conflation 
+rules in the generic script file (Poi.js).
 
-To regenerate the files:
-
-* Under `hoot-tests/unifying-tests.child/model-training.child`:
-** Regenerate the buildings model:
-*** Run the buildings model regression test:
-+
+To regenerate the building ARFF file:
 --------
+# Run the buildings model regression test:
+cd hoot-tests/unifying-tests.child/model-training.child
 cd jakarta-buildings.child && make test
---------
-*** Remove the existing buildings model:
-+
---------
+
+# Remove the existing buildings model:
 rm -f $HOOT_HOME/conf/models/BuildingModel*
---------
-*** Compress the arff file:
-+
---------
+
+# Compress the arff file:
 bzip2 jakarta-buildings.child/tmp/JakartaBuildingModel.arff
---------
-*** Copy the compressed model to the hoot dir:
-+
---------
+
+# Copy the compressed file to hoot:
 cp jakarta-buildings.child/tmp/JakartaBuildingModel.arff.bz2 $HOOT_HOME/conf/models/BuildingModel.arff.bz2
 --------
-** Regenerate the roads model:
-*** Run the roads model regression test:
-+
+
+To regenerate the roads ARFF file:
 --------
+# Run the roads model regression test:
 cd train-highway.child && make test
---------
-*** Remove the existing buildings model:
-+
---------
+
+# Remove the existing buildings model:
 rm -f $HOOT_HOME/conf/models/HighwayModel*
---------
-*** Compress the arff file:
-+
---------
+
+# Compress the arff file:
 bzip2 train-highway.child/tmp/HighwayModelAll.arff
---------
-*** Copy the compressed model to the hoot dir:
-+
---------
+
+# Copy the compressed file to hoot:
 cp train-highway.child/tmp/HighwayModelAll.arff.bz2 $HOOT_HOME/conf/models/HighwayModel.arff.bz2
 --------
-** Regenerate the POI model (optional):
-*** Build the POI model files (TODO: verify this is right and update the regression test Makefile to do it automatically):
-+
+
+To regenerate the POI ARFF file:
 --------
+# Build the POI model files (TODO: verify this is right and update the regression test Makefile to 
+# do it automatically):
 cd train-poi.child && make all'
 hoot build-model -C GenericPoi.conf tmp/Train1PoiRef1.osm tmp/Train1PoiRef2.osm tmp/Train2PoiRef1.osm tmp/Train2PoiRef2.osm tmp/Train3PoiRef1.osm tmp/Train3PoiRef2.osm tmp/Train4PoiRef1.osm tmp/Train4PoiRef1.osm tmp/Train5PoiRef1.osm tmp/Train5PoiRef2.osm tmp/Train6PoiRef1.osm tmp/Train6PoiRef2.osm tmp/Train7PoiRef1.osm tmp/Train7PoiRef2.osm tmp/PoiModel.rf
---------
-*** Remove the existing POI model:
-+
---------
+
+# Remove the existing POI model:
 rm -f $HOOT_HOME/conf/models/PoiModel*
---------
-*** Compress the arff file:
-+
---------
+
+# Compress the arff file:
 bzip2 train-highway.child/tmp/HighwayModelAll.arff
---------
-*** Copy the compressed model to the hoot dir:
-+
---------
+
+# Copy the compressed model to hoot:
 cp train-poi.child/tmp/?.arff.bz2 $HOOT_HOME/conf/models/PoiModel.arff.bz2
---------
-* Build hoot; the Random Forest files (.rf) and SHA1 hashes will be regenerated.
-* Check all the file changes into the hoot repository
+-------
+
+After regenerating all ARFF files, build hoot and it will auto-detect that the ARFF files have 
+changed using a SHA1 hash. New RF files and their SHA1 hashes will be automatically regenerated. 
+Check the new RF and ARFF files into the hoot repository.
+
 

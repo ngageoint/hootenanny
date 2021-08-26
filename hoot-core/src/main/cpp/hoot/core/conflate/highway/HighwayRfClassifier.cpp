@@ -151,7 +151,7 @@ map<QString, double> HighwayRfClassifier::getFeatures(
     LOG_VART(match.toString());
     throw NeedsReviewException(
       "Internal Error: Found a situation where the match after copy is invalid. Marking as needs "
-      "review.  Expected a matching subline, but got an empty match. Please report this to "
+      "review. Expected a matching subline, but got an empty match. Please report this to "
       " https://github.com/ngageoint/hootenanny.");
   }
   else
@@ -227,7 +227,7 @@ void HighwayRfClassifier::_init() const
         LOG_WARN(
           "An extractor used by the model is not being calculated. We will still try, but this " <<
           "will undoubtably result in poor quality matches. Missing extractors: " <<
-          missingExtractors);
+          missingExtractors << ", Available extractors: " << extractorNames);
       }
       else if (logWarnCount == Log::getWarnMessageLimit())
       {

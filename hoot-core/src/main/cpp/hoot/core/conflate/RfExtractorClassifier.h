@@ -43,7 +43,7 @@ class RfExtractorClassifier
 {
 public:
 
-  static QString className() { return "hoot::RfExtractorClassifier"; }
+  static QString className() { return "RfExtractorClassifier"; }
 
   RfExtractorClassifier() = default;
   virtual ~RfExtractorClassifier() = default;
