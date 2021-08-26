@@ -43,6 +43,8 @@ boost::any Factory::constructObject(const QString& name)
   QMutexLocker locker(&_mutex);
   if (_creators.find(nameToUse) == _creators.end())
   {
+    // This backward compatible check for the prepended namespace is in place to support legacy
+    // clients that may be adding it, as well as FeatureExtractors (for now?).
     if (nameToUse.contains(MetadataTags::HootNamespacePrefix()))
     {
       nameToUse = nameToUse.remove(MetadataTags::HootNamespacePrefix());

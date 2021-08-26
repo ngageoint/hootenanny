@@ -127,6 +127,7 @@ public:
     QMutexLocker locker(&_mutex);
     if (_creators.find(nameToUse) == _creators.end())
     {
+      // See note in Factory::constructObject.
       if (nameToUse.contains(MetadataTags::HootNamespacePrefix()))
       {
         nameToUse = nameToUse.remove(MetadataTags::HootNamespacePrefix());
@@ -158,6 +159,7 @@ public:
     QMutexLocker locker(&_mutex);
     if (_creators.find(nameToUse) == _creators.end())
     {
+      // See note in Factory::constructObject.
       if (nameToUse.contains(MetadataTags::HootNamespacePrefix()))
       {
         nameToUse = nameToUse.remove(MetadataTags::HootNamespacePrefix());
