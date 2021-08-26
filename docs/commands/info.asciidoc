@@ -28,9 +28,10 @@ Only one of the following options can be passed to the command per invocation:
 * +--subline-matchers+         - Displays available subline matchers
 * +--subline-string-matchers+  - Displays available subline string matchers
 * +--tag-mergers+              - Displays available feature tag mergers used during conflation
+* +--validators+               - Displays available non-JOSM validators.
 * +--value-aggregators+        - Displays available feature tag value aggregators used in conflation model building
 * +--way-joiners+              - Displays available way joiners
-* +--way-snap-criteria+        - Displays available way criteria for snapping ways to each other.
+* +--way-snap-criteria+        - Displays available way criteria for snapping ways to each other
 
 All configuration options (-D <option>) added to this command must be added to before the specified option. Example:
 
@@ -267,6 +268,17 @@ The +--tag-mergers+ option prints out available tag mergers that may be applied 
 
 --------------------------------------
 hoot info --tag-mergers
+--------------------------------------
+
+=== Validators
+
+The +--validators+ option prints out available Hootenanny validators that can be used to validate 
+data. To also see JOSM validators, run `validate --validators` (must be configured `--with-josm`).
+
+==== Usage
+
+--------------------------------------
+hoot info --validators
 --------------------------------------
 
 === Value Aggregators
