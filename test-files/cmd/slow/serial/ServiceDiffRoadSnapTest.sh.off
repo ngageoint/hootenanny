@@ -1,18 +1,35 @@
 #!/bin/bash
 set -e
 
-# This test creates a diff between two road datasets using Differential Conflation and snaps unconnected secondary roads back 
-# to reference roads (within a tolerance). It then applies the diff changeset back to the reference data store, after which 
-# we may check to see that all the snapped secondary roads remain connected to the reference roads (not just hovering over 
-# top of them unconnected). The type of road conflation algorithm is passed in by calling scripts. Also configurable is how 
-# many steps in the process are used: either a two step process where the conflate command outputs a changeset or a three 
-# step process where the conflate command outputs an OSM file and the changeset is derived from it and the original 
-# reference layer. Both workflows are used in production.
+# This test creates a diff between two road datasets using Differential Conflation and snaps 
+# unconnected secondary roads back to reference roads (within a tolerance). It then applies the diff 
+# changeset back to the reference data store, after which we may check to see that all the snapped 
+# secondary roads remain connected to the reference roads (not just hovering over top of them 
+# unconnected). The type of road conflation algorithm is passed in by calling scripts. Also 
+# configurable is how many steps in the process are used: either a two step process where the 
+# conflate command outputs a changeset or a three step process where the conflate command outputs an 
+# OSM file and the changeset is derived from it and the original reference layer. Both workflows are 
+# used in production.
 
 TEST_NAME=$1
 REF_INPUT=$2
 SEC_INPUT=$3
-ALG_CONFIG=$4
+if [[ "$4" == "-180,-90,180,90" ]]; then
+  BOUNDS=""
+else
+  BOUNDS="-D bounds=$4"
+fi
+if [[ "$5" == "false" ]]; then
+  INCLUDE_TAGS=
+else
+  INCLUDE_TAGS=--include-tags
+fi
+if [[ "$6" == "false" ]]; then
+  SEPARATE_OUTPUT=
+else
+  SEPARATE_OUTPUT=--separate-output
+fi
+ALG_CONFIG=$7
 # This is a bit of a hack, but just trying to reduce test runtime here.
 if [ "$ALG_CONFIG" == "UnifyingAlgorithm.conf" ]; then
   MATCHERS="-D match.creators=HighwayMatchCreator"
@@ -21,9 +38,9 @@ else
   MATCHERS="-D match.creators=NetworkMatchCreator"
   MERGERS="-D merger.creators=NetworkMergerCreator"
 fi
-# valid params are: "2" for generating an osc from diff conflate or "3" for generating an osm from diff conflate and 
-# generating the changeset in a separate step
-NUM_STEPS=$5
+# Valid params are: "2" for generating an osc from diff conflate or "3" for generating an osm from 
+# diff conflate and generating the changeset in a separate step
+NUM_STEPS=$8
 
 GOLD_DIR=test-files/cmd/slow/serial/$TEST_NAME
 OUTPUT_DIR=test-output/cmd/slow/serial/$TEST_NAME
@@ -39,14 +56,14 @@ HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 HOOT_EMAIL="$TEST_NAME@hoottestcpp.org"
 
 GENERAL_OPTS=$CONFIG" -C "$ALG_CONFIG" -C DifferentialConflation.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
-# When using Diff conflate w/ Network, we're not allowed to remove partial match elements in a partial fashion at this 
-# time, so change the default setting to avoid a warning.
+# When using Diff conflate w/ Network, we're not allowed to remove partial match elements in a 
+# partial fashion at this time, so change the default setting to avoid a warning.
 if [ "$ALG_CONFIG" == "NetworkAlgorithm.conf" ]; then
   GENERAL_OPTS+=" -D differential.remove.linear.partial.matches.as.whole=true"
 fi
 DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999"
-CONFLATE_OPTS="$MATCHERS $MERGERS -D snap.unconnected.ways.mark.snapped.nodes=true -D snap.unconnected.ways.mark.snapped.ways=true"
-CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.reference.features=false"
+CONFLATE_OPTS="$MATCHERS $MERGERS -D snap.unconnected.ways.mark.snapped.nodes=true -D snap.unconnected.ways.mark.snapped.ways=true -D bounds.output.file=$OUTPUT_DIR/$TEST_NAME-bounds-conflate.osm"
+CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUTPUT_DIR/$TEST_NAME-bounds-changeset.osm"
 
 DEBUG=false
 if [ "$DEBUG" == "true" ]; then
@@ -61,15 +78,21 @@ fi
 
 scripts/database/CleanAndInitializeOsmApiDb.sh
 
-# write ref to osmapidb - There's a mix of positive/negative IDs in the input ref source files, so let's treat this like 
-# an authoritative data store and give it all positive IDs.
+# Write ref to osmapidb - There's a mix of positive/negative IDs in the input ref source files, so 
+# let's treat this like an authoritative data store and give it all positive IDs.
+echo ""
+echo "Writing ref data..."
+echo ""
 hoot convert $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/ref-load-debug.osm -D reader.use.data.source.ids=false -D id.generator=PositiveIdGenerator $GENERAL_OPTS $DB_OPTS $REF_INPUT $OSM_API_DB_URL
 if [ "$DEBUG" == "true" ]; then
   hoot convert --warn -D debug.maps.filename=$OUTPUT_DIR/ref-load-debug.osm -D reader.use.data.source.ids=true $GENERAL_OPTS $DB_OPTS $OSM_API_DB_URL $OUTPUT_DIR/ref-original.osm
 fi
 
-# write sec to hootapidb - Also a mix of positive/negative IDs here, and we'll treat it like shoebox data and give it 
-# all negative IDs.
+# Write sec to hootapidb - Also a mix of positive/negative IDs here, and we'll treat it like shoebox 
+# data and give it all negative IDs.
+echo ""
+echo "Writing sec data..."
+echo ""
 SEC_LAYER=$HOOT_DB_URL/$TEST_NAME-sec
 hoot convert $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/sec-load-debug.osm -D reader.use.data.source.ids=false $GENERAL_OPTS $DB_OPTS $SEC_INPUT $SEC_LAYER
 if [ "$DEBUG" == "true" ]; then
@@ -77,29 +100,44 @@ if [ "$DEBUG" == "true" ]; then
 fi
 
 if [ "$NUM_STEPS" == "2" ]; then
-  # run diff conflate to changeset w/ road snapping; retain both sets of IDs during conflate
-  hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=HighwayCriterion -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL --differential
+  # Run diff conflate to changeset w/ road snapping; retain both sets of IDs during conflate
+  echo ""
+  echo "Running conflation as part of a two step process..."
+  echo ""
+  hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=HighwayCriterion -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL --differential $INCLUDE_TAGS $SEPARATE_OUTPUT --write-bounds
   if [ "$DEBUG" == "true" ]; then
-    hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc --differential  
+    hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc --differential $INCLUDE_TAGS $SEPARATE_OUTPUT --write-bounds
   fi
 else
-  # run diff conflate to osm w/ road snapping; retain both sets of IDs during conflate
-  hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=HighwayCriterion -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osm --differential
-  # generate a changeset between the original ref data and the diff calculated in the previous step
-  hoot changeset-derive $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/diff.osm $OUTPUT_DIR/diff.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL
+  # Run diff conflate to osm w/ road snapping; retain both sets of IDs during conflate
+  echo ""
+  echo "Running conflation as part of a three step process..."
+  echo ""
+  hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=HighwayCriterion -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osm --differential $INCLUDE_TAGS $SEPARATE_OUTPUT --write-bounds
+  # Generate a changeset between the original ref data and the diff calculated in the previous step
+  echo ""
+  echo "Running changeset derivation as part of a three step process..."
+  echo ""
+  hoot changeset-derive $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/diff.osm $OUTPUT_DIR/diff.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL --write-bounds
   if [ "$DEBUG" == "true" ]; then
-    hoot changeset-derive $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/diff.osm $OUTPUT_DIR/diff.osc
+    hoot changeset-derive $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/diff.osm $OUTPUT_DIR/diff.osc --write-bounds
   fi
 fi
 
-# apply changeset back to ref
+# Apply changeset back to ref
+echo ""
+echo "Applying changset..."
+echo ""
 hoot changeset-apply $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/changeset-apply-debug.osm $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL
 
-# read ref back out and compare to gold
+# Read ref back out and compare to gold
+echo ""
+echo "Reading final data..."
+echo ""
 hoot convert $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/final-out-debug.osm $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true $OSM_API_DB_URL $OUTPUT_DIR/out.osm
 hoot diff $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $GOLD_DIR/out.osm $OUTPUT_DIR/out.osm
 
-# cleanup
+# Cleanup
 hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $SEC_DB_INPUT $HOOT_DB_URL/$TEST_NAME-sec
 psql $PSQL_DB_AUTH -d $DB_NAME -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null
 scripts/database/CleanOsmApiDB.sh

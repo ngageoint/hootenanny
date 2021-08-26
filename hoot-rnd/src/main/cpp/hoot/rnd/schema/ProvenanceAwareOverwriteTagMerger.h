@@ -27,6 +27,7 @@
 #ifndef PROVENANCEAWAREOVERWRITETAGMERGER_H
 #define PROVENANCEAWAREOVERWRITETAGMERGER_H
 
+// hoot
 #include <hoot/core/schema/OverwriteTagMerger.h>
 
 namespace hoot
@@ -48,7 +49,7 @@ public:
   Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
   QString getDescription() const override
-  { return "Overwrites tags secondary feature tags with reference tags while maintaining provenance (experimental)"; }
+  { return "Overwrites secondary feature tags with reference tags while maintaining provenance (experimental)"; }
 };
 
 }
