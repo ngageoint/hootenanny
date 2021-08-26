@@ -3,6 +3,21 @@
       1
 (1 row)
 
+
+Writing ref data...
+
+
+Writing sec data...
+
+
+Running conflation as part of a three step process...
+
+
+Running changeset derivation as part of a three step process...
+
+
+Applying changset...
+
 Changeset(s) Created: 1
 Changeset Details: min_lat=11.9904914, max_lat=11.993906, min_lon=8.535214, max_lon=8.5444777, num_changes=45
 Node(s) Created: 19
@@ -17,3 +32,6 @@ Relation(s) Deleted: 0
 Total Creations: 24
 Total Modifications: 21
 Total Deletions: 0
+
+Reading final data...
+

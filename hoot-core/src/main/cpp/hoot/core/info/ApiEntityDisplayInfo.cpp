@@ -150,7 +150,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
 {
   // The log must be disabled for this to display things correctly. Disable it for debugging only.
   DisableLog dl;
-  QString msg = " (prepend 'hoot::' before using";
+  QString msg = "";
   QString buffer;
   QTextStream ts(&buffer);
   if (apiEntityType == "operators")
@@ -172,7 +172,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   else if (apiEntityType == "filters")
   {
     // This is the criterion portion of --operators only.
-    msg += "):";
+    msg += ":";
     msg.prepend("Filters");
     ts << msg << endl;
     ts <<
@@ -181,7 +181,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   }
   else if (apiEntityType == "feature-extractors")
   {
-    msg += "):";
+    msg += ":";
     msg.prepend("Feature Extractors");
     ts << msg << endl;
     ts <<
@@ -190,35 +190,35 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   }
   else if (apiEntityType == "matchers")
   {
-    msg += "):";
+    msg += ":";
     msg.prepend("Matchers");
     ts << msg << endl;
     ts << _getApiEntities<Match, Match>(Match::className(), "matcher", false, MAX_NAME_SIZE);
   }
   else if (apiEntityType == "mergers")
   {
-    msg += "):";
+    msg += ":";
     msg.prepend("Mergers");
     ts << msg << endl;
     ts << _getApiEntities<Merger, Merger>(Merger::className(), "merger", false, MAX_NAME_SIZE);
   }
   else if (apiEntityType == "match-creators")
   {
-    msg += "):";
+    msg += ":";
     msg.prepend("Conflate Match Creators");
     ts << msg << endl;
     ts << _getApiEntitiesForMatchMergerCreators<MatchCreator>(MatchCreator::className());
   }
   else if (apiEntityType == "merger-creators")
   {
-    msg += "):";
+    msg += ":";
     msg.prepend("Conflate Merger Creators");
     ts << msg << endl;
     ts << _getApiEntitiesForMatchMergerCreators<MergerCreator>(MergerCreator::className());
   }
   else if (apiEntityType == "tag-mergers")
   {
-    msg += "):";
+    msg += ":";
     msg.prepend("Tag Mergers");
     ts << msg << endl;
     ts <<
@@ -227,7 +227,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   }
   else if (apiEntityType == "string-comparators")
   {
-    msg += "):";
+    msg += ":";
     msg.prepend("String Comparators");
     ts << msg << endl;
     ts <<
@@ -236,7 +236,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   }
   else if (apiEntityType == "subline-matchers")
   {
-    msg += "):";
+    msg += ":";
     msg.prepend("Subline Matchers");
     ts << msg << endl;
     ts <<
@@ -245,7 +245,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   }
   else if (apiEntityType == "subline-string-matchers")
   {
-    msg += "):";
+    msg += ":";
     msg.prepend("Subline Matchers");
     ts << msg << endl;
     ts <<
@@ -254,7 +254,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   }
   else if (apiEntityType == "value-aggregators")
   {
-    msg += "):";
+    msg += ":";
     msg.prepend("Value Aggregators");
     ts << msg << endl;
     ts <<
@@ -263,7 +263,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   }
   else if (apiEntityType == "way-joiners")
   {
-    msg += "):";
+    msg += ":";
     msg.prepend("Way Joiners");
     ts << msg << endl;
     ts <<
@@ -278,7 +278,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   }
   else if (apiEntityType == "conflatable-criteria")
   {
-    msg += "):";
+    msg += ":";
     msg.prepend("Conflatable Criteria");
     ts << msg << endl;
     ts <<
@@ -287,7 +287,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   }
   else if (apiEntityType == "criterion-consumers")
   {
-    msg += "):";
+    msg += ":";
     msg.prepend("Criterion Consumers");
     ts << msg << endl;
     ts <<
@@ -302,7 +302,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   }
   else if (apiEntityType == "geometry-type-criteria")
   {
-    msg += "):";
+    msg += ":";
     msg.prepend("Geometry Type Criteria");
     ts << msg << endl;
     ts <<
