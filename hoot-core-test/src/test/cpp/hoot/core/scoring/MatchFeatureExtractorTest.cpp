@@ -27,6 +27,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/conflate/highway/HighwayMatchCreator.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
@@ -44,6 +45,7 @@ class MatchFeatureExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MatchFeatureExtractorTest);
   CPPUNIT_TEST(runBuildingTest);
+  CPPUNIT_TEST(runHighwayTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -75,6 +77,27 @@ public:
 
     // Check for consistency with previous versions.
     HOOT_FILE_EQUALS(_inputPath + "Buildings.arff", _outputPath + "Buildings.arff");
+  }
+
+  void runHighwayTest()
+  {
+    // This test is primarily useful as an input to Weka for training models.
+    MatchFeatureExtractor uut;
+    std::shared_ptr<HighwayMatchCreator> matchCreator = std::make_shared<HighwayMatchCreator>();
+    matchCreator->getMatchThreshold(); // This inits the threshold on the match creator.
+    uut.addMatchCreator(matchCreator);
+    uut.processMap(_load("test-files/ToyTestA.osm", "test-files/ToyTestB.osm"));
+
+    LOG_TRACE(uut.getResults().toStdString());
+
+    QFile fp(_outputPath + "Highways.arff");
+    CPPUNIT_ASSERT(fp.open(QIODevice::WriteOnly | QIODevice::Text));
+    QByteArray arr = uut.getResults().toUtf8();
+    fp.write(arr);
+    fp.close();
+
+    // Check for consistency with previous versions.
+    HOOT_FILE_EQUALS(_inputPath + "Highways.arff", _outputPath + "Highways.arff");
   }
 
 private:
