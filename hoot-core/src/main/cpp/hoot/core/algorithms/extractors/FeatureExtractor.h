@@ -50,6 +50,9 @@ class FeatureExtractor : public ApiEntityInfo
 {
 public:
 
+  // Note that FeatureExtractors are the only classes that have the namespace prepended here
+  // anymore. Not having it causes issues with the attribute ordering in the ARFF files, which
+  // affects matching. Eventually it will be removed from them.
   static QString className() { return "hoot::FeatureExtractor"; }
 
   FeatureExtractor() = default;
