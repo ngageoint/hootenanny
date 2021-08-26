@@ -223,3 +223,9 @@ echo "Listing value aggregators..."
 echo ""
 hoot info $CONFIG --value-aggregators | grep "MinAggregator"
 echo ""
+
+# VALIDATORS
+echo "Listing validators..."
+echo ""
+hoot info $CONFIG --validators | grep "RoadCrossingPolyMarker"
+echo ""
