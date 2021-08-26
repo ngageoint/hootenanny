@@ -65,8 +65,8 @@ public:
    * @param poi a POI element
    * @param poly a polygon element
    */
-  double extract(const OsmMap& map, const ConstElementPtr& poi,
-                 const ConstElementPtr& poly) const override;
+  double extract(
+    const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
 
   void setConfiguration(const Settings& conf) override;
 

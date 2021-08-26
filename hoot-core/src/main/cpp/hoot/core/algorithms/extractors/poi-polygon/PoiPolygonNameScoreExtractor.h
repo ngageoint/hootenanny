@@ -58,8 +58,8 @@ public:
    * @param poly the second element to examine
    * @return a name score
    */
-  double extract(const OsmMap& map, const ConstElementPtr& poi,
-                 const ConstElementPtr& poly) const override;
+  double extract(
+    const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
 
   void setConfiguration(const Settings& conf) override;
 
@@ -77,8 +77,6 @@ public:
   void setNameScoreThreshold(double threshold) { _nameScoreThreshold = threshold; }
   void setLevDist(double dist) { _levDist = dist; }
   void setTranslateTagValuesToEnglish(bool translate) { _translateTagValuesToEnglish = translate; }
-
-
 
 private:
 

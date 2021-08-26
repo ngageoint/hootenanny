@@ -43,9 +43,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonAlphaShapeDistanceExtractor)
 
-double PoiPolygonAlphaShapeDistanceExtractor::extract(const OsmMap& map,
-                                                      const ConstElementPtr& poi,
-                                                      const ConstElementPtr& poly) const
+double PoiPolygonAlphaShapeDistanceExtractor::extract(
+  const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const
 {
   try
   {
