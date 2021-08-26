@@ -464,13 +464,13 @@ Tags TagComparator::generalize(Tags t1, Tags t2, bool overwriteUnrecognizedTags,
   Tags result;
 
   // Names are merged using _mergeNames.
-  mergeNames(t1, t2, result, QStringList()/*FIXEME*/, caseSensitive);
+  mergeNames(t1, t2, result, QStringList(), caseSensitive);
 
   // Exact matches are unchanged
   _mergeExactMatches(t1, t2, result);
 
   // Merge any text fields by adding to a list.
-  mergeText(t1, t2, result, QStringList()/*FIXEME*/, caseSensitive);
+  mergeText(t1, t2, result, QStringList(), caseSensitive);
 
   // Unrecognized tags are concatenated in a list.
   if (overwriteUnrecognizedTags)
@@ -484,6 +484,42 @@ Tags TagComparator::generalize(Tags t1, Tags t2, bool overwriteUnrecognizedTags,
 
   // Tags that share an ancestor are promoted to the first common ancestor
   _promoteToCommonAncestor(t1, t2, result);
+
+  // If there are no conflicting tags the tag is kept
+  _addNonConflictingTags(t1, t2, result);
+  _addNonConflictingTags(t2, t1, result);
+
+  return result;
+}
+
+Tags TagComparator::mostSpecific(
+  Tags t1, Tags t2, bool overwriteUnrecognizedTags, bool caseSensitive)
+{
+  // NOTE: Not using const references on the inputs b/c we'd have to copy anyway.
+
+  Tags result;
+
+  // Names are merged using _mergeNames.
+  mergeNames(t1, t2, result, QStringList(), caseSensitive);
+
+  // Exact matches are unchanged
+  _mergeExactMatches(t1, t2, result);
+
+  // Merge any text fields by adding to a list.
+  mergeText(t1, t2, result, QStringList(), caseSensitive);
+
+  // Unrecognized tags are concatenated in a list.
+  if (overwriteUnrecognizedTags)
+  {
+    _overwriteUnrecognizedTags(t1, t2, result);
+  }
+  else
+  {
+    _mergeUnrecognizedTags(t1, t2, result);
+  }
+
+  // Tags that share an ancestor are promoted to the first common ancestor
+  //_promoteToCommonAncestor(t1, t2, result);
 
   // If there are no conflicting tags the tag is kept
   _addNonConflictingTags(t1, t2, result);
