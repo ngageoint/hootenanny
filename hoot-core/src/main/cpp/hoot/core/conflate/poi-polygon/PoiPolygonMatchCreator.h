@@ -29,9 +29,7 @@
 
 // hoot
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
-#include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
@@ -80,9 +78,6 @@ public:
 private:
 
   std::shared_ptr<MatchThreshold> _matchThreshold;
-  std::shared_ptr<PoiPolygonRfClassifier> _getRf();
-
-  std::shared_ptr<PoiPolygonRfClassifier> _rf;
 
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
