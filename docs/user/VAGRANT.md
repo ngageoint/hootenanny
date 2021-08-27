@@ -24,6 +24,11 @@ cd hoot
 vagrant up hoot_centos7_rpm
 ```
 
+To update Hoot to the latest nightly RPM from the master branch, simply run this provisioner:
+```
+vagrant provision hoot_centos7_rpm --provision-with updatehoot
+```
+
 # Setting Up Hootenanny
 
 Hootenanny is thoroughly tested against the Virtualbox provider.  You are welcome to try other providers, and they can be configured in Vagrantfile.  Make sure the the umask of the terminal used to start the vagrant vm is set to `002` (see [#1332](https://github.com/ngageoint/hootenanny/issues/1382))
