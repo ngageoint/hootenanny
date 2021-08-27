@@ -135,9 +135,12 @@ public:
   static void verifyStdMatchesOutputIgnoreDate(
     const QString& stdFilePath, const QString& outFilePath);
 
+  /**
+   * Making the map optional here, as you don't always need a test node to belong to one.
+   */
   static NodePtr createNode(
-    const OsmMapPtr& map, const QString& note = "", const Status& status = Status::Unknown1,
-    const double x = 0.0, const double y = 0.0,
+    const OsmMapPtr& map = OsmMapPtr(), const QString& note = "",
+    const Status& status = Status::Unknown1, const double x = 0.0, const double y = 0.0,
     const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
     const Tags& tags = Tags());
 
