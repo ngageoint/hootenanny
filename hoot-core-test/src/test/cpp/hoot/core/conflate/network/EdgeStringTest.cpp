@@ -62,8 +62,6 @@ public:
 
   void basicTest()
   {
-// Test
-TestUtils::resetEnvironment();
     OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1 =
       std::make_shared<NetworkVertex>(TestUtils::createNode(map, "", Status::Unknown1, 0, 0));
