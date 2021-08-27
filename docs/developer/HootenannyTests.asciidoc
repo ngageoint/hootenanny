@@ -102,10 +102,12 @@ the environment between CPPUnit test runs:
 * `ResetBasic` - This resets element ID counters within `OsmMap`, the random number seed generator, 
 and the UUID generator. Resetting all of this is generally necessary to compare map output within a 
 test. This is the default and does not need to be explicitly specified.
-* `ResetEnvironment` - In addition to what is reset in `ResetBasic`, this resets the configuration
-along with many other internal settings but does not reset the `MatchFactory` class (expensive to do
-in the tests; see code for details). This reset option is discouraged overall but necessary for some
-tests.
+* `ResetConfigs` - In addition to what is reset in `ResetBasic`, this resets the configuration file
+settings back to their default values.
+* `ResetEnvironment` - In addition to what is reset in `ResetConfigs`, this resets the configuration
+along with many other internal settings, the `MergerFactory` and `TagMergerFactory` but does not reset
+the `MatchFactory` class (expensive to do in the tests; see code for details). This reset option is
+discouraged overall but necessary for some tests.
 * `ResetAll` - This does all the resetting done in `ResetEnvironment` and additionally resets the
 `MatchFactory` class. This is the most resource expensive reset option.
 
