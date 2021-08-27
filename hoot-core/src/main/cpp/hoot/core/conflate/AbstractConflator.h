@@ -76,6 +76,8 @@ public:
    */
   void setMergerFactory(const std::shared_ptr<MergerFactory>& mf) { _mergerFactory = mf; }
 
+  void setConflateScoreTagsFilter(const QStringList& filter);
+
 protected:
 
   OsmMapPtr _map;
@@ -90,6 +92,7 @@ protected:
   std::vector<MergerPtr> _mergers;
 
   QList<SingleStat> _stats;
+  QStringList _conflateScoreTagsFilter;
 
   int _taskStatusUpdateInterval;
   int _currentStep;
@@ -144,6 +147,8 @@ protected:
   void _updateProgress(const int currentStep, const QString message);
 
 private:
+
+  friend class UnifyingConflatorTest;
 
   Progress _progress;
 
