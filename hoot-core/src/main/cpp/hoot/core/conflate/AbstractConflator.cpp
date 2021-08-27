@@ -472,7 +472,9 @@ void AbstractConflator::_addConflateScoreTags(
   const ElementPtr& e, const MatchClassification& matchClassification,
   const MatchThreshold& matchThreshold) const
 {
-  const MatchType matchType = _matchThreshold->getType(matchClassification);
+  LOG_VART(matchClassification);
+  LOG_VART(matchThreshold);
+  const MatchType matchType = matchThreshold.getType(matchClassification);
   LOG_VART(matchType.toString());
   if (_conflateScoreTagsFilter.contains(matchType.toString(), Qt::CaseInsensitive))
   {
@@ -482,7 +484,7 @@ void AbstractConflator::_addConflateScoreTags(
     tags.appendValue(MetadataTags::HootScoreReview(), matchClassification.getReviewP());
     tags.appendValue(MetadataTags::HootScoreClassification(), matchType.toString());
     tags.appendValue(
-      MetadataTags::HootScoreDetail(), _matchThreshold->getTypeDetail(matchClassification));
+      MetadataTags::HootScoreDetail(), matchThreshold.getTypeDetail(matchClassification));
     // The thresholds are global, so don't append.
     tags.set(MetadataTags::HootScoreMatchThreshold(), matchThreshold.getMatchThreshold());
     tags.set(MetadataTags::HootScoreMissThreshold(), matchThreshold.getMissThreshold());
