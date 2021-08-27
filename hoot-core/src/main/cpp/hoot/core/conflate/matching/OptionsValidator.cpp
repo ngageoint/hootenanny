@@ -254,7 +254,8 @@ void OptionsValidator::validateMatchers()
     throw HootException(
       "The number of configured match creators (" + QString::number(matchCreators.size()) +
       ") does not equal the number of configured merger creators (" +
-      QString::number(mergerCreators.size()) + ")");
+      QString::number(mergerCreators.size()) + "); match creators: " + matchCreators.join(";") +
+      ", merger creators: " + mergerCreators.join(";"));
   }
 
   for (int i = 0; i < matchCreators.size(); i++)

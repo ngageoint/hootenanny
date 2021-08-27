@@ -112,6 +112,8 @@ private:
 
   void _addressCountVisitorBasicTest()
   {
+    LOG_DEBUG("_addressCountVisitorBasicTest");
+
     conf().set(ConfigOptions::getAddressMatchEnabledKey(), true);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
@@ -128,6 +130,8 @@ private:
 
   void _hasAddressCriterionBasicTest()
   {
+    LOG_DEBUG("_hasAddressCriterionBasicTest");
+
     HasAddressCriterion uut;
     uut.setConfiguration(conf());
 
@@ -147,6 +151,8 @@ private:
 
   void _normalizeAddressesVisitorBasicTest()
   {
+    LOG_DEBUG("_normalizeAddressesVisitorBasicTest");
+
     OsmMap::resetCounters();
     OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
@@ -167,6 +173,8 @@ private:
 
   void _addressScoreExtractorTagTest()
   {
+    LOG_DEBUG("_addressScoreExtractorTagTest");
+
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     // The cache needs to be disabled since its static and all of these tests will run as threads
@@ -214,6 +222,8 @@ private:
 
   void _addressScoreExtractorCombinedTagTest()
   {
+    LOG_DEBUG("_addressScoreExtractorCombinedTagTest");
+
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
@@ -244,6 +254,8 @@ private:
 
   void _addressScoreExtractorRangeTest()
   {
+    LOG_DEBUG("_addressScoreExtractorRangeTest");
+
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
@@ -285,6 +297,8 @@ private:
 
   void _addressScoreExtractorAltFormatTest()
   {
+    LOG_DEBUG("_addressScoreExtractorAltFormatTest");
+
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
@@ -324,6 +338,8 @@ private:
 
   void _addressScoreExtractorSubLetterTest()
   {
+    LOG_DEBUG("_addressScoreExtractorSubLetterTest");
+
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
@@ -348,6 +364,8 @@ private:
 
   void _addressScoreExtractorIntersectionTest()
   {
+    LOG_DEBUG("_addressScoreExtractorIntersectionTest");
+
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
@@ -448,6 +466,8 @@ private:
 
   void _addressScoreExtractorWayTest()
   {
+    LOG_DEBUG("_addressScoreExtractorWayTest");
+
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
@@ -501,6 +521,8 @@ private:
 
   void _addressScoreExtractorRelationTest()
   {
+    LOG_DEBUG("_addressScoreExtractorRelationTest");
+
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
@@ -584,6 +606,8 @@ private:
 
   void _addressScoreExtractorTranslateTagValueTest()
   {
+    LOG_DEBUG("_addressScoreExtractorTranslateTagValueTest");
+
     AddressScoreExtractor uut;
     Settings settings = conf();
     OsmMapPtr map = std::make_shared<OsmMap>();
@@ -628,6 +652,8 @@ private:
 
   void _addressScoreExtractorInvalidFullAddressTest()
   {
+    LOG_DEBUG("_addressScoreExtractorInvalidFullAddressTest");
+
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
@@ -664,6 +690,8 @@ private:
 
   void _addressScoreExtractorInvalidComponentAddressTest()
   {
+    LOG_DEBUG("_addressScoreExtractorInvalidComponentAddressTest");
+
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
@@ -704,6 +732,8 @@ private:
 
   void _addressScoreExtractorNoStreetNumberTest()
   {
+    LOG_DEBUG("_addressScoreExtractorNoStreetNumberTest");
+
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
@@ -826,6 +856,8 @@ private:
 
   void _addressScoreExtractorPartialMatchTest()
   {
+    LOG_DEBUG("_addressScoreExtractorPartialMatchTest");
+
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
@@ -888,6 +920,8 @@ private:
 
   void _building3441Addresses1Test()
   {
+    LOG_DEBUG("_building3441Addresses1Test");
+
     setUp();
     conf().set(ConfigOptions::getMatchCreatorsKey(), "BuildingMatchCreator");
     conf().set(ConfigOptions::getMergerCreatorsKey(), "BuildingMergerCreator");
@@ -902,6 +936,8 @@ private:
 
   void _building3441Addresses2Test()
   {
+    LOG_DEBUG("_building3441Addresses2Test");
+
     setUp();
     conf().set(ConfigOptions::getMatchCreatorsKey(), "BuildingMatchCreator");
     conf().set(ConfigOptions::getMergerCreatorsKey(), "BuildingMergerCreator");
@@ -916,13 +952,15 @@ private:
 
   void _poiPolygon10Test()
   {
+    LOG_DEBUG("_poiPolygon10Test");
+
     setUp();
     conf().set(
       ConfigOptions::getMatchCreatorsKey(),
-      "BuildingMatchCreator;hoot::PoiPolygonMatchCreator");
+      "BuildingMatchCreator;PoiPolygonMatchCreator");
     conf().set(
       ConfigOptions::getMergerCreatorsKey(),
-      "BuildingMergerCreator;hoot::PoiPolygonMergerCreator");
+      "BuildingMergerCreator;PoiPolygonMergerCreator");
     conf().set(ConfigOptions::getPoiPolygonMatchEvidenceThresholdKey(), 2);
     conf().set(ConfigOptions::getPoiPolygonPromotePointsWithAddressesToPoisKey(), true);
 
@@ -935,13 +973,15 @@ private:
 
   void _poiPolygonAutoMerge13Test()
   {
+    LOG_DEBUG("_poiPolygonAutoMerge13Test");
+
     setUp();
     conf().set(
       ConfigOptions::getMatchCreatorsKey(),
-      "BuildingMatchCreator;hoot::PoiPolygonMatchCreator");
+      "BuildingMatchCreator;PoiPolygonMatchCreator");
     conf().set(
       ConfigOptions::getMergerCreatorsKey(),
-      "BuildingMergerCreator;hoot::PoiPolygonMergerCreator");
+      "BuildingMergerCreator;PoiPolygonMergerCreator");
 
     const QString outFile = _outputPath + "poi-polygon-auto-merge-13-out.osm";
     ConflateExecutor().conflate(
@@ -953,6 +993,8 @@ private:
 
   void _poiPolygonAutoMerge14Test()
   {
+    LOG_DEBUG("_poiPolygonAutoMerge14Test");
+
     setUp();
     conf().set(ConfigOptions::getMatchCreatorsKey(), "BuildingMatchCreator;PoiPolygonMatchCreator");
     conf().set(
@@ -969,6 +1011,8 @@ private:
 
   void _poiPolygonRecursiveWayAddress3267_1Test()
   {
+    LOG_DEBUG("_poiPolygonRecursiveWayAddress3267_1Test");
+
     setUp();
     conf().set(ConfigOptions::getMatchCreatorsKey(), "PoiPolygonMatchCreator");
     conf().set(ConfigOptions::getMergerCreatorsKey(), "PoiPolygonMergerCreator");
@@ -983,13 +1027,15 @@ private:
 
   void _poiPolygonReviewConflict4331_3Test()
   {
+    LOG_DEBUG("_poiPolygonReviewConflict4331_3Test");
+
     setUp();
     conf().set(
       ConfigOptions::getMatchCreatorsKey(),
-      "BuildingMatchCreator;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Poi.js");
+      "BuildingMatchCreator;PoiPolygonMatchCreator;ScriptMatchCreator,Poi.js");
     conf().set(
       ConfigOptions::getMergerCreatorsKey(),
-      "BuildingMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator");
+      "BuildingMergerCreator;PoiPolygonMergerCreator;ScriptMergerCreator");
     conf().set(ConfigOptions::getPoiPolygonNameStringComparerKey(), "KskipBigramDistance");
 
     const QString outFile = _outputPath + "poi-polygon-review-conflict-4331-3-out.osm";
