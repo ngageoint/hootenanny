@@ -251,7 +251,7 @@ void OptionsValidator::validateMatchers()
   else if (matchCreators.size() != mergerCreators.size())
   {
     // This gets fixed in fixMisc, if needed.
-    throw HootException(
+    throw IllegalArgumentException(
       "The number of configured match creators (" + QString::number(matchCreators.size()) +
       ") does not equal the number of configured merger creators (" +
       QString::number(mergerCreators.size()) + "); match creators: " + matchCreators.join(";") +
@@ -267,7 +267,7 @@ void OptionsValidator::validateMatchers()
     // need a better check.
     if (matchCreator.startsWith("ScriptMatchCreator") && mergerCreator != "ScriptMergerCreator")
     {
-      throw HootException(
+      throw IllegalArgumentException(
         "Attempted to use a ScriptMatchCreator without a ScriptMergerCreator. Match creator: " +
         matchCreator + QString(" Merger creator: ")  + mergerCreator);
     }
