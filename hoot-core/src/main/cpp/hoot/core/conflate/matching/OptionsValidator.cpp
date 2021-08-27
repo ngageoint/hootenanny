@@ -87,7 +87,8 @@ void OptionsValidator::fixMisc()
   }
   StringUtils::removeEmptyStrings(matchCreators);
   StringUtils::removeEmptyStrings(mergerCreators);
-  // Legacy namespace prefixes are still supported, but internally we ignore them.
+  // Legacy namespace prefixes are still supported coming in from the UI only, but internally we
+  // ignore them.
   StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), matchCreators);
   StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), mergerCreators);
   // Merger creators may have duplicate ScriptMergerCreator instances, but match creators should

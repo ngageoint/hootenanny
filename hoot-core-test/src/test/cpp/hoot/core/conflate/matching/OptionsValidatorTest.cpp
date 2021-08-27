@@ -52,7 +52,6 @@ class OptionsValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OptionsValidatorTest);
   CPPUNIT_TEST(runValidateSizeUnequalTest);
-  CPPUNIT_TEST(runMatcherLegacyNamespaceTest);
   CPPUNIT_TEST(runValidateScriptMismatchTest);
   CPPUNIT_TEST(runAutoCorrectGenericTest);
   CPPUNIT_TEST(runAutoCorrectRelationScriptTest);
@@ -94,33 +93,6 @@ public:
       QString("The number of configured match creators (2) does not equal the number of ") +
       QString("configured merger creators (1)");
     CPPUNIT_ASSERT(exceptionMsg.startsWith(expected));
-  }
-
-  void runMatcherLegacyNamespaceTest()
-  {
-    // We should still support the prefixed namespace.
-
-    QStringList matchers;
-    matchers.append(BuildingMatchCreator::className());
-    matchers.append(MetadataTags::HootNamespacePrefix() + HighwayMatchCreator::className());
-    conf().set(ConfigOptions::getMatchCreatorsKey(), matchers);
-    QStringList mergers;
-    mergers.append(BuildingMergerCreator::className());
-    mergers.append(MetadataTags::HootNamespacePrefix() + HighwayMergerCreator::className());
-    conf().set(ConfigOptions::getMergerCreatorsKey(), mergers);
-
-    OptionsValidator::validateMatchers();
-
-    matchers = conf().get(ConfigOptions::getMatchCreatorsKey()).toString().split(";");
-    LOG_VARD(matchers);
-    mergers = conf().get(ConfigOptions::getMergerCreatorsKey()).toString().split(";");
-    LOG_VARD(mergers);
-    CPPUNIT_ASSERT(matchers.contains(BuildingMatchCreator::className()));
-    CPPUNIT_ASSERT(
-      matchers.contains(MetadataTags::HootNamespacePrefix() + HighwayMatchCreator::className()));
-    CPPUNIT_ASSERT(mergers.contains(BuildingMergerCreator::className()));
-    CPPUNIT_ASSERT(
-      mergers.contains(MetadataTags::HootNamespacePrefix() + HighwayMergerCreator::className()));
   }
 
   void runValidateScriptMismatchTest()

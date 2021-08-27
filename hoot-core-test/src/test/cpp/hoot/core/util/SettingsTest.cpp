@@ -197,25 +197,6 @@ public:
     args.append(
       ConfigOptions::getConvertOpsKey() + "=" +
       ReplaceElementOp::className() + ";" +
-      // This should not fail, as the namespace gets automatically removed from the visitor if it
-      // was left over from legacy code.
-      MetadataTags::HootNamespacePrefix() + RemoveElementsVisitor::className());
-    exceptionMsg = "";
-    try
-    {
-      Settings::parseCommonArguments(args);
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.isEmpty());
-
-    args.clear();
-    args.append("-D");
-    args.append(
-      ConfigOptions::getConvertOpsKey() + "=" +
-      ReplaceElementOp::className() + ";" +
       RemoveElementsVisitor::className() + ";" +
       "blah");
     exceptionMsg = "";
