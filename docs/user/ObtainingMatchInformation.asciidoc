@@ -23,10 +23,14 @@ unmerged output clean.
 Adding the aforementioned options will cause the following tags of note to be added to element 
 output:
 
-* `hoot:uuid` - Unique ID assigned to an element. Note that When `conflate.match.only=false` 
+* `hoot:id` - OSM ID assigned to the element.
+* `hoot:uuid` - Unique ID assigned to the element. Note that When `conflate.match.only=false` 
 (default) this ID may be concatenated with the ID of any feature merged into the feature. Such 
 concatenation may make determining feature provenance difficult, which is why we enabled the option.
 * `hoot:score:uuid` - The unique ID of the feature that matched to the feature with ID `hoot:uuid`.
+* `hoot:status` - The conflated status of the element. 1=unconflated from reference data, 2=unconflated 
+from secondary data, 3=conflated (with certain options enabled you may see text values in place of the 
+numerals).
 * `hoot:score:match` - The match likelihood score assigned by conflation. 
 * `hoot:score:miss` - The miss (non-match) likelihood score assigned by conflation.
 * `hoot:score:review` - The review likelihood score assigned by conflation.  

@@ -32,11 +32,11 @@ namespace hoot
 {
 
 /**
- * Metadata tag names that are used throughout the code.  This class centralizes them
- * into one place in the code base.  This class also includes a couple of key values too.
+ * Metadata tag names that are used throughout the code. This class centralizes them into one place
+ * within the code base.  This class also includes a couple of key values too.
  *
- * These static methods cause the QString to be recreated from the ASCII version every time
- * the method is called. This does two things:
+ * These static methods cause the QString to be recreated from the ASCII version every time the
+ * method is called. This does two things:
  * 1. The QString is recreated and duplicate RAM is allocated, used then freed
  * 2. The QString must parse the ASCII which takes time.
  *
