@@ -45,7 +45,7 @@ public:
   static QString className() { return "hoot::ChangesetCutOnlyCreator"; }
 
   ChangesetCutOnlyCreator();
-  virtual ~ChangesetCutOnlyCreator() = default;
+  ~ChangesetCutOnlyCreator() override = default;
 
   /**
    * @brief create creates a changeset that replaces features in the first input.

@@ -98,6 +98,11 @@ public:
    */
   void reset();
 
+  /**
+   * Return the list of creators as a string
+   */
+  QString toString() const;
+
 private:
 
   // These allow for matching a subset of the input data.

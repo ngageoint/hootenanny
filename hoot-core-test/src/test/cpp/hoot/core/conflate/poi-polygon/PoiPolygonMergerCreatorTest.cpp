@@ -58,7 +58,7 @@ public:
   {
     // This test passes with ResetEnvironment in parallel but crashes in series without
     // ResetAll.
-    setResetType(ResetAll);
+    setResetType(ResetEnvironment);
   }
 
   void setUp() override

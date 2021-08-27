@@ -508,7 +508,9 @@ QString HootTestFixture::getEnvString()
   //  Check the tag merger factory mergers
   oss << TagMergerFactory::getInstance().toString() << std::endl;
   //  Check the match factory
-  //  TODO:  Implement this
+  //  Including this check for the match factory exposes a potential memory leak in our
+  //  usage of v8 'Fatal javascript OOM in Ineffective mark-compacts near heap limit'
+  //  Enable only when running few tests that have MatchFactory issues
 //  oss << MatchFactory::getInstance().toString() << std::endl;
   return QString(oss.str().c_str());
 }

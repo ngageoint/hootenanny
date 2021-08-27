@@ -48,8 +48,6 @@ public:
   CookieCutterOpTest() :
   HootTestFixture("test-files/ops/CookieCutterOp/", "test-output/ops/CookieCutterOp/")
   {
-    // Strangely, this only needs ResetEnvironment fto pass in series, but not parallel.
-    setResetType(ResetEnvironment);
   }
 
   void runTest()
