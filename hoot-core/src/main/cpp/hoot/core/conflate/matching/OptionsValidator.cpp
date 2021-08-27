@@ -27,6 +27,19 @@
 #include "OptionsValidator.h"
 
 // hoot
+#include <hoot/core/algorithms/subline-matching/FrechetSublineMatcher.h>
+#include <hoot/core/algorithms/subline-matching/MaximalNearestSublineMatcher.h>
+#include <hoot/core/algorithms/subline-matching/MaximalSublineMatcher.h>
+#include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
+#include <hoot/core/conflate/polygon/BuildingMergerCreator.h>
+#include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
+#include <hoot/core/conflate/highway/HighwayRfClassifier.h>
+#include <hoot/core/conflate/highway/HighwayMatchCreator.h>
+#include <hoot/core/conflate/highway/HighwayMergerCreator.h>
+#include <hoot/core/conflate/network/NetworkMatchCreator.h>
+#include <hoot/core/conflate/network/NetworkMergerCreator.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatchCreator.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/schema/MetadataTags.h>
@@ -68,82 +81,89 @@ void OptionsValidator::fixMisc()
   LOG_VART(mergerCreators);
   if (matchCreators.empty() || mergerCreators.empty())
   {
-    LOG_WARN("Match or merger creators empty.  Setting to defaults.");
+    LOG_WARN("Match or merger creators empty. Setting to defaults.");
     matchCreators = ConfigOptions::getMatchCreatorsDefaultValue();
     mergerCreators = ConfigOptions::getMergerCreatorsDefaultValue();
   }
+  StringUtils::removeEmptyStrings(matchCreators);
+  StringUtils::removeEmptyStrings(mergerCreators);
+  // Legacy namespace prefixes are still supported, but internally we ignore them.
   StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), matchCreators);
   StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), mergerCreators);
+  // Merger creators may have duplicate ScriptMergerCreator instances, but match creators should
+  // not have any duplicates.
+  matchCreators.removeDuplicates();
+  LOG_VARE(matchCreators);
+  LOG_VARE(mergerCreators);
 
-  // We could also do something here even when the sizes are equal but not doing that yet, since
-  // the issue should be fixed in the UI soon.
-  if (matchCreators.size() != mergerCreators.size())
+  // aligning the mergers with the matchers
+  QStringList fixedMergerCreators;
+  for (int i = 0; i < matchCreators.size(); i++)
   {
-    //going to make the mergers match whatever the matchers are
-    QStringList fixedMergerCreators;
-    for (int i = 0; i < matchCreators.size(); i++)
+    QString matchCreator = matchCreators.at(i);
+    if (matchCreator == BuildingMatchCreator::className())
     {
-      QString matchCreator = matchCreators.at(i);
-      matchCreator = matchCreator.remove(MetadataTags::HootNamespacePrefix());
-      if (matchCreator == "BuildingMatchCreator")
-      {
-        fixedMergerCreators.append("BuildingMergerCreator");
-      }
-      else if (matchCreator.contains("ScriptMatchCreator"))
-      {
-        fixedMergerCreators.append("ScriptMergerCreator");
-      }
-      else if (matchCreator == "HighwayMatchCreator")
-      {
-        fixedMergerCreators.append("HighwayMergerCreator");
-      }
-      else if (matchCreator == "NetworkMatchCreator")
-      {
-        fixedMergerCreators.append("NetworkMergerCreator");
-      }
-      else if (matchCreator == "PoiPolygonMatchCreator")
-      {
-        fixedMergerCreators.append("PoiPolygonMergerCreator");
-      }
+      fixedMergerCreators.append(BuildingMergerCreator::className());
     }
-    conf().set("merger.creators", fixedMergerCreators.join(";"));
+    else if (matchCreator.contains("ScriptMatchCreator"))
+    {
+      fixedMergerCreators.append("ScriptMergerCreator");
+    }
+    else if (matchCreator == HighwayMatchCreator::className())
+    {
+      fixedMergerCreators.append(HighwayMergerCreator::className());
+    }
+    else if (matchCreator == NetworkMatchCreator::className())
+    {
+      fixedMergerCreators.append(NetworkMergerCreator::className());
+    }
+    else if (matchCreator == PoiPolygonMatchCreator::className())
+    {
+      fixedMergerCreators.append(PoiPolygonMergerCreator::className());
+    }
   }
-  LOG_VART(matchCreators);
-  LOG_VART(mergerCreators);
+  mergerCreators = fixedMergerCreators;
+
+  assert(matchCreators.size() == mergerCreators.size());
+  LOG_VARE(matchCreators);
+  LOG_VARE(mergerCreators);
+  conf().set(ConfigOptions::getMatchCreatorsKey(), matchCreators.join(";"));
+  conf().set(ConfigOptions::getMergerCreatorsKey(), mergerCreators.join(";"));
+  LOG_VARE(ConfigOptions().getMatchCreators());
+  LOG_VARE(ConfigOptions().getMergerCreators());
 
   // fix way subline matcher options - https://github.com/ngageoint/hootenanny-ui/issues/970
   QString highwaySublineMatcher =
     ConfigOptions().getHighwaySublineMatcher().remove(MetadataTags::HootNamespacePrefix());
-  if (matchCreators.contains("NetworkMatchCreator") &&
-      highwaySublineMatcher != "FrechetSublineMatcher" &&
-      highwaySublineMatcher != "MaximalSublineMatcher")
+  if (matchCreators.contains(NetworkMatchCreator::className()) &&
+      highwaySublineMatcher != FrechetSublineMatcher::className() &&
+      highwaySublineMatcher != MaximalSublineMatcher::className())
   {
-    LOG_TRACE("Temp fixing highway.subline.matcher...");
-    conf().set("highway.subline.matcher", "MaximalSublineMatcher");
+    conf().set(ConfigOptions::getHighwaySublineMatcherKey(), MaximalSublineMatcher::className());
   }
-  else if (matchCreators.contains("HighwayMatchCreator") &&
-           highwaySublineMatcher != "FrechetSublineMatcher" &&
-           highwaySublineMatcher != "MaximalNearestSublineMatcher")
+  else if (matchCreators.contains(HighwayMatchCreator::className()) &&
+           highwaySublineMatcher != FrechetSublineMatcher::className() &&
+           highwaySublineMatcher != MaximalNearestSublineMatcher::className())
   {
-    LOG_TRACE("Temp fixing highway.subline.matcher...");
-    conf().set("highway.subline.matcher", "MaximalNearestSublineMatcher");
+    conf().set(
+      ConfigOptions::getHighwaySublineMatcherKey(), MaximalNearestSublineMatcher::className());
   }
   LOG_VART(ConfigOptions().getHighwaySublineMatcher());
 
   // fix highway classifier - https://github.com/ngageoint/hootenanny-ui/issues/971
   QString conflateMatchHighwayClassifier =
     ConfigOptions().getConflateMatchHighwayClassifier().remove(MetadataTags::HootNamespacePrefix());
-  if (matchCreators.contains("NetworkMatchCreator") &&
-      conflateMatchHighwayClassifier != "HighwayExpertClassifier")
+  if (matchCreators.contains(NetworkMatchCreator::className()) &&
+      conflateMatchHighwayClassifier != HighwayExpertClassifier::className())
   {
-    LOG_TRACE("Temp fixing conflate.match.highway.classifier...");
-    conf().set("conflate.match.highway.classifier", "HighwayExpertClassifier");
+    conf().set(
+      ConfigOptions::getConflateMatchHighwayClassifierKey(), HighwayExpertClassifier::className());
   }
-  else if (matchCreators.contains("HighwayMatchCreator") &&
-           conflateMatchHighwayClassifier != "HighwayRfClassifier")
+  else if (matchCreators.contains(HighwayMatchCreator::className()) &&
+           conflateMatchHighwayClassifier != HighwayRfClassifier::className())
   {
-    LOG_TRACE("Temp fixing conflate.match.highway.classifier...");
-    conf().set("conflate.match.highway.classifier", "HighwayRfClassifier");
+    conf().set(
+      ConfigOptions::getConflateMatchHighwayClassifierKey(), HighwayRfClassifier::className());
   }
   LOG_VART(ConfigOptions().getConflateMatchHighwayClassifier());
 }
@@ -154,16 +174,16 @@ void OptionsValidator::fixGenericMatcherOrdering()
 
   QStringList matchCreators = ConfigOptions().getMatchCreators();
   QStringList mergerCreators = ConfigOptions().getMergerCreators();
-  LOG_VART(matchCreators);
-  LOG_VART(mergerCreators);
+  LOG_VARE(matchCreators);
+  LOG_VARE(mergerCreators);
   assert(matchCreators.size() == mergerCreators.size());
 
   // fix matchers/mergers - https://github.com/ngageoint/hootenanny-ui/issues/972,
   // https://github.com/ngageoint/hootenanny-ui/issues/1764
 
-  // At this time we always want the generic matchers at the end, just before Relation.js,
-  // if they're present. So, don't even check to see if they're in the right order...just move them
-  // anyway. There overall order will be maintained, but they'll just be towards the end. We'll
+  // At this time we always want the generic matchers at the end, just before Relation.js, if
+  // they're present. So, don't even check to see if they're in the right order...just move them
+  // anyway. Their overall order will be maintained, but they'll just be towards the end. We'll
   // assume the corresponding merger for each is in the correct order and move it as well.
   if (_containsGenericMatcher(matchCreators))
   {
@@ -186,13 +206,13 @@ void OptionsValidator::fixGenericMatcherOrdering()
         LOG_VART(fixedMergerCreators);
       }  
     }
-    conf().set("match.creators", fixedMatchCreators.join(";"));
-    conf().set("merger.creators", fixedMergerCreators.join(";"));
+    conf().set(ConfigOptions::getMatchCreatorsKey(), fixedMatchCreators.join(";"));
+    conf().set(ConfigOptions::getMergerCreatorsKey(), fixedMergerCreators.join(";"));
     matchCreators = ConfigOptions().getMatchCreators();
     mergerCreators = ConfigOptions().getMergerCreators();  
   }
-  LOG_VART(matchCreators);
-  LOG_VART(mergerCreators);
+  LOG_VARE(matchCreators);
+  LOG_VARE(mergerCreators);
 
   // now move Relation.js
   const QString relationScript = "Relation.js";
@@ -205,14 +225,14 @@ void OptionsValidator::fixGenericMatcherOrdering()
     {
       matchCreators.move(relationScriptIndex, matchCreators.size() - 1);
       mergerCreators.move(relationScriptIndex, mergerCreators.size() - 1);
-      conf().set("match.creators", matchCreators.join(";"));
-      conf().set("merger.creators", mergerCreators.join(";"));
+      conf().set(ConfigOptions::getMatchCreatorsKey(), matchCreators.join(";"));
+      conf().set(ConfigOptions::getMergerCreatorsKey(), mergerCreators.join(";"));
       LOG_VART(matchCreators);
       LOG_VART(mergerCreators);
     }
   }
-  LOG_VART(matchCreators);
-  LOG_VART(mergerCreators);
+  LOG_VARE(matchCreators);
+  LOG_VARE(mergerCreators);
 }
 
 void OptionsValidator::validateMatchers()
@@ -221,23 +241,21 @@ void OptionsValidator::validateMatchers()
 
   QStringList matchCreators = ConfigOptions().getMatchCreators();
   QStringList mergerCreators = ConfigOptions().getMergerCreators();
-  LOG_VART(matchCreators);
-  LOG_VART(mergerCreators);
+  LOG_VARE(matchCreators);
+  LOG_VARE(mergerCreators);
   if (matchCreators.isEmpty() || mergerCreators.isEmpty())
   {
-    // This gets temp fixed in fixMisc, if needed.
+    // This gets fixed in fixMisc, if needed.
     throw IllegalArgumentException("Empty matcher or merger list specified.");
   }
   else if (matchCreators.size() != mergerCreators.size())
   {
-    // This gets temp fixed in fixMisc, if needed.
+    // This gets fixed in fixMisc, if needed.
     throw HootException(
       "The number of configured match creators (" + QString::number(matchCreators.size()) +
       ") does not equal the number of configured merger creators (" +
       QString::number(mergerCreators.size()) + ")");
   }
-  StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), matchCreators);
-  StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), mergerCreators);
 
   for (int i = 0; i < matchCreators.size(); i++)
   {
