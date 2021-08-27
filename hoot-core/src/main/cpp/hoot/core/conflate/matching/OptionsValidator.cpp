@@ -93,8 +93,8 @@ void OptionsValidator::fixMisc()
   // Merger creators may have duplicate ScriptMergerCreator instances, but match creators should
   // not have any duplicates.
   matchCreators.removeDuplicates();
-  LOG_VARE(matchCreators);
-  LOG_VARE(mergerCreators);
+  LOG_VART(matchCreators);
+  LOG_VART(mergerCreators);
 
   // aligning the mergers with the matchers
   QStringList fixedMergerCreators;
@@ -125,12 +125,12 @@ void OptionsValidator::fixMisc()
   mergerCreators = fixedMergerCreators;
 
   assert(matchCreators.size() == mergerCreators.size());
-  LOG_VARE(matchCreators);
-  LOG_VARE(mergerCreators);
+  LOG_VART(matchCreators);
+  LOG_VART(mergerCreators);
   conf().set(ConfigOptions::getMatchCreatorsKey(), matchCreators.join(";"));
   conf().set(ConfigOptions::getMergerCreatorsKey(), mergerCreators.join(";"));
-  LOG_VARE(ConfigOptions().getMatchCreators());
-  LOG_VARE(ConfigOptions().getMergerCreators());
+  LOG_VART(ConfigOptions().getMatchCreators());
+  LOG_VART(ConfigOptions().getMergerCreators());
 
   // fix way subline matcher options - https://github.com/ngageoint/hootenanny-ui/issues/970
   QString highwaySublineMatcher =
@@ -174,8 +174,8 @@ void OptionsValidator::fixGenericMatcherOrdering()
 
   QStringList matchCreators = ConfigOptions().getMatchCreators();
   QStringList mergerCreators = ConfigOptions().getMergerCreators();
-  LOG_VARE(matchCreators);
-  LOG_VARE(mergerCreators);
+  LOG_VART(matchCreators);
+  LOG_VART(mergerCreators);
   assert(matchCreators.size() == mergerCreators.size());
 
   // fix matchers/mergers - https://github.com/ngageoint/hootenanny-ui/issues/972,
@@ -211,8 +211,8 @@ void OptionsValidator::fixGenericMatcherOrdering()
     matchCreators = ConfigOptions().getMatchCreators();
     mergerCreators = ConfigOptions().getMergerCreators();  
   }
-  LOG_VARE(matchCreators);
-  LOG_VARE(mergerCreators);
+  LOG_VART(matchCreators);
+  LOG_VART(mergerCreators);
 
   // now move Relation.js
   const QString relationScript = "Relation.js";
@@ -231,8 +231,8 @@ void OptionsValidator::fixGenericMatcherOrdering()
       LOG_VART(mergerCreators);
     }
   }
-  LOG_VARE(matchCreators);
-  LOG_VARE(mergerCreators);
+  LOG_VART(matchCreators);
+  LOG_VART(mergerCreators);
 }
 
 void OptionsValidator::validateMatchers()
@@ -241,8 +241,8 @@ void OptionsValidator::validateMatchers()
 
   QStringList matchCreators = ConfigOptions().getMatchCreators();
   QStringList mergerCreators = ConfigOptions().getMergerCreators();
-  LOG_VARE(matchCreators);
-  LOG_VARE(mergerCreators);
+  LOG_VART(matchCreators);
+  LOG_VART(mergerCreators);
   if (matchCreators.isEmpty() || mergerCreators.isEmpty())
   {
     // This gets fixed in fixMisc, if needed.
