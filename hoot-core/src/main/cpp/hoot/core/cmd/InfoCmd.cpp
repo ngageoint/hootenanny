@@ -40,8 +40,8 @@ namespace hoot
 {
 
 /*
- * Some time needs to be spent exploring ways to make the classes containing the information
- * printed out by this command auto-register themselves in a more extensible way.
+ * Some time needs to be spent exploring ways to make the classes containing the information printed
+ * out by this command auto-register themselves in a more extensible way.
  */
 class InfoCmd : public BaseCommand
 {
@@ -58,8 +58,8 @@ public:
   {
     const QStringList supportedOpts = _getSupportedOptions();
     QStringList specifiedOpts;
-    // Only allowing one option per info command by default. Options with more than sub-option
-    // are parsed separately after this.
+    // Only allowing one option per info command by default. Options with more than sub-option are
+    // parsed separately after this.
     LOG_VART(args);
     for (int i = 0; i < args.size(); i++)
     {
@@ -240,14 +240,17 @@ public:
       {
         std::cout << getHelp() << std::endl << std::endl;
         throw IllegalArgumentException(
-          QString("%1 with the --operators option takes zero parameters.").arg(getName()));
+          QString("%1 takes zero parameters when called with: --%2")
+            .arg(getName()).arg(apiEntityType));
       }
 
       std::cout << ApiEntityDisplayInfo::getDisplayInfo(apiEntityType).toStdString();
     }
     else
     {
-      return 1;
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        "Invalid " + getName() + " command parameters: " + specifiedOpts.join(" "));
     }
 
     return 0;
@@ -277,6 +280,7 @@ private:
     options.append("--subline-matchers");
     options.append("--subline-string-matchers");
     options.append("--tag-mergers");
+    options.append("--validators");
     options.append("--value-aggregators");
     options.append("--way-joiners");
     options.append("--way-snap-criteria");
