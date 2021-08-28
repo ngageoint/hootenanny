@@ -11,11 +11,17 @@ Conflation" section in the Algorithms document.
 Run your conflation job with the following options: 
 
 * `conflate.match.only=true` - This will prevent matches from merging during conflation, which is 
-necessary for you to be able to examine the corresponding features in the output.
+necessary for you to be able to examine the corresponding features in the output unmerged. If you
+do not enable this option, conflated features will automatically merge. It is still possible to
+track feature provenance via the `hoot:uuid` tag described later, but more difficult.
 * `writer.include.debug.tags=true` - This will give you extra information about elements in the 
 output element tags.
 * `writer.include.conflate.score.tags=true` - This will give you extra information about conflation 
 results in the output element tags.
+* (optional) `conflate.score.tags.filter=matchType1;matchType2...` - This allows you to filter out 
+certain types of conflate score tags by match classification. For example, to only see the score 
+tags for elements that were classified as a match or a review  use: 
+`conflate.score.tags.filter=Match;Review`. Valid values are: `Match`, `Miss`, or `Review`.
 * (optional) `conflate.post.ops-=WayJoiner` - This will prevent post conflate way joining that
 restores ways split pre-conflation to ease in matching. You may find this helpful in keeping the 
 unmerged output clean.
@@ -23,10 +29,15 @@ unmerged output clean.
 Adding the aforementioned options will cause the following tags of note to be added to element 
 output:
 
-* `hoot:uuid` - Unique ID assigned to an element. Note that When `conflate.match.only=false` 
+* `hoot:id` - OSM ID assigned to the element.
+* `hoot:uuid` - Unique ID assigned to the element. Note that When `conflate.match.only=false` 
 (default) this ID may be concatenated with the ID of any feature merged into the feature. Such 
 concatenation may make determining feature provenance difficult, which is why we enabled the option.
 * `hoot:score:uuid` - The unique ID of the feature that matched to the feature with ID `hoot:uuid`.
+* `hoot:status` - The conflated status of the element. 1=unconflated from reference data, 
+2=unconflated from secondary data, 3=conflated (with certain options enabled you may see text values 
+in place of the numerals).
+* `hoot:score:classification` - The match classification assigned by conflation.
 * `hoot:score:match` - The match likelihood score assigned by conflation. 
 * `hoot:score:miss` - The miss (non-match) likelihood score assigned by conflation.
 * `hoot:score:review` - The review likelihood score assigned by conflation.  
@@ -44,6 +55,9 @@ can be classified as a feature miss (non-match).
 * `conflate.review.threshold.default` - This is the default threshold at or above which match scores 
 can be classified as needing manual review.
 
-Note that each conflate matcher may override these default, so look at the configuration options for
-more detail on which value is actually used.
+Note that each conflate matcher may override these defaults, so look at the configuration options 
+for more detail on which value is actually used.
+
+If a feature is involved in a review, then it will be assigned to a review relation. Review
+relations all have the `hoot:needs:review=yes` tag.
 

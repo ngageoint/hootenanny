@@ -109,6 +109,8 @@
     <node visible="true" id="-1559912" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535562894566056" lon="-104.8992258880587372"/>
     <node visible="true" id="-1559911" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8629663503746912" lon="-104.8792670778330489">
         <tag k="error:circular" v="50"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0"/>
@@ -124,6 +126,8 @@
     <node visible="true" id="-1559910" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8887008885512984" lon="-104.7187703222333965">
         <tag k="amenity" v="cafe"/>
         <tag k="error:circular" v="1000"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0"/>
@@ -138,6 +142,8 @@
     </node>
     <node visible="true" id="-1559909" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8319586024347956" lon="-104.7772181212616402">
         <tag k="error:circular" v="5000"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0"/>
@@ -152,6 +158,8 @@
     </node>
     <node visible="true" id="-1559908" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8415743887464657" lon="-104.8829403278503065">
         <tag k="error:circular" v="1000"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0"/>
@@ -167,6 +175,8 @@
     <node visible="true" id="-1559907" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8942750169005720" lon="-104.7187096307715564">
         <tag k="amenity" v="cafe"/>
         <tag k="error:circular" v="1000"/>
+        <tag k="hoot:score:classification" v="Match;Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6.;The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1;1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0;0"/>
@@ -182,6 +192,8 @@
     <node visible="true" id="-1559906" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8747831409683329" lon="-104.7208597111928867">
         <tag k="amenity" v="cafe"/>
         <tag k="error:circular" v="150"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0"/>
@@ -197,6 +209,8 @@
     <node visible="true" id="-1559905" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9111581782100160" lon="-104.7157831944439152">
         <tag k="amenity" v="cafe"/>
         <tag k="error:circular" v="1000"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0"/>
@@ -212,6 +226,8 @@
     <node visible="true" id="-1559904" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8753845261677924" lon="-104.7191538262594008">
         <tag k="amenity" v="cafe"/>
         <tag k="error:circular" v="1000"/>
+        <tag k="hoot:score:classification" v="Match;Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6.;The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1;1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0;0"/>
@@ -226,6 +242,8 @@
     </node>
     <node visible="true" id="-1559903" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8578321389392443" lon="-104.9125488383814826">
         <tag k="error:circular" v="1000"/>
+        <tag k="hoot:score:classification" v="Match;Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6.;The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1;1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0;0"/>
@@ -241,6 +259,8 @@
     <node visible="true" id="-1559902" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9235218851992073" lon="-104.8439756581664852">
         <tag k="amenity" v="cafe"/>
         <tag k="error:circular" v="2000"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0"/>
@@ -291,6 +311,8 @@
     <node visible="true" id="-1559825" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9109692767935371" lon="-104.7145693652068132">
         <tag k="amenity" v="cafe"/>
         <tag k="error:circular" v="100"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0"/>
@@ -305,6 +327,8 @@
     </node>
     <node visible="true" id="-1559824" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8467218120797426" lon="-104.8852148410949496">
         <tag k="error:circular" v="1000"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0"/>
@@ -320,6 +344,8 @@
     <node visible="true" id="-1559823" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9239774040227147" lon="-104.8439481192893510">
         <tag k="amenity" v="cafe"/>
         <tag k="error:circular" v="50"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0"/>
@@ -333,6 +359,8 @@
     </node>
     <node visible="true" id="-1559822" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8580512412840307" lon="-104.7869287551585984">
         <tag k="error:circular" v="20000"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0"/>
@@ -348,6 +376,8 @@
     <node visible="true" id="-1559821" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8745941427828896" lon="-104.7196458819557705">
         <tag k="amenity" v="cafe"/>
         <tag k="error:circular" v="1000"/>
+        <tag k="hoot:score:classification" v="Match;Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6.;The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1;1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0;0"/>
@@ -362,6 +392,8 @@
     </node>
     <node visible="true" id="-1559820" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8618557942463028" lon="-104.8786905089454109">
         <tag k="error:circular" v="1000"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0"/>
@@ -377,6 +409,8 @@
     <node visible="true" id="-1559819" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8940860705601565" lon="-104.7174958015344259">
         <tag k="amenity" v="cafe"/>
         <tag k="error:circular" v="200"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0"/>
@@ -391,6 +425,8 @@
     </node>
     <node visible="true" id="-1559818" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8571566428667410" lon="-104.9070371581716046">
         <tag k="error:circular" v="1500"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0"/>
@@ -406,6 +442,8 @@
     <node visible="true" id="-1559817" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8751955295816245" lon="-104.7179399970222704">
         <tag k="amenity" v="cafe"/>
         <tag k="error:circular" v="1000"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0"/>
@@ -421,6 +459,8 @@
     <node visible="true" id="-1559816" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8885119273824387" lon="-104.7175564929962519">
         <tag k="amenity" v="cafe"/>
         <tag k="error:circular" v="1000"/>
+        <tag k="hoot:score:classification" v="Match;Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6.;The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1;1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0;0"/>
@@ -435,6 +475,8 @@
     </node>
     <node visible="true" id="-1559815" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8593025332214523" lon="-104.9197586162135565">
         <tag k="error:circular" v="2000"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="1"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0"/>
@@ -531,6 +573,8 @@
         <tag k="REF2" v="Panera"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.925 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="0.925"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0.075"/>
@@ -555,6 +599,8 @@
         <tag k="REF2" v="Panera"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.925 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="0.925"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0.075"/>
@@ -588,6 +634,8 @@
         <tag k="REF2" v="Target"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.925 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="0.925"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0.075"/>
@@ -608,6 +656,8 @@
         <tag k="REF2" v="Target"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.975 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="0.975"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0.025"/>
@@ -630,6 +680,8 @@
         <tag k="REF2" v="Target"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.975 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="0.975"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0.025"/>
@@ -649,6 +701,8 @@
         <tag k="REF2" v="Biondi"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.825 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="0.825"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0.175"/>
@@ -668,6 +722,8 @@
         <tag k="amenity" v="cafe"/>
         <tag k="building" v="restaurant"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.7 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="0.7"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0.275"/>
@@ -685,6 +741,8 @@
         <nd ref="-1559933"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:score:classification" v="Match;Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.925 was matched because it met the threshold for a match at 0.161.;The feature pair with a match score of 0.375 was matched because it met the threshold for a match at 0.161."/>
         <tag k="hoot:score:match" v="0.925;0.375"/>
         <tag k="hoot:score:match:threshold" v="0.161"/>
         <tag k="hoot:score:miss" v="0.075;0.625"/>
@@ -702,6 +760,8 @@
         <nd ref="-1559913"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.95 was matched because it met the threshold for a match at 0.161."/>
         <tag k="hoot:score:match" v="0.95"/>
         <tag k="hoot:score:match:threshold" v="0.161"/>
         <tag k="hoot:score:miss" v="0.05"/>
@@ -755,6 +815,8 @@
         <nd ref="-1559944"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:score:classification" v="Match;Match;Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.161.;The feature pair with a match score of 0.825 was matched because it met the threshold for a match at 0.161.;The feature pair with a match score of 0.85 was matched because it met the threshold for a match at 0.161."/>
         <tag k="hoot:score:match" v="1;0.825;0.85"/>
         <tag k="hoot:score:match:threshold" v="0.161"/>
         <tag k="hoot:score:miss" v="0;0.175;0.15"/>
@@ -785,6 +847,8 @@
         <nd ref="-1559941"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:score:classification" v="Match;Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.975 was matched because it met the threshold for a match at 0.161.;The feature pair with a match score of 0.825 was matched because it met the threshold for a match at 0.161."/>
         <tag k="hoot:score:match" v="0.975;0.825"/>
         <tag k="hoot:score:match:threshold" v="0.161"/>
         <tag k="hoot:score:miss" v="0.025;0.175"/>
@@ -809,6 +873,8 @@
         <nd ref="-1559882"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.925 was matched because it met the threshold for a match at 0.161."/>
         <tag k="hoot:score:match" v="0.925"/>
         <tag k="hoot:score:match:threshold" v="0.161"/>
         <tag k="hoot:score:miss" v="0.075"/>
@@ -825,6 +891,8 @@
         <nd ref="-1559890"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.95 was matched because it met the threshold for a match at 0.161."/>
         <tag k="hoot:score:match" v="0.95"/>
         <tag k="hoot:score:match:threshold" v="0.161"/>
         <tag k="hoot:score:miss" v="0.05"/>
@@ -868,6 +936,8 @@
         <nd ref="-1559867"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.975 was matched because it met the threshold for a match at 0.161."/>
         <tag k="hoot:score:match" v="0.975"/>
         <tag k="hoot:score:match:threshold" v="0.161"/>
         <tag k="hoot:score:miss" v="0.025"/>
@@ -888,6 +958,8 @@
         <tag k="amenity" v="restaurant"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.7 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="0.7"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0.275"/>
@@ -907,6 +979,8 @@
         <tag k="REF1" v="Biondi"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:score:classification" v="Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.825 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="0.825"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0.175"/>
@@ -966,6 +1040,8 @@
         <tag k="REF1" v="Target"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:score:classification" v="Match;Match;Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.925 was matched because it met the threshold for a match at 0.6.;The feature pair with a match score of 0.975 was matched because it met the threshold for a match at 0.6.;The feature pair with a match score of 0.975 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="0.925;0.975;0.975"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0.075;0.025;0.025"/>
@@ -1042,6 +1118,8 @@
         <tag k="alt_name" v="Panera Bread"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:score:classification" v="Match;Match"/>
+        <tag k="hoot:score:detail" v="The feature pair with a match score of 0.925 was matched because it met the threshold for a match at 0.6.;The feature pair with a match score of 0.925 was matched because it met the threshold for a match at 0.6."/>
         <tag k="hoot:score:match" v="0.925;0.925"/>
         <tag k="hoot:score:match:threshold" v="0.6"/>
         <tag k="hoot:score:miss" v="0.075;0.075"/>
