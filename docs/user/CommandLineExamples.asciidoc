@@ -1307,21 +1307,14 @@ Requires a language translation server installation.  See the Hootenanny Install
       input.osm output.osm
 -----
 
-==== Remove all "source" and "error:circular" tags from ways:
-
+==== Remove all "surface" and "smoothness" tags from ways:
+(Please note, source and error tags are treated as a special case and cannot be removed by RemoveTagsVisitor. Use options writer.include.circular.error.tags=false and reader.add.source.datetime=false)
 -----
     hoot convert -D convert.ops="RemoveTagsVisitor" \
       -D tag.filter.element.criterion="WayCriterion" \
-      -D tag.filter.keys="source;error:circular" input.osm output.osm
+      -D tag.filter.keys="surface;smoothness" input.osm output.osm
 -----
 
-==== Remove all tag keys starting with "source" from ways:
-
------
-    hoot convert -D convert.ops="RemoveTagsVisitor" \
-      -D tag.filter.element.criterion="WayCriterion" \
-      -D tag.filter.keys="source*" input.osm output.osm
------
 
 ==== Remove all elements that have the tag "status=proposed":
 
