@@ -106,6 +106,8 @@ class ProcessThread : public QThread
 public:
   /**
    * @brief ProcessThread constructor
+   * @param threadId ID of this thread to output if '--names' is set
+   * @param maxThreads Maximum number of threads in the pool
    * @param showTestName boolean flag indicating if the thread should pass the '--names' flag to
    * the process
    * @param suppressFailureDetail If true, only the failing test name gets logged and none of the
@@ -122,8 +124,9 @@ public:
    * all jobs that cannot be run in parallel but must be run serially
    */
   ProcessThread(
-    bool showTestName, bool suppressFailureDetail, bool printDiff, bool disableFailureRetries,
-    double waitTime, QMutex* outMutex, JobQueue* parallelJobs, JobQueue* serialJobs = nullptr);
+    int threadId, int maxThreads, bool showTestName, bool suppressFailureDetail, bool printDiff,
+    bool disableFailureRetries, double waitTime, QMutex* outMutex, JobQueue* parallelJobs,
+    JobQueue* casesJobs, JobQueue* serialJobs = nullptr);
   virtual ~ProcessThread() = default;
 
   /**
@@ -158,6 +161,10 @@ private:
    */
   void processJobs(JobQueue* queue);
 
+  /** Thread ID for current process */
+  int _threadId;
+  /** Maximum number of threads in the pool */
+  int _maxThreads;
   /** Flag for showing test names in output */
   bool _showTestName;
   /** If true, only the failing test name gets logged and none of the failure detail is logged. */
@@ -172,6 +179,8 @@ private:
   QMutex* _outMutex;
   /** Pointer to shared job queue that contains names of jobs that can all be run in parallel */
   JobQueue* _parallelJobs;
+  /** Pointer to shared job queue that contains only names of conflate case jobs */
+  JobQueue* _casesJobs;
   /** Pointer to job queue that contains only names of jobs that must be run serially */
   JobQueue* _serialJobs;
   /** Number of failed tests */
@@ -210,12 +219,19 @@ public:
   /** Destructor */
   ~ProcessPool();
 
+  enum JobType
+  {
+    SerialJob,
+    ParallelJob,
+    ConflateJob
+  };
+
   /**
    * @brief addJob method to add a new job to one of the job queues
    * @param test - name of job to add
    * @param parallel - boolean flag indicating if this test is able to be run in parallel
    */
-  void addJob(const QString& test, bool parallel = true);
+  void addJob(const QString& test, JobType job_type = ParallelJob);
 
   /**
    * @brief startProcessing starts each thread and process in order
@@ -239,6 +255,8 @@ private:
   JobQueue _serialJobs;
   /** queue of jobs that can be run in parallel */
   JobQueue _parallelJobs;
+  /** queue of conflate case jobs */
+  JobQueue _caseJobs;
   /** mutex protecting standard out to keep all output for each single test together */
   QMutex _mutex;
   /** count of failed unit tests */

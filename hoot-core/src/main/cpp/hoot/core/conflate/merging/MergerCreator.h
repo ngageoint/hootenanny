@@ -45,6 +45,7 @@ class MergerCreator
 public:
 
   static QString className() { return "hoot::MergerCreator"; }
+  virtual QString toString() { return className(); }
 
   MergerCreator() = default;
   virtual ~MergerCreator() = default;

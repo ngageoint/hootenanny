@@ -48,8 +48,6 @@ public:
   CookieCutterOpTest() :
   HootTestFixture("test-files/ops/CookieCutterOp/", "test-output/ops/CookieCutterOp/")
   {
-    // Strangely, this only needs ResetAllNoMatchFactory fto pass in series, but not parallel.
-    setResetType(ResetAllNoMatchFactory);
   }
 
   void runTest()

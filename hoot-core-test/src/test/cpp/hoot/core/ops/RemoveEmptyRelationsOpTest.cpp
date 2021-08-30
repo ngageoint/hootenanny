@@ -26,8 +26,8 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 
@@ -46,7 +46,6 @@ public:
     : HootTestFixture("test-files/ops/RemoveEmptyRelationsOp/",
                       UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void runBasicTest()

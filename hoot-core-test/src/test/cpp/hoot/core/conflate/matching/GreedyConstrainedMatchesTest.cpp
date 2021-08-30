@@ -138,6 +138,12 @@ class GreedyConstrainedMatchesTest : public HootTestFixture
 
 public:
 
+  GreedyConstrainedMatchesTest()
+  {
+    //  Reset all mergers
+    setResetType(ResetAll);
+  }
+
   void runFindSubgraphsTest()
   {
     // See this for a visual.
@@ -177,17 +183,15 @@ public:
     CPPUNIT_ASSERT_EQUAL(true, matchSet.find(fm[3]) != matchSet.end());
   }
 
-  virtual void setUp()
+  void setUp() override
   {
-    MergerFactory::getInstance().reset();
-    MergerFactory::getInstance().registerCreator(std::make_shared<GreedyConstrainedFakeCreator>());
+    HootTestFixture::setUp();
+    //  Capture the merger factory so that only one merger is created for the test
+    MergerFactory& factory = MergerFactory::getInstance();
+    factory.reset();
+    factory.registerCreator(std::make_shared<GreedyConstrainedFakeCreator>());
   }
 
-  virtual void tearDown()
-  {
-    MergerFactory::getInstance().reset();
-    MergerFactory::getInstance().registerDefaultCreators();
-  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GreedyConstrainedMatchesTest, "quick");

@@ -145,7 +145,7 @@ public:
   HootTestFixture(
     "test-files/js/conflate/ElementMergerJsTest/", "test-output/js/conflate/ElementMergerJsTest/")
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void testMerge(const QString& inFileName, const QString& outFileName,
@@ -153,7 +153,6 @@ public:
   {
     // Poi/poly test output is based on this config for now, despite it being different than the
     // default config.
-    conf().set(ConfigOptions::getAddressMatchEnabledKey(), "false");
     conf().set(ConfigOptions::getPoiPolygonTagMergerKey(), "hoot::OverwriteTag2Merger");
 
     LOG_VART(inFileName);

@@ -26,11 +26,11 @@
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/visitors/NodesPerWayVisitor.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
 
 namespace hoot
 {
@@ -43,11 +43,6 @@ class NodesPerWayVisitorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  NodesPerWayVisitorTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   void runBasicTest()
   {

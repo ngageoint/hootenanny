@@ -128,13 +128,13 @@ void ConfigUtils::checkForTagValueTruncationOverride()
     int numFound = conflatePreOps.removeAll(ApiTagTruncateVisitor::className());
     if (numFound > 0)
     {
-      conf().set("conflate.pre.ops", conflatePreOps);
+      conf().set(ConfigOptions::getConflatePreOpsKey(), conflatePreOps);
     }
     QStringList conflatePostOps = ConfigOptions().getConflatePostOps();
     numFound = conflatePostOps.removeAll(ApiTagTruncateVisitor::className());
     if (numFound > 0)
     {
-      conf().set("conflate.post.ops", conflatePostOps);
+      conf().set(ConfigOptions::getConflatePostOpsKey(), conflatePostOps);
     }
   }
 }

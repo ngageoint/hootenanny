@@ -26,8 +26,8 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 
@@ -48,7 +48,6 @@ public:
     : HootTestFixture("test-files/io/OsmXmlWriterTest/",
                       "test-output/io/OsmXmlWriterTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runEncodeCharsTest()

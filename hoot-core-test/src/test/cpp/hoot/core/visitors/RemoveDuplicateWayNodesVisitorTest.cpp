@@ -26,10 +26,10 @@
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
 
 namespace hoot
 {
@@ -51,7 +51,6 @@ public:
   HootTestFixture("test-files/visitors/RemoveDuplicateWayNodesVisitorTest/",
                   "test-output/visitors/RemoveDuplicateWayNodesVisitorTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runInvalidWayTest1()

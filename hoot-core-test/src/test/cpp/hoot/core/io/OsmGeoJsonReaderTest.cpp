@@ -30,12 +30,11 @@
 #include <geos/geom/Point.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmGeoJsonReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/MapProjector.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
@@ -60,7 +59,6 @@ public:
 
   OsmGeoJsonReaderTest() : HootTestFixture("test-files/io/GeoJson/", "test-output/io/GeoJson/")
   {
-    setResetType(ResetBasic);
   }
 
   void runAllDataTypesTest()

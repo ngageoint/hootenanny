@@ -26,8 +26,8 @@
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/visitors/MembersPerRelationVisitor.h>
 
@@ -43,11 +43,6 @@ class MembersPerRelationVisitorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  MembersPerRelationVisitorTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   void runBasicTest()
   {

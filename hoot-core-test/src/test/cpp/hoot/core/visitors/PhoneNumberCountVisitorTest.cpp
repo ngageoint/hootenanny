@@ -26,8 +26,8 @@
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/visitors/PhoneNumberCountVisitor.h>
 
@@ -46,7 +46,6 @@ public:
   PhoneNumberCountVisitorTest() :
   HootTestFixture("test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/", UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void runBasicTest()

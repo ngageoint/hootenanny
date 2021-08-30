@@ -31,10 +31,10 @@
 #include <hoot/core/algorithms/WayJoinerBasic.h>
 #include <hoot/core/algorithms/splitter/HighwayCornerSplitter.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
@@ -53,7 +53,6 @@ public:
   WayJoinerTest() :
   HootTestFixture("test-files/algorithms/WayJoinerTest/", "test-output/algorithms/WayJoinerTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runSimpleTest()

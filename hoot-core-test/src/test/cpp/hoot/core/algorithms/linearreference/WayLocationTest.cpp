@@ -26,10 +26,11 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
 
@@ -45,11 +46,6 @@ class WayLocationTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  WayLocationTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   OsmMapPtr createMap()
   {

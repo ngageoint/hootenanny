@@ -26,12 +26,12 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
-#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
@@ -49,7 +49,6 @@ public:
     : HootTestFixture("test-files/ops/BuildingOutlineUpdateOp/",
                       "test-output/ops/BuildingOutlineUpdateOp/")
   {
-    setResetType(ResetBasic);
   }
 
   void runSelfIntersectingRelationTest()

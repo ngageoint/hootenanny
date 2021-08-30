@@ -39,6 +39,8 @@ TagMergerFactory& TagMergerFactory::getInstance()
 {
   //  Local static singleton instance
   static TagMergerFactory instance;
+  if (!instance._default)
+    instance.getDefaultPtr();
   return instance;
 }
 
@@ -83,6 +85,11 @@ void TagMergerFactory::reset()
 {
   _default.reset();
   _mergers.clear();
+}
+
+QString TagMergerFactory::toString() const
+{
+  return QString("{ %1 }").arg(_mergers.keys().join(",\n"));
 }
 
 }
