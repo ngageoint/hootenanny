@@ -63,6 +63,11 @@ public:
    */
   void setConfiguration(const Settings& conf) override;
 
+  /**
+   * @brief setPreserveTypes TODO
+   */
+  virtual void setPreserveTypes() = 0;
+
   void setOverwrite1(bool overwrite) { _overwrite1 = overwrite; }
   void setSkipTagKeys(const QSet<QString>& keys) { _skipTagKeys = keys; }
   void setOverwriteExcludeTagKeys(const QStringList& overwriteExcludeTagKeys)

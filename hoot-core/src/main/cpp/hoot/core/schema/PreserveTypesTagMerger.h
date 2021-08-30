@@ -54,6 +54,11 @@ public:
   PreserveTypesTagMerger(const QSet<QString>& skipTagKeys = QSet<QString>());
   ~PreserveTypesTagMerger() = default;
 
+  /**
+   * @see TypesTagMerger
+   */
+  void setPreserveTypes() override { _preserveTypes = true; }
+
   QString getDescription() const override
   { return "Keeps tags from both features and preserves overlapping type tags"; }
   QString getName() const override { return className(); }

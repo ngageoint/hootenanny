@@ -51,6 +51,11 @@ public:
   MostSpecificTagMerger(const QSet<QString>& skipTagKeys = QSet<QString>());
   ~MostSpecificTagMerger() = default;
 
+  /**
+   * @see TypesTagMerger
+   */
+  void setPreserveTypes() override { _preserveTypes = false; }
+
   QString getDescription() const override
   { return "Keeps the most specific tag between two features"; }
   QString getName() const override { return className(); }

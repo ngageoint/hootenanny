@@ -37,7 +37,7 @@ HOOT_FACTORY_REGISTER(TagMerger, MostSpecificTagMerger)
 MostSpecificTagMerger::MostSpecificTagMerger(const QSet<QString>& skipTagKeys) :
 TypesTagMerger(skipTagKeys)
 {
-  _preserveTypes = false;
+  setPreserveTypes();
 }
 
 }
