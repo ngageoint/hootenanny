@@ -118,6 +118,8 @@ public:
   inline static QString HootReviewUuid()                { return "hoot:review:uuid"; }
   inline static QString HootReviewRoadCrossingPolygon() { return "road_crossing_polygon"; }
 
+  inline static QString HootScoreClassification()       { return "hoot:score:classification"; }
+  inline static QString HootScoreDetail()               { return "hoot:score:detail"; }
   inline static QString HootScoreMatch()                { return "hoot:score:match"; }
   inline static QString HootScoreMiss()                 { return "hoot:score:miss"; }
   inline static QString HootScoreReview()               { return "hoot:score:review"; }
@@ -125,6 +127,7 @@ public:
   inline static QString HootScoreMissThreshold()        { return "hoot:score:miss:threshold"; }
   inline static QString HootScoreReviewThreshold()      { return "hoot:score:review:threshold"; }
   inline static QString HootScoreUuid()                 { return "hoot:score:uuid"; }
+
   inline static QString HootUserName()                  { return "hoot:user_name"; }
   inline static QString HootUserId()                    { return "hoot:user_id"; }
 
