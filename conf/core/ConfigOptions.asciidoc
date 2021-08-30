@@ -1098,9 +1098,7 @@ See also:
 * Data Type: list
 * Default Value:
 ** `hoot::RiverCriterion`
-** `hoot::RiverWayNodeCriterion`
 ** `hoot::PowerLineCriterion`
-** `hoot::PowerLineWayNodeCriterion`
 
 Determines which type of features are rubbersheeted during conflation when rubbersheeting is part
 of the conflation pre-operations. An empty list will rubbersheet all types of features.
@@ -1134,6 +1132,14 @@ testing purposes only.
 
 A JSON tag filter that is applied to filter features before conflation. See the Hootenanny User
 Guide "Feature Filtering" section for filter usage examples.
+
+=== conflate.unifying.rubber.sheet.roads
+
+* Data Type: bool
+* Default Value: `false`
+
+Forces pre-conflation rubbersheeting for roads when the Unifying Algorithm is used by adding an
+entry to `conflate.rubber.sheet.element.criteria`.
 
 === conflate.use.data.source.ids.1
 

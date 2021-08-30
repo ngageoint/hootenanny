@@ -1,0 +1,33 @@
+
+[[RubberSheetingUser]]
+== Rubber Sheeting
+
+An option while conflating two datasets is to use rubber sheeting. It uses linear intersections to 
+determine high confidence intersection matches. The high confidence matches are then considered to 
+be tie points for determining rubber sheeting transforms. See the Algorithms section, "Rubber 
+Sheeting" for technical information on the process. This document briefly describes configuration 
+and details pertaining to rubber sheeting.
+
+Rubber sheeting is applied by default as a conflation pre-operation by being inserted into the
+configuration option, `conflate.pre.ops`. Which types of features are rubber sheeted is determined
+by the configuration option, `conflate.rubber.sheet.element.criteria`. Whether roads are rubber 
+sheeted or not depends on which road conflation algorithm, Unifying or Network, is in use. 
+Conflation with the Network Algorithm rubber sheets roads by default, while conflation with the 
+Unifying Algorithm does not. This default configuration is based on the outcome of tests against 
+several datasets.
+
+At the time of this writing, the rubber sheeting configuration options available in the Advanced 
+Options section of the iD user interface are limited. There are some configurable options to control 
+how rubber sheeting behaves, but the following cannot be currently be done from iD: 
+* Disable pre-conflation rubber sheeting completely
+* Edit the feature types that are rubber sheeted
+
+An exception to the limitation of editing the feature types that are rubber sheeted exists when 
+using the Unifying Algorithm. You can enable the "Rubbersheet roads with Unifying Algorithm" 
+advanced option (`conflate.unifying.rubbersheet.roads` from the command line interface) in iD to 
+force rubber sheeting for road features when using the Unifying Algorithm.
+
+Rubber sheeting can also be performed outside of conflation by either either running the `align` 
+command or using the map operation, `RubberSheet`, as part of `convert.ops` with the `convert` 
+command. 
+
