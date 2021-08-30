@@ -49,6 +49,8 @@ public:
   MergerCreator() = default;
   virtual ~MergerCreator() = default;
 
+  virtual QString toString() { return className(); }
+
   /**
    * Either creates one or more mergers that can merge all the matches in the
    * provided set, or does nothing.

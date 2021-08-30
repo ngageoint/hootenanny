@@ -56,7 +56,7 @@ public:
     _type = (Type)t;
   }
 
-  MatchType(QString v)
+  MatchType(const QString& v)
   {
     QString l = v.toLower();
     if (l == "miss")
@@ -95,6 +95,12 @@ public:
     default:
       throw HootException("Invalid match type.");
     }
+  }
+
+  static bool isValidMatchTypeString(const QString& str)
+  {
+    const QString temp = str.toLower();
+    return temp == "match" || temp == "review" || temp == "miss";
   }
 
 private:

@@ -26,8 +26,8 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/DuplicateNameRemover.h>
 
 using namespace geos::geom;
@@ -44,11 +44,6 @@ class DuplicateNameRemoverTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  DuplicateNameRemoverTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   void runCaseInsensitiveTest()
   {

@@ -32,11 +32,11 @@ namespace hoot
 {
 
 /**
- * Metadata tag names that are used throughout the code.  This class centralizes them
- * into one place in the code base.  This class also includes a couple of key values too.
+ * Metadata tag names that are used throughout the code. This class centralizes them into one place
+ * within the code base.  This class also includes a couple of key values too.
  *
- * These static methods cause the QString to be recreated from the ASCII version every time
- * the method is called. This does two things:
+ * These static methods cause the QString to be recreated from the ASCII version every time the
+ * method is called. This does two things:
  * 1. The QString is recreated and duplicate RAM is allocated, used then freed
  * 2. The QString must parse the ASCII which takes time.
  *
@@ -118,6 +118,8 @@ public:
   inline static QString HootReviewUuid()                { return "hoot:review:uuid"; }
   inline static QString HootReviewRoadCrossingPolygon() { return "road_crossing_polygon"; }
 
+  inline static QString HootScoreClassification()       { return "hoot:score:classification"; }
+  inline static QString HootScoreDetail()               { return "hoot:score:detail"; }
   inline static QString HootScoreMatch()                { return "hoot:score:match"; }
   inline static QString HootScoreMiss()                 { return "hoot:score:miss"; }
   inline static QString HootScoreReview()               { return "hoot:score:review"; }
@@ -125,6 +127,7 @@ public:
   inline static QString HootScoreMissThreshold()        { return "hoot:score:miss:threshold"; }
   inline static QString HootScoreReviewThreshold()      { return "hoot:score:review:threshold"; }
   inline static QString HootScoreUuid()                 { return "hoot:score:uuid"; }
+
   inline static QString HootUserName()                  { return "hoot:user_name"; }
   inline static QString HootUserId()                    { return "hoot:user_id"; }
 

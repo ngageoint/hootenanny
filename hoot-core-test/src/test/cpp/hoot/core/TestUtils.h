@@ -117,11 +117,23 @@ public:
    */
   static void resetBasic();
   /**
+   * @brief resetConfigs Reset the configuration from the default, Testing.conf, and input files
+   * @param confs custom config files to load during reset; if left blank the default config
+   * in ConfigOptions will be loaded
+   */
+  static void resetConfigs(const QStringList confs = QStringList());
+  /**
    * @brief resetEnvironment Resets the test environment to a known state.
    * @param confs custom confs to load during reset; if left blank the default config in
    * ConfigOptions will be loaded
    */
   static void resetEnvironment(const QStringList confs = QStringList());
+  /**
+   * @brief resetAll Resets the test environment and including the MatchFactory
+   * @param confs custom confs to load during reset; if left blank the default config in
+   * ConfigOptions will be loaded
+   */
+  static void resetAll(const QStringList confs = QStringList());
 
   static bool compareMaps(OsmMapPtr map1, OsmMapPtr map2);
   static bool compareMaps(const QString& map1, const QString& map2);
@@ -135,9 +147,12 @@ public:
   static void verifyStdMatchesOutputIgnoreDate(
     const QString& stdFilePath, const QString& outFilePath);
 
+  /**
+   * Making the map optional here, as you don't always need a test node to belong to one.
+   */
   static NodePtr createNode(
-    const OsmMapPtr& map, const QString& note = "", const Status& status = Status::Unknown1,
-    const double x = 0.0, const double y = 0.0,
+    const OsmMapPtr& map = OsmMapPtr(), const QString& note = "",
+    const Status& status = Status::Unknown1, const double x = 0.0, const double y = 0.0,
     const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
     const Tags& tags = Tags());
 
@@ -230,63 +245,25 @@ public:
 
 class HootTestFixture : public CppUnit::TestFixture
 {
-public:
-
-  /**
-   * @brief setUp Overload of the CppUnit::TextFixture::setUp() to reset Hootenanny environment
-   */
-  virtual void setUp()
-  {
-    if (_reset == ResetAll)
-    {
-      // resetEnvironment reloads Testing.conf, so we don't need to do it here.
-      TestUtils::resetEnvironment();
-      MatchFactory::getInstance().reset();
-    }
-    else if (_reset == ResetAllNoMatchFactory)
-    {
-      TestUtils::resetEnvironment();
-    }
-    else
-    {
-      if (_reset == ResetBasic)
-      {
-        TestUtils::resetBasic();
-      }
-
-      // We require that all tests use Testing.conf as a starting point and any conf values
-      // specified by it may be overridden when necessary.
-      conf().loadJson(ConfPath::search("Testing.conf"));
-    }
-  }
-
-  static const QString UNUSED_PATH;
-
 protected:
 
+  /** Each Reset* builds on the prior, Configs also resets Basic, Environment rests Basic and Configs, etc. */
   enum HootTestReset
   {
-    ResetNone,
-    ResetBasic,             // resets counters
-    ResetAllNoMatchFactory, // resets entire environment except for MatchFactory (see additional
-                            // explanation in resetEnvironment)
-    ResetAll                // resets entire environment (config, etc.); This can be fairly resource
-                            // expensive due to the call to ScriptMatchCreator::setArguments but
-                            // only if you have script matchers configured to run.
+    ResetBasic,         // resets counters
+    ResetConfigs,       // resets configurations
+    ResetEnvironment,   // resets entire environment except for MatchFactory (see additional
+                        // explanation in resetEnvironment)
+    ResetAll            // resets entire environment (config, etc.); This can be fairly resource
+                        // expensive due to the call to ScriptMatchCreator::setArguments but
+                        // only if you have script matchers configured to run.
   };
 
   /**
    * @brief Constructor to set the paths to begin with $HOOT_HOME if used, default reset to none,
    * and create the output path if needed
    */
-  HootTestFixture(const QString& inputPath = UNUSED_PATH, const QString& outputPath = UNUSED_PATH) :
-  _inputPath((inputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + inputPath : inputPath),
-  _outputPath((outputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + outputPath : outputPath),
-  _reset(ResetNone)
-  {
-    if (outputPath != UNUSED_PATH)
-      FileUtils::makeDir(_outputPath);
-  }
+  HootTestFixture(const QString& inputPath = UNUSED_PATH, const QString& outputPath = UNUSED_PATH);
   virtual ~HootTestFixture() = default;
 
   /**
@@ -300,10 +277,30 @@ protected:
   /** Path relative from $HOOT_HOME to the output folder of the test */
   const QString _outputPath;
 
+public:
+
+  void setUp() override;
+
+  void tearDown() override;
+
+  static void setCompareEnv(bool compare) { _compareEnv = compare; }
+
+  static const QString UNUSED_PATH;
+
+  /**
+   * @brief getEnvString Record the current state of the environment for comparison
+   * @return the environment as a string
+   */
+  static QString getEnvString();
+
 private:
 
   /** Reset flag on setup to reset nothing, basic IDs, or everything */
   HootTestReset _reset;
+  /** Environment string for environment comparison for this test */
+  QString _defaultEnv;
+  /** Compare default the environment to the environment after the test, useful in debugging tests */
+  static bool _compareEnv;
 };
 
 #define TEST_UTILS_REGISTER_RESET(ClassName)      \

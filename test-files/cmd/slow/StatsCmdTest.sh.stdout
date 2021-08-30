@@ -191,23 +191,23 @@ Full stats from multiple files to json...
     ],
     "Meters of Linear Features":
     [
-        "1268.40623905813",
-        "1199.570696279575"
+        "1268.255386844277",
+        "1199.582362034723"
     ],
     "Meters Squared of Area Features":
     [
-        "20532.24327449358",
-        "18519.10598798101"
+        "20505.61775991873",
+        "18495.07142449254"
     ],
     "Meters of Roads":
     [
-        "1268.40623905813",
-        "1199.570696279575"
+        "1268.255386844277",
+        "1199.582362034723"
     ],
     "Meters Squared of Buildings":
     [
-        "20532.24327449358",
-        "18519.10598798101"
+        "20505.61775991873",
+        "18495.07142449254"
     ],
     "Bridges":
     [
@@ -574,8 +574,8 @@ Full stats from multiple files to json...
     ],
     "Total Meters of Roads":
     [
-        "1268.40623905813",
-        "1199.570696279575"
+        "1268.255386844277",
+        "1199.582362034723"
     ],
     "Meters of Conflated Roads":
     [
@@ -659,8 +659,8 @@ Full stats from multiple files to json...
     ],
     "Total Square Meters of Buildings":
     [
-        "1591.177961830552",
-        "1511.566703280165"
+        "1590.075317170706",
+        "1510.52981180349"
     ],
     "Square Meters of Conflated Buildings":
     [
@@ -894,8 +894,8 @@ Full stats from multiple files to json...
     ],
     "Total Square Meters of Polygons":
     [
-        "1591.177961830552",
-        "1511.566703280165"
+        "1590.075317170706",
+        "1510.52981180349"
     ],
     "Square Meters of Conflated Polygons":
     [
@@ -1299,8 +1299,8 @@ Full stats from multiple files to json...
     ],
     "Total Meters of Lines":
     [
-        "1268.40623905813",
-        "1199.570696279575"
+        "1268.255386844277",
+        "1199.582362034723"
     ],
     "Meters of Conflated Lines":
     [

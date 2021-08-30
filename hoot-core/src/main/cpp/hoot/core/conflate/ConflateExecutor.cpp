@@ -53,7 +53,9 @@
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
+#include <hoot/core/visitors/RemoveUnknownVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -648,9 +650,17 @@ void ConflateExecutor::_disableRoundaboutRemoval() const
 void ConflateExecutor::_updateConfigOptionsForAttributeConflation() const
 {
   // These are some custom adjustments to config opts that must be done for Attribute Conflation.
-  // There may be a way to eliminate these by adding more custom behavior to the UI.
+  // There may be a way to eliminate some of these by adding more custom behavior to the UI.
 
-  const QString reviewRelationCritName = ReviewRelationCriterion::className();
+  // If we're just matching, then don't remove secondary data as the default config specifies to do.
+  // We'll also leave in review relations for match debugging purposes.
+  if (ConfigOptions().getConflateMatchOnly())
+  {
+    ConfigUtils::removeListOpEntry(
+      ConfigOptions::getConflatePostOpsKey(), RemoveElementsVisitor::className());
+    ConfigUtils::removeListOpEntry(
+      ConfigOptions::getConflatePostOpsKey(), RemoveUnknown2Visitor::className());
+  }
 
   // This swaps the logic that removes all reviews with the logic that removes them based on score
   // thresholding.
@@ -659,7 +669,7 @@ void ConflateExecutor::_updateConfigOptionsForAttributeConflation() const
     QStringList removeElementsCriteria =
       conf().get(ConfigOptions::getRemoveElementsVisitorElementCriteriaKey()).toStringList();
     removeElementsCriteria.replaceInStrings(
-      reviewRelationCritName, ReviewScoreCriterion::className());
+      ReviewRelationCriterion::className(), ReviewScoreCriterion::className());
     conf().set(
       ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(), removeElementsCriteria);
   }

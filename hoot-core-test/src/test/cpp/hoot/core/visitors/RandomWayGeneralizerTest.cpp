@@ -27,10 +27,10 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/RandomWayGeneralizer.h>
 
 using namespace std;
@@ -60,7 +60,6 @@ public:
     : HootTestFixture("test-files/visitors/RandomWayGeneralizerTest/",
                       "test-output/visitors/RandomWayGeneralizerTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runTest(const QString& inputFile, const int randomNumberGeneratorSeed,

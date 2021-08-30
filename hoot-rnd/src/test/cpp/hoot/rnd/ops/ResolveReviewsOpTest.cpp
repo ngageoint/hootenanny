@@ -28,11 +28,10 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/elements/MapProjector.h>
-
 #include <hoot/rnd/ops/ResolveReviewsOp.h>
 
 namespace hoot
@@ -52,7 +51,6 @@ public:
   HootTestFixture(
     "test-files/rnd/ops/ResolveReviewsOpTest/", "test-output/rnd/ops/ResolveReviewsOpTest/")
   {
-    setResetType(ResetAllNoMatchFactory);
   }
 
   void runKeepTest()

@@ -61,7 +61,7 @@ public:
   UnconnectedWaySnapperTest() :
   HootTestFixture("test-files/ops/UnconnectedWaySnapper/", "test-output/ops/UnconnectedWaySnapper/")
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void runSnapTest()

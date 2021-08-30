@@ -47,7 +47,6 @@ public:
     : HootTestFixture("test-files/visitors/DataSummaryTagVisitorTest/",
                       "test-output/visitors/DataSummaryTagVisitorTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runDataSummaryTest()

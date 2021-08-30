@@ -52,11 +52,12 @@ public:
   {
   }
 
-  virtual void tearDown()
+  void tearDown() override
   {
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
     database.close();
+    HootTestFixture::tearDown();
   }
 
   void runBasicTest()

@@ -26,8 +26,8 @@
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/visitors/NormalizePhoneNumbersVisitor.h>
@@ -56,7 +56,6 @@ public:
     "test-files/visitors/NormalizePhoneNumbersVisitorTest/",
     "test-output/visitors/NormalizePhoneNumbersVisitorTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runBasicTest()

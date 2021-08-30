@@ -1,7 +1,7 @@
-19:06:47.944 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 116) Comparing ...st/all-data-types-out.osm and ...st/all-data-types-out.osm...
-19:06:47.956 STATUS ...ore/io/OsmMapReaderFactory.cpp( 191) Read 167 elements from input in: 00:00.
-19:06:47.959 STATUS ...ore/io/OsmMapReaderFactory.cpp( 191) Read 167 elements from input in: 00:00.
-19:06:47.961 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 154) Map difference calculated in 00:00 total.
+19:58:05.492 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 118) Comparing ...st/all-data-types-out.osm and ...st/all-data-types-out.osm...
+19:58:05.512 STATUS ...ore/io/OsmMapReaderFactory.cpp( 192) Read 167 elements from input in: 00:00.
+19:58:05.518 STATUS ...ore/io/OsmMapReaderFactory.cpp( 192) Read 167 elements from input in: 00:00.
+19:58:05.520 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 156) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	117	116	142	
 Ways	14	12	16	
@@ -88,9 +88,9 @@ Road Reviews to be Made	0	0	0
 Unmatched Roads	4	4	1	
 Unmatched Roads From Map 1	4	0	1	
 Unmatched Roads From Map 2	0	4	0	
-Meters of Conflated Roads	0	0	1193.122159820916	
-Meters of Unmatched Roads From Map 1	1268.405963542601	0	75.28407590785622	
-Meters of Unmatched Roads From Map 2	0	1199.570706636574	0	
+Meters of Conflated Roads	0	0	1193.173985635746	
+Meters of Unmatched Roads From Map 1	1268.255775616008	0	75.08140120722001	
+Meters of Unmatched Roads From Map 2	0	1199.582447808015	0	
 Percentage of Roads Conflated	0	0	75	
 Percentage of Roads Marked for Review	0	0	0	
 Percentage of Unmatched Roads From Map 1	100	0	25	
@@ -104,10 +104,10 @@ Building Reviews to be Made	0	0	0
 Unmatched Buildings	10	8	7	
 Unmatched Buildings From Map 1	10	0	6	
 Unmatched Buildings From Map 2	0	8	1	
-Total Square Meters of Buildings	1591.178165391033	1511.566721696299	1820.028246235927	
-Square Meters of Conflated Buildings	0	0	14063.00015869221	
-Square Meters of Unmatched Buildings From Map 1	20532.24845303963	0	6523.849267009892	
-Square Meters of Unmatched Buildings From Map 2	0	18519.10638680887	4706.721018415452	
+Total Square Meters of Buildings	1590.074632337281	1510.529808185724	1818.71917485835	
+Square Meters of Conflated Buildings	0	0	14044.76301665717	
+Square Meters of Unmatched Buildings From Map 1	20505.60048652773	0	6515.388681114311	
+Square Meters of Unmatched Buildings From Map 2	0	18495.07130894592	4700.617909998479	
 Percentage of Buildings Conflated	0	0	36.36363636363637	
 Percentage of Buildings Marked for Review	0	0	0	
 Percentage of Unmatched Buildings From Map 1	100	0	54.54545454545454	
@@ -151,10 +151,10 @@ Polygon Reviews to be Made	0	0	0
 Unmatched Polygons	10	8	9	
 Unmatched Polygons From Map 1	10	0	6	
 Unmatched Polygons From Map 2	0	8	3	
-Total Square Meters of Polygons	1591.178165391033	1511.566721696299	1981.130599645586	
-Square Meters of Conflated Polygons	0	0	14063.00015869221	
-Square Meters of Unmatched Polygons From Map 1	20532.24845303963	0	6523.849267009892	
-Square Meters of Unmatched Polygons From Map 2	0	18519.10638680887	5416.581787050613	
+Total Square Meters of Polygons	1590.074632337281	1510.529808185724	1979.69061164168	
+Square Meters of Conflated Polygons	0	0	14044.76301665717	
+Square Meters of Unmatched Polygons From Map 1	20505.60048652773	0	6515.388681114311	
+Square Meters of Unmatched Polygons From Map 2	0	18495.07130894592	5409.5581449164	
 Percentage of Polygons Conflated	0	0	30.76923076923077	
 Percentage of Polygons Marked for Review	0	0	0	
 Percentage of Unmatched Polygons From Map 1	100	0	46.15384615384615	
@@ -168,10 +168,10 @@ Area Reviews to be Made	0	0	0
 Unmatched Areas	0	0	2	
 Unmatched Areas From Map 1	0	0	0	
 Unmatched Areas From Map 2	0	0	2	
-Total Square Meters of Areas	0	0	161.102353409659	
+Total Square Meters of Areas	0	0	160.9714367833303	
 Square Meters of Conflated Areas	0	0	0	
 Square Meters of Unmatched Areas From Map 1	0	0	0	
-Square Meters of Unmatched Areas From Map 2	0	0	709.8607686351606	
+Square Meters of Unmatched Areas From Map 2	0	0	708.9402349179209	
 Percentage of Areas Conflated	0	0	0	
 Percentage of Areas Marked for Review	0	0	0	
 Percentage of Unmatched Areas From Map 1	0	0	0	
@@ -232,10 +232,10 @@ Line Reviews to be Made	0	0	0
 Unmatched Lines	4	4	1	
 Unmatched Lines From Map 1	4	0	1	
 Unmatched Lines From Map 2	0	4	0	
-Total Meters of Lines	1268.405963542601	1199.570706636574	1268.406235728772	
-Meters of Conflated Lines	0	0	1193.122159820916	
-Meters of Unmatched Lines From Map 1	1268.405963542601	0	75.28407590785622	
-Meters of Unmatched Lines From Map 2	0	1199.570706636574	0	
+Total Meters of Lines	1268.255775616008	1199.582447808015	1268.255386842966	
+Meters of Conflated Lines	0	0	1193.173985635746	
+Meters of Unmatched Lines From Map 1	1268.255775616008	0	75.08140120722001	
+Meters of Unmatched Lines From Map 2	0	1199.582447808015	0	
 Percentage of Lines Conflated	0	0	75	
 Percentage of Lines Marked for Review	0	0	0	
 Percentage of Unmatched Lines From Map 1	100	0	25	
@@ -249,7 +249,7 @@ Unmatched Relations	0	0	0
 Unmatched Relations From Map 1	0	0	0	
 Unmatched Relations From Map 2	0	0	0	
 Total Square Meters of Relations	0	0	0	
-Square Meters of Conflated Relations	0	0	709.8607686351606	
+Square Meters of Conflated Relations	0	0	708.9402349179209	
 Square Meters of Unmatched Relations From Map 1	0	0	0	
 Square Meters of Unmatched Relations From Map 2	0	0	0	
 Percentage of Relations Conflated	0	0	100	
@@ -264,22 +264,22 @@ Percentage Difference Between Total Features in Output and Total Features in Inp
 Percentage of Number of Total Map 1 Features Matched With Map 2 Features			48	
 Percentage of Number of Total Map 1 Features Not Matched With Map 2 Features			52	
 Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features			36.36363636363637	
-Percentage of Length of Map 1 Roads Matched With Map 2 Roads			94.06469175598787	
-Percentage of Length of Map 1 Roads Not Matched With Map 2 Roads			5.935329702928166	
+Percentage of Length of Map 1 Roads Matched With Map 2 Roads			94.07991736179613	
+Percentage of Length of Map 1 Roads Not Matched With Map 2 Roads			5.920051984052825	
 Percentage of Length of Map 2 Roads Not Matched With Map 1 Roads			0	
-Percentage of Area of Map 1 Buildings Matched With Map 2 Buildings			883.8105288628208	
-Percentage of Area of Map 1 Buildings Not Matched With Map 2 Buildings			410.0011808172754	
-Percentage of Area of Map 2 Buildings Not Matched With Map 1 Buildings			311.3803017000475	
-Percentage of Area of Map 1 Polygons Matched With Map 2 Polygons			883.8105288628208	
-Percentage of Area of Map 1 Polygons Not Matched With Map 2 Polygons			410.0011808172754	
-Percentage of Area of Map 2 Polygons Not Matched With Map 1 Polygons			358.3422226292503	
-Percentage of Length of Map 1 Lines Matched With Map 2 Lines			94.06469175598787	
-Percentage of Length of Map 1 Lines Not Matched With Map 2 Lines			5.935329702928166	
+Percentage of Area of Map 1 Buildings Matched With Map 2 Buildings			883.2769689566396	
+Percentage of Area of Map 1 Buildings Not Matched With Map 2 Buildings			409.7536397733242	
+Percentage of Area of Map 2 Buildings Not Matched With Map 1 Buildings			311.1900132341199	
+Percentage of Area of Map 1 Polygons Matched With Map 2 Polygons			883.2769689566396	
+Percentage of Area of Map 1 Polygons Not Matched With Map 2 Polygons			409.7536397733242	
+Percentage of Area of Map 2 Polygons Not Matched With Map 1 Polygons			358.1232303792631	
+Percentage of Length of Map 1 Lines Matched With Map 2 Lines			94.07991736179613	
+Percentage of Length of Map 1 Lines Not Matched With Map 2 Lines			5.920051984052825	
 Percentage of Length of Map 2 Lines Not Matched With Map 1 Lines			0	
-Calculate Stats for Input 1 Time (sec)				0.7302730083465576
-Calculate Stats for Input 2 Time (sec)				0.4155590534210205
-Apply Pre-Conflate Ops Time (sec)				0.007721900939941406
-Apply Post-Conflate Ops Time (sec)				0.004745960235595703
-Calculate Stats for Output Time (sec)				0.6168079376220703
+Calculate Stats for Input 1 Time (sec)				1.04840087890625
+Calculate Stats for Input 2 Time (sec)				0.8052849769592285
+Apply Pre-Conflate Ops Time (sec)				0.01133203506469727
+Apply Post-Conflate Ops Time (sec)				0.00726318359375
+Calculate Stats for Output Time (sec)				0.7925169467926025
 
-19:06:47.595 STATUS ...pp/hoot/core/util/Progress.cpp(  81) Conflate (100%): Conflation job completed in 00:02 for reference map: ...late/unified/AllDataTypesA.osm and secondary map: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm
+19:58:05.119 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:03 for reference map: ...late/unified/AllDataTypesA.osm and secondary map: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm

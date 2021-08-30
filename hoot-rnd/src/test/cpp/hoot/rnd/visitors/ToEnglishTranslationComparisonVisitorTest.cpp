@@ -26,11 +26,13 @@
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/visitors/ToEnglishTranslationComparisonVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/rnd/language/HootServicesLanguageInfoMockClient.h>
+#include <hoot/rnd/language/HootServicesTranslatorMockClient.h>
+#include <hoot/rnd/visitors/ToEnglishTranslationComparisonVisitor.h>
 
 namespace hoot
 {
@@ -50,7 +52,6 @@ public:
     : HootTestFixture("test-files/visitors/ToEnglishTranslationComparisonVisitorTest/",
                       "test-output/visitors/ToEnglishTranslationComparisonVisitorTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runTest()
@@ -80,7 +81,7 @@ public:
     QStringList sourceLangs;
     sourceLangs.append("de");
     sourceLangs.append("es");
-    conf.set("language.translation.source.languages", sourceLangs);
+    conf.set(ConfigOptions::getLanguageTranslationSourceLanguagesKey(), sourceLangs);
 
     QString exceptionMsg("");
     try
@@ -103,7 +104,7 @@ public:
     Settings conf;
     QStringList sourceLangs;
     sourceLangs.append("detect");
-    conf.set("language.translation.source.languages", sourceLangs);
+    conf.set(ConfigOptions::getLanguageTranslationSourceLanguagesKey(), sourceLangs);
 
     QString exceptionMsg("");
     try
@@ -126,24 +127,28 @@ private:
   {
     Settings conf;
 
-    conf.set("language.skip.words.in.english.dictionary", true);
-    conf.set("language.ignore.pre.translated.tags", false);
+    conf.set(ConfigOptions::getLanguageSkipWordsInEnglishDictionaryKey(), true);
+    conf.set(ConfigOptions::getLanguageIgnorePreTranslatedTagsKey(), false);
     QStringList sourceLangs;
     sourceLangs.append("de");
-    conf.set("language.translation.source.languages", sourceLangs);
+    conf.set(ConfigOptions::getLanguageTranslationSourceLanguagesKey(), sourceLangs);
     QStringList preTranslateTagKeys;
     preTranslateTagKeys.append("name:en");
     preTranslateTagKeys.append("alt_name:en");
-    conf.set("language.translation.comparison.pretranslated.tag.keys", preTranslateTagKeys);
+    conf.set(ConfigOptions::getLanguageTranslationComparisonPretranslatedTagKeysKey(), preTranslateTagKeys);
     QStringList toTranslateTagKeys;
     toTranslateTagKeys.append("name");
     toTranslateTagKeys.append("alt_name");
-    conf.set("language.tag.keys", toTranslateTagKeys);
-    conf.set("language.translation.translator", "HootServicesTranslatorMockClient");
-    conf.set("language.info.provider", "HootServicesLanguageInfoMockClient");
-    conf.set("hoot.services.auth.user.name", "ToEnglishTranslationComparisonVisitorTest");
-    conf.set("hoot.services.auth.access.token", "testAccessToken");
-    conf.set("hoot.services.auth.access.token.secret", "testAccessTokenSecret");
+    conf.set(ConfigOptions::getLanguageTagKeysKey(), toTranslateTagKeys);
+    conf.set(
+      ConfigOptions::getLanguageTranslationTranslatorKey(),
+      HootServicesTranslatorMockClient::className());
+    conf.set(
+      ConfigOptions::getLanguageInfoProviderKey(), HootServicesLanguageInfoMockClient::className());
+    conf.set(
+      ConfigOptions::getHootServicesAuthUserNameKey(), "ToEnglishTranslationComparisonVisitorTest");
+    conf.set(ConfigOptions::getHootServicesAuthAccessTokenKey(), "testAccessToken");
+    conf.set(ConfigOptions::getHootServicesAuthAccessTokenSecretKey(), "testAccessTokenSecret");
 
     return conf;
   }

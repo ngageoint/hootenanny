@@ -1,7 +1,7 @@
-18:11:38.321 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 116) Comparing ...est/toy-buildings-out.osm and ...est/toy-buildings-out.osm...
-18:11:38.332 STATUS ...ore/io/OsmMapReaderFactory.cpp( 191) Read 103 elements from input in: 00:00.
-18:11:38.336 STATUS ...ore/io/OsmMapReaderFactory.cpp( 191) Read 103 elements from input in: 00:00.
-18:11:38.337 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 154) Map difference calculated in 00:00 total.
+19:58:12.685 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 118) Comparing ...est/toy-buildings-out.osm and ...est/toy-buildings-out.osm...
+19:58:12.702 STATUS ...ore/io/OsmMapReaderFactory.cpp( 192) Read 103 elements from input in: 00:00.
+19:58:12.706 STATUS ...ore/io/OsmMapReaderFactory.cpp( 192) Read 103 elements from input in: 00:00.
+19:58:12.707 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 156) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	70	41	90	
 Ways	10	8	12	
@@ -64,10 +64,10 @@ Building Reviews to be Made	0	0	0
 Unmatched Buildings	10	8	7	
 Unmatched Buildings From Map 1	10	0	6	
 Unmatched Buildings From Map 2	0	8	1	
-Total Square Meters of Buildings	1590.092406885548	1510.54661124331	1818.73895113972	
-Square Meters of Conflated Buildings	0	0	14045.05793618777	
-Square Meters of Unmatched Buildings From Map 1	20506.0481996841	0	6515.525369078695	
-Square Meters of Unmatched Buildings From Map 2	0	18495.4752731777	4700.71655109294	
+Total Square Meters of Buildings	1590.09240617345	1510.546611968737	1818.738950166703	
+Square Meters of Conflated Buildings	0	0	14045.05789054684	
+Square Meters of Unmatched Buildings From Map 1	20506.04816013109	0	6515.525363336662	
+Square Meters of Unmatched Buildings From Map 2	0	18495.47529176153	4700.716568966702	
 Percentage of Buildings Conflated	0	0	36.36363636363637	
 Percentage of Buildings Marked for Review	0	0	0	
 Percentage of Unmatched Buildings From Map 1	100	0	54.54545454545454	
@@ -79,13 +79,13 @@ Percentage Difference Between Total Features in Output and Total Features in Inp
 Percentage of Number of Total Map 1 Features Matched With Map 2 Features			40	
 Percentage of Number of Total Map 1 Features Not Matched With Map 2 Features			60	
 Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features			37.5	
-Percentage of Area of Map 1 Buildings Matched With Map 2 Buildings			883.28564273175	
-Percentage of Area of Map 1 Buildings Not Matched With Map 2 Buildings			409.757655647221	
-Percentage of Area of Map 2 Buildings Not Matched With Map 1 Buildings			311.1930817695089	
-Calculate Stats for Input 1 Time (sec)				0.6382861137390137
-Calculate Stats for Input 2 Time (sec)				0.3345870971679688
-Apply Pre-Conflate Ops Time (sec)				0.003184795379638672
-Apply Post-Conflate Ops Time (sec)				0.002092123031616211
-Calculate Stats for Output Time (sec)				0.4476099014282227
+Percentage of Area of Map 1 Buildings Matched With Map 2 Buildings			883.2856402569838	
+Percentage of Area of Map 1 Buildings Not Matched With Map 2 Buildings			409.7576554696115	
+Percentage of Area of Map 2 Buildings Not Matched With Map 1 Buildings			311.1930828033256	
+Calculate Stats for Input 1 Time (sec)				0.8223459720611572
+Calculate Stats for Input 2 Time (sec)				0.5136070251464844
+Apply Pre-Conflate Ops Time (sec)				0.003849029541015625
+Apply Post-Conflate Ops Time (sec)				0.003684043884277344
+Calculate Stats for Output Time (sec)				0.5505919456481934
 
-18:11:37.988 STATUS ...pp/hoot/core/util/Progress.cpp(  81) Conflate (100%): Conflation job completed in 00:01 for reference map: ...st-files/ToyBuildingsTestA.osm and secondary map: ...st-files/ToyBuildingsTestB.osm and written to output: ...tatsTest/toy-buildings-out.osm
+19:58:12.337 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:01 for reference map: ...st-files/ToyBuildingsTestA.osm and secondary map: ...st-files/ToyBuildingsTestB.osm and written to output: ...tatsTest/toy-buildings-out.osm

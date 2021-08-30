@@ -26,9 +26,9 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/alpha-shape/AlphaShape.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 
 // Standard
@@ -59,7 +59,6 @@ public:
     : HootTestFixture(UNUSED_PATH,
                       "test-output/algorithms/alpha-shape/")
   {
-    setResetType(ResetBasic);
   }
 
   void createDonut(vector<pair<double, double>>& p, double innerRadius, double outerRadius,

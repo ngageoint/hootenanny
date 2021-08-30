@@ -26,8 +26,8 @@
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
@@ -52,7 +52,6 @@ public:
     : HootTestFixture("test-files/visitors/SetTagValueVisitorTest/",
                       "test-output/visitors/SetTagValueVisitorTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runAddNewTest()

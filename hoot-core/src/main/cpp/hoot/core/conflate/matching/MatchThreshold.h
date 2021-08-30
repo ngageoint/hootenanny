@@ -58,14 +58,11 @@ public:
                  double reviewThreshold = 1.0, bool validateRange = true);
 
   double getMatchThreshold() const { return _matchThreshold; }
-
   double getMissThreshold() const { return _missThreshold; }
-
   double getReviewThreshold() const { return _reviewThreshold; }
 
   MatchType getType(const Match& m) const { return getType(m.getClassification()); }
   MatchType getType(const MatchClassification& mc) const;
-
   /**
    * Returns human readable information about the match type
    *
@@ -78,8 +75,9 @@ public:
 
 private:
 
-  double _matchThreshold, _missThreshold, _reviewThreshold;
-
+  double _matchThreshold;
+  double _missThreshold;
+  double _reviewThreshold;
 };
 
 using MatchThresholdPtr = std::shared_ptr<MatchThreshold>;

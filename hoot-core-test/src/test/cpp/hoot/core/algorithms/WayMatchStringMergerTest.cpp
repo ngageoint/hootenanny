@@ -31,11 +31,11 @@
 #include <hoot/core/algorithms/WayMatchStringSplitter.h>
 #include <hoot/core/algorithms/linearreference/WayString.h>
 #include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
 using namespace std;
@@ -57,7 +57,6 @@ public:
     : HootTestFixture("test-files/algorithms/WayMatchStringMergerTest/",
                       "test-output/algorithms/WayMatchStringMergerTest/")
   {
-    setResetType(ResetBasic);
   }
 
   WayStringPtr createWayString1(OsmMapPtr map)

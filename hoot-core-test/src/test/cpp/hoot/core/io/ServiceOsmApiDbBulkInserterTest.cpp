@@ -31,8 +31,8 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmApiDbReader.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -60,7 +60,6 @@ public:
     : HootTestFixture("test-files/io/ServiceOsmApiDbBulkInserterTest/",
                       "test-output/io/ServiceOsmApiDbBulkInserterTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void verifyDatabaseOutputOffline()

@@ -26,12 +26,12 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/ops/PointsToPolysConverter.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/ops/PointsToPolysConverter.h>
 
 namespace hoot
 {
@@ -48,7 +48,6 @@ public:
   HootTestFixture(
     "test-files/ops/PointsToPolysConverterTest/", "test-output/ops/PointsToPolysConverterTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runBasicTest()

@@ -65,7 +65,7 @@ public:
 
   BuildingMatchCreatorTest() : HootTestFixture("test-files/", UNUSED_PATH)
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   ConstWayPtr getWay(ConstOsmMapPtr map, const QString& key, const QString& value)
@@ -129,8 +129,6 @@ public:
   {
     OsmMapPtr map = getTestMap();
 
-    conf().set("address.match.enabled", "false");
-
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
 
@@ -149,8 +147,6 @@ public:
 
     OsmXmlReader reader;
     OsmMapPtr map = std::make_shared<OsmMap>();
-
-    conf().set("address.match.enabled", "false");
 
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
@@ -184,10 +180,9 @@ public:
     MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("source:date", "2018-02-14T10:56");
 
-    conf().set("building.date.format", "yyyy-MM-ddTHH:mm");
-    conf().set("building.date.tag.key", "source:date");
-    conf().set("building.review.if.secondary.newer", "true");
-    conf().set("address.match.enabled", "false");
+    conf().set(ConfigOptions::getBuildingDateFormatKey(), "yyyy-MM-ddTHH:mm");
+    conf().set(ConfigOptions::getBuildingDateTagKeyKey(), "source:date");
+    conf().set(ConfigOptions::getBuildingReviewIfSecondaryNewerKey(), "true");
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
@@ -245,10 +240,9 @@ public:
     MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("source:date", "2018-02-14T10:55");
 
-    conf().set("address.match.enabled", "false");
-    conf().set("building.date.format", "yyyy-MM-ddTHH:mm");
-    conf().set("building.date.tag.key", "source:date");
-    conf().set("building.review.if.secondary.newer", "true");
+    conf().set(ConfigOptions::getBuildingDateFormatKey(), "yyyy-MM-ddTHH:mm");
+    conf().set(ConfigOptions::getBuildingDateTagKeyKey(), "source:date");
+    conf().set(ConfigOptions::getBuildingReviewIfSecondaryNewerKey(), "true");
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
@@ -274,10 +268,9 @@ public:
     MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("date", "2018-02-14T10:55");
 
-    conf().set("address.match.enabled", "false");
-    conf().set("building.date.format", "yyyy-MM-ddTHH:mm");
-    conf().set("building.date.tag.key", "source:date");
-    conf().set("building.review.if.secondary.newer", "true");
+    conf().set(ConfigOptions::getBuildingDateFormatKey(), "yyyy-MM-ddTHH:mm");
+    conf().set(ConfigOptions::getBuildingDateTagKeyKey(), "source:date");
+    conf().set(ConfigOptions::getBuildingReviewIfSecondaryNewerKey(), "true");
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
@@ -302,10 +295,9 @@ public:
     MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("source:date", "2018-02-14T10:55");
 
-    conf().set("address.match.enabled", "false");
-    conf().set("building.date.format", "yyyy-MM-ddTHH:mm");
-    conf().set("building.date.tag.key", "source:date");
-    conf().set("building.review.if.secondary.newer", "true");
+    conf().set(ConfigOptions::getBuildingDateFormatKey(), "yyyy-MM-ddTHH:mm");
+    conf().set(ConfigOptions::getBuildingDateTagKeyKey(), "source:date");
+    conf().set(ConfigOptions::getBuildingReviewIfSecondaryNewerKey(), "true");
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
@@ -327,8 +319,7 @@ public:
   {
     OsmMapPtr map = getTestMap();
 
-    conf().set("address.match.enabled", "false");
-    conf().set("building.review.matches.other.than.one.to.one", "true");
+    conf().set(ConfigOptions::getBuildingReviewMatchesOtherThanOneToOneKey(), "true");
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;
@@ -351,8 +342,7 @@ public:
 
     OsmMapPtr map = getTestMap(false);
 
-    conf().set("address.match.enabled", "false");
-    conf().set("building.review.matches.other.than.one.to.one", "true");
+    conf().set(ConfigOptions::getBuildingReviewMatchesOtherThanOneToOneKey(), "true");
 
     BuildingMatchCreator uut;
     vector<ConstMatchPtr> matches;

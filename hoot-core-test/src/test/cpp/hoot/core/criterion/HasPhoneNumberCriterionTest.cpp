@@ -40,11 +40,6 @@ class HasPhoneNumberCriterionTest : public HootTestFixture
 
 public:
 
-  HasPhoneNumberCriterionTest() : HootTestFixture(UNUSED_PATH, UNUSED_PATH)
-  {
-    setResetType(ResetBasic);
-  }
-
   void runBasicTest()
   {
     HasPhoneNumberCriterion uut;

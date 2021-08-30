@@ -26,11 +26,13 @@
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/visitors/ToEnglishTranslationVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/rnd/language/HootServicesLanguageInfoMockClient.h>
+#include <hoot/rnd/language/HootServicesTranslatorMockClient.h>
+#include <hoot/rnd/visitors/ToEnglishTranslationVisitor.h>
 
 namespace hoot
 {
@@ -52,7 +54,6 @@ public:
     : HootTestFixture("test-files/visitors/ToEnglishTranslationVisitorTest/",
                       "test-output/visitors/ToEnglishTranslationVisitorTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runTranslateTest()
@@ -68,7 +69,7 @@ public:
   {
     const QString testName = "runNoSourceLangsTest";
     Settings conf = _getDefaultConfig();
-    conf.set("language.translation.source.languages", QStringList());
+    conf.set(ConfigOptions::getLanguageTranslationSourceLanguagesKey(), QStringList());
     QString exceptionMsg("");
     try
     {
@@ -88,7 +89,7 @@ public:
   {
     const QString testName = "runIgnorePreTranslatedTagsTest";
     Settings conf = _getDefaultConfig();
-    conf.set("language.ignore.pre.translated.tags", true);
+    conf.set(ConfigOptions::getLanguageIgnorePreTranslatedTagsKey(), true);
     _runTranslationTest(
       conf,
       _outputPath + testName + ".osm",
@@ -99,7 +100,7 @@ public:
   {
     const QString testName = "runNoTagKeysTest";
     Settings conf = _getDefaultConfig();
-    conf.set("language.tag.keys", QStringList());
+    conf.set(ConfigOptions::getLanguageTagKeysKey(), QStringList());
     QString exceptionMsg("");
     try
     {
@@ -119,7 +120,7 @@ public:
   {
     const QString testName = "runNamesTest";
     Settings conf = _getDefaultConfig();
-    conf.set("language.parse.names", true);
+    conf.set(ConfigOptions::getLanguageParseNamesKey(), true);
     _runTranslationTest(
       conf,
       _outputPath + testName + ".osm",
@@ -130,8 +131,8 @@ public:
   {
     const QString testName = "runNamesTestWithAdditionalTagKeys";
     Settings conf = _getDefaultConfig();
-    conf.set("language.parse.names", true);
-    conf.set("language.tag.keys", "tag1;tag2");
+    conf.set(ConfigOptions::getLanguageParseNamesKey(), true);
+    conf.set(ConfigOptions::getLanguageTagKeysKey(), "tag1;tag2");
     _runTranslationTest(
       conf,
       _outputPath + testName + ".osm",
@@ -144,18 +145,21 @@ private:
   {
     Settings conf;
 
-    conf.set("language.skip.words.in.english.dictionary", true);
-    conf.set("language.ignore.pre.translated.tags", false);
+    conf.set(ConfigOptions::getLanguageSkipWordsInEnglishDictionaryKey(), true);
+    conf.set(ConfigOptions::getLanguageIgnorePreTranslatedTagsKey(), false);
     QStringList sourceLangs;
     sourceLangs.append("de");
     sourceLangs.append("es");
-    conf.set("language.translation.source.languages", sourceLangs);
+    conf.set(ConfigOptions::getLanguageTranslationSourceLanguagesKey(), sourceLangs);
     QStringList toTranslateTagKeys;
     toTranslateTagKeys.append("name");
     toTranslateTagKeys.append("alt_name");
-    conf.set("language.tag.keys", toTranslateTagKeys);
-    conf.set("language.translation.translator", "HootServicesTranslatorMockClient");
-    conf.set("language.info.provider", "HootServicesLanguageInfoMockClient");
+    conf.set(ConfigOptions::getLanguageTagKeysKey(), toTranslateTagKeys);
+    conf.set(
+      ConfigOptions::getLanguageTranslationTranslatorKey(),
+      HootServicesTranslatorMockClient::className());
+    conf.set(
+      ConfigOptions::getLanguageInfoProviderKey(), HootServicesLanguageInfoMockClient::className());
 
     return conf;
   }
