@@ -87,7 +87,8 @@ void OptionsValidator::fixMisc()
   }
   StringUtils::removeEmptyStrings(matchCreators);
   StringUtils::removeEmptyStrings(mergerCreators);
-  // Legacy namespace prefixes are still supported, but internally we ignore them.
+  // Legacy namespace prefixes are still supported coming in from the UI only, but internally we
+  // ignore them.
   StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), matchCreators);
   StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), mergerCreators);
   // Merger creators may have duplicate ScriptMergerCreator instances, but match creators should
@@ -251,10 +252,11 @@ void OptionsValidator::validateMatchers()
   else if (matchCreators.size() != mergerCreators.size())
   {
     // This gets fixed in fixMisc, if needed.
-    throw HootException(
+    throw IllegalArgumentException(
       "The number of configured match creators (" + QString::number(matchCreators.size()) +
       ") does not equal the number of configured merger creators (" +
-      QString::number(mergerCreators.size()) + ")");
+      QString::number(mergerCreators.size()) + "); match creators: " + matchCreators.join(";") +
+      ", merger creators: " + mergerCreators.join(";"));
   }
 
   for (int i = 0; i < matchCreators.size(); i++)
@@ -266,7 +268,7 @@ void OptionsValidator::validateMatchers()
     // need a better check.
     if (matchCreator.startsWith("ScriptMatchCreator") && mergerCreator != "ScriptMergerCreator")
     {
-      throw HootException(
+      throw IllegalArgumentException(
         "Attempted to use a ScriptMatchCreator without a ScriptMergerCreator. Match creator: " +
         matchCreator + QString(" Merger creator: ")  + mergerCreator);
     }

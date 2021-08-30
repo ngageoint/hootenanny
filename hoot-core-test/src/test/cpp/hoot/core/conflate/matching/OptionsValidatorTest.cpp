@@ -46,11 +46,6 @@ namespace hoot
 {
 
 /*
- * Parts of this test should eventually be removed including:
- *
- * runAutoCorrectSublineMatcherTest
- * runAutoCorrectClassifierTest
- *
  * See notes in OptionsValidator.
  */
 class OptionsValidatorTest : public HootTestFixture
@@ -97,7 +92,7 @@ public:
     const QString expected =
       QString("The number of configured match creators (2) does not equal the number of ") +
       QString("configured merger creators (1)");
-    HOOT_STR_EQUALS(expected.toStdString(), exceptionMsg.toStdString());
+    CPPUNIT_ASSERT(exceptionMsg.startsWith(expected));
   }
 
   void runValidateScriptMismatchTest()
