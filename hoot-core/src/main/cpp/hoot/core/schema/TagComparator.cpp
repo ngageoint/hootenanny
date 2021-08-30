@@ -103,14 +103,15 @@ void TagComparator::_addNonConflictingTags(Tags& t1, const Tags& t2, Tags& resul
   }
 }
 
-void TagComparator::averageTags(const Tags& t1, const Tags& t2, Tags& result,
-                                bool keepAllUnknownTags, bool caseSensitive)
+void TagComparator::averageTags(
+  const Tags& t1, const Tags& t2, Tags& result, bool keepAllUnknownTags, bool caseSensitive)
 {
   averageTags(t1, 1.0, t2, 1.0, result, keepAllUnknownTags, caseSensitive);
 }
 
-void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, double w2,
-                                Tags& result, bool keepAllUnknownTags, bool caseSensitive)
+void TagComparator::averageTags(
+  const Tags& t1In, double w1, const Tags& t2In, double w2, Tags& result, bool keepAllUnknownTags,
+  bool caseSensitive)
 {
   result.clear();
   const OsmSchema& schema = OsmSchema::getInstance();
@@ -270,7 +271,8 @@ void TagComparator::compareEnumeratedTags(
   LOG_TRACE("score: " << score);
 }
 
-void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& score, double& weight) const
+void TagComparator::compareTextTags(
+  const Tags& t1, const Tags& t2, double& score, double& weight) const
 {
   const OsmSchema& schema = OsmSchema::getInstance();
 
@@ -295,13 +297,11 @@ void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& scor
   }
 }
 
-void TagComparator::compareNames(const Tags& t1, const Tags& t2, double& score, double& weight,
-                                 bool strict) const
+void TagComparator::compareNames(
+  const Tags& t1, const Tags& t2, double& score, double& weight, bool strict) const
 {
-  //double score = LevenshteinDistance::score();
-  // Check out picard's coefficient
-  // or sum(top scores) / min(t1.count, t2.count)
-  // score for the same and score for different
+  // Check out picard's coefficient or sum(top scores) / min(t1.count, t2.count) score for the same
+  // and score for different.
   score = 0;
   weight = 0;
 
@@ -485,7 +485,7 @@ Tags TagComparator::generalize(Tags t1, Tags t2, bool overwriteUnrecognizedTags,
   // Tags that share an ancestor are promoted to the first common ancestor
   _promoteToCommonAncestor(t1, t2, result);
 
-  // If there are no conflicting tags the tag is kept
+  // If there are no conflicting tags, the tag is kept.
   _addNonConflictingTags(t1, t2, result);
   _addNonConflictingTags(t2, t1, result);
 
@@ -502,7 +502,7 @@ Tags TagComparator::mostSpecific(
   // Names are merged using _mergeNames.
   mergeNames(t1, t2, result, QStringList(), caseSensitive);
 
-  // Exact matches are unchanged
+  // Exact matches are unchanged.
   _mergeExactMatches(t1, t2, result);
 
   // Merge any text fields by adding to a list.
@@ -518,14 +518,48 @@ Tags TagComparator::mostSpecific(
     _mergeUnrecognizedTags(t1, t2, result);
   }
 
-  // Tags that share an ancestor are promoted to the first common ancestor
-  //_promoteToCommonAncestor(t1, t2, result);
+  // Keep the most specific tag as recognized by the schema. If tags tie in specificity, then the
+  // tag from t1 is arbitrarily kept.
+  _keepMostSpecific(t1, t2, result);
 
-  // If there are no conflicting tags the tag is kept
+  // If there are no conflicting tags, the tag is kept.
   _addNonConflictingTags(t1, t2, result);
   _addNonConflictingTags(t2, t1, result);
 
   return result;
+}
+
+void TagComparator::_keepMostSpecific(Tags& t1, Tags& t2, Tags& result) const
+{
+  const OsmSchema& schema = OsmSchema::getInstance();
+  // We're deleting as we iterate, so be careful making changes.
+  for (Tags::iterator it1 = t1.begin(); it1 != t1.end(); )
+  {
+    for (Tags::iterator it2 = t2.begin(); it2 != t2.end(); )
+    {
+      const SchemaVertex& ancestor =
+        schema.getFirstCommonAncestor(it1.key() + "=" + it1.value(), it2.key() + "=" + it2.value());
+      if (ancestor.isEmpty() == false)
+      {
+        // Erase from the iterators in a safe way.
+        t1.erase(it1++);
+        t2.erase(it2++);
+        if (ancestor.getValue().isEmpty() == false)
+        {
+          result[ancestor.getKey()] = ancestor.getValue();
+        }
+      }
+      else
+      {
+        // If we didn't erase anything, then increment the iterators.
+        ++it2;
+      }
+    }
+    if (it1 != t1.end())
+    {
+      ++it1;
+    }
+  }
 }
 
 void TagComparator::_mergeExactMatches(Tags& t1, Tags& t2, Tags& result) const
@@ -663,9 +697,9 @@ void TagComparator::mergeNames(
   LOG_VART(result);
 }
 
-void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result,
-                              const QStringList& overwriteExcludeTagKeys,
-                              bool caseSensitive) const
+void TagComparator::mergeText(
+  Tags& t1, Tags& t2, Tags& result, const QStringList& overwriteExcludeTagKeys,
+  bool caseSensitive) const
 {
   LOG_TRACE("Merging text...");
   LOG_VART(t1);
@@ -766,8 +800,9 @@ void TagComparator::_mergeUnrecognizedTags(Tags& t1, Tags& t2, Tags& result)
   }
 }
 
-Tags TagComparator::overwriteMerge(Tags t1, Tags t2, const QStringList& overwriteExcludeTagKeys,
-                                   const QStringList& accumulateValuesTagKeys, bool caseSensitive)
+Tags TagComparator::overwriteMerge(
+  Tags t1, Tags t2, const QStringList& overwriteExcludeTagKeys,
+  const QStringList& accumulateValuesTagKeys, bool caseSensitive)
 { 
   Tags result;
 
@@ -784,9 +819,8 @@ Tags TagComparator::overwriteMerge(Tags t1, Tags t2, const QStringList& overwrit
   return result;
 }
 
-Tags TagComparator::replaceMerge(const Tags& t1, const Tags& t2,
-                                 const QStringList& overwriteExcludeTagKeys,
-                                 bool caseSensitive)
+Tags TagComparator::replaceMerge(
+  const Tags& t1, const Tags& t2, const QStringList& overwriteExcludeTagKeys, bool caseSensitive)
 {
   Tags result;
 
@@ -812,10 +846,9 @@ Tags TagComparator::replaceMerge(const Tags& t1, const Tags& t2,
   return result;
 }
 
-void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result,
-                                            const QStringList& overwriteExcludeTagKeys,
-                                            const QStringList& accumulateValuesTagKeys,
-                                            bool caseSensitive) const
+void TagComparator::_overwriteRemainingTags(
+  Tags& t1, Tags& t2, Tags& result, const QStringList& overwriteExcludeTagKeys,
+  const QStringList& accumulateValuesTagKeys, bool caseSensitive) const
 {
   LOG_TRACE("Overwriting remaining tags...");
 

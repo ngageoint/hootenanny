@@ -37,9 +37,7 @@ HOOT_FACTORY_REGISTER(TagMerger, MostSpecificTagMerger)
 
 Tags MostSpecificTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
 {
-  Tags result;
-  TagComparator::getInstance().mostSpecific(t1, 1.0, t2, 1.0, result, false, _caseSensitive);
-  return result;
+  return TagComparator::getInstance().mostSpecific(t1, t2, false, _caseSensitive);
 }
 
 }

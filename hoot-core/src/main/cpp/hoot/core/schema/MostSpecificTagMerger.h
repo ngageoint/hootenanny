@@ -27,11 +27,15 @@
 #ifndef MOST_SPECIFIC_TAG_MERGER_H
 #define MOST_SPECIFIC_TAG_MERGER_H
 
+// Hoot
 #include <hoot/core/schema/TagMerger.h>
 
 namespace hoot
 {
 
+/**
+ * @brief The MostSpecificTagMerger class TODO
+ */
 class MostSpecificTagMerger : public TagMerger
 {
 public:
@@ -41,6 +45,13 @@ public:
   MostSpecificTagMerger() = default;
   ~MostSpecificTagMerger() = default;
 
+  /**
+   * @brief mergeTags TODO
+   * @param t1
+   * @param t2
+   * @param et
+   * @return
+   */
   Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
   QString getDescription() const override

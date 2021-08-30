@@ -27,6 +27,7 @@
 #ifndef GENERALIZETAGMERGER_H
 #define GENERALIZETAGMERGER_H
 
+// Hoot
 #include <hoot/core/schema/TagMerger.h>
 
 namespace hoot

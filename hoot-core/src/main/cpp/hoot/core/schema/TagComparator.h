@@ -190,6 +190,14 @@ private:
    */
   void _promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result) const;
 
+  /**
+   * @brief _keepMostSpecific TODO
+   * @param t1
+   * @param t2
+   * @param result
+   */
+  void _keepMostSpecific(Tags& t1, Tags& t2, Tags& result) const;
+
   QSet<QString> _toSet(const Tags& t, const QString& k);
 
   /** Default constructor/destructor */
