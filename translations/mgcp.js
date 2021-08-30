@@ -899,6 +899,10 @@ mgcp = {
 
     case 'AL015': // Building
       if (tags.surface == 'unknown') delete tags.surface;
+      if (tags.industrial == 'petroleum_refining' && (tags.product == 'unknown' || tags.product == undefined))
+      {
+        tags.product = 'petroleum';
+      }
       break;
 
     case 'AL020': // AL020 (Built-up Area) should become a Place. NOTE: This is a bit vague...
@@ -1971,6 +1975,7 @@ mgcp = {
         if (!attrs.FFN)
         {
           if (tags.shop || tags.office) attrs.FFN = '440';
+          if (tags.industrial == 'petroleum_refining') attrs.FFN = '192';
         }
         break;
 
@@ -2368,6 +2373,14 @@ mgcp = {
 
     // one 2 one
     translate.applyOne2One(notUsedAttrs, tags, mgcp.lookup, {'k':'v'},[]);
+
+    // Debug:
+    if (mgcp.configIn.OgrDebugDumptags == 'true')
+    {
+      translate.debugOutput(attrs,layerName,geometryType,'','After o2o attrs: ');
+      translate.debugOutput(tags,layerName,geometryType,'','After 020 tags: ');
+    }
+
 
     // post processing
     mgcp.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);

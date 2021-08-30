@@ -1488,7 +1488,8 @@ mgcp.rules = {
     ['ICF','14','man_made','kiln'],
     ['ICF','18','building','processing'],
     ['ICF','19','building','pumping'],
-    ['ICF','21','product','petroleum'],
+    // ['ICF','21','product','petroleum'],
+    ['ICF','21','industrial','petroleum_refining'],
     ['ICF','22','product','paper'],
     ['ICF','23','amenity','shipyard'],
     ['ICF','24','product','steel'],
@@ -2211,7 +2212,6 @@ mgcp.rules = {
     ['FFN','99','man_made','kiln'], //Not a good match for kiln
     ['FFN','99','building','manufacturing_outbuilding'],
     ['FFN','99','building','manufacturing'],
-    ['FFN','192','product','petroleum'],
 
     // Building
     ['FFN','563','building','detached'],
