@@ -35,9 +35,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(TagMerger, MostSpecificTagMerger)
 
-Tags MostSpecificTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
+Tags MostSpecificTagMerger::mergeTags(const Tags& /*t1*/, const Tags& /*t2*/, ElementType /*et*/) const
 {
-  return TagComparator::getInstance().mostSpecific(t1, t2, false, _caseSensitive);
+  return Tags();
 }
 
 }

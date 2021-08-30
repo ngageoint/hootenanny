@@ -53,7 +53,6 @@ class TagComparatorTest : public HootTestFixture
   CPPUNIT_TEST(railwayBusStopTest);
   CPPUNIT_TEST(realWorldTest);
   CPPUNIT_TEST(nonNameTagsExactlyMatchTest);
-  // TODO: specific test
   CPPUNIT_TEST_SUITE_END();
 
 public:

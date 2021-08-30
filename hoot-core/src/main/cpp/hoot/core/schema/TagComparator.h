@@ -77,16 +77,6 @@ public:
    */
   Tags generalize(
     Tags t1, Tags t2, bool overwriteUnrecognizedTags = false, bool caseSensitive = true);
-  /**
-   * Keep the most specific tags in t1 and t2. Using the following rules:
-   * - Names are merged using mergeNames.
-   * - Exact matches are unchanged (lists are treated as unordered)
-   * - Unrecognized tags are concatenated in a list.
-   * - If tags tie in specificity, then the tag from t1 is arbitrarily kept.
-   * - If there are no conflicting tags, the tag is kept.
-   */
-  Tags mostSpecific(
-    Tags t1, Tags t2, bool overwriteUnrecognizedTags = false, bool caseSensitive = true);
 
   /**
    * @brief mergeNames - This merges "names" tags, so the name tag in t1 gets
@@ -189,14 +179,6 @@ private:
    * removed from t1 and t2.
    */
   void _promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result) const;
-
-  /**
-   * @brief _keepMostSpecific TODO
-   * @param t1
-   * @param t2
-   * @param result
-   */
-  void _keepMostSpecific(Tags& t1, Tags& t2, Tags& result) const;
 
   QSet<QString> _toSet(const Tags& t, const QString& k);
 

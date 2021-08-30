@@ -80,7 +80,8 @@ public:
 
   void overlappingKeysTest()
   {
-    // The second name should go into alt_name, and the second building tag should go into alt_types.
+    // The second name should go into alt_name, and the second building tag should go into
+    // alt_types.
 
     Tags t1;
     t1["name"] = "Building 1";

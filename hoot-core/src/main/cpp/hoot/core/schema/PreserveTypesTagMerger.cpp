@@ -77,12 +77,11 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     tagsToBeOverwritten = t2;
   }
 
-  // handle name and text tags in the standard overwrite merge fashion
-  //const QStringList excludeKeysAsList = QStringList::fromSet(_skipTagKeys);
-  TagComparator::getInstance().mergeNames(tagsToOverwriteWith, tagsToBeOverwritten, result,
-                                          _overwriteExcludeTagKeys, _caseSensitive);
-  TagComparator::getInstance().mergeText(tagsToOverwriteWith, tagsToBeOverwritten, result,
-                                         _overwriteExcludeTagKeys, _caseSensitive);
+  // Handle name and text tags in the standard overwrite merge fashion.
+  TagComparator::getInstance().mergeNames(
+    tagsToOverwriteWith, tagsToBeOverwritten, result, _overwriteExcludeTagKeys, _caseSensitive);
+  TagComparator::getInstance().mergeText(
+    tagsToOverwriteWith, tagsToBeOverwritten, result, _overwriteExcludeTagKeys, _caseSensitive);
   LOG_TRACE("Tags after name/text merging: " << result);
 
   // retain any previously set alt_types
@@ -106,8 +105,8 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     LOG_VART(it.value());
 
     bool skippingTagPreservation = false;
-    // ignore type tags that either were specified to be explicitly skipped or general tags that
-    // we don't want to be overwritten
+    // Ignore type tags that either were specified to be explicitly skipped or general tags that
+    // we don't want to be overwritten.
     if (_skipTagKeys.find(it.key()) != _skipTagKeys.end() ||
         _overwriteExcludeTagKeys.contains(it.key()))
     {
@@ -161,7 +160,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
         }
         else
         {
-          // arbitrarily use first tag and add the second to an alt_types field
+          // Arbitrarily use the first tag and add the second to an alt_types field.
           LOG_TRACE(
             "Both tag sets contain same type: " << it.key() <<
             " but neither is more specific.  Keeping both...");
@@ -195,7 +194,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   }
   LOG_TRACE("Tags after type handling: " << result);
 
-  // handle all the remaining tags that don't conflict
+  // Handle all the remaining tags that don't conflict.
   for (Tags::ConstIterator it = tagsToBeOverwritten.constBegin();
        it != tagsToBeOverwritten.constEnd(); ++it)
   {
