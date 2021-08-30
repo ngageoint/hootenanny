@@ -49,6 +49,7 @@
 #include <hoot/core/schema/TagMerger.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/validation/Validator.h>
 #include <hoot/core/visitors/ElementVisitor.h>
 
 //  Qt
@@ -308,6 +309,16 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     ts <<
       _getApiEntities<ElementCriterion, GeometryTypeCriterion>(
         ElementCriterion::className(), "geometry type criteria", false, MAX_NAME_SIZE - 10);
+  }
+  else if (apiEntityType == "validators")
+  {
+    // We know that all validators must be map ops b/c validators need to look at entire maps.
+    msg += ":";
+    msg.prepend("Validators");
+    ts << msg << endl;
+    ts <<
+      _getApiEntities<OsmMapOperation, Validator>(
+        OsmMapOperation::className(), "validator", false, MAX_NAME_SIZE - 10);
   }
   return ts.readAll();
 }
