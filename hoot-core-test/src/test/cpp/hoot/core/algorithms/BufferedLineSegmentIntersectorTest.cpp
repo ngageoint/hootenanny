@@ -25,12 +25,6 @@
  * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // GEOS
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
@@ -39,7 +33,6 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/BufferedLineSegmentIntersector.h>
-#include <hoot/core/util/Log.h>
 
 // Tgs
 #include <tgs/Statistics/Random.h>

@@ -37,7 +37,6 @@
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
@@ -61,6 +60,7 @@ _matchFactory(MatchFactory::getInstance()),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _currentStep(1)
 {
+  setConflateScoreTagsFilter(ConfigOptions().getConflateScoreTagsFilter());
   _reset();
 }
 
@@ -70,12 +70,25 @@ _matchThreshold(matchThreshold),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _currentStep(1)
 {
+  setConflateScoreTagsFilter(ConfigOptions().getConflateScoreTagsFilter());
   _reset();
 }
 
 AbstractConflator::~AbstractConflator()
 {
   _reset();
+}
+
+void AbstractConflator::setConflateScoreTagsFilter(const QStringList& filter)
+{
+  for (int i = 0; i < filter.size(); i++)
+  {
+    if (!MatchType::isValidMatchTypeString(filter.at(i)))
+    {
+      throw IllegalArgumentException("Invalid conflate score tag filter type: " + filter.at(i));
+    }
+  }
+  _conflateScoreTagsFilter = filter;
 }
 
 void AbstractConflator::_reset()
@@ -459,14 +472,24 @@ void AbstractConflator::_addConflateScoreTags(
   const ElementPtr& e, const MatchClassification& matchClassification,
   const MatchThreshold& matchThreshold) const
 {
-  Tags& tags = e->getTags();
-  tags.appendValue(MetadataTags::HootScoreMatch(), matchClassification.getMatchP());
-  tags.appendValue(MetadataTags::HootScoreMiss(), matchClassification.getMissP());
-  tags.appendValue(MetadataTags::HootScoreReview(), matchClassification.getReviewP());
-  // The thresholds are global, so don't append.
-  tags.set(MetadataTags::HootScoreMatchThreshold(), matchThreshold.getMatchThreshold());
-  tags.set(MetadataTags::HootScoreMissThreshold(), matchThreshold.getMissThreshold());
-  tags.set(MetadataTags::HootScoreReviewThreshold(), matchThreshold.getReviewThreshold());
+  LOG_VART(matchClassification);
+  LOG_VART(matchThreshold);
+  const MatchType matchType = matchThreshold.getType(matchClassification);
+  LOG_VART(matchType.toString());
+  if (_conflateScoreTagsFilter.contains(matchType.toString(), Qt::CaseInsensitive))
+  {
+    Tags& tags = e->getTags();
+    tags.appendValue(MetadataTags::HootScoreMatch(), matchClassification.getMatchP());
+    tags.appendValue(MetadataTags::HootScoreMiss(), matchClassification.getMissP());
+    tags.appendValue(MetadataTags::HootScoreReview(), matchClassification.getReviewP());
+    tags.appendValue(MetadataTags::HootScoreClassification(), matchType.toString());
+    tags.appendValue(
+      MetadataTags::HootScoreDetail(), matchThreshold.getTypeDetail(matchClassification));
+    // The thresholds are global, so don't append.
+    tags.set(MetadataTags::HootScoreMatchThreshold(), matchThreshold.getMatchThreshold());
+    tags.set(MetadataTags::HootScoreMissThreshold(), matchThreshold.getMissThreshold());
+    tags.set(MetadataTags::HootScoreReviewThreshold(), matchThreshold.getReviewThreshold());
+  }
 }
 
 void AbstractConflator::_addConflateScoreTags()

@@ -25,19 +25,9 @@
  * @copyright Copyright (C) 2013, 2014, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
-
-//  Qt
-#include <QFileInfo>
 
 namespace hoot
 {

@@ -27,10 +27,7 @@
 #ifndef REQUIREJS_H
 #define REQUIREJS_H
 
-// Qt
-#include <QString>
-
-// node.js
+// Hoot
 #include <hoot/js/HootBaseJs.h>
 
 namespace hoot

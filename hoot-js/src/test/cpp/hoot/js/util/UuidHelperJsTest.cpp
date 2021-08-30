@@ -27,6 +27,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/PluginContext.h>
@@ -36,9 +37,6 @@
 
 // Qt
 #include <QVariant>
-
-#include <iostream>
-#include <string>
 
 using namespace v8;
 
@@ -52,6 +50,11 @@ class UuidHelperJsTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  UuidHelperJsTest()
+  {
+    setResetType(ResetConfigs);
+  }
 
   // Jasons Code: "what can I say? I'm lazy and I don't like extra verbose mark ups."
   // Heck yeah, this is my code! Are you saying you like crazy verbose and difficult to read tests!?

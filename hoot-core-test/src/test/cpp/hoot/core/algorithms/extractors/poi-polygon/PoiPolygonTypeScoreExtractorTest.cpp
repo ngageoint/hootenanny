@@ -26,19 +26,14 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/core/util/FileUtils.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 using namespace geos::geom;
 
@@ -106,8 +101,8 @@ public:
     Settings settings = conf();
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    settings.set("poi.polygon.type.translate.to.english", "true");
-    settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
+    settings.set(ConfigOptions::getPoiPolygonTypeTranslateToEnglishKey(), "true");
+    settings.set(ConfigOptions::getLanguageTranslationTranslatorKey(), ToEnglishDictionaryTranslator::className());
     PoiPolygonInfoCachePtr infoCache = std::make_shared<PoiPolygonInfoCache>(map);
     infoCache->setConfiguration(settings);
     PoiPolygonTypeScoreExtractor uut(infoCache);
@@ -119,7 +114,7 @@ public:
     way1->getTags().set("amenity", "Fahrscheinschalter");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    settings.set("poi.polygon.type.translate.to.english", "false");
+    settings.set(ConfigOptions::getPoiPolygonTypeTranslateToEnglishKey(), "false");
     uut.setConfiguration(settings);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }

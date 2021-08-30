@@ -32,7 +32,6 @@
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QDateTime>
@@ -56,12 +55,13 @@ public:
 
   long mapId;
 
-  virtual void setUp()
+  void setUp() override
   {
+    HootTestFixture::setUp();
     deleteUser(userEmail());
   }
 
-  virtual void tearDown()
+  void tearDown() override
   {
     deleteUser(userEmail());
 
@@ -69,6 +69,7 @@ public:
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
     database.close();
+    HootTestFixture::tearDown();
   }
 
   void deleteUser(QString email)

@@ -33,18 +33,12 @@
 #include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/WayAverager.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 // Standard
 #include <sstream>
@@ -67,7 +61,6 @@ public:
   HootTestFixture(
     "test-files/algorithms/subline-matching/", "test-output/algorithms/subline-matching/")
   {
-    setResetType(ResetBasic);
   }
 
   void runTest()

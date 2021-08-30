@@ -28,13 +28,6 @@
 #ifndef COLLECTION_UTILS_H
 #define COLLECTION_UTILS_H
 
-// Qt
-#include <QString>
-#include <QSet>
-
-// Std
-#include <set>
-
 namespace hoot
 {
 

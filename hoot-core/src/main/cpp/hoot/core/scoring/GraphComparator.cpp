@@ -47,11 +47,8 @@
 #include <hoot/core/scoring/DirectedGraph.h>
 #include <hoot/core/scoring/ShortestPath.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
 
 // Qt
-#include <QDebug>
-#include <QDir>
 #include <QPainter>
 
 // TGS

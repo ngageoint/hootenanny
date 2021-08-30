@@ -29,7 +29,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/network/NetworkEdge.h>
 #include <hoot/core/elements/Node.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 
 using namespace geos::geom;
@@ -52,9 +51,6 @@ public:
    */
   void basicTest()
   {
-    // Reset static IDs for testing
-    NetworkVertex::reset();
-
     // Make some nodes and Vertexes
     NodePtr pN1 = std::make_shared<Node>(Status::Unknown1, -100, Coordinate(1.0, 1.0), 10.0);
     NodePtr pN2 = std::make_shared<Node>(Status::Unknown1, -200, Coordinate(2.0, 2.0), 10.0);

@@ -25,15 +25,6 @@
  * @copyright Copyright (C) 2014, 2016, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
-// geos
-#include <geos/geom/Coordinate.h>
-
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/zindex/Range.h>

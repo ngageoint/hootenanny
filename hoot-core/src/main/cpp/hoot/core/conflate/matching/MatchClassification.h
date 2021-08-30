@@ -27,9 +27,6 @@
 #ifndef MATCHCLASSIFICATION_H
 #define MATCHCLASSIFICATION_H
 
-// Qt
-#include <QString>
-
 namespace hoot
 {
 

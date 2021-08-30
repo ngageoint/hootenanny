@@ -38,7 +38,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/KnnWayIterator.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/util/StringUtils.h>
 

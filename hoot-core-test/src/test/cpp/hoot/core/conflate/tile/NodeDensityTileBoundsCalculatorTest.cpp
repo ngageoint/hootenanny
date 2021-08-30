@@ -30,13 +30,6 @@
 #include <hoot/core/conflate/tile/NodeDensityTileBoundsCalculator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/Log.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -59,7 +52,6 @@ public:
   NodeDensityTileBoundsCalculatorTest() :
   HootTestFixture("test-files/conflate/tile/", "test-output/conflate/tile/")
   {
-    setResetType(ResetBasic);
   }
 
   void addEnvelope(OsmMapPtr map, Envelope& e, int tx, int ty)

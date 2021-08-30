@@ -25,20 +25,14 @@
  * @copyright Copyright (C) 2013, 2014, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmApiDbBulkInserter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmApiDbReader.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -66,7 +60,6 @@ public:
     : HootTestFixture("test-files/io/ServiceOsmApiDbBulkInserterTest/",
                       "test-output/io/ServiceOsmApiDbBulkInserterTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void verifyDatabaseOutputOffline()

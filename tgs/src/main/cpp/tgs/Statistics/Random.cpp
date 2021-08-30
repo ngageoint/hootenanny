@@ -27,7 +27,7 @@
 
 #include "Random.h"
 
-// Standard Includes
+// Standard
 #include <math.h>
 #include <stdlib.h>
 

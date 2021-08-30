@@ -27,10 +27,9 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
 #include <hoot/rnd/visitors/ImplicitPoiTypeTagger.h>
 
 namespace hoot
@@ -56,7 +55,6 @@ public:
     "test-files/visitors/ImplicitPoiTypeTaggerTest/",
     "test-output/visitors/ImplicitPoiTypeTaggerTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runBasicTest()

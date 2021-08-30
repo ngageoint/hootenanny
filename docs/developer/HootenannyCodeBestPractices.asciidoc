@@ -3,7 +3,7 @@
 
 === General
 
-Many of these come directly from https://sonarcloud.io/dashboard?id=hoot[Sonar] recommendations.
+Some of these come directly from https://sonarcloud.io/dashboard?id=hoot[Sonar] recommendations.
 
 * Keep as much implementation out of header files as possible. The implementations of simple 
 getters/setters are ok in a header file.
@@ -23,20 +23,16 @@ getter methods.
 * Use interface inheritance with a focus on simple, skinny interface definitions.
 * Avoid "magic" strings. Tie strings whose values may change to a class member variable or 
 configuration option when possible.
+* Remove the corresponding includes from a class as you completely remove references to other 
+classes.
 * See the "General Test Writing Guidelines" section in the 
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[testing document] 
 for some test writing tips.
 
 === Core Specific
 
-* Similar class methods/variables should be grouped together in the header file with 
-constructors/destructors being toward the top.
-* Per class member access type, list member variables before member methods.
-* Place getters/setters at the end of the public documentation in the header file.
-* Prepend private member variables and methods with "_".
-* Place private member variables before member methods in the function file.
-* Group header includes by type. e.g. hoot includes together, Qt includes together, etc.
-* Header includes should be alphabetized.
+* If you're using a commonly used class from a 3rd party library and its already included in 
+`HootCoreStable.h`, then you don't need to add an include for it.
 * Keep as much logic out of classes inheriting `BaseCommand` as possible. Create a new class to hold
 logic needed to be executed by the command.
 * Make use of configuration options via the `Configurable` interface to keep functionality 
@@ -63,6 +59,7 @@ processed.
 `OsmMapOperation` only when the data processor needs a copy of a complete map to performs its logic.
 * Use classes inheriting `ElementCriterion` to identify data based on its properties.
 * Use streaming I/O whereever possible to avoid loading large maps into memory all at once.
+* Use `OsmMapReaderFactory`, `OsmMapWriterFactory`, and `IoUtils` for I/O purposes when applicable.
 * Place experimental code into the `hoot-rnd` library. This code is expected to be at a lower TRL 
 than code in `hoot-core`, and we can be a little lenient on test coverage.
 * Make use of the `ApiEntityInfo` interface to appropriately describe map operators (classes 
@@ -75,7 +72,24 @@ geometry types a map operator (classes inheriting `OsmMapOperation`, `ElementVis
 `ElementCriterion`, etc.) operates on.
 * Make use of object pools when objects are created in very large numbers (> 10^6) e.g. create 
 `Node` with `Node::newSp`. For element objects, this generally is done in reader classes.
+* Create new exception types by deriving them from `HootException` with the `HOOT_DEFINE_EXCEPTION` 
+macro.
+* Refrain from use of `using namespace std;` and the like to avoid potential namespace collisions.
 * See the "Hootenanny Specific Test Writing Guidelines" section in the 
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[testing document] 
 for some test writing tips.
+
+== Cleaning Up Header Includes
+
+Maybe we work this into the build and/or find a better tool, but this is what has been tried so far:
+
+Use `cppclean`:
+-----
+sudo yum install python-pip
+sudo pip install --upgrade cppclean
+cd $HOOT_HOME
+cppclean .
+-----
+
+Some hoot code causes it to crash, and it also doesn't pick up unnecessary includes in .cpp files.
 

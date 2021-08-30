@@ -22,12 +22,37 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
-#ifndef NOTIMPLEMENTEDEXCEPTION_H
-#define NOTIMPLEMENTEDEXCEPTION_H
+// Hoot
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/criterion/PositiveIdCriterion.h>
 
-#include <hoot/core/util/HootException.h>
+namespace hoot
+{
 
-#endif // NOTIMPLEMENTEDEXCEPTION_H
+class PositiveIdCriterionTest : public HootTestFixture
+{
+  CPPUNIT_TEST_SUITE(PositiveIdCriterionTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
+
+public:
+
+  void runBasicTest()
+  {
+    PositiveIdCriterion uut;
+
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    node = std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+  }
+};
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PositiveIdCriterionTest, "quick");
+
+}

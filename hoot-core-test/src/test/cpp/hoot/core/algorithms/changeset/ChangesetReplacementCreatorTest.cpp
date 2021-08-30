@@ -28,7 +28,6 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/changeset/ChangesetCutOnlyCreator.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/geometry/GeometryUtils.h>
@@ -62,6 +61,7 @@ public:
 
   ChangesetReplacementCreatorTest()
   {
+    setResetType(ResetConfigs);
   }
 
   void runNonBoundableReaderTest()

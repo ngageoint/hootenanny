@@ -39,9 +39,7 @@
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/MetadataTags.h>
-
-// Standard
-#include <vector>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {

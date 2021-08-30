@@ -32,8 +32,6 @@
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 using namespace std;
@@ -169,6 +167,18 @@ void MergerFactory::registerDefaultCreators()
       }
     }
   }
+}
+
+QString MergerFactory::toString() const
+{
+  QStringList creatorList;
+  for (size_t i = 0; i < _creators.size(); ++i)
+  {
+    vector<CreatorDescription> desc = _creators[i]->getAllCreators();
+    for (size_t j = 0; j < desc.size(); ++j)
+      creatorList << desc[j].toString();
+  }
+  return QString("{ %1 }").arg(creatorList.join(",\n"));
 }
 
 }

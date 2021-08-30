@@ -34,7 +34,6 @@
 #include <hoot/core/algorithms/string/WeightedWordDistance.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
-#include <hoot/core/util/Log.h>
 
 // Tgs
 #include <tgs/System/SystemInfo.h>

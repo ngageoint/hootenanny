@@ -27,7 +27,6 @@
 #include "AddressParser.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/address/LibPostalInit.h>
 #include <hoot/core/algorithms/string/ExactStringDistance.h>

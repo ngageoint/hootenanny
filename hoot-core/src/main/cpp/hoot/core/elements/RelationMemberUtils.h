@@ -36,7 +36,6 @@ namespace hoot
 {
 
 class ElementCriterion;
-class InBoundsCriterion;
 
 /**
  * Various utilities useful when working with relation members but kept out of the Relation class

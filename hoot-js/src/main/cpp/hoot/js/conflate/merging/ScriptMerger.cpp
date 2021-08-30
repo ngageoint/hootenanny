@@ -35,8 +35,6 @@
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
-
-// node.js
 #include <hoot/js/SystemNodeJs.h>
 
 using namespace node;

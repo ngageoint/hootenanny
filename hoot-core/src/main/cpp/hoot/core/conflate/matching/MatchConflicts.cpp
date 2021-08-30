@@ -35,10 +35,6 @@
 // Qt
 #include <QElapsedTimer>
 
-// Standard
-#include <map>
-#include <set>
-
 namespace hoot
 {
 using namespace std;

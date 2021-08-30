@@ -28,14 +28,10 @@
 #include "SortedElementsValidator.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/visitors/IsSortedVisitor.h>
 #include <hoot/core/util/FileUtils.h>
-
-// Qt
-#include <QFileInfo>
 
 namespace hoot
 {

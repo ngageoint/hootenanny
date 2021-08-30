@@ -33,12 +33,6 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatchCreator.h>
 #include <hoot/core/conflate/network/NetworkMatchCreator.h>
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 namespace hoot
 {
 
@@ -56,7 +50,7 @@ public:
 
   SuperfluousConflateOpRemoverTest()
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void runOpFilter1Test()

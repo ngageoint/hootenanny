@@ -33,9 +33,6 @@
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/util/Configurable.h>
 
-// Standard
-#include <vector>
-
 // GEOS
 #include <geos/geom/Geometry.h>
 
@@ -100,6 +97,11 @@ public:
    * Removes all the creators from the factory
    */
   void reset();
+
+  /**
+   * Return the list of creators as a string
+   */
+  QString toString() const;
 
 private:
 

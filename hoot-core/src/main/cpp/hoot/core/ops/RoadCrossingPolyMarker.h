@@ -36,9 +36,6 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/validation/Validator.h>
 
-// Qt
-#include <QSet>
-
 namespace hoot
 {
 
@@ -101,11 +98,11 @@ public:
   /**
    * @see Validator
    */
-  int getNumValidationErrors() const override { return _numAffected; }
+  long getNumValidationErrors() const override { return _numAffected; }
   /**
    * @see Validator
    */
-  int getNumFeaturesValidated() const override { return _numProcessed; }
+  long getNumFeaturesValidated() const override { return _numProcessed; }
 
  private:
 

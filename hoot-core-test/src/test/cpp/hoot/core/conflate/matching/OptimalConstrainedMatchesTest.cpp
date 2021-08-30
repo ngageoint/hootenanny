@@ -34,16 +34,6 @@
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
 #include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
-#include <hoot/core/util/Log.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
-// Standard
-#include <iostream>
 
 // Tgs
 #include <tgs/StreamUtils.h>
@@ -148,6 +138,21 @@ class OptimalConstrainedMatchesTest : public HootTestFixture
 
 public:
 
+  OptimalConstrainedMatchesTest()
+  {
+    //  Reset all mergers
+    setResetType(ResetAll);
+  }
+
+  void setUp() override
+  {
+    HootTestFixture::setUp();
+    //  Capture the merger factory so that only one merger is created for the test
+    MergerFactory& factory = MergerFactory::getInstance();
+    factory.reset();
+    factory.registerCreator(std::make_shared<OptimalConstrainedFakeCreator>());
+  }
+
   void runFindSubgraphsTest()
   {
     // See this for a visual.
@@ -186,18 +191,6 @@ public:
     CPPUNIT_ASSERT_EQUAL(true, matchSet.find(fm[0]) != matchSet.end());
     CPPUNIT_ASSERT_EQUAL(true, matchSet.find(fm[2]) != matchSet.end());
     CPPUNIT_ASSERT_EQUAL(true, matchSet.find(fm[3]) != matchSet.end());
-  }
-
-  virtual void setUp()
-  {
-    MergerFactory::getInstance().reset();
-    MergerFactory::getInstance().registerCreator(std::make_shared<OptimalConstrainedFakeCreator>());
-  }
-
-  virtual void tearDown()
-  {
-    MergerFactory::getInstance().reset();
-    MergerFactory::getInstance().registerDefaultCreators();
   }
 };
 

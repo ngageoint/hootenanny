@@ -29,21 +29,14 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/scoring/GraphComparator.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/OpenCv.h>
 
 // Tgs
 #include <tgs/Statistics/Random.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -63,7 +56,6 @@ public:
     : HootTestFixture("test-files/",
                       UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void runTest()

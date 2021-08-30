@@ -25,18 +25,12 @@
  * @copyright Copyright (C) 2014, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/ElementAttributeType.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/elements/ElementAttributeType.h>
 #include <hoot/core/visitors/RemoveAttributesVisitor.h>
 
 namespace hoot
@@ -55,7 +49,6 @@ public:
     : HootTestFixture("test-files/visitors/RemoveAttributesVisitorTest/",
                       "test-output/visitors/RemoveAttributesVisitorTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runRemoveAttributesTest()

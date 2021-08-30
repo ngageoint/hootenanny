@@ -36,8 +36,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementVisitor.h>
 
 // Boost
@@ -45,12 +43,8 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
 
-// Qt
-#include <QStringList>
-
 // Standard
 #include <fstream>
-#include <iostream>
 #include <sstream>
 #include <unistd.h>
 
@@ -751,11 +745,39 @@ void Settings::parseCommonArguments(QStringList& args)
         foreach (QString v, values)
         {
           QStringList newList = conf().getList(optionName);
-          if (!newList.contains(v))
+
+          // Let's be lenient for class name entries as to whether they have the namespace prepended
+          // to them or not.
+          bool itemRemoved = false;
+          QString listItemToRemove = v;
+          if (newList.contains(listItemToRemove))
+          {
+            newList.removeAll(listItemToRemove);
+            itemRemoved = true;
+          }
+          if (!itemRemoved)
+          {
+            listItemToRemove = v.replace(MetadataTags::HootNamespacePrefix(), "");
+            if (newList.contains(listItemToRemove))
+            {
+              newList.removeAll(listItemToRemove);
+              itemRemoved = true;
+            }
+          }
+          if (!itemRemoved)
+          {
+            listItemToRemove = MetadataTags::HootNamespacePrefix() + v;
+            if (newList.contains(listItemToRemove))
+            {
+              newList.removeAll(listItemToRemove);
+              itemRemoved = true;
+            }
+          }
+          if (!itemRemoved)
           {
             throw IllegalArgumentException("Option list does not contain value: (" + v + ")");
           }
-          newList.removeAll(v);
+
           conf().set(optionName, newList);
         }
       }

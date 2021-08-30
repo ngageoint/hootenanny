@@ -34,8 +34,6 @@
 namespace hoot
 {
 
-class Settings;
-
 /**
  * Base class for a visitor that consumes multiple element criteria
  *

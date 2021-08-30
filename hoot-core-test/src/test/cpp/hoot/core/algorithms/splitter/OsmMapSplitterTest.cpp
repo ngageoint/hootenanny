@@ -46,6 +46,7 @@ public:
     : HootTestFixture("test-files/algorithms/splitter/",
                       "test-output/algorithms/splitter/")
   {
+    setResetType(ResetConfigs);
   }
 
   void runTestSmall()
@@ -74,7 +75,7 @@ public:
 
   void runTestBoston()
   {
-    Settings::getInstance().set("log.warn.message.limit", 100);
+    Settings::getInstance().set(ConfigOptions::getLogWarnMessageLimitKey(), 100);
     //  Load in the tile map
     OsmMapPtr tiles = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(tiles, _inputPath + "OsmMapSplitterTestTiles_Boston.geojson");

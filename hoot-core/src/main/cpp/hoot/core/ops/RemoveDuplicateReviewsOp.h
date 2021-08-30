@@ -31,9 +31,6 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/StringUtils.h>
 
-// Standard
-#include <set>
-
 namespace hoot
 {
 class OsmMap;

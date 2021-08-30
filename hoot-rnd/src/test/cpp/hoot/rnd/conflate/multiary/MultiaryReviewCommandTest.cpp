@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmJsonReader.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/rnd/conflate/multiary/MultiaryReviewCommand.h>
 
 using namespace std;
@@ -44,11 +44,6 @@ class MultiaryReviewCommandTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  MultiaryReviewCommandTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   OsmMapPtr getTestMap()
   {

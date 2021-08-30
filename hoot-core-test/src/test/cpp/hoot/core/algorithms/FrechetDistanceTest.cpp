@@ -25,21 +25,15 @@
  * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // GEOS
 #include <geos/geom/LineString.h>
 
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/FrechetDistance.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
 using namespace geos::geom;
@@ -59,11 +53,6 @@ class FrechetDistanceTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  FrechetDistanceTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   void simpleFrechet()
   {

@@ -25,23 +25,13 @@
  * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/RandomWayGeneralizer.h>
-
-// Qt
-#include <QFileInfo>
 
 using namespace std;
 
@@ -70,7 +60,6 @@ public:
     : HootTestFixture("test-files/visitors/RandomWayGeneralizerTest/",
                       "test-output/visitors/RandomWayGeneralizerTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runTest(const QString& inputFile, const int randomNumberGeneratorSeed,

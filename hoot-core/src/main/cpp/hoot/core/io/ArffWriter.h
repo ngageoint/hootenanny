@@ -28,14 +28,8 @@
 #ifndef ARFFWRITER_H
 #define ARFFWRITER_H
 
-// Qt
-#include <QString>
-
 // Standard
 #include <fstream>
-#include <map>
-#include <memory>
-#include <vector>
 
 namespace hoot
 {

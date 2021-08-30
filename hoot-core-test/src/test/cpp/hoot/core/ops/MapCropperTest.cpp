@@ -26,29 +26,21 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/criterion/ElementIdCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/criterion/ElementIdCriterion.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 // geos
 #include <geos/io/WKTReader.h>
 #include <geos/geom/Point.h>
-#include <geos/geom/Envelope.h>
 #include <geos/geom/Polygon.h>
 
 // TGS
@@ -78,7 +70,6 @@ public:
   MapCropperTest() :
   HootTestFixture("test-files/ops/MapCropper", "test-output/ops/MapCropper")
   {
-    setResetType(ResetBasic);
   }
 
   OsmMapPtr genPoints(int seed)
@@ -144,25 +135,25 @@ public:
     MapCropper cropper;
     Settings settings = conf();
 
-    settings.set("crop.bounds", "12.462,41.891,12.477,41.898");
+    settings.set(ConfigOptions::getCropBoundsKey(), "12.462,41.891,12.477,41.898");
     cropper.setConfiguration(settings);
     HOOT_STR_EQUALS(
       "Env[12.462:12.477,41.891:41.898]", cropper._bounds->getEnvelopeInternal()->toString());
 
     settings.clear();
-    settings.set("crop.bounds", "-12.462,41.891,12.477,41.898");
+    settings.set(ConfigOptions::getCropBoundsKey(), "-12.462,41.891,12.477,41.898");
     cropper.setConfiguration(settings);
     HOOT_STR_EQUALS(
       "Env[-12.462:12.477,41.891:41.898]", cropper._bounds->getEnvelopeInternal()->toString());
 
     settings.clear();
-    settings.set("crop.bounds", "12,41.891,13,41.898");
+    settings.set(ConfigOptions::getCropBoundsKey(), "12,41.891,13,41.898");
     cropper.setConfiguration(settings);
     HOOT_STR_EQUALS(
       "Env[12:13,41.891:41.898]", cropper._bounds->getEnvelopeInternal()->toString());
 
     settings.clear();
-    settings.set("crop.bounds", "12,41.891,13.,42");
+    settings.set(ConfigOptions::getCropBoundsKey(), "12,41.891,13.,42");
     cropper.setConfiguration(settings);
     HOOT_STR_EQUALS("Env[12:13,41.891:42]", cropper._bounds->getEnvelopeInternal()->toString());
   }

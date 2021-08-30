@@ -253,7 +253,7 @@ features, an out of memory error will occur.
 First record ID to assign to written nodes when writing to an OSM/Hootenanny API database or SQL
 file.  Must be a positive number.  Use this when working with an offline database and know the
 ID range you want to assign to node records.  If writing to an OSM API databse, this option is
-ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
+ignored if `osmapidb.bulk.inserter.reserve.record.ids.before.writing.data` is set to true.
 
 === apidb.bulk.inserter.starting.way.id
 
@@ -263,7 +263,7 @@ ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is se
 First record ID to assign to written ways when writing to an OSM/Hootenanny API database or SQL
 file. Must be a positive number.  Use this when working with an offline database and know the ID
 range you want to assign to way records.  If writing to an OSM API databse, this option is ignored
-if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
+if `osmapidb.bulk.inserter.reserve.record.ids.before.writing.data` is set to true.
 
 === apidb.bulk.inserter.starting.relation.id
 
@@ -273,7 +273,7 @@ if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to tru
 First record ID to assign to written relations when writing to an OSM/Hootenanny API database or
 SQL file.  Must be a positive number.  Use this when working with an offline database and know the
 ID range you want to assign to relation records.  If writing to an OSM API database, this option is
-ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
+ignored if `osmapidb.bulk.inserter.reserve.record.ids.before.writing.data` is set to true.
 
 === apidb.bulk.inserter.stxxl.map.min.size
 
@@ -1105,6 +1105,18 @@ See also:
 Determines which type of features are rubbersheeted during conflation when rubbersheeting is part
 of the conflation pre-operations. An empty list will rubbersheet all types of features.
 
+=== conflate.score.tags.filter
+
+* Data Type: list
+* Default Value:
+** `Match`
+** `Miss`
+** `Review`
+
+Filters the conflate score tag output enabled with `writer.include.conflate.score.tags=true` by
+match type. Valid values are: `Match`, `Miss`, or `Review`. By default, all types of score tags are
+included.
+
 === conflate.tag.disable.value.truncation
 
 * Data Type: bool
@@ -1341,7 +1353,19 @@ Unifying Algorithm.
 * Default Value: `true`
 
 If false, when running Differential Conflation the reference elements will not be dropped from the
-output. Setting this to false is primarily useful when debugging unconnected way snapping issues.
+output. Setting this to true will not remove reference data in the output involved in snapping to
+secondary features. Disabling this can be useful useful when debugging unconnected way snapping
+issues.
+
+=== differential.remove.reference.snapped.data
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, when running Differential Conflation all reference elements will be dropped from the
+output regardless of whether they were snapped to a secondary feature. This overrides the
+`differential.remove.reference.data` option. Do not enable this if Differential Conflation is to be
+used to generate changeset output that will be written back to an authoritative data store.
 
 === differential.remove.river.partial.matches.as.whole
 

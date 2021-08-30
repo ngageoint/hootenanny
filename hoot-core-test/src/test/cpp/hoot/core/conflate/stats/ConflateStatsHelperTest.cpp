@@ -31,12 +31,6 @@
 #include <hoot/core/conflate/stats/ConflateStatsHelper.h>
 #include <hoot/core/info/SingleStat.h>
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 namespace hoot
 {
 

@@ -31,12 +31,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
-
-// CPP Unit
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 // Qt
 #include <qnumeric.h>
@@ -66,17 +60,10 @@ public:
     setResetType(ResetAll);
   }
 
-  virtual void setUp()
+  void setUp() override
   {
     HootTestFixture::setUp();
     conf().set(ConfigOptions::getStatsTranslateScriptKey(), "${HOOT_HOME}/translations/HootTest.js");
-  }
-
-  virtual void tearDown()
-  {
-    conf().set(
-      ConfigOptions::getStatsTranslateScriptKey(),
-      ConfigOptions::getStatsTranslateScriptDefaultValue());
   }
 
   void runStatsNumTest()

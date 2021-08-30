@@ -28,10 +28,6 @@
 #ifndef IDGENERATOR_H
 #define IDGENERATOR_H
 
-// standard
-#include <memory>
-#include <string>
-
 namespace hoot
 {
 

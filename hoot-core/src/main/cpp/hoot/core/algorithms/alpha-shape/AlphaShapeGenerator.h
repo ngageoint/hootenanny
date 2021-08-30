@@ -32,7 +32,7 @@
 #include <hoot/core/algorithms/alpha-shape/AlphaShape.h>
 #include <hoot/core/elements/OsmMap.h>
 
-//  Standard
+// Standard
 #include <mutex>
 
 namespace hoot

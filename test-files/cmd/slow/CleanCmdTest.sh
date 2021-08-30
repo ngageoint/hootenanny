@@ -53,8 +53,8 @@ echo ""
 echo "Cleaning one file and also recursively in a directory structure with one filter..."
 echo ""
 # The inputs here are from two fairly far apart locations, but all you really need to check is that both
-# areas are in the output.
-hoot clean $LOG_LEVEL $CONFIG $inputfile $RECURSIVE_INPUT $OUTPUT_FILE_RECURSIVE_2 --recursive "*.osm"
+# areas are in the output.  Don't force orthographic projection for this test dataset
+hoot clean $LOG_LEVEL $CONFIG -D test.force.orthographic.projection=false $inputfile $RECURSIVE_INPUT $OUTPUT_FILE_RECURSIVE_2 --recursive "*.osm"
 hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_RECURSIVE_2 $OUTPUT_FILE_RECURSIVE_2 || diff $GOLD_FILE_RECURSIVE_2 $OUTPUT_FILE_RECURSIVE_2
 
 echo ""

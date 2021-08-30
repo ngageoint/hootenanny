@@ -29,7 +29,6 @@
 #define MAPCROPPER_H
 
 // GEOS
-#include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h>
 
@@ -44,7 +43,6 @@ namespace hoot
 {
 
 class OsmMap;
-class Way;
 
 /**
  * Provides a clean crop at the edges of the map rather than the ragged crop you get from Osmosis.

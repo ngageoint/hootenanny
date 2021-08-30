@@ -32,14 +32,10 @@
 #include <hoot/rnd/schema/ImplicitTagCustomRules.h>
 
 // Qt
-#include <QString>
 #include <QTemporaryFile>
-#include <QSet>
 
 namespace hoot
 {
-
-class Tags;
 
 /**
  * Derives an implicit tag rules database for elements, given a set of raw implicit tag rules

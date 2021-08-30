@@ -33,9 +33,6 @@
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 
-// Qt
-#include <QString>
-
 namespace hoot
 {
 

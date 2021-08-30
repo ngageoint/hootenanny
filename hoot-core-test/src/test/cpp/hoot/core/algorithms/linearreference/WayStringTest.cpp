@@ -51,11 +51,6 @@ class WayStringTest : public HootTestFixture
 
 public:
 
-  WayStringTest()
-  {
-    setResetType(ResetBasic);
-  }
-
   OsmMapPtr createMap()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();

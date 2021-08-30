@@ -28,17 +28,11 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/splitter/HighwayCornerSplitter.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/MapProjector.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 namespace hoot
 {
@@ -57,7 +51,6 @@ public:
     : HootTestFixture("test-files/algorithms/splitter/",
                       "test-output/algorithms/splitter/")
   {
-    setResetType(ResetBasic);
   }
 
   void runTest()

@@ -26,9 +26,9 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/CommonElementIdFinder.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 
 namespace hoot
@@ -41,11 +41,6 @@ class CommonElementIdFinderTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  CommonElementIdFinderTest() : HootTestFixture(UNUSED_PATH, UNUSED_PATH)
-  {
-    setResetType(ResetBasic);
-  }
 
   void runBasicTest()
   {

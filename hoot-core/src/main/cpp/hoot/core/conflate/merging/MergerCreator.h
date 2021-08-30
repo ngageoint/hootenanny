@@ -34,11 +34,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/CreatorDescription.h>
 
-// Standard
-#include <set>
-#include <string>
-#include <vector>
-
 namespace hoot
 {
 
@@ -50,6 +45,7 @@ class MergerCreator
 public:
 
   static QString className() { return "hoot::MergerCreator"; }
+  virtual QString toString() { return className(); }
 
   MergerCreator() = default;
   virtual ~MergerCreator() = default;

@@ -31,7 +31,7 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmPbfWriter.h>
-#include <hoot/core/util/Log.h>
+
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 
 using namespace std;
@@ -47,11 +47,6 @@ class MultiaryUtilitiesTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  MultiaryUtilitiesTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   QByteArray convertJsonToPbf(QString json)
   {

@@ -30,6 +30,7 @@
 // Qt
 #include <QVariant>
 
+// Hoot
 #include <hoot/core/io/schema/StrictChecking.h>
 
 namespace hoot

@@ -28,7 +28,6 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/network/EdgeSublineMatch.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -43,7 +42,7 @@ public:
 
   EdgeSublineMatchTest()
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void basicTest()

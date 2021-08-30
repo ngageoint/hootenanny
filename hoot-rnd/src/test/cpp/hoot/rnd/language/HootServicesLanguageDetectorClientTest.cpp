@@ -25,12 +25,6 @@
  * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/rnd/language/HootServicesLanguageDetectorMockClient.h>
@@ -107,10 +101,10 @@ private:
       std::make_shared<HootServicesLanguageDetectorMockClient>();
 
     Settings conf;
-    conf.set("hoot.services.auth.host", "localhost");
-    conf.set("hoot.services.auth.port", "8080");
-    conf.set("language.hoot.services.detectors", QStringList("TikaLanguageDetector"));
-    conf.set("language.hoot.services.detection.min.confidence.threshold", "low");
+    conf.set(ConfigOptions::getHootServicesAuthHostKey(), "localhost");
+    conf.set(ConfigOptions::getHootServicesAuthPortKey(), "8080");
+    conf.set(ConfigOptions::getLanguageHootServicesDetectorsKey(), QStringList("TikaLanguageDetector"));
+    conf.set(ConfigOptions::getLanguageHootServicesDetectionMinConfidenceThresholdKey(), "low");
     client->setConfiguration(conf);
 
     return client;

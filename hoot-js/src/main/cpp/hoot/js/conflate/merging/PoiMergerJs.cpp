@@ -28,7 +28,6 @@
 
 // Hoot
 #include <hoot/core/util/ConfPath.h>
-#include <hoot/core/util/HootException.h>
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>
@@ -36,11 +35,7 @@
 #include <hoot/js/conflate/merging/ScriptMerger.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 
-// Qt
-#include <QString>
-
 // std
-#include <set>
 #include <utility>
 
 using namespace v8;

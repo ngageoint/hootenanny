@@ -28,11 +28,8 @@
 #ifndef BASE_COMPARATOR_H
 #define BASE_COMPARATOR_H
 
-// GDAL Includes
+// GDAL
 #include <ogrsf_frmts.h>
-
-// GEOS
-#include <geos/geom/Coordinate.h>
 
 // Hoot
 #include <hoot/core/util/OpenCv.h>
@@ -40,13 +37,9 @@
 
 // Qt
 #include <QRgb>
-#include <QString>
 
 // TGS
 #include <tgs/RasterOps/Image.hpp>
-
-// Standard
-#include <memory>
 
 namespace hoot
 {

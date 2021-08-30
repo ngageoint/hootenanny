@@ -27,9 +27,7 @@
 #ifndef INTEGERFIELDDEFINITION_H
 #define INTEGERFIELDDEFINITION_H
 
-// Standard
-#include <set>
-
+// hoot
 #include <hoot/core/io/schema/FieldDefinition.h>
 
 namespace hoot
@@ -45,17 +43,12 @@ public:
   void addEnumeratedValue(int v) { _enumeratedValues.insert(v); }
 
   QVariant getDefaultValue() const override;
-
   QVariant::Type getType() const override { return QVariant::Int; }
-
   bool hasDefaultValue() const override;
-
   bool hasEnumeratedValue(int v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
 
   void setDefaultValue(double v) { _defaultValue = v; }
-
   void setMaxValue(double max) { _max = max; }
-
   void setMinValue(double min) { _min = min; }
 
   QString toString() const override;

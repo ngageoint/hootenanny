@@ -25,15 +25,9 @@
  * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmPbfWriter.h>
 using namespace hoot::pb;
@@ -62,7 +56,6 @@ public:
 
   OsmPbfWriterTest() : HootTestFixture("test-files/io/", "test-output/io/")
   {
-    setResetType(ResetBasic);
   }
 
   void runToyTest()

@@ -33,7 +33,6 @@
 #include <hoot/core/test/TestSetup.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -65,7 +64,7 @@ void ConflateCaseTest::_runConflateCmd()
   }
 
   // This is also set in Testing.conf.
-  conf().set("conflate.tag.disable.value.truncation", "true");
+  conf().set(ConfigOptions::getConflateTagDisableValueTruncationKey(), "true");
 
   QString testOutput = _d.absoluteFilePath("Output.osm");
 

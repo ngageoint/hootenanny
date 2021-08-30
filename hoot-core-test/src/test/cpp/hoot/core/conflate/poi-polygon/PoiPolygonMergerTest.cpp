@@ -28,16 +28,15 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
-#include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OverwriteTagMerger.h>
-#include <hoot/core/io/OsmJsonReader.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -69,7 +68,6 @@ public:
     "test-files/conflate/poi-polygon/PoiPolygonMergerTest/",
     "test-output/conflate/poi-polygon/PoiPolygonMergerTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void basicTest()

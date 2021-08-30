@@ -32,12 +32,6 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/FindStreetIntersectionsByName.h>
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 namespace hoot
 {
 
@@ -69,9 +63,9 @@ public:
 
     OsmMapReaderFactory::read(map, true, Status::Unknown1, "test-files/DcTigerRoads.osm");
 
-    conf.set("name.criterion.names", "I St NW;19th St NW");
-    conf.set("name.criterion.case.sensitive", true);
-    conf.set("name.criterion.partial.match", false);
+    conf.set(ConfigOptions::getNameCriterionNamesKey(), "I St NW;19th St NW");
+    conf.set(ConfigOptions::getNameCriterionCaseSensitiveKey(), true);
+    conf.set(ConfigOptions::getNameCriterionPartialMatchKey(), false);
     uut.setConfiguration(conf);
 
     uut.apply(map);
@@ -93,9 +87,9 @@ public:
       OsmMapReaderFactory::read(map, true, Status::Unknown1, "test-files/DcTigerRoads.osm");
       cachedMap = std::make_shared<OsmMap>(map);
 
-      conf.set("name.criterion.names", "I ST NW;19th St NW");
-      conf.set("name.criterion.case.sensitive", true);
-      conf.set("name.criterion.partial.match", false);
+      conf.set(ConfigOptions::getNameCriterionNamesKey(), "I ST NW;19th St NW");
+      conf.set(ConfigOptions::getNameCriterionCaseSensitiveKey(), true);
+      conf.set(ConfigOptions::getNameCriterionPartialMatchKey(), false);
       uut.setConfiguration(conf);
 
       uut.apply(map);
@@ -111,9 +105,9 @@ public:
 
       map = std::make_shared<OsmMap>(cachedMap);
 
-      conf.set("name.criterion.names", "I ST NW;19th St NW");
-      conf.set("name.criterion.case.sensitive", false);
-      conf.set("name.criterion.partial.match", false);
+      conf.set(ConfigOptions::getNameCriterionNamesKey(), "I ST NW;19th St NW");
+      conf.set(ConfigOptions::getNameCriterionCaseSensitiveKey(), false);
+      conf.set(ConfigOptions::getNameCriterionPartialMatchKey(), false);
       uut.setConfiguration(conf);
 
       uut.apply(map);
@@ -138,9 +132,9 @@ public:
       OsmMapReaderFactory::read(map, true, Status::Unknown1, "test-files/DcTigerRoads.osm");
       cachedMap = std::make_shared<OsmMap>(map);
 
-      conf.set("name.criterion.names", "I St;19th St");
-      conf.set("name.criterion.case.sensitive", false);
-      conf.set("name.criterion.partial.match", false);
+      conf.set(ConfigOptions::getNameCriterionNamesKey(), "I St;19th St");
+      conf.set(ConfigOptions::getNameCriterionCaseSensitiveKey(), false);
+      conf.set(ConfigOptions::getNameCriterionPartialMatchKey(), false);
       uut.setConfiguration(conf);
 
       uut.apply(map);
@@ -155,9 +149,9 @@ public:
 
       map = std::make_shared<OsmMap>(cachedMap);
 
-      conf.set("name.criterion.names", "I St;19th St");
-      conf.set("name.criterion.case.sensitive", false);
-      conf.set("name.criterion.partial.match", true);
+      conf.set(ConfigOptions::getNameCriterionNamesKey(), "I St;19th St");
+      conf.set(ConfigOptions::getNameCriterionCaseSensitiveKey(), false);
+      conf.set(ConfigOptions::getNameCriterionPartialMatchKey(), true);
       uut.setConfiguration(conf);
 
       uut.apply(map);
@@ -181,9 +175,9 @@ public:
     OsmMapReaderFactory::read(
       map, true, Status::Unknown1, _inputPath + "runSingleInputDupeRoadMatchesTest.osm");
 
-    conf.set("name.criterion.names", "Olive;Fremont");
-    conf.set("name.criterion.case.sensitive", false);
-    conf.set("name.criterion.partial.match", true);
+    conf.set(ConfigOptions::getNameCriterionNamesKey(), "Olive;Fremont");
+    conf.set(ConfigOptions::getNameCriterionCaseSensitiveKey(), false);
+    conf.set(ConfigOptions::getNameCriterionPartialMatchKey(), true);
     uut.setConfiguration(conf);
 
     uut.apply(map);

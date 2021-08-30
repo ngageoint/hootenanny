@@ -29,7 +29,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
 
@@ -57,11 +56,6 @@ class PoiPolygonMatchTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  PoiPolygonMatchTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   void matchTest()
   {

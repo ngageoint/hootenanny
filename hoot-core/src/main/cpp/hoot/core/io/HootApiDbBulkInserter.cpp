@@ -28,7 +28,6 @@
 #include "HootApiDbBulkInserter.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/io/HootApiDbSqlStatementFormatter.h>
@@ -36,15 +35,11 @@
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
-#include <QFileInfo>
 #include <QStringBuilder>
 #include <QTextStream>
 
 // Tgs
 #include <tgs/System/SystemInfo.h>
-
-// Std
-#include <set>
 
 namespace hoot
 {

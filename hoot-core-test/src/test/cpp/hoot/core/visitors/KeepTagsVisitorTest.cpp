@@ -25,15 +25,9 @@
  * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/visitors/TagKeyCountVisitor.h>
 #include <hoot/core/visitors/KeepTagsVisitor.h>
@@ -52,7 +46,6 @@ public:
 
   KeepTagsVisitorTest() : HootTestFixture("test-files/visitors/", UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void runTest()

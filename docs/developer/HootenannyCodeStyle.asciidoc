@@ -19,8 +19,14 @@ Here are the highlights:
 rotate their screens vertically.
 * Similar class methods/variables should be grouped together in the header file with 
 constructors/destructors being toward the top.
+* Place private member variables before member methods in the function file.
 * Per class member access type, list member variables before member methods.
 * Place getters/setters at the end of the public documentation in the header file.
-* Group header includes by type. e.g. hoot includes together, Qt includes together, etc.
+* All class files should include the standard Hootenanny header with copyright information and the 
+correct copyright date. 
+* Group header includes by type with the type name as a comment above each group. e.g. hoot includes together with "// hoot" above them, Qt includes together with "// Qt" above them, etc.
 * Header includes should be alphabetized.
-* Place private member variables before member methods in the function file.
+* "hoot" header includes should be placed before other header includes.
+* Not specifically code related, but all asciidoc files used in the documentation must have at least
+one blank line at the beginning and end of the document in order for the PDF documentation to 
+generate correctly.

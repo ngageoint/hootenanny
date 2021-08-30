@@ -25,12 +25,6 @@
  * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
@@ -43,7 +37,6 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/RemoveAttributesVisitor.h>
@@ -83,7 +76,7 @@ public:
     : HootTestFixture("test-files/io/ServiceHootApiDbReaderTest/",
                       "test-output/io/ServiceHootApiDbReaderTest/")
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void setUpTest(const QString& testName, bool adminUser = false)
@@ -98,7 +91,7 @@ public:
     database.close();
   }
 
-  virtual void tearDown()
+  void tearDown() override
   {
     //  Delete the current map
     if (_mapId != -1)
@@ -115,6 +108,7 @@ public:
     }
     //  Delete the current user afterwards
     ServicesDbTestUtils::deleteUser(userEmail(_testName));
+    HootTestFixture::tearDown();
   }
 
   long populateMap(const bool putInFolder = false, const bool folderIsPublic = false)
@@ -426,7 +420,7 @@ public:
     _mapId = populateMap();
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    conf().set("api.db.email", userEmail(_testName));
+    conf().set(ConfigOptions::getApiDbEmailKey(), userEmail(_testName));
     OsmMapReaderFactory::read(map, ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
     verifyFullReadOutput(map);
   }

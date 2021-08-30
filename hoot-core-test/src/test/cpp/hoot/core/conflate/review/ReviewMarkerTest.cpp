@@ -29,8 +29,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -53,7 +51,7 @@ public:
   HootTestFixture(
     "test-files/conflate/review/ReviewMarkerTest/", "test-output/conflate/review/ReviewMarkerTest/")
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void runNeedsReviewTest()
@@ -163,7 +161,7 @@ public:
     map->addElement(n2);
     map->addElement(n3);
 
-    conf().set("add.review.tags.to.features", "true");
+    conf().set(ConfigOptions::getAddReviewTagsToFeaturesKey(), "true");
 
     ReviewMarker uut;
 

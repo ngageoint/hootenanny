@@ -37,7 +37,6 @@
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -57,24 +56,16 @@ public:
 
   PoiPolygonMergerCreatorTest()
   {
-    // This test passes with ResetAllNoMatchFactory in parallel but crashes in series without
+    // This test passes with ResetEnvironment in parallel but crashes in series without
     // ResetAll.
-    setResetType(ResetAll);
+    setResetType(ResetEnvironment);
   }
 
-  virtual void setUp()
+  void setUp() override
   {
     HootTestFixture::setUp();
     conf().set(ConfigOptions().getMatchCreatorsKey(), "hoot::PoiPolygonMatchCreator");
     conf().set(ConfigOptions().getMergerCreatorsKey(), "hoot::PoiPolygonMergerCreator");
-  }
-
-  virtual void tearDown()
-  {
-    conf().set(
-      ConfigOptions().getMatchCreatorsKey(), ConfigOptions().getMatchCreatorsDefaultValue());
-    conf().set(
-      ConfigOptions().getMergerCreatorsKey(), ConfigOptions().getMergerCreatorsDefaultValue());
   }
 
   void basicTest()

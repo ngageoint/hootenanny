@@ -28,12 +28,12 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/info/ApiEntityDisplayInfo.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/validation/Validator.h>
 #include <hoot/josm/ops/JosmMapValidator.h>

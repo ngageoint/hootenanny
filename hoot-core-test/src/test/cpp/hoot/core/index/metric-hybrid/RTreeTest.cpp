@@ -25,20 +25,11 @@
  * @copyright Copyright (C) 2013, 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/index/metric-hybrid/RTree.h>
 #include <hoot/core/io/OsmPbfReader.h>
-
-// Qt
-#include <QStringList>
 
 // Tgs
 #include <tgs/Statistics/Random.h>

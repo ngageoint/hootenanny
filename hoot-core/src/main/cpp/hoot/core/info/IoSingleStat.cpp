@@ -26,13 +26,7 @@
  */
 #include "IoSingleStat.h"
 
-// hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-
 // Qt
-#include <QFile>
-#include <QStringList>
 #include <QTextStream>
 
 namespace hoot

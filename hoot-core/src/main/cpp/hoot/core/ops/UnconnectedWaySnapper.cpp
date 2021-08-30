@@ -46,15 +46,13 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
-
-// GEOS
-#include <geos/geom/Coordinate.h>
 
 // Standard
 #include <cfloat>

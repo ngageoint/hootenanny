@@ -34,7 +34,6 @@
 #include <hoot/core/io/ArffReader.h>
 #include <hoot/core/scoring/DataSamples.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

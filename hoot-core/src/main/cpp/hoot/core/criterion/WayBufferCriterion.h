@@ -39,8 +39,6 @@
 namespace hoot
 {
 
-class Way;
-
 class WayBufferCriterion : public ElementCriterion
 {
 public:

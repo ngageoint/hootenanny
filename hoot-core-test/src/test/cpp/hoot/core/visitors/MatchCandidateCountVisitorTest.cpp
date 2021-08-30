@@ -32,15 +32,8 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 namespace hoot
 {
@@ -62,7 +55,7 @@ public:
 
   MatchCandidateCountVisitorTest() : HootTestFixture("test-files/conflate/unified/", UNUSED_PATH)
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void runBuildingMatchCandidateCountTest()

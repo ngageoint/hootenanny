@@ -30,9 +30,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 
-// Qt
-#include <QSet>
-
 namespace hoot
 {
 

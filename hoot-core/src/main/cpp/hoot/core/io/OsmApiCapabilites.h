@@ -27,7 +27,7 @@
 
 #ifndef OSM_API_CAPABILITIES_H
 #define OSM_API_CAPABILITIES_H
-#include <QString>
+
 
 namespace hoot
 {

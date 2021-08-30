@@ -25,12 +25,6 @@
  * @copyright Copyright (C) 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // GEOS
 #include <geos/geom/LineString.h>
 
@@ -38,7 +32,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/KskipBigramDistance.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

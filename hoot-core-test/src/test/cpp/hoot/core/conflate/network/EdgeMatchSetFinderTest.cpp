@@ -32,6 +32,7 @@
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/elements/MapProjector.h>
 
@@ -56,13 +57,11 @@ public:
   EdgeMatchSetFinderTest() :
   HootTestFixture("test-files/conflate/network/", "test-files/conflate/network/")
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   EdgeMatchSetFinderPtr loadTest(int testNumber)
   {
-    NetworkVertex::reset();
-
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmMapReaderFactory::read(map, _inputPath + "ParitalEdgeMatch.osm",

@@ -25,23 +25,23 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
-// Standard Includes
+// Standard
 #include <iostream>
 #include <math.h>
 
-// CPP Unit Includes
+// CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
+// tgs
 #include <tgs/RStarTree/Box.h>
 #include <tgs/RStarTree/HilbertRTree.h>
 #include <tgs/RStarTree/KnnIteratorNd.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
 #include <tgs/RStarTree/Page.h>
 #include <tgs/Statistics/Random.h>
-
 #include "../PluginFactory.h"
 
 namespace Tgs
@@ -52,13 +52,16 @@ class KnnIteratorNdTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(KnnIteratorNdTest);
   CPPUNIT_TEST(test1);
   CPPUNIT_TEST_SUITE_END();
+
 public:
+
   std::vector<Box> testData;
   std::vector<int> testId;
 
   class Distance
   {
   public:
+
     double distance;
     int id;
 

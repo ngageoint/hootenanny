@@ -33,7 +33,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 
 namespace hoot
@@ -57,9 +56,9 @@ public:
 
   PertyTestRunnerTest()
     : HootTestFixture("test-files/algorithms/perty/PertyTestRunnerTest/",
-                      "test-output/rnd/algorithms/perty/PertyTestRunnerTest/")
+                      "test-output/algorithms/perty/PertyTestRunnerTest/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetConfigs);
     FileUtils::makeDir(_outputPath + "Dynamic");
     FileUtils::makeDir(_outputPath + "Static");
     FileUtils::makeDir(_outputPath + "Variance");
@@ -73,8 +72,7 @@ public:
     resultsPlotFile.remove();
 
     Settings testSettings = conf();
-    testSettings.set("perty.seed", QString::number(2));
-    testSettings.set("perty.search.distance", QString::number(15.0));
+    testSettings.set(ConfigOptions::getPertySearchDistanceKey(), QString::number(15.0));
 
     PertyTestRunner testRunner;
     testRunner.setConfiguration(testSettings);
@@ -180,8 +178,7 @@ public:
     resultsPlotFile.remove();
 
     Settings testSettings = conf();
-    testSettings.set("perty.seed", QString::number(2));
-    testSettings.set("perty.search.distance", QString::number(15.0));
+    testSettings.set(ConfigOptions::getPertySearchDistanceKey(), QString::number(15.0));
 
     PertyTestRunner testRunner;
     testRunner.setConfiguration(testSettings);
@@ -272,9 +269,7 @@ public:
     resultsPlotFile.remove();
 
     Settings testSettings = conf();
-    testSettings.set("perty.seed", QString::number(2));
-    testSettings.set("perty.search.distance", QString::number(15.0));
-    testSettings.set("conflate.enable.old.roads", "false");
+    testSettings.set(ConfigOptions::getPertySearchDistanceKey(), QString::number(15.0));
 
     PertyTestRunner testRunner;
     testRunner.setConfiguration(testSettings);

@@ -27,19 +27,12 @@
 #ifndef SCOREMATRIX_H
 #define SCOREMATRIX_H
 
-// Qt
-#include <QString>
-
 // Standard
 #include <cassert>
-#include <deque>
 #include <queue>
-#include <set>
-#include <vector>
 
 //  Hoot
 #include <hoot/core/scoring/TextTable.h>
-#include <hoot/core/util/HootException.h>
 
 namespace hoot
 {

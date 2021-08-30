@@ -38,12 +38,12 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
-#include <QDebug>
 #include <QImage>
 #include <QPainter>
 

@@ -32,18 +32,8 @@
 #include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/elements/OsmMap.h>
 
-// Qt
-#include <QString>
-
-// Standard
-#include <set>
-#include <vector>
-
 namespace hoot
 {
-
-class Match;
-class Merger;
 
 /**
  * A factory for creating a merger from a set of matches (Singleton).
@@ -99,7 +89,15 @@ public:
   void registerCreator(MergerCreatorPtr creator) { _creators.push_back(creator); }
   void registerDefaultCreators();
 
+  /**
+   * Reset the the merger creators and then register the default creators
+   */
   void reset();
+
+  /**
+   * Return the list of creators as a string
+   */
+  QString toString() const;
 
 private:
 

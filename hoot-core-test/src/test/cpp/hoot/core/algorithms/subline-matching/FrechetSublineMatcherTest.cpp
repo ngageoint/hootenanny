@@ -25,12 +25,6 @@
  * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // GEOS
 #include <geos/geom/LineString.h>
 
@@ -39,7 +33,6 @@
 #include <hoot/core/algorithms/subline-matching/FrechetSublineMatcher.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
@@ -63,7 +56,6 @@ public:
     : HootTestFixture("test-files/algorithms/subline-matching/",
                       UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void singleSublineTest()

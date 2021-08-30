@@ -27,7 +27,6 @@
 #include "InMemoryElementSorter.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Standard

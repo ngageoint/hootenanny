@@ -32,6 +32,7 @@
 #include <hoot/core/io/schema/FieldDefinition.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/schema/ScriptSchemaTranslator.h>

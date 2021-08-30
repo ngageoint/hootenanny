@@ -37,6 +37,8 @@ class Validator
 {
 public:
 
+  static QString className() { return "Validator"; }
+
   /**
    * @brief Enables validation on the validator.
    *
@@ -59,12 +61,12 @@ public:
   /**
     * @brief Returns the total number of validation errors encountered
     */
-  virtual int getNumValidationErrors() const = 0;
+  virtual long getNumValidationErrors() const = 0;
 
   /**
     * @brief Returns the total number of features validated
     */
-  virtual int getNumFeaturesValidated() const = 0;
+  virtual long getNumFeaturesValidated() const = 0;
 };
 
 }

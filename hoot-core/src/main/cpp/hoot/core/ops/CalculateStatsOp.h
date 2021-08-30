@@ -37,10 +37,6 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
 
-// Qt
-#include <QList>
-#include <QString>
-
 namespace hoot
 {
 class FilteredVisitor;

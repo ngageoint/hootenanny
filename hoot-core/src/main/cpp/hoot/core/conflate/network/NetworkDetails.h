@@ -39,7 +39,6 @@
 #include <hoot/core/conflate/network/SearchRadiusProvider.h>
 #include <hoot/core/util/Configurable.h>
 
-
 namespace hoot
 {
 

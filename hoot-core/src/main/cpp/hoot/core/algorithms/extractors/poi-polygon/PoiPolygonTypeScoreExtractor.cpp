@@ -34,7 +34,6 @@
 #include <hoot/core/util/Factory.h>
 
 // Qt
-#include <QSet>
 #include <QStringBuilder>
 
 using namespace std;

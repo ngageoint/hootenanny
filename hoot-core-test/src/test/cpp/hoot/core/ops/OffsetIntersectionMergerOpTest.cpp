@@ -25,12 +25,6 @@
  * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -38,7 +32,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/OffsetIntersectionMergerOp.h>
-#include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
 
@@ -57,7 +50,6 @@ public:
     : HootTestFixture("test-files/ops/OffsetIntersectionMergerOpTest/",
                       "test-output/ops/OffsetIntersectionMergerOpTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runOffsetMergeTest()

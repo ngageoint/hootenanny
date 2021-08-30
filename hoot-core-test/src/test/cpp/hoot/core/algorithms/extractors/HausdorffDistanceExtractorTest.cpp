@@ -26,19 +26,13 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/extractors/HausdorffDistanceExtractor.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/elements/MapProjector.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 // Tgs
 #include <tgs/StreamUtils.h>
@@ -52,14 +46,9 @@ class HausdorffDistanceExtractorTest : public HootTestFixture
   CPPUNIT_TEST(runRoadsTest);
   CPPUNIT_TEST_SUITE_END();
 
-public:
-
-  HausdorffDistanceExtractorTest()
-  {
-    setResetType(ResetBasic);
-  }
-
   OsmMapPtr _map;
+
+public:
 
   NodePtr createNode(double x, double y)
   {

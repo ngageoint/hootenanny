@@ -30,12 +30,6 @@
 // Hoot
 #include <hoot/core/algorithms/changeset/TaskGrid.h>
 
-// GEOS
-#include <geos/geom/Envelope.h>
-
-// Qt
-#include <QList>
-
 namespace hoot
 {
 

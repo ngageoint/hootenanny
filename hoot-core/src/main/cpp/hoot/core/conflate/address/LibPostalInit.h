@@ -27,9 +27,6 @@
 #ifndef LIB_POSTAL_INIT_H
 #define LIB_POSTAL_INIT_H
 
-// Qt
-#include <QString>
-
 namespace hoot
 {
 
@@ -55,7 +52,6 @@ private:
   /** Delete copy constructor and assignment operator */
   LibPostalInit(const LibPostalInit&) = delete;
   LibPostalInit& operator=(const LibPostalInit&) = delete;
-
 };
 
 }

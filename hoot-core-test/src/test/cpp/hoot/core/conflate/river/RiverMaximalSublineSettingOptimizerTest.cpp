@@ -26,17 +26,11 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/conflate/river/RiverMaximalSublineSettingOptimizer.h>
 #include <hoot/core/elements/MapProjector.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 
 namespace hoot
 {
@@ -55,7 +49,6 @@ public:
   RiverMaximalSublineSettingOptimizerTest() :
   HootTestFixture("test-files/conflate/generic/rivers/", UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void runBasicTest()
@@ -74,7 +67,7 @@ public:
     uut.setMaxRiverLengthScalingValue(500000.0);
     uut.setMinIterationsScalingValue(5);
     uut.setMinRiverLengthScalingValue(15000.0);
-    CPPUNIT_ASSERT_EQUAL(403, uut.getFindBestMatchesMaxRecursions(map));
+    CPPUNIT_ASSERT_EQUAL(404, uut.getFindBestMatchesMaxRecursions(map));
 
     // This should return the recursion value that indicates MaximalSubline will automatically
     // determine the upper limit (-1).

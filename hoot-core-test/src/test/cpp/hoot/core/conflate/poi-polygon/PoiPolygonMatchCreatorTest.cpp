@@ -31,7 +31,6 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatchCreator.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -53,38 +52,29 @@ public:
 
   PoiPolygonMatchCreatorTest()
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void basicTest()
   {
-    // Poi/poly test output is based on this config for now, despite it being different than the
-    // default config.
-    conf().set(ConfigOptions::getAddressMatchEnabledKey(), "false");
-
     OsmMapPtr map = getTestMap1();
 
-    {
-      PoiPolygonMatchCreator uut;
-      vector<ConstMatchPtr> matches;
-      std::shared_ptr<const MatchThreshold> threshold =
-        std::make_shared<MatchThreshold>(0.5, 0.5, 0.5);
-      uut.createMatches(map, matches, threshold);
-      HOOT_STR_EQUALS(2, matches.size());
-      HOOT_STR_EQUALS(
-        "PoiPolygonMatch: POI: Node(1), Poly: Way(-1), P: match: 1 miss: 0 review: 0, distance: 0, close match: 1, type score: 0, name score: 1, address score: -1",
-        matches[0]->toString());
-      HOOT_STR_EQUALS(
-        "PoiPolygonMatch: POI: Node(2), Poly: Way(-1), P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0, name score: 0, address score: 0",
-        matches[1]->toString());
-    }
+    PoiPolygonMatchCreator uut;
+    vector<ConstMatchPtr> matches;
+    std::shared_ptr<const MatchThreshold> threshold =
+      std::make_shared<MatchThreshold>(0.5, 0.5, 0.5);
+    uut.createMatches(map, matches, threshold);
+    HOOT_STR_EQUALS(2, matches.size());
+    HOOT_STR_EQUALS(
+      "PoiPolygonMatch: POI: Node(1), Poly: Way(-1), P: match: 1 miss: 0 review: 0, distance: 0, close match: 1, type score: 0, name score: 1, address score: -1",
+      matches[0]->toString());
+    HOOT_STR_EQUALS(
+      "PoiPolygonMatch: POI: Node(2), Poly: Way(-1), P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0, name score: 0, address score: 0",
+      matches[1]->toString());
   }
 
   void runIsCandidateTest()
   {
-    // see corresponding note in basicTest
-    conf().set(ConfigOptions::getAddressMatchEnabledKey(), "false");
-
     PoiPolygonMatchCreator uut;
 
     OsmMapPtr map = getTestMap1();

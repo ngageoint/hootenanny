@@ -29,7 +29,6 @@
 #define ELEMENT_TO_GEOMETRY_CONVERTER_H
 
 // GEOS
-#include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
 
 // GDAL
@@ -38,12 +37,6 @@
 // Hoot
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/OsmMap.h>
-
-// Qt
-#include <QString>
-
-// Standard
-#include <memory>
 
 namespace geos
 {

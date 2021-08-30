@@ -27,6 +27,7 @@
 
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>

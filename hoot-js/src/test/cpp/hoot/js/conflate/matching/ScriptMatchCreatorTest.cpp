@@ -38,9 +38,6 @@
 // Qt
 #include <QVariant>
 
-#include <iostream>
-#include <string>
-
 using namespace v8;
 
 namespace hoot
@@ -57,6 +54,7 @@ public:
   ScriptMatchCreatorTest() :
   HootTestFixture("test-files/js/conflate/matching/", UNUSED_PATH)
   {
+    setResetType(ResetConfigs);
   }
 
   void runIsCandidateTest()

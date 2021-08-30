@@ -30,7 +30,6 @@
 #include <hoot/core/conflate/network/OsmNetworkExtractor.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -52,8 +51,6 @@ public:
    */
   void toyTest()
   {
-    NetworkVertex::reset();
-
     OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "ToyInput.osm");
 

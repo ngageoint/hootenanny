@@ -26,6 +26,7 @@
  */
 
 // Hoot
+#include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/criterion/IntersectingWayCriterion.h>
 #include <hoot/core/criterion/NetworkTypeCriterion.h>
@@ -34,11 +35,9 @@
 #include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-
 #include <hoot/core/TestUtils.h>
 
 namespace hoot
@@ -61,7 +60,6 @@ public:
     "test-files/algorithms/splitter/IntersectionSplitterRelationMemberOrderTest/",
     "test-output/algorithms/splitter/IntersectionSplitterRelationMemberOrderTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runRelationMemberOrderTest()

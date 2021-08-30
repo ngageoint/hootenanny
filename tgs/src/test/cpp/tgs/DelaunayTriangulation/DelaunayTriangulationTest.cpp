@@ -25,17 +25,17 @@
  * @copyright Copyright (C) 2015, 2017, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit Includes
+// CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Standard Includes
+// Standard
 #include <iostream>
 using namespace std;
 
-// TGS Includes
+// TGS
 #include <tgs/DelaunayTriangulation/DelaunayTriangulation.h>
 #include <tgs/TgsException.h>
 
@@ -51,6 +51,7 @@ class DelaunayTriangulationTest : public CppUnit::TestFixture
   CPPUNIT_TEST(findFaceTest);
   CPPUNIT_TEST_EXCEPTION(smallPointsTest, Exception);
   CPPUNIT_TEST_SUITE_END();
+
 public:
 
   void edgesTest()

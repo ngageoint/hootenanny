@@ -35,9 +35,6 @@
 #include <hoot/core/conflate/matching/MatchDetails.h>
 #include <hoot/core/elements/OsmMap.h>
 
-// Qt
-#include <QHash>
-
 namespace hoot
 {
 

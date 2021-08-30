@@ -29,12 +29,9 @@
 
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/HootException.h>
 
 // Standard
-#include <iostream>
 #include <math.h>
 
 using namespace std;

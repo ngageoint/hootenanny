@@ -88,7 +88,7 @@ public:
     QString out = _outputPath + "runWriteDiffTest-out.osm";
     ConflateUtils::writeDiff(
       "test-files/ToyTestB.osm", "test-files/ToyTestA.osm",
-      geos::geom::Envelope(-104.9007, -104.8994, 38.8541, 38.8552), out);
+      geos::geom::Envelope(-104.9007149, -104.900473, 38.854429, 38.85468), out);
     HOOT_FILE_EQUALS(_inputPath + "runWriteDiffTest-out.osm", out);
   }
 };

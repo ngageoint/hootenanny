@@ -28,9 +28,9 @@
 #ifndef FILEUTILS_H
 #define FILEUTILS_H
 
-// Qt
-#include <QString>
+//  Qt
 #include <QDir>
+#include <QString>
 
 namespace hoot
 {

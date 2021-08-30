@@ -25,18 +25,12 @@
  * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/visitors/WayGeneralizeVisitor.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
 {
@@ -58,7 +52,6 @@ public:
     "test-files/visitors/WayGeneralizeVisitorTest/",
     "test-output/visitors/WayGeneralizeVisitorTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runBasicTest()

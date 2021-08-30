@@ -28,12 +28,6 @@
 #ifndef WAYSPLITTER_H
 #define WAYSPLITTER_H
 
-// GEOS
-#include <geos/geom/Coordinate.h>
-
-// Standard
-#include <vector>
-
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/elements/OsmMap.h>

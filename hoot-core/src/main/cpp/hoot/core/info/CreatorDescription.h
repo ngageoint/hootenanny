@@ -32,13 +32,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
 
-// Standard
-#include <string>
-#include <vector>
-
-// QT
-#include <QString>
-
 namespace hoot
 {
 

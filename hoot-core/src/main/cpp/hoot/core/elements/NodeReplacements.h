@@ -28,9 +28,6 @@
 #ifndef NODEREPLACEMENTS_H
 #define NODEREPLACEMENTS_H
 
-// Qt
-#include <QString>
-
 // TGS
 #include <tgs/HashMap.h>
 

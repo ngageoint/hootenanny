@@ -37,11 +37,13 @@
 
 namespace Tgs
 {
-// taken from http://cs.brown.edu/~pff/segment/
-// disjoint-set forests using union-by-rank and path compression (sort of).
 
 /**
  * Similar to the DisjointSet, but can use a class other than an int for defining groups.
+ *
+ * taken from:
+ * http://cs.brown.edu/~pff/segment/disjoint-set forests using union-by-rank and path compression
+ * (sort of).
  */
 template<class T>
 class DisjointSetMap

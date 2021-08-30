@@ -27,12 +27,6 @@
 #ifndef NUMERIC_COMPARISON_TYPE_H
 #define NUMERIC_COMPARISON_TYPE_H
 
-// Hoot
-#include <hoot/core/util/HootException.h>
-
-// Qt
-#include <QString>
-
 namespace hoot
 {
 

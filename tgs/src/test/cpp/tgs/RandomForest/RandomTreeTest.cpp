@@ -25,16 +25,17 @@
  * @copyright Copyright (C) 2015, 2021 Maxar (http://www.maxar.com/)
  */
 
-// Standard includes
+// Standard
 #include <ctime>
 #include <vector>
 
-// CPP Unit Includes
+// CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
+// tgs
 #include "../PluginFactory.h"
 #include <tgs/RandomForest/DataFrame.h>
 #include <tgs/RandomForest/RandomTree.h>
@@ -65,7 +66,9 @@ namespace Tgs
     CPPUNIT_TEST_SUITE(RandomTreeTest);
     CPPUNIT_TEST(test1);
     CPPUNIT_TEST_SUITE_END();
+
   public:
+
     void test1()
     {
 //       //std::cout <<"Start Data Frame Test"  << std::endl;

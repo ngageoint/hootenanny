@@ -30,14 +30,13 @@
 #include <geos/geom/Point.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/ReprojectToGeographicOp.h>
-#include <hoot/core/util/Log.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
@@ -58,7 +57,6 @@ public:
     : HootTestFixture("test-files/ops/ReprojectToGeographicOp/",
                       "test-output/ops/ReprojectToGeographicOp/")
   {
-    setResetType(ResetBasic);
   }
 
   void runTest()

@@ -25,12 +25,6 @@
  * @copyright Copyright (C) 2013, 2014, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/HootApiDbBulkInserter.h>
@@ -64,7 +58,6 @@ public:
     : HootTestFixture("test-files/io/ServiceHootApiDbBulkInserterTest/",
                       "test-output/io/ServiceHootApiDbBulkInserterTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void setUpTest(const QString& testName)
@@ -79,7 +72,7 @@ public:
     database.close();
   }
 
-  virtual void tearDown()
+  void tearDown() override
   {
     ServicesDbTestUtils::deleteUser(userEmail());
 
@@ -90,6 +83,7 @@ public:
       database.deleteMap(_mapId);
       database.close();
     }
+    HootTestFixture::tearDown();
   }
 
   void runPsqlDbOfflineTest()

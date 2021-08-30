@@ -37,7 +37,6 @@
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
 
@@ -510,7 +509,7 @@ bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(
 {
   if (_cachingEnabled)
   {
-    // Check the element can be conflated cache first.
+    // Check the cache to see if the element can be conflated first.
     const bool* cachedVal = _conflatableElementCache[element->getElementId()];
     if (cachedVal != nullptr)
     {

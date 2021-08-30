@@ -29,14 +29,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/ops/ElementIdToVersionMapper.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 namespace hoot
 {

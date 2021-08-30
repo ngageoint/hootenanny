@@ -30,6 +30,7 @@
 // Qt
 #include <QList>
 
+// Tgs
 #include <tgs/Optimization/VariableDescription.h>
 
 namespace Tgs
@@ -38,6 +39,7 @@ namespace Tgs
 class StateDescription
 {
 public:
+
   StateDescription() = default;
 
   void addVariable(ConstVariableDescriptionPtr v) { _variables.append(v); }
@@ -46,8 +48,8 @@ public:
   QList<ConstVariableDescriptionPtr> getVariables() const { return _variables; }
 
 private:
-  QList<ConstVariableDescriptionPtr> _variables;
 
+  QList<ConstVariableDescriptionPtr> _variables;
 };
 
 using StateDescriptionPtr = std::shared_ptr<StateDescription>;

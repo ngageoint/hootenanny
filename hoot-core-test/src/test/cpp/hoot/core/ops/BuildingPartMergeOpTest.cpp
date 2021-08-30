@@ -31,15 +31,9 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/schema/OverwriteTagMerger.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 // geos
 #include <geos/io/WKTReader.h>
@@ -65,7 +59,7 @@ public:
   BuildingPartMergeOpTest() :
   HootTestFixture("test-files/ops/BuildingPartMergeOp/", "test-output/ops/BuildingPartMergeOp/")
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void runToyTest()

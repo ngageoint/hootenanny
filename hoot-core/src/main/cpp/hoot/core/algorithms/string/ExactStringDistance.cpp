@@ -27,7 +27,6 @@
 #include "ExactStringDistance.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 
 // Standard

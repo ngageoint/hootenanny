@@ -41,7 +41,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
-#include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>

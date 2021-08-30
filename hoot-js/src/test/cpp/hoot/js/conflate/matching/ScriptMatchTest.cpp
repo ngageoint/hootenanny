@@ -39,9 +39,6 @@
 // Qt
 #include <QVariant>
 
-#include <iostream>
-#include <string>
-
 using namespace std;
 using namespace v8;
 
@@ -60,6 +57,7 @@ public:
   ScriptMatchTest() :
   HootTestFixture("test-files/js/conflate/matching/", UNUSED_PATH)
   {
+    setResetType(ResetConfigs);
   }
 
   void conflictTest()

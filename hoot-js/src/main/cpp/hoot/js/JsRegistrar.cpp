@@ -27,7 +27,7 @@
 #include "JsRegistrar.h"
 
 #include <hoot/core/Hoot.h>
-#include <hoot/core/util/Log.h>
+
 
 #include <hoot/js/io/DataConvertJs.h>
 

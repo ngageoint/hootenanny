@@ -34,17 +34,9 @@
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-
 #include <tgs/Statistics/Random.h>
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // Qt
-#include <QDebug>
 #include <QBuffer>
 #include <QByteArray>
 
@@ -71,7 +63,7 @@ public:
   RubberSheetTest() :
   HootTestFixture("test-files/algorithms/rubber-sheet/", "test-output/algorithms/rubber-sheet/")
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void runSimpleTest()

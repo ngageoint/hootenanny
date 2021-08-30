@@ -47,6 +47,7 @@ using namespace geos::geom;
 // Hoot
 #include <hoot/core/Hoot.h>
 #include <hoot/core/HootConfig.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/test/ConflateCaseTestSuite.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -81,14 +82,15 @@ enum _TestType
   NONE          = 0x00,
   CURRENT       = 0x01,
   QUICK_ONLY    = 0x02,
-  QUICK         = 0x03,
-  CASE_ONLY     = 0x04,
-  SLOW_ONLY     = 0x08,
-  SLOW          = 0x0f,
-  GLACIAL_ONLY  = 0x10,
-  GLACIAL       = 0x1f,
-  SERIAL        = 0x20,
-  ALL           = 0x3f
+  QUICK         = CURRENT | QUICK_ONLY,
+  SERIAL        = 0x04,
+  CASE_ONLY     = 0x08,
+  SLOW_TESTS    = 0x10,
+  SLOW_ONLY     = SLOW_TESTS | SERIAL | CASE_ONLY,
+  SLOW          = SLOW_ONLY | QUICK,
+  GLACIAL_TESTS = 0x20,
+  GLACIAL_ONLY  = GLACIAL_TESTS | SERIAL,
+  GLACIAL       = GLACIAL_ONLY | SLOW
 };
 
 enum _TimeOutValue
@@ -368,29 +370,64 @@ void printNames(const std::vector<CppUnit::Test*>& vTests)
     cout << *it << endl;
 }
 
-void runSingleTest(CppUnit::Test* pTest, QStringList& args, CppUnit::TextTestResult* pResult)
+void setupTestingConfig(QStringList& args)
 {
-  // clear all user configuration so we have consistent tests.
+  //  Clear all user configuration so we have consistent tests.
   conf().clear();
   ConfigOptions::populateDefaults(conf());
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
   Settings::parseCommonArguments(args);
+  //  We require that all tests use Testing.conf as a starting point and any conf values
+  //  specified by it may be overridden when necessary.
+  conf().loadJson(ConfPath::search("Testing.conf"));
+}
+
+void runSingleTest(CppUnit::Test* pTest, QStringList& args, CppUnit::TextTestResult* pResult)
+{
+  //  Setup the testing config
+  setupTestingConfig(args);
+  //  before running the test
   pTest->run(pResult);
 }
 
 void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
                    bool suppressFailureDetail, bool hideDisableTests = false)
 {
-  //  Current tests are included in CURRENT, QUICK, SLOW, and GLACIAL
-  //  Add current tests if the bit flag is set
-  if (t & CURRENT)
+  //  Add glacial tests if the bit flag is set
+  if (t & GLACIAL_TESTS)
   {
     vTests.push_back(
       TestPtr(
         new ScriptTestSuite(
-          "test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests,
+          "test-files/cmd/glacial/", printDiff, GLACIAL_WAIT, hideDisableTests,
           suppressFailureDetail)));
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest()));
+    if (t & SERIAL)
+    {
+      vTests.push_back(
+        TestPtr(
+          new ScriptTestSuite(
+            "test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests,
+            suppressFailureDetail)));
+    }
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest()));
+  }
+  //  Slow tests are included in SLOW and GLACIAL
+  //  Add slow tests if the bit flag is set
+  if (t & SLOW_TESTS)
+  {
+    vTests.push_back(
+      TestPtr(
+        new ScriptTestSuite(
+          "test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests, suppressFailureDetail)));
+    if (t & SERIAL)
+    {
+      vTests.push_back(
+        TestPtr(
+          new ScriptTestSuite(
+            "test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests,
+            suppressFailureDetail)));
+    }
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest()));
   }
   //  Quick tests are included in QUICK, SLOW, and GLACIAL
   //  Add quick tests if the bit flag is set
@@ -404,36 +441,16 @@ void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest()));
   }
-  //  Slow tests are included in SLOW and GLACIAL
-  //  Add slow tests if the bit flag is set
-  if (t & SLOW_ONLY)
+  //  Current tests are included in CURRENT, QUICK, SLOW, and GLACIAL
+  //  Add current tests if the bit flag is set
+  if (t & CURRENT)
   {
     vTests.push_back(
       TestPtr(
         new ScriptTestSuite(
-          "test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests, suppressFailureDetail)));
-    vTests.push_back(
-      TestPtr(
-        new ScriptTestSuite(
-          "test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests,
+          "test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests,
           suppressFailureDetail)));
-    vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases", hideDisableTests));
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest()));
-  }
-  //  Add glacial tests if the bit flag is set
-  if (t & GLACIAL_ONLY)
-  {
-    vTests.push_back(
-      TestPtr(
-        new ScriptTestSuite(
-          "test-files/cmd/glacial/", printDiff, GLACIAL_WAIT, hideDisableTests,
-          suppressFailureDetail)));
-    vTests.push_back(
-      TestPtr(
-        new ScriptTestSuite(
-          "test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests,
-          suppressFailureDetail)));
-    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest()));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest()));
   }
   //  Add serial tests if the bit flag is set
   if (t == SERIAL)
@@ -450,8 +467,8 @@ void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
           suppressFailureDetail)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("serial").makeTest()));
   }
-
-  if (t == CASE_ONLY)
+  //  Test cases go last because of the way they change the environment
+  if (t & CASE_ONLY)
   {
     vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases", hideDisableTests));
   }
@@ -464,6 +481,7 @@ QMap<QString, QString> getAllowedOptions()
   options["--all"] = "Run all the tests";
   options["--all-names"] = "Print the names of all the tests without running them";
   options["--case-only"] = "Run the conflate case tests only";
+  options["--check-env"] = "Check the environment before and after the test is run, good for debugging";
   options["--current"] = "Run the 'current' level tests";
   options["--debug"] = "Show debug level log messages and above";
   options["--diff"] = "Print a diff when a script test fails";
@@ -549,21 +567,19 @@ _TestType getTestType(const QStringList& args)
     return SLOW;
   else if (args.contains("--slow-only"))
     return SLOW_ONLY;
-  else if (args.contains("--all") || args.contains("--glacial"))
-    return GLACIAL;
   else if (args.contains("--glacial-only"))
     return GLACIAL_ONLY;
   else if (args.contains("--case-only"))
     return CASE_ONLY;
-  else
-    return ALL;
+  else // --all or --glacial
+    return GLACIAL;
 }
 
 _TimeOutValue getTimeoutValue(_TestType type)
 {
-  if (type & GLACIAL)
+  if (type & GLACIAL_ONLY)
       return GLACIAL_WAIT;
-  else if (type & SLOW)
+  else if (type & SLOW_ONLY)
     return SLOW_WAIT;
   else
     return QUICK_WAIT;
@@ -644,6 +660,10 @@ int main(int argc, char* argv[])
       return 0;
     }
 
+    // Setup the environment checks if requested
+    if (args.contains("--check-env"))
+      HootTestFixture::setCompareEnv(true);
+
     // Run a single test
     if (args.contains("--single"))
     {
@@ -657,7 +677,7 @@ int main(int argc, char* argv[])
       listener = std::make_shared<HootTestListener>(false, suppressFailureDetail, -1);
       result.addListener(listener.get());
       Log::getInstance().setLevel(Log::Status);
-      populateTests(ALL, vAllTests, printDiff, suppressFailureDetail, true);
+      populateTests(GLACIAL, vAllTests, printDiff, suppressFailureDetail, true);
       CppUnit::Test* t = findTest(vAllTests, testName.toStdString());
       if (t == nullptr)
       {
@@ -686,7 +706,7 @@ int main(int argc, char* argv[])
       cin >> testName;
       while (testName != HOOT_TEST_FINISHED)
       {
-        populateTests(ALL, vAllTests, printDiff, suppressFailureDetail, true);
+        populateTests(GLACIAL, vAllTests, printDiff, suppressFailureDetail, true);
         CppUnit::Test* t = findTest(vAllTests, testName);
         if (t != 0)
         {
@@ -757,9 +777,16 @@ int main(int argc, char* argv[])
       //  Get the names of all of the tests to run
       vector<string> allNames;
       getNames(allNames, vTestsToRun);
-      set<string> nameCheck;
-      for (vector<string>::iterator it = allNames.begin(); it != allNames.end(); ++it)
-        nameCheck.insert(*it);
+      set<string> nameCheck(allNames.begin(), allNames.end());
+
+      //  Get a list of all conflate cases jobs that must be processed last
+      vector<TestPtr> conflateCases;
+      populateTests(CASE_ONLY, conflateCases, printDiff, suppressFailureDetail, true);
+      vector<CppUnit::Test*> vConflateCases;
+      getTestVector(conflateCases, vConflateCases);
+      vector<string> casesNames;
+      getNames(casesNames, vConflateCases);
+      set<string> casesSet(casesNames.begin(), casesNames.end());
 
       //  Add all of the jobs that must be done serially and are a part of the selected tests
       vector<TestPtr> serialTests;
@@ -771,12 +798,15 @@ int main(int argc, char* argv[])
       for (vector<string>::iterator it = serialNames.begin(); it != serialNames.end(); ++it)
       {
         if (nameCheck.find(*it) != nameCheck.end())
-          pool.addJob(QString(it->c_str()), false);
+          pool.addJob(QString(it->c_str()), ProcessPool::SerialJob);
       }
-
-      //  Add all of the remaining jobs in the test suite
+      //  Add all of the remaining non-case jobs in the test suite
       for (vector<string>::iterator it = allNames.begin(); it != allNames.end(); ++it)
-        pool.addJob(QString(it->c_str()));
+      {
+        //  Jobs in the casesSet are ConflateJob's and the rest are ParallelJob's
+        pool.addJob(QString(it->c_str()),
+          (casesSet.find(*it) != casesSet.end()) ? ProcessPool::ConflateJob : ProcessPool::ParallelJob);
+      }
 
       pool.startProcessing();
       pool.wait();
@@ -793,14 +823,8 @@ int main(int argc, char* argv[])
       if (args.contains("--names"))
         listener->showTestNames(true);
 
-      // clear all user configuration so we have consistent tests.
-      conf().clear();
-      ConfigOptions::populateDefaults(conf());
-      LOG_DEBUG("HOOT_HOME: " + QString(getenv("HOOT_HOME")))
-      conf().set("HOOT_HOME", getenv("HOOT_HOME"));
-
-      // allows us to pass config options through HootTest
-      Settings::parseCommonArguments(args);
+      //  Setup the testing configs
+      setupTestingConfig(args);
 
       // set up listener
       result.addListener(listener.get());

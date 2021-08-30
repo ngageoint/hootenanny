@@ -38,12 +38,6 @@
 
 // hoot
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/NotImplementedException.h>
-#include <hoot/core/util/Log.h>
-
-// Qt
-#include <QString>
-#include <QStringList>
 
 // Standard
 #include <stdint.h>

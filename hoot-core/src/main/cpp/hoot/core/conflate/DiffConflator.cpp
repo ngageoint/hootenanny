@@ -47,7 +47,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/AddRef1Visitor.h>
 #include <hoot/core/visitors/CriterionCountVisitor.h>
@@ -238,9 +237,10 @@ void DiffConflator::apply(OsmMapPtr& map)
 
     // We only want the diff to have data from the secondary input not in the reference input, so
     // remove the reference data from the diff.
-    if (ConfigOptions().getDifferentialRemoveReferenceData())
+    const bool removeSnapped = ConfigOptions().getDifferentialRemoveReferenceSnappedData();
+    if (ConfigOptions().getDifferentialRemoveReferenceData() || removeSnapped)
     {
-      _removeRefData();
+      _removeRefData(removeSnapped);
     }
     // When removing partial linear matches partially, sometimes the diff can be a little too
     // granular. In that case, we allow filtering out some of the smaller secondary data.
@@ -307,11 +307,11 @@ void DiffConflator::_cleanSecData(QStringList& baseCriteria, const double maxSiz
   counter.setCriteria(removalCrit);
   LOG_VARD(counter.count(_map));
 
-  RemoveElementsVisitor removeRef1Visitor;
-  removeRef1Visitor.setRecursive(true);
-  removeRef1Visitor.addCriterion(removalCrit);
+  RemoveElementsVisitor cleaner;
+  cleaner.setRecursive(true);
+  cleaner.addCriterion(removalCrit);
   const size_t mapSizeBefore = _map->size();
-  _map->visitRw(removeRef1Visitor);
+  _map->visitRw(cleaner);
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-cleaning-sec-elements");
 
   LOG_DEBUG(
@@ -729,7 +729,7 @@ void DiffConflator::_cleanupAfterPartialMatchRemoval()
   SuperfluousNodeRemover::removeNodes(_map);
 }
 
-void DiffConflator::_removeRefData()
+void DiffConflator::_removeRefData(const bool removeSnapped)
 {
   LOG_INFO("\tRemoving all reference elements...");
 
@@ -739,12 +739,22 @@ void DiffConflator::_removeRefData()
   _removeMatchElementsCompletely(Status::Unknown1);
   MemoryUsageChecker::getInstance().check();
 
-  // Now remove input1 elements. Don't remove any features involved in a snap, as they are needed
-  // to properly generate the changeset and keep sec ways snapped in the final output.
-  ElementCriterionPtr refCrit = std::make_shared<TagKeyCriterion>(MetadataTags::Ref1());
-  ElementCriterionPtr notSnappedCrit =
-    std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>(MetadataTags::HootSnapped()));
-  ElementCriterionPtr removeCrit = std::make_shared<ChainCriterion>(refCrit, notSnappedCrit);
+  // Now, remove input1 elements.
+  ElementCriterionPtr removeCrit;
+  ElementCriterionPtr refCrit = std::make_shared<StatusCriterion>(Status::Unknown1);
+  if (!removeSnapped)
+  {
+    // Don't remove any features involved in a snap, as they are needed
+    // to properly generate the changeset and keep sec ways snapped in the final output.
+    ElementCriterionPtr notSnappedCrit =
+      std::make_shared<NotCriterion>(
+        std::make_shared<TagKeyCriterion>(MetadataTags::HootSnapped()));
+    removeCrit = std::make_shared<ChainCriterion>(refCrit, notSnappedCrit);
+  }
+  else
+  {
+    removeCrit = refCrit;
+  }
 
   RemoveElementsVisitor removeRef1Visitor;
   removeRef1Visitor.setRecursive(true);

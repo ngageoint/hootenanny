@@ -37,10 +37,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/ReprojectToPlanarOp.h>
-#include <hoot/core/util/Log.h>
-
-// Qt
-#include <QDebug>
 
 // TGS
 #include <tgs/Statistics/Random.h>
@@ -60,7 +56,7 @@ public:
   ReprojectToPlanarOpTest() :
   HootTestFixture("test-files/ops/ReprojectToPlanarOp/", "test-output/ops/ReprojectToPlanarOp/")
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void runTest()

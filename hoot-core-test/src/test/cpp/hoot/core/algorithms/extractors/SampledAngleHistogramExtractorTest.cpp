@@ -26,22 +26,16 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/extractors/SampledAngleHistogramExtractor.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 
 namespace hoot
 {
@@ -61,7 +55,6 @@ public:
   HootTestFixture(
     "test-files/algorithms/extractors/SampledAngleHistogramExtractorTest/", UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void runTest()
@@ -80,7 +73,7 @@ public:
     angleHistogramExtractor.setHeadingDelta(ConfigOptions().getWayMatcherHeadingDelta());
     angleHistogramExtractor.setSampleDistance(ConfigOptions().getWayAngleSampleDistance());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      0.040583,
+      0.040713,
       angleHistogramExtractor.extract(
         *map,
         map->getWay(

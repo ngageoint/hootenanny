@@ -43,13 +43,7 @@
 #include <hoot/rnd/io/MultiaryIngestChangesetReader.h>
 #include <hoot/rnd/io/OsmFileSorter.h>
 #include <hoot/core/io/OgrReader.h>
-
-// tgs
-#include <tgs/System/Time.h>
-
-// Qt
-#include <QFileInfo>
-#include <QDir>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {

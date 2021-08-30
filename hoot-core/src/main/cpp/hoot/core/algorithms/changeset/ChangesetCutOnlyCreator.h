@@ -34,9 +34,6 @@
 namespace hoot
 {
 
-class ChainCriterion;
-class Settings;
-
 /**
  * @brief The ChangesetCutOnlyCreator class is the cut only version of Cut and Replace.
  */
@@ -48,6 +45,7 @@ public:
   static QString className() { return "hoot::ChangesetCutOnlyCreator"; }
 
   ChangesetCutOnlyCreator();
+  ~ChangesetCutOnlyCreator() override = default;
 
   /**
    * @brief create creates a changeset that replaces features in the first input.

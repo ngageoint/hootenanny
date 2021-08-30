@@ -30,12 +30,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/js/conflate/matching/ScriptMatchCreator.h>
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 namespace hoot
 {
 
@@ -58,7 +52,7 @@ public:
 
   SuperfluousConflateOpRemoverJsTest()
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
 
     _scriptMatchCreatorName = ScriptMatchCreator::className();
   }

@@ -43,18 +43,17 @@
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
 #include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 
 // Qt
-#include <QFileInfo>
 #include <QDirIterator>
 
 // GEOS

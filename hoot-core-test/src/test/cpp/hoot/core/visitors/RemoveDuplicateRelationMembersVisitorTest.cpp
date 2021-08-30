@@ -26,8 +26,8 @@
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>
 
 namespace hoot
@@ -40,11 +40,6 @@ class RemoveDuplicateRelationMembersVisitorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  RemoveDuplicateRelationMembersVisitorTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   void runTest()
   {

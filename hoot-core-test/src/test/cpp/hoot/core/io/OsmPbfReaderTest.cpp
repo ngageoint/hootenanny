@@ -32,18 +32,12 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/elements/MapProjector.h>
 using namespace hoot::pb;
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
+// zip
 #include <zlib.h>
 
 using namespace std;
@@ -81,9 +75,9 @@ public:
   OsmPbfReaderTest() :
   HootTestFixture("test-files/io/OsmPbfReaderTest/", "test-output/io/OsmPbfReaderTest/")
   {
-    // Strangely, this only needs ResetAllNoMatchFactory for runFactoryReadMapTest to pass in
+    // Strangely, this only needs ResetEnvironment for runFactoryReadMapTest to pass in
     // series, but not parallel.
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void runOffsetsTest()

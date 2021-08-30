@@ -42,7 +42,6 @@
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/Log.h>
 
 // tgs
 #include <tgs/DisjointSet/DisjointSetMap.h>

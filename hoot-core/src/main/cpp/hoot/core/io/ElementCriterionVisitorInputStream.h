@@ -33,9 +33,6 @@
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 
-// Qt
-#include <QList>
-
 namespace hoot
 {
 

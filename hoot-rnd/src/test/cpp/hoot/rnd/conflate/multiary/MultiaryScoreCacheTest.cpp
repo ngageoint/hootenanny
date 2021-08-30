@@ -32,8 +32,8 @@
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
+
 #include <hoot/rnd/conflate/multiary/MultiaryScoreCache.h>
 
 using namespace std;
@@ -48,6 +48,11 @@ class MultiaryScoreCacheTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  MultiaryScoreCacheTest()
+  {
+    setResetType(ResetAll);
+  }
 
   /**
    * Basic set of tests to see if the scores returned are sensible.

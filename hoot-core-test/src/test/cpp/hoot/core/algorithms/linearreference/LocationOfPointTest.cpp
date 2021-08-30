@@ -25,20 +25,11 @@
  * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
-// geos
-#include <geos/geom/Coordinate.h>
-
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -50,11 +41,6 @@ class LocationOfPointTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  LocationOfPointTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   void runLocateAfterTest()
   {

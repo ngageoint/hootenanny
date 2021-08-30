@@ -35,10 +35,6 @@
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
-
-//Qt
-#include <QString>
 
 using namespace geos::geom;
 using namespace std;
@@ -80,7 +76,11 @@ void MatchFactory::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMat
     std::shared_ptr<MatchCreator> matchCreator = _creators[i];
     LOG_STATUS(
       "Running matcher: " << i + 1 << " of " << _creators.size() << ": " <<
-      matchCreator->getName() << "...");
+      matchCreator->getName()
+        .replace(MetadataTags::HootNamespacePrefix(), "")
+        // Don't need to see this. The class is in hoot-js, so can't ref the static name var.
+        .replace("hoot::ScriptMatchCreator;", "")
+        .replace("ScriptMatchCreator;", "")<< "...");
     _checkMatchCreatorBoundable(matchCreator, bounds);
     if (threshold.get())
     {
@@ -245,6 +245,18 @@ void MatchFactory::reset()
   _tagFilterJson = "";
   _critFilterClassName = "";
   _negateCritFilter = false;
+}
+
+QString MatchFactory::toString() const
+{
+  QStringList creatorList;
+  for (size_t i = 0; i < _creators.size(); ++i)
+  {
+    vector<CreatorDescription> desc = _creators[i]->getAllCreators();
+    for (size_t j = 0; j < desc.size(); ++j)
+      creatorList << desc[j].toString();
+  }
+  return QString("{ %1 }\n{ %2 }\n{ %3 }").arg(creatorList.join(",\n")).arg(_tagFilterJson).arg(_critFilterClassName);
 }
 
 }

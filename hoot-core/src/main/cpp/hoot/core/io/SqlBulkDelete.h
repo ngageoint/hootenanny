@@ -27,12 +27,11 @@
 #ifndef SQLBULKDELETE_H
 #define SQLBULKDELETE_H
 
-// Qt
-#include <QSqlQuery>
-#include <QStringList>
-
+// Hoot
 #include <hoot/core/io/BulkDelete.h>
 
+// Qt
+#include <QSqlQuery>
 class QSqlDatabase;
 
 namespace hoot
