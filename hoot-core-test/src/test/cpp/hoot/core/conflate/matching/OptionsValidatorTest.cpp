@@ -215,7 +215,6 @@ public:
     conf().set(ConfigOptions::getAutocorrectOptionsKey(), "true");
 
     QStringList matchers;
-<<<<<<< HEAD
     matchers.append(NetworkMatchCreator::className());
     conf().set(ConfigOptions::getMatchCreatorsKey(), matchers.join(";"));
     QStringList mergers;
