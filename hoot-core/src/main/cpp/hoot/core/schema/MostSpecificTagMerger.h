@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * @brief The MostSpecificTagMerger class TODO
+ * @brief The MostSpecificTagMerger class merges tags by keeping the most specifically typed tags.
  */
 class MostSpecificTagMerger : public TypesTagMerger
 {

@@ -34,7 +34,8 @@ namespace hoot
 {
 
 /**
- * @brief The TypesTagMerger class TODO
+ * @brief The TypesTagMerger class is an abstract base class for merging type tags. It can be
+ * configured to preserve overlapping type tags.
  */
 class TypesTagMerger : public TagMerger
 {
@@ -64,7 +65,7 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   /**
-   * @brief setPreserveTypes TODO
+   * @brief setPreserveTypes Determines whether implementations preserve overlapping type tags.
    */
   virtual void setPreserveTypes() = 0;
 
@@ -75,7 +76,8 @@ public:
 
 protected:
 
-  // TODO
+  // If true, all type tags are preserved. The most specific ones are preserved and less specific
+  // ones are added to an "alt_types" tag.
   bool _preserveTypes;
 
 private:
