@@ -1322,6 +1322,14 @@ Requires a language translation server installation.  See the Hootenanny Install
       input.osm output.osm
 -----
 
+==== Remove all tag keys starting with "source" from ways:
+
+-----
+    hoot convert -D convert.ops="RemoveTagsVisitor" \
+      -D tag.filter.element.criterion="WayCriterion" \
+      -D tag.filter.keys="source*" input.osm output.osm
+-----
+
 ==== Remove all elements that have the tag `status=proposed`:
 
 -----
