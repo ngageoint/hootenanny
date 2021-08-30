@@ -1292,14 +1292,14 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 === Tag Manipulation
 
-==== Add the tag "error:circular=5.0" to all elements:
+==== Add the tag `error:circular=5.0` to all elements:
 
 -----
     hoot convert -D convert.ops=SetTagValueVisitor -D set.tag.value.visitor.keys=error:circular \
       -D set.tag.value.visitor.values=5.0 input.osm output.osm
 -----
 
-==== Add the tag "error:circular=5.0" to all relations and their members: 
+==== Add the tag `error:circular=5.0` to all relations and their members: 
 
 -----
     hoot convert -D convert.ops=RecursiveSetTagValueOp -D set.tag.value.visitor.keys=error:circular \
@@ -1308,15 +1308,21 @@ Requires a language translation server installation.  See the Hootenanny Install
 -----
 
 ==== Remove all "surface" and "smoothness" tags from ways:
-(Please note, source and error tags are treated as a special case and cannot be removed by RemoveTagsVisitor. Use options writer.include.circular.error.tags=false and reader.add.source.datetime=false)
+
 -----
     hoot convert -D convert.ops="RemoveTagsVisitor" \
       -D tag.filter.element.criterion="WayCriterion" \
       -D tag.filter.keys="surface;smoothness" input.osm output.osm
 -----
 
+==== Suppress creation of `source:datetime` and `error:circular` tags in map data:
 
-==== Remove all elements that have the tag "status=proposed":
+-----
+    hoot convert -D writer.include.circular.error.tags=false -D reader.add.source.datetime=false \
+      input.osm output.osm
+-----
+
+==== Remove all elements that have the tag `status=proposed`:
 
 -----
     hoot convert -D convert.ops=RemoveElementsVisitor \
@@ -1331,7 +1337,7 @@ Requires a language translation server installation.  See the Hootenanny Install
       -D tag.criterion.kvps="power=line" -D element.criteria.negate=true input.osm output.osm
 -----
 
-==== For all features with a "voltage" tag between 1 and 45k volts, set the tag "power=minor_line":
+==== For all features with a "voltage" tag between 1 and 45k volts, set the tag `power=minor_line`:
 
 -----
     hoot convert -D convert.ops=SetTagValueVisitor -D set.tag.value.visitor.keys=power \
