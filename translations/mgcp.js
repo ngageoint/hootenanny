@@ -353,39 +353,44 @@ mgcp = {
   }, // End manyFeatures
 
 
-  // Cleanup the attributes
-  cleanAttrs: function (attrs)
+  // Function to drop  default and usless values
+  // NOTE: This is also called to remove translated tag values
+  dropDefaults: function (feat)
   {
-      // Clean up BEFORE trying to untangle
-    delete attrs.FCSUBTYPE;
-    delete attrs.FCSubtype;
-
-    // List of data values to drop/ignore
-    var ignoreList = { '-32765':1,'-32767':1,'-32768':1,
-               '998':1,'-999999':1,'fcsubtype':1,
-               'n_a':1,'n/a':1,'noinformation':1,'unknown':1,'unk':1 };
-
-    // Unit conversion. Some attributes are in centimetres, others in decimetres
-    // var unitList = { 'GAW':100,'HCA':10,'WD1':10,'WD2':10,'WD3':10,'WT2':10 };
-
-    for (var col in attrs)
+    for (var col in feat)
     {
       // slightly ugly but we would like to account for: 'No Information','noInformation' etc
       // First, push to lowercase
-      var attrValue = attrs[col].toString().toLowerCase();
+      var attrValue = feat[col].toString().toLowerCase();
 
       // Get rid of the spaces in the text
       attrValue = attrValue.replace(/\s/g, '');
 
       // Wipe out the useless values
-      // if (attrs[col] == '-32768' || attrValue == 'unk' || attrValue == 'n_a' || attrValue == 'noinformation' || attrs[col] == '')
-      if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ignoreList || attrs[col] in ignoreList)
+      if (feat[col] == '' || feat[col] == ' ' || attrValue in mgcp.rules.dropList || feat[col] in mgcp.rules.dropList)
       {
         // debug: Comment this out to leave all of the No Info stuff in for testing
-        delete attrs[col];
+        // print('Dropping: ' + col + ' = ' + attrs[col]);
+        delete feat[col];
         continue;
       }
+    } // End col in attrs loop
 
+  }, // End dropDefaults
+
+  // Cleanup the attributes
+  cleanAttrs: function (attrs)
+  {
+    // Switch to keep all of the default values. Mainly for the schema switcher
+    if (mgcp.configIn.ReaderInputFormat == 'OGR')
+    {
+      mgcp.dropDefaults(attrs);
+    }
+
+    // Unit conversion. Some attributes are in centimetres, others in decimetres
+    // var unitList = { 'GAW':100,'HCA':10,'WD1':10,'WD2':10,'WD3':10,'WT2':10 };
+    for (var col in attrs)
+    {
       // Sort out units - if needed
       // if (col in unitList) attrs[col] = attrs[col] / unitList[col];
 
@@ -2366,6 +2371,13 @@ mgcp = {
 
     // post processing
     mgcp.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
+
+    // If we are reading from an OGR source, drop all of the output tags with default values
+    // This cleans up after the one2one rules since '0' can be a number or an enumerated attribute value
+    if (mgcp.configIn.ReaderInputFormat == 'OGR')
+    {
+      mgcp.dropDefaults(tags);
+    }
 
     // Debug: Add the FCODE to the tags
     if (mgcp.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;

@@ -531,8 +531,6 @@ void IoUtils::loadMap(
   }
   else
   {
-    conf().set(ConfigOptions::getReaderInputFormatKey(), "OSM");
-
     // This handles all non-OGR format reading.
     OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
   }

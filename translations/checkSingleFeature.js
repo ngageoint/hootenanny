@@ -39,10 +39,13 @@ transTest = require(HOOT_HOME + '/translations/checkTranslations.js');
 hoot.Settings.set({"ogr.tds.structure":"false"});
 
 // LOTS of debug output
-// hoot.Settings.set({"ogr.debug.dumptags":"true"});
+hoot.Settings.set({"ogr.debug.dumptags":"true"});
 
 // Debug messages from feature validation
 hoot.Settings.set({"ogr.debug.dumpvalidate":"true"});
+
+// Set this to drop default/usless values
+// hoot.Settings.set({"reader.input.format":"OGR"});
 
 
 // ####################################################################################
@@ -57,6 +60,6 @@ console.log('\nF_CODE with attributes');
 transTest.testTranslated('MGCP','AQ040',{'FUN':'6','NOS':'2','SDP':'DigitalGLobe','OSMTAGS':'{\"security:classification\":\"UNCLASSIFIED\"}'});
 
 console.log('\nF_CODE with default attributes');
-transTest.testTranslated('MGCP','AQ040',{'FUN':'0','NOS':'2','SDP':'DigitalGLobe','OSMTAGS':'{\"security:classification\":\"UNCLASSIFIED\"}'});
+transTest.testTranslated('MGCP','AQ040',{'VOI':'N_A','OHB':'-32767.0','FUN':'0','NOS':'2','SDP':'DigitalGLobe','OSMTAGS':'{\"security:classification\":\"UNCLASSIFIED\"}'});
 
 // End
