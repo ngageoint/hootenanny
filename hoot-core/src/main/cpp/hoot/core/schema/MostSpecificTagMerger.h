@@ -28,7 +28,7 @@
 #define MOST_SPECIFIC_TAG_MERGER_H
 
 // Hoot
-#include <hoot/core/schema/TagMerger.h>
+#include <hoot/core/schema/TypesTagMerger.h>
 
 namespace hoot
 {
@@ -36,23 +36,20 @@ namespace hoot
 /**
  * @brief The MostSpecificTagMerger class TODO
  */
-class MostSpecificTagMerger : public TagMerger
+class MostSpecificTagMerger : public TypesTagMerger
 {
 public:
 
-  static QString className() { return "MostSpecificTagMerger"; }
-
-  MostSpecificTagMerger() = default;
-  ~MostSpecificTagMerger() = default;
+  static QString className() { return "hoot::MostSpecificTagMerger"; }
 
   /**
-   * @brief mergeTags TODO
-   * @param t1
-   * @param t2
-   * @param et
-   * @return
+   * Constructor
+   *
+   * @param skipTagKeys optional; Any additional type tags found during merging with a key in this
+   * list will be not be preserved.
    */
-  Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
+  MostSpecificTagMerger(const QSet<QString>& skipTagKeys = QSet<QString>());
+  ~MostSpecificTagMerger() = default;
 
   QString getDescription() const override
   { return "Keeps the most specific tag between two features"; }

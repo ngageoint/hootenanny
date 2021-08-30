@@ -27,7 +27,6 @@
 #include "MostSpecificTagMerger.h"
 
 // hoot
-#include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
@@ -35,9 +34,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(TagMerger, MostSpecificTagMerger)
 
-Tags MostSpecificTagMerger::mergeTags(const Tags& /*t1*/, const Tags& /*t2*/, ElementType /*et*/) const
+MostSpecificTagMerger::MostSpecificTagMerger(const QSet<QString>& skipTagKeys) :
+TypesTagMerger(skipTagKeys)
 {
-  return Tags();
+  _preserveTypes = false;
 }
 
 }
