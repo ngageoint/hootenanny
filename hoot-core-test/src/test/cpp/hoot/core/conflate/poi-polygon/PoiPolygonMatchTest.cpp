@@ -57,11 +57,6 @@ class PoiPolygonMatchTest : public HootTestFixture
 
 public:
 
-  PoiPolygonMatchTest()
-  {
-    setResetType(ResetBasic);
-  }
-
   void matchTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();

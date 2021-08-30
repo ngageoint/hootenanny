@@ -49,6 +49,11 @@ class MultiaryScoreCacheTest : public HootTestFixture
 
 public:
 
+  MultiaryScoreCacheTest()
+  {
+    setResetType(ResetAll);
+  }
+
   /**
    * Basic set of tests to see if the scores returned are sensible.
    */

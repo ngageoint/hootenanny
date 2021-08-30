@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="30.51734" minlon="47.7861668287234" maxlat="30.51734" maxlon="47.7861668287234"/>
-    <node visible="true" id="-1" timestamp="2016-05-04T22:07:19Z" version="1" changeset="39108451" user="Seandebasti" uid="550560" lat="30.5173400000000008" lon="47.7861668287234025">
+    <node visible="true" id="-1" timestamp="2016-05-04T22:07:19Z" version="1" user="Seandebasti" uid="550560" lat="30.5173400000000008" lon="47.7861668287234025">
+        <tag k="error:circular" v="15"/>
         <tag k="key1" v="value1"/>
     </node>
 </osm>

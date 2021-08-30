@@ -27,9 +27,9 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/josm/ops/JosmMapValidator.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/josm/ops/JosmMapValidator.h>
 
 namespace hoot
 {
@@ -49,7 +49,6 @@ public:
   HootTestFixture(
     "test-files/ops/JosmMapValidatorTest", "test-output/ops/JosmMapValidatorTest")
   {
-    setResetType(ResetBasic);
   }
 
   void runGetAvailableValidatorDetailTest()

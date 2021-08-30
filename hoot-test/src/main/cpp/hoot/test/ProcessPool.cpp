@@ -41,14 +41,6 @@ bool JobQueue::empty()
 {
   _mutex.lock();
   bool e = _jobs.empty();
-//  if (e)
-//  {
-//    std::cout << "Job queue: " << _name.toStdString() << " empty. " << std::endl;
-//  }
-//  else
-//  {
-//    std::cout << "Job queue " << _name.toStdString() << " size: " << _jobs.size() << std::endl;
-//  }
   _mutex.unlock();
   return e;
 }
@@ -83,21 +75,27 @@ void JobQueue::push(const QString& job)
   _mutex.unlock();
 }
 
-ProcessThread::ProcessThread(bool showTestName,
+ProcessThread::ProcessThread(int threadId,
+                             int maxThreads,
+                             bool showTestName,
                              bool suppressFailureDetail,
                              bool printDiff,
                              bool disableFailureRetries,
                              double waitTime,
                              QMutex* outMutex,
                              JobQueue* parallelJobs,
+                             JobQueue* casesJobs,
                              JobQueue* serialJobs)
-  : _showTestName(showTestName),
+  : _threadId(threadId),
+    _maxThreads(maxThreads),
+    _showTestName(showTestName),
     _suppressFailureDetail(suppressFailureDetail),
     _printDiff(printDiff),
     _disableFailureRetries(disableFailureRetries),
     _waitTime(waitTime),
     _outMutex(outMutex),
     _parallelJobs(parallelJobs),
+    _casesJobs(casesJobs),
     _serialJobs(serialJobs),
     _failures(0),
     _proc()
@@ -111,8 +109,6 @@ int ProcessThread::getFailures()
 
 void ProcessThread::resetProcess()
 {
-  //std::cout << "resetting process" << std::endl;
-
   //  Kill the process
   _proc->write(QString("%1\n").arg(HOOT_TEST_FINISHED).toLatin1());
   _proc->waitForFinished();
@@ -122,8 +118,6 @@ void ProcessThread::resetProcess()
 
 QProcess* ProcessThread::createProcess()
 {
-  //std::cout << "Creating process" << std::endl;
-
   QProcess* proc = new QProcess();
   proc->setProcessChannelMode(QProcess::MergedChannels);
   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -140,8 +134,6 @@ QProcess* ProcessThread::createProcess()
 
 void ProcessThread::run()
 {
-  //std::cout << "running process" << std::endl;
-
   _proc.reset(createProcess());
   if (_serialJobs != nullptr)
   {
@@ -150,6 +142,7 @@ void ProcessThread::run()
     resetProcess();
   }
   processJobs(_parallelJobs);
+  processJobs(_casesJobs);
 
   _proc->write(QString("%1\n").arg(HOOT_TEST_FINISHED).toLatin1());
   _proc->waitForFinished();
@@ -236,6 +229,8 @@ void ProcessThread::processJobs(JobQueue* queue)
         line = QString(_proc->readLine()).trimmed();
       }
       output = output.replace("\n\n\n", "\n").replace("\n\n", "\n");
+      if (_showTestName)
+        output = QString("(%1) %2").arg(_threadId, (_maxThreads < 10) ? 1 : 2).arg(output);
       _outMutex->lock();
       cout << output.toStdString();
       cout.flush();
@@ -251,58 +246,51 @@ ProcessPool::ProcessPool(
   bool disableFailureRetries) :
 _failed(0)
 {
+  _parallelJobs.setName("parallel");
+  _serialJobs.setName("serial");
+  _caseJobs.setName("cases");
+
   for (int i = 0; i < nproc; ++i)
   {
     //  First process gets the serial jobs
     JobQueue* serial = (i == 0) ? &_serialJobs : nullptr;
     ProcessThreadPtr thread =
       std::make_shared<ProcessThread>(
-        showTestName, suppressFailureDetail, printDiff, disableFailureRetries, waitTime, &_mutex,
-        &_parallelJobs, serial);
+        i, nproc, showTestName, suppressFailureDetail, printDiff, disableFailureRetries, waitTime,
+        &_mutex, &_parallelJobs, &_caseJobs, serial);
     _threads.push_back(thread);
   }
 }
 
 ProcessPool::~ProcessPool()
 {
-  //std::cout << "Shutting down process pool..." << std::endl;
   for (vector<ProcessThreadPtr>::size_type i = 0; i < _threads.size(); ++i)
   {
     _threads[i]->quit();
     _threads[i]->wait();
   }
-  //std::cout << "Process pool shut down." << std::endl;
 }
 
 void ProcessPool::startProcessing()
 {
   for (vector<ProcessThreadPtr>::size_type i = 0; i < _threads.size(); ++i)
-  {
-    //std::cout << "Starting thread: " << i << std::endl;
     _threads[i]->start();
-  }
-  //std::cout << "All threads started." << std::endl;
 }
 
 void ProcessPool::wait()
 {
   for (vector<ProcessThreadPtr>::size_type i = 0; i < _threads.size(); ++i)
-  {
-    //std::cout << "Waiting for thread: " << i << std::endl;
     _threads[i]->wait();
-  }
-  //std::cout << "Finished waiting." << std::endl;
 }
 
-void ProcessPool::addJob(const QString& test, bool parallel)
+void ProcessPool::addJob(const QString& test, JobType job_type)
 {
-  _parallelJobs.setName("parallel"); // TODO: move this somewhere else?
-  _serialJobs.setName("serial");
-
-  if (parallel && !_serialJobs.contains(test))
+  if (job_type == ParallelJob && !_serialJobs.contains(test) && !_caseJobs.contains(test))
     _parallelJobs.push(test);
-  else if (!parallel)
+  else if (job_type == SerialJob)
     _serialJobs.push(test);
+  else if (job_type == ConflateJob)
+    _caseJobs.push(test);
 }
 
 int ProcessPool::getFailures()

@@ -50,7 +50,6 @@ public:
     : HootTestFixture("test-files/ops/OffsetIntersectionMergerOpTest/",
                       "test-output/ops/OffsetIntersectionMergerOpTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runOffsetMergeTest()

@@ -52,7 +52,6 @@ public:
   NodeDensityTileBoundsCalculatorTest() :
   HootTestFixture("test-files/conflate/tile/", "test-output/conflate/tile/")
   {
-    setResetType(ResetBasic);
   }
 
   void addEnvelope(OsmMapPtr map, Envelope& e, int tx, int ty)

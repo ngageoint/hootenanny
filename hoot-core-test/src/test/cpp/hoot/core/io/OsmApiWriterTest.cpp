@@ -101,7 +101,6 @@ public:
     : HootTestFixture("test-files/io/OsmChangesetElementTest/",
                       "test-output/io/OsmChangesetElementTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runParseStatusTest()

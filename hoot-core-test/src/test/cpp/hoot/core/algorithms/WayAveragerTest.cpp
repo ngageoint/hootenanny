@@ -48,7 +48,6 @@ public:
   HootTestFixture(
     "test-files/algorithms/WayAveragerTest/", "test-output/algorithms/WayAveragerTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runSimpleTest()

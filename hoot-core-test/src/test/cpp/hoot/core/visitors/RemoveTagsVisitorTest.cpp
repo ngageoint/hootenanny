@@ -26,9 +26,9 @@
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/NodeCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
@@ -51,7 +51,6 @@ public:
   HootTestFixture("test-files/visitors/RemoveTagsVisitorTest/",
                   "test-output/visitors/RemoveTagsVisitorTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runRemoveTest()

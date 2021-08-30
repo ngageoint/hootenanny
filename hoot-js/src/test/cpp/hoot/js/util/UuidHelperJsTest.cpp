@@ -51,6 +51,11 @@ class UuidHelperJsTest : public HootTestFixture
 
 public:
 
+  UuidHelperJsTest()
+  {
+    setResetType(ResetConfigs);
+  }
+
   // Jasons Code: "what can I say? I'm lazy and I don't like extra verbose mark ups."
   // Heck yeah, this is my code! Are you saying you like crazy verbose and difficult to read tests!?
   // -JRS

@@ -26,14 +26,14 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/WaySublineRemover.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/MapUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
@@ -54,7 +54,6 @@ public:
     "test-files/algorithms/linearreference/WaySublineRemoverTest/",
     "test-output/algorithms/linearreference/WaySublineRemoverTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runSplitInTheMiddleTest()

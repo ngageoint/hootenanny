@@ -47,7 +47,6 @@ public:
     : HootTestFixture("test-files/ops/IdSwapOp/",
                       "test-output/ops/IdSwapOp/")
   {
-    setResetType(ResetBasic);
   }
 
   void runQuickTest()

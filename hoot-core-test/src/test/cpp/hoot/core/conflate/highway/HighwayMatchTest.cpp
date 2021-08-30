@@ -32,12 +32,12 @@
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/MapUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/MapProjector.h>
 
 // Tgs
 #include <tgs/StreamUtils.h>
@@ -64,7 +64,6 @@ public:
     : HootTestFixture("test-files/conflate/highway/",
                       UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   /**

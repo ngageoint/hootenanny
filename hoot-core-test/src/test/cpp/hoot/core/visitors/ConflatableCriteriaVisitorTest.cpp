@@ -26,11 +26,11 @@
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/visitors/ConflatableCriteriaVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/visitors/ConflatableCriteriaVisitor.h>
 
 namespace hoot
 {
@@ -48,7 +48,6 @@ public:
       "test-files/visitors/ConflatableCriteriaVisitorTest/",
       "test-output/visitors/ConflatableCriteriaVisitorTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runBasicTest()

@@ -29,11 +29,11 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/subline-matching/MaximalSublineStringMatcher.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // Standard
@@ -57,10 +57,6 @@ class MaximalSublineStringMatcherTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-  MaximalSublineStringMatcherTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   OsmMapPtr createMap()
   {
