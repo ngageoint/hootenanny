@@ -22,33 +22,22 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef AVERAGETAGMERGER_H
-#define AVERAGETAGMERGER_H
+#include "MostSpecificTagMerger.h"
 
-#include <hoot/core/schema/TagMerger.h>
+// hoot
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-class AverageTagMerger : public TagMerger
+HOOT_FACTORY_REGISTER(TagMerger, MostSpecificTagMerger)
+
+MostSpecificTagMerger::MostSpecificTagMerger(const QSet<QString>& skipTagKeys) :
+TypesTagMerger(skipTagKeys)
 {
-public:
-
-  static QString className() { return "hoot::AverageTagMerger"; }
-
-  AverageTagMerger() = default;
-  ~AverageTagMerger() = default;
-
-  Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
-
-  QString getDescription() const override
-  { return "Keeps tags from both features and overlapping tags are averaged together"; }
-  QString getName() const override { return className(); }
-  QString getClassName() const override { return className(); }
-};
-
+  setPreserveTypes();
 }
 
-#endif // AVERAGETAGMERGER_H
+}
