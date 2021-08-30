@@ -45,7 +45,7 @@ QString TypesTagMerger::ALT_TYPES_TAG_KEY = "alt_types";
 
 TypesTagMerger::TypesTagMerger(const QSet<QString>& skipTagKeys) :
 _preserveTypes(false),
-_overwrite1(ConfigOptions().getTagMergerDefault() == OverwriteTag1Merger::className()),
+_overwrite1(false),
 _skipTagKeys(skipTagKeys)
 {
   setConfiguration(conf());
@@ -55,6 +55,7 @@ void TypesTagMerger::setConfiguration(const Settings& conf)
 {
   TagMerger::setConfiguration(conf);
   ConfigOptions config = ConfigOptions(conf);
+  setOverwrite1(config.getTagMergerTypesOverwriteReference());
   setOverwriteExcludeTagKeys(config.getTagMergerOverwriteExclude());
 }
 
@@ -96,10 +97,6 @@ Tags TypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*
       result = _preserveAltTypes(tagsToBeOverwritten, result);
     }
     LOG_TRACE("Tags after alt_types handling: " << result);
-  }
-  else
-  {
-    result = tagsToBeOverwritten;
   }
 
   // Combine the rest of the tags together. If two tags with the same key are found, use the most

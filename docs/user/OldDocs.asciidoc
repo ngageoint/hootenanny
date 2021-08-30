@@ -1307,7 +1307,7 @@ Use an internal method to generalize the tags between two features. For instance
 [[Most-Specific-Tag-Merger]]
 ===== Most Specific Tag Merger
 
-This tag merger keeps only the most specific types as recognized by the Hootenanny schema. In instances where two features have the same type tag key and the value ties in specificity, the tag from the reference feature is arbitrarily kept. Implementation: +hoot::MostSpecificTagMerger+
+This tag merger keeps only the most specific types as recognized by the Hootenanny schema. If there is a tie in specificity the configuration option, `tag.merger.types.overwrite.reference`, determines which tag is kept. A value of false for the option keeps the tying tag from the reference feature and a value of true keeps the tying tag from the secondary feature. Implementation: +hoot::MostSpecificTagMerger+
 
 [[Overwrite-Tag-1]]
 ==== Overwriting Tag 1 Tag Merger
@@ -1413,7 +1413,7 @@ features are concatenated together. Implementation +hoot::ProvenanceAwareOverwri
 [[Preserve-Types-Tag-Merger]]
 ===== Preserving Types Tag Merger
 
-This tag merger preserves tags from both features and is simliar to `MostSpecificTagMerger`. In instances where two features have the same type tag key, the most specific type is chosen (or arbitrarily the reference type in a tie) and the unselected type is stored in an `alt_types` field. Implementation: +hoot::PreserveTypesTagMerger+.
+This tag merger preserves tags from both features and is simliar to `MostSpecificTagMerger`. In instances where two features have the same type tag key, the most specific type is chosen and the less specific type is stored in an `alt_types` field. The rule for keeping tags with a tying specificity is the same as used with `MostSpecificTagMerger`. Implementation: +hoot::PreserveTypesTagMerger+.
 
 [[Replace-Tag-1-Tag-Merger]]
 ===== Replacing Tag 1 Tag Merger
