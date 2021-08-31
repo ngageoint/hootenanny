@@ -77,6 +77,7 @@ mgcp = {
 
   // This function dumps the schema to the screen for debugging
   // translate.dumpSchema(mgcp.rawSchema);
+  // print('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
 
   return mgcp.rawSchema;
   }, // End of getDbSchema
@@ -559,9 +560,14 @@ mgcp = {
 
       if (attrs.OSMTAGS)
       {
+        print('About to unpack OSMTAGS');
         var tmp = translate.unpackText(attrs,'OSMTAGS',4);
+
+        print('Back from unpack OSMTAGS');
         for (var i in tmp)
         {
+print('  i = ' + i);
+
           if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
           tTags[i] = tmp[i];
         }
@@ -2401,6 +2407,9 @@ mgcp = {
       mgcp.configOut.OgrFormat = config.getOgrOutputFormat();
       mgcp.configOut.OgrNoteExtra = config.getOgrNoteExtra();
       mgcp.configOut.OgrThrowError = config.getOgrThrowError();
+      mgcp.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
+
+print('Debug: OgrTextFieldNumber = ' + mgcp.configOut.OgrTextFieldNumber);
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon
@@ -2528,9 +2537,9 @@ mgcp = {
             if (mgcp.configOut.OgrFormat == 'shp')
             {
               // Split the tags into a maximum of 4 fields, each no greater than 225 char long.
-              var tList = translate.packText(notUsedTags,4,225);
+              var tList = translate.packText(notUsedTags,mgcp.configOut.OgrTextFieldNumber,250);
               returnData[i]['attrs']['OSMTAGS'] = tList[1];
-              for (var j = 2; j < 5; j++)
+              for (var j = 2; j < mgcp.configOut.OgrTextFieldNumber; j++)
               {
                 returnData[i]['attrs']['OSMTAGS' + j] = tList[j];
               }
@@ -2624,11 +2633,11 @@ mgcp = {
       {
         var str = JSON.stringify(tags,Object.keys(tags).sort());
         // Throw a warning that text will get truncated.
-        if (str.length > 900) hoot.logWarn('o2s tags truncated to fit in available space.');
+        if (str.length > (mgcp.configOut.OgrTextFieldNumber * 253)) hoot.logWarn('o2s tags truncated to fit in available space.');
 
         attrs = {};
-        var tList = translate.packText(tags,4,225);
-        for (var i = 1; i < 5; i++)
+        var tList = translate.packText(tags,mgcp.configOut.OgrTextFieldNumber,253);
+        for (var i = 1, tLen = tList.length; i < 5; i++)
         {
           attrs['tag'+i] = tList[i];
         }
