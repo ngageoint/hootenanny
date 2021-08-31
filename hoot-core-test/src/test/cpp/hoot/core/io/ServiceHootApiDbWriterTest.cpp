@@ -65,11 +65,6 @@ public:
   { return QString("%1.ServiceHootApiDbWriterTest@hoottestcpp.org").arg(_testName); }
   QString userName()  { return QString("%1.ServiceHootApiDbWriterTest").arg(_testName); }
 
-  ServiceHootApiDbWriterTest()
-  {
-    setResetType(ResetBasic);
-  }
-
   void setUpTest(const QString& testName)
   {
     _mapId = -1;
@@ -82,7 +77,7 @@ public:
     database.close();
   }
 
-  virtual void tearDown()
+  void tearDown() override
   {
     ServicesDbTestUtils::deleteUser(userEmail());
 
@@ -93,6 +88,7 @@ public:
       database.deleteMap(_mapId);
       database.close();
     }
+    HootTestFixture::tearDown();
   }
 
   void runEscapeTest()

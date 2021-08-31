@@ -29,12 +29,12 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
 #include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 // TGS
 #include <tgs/System/Time.h>
@@ -53,11 +53,6 @@ class MultiLineStringSplitterTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  MultiLineStringSplitterTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   OsmMapPtr createMap()
   {

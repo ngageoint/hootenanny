@@ -26,8 +26,8 @@
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/visitors/BuildingLevelsVisitor.h>
 
@@ -46,7 +46,6 @@ public:
     : HootTestFixture("test-files/visitors/BuildingHeightVisitorTest/",
                       UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void runBasicTest()

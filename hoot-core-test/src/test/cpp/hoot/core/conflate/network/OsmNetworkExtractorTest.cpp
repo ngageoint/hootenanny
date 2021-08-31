@@ -51,8 +51,6 @@ public:
    */
   void toyTest()
   {
-    NetworkVertex::reset();
-
     OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "ToyInput.osm");
 

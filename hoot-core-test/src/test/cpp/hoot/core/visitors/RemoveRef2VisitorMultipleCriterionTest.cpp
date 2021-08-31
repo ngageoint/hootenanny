@@ -26,16 +26,16 @@
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/visitors/RemoveRef2VisitorMultipleCriterion.h>
-#include <hoot/core/io/OsmJsonReader.h>
-#include <hoot/core/elements/MapProjector.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
@@ -57,7 +57,6 @@ public:
     : HootTestFixture("test-files/visitors/RemoveRef2VisitorMultipleCriterionTest/",
                       "test-output/visitors/RemoveRef2VisitorMultipleCriterionTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runToyTest1()

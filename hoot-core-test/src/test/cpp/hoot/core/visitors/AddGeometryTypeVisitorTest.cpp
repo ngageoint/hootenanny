@@ -26,13 +26,13 @@
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/AddGeometryTypeVisitor.h>
 
 using namespace std;
@@ -47,11 +47,6 @@ class AddGeometryTypeVisitorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  AddGeometryTypeVisitorTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   void runBasicTest()
   {

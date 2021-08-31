@@ -26,10 +26,10 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonPhoneNumberScoreExtractor.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
 
 namespace hoot
 {
@@ -47,11 +47,6 @@ class PoiPolygonPhoneNumberScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  PoiPolygonPhoneNumberScoreExtractorTest() : HootTestFixture(UNUSED_PATH, UNUSED_PATH)
-  {
-    setResetType(ResetBasic);
-  }
 
   void basicTest()
   {

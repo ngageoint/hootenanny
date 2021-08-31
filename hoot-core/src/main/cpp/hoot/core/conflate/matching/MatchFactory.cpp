@@ -247,4 +247,16 @@ void MatchFactory::reset()
   _negateCritFilter = false;
 }
 
+QString MatchFactory::toString() const
+{
+  QStringList creatorList;
+  for (size_t i = 0; i < _creators.size(); ++i)
+  {
+    vector<CreatorDescription> desc = _creators[i]->getAllCreators();
+    for (size_t j = 0; j < desc.size(); ++j)
+      creatorList << desc[j].toString();
+  }
+  return QString("{ %1 }\n{ %2 }\n{ %3 }").arg(creatorList.join(",\n")).arg(_tagFilterJson).arg(_critFilterClassName);
+}
+
 }

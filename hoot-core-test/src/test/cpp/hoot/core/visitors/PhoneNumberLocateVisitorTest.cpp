@@ -51,7 +51,7 @@ public:
     "test-files/visitors/PhoneNumberLocateVisitorTest/",
     "test-output/visitors/PhoneNumberLocateVisitorTest/")
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void runBasicTest()

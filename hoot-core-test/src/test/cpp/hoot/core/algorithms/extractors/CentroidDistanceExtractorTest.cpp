@@ -26,13 +26,13 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/extractors/CentroidDistanceExtractor.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/elements/MapProjector.h>
 
 // Tgs
 #include <tgs/StreamUtils.h>
@@ -46,14 +46,9 @@ class CentroidDistanceExtractorTest : public HootTestFixture
   CPPUNIT_TEST(runRoadsTest);
   CPPUNIT_TEST_SUITE_END();
 
-public:
-
-  CentroidDistanceExtractorTest()
-  {
-    setResetType(ResetBasic);
-  }
-
   OsmMapPtr _map;
+
+public:
 
   NodePtr createNode(double x, double y)
   {

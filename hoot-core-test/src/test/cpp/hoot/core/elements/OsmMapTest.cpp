@@ -26,20 +26,20 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/KnnWayIterator.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-#include <hoot/core/io/OsmJsonReader.h>
 
 // Qt
 #include <QTime>
@@ -86,7 +86,6 @@ public:
   OsmMapTest() :
   HootTestFixture("test-files/elements/OsmMapTest/", "test-output/elements/OsmMapTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void _checkKnnWayIterator(OsmMapPtr map)

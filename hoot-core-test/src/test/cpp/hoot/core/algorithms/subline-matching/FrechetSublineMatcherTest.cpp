@@ -56,7 +56,6 @@ public:
     : HootTestFixture("test-files/algorithms/subline-matching/",
                       UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void singleSublineTest()

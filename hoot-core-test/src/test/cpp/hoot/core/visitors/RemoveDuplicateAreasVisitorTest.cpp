@@ -31,10 +31,10 @@
 
 // hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateAreasVisitor.h>
 
@@ -57,7 +57,6 @@ public:
     : HootTestFixture("test-files/visitors/",
                       UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void runToyTest()

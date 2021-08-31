@@ -56,7 +56,7 @@ public:
   ReprojectToPlanarOpTest() :
   HootTestFixture("test-files/ops/ReprojectToPlanarOp/", "test-output/ops/ReprojectToPlanarOp/")
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
   }
 
   void runTest()

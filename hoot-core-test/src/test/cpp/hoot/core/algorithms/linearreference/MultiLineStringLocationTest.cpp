@@ -26,12 +26,13 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
 
@@ -55,11 +56,6 @@ class MultiLineStringLocationTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  MultiLineStringLocationTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   void runSingleWayTest()
   {

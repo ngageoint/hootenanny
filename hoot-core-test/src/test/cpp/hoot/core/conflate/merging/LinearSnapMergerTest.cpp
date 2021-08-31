@@ -35,14 +35,14 @@
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/merging/LinearSnapMerger.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/MapUtils.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 // Tgs
@@ -73,7 +73,6 @@ public:
     "test-files/conflate/merging/LinearSnapMergerTest/",
     "test-output/conflate/merging/LinearSnapMergerTest/")
   {
-    setResetType(ResetBasic);
   }
 
   OsmMapPtr createMap()

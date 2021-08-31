@@ -45,11 +45,6 @@ class MultiaryReviewCommandTest : public HootTestFixture
 
 public:
 
-  MultiaryReviewCommandTest()
-  {
-    setResetType(ResetBasic);
-  }
-
   OsmMapPtr getTestMap()
   {
     QString testJsonStr =

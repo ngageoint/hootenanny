@@ -103,7 +103,7 @@ void OptionsValidator::fixMisc()
         fixedMergerCreators.append("hoot::PoiPolygonMergerCreator");
       }
     }
-    conf().set("merger.creators", fixedMergerCreators.join(";"));
+    conf().set(ConfigOptions::getMergerCreatorsKey(), fixedMergerCreators.join(";"));
   }
   LOG_VART(matchCreators);
   LOG_VART(mergerCreators);
@@ -114,14 +114,14 @@ void OptionsValidator::fixMisc()
       ConfigOptions().getHighwaySublineMatcher() != "hoot::MaximalSublineMatcher")
   {
     LOG_TRACE("Temp fixing highway.subline.matcher...");
-    conf().set("highway.subline.matcher", "hoot::MaximalSublineMatcher");
+    conf().set(ConfigOptions::getHighwaySublineMatcherKey(), "hoot::MaximalSublineMatcher");
   }
   else if (matchCreators.contains("hoot::HighwayMatchCreator") &&
            ConfigOptions().getHighwaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
            ConfigOptions().getHighwaySublineMatcher() != "hoot::MaximalNearestSublineMatcher")
   {
     LOG_TRACE("Temp fixing highway.subline.matcher...");
-    conf().set("highway.subline.matcher", "hoot::MaximalNearestSublineMatcher");
+    conf().set(ConfigOptions::getHighwaySublineMatcherKey(), "hoot::MaximalNearestSublineMatcher");
   }
   LOG_VART(ConfigOptions().getHighwaySublineMatcher());
 
@@ -130,13 +130,13 @@ void OptionsValidator::fixMisc()
       ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayExpertClassifier")
   {
     LOG_TRACE("Temp fixing conflate.match.highway.classifier...");
-    conf().set("conflate.match.highway.classifier", "hoot::HighwayExpertClassifier");
+    conf().set(ConfigOptions::getConflateMatchHighwayClassifierKey(), "hoot::HighwayExpertClassifier");
   }
   else if (matchCreators.contains("hoot::HighwayMatchCreator") &&
            ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayRfClassifier")
   {
     LOG_TRACE("Temp fixing conflate.match.highway.classifier...");
-    conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
+    conf().set(ConfigOptions::getConflateMatchHighwayClassifierKey(), "hoot::HighwayRfClassifier");
   }
   LOG_VART(ConfigOptions().getConflateMatchHighwayClassifier());
 }
@@ -179,8 +179,8 @@ void OptionsValidator::fixGenericMatcherOrdering()
         LOG_VART(fixedMergerCreators);
       }  
     }
-    conf().set("match.creators", fixedMatchCreators.join(";"));
-    conf().set("merger.creators", fixedMergerCreators.join(";"));
+    conf().set(ConfigOptions::getMatchCreatorsKey(), fixedMatchCreators.join(";"));
+    conf().set(ConfigOptions::getMergerCreatorsKey(), fixedMergerCreators.join(";"));
     matchCreators = ConfigOptions().getMatchCreators();
     mergerCreators = ConfigOptions().getMergerCreators();  
   }
@@ -198,8 +198,8 @@ void OptionsValidator::fixGenericMatcherOrdering()
     {
       matchCreators.move(relationScriptIndex, matchCreators.size() - 1);
       mergerCreators.move(relationScriptIndex, mergerCreators.size() - 1);
-      conf().set("match.creators", matchCreators.join(";"));
-      conf().set("merger.creators", mergerCreators.join(";"));
+      conf().set(ConfigOptions::getMatchCreatorsKey(), matchCreators.join(";"));
+      conf().set(ConfigOptions::getMergerCreatorsKey(), mergerCreators.join(";"));
       LOG_VART(matchCreators);
       LOG_VART(mergerCreators);
     }

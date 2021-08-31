@@ -29,11 +29,12 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/WayJoinerAdvanced.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
+#include <hoot/core/conflate/merging/MergerFactory.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 namespace hoot
@@ -58,9 +59,15 @@ public:
     "test-files/algorithms/WayJoinerConflateTest/", "test-output/algorithms/WayJoinerConflateTest/")
   {
     setResetType(ResetAll);
+  }
 
+  void setUp() override
+  {
+    HootTestFixture::setUp();
     conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::HighwayMatchCreator");
     conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::HighwayMergerCreator");
+    MatchFactory::getInstance().reset();
+    MergerFactory::getInstance().reset();
   }
 
   void runConflateTest()

@@ -41,11 +41,6 @@ class WayMatchStringMappingConverterTest : public HootTestFixture
 
 public:
 
-  WayMatchStringMappingConverterTest()
-  {
-    setResetType(ResetBasic);
-  }
-
   /**
    * Create a couple of simple way strings and verify that the generated subline match is correct.
    */

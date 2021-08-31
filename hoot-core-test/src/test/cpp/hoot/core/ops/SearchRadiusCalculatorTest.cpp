@@ -27,13 +27,13 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/ops/MapCleaner.h>
-#include <hoot/core/ops/SearchRadiusCalculator.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/ops/SearchRadiusCalculator.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // Qt
@@ -62,7 +62,6 @@ public:
   SearchRadiusCalculatorTest() :
   HootTestFixture("test-files/ops/SearchRadiusCalculatorTest/", UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void runCalcResultTest()
@@ -77,15 +76,15 @@ public:
     MapCleaner().apply(map);
 
     Settings testSettings = conf();
-    testSettings.set("rubber.sheet.ref", "true");
-    testSettings.set("rubber.sheet.minimum.ties", "5");
-    testSettings.set("rubber.sheet.fail.when.minimum.tie.points.not.found", "false");
+    testSettings.set(ConfigOptions::getRubberSheetRefKey(), "true");
+    testSettings.set(ConfigOptions::getRubberSheetMinimumTiesKey(), "5");
+    testSettings.set(ConfigOptions::getRubberSheetFailWhenMinimumTiePointsNotFoundKey(), "false");
     SearchRadiusCalculator searchRadiusCalculator;
     searchRadiusCalculator.setConfiguration(testSettings);
 
     searchRadiusCalculator.apply(map);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      34.334701, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
+      34.266771, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
   }
 
   void runNotEnoughTiePointsTest()
@@ -96,9 +95,9 @@ public:
     tiePointDistances.push_back(11.0);
 
     Settings testSettings = conf();
-    testSettings.set("rubber.sheet.ref", "true");
-    testSettings.set("rubber.sheet.minimum.ties", "5");
-    testSettings.set("rubber.sheet.fail.when.minimum.tie.points.not.found", "false");
+    testSettings.set(ConfigOptions::getRubberSheetRefKey(), "true");
+    testSettings.set(ConfigOptions::getRubberSheetMinimumTiesKey(), "5");
+    testSettings.set(ConfigOptions::getRubberSheetFailWhenMinimumTiePointsNotFoundKey(), "false");
     SearchRadiusCalculator searchRadiusCalculator;
     searchRadiusCalculator.setConfiguration(testSettings);
 
@@ -130,15 +129,15 @@ public:
         map, ElementType::Way,  MetadataTags::Ref2(), "001f4b")[0])->setStatus(Status::Invalid);
 
     Settings testSettings = conf();
-    testSettings.set("rubber.sheet.ref", "true");
-    testSettings.set("rubber.sheet.minimum.ties", "5");
-    testSettings.set("rubber.sheet.fail.when.minimum.tie.points.not.found", "false");
+    testSettings.set(ConfigOptions::getRubberSheetRefKey(), "true");
+    testSettings.set(ConfigOptions::getRubberSheetMinimumTiesKey(), "5");
+    testSettings.set(ConfigOptions::getRubberSheetFailWhenMinimumTiePointsNotFoundKey(), "false");
     SearchRadiusCalculator searchRadiusCalculator;
     searchRadiusCalculator.setConfiguration(testSettings);
 
     searchRadiusCalculator.apply(map);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      32.675050, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6/*1e-1*/);
+      32.584460, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6/*1e-1*/);
   }
 
 };

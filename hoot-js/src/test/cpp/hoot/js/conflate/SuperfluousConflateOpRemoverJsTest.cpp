@@ -52,7 +52,7 @@ public:
 
   SuperfluousConflateOpRemoverJsTest()
   {
-    setResetType(ResetAllNoMatchFactory);
+    setResetType(ResetEnvironment);
 
     _scriptMatchCreatorName = ScriptMatchCreator::className();
   }

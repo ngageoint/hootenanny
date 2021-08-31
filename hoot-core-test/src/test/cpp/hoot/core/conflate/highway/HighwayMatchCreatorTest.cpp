@@ -26,13 +26,13 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/highway/HighwayMatchCreator.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
 namespace hoot
@@ -50,7 +50,6 @@ public:
     : HootTestFixture("test-files/",
                       UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void runIsCandidateTest()

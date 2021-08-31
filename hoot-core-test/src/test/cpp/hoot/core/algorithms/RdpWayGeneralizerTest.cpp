@@ -30,11 +30,11 @@
 #include <boost/random/linear_congruential.hpp>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/algorithms/RdpWayGeneralizer.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 
 using namespace geos::geom;
 
@@ -63,7 +63,6 @@ public:
     : HootTestFixture("test-files/algorithms/RdpWayGeneralizerTest/",
                       "test-output/algorithms/RdpWayGeneralizerTest/")
   {
-    setResetType(ResetBasic);
   }
 
   QList<ConstNodePtr> readPoints(const QString& filePath)

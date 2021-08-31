@@ -26,9 +26,9 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
@@ -44,11 +44,6 @@ class WaySublineStringTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  WaySublineStringTest()
-  {
-    setResetType(ResetBasic);
-  }
 
   OsmMapPtr createTestMap()
   {

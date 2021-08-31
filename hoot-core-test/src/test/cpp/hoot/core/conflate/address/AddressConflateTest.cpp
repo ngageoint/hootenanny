@@ -27,16 +27,17 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
+#include <hoot/core/conflate/ConflateExecutor.h>
 #include <hoot/core/criterion/HasAddressCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/visitors/AddressCountVisitor.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
-#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
+#include <hoot/core/schema/OverwriteTagMerger.h>
+#include <hoot/core/visitors/AddressCountVisitor.h>
 #include <hoot/core/visitors/NormalizeAddressesVisitor.h>
-#include <hoot/core/conflate/ConflateExecutor.h>
 
 namespace hoot
 {
@@ -70,10 +71,24 @@ public:
   void setUp() override
   {
     HootTestFixture::setUp();
+    setupTestConfig();
+  }
+
+  void setupTestConfig()
+  {
+    //  Enable address matching
     conf().set(ConfigOptions::getAddressMatchEnabledKey(), true);
     conf().set(ConfigOptions::getAddressScorerEnableCachingKey(), false);
     conf().set(ConfigOptions::getUuidHelperRepeatableKey(), true);
-    conf().set(ConfigOptions::getPoiPolygonTagMergerKey(), "OverwriteTag2Merger");
+    conf().set(ConfigOptions::getPoiPolygonTagMergerKey(), OverwriteTag2Merger::className());
+  }
+
+  void resetTest()
+  {
+    //  Reset the entire environment
+    TestUtils::resetAll();
+    //  Setup the address matching configuration settings
+    setupTestConfig();
   }
 
   void runTest()
@@ -98,9 +113,9 @@ public:
     _addressScoreExtractorNoStreetNumberTest();
     _addressScoreExtractorPartialMatchTest();
 
+    //  Test order in important here, do not change
     _building3441Addresses1Test();
     _building3441Addresses2Test();
-
     _poiPolygon10Test();
     _poiPolygonAutoMerge13Test();
     _poiPolygonAutoMerge14Test();
@@ -124,6 +139,7 @@ private:
     AddressCountVisitor uut;
     map->visitRo(uut);
     CPPUNIT_ASSERT_EQUAL(28, (int)uut.getStat());
+    OsmMap::resetCounters();
   }
 
   void _hasAddressCriterionBasicTest()
@@ -147,7 +163,6 @@ private:
 
   void _normalizeAddressesVisitorBasicTest()
   {
-    OsmMap::resetCounters();
     OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map,
@@ -163,6 +178,7 @@ private:
 
     CPPUNIT_ASSERT_EQUAL(21, uut._addressNormalizer.getNumNormalized());
     HOOT_FILE_EQUALS(_inputPath + "normalizeAddressesVisitorBasicTest-out.osm", outputFile);
+    OsmMap::resetCounters();
   }
 
   void _addressScoreExtractorTagTest()
@@ -588,9 +604,9 @@ private:
     Settings settings = conf();
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    settings.set("address.translate.to.english", "true");
-    settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
-    settings.set("address.use.default.language.translation.only", "false");
+    settings.set(ConfigOptions::getAddressTranslateToEnglishKey(), "true");
+    settings.set(ConfigOptions::getLanguageTranslationTranslatorKey(), ToEnglishDictionaryTranslator::className());
+    settings.set(ConfigOptions::getAddressUseDefaultLanguageTranslationOnlyKey(), "false");
     uut.setConfiguration(settings);
     uut.setCacheEnabled(false);
     std::shared_ptr<ToEnglishDictionaryTranslator> dictTranslator =
@@ -620,7 +636,7 @@ private:
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node2, way2), 0.0);
 
-    settings.set("address.translate.to.english", "false");
+    settings.set(ConfigOptions::getAddressTranslateToEnglishKey(), "false");
     uut.setConfiguration(settings);
     uut.setCacheEnabled(false);
      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
@@ -888,7 +904,7 @@ private:
 
   void _building3441Addresses1Test()
   {
-    setUp();
+    resetTest();
     conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::BuildingMatchCreator");
     conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::BuildingMergerCreator");
 
@@ -902,7 +918,7 @@ private:
 
   void _building3441Addresses2Test()
   {
-    setUp();
+    resetTest();
     conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::BuildingMatchCreator");
     conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::BuildingMergerCreator");
 
@@ -916,7 +932,7 @@ private:
 
   void _poiPolygon10Test()
   {
-    setUp();
+    resetTest();
     conf().set(
       ConfigOptions::getMatchCreatorsKey(),
       "hoot::BuildingMatchCreator;hoot::PoiPolygonMatchCreator");
@@ -935,7 +951,7 @@ private:
 
   void _poiPolygonAutoMerge13Test()
   {
-    setUp();
+    resetTest();
     conf().set(
       ConfigOptions::getMatchCreatorsKey(),
       "hoot::BuildingMatchCreator;hoot::PoiPolygonMatchCreator");
@@ -953,7 +969,7 @@ private:
 
   void _poiPolygonAutoMerge14Test()
   {
-    setUp();
+    resetTest();
     conf().set(ConfigOptions::getMatchCreatorsKey(), "BuildingMatchCreator;PoiPolygonMatchCreator");
     conf().set(
       ConfigOptions::getMergerCreatorsKey(), "BuildingMergerCreator;PoiPolygonMergerCreator");
@@ -969,7 +985,7 @@ private:
 
   void _poiPolygonRecursiveWayAddress3267_1Test()
   {
-    setUp();
+    resetTest();
     conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::PoiPolygonMatchCreator");
     conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::PoiPolygonMergerCreator");
 
@@ -983,7 +999,7 @@ private:
 
   void _poiPolygonReviewConflict4331_3Test()
   {
-    setUp();
+    resetTest();
     conf().set(
       ConfigOptions::getMatchCreatorsKey(),
       "hoot::BuildingMatchCreator;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Poi.js");

@@ -29,10 +29,10 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/visitors/poi-polygon/PoiPolygonMatchVisitor.h>
-#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
+#include <hoot/core/visitors/poi-polygon/PoiPolygonMatchVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -78,7 +78,6 @@ public:
 
   PoiPolygonMatchVisitorTest() : HootTestFixture("test-files/", UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void runIsCandidateTest()

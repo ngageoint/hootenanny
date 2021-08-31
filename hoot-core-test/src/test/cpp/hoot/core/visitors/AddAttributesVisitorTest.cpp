@@ -26,13 +26,13 @@
  */
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/visitors/AddAttributesVisitor.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/visitors/AddAttributesVisitor.h>
 
 namespace hoot
 {
@@ -59,7 +59,6 @@ public:
     : HootTestFixture("test-files/visitors/AddAttributesVisitorTest/",
                       "test-output/visitors/AddAttributesVisitorTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runAddAttributesTest()
