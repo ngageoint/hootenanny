@@ -231,7 +231,7 @@ more diverse scenarios. See <<GenericLineConflationFutureWork>> for details.
 ==== DC Tiger Perty
 
 This test configuration uses Tiger data over the DC region to determine
-performance. The `perty-test` command is used with the following configuration:
+performance. The `perturb --test` command is used with the following configuration:
 
 -----
 {
