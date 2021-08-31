@@ -68,6 +68,8 @@ public:
 
   void visit(const ElementPtr& pElement) override;
 
+  Tags getExportTags(const ConstElementPtr& pElement);
+
   void overrideDebugSettings();
 
   QString getName() const override { return className(); }
