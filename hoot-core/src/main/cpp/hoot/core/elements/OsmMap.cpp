@@ -1069,9 +1069,10 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
   ConstElementPtr newNode = getNode(newId);
   //  Use the index to get all relations containing the old node ID
   const std::shared_ptr<ElementToRelationMap>& mapping = getIndex().getElementToRelationMap();
-  const set<long>& relations = mapping->getRelationByElement(oldNodeId);
+  const set<long>& relation_map = mapping->getRelationByElement(oldNodeId);
+  vector<long> relations(relation_map.begin(), relation_map.end());
   //  Only iterate the relations that contain the old node ID
-  for (set<long>::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (vector<long>::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     RelationPtr currRelation = getRelation(*it);
     if (!currRelation || !currRelation->contains(oldNodeId))
