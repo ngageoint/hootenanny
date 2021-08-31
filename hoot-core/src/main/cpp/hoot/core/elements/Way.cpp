@@ -384,17 +384,15 @@ void Way::replaceNode(long oldId, long newId)
 
   const vector<long>& ids = getNodeIds();
 
-  bool change = false;
+  vector<size_t> indices;
   for (size_t i = 0; i < ids.size(); i++)
   {
     const long id = ids[i];
     if (id == oldId)
-    {
-      change = true;
-    }
+      indices.emplace_back(i);
   }
 
-  if (change)
+  if (indices.size() > 0)
   {
     LOG_TRACE("IDs before replacement: " << getNodeIds());
 
@@ -406,13 +404,8 @@ void Way::replaceNode(long oldId, long newId)
 
     vector<long>& newIds = _wayData->getNodeIds();
     LOG_TRACE("Replacement IDs: " << newIds);
-    for (size_t i = 0; i < newIds.size(); i++)
-    {
-      if (newIds[i] == oldId)
-      {
-        newIds[i] = newId;
-      }
-    }
+    for (size_t i = 0; i < indices.size(); ++i)
+      newIds[indices[i]] = newId;
 
     _postGeometryChange();
 
