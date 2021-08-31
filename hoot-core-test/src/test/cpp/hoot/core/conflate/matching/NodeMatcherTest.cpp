@@ -116,7 +116,7 @@ public:
 
 };
 
-}
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NodeMatcherTest, "quick");
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::NodeMatcherTest, "quick");
+}
 

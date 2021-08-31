@@ -93,7 +93,7 @@ private:
   /**
    * Converts to tags if not-null otherwise returns an empty set of tags.
    */
-  static Tags _toTags(const hoot::ScriptToOgrSchemaTranslator::TranslatedFeature* tf);
+  static Tags _toTags(const ScriptToOgrSchemaTranslator::TranslatedFeature* tf);
 };
 
 }

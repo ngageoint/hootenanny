@@ -146,10 +146,10 @@ private:
     const CreatorDescription& m1, const CreatorDescription& m2);
 
   double _applyVisitor(
-    const hoot::FilteredVisitor& v, const QString& statName,
+    const FilteredVisitor& v, const QString& statName,
     StatData::StatCall call = StatData::StatCall::Stat);
   double _applyVisitor(
-    const hoot::FilteredVisitor& v, boost::any& visitorData, const QString& statName,
+    const FilteredVisitor& v, boost::any& visitorData, const QString& statName,
     StatData::StatCall call = StatData::StatCall::Stat);
   double _applyVisitor(
     const ElementCriterion& pCrit, ElementVisitor& pVis, const QString& statName,

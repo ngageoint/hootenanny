@@ -214,7 +214,7 @@ public:
   }
 };
 
-}
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SettingsTest, "quick");
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::SettingsTest, "quick");
+}
 

@@ -276,7 +276,7 @@ protected:
    * @param pElement Element to which we will add the tags
    */
   void _addTags(const boost::property_tree::ptree &item,
-                hoot::ElementPtr pElement) const;
+                ElementPtr pElement) const;
 
   /**
    * @brief _readFromHttp Creates HTTP(S) connection and downloads JSON to the _results list or

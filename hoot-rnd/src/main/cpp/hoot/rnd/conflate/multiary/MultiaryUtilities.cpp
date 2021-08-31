@@ -118,10 +118,10 @@ QList<MultiaryElement> MultiaryUtilities::conflateCluster(QList<QByteArray> pbfE
   return result;
 }
 
-QList<hoot::MultiarySimpleMatch> MultiaryUtilities::findMatches(
+QList<MultiarySimpleMatch> MultiaryUtilities::findMatches(
   QByteArray checkElement, QList<QByteArray> againstElements)
 {
-  QList<hoot::MultiarySimpleMatch> result;
+  QList<MultiarySimpleMatch> result;
   OsmPbfReader reader;
   reader.setUseDataSourceIds(false);
 
