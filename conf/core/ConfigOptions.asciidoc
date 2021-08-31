@@ -1097,8 +1097,8 @@ See also:
 
 * Data Type: list
 * Default Value:
-** `hoot::RiverCriterion`
-** `hoot::PowerLineCriterion`
+** `RiverCriterion`
+** `PowerLineCriterion`
 
 Determines which type of features are rubbersheeted during conflation when rubbersheeting is part
 of the conflation pre-operations. An empty list will rubbersheet all types of features.
