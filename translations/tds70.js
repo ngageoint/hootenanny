@@ -725,7 +725,7 @@ tds70 = {
 
       if (attrs.OSMTAGS)
       {
-        var tmp = translate.unpackText(attrs,'OSMTAGS',4);
+        var tmp = translate.unpackText(attrs,'OSMTAGS');
         for (var i in tmp)
         {
           if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
@@ -2731,7 +2731,7 @@ tds70 = {
     // See if we have an o2s_X layer and try to unpack it.
     if (~layerName.indexOf('o2s_'))
     {
-      tags = translate.unpackText(attrs,'tag',4);
+      tags = translate.unpackText(attrs,'tag');
 
       // Add some metadata
       if (!tags.uuid && tds70.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
@@ -2876,6 +2876,8 @@ tds70 = {
       tds70.configOut.OgrNoteExtra = config.getOgrNoteExtra();
       tds70.configOut.OgrThematicStructure = config.getOgrThematicStructure();
       tds70.configOut.OgrThrowError = config.getOgrThrowError();
+      tds70.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
+
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon
@@ -3011,9 +3013,9 @@ tds70 = {
             if (tds61.configOut.OgrFormat == 'shp')
             {
               // Split the tags into a maximum of 4 fields, each no greater than 225 char long.
-              var tList = translate.packText(notUsedTags,4,225);
+              var tList = translate.packText(notUsedTags,tds70.configOut.OgrTextFieldNumber,250);
               returnData[i]['attrs']['OSMTAGS'] = tList[1];
-              for (var j = 2; j < 5; j++)
+              for (var j = 2, tLen = tList.length; j < tLen; j++)
               {
                 returnData[i]['attrs']['OSMTAGS' + j] = tList[j];
               }
@@ -3122,11 +3124,11 @@ tds70 = {
       if (tds70.configOut.OgrFormat == 'shp')
       {
         // Throw a warning that text will get truncated.
-        if (str.length > 900) hoot.logWarn('o2s tags truncated to fit in available space.');
+        if (str.length > (tds70.configOut.OgrTextFieldNumber * 250)) hoot.logWarn('o2s tags truncated to fit in available space.');
 
         attrs = {};
-        var tList = translate.packText(tags,4,225);
-        for (var i = 1; i < 5; i++)
+        var tList = translate.packText(tags,tds70.configOut.OgrTextFieldNumber,250);
+        for (var i = 1, tLen = tList.length; i < tLen; i++)
         {
           attrs['tag'+i] = tList[i];
         }

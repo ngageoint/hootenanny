@@ -641,7 +641,7 @@ translate = {
       for (var j = 1; j <= num; j++)
       {
         // print('item' + j + '  len:' + (sTag.length + outTags[j].length) );
-        if ((sTag.length + outTags[j].length) < maxLen)
+        if ((sTag.length + outTags[j].length) < Number(maxLen))
         {
           outTags[j] += sTag + ',';
           packed = true;
@@ -659,8 +659,6 @@ translate = {
         var chunkLength = 100; // Split string length
         var numChunks = Math.ceil(input[key].length / chunkLength)
 
-print('numChunks = ' + numChunks);
-
         for (var m = 1, o = 0; m <= numChunks; ++m, o += chunkLength)
         {
           // tmpObj = tString.substr(o,chunkLength);
@@ -671,13 +669,11 @@ print('numChunks = ' + numChunks);
 
           var ssTag = JSON.stringify(nObj).slice(1,-1);
 
-print('Split: ' + ssTag);
-
           var sPacked = false;
           for (var n = 1; n <= num; n++)
           {
             // print('item' + j + '  len:' + (sTag.length + outTags[j].length) );
-            if ((ssTag.length + outTags[n].length) < maxLen)
+            if ((ssTag.length + outTags[n].length) < Number(maxLen))
             {
               outTags[n] += ssTag + ',';
               sPacked = true;
@@ -703,19 +699,16 @@ print('Split: ' + ssTag);
 
 
   // Parse JSON packed attributes
-  unpackText(input, attribute,num)
+  unpackText(input, attribute)
   {
     var outTags = {};
-
-    // Check if the tags got split
-    // NOTE: This should handle tag, tag1, tag2 etc or obj1, obj2, obj3
-
     var tList = [];
     var tTags = '';
 
+    // Handle OSMTAGS, ot tag
     if (input[attribute]) tTags = tTags.concat(input[attribute]);
 
-    // tags1, tags2 vs OSMTAGS, OSMTAGS2
+    // Handle tags1, tags2 etc vs OSMTAGS, OSMTAGS2
     if (input[attribute + '1']) tTags = tTags.concat(input['' + attribute + '1']);
 
     // We expect to see XX2, XX3 etc
@@ -764,28 +757,27 @@ print('Split: ' + ssTag);
       }
     } // End else Bad o2s
 
-    // Now, join any attribute values that got split to fit into shapefile attributes
-    // This is a two step process. 1) find the tags. 2) read them in the right order
+    // Now join any attribute values that got split during the packing process. This mainly occurs with shapefiles.
     var kList = Object.keys(outTags).sort();
     if (kList.length > 0)
     {
       for (var i = 0, fLen = kList.length; i < fLen; i++)
       {
+        // We do delete items so make sure they exist before trying to process them
         if (!outTags[kList[i]]) continue;
-        print('Sub: Check ' + kList[i]);
 
         // Find the first part of a split.
+        // Name format is:  xs[1-N]:<tag name>
         if (kList[i].indexOf('xs1:') == 0)
         {
-          print('Sub: got ' + kList[i]);
           nTag = kList[i].replace('xs1:','');
           outTags[nTag] = outTags[kList[i]];
           delete outTags[kList[i]];
 
+          // Now go find the rest: xs2:<tag>, xs3:<tag> etc
           var splitNum = 2;
           while (outTags['xs' + splitNum + ':' + nTag])
           {
-            print('Concat: ' + 'xs' + splitNum + ':' + nTag)
             outTags[nTag] = outTags[nTag].concat(outTags['xs' + splitNum + ':' + nTag]);
             delete outTags['xs' + splitNum + ':' + nTag];
             splitNum++;
@@ -1512,7 +1504,8 @@ print('Split: ' + ssTag);
   {
     schema.forEach( function (item) {
       item.columns.push({name:'OSMTAGS',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'254'});
-      for (var i = 2,maxNum = hoot.Settings.get("ogr.text.field.number"); i < maxNum; i++)
+
+      for (var i = 2,maxNum = hoot.Settings.get("ogr.text.field.number"); i <= maxNum; i++)
       {
         item.columns.push({name:'OSMTAGS' + i,desc:'Stored OSM tags and values',type:'String',defValue:'',length:'254'});
       }
