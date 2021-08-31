@@ -43,8 +43,6 @@ class PreserveTypesTagMerger : public TypesTagMerger
 {
 public:
 
-  static QString ALT_TYPES_TAG_KEY;
-
   static QString className() { return "PreserveTypesTagMerger"; }
 
   /**
