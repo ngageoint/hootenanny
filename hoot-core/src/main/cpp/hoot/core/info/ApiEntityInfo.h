@@ -27,8 +27,6 @@
 #ifndef API_ENTITY_INFO_H
 #define API_ENTITY_INFO_H
 
-
-
 namespace hoot
 {
 
@@ -48,15 +46,15 @@ public:
   virtual ~ApiEntityInfo() = default;
 
   /**
-   * Returns the entity's class name without namespace prefix
+   * Returns the entity's class name *without* the namespace prefix
    *
    * @return class name string
    */
   virtual QString getClassName() const = 0;
 
   /**
-   * Returns a name for the entity; often this is just the full class name, but some implementors
-   * may need to extend the behavior (FeatureExtractor)
+   * Returns a name for the entity; often this is just the class name, but some implementors may
+   * need to extend the behavior (FeatureExtractor)
    *
    * @return name string
    */

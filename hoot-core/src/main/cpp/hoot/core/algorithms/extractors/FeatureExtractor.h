@@ -50,7 +50,7 @@ class FeatureExtractor : public ApiEntityInfo
 {
 public:
 
-  // Note that FeatureExtractors are the only classes that have the namespace prepended to their
+  // Note that FeatureExtractors are the *only* classes that have the namespace prepended to their
   // class names in all of hoot anymore. Not having it prepended causes issues with the attribute
   // ordering in the ARFF files, which affects matching. Its very annoying and a happy accident that
   // we get higher conflate scores with the current ordering. Have made an unsuccessful attempt to
