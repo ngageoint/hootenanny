@@ -715,6 +715,18 @@ void ConflateExecutor::_setRubberSheetElementCriteria() const
   for (int i = 0; i < criteriaClassNames.size(); i++)
   {
     const QString criterionClassName = criteriaClassNames.at(i);
+    ElementCriterionPtr crit =
+      Factory::getInstance().constructObject<ElementCriterion>(criterionClassName);
+
+    // Older clients may also pass in the way node crits here, but we don't require them anymore. We
+    // auto add them in a subsequent step.
+    std::shared_ptr<WayNodeCriterion> wayNodeCrit =
+      std::dynamic_pointer_cast<WayNodeCriterion>(crit);
+    if (wayNodeCrit)
+    {
+      continue;
+    }
+
     std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
       std::dynamic_pointer_cast<ConflatableElementCriterion>(
         Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
@@ -724,6 +736,7 @@ void ConflateExecutor::_setRubberSheetElementCriteria() const
         "Invalid rubber sheet element criterion class: " + criterionClassName + ". Must be a " +
         ConflatableElementCriterion::className());
     }
+
     criteriaClassNamesWithChildren.append(criterionClassName);
     // Add the child criteria (usually WayNodeCriterion) so the rubbersheeting works properly.
     criteriaClassNamesWithChildren += conflatableCrit->getChildCriteria();
