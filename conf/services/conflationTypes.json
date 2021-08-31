@@ -49,8 +49,8 @@
         "matcher": "",
         "merger": "",
         "members": {
-            "differential.remove.linear.partial.matches.as.whole": "Remove features involved in linear partial matches completely (valid with Unifying Algorithm only)",
-            "differential.remove.river.partial.matches.as.whole": "Remove rivers involved in river partial matches completely (valid with Unifying Algorithm only)",
+            "differential.remove.linear.partial.matches.as.whole": "Remove features involved in linear partial matches completely (Unifying Algorithm only)",
+            "differential.remove.river.partial.matches.as.whole": "Remove rivers involved in river partial matches completely (Unifying Algorithm only)",
             "differential.remove.unconflatable.data": "Remove unconflatable data in the secondary layer from the output",
             "differential.snap.unconnected.features": "Snap unconnected secondary linear features to reference linear features",
             "snap.unconnected.ways.snap.criteria": "Linear feature types to snap",
@@ -180,7 +180,8 @@
         "members": {
             "rubber.sheet.max.allowed.ways": "Maximum number of ways allowed",
             "rubber.sheet.minimum.ties": "Minimum number of tie points required.",
-	          "rubber.sheet.log.missing.requirements.as.warning": "Log a warning if enough tie points are not found."
+	          "rubber.sheet.log.missing.requirements.as.warning": "Log a warning if enough tie points are not found.",
+	          "conflate.unifying.rubbersheet.roads": "Rubbersheet roads with Unifying Algorithm"
         }
     }
 }

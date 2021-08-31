@@ -22,10 +22,10 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef PRESERVETYPESTAGMERGER_H
-#define PRESERVETYPESTAGMERGER_H
+#ifndef MOST_SPECIFIC_TAG_MERGER_H
+#define MOST_SPECIFIC_TAG_MERGER_H
 
 // Hoot
 #include <hoot/core/schema/TypesTagMerger.h>
@@ -34,22 +34,13 @@ namespace hoot
 {
 
 /**
- * This is used to preserve types when merging multiple elements into one. e.g. merging multiple
- * POIs into a multi-use building. It keeps the most specific type when multiple types with the same
- * key are encountered. In the case where duplicated types have the same level of specificity, the
- * duplicated types are arbitrarily placed in an "alt_types" tag.
+ * @brief The MostSpecificTagMerger class merges tags by keeping the most specifically typed tags.
  */
-class PreserveTypesTagMerger : public TypesTagMerger
+class MostSpecificTagMerger : public TypesTagMerger
 {
 public:
 
-<<<<<<< HEAD
-  static QString ALT_TYPES_TAG_KEY;
-
-  static QString className() { return "PreserveTypesTagMerger"; }
-=======
-  static QString className() { return "hoot::PreserveTypesTagMerger"; }
->>>>>>> master
+  static QString className() { return "hoot::MostSpecificTagMerger"; }
 
   /**
    * Constructor
@@ -57,20 +48,20 @@ public:
    * @param skipTagKeys optional; Any additional type tags found during merging with a key in this
    * list will be not be preserved.
    */
-  PreserveTypesTagMerger(const QSet<QString>& skipTagKeys = QSet<QString>());
-  ~PreserveTypesTagMerger() = default;
+  MostSpecificTagMerger(const QSet<QString>& skipTagKeys = QSet<QString>());
+  ~MostSpecificTagMerger() = default;
 
   /**
    * @see TypesTagMerger
    */
-  void setPreserveTypes() override { _preserveTypes = true; }
+  void setPreserveTypes() override { _preserveTypes = false; }
 
   QString getDescription() const override
-  { return "Keeps tags from both features and preserves overlapping type tags"; }
+  { return "Keeps the most specific tag between two features"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
 };
 
 }
 
-#endif // PRESERVETYPESTAGMERGER_H
+#endif // MOST_SPECIFIC_TAG_MERGER_H

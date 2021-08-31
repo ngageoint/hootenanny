@@ -2,10 +2,10 @@
 [[RubberSheeting]]
 == Rubber Sheeting
 
-An option while conflating two data sets is to use rubber sheeting (See
+An option while conflating two datasets is to use rubber sheeting (See
 <<hootuser>>, _Rubber Sheeting_ for usage details). The rubber sheeting
 operation uses intersections in roads to determine high confidence intersection
-matches. The high confidence matches are considered to be tie points for
+matches. The high confidence matches are then considered to be tie points for
 determining rubber sheeting transforms.
 
 === Identify Tie Points

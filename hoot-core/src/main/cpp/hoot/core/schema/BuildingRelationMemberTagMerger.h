@@ -53,17 +53,16 @@ public:
    * @param elementType the type of element whose tags are being merged (ignored)
    * @return a merged set of tags
    */
-  Tags mergeTags(const Tags& relationTags, const Tags& constituentBuildingTags,
-                         ElementType elementType) const override;
-
-  QString getDescription() const override
-  { return "Merges building and building part tags together"; }
+  Tags mergeTags(
+    const Tags& relationTags, const Tags& constituentBuildingTags,
+    ElementType elementType) const override;
 
   static QSet<QString> getBuildingPartTagNames();
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Merges building and building part tags together"; }
 
 private:
 
