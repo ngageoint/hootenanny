@@ -3,26 +3,26 @@
 
 === Description
 
-The +changeset-derive+ command creates an OSM changeset file that represents the difference between two input OSM 
+The `changeset-derive` command creates an OSM changeset file that represents the difference between two input OSM 
 datasets. When only one dataset is input it generates a changeset file representing all the data in the input dataset. 
-The output changeset file can later be applied to an OSM API database with the +changeset-apply+ command. 
+The output changeset file can later be applied to an OSM API database with the `changeset-apply` command. 
 
-* +input1+                - Input 1; may be any supported input format (e.g. .osm file).
-* +input2+                - Input 2; may be any supported input format (e.g. .osm file). Optionally, specify an empty 
+* `input1`                - Input 1; may be any supported input format (e.g. .osm file).
+* `input2`                - Input 2; may be any supported input format (e.g. .osm file). Optionally, specify an empty 
                             string ("") to derive changeset from one input only.
-* +output+                - Output; must be a changeset file (.osc or .osc.sql).
-* +--enable-way-snapping+ - Optionally snaps unconnected ways in the replacement data to the data being replaced. This option
-                            is only valid if the +--replacement+ option is used. This is generally used to smooth out ways 
+* `output`                - Output; must be a changeset file (.osc or .osc.sql).
+* `--enable-way-snapping` - Optionally snaps unconnected ways in the replacement data to the data being replaced. This option
+                            is only valid if the `--replacement` option is used. This is generally used to smooth out ways 
                             at the edge of the replacement boundary when the dataset used for replacement has very 
                             different linear data than the data being replaced. This option is ignored when using the cut 
                             only replacement workflow (no second input specified).
-* +--osmApiDatabaseUrl+   - Target OSM API database to which the derived changeset is to be applied, used to maintain 
+* `--osmApiDatabaseUrl`   - Target OSM API database to which the derived changeset is to be applied, used to maintain 
                             element ID continuity. Required only if the changeset output format is SQL (.osc.sql).
-* +--replacement+         - Causes data from input2 to completely replace data in input1. Leave input2 empty ("") to cut 
+* `--replacement`         - Causes data from input2 to completely replace data in input1. Leave input2 empty ("") to cut 
                             data out of input1 while adding no replacement data from input2.
-* +--stats+               - Displays changeset statistics and optionally writes them to a JSON file (.json). Ignored if 
+* `--stats`               - Displays changeset statistics and optionally writes them to a JSON file (.json). Ignored if 
                             the changeset output format is SQL (.osc.sql).
-* +--write-bounds+        - If the `bounds` configuration option is specified, this optionally outputs a file containing the 
+* `--write-bounds`        - If the `bounds` configuration option is specified, this optionally outputs a file containing the 
                             input bounds. The location of the file is controlled via the `bounds.output.file` 
                             configuration option.
 
@@ -37,7 +37,7 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExample
 
 === Configuration Options
 
-The following describes operation of the command when the +--replacement+ option is omitted only:
+The following describes operation of the command when the `--replacement` option is omitted only:
 
 Changeset deriviation supports inline conversion operations with the `convert.ops` configuration option. See the https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc#conversion-operations[Conversion Operations] section of the `convert` command documentation for details.
 
@@ -60,9 +60,9 @@ operations that are an OsmMapOperation or an OsmMapConsumer), in-memory sorting 
 
 === Replacement Operation
 
-The following describe operation of the command when the +--replacement+ option is used.
+The following describe operation of the command when the `--replacement` option is used.
 
-The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two 
+The `changeset-derive-replacement` command creates an OSM changeset file that represents the difference between two 
 OSM datasets within a specified bounds, where the data from the second specified input dataset (secondary layer) 
 completely replaces data in the first specified dataset (reference layer). Since the command replaces all data,
 inputs should be pre-filtered in situations where it is not desirable to replace all of the data.  
@@ -70,7 +70,7 @@ inputs should be pre-filtered in situations where it is not desirable to replace
 The feature replacement algorithm used by this command allows for avoiding unnecessary clipping of features when 
 such modification are undesirable and also stitching up seams in the data when features must be clipped. The output 
 changeset file can be applied directly to an OSM API database via SQL or via the Rails Port API with the 
-+changeset-apply+ command. 
+`changeset-apply` command. 
 
 Generally, the reference data is sourced from an authoritative data store, such as an OSM API database, and the secondary 
 data is sourced from some non-authoritative data store containing superior data for enrichment. Element IDs in the 
@@ -140,7 +140,7 @@ When performing replacement, a method is required to protect the reference linea
 replacement bounds from deletion in the output changeset. The method to protect the ways is to tag them with the tag, hoot:change:exclude:delete=yes. This can either be done automatically by Hootenanny as part of this command's execution or 
 can be done before the call to this command. 
 
-Hootenanny will automatically add the +hoot:change:exclude:delete=yes+ tag to such reference ways for XML, JSON, OSM API database, and Hootenanny API database inputs only. To do so the reference input must be sufficiently larger than the replacement bounds. If this option is specified, Hootenanny will not automatically tag such ways, and the caller of this command is responsible for tagging such reference ways with the hoot:change:exclude:delete=yes+ tag. 
+Hootenanny will automatically add the `hoot:change:exclude:delete=yes` tag to such reference ways for XML, JSON, OSM API database, and Hootenanny API database inputs only. To do so the reference input must be sufficiently larger than the replacement bounds. If this option is specified, Hootenanny will not automatically tag such ways, and the caller of this command is responsible for tagging such reference ways with the hoot:change:exclude:delete=yes` tag. 
 
 ==== Unconnected Way Snapping
 
@@ -155,18 +155,18 @@ over the changeset output. See the "Snap Unconnected Ways" section of the User D
 
 Changeset replacement derivation will not remove any references to missing children elements passed in the input data. If 
 any ways with references to missing way nodes or relations with references to missing elements are found in the inputs to changeset replacement derivation, they will be tagged with the custom tag, "hoot::missing_child=yes" (configurable; turn 
-off tagging with the +changeset.replacement.mark.elements.with.missing.children+ configuration option). This is due to the 
+off tagging with the `changeset.replacement.mark.elements.with.missing.children` configuration option). This is due to the 
 fact that changeset replacement derivation may inadvertantly introduce duplicate/unwanted child elements into these 
 features since it is not aware of the existence of the missing children. This tag should be searched for after the 
 resulting changeset has been applied and features having it should be manually cleaned up, if necessary.
 
 If you are using this command with file based data sources and in conjunction with other hoot commands (`convert`, etc), 
 you need to use the following configuration options to properly manage references to missing child elements 
-(+changeset-derive+ with +--replacement+ sets these options automatically internally for itself):
+(`changeset-derive` with `--replacement` sets these options automatically internally for itself):
 
-* +bounds.remove.missing.elements+=false
-* +map.reader.add.child.refs.when.missing+=true
-* +log.warnings.for.missing.elements+=false
+* `bounds.remove.missing.elements`=false
+* `map.reader.add.child.refs.when.missing`=true
+* `log.warnings.for.missing.elements`=false
 
 === See Also
 

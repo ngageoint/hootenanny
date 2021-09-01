@@ -3,23 +3,23 @@
 
 === Description
 
-The +clean+ command corrects common erroneous data scenarios from input and writes to output by 
+The `clean` command corrects common erroneous data scenarios from input and writes to output by 
 applying the operations specified in the `map.cleaner.transforms` configuration option. Optionally, 
 https://josm.openstreetmap.de/[JOSM] cleaning operations may be used in addition to Hootenanny 
 cleaning operations. This operation is memory bound.
 
-* +input(s)+          - One or more inputs(s); may be any supported input format (e.g. .osm file)
+* `input(s)`          - One or more inputs(s); may be any supported input format (e.g. .osm file)
                         or a directory if `--recursive` is specified.
-* +output+            - Output; may be any supported output format (e.g. .osm file). This parameter 
+* `output`            - Output; may be any supported output format (e.g. .osm file). This parameter 
                         may not be specified with the `--separate-output` parameter.
-* +--recursive+       - Allows for processing inputs recursively in a directory structure. This must 
+* `--recursive`       - Allows for processing inputs recursively in a directory structure. This must 
                         be followed by either "*" to denote no filtering or one or more wildcard 
                         name filters. e.g. "*.osm;*.json" or "*myFile*". This parameter is not 
                         compatible with the OGR layer input syntax.
-* +--separate-output+ - The default behavior when processing multiple inputs is to combine them into 
+* `--separate-output` - The default behavior when processing multiple inputs is to combine them into 
                         the same single output. With this parameter specified, each input is 
                         processed and written to a separate output with the format specified in 
-                        +output+ and the same file name as the input with the text "-converted" 
+                        `output` and the same file name as the input with the text "-converted" 
                         appended to it. This parameter cannot be used with OSM API database 
                         (osmapidb://) or OSM API (http://) inputs. This parameter is not compatible 
                         with the OGR layer input syntax.

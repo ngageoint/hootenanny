@@ -3,17 +3,17 @@
 
 === Description
 
-The +optimize-network-conf+ command runs a series of network road conflation tests to determine the best performing values 
+The `optimize-network-conf` command runs a series of network road conflation tests to determine the best performing values 
 for a user specified group of configuration options.
 
-* +testsDir+      - The root directory containing the tests to run. The directory must contain Hootenanny conflate case tests,
+* `testsDir`      - The root directory containing the tests to run. The directory must contain Hootenanny conflate case tests,
                     release regression tests, or PERTY regression tests.
-* +testType+      - The type of test to run. Valid values are 'case', 'release', or 'perty'. Only one type may be used at a time.
-* +testSettings+  - A JSON file containing configuration with min/max test values.
-* +numIterations+ - The number of test iterations to run.
-* +output+        - Output; file location to write the text summary of the optimization to.
-* +verbose+       - If true, logs extra detail to +output+ during the optimization run.
-* +customConfig+  - Optional custom configuration file containing static configuration options to apply to the 
+* `testType`      - The type of test to run. Valid values are 'case', 'release', or 'perty'. Only one type may be used at a time.
+* `testSettings`  - A JSON file containing configuration with min/max test values.
+* `numIterations` - The number of test iterations to run.
+* `output`        - Output; file location to write the text summary of the optimization to.
+* `verbose`       - If true, logs extra detail to `output` during the optimization run.
+* `customConfig`  - Optional custom configuration file containing static configuration options to apply to the 
                     tests (configuration values remain constant for the duration of the test run.
 
 === Usage

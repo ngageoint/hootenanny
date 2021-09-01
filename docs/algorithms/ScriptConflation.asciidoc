@@ -1,5 +1,5 @@
 
-== Generic Line Conflation
+== Javascript Conflation
 
 Hootenanny supports "highway" conflation as defined by OpenStreetMap (OSM). In
 OSM jargon a "highway" refers to paths, roads, cart tracks and possibly bridges
@@ -231,7 +231,7 @@ more diverse scenarios. See <<GenericLineConflationFutureWork>> for details.
 ==== DC Tiger Perty
 
 This test configuration uses Tiger data over the DC region to determine
-performance. The `perty-test` command is used with the following configuration:
+performance. The `perturb --test` command is used with the following configuration:
 
 -----
 {

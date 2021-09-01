@@ -3,21 +3,21 @@
 
 === Description
 
-The +count+ command displays a count of the number of features in one or more maps.
+The `count` command displays a count of the number of features in one or more maps.
 
-* +input(s)+        - Input(s); may be any supported input format (e.g. .osm file) or a directory 
+* `input(s)`        - Input(s); may be any supported input format (e.g. .osm file) or a directory 
                       if `--recursive` is specified.
-* +--all-elements+  - Counts all elements instead of just counting features. The default behavior is 
+* `--all-elements`  - Counts all elements instead of just counting features. The default behavior is 
                       to only count features. Features are defined as elements with at least one 
                       information tag, whereas elements have no tag requirements.
-* +--criteria+      - Optional filtering criteria for the inputs; May be one or more class names 
+* `--criteria`      - Optional filtering criteria for the inputs; May be one or more class names 
                       inheriting from `ElementCriterion`. By default, multiple criteria are 
                       logically OR'd together. Set the `element.counter.chain.element.criteria` 
                       option to true to have the criteria logically AND'd together. The criteria can 
                       be negated with the option `element.criteria.negate`. Use the 
-                      +info --operators+ command to obtain a list of available criteria.
-* +--recursive+     - Allows for processing the files contained in any directories specified in 
-                      +input(s)+ recursively. This parameter has no effect on the processing of 
+                      `info --operators` command to obtain a list of available criteria.
+* `--recursive`     - Allows for processing the files contained in any directories specified in 
+                      `input(s)` recursively. This parameter has no effect on the processing of 
                       non-directory inputs. This must be followed by either "*" to denote no 
                       filtering or one or more wildcard name filters. e.g. "*.osm;*.json"  or 
                       "*myFile*". This parameter is not compatible with the OGR layer input syntax.

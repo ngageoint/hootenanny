@@ -3,14 +3,14 @@
 
 === Description
 
-The +multiary-poi-ingest+ command ingests POI data for use by the +multiary-conflate+ command.
+The `multiary-poi-ingest` command ingests POI data for use by the `multiary-conflate` command.
 
-* +input+             - Input; may be any supported input format (e.g. .osm file).
-* +translationScript+ - Translation script used to translate the input data; must by a Javascript (.js) or Python 
+* `input`             - Input; may be any supported input format (e.g. .osm file).
+* `translationScript` - Translation script used to translate the input data; must by a Javascript (.js) or Python 
                         (.py) translation file
-* +referenceOutput+   - Reference data output; must be a Hootenanny API database layer (hootapidb://); If the layer does 
+* `referenceOutput`   - Reference data output; must be a Hootenanny API database layer (hootapidb://); If the layer does 
                         not exist, it will be created.
-* +changesetOutput+   - Output changeset; must be a Spark changeset file (*.spark.1).
+* `changesetOutput`   - Output changeset; must be a Spark changeset file (*.spark.1).
 
 === Usage
 
