@@ -33,7 +33,6 @@
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/schema/OverwriteTagMerger.h>
 
 // geos
 #include <geos/io/WKTReader.h>
@@ -119,7 +118,7 @@ public:
     BuildingPartMergeOp uut;
     uut.setThreadCount(1);
     uut.setPreserveTypes(true);
-    conf().set(ConfigOptions().getTagMergerDefaultKey(), OverwriteTag1Merger::className());
+    conf().set(ConfigOptions().getTagMergerTypesOverwriteReferenceKey(), true);
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);

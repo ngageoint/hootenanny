@@ -22,33 +22,46 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef AVERAGETAGMERGER_H
-#define AVERAGETAGMERGER_H
+#ifndef MOST_SPECIFIC_TAG_MERGER_H
+#define MOST_SPECIFIC_TAG_MERGER_H
 
-#include <hoot/core/schema/TagMerger.h>
+// Hoot
+#include <hoot/core/schema/TypesTagMerger.h>
 
 namespace hoot
 {
 
-class AverageTagMerger : public TagMerger
+/**
+ * @brief The MostSpecificTagMerger class merges tags by keeping the most specifically typed tags.
+ */
+class MostSpecificTagMerger : public TypesTagMerger
 {
 public:
 
-  static QString className() { return "hoot::AverageTagMerger"; }
+  static QString className() { return "hoot::MostSpecificTagMerger"; }
 
-  AverageTagMerger() = default;
-  ~AverageTagMerger() = default;
+  /**
+   * Constructor
+   *
+   * @param skipTagKeys optional; Any additional type tags found during merging with a key in this
+   * list will be not be preserved.
+   */
+  MostSpecificTagMerger(const QSet<QString>& skipTagKeys = QSet<QString>());
+  ~MostSpecificTagMerger() = default;
 
-  Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
+  /**
+   * @see TypesTagMerger
+   */
+  void setPreserveTypes() override { _preserveTypes = false; }
 
   QString getDescription() const override
-  { return "Keeps tags from both features and overlapping tags are averaged together"; }
+  { return "Keeps the most specific tag between two features"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
 };
 
 }
 
-#endif // AVERAGETAGMERGER_H
+#endif // MOST_SPECIFIC_TAG_MERGER_H

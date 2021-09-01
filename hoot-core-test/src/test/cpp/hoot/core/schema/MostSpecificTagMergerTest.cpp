@@ -22,23 +22,23 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/schema/PreserveTypesTagMerger.h>
+#include <hoot/core/schema/MostSpecificTagMerger.h>
 
 namespace hoot
 {
 
 /**
  * These tests are fairly sensitive to schema changes. This test is essentially the same as
- * MostSpecificTagMergerTest but ensures TypesTagMerger::ALT_TYPES_TAG_KEY gets populated.
+ * PreserveTypesTagMergerTest but ensures TypesTagMerger::ALT_TYPES_TAG_KEY doesn't get populated.
  */
-class PreserveTypesTagMergerTest : public HootTestFixture
+class MostSpecificTagMergerTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(PreserveTypesTagMergerTest);
+  CPPUNIT_TEST_SUITE(MostSpecificTagMergerTest);
   CPPUNIT_TEST(basicTest);
   CPPUNIT_TEST(overlappingKeysTest);
   CPPUNIT_TEST(overwrite1Test);
@@ -72,7 +72,7 @@ public:
     expected["shop"] = "supermarket";
     expected["amenity"] = "restaurant";
 
-    PreserveTypesTagMerger uut;
+    MostSpecificTagMerger uut;
     uut.setOverwrite1(false);
     Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected, merged);
@@ -80,8 +80,7 @@ public:
 
   void overlappingKeysTest()
   {
-    // The second name should go into alt_name, and the second building tag should go into
-    // alt_types.
+    // The second name should go into alt_name.
 
     Tags t1;
     t1["name"] = "Building 1";
@@ -95,16 +94,14 @@ public:
     expected["name"] = "Building 1";
     expected["alt_name"] = "Building 2";
     expected["building"] = "cathedral";
-    expected[TypesTagMerger::ALT_TYPES_TAG_KEY] = "building=chapel";
 
-    PreserveTypesTagMerger uut;
+    MostSpecificTagMerger uut;
     uut.setOverwrite1(false);
 
     Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected, merged);
 
-    // After this merge, we should see names for the second two buildings in alt_name and their
-    // building tags in alt_types.
+    // After this merge, we should see names for the second two buildings in alt_name.
 
     Tags t3;
     t3["name"] = "Building 3";
@@ -114,7 +111,6 @@ public:
     expected2["name"] = "Building 1";
     expected2["alt_name"] = "Building 2;Building 3";
     expected2["building"] = "cathedral";
-    expected2[TypesTagMerger::ALT_TYPES_TAG_KEY] = "building=chapel;building=church";
 
     merged = uut.mergeTags(merged, t3, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected2, merged);
@@ -141,7 +137,7 @@ public:
     expected["shop"] = "supermarket";
     expected["amenity"] = "restaurant";
 
-    PreserveTypesTagMerger uut;
+    MostSpecificTagMerger uut;
     uut.setOverwrite1(true);
     Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected, merged);
@@ -163,9 +159,8 @@ public:
     expected["name"] = "Building 2";
     expected["alt_name"] = "Building 1";
     expected["building"] = "chapel";
-    expected[PreserveTypesTagMerger::ALT_TYPES_TAG_KEY] = "building=cathedral";
 
-    PreserveTypesTagMerger uut;
+    MostSpecificTagMerger uut;
     uut.setOverwrite1(true);
 
     Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
@@ -179,7 +174,6 @@ public:
     expected2["name"] = "Building 3";
     expected2["alt_name"] = "Building 1;Building 2";
     expected2["building"] = "church";
-    expected2[TypesTagMerger::ALT_TYPES_TAG_KEY] = "building=cathedral;building=chapel";
 
     merged = uut.mergeTags(merged, t3, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected2, merged);
@@ -207,7 +201,7 @@ public:
 
     QSet<QString> keys;
     keys.insert("amenity");
-    PreserveTypesTagMerger uut(keys);
+    MostSpecificTagMerger uut(keys);
     uut.setOverwrite1(false);
 
     Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
@@ -216,7 +210,7 @@ public:
 
   void ancestorTest()
   {
-    PreserveTypesTagMerger uut;
+    MostSpecificTagMerger uut;
     Tags expected;
     Tags merged;
 
@@ -252,7 +246,7 @@ public:
 
   void ancestorGenericTest()
   {
-    PreserveTypesTagMerger uut;
+    MostSpecificTagMerger uut;
     Tags expected;
     Tags merged;
 
@@ -290,6 +284,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PreserveTypesTagMergerTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MostSpecificTagMergerTest, "quick");
 
 }

@@ -1098,9 +1098,7 @@ See also:
 * Data Type: list
 * Default Value:
 ** `hoot::RiverCriterion`
-** `hoot::RiverWayNodeCriterion`
 ** `hoot::PowerLineCriterion`
-** `hoot::PowerLineWayNodeCriterion`
 
 Determines which type of features are rubbersheeted during conflation when rubbersheeting is part
 of the conflation pre-operations. An empty list will rubbersheet all types of features.
@@ -1134,6 +1132,14 @@ testing purposes only.
 
 A JSON tag filter that is applied to filter features before conflation. See the Hootenanny User
 Guide "Feature Filtering" section for filter usage examples.
+
+=== conflate.unifying.rubber.sheet.roads
+
+* Data Type: bool
+* Default Value: `false`
+
+Forces pre-conflation rubbersheeting for roads when the Unifying Algorithm is used by adding an
+entry to `conflate.rubber.sheet.element.criteria`.
 
 === conflate.use.data.source.ids.1
 
@@ -5620,6 +5626,18 @@ merged with B: { myField2=1, myField3=1 } results in C: { myField1=1, myField2=1
 
 A list of tag keys not to be overwritten on target features during tag merging when using
 OverwriteTagMerger or ReplaceTagMerger. Please keep the list alphabetized.
+
+=== tag.merger.types.overwrite.reference
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, in cases where tags between features being merged tie in type specificity when being merged
+by `MostSpecificTagMerger` or `PreserveTypesTagMerger`, the tag from the secondary feature will be
+kept. If false, then the tag from the reference feature is kept. Generally, if `OverwriteTag2Merger`
+is used as the default tag merger, this should be set to false or if `OverwriteTag1Merger` is used,
+it should be set to true. This is necessary since some conflator will override the default tag
+merging logic under certain circumstances.
 
 === tag.printing.format
 
