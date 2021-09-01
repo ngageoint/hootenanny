@@ -179,7 +179,7 @@ In addition to conflating map data, Hootenanny also provides these supporting ca
 
 # [Supported Data Formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
 
-# [Scalability](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc)
+# [Scalability](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Scalability.asciidoc)
 
 # [Support](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Support.asciidoc)
 
