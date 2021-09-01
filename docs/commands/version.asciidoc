@@ -3,9 +3,9 @@
 
 === Description
 
-The +version+ command prints the version of the software.
+The `version` command prints the version of the software.
 
-* +--debug+ - Display detailed version information.
+* `--debug` - Display detailed version information.
 
 === Usage
 

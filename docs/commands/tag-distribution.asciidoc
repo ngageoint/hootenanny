@@ -3,42 +3,42 @@
 
 === Description
 
-The +tag-distribution+ command displays a distribution of values for tags in one or more maps.
+The `tag-distribution` command displays a distribution of values for tags in one or more maps.
 
-* +input(s)+                 - Input(s); may be any supported input format (e.g. .osm file) or a 
+* `input(s)`                 - Input(s); may be any supported input format (e.g. .osm file) or a 
                                directory if `--recursive` is specified.
-* +--criteria+               - Optional filtering criteria for the inputs; May be one or more class 
+* `--criteria`               - Optional filtering criteria for the inputs; May be one or more class 
                                names inheriting from 
                                `ElementCriterion`. By default, multiple criteria are logically OR'd
                                together. Set the `tag.distribution.chain.element.criteria` option to 
                                true to have the criteria logically AND'd together. The criteria can 
                                be negated with the option `element.criteria.negate`.
-                               Use the +info --operators+ command to obtain a list of available 
+                               Use the `info --operators` command to obtain a list of available 
                                criteria.
-* +--limit+                  - Limits the number of results returned.
-* +--names+                  - If specified, name tags, as defined by Hootenanny's schema, are used 
+* `--limit`                  - Limits the number of results returned.
+* `--names`                  - If specified, name tags, as defined by Hootenanny's schema, are used 
                                as the tag keys to 
                                gather statistics for. This is incompatible with the `--types` option.
-* +--percentage-of-matching+ - By default with this option omitted, tag distribution percentages are 
+* `--percentage-of-matching` - By default with this option omitted, tag distribution percentages are 
                                based on all elements
                                parsed. Elements not possessing the tags specified in `tagKeys`, 
                                `--names`, or `--types` are counted in the element total. With this 
                                option enabled, only elements which have one of the specified tags 
                                are counted in the element total. Enabling this option has no effect 
                                if all tag keys are parsed (nothing specified for `tagKeys`).
-* +--recursive+              - Allows for processing the files contained in any directories 
-                               specified in +input(s)+ recursively. This parameter has no effect on 
+* `--recursive`              - Allows for processing the files contained in any directories 
+                               specified in `input(s)` recursively. This parameter has no effect on 
                                the processing of non-directory inputs. This must be followed by 
                                either "*" to denote no filtering or one or more wildcard name 
                                filters. e.g. "*.osm;*.json" or "*myFile*". This parameter is not 
                                compatible with the OGR layer input syntax.
-* +--sort-by-value +         - Sorts results alphabetically by tag value. If not specified, results 
+* `--sort-by-value `         - Sorts results alphabetically by tag value. If not specified, results 
                                are sorted by decreasing tag value occurrence frequency.
-* +--tagKeys+                - The tag keys to gather statistics for. If this parameter is omitted, 
+* `--tagKeys`                - The tag keys to gather statistics for. If this parameter is omitted, 
                                all tag keys are processed. This parameter is ignored if `--names` or 
                                `--types` are used.
-* +--tokenize+               - Breaks tag values up into individual tokens before counting them.
-* +--types+                  - If specified, type tags, as defined by Hootenanny's schema, are used 
+* `--tokenize`               - Breaks tag values up into individual tokens before counting them.
+* `--types`                  - If specified, type tags, as defined by Hootenanny's schema, are used 
                                as the tag keys to gather statistics for. This is incompatible with 
                                the `--names` option.
 

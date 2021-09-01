@@ -3,10 +3,10 @@
 
 === Description
 
-The +help+ command prints help for commands.
+The `help` command prints help for commands.
 
-* +command+   - Optionally specify a command
-* +--verbose+ - Prints detailed help for all commands
+* `command`   - Optionally specify a command
+* `--verbose` - Prints detailed help for all commands
 
 === Usage
 

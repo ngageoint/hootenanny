@@ -3,10 +3,10 @@
 
 === Description
 
-The +test-utils+ command contains various utilities for debugging Hootenanny tests. The available 
+The `test-utils` command contains various utilities for debugging Hootenanny tests. The available 
 input parameters are:
 
-* +--log+ - Log file path
+* `--log` - Log file path
 
 === Usage
 

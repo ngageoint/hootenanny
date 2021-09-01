@@ -3,18 +3,18 @@
 
 === Description
 
-The +perturb+ command perturbs map data using the PERTY algorithm based on the paper, 
+The `perturb` command perturbs map data using the PERTY algorithm based on the paper, 
 "Evaluating conflation methods using uncertainty modeling," P. Doucette, et. al, 2012. This can be
 useful when you need to generate test data for conflation. Conflating unperturbed data with 
 perturbed data is a technique you can use to evaluate the quality of a conflation routine.
 
-* +input+   - Input; may be any supported input format (e.g. .osm file).
-* +output+  - Output; may be any supported output format (e.g. .osm file). If specifying --score or 
+* `input`   - Input; may be any supported input format (e.g. .osm file).
+* `output`  - Output; may be any supported output format (e.g. .osm file). If specifying --score or 
               --test this must be a directory.
-* +--score+ - Generates a PERTY score for a conflation operation. Not valid in combination with the 
-              +--test+ option.
-* +--test+  - Generates a series of PERTY scores for the same set of conflation inputs and averages 
-              them together yielding a single score. Not valid in combination with the +--score+ 
+* `--score` - Generates a PERTY score for a conflation operation. Not valid in combination with the 
+              `--test` option.
+* `--test`  - Generates a series of PERTY scores for the same set of conflation inputs and averages 
+              them together yielding a single score. Not valid in combination with the `--score` 
               option.
 
 === Optional Defines
@@ -56,7 +56,7 @@ variables and increments them by 5.0 for each successive simulation run inside o
 (test run 1/simulation 1 has value 1.0; test run 1/simulation 2 has value 6.0, etc.).  It compares 
 the averaged score for each test run to the specified list of scores passed to the command as input. 
 If the average of the generated scores for each simulation within a test run is greater than or 
-equal to the corresponding score from the list, +/- the allowable specified score variance of .05, 
+equal to the corresponding score from the list, `/- the allowable specified score variance of .05, 
 the test is described as passing in the command's output.  Otherwise, it is described as failing. 
 A summarized list of scores for each test run is displayed upon completion of all of the test runs.
 
@@ -80,8 +80,8 @@ input set of expected scores for each test run (the number of expected scores mu
 of test runs specified). If the actual averaged PERTY score for a test run falls within an allowed 
 user specified score variance threshold when compared to the expected score, the test is classified 
 as passing.  Otherwise the test is classified as having failed.  Note: If you want to bypass the 
-"pass/fail" determination of the command, you can set the +perty.test.allowed.score.variance+ equal 
-to 1.0 and set +perty.test.expected.scores+ to a list the same size as the number of of test runs. 
+"pass/fail" determination of the command, you can set the `perty.test.allowed.score.variance` equal 
+to 1.0 and set `perty.test.expected.scores` to a list the same size as the number of of test runs. 
 This effectively disables the score validation.
 
 === See Also

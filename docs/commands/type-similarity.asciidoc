@@ -3,10 +3,10 @@
 
 === Description
 
-The +type-similarity+ command returns a similarity score for two type tags based on the schema in use. This may be useful when debugging conflation matches. If a type is passed into either input that is not present in the schema, an error will be returned.
+The `type-similarity` command returns a similarity score for two type tags based on the schema in use. This may be useful when debugging conflation matches. If a type is passed into either input that is not present in the schema, an error will be returned.
 
-* +tag1+  - Type tag key/value pair that maps to a type in the schema; e.g. "amenity=school"
-* +tag2+  - Type tag key/value pair that maps to a type in the schema; e.g. "amenity=school"
+* `tag1`  - Type tag key/value pair that maps to a type in the schema; e.g. "amenity=school"
+* `tag2`  - Type tag key/value pair that maps to a type in the schema; e.g. "amenity=school"
 
 === Usage
 
