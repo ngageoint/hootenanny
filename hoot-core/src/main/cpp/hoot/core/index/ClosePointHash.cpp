@@ -41,10 +41,10 @@ namespace hoot
 static vector<long> init_match;
 
 ClosePointHash::ClosePointHash(double distance)
-  : _match(init_match)
+  : _binSize(distance * 2),
+    _distance(distance),
+    _match(init_match)
 {
-  _distance = distance;
-  _binSize = _distance * 2;
 }
 
 void ClosePointHash::addPoint(double x, double y, long id)

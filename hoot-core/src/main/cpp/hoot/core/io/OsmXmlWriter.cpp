@@ -295,12 +295,13 @@ void OsmXmlWriter::_writeMetadata(const Element* e) const
 
 void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
 {
+  //  Tag order is important here, current tags first and then add export tags
+  Tags tags = element->getTags();
   //  Rather than cloning the element, get the export tags from the visitor
-  Tags tags = _addExportTagsVisitor.getExportTags(element);
+  tags.add(_addExportTagsVisitor.getExportTags(element));
 
   const ElementType type = element->getElementType();
   assert(type != ElementType::Unknown);
-  tags.add(element->getTags());
 
   if (type == ElementType::Relation)
   {
