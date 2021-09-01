@@ -541,6 +541,15 @@ mgcp = {
       attrs.GAW = Number(attrs.GAW) * 1000; // Convert M to MM
     }
 
+    // TRD3 vs TRD4.  SUC (Shed Type)
+    // TRD3 is a building AL015
+    // TRD4 is a Protection Shed AL210
+    if (attrs.F_CODE == 'AL015' && attrs.SUC)
+    {
+      attrs.xSUC = attrs.SUC;
+      delete attrs.SUC;
+    }
+
   }, // End of applyToOsmPreProcessing
 
   // Post Processing: Lots of cleanup
@@ -1939,6 +1948,7 @@ mgcp = {
       case 'AD010': // Electric Power Plants
         if (notUsedTags['plant:output:electricity'] == 'yes') delete notUsedTags['plant:output:electricity'];
         if (notUsedTags.landuse == 'industrial') delete notUsedTags.landuse;
+        if (notUsedTags.power == 'plant') delete notUsedTags.power;
         if (notUsedTags['plant:method']) delete notUsedTags['plant:method'];
         break;
 
@@ -1994,7 +2004,10 @@ mgcp = {
         if (tags.tunnel) attrs.LOC = '40'; // Below Surface
         if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
         if (tags.railway == 'rail') delete attrs.RRC; // Avoid sending RRC=0 when it is "unknown"
+        break;
 
+      case 'AN076': // Railway Roundhouse
+        if (attrs.railway == 'rail') delete attrs.RRC; // Avoid sending RRC=0 when it is "unknown"
         break;
 
       // case 'AP010': // Cart Track
@@ -2291,7 +2304,7 @@ mgcp = {
       mgcp.fcodeLookupOut = translate.createBackwardsLookup(mgcp.rules.fcodeOne2oneOut);
 
       // Debug:
-      // translate.dumpOne2OneLookup(mgcp.fcodeLookup);
+      // translate.dumpOne2OneLookup(mgcp.fcodeLookupOut);
     }
 
     if (mgcp.lookup == undefined)
@@ -2374,14 +2387,6 @@ mgcp = {
     // one 2 one
     translate.applyOne2One(notUsedAttrs, tags, mgcp.lookup, {'k':'v'},[]);
 
-    // Debug:
-    if (mgcp.configIn.OgrDebugDumptags == 'true')
-    {
-      translate.debugOutput(attrs,layerName,geometryType,'','After o2o attrs: ');
-      translate.debugOutput(tags,layerName,geometryType,'','After 020 tags: ');
-    }
-
-
     // post processing
     mgcp.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
@@ -2455,7 +2460,6 @@ mgcp = {
 
     if (mgcp.fcodeLookup == undefined)
     {
-
       // Order is important:
       // Start with the TRD4 specific FCODES and then add the valid MGCP ones from the common list
       fcodeCommon.one2one.forEach( function(item) { if (~mgcp.rules.fcodeList.indexOf(item[1])) mgcp.rules.fcodeOne2oneV4.push(item); });
@@ -2466,8 +2470,11 @@ mgcp = {
       // translation to an FCode
       mgcp.fcodeLookupOut = translate.createBackwardsLookup(mgcp.rules.fcodeOne2oneOut);
 
+      // Sigh. Yet Another Lookup Table. It is either this or add a second table option to translate.applyOne2One
+      mgcp.bigFcodeLookup = translate.joinLookup(mgcp.fcodeLookupOut,mgcp.fcodeLookup);
+
       // Debug
-      // translate.dumpOne2OneLookup(mgcp.fcodeLookup);
+      // translate.dumpOne2OneLookup(mgcp.bigFcodeLookup);
     }
 
     if (mgcp.lookup == undefined)
@@ -2501,15 +2508,11 @@ mgcp = {
     translate.txtToOgr(attrs, notUsedTags,  mgcp.rules.txtBiasedV4,transMap);
 
     // one 2 one
-    translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup, transMap);
+    translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.bigFcodeLookup, transMap);
 
     // post processing
     // mgcp.applyToOgrPostProcessing(attrs, tableName, geometryType);
     mgcp.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
-
-    // Debug
-    if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
-    if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'After Post: Attrs:: ');
 
     // Set the tablename: [P,A,L]<fcode>
     // tableName = geometryType.toString().substring(0,1) + attrs.F_CODE;

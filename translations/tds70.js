@@ -3009,7 +3009,7 @@ tds70 = {
             // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             // returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
             var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
-            if (tds61.configOut.OgrFormat == 'shp')
+            if (tds70.configOut.OgrFormat == 'shp')
             {
               // Split the tags into a maximum of 4 fields, each no greater than 225 char long.
               var tList = translate.packText(notUsedTags,4,225);

@@ -49,10 +49,10 @@ var schemaMap = {
   // DNC: require(HOOT_HOME + '/translations/dnc_schema.js'),
   // ENCv311: require(HOOT_HOME + '/translations/encv311_schema.js'),
   MGCP: require(HOOT_HOME + '/translations/mgcp_schema.js'),
-  GGDMv30: require(HOOT_HOME + '/translations/ggdm30_full_schema.js'),
-  TDSv40: require(HOOT_HOME + '/translations/tds40_full_schema.js'),
-  TDSv61: require(HOOT_HOME + '/translations/tds61_full_schema.js'),
-  TDSv70: require(HOOT_HOME + '/translations/tds70_full_schema.js'),
+  // GGDMv30: require(HOOT_HOME + '/translations/ggdm30_full_schema.js'),
+  // TDSv40: require(HOOT_HOME + '/translations/tds40_full_schema.js'),
+  // TDSv61: require(HOOT_HOME + '/translations/tds61_full_schema.js'),
+  // TDSv70: require(HOOT_HOME + '/translations/tds70_full_schema.js'),
 };
 
 // Test a single schema
@@ -61,9 +61,9 @@ var schemaMap = {
 // }
 
 // Test every fcode in a schema
-// transTest.testSchema(schemaMap);
+transTest.testSchema(schemaMap);
 
-// process.exit();
+process.exit();
 
 // ####################################################################################
 // Dump values from a schema

@@ -157,6 +157,37 @@ translate = {
   },
 
 
+  // Join two one2one lookup tables
+  joinLookup : function(lookupIn, lookupOut)
+  {
+    var newLookup = {};
+
+    Object.keys(lookupIn).forEach( function(item) {
+      if (!lookupOut[item])
+      {
+        lookupOut[item] = {};
+      }
+
+      Object.keys(lookupIn[item]).forEach( function (value) {
+        if (!lookupOut[item][value])
+        {
+          lookupOut[item][value] = [lookupIn[item][value][0],lookupIn[item][value][1]];
+        }
+        // Debug
+        // else
+        // {
+        //   if (lookupIn[item][value] !== lookupOut[item][value])
+        //   {
+        //     print('## existing value for ' + item + ' = ' + value + ' : '+  lookupOut[item][value]);
+        //   }
+        // }
+      });
+    });
+
+    return lookupOut;
+  },
+
+
   // Apply one to one translations - used for import and export
   applyOne2One : function(inList, outList, lookup, fCodeList, transMap = [])
   {
@@ -201,12 +232,19 @@ translate = {
           if ((key in fCodeList) && (value in fCodeList[key]))
           {
             // Debug
-            // print('UsedFCode:' + key + ' = ' + inList[key]);
+            // print('Have key in fCodeList and value in list:' + key + ' = ' + inList[key]);
             delete inList[key];
             continue;
           }
-
-          hoot.logTrace('Lookup value not found for column:: (' + key + '=' + value + ')');
+          // else
+          // {
+          //   print('key: ' + key + '  List: ' + fCodeList[key]);
+          //   for (var i in fCodeList[key])
+          //   {
+          //     print('  i: ' + i);
+          //   }
+          // }
+          hoot.logTrace('Have key, lookup value not found for column:: (' + key + '=' + value + ')');
         }
       } // End key in lookup
       else
@@ -215,7 +253,7 @@ translate = {
         if ((key in fCodeList) && (value in fCodeList[key]))
         {
           // Debug
-          // print('UsedFCode:' + key+ ' = ' + inList[key]);
+          // print('No Key in Lookup: UsedFCode:' + key+ ' = ' + inList[key]);
           delete inList[key];
           continue;
         }
@@ -246,7 +284,7 @@ translate = {
         else
         {
           // Removing the var test for a while.
-          // if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: (' + key + '=' + value + ')');
+          // print('Else: Column not found:: (' + key + '=' + value + ')');
           hoot.logTrace('Column not found:: (' + key + '=' + value + ')');
         }
       } // End !key in lookup

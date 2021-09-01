@@ -104,6 +104,7 @@ mgcp.rules = {
     // ['F_CODE','AL105','place','isolated_dwelling'], // From OSM
     // ['F_CODE','AL105','place','town'], // From OSM
     // ['F_CODE','AL105','place','village'], // From OSM
+    ['F_CODE','AL019','building','other_shed'], //Ugly and from TRDv3
     ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
     ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
     ['F_CODE','AL130','historic','memorial'],
@@ -585,7 +586,7 @@ mgcp.rules = {
     ['HAF','999','helipad:facility','other'],
 
     // HCT - Thoroughfare Class
-    ['HCT','0','highway','road'],
+    ['HCT','0','highway_class','unknown'],
     ['HCT','1','highway','primary'], // Primary
     ['HCT','2','highway','secondary'], // Secondary
     ['HCT','3','highway','motorway'], // National Motorway
@@ -1848,8 +1849,9 @@ mgcp.rules = {
     ['SSR','999','roof:shape','other'], // Other
 
     // SUC - Shed Type
-    ['SUC','3','building','shed'],
-    ['SUC','999','building','other_shed'], // This is nuts
+    // NOTE: Retamed to avoid confusion with the TRD4 SUC (Shed type)
+    ['xSUC','3','building','shed'],
+    ['xSUC','999','building','other_shed'], // This is nuts
 
     // TFC - Transportation Facility Type
     ['TFC','0',undefined,undefined],
@@ -2183,11 +2185,11 @@ mgcp.rules = {
     ['FFN','781','building','security'],
 
     // SUC - Shed Type
-    ['FFN','530','building','shed'],
-    ['FFN','530','building','other_shed'], //Ugly
+    // ['FFN','530','building','shed'],
+    // ['FFN','530','building','other_shed'], //Ugly
 
     // TFC - Transportation Facility Type
-    ['FFN','999','railway','roundhouse'],
+    // ['FFN','999','railway','roundhouse'],
     ['FFN','330','repair','rail_car'],
     ['FFN','481','man_made','depot'], // not a good fit for depot terminal
     ['FFN','486','signal_station','railway'], // not a good fit for railway signal

@@ -260,7 +260,7 @@ function testSchema(schemaMap)
       if (Object.keys(osmJson).length > 0)
       {
         // console.log(osmJson);
-        console.log(JSON.stringify(osmJson,Object.keys(osmJson).sort()));
+        console.log('OSM: ' + JSON.stringify(osmJson,Object.keys(osmJson).sort()));
       }
       else
       {
@@ -273,8 +273,14 @@ function testSchema(schemaMap)
 
       if (Object.keys(ogrJson).length > 0)
       {
-        // console.log(ogrJson);
-        console.log(JSON.stringify(ogrJson,Object.keys(ogrJson).sort()));
+        if (Object.keys(ogrJson).length > 1)
+        {
+          console.log('Ogr Multi: ' + JSON.stringify(ogrJson,Object.keys(ogrJson).sort()));
+        }
+        else
+        {
+          console.log('Ogr: ' + JSON.stringify(ogrJson,Object.keys(ogrJson).sort()));
+        }
       }
       else
       {
@@ -285,7 +291,7 @@ function testSchema(schemaMap)
       var backToOsm = ogrToOsm(toOgr,schema);
       var secondJson = makeJson(backToOsm);
       // console.log(secondJson);
-      console.log(JSON.stringify(secondJson,Object.keys(secondJson).sort()));
+      console.log('OSM: ' + JSON.stringify(secondJson,Object.keys(secondJson).sort()));
 
       if (JSON.stringify(osmJson,Object.keys(osmJson).sort()) !== JSON.stringify(secondJson,Object.keys(secondJson).sort()))
       {
