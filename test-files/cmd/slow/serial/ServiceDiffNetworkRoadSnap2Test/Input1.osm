@@ -1,14 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <osm version='0.6' generator='JOSM'>
-  <node id='-813477' action='modify' visible='true' lat='10.5055398' lon='7.4246195'>
-    <tag k='highway' v='crossing' />
-    <tag k='railway' v='level_crossing' />
-  </node>
-  <node id='-813478' action='modify' visible='true' lat='7.7760928' lon='4.5452547'>
-    <tag k='highway' v='traffic_signals' />
-    <tag k='railway' v='level_crossing' />
-    <tag k='traffic_signals' v='signal' />
-  </node>
   <node id='-813479' action='modify' visible='true' lat='11.9930438' lon='8.5357062' />
   <node id='-813480' action='modify' visible='true' lat='11.9932322' lon='8.5364265' />
   <node id='-813481' action='modify' visible='true' lat='11.9932907' lon='8.5366641' />
@@ -80,8 +71,6 @@
   <node id='-813545' action='modify' visible='true' lat='11.9901938' lon='8.5341038' />
   <node id='-813546' action='modify' visible='true' lat='11.9899662' lon='8.5340796' />
   <node id='-813547' action='modify' visible='true' lat='11.9896887' lon='8.5340877' />
-  <node id='-813548' action='modify' visible='true' lat='7.7444534' lon='8.5432801' />
-  <node id='-813549' action='modify' visible='true' lat='7.7393633' lon='8.5382513' />
   <node id='-813550' action='modify' visible='true' lat='12.000521' lon='8.5360292' />
   <node id='-813551' action='modify' visible='true' lat='11.9985034' lon='8.5359266' />
   <node id='-813552' action='modify' visible='true' lat='11.996492' lon='8.5358409' />
@@ -270,15 +259,6 @@
     <tag k='length' v='55.3' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='source' v='Bing' />
-  </way>
-  <way id='-232049' action='modify' visible='true'>
-    <nd ref='-813548' />
-    <nd ref='-813549' />
-    <tag k='bridge' v='yes' />
-    <tag k='highway' v='secondary' />
-    <tag k='lanes' v='2' />
-    <tag k='layer' v='2' />
-    <tag k='railway' v='rail' />
   </way>
   <way id='-232050' action='modify' visible='true'>
     <nd ref='-813550' />

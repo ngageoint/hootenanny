@@ -68,6 +68,8 @@ static const bool DISPLAY_METRICS_ONLY = false;
  * the test workflow, bugs can more easily be narrowed down to just those caused by
  * ChangesetReplacementGenerator (most of the time). This test class can also be used for simple
  * single bounds replacement by generating a task grid of size = 1.
+ *
+ * Note that some of these tests have difficulty running in isolation.
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {

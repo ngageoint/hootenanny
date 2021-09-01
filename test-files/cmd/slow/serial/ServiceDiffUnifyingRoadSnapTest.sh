@@ -9,7 +9,8 @@ set -e
 # SEPARATE_OUPUT=$6
 # ALG_CONFIG=$7
 # NUM_STEPS=$8
+# WAY_SNAP_TOLERANCE=$9
 
-test-files/cmd/slow/serial/ServiceDiffRoadSnapTest.sh.off "ServiceDiffUnifyingRoadSnapTest" "test-files/cmd/glacial/DiffConflateCmdTest/input3.osm" "test-files/cmd/glacial/DiffConflateCmdTest/input4.osm" "-180,-90,180,90" "false" "false" "UnifyingAlgorithm.conf" "2"
+test-files/cmd/slow/serial/ServiceDiffRoadSnapTest.sh.off "ServiceDiffUnifyingRoadSnapTest" "test-files/cmd/glacial/DiffConflateCmdTest/input3.osm" "test-files/cmd/glacial/DiffConflateCmdTest/input4.osm" "-180,-90,180,90" "false" "false" "UnifyingAlgorithm.conf" "2" "10.0"
 
 

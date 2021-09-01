@@ -19,6 +19,8 @@ if [[ "$4" == "-180,-90,180,90" ]]; then
 else
   BOUNDS="-D bounds=$4"
 fi
+# TODO: also apply tags changeset when this is enabled; also update logging for tags changeset file 
+# output in diffconflator
 if [[ "$5" == "false" ]]; then
   INCLUDE_TAGS=
 else
@@ -41,6 +43,10 @@ fi
 # Valid params are: "2" for generating an osc from diff conflate or "3" for generating an osm from 
 # diff conflate and generating the changeset in a separate step
 NUM_STEPS=$8
+# Determines whether the source IDs are preserved when loading data. Preserving IDs is a more
+# accurate testing method but may cause ID conflict issues with certain input datasets. After 
+# loading IDs are always preserved throughout the rest of the test.
+WAY_SNAP_TOLERANCE=$9
 
 GOLD_DIR=test-files/cmd/slow/serial/$TEST_NAME
 OUTPUT_DIR=test-output/cmd/slow/serial/$TEST_NAME
@@ -62,12 +68,14 @@ if [ "$ALG_CONFIG" == "NetworkAlgorithm.conf" ]; then
   GENERAL_OPTS+=" -D differential.remove.linear.partial.matches.as.whole=true"
 fi
 DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999"
+# Note that the tags added for snapped features will always be dropped by the changeset by design.
+# They are only useful to be observed in a debug map before changeset application.
 CONFLATE_OPTS="$MATCHERS $MERGERS -D snap.unconnected.ways.mark.snapped.nodes=true -D snap.unconnected.ways.mark.snapped.ways=true -D bounds.output.file=$OUTPUT_DIR/$TEST_NAME-bounds-conflate.osm"
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUTPUT_DIR/$TEST_NAME-bounds-changeset.osm"
 
 DEBUG=false
 if [ "$DEBUG" == "true" ]; then
-  GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
+  GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true -D debug.maps.write.detailed=true"
 fi
 LOG_LEVEL="--warn"
 LOG_FILTER=""
@@ -83,7 +91,11 @@ scripts/database/CleanAndInitializeOsmApiDb.sh
 echo ""
 echo "Writing ref data..."
 echo ""
-hoot convert $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/ref-load-debug.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator $GENERAL_OPTS $DB_OPTS $REF_INPUT $OSM_API_DB_URL
+# In the initial implementation of this test we dropped all input IDs and force all ref IDs to 
+# positive to avoid potential ID conflicts between ref and sec. Since non of the test inputs seem
+# to actually have this problem and holding onto IDs more accurately reflects the production 
+# configuration, that has been changed.
+hoot convert $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/ref-load-debug.osm -D reader.use.data.source.ids=true $GENERAL_OPTS $DB_OPTS $REF_INPUT $OSM_API_DB_URL
 if [ "$DEBUG" == "true" ]; then
   hoot convert --warn -D debug.maps.filename=$OUTPUT_DIR/ref-load-debug.osm -D reader.use.data.source.ids=true $GENERAL_OPTS $DB_OPTS $OSM_API_DB_URL $OUTPUT_DIR/ref-original.osm
 fi
@@ -94,7 +106,7 @@ echo ""
 echo "Writing sec data..."
 echo ""
 SEC_LAYER=$HOOT_DB_URL/$TEST_NAME-sec
-hoot convert $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/sec-load-debug.osm -D reader.use.data.source.ids=false $GENERAL_OPTS $DB_OPTS $SEC_INPUT $SEC_LAYER
+hoot convert $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/sec-load-debug.osm -D reader.use.data.source.ids=true $GENERAL_OPTS $DB_OPTS $SEC_INPUT $SEC_LAYER
 if [ "$DEBUG" == "true" ]; then
   hoot convert $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/sec-load-debug.osm -D reader.use.data.source.ids=true $GENERAL_OPTS $DB_OPTS $SEC_LAYER $OUTPUT_DIR/sec-original.osm
 fi
@@ -104,16 +116,19 @@ if [ "$NUM_STEPS" == "2" ]; then
   echo ""
   echo "Running conflation as part of a two step process..."
   echo ""
-  hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=HighwayCriterion -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL --differential $INCLUDE_TAGS $SEPARATE_OUTPUT --write-bounds
+  # Note that keeping ref IDs and dropping sec IDs during conflation is the default config and 
+  # reflects the production environment. Its possible at some point we may also want to keep the sec
+  # IDs as well.
+  hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=false -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=HighwayCriterion -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL --differential $INCLUDE_TAGS $SEPARATE_OUTPUT --write-bounds
   if [ "$DEBUG" == "true" ]; then
-    hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc --differential $INCLUDE_TAGS $SEPARATE_OUTPUT --write-bounds
+    hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=false -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=HighwayCriterion -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc --differential $INCLUDE_TAGS $SEPARATE_OUTPUT --write-bounds
   fi
 else
   # Run diff conflate to osm w/ road snapping; retain both sets of IDs during conflate
   echo ""
   echo "Running conflation as part of a three step process..."
   echo ""
-  hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=HighwayCriterion -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osm --differential $INCLUDE_TAGS $SEPARATE_OUTPUT --write-bounds
+  hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $BOUNDS $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=false -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=HighwayCriterion -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osm --differential $INCLUDE_TAGS $SEPARATE_OUTPUT --write-bounds
   # Generate a changeset between the original ref data and the diff calculated in the previous step
   echo ""
   echo "Running changeset derivation as part of a three step process..."
