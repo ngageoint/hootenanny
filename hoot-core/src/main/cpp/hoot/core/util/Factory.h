@@ -126,10 +126,7 @@ public:
     QMutexLocker locker(&_mutex);
     if (_creators.find(name) == _creators.end())
     {
-      if (_creators.find(name) == _creators.end())
-      {
-        throw HootException("Could not find object to construct. (" + name + ")");
-      }
+      throw HootException("Could not find object to construct. (" + name + ")");
     }
     if (_creators[name]->getBaseName() != ExpectedBase::className())
     {
@@ -148,10 +145,7 @@ public:
     QMutexLocker locker(&_mutex);
     if (_creators.find(name) == _creators.end())
     {
-      if (_creators.find(name) == _creators.end())
-      {
-        throw HootException("Could not find object to construct. (" + name + ")");
-      }
+      throw HootException("Could not find object to construct. (" + name + ")");
     }
     if (_creators[name]->getBaseName() != ExpectedBase::className())
     {

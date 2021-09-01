@@ -750,13 +750,10 @@ void Settings::parseCommonArguments(QStringList& args)
             newList.removeAll(listItemToRemove);
             itemRemoved = true;
           }
-          if (!itemRemoved)
+          if (!itemRemoved && newList.contains(listItemToRemove))
           {
-            if (newList.contains(listItemToRemove))
-            {
-              newList.removeAll(listItemToRemove);
-              itemRemoved = true;
-            }
+            newList.removeAll(listItemToRemove);
+            itemRemoved = true;
           }
           if (!itemRemoved)
           {

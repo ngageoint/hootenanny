@@ -53,7 +53,7 @@ _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 }
 
 double StatCalculator::calculateStat(
-  const QStringList& inputs, QString& visitorClassName, const QString& statType) const
+  const QStringList& inputs, const QString& visitorClassName, const QString& statType) const
 {
   if (inputs.empty())
   {

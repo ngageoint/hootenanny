@@ -42,10 +42,7 @@ boost::any Factory::constructObject(const QString& name)
   QMutexLocker locker(&_mutex);
   if (_creators.find(name) == _creators.end())
   {
-    if (_creators.find(name) == _creators.end())
-    {
-      throw HootException("Could not find object to construct. (" + name + ")");
-    }
+    throw HootException("Could not find object to construct. (" + name + ")");
   }
   std::shared_ptr<ObjectCreator> c = _creators[name];
   locker.unlock();
