@@ -1,5 +1,5 @@
 
-== Generic Line Conflation
+== Javascript Conflation
 
 Hootenanny supports "highway" conflation as defined by OpenStreetMap (OSM). In
 OSM jargon a "highway" refers to paths, roads, cart tracks and possibly bridges

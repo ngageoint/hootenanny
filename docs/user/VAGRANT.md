@@ -122,10 +122,10 @@ If you run into permission errors running the Tomcat deployment script, remove f
 
 # Faster C++ Compilation
 
-Running a Hootenanny C++ development environment on bare metal against CentOS is recommended for the best performance. However if you want to do it with Vagrant, the following describes a way to speed up the C++ compile time with a RAM disk:
+Running a Hootenanny C++ development environment on bare metal against CentOS is recommended for the best performance. However if you want to run it with Vagrant, the following describes a way to speed up the C++ compile time with a RAM disk:
 
 Add the something like the following line to your `Vagrantfile.Local`:
 
 `config.vm.provision "hoot-ramdisk", type: "shell", :privileged => false, :inline => "/home/vagrant/hoot/scripts/developer/MakeHootRamDisk.sh <size>", run: "always"`
 
-where `<size>` is the size in MB of the RAM disk. Then bring up the instance with Vagrant. This will cause the contents of the `hoot` directory to be copied over to `/ramdisk/hoot`. The initial copy time can take a minute or two, but you only pay that penalty when the instance is created. The necessary disk size can change over time and can get fairly large with use of `ccache`. This setup has not been tested successfully with the UI.
+where `<size>` is the size in MB of the RAM disk. Then bring up the instance with Vagrant. This will cause the contents of the `hoot` directory to be copied over to `/ramdisk/hoot`. The initial copy time can take a minute or two, but you only pay that penalty when the instance is created. The necessary disk size may change over time and can get fairly large with use of `ccache`. This setup has not been tested successfully with the UI, only with the command line and web services.
