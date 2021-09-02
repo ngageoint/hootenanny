@@ -44,7 +44,7 @@ void MultiaryUtilities::conflate(OsmMapPtr map)
 {
   MatchFactory& matchFactory = MatchFactory::getInstance();
   matchFactory.reset();
-  matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");
+  matchFactory.registerCreator("ScriptMatchCreator,MultiaryPoi.js");
 
   MergerFactory::getInstance().reset();
   std::shared_ptr<MergerFactory> mergerFactory(new MergerFactory());
@@ -118,10 +118,10 @@ QList<MultiaryElement> MultiaryUtilities::conflateCluster(QList<QByteArray> pbfE
   return result;
 }
 
-QList<hoot::MultiarySimpleMatch> MultiaryUtilities::findMatches(
+QList<MultiarySimpleMatch> MultiaryUtilities::findMatches(
   QByteArray checkElement, QList<QByteArray> againstElements)
 {
-  QList<hoot::MultiarySimpleMatch> result;
+  QList<MultiarySimpleMatch> result;
   OsmPbfReader reader;
   reader.setUseDataSourceIds(false);
 
@@ -161,7 +161,7 @@ QList<hoot::MultiarySimpleMatch> MultiaryUtilities::findMatches(
 
   MatchFactory& matchFactory = MatchFactory::getInstance();
   matchFactory.reset();
-  matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");
+  matchFactory.registerCreator("ScriptMatchCreator,MultiaryPoi.js");
 
   for (int i = 0; i < ids.size(); i++)
   {

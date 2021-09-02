@@ -55,7 +55,7 @@ namespace hoot
 class MultiaryPoiMergerCreator : public MergerCreator
 {
 public:
-  static QString className() { return "hoot::MultiaryPoiMergerCreator"; }
+  static QString className() { return "MultiaryPoiMergerCreator"; }
 
   MultiaryPoiMergerCreator() = default;
   ~MultiaryPoiMergerCreator() = default;

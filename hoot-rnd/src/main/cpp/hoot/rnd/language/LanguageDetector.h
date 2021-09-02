@@ -42,7 +42,7 @@ class LanguageDetector : public Configurable
 {
 public:
 
-  static QString className() { return "hoot::LanguageDetector"; }
+  static QString className() { return "LanguageDetector"; }
 
   LanguageDetector() = default;
   virtual ~LanguageDetector() = default;

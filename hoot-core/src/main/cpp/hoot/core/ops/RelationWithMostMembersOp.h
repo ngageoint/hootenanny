@@ -47,7 +47,7 @@ class RelationWithMostMembersOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::RelationWithMostMembersOp"; }
+  static QString className() { return "RelationWithMostMembersOp"; }
 
   RelationWithMostMembersOp();
   ~RelationWithMostMembersOp() = default;

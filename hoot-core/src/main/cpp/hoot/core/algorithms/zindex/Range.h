@@ -42,7 +42,7 @@ class Range
 {
 public:
 
-  static QString className() { return "hoot::Range"; }
+  static QString className() { return "Range"; }
 
   Range() = default;
   Range(long int min, long int max);

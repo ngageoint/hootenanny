@@ -9,7 +9,7 @@ SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 CONFIG="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf -C Testing.conf"
 
-hoot conflate $CONFIG -D "match.creators=hoot::ScriptMatchCreator,River.js" -D "merger.creators=hoot::ScriptMergerCreator" -D writer.include.debug.tags=true test-files/conflate/generic/rivers/Haiti_CNIGS_Rivers_REF1-cropped-2.osm test-files/conflate/generic/rivers/Haiti_osm_waterway_ss_REF2-cropped-2.osm $STATS_OUT.osm --stats > $STATS_OUT
+hoot conflate $CONFIG -D "match.creators=ScriptMatchCreator,River.js" -D "merger.creators=ScriptMergerCreator" -D writer.include.debug.tags=true test-files/conflate/generic/rivers/Haiti_CNIGS_Rivers_REF1-cropped-2.osm test-files/conflate/generic/rivers/Haiti_osm_waterway_ss_REF2-cropped-2.osm $STATS_OUT.osm --stats > $STATS_OUT
 
 hoot diff $CONFIG $STATS_OUT.osm $IN_DIR/generic-rivers-out.osm || diff $STATS_OUT.osm $IN_DIR/generic-rivers-out.osm
 

@@ -53,7 +53,7 @@ class OsmApiDbSqlChangesetFileWriter : public OsmChangesetFileWriter
 
 public:
 
-  static QString className() { return "hoot::OsmApiDbSqlChangesetFileWriter"; }
+  static QString className() { return "OsmApiDbSqlChangesetFileWriter"; }
 
   OsmApiDbSqlChangesetFileWriter();
   OsmApiDbSqlChangesetFileWriter(const QUrl& url);

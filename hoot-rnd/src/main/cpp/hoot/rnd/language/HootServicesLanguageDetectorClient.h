@@ -60,7 +60,7 @@ class HootServicesLanguageDetectorClient : public LanguageDetector
 
 public:
 
-  static QString className() { return "hoot::HootServicesLanguageDetectorClient"; }
+  static QString className() { return "HootServicesLanguageDetectorClient"; }
 
   HootServicesLanguageDetectorClient();
   virtual ~HootServicesLanguageDetectorClient();

@@ -42,7 +42,7 @@ class WorstCircularErrorVisitor : public ConstElementVisitor, public SingleStati
 {
 public:
 
-  static QString className() { return "hoot::WorstCircularErrorVisitor"; }
+  static QString className() { return "WorstCircularErrorVisitor"; }
 
   WorstCircularErrorVisitor() : _worst(ElementData::CIRCULAR_ERROR_EMPTY) {}
   ~WorstCircularErrorVisitor() = default;

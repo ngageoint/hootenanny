@@ -59,8 +59,8 @@ public:
     reader.read("test-files/criterion/ComplexBuildings.osm", map);
 
     RelationWithMostMembersOp uut;
-    uut.setCriterion("hoot::BuildingCriterion", "relation", conf());
-    uut.setCriterion("hoot::BuildingCriterion", "member", conf());
+    uut.setCriterion("BuildingCriterion", "relation", conf());
+    uut.setCriterion("BuildingCriterion", "member", conf());
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);

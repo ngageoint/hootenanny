@@ -51,7 +51,7 @@ class WayLocation
 {
 public:
 
-  static QString className() { return "hoot::WayLocation"; }
+  static QString className() { return "WayLocation"; }
 
   static int logWarnCount;
 

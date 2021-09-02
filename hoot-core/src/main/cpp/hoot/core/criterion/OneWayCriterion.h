@@ -41,7 +41,7 @@ class OneWayCriterion : public GeometryTypeCriterion
 {
 public:
 
-  static QString className() { return "hoot::OneWayCriterion"; }
+  static QString className() { return "OneWayCriterion"; }
 
   OneWayCriterion() = default;
   virtual ~OneWayCriterion() = default;

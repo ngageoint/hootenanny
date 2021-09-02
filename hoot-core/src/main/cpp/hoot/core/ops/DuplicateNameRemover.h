@@ -46,7 +46,7 @@ class DuplicateNameRemover : public OsmMapOperation, public Configurable,
 {
 public:
 
-  static QString className() { return "hoot::DuplicateNameRemover"; }
+  static QString className() { return "DuplicateNameRemover"; }
 
   DuplicateNameRemover();
   ~DuplicateNameRemover() = default;

@@ -48,6 +48,10 @@ public:
   /**
    * Returns a map of features that went into determining this as a match and their values. The
    * QVariant can either be a QString (nominal) or double (numeric).
+   *
+   * Don't like the return type as a map here b/c it doesn't preserve the order of the extractor
+   * attributes. The ordering does seem to have an affect on match quality. See additional related
+   * note in FeatureExtractor.h (#4989).
    */
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const = 0;
 };

@@ -51,7 +51,7 @@ class AlphaShapeCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::AlphaShapeCmd"; }
+  static QString className() { return "AlphaShapeCmd"; }
 
   AlphaShapeCmd() = default;
 

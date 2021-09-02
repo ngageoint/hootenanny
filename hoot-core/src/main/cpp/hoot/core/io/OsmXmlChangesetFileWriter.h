@@ -53,7 +53,7 @@ class OsmXmlChangesetFileWriter : public OsmChangesetFileWriter
 
 public:
 
-  static QString className() { return "hoot::OsmXmlChangesetFileWriter"; }
+  static QString className() { return "OsmXmlChangesetFileWriter"; }
 
   OsmXmlChangesetFileWriter();
   ~OsmXmlChangesetFileWriter() = default;

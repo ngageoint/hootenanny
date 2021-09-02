@@ -42,7 +42,7 @@ class HighwayCriterion : public ConflatableElementCriterion, public ConstOsmMapC
 {
 public:
 
-  static QString className() { return "hoot::HighwayCriterion"; }
+  static QString className() { return "HighwayCriterion"; }
 
   HighwayCriterion(const bool includeRelations = false);
   HighwayCriterion(ConstOsmMapPtr map, const bool includeRelations = false);

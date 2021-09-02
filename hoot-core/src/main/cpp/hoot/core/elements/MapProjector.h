@@ -52,7 +52,7 @@ class MapProjector
 {
 public:
 
-  static QString className() { return "hoot::MapProjector"; }
+  static QString className() { return "MapProjector"; }
 
   static int logWarnCount;
 

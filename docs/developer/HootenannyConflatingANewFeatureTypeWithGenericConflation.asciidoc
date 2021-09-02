@@ -33,8 +33,8 @@ is similar to the file provided with Hootenanny for conflating rivers,
 ----------------
 {
   "log.identical.message.limit": "999999",
-  "match.creators" : "hoot::ScriptMatchCreator,River.js",
-  "merger.creators" : "hoot::ScriptMergerCreator",
+  "match.creators" : "ScriptMatchCreator,River.js",
+  "merger.creators" : "ScriptMergerCreator",
 }
 ----------------
 
@@ -295,12 +295,12 @@ which effectively conflates the data.
 
 Hootenanny has a set of existing feature extractors which may be of use to you.  The list is constantly
 changing, but you can find them in the codebase by locating all classes which inherit from the
-hoot::FeatureExtractor interface.
+FeatureExtractor interface.
 
 ==== Creating a New Feature Extractor
 
 If you need to create a new feature extractor, simply create a class which implements
-hoot::FeatureExtractor.
+FeatureExtractor.
 
 ==== Extracting a Feature
 
@@ -477,7 +477,7 @@ Feature extractors themselves may be tweaked to tune the model.
 ===== Value Aggregators
 
 Value aggregators determine how calculated feature values are combined.  There are several types of value
-aggregators.  For a list, in the code, look for all classes implementing hoot::ValueAggregator.  In
+aggregators.  For a list, in the code, look for all classes implementing ValueAggregator.  In
 this example, an attribute score feature extractor is configured with an RMSE value aggregator:
 
 ---------

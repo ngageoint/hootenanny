@@ -65,7 +65,7 @@ void HootExceptionJs::Init(Local<Object> target)
 
   for (size_t i = 0; i < opNames.size(); i++)
   {
-    QString noNamespace = opNames[i].replace("hoot::", "");
+    QString opName = opNames[i];
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
@@ -77,7 +77,7 @@ void HootExceptionJs::Init(Local<Object> target)
                                   toV8(HootException::className()));
 
     _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
-    target->Set(context, toV8(noNamespace), ToLocal(&_constructor));
+    target->Set(context, toV8(opName), ToLocal(&_constructor));
   }
 }
 

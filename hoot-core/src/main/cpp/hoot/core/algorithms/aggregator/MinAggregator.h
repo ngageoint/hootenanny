@@ -36,7 +36,7 @@ class MinAggregator : public ValueAggregator
 {
 public:
 
-  static QString className() { return "hoot::MinAggregator"; }
+  static QString className() { return "MinAggregator"; }
 
   MinAggregator() = default;
   ~MinAggregator() = default;

@@ -41,7 +41,7 @@ class ExactStringDistance : public StringDistance
 {
 public:
 
-  static QString className() { return "hoot::ExactStringDistance"; }
+  static QString className() { return "ExactStringDistance"; }
 
   ExactStringDistance() = default;
   ~ExactStringDistance() = default;

@@ -42,7 +42,7 @@ class RelationWithRiverMembersCriterion : public RelationWithMembersOfTypeCriter
 {
 public:
 
-  static QString className() { return "hoot::RelationWithRiverMembersCriterion"; }
+  static QString className() { return "RelationWithRiverMembersCriterion"; }
 
   RelationWithRiverMembersCriterion();
   ~RelationWithRiverMembersCriterion() = default;

@@ -45,7 +45,7 @@ class AddressCountVisitor : public ConstElementVisitor, public SingleStatistic, 
 {
 public:
 
-  static QString className() { return "hoot::AddressCountVisitor"; }
+  static QString className() { return "AddressCountVisitor"; }
 
   AddressCountVisitor() : _totalCount(0) { }
   ~AddressCountVisitor() = default;

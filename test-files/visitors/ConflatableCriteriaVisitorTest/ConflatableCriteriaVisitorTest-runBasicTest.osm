@@ -72,86 +72,86 @@
     <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5944194033784882" lon="-104.8041559931055815"/>
     <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5942139571476162" lon="-104.8043781711758697"/>
     <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8593025332214523" lon="-104.9197586162135565">
-        <tag k="hoot:conflatable:criteria" v="hoot::PoiCriterion;hoot::PoiPolygonPoiCriterion"/>
-        <tag k="name" v="Manitou Springs"/>
-        <tag k="poi" v="yes"/>
-        <tag k="place" v="town"/>
         <tag k="error:circular" v="2000"/>
+        <tag k="hoot:conflatable:criteria" v="PoiCriterion;PoiPolygonPoiCriterion"/>
+        <tag k="name" v="Manitou Springs"/>
+        <tag k="place" v="town"/>
+        <tag k="poi" v="yes"/>
     </node>
     <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8885119273824316" lon="-104.7175564929962519">
         <tag k="amenity" v="cafe"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::PoiCriterion;hoot::PoiPolygonPoiCriterion"/>
+        <tag k="error:circular" v="1000"/>
+        <tag k="hoot:conflatable:criteria" v="PoiCriterion;PoiPolygonPoiCriterion"/>
         <tag k="name" v="Starbucks"/>
         <tag k="note" v="1-c"/>
         <tag k="poi" v="yes"/>
-        <tag k="error:circular" v="1000"/>
     </node>
     <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8751955295816245" lon="-104.7179399970222704">
         <tag k="amenity" v="cafe"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::PoiCriterion;hoot::PoiPolygonPoiCriterion"/>
+        <tag k="error:circular" v="1000"/>
+        <tag k="hoot:conflatable:criteria" v="PoiCriterion;PoiPolygonPoiCriterion"/>
         <tag k="name" v="Starbucks"/>
         <tag k="note" v="1-d"/>
         <tag k="poi" v="yes"/>
-        <tag k="error:circular" v="1000"/>
     </node>
     <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8571566428667481" lon="-104.9070371581716046">
-        <tag k="hoot:conflatable:criteria" v="hoot::PoiCriterion;hoot::PoiPolygonPoiCriterion"/>
-        <tag k="name" v="Manitou Springs"/>
-        <tag k="poi" v="yes"/>
-        <tag k="place" v="town"/>
         <tag k="error:circular" v="1500"/>
+        <tag k="hoot:conflatable:criteria" v="PoiCriterion;PoiPolygonPoiCriterion"/>
+        <tag k="name" v="Manitou Springs"/>
+        <tag k="place" v="town"/>
+        <tag k="poi" v="yes"/>
     </node>
     <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8940860705601636" lon="-104.7174958015344259">
         <tag k="amenity" v="cafe"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::PoiCriterion;hoot::PoiPolygonPoiCriterion"/>
+        <tag k="error:circular" v="200"/>
+        <tag k="hoot:conflatable:criteria" v="PoiCriterion;PoiPolygonPoiCriterion"/>
         <tag k="name" v="Starbucks"/>
         <tag k="note" v="1-b"/>
         <tag k="poi" v="yes"/>
-        <tag k="error:circular" v="200"/>
     </node>
     <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8618557942462957" lon="-104.8786905089454109">
-        <tag k="hoot:conflatable:criteria" v="hoot::PoiCriterion;hoot::PoiPolygonPoiCriterion"/>
-        <tag k="name" v="Garden of the Gods"/>
-        <tag k="leisure" v="park"/>
-        <tag k="poi" v="yes"/>
         <tag k="error:circular" v="1000"/>
+        <tag k="hoot:conflatable:criteria" v="PoiCriterion;PoiPolygonPoiCriterion"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="Garden of the Gods"/>
+        <tag k="poi" v="yes"/>
     </node>
     <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8745941427828896" lon="-104.7196458819557705">
         <tag k="amenity" v="cafe"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::PoiCriterion;hoot::PoiPolygonPoiCriterion"/>
+        <tag k="error:circular" v="1000"/>
+        <tag k="hoot:conflatable:criteria" v="PoiCriterion;PoiPolygonPoiCriterion"/>
         <tag k="name" v="Starbucks"/>
         <tag k="note" v="1-e"/>
         <tag k="poi" v="yes"/>
-        <tag k="error:circular" v="1000"/>
     </node>
     <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8580512412840235" lon="-104.7869287551585984">
-        <tag k="hoot:conflatable:criteria" v="hoot::PoiCriterion"/>
-        <tag k="name" v="Colorado Springs"/>
-        <tag k="poi" v="yes"/>
-        <tag k="place" v="city"/>
         <tag k="error:circular" v="20000"/>
+        <tag k="hoot:conflatable:criteria" v="PoiCriterion"/>
+        <tag k="name" v="Colorado Springs"/>
+        <tag k="place" v="city"/>
+        <tag k="poi" v="yes"/>
     </node>
     <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9239774040227218" lon="-104.8439481192893510">
         <tag k="amenity" v="cafe"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::PoiCriterion;hoot::PoiPolygonPoiCriterion"/>
+        <tag k="error:circular" v="50"/>
+        <tag k="hoot:conflatable:criteria" v="PoiCriterion;PoiPolygonPoiCriterion"/>
         <tag k="name" v="Starbucks"/>
         <tag k="poi" v="yes"/>
-        <tag k="error:circular" v="50"/>
     </node>
     <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8467218120797497" lon="-104.8852148410949496">
-        <tag k="hoot:conflatable:criteria" v="hoot::PoiCriterion;hoot::PoiPolygonPoiCriterion"/>
-        <tag k="name" v="Red Rock Canyon"/>
-        <tag k="leisure" v="park"/>
-        <tag k="poi" v="yes"/>
         <tag k="error:circular" v="1000"/>
+        <tag k="hoot:conflatable:criteria" v="PoiCriterion;PoiPolygonPoiCriterion"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="Red Rock Canyon"/>
+        <tag k="poi" v="yes"/>
     </node>
     <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9109692767935371" lon="-104.7145693652068132">
         <tag k="amenity" v="cafe"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::PoiCriterion;hoot::PoiPolygonPoiCriterion"/>
+        <tag k="error:circular" v="100"/>
+        <tag k="hoot:conflatable:criteria" v="PoiCriterion;PoiPolygonPoiCriterion"/>
         <tag k="name" v="Starbucks"/>
         <tag k="note" v="1-a"/>
         <tag k="poi" v="yes"/>
-        <tag k="error:circular" v="100"/>
     </node>
     <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542599687747341" lon="-104.9005795104799432"/>
     <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549073243849037" lon="-104.8961823052623856"/>
@@ -195,12 +195,12 @@
         <nd ref="-96"/>
         <nd ref="-97"/>
         <nd ref="-94"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::AreaCriterion;hoot::BuildingCriterion;hoot::PoiPolygonPolyCriterion"/>
-        <tag k="name" v="Panera Bread"/>
+        <tag k="REF1" v="Panera"/>
         <tag k="alt_name" v="Maid-Rite"/>
         <tag k="building" v="yes"/>
-        <tag k="REF1" v="Panera"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:conflatable:criteria" v="AreaCriterion;BuildingCriterion;PoiPolygonPolyCriterion"/>
+        <tag k="name" v="Panera Bread"/>
     </way>
     <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-90"/>
@@ -208,11 +208,11 @@
         <nd ref="-92"/>
         <nd ref="-93"/>
         <nd ref="-90"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::AreaCriterion;hoot::BuildingCriterion;hoot::PoiPolygonPolyCriterion"/>
-        <tag k="name" v="Bad Pair"/>
-        <tag k="building" v="yes"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:conflatable:criteria" v="AreaCriterion;BuildingCriterion;PoiPolygonPolyCriterion"/>
+        <tag k="name" v="Bad Pair"/>
     </way>
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-86"/>
@@ -220,11 +220,11 @@
         <nd ref="-88"/>
         <nd ref="-89"/>
         <nd ref="-86"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::AreaCriterion;hoot::BuildingCriterion;hoot::PoiPolygonPolyCriterion"/>
-        <tag k="name" v="Bad Pair"/>
-        <tag k="building" v="yes"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:conflatable:criteria" v="AreaCriterion;BuildingCriterion;PoiPolygonPolyCriterion"/>
+        <tag k="name" v="Bad Pair"/>
     </way>
     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-82"/>
@@ -232,11 +232,11 @@
         <nd ref="-84"/>
         <nd ref="-85"/>
         <nd ref="-82"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::AreaCriterion;hoot::BuildingCriterion;hoot::PoiPolygonPolyCriterion"/>
-        <tag k="name" v="Bad Pair"/>
-        <tag k="building" v="yes"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:conflatable:criteria" v="AreaCriterion;BuildingCriterion;PoiPolygonPolyCriterion"/>
+        <tag k="name" v="Bad Pair"/>
     </way>
     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-78"/>
@@ -244,11 +244,11 @@
         <nd ref="-80"/>
         <nd ref="-81"/>
         <nd ref="-78"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::AreaCriterion;hoot::BuildingCriterion;hoot::PoiPolygonPolyCriterion"/>
-        <tag k="name" v="Bad Pair"/>
-        <tag k="building" v="yes"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:conflatable:criteria" v="AreaCriterion;BuildingCriterion;PoiPolygonPolyCriterion"/>
+        <tag k="name" v="Bad Pair"/>
     </way>
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-74"/>
@@ -257,11 +257,11 @@
         <nd ref="-79"/>
         <nd ref="-77"/>
         <nd ref="-74"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::AreaCriterion;hoot::BuildingCriterion;hoot::PoiPolygonPolyCriterion"/>
-        <tag k="name" v="Convoluted Example"/>
-        <tag k="building" v="yes"/>
         <tag k="REF1" v="Convoluted No Match 1"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:conflatable:criteria" v="AreaCriterion;BuildingCriterion;PoiPolygonPolyCriterion"/>
+        <tag k="name" v="Convoluted Example"/>
     </way>
     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-62"/>
@@ -297,11 +297,11 @@
         <nd ref="-72"/>
         <nd ref="-73"/>
         <nd ref="-62"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::AreaCriterion;hoot::BuildingCriterion;hoot::PoiPolygonPolyCriterion"/>
-        <tag k="name" v="Target"/>
-        <tag k="building" v="yes"/>
         <tag k="REF1" v="Target"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:conflatable:criteria" v="AreaCriterion;BuildingCriterion;PoiPolygonPolyCriterion"/>
+        <tag k="name" v="Target"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-56"/>
@@ -311,11 +311,11 @@
         <nd ref="-60"/>
         <nd ref="-61"/>
         <nd ref="-56"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::AreaCriterion;hoot::BuildingCriterion;hoot::PoiPolygonPolyCriterion"/>
-        <tag k="name" v="Freddy's"/>
-        <tag k="building" v="yes"/>
         <tag k="REF1" v="Freddy's"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:conflatable:criteria" v="AreaCriterion;BuildingCriterion;PoiPolygonPolyCriterion"/>
+        <tag k="name" v="Freddy's"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-52"/>
@@ -323,10 +323,10 @@
         <nd ref="-54"/>
         <nd ref="-55"/>
         <nd ref="-52"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::AreaCriterion;hoot::BuildingCriterion;hoot::PoiPolygonPolyCriterion"/>
-        <tag k="building" v="yes"/>
         <tag k="REF1" v="Biondi"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:conflatable:criteria" v="AreaCriterion;BuildingCriterion;PoiPolygonPolyCriterion"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-48"/>
@@ -334,12 +334,12 @@
         <nd ref="-50"/>
         <nd ref="-51"/>
         <nd ref="-48"/>
-        <tag k="amenity" v="restaurant"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::AreaCriterion;hoot::BuildingCriterion;hoot::PoiPolygonPolyCriterion"/>
-        <tag k="name" v="Cheddar's Casual Cafe"/>
-        <tag k="building" v="yes"/>
         <tag k="REF1" v="Cheddar's"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:conflatable:criteria" v="AreaCriterion;BuildingCriterion;PoiPolygonPolyCriterion"/>
+        <tag k="name" v="Cheddar's Casual Cafe"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
@@ -372,37 +372,37 @@
         <nd ref="-28"/>
         <nd ref="-14"/>
         <nd ref="-35"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::HighwayCriterion"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="0"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:conflatable:criteria" v="HighwayCriterion"/>
+        <tag k="note" v="0"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13"/>
         <nd ref="-26"/>
         <nd ref="-12"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::HighwayCriterion"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="1"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:conflatable:criteria" v="HighwayCriterion"/>
+        <tag k="note" v="1"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-30"/>
         <nd ref="-16"/>
         <nd ref="-36"/>
         <nd ref="-20"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::HighwayCriterion"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:conflatable:criteria" v="HighwayCriterion"/>
+        <tag k="note" v="2"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-36"/>
         <nd ref="-10"/>
         <nd ref="-31"/>
-        <tag k="hoot:conflatable:criteria" v="hoot::HighwayCriterion"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="3"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:conflatable:criteria" v="HighwayCriterion"/>
+        <tag k="note" v="3"/>
     </way>
 </osm>

@@ -76,7 +76,7 @@
         "description":"Remove review relations and unmatched features in secondary dataset.",
         "name":"Conflate Post Ops",
         "hoot_key":"conflate.post.ops",
-        "defaultvalue":"hoot::RemoveElementsVisitor;hoot::RemoveUnknown2Visitor"
+        "defaultvalue":"RemoveElementsVisitor;RemoveUnknown2Visitor"
       },
       {
         "id": "conflate_mark_merger_created_multilinestring_relations",
@@ -115,7 +115,7 @@
         "elem_type": "string",
         "description": "The merger to use when merging features with linear geometries during conflation.",
         "name": "Default Linear Geometry Merger",
-        "defaultvalue": "hoot::LinearTagOnlyMerger",
+        "defaultvalue": "LinearTagOnlyMerger",
         "hoot_key": "geometry.linear.merger.default"
       },
       {
@@ -139,7 +139,7 @@
         "elem_type": "string",
         "description": "The tag merger used by POI/Polygon conflation.",
         "name": "POI/Polygon tag merger",
-        "defaultvalue": "hoot::OverwriteTag1Merger",
+        "defaultvalue": "OverwriteTag1Merger",
         "hoot_key": "poi.polygon.tag.merger"
       },
       {
@@ -171,7 +171,7 @@
         "elem_type": "string",
         "description": "The criteria for the RemoveElementsVisitor above",
         "name": "Remove Elements Visitor Criteria",
-        "defaultvalue": "hoot::TagKeyCriterion;hoot::ReviewRelationCriterion",
+        "defaultvalue": "TagKeyCriterion;ReviewRelationCriterion",
         "hoot_key": "remove.elements.visitor.element.criteria"
       },
       {
@@ -223,7 +223,7 @@
         "elem_type": "string",
         "description": "The tag merging strategy to use",
         "name": "Tag Merger",
-        "defaultvalue": "hoot::OverwriteTag1Merger",
+        "defaultvalue": "OverwriteTag1Merger",
         "hoot_key": "tag.merger.default"
       },
       {
@@ -239,7 +239,7 @@
         "elem_type": "string",
         "description": "The way joiner to use to rejoin ways split during cleaning and conflation matching",
         "name": "WayJoiner",
-        "defaultvalue": "hoot::WayJoinerAdvanced",
+        "defaultvalue": "WayJoinerAdvanced",
         "hoot_key": "way.joiner"
       },
       {

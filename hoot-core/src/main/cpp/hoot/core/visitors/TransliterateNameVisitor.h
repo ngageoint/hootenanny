@@ -37,7 +37,7 @@ class TransliterateNameVisitor : public ElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::TransliterateNameVisitor"; }
+  static QString className() { return "TransliterateNameVisitor"; }
 
   TransliterateNameVisitor() = default;
   ~TransliterateNameVisitor() = default;

@@ -42,7 +42,7 @@ class StatusCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::StatusCriterion"; }
+  static QString className() { return "StatusCriterion"; }
 
   StatusCriterion();
   StatusCriterion(Status s);

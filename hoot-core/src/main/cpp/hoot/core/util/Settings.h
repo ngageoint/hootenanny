@@ -193,7 +193,7 @@ private:
   // prepended to them. This allows users to avoid having to type in the namespace repeatedly when
   // using commands and shorten command text. If hoot ever updates namespace usage to anything other
   // than a single global namespece, then this logic would become obsolete
-  static void _addNamespacePrefixIfClassNameWithout(QString& val);
+  //static void _addNamespacePrefixIfClassNameWithout(QString& val);
   static void _updateClassNamesInList(QStringList& list);
 };
 

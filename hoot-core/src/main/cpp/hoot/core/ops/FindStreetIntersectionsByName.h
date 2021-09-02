@@ -46,7 +46,7 @@ class FindStreetIntersectionsByName : public OsmMapOperation, public Configurabl
 {
 public:
 
-  static QString className() { return "hoot::FindStreetIntersectionsByName"; }
+  static QString className() { return "FindStreetIntersectionsByName"; }
 
   FindStreetIntersectionsByName() = default;
   ~FindStreetIntersectionsByName() = default;

@@ -42,7 +42,7 @@ class FeatureCountVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static QString className() { return "hoot::FeatureCountVisitor"; }
+  static QString className() { return "FeatureCountVisitor"; }
 
   FeatureCountVisitor() : _count(0) { }
   ~FeatureCountVisitor() = default;

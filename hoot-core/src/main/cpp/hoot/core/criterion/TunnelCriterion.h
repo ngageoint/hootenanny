@@ -41,7 +41,7 @@ class TunnelCriterion : public GeometryTypeCriterion
 {
 public:
 
-  static QString className() { return "hoot::TunnelCriterion"; }
+  static QString className() { return "TunnelCriterion"; }
 
   TunnelCriterion() = default;
   ~TunnelCriterion() = default;

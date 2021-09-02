@@ -55,7 +55,7 @@ class HootApiDbBulkInserter : public OsmApiDbBulkInserter
 
 public:
 
-  static QString className() { return "hoot::HootApiDbBulkInserter"; }
+  static QString className() { return "HootApiDbBulkInserter"; }
 
   HootApiDbBulkInserter();
   ~HootApiDbBulkInserter();

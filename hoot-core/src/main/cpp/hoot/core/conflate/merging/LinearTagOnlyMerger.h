@@ -45,7 +45,7 @@ class LinearTagOnlyMerger : public LinearSnapMerger
 
 public:
 
-  static QString className() { return "hoot::LinearTagOnlyMerger"; }
+  static QString className() { return "LinearTagOnlyMerger"; }
 
   LinearTagOnlyMerger();
   // This is definitely not ideal to be passing a Network Conflation merger in here like this to

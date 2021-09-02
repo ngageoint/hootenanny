@@ -7,7 +7,7 @@ mkdir -p $HOOT_HOME/tmp/
 mkdir -p test-output/cmd/glacial/NonContiguousRoadReviewsTest
 
 hoot conflate --warn -C ReferenceConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
- -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator \
+ -D match.creators=NetworkMatchCreator -D merger.creators=NetworkMergerCreator \
  test-files/Congo_MGCP_Roads_Bridges_subset.osm \
  test-files/Congo_OSM_Roads_Bridges_subset.osm \
  test-output/cmd/glacial/NonContiguousRoadReviewsTest/output.osm

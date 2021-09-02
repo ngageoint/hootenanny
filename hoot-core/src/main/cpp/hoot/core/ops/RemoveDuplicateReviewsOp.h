@@ -42,7 +42,7 @@ class RemoveDuplicateReviewsOp : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::RemoveDuplicateReviewsOp"; }
+  static QString className() { return "RemoveDuplicateReviewsOp"; }
 
   RemoveDuplicateReviewsOp();
   ~RemoveDuplicateReviewsOp() = default;

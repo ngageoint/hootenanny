@@ -42,7 +42,7 @@ class PoiPolygonAlphaShapeDistanceExtractor : public FeatureExtractorBase
 {
 public:
 
-  static QString className() { return "hoot::PoiPolygonAlphaShapeDistanceExtractor"; }
+  static QString className() { return "PoiPolygonAlphaShapeDistanceExtractor"; }
 
   PoiPolygonAlphaShapeDistanceExtractor() = default;
   ~PoiPolygonAlphaShapeDistanceExtractor() = default;

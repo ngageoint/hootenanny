@@ -45,7 +45,7 @@ class TagInfoCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::TagInfoCmd"; }
+  static QString className() { return "TagInfoCmd"; }
 
   TagInfoCmd() = default;
 

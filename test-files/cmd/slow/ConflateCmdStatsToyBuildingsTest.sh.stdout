@@ -44,7 +44,7 @@ Untagged Features	0	0	0
 Total Unconflatable Features	0	0	0	
 Percentage of Total Features Unconflatable	0	0	0	
 Match Creators	1	1	1	
-Features Conflatable by: hoot::BuildingMatchCreator	10	8	0	
+Features Conflatable by: BuildingMatchCreator	10	8	0	
 Total Conflated Features	0	0	4	
 Percentage of Total Features Conflated	0	0	30.76923076923077	
 Total Features Marked for Review	0	0	0	

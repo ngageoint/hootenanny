@@ -50,7 +50,7 @@ class MultipleMatcherSublineStringMatcher : public SublineStringMatcher
 {
 public:
 
-  static QString className() { return "hoot::MultipleMatcherSublineStringMatcher"; }
+  static QString className() { return "MultipleMatcherSublineStringMatcher"; }
 
   MultipleMatcherSublineStringMatcher();
   MultipleMatcherSublineStringMatcher(

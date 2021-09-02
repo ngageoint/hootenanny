@@ -60,7 +60,7 @@ class SmallHighwayMerger : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::SmallHighwayMerger"; }
+  static QString className() { return "SmallHighwayMerger"; }
 
   SmallHighwayMerger(Meters threshold = -1);
   ~SmallHighwayMerger() = default;

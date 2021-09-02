@@ -42,7 +42,7 @@ class ProjectToGeographicVisitor : public ElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::ProjectToGeographicVisitor"; }
+  static QString className() { return "ProjectToGeographicVisitor"; }
 
   ProjectToGeographicVisitor();
   ~ProjectToGeographicVisitor();

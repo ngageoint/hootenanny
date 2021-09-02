@@ -41,7 +41,7 @@ class RelationWithLinearMembersCriterion : public RelationWithMembersOfTypeCrite
 {
 public:
 
-  static QString className() { return "hoot::RelationWithLinearMembersCriterion"; }
+  static QString className() { return "RelationWithLinearMembersCriterion"; }
 
   RelationWithLinearMembersCriterion();
   RelationWithLinearMembersCriterion(ConstOsmMapPtr map);

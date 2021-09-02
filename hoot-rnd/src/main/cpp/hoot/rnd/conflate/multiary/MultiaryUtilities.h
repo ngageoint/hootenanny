@@ -127,7 +127,7 @@ public:
    * @param againstElement neighbors to compare.
    * @return A list of all matches that have a score > 0.
    */
-  static QList<hoot::MultiarySimpleMatch> findMatches(QByteArray checkElement,
+  static QList<MultiarySimpleMatch> findMatches(QByteArray checkElement,
     QList<QByteArray> againstElements);
 
   std::shared_ptr<SearchBoundsCalculator> getBoundsCalculator();

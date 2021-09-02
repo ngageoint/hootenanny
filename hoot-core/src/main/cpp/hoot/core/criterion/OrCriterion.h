@@ -39,7 +39,7 @@ class OrCriterion : public ChainCriterion
 {
 public:
 
-  static QString className() { return "hoot::OrCriterion"; }
+  static QString className() { return "OrCriterion"; }
 
   OrCriterion() = default;
   OrCriterion(ElementCriterion* child1, ElementCriterion* child2);

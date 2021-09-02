@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
@@ -107,9 +108,7 @@ void TagContainsCriterion::addPair(QString key, QString valueSubstring)
 
 QString TagContainsCriterion::toString() const
 {
-  return
-    className().remove("hoot::") + ":keys:" + _keys.join(",") + ":vals:" +
-    _valueSubstrings.join(",");
+  return className() + ":keys:" + _keys.join(",") + ":vals:" + _valueSubstrings.join(",");
 }
 
 }

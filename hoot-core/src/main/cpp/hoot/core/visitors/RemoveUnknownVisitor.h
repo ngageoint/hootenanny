@@ -40,7 +40,7 @@ class RemoveUnknownVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static QString className() { return "hoot::RemoveUnknownVisitor"; }
+  static QString className() { return "RemoveUnknownVisitor"; }
 
   virtual ~RemoveUnknownVisitor() = default;
 
@@ -69,7 +69,7 @@ class RemoveUnknown1Visitor : public RemoveUnknownVisitor
 {
 public:
 
-  static QString className() { return "hoot::RemoveUnknown1Visitor"; }
+  static QString className() { return "RemoveUnknown1Visitor"; }
 
   RemoveUnknown1Visitor() : RemoveUnknownVisitor(Status::Unknown1) {}
   ~RemoveUnknown1Visitor() = default;
@@ -89,7 +89,7 @@ class RemoveUnknown2Visitor : public RemoveUnknownVisitor
 {
 public:
 
-  static QString className() { return "hoot::RemoveUnknown2Visitor"; }
+  static QString className() { return "RemoveUnknown2Visitor"; }
 
   RemoveUnknown2Visitor() : RemoveUnknownVisitor(Status::Unknown2) {}
   ~RemoveUnknown2Visitor() = default;

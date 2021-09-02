@@ -44,7 +44,7 @@ class AddAttributesVisitor : public MultipleCriterionConsumerVisitor, public Con
 
 public:
 
-  static QString className() { return "hoot::AddAttributesVisitor"; }
+  static QString className() { return "AddAttributesVisitor"; }
 
   AddAttributesVisitor();
   explicit AddAttributesVisitor(const QStringList attributes, const bool negateCriteria = false);

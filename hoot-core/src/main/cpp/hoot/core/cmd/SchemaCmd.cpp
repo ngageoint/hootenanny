@@ -41,7 +41,7 @@ class SchemaCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::SchemaCmd"; }
+  static QString className() { return "SchemaCmd"; }
 
   SchemaCmd() = default;
 

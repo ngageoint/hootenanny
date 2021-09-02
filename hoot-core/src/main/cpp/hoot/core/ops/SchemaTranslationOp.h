@@ -45,7 +45,7 @@ class SchemaTranslationOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::SchemaTranslationOp"; }
+  static QString className() { return "SchemaTranslationOp"; }
 
   SchemaTranslationOp() = default;
   ~SchemaTranslationOp() = default;

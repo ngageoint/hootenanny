@@ -60,7 +60,7 @@ class JavaScriptSchemaTranslator : public ScriptSchemaTranslator,
 {
 public:
 
-  static QString className() { return "hoot::JavaScriptSchemaTranslator"; }
+  static QString className() { return "JavaScriptSchemaTranslator"; }
 
   static int logWarnCount;
 

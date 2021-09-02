@@ -51,7 +51,7 @@ class ElementHashVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static QString className() { return "hoot::ElementHashVisitor"; }
+  static QString className() { return "ElementHashVisitor"; }
 
   ElementHashVisitor();
   ~ElementHashVisitor() = default;

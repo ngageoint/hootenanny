@@ -40,7 +40,7 @@ class ContainsNodeCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::ContainsNodeCriterion"; }
+  static QString className() { return "ContainsNodeCriterion"; }
 
   ContainsNodeCriterion() = default;
   explicit ContainsNodeCriterion(long nodeId);

@@ -119,14 +119,22 @@ private:
       std::make_shared<HootServicesTranslatorMockClient>();
 
     Settings conf;
-    conf.set(ConfigOptions::getLanguageTranslationTranslatorKey(), HootServicesTranslatorClient::className());
+    conf.set(
+      ConfigOptions::getLanguageTranslationTranslatorKey(),
+      HootServicesTranslatorClient::className());
     conf.set(ConfigOptions::getHootServicesAuthHostKey(), "localhost");
     conf.set(ConfigOptions::getHootServicesAuthPortKey(), "8080");
-    conf.set(ConfigOptions::getLanguageTranslationHootServicesTranslatorKey(), "HootLanguageTranslator");
-    conf.set(ConfigOptions::getLanguageHootServicesDetectorsKey(), QStringList("TikaLanguageDetector"));
-    conf.set(ConfigOptions::getLanguageTranslationDetectedLanguageOverridesSpecifiedSourceLanguagesKey(), false);
-    conf.set(ConfigOptions::getLanguageTranslationPerformExhaustiveSearchWithNoDetectionKey(), true);
-    conf.set(ConfigOptions::getLanguageInfoProviderKey(), HootServicesLanguageInfoMockClient::className());
+    conf.set(
+      ConfigOptions::getLanguageTranslationHootServicesTranslatorKey(), "HootLanguageTranslator");
+    conf.set(
+      ConfigOptions::getLanguageHootServicesDetectorsKey(), QStringList("TikaLanguageDetector"));
+    conf.set(
+      ConfigOptions::getLanguageTranslationDetectedLanguageOverridesSpecifiedSourceLanguagesKey(),
+      false);
+    conf.set(
+      ConfigOptions::getLanguageTranslationPerformExhaustiveSearchWithNoDetectionKey(), true);
+    conf.set(
+      ConfigOptions::getLanguageInfoProviderKey(), HootServicesLanguageInfoMockClient::className());
     client->setConfiguration(conf);
 
     QStringList sourceLangs;

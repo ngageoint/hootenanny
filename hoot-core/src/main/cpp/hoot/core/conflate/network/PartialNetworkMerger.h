@@ -44,7 +44,7 @@ class PartialNetworkMerger : public MergerBase, public EidMapper
 {
 public:
 
-  static QString className() { return "hoot::PartialNetworkMerger"; }
+  static QString className() { return "PartialNetworkMerger"; }
 
   PartialNetworkMerger();
   /**

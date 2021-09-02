@@ -59,7 +59,7 @@ bool NetworkMergerCreator::createMergers(
   LOG_TRACE("Creating mergers for match set: " << matchesIn);
 
   QString matchesList = "";
-  if (hoot::Log::Trace == hoot::Log::getInstance().getLevel())
+  if (Log::Trace == Log::getInstance().getLevel())
   {
     for (MatchSet::const_iterator it = matchesIn.begin(); it != matchesIn.end(); ++it)
     {

@@ -43,7 +43,7 @@ class HootServicesTranslatorMockClient : public HootServicesTranslatorClient
 
 public:
 
-  static QString className() { return "hoot::HootServicesTranslatorMockClient"; }
+  static QString className() { return "HootServicesTranslatorMockClient"; }
 
   HootServicesTranslatorMockClient();
   ~HootServicesTranslatorMockClient() = default;

@@ -74,7 +74,7 @@ public:
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(true);
     rawRulesDeriver._translator = std::make_shared<ToEnglishDictionaryTranslator>();
-    rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
+    rawRulesDeriver.setElementCriterion("ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
@@ -100,7 +100,7 @@ public:
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(true);
     rawRulesDeriver._translator = std::make_shared<ToEnglishDictionaryTranslator>();
-    rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
+    rawRulesDeriver.setElementCriterion("ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
@@ -141,7 +141,7 @@ public:
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(true);
     rawRulesDeriver._translator = std::make_shared<ToEnglishDictionaryTranslator>();
-    rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
+    rawRulesDeriver.setElementCriterion("ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver._sortedCountFile = sortedCountFile;
     rawRulesDeriver._removeDuplicatedKeyTypes();
     rawRulesDeriver._resolveCountTies();
@@ -173,7 +173,7 @@ public:
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(true);
     rawRulesDeriver._translator = std::make_shared<ToEnglishDictionaryTranslator>();
-    rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
+    rawRulesDeriver.setElementCriterion("ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
@@ -196,7 +196,7 @@ public:
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(false);
     rawRulesDeriver._translator = std::make_shared<ToEnglishDictionaryTranslator>();
-    rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
+    rawRulesDeriver.setElementCriterion("ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
@@ -219,7 +219,7 @@ public:
 
     try
     {
-      rawRulesDeriver.setElementCriterion("hoot::AreaCriterion");
+      rawRulesDeriver.setElementCriterion("AreaCriterion");
     }
     catch (const HootException& e)
     {
@@ -244,7 +244,7 @@ public:
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("No element type was specified"));
 
-    rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
+    rawRulesDeriver.setElementCriterion("ImplicitTagEligiblePoiPolyCriterion");
     inputs.clear();
     inputs.append(_inputPath + "yemen-crop-2.osm.pbf");
     translationScripts.clear();

@@ -42,7 +42,7 @@ class RandomTagModifier : public ElementVisitor, public RngConsumer, public Conf
 {
 public:
 
-  static QString className() { return "hoot::RandomTagModifier"; }
+  static QString className() { return "RandomTagModifier"; }
 
   RandomTagModifier();
   ~RandomTagModifier() = default;

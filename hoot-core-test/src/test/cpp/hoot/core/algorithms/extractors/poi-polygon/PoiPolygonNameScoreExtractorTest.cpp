@@ -72,7 +72,9 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     settings.set(ConfigOptions::getPoiPolygonNameTranslateToEnglishKey(), "true");
-    settings.set(ConfigOptions::getLanguageTranslationTranslatorKey(), ToEnglishDictionaryTranslator::className());
+    settings.set(
+      ConfigOptions::getLanguageTranslationTranslatorKey(),
+      ToEnglishDictionaryTranslator::className());
     uut.setConfiguration(settings);
     std::shared_ptr<ToEnglishDictionaryTranslator> dictTranslator =
       std::dynamic_pointer_cast<ToEnglishDictionaryTranslator>(
@@ -95,7 +97,7 @@ public:
   // for misc name debug testing only
 //  void miscTest()
 //  {
-//    //conf().set(ConfigOptions::getPoiPolygonStringComparerKey(), "hoot::KskipBigramDistance");
+//    //conf().set(ConfigOptions::getPoiPolygonStringComparerKey(), "KskipBigramDistance");
 //    PoiPolygonNameScoreExtractor uut;
 //    uut.setConfiguration(conf());
 //    OsmMapPtr map = std::make_shared<OsmMap>();

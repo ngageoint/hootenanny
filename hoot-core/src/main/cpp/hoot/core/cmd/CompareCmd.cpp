@@ -52,7 +52,7 @@ class CompareCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::CompareCmd"; }
+  static QString className() { return "CompareCmd"; }
 
   CompareCmd() :
   _disableAttributeScoring(false),

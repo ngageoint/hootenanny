@@ -42,7 +42,7 @@ class BuildModelCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::BuildModelCmd"; }
+  static QString className() { return "BuildModelCmd"; }
 
   BuildModelCmd() = default;
 
@@ -63,12 +63,13 @@ public:
       exportArffOnly = true;
     }
 
+    QString output;
     if (args.size() == 2 && !exportArffOnly)
     {
-      // must be a .arff to .rf conversion
+      // It must be a .arff to .rf conversion.
+      output = args[1];
       ArffToRfConverter::convert(args[0], args[1]);
     }
-    // must be a conversion to .rf from training data
     else if (args.size() < 3 || args.size() % 2 == 0)
     {
       std::cout << getHelp() << std::endl << std::endl;
@@ -79,16 +80,19 @@ public:
     }
     else
     {
+      // It must be a conversion to .rf from training data.
       QStringList inputs;
       for (int i = 0; i < args.size() - 1; i++)
       {
         inputs.append(args.at(i));
       }
-
+      output = args.last();
       RandomForestModelBuilder::build(inputs, args.last(), exportArffOnly);
     }
 
-    LOG_STATUS("Model built in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    LOG_STATUS(
+      "Model: ..." << output.right(25) << " built in " <<
+      StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

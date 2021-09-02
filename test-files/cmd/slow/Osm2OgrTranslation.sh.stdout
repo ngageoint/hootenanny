@@ -1,49 +1,4 @@
 #### Shapefile Output ####
-19:14:51.243 DEBUG  ...pp/hoot/core/util/Settings.cpp( 594) Loading Testing.conf...
-19:14:51.243 DEBUG  .../hoot/core/cmd/BaseCommand.cpp( 120) inputFilters: [0]{}
-19:14:51.243 DEBUG  ...p/hoot/core/cmd/ConvertCmd.cpp( 106) output: test-output/cmd/slow/Osm2OgrTranslation/output.shp
-19:14:51.243 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Converting ...files/io/SampleTranslation.osm to .../Osm2OgrTranslation/output.shp...
-19:14:51.244 DEBUG  ...n/cpp/hoot/core/io/IoUtils.cpp( 324) ops: [0]{}
-19:14:51.244 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 106) url: test-output/cmd/slow/Osm2OgrTranslation/output.shp
-19:14:51.244 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 108) names.size(): 13
-19:14:51.250 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 1
-19:14:51.251 DEBUG  ...hoot/core/util/IdGenerator.cpp(  42) ConfigOptions().getIdGenerator(): hoot::DefaultIdGenerator
-19:14:51.254 DEBUG  ...ore/io/OsmMapReaderFactory.cpp(  79) Using input reader: hoot::OsmXmlReader
-19:14:51.254 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 0
-19:14:51.254 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 210) OgrUtilities::getInstance().isReasonableUrl(url): 1
-19:14:51.254 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  88) Using output writer: hoot::OgrWriter
-19:14:51.254 DEBUG  ...hoot/core/io/DataConverter.cpp( 122) isStreamable: 1
-19:14:51.254 DEBUG  ...hoot/core/io/DataConverter.cpp( 201) _convert
-19:14:51.254 DEBUG  ...hoot/core/io/DataConverter.cpp( 518) shp
-19:14:51.254 INFO   ...ot/core/schema/SchemaUtils.cpp(  66) No translation direction specified. Assuming 'toogr' based on output format...
-19:14:51.254 DEBUG  ...hoot/core/io/DataConverter.cpp( 228) _shapeFileColumnsSpecified(): 0
-19:14:51.254 DEBUG  ...n/cpp/hoot/core/io/IoUtils.cpp( 324) ops: [0]{}
-19:14:51.254 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 106) url: test-output/cmd/slow/Osm2OgrTranslation/output.shp
-19:14:51.254 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 108) names.size(): 13
-19:14:51.254 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 1
-19:14:51.255 DEBUG  ...ore/io/OsmMapReaderFactory.cpp(  79) Using input reader: hoot::OsmXmlReader
-19:14:51.255 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 0
-19:14:51.255 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 210) OgrUtilities::getInstance().isReasonableUrl(url): 1
-19:14:51.255 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  88) Using output writer: hoot::OgrWriter
-19:14:51.255 DEBUG  ...hoot/core/io/DataConverter.cpp( 234) isStreamable: 1
-19:14:51.256 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 0
-19:14:51.256 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 210) OgrUtilities::getInstance().isReasonableUrl(url): 1
-19:14:51.256 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  88) Using output writer: hoot::OgrWriter
-19:14:51.256 DEBUG  ...iptSchemaTranslatorFactory.cpp(  57) scriptPath: test-files/io/SampleTranslation.js
-19:14:51.256 INFO   ...JavaScriptSchemaTranslator.cpp( 213) Loading translation script: test-files/io/SampleTranslation.js...
-19:14:51.260 DEBUG  ...JavaScriptSchemaTranslator.cpp( 259) Translation script loaded.
-19:14:51.261 STATUS ...pp/hoot/core/util/Progress.cpp( 115) Convert (0%): Streaming data conversion from ...test-files/io/SampleTranslation.osm to ...test-output/cmd/slow/Osm2OgrTranslation/output.shp...
-19:14:51.262 DEBUG  ...ore/io/OsmMapReaderFactory.cpp(  79) Using input reader: hoot::OsmXmlReader
-19:14:51.262 DEBUG  ...ot/core/io/ElementStreamer.cpp( 116) convertOps: [0]{}
-19:14:51.263 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1792) Loading translation files...
-19:14:51.304 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1794) Translation files loaded.
-19:14:51.304 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: PAL015 not found.  Creating layer...
-19:14:51.306 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: AAL015 not found.  Creating layer...
-19:14:51.306 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: LAP010 not found.  Creating layer...
-19:14:51.307 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: LAP030 not found.  Creating layer...
-19:14:51.308 INFO   ...ot/core/io/ElementStreamer.cpp( 135) Streamed 23 elements in: 00:00.
-19:14:51.308 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (100%): Converted ...files/io/SampleTranslation.osm to: .../Osm2OgrTranslation/output.shp
-19:14:51.308 STATUS ...p/hoot/core/cmd/ConvertCmd.cpp( 143) Data conversion completed in 00:00.
 AAL015
 
 Layer name: AAL015
@@ -92,51 +47,6 @@ OGRFeature(PAL015):0
  ARA (Real) = -999999.000000000000000
  POINT : 
 #### FileGDB Output ####
-19:14:51.978 DEBUG  ...pp/hoot/core/util/Settings.cpp( 594) Loading Testing.conf...
-19:14:51.978 DEBUG  .../hoot/core/cmd/BaseCommand.cpp( 120) inputFilters: [0]{}
-19:14:51.978 DEBUG  ...p/hoot/core/cmd/ConvertCmd.cpp( 106) output: test-output/cmd/slow/Osm2OgrTranslation/output.gdb
-19:14:51.978 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Converting ...files/io/SampleTranslation.osm to .../Osm2OgrTranslation/output.gdb...
-19:14:51.979 DEBUG  ...n/cpp/hoot/core/io/IoUtils.cpp( 324) ops: [0]{}
-19:14:51.979 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 106) url: test-output/cmd/slow/Osm2OgrTranslation/output.gdb
-19:14:51.979 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 108) names.size(): 13
-19:14:51.985 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 1
-19:14:51.985 DEBUG  ...hoot/core/util/IdGenerator.cpp(  42) ConfigOptions().getIdGenerator(): hoot::DefaultIdGenerator
-19:14:51.988 DEBUG  ...ore/io/OsmMapReaderFactory.cpp(  79) Using input reader: hoot::OsmXmlReader
-19:14:51.988 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 0
-19:14:51.988 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 210) OgrUtilities::getInstance().isReasonableUrl(url): 1
-19:14:51.988 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  88) Using output writer: hoot::OgrWriter
-19:14:51.988 DEBUG  ...hoot/core/io/DataConverter.cpp( 122) isStreamable: 1
-19:14:51.988 DEBUG  ...hoot/core/io/DataConverter.cpp( 201) _convert
-19:14:51.988 DEBUG  ...hoot/core/io/DataConverter.cpp( 518) gdb
-19:14:51.988 INFO   ...ot/core/schema/SchemaUtils.cpp(  66) No translation direction specified. Assuming 'toogr' based on output format...
-19:14:51.988 DEBUG  ...hoot/core/io/DataConverter.cpp( 228) _shapeFileColumnsSpecified(): 0
-19:14:51.989 DEBUG  ...n/cpp/hoot/core/io/IoUtils.cpp( 324) ops: [0]{}
-19:14:51.989 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 106) url: test-output/cmd/slow/Osm2OgrTranslation/output.gdb
-19:14:51.989 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 108) names.size(): 13
-19:14:51.989 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 1
-19:14:51.989 DEBUG  ...ore/io/OsmMapReaderFactory.cpp(  79) Using input reader: hoot::OsmXmlReader
-19:14:51.989 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 0
-19:14:51.989 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 210) OgrUtilities::getInstance().isReasonableUrl(url): 1
-19:14:51.989 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  88) Using output writer: hoot::OgrWriter
-19:14:51.989 DEBUG  ...hoot/core/io/DataConverter.cpp( 234) isStreamable: 1
-19:14:51.990 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 0
-19:14:51.990 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 210) OgrUtilities::getInstance().isReasonableUrl(url): 1
-19:14:51.990 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  88) Using output writer: hoot::OgrWriter
-19:14:51.990 DEBUG  ...iptSchemaTranslatorFactory.cpp(  57) scriptPath: test-files/io/SampleTranslation.js
-19:14:51.990 INFO   ...JavaScriptSchemaTranslator.cpp( 213) Loading translation script: test-files/io/SampleTranslation.js...
-19:14:51.995 DEBUG  ...JavaScriptSchemaTranslator.cpp( 259) Translation script loaded.
-19:14:52.021 STATUS ...pp/hoot/core/util/Progress.cpp( 115) Convert (0%): Streaming data conversion from ...test-files/io/SampleTranslation.osm to ...test-output/cmd/slow/Osm2OgrTranslation/output.gdb...
-19:14:52.021 DEBUG  ...ore/io/OsmMapReaderFactory.cpp(  79) Using input reader: hoot::OsmXmlReader
-19:14:52.021 DEBUG  ...ot/core/io/ElementStreamer.cpp( 116) convertOps: [0]{}
-19:14:52.022 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1792) Loading translation files...
-19:14:52.060 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1794) Translation files loaded.
-19:14:52.061 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: PAL015 not found.  Creating layer...
-19:14:52.083 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: AAL015 not found.  Creating layer...
-19:14:52.103 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: LAP010 not found.  Creating layer...
-19:14:52.127 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: LAP030 not found.  Creating layer...
-19:14:52.156 INFO   ...ot/core/io/ElementStreamer.cpp( 135) Streamed 23 elements in: 00:00.
-19:14:52.157 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (100%): Converted ...files/io/SampleTranslation.osm to: .../Osm2OgrTranslation/output.gdb
-19:14:52.157 STATUS ...p/hoot/core/cmd/ConvertCmd.cpp( 143) Data conversion completed in 00:00.
 AAL015
 
 Layer name: AAL015
@@ -181,98 +91,6 @@ OGRFeature(PAL015):1
  ARA (Real) = -999999
  POINT : 
 #### Test prepending layer names and lazy layer creation ####
-19:14:52.862 DEBUG  ...pp/hoot/core/util/Settings.cpp( 594) Loading Testing.conf...
-19:14:52.862 DEBUG  .../hoot/core/cmd/BaseCommand.cpp( 120) inputFilters: [0]{}
-19:14:52.862 DEBUG  ...p/hoot/core/cmd/ConvertCmd.cpp( 106) output: test-output/cmd/slow/Osm2OgrTranslation/options.shp
-19:14:52.863 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Converting ...files/io/SampleTranslation.osm to ...Osm2OgrTranslation/options.shp...
-19:14:52.863 DEBUG  ...n/cpp/hoot/core/io/IoUtils.cpp( 324) ops: [0]{}
-19:14:52.863 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 106) url: test-output/cmd/slow/Osm2OgrTranslation/options.shp
-19:14:52.863 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 108) names.size(): 13
-19:14:52.869 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 1
-19:14:52.870 DEBUG  ...hoot/core/util/IdGenerator.cpp(  42) ConfigOptions().getIdGenerator(): hoot::DefaultIdGenerator
-19:14:52.873 DEBUG  ...ore/io/OsmMapReaderFactory.cpp(  79) Using input reader: hoot::OsmXmlReader
-19:14:52.873 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 0
-19:14:52.873 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 210) OgrUtilities::getInstance().isReasonableUrl(url): 1
-19:14:52.873 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  88) Using output writer: hoot::OgrWriter
-19:14:52.873 DEBUG  ...hoot/core/io/DataConverter.cpp( 122) isStreamable: 1
-19:14:52.873 DEBUG  ...hoot/core/io/DataConverter.cpp( 201) _convert
-19:14:52.873 DEBUG  ...hoot/core/io/DataConverter.cpp( 518) shp
-19:14:52.873 INFO   ...ot/core/schema/SchemaUtils.cpp(  66) No translation direction specified. Assuming 'toogr' based on output format...
-19:14:52.873 DEBUG  ...hoot/core/io/DataConverter.cpp( 228) _shapeFileColumnsSpecified(): 0
-19:14:52.873 DEBUG  ...n/cpp/hoot/core/io/IoUtils.cpp( 324) ops: [0]{}
-19:14:52.873 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 106) url: test-output/cmd/slow/Osm2OgrTranslation/options.shp
-19:14:52.873 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 108) names.size(): 13
-19:14:52.874 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 1
-19:14:52.874 DEBUG  ...ore/io/OsmMapReaderFactory.cpp(  79) Using input reader: hoot::OsmXmlReader
-19:14:52.874 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 0
-19:14:52.874 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 210) OgrUtilities::getInstance().isReasonableUrl(url): 1
-19:14:52.874 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  88) Using output writer: hoot::OgrWriter
-19:14:52.874 DEBUG  ...hoot/core/io/DataConverter.cpp( 234) isStreamable: 1
-19:14:52.875 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 0
-19:14:52.875 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 210) OgrUtilities::getInstance().isReasonableUrl(url): 1
-19:14:52.875 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  88) Using output writer: hoot::OgrWriter
-19:14:52.875 DEBUG  ...iptSchemaTranslatorFactory.cpp(  57) scriptPath: test-files/io/SampleTranslation.js
-19:14:52.875 INFO   ...JavaScriptSchemaTranslator.cpp( 213) Loading translation script: test-files/io/SampleTranslation.js...
-19:14:52.880 DEBUG  ...JavaScriptSchemaTranslator.cpp( 259) Translation script loaded.
-19:14:52.881 STATUS ...pp/hoot/core/util/Progress.cpp( 115) Convert (0%): Streaming data conversion from ...test-files/io/SampleTranslation.osm to ...test-output/cmd/slow/Osm2OgrTranslation/options.shp...
-19:14:52.881 DEBUG  ...ore/io/OsmMapReaderFactory.cpp(  79) Using input reader: hoot::OsmXmlReader
-19:14:52.881 DEBUG  ...ot/core/io/ElementStreamer.cpp( 116) convertOps: [0]{}
-19:14:52.882 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1792) Loading translation files...
-19:14:52.922 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1794) Translation files loaded.
-19:14:52.922 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: bar_PAL015 not found.  Creating layer...
-19:14:52.924 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: bar_AAL015 not found.  Creating layer...
-19:14:52.924 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: bar_LAP010 not found.  Creating layer...
-19:14:52.925 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: bar_LAP030 not found.  Creating layer...
-19:14:52.926 INFO   ...ot/core/io/ElementStreamer.cpp( 135) Streamed 23 elements in: 00:00.
-19:14:52.926 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (100%): Converted ...files/io/SampleTranslation.osm to: ...Osm2OgrTranslation/options.shp
-19:14:52.926 STATUS ...p/hoot/core/cmd/ConvertCmd.cpp( 143) Data conversion completed in 00:00.
-19:14:53.239 DEBUG  ...pp/hoot/core/util/Settings.cpp( 594) Loading Testing.conf...
-19:14:53.240 DEBUG  .../hoot/core/cmd/BaseCommand.cpp( 120) inputFilters: [0]{}
-19:14:53.240 DEBUG  ...p/hoot/core/cmd/ConvertCmd.cpp( 106) output: test-output/cmd/slow/Osm2OgrTranslation/options.shp
-19:14:53.240 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Converting ...files/io/SampleTranslation.osm to ...Osm2OgrTranslation/options.shp...
-19:14:53.240 DEBUG  ...n/cpp/hoot/core/io/IoUtils.cpp( 324) ops: [0]{}
-19:14:53.240 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 106) url: test-output/cmd/slow/Osm2OgrTranslation/options.shp
-19:14:53.241 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 108) names.size(): 13
-19:14:53.247 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 1
-19:14:53.248 DEBUG  ...hoot/core/util/IdGenerator.cpp(  42) ConfigOptions().getIdGenerator(): hoot::DefaultIdGenerator
-19:14:53.250 DEBUG  ...ore/io/OsmMapReaderFactory.cpp(  79) Using input reader: hoot::OsmXmlReader
-19:14:53.251 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 0
-19:14:53.251 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 210) OgrUtilities::getInstance().isReasonableUrl(url): 1
-19:14:53.251 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  88) Using output writer: hoot::OgrWriter
-19:14:53.251 DEBUG  ...hoot/core/io/DataConverter.cpp( 122) isStreamable: 1
-19:14:53.251 DEBUG  ...hoot/core/io/DataConverter.cpp( 201) _convert
-19:14:53.251 DEBUG  ...hoot/core/io/DataConverter.cpp( 518) shp
-19:14:53.251 INFO   ...ot/core/schema/SchemaUtils.cpp(  66) No translation direction specified. Assuming 'toogr' based on output format...
-19:14:53.251 DEBUG  ...hoot/core/io/DataConverter.cpp( 228) _shapeFileColumnsSpecified(): 0
-19:14:53.251 DEBUG  ...n/cpp/hoot/core/io/IoUtils.cpp( 324) ops: [0]{}
-19:14:53.251 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 106) url: test-output/cmd/slow/Osm2OgrTranslation/options.shp
-19:14:53.251 DEBUG  ...ore/io/OsmMapWriterFactory.cpp( 108) names.size(): 13
-19:14:53.251 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 1
-19:14:53.252 DEBUG  ...ore/io/OsmMapReaderFactory.cpp(  79) Using input reader: hoot::OsmXmlReader
-19:14:53.252 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 0
-19:14:53.252 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 210) OgrUtilities::getInstance().isReasonableUrl(url): 1
-19:14:53.252 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  88) Using output writer: hoot::OgrWriter
-19:14:53.252 DEBUG  ...hoot/core/io/DataConverter.cpp( 234) isStreamable: 1
-19:14:53.253 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 205) _scriptPath.isEmpty(): 0
-19:14:53.253 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 210) OgrUtilities::getInstance().isReasonableUrl(url): 1
-19:14:53.253 DEBUG  ...ore/io/OsmMapWriterFactory.cpp(  88) Using output writer: hoot::OgrWriter
-19:14:53.253 DEBUG  ...iptSchemaTranslatorFactory.cpp(  57) scriptPath: test-files/io/SampleTranslation.js
-19:14:53.253 INFO   ...JavaScriptSchemaTranslator.cpp( 213) Loading translation script: test-files/io/SampleTranslation.js...
-19:14:53.257 DEBUG  ...JavaScriptSchemaTranslator.cpp( 259) Translation script loaded.
-19:14:53.258 INFO   ...cpp/hoot/core/io/OgrWriter.cpp( 554) Creating all layers...
-19:14:53.258 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: foo_AAL015 not found.  Creating layer...
-19:14:53.259 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: foo_LAP010 not found.  Creating layer...
-19:14:53.260 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: foo_LAP020 not found.  Creating layer...
-19:14:53.260 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: foo_LAP030 not found.  Creating layer...
-19:14:53.260 DEBUG  ...cpp/hoot/core/io/OgrWriter.cpp( 653) Layer: foo_PAL015 not found.  Creating layer...
-19:14:53.261 STATUS ...pp/hoot/core/util/Progress.cpp( 115) Convert (0%): Streaming data conversion from ...test-files/io/SampleTranslation.osm to ...test-output/cmd/slow/Osm2OgrTranslation/options.shp...
-19:14:53.261 DEBUG  ...ore/io/OsmMapReaderFactory.cpp(  79) Using input reader: hoot::OsmXmlReader
-19:14:53.261 DEBUG  ...ot/core/io/ElementStreamer.cpp( 116) convertOps: [0]{}
-19:14:53.262 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1792) Loading translation files...
-19:14:53.302 DEBUG  ...hoot/core/schema/OsmSchema.cpp(1794) Translation files loaded.
-19:14:53.304 INFO   ...ot/core/io/ElementStreamer.cpp( 135) Streamed 23 elements in: 00:00.
-19:14:53.304 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (100%): Converted ...files/io/SampleTranslation.osm to: ...Osm2OgrTranslation/options.shp
-19:14:53.304 STATUS ...p/hoot/core/cmd/ConvertCmd.cpp( 143) Data conversion completed in 00:00.
 bar_AAL015
 
 Layer name: bar_AAL015
@@ -373,25 +191,10 @@ OGRFeature(foo_PAL015):0
  ARA (Real) = -999999.000000000000000
  POINT : 
 #### Test to make sure all layers are read from a data source. ####
-19:14:54.420 WARN   ...cpp/hoot/core/io/OgrWriter.cpp( 760) Truncating the tags attribute (479 characters) to the output field width (254 characters).
-19:14:54.428 WARN   ...cpp/hoot/core/io/OgrWriter.cpp( 760) Truncating the tags attribute (370 characters) to the output field width (254 characters).
-19:14:54.437 WARN   ...cpp/hoot/core/io/OgrWriter.cpp( 760) Truncating the tags attribute (428 characters) to the output field width (254 characters).
-19:14:54.438 WARN   ...cpp/hoot/core/io/OgrWriter.cpp( 764) hoot::OgrWriter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
-19:14:54.761 STATUS ...cpp/hoot/core/cmd/StatsCmd.cpp( 130) Reading from: ...cmd/slow/delaware-tds.shp...
-19:14:54.832 STATUS ...ore/io/OsmMapReaderFactory.cpp( 192) Read 5,696 elements from input in: 00:00.
-19:14:54.974 STATUS ...cpp/hoot/core/cmd/StatsCmd.cpp( 136) Calculating statistics for map 1 of 1: cmd/slow/delaware-tds.shp...
-19:14:54.975 STATUS .../core/ops/CalculateStatsOp.cpp( 336) Performing 9 map statistic calculations...
-19:14:54.975 STATUS .../core/ops/CalculateStatsOp.cpp( 804) Calculating statistic: Nodes (1/9) ...
-19:14:54.976 STATUS .../core/ops/CalculateStatsOp.cpp( 804) Calculating statistic: Ways (2/9) ...
-19:14:54.976 STATUS .../core/ops/CalculateStatsOp.cpp( 804) Calculating statistic: Relations (3/9) ...
-19:14:54.977 STATUS .../core/ops/CalculateStatsOp.cpp( 804) Calculating statistic: Minimum Node ID (4/9) ...
-19:14:54.977 STATUS .../core/ops/CalculateStatsOp.cpp( 804) Calculating statistic: Maximum Node ID (5/9) ...
-19:14:54.977 STATUS .../core/ops/CalculateStatsOp.cpp( 804) Calculating statistic: Minimum Way ID (6/9) ...
-19:14:54.978 STATUS .../core/ops/CalculateStatsOp.cpp( 804) Calculating statistic: Maximum Way ID (7/9) ...
-19:14:54.978 STATUS .../core/ops/CalculateStatsOp.cpp( 804) Calculating statistic: Minimum Relation ID (8/9) ...
-19:14:54.978 STATUS .../core/ops/CalculateStatsOp.cpp( 804) Calculating statistic: Maximum Relation ID (9/9) ...
-19:14:54.978 STATUS ...cpp/hoot/core/cmd/StatsCmd.cpp( 145) Statistics calculated for map 1 of 1: cmd/slow/delaware-tds.shp in 00:00
-19:14:54.979 STATUS ...cpp/hoot/core/cmd/StatsCmd.cpp( 159) Writing statistics output to string...
+18:14:25.542 WARN   ...cpp/hoot/core/io/OgrWriter.cpp( 752) Truncating the tags attribute (479 characters) to the output field width (254 characters).
+18:14:25.549 WARN   ...cpp/hoot/core/io/OgrWriter.cpp( 752) Truncating the tags attribute (370 characters) to the output field width (254 characters).
+18:14:25.558 WARN   ...cpp/hoot/core/io/OgrWriter.cpp( 752) Truncating the tags attribute (428 characters) to the output field width (254 characters).
+18:14:25.559 WARN   ...cpp/hoot/core/io/OgrWriter.cpp( 756) OgrWriter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 Stat Name	test-output/cmd/slow/delaware-tds.shp
 Nodes	5664
 Ways	32
@@ -402,4 +205,3 @@ Minimum Way ID	-32
 Maximum Way ID	-1
 Minimum Relation ID	9.223372036854776e+18
 Maximum Relation ID	-9.223372036854776e+18
-19:14:54.979 STATUS ...cpp/hoot/core/cmd/StatsCmd.cpp( 166) Map statistics calculated in 00:00 total.

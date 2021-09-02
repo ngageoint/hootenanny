@@ -46,7 +46,7 @@ class AlphaShapeGenerator
 {
 public:
 
-  static QString className() { return "hoot::AlphaShapeGenerator"; }
+  static QString className() { return "AlphaShapeGenerator"; }
 
   /**
    * @brief AlphaShapeGenerator Constructor

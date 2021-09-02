@@ -45,7 +45,7 @@ class HelpCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::HelpCmd"; }
+  static QString className() { return "HelpCmd"; }
 
   QString getName() const override { return "help"; }
   QString getDescription() const override { return "Displays help documentation"; }

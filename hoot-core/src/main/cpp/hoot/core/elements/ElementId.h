@@ -103,7 +103,7 @@ inline std::ostream& operator<<(std::ostream& o, const ElementId& eid)
 /**
  * The qHash function supports Qt's QHash collection class.
  */
-inline uint qHash(const hoot::ElementId& eid)
+inline uint qHash(const ElementId& eid)
 {
   // XOR the enum values with the top bits in the id. The top bits in the id are usually empty, or
   // FFFF if it is a negative value.
@@ -112,7 +112,7 @@ inline uint qHash(const hoot::ElementId& eid)
   return uint(((key >> (8 * sizeof(uint) - 1)) ^ key) & (~0U));
 }
 
-inline uint qHash(const std::pair<hoot::ElementId, hoot::ElementId>& peid)
+inline uint qHash(const std::pair<ElementId, ElementId>& peid)
 {
   return Tgs::cantorPairing(qHash(peid.first), qHash(peid.second));
 }

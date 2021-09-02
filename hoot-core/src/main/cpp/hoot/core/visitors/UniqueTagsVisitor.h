@@ -40,7 +40,7 @@ class UniqueTagsVisitor : public ConstElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::UniqueTagsVisitor"; }
+  static QString className() { return "UniqueTagsVisitor"; }
 
   UniqueTagsVisitor() = default;
   ~UniqueTagsVisitor() = default;

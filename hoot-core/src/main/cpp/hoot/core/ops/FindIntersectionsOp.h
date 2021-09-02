@@ -43,7 +43,7 @@ class FindIntersectionsOp : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::FindIntersectionsOp"; }
+  static QString className() { return "FindIntersectionsOp"; }
 
   static QString opsKey() { return "map.cleaner.transforms"; }
 
@@ -72,7 +72,7 @@ public:
   FindHighwayIntersectionsOp() = default;
   ~FindHighwayIntersectionsOp() = default;
 
-  static QString className() { return "hoot::FindHighwayIntersectionsOp"; }
+  static QString className() { return "FindHighwayIntersectionsOp"; }
 
   std::shared_ptr<FindIntersectionsVisitor> createVisitor() override;
 
@@ -91,7 +91,7 @@ public:
   FindRailwayIntersectionsOp() = default;
   ~FindRailwayIntersectionsOp() = default;
 
-  static QString className() { return "hoot::FindRailwayIntersectionsOp"; }
+  static QString className() { return "FindRailwayIntersectionsOp"; }
 
   std::shared_ptr<FindIntersectionsVisitor> createVisitor() override;
 

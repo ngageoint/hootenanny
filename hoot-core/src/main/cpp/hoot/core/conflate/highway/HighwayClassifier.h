@@ -39,20 +39,24 @@ class HighwayClassifier
 {
 public:
 
+  static QString className() { return "HighwayClassifier"; }
+
   HighwayClassifier() = default;
   virtual ~HighwayClassifier() = default;
-
-  static QString className() { return "hoot::HighwayClassifier"; }
 
   /**
    * Classifies the match type of a subline match and returns the results.
    */
-  virtual MatchClassification classify(const ConstOsmMapPtr& map,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) = 0;
+  virtual MatchClassification classify(
+    const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2,
+    const WaySublineMatchString& match) = 0;
 
-  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const = 0;
-
+  /**
+   * See note in MatchDetails::getFeatures about the return type of this method.
+   */
+  virtual std::map<QString, double> getFeatures(
+    const ConstOsmMapPtr& m, ElementId eid1, ElementId eid2,
+    const WaySublineMatchString& match) const = 0;
 };
 
 }

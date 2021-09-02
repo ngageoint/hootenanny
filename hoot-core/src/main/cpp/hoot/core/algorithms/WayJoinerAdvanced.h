@@ -46,7 +46,7 @@ class WayJoinerAdvanced : public WayJoiner
 {
 public:
 
-  static QString className() { return "hoot::WayJoinerAdvanced"; }
+  static QString className() { return "WayJoinerAdvanced"; }
 
   enum JoinAtNodeMergeType
   {

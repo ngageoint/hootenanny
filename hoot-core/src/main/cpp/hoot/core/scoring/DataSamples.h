@@ -51,7 +51,6 @@ public:
   std::shared_ptr<Tgs::DataFrame> toDataFrame(double nullValue) const;
 
   const Sample& get(size_t i) const { return operator[](i); }
-
 };
 
 }

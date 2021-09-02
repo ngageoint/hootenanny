@@ -41,7 +41,7 @@ class RelationWithBuildingMembersCriterion : public RelationWithMembersOfTypeCri
 {
 public:
 
-  static QString className() { return "hoot::RelationWithBuildingMembersCriterion"; }
+  static QString className() { return "RelationWithBuildingMembersCriterion"; }
 
   RelationWithBuildingMembersCriterion();
   RelationWithBuildingMembersCriterion(ConstOsmMapPtr map);

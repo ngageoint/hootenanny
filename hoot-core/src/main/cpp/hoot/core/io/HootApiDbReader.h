@@ -42,7 +42,7 @@ class HootApiDbReader : public ApiDbReader
 {
 public:
 
-  static QString className() { return "hoot::HootApiDbReader"; }
+  static QString className() { return "HootApiDbReader"; }
 
   HootApiDbReader();
 

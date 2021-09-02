@@ -41,7 +41,7 @@ class RemoveWayByEid : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::RemoveWayByEid"; }
+  static QString className() { return "RemoveWayByEid"; }
 
   /**
    * Constructor

@@ -52,7 +52,7 @@ class DuplicateNodeRemover : public OsmMapOperation, public ConflateInfoCacheCon
 {
 public:
 
-  static QString className() { return "hoot::DuplicateNodeRemover"; }
+  static QString className() { return "DuplicateNodeRemover"; }
 
   DuplicateNodeRemover(Meters distanceThreshold = -1.0);
   ~DuplicateNodeRemover() = default;

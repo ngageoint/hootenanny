@@ -42,7 +42,7 @@ class RandomElementRenamer : public ElementVisitor, public RngConsumer, public C
 {
 public:
 
-  static QString className() { return "hoot::RandomElementRenamer"; }
+  static QString className() { return "RandomElementRenamer"; }
 
   RandomElementRenamer();
   ~RandomElementRenamer() = default;

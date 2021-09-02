@@ -58,7 +58,7 @@ void ArffWriter::_w(const QString& s)
   (*_strm) << s.toUtf8().data() << endl;
 }
 
-void ArffWriter::write(const vector<Sample> &samples)
+void ArffWriter::write(const vector<Sample>& samples)
 {
   QString msg = "Writing attribute-relation model file";
   if (!_path.isEmpty())

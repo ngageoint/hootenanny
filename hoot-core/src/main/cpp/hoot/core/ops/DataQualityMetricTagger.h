@@ -47,7 +47,7 @@ class DataQualityMetricTagger : public OsmMapOperation, public Boundable
 {
 public:
 
-  static QString className() { return "hoot::DataQualityMetricTagger"; }
+  static QString className() { return "DataQualityMetricTagger"; }
 
   DataQualityMetricTagger();
   ~DataQualityMetricTagger() = default;

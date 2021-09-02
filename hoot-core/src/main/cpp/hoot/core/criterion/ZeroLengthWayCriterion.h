@@ -42,7 +42,7 @@ class ZeroLengthWayCriterion : public WayNodeCountCriterion
 {
 public:
 
-  static QString className() { return "hoot::ZeroLengthWayCriterion"; }
+  static QString className() { return "ZeroLengthWayCriterion"; }
 
   ZeroLengthWayCriterion();
   ~ZeroLengthWayCriterion() = default;

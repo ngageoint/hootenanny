@@ -38,7 +38,7 @@ GENERAL_OPTS="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf -C Testing.c
 DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999" 
 BOUNDS="-117.729492166,40.9881915574,-117.718505838,40.996484138672"
 # The match/merger creators added here are the only difference between this scenario and scenario 1.
-CONFLATE_OPTS="-D match.creators=hoot::ScriptMatchCreator,River.js;hoot::ScriptMatchCreator,Relation.js -D merger.creators=hoot::ScriptMergerCreator;hoot::ScriptMergerCreator -D bounds=$BOUNDS -D bounds.output.file=$OUTPUT_DIR/bounds.osm"
+CONFLATE_OPTS="-D match.creators=ScriptMatchCreator,River.js;ScriptMatchCreator,Relation.js -D merger.creators=ScriptMergerCreator;ScriptMergerCreator -D bounds=$BOUNDS -D bounds.output.file=$OUTPUT_DIR/bounds.osm"
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds=$BOUNDS"
 
 DEBUG=false

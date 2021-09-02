@@ -42,7 +42,7 @@ class RelationMemberSwapper : public ConstOsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::RelationMemberSwapper"; }
+  static QString className() { return "RelationMemberSwapper"; }
 
   RelationMemberSwapper();
   RelationMemberSwapper(

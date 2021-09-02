@@ -43,7 +43,7 @@ class JsFunctionCriterion : public ElementCriterion, public JsFunctionConsumer
 {
 public:
 
-  static QString className() { return "hoot::JsFunctionCriterion"; }
+  static QString className() { return "JsFunctionCriterion"; }
 
   JsFunctionCriterion() = default;
   JsFunctionCriterion(const v8::Persistent<v8::Function>& func)

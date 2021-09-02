@@ -41,7 +41,7 @@ class CookieCutter
 {
 public:
 
-  static QString className() { return "hoot::CookieCutter"; }
+  static QString className() { return "CookieCutter"; }
 
   CookieCutter(bool crop, double outputBuffer = 0.0, bool keepEntireFeaturesCrossingBounds = false,
                bool keepOnlyFeaturesInsideBounds = false, bool removeMissingElements = true);

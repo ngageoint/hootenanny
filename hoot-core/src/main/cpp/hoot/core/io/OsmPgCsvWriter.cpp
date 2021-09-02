@@ -182,7 +182,7 @@ void OsmPgCsvWriter::write(const ConstOsmMapPtr& map)
     writePartial(map->getRelation(ids[i]));
 }
 
-void OsmPgCsvWriter::writePartial(const hoot::ConstNodePtr& n)
+void OsmPgCsvWriter::writePartial(const ConstNodePtr& n)
 {
   //  Node
   //  node_id,latitude,longitude,changeset_id,visible,timestamp,version,tags
@@ -197,7 +197,7 @@ void OsmPgCsvWriter::writePartial(const hoot::ConstNodePtr& n)
       << _getTags(n) << _endl;
 }
 
-void OsmPgCsvWriter::writePartial(const hoot::ConstWayPtr& w)
+void OsmPgCsvWriter::writePartial(const ConstWayPtr& w)
 {
   //  Way
   //  way_id,changeset_id,timestamp,version,visible,tags
@@ -220,7 +220,7 @@ void OsmPgCsvWriter::writePartial(const hoot::ConstWayPtr& w)
   }
 }
 
-void OsmPgCsvWriter::writePartial(const hoot::ConstRelationPtr& r)
+void OsmPgCsvWriter::writePartial(const ConstRelationPtr& r)
 {
   //  Relation
   //  relation_id,changeset_id,timestamp,version,visible,tags

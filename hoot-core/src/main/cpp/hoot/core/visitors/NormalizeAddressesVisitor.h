@@ -42,7 +42,7 @@ class NormalizeAddressesVisitor : public ElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::NormalizeAddressesVisitor"; }
+  static QString className() { return "NormalizeAddressesVisitor"; }
 
   NormalizeAddressesVisitor() = default;
   ~NormalizeAddressesVisitor() = default;

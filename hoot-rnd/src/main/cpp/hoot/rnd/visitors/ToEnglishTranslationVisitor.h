@@ -45,7 +45,7 @@ class ToEnglishTranslationVisitor : public ElementVisitor, public Configurable
 
 public:
 
-  static QString className() { return "hoot::ToEnglishTranslationVisitor"; }
+  static QString className() { return "ToEnglishTranslationVisitor"; }
 
   ToEnglishTranslationVisitor();
   virtual ~ToEnglishTranslationVisitor();

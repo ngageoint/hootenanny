@@ -45,7 +45,7 @@ public:
   static const QString MAX_AREA_PARAM;
   static const QString MAX_LENGTH_PARAM;
 
-  static QString className() { return "hoot::CollapsePolyGeoModifierAction"; }
+  static QString className() { return "CollapsePolyGeoModifierAction"; }
 
   CollapsePolyGeoModifierAction() = default;
   ~CollapsePolyGeoModifierAction() = default;

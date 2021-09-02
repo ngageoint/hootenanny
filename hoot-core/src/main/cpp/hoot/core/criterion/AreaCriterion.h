@@ -42,7 +42,7 @@ class AreaCriterion : public ConflatableElementCriterion, public ConstOsmMapCons
 {
 public:
 
-  static QString className() { return "hoot::AreaCriterion"; }
+  static QString className() { return "AreaCriterion"; }
 
   AreaCriterion() = default;
   AreaCriterion(ConstOsmMapPtr map) : _map(map) { }

@@ -43,7 +43,7 @@ class RfExtractorClassifier
 {
 public:
 
-  static QString className() { return "hoot::RfExtractorClassifier"; }
+  static QString className() { return "RfExtractorClassifier"; }
 
   RfExtractorClassifier() = default;
   virtual ~RfExtractorClassifier() = default;
@@ -51,11 +51,14 @@ public:
   /**
    * @brief classify classifies the match type of a building pair and returns the results.
    */
-  virtual MatchClassification classify(const ConstOsmMapPtr& map,
-    ElementId eid1, ElementId eid2) const;
+  virtual MatchClassification classify(
+    const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const;
 
-  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
-    ElementId eid1, ElementId eid2) const;
+  /**
+   * See note in MatchDetails::getFeatures about the return type of this method.
+   */
+  virtual std::map<QString, double> getFeatures(
+    const ConstOsmMapPtr& m, ElementId eid1, ElementId eid2) const;
 
   void import(const QDomElement& docRoot);
 

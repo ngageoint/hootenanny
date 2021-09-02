@@ -36,30 +36,20 @@ namespace hoot
 {
 
 ElementCriterionPtr CriterionUtils::constructCriterion(
-  QStringList& criteriaClassNames, const bool chainCriteria, const bool negate)
+  const QStringList& criteriaClassNames, const bool chainCriteria, const bool negate)
 {
   bool isStreamable = false; // This gets ignored.
   return constructCriterion(criteriaClassNames, chainCriteria, negate, isStreamable);
 }
 
 ElementCriterionPtr CriterionUtils::constructCriterion(
-  QStringList& criteriaClassNames, const bool chainCriteria, const bool negate,
+  const QStringList& criteriaClassNames, const bool chainCriteria, const bool negate,
   bool& isStreamable)
 {
   if (criteriaClassNames.isEmpty())
   {
     isStreamable = true;
     return ElementCriterionPtr();
-  }
-
-  for (int i = 0; i < criteriaClassNames.size(); i++)
-  {
-    if (!criteriaClassNames.at(i).startsWith(MetadataTags::HootNamespacePrefix()))
-    {
-      QString className = criteriaClassNames[i];
-      className.prepend(MetadataTags::HootNamespacePrefix());
-      criteriaClassNames[i] = className;
-    }
   }
 
   ChainCriterionPtr crit;

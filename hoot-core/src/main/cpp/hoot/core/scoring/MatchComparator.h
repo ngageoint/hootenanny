@@ -53,7 +53,7 @@ class MatchComparator
 
 public:
 
-  static QString className() { return "hoot::MatchComparator"; }
+  static QString className() { return "MatchComparator"; }
 
   using UuidToEid = QMultiMap<QString, ElementId>;
 

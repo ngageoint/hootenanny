@@ -44,7 +44,7 @@ class DataSummaryTagVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::DataSummaryTagVisitor"; }
+  static QString className() { return "DataSummaryTagVisitor"; }
 
   DataSummaryTagVisitor();
   DataSummaryTagVisitor(const QString& sources);

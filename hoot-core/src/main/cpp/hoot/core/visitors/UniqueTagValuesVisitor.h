@@ -40,7 +40,7 @@ class UniqueTagValuesVisitor : public ConstElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::UniqueTagValuesVisitor"; }
+  static QString className() { return "UniqueTagValuesVisitor"; }
 
   /**
    * Constructor

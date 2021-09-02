@@ -41,7 +41,7 @@ class ScriptMerger : public MergerBase
 {
 public:
 
-  static QString className() { return "hoot::ScriptMerger"; }
+  static QString className() { return "ScriptMerger"; }
 
   static int logWarnCount;
 

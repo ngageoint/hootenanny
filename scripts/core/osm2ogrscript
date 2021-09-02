@@ -3,7 +3,7 @@
 #
 
 # Options for most exports
-HOOT_OPTS+= -D convert.ops=hoot::DecomposeBuildingRelationsVisitor
+HOOT_OPTS+= -D convert.ops=DecomposeBuildingRelationsVisitor
 HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
 HOOT_OPTS+= -D api.db.email=${TEST_EMAIL}
 

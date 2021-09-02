@@ -45,7 +45,7 @@ class PoiPolygonMergerCreator : public MergerCreator, public ConstOsmMapConsumer
 
 public:
 
-  static QString className() { return "hoot::PoiPolygonMergerCreator"; }
+  static QString className() { return "PoiPolygonMergerCreator"; }
 
   PoiPolygonMergerCreator();
   ~PoiPolygonMergerCreator() = default;

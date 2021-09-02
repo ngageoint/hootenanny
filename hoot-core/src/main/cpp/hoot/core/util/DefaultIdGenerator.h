@@ -37,7 +37,7 @@ class DefaultIdGenerator : public IdGenerator
 {
 public:
 
-  static QString className() { return "hoot::DefaultIdGenerator"; }
+  static QString className() { return "DefaultIdGenerator"; }
 
   DefaultIdGenerator() { reset(); }
 

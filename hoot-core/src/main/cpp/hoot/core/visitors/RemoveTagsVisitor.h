@@ -49,7 +49,7 @@ class RemoveTagsVisitor : public ElementOsmMapVisitor, public Configurable,
 {
 public:
 
-  static QString className() { return "hoot::RemoveTagsVisitor"; }
+  static QString className() { return "RemoveTagsVisitor"; }
 
   RemoveTagsVisitor();
   explicit RemoveTagsVisitor(const QStringList& keys);

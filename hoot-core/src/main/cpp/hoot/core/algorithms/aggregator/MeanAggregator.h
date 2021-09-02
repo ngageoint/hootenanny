@@ -36,7 +36,7 @@ class MeanAggregator : public ValueAggregator
 {
 public:
 
-  static QString className() { return "hoot::MeanAggregator"; }
+  static QString className() { return "MeanAggregator"; }
 
   MeanAggregator() = default;
   ~MeanAggregator() = default;

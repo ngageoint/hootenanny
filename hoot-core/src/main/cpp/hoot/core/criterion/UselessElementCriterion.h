@@ -46,7 +46,7 @@ class UselessElementCriterion : public ElementCriterion, public ConstOsmMapConsu
 {
 public:
 
-  static QString className() { return "hoot::UselessElementCriterion"; }
+  static QString className() { return "UselessElementCriterion"; }
 
   UselessElementCriterion() = default;
   UselessElementCriterion(ConstOsmMapPtr map) : _map(map) { }

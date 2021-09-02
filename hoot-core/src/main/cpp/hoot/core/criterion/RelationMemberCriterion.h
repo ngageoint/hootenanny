@@ -42,7 +42,7 @@ class RelationMemberCriterion : public ElementCriterion, public ConstOsmMapConsu
 {
 public:
 
-  static QString className() { return "hoot::RelationMemberCriterion"; }
+  static QString className() { return "RelationMemberCriterion"; }
 
   RelationMemberCriterion() = default;
   RelationMemberCriterion(ConstOsmMapPtr map);

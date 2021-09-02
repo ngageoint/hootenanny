@@ -52,7 +52,7 @@ public:
   WayJoinerOp();
   ~WayJoinerOp() = default;
 
-  static QString className() { return "hoot::WayJoinerOp"; }
+  static QString className() { return "WayJoinerOp"; }
 
   /**
    * Apply the way joiner to the specified map

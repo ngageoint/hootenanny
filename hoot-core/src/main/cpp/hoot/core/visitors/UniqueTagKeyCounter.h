@@ -42,7 +42,7 @@ class UniqueTagKeyCounter : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static QString className() { return "hoot::UniqueTagKeyCounter"; }
+  static QString className() { return "UniqueTagKeyCounter"; }
 
   UniqueTagKeyCounter() = default;
   ~UniqueTagKeyCounter() = default;

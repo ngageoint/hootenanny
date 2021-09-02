@@ -43,7 +43,7 @@ class NetworkTypeCriterion : public GeometryTypeCriterion, public ConstOsmMapCon
 {
 public:
 
-  static QString className() { return "hoot::NetworkTypeCriterion"; }
+  static QString className() { return "NetworkTypeCriterion"; }
 
   NetworkTypeCriterion() = default;
   NetworkTypeCriterion(ConstOsmMapPtr map);

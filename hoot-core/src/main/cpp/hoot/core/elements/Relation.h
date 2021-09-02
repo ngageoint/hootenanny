@@ -47,7 +47,7 @@ class Relation : public Element
 {
 public:
 
-  static QString className() { return "hoot::Relation"; }
+  static QString className() { return "Relation"; }
 
   Relation(
     Status s, long id, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY, QString type = "",
