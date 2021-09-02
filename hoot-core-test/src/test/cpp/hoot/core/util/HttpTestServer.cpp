@@ -123,14 +123,22 @@ void HttpTestServer::stop()
   //  Interupt the threads
   _interupt = true;
   //  Close the acceptor
-  if (_acceptor->is_open())
+  try
   {
-    boost::system::error_code ec;
-    _acceptor->close(ec);
+    if (_acceptor && _acceptor->is_open())
+    {
+      boost::system::error_code ec;
+      _acceptor->close(ec);
+    }
   }
+  catch (...) {}
   //  Stop the IO service
-  if (!_io_service.stopped())
-    _io_service.stop();
+  try
+  {
+    if (!_io_service.stopped())
+      _io_service.stop();
+  }
+  catch (...) {}
 }
 
 void HttpTestServer::shutdown()
@@ -274,7 +282,7 @@ long HttpTestServer::parse_content_length(const std::string& headers)
       }
     }
   }
-  catch(...) {}
+  catch (...) {}
   return 0;
 }
 

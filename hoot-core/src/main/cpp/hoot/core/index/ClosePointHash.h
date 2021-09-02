@@ -94,7 +94,7 @@ private:
 
   double _binSize;
   double _distance;
-  std::vector<long> _match;
+  std::vector<long>& _match;
 
   HashMap<int64_t, std::vector<long>> _bins;
   HashMap<int64_t, std::vector<long>>::const_iterator _it;

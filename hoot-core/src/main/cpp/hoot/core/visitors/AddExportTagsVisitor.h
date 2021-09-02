@@ -68,6 +68,13 @@ public:
 
   void visit(const ElementPtr& pElement) override;
 
+  /**
+   * @brief getExportTags Create (not add) export tags for a specific element
+   * @param pElement element to base the new tags on
+   * @return all new export tags
+   */
+  Tags getExportTags(const ConstElementPtr& pElement);
+
   void overrideDebugSettings();
 
   QString getName() const override { return className(); }

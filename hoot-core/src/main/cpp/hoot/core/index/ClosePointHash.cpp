@@ -35,29 +35,35 @@ using namespace std;
 namespace hoot
 {
 
+/** init_match is an empty vector used only for the initialization of the
+ *  reference ClosePointHash::_match
+ */
+static vector<long> init_match;
+
 ClosePointHash::ClosePointHash(double distance)
+  : _binSize(distance * 2),
+    _distance(distance),
+    _match(init_match)
 {
-  _distance = distance;
-  _binSize = _distance * 2;
 }
 
 void ClosePointHash::addPoint(double x, double y, long id)
 {
   int64_t binIx = _toBin(x + _distance, y + _distance);
-  _bins[binIx].push_back(id);
-  _idTobin[id].push_back(binIx);
+  _bins[binIx].emplace_back(id);
+  _idTobin[id].emplace_back(binIx);
 
   binIx = _toBin(x + _distance, y - _distance);
-  _bins[binIx].push_back(id);
-  _idTobin[id].push_back(binIx);
+  _bins[binIx].emplace_back(id);
+  _idTobin[id].emplace_back(binIx);
 
   binIx =_toBin(x - _distance, y + _distance);
-  _bins[binIx].push_back(id);
-  _idTobin[id].push_back(binIx);
+  _bins[binIx].emplace_back(id);
+  _idTobin[id].emplace_back(binIx);
 
   binIx = _toBin(x - _distance, y - _distance);
-  _bins[binIx].push_back(id);
-  _idTobin[id].push_back(binIx);
+  _bins[binIx].emplace_back(id);
+  _idTobin[id].emplace_back(binIx);
 }
 
 const vector<long>& ClosePointHash::getMatch() const
