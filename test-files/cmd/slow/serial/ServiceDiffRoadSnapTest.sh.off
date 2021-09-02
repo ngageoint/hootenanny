@@ -85,8 +85,8 @@ CHANGESET_DERIVE_OPTS="-D debug.maps.filename=$OUTPUT_DIR/derive.osm -D changese
 
 DEBUG=false
 if [ "$DEBUG" == "true" ]; then
-  GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true -D debug.maps.write.detailed=true -D debug.maps.class.include.filter= "
-  LOG_LEVEL="--debug"
+  GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true -D debug.maps.write.detailed=false -D debug.maps.class.include.filter= "
+  LOG_LEVEL="--info"
   LOG_FILTER="-D log.class.include.filter= "
 fi
 

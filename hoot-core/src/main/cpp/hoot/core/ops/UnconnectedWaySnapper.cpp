@@ -66,6 +66,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, UnconnectedWaySnapper)
 
 UnconnectedWaySnapper::UnconnectedWaySnapper() :
 _snapToExistingWayNodes(true),
+_favorReferenceWayNode(false),
 _maxNodeReuseDistance(0.5),
 _maxSnapDistance(5.0),
 _snapToWayDiscretizationSpacing(1.0),
@@ -93,6 +94,7 @@ void UnconnectedWaySnapper::setConfiguration(const Settings& conf)
   _taskStatusUpdateInterval = confOpts.getTaskStatusUpdateInterval();
 
   setSnapToExistingWayNodes(confOpts.getSnapUnconnectedWaysUseExistingWayNodes());
+  setFavorReferenceWayNode(confOpts.getSnapUnconnectedWaysFavorReferenceWayNode());
   if (_snapToExistingWayNodes)
   {
     setMaxNodeReuseDistance(confOpts.getSnapUnconnectedWaysExistingWayNodeTolerance());
@@ -575,13 +577,13 @@ void UnconnectedWaySnapper::_snapUnconnectedWayEndNodes(const WayPtr& wayToSnap)
 bool UnconnectedWaySnapper::_snapUnconnectedWayEndNode(
   const NodePtr& unconnectedEndNode, const WayPtr& wayToSnap)
 {
-  // For way snapping, pass in the tags of the way being snapped during comparison. They
-  // will be needed if a minimum type score or a feature type exclude list was specified.
+  // For way snapping, pass in the tags of the way being snapped during comparison. They will be
+  // needed if a minimum type score or a feature type exclude list was specified.
 
-  // Try to find the nearest way node satisfying the specifying way node criteria that
-  // is within the max reuse distance (if one was specified) and snap the unconnected way
-  // node.  The reuse of existing way nodes on way being snapped to is done in order to cut
-  // back on the number of new way nodes being added.
+  // Try to find the nearest way node satisfying the specifying way node criteria that is within the
+  // max reuse distance (if one was specified) and snap the unconnected way node. The reuse of
+  // existing way nodes on way being snapped to is done in order to cut back on the number of new
+  // way nodes being added.
   bool snapOccurred = false;
   if (_snapToExistingWayNodes)
   {
@@ -590,9 +592,9 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNode(
 
   if (!snapOccurred)
   {
-    // If we weren't able to snap to a nearby way node or the snapping directly to way nodes
-    // option was turned off, we're going to try to find a nearby way and snap onto the
-    // closest location on it.
+    // If we weren't able to snap to a nearby way node or the snapping directly to way nodes option
+    // was turned off, we're going to try to find a nearby way and snap onto the closest location on
+    // it.
     snapOccurred = _snapUnconnectedWayEndNodeToWay(unconnectedEndNode, wayToSnap->getTags());
   }
 
@@ -623,9 +625,9 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNode(
     LOG_VART(wayToSnap);
     LOG_VART(_snappedToWay);
 
-    // It seems like the geospatial indices should have to be updated after every snap, but
-    // haven't any direct evidence of that being necessary for proper snapping yet. If it
-    // is needed, that would likely slow things down a lot.
+    // It seems like the geospatial indices should have to be updated after every snap, but haven't
+    // any direct evidence of that being necessary for proper snapping yet. If it is needed, that
+    // would likely slow things down a lot.
 
     if (ConfigOptions().getDebugMapsWriteDetailed())
     {
@@ -813,8 +815,18 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNodeToWayNode(
             ", since no minimum type score set...");
         }
 
-        // Snap the input way node to the nearest way node neighbor we found.
-        _snap(nodeToSnap, wayNodeToSnapTo);
+        // Snap the input way node to the nearest way node neighbor we found. If we're trying to
+        // keep as many existing reference way nodes as possible, then we'll swap the source/target
+        // way node here if necessary.
+        if (_favorReferenceWayNode && nodeToSnap->getStatus() == Status::Unknown1 &&
+            wayNodeToSnapTo->getStatus() == Status::Unknown2)
+        {
+          _snap(wayNodeToSnapTo, nodeToSnap);
+        }
+        else
+        {
+          _snap(nodeToSnap, wayNodeToSnapTo);
+        }
 
         // Don't snap the node more than once.
         return true;
@@ -850,9 +862,8 @@ void UnconnectedWaySnapper::_snap(const NodePtr& nodeToSnap, const NodePtr& wayN
   {
     _reviewSnappedWay(nodeToSnap->getId());
   }
-  // Get the snapped to way so we can retain the parent id. The size should be equal to 1.
-  // Maybe this could be optimized, since we're doing way containing way node checks already
-  // above?
+  // Get the snapped to way so we can retain the parent id. The size should be equal to 1. Maybe
+  // this could be optimized, since we're doing way containing way node checks already above?
   const std::set<long>& waysContainingWayNodeToSnapTo =
     _map->getIndex().getNodeToWayMap()->getWaysByNode(wayNodeToSnapTo->getId());
   LOG_TRACE(waysContainingWayNodeToSnapTo.size());
@@ -864,15 +875,13 @@ void UnconnectedWaySnapper::_snap(const NodePtr& nodeToSnap, const NodePtr& wayN
   // Skip the actual snapping if we're only marking ways that could be snapped.
   if (!_markOnly)
   {
-    // merge the tags
+    LOG_TRACE(
+      "Replacing " << nodeToSnap->getElementId() << " with " << wayNodeToSnapTo->getElementId());
+    // Merge the tags.
     wayNodeToSnapTo->setTags(
       TagMergerFactory::mergeTags(
         wayNodeToSnapTo->getTags(), nodeToSnap->getTags(), ElementType::Node));
-
     // Replace the snapped node with the node we snapped it to.
-    LOG_TRACE(
-      "Replacing " << nodeToSnap->getElementId() << " with " <<
-      wayNodeToSnapTo->getElementId());
     ReplaceElementOp(
       nodeToSnap->getElementId(), wayNodeToSnapTo->getElementId(), true).apply(_map);
   }

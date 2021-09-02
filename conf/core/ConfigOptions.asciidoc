@@ -187,7 +187,7 @@ address before normalizing it during conflation address matching (note that addr
 may involve some form of language translation even when this setting is disabled).  This can have
 significant impact on the runtime performance of conflation when enabled and should only be enabled
 if the source data is known to have non-English addresses.  The configuration option,
-'language.translation.translator', controls which translator is used.
+`language.translation.translator`, controls which translator is used.
 
 === address.use.default.language.translation.only
 
@@ -890,7 +890,7 @@ The user ID used by certain changeset writers when writing to an OSM API databas
 * Data Type: bool
 * Default Value: `true`
 
-If true, XML changesets will add the 'timestamp' attribute to the element tags.  If false, the
+If true, XML changesets will add the `timestamp` attribute to the element tags.  If false, the
 timestamp attribute will not be added.  This generally should only be set to false for testing
 purposes.
 
@@ -1046,7 +1046,7 @@ See also:
 
 Runs during conflation just after the data is conflated, but before it is saved. The ordering here
 is sensitive and addition of new operations may take experimentation to produce optimal conflated
-output. 'hoot info --operators' displays information about the available operations.
+output. `hoot info --operators` displays information about the available operations.
 
 === conflate.pre.ops
 
@@ -1062,7 +1062,7 @@ output. 'hoot info --operators' displays information about the available operati
 
 Runs during conflation just after data is loaded. The ordering here is sensitive (although
 generally not as sensitive as with conflate.post.ops) and addition of new operations may take
-experimentation to produce optimal conflated output. 'hoot info --operators' displays information
+experimentation to produce optimal conflated output. `hoot info --operators` displays information
 about the available operations.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
@@ -1173,7 +1173,7 @@ ID of the node that ContainsNodeCriterion should search for.
 ** ``
 
 Specifies one or more semi-colon delimited map operations or visitors to apply before writing
-converted data.  This is only applicable to the convert command. 'hoot info --operators' displays
+converted data.  This is only applicable to the convert command. `hoot info --operators` displays
 information about the available operations.
 
 === convert.require.area.for.polygon
@@ -1455,7 +1455,7 @@ searching for nodes.
 * Default Value: `-1.0`
 
 Distance in meters that the DistanceNodeCriterion should search for nodes out from a center
-specified by 'distance.node.criterion.center'.
+specified by `distance.node.criterion.center`.
 
 === dual.highway.marker.mark.crossing.roads
 
@@ -1916,7 +1916,7 @@ OpenstreetMap OAuth Private Access Token for gaining access to the OAuth protect
 * Default Value: ``
 
 Hootenanny Web Services public access token required by some Hootenanny commands.  Use the
-Hootenanny 'login' command to retrieve access tokens.
+Hootenanny `login` command to retrieve access tokens.
 
 === hoot.services.auth.access.token.secret
 
@@ -1924,7 +1924,7 @@ Hootenanny 'login' command to retrieve access tokens.
 * Default Value: ``
 
 Hootenanny Web Services private access token required by some Hootenanny commands.  Use the
-Hootenanny 'login' command to retrieve access tokens.
+Hootenanny `login` command to retrieve access tokens.
 
 === hoot.services.auth.host
 
@@ -2157,8 +2157,8 @@ The minimum allowed word length when associating word tokens with tags.
 ** `place=village`
 
 Key/value pairs to ignore when deriving an implicit tags database from POI names. Use this list to
-fine tune tagging rules behavior based on the auto-generated rules database. Format: 'key=value'.
-Use 'key=*' to ignore all tags for a given key. Keep the list alphabetized and in lower case.
+fine tune tagging rules behavior based on the auto-generated rules database. Format: `key=value`.
+Use `key=*` to ignore all tags for a given key. Keep the list alphabetized and in lower case.
 
 === implicit.tagging.database.deriver.translate.names.to.english
 
@@ -2543,7 +2543,7 @@ The default value was determined experimentally and may need tweaking per enviro
 ** `WronglyOrderedWays`
 
 List of JOSM validator Java class names without namespace prefixes or file extensions (e.g.
-'DuplicatedWayNodes') to use during validation or cleaning. With each JOSM upgrade a check needs to
+`DuplicatedWayNodes`) to use during validation or cleaning. With each JOSM upgrade a check needs to
 be made for new available validators by looking at the hardcoded list in the
 `OsmValidator::CORE_TEST_CLASSES` member variable. Last updated version: 18118. See also:
 `hoot.validators`.
@@ -2653,7 +2653,7 @@ Write out JSON in a more legible manner
 
 LanguageDetector implementation to use for detecting source languages.  If using
 HootServicesLanguageDetectorClient, a translation server must be set up and valid OAuth
-credentials used.  Also, be sure to use an appropriate value for the 'language.info.provider'
+credentials used.  Also, be sure to use an appropriate value for the `language.info.provider`
 option.
 
 === language.detection.write.detected.lang.tags
@@ -2672,7 +2672,7 @@ tags are written and only a summary of the source languages found will be printe
 The minimum language detection confidence threshold to use when detecting languages in text using
 HootServicesLanguageDetectorClient.  Valid values are: 'low', 'medium', 'high', or 'none'.  A
 value of 'none' or an empty string disables the threshold.  Not all server side language detectors
-specified in 'language.hoot.services.detectors' support detection confidence.  When listing server
+specified in `language.hoot.services.detectors` support detection confidence.  When listing server
 side detectors via the API, confidence support information is included.
 
 === language.hoot.services.detectors
@@ -2682,10 +2682,10 @@ side detectors via the API, confidence support information is included.
 ** `TikaLanguageDetector`
 ** `OpenNlpLanguageDetector`
 
-When using 'HootServicesTranslatorClient' as the to English language translator or
+When using `HootServicesTranslatorClient` as the to English language translator or
 HootServicesLanguageDetectorClient as a source language detector, one or more hoot-services Java
 class names implementing LanguageDetector.  Language detectors are used in order of entry.
-'hoot info --languages --detectors' displays information about the available server side detectors.
+`hoot info --languages --detectors` displays information about the available server side detectors.
 If no detectors are specified, then language translation will attempt to use as many detectors as
 needed, in a pre-determined order, to get a positive detection.
 
@@ -2725,11 +2725,11 @@ pre-translated tag.
 * Default Value: `false`
 
 When performing a to English translation or source language detection, the translator/detector
-by default uses the required 'language.tag.keys' configuration option to determine which tags to
-translate or detect source languages for.  If this option is enabled, 'language.tag.keys' is no
+by default uses the required `language.tag.keys` configuration option to determine which tags to
+translate or detect source languages for.  If this option is enabled, `language.tag.keys` is no
 longer a required option and all name tags will be parsed during translation/detection.  If
-'language.tag.keys' is populated in addition to enabling this option, then any tag keys in
-'language.tag.keys' that are not names will be parsed in addition to the name tags.
+`language.tag.keys` is populated in addition to enabling this option, then any tag keys in
+`language.tag.keys` that are not names will be parsed in addition to the name tags.
 
 === language.skip.words.in.english.dictionary
 
@@ -2779,9 +2779,9 @@ languages.
 * Data Type: string
 * Default Value: `HootLanguageTranslator`
 
-When using 'HootServicesTranslatorClient' as the to English language translator, a
+When using `HootServicesTranslatorClient` as the to English language translator, a
 hoot-services Java class names implementing ToEnglishTranslator.  Valid values are
-'JoshuaLanguageTranslator' and 'HootLanguageTranslator'.
+`JoshuaLanguageTranslator` and `HootLanguageTranslator`.
 
 === language.translation.perform.exhaustive.search.with.no.detection
 
@@ -2829,7 +2829,7 @@ translation is retrieved.
 
 ToEnglishTranslator implementation to use for to English translation.
 HootServicesTranslatorClient, requires a translation server be set up and valid OAuth
-credentials used.  Also, be sure to use an appropriate value for the 'language.info.provider'
+credentials used.  Also, be sure to use an appropriate value for the `language.info.provider`
 option.
 
 === levenshtein.distance.alpha
@@ -2932,7 +2932,7 @@ trigger warning log messages.
 ** `NoInformationElementRemover`
 
 A list of map operations to be applied to a map for cleaning purposes, in order.
-'hoot info --operators' displays information about the available transforms.
+`hoot info --operators` displays information about the available transforms.
 
 === map.comparator.ignore.tag.keys
 
@@ -3024,7 +3024,7 @@ file even if the map is empty.
 
 List of match creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in merger.creators.
-'hoot info --matchers' displays information about the available matchers.
+`hoot info --matchers` displays information about the available matchers.
 
 === match.parallel.exponent
 
@@ -3134,7 +3134,7 @@ notification. The same threshold value is used separately for both used physical
 
 List of merger creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
-'hoot info --mergers' displays information about the available mergers.
+`hoot info --mergers` displays information about the available mergers.
 
 === metadata.dataset.indicator.tag
 
@@ -3841,7 +3841,7 @@ The size of the PERTY grid spacing in meters.
 ** `RandomElementRenamer`
 
 A list of operations that should be applied after the geometries have been shifted by PERTY.
-'hoot info --operators | grep Random' displays information about the available operations.
+`hoot info --operators | grep Random` displays information about the available operations.
 
 === perty.search.distance
 
@@ -4046,7 +4046,7 @@ review against the polygon instead.
 * Default Value: `false`
 
 If true, debug match distance output will be obtained from manually matched source data if running
-'hoot score-matches' with POI to Polygon conflation.
+`hoot score-matches` with POI to Polygon conflation.
 
 === poi.polygon.disable.intradataset.conflation.1
 
@@ -4070,7 +4070,7 @@ matched. Enabling it causes poi.polygon.disable.same.source.conflation to be ign
 * Default Value: `false`
 
 If true, POI to Polygon conflation will not attempt to conflate two features with the same source
-tag value.  e.g. both have 'source=osm' tag  The source tag key is specified by
+tag value.  e.g. both have `source=osm` tag  The source tag key is specified by
 poi.polygon.source.tag.key.  How strictly the source tag key must be matched is controlled by
 poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only.  This setting is useful when
 you have a data layer where data has been collected as both POIs and polygons for the same source
@@ -4081,12 +4081,12 @@ and you never want the two source to be conflated together.
 * Data Type: bool
 * Default Value: `true`
 
-If set to false and poi.polygon.disable.same.source.conflation is set to true, POI to polygon
+If set to false and `poi.polygon.disable.same.source.conflation` is set to true, POI to polygon
 conflation will disable conflation only between features who have the exact same source tag value.
-e.g. both have 'source=osm' tag  If set to true and poi.polygon.disable.same.source.conflation is
+e.g. both have `source=osm` tag  If set to true and `poi.polygon.disable.same.source.conflation` is
 set to true, then the tag matcher is less strict and will attempt to match the prefix of the source
-tag value when delimited by a colon.  e.g. 'source=mgcp:buildp_clip;osm' will match
-'source=mgcp:builda_clip;osm' since both tag values begin with 'mgcp:'.
+tag value when delimited by a colon.  e.g. `source=mgcp:buildp_clip;osm` will match
+`source=mgcp:builda_clip;osm` since both tag values begin with `mgcp:`.
 
 === poi.polygon.enable.review.reduction
 
@@ -4124,7 +4124,7 @@ a match based on distance criteria only.
 The minimum evidence score at which a POI will be matched to a polygon.  Valid values are 1 to 4.
 If an evidence score for a feature pair falls below this value, the relationship between the
 features will be classified as a review or miss, depending on the value of
-'poi.polygon.review.evidence.threshold'.  Generally, this setting should not be changed except
+`poi.polygon.review.evidence.threshold`. Generally, this setting should not be changed except
 when working with specific POI/Polygon conflation use cases that require it.
 
 === poi.polygon.match.takes.precedence.over.poi.to.poi.review
@@ -4164,7 +4164,7 @@ implementation of `StringDistance`.
 If true, Hootenanny will attempt to translate to English the value of any name tag.  This can have
 significant impact on the runtime performance of conflation when enabled and should only be enabled
 if the source data is known to have non-English names.  The configuration option,
-'language.translation.translator', controls which translator is used.
+`language.translation.translator`, controls which translator is used.
 
 === poi.polygon.phone.number.match.enabled
 
@@ -4259,11 +4259,11 @@ they do not have specific type tags.
 * Default Value: `1`
 
 The minimum evidence score at which a POI will be reviewed against a polygon, if the evidence score
-does not meet the threshold defined by 'poi.polygon.match.evidence.threshold'.  Valid values are
+does not meet the threshold defined by `poi.polygon.match.evidence.threshold`.  Valid values are
 0 to 3.  If an evidence score for a feature pair falls below this value, the relationship between
 the features will be classified as a miss.  If the value is set to 0, all feature pairs which did
 not match will be reviewed.  If the value is set greater than or equal to
-'poi.polygon.match.evidence.threshold', an error will occur.  Generally, this setting should not be
+`poi.polygon.match.evidence.threshold`, an error will occur. Generally, this setting should not be
 changed except when working with specific POI/Polygon conflation use cases that require it.
 
 === poi.polygon.review.if.matched.types
@@ -4272,9 +4272,9 @@ changed except when working with specific POI/Polygon conflation use cases that 
 * Default Value:
 ** ``
 
-List of key value pairs in the format 'key=value' or  'key,value' (UI only) for features to always
+List of key value pairs in the format `key=value` or `key,value` (UI only) for features to always
 review if marked as matches with POI to polygon conflation.  Delimit the individual types with ';'.
-e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'.
+e.g. `amenity=school;shop=mall` or `amenity,school;shop,mall`.
 
 === poi.polygon.review.multiuse.buildings
 
@@ -4297,8 +4297,8 @@ The source tag key to be used in conjunction with poi.polygon.disable.same.sourc
 * Data Type: string
 * Default Value: `PreserveTypesTagMerger`
 
-The tag merger used by POI/Polygon conflation. See 'tag.merger.default' for more information. If
-'poi.polygon.auto.merge.many.poi.to.one.poly.matches' is set to true then 'PreserveTypesTagMerger'
+The tag merger used by POI/Polygon conflation. See `tag.merger.default` for more information. If
+`poi.polygon.auto.merge.many.poi.to.one.poly.matches` is set to true then `PreserveTypesTagMerger`
 is always used and changes to this option value are ignore.
 
 === poi.polygon.type.score.threshold
@@ -4328,7 +4328,7 @@ name text should correspond to text commonly associated with a unique subtype of
 If true, Hootenanny will attempt to translate to English the value of any tag having a key in its
 schema.  This can have significant impact on the runtime performance of conflation when enabled
 and should only be enabled if the source data is known to have non-English type values.  The
-configuration option, 'language.translation.translator', controls which translator is used.
+configuration option, `language.translation.translator`, controls which translator is used.
 
 === poi.search.radii
 
@@ -4638,8 +4638,8 @@ all readers.
 * Data Type: bool
 * Default Value: `false`
 
-If true, all tags from the input data will be preserved.  Not honored by all readers.  e.g.
-an 'accuracy' tag will not be replaced by a 'error:circular' tag; both tags will be kept.
+If true, all tags from the input data will be preserved. Not honored by all readers.  e.g.
+an `accuracy` tag will not be replaced by a `error:circular` tag; both tags will be kept.
 
 === reader.set.default.status
 
@@ -5301,6 +5301,14 @@ Maximum distance used by the Unconnected Way Snapper, in meters, allowed between
 way endpoint node and a neighboring way node for the way endpoint node to be snapped directly to
 the existing way node instead of adding the way endpoint node as a new way node on the way.
 
+=== snap.unconnected.ways.favor.reference.way.node
+
+* Data Type: bool
+* Default Value: `false`
+
+When enabled, the Unconnected Way Snapper will attempt to maximize the number of reference
+(status=1) way nodes kept during snapping.
+
 === snap.unconnected.ways.mark.only
 
 * Data Type: bool
@@ -5598,7 +5606,7 @@ Tag keys that TagKeyCriterion uses to filter elements.
 * Default Value: `OverwriteTag2Merger`
 
 Specifies the default way of merging tags. This is used by most merge routines, but may be overriden
-depending on the specifics of the merger. 'hoot info --tag-mergers' displays information about the
+depending on the specifics of the merger. `hoot info --tag-mergers` displays information about the
 available mergers.
 
 === tag.merger.overwrite.accumulate.values.keys
@@ -5831,7 +5839,7 @@ the wait time limit unlimited.
 If this value is set to something other than -1 your conflation results may change between multiple
 runs. Especially if the machine Hoot is running on is under heavy load. If the "CM Score:" value
 is changing between runs and GLPK isn't finding an optimal solution then this is likely causing
-different output.  Just because the output is changing doesn't mean it is wrong, but this can be
+different output. Just because the output is changing doesn't mean it is wrong, but this can be
 problematic if you're doing testing or expecting repeatable output for other.
 
 === unlikely.road.remover.heading.delta
@@ -6108,7 +6116,7 @@ writers.
 * Data Type: bool
 * Default Value: `false`
 
-If true, the 'hoot:matchedBy' tag will be added to element output when
+If true, the `hoot:matchedBy` tag will be added to element output when
 writer.include.debug.tags=true.
 
 === writer.precision
