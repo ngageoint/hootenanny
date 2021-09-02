@@ -19,8 +19,7 @@ if [[ "$4" == "-180,-90,180,90" ]]; then
 else
   BOUNDS="-D bounds=$4"
 fi
-# TODO: also apply tags changeset when this is enabled?; also update logging for tags changeset file 
-# output in diffconflator
+# Should we also be applying the tags changeset when this is enabled?
 if [[ "$5" == "false" ]]; then
   INCLUDE_TAGS=
 else
