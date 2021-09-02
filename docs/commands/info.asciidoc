@@ -44,7 +44,7 @@ All configuration options (-D <option>) added to this command must be added to b
 option. Example:
 
 --------
-hoot info -D match.creators="hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,River.js" --way-snap-criteria
+hoot info -D match.creators="HighwayMatchCreator;ScriptMatchCreator,River.js" --way-snap-criteria
 --------
 
 Note how "--way-snap-criteria" is specified after the single configuration option.

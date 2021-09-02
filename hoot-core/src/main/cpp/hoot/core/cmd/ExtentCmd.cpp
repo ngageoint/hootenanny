@@ -47,7 +47,7 @@ class ExtentCmd : public BaseCommand
 
 public:
 
-  static QString className() { return "hoot::ExtentCmd"; }
+  static QString className() { return "ExtentCmd"; }
 
   ExtentCmd() = default;
 

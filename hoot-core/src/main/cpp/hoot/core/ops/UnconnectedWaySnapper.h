@@ -76,7 +76,7 @@ class UnconnectedWaySnapper : public OsmMapOperation, public Configurable,
 {
 public:
 
-  static QString className() { return "hoot::UnconnectedWaySnapper"; }
+  static QString className() { return "UnconnectedWaySnapper"; }
 
   UnconnectedWaySnapper();
   ~UnconnectedWaySnapper() = default;

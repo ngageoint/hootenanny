@@ -43,7 +43,7 @@ class WayBufferCriterion : public ElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::WayBufferCriterion"; }
+  static QString className() { return "WayBufferCriterion"; }
 
   WayBufferCriterion() = default;
   ~WayBufferCriterion() = default;

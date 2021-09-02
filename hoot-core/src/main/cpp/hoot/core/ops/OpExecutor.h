@@ -46,7 +46,7 @@ class OpExecutor : public OsmMapOperation, public Configurable, public ProgressR
 {
 public:
 
-  static QString className() { return "hoot::NamedOp"; }
+  static QString className() { return "NamedOp"; }
 
   OpExecutor();
   OpExecutor(const QStringList& namedOps, const bool operateOnlyOnConflatableElements = false);

@@ -41,7 +41,7 @@ class AddUserIdVisitor : public ElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::AddUserIdVisitor"; }
+  static QString className() { return "AddUserIdVisitor"; }
 
   AddUserIdVisitor() = default;
 

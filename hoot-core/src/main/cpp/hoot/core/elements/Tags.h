@@ -60,7 +60,7 @@ class Tags : public QHash<QString, QString>
 {
 public:
 
-  static QString className() { return "hoot::Tags"; }
+  static QString className() { return "Tags"; }
   static QString uuidKey() { return "uuid"; }
 
   Tags() = default;
@@ -199,7 +199,7 @@ public:
   bool isTrue(const QString& key) const;
 
   /**
-   * Similar to operator== but 'hoot::*' tags are ignored
+   * Similar to operator== but 'hoot:*' tags are ignored
    */
   bool dataOnlyEqual(const Tags& other) const;
 
@@ -215,7 +215,7 @@ public:
   bool hasSameNonMetadataTags(const Tags& other) const;
 
   /**
-   * Get a list of all non-'hoot::*' tags
+   * Get a list of all non-'hoot:*' tags
    */
   QStringList getDataOnlyValues(const Tags& tags) const;
 
@@ -229,7 +229,7 @@ public:
   int removeEmpty();
 
   /**
-   * Removes all metadata tags (hoot::* and those identified in the schema)
+   * Removes all metadata tags (hoot:* and those identified in the schema)
    *
    * @return the number of tags removed
    */

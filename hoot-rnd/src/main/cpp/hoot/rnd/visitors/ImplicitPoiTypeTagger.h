@@ -40,7 +40,7 @@ class ImplicitPoiTypeTagger : public ImplicitTypeTaggerBase
 {
 public:
 
-  static QString className() { return "hoot::ImplicitPoiTypeTagger"; }
+  static QString className() { return "ImplicitPoiTypeTagger"; }
 
   ImplicitPoiTypeTagger() = default;
   ImplicitPoiTypeTagger(const QString& databasePath);

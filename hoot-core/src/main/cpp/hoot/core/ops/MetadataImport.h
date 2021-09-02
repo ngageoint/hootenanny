@@ -63,7 +63,7 @@ class MetadataImport : public MetadataOp
 {
 public:
 
-  static QString className() { return "hoot::MetadataImport"; }
+  static QString className() { return "MetadataImport"; }
 
   MetadataImport() = default;
   ~MetadataImport() = default;

@@ -235,8 +235,8 @@ performance. The `perturb --test` command is used with the following configurati
 
 -----
 {
-  "match.creators" : "hoot::ScriptMatchCreator,Line.js",
-  "merger.creators" : "hoot::ScriptMergerCreator",
+  "match.creators" : "ScriptMatchCreator,Line.js",
+  "merger.creators" : "ScriptMergerCreator",
   "uuid.helper.repeatable": "true",
   "perty.test.num.runs": 1,
   "perty.test.num.simulations": 5

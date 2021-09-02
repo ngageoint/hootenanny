@@ -43,7 +43,7 @@ class WayHeadingVarianceCriterion : public ElementCriterion, public ConstOsmMapC
 {
 public:
 
-  static QString className() { return "hoot::WayHeadingVarianceCriterion"; }
+  static QString className() { return "WayHeadingVarianceCriterion"; }
 
   WayHeadingVarianceCriterion();
   WayHeadingVarianceCriterion(

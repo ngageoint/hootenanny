@@ -40,7 +40,7 @@ class MultiLineStringCriterion : public GeometryTypeCriterion
 {
 public:
 
-  static QString className() { return "hoot::MultiLineStringCriterion"; }
+  static QString className() { return "MultiLineStringCriterion"; }
 
   MultiLineStringCriterion() = default;
   ~MultiLineStringCriterion() = default;

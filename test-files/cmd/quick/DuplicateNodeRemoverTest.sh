@@ -6,5 +6,5 @@ mkdir -p $OUT_DIR
 
 CONFIG="--warn -C Testing.conf"
 
-hoot convert $CONFIG -D convert.ops="hoot::DuplicateNodeRemover" $IN_DIR/input.json $OUT_DIR/output.json
+hoot convert $CONFIG -D convert.ops="DuplicateNodeRemover" $IN_DIR/input.json $OUT_DIR/output.json
 hoot diff $CONFIG $IN_DIR/input.json $OUT_DIR/output.json || diff $IN_DIR/input.json $OUT_DIR/output.json

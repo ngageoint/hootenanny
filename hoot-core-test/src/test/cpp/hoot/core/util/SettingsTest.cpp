@@ -126,26 +126,26 @@ public:
     //  Default value before change in JSON
     CPPUNIT_ASSERT_EQUAL(false, uut.getBool("uuid.helper.repeatable"));
     //  Default value before change in AttributeConflation.conf
-    HOOT_STR_EQUALS("hoot::OverwriteTag2Merger", uut.getString("tag.merger.default"));
+    HOOT_STR_EQUALS("OverwriteTag2Merger", uut.getString("tag.merger.default"));
     HOOT_STR_EQUALS(
-      "hoot::LinearSnapMerger", uut.getString("geometry.linear.merger.default"));
+      "LinearSnapMerger", uut.getString("geometry.linear.merger.default"));
     //  Default value before change in NetworkAlgorithm.conf
-    HOOT_STR_EQUALS("hoot::HighwayRfClassifier", uut.getString("conflate.match.highway.classifier"));
+    HOOT_STR_EQUALS("HighwayRfClassifier", uut.getString("conflate.match.highway.classifier"));
     HOOT_STR_EQUALS(
-      "hoot::MaximalNearestSublineMatcher", uut.getString("way.subline.matcher"));
+      "MaximalNearestSublineMatcher", uut.getString("way.subline.matcher"));
 
     uut.loadFromString(
       "{ \"base.config\": \"AttributeConflation.conf,NetworkAlgorithm.conf\", \"uuid.helper.repeatable\": \"true\" }");
     //  From the JSON
     CPPUNIT_ASSERT_EQUAL(true, uut.getBool("uuid.helper.repeatable"));
     //  From AttributeConflation.conf
-    HOOT_STR_EQUALS("hoot::OverwriteTag1Merger", uut.getString("tag.merger.default"));
+    HOOT_STR_EQUALS("OverwriteTag1Merger", uut.getString("tag.merger.default"));
     HOOT_STR_EQUALS(
-      "hoot::LinearTagOnlyMerger", uut.getString("geometry.linear.merger.default"));
+      "LinearTagOnlyMerger", uut.getString("geometry.linear.merger.default"));
     //  From NetworkAlgorithm.conf
     HOOT_STR_EQUALS(
-      "hoot::HighwayExpertClassifier", uut.getString("conflate.match.highway.classifier"));
-    HOOT_STR_EQUALS("hoot::MaximalSublineMatcher", uut.getString("highway.subline.matcher"));
+      "HighwayExpertClassifier", uut.getString("conflate.match.highway.classifier"));
+    HOOT_STR_EQUALS("MaximalSublineMatcher", uut.getString("highway.subline.matcher"));
   }
 
   void invalidOptionNameTest()
@@ -198,24 +198,6 @@ public:
     args.append(
       ConfigOptions::getConvertOpsKey() + "=" +
       ReplaceElementOp::className() + ";" +
-      // This should not fail, as the namespace gets automatically added to the visitor.
-      RemoveElementsVisitor::className().replace("hoot::", ""));
-    exceptionMsg = "";
-    try
-    {
-      Settings::parseCommonArguments(args);
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.isEmpty());
-
-    args.clear();
-    args.append("-D");
-    args.append(
-      ConfigOptions::getConvertOpsKey() + "=" +
-      ReplaceElementOp::className() + ";" +
       RemoveElementsVisitor::className() + ";" +
       "blah");
     exceptionMsg = "";
@@ -232,7 +214,7 @@ public:
   }
 };
 
-}
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SettingsTest, "quick");
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::SettingsTest, "quick");
+}
 

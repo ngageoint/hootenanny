@@ -140,9 +140,13 @@ private:
     toTranslateTagKeys.append("name");
     toTranslateTagKeys.append("alt_name");
     conf.set(ConfigOptions::getLanguageTagKeysKey(), toTranslateTagKeys);
-    conf.set(ConfigOptions::getLanguageTranslationTranslatorKey(), HootServicesTranslatorMockClient::className());
-    conf.set(ConfigOptions::getLanguageInfoProviderKey(), HootServicesLanguageInfoMockClient::className());
-    conf.set(ConfigOptions::getHootServicesAuthUserNameKey(), "ToEnglishTranslationComparisonVisitorTest");
+    conf.set(
+      ConfigOptions::getLanguageTranslationTranslatorKey(),
+      HootServicesTranslatorMockClient::className());
+    conf.set(
+      ConfigOptions::getLanguageInfoProviderKey(), HootServicesLanguageInfoMockClient::className());
+    conf.set(
+      ConfigOptions::getHootServicesAuthUserNameKey(), "ToEnglishTranslationComparisonVisitorTest");
     conf.set(ConfigOptions::getHootServicesAuthAccessTokenKey(), "testAccessToken");
     conf.set(ConfigOptions::getHootServicesAuthAccessTokenSecretKey(), "testAccessTokenSecret");
 

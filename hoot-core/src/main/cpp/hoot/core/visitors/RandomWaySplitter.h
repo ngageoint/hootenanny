@@ -60,7 +60,7 @@ class RandomWaySplitter : public ElementOsmMapVisitor, public RngConsumer, publi
 
 public:
 
-  static QString className() { return "hoot::RandomWaySplitter"; }
+  static QString className() { return "RandomWaySplitter"; }
 
   RandomWaySplitter();
   ~RandomWaySplitter() = default;

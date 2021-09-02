@@ -44,7 +44,7 @@ class MultiaryPoiMerger : public MergerBase
 {
 public:
 
-  static QString className() { return "hoot::MultiaryPoiMerger"; }
+  static QString className() { return "MultiaryPoiMerger"; }
 
   MultiaryPoiMerger() = default;
   ~MultiaryPoiMerger() = default;

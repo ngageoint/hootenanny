@@ -45,7 +45,7 @@ public:
   static const QString WIDTH_TAG_PARAM;
   static const QString DEFAULT_WIDTH_PARAM;
 
-  static QString className() { return "hoot::WayToPolyGeoModifierAction"; }
+  static QString className() { return "WayToPolyGeoModifierAction"; }
 
   WayToPolyGeoModifierAction() = default;
   ~WayToPolyGeoModifierAction() = default;

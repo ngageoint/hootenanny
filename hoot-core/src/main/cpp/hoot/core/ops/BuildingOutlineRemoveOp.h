@@ -42,7 +42,7 @@ class BuildingOutlineRemoveOp : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::BuildingOutlineRemoveOp"; }
+  static QString className() { return "BuildingOutlineRemoveOp"; }
 
   BuildingOutlineRemoveOp() = default;
   ~BuildingOutlineRemoveOp() = default;

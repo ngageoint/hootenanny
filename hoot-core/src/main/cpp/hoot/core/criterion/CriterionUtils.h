@@ -58,7 +58,7 @@ public:
    * @return an element criterion
    */
   static ElementCriterionPtr constructCriterion(
-    QStringList& criteriaClassNames, const bool chainCriteria, const bool negate,
+    const QStringList& criteriaClassNames, const bool chainCriteria, const bool negate,
     bool& isStreamable);
 
   /**
@@ -72,7 +72,7 @@ public:
    * @todo may be able to use this in MultipleCriterionConsumerVisitor to simplify it
    */
   static ElementCriterionPtr constructCriterion(
-    QStringList& criteriaClassNames, const bool chainCriteria, const bool negate);
+    const QStringList& criteriaClassNames, const bool chainCriteria, const bool negate);
 
   /**
    * @brief combineCriterion combines multiple criterion into a single criteria

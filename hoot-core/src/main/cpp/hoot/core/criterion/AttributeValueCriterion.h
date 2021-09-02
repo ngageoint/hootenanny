@@ -41,7 +41,7 @@ class AttributeValueCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::AttributeValueCriterion"; }
+  static QString className() { return "AttributeValueCriterion"; }
 
   AttributeValueCriterion();
   AttributeValueCriterion(

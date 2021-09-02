@@ -33,6 +33,7 @@
 
 // Hoot
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 // Qt
 #include <QMutex>
@@ -125,7 +126,7 @@ public:
     QMutexLocker locker(&_mutex);
     if (_creators.find(name) == _creators.end())
     {
-      throw HootException("Could not find object to check. (" + name + ")");
+      throw HootException("Could not find object to construct. (" + name + ")");
     }
     if (_creators[name]->getBaseName() != ExpectedBase::className())
     {
@@ -144,7 +145,7 @@ public:
     QMutexLocker locker(&_mutex);
     if (_creators.find(name) == _creators.end())
     {
-      throw HootException("Could not find object to check. (" + name + ")");
+      throw HootException("Could not find object to construct. (" + name + ")");
     }
     if (_creators[name]->getBaseName() != ExpectedBase::className())
     {

@@ -40,7 +40,7 @@ class NetworkMatchCreator : public MatchCreator
 
 public:
 
-  static QString className() { return "hoot::NetworkMatchCreator"; }
+  static QString className() { return "NetworkMatchCreator"; }
 
   NetworkMatchCreator();
   ~NetworkMatchCreator() = default;

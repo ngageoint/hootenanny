@@ -48,7 +48,7 @@ class RemoveInvalidRelationVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static QString className() { return "hoot::RemoveInvalidRelationVisitor"; }
+  static QString className() { return "RemoveInvalidRelationVisitor"; }
 
   RemoveInvalidRelationVisitor();
   ~RemoveInvalidRelationVisitor() = default;

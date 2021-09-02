@@ -49,7 +49,7 @@ class CropRandomCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::CropRandomCmd"; }
+  static QString className() { return "CropRandomCmd"; }
 
   CropRandomCmd() = default;
 

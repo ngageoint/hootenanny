@@ -40,7 +40,7 @@ class StatsAreaCriterion : public ElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::StatsAreaCriterion"; }
+  static QString className() { return "StatsAreaCriterion"; }
 
   StatsAreaCriterion() = default;
   ~StatsAreaCriterion() = default;

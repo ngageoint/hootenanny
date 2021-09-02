@@ -50,7 +50,7 @@ class HighwayImpliedDividedMarker : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::HighwayImpliedDividedMarker"; }
+  static QString className() { return "HighwayImpliedDividedMarker"; }
 
   HighwayImpliedDividedMarker() = default;
   HighwayImpliedDividedMarker(const std::shared_ptr<const OsmMap>& map) : _inputMap(map) { }

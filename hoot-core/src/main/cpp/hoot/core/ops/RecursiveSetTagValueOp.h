@@ -43,7 +43,7 @@ class RecursiveSetTagValueOp : public OsmMapOperation, public ElementCriterionCo
 {
 public:
 
-  static QString className() { return "hoot::RecursiveSetTagValueOp"; }
+  static QString className() { return "RecursiveSetTagValueOp"; }
 
   RecursiveSetTagValueOp();
   // We have some of the constructor signatures from SetTagValueVisitor here, as well as a signature

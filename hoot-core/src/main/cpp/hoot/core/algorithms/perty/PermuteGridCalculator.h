@@ -38,7 +38,7 @@ class PermuteGridCalculator
 {
 public:
 
-  static QString className() { return "hoot::PermuteGridCalculator"; }
+  static QString className() { return "PermuteGridCalculator"; }
 
   PermuteGridCalculator() = default;
   virtual ~PermuteGridCalculator() = default;

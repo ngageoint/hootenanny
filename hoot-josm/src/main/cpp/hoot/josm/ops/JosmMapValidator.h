@@ -44,7 +44,7 @@ class JosmMapValidator : public JosmMapValidatorAbstract
 
 public:
 
-  static QString className() { return "hoot::JosmMapValidator"; }
+  static QString className() { return "JosmMapValidator"; }
 
   JosmMapValidator() = default;
   virtual ~JosmMapValidator() = default;

@@ -46,7 +46,7 @@ class SchemaTranslationVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::SchemaTranslationVisitor"; }
+  static QString className() { return "SchemaTranslationVisitor"; }
 
   SchemaTranslationVisitor();
   ~SchemaTranslationVisitor() = default;

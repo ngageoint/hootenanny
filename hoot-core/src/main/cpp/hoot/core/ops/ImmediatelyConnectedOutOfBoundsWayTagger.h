@@ -46,7 +46,7 @@ class ImmediatelyConnectedOutOfBoundsWayTagger : public OsmMapOperation, public 
 {
 public:
 
-  static QString className() { return "hoot::ImmediatelyConnectedOutOfBoundsWayTagger"; }
+  static QString className() { return "ImmediatelyConnectedOutOfBoundsWayTagger"; }
 
   ImmediatelyConnectedOutOfBoundsWayTagger();
   ImmediatelyConnectedOutOfBoundsWayTagger(const bool strictBounds);

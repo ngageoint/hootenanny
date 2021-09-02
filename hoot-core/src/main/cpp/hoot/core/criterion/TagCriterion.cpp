@@ -30,6 +30,7 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
@@ -99,7 +100,7 @@ bool TagCriterion::isSatisfied(const ConstElementPtr& e) const
 
 QString TagCriterion::toString() const
 {
-  return className().remove("hoot::")+ ":kvps:" + _kvps.join(",");
+  return className() + ":kvps:" + _kvps.join(",");
 }
 
 }

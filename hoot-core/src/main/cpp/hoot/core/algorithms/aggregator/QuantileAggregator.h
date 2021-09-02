@@ -38,7 +38,7 @@ class QuantileAggregator : public ValueAggregator, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::QuantileAggregator"; }
+  static QString className() { return "QuantileAggregator"; }
 
   QuantileAggregator();
   ~QuantileAggregator() = default;

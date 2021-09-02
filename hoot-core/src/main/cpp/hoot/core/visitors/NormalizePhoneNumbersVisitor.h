@@ -43,7 +43,7 @@ class NormalizePhoneNumbersVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::NormalizePhoneNumbersVisitor"; }
+  static QString className() { return "NormalizePhoneNumbersVisitor"; }
 
   NormalizePhoneNumbersVisitor() = default;
   ~NormalizePhoneNumbersVisitor() = default;

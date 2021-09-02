@@ -53,8 +53,8 @@ int HighwayRfClassifier::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(HighwayClassifier, HighwayRfClassifier)
 
-MatchClassification HighwayRfClassifier::classify(const ConstOsmMapPtr& map,
-  ElementId eid1, ElementId eid2, const WaySublineMatchString& match)
+MatchClassification HighwayRfClassifier::classify(
+  const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2, const WaySublineMatchString& match)
 {
   _init();
 
@@ -101,26 +101,25 @@ MatchClassification HighwayRfClassifier::classify(const ConstOsmMapPtr& map,
   return p;
 }
 
-void HighwayRfClassifier::_createTestExtractors() const
+void HighwayRfClassifier::_createExtractors() const
 {
   _extractors.clear();
-
+  // Order can be very important as far as matching quality is concerned. You can check the
+  // resulting output arff file when these are serialized to make sure the order of these extractors
+  // is maintained.
   _extractors.push_back(
     std::make_shared<EdgeDistanceExtractor>(std::make_shared<RmseAggregator>()));
   _extractors.push_back(
      std::make_shared<EdgeDistanceExtractor>(std::make_shared<SigmaAggregator>()));
   _extractors.push_back(std::make_shared<AngleHistogramExtractor>());
-
   _extractors.push_back(
     std::make_shared<WeightedMetricDistanceExtractor>(
       std::make_shared<MeanAggregator>(), std::make_shared<RmseAggregator>(),
       ConfigOptions().getSearchRadiusHighway()));
-
-  // TODO: At some point names will make sense, but for now there isn't enough name data (#4874).
 }
 
-map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtr& m,
-  ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const
+map<QString, double> HighwayRfClassifier::getFeatures(
+  const ConstOsmMapPtr& m, ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const
 {
   _init();
 
@@ -152,7 +151,7 @@ map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtr& m,
     LOG_VART(match.toString());
     throw NeedsReviewException(
       "Internal Error: Found a situation where the match after copy is invalid. Marking as needs "
-      "review.  Expected a matching subline, but got an empty match. Please report this to "
+      "review. Expected a matching subline, but got an empty match. Please report this to "
       " https://github.com/ngageoint/hootenanny.");
   }
   else
@@ -160,7 +159,7 @@ map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtr& m,
     for (size_t i = 0; i < _extractors.size(); i++)
     {
       double v = _extractors[i]->extract(*copiedMap, match1, match2);
-      // if it isn't null then include it.
+      // If it isn't null, then include it.
       if (!FeatureExtractor::isNull(v))
       {
         QString factorName = _extractors[i]->getName().replace(QRegExp("[^\\w]"), "_");
@@ -176,7 +175,7 @@ void HighwayRfClassifier::_init() const
 {
   if (!_rf)
   {
-    _createTestExtractors();
+    _createExtractors();
 
     QString path = ConfPath::search(ConfigOptions().getConflateMatchHighwayModel());
     LOG_DEBUG("Loading highway model from: " << path);
@@ -228,8 +227,7 @@ void HighwayRfClassifier::_init() const
         LOG_WARN(
           "An extractor used by the model is not being calculated. We will still try, but this " <<
           "will undoubtably result in poor quality matches. Missing extractors: " <<
-          missingExtractors);
-        LOG_TRACE("Available extractors: " << extractorNames);
+          missingExtractors << ", Available extractors: " << extractorNames);
       }
       else if (logWarnCount == Log::getWarnMessageLimit())
       {

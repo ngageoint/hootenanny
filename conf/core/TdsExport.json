@@ -1,10 +1,10 @@
 {
   "#" : "Options to remove all to-be-reviewed elements after conflation",
-  "conflate.post.ops": "hoot::RemoveElementsVisitor;$(conflate.post.ops)",
-  "remove.elements.visitor.element.criteria": "hoot::TagCriterion",
+  "conflate.post.ops": "RemoveElementsVisitor;$(conflate.post.ops)",
+  "remove.elements.visitor.element.criteria": "TagCriterion",
   "tag.filter.kvp": "hoot:review:source,2",
-  "convert.ops": "$(convert.ops);hoot::SmallHighwayMerger",
-  "small.highway.merger.diff": "hoot::TranslatedTagDifferencer",
+  "convert.ops": "$(convert.ops);SmallHighwayMerger",
+  "small.highway.merger.diff": "TranslatedTagDifferencer",
   "translated.tag.differencer.script": "$(HOOT_HOME)/translations/TDSv40.js",
   "translated.tag.differencer.ignore.list": "UFI",
   "#" : "end"

@@ -42,7 +42,7 @@ class TagKeyContainsCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::TagKeyContainsCriterion"; }
+  static QString className() { return "TagKeyContainsCriterion"; }
 
   TagKeyContainsCriterion() : _text(""), _caseSensitive(false) { }
   explicit TagKeyContainsCriterion(const QString& text);

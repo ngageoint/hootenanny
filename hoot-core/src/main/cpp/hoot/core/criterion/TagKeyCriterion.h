@@ -41,7 +41,7 @@ class TagKeyCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::TagKeyCriterion"; }
+  static QString className() { return "TagKeyCriterion"; }
 
   TagKeyCriterion() = default;
   explicit TagKeyCriterion(QString key);

@@ -46,7 +46,7 @@ class LinearSnapMerger : public LinearMergerAbstract
 
 public:
 
-  static QString className() { return "hoot::LinearSnapMerger"; }
+  static QString className() { return "LinearSnapMerger"; }
 
   LinearSnapMerger();
   LinearSnapMerger(

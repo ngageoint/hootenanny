@@ -42,7 +42,7 @@ class SplitNameVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::SplitNameVisitor"; }
+  static QString className() { return "SplitNameVisitor"; }
 
   SplitNameVisitor();
   ~SplitNameVisitor() = default;

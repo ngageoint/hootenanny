@@ -46,7 +46,7 @@ class NonConflatableCriterion : public ElementCriterion, public ConstOsmMapConsu
 {
 public:
 
-  static QString className() { return "hoot::NonConflatableCriterion"; }
+  static QString className() { return "NonConflatableCriterion"; }
 
   NonConflatableCriterion();
   NonConflatableCriterion(ConstOsmMapPtr map);

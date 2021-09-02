@@ -45,7 +45,7 @@ class RelationWithMembersOfTypeCriterion : public GeometryTypeCriterion,
 {
 public:
 
-  static QString className() { return "hoot::RelationWithMembersOfTypeCriterion"; }
+  static QString className() { return "RelationWithMembersOfTypeCriterion"; }
 
   RelationWithMembersOfTypeCriterion();
   RelationWithMembersOfTypeCriterion(ConstOsmMapPtr map);

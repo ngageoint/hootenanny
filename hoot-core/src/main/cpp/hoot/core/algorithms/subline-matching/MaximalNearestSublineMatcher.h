@@ -36,7 +36,7 @@ class MaximalNearestSublineMatcher : public SublineMatcher
 {
 public:
 
-  static QString className() { return "hoot::MaximalNearestSublineMatcher"; }
+  static QString className() { return "MaximalNearestSublineMatcher"; }
 
   MaximalNearestSublineMatcher() = default;
   ~MaximalNearestSublineMatcher() = default;

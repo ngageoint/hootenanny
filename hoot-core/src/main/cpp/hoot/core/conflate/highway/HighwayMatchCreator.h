@@ -42,7 +42,7 @@ class HighwayMatchCreator : public MatchCreator
 
 public:
 
-  static QString className() { return "hoot::HighwayMatchCreator"; }
+  static QString className() { return "HighwayMatchCreator"; }
 
   HighwayMatchCreator();
   ~HighwayMatchCreator() = default;

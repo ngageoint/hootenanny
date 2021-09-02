@@ -42,7 +42,7 @@ class Node : public Element
 {
 public:
 
-  static QString className() { return "hoot::Node"; }
+  static QString className() { return "Node"; }
 
   Node(const Node& from);
   Node(Status s, long id, const geos::geom::Coordinate& c,

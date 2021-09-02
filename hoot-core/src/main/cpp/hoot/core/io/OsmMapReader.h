@@ -39,7 +39,7 @@ class OsmMapReader : public Configurable
 
 public:
 
-  static QString className() { return "hoot::OsmMapReader"; }
+  static QString className() { return "OsmMapReader"; }
 
   OsmMapReader() : _ignoreDuplicates(false), _warnOnVersionZeroElement(false) { }
 

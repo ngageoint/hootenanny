@@ -190,29 +190,29 @@ Total elements processed: 8,088. Total tags processed: 1,137.
 
 Testing with a single key and a criterion specified...
 
-Total elements processed: 374. Total tags processed: 748. Filtered by: hoot::HighwayCriterion.
+Total elements processed: 374. Total tags processed: 748. Filtered by: HighwayCriterion.
 365	(97.6%)	highway=road
 9	(2.41%)	highway=motorway
 
 Testing with a single key and multiple criteria specified...
 
-Total elements processed: 374. Total tags processed: 748. Filtered by: OrCriterion(hoot::HighwayCriterion;hoot::WayCriterion).
+Total elements processed: 374. Total tags processed: 748. Filtered by: OrCriterion(HighwayCriterion;WayCriterion).
 365	(97.6%)	highway=road
 9	(2.41%)	highway=motorway
 
 Testing a crit chain...
 
-No tags with keys: highway were found out of 0 total tags processed. Filtered by: ChainCriterion(hoot::HighwayCriterion;hoot::PoiCriterion).
+No tags with keys: highway were found out of 0 total tags processed. Filtered by: ChainCriterion(HighwayCriterion;PoiCriterion).
 
 Testing a non-streamable crit chain that will fail without an input map...
 
-Total elements processed: 4,698. Total tags processed: 748. Filtered by: OrCriterion(hoot::HighwayCriterion;hoot::HighwayWayNodeCriterion).
+Total elements processed: 4,698. Total tags processed: 748. Filtered by: OrCriterion(HighwayCriterion;HighwayWayNodeCriterion).
 365	(7.77%)	highway=road
 9	(<1%)	highway=motorway
 
 Testing a negated crit...
 
-Total elements processed: 4,698. Total tags processed: 748. Filtered by: NotCriterion(hoot::PoiCriterion).
+Total elements processed: 4,698. Total tags processed: 748. Filtered by: NotCriterion(PoiCriterion).
 365	(7.77%)	highway=road
 9	(<1%)	highway=motorway
 
@@ -222,7 +222,7 @@ No tags with keys: blah were found out of 748 total tags processed.
 
 Testing criterion for elements not present...
 
-No tags with keys: highway were found out of 0 total tags processed. Filtered by: hoot::PoiCriterion.
+No tags with keys: highway were found out of 0 total tags processed. Filtered by: PoiCriterion.
 
 Testing with a single key and counting matching elements only...
 

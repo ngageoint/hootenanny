@@ -43,7 +43,7 @@ class StatusUpdateVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::StatusUpdateVisitor"; }
+  static QString className() { return "StatusUpdateVisitor"; }
 
   StatusUpdateVisitor();
   StatusUpdateVisitor(Status status, bool onlyUpdateIfStatusInvalid = false);

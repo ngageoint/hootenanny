@@ -42,7 +42,7 @@ class ConflateCmd : public BoundedCommand
 
 public:
 
-  static QString className() { return "hoot::ConflateCmd"; }
+  static QString className() { return "ConflateCmd"; }
 
   ConflateCmd() = default;
 

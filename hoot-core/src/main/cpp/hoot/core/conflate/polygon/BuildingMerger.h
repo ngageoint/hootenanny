@@ -40,7 +40,7 @@ class BuildingMerger : public MergerBase
 {
 public:
 
-  static QString className() { return "hoot::BuildingMerger"; }
+  static QString className() { return "BuildingMerger"; }
 
   BuildingMerger() = default;
   /**

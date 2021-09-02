@@ -41,7 +41,7 @@ class TagCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::TagCriterion"; }
+  static QString className() { return "TagCriterion"; }
 
   TagCriterion();
   TagCriterion(const QString& k, const QString& v);

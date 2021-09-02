@@ -42,7 +42,7 @@ class ReviewScoreCriterion : public ReviewRelationCriterion, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::ReviewScoreCriterion"; }
+  static QString className() { return "ReviewScoreCriterion"; }
 
   ReviewScoreCriterion();
   ~ReviewScoreCriterion() = default;

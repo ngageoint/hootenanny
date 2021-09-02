@@ -37,7 +37,7 @@ class TunnelWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static QString className() { return "hoot::TunnelWayNodeCriterion"; }
+  static QString className() { return "TunnelWayNodeCriterion"; }
 
   TunnelWayNodeCriterion();
   TunnelWayNodeCriterion(ConstOsmMapPtr map);

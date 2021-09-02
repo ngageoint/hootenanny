@@ -40,7 +40,7 @@ class DirectSequentialSimulation : public PermuteGridCalculator
 {
 public:
 
-  static QString className() { return "hoot::DirectSequentialSimulation"; }
+  static QString className() { return "DirectSequentialSimulation"; }
 
   DirectSequentialSimulation() = default;
   ~DirectSequentialSimulation() = default;

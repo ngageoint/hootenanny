@@ -50,6 +50,13 @@ class FeatureExtractor : public ApiEntityInfo
 {
 public:
 
+  // Note that FeatureExtractors are the *only* classes that have the namespace prepended to their
+  // class names in all of hoot anymore. Not having it prepended causes issues with the attribute
+  // ordering in the ARFF files, which affects matching. Its very annoying and a happy accident that
+  // we get higher conflate scores with the current ordering. Have made an unsuccessful attempt to
+  // remove the namespace prefix, make all the extractors/aggregators/stringdistance implementations
+  // have more descriptive names, and then rebuild the model. Hopefully can be done at some point,
+  // though.
   static QString className() { return "hoot::FeatureExtractor"; }
 
   FeatureExtractor() = default;

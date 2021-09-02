@@ -45,7 +45,7 @@ class EmptyWayCriterion : public WayNodeCountCriterion
 {
 public:
 
-  static QString className() { return "hoot::EmptyWayCriterion"; }
+  static QString className() { return "EmptyWayCriterion"; }
 
   EmptyWayCriterion();
   ~EmptyWayCriterion() = default;

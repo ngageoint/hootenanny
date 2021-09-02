@@ -36,7 +36,7 @@ class NodeCriterion : public ElementTypeCriterion
 {
 public:
 
-  static QString className() { return "hoot::NodeCriterion"; }
+  static QString className() { return "NodeCriterion"; }
 
   NodeCriterion();
   ~NodeCriterion() override = default;

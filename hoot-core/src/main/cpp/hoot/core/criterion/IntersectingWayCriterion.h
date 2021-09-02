@@ -49,7 +49,7 @@ class IntersectingWayCriterion : public GeometryTypeCriterion, public ConstOsmMa
 {
 public:
 
-  static QString className() { return "hoot::IntersectingWayCriterion"; }
+  static QString className() { return "IntersectingWayCriterion"; }
 
   IntersectingWayCriterion() = default;
   IntersectingWayCriterion(ConstOsmMapPtr map);

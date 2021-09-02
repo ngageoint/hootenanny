@@ -53,7 +53,7 @@ class ManualMatchValidator : public ConstOsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::ManualMatchValidator"; }
+  static QString className() { return "ManualMatchValidator"; }
 
   ManualMatchValidator();
   ~ManualMatchValidator() = default;

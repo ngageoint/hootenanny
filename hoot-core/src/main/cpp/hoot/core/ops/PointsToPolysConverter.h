@@ -43,7 +43,7 @@ class PointsToPolysConverter : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::PointsToPolysConverter"; }
+  static QString className() { return "PointsToPolysConverter"; }
 
   PointsToPolysConverter(const double bufferSize = 1.0);
   ~PointsToPolysConverter() = default;

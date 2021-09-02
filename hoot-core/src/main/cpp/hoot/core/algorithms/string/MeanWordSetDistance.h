@@ -55,7 +55,7 @@ public:
   MeanWordSetDistance();
   ~MeanWordSetDistance() = default;
 
-  static QString className() { return "hoot::MeanWordSetDistance"; }
+  static QString className() { return "MeanWordSetDistance"; }
 
   double compare(const QString& s1, const QString& s2) const override;
 

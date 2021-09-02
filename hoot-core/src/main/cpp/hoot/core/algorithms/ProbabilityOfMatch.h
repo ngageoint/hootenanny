@@ -51,7 +51,7 @@ public:
 
   double distanceScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const ConstWayPtr& w2);
-  double distanceScore(const hoot::ConstOsmMapPtr &map, const ConstWayPtr &w1,
+  double distanceScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const std::shared_ptr<const geos::geom::LineString> &ls2, Meters circularError);
 
   double lengthScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,

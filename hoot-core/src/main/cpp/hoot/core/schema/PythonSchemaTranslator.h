@@ -39,7 +39,7 @@ class PythonSchemaTranslator : public ScriptSchemaTranslator
 {
 public:
 
-  static QString className() { return "hoot::PythonSchemaTranslator"; }
+  static QString className() { return "PythonSchemaTranslator"; }
 
   PythonSchemaTranslator() = default;
   ~PythonSchemaTranslator();

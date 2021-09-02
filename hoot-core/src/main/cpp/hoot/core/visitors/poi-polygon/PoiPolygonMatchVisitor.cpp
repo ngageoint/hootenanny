@@ -47,9 +47,8 @@ using namespace std;
 namespace hoot
 {
 
-PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(const ConstOsmMapPtr& map,
-                                               std::vector<ConstMatchPtr>& result,
-                                               ElementCriterionPtr filter) :
+PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(
+  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result, ElementCriterionPtr filter) :
 _map(map),
 _result(result),
 _filter(filter)
@@ -57,19 +56,15 @@ _filter(filter)
   _timer.start();
 }
 
-PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(const ConstOsmMapPtr& map,
-                                               std::vector<ConstMatchPtr>& result,
-                                               ConstMatchThresholdPtr threshold,
-                                               std::shared_ptr<PoiPolygonRfClassifier> rf,
-                                               PoiPolygonInfoCachePtr infoCache,
-                                               ElementCriterionPtr filter) :
+PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(
+  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result, ConstMatchThresholdPtr threshold,
+  PoiPolygonInfoCachePtr infoCache, ElementCriterionPtr filter) :
 _map(map),
 _result(result),
 _neighborCountMax(-1),
 _neighborCountSum(0),
 _elementsEvaluated(0),
 _threshold(threshold),
-_rf(rf),
 _numElementsVisited(0),
 _numMatchCandidatesVisited(0),
 _filter(filter),
@@ -110,7 +105,7 @@ void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>
         LOG_TRACE(
           "Calculating match between: " << poiId << " and " << poly->getElementId() << "...");
         std::shared_ptr<PoiPolygonMatch> m =
-          std::make_shared<PoiPolygonMatch>(_map, _threshold, _rf, _infoCache, surroundingPolyIds);
+          std::make_shared<PoiPolygonMatch>(_map, _threshold, _infoCache, surroundingPolyIds);
         m->setConfiguration(conf());
         m->calculateMatch(poiId, polyId);
 

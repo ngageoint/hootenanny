@@ -48,7 +48,7 @@ class SmallDisconnectedWayRemover : public OsmMapOperation, public Configurable,
 {
 public:
 
-  static QString className() { return "hoot::SmallDisconnectedWayRemover"; }
+  static QString className() { return "SmallDisconnectedWayRemover"; }
 
   SmallDisconnectedWayRemover();
   SmallDisconnectedWayRemover(const int maxWayLength, const int maxWayNodeCount);

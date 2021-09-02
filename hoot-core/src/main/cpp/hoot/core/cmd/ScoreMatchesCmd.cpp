@@ -41,7 +41,7 @@ class ScoreMatchesCmd : public BaseCommand
 
 public:
 
-  static QString className() { return "hoot::ScoreMatchesCmd"; }
+  static QString className() { return "ScoreMatchesCmd"; }
 
   ScoreMatchesCmd() = default;
 

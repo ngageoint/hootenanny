@@ -41,7 +41,7 @@ class PoiPolygonPoiCriterion : public ConflatableElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::PoiPolygonPoiCriterion"; }
+  static QString className() { return "PoiPolygonPoiCriterion"; }
 
   PoiPolygonPoiCriterion();
   ~PoiPolygonPoiCriterion() = default;

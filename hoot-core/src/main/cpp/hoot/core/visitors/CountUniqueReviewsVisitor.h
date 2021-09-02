@@ -43,7 +43,7 @@ class CountUniqueReviewsVisitor : public ElementConstOsmMapVisitor, public Singl
 
 public:
 
-  static QString className() { return "hoot::CountUniqueReviewsVisitor"; }
+  static QString className() { return "CountUniqueReviewsVisitor"; }
 
   CountUniqueReviewsVisitor() = default;
   ~CountUniqueReviewsVisitor() = default;

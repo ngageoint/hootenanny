@@ -48,7 +48,7 @@ _idSwap(std::make_shared<IdSwap>(e1, e2))
 {
 }
 
-void IdSwapOp::apply(const std::shared_ptr<hoot::OsmMap>& map)
+void IdSwapOp::apply(const std::shared_ptr<OsmMap>& map)
 {
   //  Validate the swap information
   IdSwapPtr swap;

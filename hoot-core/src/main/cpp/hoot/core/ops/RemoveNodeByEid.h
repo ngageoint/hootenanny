@@ -41,7 +41,7 @@ class RemoveNodeByEid : public ConstOsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::RemoveNodeByEid"; }
+  static QString className() { return "RemoveNodeByEid"; }
 
   /**
    * Constructor

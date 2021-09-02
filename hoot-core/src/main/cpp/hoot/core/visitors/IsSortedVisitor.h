@@ -43,7 +43,7 @@ class IsSortedVisitor : public ConstElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::IsSortedVisitor"; }
+  static QString className() { return "IsSortedVisitor"; }
 
   IsSortedVisitor();
   ~IsSortedVisitor() = default;

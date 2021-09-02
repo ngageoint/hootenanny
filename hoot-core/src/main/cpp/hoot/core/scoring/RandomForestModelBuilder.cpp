@@ -51,7 +51,7 @@ namespace hoot
 {
 
 void RandomForestModelBuilder::build(
-  const QStringList trainingData, QString output, const bool exportArffOnly)
+  const QStringList& trainingData, QString& output, const bool exportArffOnly)
 {
   if (output.endsWith(".rf"))
   {

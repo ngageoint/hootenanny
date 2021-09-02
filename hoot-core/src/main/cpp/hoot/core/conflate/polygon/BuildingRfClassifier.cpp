@@ -27,7 +27,6 @@
 #include "BuildingRfClassifier.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/algorithms/string/MeanWordSetDistance.h>
@@ -41,12 +40,16 @@
 namespace hoot
 {
 
-void BuildingRfClassifier::_createBestExtractors() const
+void BuildingRfClassifier::_createExtractors() const
 {
   _extractors.clear();
 
   // This set was determined with experimentation using the Jakarta building data and weka (see
-  // regression tests).
+  // regression tests). Order can be very important as far as matching quality is concerned. You can
+  // check the resulting output arff file when these are serialized to make sure the order of these
+  // extractors is maintained.
+  _extractors.push_back(
+    std::make_shared<EdgeDistanceExtractor>(std::make_shared<QuantileAggregator>(0.4)));
   _extractors.push_back(std::make_shared<AngleHistogramExtractor>(0.0));
   _extractors.push_back(std::make_shared<AngleHistogramExtractor>(0.3));
   _extractors.push_back(std::make_shared<CompactnessExtractor>());
@@ -56,14 +59,6 @@ void BuildingRfClassifier::_createBestExtractors() const
       std::make_shared<ToEnglishTranslateStringDistance>(
         std::make_shared<MeanWordSetDistance>(
           std::make_shared<LevenshteinDistance>(1.45)))));
-  _extractors.push_back(
-    std::make_shared<EdgeDistanceExtractor>(std::make_shared<QuantileAggregator>(0.4)));
-}
-
-void BuildingRfClassifier::_createExtractors() const
-{
-  LOG_TRACE("Creating extractors...");
-  _createBestExtractors();
 }
 
 }

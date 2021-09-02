@@ -45,7 +45,7 @@ class NonBuildingAreaCriterion : public GeometryTypeCriterion, public ConstOsmMa
 {
 public:
 
-  static QString className() { return "hoot::NonBuildingAreaCriterion"; }
+  static QString className() { return "NonBuildingAreaCriterion"; }
 
   NonBuildingAreaCriterion() = default;
   NonBuildingAreaCriterion(ConstOsmMapPtr map) : _map(map) { }

@@ -41,7 +41,7 @@ class ImplicitPoiPolygonTypeTagger : public ImplicitPoiTypeTagger
 {
 public:
 
-  static QString className() { return "hoot::ImplicitPoiPolygonTypeTagger"; }
+  static QString className() { return "ImplicitPoiPolygonTypeTagger"; }
 
   ImplicitPoiPolygonTypeTagger() = default;
   ImplicitPoiPolygonTypeTagger(const QString& databasePath);

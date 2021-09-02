@@ -36,7 +36,7 @@ hoot count $LOG_LEVEL $CONFIG -D element.criteria.negate=true $INPUT_FILE_3 $INP
 
 echo ""
 echo "counting all POIs..."
-hoot count $LOG_LEVEL $CONFIG $INPUT_FILE_1 $INPUT_FILE_2 --criteria hoot::PoiCriterion
+hoot count $LOG_LEVEL $CONFIG $INPUT_FILE_1 $INPUT_FILE_2 --criteria PoiCriterion
 
 echo ""
 echo "counting all elements that are not POIs..."

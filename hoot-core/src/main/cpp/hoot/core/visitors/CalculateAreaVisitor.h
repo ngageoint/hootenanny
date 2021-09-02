@@ -42,7 +42,7 @@ class CalculateAreaVisitor : public ElementConstOsmMapVisitor, public SingleStat
 {
 public:
 
-  static QString className() { return "hoot::CalculateAreaVisitor"; }
+  static QString className() { return "CalculateAreaVisitor"; }
 
   CalculateAreaVisitor() : _total(0) { }
   ~CalculateAreaVisitor() = default;

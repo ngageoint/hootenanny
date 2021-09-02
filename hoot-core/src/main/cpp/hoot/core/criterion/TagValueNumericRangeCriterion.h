@@ -41,7 +41,7 @@ class TagValueNumericRangeCriterion : public ElementCriterion, public Configurab
 {
 public:
 
-  static QString className() { return "hoot::TagValueNumericRangeCriterion"; }
+  static QString className() { return "TagValueNumericRangeCriterion"; }
 
   TagValueNumericRangeCriterion();
   TagValueNumericRangeCriterion(const QStringList tagKeys, const long rangeMin,

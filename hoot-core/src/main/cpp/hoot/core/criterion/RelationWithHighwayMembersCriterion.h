@@ -41,7 +41,7 @@ class RelationWithHighwayMembersCriterion : public RelationWithMembersOfTypeCrit
 {
 public:
 
-  static QString className() { return "hoot::RelationWithHighwayMembersCriterion"; }
+  static QString className() { return "RelationWithHighwayMembersCriterion"; }
 
   RelationWithHighwayMembersCriterion();
   RelationWithHighwayMembersCriterion(ConstOsmMapPtr map);

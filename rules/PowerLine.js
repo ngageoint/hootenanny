@@ -16,7 +16,7 @@ exports.reviewThreshold = parseFloat(hoot.get("power.line.review.threshold"));
 
 // This is needed for disabling superfluous conflate ops and calculating a search radius only.
 // exports.isMatchCandidate handles culling match candidates.
-exports.matchCandidateCriterion = "hoot::PowerLineCriterion";
+exports.matchCandidateCriterion = "PowerLineCriterion";
 
 // We're just using the default max recursions here for MaximalSubline. May need to come up with a
 // custom value via empirical testing. This will not work if we ever end up needing to pass map in

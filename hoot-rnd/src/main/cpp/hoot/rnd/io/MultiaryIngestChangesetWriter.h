@@ -43,7 +43,7 @@ class MultiaryIngestChangesetWriter : public OsmChangeWriter, public Configurabl
 {
 public:
 
-  static QString className() { return "hoot::MultiaryIngestChangesetWriter"; }
+  static QString className() { return "MultiaryIngestChangesetWriter"; }
 
   MultiaryIngestChangesetWriter();
 

@@ -122,8 +122,9 @@ public:
    *
    * @param prefix the prefix to remove from the strings
    * @param input the collection of strings to modify
+   * @return the number of prefixes removed
    */
-  static void removePrefixes(const QString& prefix, QStringList& input);
+  static int removePrefixes(const QString& prefix, QStringList& input);
 
   /**
    * Determines if a string is made up of entirely alphanumeric characters

@@ -90,11 +90,11 @@ public:
     // have to do this or getInstance will re-register the default match creators.
     MatchFactory& matchFactory = MatchFactory::getInstance();
     matchFactory.reset();
-    matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");
+    matchFactory.registerCreator("ScriptMatchCreator,MultiaryPoi.js");
 
     MergerCreatorPtr mergerCreator =
       Factory::getInstance().constructObject<MergerCreator>(
-        QString("hoot::ScriptMergerCreator"));
+        QString("ScriptMergerCreator"));
     MergerFactory& mergerFactory = MergerFactory::getInstance();
     mergerFactory.reset();
     mergerFactory.registerCreator(mergerCreator);

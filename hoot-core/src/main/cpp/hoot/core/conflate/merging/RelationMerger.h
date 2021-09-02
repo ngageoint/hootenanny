@@ -46,7 +46,7 @@ class RelationMerger : public OsmMapConsumer
 {
 public:
 
-  static QString className() { return "hoot::RelationMerger"; }
+  static QString className() { return "RelationMerger"; }
 
   RelationMerger();
   ~RelationMerger() = default;

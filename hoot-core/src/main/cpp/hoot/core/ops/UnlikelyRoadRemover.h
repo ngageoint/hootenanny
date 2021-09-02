@@ -48,7 +48,7 @@ class UnlikelyRoadRemover : public OsmMapOperation, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::UnlikelyRoadRemover"; }
+  static QString className() { return "UnlikelyRoadRemover"; }
 
   UnlikelyRoadRemover();
   ~UnlikelyRoadRemover() override = default;

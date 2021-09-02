@@ -47,7 +47,7 @@ public:
   static const QString DETECTORS_STR;
   static const QString TRANSLATORS_STR;
 
-  static QString className() { return "hoot::HootServicesLanguageInfoMockClient"; }
+  static QString className() { return "HootServicesLanguageInfoMockClient"; }
 
   HootServicesLanguageInfoMockClient();
   ~HootServicesLanguageInfoMockClient() = default;

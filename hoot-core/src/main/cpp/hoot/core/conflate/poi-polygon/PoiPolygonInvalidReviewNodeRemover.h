@@ -47,7 +47,7 @@ class PoiPolygonInvalidReviewNodeRemover : public ConstOsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::PoiPolygonInvalidReviewNodeRemover"; }
+  static QString className() { return "PoiPolygonInvalidReviewNodeRemover"; }
 
   PoiPolygonInvalidReviewNodeRemover();
   ~PoiPolygonInvalidReviewNodeRemover() = default;

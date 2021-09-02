@@ -39,7 +39,7 @@ class HasNameCriterion : public ElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::HasNameCriterion"; }
+  static QString className() { return "HasNameCriterion"; }
 
   HasNameCriterion() = default;
   ~HasNameCriterion() = default;

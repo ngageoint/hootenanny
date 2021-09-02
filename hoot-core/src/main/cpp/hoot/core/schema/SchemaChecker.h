@@ -42,7 +42,7 @@ class SchemaChecker
 {
 public:
 
-  static QString className() { return "hoot::SchemaChecker"; }
+  static QString className() { return "SchemaChecker"; }
 
   static int logWarnCount;
 

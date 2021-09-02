@@ -43,7 +43,7 @@ class LongBox
 {
 public:
 
-  static QString className() { return "hoot::LongBox"; }
+  static QString className() { return "LongBox"; }
 
   LongBox() = default;
   LongBox(const std::vector<long int>& min, const std::vector<long int>& max);

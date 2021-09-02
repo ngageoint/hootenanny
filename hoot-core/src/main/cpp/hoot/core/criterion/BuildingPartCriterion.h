@@ -40,7 +40,7 @@ class BuildingPartCriterion : public GeometryTypeCriterion
 {
 public:
 
-  static QString className() { return "hoot::BuildingPartCriterion"; }
+  static QString className() { return "BuildingPartCriterion"; }
 
   BuildingPartCriterion() = default;
   ~BuildingPartCriterion() = default;

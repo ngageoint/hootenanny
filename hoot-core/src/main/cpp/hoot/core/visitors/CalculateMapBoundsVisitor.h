@@ -44,7 +44,7 @@ class CalculateMapBoundsVisitor : public ConstElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::CalculateMapBoundsVisitor"; }
+  static QString className() { return "CalculateMapBoundsVisitor"; }
 
   CalculateMapBoundsVisitor() = default;
   ~CalculateMapBoundsVisitor() = default;

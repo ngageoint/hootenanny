@@ -43,7 +43,7 @@ class FilteredVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
 
 public:
 
-  static QString className() { return "hoot::FilteredVisitor"; }
+  static QString className() { return "FilteredVisitor"; }
 
   FilteredVisitor();
   /**

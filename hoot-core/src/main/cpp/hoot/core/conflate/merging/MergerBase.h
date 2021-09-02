@@ -36,7 +36,7 @@ class MergerBase : public Merger
 {
 public:
 
-  static QString className() { return "hoot::MergerBase"; }
+  static QString className() { return "MergerBase"; }
 
   using PairsSet = std::set<std::pair<ElementId, ElementId>>;
 

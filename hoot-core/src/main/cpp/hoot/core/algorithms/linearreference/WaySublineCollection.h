@@ -42,7 +42,7 @@ class WaySublineCollection
 {
 public:
 
-  static QString className() { return "hoot::WaySublineCollection"; }
+  static QString className() { return "WaySublineCollection"; }
 
   static int logWarnCount;
 

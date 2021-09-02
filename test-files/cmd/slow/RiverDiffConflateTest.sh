@@ -7,7 +7,7 @@ IN_DIR=test-files/cmd/slow/RiverDiffConflateTest
 OUT_DIR=test-output/cmd/slow/RiverDiffConflateTest
 mkdir -p $OUT_DIR
 LOG_LEVEL=--warn
-CONFIG="-C UnifyingAlgorithm.conf -C DifferentialConflation.conf -C Testing.conf -D uuid.helper.repeatable=true -D match.creators=hoot::ScriptMatchCreator,River.js -D merger.creators=hoot::ScriptMergerCreator"
+CONFIG="-C UnifyingAlgorithm.conf -C DifferentialConflation.conf -C Testing.conf -D uuid.helper.repeatable=true -D match.creators=ScriptMatchCreator,River.js -D merger.creators=ScriptMergerCreator"
 
 # See related notes in DiffConflatePartialLinearMatchTest.
 

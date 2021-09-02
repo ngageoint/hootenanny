@@ -39,7 +39,7 @@ class LogoutCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::LogoutCmd"; }
+  static QString className() { return "LogoutCmd"; }
 
   LogoutCmd() = default;
 

@@ -37,7 +37,7 @@ class BBox
 {
 public:
 
-  static QString className() { return "hoot::BBox"; }
+  static QString className() { return "BBox"; }
 
   BBox(const std::vector<double>& min, const std::vector<double>& max);
   BBox(const geos::geom::Envelope& envelope);

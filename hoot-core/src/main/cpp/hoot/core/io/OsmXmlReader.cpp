@@ -792,7 +792,7 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
           else
           {
             bool isBad = false;
-            hoot::Tags t1;
+            Tags t1;
             t1.set(key, value);
             try
             {

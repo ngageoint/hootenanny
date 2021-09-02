@@ -55,20 +55,20 @@ SOURCE_FILE_2=$3
 if [ "$SOURCE_FILE_2" == "" ]; then
   SOURCE_FILE_2=$SOURCE_FILE_1
   if [ "$CROP_OPTS" == "" ]; then
-    REF_CONVERT_OPS="hoot::SetTagValueVisitor;hoot::PertyOp"
-    SEC_CONVERT_OPS="hoot::SetTagValueVisitor"
+    REF_CONVERT_OPS="SetTagValueVisitor;PertyOp"
+    SEC_CONVERT_OPS="SetTagValueVisitor"
   else
-    REF_CONVERT_OPS="hoot::MapCropper;hoot::SetTagValueVisitor;hoot::PertyOp"
-    SEC_CONVERT_OPS="hoot::MapCropper;hoot::SetTagValueVisitor"
+    REF_CONVERT_OPS="MapCropper;SetTagValueVisitor;PertyOp"
+    SEC_CONVERT_OPS="MapCropper;SetTagValueVisitor"
   fi
   PERTURBING_REF="true"
 else
   if [ "$CROP_OPTS" == "" ]; then
-    REF_CONVERT_OPS="hoot::SetTagValueVisitor"
-    SEC_CONVERT_OPS="hoot::SetTagValueVisitor"
+    REF_CONVERT_OPS="SetTagValueVisitor"
+    SEC_CONVERT_OPS="SetTagValueVisitor"
   else
-    REF_CONVERT_OPS="hoot::MapCropper;hoot::SetTagValueVisitor"
-    SEC_CONVERT_OPS="hoot::MapCropper;hoot::SetTagValueVisitor"
+    REF_CONVERT_OPS="MapCropper;SetTagValueVisitor"
+    SEC_CONVERT_OPS="MapCropper;SetTagValueVisitor"
   fi
   PERTURBING_REF="false"
 fi
@@ -85,8 +85,8 @@ else
   # If a input filter was specified we'll remove everything that doesn't pass the specified filter,
   # by placing a RemoveElementsVisitor as the very first op and negating the criterion.
   INPUT_FILTER=$6
-  REF_CONVERT_OPS="hoot::RemoveElementsVisitor;"$REF_CONVERT_OPS
-  SEC_CONVERT_OPS="hoot::RemoveElementsVisitor;"$SEC_CONVERT_OPS
+  REF_CONVERT_OPS="RemoveElementsVisitor;"$REF_CONVERT_OPS
+  SEC_CONVERT_OPS="RemoveElementsVisitor;"$SEC_CONVERT_OPS
 fi
 echo "input filter: " $INPUT_FILTER
 
@@ -178,7 +178,7 @@ else
 fi
 echo ""
 scripts/database/CleanAndInitializeOsmApiDb.sh
-hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D remove.elements.visitor.element.criteria=$INPUT_FILTER -D remove.elements.visitor.recursive=true -D element.criteria.negate=true -D remove.elements.visitor.chain.element.criteria=true -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
+hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm -D reader.use.data.source.ids=false -D id.generator=PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D remove.elements.visitor.element.criteria=$INPUT_FILTER -D remove.elements.visitor.recursive=true -D element.criteria.negate=true -D remove.elements.visitor.chain.element.criteria=true -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
 # Don't remove missing elements for these file conversions (even if you need to view them in JOSM), since they are the 
 # input data and we want to see any errors caused by them having missing elements.
 echo ""
@@ -217,7 +217,7 @@ hoot changeset-apply $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D
 echo ""
 echo "Reading the entire reference dataset out of the osm api db to: $OUT_XML for verification..."
 echo ""
-hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS -D convert.ops="hoot::RemoveMissingElementsVisitor" -D debug.maps.filename=$OUT_DIR/final-write-xml.osm $OSM_API_DB_URL $OUT_DIR/$OUT_XML
+hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS -D convert.ops="RemoveMissingElementsVisitor" -D debug.maps.filename=$OUT_DIR/final-write-xml.osm $OSM_API_DB_URL $OUT_DIR/$OUT_XML
 # Not completely sure what the differences between the xml output and db output are yet, but the output maps look identical.
 hoot diff $LOG_LEVEL $GENERAL_OPTS $IN_DIR/$OUT_XML $OUT_DIR/$OUT_XML
 

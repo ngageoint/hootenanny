@@ -57,7 +57,7 @@ class TagAdvancedCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::TagAdvancedCriterion"; }
+  static QString className() { return "TagAdvancedCriterion"; }
 
   TagAdvancedCriterion();
   TagAdvancedCriterion(const QString& filterJsonStrOrPath);

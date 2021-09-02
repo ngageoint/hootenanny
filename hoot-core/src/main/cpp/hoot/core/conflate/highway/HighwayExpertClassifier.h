@@ -38,7 +38,7 @@ class HighwayExpertClassifier : public HighwayClassifier
 {
 public:
 
-  static QString className() { return "hoot::HighwayExpertClassifier"; }
+  static QString className() { return "HighwayExpertClassifier"; }
 
   HighwayExpertClassifier() = default;
   ~HighwayExpertClassifier() = default;

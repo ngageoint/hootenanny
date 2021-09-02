@@ -71,7 +71,7 @@ class OgrReaderInternal : public ProgressReporter
 {
 public:
 
-  static QString className() { return "hoot::OgrReaderInternal"; }
+  static QString className() { return "OgrReaderInternal"; }
 
   static int logWarnCount;
 

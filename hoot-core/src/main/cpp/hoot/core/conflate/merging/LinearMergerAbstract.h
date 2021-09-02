@@ -90,7 +90,7 @@ class LinearMergerAbstract : public MergerBase
 
 public:
 
-  static QString className() { return "hoot::LinearMergerAbstract"; }
+  static QString className() { return "LinearMergerAbstract"; }
 
   LinearMergerAbstract() = default;
   LinearMergerAbstract(

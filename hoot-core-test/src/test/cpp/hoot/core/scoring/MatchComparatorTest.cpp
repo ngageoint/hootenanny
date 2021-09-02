@@ -55,8 +55,8 @@ public:
   {
     setResetType(ResetAll);
 
-    conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::BuildingMatchCreator");
-    conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::BuildingMergerCreator");
+    conf().set(ConfigOptions::getMatchCreatorsKey(), "BuildingMatchCreator");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), "BuildingMergerCreator");
   }
 
   void runTest()

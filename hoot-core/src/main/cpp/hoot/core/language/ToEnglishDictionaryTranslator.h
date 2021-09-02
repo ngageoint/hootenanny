@@ -52,7 +52,7 @@ class ToEnglishDictionaryTranslator : public ToEnglishTranslator
 {
 public:
 
-  static QString className() { return "hoot::ToEnglishDictionaryTranslator"; }
+  static QString className() { return "ToEnglishDictionaryTranslator"; }
 
   ToEnglishDictionaryTranslator();
   ~ToEnglishDictionaryTranslator() = default;

@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
@@ -69,10 +70,7 @@ bool OrCriterion::isSatisfied(const ConstElementPtr& e) const
 
 QString OrCriterion::toString() const
 {
-  return
-    ChainCriterion::toString().replace(
-      ChainCriterion::className().replace("hoot::", ""),
-      className().replace("hoot::", ""));
+  return ChainCriterion::toString().replace(ChainCriterion::className(), className());
 }
 
 }

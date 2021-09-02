@@ -36,7 +36,7 @@ class WayCriterion : public ElementTypeCriterion
 {
 public:
 
-  static QString className() { return "hoot::WayCriterion"; }
+  static QString className() { return "WayCriterion"; }
 
   WayCriterion();
   ~WayCriterion() override = default;

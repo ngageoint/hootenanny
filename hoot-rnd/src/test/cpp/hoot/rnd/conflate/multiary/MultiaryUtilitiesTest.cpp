@@ -92,7 +92,7 @@ public:
     elements.append(e2);
     elements.append(e3);
 
-    QList<hoot::MultiaryElement> result = MultiaryUtilities::conflateCluster(elements);
+    QList<MultiaryElement> result = MultiaryUtilities::conflateCluster(elements);
 
     HOOT_STR_EQUALS("[2]{{hash: 'sha1sum:537bc7a383257c8c1cdf69b461af87344a0a0ba5', bounds: 'Env[-3.0018:-2.9982,2.9982:3.0018]', payload: 'AAAApwqGAQoACgdhbWVuaXR5CgNwdWIKCWhvb3Q6aGFzaAowc2hhMXN1bTo1MzdiYzdhMzgzMjU3YzhjMWNkZjY5YjQ2MWFmODczNDRhMGEwYmE1CgRuYW1lCg1NeSBSZXN0YXVyYW50Cg5lcnJvcjpjaXJjdWxhcgoCMTUKC2hvb3Q6c3RhdHVzCgExEhwKGggFEgUBAwUHCRoFAgQGCApAgI7OHEj/jc4c'}, {hash: 'sha1sum:bd4ba434e321fd3eb0d1597044b962412067fd8a', bounds: 'Env[-3.0018:-2.9982,1.9982:2.0018]', payload: 'AAABMwqMAgoACg1pc19pbjpjb3VudHJ5CgVZZW1lbgoHYW1lbml0eQoDcHViCglob290Omhhc2gKMHNoYTFzdW06YmQ0YmE0MzRlMzIxZmQzZWIwZDE1OTcwNDRiOTYyNDEyMDY3ZmQ4YQoEbmFtZQoNTXkgUmVzdGF1cmFudAoKc291cmNlOnVybAojaHR0cDovL3dpa2ltYXBpYS5vcmcvMzY5NTY3NDgvMTUtNDMKC3NvdXJjZTpoYXNoCjBzaGExc3VtOmM0MGI1N2YxNWFjODE0MjcyYjFiNGNkNDIzMDJjMjlkMTVjYWI5ZDkKDmVycm9yOmNpcmN1bGFyCgIxNQoLaG9vdDpzdGF0dXMKATMSIgogCAESCAEDBQcJCw0PGggCBAYICgwOEECAtIkTSP+Nzhw='}}", result);
   }
@@ -122,7 +122,7 @@ public:
     againstElements.append(e2);
     againstElements.append(e3);
 
-    QList<hoot::MultiarySimpleMatch> result = MultiaryUtilities::findMatches(e1, againstElements);
+    QList<MultiarySimpleMatch> result = MultiaryUtilities::findMatches(e1, againstElements);
 
     HOOT_STR_EQUALS("[1]{{neighborIndex: 0, score: 0.757576}}", result);
   }

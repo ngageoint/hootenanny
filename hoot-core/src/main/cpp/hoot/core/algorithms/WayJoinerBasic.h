@@ -43,7 +43,7 @@ class WayJoinerBasic : public WayJoiner
 {
 public:
 
-  static QString className() { return "hoot::WayJoinerBasic"; }
+  static QString className() { return "WayJoinerBasic"; }
 
   WayJoinerBasic() = default;
   ~WayJoinerBasic() = default;
