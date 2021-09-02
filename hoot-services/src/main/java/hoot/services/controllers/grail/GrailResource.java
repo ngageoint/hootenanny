@@ -331,7 +331,7 @@ public class GrailResource {
                 differentialParams.setConflationType(DbUtils.getConflationType(Long.parseLong(input2)));
                 input2 = HOOTAPI_DB_URL + "/" + input2;
 
-                grailCommandClass = replacement ? DeriveChangesetReplacementCommand.class : DeriveChangesetCommand.class;
+                grailCommandClass = replacement ? DeriveChangesetReplacementCommand.class : RunDiffCommand.class;
             }
         }
 
@@ -366,6 +366,15 @@ public class GrailResource {
                 jobType = JobType.BULK_REPLACE;
             } else {
                 jobType = JobType.BULK_DIFFERENTIAL;
+
+                if (reqParams.getApplyTags()) {
+                    File tagDiffFile = new File(workDir, "diff.tags.osc");
+                    GrailParams pushTagsParams = new GrailParams(pushParams);
+                    pushTagsParams.setOutput(tagDiffFile.getAbsolutePath());
+
+                    ExternalCommand applyTagChange = grailCommandFactory.build(jobId, pushTagsParams, debugLevel, ApplyChangesetCommand.class, this.getClass());
+                    workflow.add(applyTagChange);
+                }
             }
 
             // Wait to detect overpass 'Last element pushed'
