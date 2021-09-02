@@ -544,8 +544,6 @@ long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
   long numFeaturesSnapped = 0;
 
   // snapping with the default config
-  linearFeatureSnapper.setSnapToWayStatuses(originalSnapToWayStatuses);
-  linearFeatureSnapper.setSnapWayStatuses(originalSnapWayStatuses);
   LOG_INFO("\t" << linearFeatureSnapper.getInitStatusMessage());
   linearFeatureSnapper.apply(_map);
   LOG_DEBUG("\t" << linearFeatureSnapper.getCompletedStatusMessage());
@@ -578,7 +576,9 @@ long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
     ConfigUtils::removeListOpEntry(
       ConfigOptions::getConflatePostOpsKey(), WayJoinerOp::className());
 
-    // TODO
+    // This is getting a little kludgy, but needed to do one more round of snapping after the
+    // joining to make some test output better. Only doing it in the default direction, as doing it
+    // the reverse direction again had some adverse affects on the diff way snap tests.
     linearFeatureSnapper.setSnapToWayStatuses(originalSnapToWayStatuses);
     linearFeatureSnapper.setSnapWayStatuses(originalSnapWayStatuses);
     LOG_INFO("\t" << linearFeatureSnapper.getInitStatusMessage());
