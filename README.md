@@ -14,7 +14,7 @@ _Conflation_:
 
 [Hootenanny](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) is an open source map data conflation tool developed with machine learning techniques to facilitate automated and semi-automated conflation of critical Foundation GEOINT features in the topographic domain. **In short, it merges multiple maps into a single seamless map.**
 
-# Goals
+Goals:
 
 * Automatically combine geospatial features for decision making
 * Allow for reviewing and manually resolving features which cannot be automatically matched with sufficient certainty
@@ -25,10 +25,10 @@ _Conflation_:
 
 # [Releases](https://github.com/ngageoint/hootenanny/releases)
 
+For installation from RPM, please follow the [guide in the rpms repo](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md). If you want to install from source without downloading the release, please follow [VAGRANT.md](https://github.com/ngageoint/hootenanny/blob/master/docs/user/VAGRANT.md).
+
 Documentation is included as [PDF files](https://github.com/ngageoint/hootenanny/releases) with each release. Download 
 the Hootenanny `.tar.gz` installation file and locate the documentation within the "docs" directory.
-
-If you want to install from source using without downloading the release, please follow [VAGRANT.md](https://github.com/ngageoint/hootenanny/blob/master/docs/user/VAGRANT.md). For installation from RPM, please follow the [guide in the rpms repo](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md).
 
 # Conflatable Feature Types
 
@@ -52,7 +52,7 @@ You can create your own custom conflation algorithms for additional feature type
 # [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) Workflows
 
 A conflation workflow defines the manner in which two maps are merged together. Hootenanny has the following workflows:
-* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc#conflation-strategies)** **(default; aka Vertical Conflation)** - _Keep the best of both maps while favoring the first_
+* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc#conflation-strategies)** (**default**; aka Vertical Conflation) - _Keep the best of both maps while favoring the first_
   * Use this type of conflation when you want map output based on the best state of two maps while favoring the first one.
 * **[Average Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc#average-conflation)** - _Keep an average of both maps_ 
   * Use this type of conflation when you consider both input maps equal in quality and want a result that is an average of the two.
@@ -114,23 +114,21 @@ wishing to develop their own conflation clients. The web services use
 
 # [Command Line Interface](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc)
 
-Command line access is available to aid in custom scripting of conflation capabilities.
-
-Example:
+Basic conflation example:
 
 ```
 #  conflate two datasets together
 hoot conflate input1.osm input2.osm output.osm
 ```
 
-[examples](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc)
+[More examples](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc)
 
 # Programming Language Bindings
 
 Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) available which expose 
 core conflation capabilities for creating custom workflows. 
 
-Example:
+Basic conflation example:
 
 ```
 //  conflate two datasets together
@@ -144,7 +142,7 @@ hoot.saveMap(map, "output.osm");
 
 # Feature Summary
 
-In addition to conflating map data, Hootenanny also provides these supporting capabilities that aid conflation:
+In addition to conflating map data, Hootenanny also provides these supporting capabilities that may aid conflation:
 * [Add missing type tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/ImplicitTypeTagging.asciidoc) to features implicitly based on their name (experimental)
 * [Align](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/align.asciidoc) the geometries of two maps more closely with each other
 * [Apply data transformation operations](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc#conversion-operations) to a map
