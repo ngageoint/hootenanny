@@ -1,0 +1,21 @@
+
+[[Support]]
+== Support
+
+Don't hesitate to ask for help if features aren't conflating how you expect them to or if you're 
+experiencing difficulty while installing the software. We officially support installing RPMs to 
+CentOS and launching CentOS virtual machines via Vagrant/VirtualBox. For anything else you need to 
+do we'll do our best to help you out, but there are no guarantees. If you have any support 
+questions, please create an issue in this repository.
+
+As there are lot of different data scenarios out in the wild, there is no one-size fits all 
+conflation workflow or algorithm. Hootenanny attempts to provide a useful set of conflation 
+workflows with pre-configured options that capture most conflation requirements. However, you may 
+require a new conflation scenario for your purposes (let us know), or you may need to custom modify 
+configuration options for an existing scenario in order to get the best results.
+
+Also, the availability of new software features to the user interface may lag their initial 
+availability from the command line interface (CLI) by one or more development cycles. If you find a 
+conflation feature you wish to use that is mentioned in the CLI documentation but is not present 
+within the UI, let us know.
+

@@ -29,7 +29,7 @@
 
 // Qt
 #include <QDateTime>
-#include <QRegExp>
+#include <QRegularExpression>
 
 namespace hoot
 {
@@ -46,8 +46,9 @@ QString DateTimeUtils::toTimeString(quint64 timestamp)
 quint64 DateTimeUtils::fromTimeString(QString timestamp)
 {
   //2016-05-04T22:07:19Z
-  QRegExp timestampRegex("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z*");
-  if (!timestampRegex.exactMatch(timestamp))
+  static QRegularExpression timestampRegex("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z*",
+                                           QRegularExpression::OptimizeOnFirstUsageOption);
+  if (!timestampRegex.match(timestamp).hasMatch())
   {
     throw IllegalArgumentException("Invalid timestamp string: " + timestamp);
   }

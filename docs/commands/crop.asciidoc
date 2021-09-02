@@ -3,34 +3,34 @@
 
 === Description
 
-The +crop+ command crops a map to a specified bounds. 
+The `crop` command crops a map to a specified bounds. 
 
 This operation is memory bound and may not be appropriate to crop very large pieces of data. The 
 default cropping behavior is that individual features on the border are modified to make sure 
 nothing is outside the given bounds. This behavior may be customized with the `crop.*` configuration 
 options.
 
-* +input(s)+          - Input(s); may be any supported input format (e.g. .osm file) or a directory 
+* `input(s)`          - Input(s); may be any supported input format (e.g. .osm file) or a directory 
                         if  `--recursive` is specified.
-* +output+            - Output; may be any supported output format (e.g. .osm file). Not used if 
+* `output`            - Output; may be any supported output format (e.g. .osm file). Not used if 
                         `--separate-output` is specified.
-* +bounds+            - The boundary to crop the data to of the format: minx,miny,maxx,maxy 
+* `bounds`            - The boundary to crop the data to of the format: minx,miny,maxx,maxy 
                         e.g. 38,-105,39,-104
-* +--recursive+       - Allows for processing the files contained in any directories specified in 
-                        +input(s)+ recursively. This parameter has no effect on the processing of 
+* `--recursive`       - Allows for processing the files contained in any directories specified in 
+                        `input(s)` recursively. This parameter has no effect on the processing of 
                         non-directory inputs. This must be followed by either "*" to denote no 
                         filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or 
                         "*myFile*". This parameter is not compatible with the OGR layer input 
                         syntax.
-* +--separate-output+ - The default behavior when processing multiple inputs is to combine them into 
+* `--separate-output` - The default behavior when processing multiple inputs is to combine them into 
                         the same single output. With this parameter specified, each input is 
-                        processed and written to a separate output. The +output+ parameter is 
+                        processed and written to a separate output. The `output` parameter is 
                         invalid in combination with this parameter, and output is written back to a 
                         new URL with the same base name as each input with the text "-cropped" 
                         appended to it. This parameter cannot be used with OSM API database 
                         (osmapidb://) or OSM API (http://) inputs. This parameter is not compatible 
                         with the OGR layer input syntax.
-* +--write-bounds+    - Optionally outputs a file containing the cropped bounds. The location of the 
+* `--write-bounds`    - Optionally outputs a file containing the cropped bounds. The location of the 
                         file is controlled via the `bounds.output.file` configuration option.
 
 === Usage

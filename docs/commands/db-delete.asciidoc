@@ -3,9 +3,9 @@
 
 === Description
 
-The +db-delete+ command deletes maps from the Hootenanny Web Services database.
+The `db-delete` command deletes maps from the Hootenanny Web Services database.
 
-* +mapDatabaseLayerUrl(s)+ - One or more URLs pointing to database maps.
+* `mapDatabaseLayerUrl(s)` - One or more URLs pointing to database maps.
 
 === Usage
 

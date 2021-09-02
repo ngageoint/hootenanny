@@ -1043,7 +1043,6 @@ void OsmMap::visitRelationsRw(ElementVisitor& visitor)
 
 void OsmMap::_replaceNodeInRelations(long oldId, long newId)
 {
-  RelationMap allRelations = getRelations();
   const ElementId oldNodeId = ElementId::node(oldId);
 
   LOG_TRACE("Replace node in relations: replace " << oldId << " with " << newId );
@@ -1068,18 +1067,19 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
 
   ConstElementPtr oldNode = getNode(oldId);
   ConstElementPtr newNode = getNode(newId);
-
-  for ( RelationMap::iterator r_it = allRelations.begin(); r_it != allRelations.end(); ++r_it)
+  //  Use the index to get all relations containing the old node ID
+  const std::shared_ptr<ElementToRelationMap>& mapping = getIndex().getElementToRelationMap();
+  const set<long>& relation_map = mapping->getRelationByElement(oldNodeId);
+  vector<long> relations(relation_map.begin(), relation_map.end());
+  //  Only iterate the relations that contain the old node ID
+  for (vector<long>::const_iterator iter = relations.begin(); iter != relations.end(); ++iter)
   {
-    RelationPtr currRelation = r_it->second;
-
-    if (currRelation->contains(oldNodeId) == true)
-    {
-      LOG_TRACE("Trying to replace node " << oldNode->getId() << " with node " <<
-                newNode->getId() << " in relation " << currRelation->getId());
-
-      currRelation->replaceElement(oldNode, newNode);
-    }
+    RelationPtr currRelation = getRelation(*iter);
+    if (!currRelation || !currRelation->contains(oldNodeId))
+      continue;
+    LOG_TRACE("Trying to replace node " << oldNode->getId() << " with node " <<
+              newNode->getId() << " in relation " << currRelation->getId());
+    currRelation->replaceElement(oldNode, newNode);
   }
 }
 
