@@ -132,6 +132,8 @@ public:
 
   long getNumSnappedToWays() const { return _numSnappedToWays; }
   long getNumSnappedToWayNodes() const { return _numSnappedToWayNodes; }
+  QStringList getSnapWayStatuses() const { return  _snapWayStatuses; }
+  QStringList getSnapToWayStatuses() const { return  _snapToWayStatuses; }
 
   void setSnapToExistingWayNodes(bool snap) { _snapToExistingWayNodes = snap; }
   void setMaxNodeReuseDistance(double distance);

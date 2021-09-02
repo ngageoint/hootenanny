@@ -41,8 +41,7 @@ public:
 
   static QString className() { return "OsmMapReader"; }
 
-  OsmMapReader() : _ignoreDuplicates(false), _warnOnVersionZeroElement(false) { }
-
+  OsmMapReader();
   virtual ~OsmMapReader() = default;
 
   /**
@@ -86,6 +85,9 @@ public:
    */
   virtual QString supportedFormats() = 0;
 
+  /** Configurable interface */
+  void setConfiguration(const Settings& conf) override;
+
   /**
    * Gets the ignore duplicates flag
    */
@@ -97,14 +99,7 @@ public:
    * and multiple bounding boxes are being merged together.
    */
   void setIgnoreDuplicates(bool ignore) { _ignoreDuplicates = ignore; }
-
   void setWarnOnVersionZeroElement(bool warn) { _warnOnVersionZeroElement = warn; }
-
-  /** Configurable interface */
-  void setConfiguration(const Settings& conf) override
-  {
-    _ignoreDuplicates =  ConfigOptions(conf).getMapMergeIgnoreDuplicateIds();
-  }
 
 protected:
 
@@ -118,6 +113,11 @@ protected:
   // derivation debugging. So far have only implemented this on some of the file format readers,
   // as data read out of an API DB will always have a positive version due to imposed constraints.
   bool _warnOnVersionZeroElement;
+
+  // Maps from old node ids to new node ids.
+  QHash<long, long> _nodeIdMap;
+  QHash<long, long> _relationIdMap;
+  QHash<long, long> _wayIdMap;
 };
 
 }

@@ -129,7 +129,7 @@ void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
   _element.reset();
 
   long id = _parseLong(attributes.value("id"));
-  //LOG_VART(id);
+  LOG_VART(id);
 
   if (_nodeIdMap.contains(id))
   {
@@ -152,7 +152,7 @@ void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
   {
     newId = _map->createNextNodeId();
   }
-  //LOG_VART(newId);
+  LOG_VART(newId);
   _nodeIdMap.insert(id, newId);
 
   double x = _parseDouble(attributes.value("lon"));
@@ -294,24 +294,25 @@ void OsmXmlReader::_createRelation(const QXmlAttributes& attributes)
 
   long id = _parseLong(attributes.value("id"));
 
-  if (_relationIdMap.contains(id) && _ignoreDuplicates)
+  if (_ignoreDuplicates && _relationIdMap.contains(id))
   {
-    LOG_TRACE("Ignoring relation id " << id << " already exists");
-    return;
+    //if (_ignoreDuplicates)
+    //{
+      LOG_TRACE("Ignoring relation id " << id << " already exists");
+      return;
+    //}
+    // Adding this in causes issues with the tests...worth looking into at some point.
+//    else
+//      throw HootException(
+//        QString("Duplicate relation id %1 in map %2 encountered.").arg(_relationId).arg(_url));
   }
-// Adding this in causes issues with the tests...worth looking into at some point.
-//  if (_relationIdMap.contains(_relationId))
-//  {
-//    throw HootException(
-//      QString("Duplicate relation id %1 in map %2 encountered.").arg(_relationId).arg(_url));
-//  }
 
   _relationId = id;
 
   long newId = _getRelationId(_relationId);
 
-  // check the next 3 attributes to see if a value exists, if not, assign a default since these are
-  // not officially required by the DTD
+  // Check the next 3 attributes to see if a value exists, if not, assign a default since these are
+  // not officially required by the DTD.
   long version = ElementData::VERSION_EMPTY;
   if (attributes.value("version") != "")
   {
@@ -358,7 +359,7 @@ void OsmXmlReader::_createRelation(const QXmlAttributes& attributes)
   _parseTimeStamp(attributes);
 }
 
-bool OsmXmlReader::fatalError(const QXmlParseException &exception)
+bool OsmXmlReader::fatalError(const QXmlParseException& exception)
 {
   _errorString =
     QObject::tr("OsmXmlReader: Parse error at line %1, column %2:\n%3")
@@ -415,9 +416,10 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   LOG_VART(_useFileStatus);
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
+  LOG_VART(_url);
 
   // Reusing the reader for multiple files has two options, the first is the default where the
-  // reader is reset and duplicates error out.  The second is where duplicates are ignored in the
+  // reader is reset and duplicates error out. The second is where duplicates are ignored in the
   // same file and across files so the ID maps aren't reset.
   if (!_ignoreDuplicates)
   {
@@ -428,6 +430,12 @@ void OsmXmlReader::read(const OsmMapPtr& map)
     _numRead = 0;
     finalizePartial();
   }
+  // Note that if the incoming map is already partially populated from a previous load, like how
+  // ConflateExecutor works via multiple calls to IoUtils::loadMap, that we're not recording its IDs
+  // in order to check for duplicates when loading this subsequent input (#5009). If we're not
+  // ignoring duplicates we won't get the expected behavior of an error when loading duplicate IDs
+  // and instead the feature with the duplicate ID from the subsequent input will overwrite that
+  // from the previous input.
   _map = map;
   _map->appendSource(_url);
 
@@ -490,7 +498,6 @@ OsmMapPtr OsmXmlReader::fromXml(
   }
 
   LOG_DEBUG("Reading map from xml...");
-  //LOG_VART(xml);
   OsmMapPtr map = std::make_shared<OsmMap>();
   OsmXmlReader reader;
   reader.setUseDataSourceIds(useDataSourceId);
@@ -662,7 +669,6 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
       if (type == QLatin1String("node"))
       {
         const bool nodePresent = _nodeIdMap.contains(ref);
-
         if (!nodePresent)
         {
           if (_addChildRefsWhenMissing)

@@ -27,12 +27,18 @@
 
 #include "PositiveIdGenerator.h"
 
+// Hoot
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(IdGenerator, PositiveIdGenerator)
+
+PositiveIdGenerator::PositiveIdGenerator()
+{
+  reset();
+}
 
 IdGeneratorPtr PositiveIdGenerator::clone() const
 {
@@ -41,6 +47,13 @@ IdGeneratorPtr PositiveIdGenerator::clone() const
   result->_wayId = _wayId;
   result->_relationId = _relationId;
   return result;
+}
+
+void PositiveIdGenerator::reset()
+{
+  _wayId = ConfigOptions().getIdGeneratorWayStart();
+  _nodeId = ConfigOptions().getIdGeneratorNodeStart();
+  _relationId = ConfigOptions().getIdGeneratorRelationStart();
 }
 
 }

@@ -97,7 +97,7 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(
   const QString& url, bool useDataSourceIds, Status defaultStatus)
 {
   LOG_VART(url);
-  LOG_VART(useDataSourceIds);
+  LOG_VARD(useDataSourceIds);
   LOG_VART(defaultStatus);
 
   std::shared_ptr<OsmMapReader> reader = _createReader(url);
@@ -110,7 +110,7 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(
   bool useDataSourceIds, bool useFileStatus, const QString& url)
 {
   LOG_VART(url);
-  LOG_VART(useDataSourceIds);
+  LOG_VARD(useDataSourceIds);
   LOG_VART(useFileStatus);
 
   std::shared_ptr<OsmMapReader> reader = _createReader(url);

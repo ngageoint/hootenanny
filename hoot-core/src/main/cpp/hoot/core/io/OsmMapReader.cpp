@@ -22,39 +22,23 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
-#include "DefaultIdGenerator.h"
-
-// hoot
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Factory.h>
+#include "OsmMapReader.h"
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(IdGenerator, DefaultIdGenerator)
-
-DefaultIdGenerator::DefaultIdGenerator()
+OsmMapReader::OsmMapReader() :
+_ignoreDuplicates(false),
+_warnOnVersionZeroElement(false)
 {
-  reset();
 }
 
-IdGeneratorPtr DefaultIdGenerator::clone() const
+void OsmMapReader::setConfiguration(const Settings& conf)
 {
-  std::shared_ptr<DefaultIdGenerator> result = std::make_shared<DefaultIdGenerator>();
-  result->_nodeId = _nodeId;
-  result->_wayId = _wayId;
-  result->_relationId = _relationId;
-  return result;
-}
-
-void DefaultIdGenerator::reset()
-{
-  _wayId = ConfigOptions().getIdGeneratorWayStart();
-  _nodeId = ConfigOptions().getIdGeneratorNodeStart();
-  _relationId = ConfigOptions().getIdGeneratorRelationStart();
+  _ignoreDuplicates =  ConfigOptions(conf).getMapMergeIgnoreDuplicateIds();
 }
 
 }
