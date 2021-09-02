@@ -69,7 +69,8 @@ static const bool DISPLAY_METRICS_ONLY = false;
  * ChangesetReplacementGenerator (most of the time). This test class can also be used for simple
  * single bounds replacement by generating a task grid of size = 1.
  *
- * Note that some of these tests have difficulty running in isolation.
+ * Note that some of these tests have difficulty running in isolation. Think the osmapidb needs to
+ * be set up by these tests beforehand.
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
