@@ -64,9 +64,16 @@ public:
   AddExportTagsVisitor();
   ~AddExportTagsVisitor() = default;
 
-  static QString className() { return "hoot::AddExportTagsVisitor"; }
+  static QString className() { return "AddExportTagsVisitor"; }
 
   void visit(const ElementPtr& pElement) override;
+
+  /**
+   * @brief getExportTags Create (not add) export tags for a specific element
+   * @param pElement element to base the new tags on
+   * @return all new export tags
+   */
+  Tags getExportTags(const ConstElementPtr& pElement);
 
   void overrideDebugSettings();
 

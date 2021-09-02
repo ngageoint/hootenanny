@@ -51,7 +51,7 @@ class OgrReader : public PartialOsmMapReader, public ProgressReporter
 {
 public:
 
-  static QString className() { return "hoot::OgrReader"; }
+  static QString className() { return "OgrReader"; }
 
   static int logWarnCount;
 

@@ -38,7 +38,7 @@ class SublineStringMatcherFactoryJs : public HootBaseJs
 {
 public:
 
-  static QString className() { return "hoot::SublineStringMatcherFactoryJs"; }
+  static QString className() { return "SublineStringMatcherFactoryJs"; }
 
   static void Init(v8::Local<v8::Object> target);
   virtual ~SublineStringMatcherFactoryJs() = default;

@@ -43,7 +43,7 @@ class TagCountVisitor : public ConstElementVisitor, public NumericStatistic
 {
 public:
 
-  static QString className() { return "hoot::TagCountVisitor"; }
+  static QString className() { return "TagCountVisitor"; }
 
   TagCountVisitor();
   ~TagCountVisitor() = default;

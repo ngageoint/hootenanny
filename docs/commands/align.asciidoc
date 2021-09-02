@@ -3,20 +3,20 @@
 
 === Description
 
-The +align+ command finds common high confidence road intersection matches and rubber sheets two map datasets to bring them
+The `align` command finds common high confidence road intersection matches and rubber sheets two map datasets to bring them
 into alignment.  It reads from inputs, matches nodes, transforms input2, and writes the combined data to output.  The input
 parameters are:
 
-* +input1+ - Input 1; may be any supported input format (e.g. OSM file).
-* +input2+ - Input 2; may be any supported input format (e.g. OSM file).
-* +output+ - Output; may be any supported output format (e.g. OSM file).
+* `input1` - Input 1; may be any supported input format (e.g. OSM file).
+* `input2` - Input 2; may be any supported input format (e.g. OSM file).
+* `output` - Output; may be any supported output format (e.g. OSM file).
 
 The following optional defines can be set:
 
-* +rubber.sheet.ref+                   - If set to true then the first input will be treated as a reference layer and 
-                                         the geometries will not be moved. By default +input1+ and +input2+ are moved 
+* `rubber.sheet.ref`                   - If set to true then the first input will be treated as a reference layer and 
+                                         the geometries will not be moved. By default `input1` and `input2` are moved 
                                          towards each other.
-* +rubber.sheet.kernel.estimate.sigma+ - The sigma to use when applying a kernel estimation interpolation. By default 
+* `rubber.sheet.kernel.estimate.sigma` - The sigma to use when applying a kernel estimation interpolation. By default 
                                          cross validation is used to determine an appropriate sigma and should be adequate 
                                          for most purposes.
 
@@ -33,12 +33,12 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExample
 To just derive a transform file that can be used separately to rubber sheet data, used the --derive option.  When using the 
 --derive option, the input parameters are:
 
-* +input1+           - Input 1; may be any supported input format (e.g. OSM file).
-* +input2+           - Input 2; may be any supported input format (e.g. OSM file).
-* +transform2to1.rs+ - Output transform rubber sheet spec. provides a transform for moving input 2 towards input 1.
-* +transform1to2.rs+ - Output transform rubber sheet spec. Provides a transform for moving input 1 towards input 2. Required 
+* `input1`           - Input 1; may be any supported input format (e.g. OSM file).
+* `input2`           - Input 2; may be any supported input format (e.g. OSM file).
+* `transform2to1.rs` - Output transform rubber sheet spec. provides a transform for moving input 2 towards input 1.
+* `transform1to2.rs` - Output transform rubber sheet spec. Provides a transform for moving input 1 towards input 2. Required 
                        if --ref is not specified.
-* +--ref +           - If specified, treat input1 as a reference layer and only produce one output transform.
+* `--ref `           - If specified, treat input1 as a reference layer and only produce one output transform.
 
 === Usage With Derive Option
 
@@ -53,9 +53,9 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExample
 To apply a rubber sheet created with the --derive option, use the --apply option.  When using the --apply option, the 
 input parameters are:
 
-* +transform.rs+ - Transform rubber sheet spec for moving the input.
-* +input+        - Input; may be any supported input format (e.g. OSM file).
-* +output+       - Write transformed result to this file; may be any supported output format (e.g. OSM file).
+* `transform.rs` - Transform rubber sheet spec for moving the input.
+* `input`        - Input; may be any supported input format (e.g. OSM file).
+* `output`       - Write transformed result to this file; may be any supported output format (e.g. OSM file).
 
 === Usage With Apply Option
 

@@ -87,7 +87,7 @@ public:
     ConstEdgeSublinePtr _subline;
   };
 
-  static QString className() { return "hoot::EdgeString"; }
+  static QString className() { return "EdgeString"; }
 
   static int logWarnCount;
 
@@ -248,7 +248,7 @@ bool operator<(ConstEdgeStringPtr, ConstEdgeStringPtr);
 // needed for QSet
 bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2);
 
-inline uint qHash(const hoot::ConstEdgeStringPtr& es)
+inline uint qHash(const ConstEdgeStringPtr& es)
 {
   uint result = 0;
   foreach (const EdgeString::EdgeEntry& e, es->getAllEdges())
@@ -259,7 +259,7 @@ inline uint qHash(const hoot::ConstEdgeStringPtr& es)
   return result;
 }
 
-inline uint qHash(const hoot::EdgeStringPtr& es)
+inline uint qHash(const EdgeStringPtr& es)
 {
   return qHash((ConstEdgeStringPtr)es);
 }

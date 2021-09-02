@@ -44,7 +44,7 @@ REMOVE_UNLIKELY=
 SUPRESS_DIVIDED_ROADS="no"
 REMOVE_MERGE_RELATIONS=
 
-ALGORITHM_CONF="UnifyingAlgorithm.conf -D match.creators=hoot::HighwayMatchCreator -D merger.creators=hoot::HighwayMergerCreator"
+ALGORITHM_CONF="UnifyingAlgorithm.conf -D match.creators=HighwayMatchCreator -D merger.creators=HighwayMergerCreator"
 
 ATTRIBUTE_FILE=
 INPUT_TAG_KEYS=
@@ -65,7 +65,7 @@ for ARGUMENT in "$@"
 do
   if [ $ARGUMENT == "--network" ]
   then
-    ALGORITHM_CONF="NetworkAlgorithm.conf -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator"
+    ALGORITHM_CONF="NetworkAlgorithm.conf -D match.creators=NetworkMatchCreator -D merger.creators=NetworkMergerCreator"
     echo "Using the Network Roads Algorithm."
   elif [ -d $ARGUMENT ]
   then
@@ -75,7 +75,7 @@ do
     ATTRIBUTE_TRANSFER_OUTPUT_PATH=$FILE_PATH/attribute-transfer
   elif [ $ARGUMENT == "--remove-disconnected" ]
   then
-    REMOVE_DISCONNECTED=" -D small.disconnected.way.remover.max.length=20.0 -D small.disconnected.way.remover.max.node.count=3 -D conflate.pre.ops+=hoot::SmallDisconnectedWayRemover"
+    REMOVE_DISCONNECTED=" -D small.disconnected.way.remover.max.length=20.0 -D small.disconnected.way.remover.max.node.count=3 -D conflate.pre.ops+=SmallDisconnectedWayRemover"
     echo "Configured to remove small disconnected ways."
   elif [ $ARGUMENT == "--parallel" ]
   then
@@ -86,15 +86,15 @@ do
     echo "Configured to reverse inputs."
   elif [ $ARGUMENT == "--resolve" ]
   then
-    RESOLVE_REVIEWS=" -D resolve.review.type=resolve -D conflate.post.ops+=hoot::ResolveReviewsOp"
+    RESOLVE_REVIEWS=" -D resolve.review.type=resolve -D conflate.post.ops+=ResolveReviewsOp"
     echo "Configured to automatically resolve reviews."
   elif [ $ARGUMENT == "--snap-unconnected" ]
   then
-    SNAP_UNCONNECTED=" -D snap.unconnected.ways.snap.tolerance=7.0 -D snap.unconnected.ways.snap.way.statuses=Input1 -D snap.unconnected.ways.snap.to.way.statuses=Input1 -D conflate.post.ops+=hoot::UnconnectedWaySnapper"
+    SNAP_UNCONNECTED=" -D snap.unconnected.ways.snap.tolerance=7.0 -D snap.unconnected.ways.snap.way.statuses=Input1 -D snap.unconnected.ways.snap.to.way.statuses=Input1 -D conflate.post.ops+=UnconnectedWaySnapper"
     echo "Configured to snap unconnected roads."
   elif [ $ARGUMENT == "--remove-unlikely" ]
   then
-    REMOVE_UNLIKELY=" -D unlikely.road.remover.max.heading.variance=60.0 -D unlikely.road.remover.max.length=25.0 -D conflate.pre.ops+=hoot::UnlikelyRoadRemover"
+    REMOVE_UNLIKELY=" -D unlikely.road.remover.max.heading.variance=60.0 -D unlikely.road.remover.max.length=25.0 -D conflate.pre.ops+=UnlikelyRoadRemover"
     echo "Configured to remove unlikely roads."
   elif [ $ARGUMENT == "--suppress-divided-roads" ]
   then
@@ -177,8 +177,8 @@ then
   
     HOOT_ATTRIBUTE_TRANSFER_OPTS=" -C AttributeConflation.conf -C ${ALGORITHM_CONF}"
     # conflate ops we don't need
-    HOOT_ATTRIBUTE_TRANSFER_OPTS+=" -D conflate.post.ops-=hoot::RoadCrossingPolyMarker"
-    HOOT_ATTRIBUTE_TRANSFER_OPTS+=" -D conflate.post.ops-=hoot::AddHilbertReviewSortOrderOp"
+    HOOT_ATTRIBUTE_TRANSFER_OPTS+=" -D conflate.post.ops-=RoadCrossingPolyMarker"
+    HOOT_ATTRIBUTE_TRANSFER_OPTS+=" -D conflate.post.ops-=AddHilbertReviewSortOrderOp"
     HOOT_ATTRIBUTE_TRANSFER_OPTS+=$AOI_OPTS
     
     if [ $PARALLEL == "no" ]
@@ -238,8 +238,8 @@ fi
 HOOT_CONFLATE_OPTS="-C ${ALGORITHM_CONF} -C ${CONFLATION_CONF}"
 
 # conflate ops we don't need
-HOOT_CONFLATE_OPTS+=" -D conflate.post.ops-=hoot::RoadCrossingPolyMarker"
-HOOT_CONFLATE_OPTS+=" -D conflate.post.ops-=hoot::AddHilbertReviewSortOrderOp"
+HOOT_CONFLATE_OPTS+=" -D conflate.post.ops-=RoadCrossingPolyMarker"
+HOOT_CONFLATE_OPTS+=" -D conflate.post.ops-=AddHilbertReviewSortOrderOp"
 
 HOOT_CONFLATE_OPTS+=" -D writer.sort.tags.imagery.source=true"
 HOOT_CONFLATE_OPTS+=$RESOLVE_REVIEWS
@@ -255,16 +255,16 @@ then
   # opts are quoted one way and the non-parallel call complains when they're quoted the other way.
   if [ $PARALLEL == "no" ]
   then
-    HOOT_CONFLATE_OPTS+=" -D map.cleaner.transforms+=hoot::DualHighwayMarker;hoot::RemoveElementsVisitor -D remove.elements.visitor.element.criteria=hoot::TagCriterion;hoot::StatusCriterion -D remove.elements.visitor.recursive=true -D remove.elements.visitor.chain.element.criteria=true -D tag.criterion.kvps=hoot:dual_highway=yes;hoot:dual_highway_crossing=yes -D status.criterion.status=Unknown2"
+    HOOT_CONFLATE_OPTS+=" -D map.cleaner.transforms+=DualHighwayMarker;RemoveElementsVisitor -D remove.elements.visitor.element.criteria=TagCriterion;StatusCriterion -D remove.elements.visitor.recursive=true -D remove.elements.visitor.chain.element.criteria=true -D tag.criterion.kvps=hoot:dual_highway=yes;hoot:dual_highway_crossing=yes -D status.criterion.status=Unknown2"
   else
-    HOOT_CONFLATE_OPTS+=' -D map.cleaner.transforms+="hoot::DualHighwayMarker;hoot::RemoveElementsVisitor" -D remove.elements.visitor.element.criteria="hoot::TagCriterion;hoot::StatusCriterion" -D remove.elements.visitor.recursive=true -D remove.elements.visitor.chain.element.criteria=true -D tag.criterion.kvps="hoot:dual_highway=yes;hoot:dual_highway_crossing=yes" -D status.criterion.status=Unknown2'
+    HOOT_CONFLATE_OPTS+=' -D map.cleaner.transforms+="DualHighwayMarker;RemoveElementsVisitor" -D remove.elements.visitor.element.criteria="TagCriterion;StatusCriterion" -D remove.elements.visitor.recursive=true -D remove.elements.visitor.chain.element.criteria=true -D tag.criterion.kvps="hoot:dual_highway=yes;hoot:dual_highway_crossing=yes" -D status.criterion.status=Unknown2'
   fi
 fi
 # MultilineStringMergeRelationCollapser must be run an additional time after ResolveReviewsOp.
-HOOT_CONFLATE_OPTS+=" -D conflate.post.ops+=hoot::MultilineStringMergeRelationCollapser"
+HOOT_CONFLATE_OPTS+=" -D conflate.post.ops+=MultilineStringMergeRelationCollapser"
 
 # This is here for some final clean up. Not sure yet what's causing orphaned nodes in some of the output.
-HOOT_CONFLATE_OPTS+=" -D conflate.post.ops+=hoot::SuperfluousNodeRemover"
+HOOT_CONFLATE_OPTS+=" -D conflate.post.ops+=SuperfluousNodeRemover"
 
 HOOT_CONFLATE_OPTS+=$AOI_OPTS
 HOOT_CONFLATE_OPTS+=$DEBUG_OPTS
@@ -372,11 +372,11 @@ then
   # and any added metadata tags (for debugging purposes) so that we don't end up adding any new tags as a result of the
   # previously run attribute transfer. It also sets all 'highway' tags back to 'road', which is what we started with, since they
   # may have been changed by attribute transfer.
-  DATA_SUMMARY_OPS=" -D convert.ops=hoot::KeepTagsVisitor;hoot::SetTagValueVisitor;hoot::DataSummaryTagVisitor -D tag.filter.keys=$INPUT_TAG_KEYS;hoot:* -D set.tag.value.visitor.keys=highway -D set.tag.value.visitor.values=road -D set.tag.value.visitor.element.criteria=hoot::HighwayCriterion -D data.summary.tag.sources=${TAG_SOURCES}"
+  DATA_SUMMARY_OPS=" -D convert.ops=KeepTagsVisitor;SetTagValueVisitor;DataSummaryTagVisitor -D tag.filter.keys=$INPUT_TAG_KEYS;hoot:* -D set.tag.value.visitor.keys=highway -D set.tag.value.visitor.values=road -D set.tag.value.visitor.element.criteria=HighwayCriterion -D data.summary.tag.sources=${TAG_SOURCES}"
   echo "Cleaning and summarizing data output..."
 else
   # default data summary ops
-  DATA_SUMMARY_OPS=" -D convert.ops=hoot::DataSummaryTagVisitor -D data.summary.tag.sources=${TAG_SOURCES}"
+  DATA_SUMMARY_OPS=" -D convert.ops=DataSummaryTagVisitor -D data.summary.tag.sources=${TAG_SOURCES}"
   echo "Summarizing data output..."
 fi
 hoot convert ${QUIET} ${DATA_SUMMARY_OPS} ${CONVERT_SRC} ${OUTPUT_PATH}/results.osm

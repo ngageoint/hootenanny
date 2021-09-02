@@ -43,11 +43,6 @@ public:
 protected:
 
   void _createExtractors() const override;
-
-  /**
-   * Create the best extractors found during experimentation.
-   */
-  void _createBestExtractors() const;
 };
 
 }

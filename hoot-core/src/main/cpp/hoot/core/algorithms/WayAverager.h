@@ -47,7 +47,7 @@ class WayAverager
 {
 public:
 
-  static QString className() { return "hoot::WayAverager"; }
+  static QString className() { return "WayAverager"; }
 
   /**
    * @brief Constructor

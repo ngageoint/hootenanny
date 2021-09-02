@@ -64,7 +64,7 @@ void OsmMapOperationJs::Init(Local<Object> target)
 
   for (size_t i = 0; i < opNames.size(); i++)
   {
-    QByteArray utf8 = opNames[i].replace("hoot::", "").toUtf8();
+    QByteArray utf8 = opNames[i].toUtf8();
     const char* n = utf8.data();
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
@@ -87,7 +87,7 @@ void OsmMapOperationJs::New(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  const QString className = "hoot::" + str(args.This()->GetConstructorName());
+  const QString className = str(args.This()->GetConstructorName());
   if (className == "Object")
   {
     args.GetReturnValue().Set(

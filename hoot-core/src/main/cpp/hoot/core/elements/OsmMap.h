@@ -68,7 +68,7 @@ class OsmMap : public std::enable_shared_from_this<OsmMap>, public ElementProvid
 {
 public:
 
-  static QString className() { return "hoot::OsmMap"; }
+  static QString className() { return "OsmMap"; }
 
   OsmMap();
   explicit OsmMap(const std::shared_ptr<const OsmMap>&);

@@ -51,7 +51,7 @@ class InBoundsCriterion : public ElementCriterion, public Boundable, public Cons
 {
 public:
 
-  static QString className() { return "hoot::InBoundsCriterion"; }
+  static QString className() { return "InBoundsCriterion"; }
 
   InBoundsCriterion();
   InBoundsCriterion(const bool mustCompletelyContain);

@@ -35,7 +35,7 @@ Untagged Features	0	0	0
 Total Unconflatable Features	0	0	0	
 Percentage of Total Features Unconflatable	0	0	0	
 Match Creators	1	1	1	
-Features Conflatable by: hoot::ScriptMatchCreator,River.js	14	15	0	
+Features Conflatable by: ScriptMatchCreator,River.js	14	15	0	
 Total Conflated Features	0	0	15	
 Percentage of Total Features Conflated	0	0	46.875	
 Total Features Marked for Review	0	0	0	

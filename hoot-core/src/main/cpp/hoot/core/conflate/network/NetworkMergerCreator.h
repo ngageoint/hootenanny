@@ -40,7 +40,7 @@ class NetworkMergerCreator : public MergerCreator, public ConstOsmMapConsumer
 {
 public:
 
-  static QString className() { return "hoot::NetworkMergerCreator"; }
+  static QString className() { return "NetworkMergerCreator"; }
 
   NetworkMergerCreator();
   ~NetworkMergerCreator() = default;

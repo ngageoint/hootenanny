@@ -43,7 +43,7 @@ class SynchronizeElementIdsCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::SynchronizeElementIdsCmd"; }
+  static QString className() { return "SynchronizeElementIdsCmd"; }
 
   SynchronizeElementIdsCmd() = default;
 

@@ -52,7 +52,7 @@ class CleanCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::CleanCmd"; }
+  static QString className() { return "CleanCmd"; }
 
   CleanCmd() = default;
 

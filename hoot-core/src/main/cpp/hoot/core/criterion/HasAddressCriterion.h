@@ -42,7 +42,7 @@ class HasAddressCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::HasAddressCriterion"; }
+  static QString className() { return "HasAddressCriterion"; }
 
   HasAddressCriterion() = default;
   ~HasAddressCriterion() = default;

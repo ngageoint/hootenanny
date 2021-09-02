@@ -28,7 +28,7 @@ exports.geometryType = "";
 
 // This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
 // culling match candidates.
-exports.matchCandidateCriterion = "hoot::RelationCriterion";
+exports.matchCandidateCriterion = "RelationCriterion";
 
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
 var angleHistExtractor = new hoot.AngleHistogramExtractor();

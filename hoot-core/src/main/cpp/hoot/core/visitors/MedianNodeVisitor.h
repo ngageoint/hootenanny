@@ -42,7 +42,7 @@ class MedianNodeVisitor : public ConstElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::MedianNodeVisitor"; }
+  static QString className() { return "MedianNodeVisitor"; }
 
   MedianNodeVisitor() = default;
   ~MedianNodeVisitor() = default;

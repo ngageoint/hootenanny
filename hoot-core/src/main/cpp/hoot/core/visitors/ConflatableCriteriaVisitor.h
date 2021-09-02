@@ -44,7 +44,7 @@ class ConflatableCriteriaVisitor : public ElementVisitor, public ConstOsmMapCons
 
 public:
 
-  static QString className() { return "hoot::ConflatableCriteriaVisitor"; }
+  static QString className() { return "ConflatableCriteriaVisitor"; }
 
   ConflatableCriteriaVisitor() = default;
   ~ConflatableCriteriaVisitor() = default;

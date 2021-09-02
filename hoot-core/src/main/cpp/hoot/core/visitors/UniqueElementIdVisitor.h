@@ -43,7 +43,7 @@ class UniqueElementIdVisitor : public ConstElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::UniqueElementIdVisitor"; }
+  static QString className() { return "UniqueElementIdVisitor"; }
 
   UniqueElementIdVisitor() = default;
   ~UniqueElementIdVisitor() = default;

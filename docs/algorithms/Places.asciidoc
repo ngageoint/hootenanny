@@ -160,7 +160,7 @@ extension to.geonames. For example:
 wget http://download.geonames.org/export/dump/allCountries.zip
 unzip allCountries.zip
 mv allCountries.txt allCountries.geonames
-hoot convert -D "convert.ops=hoot::SchemaTranslationVisitor" -D schema.translation.script=$HOOT_HOME/translations/GeoNamesOrg.js allCountries.geonames allCountries.osm.pbf
+hoot convert -D "convert.ops=SchemaTranslationVisitor" -D schema.translation.script=$HOOT_HOME/translations/GeoNamesOrg.js allCountries.geonames allCountries.osm.pbf
 -------
 
 === Hootenanny Example Conflation Results

@@ -40,7 +40,7 @@ class PowerLineCriterion : public ConflatableElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::PowerLineCriterion"; }
+  static QString className() { return "PowerLineCriterion"; }
 
   PowerLineCriterion() = default;
   ~PowerLineCriterion() = default;

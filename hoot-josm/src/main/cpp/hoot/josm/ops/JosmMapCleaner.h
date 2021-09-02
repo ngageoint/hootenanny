@@ -52,7 +52,7 @@ class JosmMapCleaner : public JosmMapValidatorAbstract
 
 public:
 
-  static QString className() { return "hoot::JosmMapCleaner"; }
+  static QString className() { return "JosmMapCleaner"; }
 
   JosmMapCleaner();
   virtual ~JosmMapCleaner() = default;

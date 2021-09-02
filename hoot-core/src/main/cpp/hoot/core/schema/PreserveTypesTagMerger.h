@@ -43,7 +43,7 @@ class PreserveTypesTagMerger : public TypesTagMerger
 {
 public:
 
-  static QString className() { return "hoot::PreserveTypesTagMerger"; }
+  static QString className() { return "PreserveTypesTagMerger"; }
 
   /**
    * Constructor

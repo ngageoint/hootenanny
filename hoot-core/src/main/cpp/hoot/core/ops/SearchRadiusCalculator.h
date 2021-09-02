@@ -44,7 +44,7 @@ class SearchRadiusCalculator : public OsmMapOperation, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::SearchRadiusCalculator"; }
+  static QString className() { return "SearchRadiusCalculator"; }
 
   SearchRadiusCalculator() = default;
   ~SearchRadiusCalculator() = default;

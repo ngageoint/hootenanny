@@ -41,7 +41,7 @@ class LinearAverageMerger : public LinearMergerAbstract
 
 public:
 
-  static QString className() { return "hoot::LinearAverageMerger"; }
+  static QString className() { return "LinearAverageMerger"; }
 
   LinearAverageMerger();
   LinearAverageMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);

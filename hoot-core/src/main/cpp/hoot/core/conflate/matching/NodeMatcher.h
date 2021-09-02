@@ -42,7 +42,7 @@ class NodeMatcher
 {
 public:
 
-  static QString className() { return "hoot::NodeMatcher"; }
+  static QString className() { return "NodeMatcher"; }
 
   static int logWarnCount;
 

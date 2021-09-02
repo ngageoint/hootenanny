@@ -3,14 +3,14 @@
 
 === Description
 
-The +stats+ command calculates a pre-determined set of statistics for one or more maps.
+The `stats` command calculates a pre-determined set of statistics for one or more maps.
 
-* +input(s)+    - Input(s); may be any supported input format (e.g. .osm file) or a directory if 
+* `input(s)`    - Input(s); may be any supported input format (e.g. .osm file) or a directory if 
                   `--recursive` is specified.
-* +--brief+     - Only calculates subset of statistics. 
-* +--output+    - Optional output; supported formats are text (.txt) and JSON (.json).
-* +--recursive+ - Allows for processing the files contained in any directories specified in 
-                  +input(s)+ recursively. This parameter has no effect on the processing of 
+* `--brief`     - Only calculates subset of statistics. 
+* `--output`    - Optional output; supported formats are text (.txt) and JSON (.json).
+* `--recursive` - Allows for processing the files contained in any directories specified in 
+                  `input(s)` recursively. This parameter has no effect on the processing of 
                   non-directory inputs. This must be followed by either "*" to denote no filtering 
                   or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*". This 
                   parameter is not compatible with the OGR layer input syntax.

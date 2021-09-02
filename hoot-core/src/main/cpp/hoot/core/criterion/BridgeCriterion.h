@@ -41,7 +41,7 @@ class BridgeCriterion : public ElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::BridgeCriterion"; }
+  static QString className() { return "BridgeCriterion"; }
 
   BridgeCriterion() = default;
   ~BridgeCriterion() = default;

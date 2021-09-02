@@ -82,9 +82,9 @@ public:
 
     matchSet = std::make_shared<IndexedEdgeMatchSet>();
     NetworkDetailsPtr details = std::make_shared<NetworkDetails>(map, network1, network2);
-    conf().set(ConfigOptions().getWaySublineMatcherKey(), "hoot::MaximalSublineMatcher");
+    conf().set(ConfigOptions().getWaySublineMatcherKey(), "MaximalSublineMatcher");
     conf().set(
-      ConfigOptions().getConflateMatchHighwayClassifierKey(), "hoot::HighwayExpertClassifier");
+      ConfigOptions().getConflateMatchHighwayClassifierKey(), "HighwayExpertClassifier");
     details->setConfiguration(conf());
     EdgeMatchSetFinderPtr uut =
       std::make_shared<EdgeMatchSetFinder>(details, matchSet, network1, network2);

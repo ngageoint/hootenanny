@@ -66,13 +66,13 @@ public class ConflateCommandTest {
         conflateParams.setReferenceLayer("1");
 
         List<String> advancedOptions = new LinkedList<>();
-        advancedOptions.add("\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
-                "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
-                "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
-                "hoot::DualHighwaySplitter;hoot::HighwayImpliedDividedMarker;" +
-                "hoot::DuplicateNameRemover;hoot::SmallHighwayMerger;" +
-                "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreasVisitor;" +
-                "hoot::NoInformationElementRemover\"");
+        advancedOptions.add("\"map.cleaner.transforms=ReprojectToPlanarOp;" +
+                "DuplicateWayRemover;SuperfluousWayRemover;" +
+                "IntersectionSplitter;UnlikelyIntersectionRemover;" +
+                "DualHighwaySplitter;HighwayImpliedDividedMarker;" +
+                "DuplicateNameRemover;SmallHighwayMerger;" +
+                "RemoveEmptyAreasVisitor;RemoveDuplicateAreasVisitor;" +
+                "NoInformationElementRemover\"");
 
         conflateParams.setAdvancedOptions(advancedOptions.stream().collect(Collectors.joining(" ")));
 
@@ -98,13 +98,13 @@ public class ConflateCommandTest {
         assertTrue(command.contains("-D, hootapi.db.writer.overwrite.map=true, "));
         assertTrue(command.contains("-D, writer.text.status=true, "));
         assertTrue(command.contains("-D, api.db.email=test@test.com, "));
-        assertTrue(command.endsWith("-D, \"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
-                                    "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
-                                    "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
-                                    "hoot::DualHighwaySplitter;hoot::HighwayImpliedDividedMarker;" +
-                                    "hoot::DuplicateNameRemover;hoot::SmallHighwayMerger;" +
-                                    "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreasVisitor;" +
-                                    "hoot::NoInformationElementRemover\"]"));
+        assertTrue(command.endsWith("-D, \"map.cleaner.transforms=ReprojectToPlanarOp;" +
+                                    "DuplicateWayRemover;SuperfluousWayRemover;" +
+                                    "IntersectionSplitter;UnlikelyIntersectionRemover;" +
+                                    "DualHighwaySplitter;HighwayImpliedDividedMarker;" +
+                                    "DuplicateNameRemover;SmallHighwayMerger;" +
+                                    "RemoveEmptyAreasVisitor;RemoveDuplicateAreasVisitor;" +
+                                    "NoInformationElementRemover\"]"));
         assertTrue(command.contains("-D, job.id="));
 
         assertEquals("hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads", conflateCommand.getSubstitutionMap().get("INPUT1"));
@@ -252,20 +252,20 @@ public class ConflateCommandTest {
 
         Map<String, String> hoot2Opts = new HashMap<>();
 
-        hoot2Opts.put("GeometryLinearMergerDefault", "hoot::LinearSnapMerger");
+        hoot2Opts.put("GeometryLinearMergerDefault", "LinearSnapMerger");
         hoot2Opts.put("AddressTagKeys", "[foo=bar,blim=blam]");
         conflateParams.setHoot2AdvOptions(hoot2Opts);
 
         conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
         options = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
         assertTrue(options.contains("\"address.tag.keys=foo=bar;blim=blam\""));
-        assertTrue(options.contains("\"geometry.linear.merger.default=hoot::LinearSnapMerger\""));
+        assertTrue(options.contains("\"geometry.linear.merger.default=LinearSnapMerger\""));
 
         // handles cleaning options...
         conflateParams.setCleaningOpts(Arrays.asList("DualHighwaySplitter"));
         conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
         options = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
-        assertTrue(options.contains("\"map.cleaner.transforms-=hoot::DualHighwaySplitter\""));
+        assertTrue(options.contains("\"map.cleaner.transforms-=DualHighwaySplitter\""));
 
     }
 
@@ -298,9 +298,9 @@ public class ConflateCommandTest {
         assertTrue(matcherFound);
 
         String[] sortedMatchers = matcher.group(1).split(";");
-        assertEquals(sortedMatchers[0], "hoot::BuildingMatchCreator");
-        assertEquals(sortedMatchers[1], "hoot::HighwayMatchCreator");
-        assertEquals(sortedMatchers[5], "hoot::ScriptMatchCreator,Railway.js");
+        assertEquals(sortedMatchers[0], "BuildingMatchCreator");
+        assertEquals(sortedMatchers[1], "HighwayMatchCreator");
+        assertEquals(sortedMatchers[5], "ScriptMatchCreator,Railway.js");
 
         Pattern mergerPattern = Pattern.compile("merger\\.creators=([^\\s]+)[,\\]]");
 
@@ -310,9 +310,9 @@ public class ConflateCommandTest {
         assertTrue(mergerFound);
 
         String[] sortedMergers = matcher.group(1).split(";");
-        assertEquals(sortedMergers[0], "hoot::BuildingMergerCreator");
-        assertEquals(sortedMergers[1], "hoot::HighwayMergerCreator");
-        assertEquals(sortedMergers[5], "hoot::ScriptMergerCreator");
+        assertEquals(sortedMergers[0], "BuildingMergerCreator");
+        assertEquals(sortedMergers[1], "HighwayMergerCreator");
+        assertEquals(sortedMergers[5], "ScriptMergerCreator");
 
     }
 
@@ -346,10 +346,10 @@ public class ConflateCommandTest {
         assertTrue(matcherFound);
 
         String[] sortedMatchers = matcher.group(1).split(";");
-        assertEquals(sortedMatchers[0], "hoot::BuildingMatchCreator");
-        assertEquals(sortedMatchers[1], "hoot::NetworkMatchCreator");
-        assertEquals(sortedMatchers[5], "hoot::ScriptMatchCreator,Railway.js");
-        assertEquals(sortedMatchers[9], "hoot::ScriptMatchCreator,Polygon.js");
+        assertEquals(sortedMatchers[0], "BuildingMatchCreator");
+        assertEquals(sortedMatchers[1], "NetworkMatchCreator");
+        assertEquals(sortedMatchers[5], "ScriptMatchCreator,Railway.js");
+        assertEquals(sortedMatchers[9], "ScriptMatchCreator,Polygon.js");
 
         Pattern mergerPattern = Pattern.compile("merger\\.creators=([^\\s]+)[,\\]]");
 
@@ -359,10 +359,10 @@ public class ConflateCommandTest {
         assertTrue(mergerFound);
 
         String[] sortedMergers = matcher.group(1).split(";");
-        assertEquals(sortedMergers[0], "hoot::BuildingMergerCreator");
-        assertEquals(sortedMergers[1], "hoot::NetworkMergerCreator");
-        assertEquals(sortedMergers[5], "hoot::ScriptMergerCreator");
-        assertEquals(sortedMergers[9], "hoot::ScriptMergerCreator");
+        assertEquals(sortedMergers[0], "BuildingMergerCreator");
+        assertEquals(sortedMergers[1], "NetworkMergerCreator");
+        assertEquals(sortedMergers[5], "ScriptMergerCreator");
+        assertEquals(sortedMergers[9], "ScriptMergerCreator");
 
     }
 
@@ -487,7 +487,7 @@ public class ConflateCommandTest {
         String debugLevel = "info";
         ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
 
-        String expectedCommand = "hoot.bin conflate --info -D writer.include.conflate.score.tags=false -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com -D tag.merger.default=hoot::OverwriteTag1Merger hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d --stats";
+        String expectedCommand = "hoot.bin conflate --info -D writer.include.conflate.score.tags=false -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com -D tag.merger.default=OverwriteTag1Merger hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d --stats";
         CommandLine actualCommand = ExternalCommandRunnerImpl.parse(conflateCommand.getCommand(), conflateCommand.getSubstitutionMap());
         assertEquals(expectedCommand, actualCommand.getExecutable() + " " + StringUtils.join(actualCommand.getArguments(), " "));
 

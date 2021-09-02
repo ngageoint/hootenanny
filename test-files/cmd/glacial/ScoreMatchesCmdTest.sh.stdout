@@ -1,9 +1,9 @@
 Running optimized...
 
-15:03:26.072 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-36)
-15:03:26.073 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-13)
-15:03:26.073 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-14)
-15:03:26.073 WARN   ...re/scoring/MatchComparator.cpp( 474) hoot::MatchComparator: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+19:13:53.891 WARN   ...re/scoring/MatchComparator.cpp( 467) Missing uuid for Way(-36)
+19:13:53.891 WARN   ...re/scoring/MatchComparator.cpp( 467) Missing uuid for Way(-13)
+19:13:53.891 WARN   ...re/scoring/MatchComparator.cpp( 467) Missing uuid for Way(-14)
+19:13:53.891 WARN   ...re/scoring/MatchComparator.cpp( 471) MatchComparator: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 Threshold: Thresholds; Match: 0.01 Miss: 0.01 Review: 0.01
 |                 |        |\3=.       expected     |
 |                 |        | miss  | match | review |
@@ -1502,17 +1502,17 @@ number of manual matches made: 5
 Score: -1.8
 Running unoptimized with output...
 
-15:03:33.991 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-94)
-15:03:33.991 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-12)
-15:03:33.991 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-11)
+19:14:07.292 WARN   ...re/scoring/MatchComparator.cpp( 467) Missing uuid for Way(-94)
+19:14:07.292 WARN   ...re/scoring/MatchComparator.cpp( 467) Missing uuid for Way(-12)
+19:14:07.292 WARN   ...re/scoring/MatchComparator.cpp( 467) Missing uuid for Way(-11)
 Score: -1.8
 -1,0.4,0.3,0.3
 Running optimized with multiple inputs...
 
-15:03:36.166 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-36)
-15:03:36.166 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-13)
-15:03:36.166 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-14)
-15:03:36.166 WARN   ...re/scoring/MatchComparator.cpp( 474) hoot::MatchComparator: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+19:14:09.661 WARN   ...re/scoring/MatchComparator.cpp( 467) Missing uuid for Way(-36)
+19:14:09.661 WARN   ...re/scoring/MatchComparator.cpp( 467) Missing uuid for Way(-13)
+19:14:09.661 WARN   ...re/scoring/MatchComparator.cpp( 467) Missing uuid for Way(-14)
+19:14:09.661 WARN   ...re/scoring/MatchComparator.cpp( 471) MatchComparator: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 Threshold: Thresholds; Match: 0.01 Miss: 0.01 Review: 0.01
 |                 |        |\3=.       expected     |
 |                 |        | miss  | match | review |
@@ -3011,9 +3011,9 @@ number of manual matches made: 10
 Score: -1.8
 Running unoptimized with multiple inputs and an output...
 
-15:03:50.358 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-140)
-15:03:50.358 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-12)
-15:03:50.358 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-11)
-15:03:50.449 WARN   ...re/scoring/MatchComparator.cpp( 474) hoot::MatchComparator: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+19:14:34.665 WARN   ...re/scoring/MatchComparator.cpp( 467) Missing uuid for Way(-140)
+19:14:34.665 WARN   ...re/scoring/MatchComparator.cpp( 467) Missing uuid for Way(-12)
+19:14:34.665 WARN   ...re/scoring/MatchComparator.cpp( 467) Missing uuid for Way(-11)
+19:14:34.839 WARN   ...re/scoring/MatchComparator.cpp( 471) MatchComparator: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 Score: -1.8
 -1,0.4,0.3,0.3

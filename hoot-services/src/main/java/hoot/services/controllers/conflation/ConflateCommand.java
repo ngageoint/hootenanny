@@ -171,7 +171,7 @@ class ConflateCommand extends ExternalCommand {
 
         //Attribute Reference Layer is not default
         if ("2".equals(params.getReferenceLayer())) {
-            options.add("tag.merger.default=hoot::OverwriteTag1Merger");
+            options.add("tag.merger.default=OverwriteTag1Merger");
         }
 
         if (params.getHoot2() != null) { // hoot 2
@@ -226,9 +226,9 @@ class ConflateCommand extends ExternalCommand {
                     String current = matchCreators.get(i);
 
                     // Special case for network
-                    if (current.equals("hoot::NetworkMatchCreator") && (matchers.contains("hoot::HighwayMatchCreator") || matchers.contains("hoot::NetworkMatchCreator"))) {
-                        sortedMatchers.add("hoot::NetworkMatchCreator");
-                        sortedMergers.add("hoot::NetworkMergerCreator");
+                    if (current.equals("NetworkMatchCreator") && (matchers.contains("HighwayMatchCreator") || matchers.contains("NetworkMatchCreator"))) {
+                        sortedMatchers.add("NetworkMatchCreator");
+                        sortedMergers.add("NetworkMergerCreator");
                     }
                     else if (matchers.contains(current)) {
                         sortedMatchers.add(current);
@@ -265,7 +265,7 @@ class ConflateCommand extends ExternalCommand {
             if (params.getCleaningOpts() != null) { // remove cleaning specified cleaning options...
                 for (String cleaningOption: params.getCleaningOpts()) {
                     if (cleaningOptions.contains(cleaningOption)) {
-                        options.add("\"map.cleaner.transforms-=hoot::" + cleaningOption + "\"");
+                        options.add("\"map.cleaner.transforms-=" + cleaningOption + "\"");
                     }
                 }
             }
@@ -337,9 +337,9 @@ class ConflateCommand extends ExternalCommand {
      */
     private List<String> getCreatorsFromJson(String optionName, String defaultOptionId, JSONObject config) {
         // hoot json config files support an option list value entry replacement syntax. For instance, to replace an instance of
-        // "hoot::HighwayMatchCreator", in the "match.creators" config option the json snippet would look like:
+        // "HighwayMatchCreator", in the "match.creators" config option the json snippet would look like:
         //
-        // "match.creators": "hoot::HighwayMatchCreator->hoot::NetworkMatchCreator",
+        // "match.creators": "HighwayMatchCreator->NetworkMatchCreator",
         //
         // where '->' means replace the first item with the second item.
 

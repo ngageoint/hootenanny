@@ -43,7 +43,7 @@ class FindIntersectionsVisitor : public ConstElementVisitor, public OsmMapConsum
 {
 public:
 
-  static QString className() { return "hoot::FindIntersectionsVisitor"; }
+  static QString className() { return "FindIntersectionsVisitor"; }
 
   FindIntersectionsVisitor() = default;
   ~FindIntersectionsVisitor() = default;
@@ -79,7 +79,7 @@ class FindHighwayIntersectionsVisitor : public FindIntersectionsVisitor
 {
 public:
 
-  static QString className() { return "hoot::FindHighwayIntersectionsVisitor"; }
+  static QString className() { return "FindHighwayIntersectionsVisitor"; }
 
   FindHighwayIntersectionsVisitor() = default;
   ~FindHighwayIntersectionsVisitor() = default;
@@ -101,7 +101,7 @@ class FindRailwayIntersectionsVisitor : public FindIntersectionsVisitor
 {
 public:
 
-  static QString className() { return "hoot::FindRailwayIntersectionsVisitor"; }
+  static QString className() { return "FindRailwayIntersectionsVisitor"; }
 
   FindRailwayIntersectionsVisitor() = default;
   ~FindRailwayIntersectionsVisitor() = default;

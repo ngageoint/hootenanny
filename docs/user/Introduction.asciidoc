@@ -1,5 +1,9 @@
 
 [[Introduction]]
+== Detail Summary
+
+(https://github.com/ngageoint/hootenanny/blob/master/docs/user/SummaryDetail.asciidoc)[Detail Summary]
+
 == Conflation Background
 
 [quote,Seth and Samal,Encyclopedia of GIS]
@@ -94,30 +98,28 @@ See also:
 
 ==== Conflation Strategies
 
-There are three main conflation strategies supported by Hootenanny:
+These are the conflation strategies supported by Hootenanny:
 
-* Vertical Conflation (aka Reference Conflation) - Both data sets contain useful information and significant overlap.  Conflate the best
+* Reference Conflation (aka Vertical Conflation) - Both data sets contain useful information and significant overlap.  Conflate the best
 geometry and tag parts of map B into map A.
 * Horizontal Conflation - There is a small amount of overlap between the two data sets.
 * Cookie Cutter & Horizontal Conflation - One data set is superior to the other in every way but does not cover the same region. The
 lesser data set will be cropped and the seams stitched back in using Horizontal Conflation.  Define a specific region in map A that should
 not be modified at all and stitch in data from map B around it.
 * Differential Conflation - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A.  Optionally, you can configure to overwrite tags in A from B even when there is overlap.
-* Attribute Conflation - Conflate map A with B where only tags are transferred from B to A and no changes are made to A's geometry (with
-some configurable exceptions).
+* Attribute Conflation - Conflate map A with B where only tags are transferred from B to A and no changes are made to A's geometry (with some configurable exceptions).
+* Average Conflation - Averages geometries together in the output.
 
 See also:
 
 * _Unifying Conflation_, <<hootalgo>>
 
-NOTE: In the Hootenanny iD UI, there are three conflation options: _Reference_, _Cookie Cutter & Horizontal_, and _Average_.  For more background on these three conflation methods and how they are employed within the iD User Interface, please refer to the _Conflation Options_ <<hootUI>>.
+===== Reference Conflation
 
-===== Vertical Conflation
-
-.Vertical Conflation.  Red and blue boxes represent different data sets.  This is a good candidate for Vertical Conflation because of the high degree of overlap between the two data sets.
+.Vertical Conflation.  Red and blue boxes represent different data sets.  This is a good candidate for Reference Conflation because of the high degree of overlap between the two data sets.
 image::images/VerticalConflation.png[]
 
-Vertical conflation is most applicable when both data sets provide value and there is significant overlap between the data sets. In this scenario many of the features will be evaluated for conflation and possibly merged or marked as needing review. The primary advantage to using this strategy is maintaining much of the information available in both data sets. Because a large amount of the data is being evaluated for conflation it also increases the chances that errors will be introduced or unnecessary reviews may be generated.
+Reference conflation is most applicable when both data sets provide value and there is significant overlap between the data sets. In this scenario many of the features will be evaluated for conflation and possibly merged or marked as needing review. The primary advantage to using this strategy is maintaining much of the information available in both data sets. Because a large amount of the data is being evaluated for conflation it also increases the chances that errors will be introduced or unnecessary reviews may be generated.
 
 To use, pass +ReferenceConflation.conf+ to the conflate command.
 
@@ -139,7 +141,7 @@ TODO
 .Horizontal Conflation.  This is a good candidate for Horizontal Conflation because there is a small amount of overlap between the two data sets.
 image::images/HorizontalConflation.png[]
 
-Programmatically there is no difference between Vertical and Horizontal conflation. The difference is solely conceptual.
+Programmatically there is no difference between Reference and Horizontal conflation. The difference is solely conceptual.
 
 [[UnsupportedHorizontalConflation]]
 .Unsupported Horizontal Conflation due to the complete lack of overlap between the two data sets.
@@ -162,7 +164,7 @@ See also:
 ===== Cookie Cutter & Horizontal
 
 [[CookieCutterImage]]
-.Cookie Cutter & Horizontal.  The left image depicts the overlap of a high quality, smaller area data set overlayed on a coarser regional data set that is typical for Vertical/Horizontal Conflation.  The shaded area in the right image depicts the -1km buffer that is applied during the Cookie Cutter operation.
+.Cookie Cutter & Horizontal.  The left image depicts the overlap of a high quality, smaller area data set overlayed on a coarser regional data set that is typical for Reference/Horizontal Conflation.  The shaded area in the right image depicts the -1km buffer that is applied during the Cookie Cutter operation.
 image::images/CookieCutter.png[]
 
 The cookie cutter operation is designed for situations where two data sets contain significant overlap, but one data set is better in _every way_. A typical scenario that warrants this strategy is coarse country wide data that needs to be conflated with high quality city level data. When employing cookie cutter a polygon that approximates the bounds of the city will be removed from the coarse country data before conflation.

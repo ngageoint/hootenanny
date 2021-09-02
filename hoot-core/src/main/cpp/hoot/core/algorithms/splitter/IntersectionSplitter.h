@@ -57,7 +57,7 @@ class IntersectionSplitter : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::IntersectionSplitter"; }
+  static QString className() { return "IntersectionSplitter"; }
 
   IntersectionSplitter() = default;
   IntersectionSplitter(const std::shared_ptr<OsmMap>& map);

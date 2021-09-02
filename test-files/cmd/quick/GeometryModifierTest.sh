@@ -7,5 +7,5 @@ COMPAREFILE=$INPATH/GeoModifierTestOut.osm
 OUTPUTFILE=test-output/cmd/quick/GeoModifierTestOut.osm
 
 mkdir -p test-output/cmd/quick/
-hoot convert -C Testing.conf -D convert.ops="hoot::GeometryModifierOp" -D geometry.modifier.rules.file=$RULESFILE $INPUTFILE $OUTPUTFILE
+hoot convert -C Testing.conf -D convert.ops="GeometryModifierOp" -D geometry.modifier.rules.file=$RULESFILE $INPUTFILE $OUTPUTFILE
 hoot diff -C Testing.conf $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE

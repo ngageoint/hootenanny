@@ -42,7 +42,7 @@ class ElementIdCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::ElementIdCriterion"; }
+  static QString className() { return "ElementIdCriterion"; }
 
   ElementIdCriterion() = default;
   ElementIdCriterion(const ElementId& id);

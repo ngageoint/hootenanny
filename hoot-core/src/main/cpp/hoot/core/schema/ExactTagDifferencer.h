@@ -40,7 +40,7 @@ class ExactTagDifferencer : public TagDifferencer
 {
 public:
 
-  static QString className() { return "hoot::ExactTagDifferencer"; }
+  static QString className() { return "ExactTagDifferencer"; }
 
   ExactTagDifferencer() = default;
   ~ExactTagDifferencer() = default;

@@ -56,7 +56,7 @@ public:
    * @return a numeric statistic
    */
   double calculateStat(
-    const QStringList& inputs, QString& visitorClassName, const QString& statType) const;
+    const QStringList& inputs, const QString& visitorClassName, const QString& statType) const;
 
 private:
 

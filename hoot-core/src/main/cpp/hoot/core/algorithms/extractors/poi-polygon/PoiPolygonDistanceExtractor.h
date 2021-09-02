@@ -43,7 +43,7 @@ class PoiPolygonDistanceExtractor : public FeatureExtractorBase
 {
 public:
 
-  static QString className() { return "hoot::PoiPolygonDistanceExtractor"; }
+  static QString className() { return "PoiPolygonDistanceExtractor"; }
 
   PoiPolygonDistanceExtractor(PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr());
   ~PoiPolygonDistanceExtractor() = default;
@@ -55,8 +55,8 @@ public:
    * @param poly a polygon element
    * @return the distance between the two elements
    */
-  double extract(const OsmMap& map, const ConstElementPtr& poi,
-                 const ConstElementPtr& poly) const override;
+  double extract(
+    const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
 
   QString getClassName() const override { return className(); }
   QString getDescription() const override

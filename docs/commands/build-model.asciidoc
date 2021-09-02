@@ -3,7 +3,7 @@
 
 === Description
 
-The +build-model+ command reads input(s), generates a model, and writes the result to an Attribute-Relation file (.arff)
+The `build-model` command reads input(s), generates a model, and writes the result to an Attribute-Relation file (.arff)
 and/or a Random Forest model file (.rf). Generating a `.arff` file is most useful when trying to reduce the size of a 
 stored model file. The `.arff` file is considerably smaller than the .rf output.
 
@@ -11,10 +11,10 @@ stored model file. The `.arff` file is considerably smaller than the .rf output.
 
 ==== Input Parameters
 
-* +ref1+               - Input with REF1 tags; may be any supported input format (e.g. .osm file).
-* +ref2+               - Input with REF2 tags; may be any supported input format (e.g. .osm file).
-* +output+             - Output model base name (file name with file extension).
-* +--export-arff-only+ - Exports only the .arff file and skips the building and exporting of the .rf file.
+* `ref1`               - Input with REF1 tags; may be any supported input format (e.g. .osm file).
+* `ref2`               - Input with REF2 tags; may be any supported input format (e.g. .osm file).
+* `output`             - Output model base name (file name with file extension).
+* `--export-arff-only` - Exports only the .arff file and skips the building and exporting of the .rf file.
 
 ==== Usage
 
@@ -26,8 +26,8 @@ hoot build-model (ref1 ref2) [ref1 ref2 ...] (output) [--export-arff-only]
 
 ==== Input Parameters
 
-* +input.arff+ - Input .arff file.
-* +output.rf+  - Output model name.
+* `input.arff` - Input .arff file.
+* `output.rf`  - Output model name.
 
 ==== Usage
 

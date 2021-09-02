@@ -54,7 +54,7 @@ class OsmPbfWriter : public PartialOsmMapWriter
 {
 public:
 
-  static QString className() { return "hoot::OsmPbfWriter"; }
+  static QString className() { return "OsmPbfWriter"; }
 
   class BlobLocation
   {

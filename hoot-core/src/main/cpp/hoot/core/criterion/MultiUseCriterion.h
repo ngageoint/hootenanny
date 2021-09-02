@@ -40,7 +40,7 @@ class MultiUseCriterion : public ElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::MultiUseCriterion"; }
+  static QString className() { return "MultiUseCriterion"; }
 
   MultiUseCriterion() = default;
   ~MultiUseCriterion() = default;

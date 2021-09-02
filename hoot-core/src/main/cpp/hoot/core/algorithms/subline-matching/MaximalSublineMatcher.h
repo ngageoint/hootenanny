@@ -39,7 +39,7 @@ class MaximalSublineMatcher : public SublineMatcher
 {
 public:
 
-  static QString className() { return "hoot::MaximalSublineMatcher"; }
+  static QString className() { return "MaximalSublineMatcher"; }
 
   MaximalSublineMatcher();
   ~MaximalSublineMatcher() = default;

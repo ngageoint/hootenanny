@@ -210,19 +210,22 @@ int StringUtils::indexOfSubstring(
   return -1;
 }
 
-void StringUtils::removePrefixes(const QString& prefix, QStringList& input)
+int StringUtils::removePrefixes(const QString& prefix, QStringList& input)
 {
+  int numRemoved = 0;
   QStringList inputCopy(input);
   for (int i = 0; i < input.size(); i++)
   {
     QString inputStr = input.at(i);
     if (inputStr.startsWith(prefix))
     {
-      inputStr = inputStr.replace(prefix, "");
+      inputStr = inputStr.remove(prefix);
+      numRemoved++;
     }
     inputCopy.append(inputStr);
   }
   input = inputCopy;
+  return numRemoved;
 }
 
 void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)

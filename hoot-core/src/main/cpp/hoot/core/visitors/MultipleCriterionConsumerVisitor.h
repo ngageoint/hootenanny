@@ -44,7 +44,7 @@ class MultipleCriterionConsumerVisitor : public ElementVisitor,
 {
 public:
 
-  static QString className() { return "hoot::MultipleCriterionConsumerVisitor"; }
+  static QString className() { return "MultipleCriterionConsumerVisitor"; }
 
   MultipleCriterionConsumerVisitor();
   virtual ~MultipleCriterionConsumerVisitor() = default;

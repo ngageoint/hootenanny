@@ -11,7 +11,7 @@
         "elem_type": "string",
         "description": "The highway match classifier to use. This should only be used for testing and debugging.",
         "name": "Conflate Match Highway Classifier",
-        "defaultvalue": "hoot::HighwayRfClassifier",
+        "defaultvalue": "HighwayRfClassifier",
         "hoot_key": "conflate.match.highway.classifier",
 				"required":"true"
       },
@@ -21,7 +21,7 @@
         "elem_type": "string",
         "description": "List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
         "name": "Match Creator",
-        "defaultvalue": "hoot::HighwayMatchCreator",
+        "defaultvalue": "HighwayMatchCreator",
         "hoot_key": "match.creators",
 				"required":"true"
       },
@@ -30,7 +30,7 @@
         "elem_type": "string",
         "description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
         "name": "Merger Creator",
-        "defaultvalue": "hoot::HighwayMergerCreator",
+        "defaultvalue": "HighwayMergerCreator",
         "hoot_key": "merger.creators",
 				"required":"true"
       },
@@ -39,7 +39,7 @@
         "elem_type": "string",
         "description": "List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
         "name": "Match Creator",
-        "defaultvalue": "hoot::BuildingMatchCreator",
+        "defaultvalue": "BuildingMatchCreator",
         "hoot_key": "match.creators"
       },
       {
@@ -47,7 +47,7 @@
         "elem_type": "string",
         "description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
         "name": "Merger Creator",
-        "defaultvalue": "hoot::BuildingMergerCreator",
+        "defaultvalue": "BuildingMergerCreator",
         "hoot_key": "merger.creators"
       },
     

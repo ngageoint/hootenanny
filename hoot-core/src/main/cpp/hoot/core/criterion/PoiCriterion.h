@@ -40,7 +40,7 @@ class PoiCriterion : public ConflatableElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::PoiCriterion"; }
+  static QString className() { return "PoiCriterion"; }
 
   PoiCriterion() = default;
   ~PoiCriterion() = default;

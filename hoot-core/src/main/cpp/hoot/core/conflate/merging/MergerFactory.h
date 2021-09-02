@@ -42,7 +42,7 @@ class MergerFactory
 {
 public:
 
-  static QString className() { return "hoot::ScriptMerger"; }
+  static QString className() { return "ScriptMerger"; }
 
   static int logWarnCount;
 

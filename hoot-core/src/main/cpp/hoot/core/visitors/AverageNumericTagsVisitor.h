@@ -46,7 +46,7 @@ class AverageNumericTagsVisitor : public ConstElementVisitor, public SingleStati
 {
 public:
 
-  static QString className() { return "hoot::AverageNumericTagsVisitor"; }
+  static QString className() { return "AverageNumericTagsVisitor"; }
 
   static int logWarnCount;
 

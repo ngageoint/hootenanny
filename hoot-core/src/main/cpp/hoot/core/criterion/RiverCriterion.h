@@ -40,7 +40,7 @@ class RiverCriterion : public ConflatableElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::RiverCriterion"; }
+  static QString className() { return "RiverCriterion"; }
 
   RiverCriterion() = default;
   ~RiverCriterion() = default;

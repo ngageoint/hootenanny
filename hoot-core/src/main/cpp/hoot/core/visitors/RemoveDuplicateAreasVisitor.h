@@ -56,7 +56,7 @@ class RemoveDuplicateAreasVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static QString className() { return "hoot::RemoveDuplicateAreasVisitor"; }
+  static QString className() { return "RemoveDuplicateAreasVisitor"; }
 
   RemoveDuplicateAreasVisitor();
   ~RemoveDuplicateAreasVisitor() = default;

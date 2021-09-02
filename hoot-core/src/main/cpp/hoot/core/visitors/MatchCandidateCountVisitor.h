@@ -47,7 +47,7 @@ class MatchCandidateCountVisitor : public ElementConstOsmMapVisitor, public Sing
 {
 public:
 
-  static QString className() { return "hoot::MatchCandidateCountVisitor"; }
+  static QString className() { return "MatchCandidateCountVisitor"; }
 
   MatchCandidateCountVisitor(const std::vector<std::shared_ptr<MatchCreator>>& matchCreators);
   ~MatchCandidateCountVisitor() = default;

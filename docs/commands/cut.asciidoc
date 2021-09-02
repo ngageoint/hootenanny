@@ -3,20 +3,20 @@
 
 === Description
 
-The +cut+ command cuts a section out of a map.
+The `cut` command cuts a section out of a map.
 
 When you have two data sets to conflate where one is clearly better than the other in every way (attributes and 
 geometric accuracy), the cookie cutter can be a very useful tool. For instance, you may have country wide primary roads 
 and very high quality city scale roads for a small region. In this case you'll want to remove a section of the country 
-scale roads, then conflate the high quality roads back in.  The +cut+ command functions by reading in a OSM input file 
-as the +cutter-shape+ and removes the cookie cutter shape from the contents of the 'dough' file. The resulting geometries 
+scale roads, then conflate the high quality roads back in.  The `cut` command functions by reading in a OSM input file 
+as the `cutter-shape` and removes the cookie cutter shape from the contents of the 'dough' file. The resulting geometries 
 are written to 'output'. The dough input is limited by the available RAM.
 
-* +cutter-shape+ - The input to use as the cutter shape; may be any supported input format (e.g. .osm file).
-* +dough+        - The input data to cut from; may be any supported input format (e.g. .osm file).
-* +output+       - Output; may be any supported output format (e.g. .osm file).
-* +--buffer+     - Optional buffer value to buffer the shape with before cutting. The value may be positive or negative.
-* +--crop+       - Optionally crops the exterior based on the cutter shape rather than cutting from inside the cutter shape.
+* `cutter-shape` - The input to use as the cutter shape; may be any supported input format (e.g. .osm file).
+* `dough`        - The input data to cut from; may be any supported input format (e.g. .osm file).
+* `output`       - Output; may be any supported output format (e.g. .osm file).
+* `--buffer`     - Optional buffer value to buffer the shape with before cutting. The value may be positive or negative.
+* `--crop`       - Optionally crops the exterior based on the cutter shape rather than cutting from inside the cutter shape.
 
 === Usage
 

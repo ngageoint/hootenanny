@@ -143,8 +143,11 @@ private:
     tagKeys.append("name");
     tagKeys.append("alt_name");
     conf.set(ConfigOptions::getLanguageTagKeysKey(), tagKeys);
-    conf.set(ConfigOptions::getLanguageDetectionDetectorKey(), HootServicesLanguageDetectorMockClient::className());
-    conf.set(ConfigOptions::getLanguageInfoProviderKey(), HootServicesLanguageInfoMockClient::className());
+    conf.set(
+      ConfigOptions::getLanguageDetectionDetectorKey(),
+      HootServicesLanguageDetectorMockClient::className());
+    conf.set(
+      ConfigOptions::getLanguageInfoProviderKey(), HootServicesLanguageInfoMockClient::className());
     conf.set(ConfigOptions::getLanguageHootServicesDetectionMinConfidenceThresholdKey(), "none");
     conf.set(ConfigOptions::getLanguageDetectionWriteDetectedLangTagsKey(), "true");
 

@@ -144,10 +144,8 @@ void Log::setLevel(WarningLevel l)
 void Log::_setFilter()
 {
   _includeClassFilter = ConfigOptions().getLogClassIncludeFilter();
-  StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), _includeClassFilter);
   _includeClassFilter.removeDuplicates();
   _excludeClassFilter = ConfigOptions().getLogClassExcludeFilter();
-  StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), _excludeClassFilter);
   _excludeClassFilter.removeDuplicates();
 }
 

@@ -3,7 +3,7 @@
 IN_DIR=test-files/cmd/quick/ChangesetReplacementToy2Test
 OUT_DIR=test-output/cmd/quick/ChangesetReplacementToy2Test
 
-CONFIG="--warn -C DeriveChangeset.conf -C Testing.conf"
+CONFIG="--warn -C Testing.conf"
 
 mkdir -p $OUT_DIR
 

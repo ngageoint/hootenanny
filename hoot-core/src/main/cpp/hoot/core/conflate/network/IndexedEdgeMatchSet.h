@@ -42,7 +42,7 @@ class IndexedEdgeMatchSet : public EdgeMatchSet
 {
 public:
 
-  static QString className() { return "hoot::IndexedEdgeMatchSet"; }
+  static QString className() { return "IndexedEdgeMatchSet"; }
 
   using MatchHash = QHash<ConstEdgeMatchPtr, double>;
 

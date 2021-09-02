@@ -42,7 +42,7 @@ class OptimizeConflateTestSettingsCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::OptimizeConflateTestSettingsCmd"; }
+  static QString className() { return "OptimizeConflateTestSettingsCmd"; }
 
   OptimizeConflateTestSettingsCmd() { }
 

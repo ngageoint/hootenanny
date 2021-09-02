@@ -64,7 +64,7 @@ class RecursiveElementRemover : public ConstOsmMapOperation, public ConstElement
 {
 public:
 
-  static QString className() { return "hoot::RecursiveElementRemover"; }
+  static QString className() { return "RecursiveElementRemover"; }
 
   /**
    * Constructor

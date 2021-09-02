@@ -41,7 +41,7 @@ class RelationWithPoiMembersCriterion : public RelationWithMembersOfTypeCriterio
 {
 public:
 
-  static QString className() { return "hoot::RelationWithPoiMembersCriterion"; }
+  static QString className() { return "RelationWithPoiMembersCriterion"; }
 
   RelationWithPoiMembersCriterion();
   ~RelationWithPoiMembersCriterion() = default;

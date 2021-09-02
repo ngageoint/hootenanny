@@ -52,7 +52,7 @@ public:
 
   using Ref1ToEid = QMap<QString, ElementId>;
 
-  static QString className() { return "hoot::RemoveRef2Visitor"; }
+  static QString className() { return "RemoveRef2Visitor"; }
 
   static int logWarnCount;
 

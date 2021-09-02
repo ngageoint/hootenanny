@@ -43,7 +43,7 @@ class ParallelWayCriterion : public GeometryTypeCriterion
 {
 public:
 
-  static QString className() { return "hoot::ParallelWayCriterion"; }
+  static QString className() { return "ParallelWayCriterion"; }
 
   ParallelWayCriterion() = default;
   ParallelWayCriterion(const ConstOsmMapPtr& map, ConstWayPtr baseWay, bool isParallel = true);

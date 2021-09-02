@@ -43,7 +43,7 @@ class NoInformationCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::NoInformationCriterion"; }
+  static QString className() { return "NoInformationCriterion"; }
 
   NoInformationCriterion();
   NoInformationCriterion(bool treatReviewTagsAsMetadata);

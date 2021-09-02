@@ -37,7 +37,7 @@ class RiverWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static QString className() { return "hoot::RiverWayNodeCriterion"; }
+  static QString className() { return "RiverWayNodeCriterion"; }
 
   RiverWayNodeCriterion();
   RiverWayNodeCriterion(ConstOsmMapPtr map);

@@ -54,7 +54,7 @@ class AbstractConflator : public OsmMapOperation, public Boundable, public Progr
 {
 public:
 
-  static QString className() { return "hoot::AbstractConflator"; }
+  static QString className() { return "AbstractConflator"; }
 
   AbstractConflator();
   AbstractConflator(const std::shared_ptr<MatchThreshold>& matchThreshold);

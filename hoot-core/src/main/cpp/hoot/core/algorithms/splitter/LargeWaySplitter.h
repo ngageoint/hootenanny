@@ -48,7 +48,7 @@ class LargeWaySplitter
 {
 public:
 
-  static QString className() { return "hoot::LargeWaySplitter"; }
+  static QString className() { return "LargeWaySplitter"; }
 
   static int logWarnCount;
 

@@ -40,7 +40,7 @@ class ElementTypeCriterion : public ElementCriterion
 
 public:
 
-  static QString className() { return "hoot::ElementTypeCriterion"; }
+  static QString className() { return "ElementTypeCriterion"; }
 
   ElementTypeCriterion() = default;
   ElementTypeCriterion(ElementType::Type eType);

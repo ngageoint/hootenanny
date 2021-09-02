@@ -37,7 +37,7 @@ class LinearWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static QString className() { return "hoot::LinearWayNodeCriterion"; }
+  static QString className() { return "LinearWayNodeCriterion"; }
 
   LinearWayNodeCriterion();
   ~LinearWayNodeCriterion() override = default;

@@ -46,7 +46,7 @@ class PhoneNumberCountVisitor : public ConstElementVisitor, public SingleStatist
 {
 public:
 
-  static QString className() { return "hoot::PhoneNumberCountVisitor"; }
+  static QString className() { return "PhoneNumberCountVisitor"; }
 
   PhoneNumberCountVisitor();
   ~PhoneNumberCountVisitor() = default;

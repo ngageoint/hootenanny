@@ -3,16 +3,16 @@
 
 === Description
 
-The +diff+ command finds differences between two maps. It returns 0 if they are the same or 1 if they differ significantly. 
+The `diff` command finds differences between two maps. It returns 0 if they are the same or 1 if they differ significantly. 
 If they differ significantly, the differences will be displayed. 
 
-* +input1+          - Input 1; may be any supported input format (e.g. .osm file), XML changeset (.osc), or a 
+* `input1`          - Input 1; may be any supported input format (e.g. .osm file), XML changeset (.osc), or a 
                       directory containing XML changesets.
-* +input2+          - Input 2; may be any supported input format (e.g. .osm file), XML changeset (.osc), or a 
+* `input2`          - Input 2; may be any supported input format (e.g. .osm file), XML changeset (.osc), or a 
                       directory containing XML changesets.
-* +--error-limit+   - Increase the compare error limit from the default value
-* +--ignore-uuid+   - Ignores UUID's during comparison
-* +--use-datetime+  - Ignores `source:datetime` and `source:ingest:datetime` tags during comparison
+* `--error-limit`   - Increase the compare error limit from the default value
+* `--ignore-uuid`   - Ignores UUID's during comparison
+* `--use-datetime`  - Ignores `source:datetime` and `source:ingest:datetime` tags during comparison
 
 === Usage
 

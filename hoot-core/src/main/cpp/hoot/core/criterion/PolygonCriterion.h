@@ -43,7 +43,7 @@ class PolygonCriterion : public ConflatableElementCriterion, public ConstOsmMapC
 {
 public:
 
-  static QString className() { return "hoot::PolygonCriterion"; }
+  static QString className() { return "PolygonCriterion"; }
 
   PolygonCriterion() = default;
   PolygonCriterion(ConstOsmMapPtr map);

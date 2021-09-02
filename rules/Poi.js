@@ -22,7 +22,7 @@ exports.geometryType = "point";
 
 // This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
 // culling match candidates.
-exports.matchCandidateCriterion = "hoot::PoiCriterion";
+exports.matchCandidateCriterion = "PoiCriterion";
 
 var soundexExtractor = new hoot.NameExtractor(
     new hoot.Soundex());

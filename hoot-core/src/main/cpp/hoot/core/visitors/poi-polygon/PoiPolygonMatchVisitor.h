@@ -32,7 +32,6 @@
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/Match.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
@@ -54,12 +53,12 @@ class PoiPolygonMatchVisitor : public ConstElementVisitor
 
 public:
 
-  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
-                         ElementCriterionPtr filter = ElementCriterionPtr());
-  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
-                         ConstMatchThresholdPtr threshold,
-                         std::shared_ptr<PoiPolygonRfClassifier> rf, PoiPolygonInfoCachePtr infoCache,
-                         ElementCriterionPtr filter = ElementCriterionPtr());
+  PoiPolygonMatchVisitor(
+    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
+    ElementCriterionPtr filter = ElementCriterionPtr());
+  PoiPolygonMatchVisitor(
+    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result, ConstMatchThresholdPtr threshold,
+    PoiPolygonInfoCachePtr infoCache, ElementCriterionPtr filter = ElementCriterionPtr());
   ~PoiPolygonMatchVisitor() = default;
 
   /**
@@ -95,8 +94,6 @@ private:
   // used for finding surrounding polys
   std::shared_ptr<Tgs::HilbertRTree> _polyIndex;
   std::deque<ElementId> _polyIndexToEid;
-
-  std::shared_ptr<PoiPolygonRfClassifier> _rf;
 
   double _reviewDistanceThreshold;
 

@@ -44,7 +44,7 @@ class WaySublineRemover
 {
 public:
 
-  static QString className() { return "hoot::WaySublineRemover"; }
+  static QString className() { return "WaySublineRemover"; }
 
   /**
    * @brief removeSubline removes a subline from a way.

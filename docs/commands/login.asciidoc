@@ -1,7 +1,7 @@
 [[login]]
 == login
 
-The +login+ command logs a user into the web services, and returns access tokens for use in command invocations. Some 
+The `login` command logs a user into the web services, and returns access tokens for use in command invocations. Some 
 commands require web services authentication before use (e.g. `languages` command).
 
 The access tokens retrieved after login, along with their associated user name, must be used as configuration options 

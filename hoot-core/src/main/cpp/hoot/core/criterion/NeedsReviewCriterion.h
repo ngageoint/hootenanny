@@ -42,7 +42,7 @@ class NeedsReviewCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  static QString className() { return "hoot::NeedsReviewCriterion"; }
+  static QString className() { return "NeedsReviewCriterion"; }
 
   NeedsReviewCriterion() = default;
   NeedsReviewCriterion(const ConstOsmMapPtr& map);

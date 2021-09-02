@@ -105,7 +105,7 @@ public:
     OsmMapReaderFactory::read(
       map, _inputPath + "SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
-    SetTagValueVisitor visitor("key3", "value3", false, QStringList("hoot::NodeCriterion"));
+    SetTagValueVisitor visitor("key3", "value3", false, QStringList("NodeCriterion"));
     map->visitRw(visitor);
 
     OsmMapWriterFactory::write(map, _outputPath + "RunFilterTest.osm");
@@ -139,7 +139,7 @@ public:
       map, _inputPath + "SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
     SetTagValueVisitor visitor(
-      "key3", "value3", false, QStringList("hoot::NodeCriterion"), false, true);
+      "key3", "value3", false, QStringList("NodeCriterion"), false, true);
     map->visitRw(visitor);
 
     OsmMapWriterFactory::write(map, _outputPath + "RunNegatedFilterTest.osm");

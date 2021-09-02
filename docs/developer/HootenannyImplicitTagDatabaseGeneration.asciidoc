@@ -21,9 +21,9 @@ you should pre-filter your input datasets to data that is eligible to have impli
 The pre-filtered input datasets must be translated if in a format other than OSM.  A pre-filtering example:
 
 ---------------------------
-hoot convert -D convert.ops="hoot::TranslationVisitor;hoot::ImplicitTagEligiblePoiPolyCriterion" -D schema.translation.script="translations/GeoNames_to_OSM.js" allCountries.geonames allCountries-filtered.osm.pbf
+hoot convert -D convert.ops="TranslationVisitor;ImplicitTagEligiblePoiPolyCriterion" -D schema.translation.script="translations/GeoNames_to_OSM.js" allCountries.geonames allCountries-filtered.osm.pbf
 
-hoot convert -D convert.ops="hoot::ImplicitTagEligiblePoiPolyCriterion" planet.osm.pbf planet-filtered.osm.pbf
+hoot convert -D convert.ops="ImplicitTagEligiblePoiPolyCriterion" planet.osm.pbf planet-filtered.osm.pbf
 ---------------------------
 
 === Raw Rules Derivation

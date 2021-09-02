@@ -59,7 +59,7 @@ class MostEnglishName : public Configurable
 {
 public:
 
-  static QString className() { return "hoot::MostEnglishName"; }
+  static QString className() { return "MostEnglishName"; }
 
   static const MostEnglishNamePtr& getInstance();
   ~MostEnglishName() = default;

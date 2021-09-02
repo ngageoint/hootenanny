@@ -46,7 +46,7 @@ class ResolveReviewsOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::ResolveReviewsOp"; }
+  static QString className() { return "ResolveReviewsOp"; }
 
   ResolveReviewsOp();
   virtual ~ResolveReviewsOp() = default;

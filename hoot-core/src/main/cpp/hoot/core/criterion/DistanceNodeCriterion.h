@@ -43,7 +43,7 @@ class DistanceNodeCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::DistanceNodeCriterion"; }
+  static QString className() { return "DistanceNodeCriterion"; }
 
   DistanceNodeCriterion() = default;
   DistanceNodeCriterion(geos::geom::Coordinate center, Meters distance);

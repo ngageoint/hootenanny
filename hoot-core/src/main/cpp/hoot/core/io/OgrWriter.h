@@ -52,7 +52,7 @@ class OgrWriter : public PartialOsmMapWriter, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::OgrWriter"; }
+  static QString className() { return "OgrWriter"; }
 
   OgrWriter();
   ~OgrWriter() = default;

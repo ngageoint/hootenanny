@@ -41,7 +41,7 @@ class RelationWithRailwayMembersCriterion : public RelationWithMembersOfTypeCrit
 {
 public:
 
-  static QString className() { return "hoot::RelationWithRailwayMembersCriterion"; }
+  static QString className() { return "RelationWithRailwayMembersCriterion"; }
 
   RelationWithRailwayMembersCriterion();
   ~RelationWithRailwayMembersCriterion() = default;

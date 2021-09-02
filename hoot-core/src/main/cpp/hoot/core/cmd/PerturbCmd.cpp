@@ -55,7 +55,7 @@ class PerturbCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::PerturbCmd"; }
+  static QString className() { return "PerturbCmd"; }
 
   PerturbCmd() = default;
 

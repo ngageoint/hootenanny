@@ -47,7 +47,7 @@ public:
    * @brief className - get class name string
    * @return The namespace qualified class name
    */
-  static QString className() { return "hoot::ReplaceTagVisitor"; }
+  static QString className() { return "ReplaceTagVisitor"; }
 
   /**
    * @brief ReplaceTagVisitor - default constructor

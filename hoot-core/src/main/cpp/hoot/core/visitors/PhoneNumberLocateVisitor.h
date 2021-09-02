@@ -48,7 +48,7 @@ public:
   PhoneNumberLocateVisitor();
   ~PhoneNumberLocateVisitor() = default;
 
-  static QString className() { return "hoot::PhoneNumberLocateVisitor"; }
+  static QString className() { return "PhoneNumberLocateVisitor"; }
 
   /**
    * @see Configurable

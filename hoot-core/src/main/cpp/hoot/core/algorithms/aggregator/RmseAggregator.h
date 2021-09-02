@@ -43,7 +43,7 @@ class RmseAggregator : public ValueAggregator
 {
 public:
 
-  static QString className() { return "hoot::RmseAggregator"; }
+  static QString className() { return "RmseAggregator"; }
 
   RmseAggregator() = default;
   ~RmseAggregator() = default;

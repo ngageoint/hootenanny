@@ -67,7 +67,6 @@ namespace Tgs
     try
     {
       double itrVal = 1.0 / (double)_forest.size();
-
       for (unsigned int i = 0; i < _forest.size(); i++)
       {
         std::string result;
@@ -263,7 +262,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::importModel(const QDomElement & e)
+  void BaseRandomForest::importModel(const QDomElement& e)
   {
     try
     {
@@ -296,7 +295,6 @@ namespace Tgs
           else if (tag == "FACTORLABELS")
           {
             QStringList factorList = element.text().split(" ");
-
             for (unsigned int fIdx = 0; fIdx < (unsigned int)factorList.size(); fIdx++)
             {
               _factorLabels.emplace_back(factorList[fIdx].toLatin1().constData());
@@ -305,7 +303,6 @@ namespace Tgs
           else if (tag == "RANDOMTREES")
           {
             QDomNodeList treeList = element.childNodes();
-
             for (unsigned int rIdx = 0; rIdx < (unsigned int)treeList.size(); rIdx++)
             {
               QDomElement treeElement = treeList.at(rIdx).toElement();

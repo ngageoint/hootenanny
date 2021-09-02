@@ -47,7 +47,7 @@ class ScriptMatch : public Match, public MatchDetails
 {
 public:
 
-  static QString className() { return "hoot::ScriptMatch"; }
+  static QString className() { return "ScriptMatch"; }
 
   static int logWarnCount;
 

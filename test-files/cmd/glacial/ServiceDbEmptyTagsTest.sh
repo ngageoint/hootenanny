@@ -9,7 +9,7 @@ export PGPASSWORD=$DB_PASSWORD
 
 export HOOT_EMAIL="ApiDbTest@hoottestcpp.org"
 
-export HOOT_OPTS="--warn -C Testing.conf -D hootapi.db.writer.create.user=true -D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.overwrite.map=true -D writer.include.debug.tags=true -D match.creators=hoot::HighwayMatchCreator -D merger.creators=hoot::HighwayMergerCreator"
+export HOOT_OPTS="--warn -C Testing.conf -D hootapi.db.writer.create.user=true -D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.overwrite.map=true -D writer.include.debug.tags=true -D match.creators=HighwayMatchCreator -D merger.creators=HighwayMergerCreator"
 
 export DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 

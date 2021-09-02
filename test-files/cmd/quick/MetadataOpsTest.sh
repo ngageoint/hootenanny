@@ -9,7 +9,7 @@ COMPAREFILE_EXPORT=$INPATH/MetadataExportOpsTestOut.osm
 OUTPUTFILE_EXPORT=test-output/cmd/quick/MetadataExportOpsTestOut.osm
 
 EXPORT_CONF="
--D convert.ops=hoot::MetadataExport
+-D convert.ops=MetadataExport
 -D metadata.dataset.indicator.tag=testtag;testvalue
 -D metadata.tags=source;unknown;surface;ground
 -D metadata.grid.cell.size=0.05"
@@ -23,7 +23,7 @@ COMPAREFILE_IMPORT=$INPATH/MetadataImportOpsTestOut.osm
 OUTPUTFILE_IMPORT=test-output/cmd/quick/MetadataImportOpsTestOut.osm
 
 IMPORT_CONF="
--D convert.ops=hoot::MetadataImport
+-D convert.ops=MetadataImport
 -D metadata.dataset.indicator.tag=testtag;testvalue
 -D metadata.tags=source;unknown;surface;ground"
 

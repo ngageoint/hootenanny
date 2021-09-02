@@ -3,11 +3,11 @@
 
 === Description
 
-The +db-list+ command lists the names of all maps available in the Hootenanny Web Services database that are either 
-public or are privately owned by the specified user. The +api.db.email+ configuration option must be specified to identify 
+The `db-list` command lists the names of all maps available in the Hootenanny Web Services database that are either 
+public or are privately owned by the specified user. The `api.db.email` configuration option must be specified to identify 
 the user.
 
-* +mapDatabaseLayerUrl+ - URL of the Hootenanny Web Services database (without including a map layer name)
+* `mapDatabaseLayerUrl` - URL of the Hootenanny Web Services database (without including a map layer name)
 
 === Usage
 

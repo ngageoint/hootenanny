@@ -2651,7 +2651,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2662,7 +2662,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2673,7 +2673,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2684,7 +2684,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2695,7 +2695,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2706,7 +2706,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2717,7 +2717,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2728,7 +2728,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2739,7 +2739,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2750,7 +2750,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2761,7 +2761,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2772,7 +2772,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2783,7 +2783,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2794,7 +2794,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2805,7 +2805,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2816,7 +2816,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2827,7 +2827,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2838,7 +2838,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2849,7 +2849,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2860,7 +2860,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2871,7 +2871,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2882,7 +2882,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2893,7 +2893,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2904,7 +2904,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2915,7 +2915,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2926,7 +2926,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2937,7 +2937,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2948,7 +2948,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2959,7 +2959,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2970,7 +2970,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2981,7 +2981,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -2992,7 +2992,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -3003,7 +3003,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -3014,7 +3014,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -3025,7 +3025,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -3036,7 +3036,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -3047,7 +3047,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -3058,7 +3058,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -3069,7 +3069,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -3080,7 +3080,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -3091,7 +3091,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -3102,7 +3102,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
+        <tag k="hoot:review:type" v="UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>

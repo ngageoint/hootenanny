@@ -43,7 +43,7 @@ class RandomMapCropper : public OsmMapOperation, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::RandomMapCropper"; }
+  static QString className() { return "RandomMapCropper"; }
 
   RandomMapCropper();
   ~RandomMapCropper() = default;

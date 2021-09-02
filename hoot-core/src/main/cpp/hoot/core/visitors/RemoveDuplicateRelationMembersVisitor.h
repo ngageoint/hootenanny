@@ -44,7 +44,7 @@ class RemoveDuplicateRelationMembersVisitor : public ElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::RemoveDuplicateRelationMembersVisitor"; }
+  static QString className() { return "RemoveDuplicateRelationMembersVisitor"; }
 
   RemoveDuplicateRelationMembersVisitor() = default;
   ~RemoveDuplicateRelationMembersVisitor() = default;

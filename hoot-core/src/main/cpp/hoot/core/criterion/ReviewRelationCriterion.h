@@ -40,7 +40,7 @@ class ReviewRelationCriterion : public ElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::ReviewRelationCriterion"; }
+  static QString className() { return "ReviewRelationCriterion"; }
 
   ReviewRelationCriterion() = default;
   ~ReviewRelationCriterion() = default;

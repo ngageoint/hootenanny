@@ -1,7 +1,0 @@
-{
-  "#" : "This file contains options that force the first input (Unknown1) to be the dominant geometry and attribute source. The second input will be snapped to the first for all matches",
-  "tag.merger.default" : "hoot::OverwriteTag2Merger",
-  "conflator.manipulators" : "hoot::WaySnapMerger",
-
-  "#" : "end"
-}

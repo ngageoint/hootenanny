@@ -44,7 +44,7 @@ class PointCriterion : public ConflatableElementCriterion, public ConstOsmMapCon
 {
 public:
 
-  static QString className() { return "hoot::PointCriterion"; }
+  static QString className() { return "PointCriterion"; }
 
   PointCriterion() = default;
   PointCriterion(ConstOsmMapPtr map);

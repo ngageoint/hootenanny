@@ -42,7 +42,7 @@ class AddUuidVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::AddUuidVisitor"; }
+  static QString className() { return "AddUuidVisitor"; }
 
   AddUuidVisitor() = default;
   AddUuidVisitor(QString key);

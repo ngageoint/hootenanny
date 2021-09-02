@@ -45,7 +45,7 @@ class RefRemoveOp : public OsmMapOperation, public ElementCriterionConsumer
 {
 public:
 
-  static QString className() { return "hoot::RefRemoveOp"; }
+  static QString className() { return "RefRemoveOp"; }
 
   RefRemoveOp() = default;
   ~RefRemoveOp() = default;

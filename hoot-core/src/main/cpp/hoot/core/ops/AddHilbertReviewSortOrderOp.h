@@ -39,7 +39,7 @@ class AddHilbertReviewSortOrderOp : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::AddHilbertReviewSortOrderOp"; }
+  static QString className() { return "AddHilbertReviewSortOrderOp"; }
 
   static int logWarnCount;
 

@@ -41,7 +41,7 @@ class NodeDensityTaskGridWriter
 {
 public:
 
-  static QString className() { return "hoot::NodeDensityTaskGridWriter"; }
+  static QString className() { return "NodeDensityTaskGridWriter"; }
 
   /**
    * Writes boundary tiles to a GeoJSON output file

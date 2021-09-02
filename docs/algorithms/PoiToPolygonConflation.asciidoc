@@ -73,7 +73,7 @@ Modifying this business logic will require some user input on the desired functi
 If a merge is warranted, the geometry of the building is used and the tags are merged using the tag merging mechanism defined in the
 +poi.polygon.tag.merger+ configuration key. If that option is not defined, then the value from the +tag.merger.default+ configuration option
 is used. If the +poi.polygon.auto.merge.many.poi.to.one.poly.matches+ option is enabled, then all many POI to single polygon matches are always
-merged with hoot::PreserveTypesTagMerger, which retains type tags for merge features.
+merged with PreserveTypesTagMerger, which retains type tags for merge features.
 
 Detailed Merging Workflow:
 

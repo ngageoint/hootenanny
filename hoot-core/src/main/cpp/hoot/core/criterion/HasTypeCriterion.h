@@ -40,7 +40,7 @@ class HasTypeCriterion : public ElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::HasTypeCriterion"; }
+  static QString className() { return "HasTypeCriterion"; }
 
   HasTypeCriterion() = default;
   ~HasTypeCriterion() = default;

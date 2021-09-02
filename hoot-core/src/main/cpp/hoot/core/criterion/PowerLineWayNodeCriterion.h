@@ -37,7 +37,7 @@ class PowerLineWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static QString className() { return "hoot::PowerLineWayNodeCriterion"; }
+  static QString className() { return "PowerLineWayNodeCriterion"; }
 
   PowerLineWayNodeCriterion();
   PowerLineWayNodeCriterion(ConstOsmMapPtr map);

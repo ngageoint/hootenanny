@@ -49,7 +49,7 @@ class DualHighwayMarker : public ConstOsmMapOperation, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::DualHighwayMarker"; }
+  static QString className() { return "DualHighwayMarker"; }
 
   DualHighwayMarker();
   ~DualHighwayMarker() override = default;
