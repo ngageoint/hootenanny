@@ -236,7 +236,76 @@ function testTranslated(schema,featureCode,tagList)
 
     console.log('-----');
   } // End geom
-} // End testTranslated
+}; // End testTranslated
+
+
+// Test a translated feature
+function testOSM(schema,tagList)
+{
+  console.log('---------------');
+
+  var osmFeatures = {};
+
+  osmFeatures.Point = startPoint;
+  for (var tag in tagList) { osmFeatures.Point += "<tag k='" + tag + "' v='" + tagList[tag] + "'/>" }
+  osmFeatures.Point += endPoint;
+
+  osmFeatures.Line = startLine;
+  for (var tag in tagList) { osmFeatures.Line += "<tag k='" + tag + "' v='" + tagList[tag] + "'/>" }
+  osmFeatures.Line += endLine;
+
+  osmFeatures.Area = startArea;
+  for (var tag in tagList) { osmFeatures.Area += "<tag k='" + tag + "' v='" + tagList[tag] + "'/>" }
+  osmFeatures.Area += endLine;
+
+  for (var geom in osmFeatures)
+  {
+    console.log('' + schema + '  ' + geom);
+
+    // Raw input
+    var inputJson = makeJson(osmFeatures[geom]);
+    console.log('Raw: ' + JSON.stringify(inputJson,Object.keys(inputJson).sort()));
+
+    var toOgr = osmToOgr(osmFeatures[geom],schema);
+    var ogrJson = makeJson(toOgr);
+
+    if (Object.keys(ogrJson).length > 0)
+    {
+      // console.log(ogrJson);
+      console.log('Ogr: ' + JSON.stringify(ogrJson,Object.keys(ogrJson).sort()));
+    }
+    else
+    {
+      console.log('  ## No Ogr tags for ' + featureCode + ' ##');
+    }
+
+    // Sanity Check
+    var backToOsm = ogrToOsm(toOgr,schema);
+    var secondJson = makeJson(backToOsm);
+    // console.log(secondJson);
+    console.log('OSM: ' + JSON.stringify(secondJson,Object.keys(secondJson).sort()));
+
+    if (JSON.stringify(inputJson,Object.keys(inputJson).sort()) !== JSON.stringify(secondJson,Object.keys(secondJson).sort()))
+    {
+      console.log('  ## Not Same OSM Tags');
+    }
+
+    var backToOgr = osmToOgr(backToOsm,schema);
+    var thirdJson = makeJson(backToOgr);
+
+    if (Object.keys(thirdJson).length > 0)
+    {
+      // console.log(ogrJson);
+      console.log('Ogr: ' + JSON.stringify(thirdJson,Object.keys(thirdJson).sort()));
+    }
+    else
+    {
+      console.log('  ## No Ogr tags ##');
+    }
+
+    console.log('-----');
+  } // End geom
+}; // End testOSM
 
 
 // Go through a schema and test each feature
@@ -354,6 +423,7 @@ if (typeof exports !== 'undefined') {
     exports.makeJson = makeJson;
     exports.testF_CODE = testF_CODE;
     exports.testTranslated = testTranslated;
+    exports.testOSM = testOSM;
     exports.testSchema = testSchema;
     exports.dumpValues = dumpValues;
 }

@@ -189,7 +189,7 @@ translate = {
 
 
   // Apply one to one translations - used for import and export
-  applyOne2One : function(inList, outList, lookup, fCodeList, transMap = [])
+  applyOne2One : function(inList, outList, lookup, fCodeList, transMap = [], fCodeOutList = {})
   {
     var endChar = '',
       tAttrib = '',
@@ -236,6 +236,16 @@ translate = {
             delete inList[key];
             continue;
           }
+
+          // This is optional
+          if ((key in fCodeOutList) && (value in fCodeOutList[key]))
+          {
+            // Debug
+            // print('Have key in fCodeOutList and value in list:' + key + ' = ' + inList[key]);
+            delete inList[key];
+            continue;
+          }
+
           // else
           // {
           //   print('key: ' + key + '  List: ' + fCodeList[key]);
@@ -254,6 +264,15 @@ translate = {
         {
           // Debug
           // print('No Key in Lookup: UsedFCode:' + key+ ' = ' + inList[key]);
+          delete inList[key];
+          continue;
+        }
+
+        // This is optional
+        if ((key in fCodeOutList) && (value in fCodeOutList[key]))
+        {
+          // Debug
+          // print('No key in Lookup. Key in fCodeOutList and value in list:' + key + ' = ' + inList[key]);
           delete inList[key];
           continue;
         }

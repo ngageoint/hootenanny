@@ -53,13 +53,21 @@ hoot.Settings.set({"ogr.debug.dumpvalidate":"true"});
 // schema, F_CODE, {attribute:value}
 // testTranslated('MGCP','AA050',{'HYP':'998','PPO':'45'});
 
-console.log('Just the F_CODE');
-transTest.testTranslated('MGCP','AQ040',{});
+// console.log('Just the F_CODE');
+// transTest.testTranslated('MGCP','AQ040',{});
+
+// console.log('\nF_CODE with attributes');
+// transTest.testTranslated('MGCP','AQ040',{'FUN':'6','NOS':'2','SDP':'DigitalGLobe','OSMTAGS':'{\"security:classification\":\"UNCLASSIFIED\"}'});
+
+// console.log('\nF_CODE with default attributes');
+// transTest.testTranslated('MGCP','AQ040',{'VOI':'N_A','OHB':'-32767.0','FUN':'0','NOS':'2','SDP':'DigitalGLobe','OSMTAGS':'{\"security:classification\":\"UNCLASSIFIED\"}'});
+
 
 console.log('\nF_CODE with attributes');
-transTest.testTranslated('MGCP','AQ040',{'FUN':'6','NOS':'2','SDP':'DigitalGLobe','OSMTAGS':'{\"security:classification\":\"UNCLASSIFIED\"}'});
+transTest.testTranslated('MGCP','BH140',{});
 
-console.log('\nF_CODE with default attributes');
-transTest.testTranslated('MGCP','AQ040',{'VOI':'N_A','OHB':'-32767.0','FUN':'0','NOS':'2','SDP':'DigitalGLobe','OSMTAGS':'{\"security:classification\":\"UNCLASSIFIED\"}'});
+console.log('\nOSM Tags');
+transTest.testOSM('MGCP',{'poi':'yes','amenity':'cafe','uuid':'{4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4}',});
 
 // End
+

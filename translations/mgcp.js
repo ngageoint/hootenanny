@@ -682,7 +682,7 @@ mgcp = {
     }
 
     // #####
-    if (attrs.HWT && attrs.HWT !== '0')
+    if (attrs.HWT && attrs.HWT !== '0' && attrs.HWT !== '998')
     {
       tags.amenity = 'place_of_worship';
 
@@ -2470,11 +2470,8 @@ mgcp = {
       // translation to an FCode
       mgcp.fcodeLookupOut = translate.createBackwardsLookup(mgcp.rules.fcodeOne2oneOut);
 
-      // Sigh. Yet Another Lookup Table. It is either this or add a second table option to translate.applyOne2One
-      mgcp.bigFcodeLookup = translate.joinLookup(mgcp.fcodeLookupOut,mgcp.fcodeLookup);
-
       // Debug
-      // translate.dumpOne2OneLookup(mgcp.bigFcodeLookup);
+      // translate.dumpOne2OneLookup(mgcp.fcodeLookupOut);
     }
 
     if (mgcp.lookup == undefined)
@@ -2508,7 +2505,7 @@ mgcp = {
     translate.txtToOgr(attrs, notUsedTags,  mgcp.rules.txtBiasedV4,transMap);
 
     // one 2 one
-    translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.bigFcodeLookup, transMap);
+    translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup, transMap, mgcp.fcodeLookupOut);
 
     // post processing
     // mgcp.applyToOgrPostProcessing(attrs, tableName, geometryType);
