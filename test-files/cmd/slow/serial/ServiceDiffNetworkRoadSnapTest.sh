@@ -10,7 +10,8 @@ set -e
 # ALG_CONFIG=$7
 # NUM_STEPS=$8
 # WAY_SNAP_TOLERANCE=$9
+# CONFLATE_FROM_FILE=${10}
 
-test-files/cmd/slow/serial/ServiceDiffRoadSnapTest.sh.off "ServiceDiffNetworkRoadSnapTest" "test-files/cmd/glacial/DiffConflateCmdTest/input3.osm" "test-files/cmd/glacial/DiffConflateCmdTest/input4.osm" "-180,-90,180,90" "false" "false" "NetworkAlgorithm.conf" "2" "10.0"
+test-files/cmd/slow/serial/ServiceDiffRoadSnapTest.sh.off "ServiceDiffNetworkRoadSnapTest" "test-files/cmd/glacial/DiffConflateCmdTest/input3.osm" "test-files/cmd/glacial/DiffConflateCmdTest/input4.osm" "-180,-90,180,90" "false" "false" "NetworkAlgorithm.conf" "2" "10.0" "false"
 
 

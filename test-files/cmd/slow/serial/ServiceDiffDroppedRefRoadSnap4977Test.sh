@@ -13,8 +13,10 @@ set -e
 # ALG_CONFIG=$7
 # NUM_STEPS=$8
 # WAY_SNAP_TOLERANCE=$9
+# CONFLATE_FROM_FILE=${10}
 
 IN_DIR=test-files/cmd/slow/serial/ServiceDiffDroppedRefRoadSnap4977Test
-test-files/cmd/slow/serial/ServiceDiffRoadSnapTest.sh.off "ServiceDiffDroppedRefRoadSnap4977Test" "$IN_DIR/input1.osm" "$IN_DIR/input2.osm" "-76.404934,-13.054061;-76.342314,-13.053018;-76.341627,-13.092146;-76.404247,-13.093189;-76.404934,-13.054061" "true" "true" "UnifyingAlgorithm.conf" "2" "5.0"
+# "-76.63858,-13.0774,-76.3679,-13.0659"
+test-files/cmd/slow/serial/ServiceDiffRoadSnapTest.sh.off "ServiceDiffDroppedRefRoadSnap4977Test" "$IN_DIR/input1.osm" "$IN_DIR/input2.osm" "-76.404934,-13.054061;-76.342314,-13.053018;-76.341627,-13.092146;-76.404247,-13.093189;-76.404934,-13.054061" "true" "true" "UnifyingAlgorithm.conf" "2" "5.0" "false"
 
 

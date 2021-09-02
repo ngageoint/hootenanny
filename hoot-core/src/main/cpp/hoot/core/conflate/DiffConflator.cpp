@@ -537,17 +537,35 @@ long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
   // later on.
   linearFeatureSnapper.setMarkSnappedNodes(true);
   linearFeatureSnapper.setMarkSnappedWays(true);
+  const QStringList originalSnapWayStatuses = linearFeatureSnapper.getSnapWayStatuses();
+  const QStringList originalSnapToWayStatuses = linearFeatureSnapper.getSnapToWayStatuses();
+  const QStringList reversedSnapWayStatuses = originalSnapToWayStatuses;
+  const QStringList reversedSnapToWayStatuses = originalSnapWayStatuses;
+  long numFeaturesSnapped = 0;
+
+  // snapping with the default config
+  linearFeatureSnapper.setSnapToWayStatuses(originalSnapToWayStatuses);
+  linearFeatureSnapper.setSnapWayStatuses(originalSnapWayStatuses);
   LOG_INFO("\t" << linearFeatureSnapper.getInitStatusMessage());
   linearFeatureSnapper.apply(_map);
   LOG_DEBUG("\t" << linearFeatureSnapper.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-road-snapping");
+  numFeaturesSnapped += linearFeatureSnapper.getNumFeaturesAffected();
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-road-snapping-1");
 
-  const long numFeaturesSnapped = linearFeatureSnapper.getNumFeaturesAffected();
+  // We're going to do a little trick here and reverse the snap from/to statuses and snap again.
+  // This has been seen as needed in production diff conflate workflows. We don't want to configure
+  // diff to snap ref to ref or sec to sec and running these separately is the only way to get the
+  // desired result.
+  linearFeatureSnapper.setSnapToWayStatuses(reversedSnapToWayStatuses);
+  linearFeatureSnapper.setSnapWayStatuses(reversedSnapWayStatuses);
+  LOG_INFO("\t" << linearFeatureSnapper.getInitStatusMessage());
+  linearFeatureSnapper.apply(_map);
+  LOG_DEBUG("\t" << linearFeatureSnapper.getCompletedStatusMessage());
+  numFeaturesSnapped += linearFeatureSnapper.getNumFeaturesAffected();
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-road-snapping-2");
+
   if (numFeaturesSnapped > 0)
   {
-    // Since way splitting was done as part of the conflate pre ops previously run and we've now
-    // snapped unconnected ways, we need to rejoin any split ways *before* we remove reference data.
-    // If not, some ref linear data may incorrectly drop out of the diff.
     WayJoinerOp wayJoiner;
     wayJoiner.setConfiguration(conf());
     LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
@@ -559,7 +577,17 @@ long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
     // here (its configured in post ops by default), so let's remove it.
     ConfigUtils::removeListOpEntry(
       ConfigOptions::getConflatePostOpsKey(), WayJoinerOp::className());
+
+    // TODO
+    linearFeatureSnapper.setSnapToWayStatuses(originalSnapToWayStatuses);
+    linearFeatureSnapper.setSnapWayStatuses(originalSnapWayStatuses);
+    LOG_INFO("\t" << linearFeatureSnapper.getInitStatusMessage());
+    linearFeatureSnapper.apply(_map);
+    LOG_DEBUG("\t" << linearFeatureSnapper.getCompletedStatusMessage());
+    numFeaturesSnapped += linearFeatureSnapper.getNumFeaturesAffected();
+    OsmMapWriterFactory::writeDebugMap(_map, className(), "after-road-snapping-3");
   }
+
   return numFeaturesSnapped;
 }
 
