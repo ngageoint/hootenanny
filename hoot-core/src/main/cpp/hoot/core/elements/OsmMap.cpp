@@ -1072,9 +1072,9 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
   const set<long>& relation_map = mapping->getRelationByElement(oldNodeId);
   vector<long> relations(relation_map.begin(), relation_map.end());
   //  Only iterate the relations that contain the old node ID
-  for (vector<long>::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  for (vector<long>::const_iterator iter = relations.begin(); iter != relations.end(); ++iter)
   {
-    RelationPtr currRelation = getRelation(*it);
+    RelationPtr currRelation = getRelation(*iter);
     if (!currRelation || !currRelation->contains(oldNodeId))
       continue;
     LOG_TRACE("Trying to replace node " << oldNode->getId() << " with node " <<

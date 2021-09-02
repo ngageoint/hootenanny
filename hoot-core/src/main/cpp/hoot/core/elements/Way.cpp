@@ -392,7 +392,7 @@ void Way::replaceNode(long oldId, long newId)
       indices.emplace_back(i);
   }
 
-  if (indices.size() > 0)
+  if (!indices.empty())
   {
     LOG_TRACE("IDs before replacement: " << getNodeIds());
 
