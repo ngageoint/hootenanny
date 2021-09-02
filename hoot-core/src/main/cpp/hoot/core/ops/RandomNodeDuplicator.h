@@ -45,7 +45,7 @@ class RandomNodeDuplicator : public OsmMapOperation, public Configurable, public
 {
 public:
 
-  static QString className() { return "hoot::RandomNodeDuplicator"; }
+  static QString className() { return "RandomNodeDuplicator"; }
 
   RandomNodeDuplicator();
   ~RandomNodeDuplicator() = default;

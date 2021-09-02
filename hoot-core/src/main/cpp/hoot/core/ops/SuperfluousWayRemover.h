@@ -48,7 +48,7 @@ class SuperfluousWayRemover : public OsmMapOperation, public Configurable,
 {
 public:
 
-  static QString className() { return "hoot::SuperfluousWayRemover"; }
+  static QString className() { return "SuperfluousWayRemover"; }
 
   SuperfluousWayRemover() = default;
   ~SuperfluousWayRemover() = default;

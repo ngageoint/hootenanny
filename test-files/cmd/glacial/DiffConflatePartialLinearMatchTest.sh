@@ -6,7 +6,7 @@ INPUT_DIR=test-files/cmd/glacial/DiffConflatePartialLinearMatchTest
 OUTPUT_DIR=test-output/cmd/glacial/DiffConflatePartialLinearMatchTest
 mkdir -p $OUTPUT_DIR
 LOG_LEVEL=--warn
-CONFIG="-C UnifyingAlgorithm.conf -C DifferentialConflation.conf -C Testing.conf -D match.creators=hoot::HighwayMatchCreator -D merger.creators=hoot::HighwayMergerCreator -D writer.include.debug.tags=true -D uuid.helper.repeatable=true"
+CONFIG="-C UnifyingAlgorithm.conf -C DifferentialConflation.conf -C Testing.conf -D match.creators=HighwayMatchCreator -D merger.creators=HighwayMergerCreator -D writer.include.debug.tags=true -D uuid.helper.repeatable=true"
 
 # This test illustrates that diff conflate is capable of not dropping sections from a diff for 
 # road features involved in a match with another feature only partially.

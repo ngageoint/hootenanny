@@ -36,7 +36,7 @@ class SigmaAggregator : public ValueAggregator
 {
 public:
 
-  static QString className() { return "hoot::SigmaAggregator"; }
+  static QString className() { return "SigmaAggregator"; }
 
   SigmaAggregator() = default;
   ~SigmaAggregator() = default;

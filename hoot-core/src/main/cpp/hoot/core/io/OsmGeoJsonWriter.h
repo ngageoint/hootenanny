@@ -43,7 +43,7 @@ class OsmGeoJsonWriter : public OsmJsonWriter
 {
 public:
 
-  static QString className() { return "hoot::OsmGeoJsonWriter"; }
+  static QString className() { return "OsmGeoJsonWriter"; }
 
   OsmGeoJsonWriter(int precision = ConfigOptions().getWriterPrecision());
   ~OsmGeoJsonWriter() = default;

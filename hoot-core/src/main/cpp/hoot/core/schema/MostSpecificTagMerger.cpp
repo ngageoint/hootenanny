@@ -22,48 +22,22 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "PoiPolygonRfClassifier.h"
+#include "MostSpecificTagMerger.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 
-using namespace std;
-
 namespace hoot
 {
 
-PoiPolygonRfClassifier::PoiPolygonRfClassifier()
+HOOT_FACTORY_REGISTER(TagMerger, MostSpecificTagMerger)
+
+MostSpecificTagMerger::MostSpecificTagMerger(const QSet<QString>& skipTagKeys) :
+TypesTagMerger(skipTagKeys)
 {
-  _createExtractors();
-}
-
-void PoiPolygonRfClassifier::_createExtractors()
-{
-  _extractors.clear();
-}
-
-map<QString, double> PoiPolygonRfClassifier::getFeatures(
-  const ConstOsmMapPtr& m, ElementId eid1, ElementId eid2) const
-{
-  map<QString, double> result;
-
-  ConstElementPtr e1 = m->getElement(eid1);
-  ConstElementPtr e2 = m->getElement(eid2);
-
-  for (size_t i = 0; i < _extractors.size(); i++)
-  {
-    double v = _extractors[i]->extract(*m, e1, e2);
-    // if it isn't null then include it.
-    if (!FeatureExtractor::isNull(v))
-    {
-      QString factorName = _extractors[i]->getName().replace(QRegExp("[^\\w]"), "_");
-      result[factorName] = v;
-    }
-  }
-
-  return result;
+  setPreserveTypes();
 }
 
 }

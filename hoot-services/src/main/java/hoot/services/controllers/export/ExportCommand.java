@@ -126,22 +126,22 @@ class ExportCommand extends ExternalCommand {
         //Remove review relations, but do not remove matched review features
         //like we do before conflating a merged dataset as a new input
         if (!params.getIncludeHootTags()) {
-            convertOps.add("hoot::RemoveElementsVisitor");
-            options.add("remove.elements.visitor.element.criteria=hoot::ReviewRelationCriterion");
+            convertOps.add("RemoveElementsVisitor");
+            options.add("remove.elements.visitor.element.criteria=ReviewRelationCriterion");
             options.add("remove.elements.visitor.recursive=false");
             options.add("writer.include.circular.error.tags=false");
 
-            convertOps.add("hoot::RemoveTagsVisitor");
+            convertOps.add("RemoveTagsVisitor");
             options.add("tag.filter.keys=hoot:status;hoot:building:match;error:circular");
         }
 
         //Decompose building relations for non-osm formats only
         if (!params.getOutputType().equalsIgnoreCase("osm") && !params.getOutputType().equalsIgnoreCase("osm.pbf")) {
-            convertOps.add("hoot::DecomposeBuildingRelationsVisitor");
+            convertOps.add("DecomposeBuildingRelationsVisitor");
         }
 
         //Translate the features (which includes applying tag overrides set below)
-        convertOps.add("hoot::SchemaTranslationVisitor");
+        convertOps.add("SchemaTranslationVisitor");
 
         //If no translation, we are keeping osm tag schema, so use the toosm direction
         String direction = "toogr";

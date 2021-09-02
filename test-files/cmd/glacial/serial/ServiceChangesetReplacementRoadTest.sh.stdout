@@ -2,10 +2,10 @@ test name:  ServiceChangesetReplacementRoadTest
 source file 1:  test-files/BostonSubsetRoadBuilding_FromOsm.osm
 crop aoi:  -71.4809,42.4808,-71.45688,42.49368
 source file 2:  test-files/BostonSubsetRoadBuilding_FromOsm.osm
-REF_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor;hoot::PertyOp
-SEC_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor
+REF_CONVERT_OPS:  MapCropper;SetTagValueVisitor;PertyOp
+SEC_CONVERT_OPS:  MapCropper;SetTagValueVisitor
 replacement aoi:  -71.4698,42.4866,-71.4657,42.4902
-input filter:  hoot::HighwayCriterion;hoot::RelationWithHighwayMembersCriterion
+input filter:  HighwayCriterion;RelationWithHighwayMembersCriterion
 enable way snapping:  --enable-way-snapping
 way snap tolerance:  20.0
 existing way node tolerance:  20.0

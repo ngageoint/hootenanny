@@ -44,7 +44,7 @@ class JsFunctionVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
-  static QString className() { return "hoot::JsFunctionVisitor"; }
+  static QString className() { return "JsFunctionVisitor"; }
 
   JsFunctionVisitor() : _map(nullptr) { }
   ~JsFunctionVisitor() = default;

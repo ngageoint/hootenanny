@@ -59,7 +59,7 @@ For +List+ type options, additional options can be appended to the list of defau
 
 -----
 hoot conflate \
-  -D conflate.post.ops+="hoot::RemoveUnknown2Visitor" \
+  -D conflate.post.ops+="RemoveUnknown2Visitor" \
   test-files/ToyTestA.osm test-files/ToyTestB.osm \
   test-output/ToyTestRemoveUnknown2.osm
 -----
@@ -68,7 +68,7 @@ This example will not replace roundabouts in the post conflation operations beca
 
 -----
 hoot conflate \
-  -D conflate.post.ops-="hoot::ReplaceRoundabouts" \
+  -D conflate.post.ops-="ReplaceRoundabouts" \
   test-files/ToyTestA.osm test-files/ToyTestB.osm \
   test-output/ToyTestRemoveUnknown2.osm
 -----
@@ -77,7 +77,7 @@ This example prepends the +RemoveUnknown2Visitor+ operation to the post conflate
 
 -----
 hoot conflate \
-  -D conflate.post.ops++="hoot::RemoveUnknown2Visitor" \
+  -D conflate.post.ops++="RemoveUnknown2Visitor" \
   test-files/ToyTestA.osm test-files/ToyTestB.osm \
   test-output/ToyTestRemoveUnknown2.osm
 -----

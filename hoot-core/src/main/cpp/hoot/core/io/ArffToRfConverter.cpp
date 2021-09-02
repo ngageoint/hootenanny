@@ -45,7 +45,7 @@ namespace hoot
 
 void ArffToRfConverter::convert(const QString& input, const QString& output)
 {
-  LOG_INFO("Converting from " << input << " to " << output << "...");
+  LOG_STATUS("Converting from ..." << input.right(25) << " to ..." << output.right(25) << "...");
 
   ArffReader ar(input);
 

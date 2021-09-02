@@ -63,7 +63,7 @@ HootTest --glacial '--exclude=.*Big.*'
 HootTest --glacial '--include=.*Big.*'
 
 # Runs a single test
-HootTest --single hoot::AlphaShapeTest
+HootTest --single AlphaShapeTest
 ---------------
 
 ==== Unit Tests

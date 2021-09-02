@@ -34,28 +34,33 @@ namespace hoot
 class Tags;
 
 /**
- * (Singleton)
+ * @brief The TagComparator class houses all the logic for feature tag merging during conflation
+ * (Singleton).
  */
 class TagComparator
 {
 public:
 
+  static TagComparator& getInstance();
+
   /**
    * @param keepAllUnknownTags If this is set to true then all unknown tags will simply be
    *  concatenated using Tag lists.
    */
-  void averageTags(const Tags& t1, const Tags& t2, Tags& result, bool keepAllUnknownTags = false,
-                   bool caseSensitive = true);
+  void averageTags(
+    const Tags& t1, const Tags& t2, Tags& result, bool keepAllUnknownTags = false,
+    bool caseSensitive = true);
   /**
    * @param keepAllUnknownTags If this is set to true then all unknown tags will simply be
    *  concatenated using Tag lists.
    */
-  void averageTags(const Tags& t1, double w1, const Tags& t2, double w2, Tags& result,
+  void averageTags(
+    const Tags& t1, double w1, const Tags& t2, double w2, Tags& result,
     bool keepAllUnknownTags = false, bool caseSensitive = true);
 
   void compareEnumeratedTags(Tags t1, Tags t2, double& score, double& weight) const;
-  void compareNames(const Tags& t1, const Tags& t2, double& score, double& weight,
-                    bool strict = false) const;
+  void compareNames(
+    const Tags& t1, const Tags& t2, double& score, double& weight, bool strict = false) const;
   double compareTags(const Tags& t1, const Tags& t2, bool strict = false) const;
   /**
    * Compares all non-name text tags and puts the score in score and weight in weight.
@@ -67,13 +72,11 @@ public:
    * - Names are merged using mergeNames.
    * - Exact matches are unchanged (lists are treated as unordered)
    * - Unrecognized tags are concatenated in a list.
-   * - Tags that share an ancestor are promoted to the first common ancestor
-   * - If there are no conflicting tags the tag is kept
+   * - Tags that share an ancestor are promoted to the first common ancestor.
+   * - If there are no conflicting tags, the tag is kept.
    */
-  Tags generalize(Tags t1, Tags t2, bool overwriteUnrecognizedTags = false,
-                  bool caseSensitive = true);
-
-  static TagComparator& getInstance();
+  Tags generalize(
+    Tags t1, Tags t2, bool overwriteUnrecognizedTags = false, bool caseSensitive = true);
 
   /**
    * @brief mergeNames - This merges "names" tags, so the name tag in t1 gets
@@ -86,9 +89,9 @@ public:
    * @param overwriteExcludeTagKeys keys of tags which should not be overwritten in t2
    * @param caseSensitive True for case sensitive merge names
    */
-  void mergeNames(Tags& t1, Tags& t2, Tags& result,
-                  const QStringList& overwriteExcludeTagKeys = QStringList(),
-                  bool caseSensitive = true) const;
+  void mergeNames(
+    Tags& t1, Tags& t2, Tags& result, const QStringList& overwriteExcludeTagKeys = QStringList(),
+    bool caseSensitive = true) const;
   /**
    * Merge tags of type text
    *
@@ -112,9 +115,9 @@ public:
    * @param caseSensitive True for case sensitive merge names
    * @return merged tags
    */
-  Tags overwriteMerge(Tags t1, Tags t2, const QStringList& overwriteExcludeTagKeys = QStringList(),
-                      const QStringList& accumulateValuesTagKeys = QStringList(),
-                      bool caseSensitive = true);
+  Tags overwriteMerge(
+    Tags t1, Tags t2, const QStringList& overwriteExcludeTagKeys = QStringList(),
+    const QStringList& accumulateValuesTagKeys = QStringList(), bool caseSensitive = true);
   /**
    * Replace all tags in t2 with those from t1
    *
@@ -166,10 +169,9 @@ private:
    * Write t2 tags to result, then write t1 tags. If there are conflicts then the t1 tags will
    * overwrite the t2 values. t1 & t2 will be cleared when this is done.
    */
-  void _overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result,
-                               const QStringList& overwriteExcludeTagKeys = QStringList(),
-                               const QStringList& accumulateValuesTagKeys = QStringList(),
-                               bool caseSensitive = true) const;
+  void _overwriteRemainingTags(
+    Tags& t1, Tags& t2, Tags& result, const QStringList& overwriteExcludeTagKeys = QStringList(),
+    const QStringList& accumulateValuesTagKeys = QStringList(), bool caseSensitive = true) const;
   void _overwriteUnrecognizedTags(Tags& t1, Tags& t2, Tags& result) const;
 
   /**

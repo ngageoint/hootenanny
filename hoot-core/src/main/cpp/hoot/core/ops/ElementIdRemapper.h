@@ -44,7 +44,7 @@ class ElementIdRemapper : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::ElementIdRemapper"; }
+  static QString className() { return "ElementIdRemapper"; }
 
   ElementIdRemapper();
   ElementIdRemapper(const ElementCriterionPtr& remapFilter);

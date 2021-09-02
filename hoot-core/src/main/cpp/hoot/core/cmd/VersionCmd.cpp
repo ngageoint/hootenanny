@@ -94,7 +94,7 @@ class VersionCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::VersionCmd"; }
+  static QString className() { return "VersionCmd"; }
 
   VersionCmd() = default;
 

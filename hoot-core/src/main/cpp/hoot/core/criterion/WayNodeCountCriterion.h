@@ -38,7 +38,7 @@ class WayNodeCountCriterion : public ElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::WayNodeCountCriterion"; }
+  static QString className() { return "WayNodeCountCriterion"; }
 
   WayNodeCountCriterion();
   WayNodeCountCriterion(

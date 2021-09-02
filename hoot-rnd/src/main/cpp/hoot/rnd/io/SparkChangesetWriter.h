@@ -46,7 +46,7 @@ class SparkChangesetWriter : public OsmChangeWriter, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::SparkChangesetWriter"; }
+  static QString className() { return "SparkChangesetWriter"; }
 
   SparkChangesetWriter();
   ~SparkChangesetWriter();

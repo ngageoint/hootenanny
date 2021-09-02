@@ -50,7 +50,7 @@ class ChangesetDeriveCmd : public BoundedCommand
 {
 public:
 
-  static QString className() { return "hoot::ChangesetDeriveCmd"; }
+  static QString className() { return "ChangesetDeriveCmd"; }
 
   ChangesetDeriveCmd() = default;
 

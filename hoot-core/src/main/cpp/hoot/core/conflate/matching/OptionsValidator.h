@@ -32,6 +32,10 @@ namespace hoot
 
 /**
  * Validates some of matcher related configuration options
+ *
+ * This class is needed to fix bugs in the UI. At this point think that most of the bugs are in the
+ * legacy UI V1 code, but since that's what gets tested again this is still in use. Obviously, this
+ * class contains very brittle code with respects to global config changes.
  */
 class OptionsValidator
 {

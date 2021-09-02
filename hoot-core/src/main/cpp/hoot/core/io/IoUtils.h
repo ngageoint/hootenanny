@@ -47,7 +47,7 @@ class IoUtils
 
 public:
 
-  static QString className() { return "hoot::IoUtils"; }
+  static QString className() { return "IoUtils"; }
 
   /**
    * Determines if the a URL is a supported input format

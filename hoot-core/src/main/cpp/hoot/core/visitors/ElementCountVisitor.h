@@ -41,7 +41,7 @@ class ElementCountVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static QString className() { return "hoot::ElementCountVisitor"; }
+  static QString className() { return "ElementCountVisitor"; }
 
   ElementCountVisitor();
   ~ElementCountVisitor() = default;

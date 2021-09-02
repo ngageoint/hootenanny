@@ -3,22 +3,22 @@
 
 === Description
 
-The +compare+ command compares a map to one or two test maps and prints out three score metrics. 
+The `compare` command compares a map to one or two test maps and prints out three score metrics. 
 
 This operation is most commonly used to compare manually conflated data to automatically conflated data. The scores provided 
 give an idea of similarity between maps. A score of 1000 means they're exactly the same. A score of 0 means the maps are 
 very different.
 
-* +base1+                 - The first map file to compare against; may be any supported input format (e.g. .osm file).
-* +base2+                 - Optional second base map file to compare against; may be any supported input format 
+* `base1`                 - The first map file to compare against; may be any supported input format (e.g. .osm file).
+* `base2`                 - Optional second base map file to compare against; may be any supported input format 
                             (e.g. .osm file).
-* +uut+                   - The map input being evaluated; may be any supported input format (e.g. .osm file).
-* +--criteria+            - Optional filtering criteria for the inputs; May be one or more class names inheriting 
+* `uut`                   - The map input being evaluated; may be any supported input format (e.g. .osm file).
+* `--criteria`            - Optional filtering criteria for the inputs; May be one or more class names inheriting 
                             from `ElementCriterion`. By default, multiple criteria are logically OR'd together. Set 
                             the `element.counter.chain.element.criteria` option to true to have the criteria logically 
                             AND'd together. The criteria can be negated with the option `element.criteria.negate`. Use 
-                            the +info --operators+ command to obtain a list of available criteria.
-* +--disable-<scoreType>+ - Allows for disabling any of the score types. e.g. `--disable-attribute`.
+                            the `info --operators` command to obtain a list of available criteria.
+* `--disable-<scoreType>` - Allows for disabling any of the score types. e.g. `--disable-attribute`.
 
 The following types of scores are provided in the score result:
 

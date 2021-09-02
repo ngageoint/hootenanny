@@ -26,7 +26,7 @@ exports.typeThreshold = parseFloat(hoot.get("river.type.threshold"));
 
 // This is needed for disabling superfluous conflate ops and calculating a search radius only.
 // exports.isMatchCandidate handles culling match candidates.
-exports.matchCandidateCriterion = "hoot::RiverCriterion";
+exports.matchCandidateCriterion = "RiverCriterion";
 
 // used during subline matching
 var sublineStringMatcher; // gets set up in calculateSearchRadius function

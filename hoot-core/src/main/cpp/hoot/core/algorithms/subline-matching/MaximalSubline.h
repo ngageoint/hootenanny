@@ -54,7 +54,7 @@ class MaximalSubline
 {
 public:
 
-  static QString className() { return "hoot::MaximalSubline"; }
+  static QString className() { return "MaximalSubline"; }
 
   // hard stop at this value; This was determined empirically based on real world data...may still
   // need some tweaking. Obviously, if it gets too high conflate jobs may get really slow.

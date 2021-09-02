@@ -42,7 +42,7 @@ class TestUtilsCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::TestUtilsCmd"; }
+  static QString className() { return "TestUtilsCmd"; }
 
   TestUtilsCmd() = default;
 

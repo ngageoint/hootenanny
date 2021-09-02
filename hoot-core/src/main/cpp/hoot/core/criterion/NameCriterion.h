@@ -44,7 +44,7 @@ class NameCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::NameCriterion"; }
+  static QString className() { return "NameCriterion"; }
 
   NameCriterion();
   NameCriterion(const QStringList& names, const bool caseSensitive = false,

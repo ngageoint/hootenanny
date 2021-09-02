@@ -55,7 +55,7 @@ class NetworkDetails : public SearchRadiusProvider, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::NetworkDetails"; }
+  static QString className() { return "NetworkDetails"; }
 
   NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
   ~NetworkDetails() = default;

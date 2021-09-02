@@ -41,7 +41,7 @@ class NonConflatableElementRemover : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::NonConflatableElementRemover"; }
+  static QString className() { return "NonConflatableElementRemover"; }
 
   NonConflatableElementRemover() = default;
   ~NonConflatableElementRemover() = default;

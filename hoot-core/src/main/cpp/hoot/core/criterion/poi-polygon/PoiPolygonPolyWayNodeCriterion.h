@@ -37,7 +37,7 @@ class PoiPolygonPolyWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static QString className() { return "hoot::PoiPolygonPolyWayNodeCriterion"; }
+  static QString className() { return "PoiPolygonPolyWayNodeCriterion"; }
 
   PoiPolygonPolyWayNodeCriterion();
   PoiPolygonPolyWayNodeCriterion(ConstOsmMapPtr map);

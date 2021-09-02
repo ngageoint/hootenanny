@@ -42,7 +42,7 @@ class DuplicateElementMarker : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::DuplicateElementMarker"; }
+  static QString className() { return "DuplicateElementMarker"; }
 
   DuplicateElementMarker();
   ~DuplicateElementMarker() = default;

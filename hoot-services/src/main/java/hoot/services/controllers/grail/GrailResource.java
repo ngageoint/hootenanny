@@ -300,9 +300,30 @@ public class GrailResource {
             // Pull secondary data from the Public Overpass API
             workflow.add(getOverpassCommand);
         } else {
-            input1 = HOOTAPI_DB_URL + "/" + input1;
+            if (input1 != null) {
+                input1 = HOOTAPI_DB_URL + "/" + input1;
+            } else {
+                // If input1 is null then assume we need to pull from rails or private overpass
+                GrailParams getRailsParams = new GrailParams(reqParams);
+                getRailsParams.setWorkDir(workDir);
 
-            //If not passed INPUT2 assume an adds only changeset using one input
+                try {
+                    // cut and replace needs to get connected ways
+                    if (deriveType.equals("Cut & Replace")) {
+                        // can't have the cut and replace options for hoot convert. used for DeriveChangesetReplacementCommand
+                        getRailsParams.setAdvancedOptions(null);
+                        workflow.addAll(setupRailsPull(jobId, getRailsParams, null));
+                    } else {
+                        workflow.add(getRailsPortApiCommand(jobId, getRailsParams));
+                    }
+                } catch (UnavailableException ex) {
+                    return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
+                }
+
+                input1 = getRailsParams.getOutput();
+            }
+
+            // If not passed INPUT2 assume an adds only changeset using one input
             if (input2 == null) {
                 input2 = "\"\"";
                 grailCommandClass = DeriveChangesetCommand.class;

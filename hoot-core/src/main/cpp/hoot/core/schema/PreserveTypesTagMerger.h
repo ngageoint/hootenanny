@@ -27,8 +27,8 @@
 #ifndef PRESERVETYPESTAGMERGER_H
 #define PRESERVETYPESTAGMERGER_H
 
-#include <hoot/core/schema/TagMerger.h>
-#include <hoot/core/schema/OsmSchema.h>
+// Hoot
+#include <hoot/core/schema/TypesTagMerger.h>
 
 namespace hoot
 {
@@ -39,13 +39,11 @@ namespace hoot
  * key are encountered. In the case where duplicated types have the same level of specificity, the
  * duplicated types are arbitrarily placed in an "alt_types" tag.
  */
-class PreserveTypesTagMerger : public TagMerger
+class PreserveTypesTagMerger : public TypesTagMerger
 {
 public:
 
-  static QString ALT_TYPES_TAG_KEY;
-
-  static QString className() { return "hoot::PreserveTypesTagMerger"; }
+  static QString className() { return "PreserveTypesTagMerger"; }
 
   /**
    * Constructor
@@ -57,41 +55,14 @@ public:
   ~PreserveTypesTagMerger() = default;
 
   /**
-   * @see TagMerger
+   * @see TypesTagMerger
    */
-  Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
+  void setPreserveTypes() override { _preserveTypes = true; }
 
   QString getDescription() const override
   { return "Keeps tags from both features and preserves overlapping type tags"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
-
-  void setConfiguration(const Settings& conf) override;
-
-  void setOverwrite1(bool overwrite) { _overwrite1 = overwrite; }
-  void setSkipTagKeys(const QSet<QString>& keys) { _skipTagKeys = keys; }
-  void setOverwriteExcludeTagKeys(const QStringList& overwriteExcludeTagKeys)
-  { _overwriteExcludeTagKeys = overwriteExcludeTagKeys; }
-
-private:
-
-  // if true the first set of tags passed into mergeTags are overwritten; otherwise the second set
-  // is overwritten
-  bool _overwrite1;
-  // any type tag that would otherwise be preserved will be skipped if in this list
-  QSet<QString> _skipTagKeys;
-  // keys of general tags not to be overwritten (see OverwriteTagMerger)
-  QStringList _overwriteExcludeTagKeys;
-
-  Tags _preserveAltTypes(const Tags& source, const Tags& target) const;
-  // can probably eventually get rid of this by correcting logic that's duplicating tags in
-  // mergeTags
-  void _removeRedundantAltTypeTags(Tags& tags) const;
-
-  bool _isAncestor(const QString& childKey, const QString& childVal, const QString& parentKey,
-                   const QString& parentVal) const;
 };
 
 }

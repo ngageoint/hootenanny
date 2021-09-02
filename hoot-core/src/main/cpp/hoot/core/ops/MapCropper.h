@@ -54,7 +54,7 @@ public:
 
   static int logWarnCount;
 
-  static QString className() { return "hoot::MapCropper"; }
+  static QString className() { return "MapCropper"; }
 
   MapCropper();
   ~MapCropper() = default;

@@ -27,7 +27,7 @@ hoot convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesA.osm "$DB_URL/A
 hoot convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesB.osm "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" &
 wait
 
-hoot conflate $HOOT_OPTS $CONFLATE_OPTS -D conflate.post.ops++="hoot::RemoveTagsVisitor;hoot::RemoveAttributesVisitor" -D tag.filter.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" test-output/cmd/slow/ServiceHootApiDbConflateTest/output1.osm
+hoot conflate $HOOT_OPTS $CONFLATE_OPTS -D conflate.post.ops++="RemoveTagsVisitor;RemoveAttributesVisitor" -D tag.filter.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" test-output/cmd/slow/ServiceHootApiDbConflateTest/output1.osm
 hoot diff -C Testing.conf test-files/cmd/slow/ServiceHootApiDbConflateTest/output1.osm test-output/cmd/slow/ServiceHootApiDbConflateTest/output1.osm
 
 hoot db-delete $HOOT_OPTS "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" &
@@ -46,7 +46,7 @@ hoot convert $HOOT_OPTS test-files/DcGisRoads.osm "$DB_URL/DcGisRoads-ServiceHoo
 hoot convert $HOOT_OPTS test-files/DcTigerRoads.osm "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" &
 wait
 
-hoot conflate $HOOT_OPTS $CONFLATE_OPTS -D match.creators=hoot::HighwayMatchCreator -D merger.creators=hoot::HighwayMergerCreator -D bounds=-77.04,38.8916,-77.03324,38.8958 -D conflate.post.ops++="hoot::RemoveTagsVisitor;hoot::RemoveAttributesVisitor" -D tag.filter.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" test-output/cmd/slow/ServiceHootApiDbConflateTest/output2.osm
+hoot conflate $HOOT_OPTS $CONFLATE_OPTS -D match.creators=HighwayMatchCreator -D merger.creators=HighwayMergerCreator -D bounds=-77.04,38.8916,-77.03324,38.8958 -D conflate.post.ops++="RemoveTagsVisitor;RemoveAttributesVisitor" -D tag.filter.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" test-output/cmd/slow/ServiceHootApiDbConflateTest/output2.osm
 hoot diff test-files/cmd/slow/ServiceHootApiDbConflateTest/output2.osm test-output/cmd/slow/ServiceHootApiDbConflateTest/output2.osm
 
 hoot db-delete $HOOT_OPTS "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" &

@@ -38,7 +38,7 @@ class LoginCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::LoginCmd"; }
+  static QString className() { return "LoginCmd"; }
 
   LoginCmd() = default;
 

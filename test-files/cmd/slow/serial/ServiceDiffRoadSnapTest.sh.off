@@ -32,11 +32,11 @@ fi
 ALG_CONFIG=$7
 # This is a bit of a hack, but just trying to reduce test runtime here.
 if [ "$ALG_CONFIG" == "UnifyingAlgorithm.conf" ]; then
-  MATCHERS="-D match.creators=hoot::HighwayMatchCreator"
-  MERGERS="-D merger.creators=hoot::HighwayMergerCreator"
+  MATCHERS="-D match.creators=HighwayMatchCreator"
+  MERGERS="-D merger.creators=HighwayMergerCreator"
 else
-  MATCHERS="-D match.creators=hoot::NetworkMatchCreator"
-  MERGERS="-D merger.creators=hoot::NetworkMergerCreator"
+  MATCHERS="-D match.creators=NetworkMatchCreator"
+  MERGERS="-D merger.creators=NetworkMergerCreator"
 fi
 # Valid params are: "2" for generating an osc from diff conflate or "3" for generating an osm from 
 # diff conflate and generating the changeset in a separate step
@@ -83,7 +83,7 @@ scripts/database/CleanAndInitializeOsmApiDb.sh
 echo ""
 echo "Writing ref data..."
 echo ""
-hoot convert $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/ref-load-debug.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator $GENERAL_OPTS $DB_OPTS $REF_INPUT $OSM_API_DB_URL
+hoot convert $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/ref-load-debug.osm -D reader.use.data.source.ids=false -D id.generator=PositiveIdGenerator $GENERAL_OPTS $DB_OPTS $REF_INPUT $OSM_API_DB_URL
 if [ "$DEBUG" == "true" ]; then
   hoot convert --warn -D debug.maps.filename=$OUTPUT_DIR/ref-load-debug.osm -D reader.use.data.source.ids=true $GENERAL_OPTS $DB_OPTS $OSM_API_DB_URL $OUTPUT_DIR/ref-original.osm
 fi

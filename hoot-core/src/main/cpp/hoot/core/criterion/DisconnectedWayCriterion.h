@@ -42,7 +42,7 @@ class DisconnectedWayCriterion : public ElementCriterion, public ConstOsmMapCons
 {
 public:
 
-  static QString className() { return "hoot::DisconnectedWayCriterion"; }
+  static QString className() { return "DisconnectedWayCriterion"; }
 
   DisconnectedWayCriterion() = default;
   DisconnectedWayCriterion(ConstOsmMapPtr map);

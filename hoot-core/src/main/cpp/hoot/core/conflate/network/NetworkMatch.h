@@ -44,7 +44,7 @@ class NetworkMatch : public Match
 {
 public:
 
-  static QString className() { return "hoot::NetworkMatch"; }
+  static QString className() { return "NetworkMatch"; }
 
   NetworkMatch() = default;
   NetworkMatch(

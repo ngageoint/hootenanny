@@ -46,7 +46,7 @@ class SumNumericTagsVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static QString className() { return "hoot::SumNumericTagsVisitor"; }
+  static QString className() { return "SumNumericTagsVisitor"; }
 
   SumNumericTagsVisitor();
   explicit SumNumericTagsVisitor(const QStringList keys);

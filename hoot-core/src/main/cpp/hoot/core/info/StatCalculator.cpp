@@ -53,7 +53,7 @@ _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 }
 
 double StatCalculator::calculateStat(
-  const QStringList& inputs, QString& visitorClassName, const QString& statType) const
+  const QStringList& inputs, const QString& visitorClassName, const QString& statType) const
 {
   if (inputs.empty())
   {
@@ -66,10 +66,6 @@ double StatCalculator::calculateStat(
     "Calculating statistic of type: " << statType << ", using visitor: " << visitorClassName <<
     ", against " << inputs.size() << " inputs...");
 
-  if (!visitorClassName.startsWith(MetadataTags::HootNamespacePrefix()))
-  {
-    visitorClassName.prepend(MetadataTags::HootNamespacePrefix());
-  }
   if (!_isValidStatType(statType))
   {
     throw IllegalArgumentException("Invalid statistic type: " + statType);

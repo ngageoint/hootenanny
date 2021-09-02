@@ -55,7 +55,7 @@ class ApiTagTruncateVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::ApiTagTruncateVisitor"; }
+  static QString className() { return "ApiTagTruncateVisitor"; }
 
   ApiTagTruncateVisitor();
   ~ApiTagTruncateVisitor() = default;

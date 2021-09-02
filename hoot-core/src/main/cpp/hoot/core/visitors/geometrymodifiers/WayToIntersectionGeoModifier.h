@@ -52,7 +52,7 @@ public:
     long segNodeId2;
   };
 
-  static QString className() { return "hoot::WayToIntersectionGeoModifier"; }
+  static QString className() { return "WayToIntersectionGeoModifier"; }
 
   WayToIntersectionGeoModifier() = default;
   ~WayToIntersectionGeoModifier() = default;

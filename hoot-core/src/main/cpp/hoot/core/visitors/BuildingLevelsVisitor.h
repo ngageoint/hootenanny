@@ -41,7 +41,7 @@ class BuildingLevelsVisitor : public ConstElementVisitor, public NumericStatisti
 {
 public:
 
-  static QString className() { return "hoot::BuildingLevelsVisitor"; }
+  static QString className() { return "BuildingLevelsVisitor"; }
 
   BuildingLevelsVisitor();
   ~BuildingLevelsVisitor() = default;

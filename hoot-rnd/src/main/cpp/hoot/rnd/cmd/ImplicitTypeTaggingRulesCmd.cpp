@@ -44,7 +44,7 @@ class ImplicitTypeTaggingRulesCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::ImplicitTypeTaggingRulesCmd"; }
+  static QString className() { return "ImplicitTypeTaggingRulesCmd"; }
 
   ImplicitTypeTaggingRulesCmd()  = default;
 

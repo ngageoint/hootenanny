@@ -46,13 +46,13 @@ class PoiPolygonPhoneNumberScoreExtractor : public FeatureExtractorBase, public 
 {
 public:
 
-  static QString className() { return "hoot::PoiPolygonPhoneNumberScoreExtractor"; }
+  static QString className() { return "PoiPolygonPhoneNumberScoreExtractor"; }
 
   PoiPolygonPhoneNumberScoreExtractor();
   ~PoiPolygonPhoneNumberScoreExtractor() = default;
 
-  double extract(const OsmMap& map, const ConstElementPtr& poi,
-                 const ConstElementPtr& poly) const override;
+  double extract(
+    const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
 
   void setConfiguration(const Settings& conf) override;
 

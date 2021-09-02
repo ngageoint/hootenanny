@@ -60,7 +60,7 @@ class Element
 {
 public:
 
-  static QString className() { return "hoot::Element"; }
+  static QString className() { return "Element"; }
 
   Element();
   virtual ~Element() = default;

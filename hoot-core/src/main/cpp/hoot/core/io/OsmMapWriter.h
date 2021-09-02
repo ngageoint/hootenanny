@@ -40,7 +40,7 @@ class OsmMapWriter
 {
 public:
 
-  static QString className() { return "hoot::OsmMapWriter"; }
+  static QString className() { return "OsmMapWriter"; }
 
   OsmMapWriter() : _debug(false) { }
   virtual ~OsmMapWriter() = default;

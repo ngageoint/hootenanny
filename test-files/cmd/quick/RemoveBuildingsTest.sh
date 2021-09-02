@@ -7,5 +7,5 @@ mkdir -p OUT_DIR
 CONFIG="-C Testing.conf"
 LOG_LEVEL=--warn
 
-hoot convert $LOG_LEVEL $CONFIG -D convert.ops="hoot::RemoveElementsVisitor" -D remove.elements.visitor.element.criteria="hoot::BuildingCriterion" test-files/conflate/poi-polygon/PoiBuildingA.osm $OUT_DIR/output.osm
+hoot convert $LOG_LEVEL $CONFIG -D convert.ops="RemoveElementsVisitor" -D remove.elements.visitor.element.criteria="BuildingCriterion" test-files/conflate/poi-polygon/PoiBuildingA.osm $OUT_DIR/output.osm
 hoot diff $LOG_LEVEL $CONFIG $IN_DIR/output.osm $OUT_DIR/output.osm

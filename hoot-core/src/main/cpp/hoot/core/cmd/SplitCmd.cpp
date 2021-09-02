@@ -46,7 +46,7 @@ class SplitCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::SplitCmd"; }
+  static QString className() { return "SplitCmd"; }
 
   SplitCmd() = default;
 

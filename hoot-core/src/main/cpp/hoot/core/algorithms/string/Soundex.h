@@ -42,7 +42,7 @@ class Soundex : public StringDistance
 {
 public:
 
-  static QString className() { return "hoot::Soundex"; }
+  static QString className() { return "Soundex"; }
 
   Soundex() = default;
   ~Soundex() = default;

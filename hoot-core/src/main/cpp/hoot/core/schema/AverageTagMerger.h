@@ -36,7 +36,7 @@ class AverageTagMerger : public TagMerger
 {
 public:
 
-  static QString className() { return "hoot::AverageTagMerger"; }
+  static QString className() { return "AverageTagMerger"; }
 
   AverageTagMerger() = default;
   ~AverageTagMerger() = default;
@@ -45,9 +45,7 @@ public:
 
   QString getDescription() const override
   { return "Keeps tags from both features and overlapping tags are averaged together"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 

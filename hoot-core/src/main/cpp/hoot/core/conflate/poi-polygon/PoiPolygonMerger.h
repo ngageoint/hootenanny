@@ -58,7 +58,7 @@ class PoiPolygonMerger : public MergerBase
 
 public:
 
-  static QString className() { return "hoot::PoiPolygonMerger"; }
+  static QString className() { return "PoiPolygonMerger"; }
 
   PoiPolygonMerger();
   ~PoiPolygonMerger() = default;

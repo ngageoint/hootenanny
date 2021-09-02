@@ -43,7 +43,7 @@ class SplitLongLinearWaysVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static QString className() { return "hoot::SplitLongLinearWaysVisitor"; }
+  static QString className() { return "SplitLongLinearWaysVisitor"; }
 
   static int logWarnCount;
 

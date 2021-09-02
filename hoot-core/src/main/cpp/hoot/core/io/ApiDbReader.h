@@ -54,7 +54,7 @@ class ApiDbReader : public PartialOsmMapReader, public Boundable
 {
 public:
 
-  static QString className() { return "hoot::ApiDbReader"; }
+  static QString className() { return "ApiDbReader"; }
 
   ApiDbReader();
   virtual ~ApiDbReader() = default;

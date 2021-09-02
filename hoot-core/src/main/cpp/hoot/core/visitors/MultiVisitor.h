@@ -38,7 +38,7 @@ class MultiVisitor : public ElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::MultiVisitor"; }
+  static QString className() { return "MultiVisitor"; }
 
   MultiVisitor() = default;
    ~MultiVisitor() = default;

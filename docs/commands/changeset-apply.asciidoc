@@ -3,16 +3,16 @@
 
 === Description
 
-The +changeset-apply+ command writes changes from a changeset file to an OSM API database.
+The `changeset-apply` command writes changes from a changeset file to an OSM API database.
 
-* +changeset(s)+ - Input(s); One or more input OSM XML changesets (.osc) or OSM XML files (.osm). Elements being created 
+* `changeset(s)` - Input(s); One or more input OSM XML changesets (.osc) or OSM XML files (.osm). Elements being created 
                    must have negative element IDs when writing the changeset through the OSM API. If writing directly to an OSM 
                    API database, then the input must be a single SQL changeset (.osc.sql) file with positive element IDs.
-* +targetUrl+    - Output; If writing the changeset through the OSM API, the OSM API endpoint the changeset will be written 
+* `targetUrl`    - Output; If writing the changeset through the OSM API, the OSM API endpoint the changeset will be written 
                    to. If writing the changeset directly to an OSM API database, this should be the URL of the database 
                    being written to.
-* +--progress+   - Displays progress as a percent complete while the upload is working; ignored when using SQL changesets.
-* +--stats+      - Displays changeset output statistics; ignored when using SQL changesets.
+* `--progress`   - Displays progress as a percent complete while the upload is working; ignored when using SQL changesets.
+* `--stats`      - Displays changeset output statistics; ignored when using SQL changesets.
 
 === Usage
 

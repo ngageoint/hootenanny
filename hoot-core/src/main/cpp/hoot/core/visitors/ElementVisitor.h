@@ -75,7 +75,7 @@ class ElementVisitor : public ApiEntityInfo, public FilteredByGeometryTypeCriter
 {
 public:
 
-  static QString className() { return "hoot::ElementVisitor"; }
+  static QString className() { return "ElementVisitor"; }
 
   ElementVisitor() = default;
   virtual ~ElementVisitor() = default;

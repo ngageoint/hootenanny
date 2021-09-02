@@ -11,8 +11,8 @@ hoot conflate --warn -C UnifyingAlgorithm.conf \
   -C ReferenceConflation.conf \
   -C Testing.conf \
   -D uuid.helper.repeatable=true \
-  -D match.creators="hoot::PoiPolygonMatchCreator" \
-  -D merger.creators="hoot::PoiPolygonMergerCreator" \
+  -D match.creators="PoiPolygonMatchCreator" \
+  -D merger.creators="PoiPolygonMergerCreator" \
   -D address.scorer.enable.caching=true \
   $inputDir/PoiPolygon1.osm $inputDir/PoiPolygon2.osm $outputDir/output1.osm
 

@@ -12,8 +12,8 @@
         }
     },
     "Areas": {
-        "matcher": "hoot::ScriptMatchCreator,Area.js",
-        "merger": "hoot::ScriptMergerCreator",
+        "matcher": "ScriptMatchCreator,Area.js",
+        "merger": "ScriptMergerCreator",
         "members": {
             "area.overlap.review.threshold": "Overlap review threshold; 0.0 to 1.0",
             "search.radius.area": "Search radius (m); -1 for default",
@@ -29,8 +29,8 @@
         }
     },
     "Buildings": {
-        "matcher": "hoot::BuildingMatchCreator",
-        "merger": "hoot::BuildingMergerCreator",
+        "matcher": "BuildingMatchCreator",
+        "merger": "BuildingMergerCreator",
         "members": {
             "building.merge.many.to.many.matches": "Always merge many to many matches",
             "building.changed.review": "Create reviews when a building has changed",
@@ -49,8 +49,8 @@
         "matcher": "",
         "merger": "",
         "members": {
-            "differential.remove.linear.partial.matches.as.whole": "Remove features involved in linear partial matches completely (valid with Unifying Algorithm only)",
-            "differential.remove.river.partial.matches.as.whole": "Remove rivers involved in river partial matches completely (valid with Unifying Algorithm only)",
+            "differential.remove.linear.partial.matches.as.whole": "Remove features involved in linear partial matches completely (Unifying Algorithm only)",
+            "differential.remove.river.partial.matches.as.whole": "Remove rivers involved in river partial matches completely (Unifying Algorithm only)",
             "differential.remove.unconflatable.data": "Remove unconflatable data in the secondary layer from the output",
             "differential.snap.unconnected.features": "Snap unconnected secondary linear features to reference linear features",
             "snap.unconnected.ways.snap.criteria": "Linear feature types to snap",
@@ -63,40 +63,40 @@
         }
     },
     "GenericLines": {
-        "matcher": "hoot::ScriptMatchCreator,Line.js",
-        "merger": "hoot::ScriptMergerCreator",
+        "matcher": "ScriptMatchCreator,Line.js",
+        "merger": "ScriptMergerCreator",
         "members": {
             "search.radius.generic.line": "Search radius (m); -1 for default",
             "generic.line.tag.threshold": "Tag match threshold; 0.0 to 1.0"
         }
     },
     "GenericPoints": {
-        "matcher": "hoot::ScriptMatchCreator,Point.js",
-        "merger": "hoot::ScriptMergerCreator",
+        "matcher": "ScriptMatchCreator,Point.js",
+        "merger": "ScriptMergerCreator",
         "members": {
             "search.radius.generic.point": "Search radius (m); -1 for default",
             "generic.point.tag.threshold": "Tag match threshold; 0.0 to 1.0"
         }
     },
     "GenericPointPolygon": {
-        "matcher": "hoot::ScriptMatchCreator,PointPolygon.js",
-        "merger": "hoot::ScriptMergerCreator",
+        "matcher": "ScriptMatchCreator,PointPolygon.js",
+        "merger": "ScriptMergerCreator",
         "members": {
             "search.radius.generic.point.polygon": "Search radius (m); -1 for default",
             "generic.point.polygon.tag.threshold": "Tag match threshold; 0.0 to 1.0"
         }
     },
     "GenericPolygons": {
-        "matcher": "hoot::ScriptMatchCreator,Polygon.js",
-        "merger": "hoot::ScriptMergerCreator",
+        "matcher": "ScriptMatchCreator,Polygon.js",
+        "merger": "ScriptMergerCreator",
         "members": {
             "search.radius.generic.polygon": "Search radius (m); -1 for default",
             "generic.polygon.tag.threshold": "Tag match threshold; 0.0 to 1.0"
         }
     },
     "Pois": {
-        "matcher": "hoot::ScriptMatchCreator,Poi.js",
-        "merger": "hoot::ScriptMergerCreator",
+        "matcher": "ScriptMatchCreator,Poi.js",
+        "merger": "ScriptMergerCreator",
         "members": {
             "poi.ignore.type.if.name.present": "Ignore type if name present",
             "search.radius.poi": "Search radius (m); -1 for default",
@@ -104,8 +104,8 @@
         }
     },
     "PoiPolygon": {
-        "matcher": "hoot::PoiPolygonMatchCreator",
-        "merger": "hoot::PoiPolygonMergerCreator",
+        "matcher": "PoiPolygonMatchCreator",
+        "merger": "PoiPolygonMergerCreator",
         "members": {
 	    "poi.polygon.additional.search.distance": "Additional search radius (m)",
             "poi.polygon.allow.cross.conflation.merging": "Allow merging of Building and POI to Polygon matches",
@@ -129,23 +129,23 @@
         }
     },
     "Powerlines": {
-        "matcher": "hoot::ScriptMatchCreator,PowerLine.js",
-        "merger": "hoot::ScriptMergerCreator",
+        "matcher": "ScriptMatchCreator,PowerLine.js",
+        "merger": "ScriptMergerCreator",
         "members": {
             "power.line.match.threshold": "Match threshold; 0.0 to 1.0",
             "search.radius.power.line": "Search radius (m); -1 for default"
         }
     },
     "Railways": {
-        "matcher": "hoot::ScriptMatchCreator,Railway.js",
-        "merger": "hoot::ScriptMergerCreator",
+        "matcher": "ScriptMatchCreator,Railway.js",
+        "merger": "ScriptMergerCreator",
         "members": {
             "search.radius.railway": "Search radius (m); -1 for default"
         }
     },
     "Relations": {
-        "matcher": "hoot::ScriptMatchCreator,Relation.js",
-        "merger": "hoot::ScriptMergerCreator",
+        "matcher": "ScriptMatchCreator,Relation.js",
+        "merger": "ScriptMergerCreator",
         "members": {
             "relation.name.threshold": "Name match threshold; 0.0 to 1.0",
             "search.radius.relation": "Search radius (m); -1 for default",
@@ -153,8 +153,8 @@
         }
     },
     "Rivers": {
-        "matcher": "hoot::ScriptMatchCreator,River.js",
-        "merger": "hoot::ScriptMergerCreator",
+        "matcher": "ScriptMatchCreator,River.js",
+        "merger": "ScriptMergerCreator",
         "members": {
             "river.name.threshold": "Name match threshold; 0.0 to 1.0",
             "river.maximal.subline.auto.optimize": "Automatically optimize runtime performance",
@@ -162,16 +162,16 @@
         }
     },
     "Roads": {
-        "matcher": "hoot::HighwayMatchCreator",
-        "merger": "hoot::HighwayMergerCreator",
+        "matcher": "HighwayMatchCreator",
+        "merger": "HighwayMergerCreator",
         "members": {
             "highway.match.threshold": "Match threshold; 0.0 to 1.0",
             "search.radius.highway": "Search radius (m); -1 for default"
         }
     },
     "RoadsNetwork": {
-        "matcher": "hoot::NetworkMatchCreator",
-        "merger": "hoot::NetworkMergerCreator",
+        "matcher": "NetworkMatchCreator",
+        "merger": "NetworkMergerCreator",
         "members": {
              "network.match.threshold": "Match threshold; 0.0 to 1.0"
         }
@@ -180,7 +180,8 @@
         "members": {
             "rubber.sheet.max.allowed.ways": "Maximum number of ways allowed",
             "rubber.sheet.minimum.ties": "Minimum number of tie points required.",
-	          "rubber.sheet.log.missing.requirements.as.warning": "Log a warning if enough tie points are not found."
+	          "rubber.sheet.log.missing.requirements.as.warning": "Log a warning if enough tie points are not found.",
+	          "conflate.unifying.rubbersheet.roads": "Rubbersheet roads with Unifying Algorithm"
         }
     }
 }

@@ -3,7 +3,7 @@
 
 === Description
 
-The +schema+ command prints documentation for the OSM tag schema in use.
+The `schema` command prints documentation for the OSM tag schema in use.
 
 === Usage
 

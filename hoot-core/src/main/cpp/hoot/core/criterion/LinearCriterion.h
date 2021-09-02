@@ -41,7 +41,7 @@ class LinearCriterion : public ConflatableElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::LinearCriterion"; }
+  static QString className() { return "LinearCriterion"; }
 
   LinearCriterion() = default;
   ~LinearCriterion() = default;

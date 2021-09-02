@@ -37,7 +37,7 @@ class UpdateWayParentVisitor : public ElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::UpdateWayParentVisitor"; }
+  static QString className() { return "UpdateWayParentVisitor"; }
 
   UpdateWayParentVisitor(long oldParentId, long newParentId);
   ~UpdateWayParentVisitor() = default;

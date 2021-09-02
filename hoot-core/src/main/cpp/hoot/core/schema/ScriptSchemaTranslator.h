@@ -46,7 +46,7 @@ class ScriptSchemaTranslator
 {
 public:
 
-  static QString className() { return "hoot::ScriptSchemaTranslator"; }
+  static QString className() { return "ScriptSchemaTranslator"; }
 
   ScriptSchemaTranslator();
   virtual ~ScriptSchemaTranslator();

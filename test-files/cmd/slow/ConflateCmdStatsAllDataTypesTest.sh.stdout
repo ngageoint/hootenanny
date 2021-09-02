@@ -50,12 +50,12 @@ Untagged Features	0	0	0
 Total Unconflatable Features	1	2	0	
 Percentage of Total Features Unconflatable	4	9.090909090909092	0	
 Match Creators	13	13	13	
-Features Conflatable by: hoot::BuildingMatchCreator	10	8	0	
-Features Conflatable by: hoot::HighwayMatchCreator	4	4	0	
-Polygons Conflatable by: hoot::PoiPolygonMatchCreator	10	8	0	
-POIs Conflatable by: hoot::PoiPolygonMatchCreator	10	8	0	
-Features Conflatable by: hoot::PoiPolygonMatchCreator	20	16	0	
-Features Conflatable by: hoot::ScriptMatchCreator,Poi.js	11	10		
+Features Conflatable by: BuildingMatchCreator	10	8	0	
+Features Conflatable by: HighwayMatchCreator	4	4	0	
+Polygons Conflatable by: PoiPolygonMatchCreator	10	8	0	
+POIs Conflatable by: PoiPolygonMatchCreator	10	8	0	
+Features Conflatable by: PoiPolygonMatchCreator	20	16	0	
+Features Conflatable by: ScriptMatchCreator,Poi.js	11	10		
 Total Conflated Features	0	0	12	
 Percentage of Total Features Conflated	0	0	36.36363636363637	
 Total Features Marked for Review	0	0	11	
@@ -258,7 +258,7 @@ Percentage of Unmatched Relations From Map 1	0	0	0
 Percentage of Unmatched Relations From Map 2	0	0	0	
 Percentage of Unmatched Relations	0	0	0	
 Translated Populated Tags	132	112	175	
-Features Conflatable by: hoot::ScriptMatchCreator,Area.js			0	
+Features Conflatable by: ScriptMatchCreator,Area.js			0	
 Difference Between Total Features in Output and Total Features in Inputs			-14	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-29.78723404255319	
 Percentage of Number of Total Map 1 Features Matched With Map 2 Features			48	

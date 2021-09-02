@@ -189,17 +189,8 @@ ElementCriterionPtr RoadCrossingPolyRule::polyRuleFilterStringsToFilter(
     {
       const QString critPart = critStrParts.at(i);
       LOG_VART(critPart);
-      if (!critPart.toLower().startsWith("hoot::"))
-      {
-        throw IllegalArgumentException(
-          "A road crossing rule polygon criterion filter must be a valid Hooteanny "
-          "ElementCriterion class name.");
-      }
-      else
-      {
-        polyCriteriaFilter->addCriterion(
-          Factory::getInstance().constructObject<ElementCriterion>(critPart.trimmed()));
-      }
+      polyCriteriaFilter->addCriterion(
+        Factory::getInstance().constructObject<ElementCriterion>(critPart.trimmed()));
     }
   }
 

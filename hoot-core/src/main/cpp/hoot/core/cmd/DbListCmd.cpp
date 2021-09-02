@@ -38,7 +38,7 @@ class DbListCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::DbListCmd"; }
+  static QString className() { return "DbListCmd"; }
 
   DbListCmd() = default;
 

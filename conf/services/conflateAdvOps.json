@@ -27,7 +27,7 @@
                 "elem_type":"checkbox",
                 "description":"Before any cleaning, reproject to a planar projection (e.g. UTM).",
                 "name":"Reproject To Planar Option",
-                "hoot_val":"hoot::ReprojectToPlanarOp",
+                "hoot_val":"ReprojectToPlanarOp",
                 "required":"true",
                 "defaultvalue":"true"
             },
@@ -36,7 +36,7 @@
                 "elem_type":"checkbox",
                 "description":"Standardize one way street tags.",
                 "name":"One Way Road Standardizer",
-                "hoot_val":"hoot::OneWayRoadStandardizer",
+                "hoot_val":"OneWayRoadStandardizer",
                 "defaultvalue":"true"
             },
             {
@@ -47,7 +47,7 @@
                 },
                 "description":"Remove duplicate ways (lines) that are exact duplicates. If the lines partially overlap with exactly the same geometry then only the partial overlap is removed from the more complex geometry.",
                 "name":"Remove Duplicate Ways",
-                "hoot_val":"hoot::DuplicateWayRemover",
+                "hoot_val":"DuplicateWayRemover",
                 "onchange":"true",
                 "defaultvalue":"true"
             },
@@ -56,7 +56,7 @@
                 "elem_type":"checkbox",
                 "description":"Remove all ways that contain no nodes or all the nodes are exactly the same.",
                 "name":"Remove Superfluous Ways",
-                "hoot_val":"hoot::SuperfluousWayRemover",
+                "hoot_val":"SuperfluousWayRemover",
                 "defaultvalue":"true"
             },
             {
@@ -64,7 +64,7 @@
                 "elem_type":"checkbox",
                 "description":"Remove / Replace roundabouts.",
                 "name":"Handle Roundabouts",
-                "hoot_val":"hoot::RemoveRoundabouts",
+                "hoot_val":"RemoveRoundabouts",
                 "defaultvalue":"false"
             },
             {
@@ -72,7 +72,7 @@
                 "elem_type":"checkbox",
                 "description":"Split all roads that intersect.  Disabling this setting may have an extreme impact on conflation performance.",
                 "name":"Split Intersections",
-                "hoot_val":"hoot::IntersectionSplitter",
+                "hoot_val":"IntersectionSplitter",
                 "defaultvalue":"true"
             },
             {
@@ -80,7 +80,7 @@
                 "elem_type":"checkbox",
                 "description":"Remove implied intersections that are likely incorrect. For example, a motorway overpass intersecting a residential street at a 90° is considered unlikely and \"unsnapped\". The geometry location is not modified.",
                 "name":"Remove Unlikely Intersections",
-                "hoot_val":"hoot::UnlikelyIntersectionRemover",
+                "hoot_val":"UnlikelyIntersectionRemover",
                 "defaultvalue":"true"
             },
             {
@@ -88,7 +88,7 @@
                 "elem_type":"checkbox",
                 "description":"Split highway types that are marked as divided into two separate geometries marked as oneway roads. A number of assumptions must be made to do this including assumptions about the direction of travel on roads (right or left hand drivers).",
                 "name":"Split Dual Ways",
-                "hoot_val":"hoot::DualHighwaySplitter",
+                "hoot_val":"DualHighwaySplitter",
                 "defaultvalue":"true"
             },
             {
@@ -96,7 +96,7 @@
                 "elem_type":"checkbox",
                 "description":"If two roads implicitly should be marked as divided based on the surrounding roads, mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to be marked as divided.",
                 "name":"Divided Road Marker Implied",
-                "hoot_val":"hoot::HighwayImpliedDividedMarker",
+                "hoot_val":"HighwayImpliedDividedMarker",
                 "defaultvalue":"true"
             },
             {
@@ -104,7 +104,7 @@
                 "elem_type":"checkbox",
                 "description":"Remove any duplicate names. See `duplicate.name.case.sensitive` for modifying the case sensitivity.",
                 "name":"Remove Duplicate Names",
-                "hoot_val":"hoot::DuplicateNameRemover",
+                "hoot_val":"DuplicateNameRemover",
                 "required":"true",
                 "defaultvalue":"true"
             },
@@ -116,7 +116,7 @@
                 },
                 "description":"Merge any ludicrously small ways that have essentially the same attributes. Things like `UUID` are ignored. See `small.highway.merger.threshold` for setting the threshold value.",
                 "name":"Merge Small Ways",
-                "hoot_val":"hoot::SmallHighwayMerger",
+                "hoot_val":"SmallHighwayMerger",
                 "onchange":"true",
                 "defaultvalue":"true",
                 "members":[
@@ -137,7 +137,7 @@
                 "elem_type":"checkbox",
                 "description":"Remove all area elements that have a area of zero.",
                 "name":"Remove Empty Areas",
-                "hoot_val":"hoot::RemoveEmptyAreasVisitor",
+                "hoot_val":"RemoveEmptyAreasVisitor",
                 "defaultvalue":"true"
             },
             {
@@ -145,7 +145,7 @@
                 "elem_type":"checkbox",
                 "description":"Remove all duplicate relation members in a relation.",
                 "name":"Remove Duplicate Relation Members",
-                "hoot_val":"hoot::RemoveDuplicateRelationMembersVisitor",
+                "hoot_val":"RemoveDuplicateRelationMembersVisitor",
                 "defaultvalue":"true"
             },
             {
@@ -153,7 +153,7 @@
                 "elem_type":"checkbox",
                 "description":"Remove all circular references within relations.",
                 "name":"Remove Relation Circular References",
-                "hoot_val":"hoot::RelationCircularRefRemover",
+                "hoot_val":"RelationCircularRefRemover",
                 "defaultvalue":"true"
             },
             {
@@ -161,7 +161,7 @@
                 "elem_type":"checkbox",
                 "description":"Remove all relations with no members.",
                 "name":"Remove Empty Relations",
-                "hoot_val":"hoot::RemoveEmptyRelationsOp",
+                "hoot_val":"RemoveEmptyRelationsOp",
                 "defaultvalue":"true"
             },
             {
@@ -169,7 +169,7 @@
                 "elem_type":"checkbox",
                 "description":"Remove any area elements that are essentially the same.",
                 "name":"Remove Duplicate Areas",
-                "hoot_val":"hoot::RemoveDuplicateAreasVisitor",
+                "hoot_val":"RemoveDuplicateAreasVisitor",
                 "defaultvalue":"true"
             },
             {
@@ -177,7 +177,7 @@
                 "elem_type":"checkbox",
                 "description":"Remove any elements that don't have any tags with information. (E.g. only contains UUID and source, but not FCODE equivalent or other informative tags).",
                 "name":"Remove Elements With No Information",
-                "hoot_val":"hoot::NoInformationElementRemover",
+                "hoot_val":"NoInformationElementRemover",
                 "defaultvalue":"true"
             },
             {
@@ -185,7 +185,7 @@
                 "elem_type":"checkbox",
                 "description":"Split roads at sharp corners.",
                 "name":"Split Sharp Road Corners",
-                "hoot_val":"hoot::HighwayCornerSplitter",
+                "hoot_val":"HighwayCornerSplitter",
                 "defaultvalue":"true"
             },
             {
@@ -193,7 +193,7 @@
                 "elem_type":"checkbox",
                 "description":"Add missing type tags to input data implied from the feature name",
                 "name":"Add Missing Type Tags",
-                "hoot_val":"hoot::ImplicitPoiPolygonTypeTagger",
+                "hoot_val":"ImplicitPoiPolygonTypeTagger",
                 "defaultvalue":"false"
             }
         ]
@@ -205,12 +205,12 @@
             {
                 "id":"map_cleaner_transforms",
                 "append":{
-                    "id":"hoot::RubberSheet",
+                    "id":"RubberSheet",
                     "isDefault":"true",
                     "description":"Enable rubber sheet",
                     "dependent":"hoot_enable_rubber_sheeting",
                     "name":"Rubber Sheet",
-                    "hoot_val":"hoot::RubberSheet",
+                    "hoot_val":"RubberSheet",
                     "hoot_key":"map.cleaner.transforms"
                 }
             }
@@ -360,9 +360,9 @@
                         "elem_type":"string",
                         "description":"The way subline matcher to use when determining matching sublines.",
                         "name":"Way Subline Matcher (Frechet)",
-                        "defaultvalue":"hoot::FrechetSublineMatcher",
+                        "defaultvalue":"FrechetSublineMatcher",
                         "override":{
-                            "defaultvalue":"hoot::FrechetSublineMatcher"
+                            "defaultvalue":"FrechetSublineMatcher"
                         },
                         "hoot_key":"way.subline.matcher",
                         "required":"true"
@@ -535,7 +535,7 @@
                                 "description":"The highway match classifier to use. This should only be used for testing and debugging.",
                                 "name":"Conflate Match Highway Classifier",
                                 "required":"true",
-                                "defaultvalue":"hoot::HighwayExpertClassifier",
+                                "defaultvalue":"HighwayExpertClassifier",
                                 "hoot_key":"conflate.match.highway.classifier"
                             },
                             {
@@ -544,9 +544,9 @@
                                 "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                                 "name":"Match Creator",
                                 "required":"true",
-                                "defaultvalue":"hoot::HighwayMatchCreator",
+                                "defaultvalue":"HighwayMatchCreator",
                                 "override":{
-                                    "defaultvalue":"hoot::HighwayMatchCreator"
+                                    "defaultvalue":"HighwayMatchCreator"
                                 },
                                 "hoot_key":"match.creators"
                             },
@@ -556,9 +556,9 @@
                                 "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                                 "name":"Merger Creator",
                                 "required":"true",
-                                "defaultvalue":"hoot::HighwayMergerCreator",
+                                "defaultvalue":"HighwayMergerCreator",
                                 "override":{
-                                    "defaultvalue":"hoot::HighwayMergerCreator"
+                                    "defaultvalue":"HighwayMergerCreator"
                                 },
                                 "hoot_key":"merger.creators"
                             },
@@ -605,9 +605,9 @@
                                 "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                                 "name":"Match Creator",
                                 "required":"true",
-                                "defaultvalue":"hoot::NetworkMatchCreator",
+                                "defaultvalue":"NetworkMatchCreator",
                                 "override":{
-                                    "defaultvalue":"hoot::NetworkMatchCreator"
+                                    "defaultvalue":"NetworkMatchCreator"
                                 },
                                 "hoot_key":"match.creators"
                             },
@@ -617,9 +617,9 @@
                                 "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                                 "name":"Merger Creator",
                                 "required":"true",
-                                "defaultvalue":"hoot::NetworkMergerCreator",
+                                "defaultvalue":"NetworkMergerCreator",
                                 "override":{
-                                    "defaultvalue":"hoot::NetworkMergerCreator"
+                                    "defaultvalue":"NetworkMergerCreator"
                                 },
                                 "hoot_key":"merger.creators"
                             },
@@ -629,9 +629,9 @@
                                 "description":"The network matcher to use during conflation. This option represents different algorithms used for scoring matches.",
                                 "name":"Network Matcher",
                                 "required":"true",
-                                "defaultvalue":"hoot::ConflictsNetworkMatcher",
+                                "defaultvalue":"ConflictsNetworkMatcher",
                                 "override":{
-                                    "defaultvalue":"hoot::ConflictsNetworkMatcher"
+                                    "defaultvalue":"ConflictsNetworkMatcher"
                                 },
                                 "hoot_key":"network.matcher"
                             }
@@ -713,9 +713,9 @@
                 "description":"",
                 "name":"Match Creator",
                 "required":"true",
-                "defaultvalue":"hoot::ScriptMatchCreator,Area.js",
+                "defaultvalue":"ScriptMatchCreator,Area.js",
                 "override":{
-                    "defaultvalue":"hoot::ScriptMatchCreator,Area.js"
+                    "defaultvalue":"ScriptMatchCreator,Area.js"
                 },
                 "hoot_key":"match.creators",
                 "required":"true"
@@ -726,9 +726,9 @@
                 "description":"",
                 "name":"Merger Creator",
                 "required":"true",
-                "defaultvalue":"hoot::ScriptMergerCreator",
+                "defaultvalue":"ScriptMergerCreator",
                 "override":{
-                    "defaultvalue":"hoot::ScriptMergerCreator"
+                    "defaultvalue":"ScriptMergerCreator"
                 },
                 "hoot_key":"merger.creators",
                 "required":"true"
@@ -755,9 +755,9 @@
                 "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                 "name":"Match Creator",
                 "required":"true",
-                "defaultvalue":"hoot::BuildingMatchCreator",
+                "defaultvalue":"BuildingMatchCreator",
                 "override":{
-                    "defaultvalue":"hoot::BuildingMatchCreator"
+                    "defaultvalue":"BuildingMatchCreator"
                 },
                 "hoot_key":"match.creators",
                 "required":"true"
@@ -768,9 +768,9 @@
                 "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                 "name":"Merger Creator",
                 "required":"true",
-                "defaultvalue":"hoot::BuildingMergerCreator",
+                "defaultvalue":"BuildingMergerCreator",
                 "override":{
-                    "defaultvalue":"hoot::BuildingMergerCreator"
+                    "defaultvalue":"BuildingMergerCreator"
                 },
                 "hoot_key":"merger.creators",
                 "required":"true"
@@ -872,9 +872,9 @@
                 "description":"",
                 "name":"Match Creator",
                 "required":"true",
-                "defaultvalue":"hoot::ScriptMatchCreator,Poi.js",
+                "defaultvalue":"ScriptMatchCreator,Poi.js",
                 "override":{
-                	"defaultvalue":"hoot::ScriptMatchCreator,Poi.js"
+                	"defaultvalue":"ScriptMatchCreator,Poi.js"
                 },
             	"hoot_key":"match.creators"
             },
@@ -884,9 +884,9 @@
                 "description":"",
                 "name":"Merger Creator",
                 "required":"true",
-                "defaultvalue":"hoot::ScriptMergerCreator",
+                "defaultvalue":"ScriptMergerCreator",
                 "override":{
-                	"defaultvalue":"hoot::ScriptMergerCreator"
+                	"defaultvalue":"ScriptMergerCreator"
                 },
                 "hoot_key":"merger.creators"
             }
@@ -912,9 +912,9 @@
                 "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
 		"name":"Match Creator",
                 "required":"true",
-                "defaultvalue":"hoot::PoiPolygonMatchCreator",
+                "defaultvalue":"PoiPolygonMatchCreator",
                 "override":{
-                	"defaultvalue":"hoot::PoiPolygonMatchCreator"
+                	"defaultvalue":"PoiPolygonMatchCreator"
                 	},
                 "hoot_key":"match.creators"
             },
@@ -924,9 +924,9 @@
                 "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                 "name":"Merger Creator",
                 "required":"true",
-                "defaultvalue":"hoot::PoiPolygonMergerCreator",
+                "defaultvalue":"PoiPolygonMergerCreator",
                 "override":{
-                	"defaultvalue":"hoot::PoiPolygonMergerCreator"
+                	"defaultvalue":"PoiPolygonMergerCreator"
                 },
                 "hoot_key":"merger.creators"
             },
@@ -1118,7 +1118,7 @@
         	"elem_type":"string",
         	"description":"The tag merger used by POI/Polygon conflation. See 'tag.merger.default' for more information. If 'poi.polygon.auto.merge.many.poi.to.one.poly.matches' is set to true then 'PreserveTypesTagMerger' is always used.",
         	"name":"Review If Types Match",
-        	"defaultvalue":"hoot::PreserveTypesTagMerger",
+        	"defaultvalue":"PreserveTypesTagMerger",
 		"required": "true",
         	"hoot_key":"poi.polygon.tag.merger",
         	"onchange":"true"
@@ -1158,9 +1158,9 @@
                 "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                 "name":"Match Creator",
                 "required":"true",
-                "defaultvalue":"hoot::ScriptMatchCreator,PowerLine.js",
+                "defaultvalue":"ScriptMatchCreator,PowerLine.js",
                 "override":{
-                    "defaultvalue":"hoot::ScriptMatchCreator,PowerLine.js"
+                    "defaultvalue":"ScriptMatchCreator,PowerLine.js"
                 },
                 "hoot_key":"match.creators"
             },
@@ -1170,9 +1170,9 @@
                 "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                 "name":"Merger Creator",
                 "required":"true",
-                "defaultvalue":"hoot::ScriptMergerCreator",
+                "defaultvalue":"ScriptMergerCreator",
                 "override":{
-                    "defaultvalue":"hoot::ScriptMergerCreator"
+                    "defaultvalue":"ScriptMergerCreator"
                 },
                 "hoot_key":"merger.creators"
             },
@@ -1211,7 +1211,7 @@
                 "elem_type":"string",
                 "description":"The subline matcher to use when determining matching sublines for power lines.",
                 "name":"Power Line Subline Matcher",
-                "defaultvalue":"hoot::FrechetSublineMatcher",
+                "defaultvalue":"FrechetSublineMatcher",
                 "hoot_key":"power.line.subline.matcher",
                 "required":"true"
             }
@@ -1240,9 +1240,9 @@
             "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
             "name":"Match Creator",
             "required":"true",
-            "defaultvalue":"hoot::ScriptMatchCreator,Railway.js",
+            "defaultvalue":"ScriptMatchCreator,Railway.js",
             "override":{
-                "defaultvalue":"hoot::ScriptMatchCreator,Railway.js"
+                "defaultvalue":"ScriptMatchCreator,Railway.js"
             },
             "hoot_key":"match.creators"
         },
@@ -1252,9 +1252,9 @@
             "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
             "name":"Merger Creator",
             "required":"true",
-            "defaultvalue":"hoot::ScriptMergerCreator",
+            "defaultvalue":"ScriptMergerCreator",
             "override":{
-                "defaultvalue":"hoot::ScriptMergerCreator"
+                "defaultvalue":"ScriptMergerCreator"
             },
             "hoot_key":"merger.creators"
         },
@@ -1263,7 +1263,7 @@
             "elem_type":"string",
             "description":"The way subline matcher to use when determining matching sublines.",
             "name":"Railway Subline Matcher",
-            "defaultvalue":"hoot::MaximalSublineMatcher",
+            "defaultvalue":"MaximalSublineMatcher",
             "hoot_key":"railway.subline.matcher",
             "required":"true"
         },
@@ -1302,9 +1302,9 @@
                 "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                 "name":"Match Creator",
                 "required":"true",
-                "defaultvalue":"hoot::ScriptMatchCreator,River.js",
+                "defaultvalue":"ScriptMatchCreator,River.js",
                 "override":{
-                    "defaultvalue":"hoot::ScriptMatchCreator,River.js"
+                    "defaultvalue":"ScriptMatchCreator,River.js"
                 },
                 "hoot_key":"match.creators"
             },
@@ -1314,9 +1314,9 @@
                 "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                 "name":"Merger Creator",
                 "required":"true",
-                "defaultvalue":"hoot::ScriptMergerCreator",
+                "defaultvalue":"ScriptMergerCreator",
                 "override":{
-                    "defaultvalue":"hoot::ScriptMergerCreator"
+                    "defaultvalue":"ScriptMergerCreator"
                 },
                 "hoot_key":"merger.creators"
             },
@@ -1397,7 +1397,7 @@
                 "elem_type":"string",
                 "description":"The way subline matcher to use when determining matching sublines.",
                 "name":"River Subline Matcher",
-                "defaultvalue":"hoot::MaximalSublineMatcher",
+                "defaultvalue":"MaximalSublineMatcher",
                 "hoot_key":"river.subline.matcher",
                 "required":"true"
             }

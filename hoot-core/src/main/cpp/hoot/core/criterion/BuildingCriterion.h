@@ -42,7 +42,7 @@ class BuildingCriterion : public ConflatableElementCriterion, public ConstOsmMap
 {
 public:
 
-  static QString className() { return "hoot::BuildingCriterion"; }
+  static QString className() { return "BuildingCriterion"; }
 
   BuildingCriterion() = default;
   BuildingCriterion(ConstOsmMapPtr map);

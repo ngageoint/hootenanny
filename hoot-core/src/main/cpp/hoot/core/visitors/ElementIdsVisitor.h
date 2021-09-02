@@ -45,7 +45,7 @@ class ElementIdsVisitor : public ConstElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::ElementIdsVisitor"; }
+  static QString className() { return "ElementIdsVisitor"; }
 
   ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit);
   ElementIdsVisitor() = default;

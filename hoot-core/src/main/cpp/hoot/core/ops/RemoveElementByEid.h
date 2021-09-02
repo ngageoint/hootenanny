@@ -43,7 +43,7 @@ class RemoveElementByEid : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::RemoveElementByEid"; }
+  static QString className() { return "RemoveElementByEid"; }
 
   /**
    * Constructor

@@ -45,7 +45,7 @@ class TagCompareCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::TagCompareCmd"; }
+  static QString className() { return "TagCompareCmd"; }
 
   TagCompareCmd() = default;
 

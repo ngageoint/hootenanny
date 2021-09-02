@@ -42,7 +42,7 @@ class RandomElementRemover : public ElementOsmMapVisitor, public RngConsumer, pu
 {
 public:
 
-  static QString className() { return "hoot::RandomElementRemover"; }
+  static QString className() { return "RandomElementRemover"; }
 
   /**
    * @arg p Probability that any given feature will be removed.

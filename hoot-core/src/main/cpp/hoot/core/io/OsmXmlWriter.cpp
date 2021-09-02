@@ -295,23 +295,24 @@ void OsmXmlWriter::_writeMetadata(const Element* e) const
 
 void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
 {
-  ElementPtr elementClone = element->clone();
-  _addExportTagsVisitor.visit(elementClone);
+  //  Tag order is important here, current tags first and then add export tags
+  Tags tags = element->getTags();
+  //  Rather than cloning the element, get the export tags from the visitor
+  tags.add(_addExportTagsVisitor.getExportTags(element));
 
-  const ElementType type = elementClone->getElementType();
+  const ElementType type = element->getElementType();
   assert(type != ElementType::Unknown);
-  Tags& tags = elementClone->getTags();
 
   if (type == ElementType::Relation)
   {
-    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(elementClone);
+    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
     if (relation->getType() != "")
       tags.insert("type", removeInvalidCharacters(relation->getType()));
   }
 
   if (type == ElementType::Way)
   {
-    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(elementClone);
+    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
     //  Output the PID as a tag if desired for debugging purposes
     if (_includePid && way->hasPid())
       tags.insert(MetadataTags::HootSplitParentId(), QString("%1").arg(way->getPid()));

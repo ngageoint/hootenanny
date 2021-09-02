@@ -43,7 +43,7 @@ class BuildingHeightVisitor : public ConstElementVisitor, public NumericStatisti
 {
 public:
 
-  static QString className() { return "hoot::BuildingHeightVisitor"; }
+  static QString className() { return "BuildingHeightVisitor"; }
 
   static int logWarnCount;
 

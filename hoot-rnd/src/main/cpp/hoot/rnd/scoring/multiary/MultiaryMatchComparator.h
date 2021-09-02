@@ -54,7 +54,7 @@ class MultiaryMatchComparator
 
 public:
 
-  static QString className() { return "hoot::MultiaryMatchComparator"; }
+  static QString className() { return "MultiaryMatchComparator"; }
 
   static int logWarnCount;
 

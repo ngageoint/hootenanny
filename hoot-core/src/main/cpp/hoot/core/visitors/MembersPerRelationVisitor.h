@@ -40,7 +40,7 @@ class MembersPerRelationVisitor : public ConstElementVisitor, public NumericStat
 {
 public:
 
-  static QString className() { return "hoot::MembersPerRelationVisitor"; }
+  static QString className() { return "MembersPerRelationVisitor"; }
 
   MembersPerRelationVisitor();
   ~MembersPerRelationVisitor() = default;

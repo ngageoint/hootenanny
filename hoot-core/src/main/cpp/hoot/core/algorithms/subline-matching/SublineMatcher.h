@@ -44,7 +44,7 @@ class SublineMatcher : public ApiEntityInfo
 {
 public:
 
-  static QString className() { return "hoot::SublineMatcher"; }
+  static QString className() { return "SublineMatcher"; }
 
   SublineMatcher() :
   _minSplitSize(ConfigOptions().getWayMergerMinSplitSize()),

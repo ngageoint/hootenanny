@@ -2,25 +2,26 @@
 [[FeatureValidation]]
 == Feature Validation
 
-Hootenanny allows for tagging features which fail https://josm.openstreetmap.de/[JOSM] validation tests without attempting to 
-fix the validation errors.
+Hootenanny allows for tagging features which fail https://josm.openstreetmap.de/[JOSM] validation 
+tests or its own validation checks without attempting to fix the validation errors. Map elements 
+will be tagged with 'hoot:validation:error' which describes the error and 
+'hoot:validation:error:source' which shows the validator that found the error.
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#run-josm-validation-on-a-map[validation examples]
-
-Map elements will be tagged with 'hoot:validation:error' which describes the error and 'hoot:validation:error:source' 
-which shows the validator that found the error.
-
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-the-available-josm-validators[list validators example]
 
-=== Crossing Roads
+=== Hootenanny Validator Detail
 
-Hootenanny will attempt to detect roads that incorrectly cross polygons automatically after conflation (this is not part of 
-the +validate+ command). This is primarily helpful when a newer dataset is conflated with an older one where you want to 
-keep provenance in the older data while brining in as many of the features from the new dataset as possible. A rules 
-file, specified by the +highway.crossing.poly.rules+ configuration option, controls which polygons are search for roads 
-over them and which roads are allowed to cross certain polygons (if any). For example, there are any instances where we 
-would want to see a road crossing though a building but we allow a service road to pass through a parking lot. The rules 
-file will require maintenance over time as more road crossing data scenarios are encountered.
+==== Crossing Roads
+
+Hootenanny will attempt to detect roads that incorrectly cross polygons automatically after 
+conflation (this is not part of the +validate+ command). This is primarily helpful when a newer 
+dataset is conflated with an older one where you want to keep provenance in the older data while 
+bringing in as many of the features from the new dataset as possible. A rules file, specified by the +highway.crossing.poly.rules+ configuration option, controls which polygons are search for roads 
+over them and which roads are allowed to cross certain polygons (if any). For example, there are any 
+instances where we would want to see a road crossing though a building but we allow a service road 
+to pass through a parking lot. The rules file will require maintenance over time as more road 
+crossing data scenarios are encountered.
 
 File format example:
 
@@ -31,7 +32,7 @@ File format example:
   [
     {
       "name": "buildings",
-      "polyCriteriaFilter": "hoot::BuildingCriterion"
+      "polyCriteriaFilter": "BuildingCriterion"
     },
     {
       "name": "parking",
@@ -44,40 +45,47 @@ File format example:
 
 "name" is the name of the rule; required and used for readability purposes in reviews
 
-"polyCriteriaFilter" consists of one or more Hootenanny element criterion class names that are logically OR'd together 
-to create a type filter for the polygons which are search for roads crossing over them. The form of the value string is: <criterion 1>;<criterion 2>...; e.g. hoot::BuildingCriterion;hoot::AreaCriterion"
+"polyCriteriaFilter" consists of one or more Hootenanny element criterion class names that are 
+logically OR'd together to create a type filter for the polygons which are search for roads crossing 
+over them. The form of the value string is: <criterion 1>;<criterion 2>...; 
+e.g. BuildingCriterion;AreaCriterion"
 
-"polyTagFilter" consists of one or more tag key/value pairs that are logically OR'd together to create a tag filter 
-used to determine which types of polygons are checked for crossing roads using tag checks of the form: <key1=value1>;<key2=value2>...; e.g. "amenity=parking;leisure=park"
+"polyTagFilter" consists of one or more tag key/value pairs that are logically OR'd together to 
+create a tag filter used to determine which types of polygons are checked for crossing roads using 
+tag checks of the form: <key1=value1>;<key2=value2>...; e.g. "amenity=parking;leisure=park"
 
-At least one of "polyCriteriaFilter" and "polyTagFilter" must be specified. Both may be specified but it is not required.
+At least one of "polyCriteriaFilter" and "polyTagFilter" must be specified. Both may be specified 
+but it is not required.
 
-"allowedRoadTagFilter" determines which type of roads are allowed to cross the polygons being search for in this rule.
-It consists one or more highway tag key/value pairs that are logically OR'd together to create a tag filter used to 
-determine which types of polygons are checked for crossing roads using tag checks of the 
-form: <key1=value1>;<key2=value2>...; e.g. "highway=service;highway=footway"
+"allowedRoadTagFilter" determines which type of roads are allowed to cross the polygons being search 
+for in this rule. It consists one or more highway tag key/value pairs that are logically OR'd 
+together to create a tag filter used to determine which types of polygons are checked for crossing 
+roads using tag checks of the form: <key1=value1>;<key2=value2>...; e.g. 
+"highway=service;highway=footway"
 
 [[FeatureCleaning]]
 == Feature Cleaning
 
-Hootenanny allows for cleaning features which fail JOSM validation tests and/or those that Hootenanny internally identifies 
-as requiring cleaning. Both Hootenanny cleaning operations and JOSM auto-fix capabilities may be used for cleaning.
+Hootenanny allows for cleaning features which fail JOSM validation tests and/or those that 
+Hootenanny internally identifies as requiring cleaning. Both Hootenanny cleaning operations and JOSM 
+auto-fix capabilities may be used for cleaning.
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#clean-erroneous-data-from-two-maps[cleaning examples]
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-available-cleaning-operations[list cleaners example]
 
 == JOSM Configuration
 
-The https://josm.openstreetmap.de/[JOSM] library used in Hootenanny validation and, optionally, cleaning may be configured 
-within `hoot-josm/pom.xml`. Under the `<properties>` XML tag, configure `josm.artifactId` and `josm.version` for the JOSM
-JAR you wish to use. By default, this jar will be copied to `hoot-josm/target/dependency-jars/josm.jar`, and the path is 
-referenced by the `jni.class.path` configuration option. If you need to reference a local jar (one not available in a 
+The https://josm.openstreetmap.de/[JOSM] library used in Hootenanny validation and, optionally, 
+cleaning may be configured within `hoot-josm/pom.xml`. Under the `<properties>` XML tag, configure 
+`josm.artifactId` and `josm.version` for the JOSM JAR you wish to use. By default, this jar will be 
+copied to `hoot-josm/target/dependency-jars/josm.jar`, and the path is referenced by the 
+`jni.class.path` configuration option. If you need to reference a local jar (one not available in a 
 public Maven repository), you must manually install it with `mvn install:install-file`. See 
 `scripts/core/make-hoot-josm-java.sh` for an example.
 
-Hootenanny produces its own JAR file to interact with the JOSM jar. By default, this jar will be built by Hootenanny and 
-copied to `hoot-josm/target/hoot-josm.jar`.
+Hootenanny produces its own JAR file to interact with the JOSM jar. By default, this jar will be 
+built by Hootenanny and copied to `hoot-josm/target/hoot-josm.jar`.
 
-See the jni.* and josm.* configuration options in `conf/core/ConfigOptions.asciidoc` for more detail on configuring 
-Hootenanny to use JOSM.
+See the jni.* and josm.* configuration options in `conf/core/ConfigOptions.asciidoc` for more detail 
+on configuring Hootenanny to use JOSM.
 

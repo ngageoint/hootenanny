@@ -41,7 +41,7 @@ class ArbitraryCriterion : public ElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::ArbitraryCriterion"; }
+  static QString className() { return "ArbitraryCriterion"; }
 
   explicit ArbitraryCriterion(const std::function<bool (ConstElementPtr e)>& f)
     : _f(f) { }

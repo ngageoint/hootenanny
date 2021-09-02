@@ -41,7 +41,7 @@ class UniqueNamesVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static QString className() { return "hoot::UniqueNamesVisitor"; }
+  static QString className() { return "UniqueNamesVisitor"; }
 
   UniqueNamesVisitor() = default;
   ~UniqueNamesVisitor() = default;

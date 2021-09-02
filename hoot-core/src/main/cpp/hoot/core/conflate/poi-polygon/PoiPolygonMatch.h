@@ -34,7 +34,6 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchDetails.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
 #include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonPhoneNumberScoreExtractor.h>
@@ -59,13 +58,13 @@ class PoiPolygonMatch : public Match, public MatchDetails, public Configurable
 
 public:
 
-  static QString className() { return "hoot::PoiPolygonMatch"; }
+  static QString className() { return "PoiPolygonMatch"; }
 
   static const QString MATCH_NAME;
 
   PoiPolygonMatch() = default;
-  PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
-    std::shared_ptr<const PoiPolygonRfClassifier> rf,
+  PoiPolygonMatch(
+    const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr(),
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>());
   ~PoiPolygonMatch() = default;
@@ -211,8 +210,6 @@ private:
   bool _disableIntradatasetConflation2;
 
   bool _reviewMultiUseBuildings;
-
-  std::shared_ptr<const PoiPolygonRfClassifier> _rf;
 
   QString _explainText;
 

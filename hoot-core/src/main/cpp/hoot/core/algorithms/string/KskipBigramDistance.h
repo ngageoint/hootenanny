@@ -80,7 +80,7 @@ class KskipBigramDistance : public StringDistance
 {
 public:
 
-  static QString className() { return "hoot::KskipBigramDistance"; }
+  static QString className() { return "KskipBigramDistance"; }
 
   KskipBigramDistance(int k = 2);
   ~KskipBigramDistance() = default;

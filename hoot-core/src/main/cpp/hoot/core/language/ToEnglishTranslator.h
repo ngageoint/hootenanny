@@ -41,7 +41,7 @@ class ToEnglishTranslator : public Configurable
 {
 public:
 
-  static QString className() { return "hoot::ToEnglishTranslator"; }
+  static QString className() { return "ToEnglishTranslator"; }
 
   ToEnglishTranslator() = default;
   virtual ~ToEnglishTranslator() = default;

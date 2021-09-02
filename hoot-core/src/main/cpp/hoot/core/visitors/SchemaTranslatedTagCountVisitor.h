@@ -46,7 +46,7 @@ class SchemaTranslatedTagCountVisitor : public ConstElementVisitor, public Const
 {
 public:
 
-  static QString className() { return "hoot::SchemaTranslatedTagCountVisitor"; }
+  static QString className() { return "SchemaTranslatedTagCountVisitor"; }
 
   SchemaTranslatedTagCountVisitor();
   SchemaTranslatedTagCountVisitor(const std::shared_ptr<ScriptSchemaTranslator>& t);

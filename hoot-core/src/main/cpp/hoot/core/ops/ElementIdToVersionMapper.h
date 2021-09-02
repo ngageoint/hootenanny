@@ -39,7 +39,7 @@ class ElementIdToVersionMapper : public ConstOsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::ElementIdToVersionMapper"; }
+  static QString className() { return "ElementIdToVersionMapper"; }
 
   ElementIdToVersionMapper() = default;
   ~ElementIdToVersionMapper() = default;

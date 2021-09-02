@@ -3,30 +3,30 @@
 
 === Description
 
-The +convert+ command converts map data from one format to another. The process may be memory bound 
+The `convert` command converts map data from one format to another. The process may be memory bound 
 depending upon the input or output formats selected.
 
-* +input(s)+          - Input(s); may be any supported input format (e.g. .osm file) or a directory 
+* `input(s)`          - Input(s); may be any supported input format (e.g. .osm file) or a directory 
                         if `--recursive` is specified.
-* +output+            - Output; may be any supported output format (e.g. .osm file). If 
+* `output`            - Output; may be any supported output format (e.g. .osm file). If 
                         `--separate-output` is specified, this should be the format file extension 
                         (e.g. shp) or base URL of the output to be written and not a full URL 
                         (e.g. hootapidb://<user name>:<password>@<host name>:<port>/<database name>).
                         or hootapidb://<user name>:<password>@<host name>:<port>/<database name>).
-* +--recursive+       - Allows for processing the files contained in any directories specified in 
-                        +input(s)+ recursively. This parameter has no effect on the processing of 
+* `--recursive`       - Allows for processing the files contained in any directories specified in 
+                        `input(s)` recursively. This parameter has no effect on the processing of 
                         non-directory inputs. This must be followed by either "*" to denote no 
                         filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or 
                         "*myFile*". This parameter is not compatible with the OGR layer input 
                         syntax.
-* +--separate-output+ - The default behavior when processing multiple inputs is to combine them into 
+* `--separate-output` - The default behavior when processing multiple inputs is to combine them into 
                         the same single output. With this parameter specified, each input is 
                         processed and written to a separate output with the format specified in 
-                        +output+ and the same file name as the input with the text "-converted" 
+                        `output` and the same file name as the input with the text "-converted" 
                         appended to it. This parameter cannot be used with OSM API database 
                         (osmapidb://) or OSM API (http://) inputs. This parameter is not compatible 
                         with the OGR layer input syntax.
-* +--write-bounds+    - If the `bounds` configuration option is specified, optionally outputs a file 
+* `--write-bounds`    - If the `bounds` configuration option is specified, optionally outputs a file 
                         containing the input bounds. The location of the file is controlled via the 
                         `bounds.output.file` configuration option.
 

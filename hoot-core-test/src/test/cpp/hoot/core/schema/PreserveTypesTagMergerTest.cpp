@@ -27,14 +27,14 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/PreserveTypesTagMerger.h>
 
 namespace hoot
 {
 
 /**
- * These tests are fairly sensitive to schema changes.
+ * These tests are fairly sensitive to schema changes. This test is essentially the same as
+ * MostSpecificTagMergerTest but ensures TypesTagMerger::ALT_TYPES_TAG_KEY gets populated.
  */
 class PreserveTypesTagMergerTest : public HootTestFixture
 {
@@ -80,7 +80,8 @@ public:
 
   void overlappingKeysTest()
   {
-    // The second name should go into alt_name, and the second building tag should go into alt_types.
+    // The second name should go into alt_name, and the second building tag should go into
+    // alt_types.
 
     Tags t1;
     t1["name"] = "Building 1";
@@ -94,7 +95,7 @@ public:
     expected["name"] = "Building 1";
     expected["alt_name"] = "Building 2";
     expected["building"] = "cathedral";
-    expected[PreserveTypesTagMerger::ALT_TYPES_TAG_KEY] = "building=chapel";
+    expected[TypesTagMerger::ALT_TYPES_TAG_KEY] = "building=chapel";
 
     PreserveTypesTagMerger uut;
     uut.setOverwrite1(false);
@@ -113,7 +114,7 @@ public:
     expected2["name"] = "Building 1";
     expected2["alt_name"] = "Building 2;Building 3";
     expected2["building"] = "cathedral";
-    expected2[PreserveTypesTagMerger::ALT_TYPES_TAG_KEY] = "building=chapel;building=church";
+    expected2[TypesTagMerger::ALT_TYPES_TAG_KEY] = "building=chapel;building=church";
 
     merged = uut.mergeTags(merged, t3, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected2, merged);
@@ -178,7 +179,7 @@ public:
     expected2["name"] = "Building 3";
     expected2["alt_name"] = "Building 1;Building 2";
     expected2["building"] = "church";
-    expected2[PreserveTypesTagMerger::ALT_TYPES_TAG_KEY] = "building=cathedral;building=chapel";
+    expected2[TypesTagMerger::ALT_TYPES_TAG_KEY] = "building=cathedral;building=chapel";
 
     merged = uut.mergeTags(merged, t3, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected2, merged);

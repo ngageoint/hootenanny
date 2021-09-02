@@ -47,7 +47,7 @@ class WaySplitterOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::WaySplitterOp"; }
+  static QString className() { return "WaySplitterOp"; }
 
   static QString maxLengthKey() { return "way.splitter.max.length"; }
 

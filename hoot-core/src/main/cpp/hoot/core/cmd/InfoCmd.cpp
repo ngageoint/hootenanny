@@ -47,7 +47,7 @@ class InfoCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::InfoCmd"; }
+  static QString className() { return "InfoCmd"; }
 
   InfoCmd() = default;
 

@@ -53,7 +53,7 @@ class MetadataOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::MetadataOp"; }
+  static QString className() { return "MetadataOp"; }
 
   MetadataOp() : _pConf(&conf()) { }
   virtual ~MetadataOp() = default;

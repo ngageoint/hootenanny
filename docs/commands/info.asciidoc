@@ -1,50 +1,50 @@
 [[info]]
 == info
 
-The +info+ command displays information about command capabilities.
+The `info` command displays information about command capabilities.
 
 === Option Overview
 
 Only one of the following options can be passed to the command per invocation:
 
-* +--cleaning-operations+      - Displays the default configured options for cleaning map data
-* +--config-options+           - Displays available configuration options
-* +--conflatable-criteria+     - Displays criteria that identify conflatable elements
-* +--conflate-post-operations+ - Displays operations configured by default to run after a conflation 
+* `--cleaning-operations`      - Displays the default configured options for cleaning map data
+* `--config-options`           - Displays available configuration options
+* `--conflatable-criteria`     - Displays criteria that identify conflatable elements
+* `--conflate-post-operations` - Displays operations configured by default to run after a conflation 
                                  job (can be customized via the `conflate.post.ops` configuration 
                                  option)
-* +--conflate-pre-operations+  - Displays operations configured by default to run before a 
+* `--conflate-pre-operations`  - Displays operations configured by default to run before a 
                                  conflation job (can be customized via the `conflate.pre.ops` 
                                  configuration option)
-* +--criterion-consumers+      - Displays operations capable of taking in an ElementCriterion as 
+* `--criterion-consumers`      - Displays operations capable of taking in an ElementCriterion as 
                                  input
-* +--feature-extractors+       - Displays available feature extractors used in conflation model 
+* `--feature-extractors`       - Displays available feature extractors used in conflation model 
                                  building
-* +--filters+                  - Displays a list of all criteria that can be used for element 
+* `--filters`                  - Displays a list of all criteria that can be used for element 
                                  filtering
-* +--formats+                  - Displays supported data input/output formats
-* +--geometry-type-criteria+   - Displays criteria that identify a feature geometry type
-* +--matchers+                 - Displays available feature matchers used during conflation
-* +--match-creators+           - Displays available feature match creators used during conflation
-* +--mergers+                  - Displays available feature mergers used during conflation
-* +--merger-creators+          - Displays available feature merger creators used during conflation
-* +--operators+                - Displays available inline operators that can be applied to map 
+* `--formats`                  - Displays supported data input/output formats
+* `--geometry-type-criteria`   - Displays criteria that identify a feature geometry type
+* `--matchers`                 - Displays available feature matchers used during conflation
+* `--match-creators`           - Displays available feature match creators used during conflation
+* `--mergers`                  - Displays available feature mergers used during conflation
+* `--merger-creators`          - Displays available feature merger creators used during conflation
+* `--operators`                - Displays available inline operators that can be applied to map 
                                  datasets
-* +--string-comparators+       - Displays available string comparators
-* +--subline-matchers+         - Displays available subline matchers
-* +--subline-string-matchers+  - Displays available subline string matchers
-* +--tag-mergers+              - Displays available feature tag mergers used during conflation
-* +--validators+               - Displays available non-JOSM validators.
-* +--value-aggregators+        - Displays available feature tag value aggregators used in conflation 
+* `--string-comparators`       - Displays available string comparators
+* `--subline-matchers`         - Displays available subline matchers
+* `--subline-string-matchers`  - Displays available subline string matchers
+* `--tag-mergers`              - Displays available feature tag mergers used during conflation
+* `--validators`               - Displays available non-JOSM validators.
+* `--value-aggregators`        - Displays available feature tag value aggregators used in conflation 
                                  model building
-* +--way-joiners+              - Displays available way joiners
-* +--way-snap-criteria+        - Displays available way criteria for snapping ways to each other
+* `--way-joiners`              - Displays available way joiners
+* `--way-snap-criteria`        - Displays available way criteria for snapping ways to each other
 
 All configuration options (-D <option>) added to this command must be added to before the specified 
 option. Example:
 
 --------
-hoot info -D match.creators="hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,River.js" --way-snap-criteria
+hoot info -D match.creators="HighwayMatchCreator;ScriptMatchCreator,River.js" --way-snap-criteria
 --------
 
 Note how "--way-snap-criteria" is specified after the single configuration option.
@@ -56,7 +56,7 @@ parameters.
 
 === Cleaning Operations
 
-The +--cleaning-operations+ option prints out the currently configured map cleaning operations that 
+The `--cleaning-operations` option prints out the currently configured map cleaning operations that 
 are applied during conflation or with the 'clean' command.  The configuration option 
 'map.cleaner.transforms' controls which operators are applied.
 
@@ -68,18 +68,18 @@ hoot info --cleaning-operations
 
 === Configuration Options
 
-The +--config-options+ option prints out available Hootenanny configuration options.
+The `--config-options` option prints out available Hootenanny configuration options.
 
 ==== Input Parameters
 
 One of the following input parameters must be specified:
 
-* +name+             - name or partial name of a configuration option to list and/or print a 
+* `name`             - name or partial name of a configuration option to list and/or print a 
                        description for
-* +--option-names+   - if no name is specified, lists all configuration option names; if a name is 
+* `--option-names`   - if no name is specified, lists all configuration option names; if a name is 
                        specified, lists only configuration option names that have a full or partial 
                        match with the input name
-* +--option-details+ - if no name is specified, lists all configuration option names and 
+* `--option-details` - if no name is specified, lists all configuration option names and 
                        descriptions; if a name is specified, lists only configuration option names 
                        and descriptions that have a full or partial match with the input name
 
@@ -94,7 +94,7 @@ hoot info --config-options (name) [--option-details]
 
 === Conflatable Criteria
 
-The +--conflatable-crieria++ option prints out all element criteria classes that can be used to
+The `--conflatable-crieria`` option prints out all element criteria classes that can be used to
  identify conflatable elements.
 
 ==== Usage
@@ -105,7 +105,7 @@ hoot info --conflatable-criteria
 
 === Conflate Post Operations
 
-The +--conflate-post-operations+ option prints out the currently configured operations to run 
+The `--conflate-post-operations` option prints out the currently configured operations to run 
 immediately after a conflation job with the 'conflate' command.  The configuration option 
 'conflate.post.ops' controls which operators are applied.
 
@@ -117,7 +117,7 @@ hoot info --conflate-post-operations
 
 === Conflate Pre Operations
 
-The +--conflate-pre-operations+ option prints out the currently configured operations to run 
+The `--conflate-pre-operations` option prints out the currently configured operations to run 
 immediately after a conflation job with the 'conflate' command.  The configuration option 
 'conflate.pre.ops' controls which operators are applied.
 
@@ -129,7 +129,7 @@ hoot info --conflate-pre-operations
 
 === Element Criterion Consumers
 
-The +--criterion-consumers++ option prints out all operations that are capable of taking an 
+The `--criterion-consumers`` option prints out all operations that are capable of taking an 
 `ElementCriterion` as input. Passing in an `ElementCriterion` to an operation can be useful when 
 filtering elements before performing data transformations on them.
 
@@ -141,7 +141,7 @@ hoot info --criterion-consumers
 
 === Feature Extractors
 
-The +--feature-extractors+ option prints out available feature extractors that can be used when 
+The `--feature-extractors` option prints out available feature extractors that can be used when 
 building a conflation model with manually matched map training data.
 
 ==== Usage
@@ -152,8 +152,8 @@ hoot info --feature-extractors
 
 === Filters
 
-The +--filters++ option prints out all the element criteria classes, which are a subset of what is 
-displayed with the +--operators+ option. Element criteria can be used to filter elements during a 
+The `--filters`` option prints out all the element criteria classes, which are a subset of what is 
+displayed with the `--operators` option. Element criteria can be used to filter elements during a 
 conversion or conflation job.
 
 ==== Usage
@@ -164,7 +164,7 @@ hoot info --filters
 
 === Formats
 
-The +--formats+ option prints out supported data formats. 
+The `--formats` option prints out supported data formats. 
 
 The --input-bounded sub-option prints out input formats that support bounded reads with the `bounds`
 configuration option.
@@ -177,7 +177,7 @@ hoot info --formats [--input] [--input-bounded] [--input-streamable] [--ogr] [--
 
 === Geometry Type Criteria
 
-The +--geometry-type-crieria++ option prints out all element criteria classes that can be used to 
+The `--geometry-type-crieria`` option prints out all element criteria classes that can be used to 
 identify an element's geometry.
 
 ==== Usage
@@ -188,7 +188,7 @@ hoot info --geometry-type-crieria
 
 === Matchers
 
-The +--matchers+ option prints out available conflate matchers that may be applied when conflating 
+The `--matchers` option prints out available conflate matchers that may be applied when conflating 
 data. Matchers contain the criteria to match a specific pair of features
 
 ==== Usage
@@ -199,7 +199,7 @@ hoot info --matchers
 
 === Match Creators
 
-The +--match-creators+ option prints out available conflate match creators that may be applied when 
+The `--match-creators` option prints out available conflate match creators that may be applied when 
 conflating data. Match Creators are responsible for spawning matchers.
 
 ==== Usage
@@ -210,7 +210,7 @@ hoot info --match-creators
 
 === Mergers
 
-The +--mergers+ option prints out available conflate mergers that may be applied when conflating 
+The `--mergers` option prints out available conflate mergers that may be applied when conflating 
 data. Mergers are created to merge a feature pair supported by a corresponding matcher.
 
 ==== Usage
@@ -221,7 +221,7 @@ hoot info --mergers
 
 === Merger Creators
 
-The +--merger-creators+ option prints out available conflate merger creators that may be applied 
+The `--merger-creators` option prints out available conflate merger creators that may be applied 
 when conflating data. Merger Creators are responsible for spawning mergers.
 
 ==== Usage
@@ -232,7 +232,7 @@ hoot info --merger-creators
 
 === Operators
 
-The +--operators+ option prints out available inline operators that can be applied to map data in a 
+The `--operators` option prints out available inline operators that can be applied to map data in a 
 Hootenanny command. Map operators can be criterion, operations, or visitors.
 
 * An example of an operation is DuplicateWayRemover, which removes all duplicate ways from a map.
@@ -247,7 +247,7 @@ hoot info --operators
 
 === Subline Matchers
 
-The +--subline-matchers+ option prints out available subline matchers that determine which method of 
+The `--subline-matchers` option prints out available subline matchers that determine which method of 
 line matching is used during conflation.
 
 ==== Usage
@@ -258,7 +258,7 @@ hoot info --subline-matchers
 
 === Subline String Matchers
 
-The +--subline-string-matchers+ option prints out available subline string matchers that determine 
+The `--subline-string-matchers` option prints out available subline string matchers that determine 
 which method of multilinestring matching is used during conflation.
 
 ==== Usage
@@ -269,7 +269,7 @@ hoot info --subline-string-matchers
 
 === String Comparators
 
-The +--string-comparators+ option prints out available string comparators that can be used during 
+The `--string-comparators` option prints out available string comparators that can be used during 
 conflation when comparing tag string values.
 
 ==== Usage
@@ -280,7 +280,7 @@ hoot info --string-comparators
 
 === Tag Mergers
 
-The +--tag-mergers+ option prints out available tag mergers that may be applied when conflating
+The `--tag-mergers` option prints out available tag mergers that may be applied when conflating
  data.
 
 ==== Usage
@@ -291,7 +291,7 @@ hoot info --tag-mergers
 
 === Validators
 
-The +--validators+ option prints out available Hootenanny validators that can be used to validate 
+The `--validators` option prints out available Hootenanny validators that can be used to validate 
 data. To also see JOSM validators, run `validate --validators` (must be configured `--with-josm`).
 
 ==== Usage
@@ -302,7 +302,7 @@ hoot info --validators
 
 === Value Aggregators
 
-The +--value-aggregators+ option prints out available tag value aggregation methods that can be used 
+The `--value-aggregators` option prints out available tag value aggregation methods that can be used 
 when building a conflation model with manually matched map training data.
 
 ==== Usage
@@ -313,7 +313,7 @@ hoot info --value-aggregators
 
 === Way Joiners
 
-The +--way-joiners+ option prints out all way joiner class implementations that may either be used 
+The `--way-joiners` option prints out all way joiner class implementations that may either be used 
 independently or in conjunction with the OsmMapOperation, `WayJoinerOp`.
 
 ==== Usage
@@ -324,7 +324,7 @@ hoot info --way-joiners
 
 === Way Snap Criteria
 
-The +--way-snap-criteria+ option prints out all criterion class implementations that may used with 
+The `--way-snap-criteria` option prints out all criterion class implementations that may used with 
 `UnconnectedWaySnapper`to filter the types of ways that are snapped to each other. The list is 
 restricted to a criterion that will snap all feature types (LinearCriterion) or criteria that are 
 both conflatable and represent linear geometry types (e.g. HighwayCriterion). Unlike most other 

@@ -42,7 +42,7 @@ class ReversedRoadCriterion : public GeometryTypeCriterion, public ConstOsmMapCo
 {
 public:
 
-  static QString className() { return "hoot::ReversedRoadCriterion"; }
+  static QString className() { return "ReversedRoadCriterion"; }
 
   ReversedRoadCriterion() = default;
   ReversedRoadCriterion(ConstOsmMapPtr map);

@@ -1,7 +1,7 @@
 [[info-rnd]]
 == info-rnd
 
-The +info-rnd+ command displays information about command capabilities specific to the `hoot-rnd` module.
+The `info-rnd` command displays information about command capabilities specific to the `hoot-rnd` module.
 
 For further detail on how to use this information see both the Hootenanny User and Developer Guides.
 
@@ -9,15 +9,15 @@ For further detail on how to use this information see both the Hootenanny User a
 
 Only one of the following options can be passed to the command:
 
-* +--languages+ - Displays information about translatable/detectable spoken languages
+* `--languages` - Displays information about translatable/detectable spoken languages
 
 Each of the following sections describes an option that may be used with this command and its input parameters.
 
 === Languages
 
-The +languages+ option displays information about Hootenanny language translation/detection capabilities.
+The `languages` option displays information about Hootenanny language translation/detection capabilities.
 
-All uses of the +languages+ command require the following configuration options to be populated:
+All uses of the `languages` command require the following configuration options to be populated:
 * hoot.services.auth.user.name
 * hoot.services.auth.access.token
 * hoot.services.auth.access.token.secret
@@ -27,13 +27,13 @@ from the following command examples.
 
 Only one of the following options can be passed to the command:
 
-* +--detectable+    - Prints all spoken languages that Hootenanny can detect and the detectors that can detect them
-* +--detectors+     - Prints all available language detector implementations for the translation service
-* +--translatable+  - Prints all spoken languages that Hootenanny translate from to English and the translators that 
+* `--detectable`    - Prints all spoken languages that Hootenanny can detect and the detectors that can detect them
+* `--detectors`     - Prints all available language detector implementations for the translation service
+* `--translatable`  - Prints all spoken languages that Hootenanny translate from to English and the translators that 
                       can translate them
-* +--translators+   - Prints all available language translator implementations for the translation service
+* `--translators`   - Prints all available language translator implementations for the translation service
 
-The +--detectors+ option prints out all available language detectors that can be used with the Hootenanny web services.
+The `--detectors` option prints out all available language detectors that can be used with the Hootenanny web services.
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#metainfo[Examples]
 
@@ -45,7 +45,7 @@ Each of the following sections describes an option that may be used with this co
 hoot info-rnd --languages --detectors
 --------------------------------------
 
-The +--translators+ option prints out all available language translators that can be used with the Hootenanny web services.
+The `--translators` option prints out all available language translators that can be used with the Hootenanny web services.
 
 ==== Usage
 
@@ -53,7 +53,7 @@ The +--translators+ option prints out all available language translators that ca
 hoot info-rnd --languages --translators
 --------------------------------------
 
-The +--detectable+ option prints out spoken languages which Hootenanny can detect when using the Hootenanny web services.
+The `--detectable` option prints out spoken languages which Hootenanny can detect when using the Hootenanny web services.
 
 ==== Usage
 
@@ -61,7 +61,7 @@ The +--detectable+ option prints out spoken languages which Hootenanny can detec
 hoot info-rnd --languages --detectable
 --------------------------------------
 
-The +--translatable+ option prints out spoken languages which Hootenanny can translate from to English when using 
+The `--translatable` option prints out spoken languages which Hootenanny can translate from to English when using 
 the Hootenanny web services.
 
 ==== Usage

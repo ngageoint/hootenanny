@@ -39,7 +39,7 @@ class WayDirectionCriterion : public ElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::WayDirectionCriterion"; }
+  static QString className() { return "WayDirectionCriterion"; }
 
   WayDirectionCriterion(
     const ConstOsmMapPtr& map, ConstWayPtr baseWay, bool similarDirection = true);

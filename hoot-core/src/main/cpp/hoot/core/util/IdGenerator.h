@@ -35,7 +35,7 @@ class IdGenerator
 {
 public:
 
-  static QString className() { return "hoot::IdGenerator"; }
+  static QString className() { return "IdGenerator"; }
 
   IdGenerator() = default;
   virtual ~IdGenerator() = default;

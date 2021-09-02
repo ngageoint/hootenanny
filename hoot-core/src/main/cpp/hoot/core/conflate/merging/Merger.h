@@ -42,7 +42,7 @@ class Merger : public ApiEntityInfo
 {
 public:
 
-  static QString className() { return "hoot::Merger"; }
+  static QString className() { return "Merger"; }
 
   Merger() = default;
   virtual ~Merger() = default;

@@ -41,7 +41,7 @@ class RemoveRelationByEid : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::RemoveRelationByEid"; }
+  static QString className() { return "RemoveRelationByEid"; }
 
   /**
    * Constructor

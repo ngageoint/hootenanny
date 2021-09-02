@@ -51,7 +51,7 @@ class DiffCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::DiffCmd"; }
+  static QString className() { return "DiffCmd"; }
 
   DiffCmd() = default;
 

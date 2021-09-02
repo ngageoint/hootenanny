@@ -39,7 +39,7 @@ class WayNodeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsume
 {
 public:
 
-  static QString className() { return "hoot::WayNodeCriterion"; }
+  static QString className() { return "WayNodeCriterion"; }
 
   WayNodeCriterion() = default;
   WayNodeCriterion(ConstOsmMapPtr map);

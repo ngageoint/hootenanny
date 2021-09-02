@@ -47,12 +47,12 @@ namespace hoot
  *   -D uuid.helper.repeatable=true \
  *   -D writer.include.debug.tags=true \
  *   -D log.class.filter="CumulativeConflator2;ConflateCumulativeCmd" \
- *   -D match.creators="hoot::HighwayMatchCreator" \
- *   -D merger.creators="hoot::HighwayMergerCreator" \
+ *   -D match.creators="HighwayMatchCreator" \
+ *   -D merger.creators="HighwayMergerCreator" \
  *   -D bounds="8.4762,12.0504,8.4793,12.0526" \
  *   -D bounds.keep.entire.features.crossing.bounds=false \
- *   -D conflate.pre.ops+="hoot::SmallDisconnectedWayRemover;hoot::UnlikelyRoadRemover" \
- *   -D conflate.post.ops+="hoot::UnconnectedWaySnapper" \
+ *   -D conflate.pre.ops+="SmallDisconnectedWayRemover;UnlikelyRoadRemover" \
+ *   -D conflate.post.ops+="UnconnectedWaySnapper" \
  *   -D small.disconnected.way.remover.max.node.count=3 \
  *   -D small.disconnected.way.remover.max.length=20.0 \
  *   -D dual.highway.marker.mark.crossing.roads=true \

@@ -43,7 +43,7 @@ class RailwayCriterion : public ConflatableElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::RailwayCriterion"; }
+  static QString className() { return "RailwayCriterion"; }
 
   RailwayCriterion() = default;
   ~RailwayCriterion() = default;

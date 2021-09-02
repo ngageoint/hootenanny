@@ -47,7 +47,7 @@ class HootApiDb : public ApiDb
 {
 public:
 
-  static QString className() { return "hoot::HootApiDb"; }
+  static QString className() { return "HootApiDb"; }
 
   HootApiDb();
   ~HootApiDb();

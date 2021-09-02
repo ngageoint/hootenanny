@@ -28,11 +28,14 @@
 #include "ConflateExecutor.h"
 
 // Hoot
+#include <hoot/core/conflate/ConflateUtils.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 #include <hoot/core/conflate/merging/LinearAverageMerger.h>
 #include <hoot/core/conflate/stats/ConflateStatsHelper.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/HighwayWayNodeCriterion.h>
 #include <hoot/core/criterion/ReviewRelationCriterion.h>
 #include <hoot/core/criterion/ReviewScoreCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
@@ -49,6 +52,7 @@
 #include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/util/StringUtils.h>
@@ -460,9 +464,7 @@ void ConflateExecutor::_runConflateOps(OsmMapPtr& map, const bool runPre)
   {
     // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
     // config.
-    conf().set(
-      ConfigOptions::getRubberSheetElementCriteriaKey(),
-      ConfigOptions().getConflateRubberSheetElementCriteria());
+    _setRubberSheetElementCriteria();
 
     opNames = ConfigOptions().getConflatePreOps();
     opStr = "Pre";
@@ -704,6 +706,51 @@ void ConflateExecutor::_updateTranslationDirection(const QString& output) const
     // This gets read by the TranslationVisitor and cannot be empty.
     conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), translationDirection);
   }
+}
+
+void ConflateExecutor::_setRubberSheetElementCriteria() const
+{
+  const QStringList criteriaClassNames = ConfigOptions().getConflateRubberSheetElementCriteria();
+  QStringList criteriaClassNamesWithChildren;
+  for (int i = 0; i < criteriaClassNames.size(); i++)
+  {
+    const QString criterionClassName = criteriaClassNames.at(i);
+    ElementCriterionPtr crit =
+      Factory::getInstance().constructObject<ElementCriterion>(criterionClassName);
+
+    // Older clients may also pass in the way node crits here, but we don't require them anymore. We
+    // auto add them in a subsequent step.
+    std::shared_ptr<WayNodeCriterion> wayNodeCrit =
+      std::dynamic_pointer_cast<WayNodeCriterion>(crit);
+    if (wayNodeCrit)
+    {
+      continue;
+    }
+
+    std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
+      std::dynamic_pointer_cast<ConflatableElementCriterion>(
+        Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
+    if (!conflatableCrit)
+    {
+      throw IllegalArgumentException(
+        "Invalid rubber sheet element criterion class: " + criterionClassName + ". Must be a " +
+        ConflatableElementCriterion::className());
+    }
+
+    criteriaClassNamesWithChildren.append(criterionClassName);
+    // Add the child criteria (usually WayNodeCriterion) so the rubbersheeting works properly.
+    criteriaClassNamesWithChildren += conflatableCrit->getChildCriteria();
+  }
+  // To make control of road rubbersheeting a little simpler from the UI a custom option has been
+  // added to enable it rather than expose conflate.rubber.sheet.element.criteria.
+  if (!ConflateUtils::isNetworkConflate() &&
+      ConfigOptions().getConflateUnifyingRubberSheetRoads() &&
+      !criteriaClassNamesWithChildren.contains(HighwayCriterion::className()))
+  {
+    criteriaClassNamesWithChildren.append(HighwayCriterion::className());
+    criteriaClassNamesWithChildren.append(HighwayWayNodeCriterion::className());
+  }
+  conf().set(ConfigOptions::getRubberSheetElementCriteriaKey(), criteriaClassNamesWithChildren);
 }
 
 }

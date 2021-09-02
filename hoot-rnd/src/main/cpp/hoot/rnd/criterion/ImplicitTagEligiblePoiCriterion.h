@@ -40,7 +40,7 @@ class ImplicitTagEligiblePoiCriterion : public ImplicitTagEligibleCriterion
 {
 public:
 
-  static QString className() { return "hoot::ImplicitTagEligiblePoiCriterion"; }
+  static QString className() { return "ImplicitTagEligiblePoiCriterion"; }
 
   ImplicitTagEligiblePoiCriterion() = default;
   ~ImplicitTagEligiblePoiCriterion() = default;

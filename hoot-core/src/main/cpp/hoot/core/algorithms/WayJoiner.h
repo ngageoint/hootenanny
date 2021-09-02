@@ -47,7 +47,7 @@ class WayJoiner : public ApiEntityInfo
 {
 public:
 
-  static QString className() { return "hoot::WayJoiner"; }
+  static QString className() { return "WayJoiner"; }
 
   WayJoiner();
   virtual ~WayJoiner() = default;

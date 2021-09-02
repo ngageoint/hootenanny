@@ -48,7 +48,7 @@ class RemoveAttributesVisitor : public ElementVisitor, public Configurable
 
 public:
 
-  static QString className() { return "hoot::RemoveAttributesVisitor"; }
+  static QString className() { return "RemoveAttributesVisitor"; }
 
   RemoveAttributesVisitor();
   explicit RemoveAttributesVisitor(const QStringList types);

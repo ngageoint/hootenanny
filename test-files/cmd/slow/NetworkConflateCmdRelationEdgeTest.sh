@@ -15,7 +15,7 @@ rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
 hoot conflate --warn -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
-  -D uuid.helper.repeatable=true -D match.creators="hoot::NetworkMatchCreator" \
-  -D merger.creators="hoot::NetworkMergerCreator" \
+  -D uuid.helper.repeatable=true -D match.creators="NetworkMatchCreator" \
+  -D merger.creators="NetworkMergerCreator" \
   $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/out.osm
 hoot diff -C Testing.conf $INPUT_DIR/out.osm $OUTPUT_DIR/out.osm || diff $INPUT_DIR/out.osm $OUTPUT_DIR/out.osm

@@ -22,42 +22,46 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef POIPOLYGONRFCLASSIFIER_H
-#define POIPOLYGONRFCLASSIFIER_H
+#ifndef MOST_SPECIFIC_TAG_MERGER_H
+#define MOST_SPECIFIC_TAG_MERGER_H
 
-// hoot
-#include <hoot/core/algorithms/extractors/FeatureExtractor.h>
-#include <hoot/core/elements/OsmMap.h>
+// Hoot
+#include <hoot/core/schema/TypesTagMerger.h>
 
 namespace hoot
 {
 
 /**
- * This class lets you extract feature information by using the build-model command to export
- * an .arff file, which can be viewed in Weka.
+ * @brief The MostSpecificTagMerger class merges tags by keeping the most specifically typed tags.
  */
-class PoiPolygonRfClassifier
+class MostSpecificTagMerger : public TypesTagMerger
 {
-
 public:
 
-  PoiPolygonRfClassifier();
-  virtual ~PoiPolygonRfClassifier() = default;
+  static QString className() { return "MostSpecificTagMerger"; }
 
-  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m, ElementId eid1,
-                                                ElementId eid2) const;
+  /**
+   * Constructor
+   *
+   * @param skipTagKeys optional; Any additional type tags found during merging with a key in this
+   * list will be not be preserved.
+   */
+  MostSpecificTagMerger(const QSet<QString>& skipTagKeys = QSet<QString>());
+  ~MostSpecificTagMerger() = default;
 
-private:
+  /**
+   * @see TypesTagMerger
+   */
+  void setPreserveTypes() override { _preserveTypes = false; }
 
-  std::vector<std::shared_ptr<const FeatureExtractor>> _extractors;
-
-  void _createExtractors();
+  QString getDescription() const override
+  { return "Keeps the most specific tag between two features"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
-
-using PoiPolygonRfClassifierPtr = std::shared_ptr<PoiPolygonRfClassifier>;
 
 }
 
-#endif // POIPOLYGONRFCLASSIFIER_H
+#endif // MOST_SPECIFIC_TAG_MERGER_H

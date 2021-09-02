@@ -40,7 +40,7 @@ class NotCriterion : public ElementCriterion, public ElementCriterionConsumer, p
 {
 public:
 
-  static QString className() { return "hoot::NotCriterion"; }
+  static QString className() { return "NotCriterion"; }
 
   NotCriterion() = default;
   NotCriterion(ElementCriterion* c);

@@ -65,7 +65,7 @@ class ChangesetCreator
 
 public:
 
-  static QString className() { return "hoot::ChangesetCreator"; }
+  static QString className() { return "ChangesetCreator"; }
 
   static const QString JOB_SOURCE;
 

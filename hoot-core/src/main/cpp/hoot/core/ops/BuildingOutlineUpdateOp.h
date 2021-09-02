@@ -44,7 +44,7 @@ class BuildingOutlineUpdateOp : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::BuildingOutlineUpdateOp"; }
+  static QString className() { return "BuildingOutlineUpdateOp"; }
 
   BuildingOutlineUpdateOp() = default;
   ~BuildingOutlineUpdateOp() = default;

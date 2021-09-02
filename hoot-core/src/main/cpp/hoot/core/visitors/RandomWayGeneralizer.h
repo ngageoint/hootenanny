@@ -54,7 +54,7 @@ class RandomWayGeneralizer : public ElementOsmMapVisitor, public RngConsumer,
 
 public:
 
-  static QString className() { return "hoot::RandomWayGeneralizer"; }
+  static QString className() { return "RandomWayGeneralizer"; }
 
   RandomWayGeneralizer();
   ~RandomWayGeneralizer() = default;

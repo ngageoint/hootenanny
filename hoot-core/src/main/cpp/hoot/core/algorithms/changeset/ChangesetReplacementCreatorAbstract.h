@@ -117,7 +117,7 @@ class ChangesetReplacementCreatorAbstract : public ChangesetReplacement
 
 public:
 
-  static QString className() { return "hoot::ChangesetReplacementCreatorAbstract"; }
+  static QString className() { return "ChangesetReplacementCreatorAbstract"; }
 
   static const QString JOB_SOURCE;
 
@@ -138,8 +138,7 @@ public:
   void setEnableWaySnapping(const bool enable) override { _enableWaySnapping = enable; }
   void setChangesetId(const QString& id) override { _changesetId = id; }
 
-  QString toString() const override
-  { return className().remove("hoot::"); }
+  QString toString() const override { return className(); }
 
 protected:
 

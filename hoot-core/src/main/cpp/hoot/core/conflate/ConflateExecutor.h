@@ -53,7 +53,7 @@ class ConflateExecutor
 
 public:
 
-  static QString className() { return "hoot::ConflateExecutor"; }
+  static QString className() { return "ConflateExecutor"; }
 
   static const QString JOB_SOURCE;
 
@@ -117,6 +117,7 @@ private:
   void _updateTranslationDirection(const QString& output) const;
   void _disableRoundaboutRemoval() const;
   void _checkForTagValueTruncationOverride();
+  void _setRubberSheetElementCriteria() const;
 
   void _initTaskCount();
   float _getJobPercentComplete(const int currentTaskNum) const;

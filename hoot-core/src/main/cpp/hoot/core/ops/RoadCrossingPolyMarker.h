@@ -41,8 +41,9 @@ namespace hoot
 
 /**
  * Marks roads in instances where they cross over polygons and is governed by a set of rules (see
- * RoadCrossingPolyRule). By default such roads are marked for review. If validation is enabled,
- * then validation tags are added instead of reviews.
+ * RoadCrossingPolyRule and the "Feature Validation" section of the User documentation). By default,
+ * such roads are marked for review. If validation is enabled, then validation tags are added
+ * instead of reviews.
  *
  * We could extend this to other linear types, like rivers, once we see a need.
  */
@@ -50,7 +51,7 @@ class RoadCrossingPolyMarker : public ConstOsmMapOperation, public Configurable,
 {
 public:
 
-  static QString className() { return "hoot::RoadCrossingPolyMarker"; }
+  static QString className() { return "RoadCrossingPolyMarker"; }
 
   RoadCrossingPolyMarker();
   ~RoadCrossingPolyMarker() = default;

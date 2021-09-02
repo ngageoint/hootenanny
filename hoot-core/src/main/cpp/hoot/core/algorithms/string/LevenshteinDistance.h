@@ -39,7 +39,7 @@ class LevenshteinDistance : public StringDistance, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::LevenshteinDistance"; }
+  static QString className() { return "LevenshteinDistance"; }
 
   /**
    * @param alph See the levenshtein.distance.alpha configuration option for an explanation.

@@ -42,7 +42,7 @@ class MapCleaner : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::MapCleaner"; }
+  static QString className() { return "MapCleaner"; }
 
   static QString opsKey() { return "map.cleaner.transforms"; }
 

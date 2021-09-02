@@ -66,7 +66,7 @@ MatchPtr PoiPolygonMatchCreator::createMatch(
     const bool foundPoly = _polyCrit.isSatisfied(e1) || _polyCrit.isSatisfied(e2);
     if (foundPoi && foundPoly)
     {
-      result = std::make_shared<PoiPolygonMatch>(map, getMatchThreshold(), _getRf(), _infoCache);
+      result = std::make_shared<PoiPolygonMatch>(map, getMatchThreshold(), _infoCache);
       result->setConfiguration(conf());
       result->calculateMatch(eid1, eid2);
     }
@@ -117,7 +117,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
 
   PoiPolygonMatch::resetMatchDistanceInfo();
 
-  PoiPolygonMatchVisitor matchVis(map, matches, threshold, _getRf(), _infoCache, _filter);
+  PoiPolygonMatchVisitor matchVis(map, matches, threshold, _infoCache, _filter);
   map->visitNodesRo(matchVis);
   const int matchesSizeAfter = matches.size();
 
@@ -563,15 +563,6 @@ std::shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()
   if (!_matchThreshold.get())
     _matchThreshold = std::make_shared<MatchThreshold>(1.0, 1.0, 1.0);
   return _matchThreshold;
-}
-
-std::shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
-{
-  if (!_rf)
-  {
-    _rf = std::make_shared<PoiPolygonRfClassifier>();
-  }
-  return _rf;
 }
 
 QStringList PoiPolygonMatchCreator::getCriteria() const

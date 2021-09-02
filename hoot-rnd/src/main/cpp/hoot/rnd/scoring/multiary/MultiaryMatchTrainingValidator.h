@@ -37,7 +37,7 @@ class MultiaryMatchTrainingValidator : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::MultiaryMatchTrainingValidator"; }
+  static QString className() { return "MultiaryMatchTrainingValidator"; }
 
   MultiaryMatchTrainingValidator() = default;
   ~MultiaryMatchTrainingValidator() = default;

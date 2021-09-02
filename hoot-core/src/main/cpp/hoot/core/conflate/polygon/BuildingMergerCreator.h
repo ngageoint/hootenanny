@@ -37,7 +37,7 @@ class BuildingMergerCreator : public MergerCreator
 {
 public:
 
-  static QString className() { return "hoot::BuildingMergerCreator"; }
+  static QString className() { return "BuildingMergerCreator"; }
 
   BuildingMergerCreator() = default;
   ~BuildingMergerCreator() = default;

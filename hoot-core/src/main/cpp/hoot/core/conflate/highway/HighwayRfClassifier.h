@@ -41,13 +41,14 @@ class HighwayRfClassifier : public HighwayClassifier
 {
 public:
 
-  static QString className() { return "hoot::HighwayRfClassifier"; }
+  static QString className() { return "HighwayRfClassifier"; }
 
   HighwayRfClassifier() = default;
   ~HighwayRfClassifier() = default;
 
-  MatchClassification classify(const ConstOsmMapPtr& map,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) override;
+  MatchClassification classify(
+    const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2,
+    const WaySublineMatchString& match) override;
 
   std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const override;
@@ -60,7 +61,10 @@ private:
   mutable QStringList _rfFactorLabels;
   mutable std::vector<std::shared_ptr<const FeatureExtractor>> _extractors;
 
-  void _createTestExtractors() const;
+  /*
+   * @todo At some point names will make sense, but for now there isn't enough name data (#4874).
+   */
+  void _createExtractors() const;
 
   const std::vector<std::shared_ptr<const FeatureExtractor>>& _getExtractors() const;
 

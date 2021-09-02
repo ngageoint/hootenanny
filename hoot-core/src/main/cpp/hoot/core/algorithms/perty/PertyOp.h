@@ -53,7 +53,7 @@ class PertyOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::PertyOp"; }
+  static QString className() { return "PertyOp"; }
 
   PertyOp();
   ~PertyOp() = default;

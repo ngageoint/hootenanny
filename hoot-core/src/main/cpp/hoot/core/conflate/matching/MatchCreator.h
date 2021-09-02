@@ -41,7 +41,7 @@ class MatchCreator : public FilteredByGeometryTypeCriteria
 {
 public:
 
-  static QString className() { return "hoot::MatchCreator"; }
+  static QString className() { return "MatchCreator"; }
 
   MatchCreator();
   virtual ~MatchCreator() = default;

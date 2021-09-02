@@ -11,5 +11,5 @@ mkdir -p $OUTPUT
 
 CONFIG="-C Testing.conf"
 
-hoot conflate --error $CONFIG -D conflate.match.highway.classifier="hoot::HighwayExpertClassifier" -D way.subline.matcher="hoot::MaximalSublineMatcher" -D rubber.sheet.minimum.ties=4 -D rubber.sheet.ref=true -D uuid.helper.repeatable=true $INPUT/MapEditBandug-cropped-1.osm $INPUT/OSMmap-cropped-1.osm $OUTPUT/output.osm
+hoot conflate --error $CONFIG -D conflate.match.highway.classifier="HighwayExpertClassifier" -D way.subline.matcher="MaximalSublineMatcher" -D rubber.sheet.minimum.ties=4 -D rubber.sheet.ref=true -D uuid.helper.repeatable=true $INPUT/MapEditBandug-cropped-1.osm $INPUT/OSMmap-cropped-1.osm $OUTPUT/output.osm
 
