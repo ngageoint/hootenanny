@@ -331,7 +331,8 @@ public class GrailResource {
                 differentialParams.setConflationType(DbUtils.getConflationType(Long.parseLong(input2)));
                 input2 = HOOTAPI_DB_URL + "/" + input2;
 
-                grailCommandClass = replacement ? DeriveChangesetReplacementCommand.class : DeriveChangesetCommand.class;
+                grailCommandClass = deriveType.toLowerCase().contains("differential") ? RunDiffCommand.class :
+                        replacement ? DeriveChangesetReplacementCommand.class : DeriveChangesetCommand.class;
             }
         }
 
@@ -366,6 +367,15 @@ public class GrailResource {
                 jobType = JobType.BULK_REPLACE;
             } else {
                 jobType = JobType.BULK_DIFFERENTIAL;
+
+                if (reqParams.getApplyTags()) {
+                    File tagDiffFile = new File(workDir, "diff.tags.osc");
+                    GrailParams pushTagsParams = new GrailParams(pushParams);
+                    pushTagsParams.setOutput(tagDiffFile.getAbsolutePath());
+
+                    ExternalCommand applyTagChange = grailCommandFactory.build(jobId, pushTagsParams, debugLevel, ApplyChangesetCommand.class, this.getClass());
+                    workflow.add(applyTagChange);
+                }
             }
 
             // Wait to detect overpass 'Last element pushed'
@@ -375,6 +385,7 @@ public class GrailResource {
             // Clean up pulled files
             ArrayList<File> deleteFiles = new ArrayList<>();
             deleteFiles.add(workDir);
+            // commented out because we don't want to delete if error occurs so user can download error file
             // InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
             // workflow.add(cleanFolders);
         }
