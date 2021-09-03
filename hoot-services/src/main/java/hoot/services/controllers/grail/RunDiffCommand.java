@@ -49,6 +49,7 @@ class RunDiffCommand extends GrailCommand {
         logger.debug("Params: " + params);
 
         List<String> options = new LinkedList<>();
+        options.add("api.db.email=" + params.getUser().getEmail());
 
         Map<String, String> hoot2AdvOptions = params.getAdvancedOptions();
         String algorithm = "";
