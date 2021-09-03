@@ -263,7 +263,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   AbstractConflator::_reset();
 }
 
-void DiffConflator::_cleanSecData(QStringList& baseCriteria, const double maxSize) const
+void DiffConflator::_cleanSecData(const QStringList& baseCriteria, const double maxSize) const
 {
   LOG_INFO("\tRemoving secondary ways by criteria...");
 

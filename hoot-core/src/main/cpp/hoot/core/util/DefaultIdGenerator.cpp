@@ -52,9 +52,9 @@ IdGeneratorPtr DefaultIdGenerator::clone() const
 
 void DefaultIdGenerator::reset()
 {
-  _wayId = ConfigOptions().getIdGeneratorWayStart();
-  _nodeId = ConfigOptions().getIdGeneratorNodeStart();
-  _relationId = ConfigOptions().getIdGeneratorRelationStart();
+  _wayId = (long)ConfigOptions().getIdGeneratorWayStart();
+  _nodeId = (long)ConfigOptions().getIdGeneratorNodeStart();
+  _relationId = (long)ConfigOptions().getIdGeneratorRelationStart();
 }
 
 }

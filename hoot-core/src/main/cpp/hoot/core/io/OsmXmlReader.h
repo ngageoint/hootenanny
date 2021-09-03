@@ -117,6 +117,11 @@ public:
 
 protected:
 
+  // Maps from old node ids to new node ids.
+  QHash<long, long> _nodeIdMap;
+  QHash<long, long> _relationIdMap;
+  QHash<long, long> _wayIdMap;
+
   QString _errorString;
   OsmMapPtr _map;
 

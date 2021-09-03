@@ -299,6 +299,11 @@ private:
   // only valid is _bounds is not null
   bool _keepImmediatelyConnectedWaysOutsideBounds;
 
+  /// Maps from old node ids to new node ids.
+  QHash<long, long> _nodeIdMap;
+  QHash<long, long> _relationIdMap;
+  QHash<long, long> _wayIdMap;
+
   // If we aren't using element source IDs and a child element hasn't been parsed yet, map the
   // parent element to the missing child element's ID so that we may later update the child ID
   // with the newer remapped ID.

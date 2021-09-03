@@ -257,7 +257,7 @@ private:
    * would be a ConflatableElementCriterion (HighwayCriterion, etc.)
    * @param maxSize only ways up to this size are removed
    */
-  void _cleanSecData(QStringList& baseCriteria, const double maxSize) const;
+  void _cleanSecData(const QStringList& baseCriteria, const double maxSize) const;
   /*
    * The element criteria that must be met in order for an element involved in a match to be
    * completely removed
