@@ -41,7 +41,7 @@ class MultiaryPoiHashVisitor : public ElementHashVisitor
 {
 public:
 
-  static QString className() { return "hoot::MultiaryPoiHashVisitor"; }
+  static QString className() { return "MultiaryPoiHashVisitor"; }
 
   MultiaryPoiHashVisitor() = default;
   ~MultiaryPoiHashVisitor() = default;

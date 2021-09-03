@@ -1,7 +1,7 @@
 [[logout]]
 == logout
 
-The +logout+ command logs a user out of the web services. It requires the OAuth credentials of the user be passed in 
+The `logout` command logs a user out of the web services. It requires the OAuth credentials of the user be passed in 
 as configuration options.
 
 === Usage

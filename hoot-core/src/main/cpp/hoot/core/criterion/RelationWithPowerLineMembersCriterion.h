@@ -41,7 +41,7 @@ class RelationWithPowerLineMembersCriterion : public RelationWithMembersOfTypeCr
 {
 public:
 
-  static QString className() { return "hoot::RelationWithPowerLineMembersCriterion"; }
+  static QString className() { return "RelationWithPowerLineMembersCriterion"; }
 
   RelationWithPowerLineMembersCriterion();
   ~RelationWithPowerLineMembersCriterion() = default;

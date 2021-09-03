@@ -24,7 +24,7 @@ exports.geometryType = "point";
 
 // This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
 // culling match candidates.
-exports.matchCandidateCriterion = "hoot::PointCriterion";
+exports.matchCandidateCriterion = "PointCriterion";
 
 function distance(e1, e2) 
 {

@@ -38,7 +38,7 @@ class AddRef1Visitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::AddRef1Visitor"; }
+  static QString className() { return "AddRef1Visitor"; }
 
   AddRef1Visitor();
   ~AddRef1Visitor() = default;

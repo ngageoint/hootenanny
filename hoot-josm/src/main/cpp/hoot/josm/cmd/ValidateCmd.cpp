@@ -43,7 +43,7 @@ class ValidateCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::ValidateCmd"; }
+  static QString className() { return "ValidateCmd"; }
 
   ValidateCmd() = default;
 

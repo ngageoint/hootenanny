@@ -47,8 +47,8 @@ class InvertCropCommand extends GrailCommand {
         logger.info("Params: " + params);
 
         List<String> options = new LinkedList<>();
-        options.add("convert.ops=hoot::MapCropper;hoot::RemoveElementsVisitor");
-        options.add("remove.elements.visitor.element.criteria=hoot::WayCriterion;hoot::RelationCriterion");
+        options.add("convert.ops=MapCropper;RemoveElementsVisitor");
+        options.add("remove.elements.visitor.element.criteria=WayCriterion;RelationCriterion");
         options.add("remove.elements.visitor.recursive=false");
         options.add("crop.bounds=" + params.getBounds());
         options.add("crop.invert=true");

@@ -42,7 +42,7 @@ class ChildElementCriterion : public ElementCriterion, public ConstOsmMapConsume
 {
 public:
 
-  static QString className() { return "hoot::ChildElementCriterion"; }
+  static QString className() { return "ChildElementCriterion"; }
 
   ChildElementCriterion() = default;
   ChildElementCriterion(ConstOsmMapPtr map) : _map(map) { }

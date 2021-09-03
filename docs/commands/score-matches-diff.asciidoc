@@ -3,12 +3,12 @@
 
 === Description
 
-The +score-matches-diff+ command displays the difference between two scored conflated output files created by the 
-+score-matches+ command.
+The `score-matches-diff` command displays the difference between two scored conflated output files created by the 
+`score-matches` command.
 
-* +input1+ - Input 1; must be OSM XML (.osm) file output from the +score-matches+ command
-* +input2+ - Input 2; must be an OSM XML (.osm) file output from the +score-matches+ command
-* +output+ - Diffential output; must be a file without an extension or a text file (.txt)
+* `input1` - Input 1; must be OSM XML (.osm) file output from the `score-matches` command
+* `input2` - Input 2; must be an OSM XML (.osm) file output from the `score-matches` command
+* `output` - Diffential output; must be a file without an extension or a text file (.txt)
 
 === Usage
 

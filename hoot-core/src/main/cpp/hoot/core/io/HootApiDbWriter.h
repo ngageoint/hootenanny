@@ -43,7 +43,7 @@ class HootApiDbWriter : public PartialOsmMapWriter, public Configurable, public 
 {
 public:
 
-  static QString className() { return "hoot::HootApiDbWriter"; }
+  static QString className() { return "HootApiDbWriter"; }
 
   HootApiDbWriter();
   ~HootApiDbWriter();

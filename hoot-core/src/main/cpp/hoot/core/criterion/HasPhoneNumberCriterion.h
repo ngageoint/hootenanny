@@ -41,7 +41,7 @@ namespace hoot
 class HasPhoneNumberCriterion : public ElementCriterion, public Configurable
 {
 public:
-  static QString className() { return "hoot::HasPhoneNumberCriterion"; }
+  static QString className() { return "HasPhoneNumberCriterion"; }
 
   HasPhoneNumberCriterion() = default;
   ~HasPhoneNumberCriterion() = default;

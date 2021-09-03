@@ -45,7 +45,7 @@ class OsmNetworkExtractor
 {
 public:
 
-  static QString className() { return "hoot::OsmNetworkExtractor"; }
+  static QString className() { return "OsmNetworkExtractor"; }
 
   OsmNetworkExtractor() = default;
   ~OsmNetworkExtractor() = default;

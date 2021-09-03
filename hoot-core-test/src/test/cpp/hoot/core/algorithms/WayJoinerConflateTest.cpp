@@ -64,8 +64,8 @@ public:
   void setUp() override
   {
     HootTestFixture::setUp();
-    conf().set(ConfigOptions::getMatchCreatorsKey(), "hoot::HighwayMatchCreator");
-    conf().set(ConfigOptions::getMergerCreatorsKey(), "hoot::HighwayMergerCreator");
+    conf().set(ConfigOptions::getMatchCreatorsKey(), "HighwayMatchCreator");
+    conf().set(ConfigOptions::getMergerCreatorsKey(), "HighwayMergerCreator");
     MatchFactory::getInstance().reset();
     MergerFactory::getInstance().reset();
   }

@@ -42,7 +42,7 @@ class TagContainsCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::TagContainsCriterion"; }
+  static QString className() { return "TagContainsCriterion"; }
 
   TagContainsCriterion();
   TagContainsCriterion(QString key, QString valueSubstring);

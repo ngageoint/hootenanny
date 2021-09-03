@@ -50,7 +50,7 @@ class NodesPerWayVisitor : public ConstElementVisitor, public NumericStatistic,
 {
 public:
 
-  static QString className() { return "hoot::NodesPerWayVisitor"; }
+  static QString className() { return "NodesPerWayVisitor"; }
 
   NodesPerWayVisitor();
   ~NodesPerWayVisitor() = default;

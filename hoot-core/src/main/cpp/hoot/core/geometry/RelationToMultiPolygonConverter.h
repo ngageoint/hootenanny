@@ -66,7 +66,7 @@ class RelationToMultiPolygonConverter
 {
 public:
 
-  static QString className() { return "hoot::RelationToMultiPolygonConverter"; }
+  static QString className() { return "RelationToMultiPolygonConverter"; }
 
   static int logWarnCount;
 

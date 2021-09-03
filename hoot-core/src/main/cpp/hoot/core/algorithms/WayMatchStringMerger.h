@@ -46,7 +46,7 @@ class WayMatchStringMerger
 
 public:
 
-  static QString className() { return "hoot::WayMatchStringMerger"; }
+  static QString className() { return "WayMatchStringMerger"; }
 
   static int logWarnCount;
 

@@ -49,7 +49,7 @@ class DuplicateWayRemover : public OsmMapOperation, public ConflateInfoCacheCons
 {
 public:
 
-  static QString className() { return "hoot::DuplicateWayRemover"; }
+  static QString className() { return "DuplicateWayRemover"; }
 
   DuplicateWayRemover();
   ~DuplicateWayRemover() = default;

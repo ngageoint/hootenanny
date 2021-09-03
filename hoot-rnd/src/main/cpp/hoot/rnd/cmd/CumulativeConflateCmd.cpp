@@ -43,7 +43,7 @@ class ConflateCumulativeCmd : public BoundedCommand
 {
 public:
 
-  static QString className() { return "hoot::ConflateCumulativeCmd"; }
+  static QString className() { return "ConflateCumulativeCmd"; }
 
   ConflateCumulativeCmd() :
   BoundedCommand()

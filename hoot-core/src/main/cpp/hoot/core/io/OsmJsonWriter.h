@@ -50,7 +50,7 @@ class OsmJsonWriter : public QXmlDefaultHandler, public OsmMapWriter, public Con
 {
 public:
 
-  static QString className() { return "hoot::OsmJsonWriter"; }
+  static QString className() { return "OsmJsonWriter"; }
 
   OsmJsonWriter(int precision = ConfigOptions().getWriterPrecision());
   virtual ~OsmJsonWriter() = default;

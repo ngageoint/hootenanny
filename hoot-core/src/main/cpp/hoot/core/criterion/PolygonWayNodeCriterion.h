@@ -37,7 +37,7 @@ class PolygonWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static QString className() { return "hoot::PolygonWayNodeCriterion"; }
+  static QString className() { return "PolygonWayNodeCriterion"; }
 
   PolygonWayNodeCriterion();
   PolygonWayNodeCriterion(ConstOsmMapPtr map);

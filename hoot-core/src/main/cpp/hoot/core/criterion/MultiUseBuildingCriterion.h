@@ -40,7 +40,7 @@ class MultiUseBuildingCriterion : public GeometryTypeCriterion
 {
 public:
 
-  static QString className() { return "hoot::MultiUseBuildingCriterion"; }
+  static QString className() { return "MultiUseBuildingCriterion"; }
 
   MultiUseBuildingCriterion() = default;
   ~MultiUseBuildingCriterion() = default;

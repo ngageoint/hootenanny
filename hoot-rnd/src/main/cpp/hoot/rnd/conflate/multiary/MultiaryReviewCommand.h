@@ -53,7 +53,7 @@ namespace hoot
 class MultiaryReviewCommand
 {
 public:
-  static QString className() { return "hoot::MultiaryReviewCommand"; }
+  static QString className() { return "MultiaryReviewCommand"; }
 
   // Review operations. Feel free to extend.
   enum Operation

@@ -40,7 +40,7 @@ class MostSpecificTagMerger : public TypesTagMerger
 {
 public:
 
-  static QString className() { return "hoot::MostSpecificTagMerger"; }
+  static QString className() { return "MostSpecificTagMerger"; }
 
   /**
    * Constructor

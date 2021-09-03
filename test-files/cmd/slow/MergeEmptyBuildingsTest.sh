@@ -11,6 +11,6 @@ OUTPUT=test-output/cmd/slow/MergeEmptyBuildingsTest
 mkdir -p $OUTPUT
 
 hoot conflate --error -C Testing.conf -D uuid.helper.repeatable=true \
-  -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" \
+  -D match.creators="BuildingMatchCreator" -D merger.creators="BuildingMergerCreator" \
   $INPUT/MapEditBandug-cropped-2.osm $INPUT/OSMmap-cropped-2.osm $OUTPUT/output.osm
 

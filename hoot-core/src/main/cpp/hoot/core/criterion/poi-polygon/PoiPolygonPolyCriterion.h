@@ -42,7 +42,7 @@ class PoiPolygonPolyCriterion : public ConflatableElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::PoiPolygonPolyCriterion"; }
+  static QString className() { return "PoiPolygonPolyCriterion"; }
 
   PoiPolygonPolyCriterion();
   ~PoiPolygonPolyCriterion() = default;

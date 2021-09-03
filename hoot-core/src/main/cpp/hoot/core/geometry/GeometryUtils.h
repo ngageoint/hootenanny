@@ -52,7 +52,7 @@ class GeometryUtils
 {
 public:
 
-  static QString className() { return "hoot::GeometryUtils"; }
+  static QString className() { return "GeometryUtils"; }
 
   static int logWarnCount;
 

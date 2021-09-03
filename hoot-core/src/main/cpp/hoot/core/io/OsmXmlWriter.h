@@ -45,7 +45,7 @@ class OsmXmlWriter : public QXmlDefaultHandler, public PartialOsmMapWriter
 {
 public:
 
-  static QString className() { return "hoot::OsmXmlWriter"; }
+  static QString className() { return "OsmXmlWriter"; }
 
   OsmXmlWriter();
   ~OsmXmlWriter();

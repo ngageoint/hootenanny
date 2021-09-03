@@ -83,7 +83,7 @@ public:
    * @brief className returns a string that represents this class name.
    * @return class name
    */
-  static QString className() { return "hoot::DiffConflator"; }
+  static QString className() { return "DiffConflator"; }
 
   /**
    * @brief DiffConflator Constructor

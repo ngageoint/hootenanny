@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
   }
   else
   {
-    c = Factory::getInstance().constructObject<Command>("hoot::HelpCmd");
+    c = Factory::getInstance().constructObject<Command>("HelpCmd");
     c->run(argv, argc);
     return -1;
   }

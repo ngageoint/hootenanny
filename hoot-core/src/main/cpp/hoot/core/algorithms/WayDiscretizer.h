@@ -52,7 +52,7 @@ class WayDiscretizer
 {
 public:
 
-  WayDiscretizer(const ConstOsmMapPtr& map, const std::shared_ptr<const hoot::Way>& way);
+  WayDiscretizer(const ConstOsmMapPtr& map, const std::shared_ptr<const Way>& way);
 
   /**
    * @brief discretize given an input way, discretize the way out into discrete coordinates. The
@@ -81,7 +81,7 @@ public:
 private:
 
   ConstOsmMapPtr _map;
-  std::shared_ptr<const hoot::Way> _way;
+  std::shared_ptr<const Way> _way;
   // The distance from the beginning of the way to each node that makes up the way.
   std::vector<double> _lengthNodes;
 };

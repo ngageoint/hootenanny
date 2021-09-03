@@ -75,7 +75,7 @@ public:
 
   static QString maxElementsPerMapKey() { return "pbf.reader.max.elements.per.partial.map"; }
 
-  static QString className() { return "hoot::OsmPbfReader"; }
+  static QString className() { return "OsmPbfReader"; }
 
   OsmPbfReader();
   OsmPbfReader(bool useFileId);

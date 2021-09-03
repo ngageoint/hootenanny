@@ -41,7 +41,7 @@ class TagRenameKeyVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::TagRenameKeyVisitor"; }
+  static QString className() { return "TagRenameKeyVisitor"; }
 
   TagRenameKeyVisitor() = default;
   TagRenameKeyVisitor(const QString& oldKey, const QString& newKey);

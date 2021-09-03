@@ -43,7 +43,7 @@ class OsmChangeWriter
 
 public:
 
-  static QString className() { return "hoot::OsmChangeWriter"; }
+  static QString className() { return "OsmChangeWriter"; }
 
   OsmChangeWriter() = default;
   virtual ~OsmChangeWriter() = default;

@@ -41,7 +41,7 @@ class RelationWithAreaMembersCriterion : public RelationWithMembersOfTypeCriteri
 {
 public:
 
-  static QString className() { return "hoot::RelationWithAreaMembersCriterion"; }
+  static QString className() { return "RelationWithAreaMembersCriterion"; }
 
   RelationWithAreaMembersCriterion();
   RelationWithAreaMembersCriterion(ConstOsmMapPtr map);

@@ -49,7 +49,7 @@ class HighwayMatch : public Match, public MatchDetails
 {
 public:
 
-  static QString className() { return "hoot::HighwayMatch"; }
+  static QString className() { return "HighwayMatch"; }
 
   static const QString MATCH_NAME;
 

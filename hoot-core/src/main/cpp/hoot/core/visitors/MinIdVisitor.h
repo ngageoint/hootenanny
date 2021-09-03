@@ -45,7 +45,7 @@ class MinIdVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static QString className() { return "hoot::MinIdVisitor"; }
+  static QString className() { return "MinIdVisitor"; }
 
   MinIdVisitor() : _minId(std::numeric_limits<long>::max()) { }
   ~MinIdVisitor() = default;

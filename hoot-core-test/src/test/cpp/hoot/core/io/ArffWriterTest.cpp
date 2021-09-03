@@ -73,8 +73,7 @@ public:
     uut.write(samples);
 
     // check for consistency with previous versions.
-    HOOT_FILE_EQUALS( _inputPath + "runBasic.arff",
-                     _outputPath + "runBasic.arff");
+    HOOT_FILE_EQUALS(_inputPath + "runBasic.arff", _outputPath + "runBasic.arff");
   }
 };
 

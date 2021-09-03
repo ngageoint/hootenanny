@@ -3,30 +3,30 @@
 
 === Description
 
-The +tag-info+ command displays unique feature tag values, grouped by tag key, found in one or more maps. 
+The `tag-info` command displays unique feature tag values, grouped by tag key, found in one or more maps. 
 
-* +input(s)+            - Inputs(s); may be any supported input format (e.g. .osm file) or a directory 
+* `input(s)`            - Inputs(s); may be any supported input format (e.g. .osm file) or a directory 
                           if `--recursive` is specified.
-* +--case-insensitive+  - Makes tag key comparisons case insensitive. By default the comparisons are 
+* `--case-insensitive`  - Makes tag key comparisons case insensitive. By default the comparisons are 
                           case sensitive.
-* +--delimited-text+    - By default, JSON output is generated. If this option is specified, a 
+* `--delimited-text`    - By default, JSON output is generated. If this option is specified, a 
                           delimited list with the format "key1;key2..." is returned. Value when the 
                           `--keys-only` option is used only.
-* +--keys+              - Displays unique tag values for the specified keys only. This option is 
+* `--keys`              - Displays unique tag values for the specified keys only. This option is 
                           ignored if `--keys-only` is specified.
-* +--keys-only+         - Displays tag keys only and does not print any associated values.
-* +--partial-key-match+ - Causes any key in a feature which partially matches the given set of keys 
+* `--keys-only`         - Displays tag keys only and does not print any associated values.
+* `--partial-key-match` - Causes any key in a feature which partially matches the given set of keys 
                           in `--keys` to have its tag value added to the output. By default, keys 
                           must be an exact match with each other for the tag value to be written to 
                           output.
-* +--recursive+         - Allows for processing the files contained in any directories specified in 
-                          +input(s)+ recursively. This parameter has no effect on the processing of 
+* `--recursive`         - Allows for processing the files contained in any directories specified in 
+                          `input(s)` recursively. This parameter has no effect on the processing of 
                           non-directory inputs. This must be followed by either "*" to denote no 
                           filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or 
                           "*myFile*". This parameter is not compatible with the OGR layer input 
                           syntax.
-* +--tag-values-limit+  - Limits the number of unique tag values printed per tag key. By default, 
-                          there is no limit. This option is ignored if +--keys-only+ is specified.
+* `--tag-values-limit`  - Limits the number of unique tag values printed per tag key. By default, 
+                          there is no limit. This option is ignored if `--keys-only` is specified.
 
 === Usage
 

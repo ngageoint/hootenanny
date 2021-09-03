@@ -134,7 +134,7 @@ class OsmApiDbBulkInserter : public PartialOsmMapWriter, public Configurable
 
 public:
 
-  static QString className() { return "hoot::OsmApiDbBulkInserter"; }
+  static QString className() { return "OsmApiDbBulkInserter"; }
 
   OsmApiDbBulkInserter();
   virtual ~OsmApiDbBulkInserter();

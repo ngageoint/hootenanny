@@ -47,7 +47,7 @@ class DecomposeBuildingRelationsVisitor : public ConstElementVisitor, public Osm
 {
 public:
 
-  static QString className() { return "hoot::DecomposeBuildingRelationsVisitor"; }
+  static QString className() { return "DecomposeBuildingRelationsVisitor"; }
 
   static int logWarnCount;
 

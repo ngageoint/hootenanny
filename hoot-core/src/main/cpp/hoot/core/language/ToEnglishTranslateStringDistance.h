@@ -45,7 +45,7 @@ class ToEnglishTranslateStringDistance : public StringDistance, public StringDis
 {
 public:
 
-  static QString className() { return "hoot::ToEnglishTranslateStringDistance"; }
+  static QString className() { return "ToEnglishTranslateStringDistance"; }
 
   ToEnglishTranslateStringDistance();
   explicit ToEnglishTranslateStringDistance(const StringDistancePtr& d);

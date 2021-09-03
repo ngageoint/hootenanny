@@ -82,12 +82,12 @@ public:
     const QMatrix& m = QMatrix());
   static void drawGeometryCollection(QPainter& pt, const OGRGeometryCollection* collection,
     const QMatrix& m = QMatrix());
-  static void drawNode(QPainter& pt, const hoot::Node* e, const QMatrix& m);
+  static void drawNode(QPainter& pt, const Node* e, const QMatrix& m);
   static void drawOsmMap(QPainter& pt, const OsmMap* map, const QMatrix& m = QMatrix());
   static void drawPolygon(QPainter& pt, const OGRPolygon* polygon, const QMatrix& m = QMatrix());
   static void drawPoint(QPainter& pt, double x, double y, const QMatrix& m = QMatrix());
   static void drawPoint(QPainter& pt, const OGRPoint* point, const QMatrix& m = QMatrix());
-  static void drawWay(QPainter& pt, const OsmMap* map, const hoot::Way* e, const QMatrix& m);
+  static void drawWay(QPainter& pt, const OsmMap* map, const Way* e, const QMatrix& m);
 
 private:
 

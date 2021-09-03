@@ -47,7 +47,7 @@ class NoInformationElementRemover : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::NoInformationElementRemover"; }
+  static QString className() { return "NoInformationElementRemover"; }
 
   NoInformationElementRemover() = default;
   ~NoInformationElementRemover() = default;

@@ -41,7 +41,7 @@ class RelationWithPointMembersCriterion : public RelationWithMembersOfTypeCriter
 {
 public:
 
-  static QString className() { return "hoot::RelationWithPointMembersCriterion"; }
+  static QString className() { return "RelationWithPointMembersCriterion"; }
 
   RelationWithPointMembersCriterion();
   RelationWithPointMembersCriterion(ConstOsmMapPtr map);

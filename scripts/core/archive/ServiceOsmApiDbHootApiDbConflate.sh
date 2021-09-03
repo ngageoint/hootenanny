@@ -61,7 +61,7 @@ HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 # generic debugging options applicable to multiple commands
 HOOT_OPTS="--warn -D uuid.helper.repeatable=true -D writer.include.debug.tags=true"
 if [ "$CONFLATION_TYPE" == "network" ]; then
-  HOOT_OPTS=$HOOT_OPTS" -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator -D network.matcher=hoot::ConflictsNetworkMatcher -D conflate.match.highway.classifier=hoot::HighwayExpertClassifier -D way.subline.matcher=hoot::MaximalSublineMatcher -D rubber.sheet.minimum.ties=4 -D rubber.sheet.ref=true"
+  HOOT_OPTS=$HOOT_OPTS" -D match.creators=NetworkMatchCreator -D merger.creators=NetworkMergerCreator -D network.matcher=ConflictsNetworkMatcher -D conflate.match.highway.classifier=HighwayExpertClassifier -D way.subline.matcher=MaximalSublineMatcher -D rubber.sheet.minimum.ties=4 -D rubber.sheet.ref=true"
 fi
 
 REF_DIR=test-files/cmd/$TEST_CATEGORY/$TEST_NAME
@@ -144,13 +144,13 @@ if [ "$CONFLATE_DATA" == "true" ]; then
   echo ""
   echo "STEP 8a: Conflating the two datasets over the specified AOI with the SQL changeset workflow..."
   echo ""
-  hoot conflate $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=$HOOT_EMAIL -D bounds=$AOI -D conflate.use.data.source.ids.2=true -D map.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8a-conflated-$TEST_NAME"
+  hoot conflate $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=$HOOT_EMAIL -D bounds=$AOI -D conflate.use.data.source.ids.2=true -D map.factory.reader=OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8a-conflated-$TEST_NAME"
 
   echo ""
   echo "STEP 8b: Conflating the two datasets over the specified AOI with the XML changeset workflow..."
   echo ""
   # How is this working w/o conflate.use.data.source.ids.2=true? How can changeset derivation work if not all IDs are preserved?
-  hoot conflate $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=$HOOT_EMAIL -D bounds=$AOI -D id.generator=hoot::PositiveIdGenerator -D osm.map.writer.factory.writer=hoot::NonIdRemappingHootApiDbWriter $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8b-conflated-$TEST_NAME"
+  hoot conflate $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=$HOOT_EMAIL -D bounds=$AOI -D id.generator=PositiveIdGenerator -D osm.map.writer.factory.writer=NonIdRemappingHootApiDbWriter $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8b-conflated-$TEST_NAME"
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then

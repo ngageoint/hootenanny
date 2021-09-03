@@ -41,7 +41,7 @@ class RemoveReviewUnknown2Visitor : public ElementOsmMapVisitor
 {
 public:
 
-  static QString className() { return "hoot::RemoveReviewUnknown2Visitor"; }
+  static QString className() { return "RemoveReviewUnknown2Visitor"; }
 
   RemoveReviewUnknown2Visitor() = default;
   ~RemoveReviewUnknown2Visitor() = default;

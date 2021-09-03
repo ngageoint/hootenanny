@@ -70,9 +70,7 @@ public:
 
   bool operator()(const QString& name1, const QString& name2) const
   {
-    QString name1Temp = name1;
-    QString name2Temp = name2;
-    return name1Temp.replace("hoot::", "") < name2Temp.replace("hoot::", "");
+    return name1 < name2;
   }
 };
 
@@ -131,7 +129,7 @@ QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName)
     }
     const bool supportsSingleStat = singleStat.get();
 
-    QString name = className.replace("hoot::", "");
+    QString name = className.remove(MetadataTags::HootNamespacePrefix());
     //append '*' to the names of visitors that support the SingleStatistic interface
     if (supportsSingleStat)
     {
@@ -384,7 +382,7 @@ QString ApiEntityDisplayInfo::_getApiEntities(
         supportsNumericStat = true;
       }
 
-      QString name = className.replace("hoot::", "");
+      QString name = className.remove(MetadataTags::HootNamespacePrefix());
       // append '*' to the names of visitors that support the SingleStatistic interface
       if (supportsNumericStat)
       {
@@ -438,7 +436,7 @@ QString ApiEntityDisplayInfo::_getApiEntitiesForMatchMergerCreators(
     {
       CreatorDescription description = *itr;
       LOG_VARD(description);
-      const QString name = description.getClassName().replace("hoot::", "");
+      const QString name = description.getClassName().remove(MetadataTags::HootNamespacePrefix());
       LOG_VARD(name);
       //this suppresses test and auxiliary rules files
       if (!name.endsWith("Test.js") && !name.endsWith("Rules.js"))

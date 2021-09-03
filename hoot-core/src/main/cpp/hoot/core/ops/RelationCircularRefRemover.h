@@ -46,7 +46,7 @@ class RelationCircularRefRemover : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::RelationCircularRefRemover"; }
+  static QString className() { return "RelationCircularRefRemover"; }
 
   RelationCircularRefRemover() = default;
   ~RelationCircularRefRemover() = default;

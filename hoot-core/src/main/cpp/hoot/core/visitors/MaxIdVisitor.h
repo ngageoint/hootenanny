@@ -42,7 +42,7 @@ class MaxIdVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static QString className() { return "hoot::MaxIdVisitor"; }
+  static QString className() { return "MaxIdVisitor"; }
 
   MaxIdVisitor() : _maxId(-std::numeric_limits<long>::max()) { }
   ~MaxIdVisitor() = default;

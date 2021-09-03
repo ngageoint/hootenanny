@@ -36,13 +36,13 @@ namespace hoot
 
 /**
  * Visits elements in a collection. See Element::visit* and OsmMap::visit* for ways to use the
- * class. See hoot::AddRefVisitor for an example implementation.
+ * class. See AddRefVisitor for an example implementation.
  */
 class ConstElementVisitor : public ElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::ConstElementVisitor"; }
+  static QString className() { return "ConstElementVisitor"; }
 
   ConstElementVisitor() = default;
   virtual ~ConstElementVisitor() = default;

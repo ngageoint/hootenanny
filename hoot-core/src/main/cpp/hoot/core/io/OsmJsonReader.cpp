@@ -965,7 +965,7 @@ long OsmJsonReader::_getRelationId(long fileId)
   return newId;
 }
 
-void OsmJsonReader::_addTags(const boost::property_tree::ptree& item, hoot::ElementPtr pElement) const
+void OsmJsonReader::_addTags(const boost::property_tree::ptree& item, ElementPtr pElement) const
 {
   // Find tags and add them
   if (item.not_found() != item.find("tags"))

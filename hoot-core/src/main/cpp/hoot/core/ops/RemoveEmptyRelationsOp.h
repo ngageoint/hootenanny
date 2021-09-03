@@ -43,7 +43,7 @@ class RemoveEmptyRelationsOp : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::RemoveEmptyRelationsOp"; }
+  static QString className() { return "RemoveEmptyRelationsOp"; }
 
   RemoveEmptyRelationsOp() = default;
   ~RemoveEmptyRelationsOp() = default;

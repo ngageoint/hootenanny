@@ -42,7 +42,7 @@ class OsmGbdxJsonWriter : public OsmJsonWriter
 {
 public:
 
-  static QString className() { return "hoot::OsmGbdxJsonWriter"; }
+  static QString className() { return "OsmGbdxJsonWriter"; }
 
   OsmGbdxJsonWriter(int precision = ConfigOptions().getWriterPrecision());
   ~OsmGbdxJsonWriter() = default;

@@ -20,7 +20,7 @@ rm -rf "${OUT}_in.osm" "${OUT}_out.osm"
 hoot convert \
   $CONFIG \
   -D schema.translation.direction=toogr \
-  -D convert.ops=hoot::SchemaTranslationVisitor \
+  -D convert.ops=SchemaTranslationVisitor \
   -D schema.translation.script=$HOOT_HOME/translations/RenderDb.js \
   ${IN} \
   "${OUT}_out.osm"
@@ -28,7 +28,7 @@ hoot convert \
 hoot convert \
   $CONFIG \
   -D schema.translation.direction=toosm \
-  -D convert.ops=hoot::SchemaTranslationVisitor \
+  -D convert.ops=SchemaTranslationVisitor \
   -D schema.translation.script=$HOOT_HOME/translations/RenderDb.js \
   "${OUT}_out.osm" \
   "${OUT}_in.osm"

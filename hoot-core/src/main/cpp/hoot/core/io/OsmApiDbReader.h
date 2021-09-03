@@ -40,7 +40,7 @@ class OsmApiDbReader : public ApiDbReader
 {
 public:
 
-  static QString className() { return "hoot::OsmApiDbReader"; }
+  static QString className() { return "OsmApiDbReader"; }
 
   OsmApiDbReader();
   ~OsmApiDbReader();

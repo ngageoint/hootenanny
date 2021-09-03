@@ -41,7 +41,7 @@ class CriterionCountVisitor : public ConstElementVisitor, public ElementCriterio
 {
 public:
 
-  static QString className() { return "hoot::CriterionCountVisitor"; }
+  static QString className() { return "CriterionCountVisitor"; }
 
   CriterionCountVisitor();
   CriterionCountVisitor(const ElementCriterionPtr& pCrit);

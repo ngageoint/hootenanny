@@ -44,7 +44,7 @@ class SetTagValueVisitor : public MultipleCriterionConsumerVisitor, public Confi
 {
 public:
 
-  static QString className() { return "hoot::SetTagValueVisitor"; }
+  static QString className() { return "SetTagValueVisitor"; }
 
   SetTagValueVisitor();
   SetTagValueVisitor(

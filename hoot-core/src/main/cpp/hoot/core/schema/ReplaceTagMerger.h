@@ -40,7 +40,7 @@ class ReplaceTagMerger : public TagMerger
 {
 public:
 
-  static QString className() { return "hoot::ReplaceTagMerger"; }
+  static QString className() { return "ReplaceTagMerger"; }
 
   /**
    * If swap is set to true then t1 will be overwritten with t2 values.
@@ -75,7 +75,7 @@ class ReplaceTag2Merger : public ReplaceTagMerger
 {
 public:
 
-  static QString className() { return "hoot::ReplaceTag2Merger"; }
+  static QString className() { return "ReplaceTag2Merger"; }
 
   ReplaceTag2Merger() : ReplaceTagMerger(false) { }
   ~ReplaceTag2Merger() = default;
@@ -97,7 +97,7 @@ class ReplaceTag1Merger : public ReplaceTagMerger
 {
 public:
 
-  static QString className() { return "hoot::ReplaceTag1Merger"; }
+  static QString className() { return "ReplaceTag1Merger"; }
 
   ReplaceTag1Merger() : ReplaceTagMerger(true) { }
   ~ReplaceTag1Merger() = default;

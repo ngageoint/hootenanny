@@ -44,15 +44,15 @@
 namespace Tgs
 {
 /**
-*  The RandomForest is an implementation of the Leo Breiman
-* Random Forest Classification algorithm
-*
-* For more information see:
-* http://oz.berkeley.edu/~breiman/RandomForests/
-*/
+ * The RandomForest is an implementation of the Leo Breiman Random Forest Classification algorithm.
+ *
+ * For more information see:
+ * http://oz.berkeley.edu/~breiman/RandomForests/
+ */
 class TGS_EXPORT RandomForest : public BaseRandomForest
 {
 public:
+
   /**
   * Default Constructor/Destructor
   */
@@ -70,9 +70,10 @@ public:
   * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
   * @param balanced true if the forest will be balanced
   */
-  void trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
-    unsigned int numFactors, const std::string& posClass, unsigned int nodeSize = 1,
-    double retrain = 1.0, bool balanced = false) override;
+  void trainBinary(
+    const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
+    const std::string& posClass, unsigned int nodeSize = 1, double retrain = 1.0,
+    bool balanced = false) override;
 
   /**
   * Build the forest from a data set
@@ -84,9 +85,9 @@ public:
   * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
   * @param balanced true if the forest will be balanced
   */
-  void trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
-    unsigned int numFactors, unsigned int nodeSize = 1, double retrain = 1.0,
-    bool balanced = false) override;
+  void trainMulticlass(
+    const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
+    unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) override;
 
   /**
   * Build the forest from a data set
@@ -100,11 +101,11 @@ public:
   * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
   * @param balanced true if the forest will be balanced
   */
-  void trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
-    unsigned int numFactors, const std::string& posClass, const std::string& negClass,
-    unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) override;
-
+  void trainRoundRobin(
+    const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
+    const std::string& posClass, const std::string& negClass, unsigned int nodeSize = 1,
+    double retrain = 1.0, bool balanced = false) override;
 };
 
-}  //End namespace
+}
 #endif

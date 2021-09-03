@@ -51,7 +51,7 @@ public:
 
   const static double EPSILON;
 
-  static QString className() { return "hoot::NetworkMatcher"; }
+  static QString className() { return "NetworkMatcher"; }
 
   NetworkMatcher() = default;
   virtual ~NetworkMatcher() = default;

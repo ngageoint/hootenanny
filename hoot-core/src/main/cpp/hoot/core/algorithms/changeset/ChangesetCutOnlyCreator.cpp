@@ -634,7 +634,7 @@ bool ChangesetCutOnlyCreator::_roadFilterExists() const
   ElementCriterionPtr lineFilter = _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Line];
   if (lineFilter)
   {
-    return lineFilter->toString().contains(HighwayCriterion::className().remove("hoot::"));
+    return lineFilter->toString().contains(HighwayCriterion::className());
   }
   return false;
 }

@@ -31,16 +31,16 @@ hoot clean CroppedOutput1.osm CleanedOutput1.osm
 hoot clean CroppedOutput2.osm CleanedOutput2.osm
 
 # prune (optional); keep only buildings
-hoot convert -D convert.ops=hoot::RemoveElementsVisitor \
-  -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion \
+hoot convert -D convert.ops=RemoveElementsVisitor \
+  -D remove.elements.visitor.element.criteria=BuildingCriterion \
   -D element.criteria.negate=true CleanedOutput1.osm BuildingsOutput1.osm
-hoot convert -D convert.ops=hoot::RemoveElementsVisitor \
-  -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion \
+hoot convert -D convert.ops=RemoveElementsVisitor \
+  -D remove.elements.visitor.element.criteria=BuildingCriterion \
   -D element.criteria.negate=true CleanedOutput2.osm BuildingsOutput2.osm
 
 # add ref tags
-hoot convert -D convert.ops=hoot::AddRef1Visitor BuildingsOutput1.osm Ref1.osm
-hoot convert -D convert.ops=hoot::AddRef1Visitor BuildingsOutput2.osm Ref2.osm
+hoot convert -D convert.ops=AddRef1Visitor BuildingsOutput1.osm Ref1.osm
+hoot convert -D convert.ops=AddRef1Visitor BuildingsOutput2.osm Ref2.osm
 ----------------------------
 
 ==== Obtaining Test Data
@@ -100,7 +100,7 @@ There are two basic ways to prune various types of data.
 You can use the hoot convert command with a visitor operation.  This command line example filters a dataset down to just highways:
 
 ------------------------------
-hoot convert -D "convert.ops=hoot::KeepBuildingsVisitor" Input.osm JustBuildings.osm
+hoot convert -D "convert.ops=KeepBuildingsVisitor" Input.osm JustBuildings.osm
 ------------------------------
 
 See the Hootenanny Command Line Documentation for a complete list of the available visitors that can be used for filtering.
@@ -168,8 +168,8 @@ follow).  One dataset will have a "REF1" tag on all of its features and the othe
 An example that generates the tags on two separate input datasets:
 
 -------------------------
-hoot convert -D convert.ops=hoot::AddRef1Visitor Input1.osm Ref1.osm
-hoot convert -D convert.ops=hoot::AddRef2Visitor Input2.osm Ref2.osm
+hoot convert -D convert.ops=AddRef1Visitor Input1.osm Ref1.osm
+hoot convert -D convert.ops=AddRef2Visitor Input2.osm Ref2.osm
 -------------------------
 
 An example REF tag value: REF2=007be5

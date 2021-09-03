@@ -42,7 +42,7 @@ class FrechetSublineMatcher : public SublineMatcher, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::FrechetSublineMatcher"; }
+  static QString className() { return "FrechetSublineMatcher"; }
 
   FrechetSublineMatcher() = default;
   ~FrechetSublineMatcher() = default;

@@ -47,7 +47,7 @@ namespace hoot
 class HootJsLoaded
 {
 public:
-  static QString className() { return "hoot::HootJsLoaded"; }
+  static QString className() { return "HootJsLoaded"; }
 };
 
 HOOT_FACTORY_REGISTER_BASE(HootJsLoaded)

@@ -42,12 +42,18 @@ AddExportTagsVisitor::AddExportTagsVisitor()
 }
 
 void AddExportTagsVisitor::visit(const ElementPtr& pElement)
-{ 
-  Tags& tags = pElement->getTags();
+{
+  //  Add the export tags back to the element
+  pElement->addTags(getExportTags(pElement));
+}
+
+Tags AddExportTagsVisitor::getExportTags(const ConstElementPtr& pElement)
+{
+  const Tags& tags = pElement->getTags();
   ElementType type = pElement->getElementType();
   Status status = pElement->getStatus();
   bool isNode = type == ElementType::Node;
-  bool isRelation = type == ElementType::Relation;  
+  bool isRelation = type == ElementType::Relation;
   bool validStatus = status != Status::Invalid;
   bool hasStatus = tags.find(MetadataTags::HootStatus()) != tags.end();
   bool hasMappingTags = tags.getNonDebugCount() > 0;
@@ -61,21 +67,16 @@ void AddExportTagsVisitor::visit(const ElementPtr& pElement)
                           pElement->hasCircularError() &&
                           (!isNode || (isNode && hasMappingTags));
 
+  Tags newTags;
   if (addStatus)
-  {
-    tags[MetadataTags::HootStatus()] = _textStatus ? status.toTextStatus() : toCompatString(status);
-  }
-
+    newTags[MetadataTags::HootStatus()] = _textStatus ? status.toTextStatus() : toCompatString(status);
   if (_includeDebug || _includeIds)
-  {
-    tags[MetadataTags::HootId()] = QString::number(pElement->getId());
-  }
-
+    newTags[MetadataTags::HootId()] = QString::number(pElement->getId());
   if (addCircularError)
-  {
-    tags[MetadataTags::ErrorCircular()] = QString::number(pElement->getCircularError());
-  }
+    newTags[MetadataTags::ErrorCircular()] = QString::number(pElement->getCircularError());
+  return newTags;
 }
+
 
 void AddExportTagsVisitor::overrideDebugSettings()
 {

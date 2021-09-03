@@ -3,20 +3,20 @@
 
 === Description
 
-The +crop-random+ command randomly crops a section of map data to have a specified maximum node count. This is useful if you 
+The `crop-random` command randomly crops a section of map data to have a specified maximum node count. This is useful if you 
 have a very large file dataset and need to generate a small subset of data to test conflation against.
 
-* +input(s)+      - Input(s); may be any supported input format (e.g. .osm file).
-* +output+        - Output; may be any supported output format (e.g. OSM file)
-* +maxNodeCount+  - The maximum number of nodes to include in the output. If the number of nodes in the entire dataset is 
-                    less than the specified number, no cropping will occur. If too low a value is specified for +maxNodeCount+ 
-                    or too high a value is specified for +pixelSize+, the algorithm used to crop may not be able to find 
+* `input(s)`      - Input(s); may be any supported input format (e.g. .osm file).
+* `output`        - Output; may be any supported output format (e.g. OSM file)
+* `maxNodeCount`  - The maximum number of nodes to include in the output. If the number of nodes in the entire dataset is 
+                    less than the specified number, no cropping will occur. If too low a value is specified for `maxNodeCount` 
+                    or too high a value is specified for `pixelSize`, the algorithm used to crop may not be able to find 
                     a solution.
-* +pixelSize+     - The pixel size in degrees. A good starting default is 0.001.
-* +--randomSeed+  - Optionally seeds the random number generator for consistent output; useful during testing; use -1 for 
+* `pixelSize`     - The pixel size in degrees. A good starting default is 0.001.
+* `--randomSeed`  - Optionally seeds the random number generator for consistent output; useful during testing; use -1 for 
                     no seeding
-* +--write-tiles+ - Optionally writes the calculated tile footprints to a separate file in the same output directory 
-                    as +output+.
+* `--write-tiles` - Optionally writes the calculated tile footprints to a separate file in the same output directory 
+                    as `output`.
 
 === Usage
 
@@ -30,10 +30,10 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExample
 
 The following cropping configuration options are not supported:
 
-* +crop.bounds+ - This is unnecessary since the command calculates the crop bounds automatically based on maximum node count.
-* +crop.invert+
+* `crop.bounds` - This is unnecessary since the command calculates the crop bounds automatically based on maximum node count.
+* `crop.invert`
 
-See the +crop+ command for details on the remaining supported cropping configuration options.
+See the `crop` command for details on the remaining supported cropping configuration options.
 
 If you need to run random map cropping inline with another command, use the RandomMapCropper OSM map operation along 
 with crop.random.* configuration options.

@@ -36,7 +36,7 @@ class AddGeometryTypeVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static QString className() { return "hoot::AddGeometryTypeVisitor"; }
+  static QString className() { return "AddGeometryTypeVisitor"; }
 
   AddGeometryTypeVisitor() = default;
   ~AddGeometryTypeVisitor() = default;

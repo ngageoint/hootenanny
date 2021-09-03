@@ -37,7 +37,7 @@ class BridgeWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static QString className() { return "hoot::BridgeWayNodeCriterion"; }
+  static QString className() { return "BridgeWayNodeCriterion"; }
 
   BridgeWayNodeCriterion();
   BridgeWayNodeCriterion(ConstOsmMapPtr map);

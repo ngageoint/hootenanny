@@ -15,7 +15,7 @@ INPUTFILE2=$INPUTFILEDIR/diamond_polygon.osm
 OUTPUTFILE=$OUTPUTFILEDIR/union_polygon.osm
 COMPAREFILE=$INPUTFILEDIR/union_polygon.osm
 
-hoot convert $DEBUG_OPT -D convert.ops="hoot::UnionPolygonsOp" $INPUTFILE1 $INPUTFILE2 $OUTPUTFILE
+hoot convert $DEBUG_OPT -D convert.ops="UnionPolygonsOp" $INPUTFILE1 $INPUTFILE2 $OUTPUTFILE
 hoot diff $DEBUG_OPT $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE
 
 # Input: 2 x multipolygons
@@ -25,5 +25,5 @@ INPUTFILE2=$INPUTFILEDIR/multi_polygon2.osm
 OUTPUTFILE=$OUTPUTFILEDIR/union_multi_both.osm
 COMPAREFILE=$INPUTFILEDIR/union_multi_both.osm
 
-hoot convert $DEBUG_OPT -D convert.ops="hoot::UnionPolygonsOp" $INPUTFILE1 $INPUTFILE2 $OUTPUTFILE
+hoot convert $DEBUG_OPT -D convert.ops="UnionPolygonsOp" $INPUTFILE1 $INPUTFILE2 $OUTPUTFILE
 hoot diff $DEBUG_OPT $COMPAREFILE $OUTPUTFILE || diff $COMPAREFILE $OUTPUTFILE

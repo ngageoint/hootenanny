@@ -38,7 +38,7 @@ class OsmChangesetFileWriterFactory
 {
 public:
 
-  static QString className() { return "hoot::OsmChangesetFileWriterFactory"; }
+  static QString className() { return "OsmChangesetFileWriterFactory"; }
 
   /**
    * Creates a writer capable of writing OSM changesets to a file

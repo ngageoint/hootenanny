@@ -50,7 +50,7 @@ class OffsetIntersectionMergerOp : public OsmMapOperation
 {
 public:
 
-  static QString className() { return "hoot::OffsetIntersectionMergerOp"; }
+  static QString className() { return "OffsetIntersectionMergerOp"; }
 
   OffsetIntersectionMergerOp();
   ~OffsetIntersectionMergerOp() = default;

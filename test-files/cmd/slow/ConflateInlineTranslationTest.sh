@@ -6,7 +6,7 @@ OUT_DIR=test-output/cmd/slow/ConflateInlineTranslationTest
 rm -rf $OUT_DIR
 mkdir -p $OUT_DIR
 
-CONFIG="-C AttributeConflation.conf -C UnifyingAlgorithm.conf -C Testing.conf -D match.creators=hoot::HighwayMatchCreator -D merger.creators=hoot::HighwayMergerCreator"
+CONFIG="-C AttributeConflation.conf -C UnifyingAlgorithm.conf -C Testing.conf -D match.creators=HighwayMatchCreator -D merger.creators=HighwayMergerCreator"
 LOG_LEVEL="--warn"
 
 # Note that 

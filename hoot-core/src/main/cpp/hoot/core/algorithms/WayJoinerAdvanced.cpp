@@ -719,13 +719,13 @@ void WayJoinerAdvanced::_determineKeeperFeatureForTags(WayPtr parent, WayPtr chi
   toRemove = child;
   if (parent->getStatus() == Status::Unknown1)
   {
-    if (tagMergerClassName == "hoot::OverwriteTagMerger" ||
-        tagMergerClassName == "hoot::OverwriteTag2Merger")
+    if (tagMergerClassName == "OverwriteTagMerger" ||
+        tagMergerClassName == "OverwriteTag2Merger")
     {
       keeper = child;
       toRemove = parent;
     }
-    else if (tagMergerClassName == "hoot::OverwriteTag1Merger")
+    else if (tagMergerClassName == "OverwriteTag1Merger")
     {
       keeper = parent;
       toRemove = child;
@@ -734,13 +734,13 @@ void WayJoinerAdvanced::_determineKeeperFeatureForTags(WayPtr parent, WayPtr chi
   else if (child->getStatus() == Status::Unknown1 ||
            (parent->getStatus() == Status::Conflated && child->getStatus() == Status::Conflated))
   {
-    if (tagMergerClassName == "hoot::OverwriteTagMerger" ||
-        tagMergerClassName == "hoot::OverwriteTag2Merger")
+    if (tagMergerClassName == "OverwriteTagMerger" ||
+        tagMergerClassName == "OverwriteTag2Merger")
     {
       keeper = parent;
       toRemove = child;
     }
-    else if (tagMergerClassName == "hoot::OverwriteTag1Merger")
+    else if (tagMergerClassName == "OverwriteTag1Merger")
     {
       keeper = child;
       toRemove = parent;

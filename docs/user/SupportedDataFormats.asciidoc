@@ -10,11 +10,11 @@
 * https://www.geonames.org[GeoNames] (.geonames)
 * https://geonames.nga.mil/gns/html/gis_countryfiles.html[Geonames.nga.mil] (.geonames)
 * Hootenanny API Database (hootapidb://)
-* OpenStreetMap API Database (osmapidb://)
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/OsmApiDb.asciidoc[OpenStreetMap API Database] (osmapidb://)
 * OpenStreetMap API Web Service (http://)
 * OpenStreetMap Protocol Buffers (.osm.pbf)
 * OpenStreetMap XML (.osm)
-* Overpass JSON (.json or http://overpass-api.de/) (memory bound)
+* Overpass JSON (.json or http://overpass-api.de/[Overpass]) (memory bound)
 * Shapefile (.shp)
 * Zip files containing shape files and/or File Geodatabase files (.zip)
 * Any additional OGR supported format not listed here (untested)
@@ -25,7 +25,7 @@
 * GeoJSON (.geojson) (memory bound)
 * GeoPackage (.gpkg) (memory bound)
 * Hootenanny API Database (hootapidb://)
-* OpenStreetMap API Database (osmapidb://)
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/OsmApiDb.asciidoc[OpenStreetMap API Database] (osmapidb://)
 * OpenStreetMap API Web Service (http://)
 * OpenStreetMap Protocol Buffers (.osm.pbf)
 * OpenStreetMap SQL changeset (.osc.sql)
@@ -56,8 +56,7 @@ box filter.
 "(input1[;layer])" "[input2[;layer])" ...
 -----
 * The format for OGR database URLs is: PG:"dbname='databasename' host='addr' port='5432' user='x' password='y'"
-* To use file geodatabases, the File Geodatabase module must be compiled into your version of GDAL to work. See
-http://trac.osgeo.org/gdal/wiki/FileGDB for details.
+* To use file geodatabases, the File Geodatabase module http://trac.osgeo.org/gdal/wiki/FileGDB[must be compiled into your version of GDAL to work].
 * A file geodatabase with files in a directory must have the top level directory named as *.gdb in order to be 
 recognized correctly.
 * A directory of shape files must have the top level directory named as *.shp in order to be recognized correctly.
@@ -69,7 +68,7 @@ OSM XML format is a richer format than Shapefile and supports such things as mul
 inherit topology and arbitrary tagging. For these reasons the conversion to Shapefile is a lossy conversion.
 * Column filtering for shape files is supported with the `shape.file.writer.cols` configuration option.
 
-=== OSM API Database
+=== (https://github.com/ngageoint/hootenanny/blob/master/docs/user/OsmApiDb.asciidoc)[OSM API Database]
 
 The format of a OSM API database URL is: 
 

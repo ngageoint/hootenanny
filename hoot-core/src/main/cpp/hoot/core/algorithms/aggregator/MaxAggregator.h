@@ -40,7 +40,7 @@ public:
    * @brief className Returns the name of the class
    * @return a class name
    */
-  static QString className() { return "hoot::MaxAggregator"; }
+  static QString className() { return "MaxAggregator"; }
 
   /**
    * @brief Constructor

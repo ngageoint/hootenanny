@@ -46,7 +46,7 @@ class RemoveElementsVisitor : public MultipleCriterionConsumerVisitor, public Os
 {
 public:
 
-  static QString className() { return "hoot::RemoveElementsVisitor"; }
+  static QString className() { return "RemoveElementsVisitor"; }
 
   RemoveElementsVisitor(bool negateCriteria = false);
   ~RemoveElementsVisitor() = default;

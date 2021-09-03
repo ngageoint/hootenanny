@@ -42,7 +42,7 @@ class LengthOfWaysVisitor : public ElementConstOsmMapVisitor, public NumericStat
 {
 public:
 
-  static QString className() { return "hoot::LengthOfWaysVisitor"; }
+  static QString className() { return "LengthOfWaysVisitor"; }
 
   LengthOfWaysVisitor();
   ~LengthOfWaysVisitor() = default;

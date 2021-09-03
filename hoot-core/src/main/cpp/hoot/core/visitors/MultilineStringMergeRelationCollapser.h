@@ -60,7 +60,7 @@ class MultilineStringMergeRelationCollapser : public MultipleCriterionConsumerVi
 {
 public:
 
-  static QString className() { return "hoot::MultilineStringMergeRelationCollapser"; }
+  static QString className() { return "MultilineStringMergeRelationCollapser"; }
 
   MultilineStringMergeRelationCollapser();
   ~MultilineStringMergeRelationCollapser() = default;

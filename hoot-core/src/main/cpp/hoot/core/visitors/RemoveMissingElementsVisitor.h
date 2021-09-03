@@ -41,7 +41,7 @@ class RemoveMissingElementsVisitor : public ConstElementVisitor, public OsmMapCo
 {
 public:
 
-  static QString className() { return "hoot::RemoveMissingElementsVisitor"; }
+  static QString className() { return "RemoveMissingElementsVisitor"; }
 
   RemoveMissingElementsVisitor(const Log::WarningLevel& logLevel = Log::Trace,
                                const int maxReport = Log::getWarnMessageLimit());

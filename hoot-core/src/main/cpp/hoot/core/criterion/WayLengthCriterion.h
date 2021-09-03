@@ -40,7 +40,7 @@ class WayLengthCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  static QString className() { return "hoot::WayLengthCriterion"; }
+  static QString className() { return "WayLengthCriterion"; }
 
   WayLengthCriterion();
   WayLengthCriterion(

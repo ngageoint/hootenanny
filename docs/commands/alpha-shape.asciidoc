@@ -3,20 +3,20 @@
 
 === Description
 
-The +alpha-shape+ command provides a way to generate a concave hull for a set of points. This is most useful when seeding the
-+cut+ command. The degree of the concaveness is determined by the alpha parameters.
+The `alpha-shape` command provides a way to generate a concave hull for a set of points. This is most useful when seeding the
+`cut` command. The degree of the concaveness is determined by the alpha parameters.
 
-* +input+    - Input; may be any supported input format (e.g. OSM file). The alpha shape is derived using the boundary of 
+* `input`    - Input; may be any supported input format (e.g. OSM file). The alpha shape is derived using the boundary of 
                the input.
-* +output+   - Output; may be any supported output format (e.g. OSM file). When output to a +.osm+ file, the alpha 
-               shape will always be a multi-polygon with one attribute +area=yes+. When output as a Shapefile, it will be 
+* `output`   - Output; may be any supported output format (e.g. OSM file). When output to a `.osm` file, the alpha 
+               shape will always be a multi-polygon with one attribute `area=yes`. When output as a Shapefile, it will be 
                a multipolygon shapefile with a single record.
-* +--alpha+  - Optional size in meters used for alpha. A larger value makes a smoother shape closer to a convex hull, and 
+* `--alpha`  - Optional size in meters used for alpha. A larger value makes a smoother shape closer to a convex hull, and 
                a smaller value will create a rough shape with more holes and concave sections. An alpha value equal to 
                the maximum distance between any two points in the data or larger will create a convex hull. If no alpha 
                value is given, Hootenanny will run an approximation algorithm to find a valid alpha value.
-* +--buffer+ - Optional buffer, in meters, to add to the alpha shape before cutting. A negative value will make the 
-               shape smaller. If using the alpha shape command with the +cut+ command, it is helpful to use a larger 
+* `--buffer` - Optional buffer, in meters, to add to the alpha shape before cutting. A negative value will make the 
+               shape smaller. If using the alpha shape command with the `cut` command, it is helpful to use a larger 
                negative value on complex data shapes to limit the number of holes in the output data. A negative value 
                equal to the alpha value is a good rule of thumb.
 

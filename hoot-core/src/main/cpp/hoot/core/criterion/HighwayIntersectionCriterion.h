@@ -45,7 +45,7 @@ class HighwayIntersectionCriterion : public ElementCriterion, public ConstOsmMap
 {
 public:
 
-  static QString className() { return "hoot::HighwayIntersectionCriterion"; }
+  static QString className() { return "HighwayIntersectionCriterion"; }
 
   HighwayIntersectionCriterion() = default;
   explicit HighwayIntersectionCriterion(ConstOsmMapPtr map);

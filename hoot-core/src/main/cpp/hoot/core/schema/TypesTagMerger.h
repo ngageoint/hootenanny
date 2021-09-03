@@ -43,7 +43,7 @@ public:
 
   static QString ALT_TYPES_TAG_KEY;
 
-  static QString className() { return "hoot::TypesTagMerger"; }
+  static QString className() { return "TypesTagMerger"; }
 
   /**
    * Constructor

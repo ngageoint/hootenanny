@@ -691,7 +691,8 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "/" + outputFile, _outputPath + "/" + outputFile);
   }
 };
-}
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::OsmJsonReaderTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmJsonReaderTest, "slow");
+
+}
 

@@ -61,17 +61,17 @@ public:
       ConflatableElementCriterion::getConflatableCriteriaForElement(
         TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, Tags("poi", "yes")), map);
     CPPUNIT_ASSERT_EQUAL(2, poiConflatableCriteria.size());
-    CPPUNIT_ASSERT(poiConflatableCriteria.contains("hoot::PoiCriterion"));
-    CPPUNIT_ASSERT(poiConflatableCriteria.contains("hoot::PoiPolygonPoiCriterion"));
+    CPPUNIT_ASSERT(poiConflatableCriteria.contains("PoiCriterion"));
+    CPPUNIT_ASSERT(poiConflatableCriteria.contains("PoiPolygonPoiCriterion"));
 
     const QStringList buildingConflatableCriteria =
       ConflatableElementCriterion::getConflatableCriteriaForElement(
         TestUtils::createWay(map, wayCoords, "", Status::Unknown1, 15.0, Tags("building", "yes")),
         map);
     CPPUNIT_ASSERT_EQUAL(3, buildingConflatableCriteria.size());
-    CPPUNIT_ASSERT(buildingConflatableCriteria.contains("hoot::AreaCriterion"));
-    CPPUNIT_ASSERT(buildingConflatableCriteria.contains("hoot::BuildingCriterion"));
-    CPPUNIT_ASSERT(buildingConflatableCriteria.contains("hoot::PoiPolygonPolyCriterion"));
+    CPPUNIT_ASSERT(buildingConflatableCriteria.contains("AreaCriterion"));
+    CPPUNIT_ASSERT(buildingConflatableCriteria.contains("BuildingCriterion"));
+    CPPUNIT_ASSERT(buildingConflatableCriteria.contains("PoiPolygonPolyCriterion"));
 
     // Untyped features are now conflatable by default.
     CPPUNIT_ASSERT_EQUAL(

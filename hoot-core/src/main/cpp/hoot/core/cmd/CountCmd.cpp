@@ -39,7 +39,7 @@ class CountCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::CountCmd"; }
+  static QString className() { return "CountCmd"; }
 
   CountCmd() = default;
 

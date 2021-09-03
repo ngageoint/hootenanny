@@ -50,7 +50,7 @@ class UnlikelyIntersectionRemover : public OsmMapOperation, public ConflateInfoC
 {
 public:
 
-  static QString className() { return "hoot::UnlikelyIntersectionRemover"; }
+  static QString className() { return "UnlikelyIntersectionRemover"; }
 
   UnlikelyIntersectionRemover() = default;
   ~UnlikelyIntersectionRemover() = default;

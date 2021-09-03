@@ -40,7 +40,7 @@ class RelationCriterion : public ElementTypeCriterion, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::RelationCriterion"; }
+  static QString className() { return "RelationCriterion"; }
 
   RelationCriterion();
   RelationCriterion(const QString& type);

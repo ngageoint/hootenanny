@@ -42,7 +42,7 @@ class RemoveReviewsByEidOp : public ConstOsmMapOperation, public ConstElementCon
 {
 public:
 
-  static QString className() { return "hoot::RemoveReviewsByEidOp"; }
+  static QString className() { return "RemoveReviewsByEidOp"; }
 
   /**
    * Constructor

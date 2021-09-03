@@ -48,14 +48,15 @@ class PoiPolygonTypeScoreExtractor : public FeatureExtractorBase, public Configu
 {
 public:
 
-  static QString className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
+  static QString className() { return "PoiPolygonTypeScoreExtractor"; }
 
   PoiPolygonTypeScoreExtractor(PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr());
   ~PoiPolygonTypeScoreExtractor() = default;
 
   QString getClassName() const override { return className(); }
-
   QString getName() const override { return className(); }
+  QString getDescription() const override
+  { return "Scores element type similarity for POI/Polygon conflation"; }
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature types.
@@ -64,25 +65,20 @@ public:
    * @param poi a POI element
    * @param poly a polygon element
    */
-  double extract(const OsmMap& map, const ConstElementPtr& poi,
-                 const ConstElementPtr& poly) const override;
+  double extract(
+    const OsmMap& map, const ConstElementPtr& poi, const ConstElementPtr& poly) const override;
 
   void setConfiguration(const Settings& conf) override;
 
   double getTypeScoreThreshold() const { return _typeScoreThreshold; }
-  void setTypeScoreThreshold(double threshold) { _typeScoreThreshold = threshold; }
-
-  double getFeatureDistance() const { return _featureDistance; }
-  void setFeatureDistance(double distance) { _featureDistance = distance; }
-
-  bool getCalculateMatchDistanceTruth() const { return _calculateMatchDistanceTruth; }
-  void setCalculateMatchDistanceTruth(bool calculate) { _calculateMatchDistanceTruth = calculate; }
-
-  QString getDescription() const override
-  { return "Scores element type similarity for POI/Polygon conflation"; }
-
   QStringList getFailedMatchRequirements() const { return _failedMatchRequirements; }
   bool getNoTypeFound() const { return _noTypeFound; }
+  double getFeatureDistance() const { return _featureDistance; }
+  bool getCalculateMatchDistanceTruth() const { return _calculateMatchDistanceTruth; }
+
+  void setTypeScoreThreshold(double threshold) { _typeScoreThreshold = threshold; }
+  void setFeatureDistance(double distance) { _featureDistance = distance; }
+  void setCalculateMatchDistanceTruth(bool calculate) { _calculateMatchDistanceTruth = calculate; }
 
 private:
 

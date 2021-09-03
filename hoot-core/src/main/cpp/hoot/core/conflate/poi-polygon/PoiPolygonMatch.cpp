@@ -74,8 +74,7 @@ Match(threshold)
 
 PoiPolygonMatch::PoiPolygonMatch(
   const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
-  std::shared_ptr<const PoiPolygonRfClassifier> rf, PoiPolygonInfoCachePtr infoCache,
-  const set<ElementId>& polyNeighborIds) :
+  PoiPolygonInfoCachePtr infoCache, const set<ElementId>& polyNeighborIds) :
 Match(threshold),
 _map(map),
 _infoCache(infoCache),
@@ -106,7 +105,6 @@ _sourceTagKey(""),
 _disableIntradatasetConflation1(false),
 _disableIntradatasetConflation2(false),
 _reviewMultiUseBuildings(false),
-_rf(rf),
 _explainText(""),
 _timingThreshold(1000000)    // nanoseconds
 {
@@ -774,9 +772,10 @@ set<pair<ElementId, ElementId>> PoiPolygonMatch::getMatchPairs() const
   return result;
 }
 
-map<QString, double> PoiPolygonMatch::getFeatures(const ConstOsmMapPtr& m) const
+std::map<QString, double> PoiPolygonMatch::getFeatures(const ConstOsmMapPtr& /*m*/) const
 {
-  return _rf->getFeatures(m, _eid1, _eid2);
+  // No model is built for POI/Poly since its rules based.
+  return std::map<QString, double>();
 }
 
 QString PoiPolygonMatch::toString() const

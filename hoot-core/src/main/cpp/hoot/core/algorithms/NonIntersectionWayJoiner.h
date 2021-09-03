@@ -44,7 +44,7 @@ class NonIntersectionWayJoiner : public WayJoiner
 {
 public:
 
-  static QString className() { return "hoot::NonIntersectionWayJoiner"; }
+  static QString className() { return "NonIntersectionWayJoiner"; }
 
   NonIntersectionWayJoiner() = default;
   ~NonIntersectionWayJoiner() = default;

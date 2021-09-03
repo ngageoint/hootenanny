@@ -43,7 +43,7 @@ class DeDuplicateCmd : public BaseCommand
 {
 public:
 
-  static QString className() { return "hoot::DeDuplicateCmd"; }
+  static QString className() { return "DeDuplicateCmd"; }
 
   DeDuplicateCmd() = default;
 

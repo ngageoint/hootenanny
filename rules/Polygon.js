@@ -24,7 +24,7 @@ exports.geometryType = "polygon";
 
 // This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
 // culling match candidates.
-exports.matchCandidateCriterion = "hoot::PolygonCriterion";
+exports.matchCandidateCriterion = "PolygonCriterion";
 
 var overlapExtractor = 
   new hoot.SmallerOverlapExtractor({ "convert.require.area.for.polygon": "false" });

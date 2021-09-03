@@ -39,7 +39,7 @@ class SublineStringMatcherJs : public HootBaseJs
 {
 public:
 
-  static QString className() { return "hoot::SublineStringMatcherJs"; }
+  static QString className() { return "SublineStringMatcherJs"; }
 
   static int logWarnCount;
 

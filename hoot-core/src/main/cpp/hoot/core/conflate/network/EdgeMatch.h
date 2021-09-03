@@ -131,9 +131,9 @@ bool operator<(ConstEdgeMatchPtr, ConstEdgeMatchPtr);
 bool operator<(EdgeMatchPtr, EdgeMatchPtr);
 
 // needed for QSet
-bool operator==(const hoot::ConstEdgeMatchPtr& em1, const hoot::ConstEdgeMatchPtr& em2);
+bool operator==(const ConstEdgeMatchPtr& em1, const ConstEdgeMatchPtr& em2);
 
-inline uint qHash(const hoot::ConstEdgeMatchPtr& em)
+inline uint qHash(const ConstEdgeMatchPtr& em)
 {
   if (em->_hash == 0)
   {
@@ -144,9 +144,9 @@ inline uint qHash(const hoot::ConstEdgeMatchPtr& em)
   //return qHash(em->toString()) ^ 0xabcdefg;
 }
 
-inline uint qHash(const hoot::EdgeMatchPtr& em)
+inline uint qHash(const EdgeMatchPtr& em)
 {
-  return qHash((hoot::ConstEdgeMatchPtr)em);
+  return qHash((ConstEdgeMatchPtr)em);
 }
 
 }

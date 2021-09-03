@@ -38,7 +38,7 @@ class NodesVisitor : public ConstElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::NodesVisitor"; }
+  static QString className() { return "NodesVisitor"; }
 
   NodesVisitor(QList<ConstNodePtr>& n) : _n(n) { }
   ~NodesVisitor() = default;

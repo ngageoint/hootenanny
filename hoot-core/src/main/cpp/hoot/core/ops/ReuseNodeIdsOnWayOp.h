@@ -46,7 +46,7 @@ class ReuseNodeIdsOnWayOp : public ConstOsmMapOperation, public ConstElementCons
 {
 public:
 
-  static QString className() { return "hoot::ReuseNodeIdsOnWayOp"; }
+  static QString className() { return "ReuseNodeIdsOnWayOp"; }
 
   ReuseNodeIdsOnWayOp(ElementId from, ElementId to);
   ReuseNodeIdsOnWayOp() = default;

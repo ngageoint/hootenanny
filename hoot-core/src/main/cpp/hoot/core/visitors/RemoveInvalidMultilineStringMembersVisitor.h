@@ -44,7 +44,7 @@ class RemoveInvalidMultilineStringMembersVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static QString className() { return "hoot::RemoveInvalidMultilineStringMembersVisitor"; }
+  static QString className() { return "RemoveInvalidMultilineStringMembersVisitor"; }
 
   RemoveInvalidMultilineStringMembersVisitor();
   ~RemoveInvalidMultilineStringMembersVisitor() = default;

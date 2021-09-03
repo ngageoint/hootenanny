@@ -46,7 +46,7 @@ class UnionPolygonsVisitor : public ElementConstOsmMapVisitor
 {
 public:
 
-  static QString className() { return "hoot::UnionPolygonsVisitor"; }
+  static QString className() { return "UnionPolygonsVisitor"; }
 
   UnionPolygonsVisitor();
   ~UnionPolygonsVisitor() = default;
