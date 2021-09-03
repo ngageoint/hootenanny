@@ -331,7 +331,8 @@ public class GrailResource {
                 differentialParams.setConflationType(DbUtils.getConflationType(Long.parseLong(input2)));
                 input2 = HOOTAPI_DB_URL + "/" + input2;
 
-                grailCommandClass = replacement ? DeriveChangesetReplacementCommand.class : RunDiffCommand.class;
+                grailCommandClass = deriveType.toLowerCase().contains("differential") ? RunDiffCommand.class :
+                        replacement ? DeriveChangesetReplacementCommand.class : DeriveChangesetCommand.class;
             }
         }
 
@@ -384,6 +385,7 @@ public class GrailResource {
             // Clean up pulled files
             ArrayList<File> deleteFiles = new ArrayList<>();
             deleteFiles.add(workDir);
+            // commented out because we don't want to delete if error occurs so user can download error file
             // InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
             // workflow.add(cleanFolders);
         }
