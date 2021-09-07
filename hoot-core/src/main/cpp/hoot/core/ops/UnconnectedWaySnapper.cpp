@@ -605,22 +605,9 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNode(
       "Snapped " << wayToSnap->getElementId() << " to " << _snappedToWay->getElementId() <<
       " from " << unconnectedEndNode->getElementId());
 
-    // retain the parent id of the snapped to way; See related notes in WayJoinerAdvanced
-    const long pid = _getPid(_snappedToWay);
-    if (pid != WayData::PID_EMPTY)
-    {
-      wayToSnap->setPid(pid);
-      wayToSnap->getTags()[MetadataTags::HootSplitParentId()] = QString::number(pid);
-      LOG_TRACE(
-        "Set pid: " <<  pid << " of snapped to way: " << _snappedToWay->getElementId() <<
-        " on snapped way: " << wayToSnap->getElementId());
-    }
-
-    // retain the status of the snapped to way
-    wayToSnap->setStatus(_snappedToWay->getStatus());
-    LOG_TRACE(
-      "Set status: " <<  _snappedToWay->getStatus() << " of snapped to way: " <<
-      _snappedToWay->getElementId() << " on snapped way: " << wayToSnap->getElementId());
+    // Previously we were retaining the parent ID and status of the way being snapped to but
+    // discovered later on that was causing problems with dropped ref ways when generating
+    // changesets and writing them back with Diff Conflate (#4977).
 
     LOG_VART(wayToSnap);
     LOG_VART(_snappedToWay);

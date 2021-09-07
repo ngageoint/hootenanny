@@ -548,7 +548,7 @@ long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
   linearFeatureSnapper.apply(_map);
   LOG_DEBUG("\t" << linearFeatureSnapper.getCompletedStatusMessage());
   numFeaturesSnapped += linearFeatureSnapper.getNumFeaturesAffected();
-  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-road-snapping-1");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-road-snapping-initial");
 
   // We're going to do a little trick here and reverse the snap from/to statuses and snap again.
   // This has been seen as needed in production diff conflate workflows. We don't want to configure
@@ -560,7 +560,7 @@ long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
   linearFeatureSnapper.apply(_map);
   LOG_DEBUG("\t" << linearFeatureSnapper.getCompletedStatusMessage());
   numFeaturesSnapped += linearFeatureSnapper.getNumFeaturesAffected();
-  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-road-snapping-2");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-road-snapping-reversed");
 
   if (numFeaturesSnapped > 0)
   {
@@ -569,7 +569,7 @@ long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
     LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
     wayJoiner.apply(_map);
     LOG_DEBUG("\t" << wayJoiner.getCompletedStatusMessage());
-    OsmMapWriterFactory::writeDebugMap(_map, className(), "after-way-joining");
+    OsmMapWriterFactory::writeDebugMap(_map, className(), "after-snapped-way-joining");
 
     // No point in running way joining a second time in post conflate ops since we already did it
     // here (its configured in post ops by default), so let's remove it.
@@ -585,7 +585,7 @@ long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
     linearFeatureSnapper.apply(_map);
     LOG_DEBUG("\t" << linearFeatureSnapper.getCompletedStatusMessage());
     numFeaturesSnapped += linearFeatureSnapper.getNumFeaturesAffected();
-    OsmMapWriterFactory::writeDebugMap(_map, className(), "after-road-snapping-3");
+    OsmMapWriterFactory::writeDebugMap(_map, className(), "after-road-snapping-final");
   }
 
   return numFeaturesSnapped;

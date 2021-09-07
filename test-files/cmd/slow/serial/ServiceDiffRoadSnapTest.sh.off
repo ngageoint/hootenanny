@@ -14,23 +14,25 @@ set -e
 TEST_NAME=$1
 REF_INPUT=$2
 SEC_INPUT=$3
-if [[ "$4" == "-180,-90,180,90" ]]; then
+GOLD_DIR=$4
+OUTPUT_DIR=$5
+if [[ "$6" == "-180,-90,180,90" ]]; then
   BOUNDS=""
 else
-  BOUNDS="-D bounds=$4"
+  BOUNDS="-D bounds=$6"
 fi
 # Should we also be applying the tags changeset when this is enabled?
-if [[ "$5" == "false" ]]; then
+if [[ "$7" == "false" ]]; then
   INCLUDE_TAGS=
 else
   INCLUDE_TAGS=--include-tags
 fi
-if [[ "$6" == "false" ]]; then
+if [[ "$8" == "false" ]]; then
   SEPARATE_OUTPUT=
 else
   SEPARATE_OUTPUT=--separate-output
 fi
-ALG_CONFIG=$7
+ALG_CONFIG=$9
 # This is a bit of a hack, but just trying to reduce test runtime here.
 if [ "$ALG_CONFIG" == "UnifyingAlgorithm.conf" ]; then
   MATCHERS="-D match.creators=HighwayMatchCreator"
@@ -41,15 +43,14 @@ else
 fi
 # Valid params are: "2" for generating an osc from diff conflate or "3" for generating an osm from 
 # diff conflate and generating the changeset in a separate step
-NUM_STEPS=$8
+NUM_STEPS=${10}
 # Determines whether the source IDs are preserved when loading data. Preserving IDs is a more
 # accurate testing method but may cause ID conflict issues with certain input datasets. After 
 # loading IDs are always preserved throughout the rest of the test.
-WAY_SNAP_TOLERANCE=$9
-CONFLATE_FROM_FILE=${10}
+WAY_SNAP_TOLERANCE=${11}
+CONFLATE_FROM_FILE=${12}
+UNIFYING_RUBBERSHEET=${13} # This ignored if the Network alg is used.
 
-GOLD_DIR=test-files/cmd/slow/serial/$TEST_NAME
-OUTPUT_DIR=test-output/cmd/slow/serial/$TEST_NAME
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
@@ -69,8 +70,8 @@ GENERAL_OPTS=$CONFIG" -C "$ALG_CONFIG" -C DifferentialConflation.conf -C Testing
 # partial fashion at this time, so change the default setting to avoid a warning.
 if [ "$ALG_CONFIG" == "NetworkAlgorithm.conf" ]; then
   GENERAL_OPTS+=" -D differential.remove.linear.partial.matches.as.whole=true"
-#else
-  #GENERAL_OPTS+=" -D conflate.unifying.rubber.sheet.roads=true"
+elif [ "$UNIFYING_RUBBERSHEET" == "true" ]; then
+  GENERAL_OPTS+=" -D conflate.unifying.rubber.sheet.roads=true"
 fi
 DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999"
 # Note that the tags added for snapped features will always be dropped by the changeset by design.
@@ -84,9 +85,9 @@ CHANGESET_DERIVE_OPTS="-D debug.maps.filename=$OUTPUT_DIR/derive.osm -D changese
 
 DEBUG=false
 if [ "$DEBUG" == "true" ]; then
-  GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true -D debug.maps.write.detailed=false -D debug.maps.class.include.filter= "
-  LOG_LEVEL="--info"
-  LOG_FILTER="-D log.class.include.filter= "
+  GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true -D debug.maps.write.detailed=true -D debug.maps.class.include.filter=UnconnectedWaySnapper;DiffConflator "
+  LOG_LEVEL="--trace"
+  LOG_FILTER="-D log.class.include.filter=UnconnectedWaySnapper;DiffConflator "
 fi
 
 scripts/database/CleanAndInitializeOsmApiDb.sh
