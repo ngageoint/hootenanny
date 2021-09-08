@@ -66,7 +66,7 @@ public:
   QString getCompletedStatusMessage() const override
   {
     return
-      "Rejoined " + StringUtils::formatLargeNumber(_wayJoiner->getNumJoined()) + " pairs of ways";
+      "Rejoined " + StringUtils::formatLargeNumber(_wayJoiner->getNumJoined()) + " pairs of ways.";
   }
 
   /**

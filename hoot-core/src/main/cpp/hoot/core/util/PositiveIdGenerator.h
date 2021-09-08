@@ -43,8 +43,7 @@ public:
 
   static QString className() { return "PositiveIdGenerator"; }
 
-  PositiveIdGenerator() { reset(); }
-
+  PositiveIdGenerator();
   ~PositiveIdGenerator() = default;
 
   IdGeneratorPtr clone() const override;
@@ -57,12 +56,7 @@ public:
   void ensureRelationBounds(long rid) override { _relationId = std::max(rid, _relationId); }
   void ensureWayBounds(long wid) override { _wayId = std::max(wid, _wayId); }
 
-  void reset() override
-  {
-    _wayId = ConfigOptions().getIdGeneratorWayStart();
-    _nodeId = ConfigOptions().getIdGeneratorNodeStart();
-    _relationId = ConfigOptions().getIdGeneratorRelationStart();
-  }
+  void reset() override;
 
 private:
 

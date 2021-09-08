@@ -71,9 +71,6 @@ class MatchThreshold;
  * - Remove some metadata tags
  * - Get the tag diff (optional; used when --separate-output is specified)
  * - Add tag changes to back to the map (optional; used when --separate-output is specified)
- *
- * @todo We may end up wanting to add step at the end to remove tiny ways. Sometimes these happen
- * when linear matches are removed partially.
  */
 class DiffConflator : public AbstractConflator
 {
@@ -260,7 +257,7 @@ private:
    * would be a ConflatableElementCriterion (HighwayCriterion, etc.)
    * @param maxSize only ways up to this size are removed
    */
-  void _cleanSecData(QStringList& baseCriteria, const double maxSize) const;
+  void _cleanSecData(const QStringList& baseCriteria, const double maxSize) const;
   /*
    * The element criteria that must be met in order for an element involved in a match to be
    * completely removed

@@ -33,11 +33,7 @@
 #include <thread>
 #include <queue>
 
-//  Geos
-
-
 //  Qt
-
 #include <QUrl>
 
 namespace hoot

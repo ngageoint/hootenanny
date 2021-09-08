@@ -28,6 +28,14 @@
 #ifndef OSM_JSON_READER_H
 #define OSM_JSON_READER_H
 
+// Hoot
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/OsmMapReader.h>
+#include <hoot/core/io/ParallelBoundedApiReader.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Boundable.h>
+
 // Qt
 #include <QUrl>
 
@@ -36,14 +44,6 @@
 
 // Boost
 #include <boost/property_tree/ptree.hpp>
-
-// Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/io/OsmMapReader.h>
-#include <hoot/core/io/ParallelBoundedApiReader.h>
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Boundable.h>
 
 namespace hoot
 {
@@ -322,21 +322,18 @@ private:
    * child elements ref'd by parents that don't actually exist
    */
   void _parseOverpassJson();
-
   /**
    * @brief _parseOverpassNode Reads node info out of the property tree and
    *        builds a Node object. Adds the node to the map.
    * @param item Property Tree (likely a sub-tree)
    */
   void _parseOverpassNode(const boost::property_tree::ptree &item);
-
   /**
    * @brief _parseOverpassWay Reads way info out of the property tree and
    *        builds a Way object. Adds the way to the map.
    * @param item Property Tree (or sub-tree)
    */
   void _parseOverpassWay(const boost::property_tree::ptree &item);
-
   /**
    * @brief _parseOverpassRelation Reads relation info out of the property tree
    *        and builds a Relation object. Adds relation to the map.

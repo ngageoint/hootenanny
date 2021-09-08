@@ -237,7 +237,7 @@ private:
     }
   }
 
-  ElementCriterionPtr _getCrit(QStringList& names) const
+  ElementCriterionPtr _getCrit(const QStringList& names) const
   {
     if (!names.isEmpty())
     {

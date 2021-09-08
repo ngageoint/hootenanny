@@ -169,10 +169,10 @@ hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
  -D snap.unconnected.ways.snap.criteria=HighwayCriterion \
  -D differential.remove.reference.snapped.data=true \
  $INPUT_DIR/input3.osm $INPUT_DIR/input4.osm \
- $OUTPUT_DIR/snapped-with-all-ref-removed.osm --differential
-hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-with-all-ref-removed.osm \
+ $OUTPUT_DIR/snapped-with-all-ref-removed-output.osm --differential
+hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-with-all-ref-removed-output.osm \
   $INPUT_DIR/snapped-with-all-ref-removed-output.osm || \
-  diff $OUTPUT_DIR/snapped-with-all-ref-removed.osm $INPUT_DIR/snapped-with-all-ref-removed.osm
+  diff $OUTPUT_DIR/snapped-with-all-ref-removed-output.osm $INPUT_DIR/snapped-with-all-ref-removed-output.osm
 
 echo ""
 echo "Running diff and passing unconflatable data through to output..."

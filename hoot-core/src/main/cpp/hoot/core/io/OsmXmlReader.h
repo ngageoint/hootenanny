@@ -43,7 +43,7 @@ namespace hoot
 class Element;
 
 /**
- * Reads in a .osm file into an OsmMap data structure.
+ * Reads a .osm file into an OsmMap data structure.
  */
 class OsmXmlReader : public QXmlDefaultHandler, public PartialOsmMapReader, public Boundable
 {
@@ -109,7 +109,6 @@ public:
   void setAddChildRefsWhenMissing(bool addChildRefsWhenMissing)
   { _addChildRefsWhenMissing = addChildRefsWhenMissing; }
   void setCircularErrorTagKeys(const QStringList& keys) { _circularErrorTagKeys = keys; }
-
   // Its possible we may want to move this method and the ones for all other classes using it up
   // to OsmMapReader.
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
@@ -131,7 +130,6 @@ protected:
   bool _keepStatusTag;
   bool _useFileStatus;
   bool _useDataSourceId;
-
   bool _preserveAllTags;
 
   long _numRead;
