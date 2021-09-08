@@ -1099,6 +1099,12 @@ Requires a language translation server installation.  See the Hootenanny Install
       --criteria IntersectingWayCriterion
 -----
 
+==== Count the total number of valid address tags in a map:
+
+-----
+    hoot stat input.osm AddressCountVisitor
+-----
+
 ==== Count the number of elements with valid address tags in a map:
 
 -----
@@ -1116,12 +1122,6 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 -----
     hoot stat -D tags.visitor.keys="accuracy" input.osm AverageNumericTagsVisitor
------
-
-==== Count the total number of valid address tags in a map:
-
------
-    hoot stat input.osm AddressCountVisitor
 -----
 
 ==== Count the total number of valid phone number tags in a map:

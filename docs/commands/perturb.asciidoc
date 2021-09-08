@@ -19,7 +19,7 @@ perturbed data is a technique you can use to evaluate the quality of a conflatio
 
 === Optional Defines
 
-perty.* and random.* configuration options can be used with this command. See the Configuration 
+`perty.*` and `random.*` configuration options can be used with this command. See the Configuration 
 Options section for details. Use the `info` command to learn more about the available configuration 
 options.
 
@@ -31,19 +31,19 @@ hoot perturb (input) (output) [--score]|[--test]
 
 === Examples
 
-The following example perturbs the file "reference-in.osm", given the specified PERTY options 
+The following example perturbs the file `reference-in.osm`, given the specified PERTY options 
 (overrides default settings for those options), and writes the perturbed data to a file 
-"perturbed-out.osm":
+`perturbed-out.osm`:
 
 --------------------------------------
 hoot perturb -D perty.search.distance=20 -D random.way.generalizer.probability=0.7
   reference-in.osm perturbed-out.osm
 --------------------------------------
 
-The following example perturbs a copy of the input file "reference-in.osm", conflates 
-"reference-in.osm" with the copy, and  displays a PERTY score to define how accurately the data was 
+The following example perturbs a copy of the input file `reference-in.osm`, conflates 
+`reference-in.osm` with the copy, and  displays a PERTY score to define how accurately the data was 
 conflated. The conflated data, along with the perturbed and reference data are written to the 
-"outdir" directory:
+`outdir` directory:
 
 --------------------------------------
 hoot perturb -D perty.systematic.error.x=1 -D perty.systematic.error.y=1 \
@@ -71,7 +71,7 @@ hoot perturb -D perty.test.num.runs=10 -D perty.test.num.simulations=5 \
 
 === Perty Tests
 
-The --test option optionally allows for altering a single, user selected PERTY input variable value 
+The `--test` option optionally allows for altering a single, user selected PERTY input variable value 
 across each test run (multiple input variables can be altered per test run but each must receive the 
 same value).
 
