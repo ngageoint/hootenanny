@@ -147,7 +147,7 @@ Object.keys(objs).forEach(s => {
             key: col.name,
             text: col.desc,
             values_searchable: true,
-            // default: col.defValue
+            default: col.defValue
         };
 
         let combo = chunk.ele('combo', attrs);
@@ -164,7 +164,7 @@ Object.keys(objs).forEach(s => {
         let attrs = {
             key: col.name,
             text: col.desc,
-            // default: col.defValue
+            default: col.defValue
         };
         if (col.length) {
             attrs.length = col.length;
