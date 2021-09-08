@@ -1,6 +1,8 @@
 
 == Hootenanny Architecture
 
+Note that the some of the hyperlinks in this document only are navigable when the document is in PDF form.
+
 === Identification
 
 This document describes the architecture for Hootenanny.  It provides an overview of the principal software components and web services included in the software.  This document is not intended as an API guide to support integration but rather as a general reference for better understanding the web enabled environment that Hootenanny is deployed in.

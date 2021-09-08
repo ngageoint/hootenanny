@@ -12,7 +12,7 @@ _Conflation_:
 
 # Overview
 
-[Hootenanny](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) is an open source map data conflation tool developed with machine learning techniques to facilitate automated and semi-automated conflation of critical Foundation GEOINT features in the topographic domain. **In short, it merges multiple maps into a single seamless map.**
+Hootenanny is an open source map data conflation tool developed with machine learning techniques to facilitate automated and semi-automated conflation of critical Foundation GEOINT features in the topographic domain. **In short, it merges multiple maps into a single seamless map.**
 
 Goals:
 
@@ -27,8 +27,7 @@ Goals:
 
 For installation from RPM, please follow the [guide in the rpms repo](https://github.com/ngageoint/hootenanny-rpms/blob/master/docs/install.md). If you want to install from source without downloading the release, please follow [VAGRANT.md](https://github.com/ngageoint/hootenanny/blob/master/docs/user/VAGRANT.md).
 
-Documentation is included as [PDF files](https://github.com/ngageoint/hootenanny/releases) with each release. Download 
-the Hootenanny `.tar.gz` installation file and locate the documentation within the "docs" directory.
+Documentation is included as PDF files with each release. Download the Hootenanny `.tar.gz` installation file and locate the documentation within the "docs" directory.
 
 # Conflatable Feature Types
 
@@ -41,11 +40,10 @@ Hootenanny has specifically tailored conflation algorithms available for the fol
 * Rivers
 * Roads
 
-Any feature whose type does not fit into the list of types above, or has no type at all, will be conflated with 
-[Generic Geometry Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#generic-geometry), which uses a 
-simpler rules based approach than the type specific conflation algorithms.
+Any feature whose type does not fit into the list above or has no type at all, will be conflated with 
+[Generic Geometry Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#generic-geometry), which uses a simpler approach than the type specific conflation algorithms.
 
-[Conflation Algorithms Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/ConflationAlgsOverview.md)
+[Feature Types Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#supported-feature-types)
 
 You can create your own custom conflation algorithms for additional feature types via [Javascript](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) or [C++](https://github.com/ngageoint/hootenanny/blob/master/hoot-core/src/main/cpp/hoot/core/conflate/matching/MatchCreator.h). 
 
@@ -62,9 +60,11 @@ A conflation workflow defines the manner in which two maps are merged together. 
   * Use this type of conflation if you have a specific region of your map that you would like to completely replace with a region from another map.
 * **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Add new features that do not conflict_
   * Use this type of conflation when you want to fill holes in your map with data from another source without actually modifying any of the data in your map.
-  * There is an option available to additionally transfer tags to existing features in your map from matching features in another map where overlap occurs.
+  * There is an option available (`--include-tags`) to additionally transfer tags to existing features in your map from matching features in another map where overlap occurs.
 * **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - _Transfer attributes over to existing geometries_
   * Use this type of conflation when one map's geometry is superior to that of a second map, but the attributes of the second map are superior to that of the first map.
+  
+[Conflation Algorithms Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/ConflationAlgsOverview.md)
   
 # [Attribute Translation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#translation)
 

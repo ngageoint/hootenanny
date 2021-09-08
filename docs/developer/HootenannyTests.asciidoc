@@ -199,7 +199,7 @@ consistent with a given baseline. To do this the following must occur:
 When your test runs it will do the following:
 
 * Find all the scripts to execute (the scripts to run are determined by looking for all executable
-files in the test-files/cmd/[current|quick|slow|glacial] directories. If the file ends in +.off+ it 
+files in the test-files/cmd/[current|quick|slow|glacial] directories. If the file ends in `.off` it 
 will be ignored.)
 * Run a script and capture the stdout and stderr
 * Remove meaningless bits from the stdout and stderr such as INFO statements, DEBUG statements and
@@ -210,7 +210,7 @@ an error.
 **An Example**
 
 To create a test make a shell script that is executable and place it in the
-+test-files/cmd/current/+ directory. The shell script should exercise some aspect of the system
+`test-files/cmd/current/` directory. The shell script should exercise some aspect of the system
 and the success/failure should be determined by the output. For instance:
 ------------
 #!/bin/bash
@@ -276,7 +276,7 @@ Fix the script by changing the last line to:
 cat test-output/cmd/example/jakarta.osm
 ------------
 
-When you rerun +HootTest --current+ you'll see the .osm file in the .stdout.first file. If
+When you rerun `HootTest --current` you'll see the .osm file in the .stdout.first file. If
 everything looks good create the new baseline.
 ------------
 # Make a new baseline:
@@ -296,8 +296,8 @@ Elapsed: 0.146274
 
 This shows that the test run matches the baseline.
 
-We don't want the test to live in +current+ so we'll move it over to the appropriate test set. In
-this case +quick+.
+We don't want the test to live in `current` so we'll move it over to the appropriate test set. In
+this case `quick`.
 ------------
 mv test-files/cmd/current/Example* test-files/cmd/quick/
 ------------
@@ -332,22 +332,22 @@ these 15 roads get conflated properly?" tests. They're intended to test one situ
 correctness. Primarily they're tiny so they don't all break constantly, and it is very easy to
 determine what happened.
 
-These tests are discovered/created from +test-files/cases+. The test creation process goes as 
+These tests are discovered/created from `test-files/cases`. The test creation process goes as 
 follows:
 
-* Search +test-files/cases+ for a config file (+Config.conf+), if there is one, push it
+* Search `test-files/cases` for a config file (`Config.conf`), if there is one, push it
 onto the config file stack.
 * If there are directories, recursively search them for tests, but ignore any directories that end
-with +.off+
-* If there are no directories, search for +Input1.osm+, +Input2.osm+ and +Expected.osm+, if they're
-found then create a new test case for this directory.
+with `.off`
+* If there are no directories, search for `Input1.osm`, `Input2.osm`, and `Expected.osm`. If they're
+found, then create a new test case for this directory.
 
 When a test runs it runs as follows:
 
 * Load all the config files in turn starting with the highest level directory config file.
 * Verify that the test has all the required files.
-* Run the equivalent of a conflate command on the two input files and put the result in +Output.osm+.
-* Verify that +Expected.osm+ matches +Output.osm+.
+* Run the equivalent of a conflate command on the two input files and put the result in `Output.osm`.
+* Verify that `Expected.osm` matches `Output.osm`.
 
 This approach makes it very fast/easy to create new micro tests and run them with the rest of the
 test routines. At this time the micro tests run as part of _quick_ and up.
@@ -357,14 +357,14 @@ To only run case tests execute:
 HootTest --case-only
 ------------
 
-See +test-files/cases/README+ for additional information on case tests.
+See `test-files/cases/README` for additional information on case tests.
 
 ==== Running Tests in Parallel
 
 Hootenanny can run all Core tests in parallel, except those in the Translation test suite. This is 
 accomplished with the `HootTest` option, `--parallel [n]`, where the optional `[n]` specifies the 
 number of worker processes to spawn.  Leaving off the `[n]` parameter makes an implicit call to the 
-operating system to get the total number of online processing units (The same as +$(nproc)+ ).
+operating system to get the total number of online processing units (The same as `$(nproc)` ).
 --------------
 # Runs quick tests serially
 HootTest --quick
@@ -519,7 +519,7 @@ on the web to get you started,
 * Place common test methods in `features/conflate.feature` and 
 `features/step_definitions/custom_steps.rb`.
 * Each piece of functionality being tested should be placed into its own *.feature file.
-* When running silent mode (+make -s+), Cucumber output will be written to
+* When running silent mode (`make -s`), Cucumber output will be written to
 `test-files/ui/tmp/TestRun.log`.  When running without silent mode, Cucumber test output is written
 to the screen.
 
@@ -586,7 +586,7 @@ image::images/LoadLatest.png[]
 === Test Coverage Reporting
 
 Reports can be generated which detail the test coverage of Hootenanny code from the command line.
-Hootenanny Core code coverage is supplied +gcov+ and +lcov+. Java code coverage is supplied by 
+Hootenanny Core code coverage is supplied `gcov` and `lcov`. Java code coverage is supplied by 
 http://cobertura.github.io/cobertura/[Cobertura] via Maven.  
 
 Alternatively, you can configure your Jenkins pull request job to generate a test coverage 
@@ -653,6 +653,8 @@ so you are still preserving the integrity of the test.
 * Design a class so that testing of all of its members is possible. In some cases, you may need
 to expose members only to the tests. e.g. Use C++ friend keyword, etc.; or in Java, Mockito may
 help with this.
+* Do not access a Singleton's private members from a test. This is tempting in writing tests but may 
+lead to instabilities when the tests are run in parallel.
 
 ==== Core Specific
 

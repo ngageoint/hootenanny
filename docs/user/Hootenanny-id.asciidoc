@@ -1,6 +1,8 @@
 
 == Hootenanny User Interface
 
+Note that the some of the hyperlinks in this document only are navigable when the document is in PDF form.
+
 === Background
 
 Hootenanny deploys with an interactive web-based user interface adapted from the MapBox iD Editor. This offers several benefits including its open license that allows users to customize and add functionality, along with an in-depth editing capability that was originally designed for interactive editing of OSM features. Hootenanny is designed to facilitate automated and semi-automated conflation of critical Foundation GEOINT features in the topographic domain, namely roads (polylines), buildings (polygons), and points-of-interest (POIs) (points). Conflation happens at the dataset level, where the user’s workflow determines the best reference dataset and source content, geometry and attributes, to transfer to the output map. The input data must be normalized to allow processing and matching of features and attributes from different schemas. Hootenanny internal processing leverages the key value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups, e.g. normalized attributes can be used to aid in feature matching and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature. Depending on the data and selected conflation options, the process of resolving ambiguous features is handled by an interactive conflict resolution workflow. Hootenanny cues up conflicts and drives the user to each conflict to make the appropriate geometry or attribute fix. Additionally, the user has the option to edit other features they may come across that need correcting while working through the conflict cue. For users that do not want to perform this manual editing or want to accept the automated solution in full, there is the option to accept all or discard all conflicts. This becomes a user choice and ultimately a risk assessment between accepting geometry and attribute errors resulting from automated algorithms versus the use purpose of the end product.
@@ -826,20 +828,20 @@ image::images/id/hoot_TA_one-to-one_key-value.png[scaledwidth="25%"]
 
 *_One to Many Mappings_*
 
-One to many mappings are supported by clicking on the plus button after each new tag association has been added for a given attribute. The figure below shows a one to many mapping for the +ROUNDABOUT+ field and maps to the OSM tags +junction=roundabout+ and implies +oneway=true+. Note that this field is not present in the DC Street Centerline data and is simply used here as an example.
+One to many mappings are supported by clicking on the plus button after each new tag association has been added for a given attribute. The figure below shows a one to many mapping for the `ROUNDABOUT` field and maps to the OSM tags `junction=roundabout` and implies `oneway=true`. Note that this field is not present in the DC Street Centerline data and is simply used here as an example.
 
 .One to Many Mapping Example.
 image::images/id/hoot_TA_one-to-many.png[scaledwidth="25%"]
 
 *_Many to One Mappings_*
 
-Many to one mappings are supported with the Translation Assistant UI based on the OSM semi-colon value separator. The purpose of this is to allow the user to retain any fields in their shoebox dataset that would otherwise be dropped due to the lack of a corresponding tag in the target schema. The special tag key used for this feature is +extra_attributes+. All attributes mapped to this tag will be concatenated together. An example tag is `extra_attributes=speed_mph=45;city=District of Columbia;country=US`.
+Many to one mappings are supported with the Translation Assistant UI based on the OSM semi-colon value separator. The purpose of this is to allow the user to retain any fields in their shoebox dataset that would otherwise be dropped due to the lack of a corresponding tag in the target schema. The special tag key used for this feature is `extra_attributes`. All attributes mapped to this tag will be concatenated together. An example tag is `extra_attributes=speed_mph=45;city=District of Columbia;country=US`.
 
 NOTE:  Support for this extra_attributes tag does not exist in some export schemas such as TDS. If an export schema does support the concept of a catch-all field such as _notes_ or other, Hootenanny can add support for it in the export translation capability.
 
 *_TDS Schema_*
 
-A key distinction when doing translations with OSM tag schemas versus the Topographic Data Store (TDS) schema is that the TDS defines feature types based on +FCODE+ values. To support this within the Translation Assistant, the user must select the appropriate FCODE type using a drop-down menu of possible supported TDS feature types and proceed with the schema mapping. This FCODE restricts the set of available tags and is assumed to apply to every feature in the layer.
+A key distinction when doing translations with OSM tag schemas versus the Topographic Data Store (TDS) schema is that the TDS defines feature types based on `FCODE` values. To support this within the Translation Assistant, the user must select the appropriate FCODE type using a drop-down menu of possible supported TDS feature types and proceed with the schema mapping. This FCODE restricts the set of available tags and is assumed to apply to every feature in the layer.
 
 NOTE:  The TDS translation option only supports one feature type per translation layer.
 

@@ -13,7 +13,7 @@ Language translation is well beyond the scope of this project, but many aspects 
 
 === Data Currency
 
-The OpenStreetMap schema currently supports a tag called +end_date+ that specifies when a feature has gone out of service or been destroyed. FACC also supports a set of tags defining when a feature has gone away. While these tags are underused within datasets, it would be beneficial to use these tags to alleviate the assumptions made in <<ExplDataCurrency>>.
+The OpenStreetMap schema currently supports a tag called `end_date` that specifies when a feature has gone out of service or been destroyed. FACC also supports a set of tags defining when a feature has gone away. While these tags are underused within datasets, it would be beneficial to use these tags to alleviate the assumptions made in <<ExplDataCurrency>>.
 
 [[ExplConfidenceValuesFeatures]]
 === Confidence Values on Features
