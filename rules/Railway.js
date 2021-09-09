@@ -20,8 +20,8 @@ exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default")
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 // TODO: create custom options for these
-exports.nameThreshold = parseFloat(hoot.get("river.name.threshold"));
-exports.typeThreshold = parseFloat(hoot.get("river.type.threshold"));
+//exports.nameThreshold = parseFloat(hoot.get("river.name.threshold"));
+//exports.typeThreshold = parseFloat(hoot.get("river.type.threshold"));
 
 // This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
 // culling match candidates.
@@ -243,9 +243,6 @@ exports.mergeSets = function(map, pairs, replaced)
     hoot.trace("oneToManyTransferKeys: " + oneToManyTransferKeys);
     hoot.set({'tag.merger.default': 'SelectedOverwriteTag1Merger'});
     hoot.set({'selected.overwrite.tag.merger.keys': oneToManyTransferKeys});
-    //var newTags = hoot.TagMergerFactory.mergeTags(e1.getTags(), e2.getTags());
-    //hoot.trace("newTags: " + newTags);
-    //e1.setTags(newTags);
 
     if (!oneToManyMergeGeometries)
     {
@@ -264,17 +261,8 @@ exports.mergeSets = function(map, pairs, replaced)
     hoot.set({'geometry.linear.merger.default': defaultLinearMerger});
   }
 
-  //if (oneToManyMergeGeometries)
-  //{
-    // Snap the ways in the second input to the first input. Use the default tag merge method.
-    return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType/*, !currentMergeIsOneToMany*/);
-  //}
-  /*else
-  {
-    // TODO: not sure what to return here...not sure it matters
-    var pair = [ e2.getElementId(), e1.getElementId() ];
-    replaced.push(pair);
-  }*/
+  // Snap the ways in the second input to the first input. Use the default tag merge method.
+  return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

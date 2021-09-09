@@ -172,11 +172,8 @@ bool LinearSnapMerger::_mergePair(
   // Snap the ends together.
   _snapEnds(e2Match, e1Match);
 
-  //if (_mergeTags)
-  //{
-    // Merge the attributes appropriately.
-    _mergeElementTags(e1->getTags(), e2->getTags(), e1Match);
-  //}
+  // Merge the attributes appropriately.
+  _mergeElementTags(e1->getTags(), e2->getTags(), e1Match);
 \
   // Do some ID handling for ways.
   bool swapWayIds = false;
@@ -417,7 +414,7 @@ void LinearSnapMerger::_snapEnd(
   const QStringList nodeKvpExcludeList("highway=road");
   // If the node we just replaced has info and the one we're replacing it with does not, let's copy
   // that info over to the replacement.
-  if (/*_mergeTags &&*/ replacedNode->getTags().hasInformationTag() &&
+  if (replacedNode->getTags().hasInformationTag() &&
       !replacementNode->getTags().hasInformationTag() &&
       !replacedNode->getTags().hasAnyKvp(nodeKvpExcludeList))
   {
@@ -496,10 +493,7 @@ void LinearSnapMerger::_splitElement(
     LOG_VART(r->getElementId());
   }
 
-  //if (_mergeTags)
-  //{
-    match->setTags(splitee->getTags());
-  //}
+  match->setTags(splitee->getTags());
   match->setCircularError(splitee->getCircularError());
   match->setStatus(splitee->getStatus());
 
@@ -579,11 +573,8 @@ void LinearSnapMerger::_splitElement(
       multiLineStringAdded = true;
     }
 
-    //if (_mergeTags)
-    //{
-      // Make sure the tags are still legit on the scrap.
-      scrap->setTags(splitee->getTags());
-    //}
+    // Make sure the tags are still legit on the scrap.
+    scrap->setTags(splitee->getTags());
     // With the merging switching between split ways and relations, it gets a little hard to keep
     // track of where this tag is needed, so one final check here to make sure it gets added
     // correctly.

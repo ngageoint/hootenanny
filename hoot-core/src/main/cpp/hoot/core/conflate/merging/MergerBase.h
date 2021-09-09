@@ -58,15 +58,12 @@ public:
 
   void setPairs(const std::set<std::pair<ElementId, ElementId>>& pairs) { _pairs = pairs; }
   void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
-  //void setMergeTags(bool mergeTags) { _mergeTags = mergeTags; }
 
 protected:
 
   std::set<std::pair<ElementId, ElementId>> _pairs;
   // indicates which matcher matched the elements being processed by this merger
   QString _matchedBy;
-  // TODO
-  //bool _mergeTags;
 };
 
 }

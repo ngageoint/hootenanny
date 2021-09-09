@@ -15,9 +15,9 @@ exports.geometryType = "line";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 
-// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
-// If that ever changes, then the generic score threshold configuration options used below should 
-// be replaced with custom score threshold configuration options.
+// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't
+// used. If that ever changes, then the generic score threshold configuration options used below
+// should be replaced with custom score threshold configuration options.
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
@@ -72,9 +72,9 @@ exports.calculateSearchRadius = function(map)
 }
 
 /**
- * Returns true if e is a candidate for a match. Implementing this method is
- * optional, but may dramatically increase speed if you can cull some features
- * early on. E.g. no need to check nodes for a polygon to polygon match.
+ * Returns true if e is a candidate for a match. Implementing this method is optional, but may
+   dramatically increase speed if you can cull some features early on. E.g. no need to check nodes
+   for a polygon to polygon match.
  */
 exports.isMatchCandidate = function(map, e)
 {
@@ -82,12 +82,11 @@ exports.isMatchCandidate = function(map, e)
 };
 
 /**
- * If this function returns true then all overlapping matches will be treated
- * as a group. For now that means if two matches overlap then the whole group
- * will be marked as needing review.
+ * If this function returns true then all overlapping matches will be treated as a group. For now
+   that means if two matches overlap then the whole group will be marked as needing review.
  *
- * If this function returns false the conflation routines will attempt to
- * pick the best subset of matches that do not conflict.
+ * If this function returns false the conflation routines will attempt to pick the best subset of
+   matches that do not conflict.
  */
 exports.isWholeGroup = function()
 {
@@ -174,8 +173,8 @@ function geometryMismatch(map, e1, e2)
  * - miss
  * - review
  *
- * The scores should always sum to one. If they don't you will be taunted
- * mercilessly and we'll normalize it anyway. :P
+ * The scores should always sum to one. If they don't you will be taunted mercilessly and we'll
+   normalize it anyway. :P
  */
 exports.matchScore = function(map, e1, e2)
 {
@@ -225,19 +224,17 @@ exports.matchScore = function(map, e1, e2)
 };
 
 /**
- * The internals of geometry merging can become quite complex. Typically this
- * method will simply call another hoot method to perform the appropriate merging
- * of geometries.
+ * The internals of geometry merging can become quite complex. Typically this method will simply
+   call another hoot method to perform the appropriate merging of geometries.
  *
  * If this method is exported then the mergePair method should not be exported.
  *
  * @param map The map that is being conflated
  * @param pairs An array of ElementId pairs that will be merged.
- * @param replaced An empty array is passed in, the method should fill the array
- *      with all the replacements that occur during the merge process (e.g. if two
- *      elements (way:1 & way:2) are merged into one element (way:3), then the
- *      replaced array should contain [[way:1, way:3], [way:1, way:3]] where all
- *      the "way:*" objects are of the ElementId type.
+ * @param replaced An empty array is passed in, the method should fill the array with all the
+   replacements that occur during the merge process (e.g. if two elements (way:1 & way:2) are merged
+   into one element (way:3), then the replaced array should contain [[way:1, way:3], [way:1, way:3]]
+   where all the "way:*" objects are of the ElementId type.
  */
 exports.mergeSets = function(map, pairs, replaced)
 {

@@ -197,8 +197,8 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
 
 /////////////////UTILITIES////////////////
 
-// Would like to try to remove these one-liners but have been unable to make the translations
-// in translations-local work with the "hoot." prefix.
+// Would like to try to remove these one-liners but have been unable to make the translations in
+// translations-local work with the "hoot." prefix.
 
 /**
  * Wrapper for createUuid for backward compatibility.
@@ -217,8 +217,8 @@ function print(e)
 }
 
 /**
- * Log a string using Hootenanny's logging mechanism. By default this will
- * print the script location and the JSON version of the argument.
+ * Log a string using Hootenanny's logging mechanism. By default this will print the script location
+   and the JSON version of the argument.
  *
  * @param s String to log.
  */
@@ -228,8 +228,8 @@ function log(s)
 }
 
 /**
- * Log a debug string using Hootenanny's logging mechanism. By default this will
- * print the script location and the JSON version of the argument.
+ * Log a debug string using Hootenanny's logging mechanism. By default this will print the script
+   location and the JSON version of the argument.
  *
  * @param s String to log.
  */

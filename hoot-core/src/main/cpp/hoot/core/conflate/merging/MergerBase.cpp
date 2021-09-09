@@ -32,8 +32,7 @@ namespace hoot
 {
 
 MergerBase::MergerBase(const std::set<std::pair<ElementId, ElementId>>& pairs) :
-_pairs(pairs)//,
-//_mergeTags(true)
+_pairs(pairs)
 {
 }
 

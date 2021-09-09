@@ -56,13 +56,12 @@ public:
    * @param eids element IDs of the features to be merged
    * @param sublineMatcher the subline matcher to be used to match the features
    * @param matchedBy optional text to mark a feature with the type of matcher that matched it
-   * @param mergeTags TODO
    * @return a merger
    */
   static MergerPtr getMerger(
     const std::set<std::pair<ElementId, ElementId>>& eids,
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
-    const QString matchedBy = QString()/*, const bool mergeTags = true*/);
+    const QString matchedBy = QString());
 
   /**
    * Creates a linear feature merger matched by the Network Algorithm.
@@ -71,13 +70,12 @@ public:
    * @param edgeMatches network edge matches involved in the matching of the features
    * @param details details of the network the features belong to
    * @param matchedBy optional text to mark a feature with the type of matcher that matched it
-   * @param mergeTags TODO
    * @return a merger
    */
   static MergerPtr getMerger(
     const std::set<std::pair<ElementId, ElementId>>& eids,
     const QSet<ConstEdgeMatchPtr>& edgeMatches, const ConstNetworkDetailsPtr& details,
-    const QString matchedBy = QString()/*, const bool mergeTags = true*/);
+    const QString matchedBy = QString());
 };
 
 }
