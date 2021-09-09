@@ -49,7 +49,7 @@ hoot.require('emgcp_osm_rules')
 
 // Common translation scripts
 hoot.require('translate');
-hoot.require('config');
+// hoot.require('config');
 
 // Make sure the MGCP translator exports extra tags to the TXT field
 hoot.Settings.set({"ogr.mgcp.extra":"note"});

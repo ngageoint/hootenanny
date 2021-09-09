@@ -104,6 +104,7 @@ mgcp.rules = {
     // ['F_CODE','AL105','place','isolated_dwelling'], // From OSM
     // ['F_CODE','AL105','place','town'], // From OSM
     // ['F_CODE','AL105','place','village'], // From OSM
+    ['F_CODE','AL019','building','other_shed'], //Ugly and from TRDv3
     ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
     ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
     ['F_CODE','AL130','historic','memorial'],
@@ -252,38 +253,39 @@ mgcp.rules = {
     ['ACC','2','source:accuracy:horizontal:category','approximate'],
 
     // AFA - Available Vessel Service
-    // ['AFA','0','raw:AFA','unknown'], // Unknown
-    ['AFA','0',undefined,undefined], // Unknown
+    // ['AFA','0',undefined,undefined], // Unknown
+    ['AFA','0','available_service','unknown'], // Unknown
     ['AFA','19','available_service','helipad'], // Helipad
     ['AFA','41','available_service','none'], // None Available
     ['AFA','999','available_service','other'], // Other
 
     // ATC - Aqueduct Type
-    // ['ATC','0','aqueduct:type','unknown'], // Unknown
-    ['ATC','0',undefined,undefined], // Unknown
+    // ['ATC','0',undefined,undefined], // Unknown
+    ['ATC','0','aqueduct:type','unknown'], // Unknown
     ['ATC','1','aqueduct:type','qanat'], // Qanat Shaft
 
     // AZC - Man-made
-    // ['AZC','0','artificial','unknown'], // Unknown
-    ['AZC','0',undefined,undefined], // Unknown
+    // ['AZC','0',undefined,undefined], // Unknown
+    ['AZC','0','artificial','unknown'], // Unknown
     ['AZC','1000','artificial','no'], // Natural
     ['AZC','1001','artificial','yes'], // Man-made
 
     // BAC - Built-up Area Density
-    // ['BAC','0','building:density','unknown'],
-    ['BAC','0',undefined,undefined],
+    // ['BAC','0',undefined,undefined],
+    ['BAC','0','building:density','unknown'],
     ['BAC','1','building:density','sparse'],
     ['BAC','2','building:density','dense'],
 
     // BOC - Bog Type
-    // ['BOC','0','bog:type','unknown'], // Unknown
-    ['BOC','0',undefined,undefined], // Unknown
+    // ['BOC','0',undefined,undefined], // Unknown
+    ['BOC','0','bog:type','unknown'], // Unknown
     ['BOC','14','bog:type','peat'], // Peat Bog
     ['BOC','7','bog:type','cranberry'], // Cranberry Bog
     ['BOC','999','bog:type','other'], // Other
 
     // BOT - Bridge Opening Type
-    ['BOT','0',undefined,undefined], // Unk
+    // ['BOT','0',undefined,undefined], // Unk
+    ['BOT','0','bridge:movable','unknown'], // Unk
     ['BOT','4','bridge:movable','bascule'],
     ['BOT','10','bridge:movable','swing'],
     ['BOT','11','bridge:movable','lift'],
@@ -292,8 +294,8 @@ mgcp.rules = {
     ['BOT','17','bridge:movable','no'],
 
     // BSC - Bridge Structure
-    // ['BSC','0','bridge:structure','unknown'],
-    ['BSC','0',undefined,undefined], // Unknown
+    // ['BSC','0',undefined,undefined], // Unknown
+    ['BSC','0','bridge:structure','unknown'],
     ['BSC','1','bridge:structure','open_spandrel_arch'],
     ['BSC','2','bridge:structure','cantilever'],
     ['BSC','3','bridge:structure','deck'],
@@ -311,8 +313,8 @@ mgcp.rules = {
     ['BSC','999','bridge:structure','other'],
 
     // CAA - Controlling Authority
-    //['CAA','0','operator','unknown'],
-    ['CAA','0',undefined,undefined],
+    // ['CAA','0',undefined,undefined],
+    ['CAA','0','operator','unknown'],
     ['CAA','3','operator','private'],
     ['CAA','5','operator','military'],
     ['CAA','7','operator','joint_military_civilian'],
@@ -320,16 +322,16 @@ mgcp.rules = {
     ['CAA','999','operator','other'], // Other
 
     // CAB - Cable Type
-    // ['CAB','0','cable:type','unknown'], // Unknown
-    ['CAB','0',undefined,undefined], // Unknown
+    // ['CAB','0',undefined,undefined], // Unknown
+    ['CAB','0','cable:type','unknown'], // Unknown
     ['CAB','2','cable:type','power'], // Power Line
     ['CAB','6','cable:type','transmission'], // Transmission Line
     ['CAB','8','cable:type','communication'], // Communication Line
     ['CAB','999','cable:type','other'], // Other
 
     // CAT - Cableway Type
-    // ['CAT','0','cableway:type','unknown'], // Unknown
-    ['CAT','0',undefined,undefined], // Unknown
+    // ['CAT','0',undefined,undefined], // Unknown
+    ['CAT','0','cableway:type','unknown'], // Unknown
     ['CAT','2','cableway:type','chair-lift'], // Chair-lift
     ['CAT','5','cableway:type','aerial_tramway'], // Aerial Tramway
     ['CAT','6','cableway:type','gondola_lift'], // Gondola Lift
@@ -338,8 +340,8 @@ mgcp.rules = {
     ['CAT','999','cableway:type','other'], // Other
 
     // CCT - Cover Closure Type
-    // ['CCT','0','cover:type','unknown'], // Unknown
-    ['CCT','0',undefined,undefined], // Unknown
+    // ['CCT','0',undefined,undefined], // Unknown
+    ['CCT','0','cover:type','unknown'], // Unknown
     ['CCT','1','cover:type','open'], // Open
     ['CCT','2','cover:type','partial'], // Partial
     ['CCT','3','cover:type','moveable'], // Moveable
@@ -347,14 +349,14 @@ mgcp.rules = {
     ['CCT','999','cover:type','other'], // Complete
 
     // CDA - Covered Drain
-    // ['CDA','0','covered','unknown'],
-    ['CDA','0',undefined,undefined],
+    // ['CDA','0',undefined,undefined],
+    ['CDA','0','covered','unknown'],
     ['CDA','1000','covered','no'],
     ['CDA','1001','covered','yes'],
 
     // CNS - Controlled
-    //['CNS','0','controlled','unknown'], // Unknown
-    ['CNS','0',undefined,undefined], // Unknown
+    // ['CNS','0',undefined,undefined], // Unknown
+    ['CNS','0','controlled','unknown'], // Unknown
     ['CNS','1000','controlled','no'], // Uncontrolled
     ['CNS','1001','controlled','yes'], // Controlled
 
@@ -365,8 +367,10 @@ mgcp.rules = {
 
     //CON - Road Width Constriction Type
     ['CON','35','junction','yes'],
+    ['CON','998','route_constriction','not_applicable'],
 
     // CRA - Crane Type
+    ['CRA','0','crane:type','unknown'], // Unknown
     ['CRA','2','crane:type','bridge'], // Bridge Crane
     ['CRA','3','crane:type','rotating'], // Rotating Crane
     ['CRA','7','crane:type','tower'], // Tower Crane
@@ -374,13 +378,14 @@ mgcp.rules = {
     ['CRA','999','crane:type','other'], // Other
 
     // CRM - Crane Mobility Type
+    ['CRM','0','crane:mobile','unknown'], // Unknown
     ['CRM','1','crane:mobile','fixed'], // Fixed
     ['CRM','2','crane:mobile','travelling'], // Travelling
     ['CRM','3','crane:mobile','floating'], // Floating
 
     // CSP - Crop Species
-    // ['CSP','0','crop','unknown'], // Unknown
-    ['CSP','0',undefined,undefined], // Unknown
+    // ['CSP','0',undefined,undefined], // Unknown
+    ['CSP','0','crop','unknown'], // Unknown
     ['CSP','113','crop','nut'], // Nut
     ['CSP','13','crop','dry_crop'], // Dry Crop
     ['CSP','15','crop','fruit_tree'], // Fruit Tree
@@ -393,8 +398,8 @@ mgcp.rules = {
     ['CSP','999','crop','other'], // Other
 
     // EET - Engineered Earthwork Type
-    // ['EET','0','trench','unknown'], // Unknown
-    ['EET','0',undefined,undefined], // Unknown
+    // ['EET','0',undefined,undefined], // Unknown
+    ['EET','0','trench','unknown'], // Unknown
     ['EET','1','trench','battery'], // Battery
     ['EET','2','trench','parapet'], // Military Parapet
     ['EET','3','military','trench'], // Military Trench
@@ -403,13 +408,14 @@ mgcp.rules = {
     ['EET','999','trench','other'], // Other
 
     // FAC - Solid Maritime Construction
-    // ['FAC','0','raw:FAC','unknown'], // Unknown
-    ['FAC','0',undefined,undefined], // Unknown
+    // ['FAC','0',undefined,undefined], // Unknown
+    ['FAC','0','raw:FAC','unknown'], // Unknown
     ['FAC','1000','solid_construction','no'], // Open
     ['FAC','1001','solid_construction','yes'], // Solid Face
 
     // FFN - Feature Function from MGCP v4
-    ['FFN','0',undefined,undefined], // Good default?
+    // ['FFN','0',undefined,undefined], // Good default?
+    ['FFN','0','feature_function','unknown'], // Unknown
     ['FFN','2','use','agriculture'], // Farm?
     ['FFN','99','industrial','manufacturing'],
     ['FFN','105','use','oil-mill'],
@@ -482,8 +488,8 @@ mgcp.rules = {
     ['FFN','999','building','other'],
 
     // FFP - Farming Pattern
-    // ['FFP','0','farm:pattern','unknown'], // Unknown
-    ['FFP','0',undefined,undefined], // Unknown
+    // ['FFP','0',undefined,undefined], // Unknown
+    ['FFP','0','farm:pattern','unknown'], // Unknown
     ['FFP','2','farm:pattern','regular'], // Regular
     ['FFP','3','farm:pattern','terraced'], // Terraced
     ['FFP','5','farm:pattern','intermingled_trees'], // Intermingled Trees
@@ -491,8 +497,8 @@ mgcp.rules = {
     ['FFP','999','farm:pattern','other'], // Other
 
     // FHC - Harbour Facility Function
-    //['FHC','0','harbour:use','unknown'], // Unknown
-    ['FHC','0',undefined,undefined], // Unknown
+    // ['FHC','0',undefined,undefined], // Unknown
+    ['FHC','0','harbour:use','unknown'], // Unknown
     ['FHC','10','harbour:use','container_terminal'], // Container Terminal
     ['FHC','3','harbour:use','ferry_terminal'], // Ferry Terminal
     ['FHC','4','harbour:use','fishing_harbour'], // Fishing Harbour
@@ -502,16 +508,16 @@ mgcp.rules = {
     ['FHC','999','harbour:use','other'], // Other
 
     // FIC - Embankment Type
-    // ['FIC','0','embankment:type','unknown'], // Unknown
-    ['FIC','0',undefined,undefined], // Unknown
+    // ['FIC','0',undefined,undefined], // Unknown
+    ['FIC','0','embankment:type','unknown'], // Unknown
     ['FIC','1','embankment','mound'], // Mound
     ['FIC','2','embankment','fill'], // Fill
     ['FIC','3','man-made','dyke'], // Dyke
     ['FIC','999','embankment:type','other'], // Other
 
     // FMM - Farming Method
-    // ['FMM','0','farm:method','unknown'], // Unknown
-    ['FMM','0',undefined,undefined], // Unknown
+    // ['FMM','0',undefined,undefined], // Unknown
+    ['FMM','0','farm:method','unknown'], // Unknown
     ['FMM','1','farm:method','fallow'], // Fallow
     ['FMM','3','farm:method','permanent'], // Permanent
     ['FMM','4','farm:method','slash_and_burn'], // Slash and Burn
@@ -519,16 +525,16 @@ mgcp.rules = {
     ['FMM','999','farm:method','other'], // Other
 
     // FPT - Airfield Type
-    // ['FPT','0','aeroway:airfield:type','unknown'], // Unknown
-    ['FPT','0',undefined,undefined], // Unknown
+    // ['FPT','0',undefined,undefined], // Unknown
+    ['FPT','0','aeroway:airfield:type','unknown'], // Unknown
     ['FPT','1','aeroway:airfield:type','major_airfield'], // Major
     ['FPT','2','aeroway:airfield:type','minor_and_hard'], // Minor and Hard
     ['FPT','3','aeroway:airfield:type','minor_and_soft'], // Minor and Soft
     ['FPT','999','aeroway:airfield:type','other'], // Other
 
     // FRT - Weapons Range Type
-    // ['FRT','0','range:type','unknown'], // Unknown
-    ['FRT','0',undefined,undefined], // Unknown
+    // ['FRT','0',undefined,undefined], // Unknown
+    ['FRT','0','range:type','unknown'], // Unknown
     ['FRT','1','range:type','small_arms'], // Small Arms
     ['FRT','2','range:type','tank'], // Tank
     ['FRT','3','range:type','artillery'], // Field Artillery
@@ -538,8 +544,8 @@ mgcp.rules = {
     ['FRT','999','range:type','other'], // Other
 
     // FUC - Functional Use
-    // ['FUC','0','use','unknown'],
-    ['FUC','0',undefined,undefined],
+    // ['FUC','0',undefined,undefined],
+    ['FUC','0','use','unknown'],
     ['FUC','1','use','industrial'],
     ['FUC','2','use','commercial'],
     ['FUC','4','use','residential'],
@@ -551,8 +557,8 @@ mgcp.rules = {
 
 
     // FUN - Condition of Facility
-    // ['FUN','0','condition','unknown'],
-    ['FUN','0',undefined,undefined], // Null
+    // ['FUN','0',undefined,undefined], // Null
+    ['FUN','0','condition','unknown'],
     ['FUN','1','condition','construction'],
     ['FUN','2','condition','abandoned'],
     ['FUN','3','condition','destroyed'],
@@ -561,16 +567,16 @@ mgcp.rules = {
     ['FUN','13','condition','damaged'],
 
     // GNC - Water Gate Type
-    // ['GNC','0','flood_control:type','unknown'], // Unknown
-    ['GNC','0',undefined,undefined], // Unknown
+    // ['GNC','0',undefined,undefined], // Unknown
+    ['GNC','0','flood_control:type','unknown'], // Unknown
     ['GNC','2','flood_control:type','flood_gate'], // Flood Barrage Gate
     ['GNC','4','flood_control:type','lock_gate'], // Lock Gate
     ['GNC','5','flood_control:type','dyke_gate'], // Dyke Gate
     ['GNC','999','flood_control:type','other'], // Other
 
     // HAF - Helipad Accociated Facilities
-    // ['HAF','0','helipad:facility','unknown'],
-    ['HAF','0',undefined,undefined],
+    // ['HAF','0',undefined,undefined],
+    ['HAF','0','helipad:facility','unknown'],
     ['HAF','1','helipad:facility','heliport'],
     ['HAF','2','helipad:facility','land_aerodrome'],
     ['HAF','3','helipad:facility','hospital'],
@@ -580,14 +586,15 @@ mgcp.rules = {
     ['HAF','999','helipad:facility','other'],
 
     // HCT - Thoroughfare Class
-    ['HCT','0','highway','road'],
+    ['HCT','0','highway_class','unknown'],
     ['HCT','1','highway','primary'], // Primary
     ['HCT','2','highway','secondary'], // Secondary
     ['HCT','3','highway','motorway'], // National Motorway
     ['HCT','4','highway','tertiary'], // Local
 
     // HWT - House of Worship Type
-    ['HWT','0',undefined,undefined],
+    // ['HWT','0',undefined,undefined],
+    ['HWT','0','house_of_worship','unknown'],
     ['HWT','2','building','cathedral'],
     ['HWT','3','building','chapel'],
     ['HWT','4','building','church'],
@@ -604,15 +611,15 @@ mgcp.rules = {
     ['HWT','999','building:religious','other'], // To avoid conflicts
 
     // HYP - Hydrologic Persistance
-    // ['HYP','0','intermittent','unknown'],
-    ['HYP','0',undefined,undefined],
+    // ['HYP','0',undefined,undefined],
+    ['HYP','0','intermittent','unknown'],
     ['HYP','1','intermittent','no'], // Perennial
     ['HYP','2','intermittent','yes'],
     ['HYP','4','intermittent','dry'],
 
     // LFA - Aeronautical Light Function
-    // ['LFA','0','aeroway:light','unknown'], // Unknown
-    ['LFA','0',undefined,undefined], // Unknown
+    // ['LFA','0',undefined,undefined], // Unknown
+    ['LFA','0','aeroway:light','unknown'], // Unknown
     ['LFA','15','aeroway:light','alsf-i'], // ALSF-I
     ['LFA','16','aeroway:light','alsf-ii'], // ALSF-II
     ['LFA','17','aeroway:light','ssalf'], // SSALF
@@ -622,8 +629,8 @@ mgcp.rules = {
     ['LFA','999','aeroway:light','other'], // Other
 
     // LOC - Vertical Relative Location
-    // ['LOC','0','location','unknown'],
-    ['LOC','0',undefined,undefined],
+    // ['LOC','0',undefined,undefined],
+    ['LOC','0','location','unknown'],
     // ['LOC','4','location','underwater'], // From DIGEST FACC - Below Water Surface
     ['LOC','17','location','on_waterbody_bottom'], // No OSM
     ['LOC','23','location','below_waterbody_bottom'], // No OSM
@@ -634,8 +641,8 @@ mgcp.rules = {
     ['LOC','46','location','underwater'], // Above waterbody bottom
 
     // MCC - Structural Material Type
-    // ['MCC','0','material','unknown'],
-    ['MCC','0',undefined,undefined],
+    // ['MCC','0',undefined,undefined],
+    ['MCC','0','material','unknown'],
     ['MCC','5','material','asphalt'],
     ['MCC','9','material','brick'],
     ['MCC','8','material','boulders'], // From SMC
@@ -676,14 +683,14 @@ mgcp.rules = {
     ['MCC','999','material','other'],
 
     // MES - Median Present
-    // ['MES','0','median','unknown'],
-    ['MES','0',undefined,undefined],
+    // ['MES','0',undefined,undefined],
+    ['MES','0','median','unknown'],
     ['MES','1000','median','no'],
     ['MES','1001','median','yes'],
 
     // MZN - Extraction Mine type TRDv4, was MIN in TRDv3
-    // ['MZN','0','mine:type','unknown'],
-    ['MZN','0',undefined,undefined],
+    // ['MZN','0',undefined,undefined],
+    ['MZN','0','mine:type','unknown'],
     ['MZN','3','mine:type','opencast'],
     ['MZN','4','mine:type','placer'],
     ['MZN','5','mine:type','prospect'],
@@ -692,8 +699,8 @@ mgcp.rules = {
     ['MZN','9','mine:type','below_surface'],
 
     // NST - Navigation System Type
-    // ['NST','0','beacon:type','unknown'],
-    ['NST','0',undefined,undefined],
+    // ['NST','0',undefined,undefined],
+    ['NST','0','beacon:type','unknown'],
     ['NST','12','beacon:type','radio'],
     ['NST','13','beacon:type','radio_telephone'],
     ['NST','15','beacon:type','television'],
@@ -725,8 +732,8 @@ mgcp.rules = {
     ['NST','999','beacon:type','other'],
 
     // OPC - Offshore Platform Type
-    // ['OPC','0','offshore_construction','unknown'], // Unknown
-    ['OPC','0',undefined,undefined], // Unknown
+    // ['OPC','0',undefined,undefined], // Unknown
+    ['OPC','0','offshore_construction','unknown'], // Unknown
     ['OPC','2','offshore_construction','production_platform'], // Production Platform
     ['OPC','3','offshore_construction','observation_platform'], // Observation Platform
     ['OPC','4','offshore_construction','articulated_loading_platform_(alp)'], // Articulated Loading Platform (ALP)
@@ -735,8 +742,8 @@ mgcp.rules = {
     ['OPC','999','offshore_construction','other'], // Other
 
     // ORD - Relative Importance
-    //['ORD','0','place:importance','unknown'],
-    ['ORD','0',undefined,undefined],
+    // ['ORD','0',undefined,undefined],
+    ['ORD','0','place:importance','unknown'],
     ['ORD','1','place:importance','first'],
     ['ORD','2','place:importance','second'],
     ['ORD','3','place:importance','third'],
@@ -746,16 +753,16 @@ mgcp.rules = {
     ['ORD','999','place:importance','other'],
 
     // PBY - By-product
-    //['PBY','0','by_product','unknown'], // Unknown
-    ['PBY','0',undefined,undefined], // Unknown
+    // ['PBY','0',undefined,undefined], // Unknown
+    ['PBY','0','by_product','unknown'], // Unknown
     ['PBY','8','by_product','refuse'], // Refuse
     ['PBY','15','by_product','slag'], // Slag
     ['PBY','17','by_product','spoil'], // Spoil
     ['PBY','999','by_product','other'], // Other
 
     // PPC - Power Station Type
-    //['PPC','0','plant:source','unknown'], // Unknown
-    ['PPC','0',undefined,undefined], // Unknown
+    // ['PPC','0',undefined,undefined], // Unknown
+    ['PPC','0','plant:source','unknown'], // Unknown
     ['PPC','1','plant:source','hydro'], // Hydro-electric
     ['PPC','2','plant:source','nuclear'], // Nuclear
     ['PPC','3','plant:source','solar'], // Solar
@@ -766,8 +773,8 @@ mgcp.rules = {
     ['PPC','999','plant:source','other'], // Other
 
     // PPO Product
-    // ['PPO','0','product','unknown'],
-    ['PPO','0',undefined,undefined],
+    // ['PPO','0',undefined,undefined],
+    ['PPO','0','product','unknown'],
     ['PPO','1','product','aircraft'],
     ['PPO','2','product','aluminum'],
     ['PPO','3','product','ammunition'],
@@ -830,8 +837,8 @@ mgcp.rules = {
     ['PPO','999','product','other'],
 
     // PRM - Permanent
-    //['PRM','0','permanent','unknown'], // Unknown
-    ['PRM','0',undefined,undefined], // Unknown
+    // ['PRM','0',undefined,undefined], // Unknown
+    ['PRM','0','permanent','unknown'], // Unknown
     ['PRM','1000','permanent','no'], // Temporary
     ['PRM','1001','permanent','yes'], // Permanent
 
@@ -843,8 +850,8 @@ mgcp.rules = {
     ['PWC','3','man_made','quay'], // Quay
 
     // RAC - Radar Antenna Configuration
-    //['RAC','0','radar:configuration','unknown'], // Unknown
-    ['RAC','0',undefined,undefined], // Unknown
+    // ['RAC','0',undefined,undefined], // Unknown
+    ['RAC','0','radar:configuration','unknown'], // Unknown
     ['RAC','1','radar:configuration','dome_enclosed'], // Dome Enclosed
     ['RAC','2','radar:configuration','mast_mounted'], // Mast Mounted
     ['RAC','4','radar:configuration','radome_on_tower'], // Radome on Tower
@@ -853,8 +860,8 @@ mgcp.rules = {
     ['RAC','999','radar:configuration','other'], // Other
 
     // RAY - Racing Type
-    // ['RAY','0','race:type','unknown'], // Unknown
-    ['RAY','0',undefined,undefined], // Unknown
+    // ['RAY','0',undefined,undefined], // Unknown
+    ['RAY','0','race:type','unknown'], // Unknown
     ['RAY','1','race:type','bicycle'], // Bicycle
     ['RAY','2','race:type','camel'], // Camel
     ['RAY','3','race:type','greyhound'], // Greyhound
@@ -876,29 +883,29 @@ mgcp.rules = {
     ['REL','999','religion','other'],
 
     // RGC - Railway Gauge Classification
-    //['RGC','0','gauge:type','unknown'],
-    ['RGC','0',undefined,undefined],
+    // ['RGC','0',undefined,undefined],
+    ['RGC','0','gauge:type','unknown'],
     ['RGC','1','gauge:type','broad'],
     ['RGC','2','gauge:type','narrow'],
     ['RGC','3','gauge:type','standard'],
     ['RGC','6','railway','monorail'], // Gauge = 0.5?
 
     // RIR - Railway in Road
-    //['RIR','0','railway:in_road','unknown'],
-    ['RIR','0',undefined,undefined],
+    // ['RIR','0',undefined,undefined],
+    ['RIR','0','railway:in_road','unknown'],
     ['RIR','1000','railway:in_road','separated'],
     ['RIR','1001','railway:in_road','yes'],
 
     // RKF - Rock Formation Structure
-    //['RKF','0','rock_formation','unknown'], // Unknown
-    ['RKF','0',undefined,undefined], // Unknown
+    // ['RKF','0',undefined,undefined], // Unknown
+    ['RKF','0','rock_formation','unknown'], // Unknown
     ['RKF','1','rock_formation','columnar'], // Columnar
     ['RKF','3','rock_formation','pinnacle'], // Pinnacle
     ['RKF','999','rock_formation','other'], // Other
 
     // RRA - Railway Power Method
-    //['RRA','0','electrified','unknown'],
-    ['RRA','0',undefined,undefined],
+    // ['RRA','0',undefined,undefined],
+    ['RRA','0','electrified','unknown'],
     ['RRA','1','electrified','rail'], // Electrified Track
     ['RRA','3','electrified','contact_line'], // Overhead Electrified
     ['RRA','4','electrified','no'],
@@ -915,15 +922,15 @@ mgcp.rules = {
     ['RRC','999','railway','Other'],
 
     // RSA - Branch Railway Type
-    // ['RSA','0','service','unknown'],
-    ['RSA','0',undefined,undefined],
+    // ['RSA','0',undefined,undefined],
+    ['RSA','0','service','unknown'],
     ['RSA','1','service','spur'],
     ['RSA','2','service','siding'],
     ['RSA','3','service','passing'],
 
     // RST - Load Bearing Surface Type
-    // ['RST','0','surface','unknown'],
-    ['RST','0',undefined,undefined],
+    // ['RST','0',undefined,undefined],
+    ['RST','0','surface','unknown'],
     ['RST','1','surface','paved'],
     ['RST','2','surface','unpaved'],
     ['RST','5','surface','grass'], // DIGEST FACC from Data: Grass/Sod
@@ -932,7 +939,8 @@ mgcp.rules = {
     ['RST','999','surface','Other'],
 
     // RTA - Linear Feature Arrangement
-    ['RTA','0',undefined,undefined], // This also gets used by pipelines
+    // ['RTA','0',undefined,undefined], // This also gets used by pipelines
+    ['RTA','0','arrangement','unknown'], // Unknown
     ['RTA','1','arrangement','single'],
     ['RTA','2','arrangement','double'],
     ['RTA','3','arrangement','multiple'],
@@ -944,8 +952,8 @@ mgcp.rules = {
     ['RWC','3','usage','branch'],
 
     // SCC - Water Type
-    // ['SCC','0','water:type','unknown'],
-    ['SCC','0',undefined,undefined],
+    // ['SCC','0',undefined,undefined],
+    ['SCC','0','water:type','unknown'],
     ['SCC','1','water:type','alkaline'],
     ['SCC','4','water:type','mineral'],
     ['SCC','9','water:type','potable'],
@@ -955,8 +963,8 @@ mgcp.rules = {
     ['SCC','999','water:type','other'],
 
     // SDT - Sand Dune Type
-    // ['SDT','0','dune:type','unknown'], // Unknown
-    ['SDT','0',undefined,undefined], // Unknown
+    // ['SDT','0',undefined,undefined], // Unknown
+    ['SDT','0','dune:type','unknown'], // Unknown
     ['SDT','1','dune:type','crescent'], // Crescent
     ['SDT','2','dune:type','dome'], // Dome
     ['SDT','3','dune:type','transverse'], // Transverse
@@ -967,21 +975,21 @@ mgcp.rules = {
     ['SDT','8','dune:type','dome_and_transverse'], // Dome and Transverse
 
     // SEP - Divided
-    // ['SEP','0','divider','unknown'],
-    ['SEP','0',undefined,undefined],
+    // ['SEP','0',undefined,undefined],
+    ['SEP','0','divider','unknown'],
     ['SEP','1000','is_divided','no'],
     ['SEP','1001','is_divided','yes'],
 
     // SFS - Aerodrome Pavement Functional
-    //['SFS','0','aeroway:pavement_status','unknown'], // Unknown
-    ['SFS','0',undefined,undefined], // Unknown
+    // ['SFS','0',undefined,undefined], // Unknown
+    ['SFS','0','aeroway:pavement_status','unknown'], // Unknown
     ['SFS','1','aeroway:pavement:status','fair'], // Fair
     ['SFS','3','aeroway:pavement:status','good'], // Good
     ['SFS','5','aeroway:pavement:status','poor'], // Poor
 
     // SLT - Shoreline Type
-    // ['SLT','0','shoreline:type','unknown'], // Unknown
-    ['SLT','0',undefined,undefined], // Unknown
+    // ['SLT','0',undefined,undefined], // Unknown
+    ['SLT','0','shoreline:type','unknown'], // Unknown
     ['SLT','6','shoreline:type','mangrove'], // Mangrove
     ['SLT','8','shoreline:type','marshy'], // Marshy
     ['SLT','10','shoreline:type','stony'], // Stony
@@ -992,8 +1000,8 @@ mgcp.rules = {
 
 
     // SRT - Source Type (MGCP v4)
-    // ['SRT','0','source:name','unknown'],
-    ['SRT','0',undefined,undefined],
+    // ['SRT','0',undefined,undefined],
+    ['SRT','0','source:name','unknown'],
     ['SRT','1','source:name','arc_digitized_raster_graphic_(adrg)'], // Arc Digitized Raster Graphic (ADRG)
     ['SRT','2','source:name','automated_aeronautical_facilities_information_file_(aafif)'], //  Automated Aeronautical Facilities Information File (AAFIF)
     ['SRT','3','source:name','chum'], // CHUM
@@ -1071,8 +1079,8 @@ mgcp.rules = {
     ['SRT','999','source:name','other'],
 
     // SSC - Structure Shape
-    // ['SSC','0','shape','unknown'], // Unknown
-    ['SSC','0',undefined,undefined], // Unknown
+    // ['SSC','0',undefined,undefined], // Unknown
+    ['SSC','0','shape','unknown'], // Unknown
     ['SSC','2','shape','horizontal_capped_cylindrical'], // Horizontal Capped Cylindrical
     ['SSC','4','shape','vertical_capped_cylindrical'], // Vertical Capped Cylindrical
     ['SSC','12','shape','pyramidal'], // Pyramidal
@@ -1086,8 +1094,8 @@ mgcp.rules = {
     ['SSC','999','shape','other'], // Other
 
     // STA - Maritime Station Type
-    // ['STA','0','raw:STA','unknown'], // Unknown
-    ['STA','0',undefined,undefined], // Unknown
+    // ['STA','0',undefined,undefined], // Unknown
+    ['STA','0','seamark:signal_station','unknown'], // Unknown
     ['STA','1','seamark:signal_station','coast_guard'], // Coast Guard Station
     ['STA','11','seamark:signal_station','pilot'], // Pilot Station
     ['STA','13','seamark:signal_station','signal'], // Signal Station
@@ -1112,28 +1120,29 @@ mgcp.rules = {
     ['STA','999','seamark:signal_station','other'], // Other
 
     // SUC - Shed Type
-    ['SUC','0',undefined,undefined],
+    // ['SUC','0',undefined,undefined],
+    ['SUC','0','shed_type','unknown'],
     ['SUC','1','man_made','snow_fence'],
     ['SUC','2','man_made','rock_shed'],
     ['SUC','4','man_made','rock_and_snow_fence'],
     ['SUC','999','protection:type','other'],
 
     // SWT - Natural Pool Type
-    // ['SWT','0','raw:SWT','unknown'], // Unknown
-    ['SWT','0',undefined,undefined], // Unknown
+    // ['SWT','0',undefined,undefined], // Unknown
+    ['SWT','0','spring:type','unknown'], // Unknown
     ['SWT','4','spring:type','spring'], // Spring - Will remove this in post processing
     ['SWT','5','water','water-hole'], // Water-hole
     ['SWT','999','spring:type','other'], // Other
 
     // TID - Tide Influenced
-    //['TID','0','tidal','unknown'],
-    ['TID','0',undefined,undefined],
+    // ['TID','0',undefined,undefined],
+    ['TID','0','tidal','unknown'],
     ['TID','1000','tidal','no'],
     ['TID','1001','tidal','yes'],
 
     // TOS - Tower Shape
-    // ['TOS','0','tower:shape','unknown'], // Unknown
-    ['TOS','0',undefined,undefined], // Unknown
+    // ['TOS','0',undefined,undefined], // Unknown
+    ['TOS','0','tower:shape','unknown'], // Unknown
     ['TOS','1','tower:shape','a_frame'], // 'A' Frame
     ['TOS','2','tower:shape','h_frame'], // 'H' Frame
     ['TOS','3','tower:shape','i_frame'], // 'I' Frame
@@ -1143,15 +1152,15 @@ mgcp.rules = {
     ['TOS','999','tower:shape','other'], // Other
 
     // TRE - Foliage Type
-    // ['TRE','0','wood','unknown'], // Unknown
-    ['TRE','0',undefined,undefined], // Unknown
+    // ['TRE','0',undefined,undefined], // Unknown
+    ['TRE','0','leaf_cycle','unknown'], // Unknown
     ['TRE','1','leaf_cycle','deciduous'], // Deciduous
     ['TRE','2','leaf_cycle','evergreen'], // Evergreen
     ['TRE','3','leaf_cycle','mixed'], // Mixed
 
     // TRS - Transportation System Type: See BH070 Ford
-    // ['TRS','0','transport:type','unknown'],
-    ['TRS','0',undefined,undefined],
+    // ['TRS','0',undefined,undefined],
+    ['TRS','0','transport:type','unknown'],
     ['TRS','1','transport:type','air'],
     ['TRS','2','transport:type','aqueduct'],
     ['TRS','4','transport:type','bus'],
@@ -1164,8 +1173,8 @@ mgcp.rules = {
     ['TRS','999','transport:type','other'],
 
     // TTC - Tower Type
-    //['TTC','0','tower:type','unknown'],
-    ['TTC','0',undefined,undefined],
+    // ['TTC','0',undefined,undefined],
+    ['TTC','0','tower:type','unknown'],
     ['TTC','1','tower:type','bridge'], // Bridge Tower
     ['TTC','2','tower:type','observation'], // Observation Tower
     ['TTC','5','tower:type','light'], // Light Tower
@@ -1185,16 +1194,16 @@ mgcp.rules = {
     ['TTC','999','tower:type','other'], // Other
 
     // TUC - Transportation Use
-    // ['TUC','0','transport:use','unknown'],
-    ['TUC','0',undefined,undefined],
+    // ['TUC','0',undefined,undefined],
+    ['TUC','0','transport:use','unknown'],
     ['TUC','25','transport:use','cargo'],
     ['TUC','26','transport:use','passenger'],
     ['TUC','45','transport:use','general'],
     ['TUC','999','transport:use','other'],
 
     // VEG - Vegetation Characteristic
-    // ['VEG','0','raw:VEG','unknown'], // Unknown
-    ['VEG','0',undefined,undefined], // Unknown
+    // ['VEG','0',undefined,undefined], // Unknown
+    ['VEG','0','raw:VEG','unknown'], // Unknown
     ['VEG','50','swamp:vegetation:type','wood'], // Wood  - In MGCP Spec but no details about it
     ['VEG','51','swamp:vegetation:type','herb_and_brush'], // Herb and Brush
     ['VEG','75','swamp:vegetation:type','brush'], // Brush
@@ -1203,8 +1212,8 @@ mgcp.rules = {
     ['VEG','999','vegetation:characteristic','other'], // Other
 
     // VGT - Volcano Shape
-    // ['VGT','0','volcano:type','unknown'], // Unknown
-    ['VGT','0',undefined,undefined], // Unknown
+    // ['VGT','0',undefined,undefined], // Unknown
+    ['VGT','0','volcano:type','unknown'], // Unknown
     ['VGT','1','volcano:type','cone'], // Cone
     ['VGT','2','volcano:type','cinder_cone'], // Cinder Cone
     ['VGT','3','volcano:type','shield'], // Shield
@@ -1213,8 +1222,8 @@ mgcp.rules = {
     ['VGT','999','volcano:type','other'], // Other
 
     // VSP - Vegetation Species
-    // ['VSP','0','vegetation:type','unknown'], // Unknown
-    ['VSP','0',undefined,undefined], // Unknown
+    // ['VSP','0',undefined,undefined], // Unknown
+    ['VSP','0','vegetation:type','unknown'], // Unknown
     ['VSP','10','vegetation:type','eucalyptus'], // Eucalyptus
     ['VSP','11','vegetation:type','filao'], // Filao
     ['VSP','22','vegetation:type','nipa'], // Nipa
@@ -1226,7 +1235,7 @@ mgcp.rules = {
     ['VSP','999','vegetation:type','other'], // Other
 
     // WCC - Watercourse Channel Type
-    // ['WCC','0','channel:type','yes'],
+    ['WCC','0','channel:type','unknown'],
     ['WCC','1','channel:type','channelized_stream'],
     ['WCC','2','channel:type','braided_stream'],
     ['WCC','3','channel:type','gorge'],
@@ -1234,8 +1243,8 @@ mgcp.rules = {
     ['WCC','7','channel:type','normal'],
 
     // WFT - Well Type
-    // ['WFT','0','water_well:type','unknown'],
-    ['WFT','0',undefined,undefined],
+    // ['WFT','0',undefined,undefined],
+    ['WFT','0','water_well:type','unknown'],
     ['WFT','2','water_well:type','walled-in'],
     ['WFT','3','water_well:type','artesian'],
     ['WFT','6','water_well:type','dug'],
@@ -1243,8 +1252,8 @@ mgcp.rules = {
     ['WFT','999','water_well:type','other'],
 
     // WLE - Water Level Effect
-    // ['WLE','0','hydrographic_vertical_position','unknown'], // Unknown
-    ['WLE','0',undefined,undefined], // Unknown
+    // ['WLE','0',undefined,undefined], // Unknown
+    ['WLE','0','hydrographic_vertical_position','unknown'], // Unknown
     ['WLE','1','hydrographic_vertical_position','partly_submerged'], // Partly Submerged
     ['WLE','2','hydrographic_vertical_position','always_dry'], // Always Dry
     ['WLE','3','hydrographic_vertical_position','always_submerged'], // Always Submerged
@@ -1253,15 +1262,15 @@ mgcp.rules = {
     ['WLE','999','hydrographic_vertical_position','other'], // Other
 
     // WST - Watercourse Sink Type: No OSM even close
-    // ['WST','0','water:sink:type','unknown'],
-    ['WST','0',undefined,undefined],
+    // ['WST','0',undefined,undefined],
+    ['WST','0','water:sink:type','unknown'],
     ['WST','1','water:sink:type','dissipating'],
     ['WST','2','water:sink:type','disappearing'],
     ['WST','999','water:sink:type','other'],
 
     // WTC - Road Weather Restriction
-    // ['WTC','0','seasonal','unknown'],
-    ['WTC','0',undefined,undefined],
+    // ['WTC','0',undefined,undefined],
+    ['WTC','0','seasonal','unknown'],
     ['WTC','1','seasonal','no'],
     ['WTC','2','seasonal','fair'], // possibly seasonal=
     ['WTC','3','seasonal','winter'],
@@ -1272,8 +1281,8 @@ mgcp.rules = {
     // One to one translation table for MGCP TRD 3.0 attributes. This is for import only
     one2oneIn : [
     // ACE_EVAL Absolute Horizontal Accuracy Evaluation Method
-    // ['ACE_EVAL','0','source:accuracy:horizontal:evaluation','unknown'],
-    ['ACE_EVAL','0',undefined,undefined],
+    // ['ACE_EVAL','0',undefined,undefined],
+    ['ACE_EVAL','0','source:accuracy:horizontal:evaluation','unknown'],
     ['ACE_EVAL','1','source:accuracy:horizontal:evaluation','aca_geodetic_survey_adequate'],
     ['ACE_EVAL','2','source:accuracy:horizontal:evaluation','acs_geodetic_survey_small'],
     ['ACE_EVAL','4','source:accuracy:horizontal:evaluation','ana_photogrammetric_gdas_adequate'],
@@ -1480,7 +1489,8 @@ mgcp.rules = {
     ['ICF','14','man_made','kiln'],
     ['ICF','18','building','processing'],
     ['ICF','19','building','pumping'],
-    ['ICF','21','product','petroleum'],
+    // ['ICF','21','product','petroleum'],
+    ['ICF','21','industrial','petroleum_refining'],
     ['ICF','22','product','paper'],
     ['ICF','23','amenity','shipyard'],
     ['ICF','24','product','steel'],
@@ -1839,8 +1849,9 @@ mgcp.rules = {
     ['SSR','999','roof:shape','other'], // Other
 
     // SUC - Shed Type
-    ['SUC','3','building','shed'],
-    ['SUC','999','building','other_shed'], // This is nuts
+    // NOTE: Retamed to avoid confusion with the TRD4 SUC (Shed type)
+    ['xSUC','3','building','shed'],
+    ['xSUC','999','building','other_shed'], // This is nuts
 
     // TFC - Transportation Facility Type
     ['TFC','0',undefined,undefined],
@@ -2174,11 +2185,11 @@ mgcp.rules = {
     ['FFN','781','building','security'],
 
     // SUC - Shed Type
-    ['FFN','530','building','shed'],
-    ['FFN','530','building','other_shed'], //Ugly
+    // ['FFN','530','building','shed'],
+    // ['FFN','530','building','other_shed'], //Ugly
 
     // TFC - Transportation Facility Type
-    ['FFN','999','railway','roundhouse'],
+    // ['FFN','999','railway','roundhouse'],
     ['FFN','330','repair','rail_car'],
     ['FFN','481','man_made','depot'], // not a good fit for depot terminal
     ['FFN','486','signal_station','railway'], // not a good fit for railway signal
@@ -2203,7 +2214,6 @@ mgcp.rules = {
     ['FFN','99','man_made','kiln'], //Not a good match for kiln
     ['FFN','99','building','manufacturing_outbuilding'],
     ['FFN','99','building','manufacturing'],
-    ['FFN','192','product','petroleum'],
 
     // Building
     ['FFN','563','building','detached'],
@@ -2304,6 +2314,12 @@ mgcp.rules = {
     // This is taken from OSM pre processing and a few things added.
     ignoreList : ['FCODE','error_circ','CPYRT_NOTE','SRC_INFO','SRC_DATE','SMC'],
     // ##### End of ignoreList #####
+
+    // Attribute values that are to be dropped since they are defaults or don't add value.
+    dropList : { '-32765':1,'-32767':1,'-32768':1,
+                 '-32765.0':1,'-32767.0':1,'-32768.0':1,
+                 '998':1,'n_a':1,'n/a':1,'unknown':1,'unk':1 },
+    // ##### End of dropList #####
 
     // Attribute names to swap on input. These are to avoid having copies of the same translation.
     swapListIn : {'OHB':'HGT','CPYRT_NOTE':'CCN','SRC_INFO':'SDP','SRC_DATE':'SDV','SMC':'MCC'},

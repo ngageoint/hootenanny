@@ -24,7 +24,6 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:aeb020"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:23.028Z"/>
         <tag k="undergrowth:density" v="40"/>
         <tag k="uuid" v="{f5d18b0b-cdf3-418f-9392-23bb16d443ac}"/>
@@ -45,7 +44,6 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:aeb020"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:22.938Z"/>
         <tag k="undergrowth:density" v="40"/>
         <tag k="uuid" v="{dc04b9cd-a7a1-433a-8aec-19cdc6203e72}"/>

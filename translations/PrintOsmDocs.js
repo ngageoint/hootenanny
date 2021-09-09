@@ -149,7 +149,7 @@ function initialize()
   // createLookup(tagList, dnc.rules.fcodeOne2oneIn, 'DNC');
 
   // Print the tagList
-  switch (config.getTagPrintingFormat())
+  switch (hoot.Settings.get('tag.printing.format'))
   {
   case 'html':
     dumpHtmlTags(tagList);

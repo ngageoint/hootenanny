@@ -30,7 +30,7 @@
 */
 
 hoot.require('translate')
-hoot.require('config')
+// hoot.require('config')
 
 MassNh = {
     // One2one rules for Text Fields
@@ -549,8 +549,8 @@ MassNh = {
         if (MassNh.configIn == undefined)
                 {
                     MassNh.configIn = {};
-                    MassNh.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
-                    MassNh.configIn.OgrAddUuid = config.getOgrAddUuid();
+                    MassNh.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+                    MassNh.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
 
                     // Get any changes
                     MassNh.toChange = hoot.Settings.get("schema.translation.override");

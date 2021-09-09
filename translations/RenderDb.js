@@ -29,7 +29,7 @@
 // Convert RenderDb to FGDB & Shapefile
 //
 
-hoot.require('config');
+// hoot.require('config');
 hoot.require('translate');
 
 // Shorten some of the names when exporting to shapefile
@@ -97,9 +97,9 @@ function initialize()
 
     // Grab the config variables once so we don't have to keep calling into the core
     _global.renderDb.config = {};
-    _global.renderDb.config.OgrDebugDumptags = config.getOgrDebugDumptags();
-    _global.renderDb.config.outputFormat = config.getOgrOutputFormat();
-    _global.renderDb.config.toChange = config.getSchemaTranslationOverride();
+    _global.renderDb.config.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+    _global.renderDb.config.outputFormat = hoot.Settings.get('ogr.output.format');
+    _global.renderDb.config.toChange = hoot.Settings.get("schema.translation.override");
   } // End !_global
 
 } // End Initialize
@@ -395,11 +395,11 @@ function getDbSchema()
   var schema = [];
 
   // Debug
-  // print('OutputFormat = :' + config.getOgrOutputFormat() + ':')
+  // print('OutputFormat = :' + hoot.Settings.get('ogr.output.format') + ':')
 
   // Shapefiles can only have 10 character attribute names
   // This is Ugly and is repeated since getDbSchema gets used before initialise() and the translation functions
-  if (config.getOgrOutputFormat() == 'shp')
+  if (hoot.Settings.get('ogr.output.format') == 'shp')
   {
 
     // This is brute force and ugly but the list is an array of objects
@@ -419,7 +419,7 @@ function getDbSchema()
   }
 
   // GDB doesn't likr ":" in attribute names
-  if (config.getOgrOutputFormat() == 'gdb')
+  if (hoot.Settings.get('ogr.output.format') == 'gdb')
   {
 
     // This is brute force and ugly but the list is an array of objects
