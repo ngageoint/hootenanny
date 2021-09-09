@@ -5174,6 +5174,14 @@ The search radius to use when conflating rivers. This value is not used if
 `river.auto.calc.search.radius=true`, and in that case the search radius is auto-calculated for
 the entire input dataset. See `search.radius.default`.
 
+=== selected.overwrite.tag.merger.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+TODO
+
 === set.tag.value.visitor.append.to.existing.value
 
 * Data Type: bool
@@ -5612,9 +5620,9 @@ Tag keys that `TagKeyCriterion` uses to filter elements.
 * Data Type: string
 * Default Value: `OverwriteTag2Merger`
 
-Specifies the default way of merging tags. This is used by most merge routines, but may be overriden
-depending on the specifics of the merger. `hoot info --tag-mergers` displays information about the
-available mergers.
+Specifies the default way of merging tags. This is used by most merge routines, but may be
+overridden depending on the specifics of the merger. `hoot info --tag-mergers` displays information
+about the available mergers.
 
 === tag.merger.overwrite.accumulate.values.keys
 

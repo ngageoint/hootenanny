@@ -24,9 +24,9 @@ function testAdd(v1, v2)
 /////////////////MERGING////////////////
 
 /**
- * This will merge elements 1 and 2. The geometry of 1 will be kept and 2
- * discarded. If element 2 is part of another element (e.g. in a way or
- * relation) element 1 will take its place in that element.
+ * This will merge elements 1 and 2. The geometry of 1 will be kept and 2 discarded. If element 2 is
+   part of another element (e.g. in a way or relation) element 1 will take its place in that
+   element.
  */
 function mergeElements(map, e1, e2) 
 {

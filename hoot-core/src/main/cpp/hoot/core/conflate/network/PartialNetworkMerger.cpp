@@ -108,7 +108,10 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
 
   WayStringPtr str2 = merger->getMapping()->getWayString2();
 
-  merger->mergeTags();
+  //if (_mergeTags)
+  //{
+    merger->mergeTags();
+  //}
   // Set the status on all keeper ways to conflated.
   merger->setKeeperStatus(Status::Conflated);
   ConfigOptions conf;

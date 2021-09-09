@@ -33,7 +33,7 @@ exports.matchCandidateCriterion = "RailwayCriterion";
 var sublineStringMatcher = hoot.SublineStringMatcherFactory.getMatcher(exports.baseFeatureType);
 
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
-// Use default spacing of 5 meters.
+// Use the default spacing of 5 meters.
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
 var hausdorffDistanceExtractor = new hoot.HausdorffDistanceExtractor();
 
@@ -44,9 +44,12 @@ var nameExtractor = new hoot.NameExtractor(
     { "translate.string.distance.tokenize": "false" },
     new hoot.LevenshteinDistance( { "levenshtein.distance.alpha": 1.15 } )));
 
-//var oneToManyIdentifyingKeys = hoot.get("railway.one.to.many.identifying.keys").split(';');
-//var oneToManyTransferKeys = hoot.get("railway.one.to.many.transfer.keys").split(';');
-//var oneToManyMergeGeometries = hoot.get("railway.one.to.many.reference.merge.geometries");
+var oneToManyIdentifyingKeys = hoot.get("railway.one.to.many.identifying.keys").split(';');
+var oneToManyTransferKeys = hoot.get("railway.one.to.many.transfer.keys").split(';');
+var oneToManyMergeGeometries = (hoot.get("railway.one.to.many.reference.merge.geometries") === 'true');
+var currentMergeIsOneToMany = false;
+var defaultTagMerger = hoot.get("tag.merger.default");
+var defaultLinearMerger = hoot.get("geometry.linear.merger.default");
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
@@ -97,7 +100,7 @@ function nameMismatch(map, e1, e2)
   return false;
 }
 
-function geometryMismatch(map, e1, e2)
+function geometryMismatch(map, e1, e2, minDistanceScore, minHausdorffDistanceScore, minEdgeDistanceScore)
 {
   hoot.trace("Processing geometry...");
 
@@ -118,13 +121,13 @@ function geometryMismatch(map, e1, e2)
      "REPTree".
     */
     var distanceScore = distanceScoreExtractor.extract(m, m1, m2);
-    if (distanceScore >= 0.577)
+    if (distanceScore >= minDistanceScore)
     {
       var hausdorffDistance = hausdorffDistanceExtractor.extract(m, m1, m2);
-      if (hausdorffDistance >= 0.8)
+      if (hausdorffDistance >= minHausdorffDistanceScore)
       {
         var edgeDistance  = edgeDistanceExtractor.extract(m, m1, m2);
-        if (edgeDistance >= 0.8)
+        if (edgeDistance >= minEdgeDistanceScore)
         {
           hoot.trace("Geometry match");
           return false;
@@ -187,7 +190,27 @@ exports.matchScore = function(map, e1, e2)
   {
     return result;
   }*/
-  if (geometryMismatch(map, e1, e2))
+
+  var minDistanceScore = 0.577;
+  var minHausdorffDistanceScore = 0.8;
+  var minEdgeDistanceScore = 0.8;
+
+  // TODO
+  var oneToManyTagKey = tags2.getFirstMatchingKey(oneToManyIdentifyingKeys);
+  hoot.trace("oneToManyTagKey: " + oneToManyTagKey);
+  if (oneToManyTagKey !== "")
+  {
+    currentMergeIsOneToMany = true;
+    minDistanceScore = 0.577;
+    minHausdorffDistanceScore = 0.8;
+    minEdgeDistanceScore = 0.8;
+  }
+  else
+  {
+    currentMergeIsOneToMany = false;
+  }
+
+  if (geometryMismatch(map, e1, e2, minDistanceScore, minHausdorffDistanceScore, minEdgeDistanceScore))
   {
     return result;
   }
@@ -198,27 +221,60 @@ exports.matchScore = function(map, e1, e2)
 };
 
 /**
- * The internals of geometry merging can become quite complex. Typically this
- * method will simply call another hoot method to perform the appropriate merging
- * of geometries.
+ * The internals of geometry merging can become quite complex. Typically this method will simply
+   call another hoot method to perform the appropriate merging of geometries.
  *
  * If this method is exported then the mergePair method should not be exported.
  *
  * @param map The map that is being conflated
  * @param pairs An array of ElementId pairs that will be merged.
- * @param replaced An empty array is passed in, the method should fill the array
- *      with all the replacements that occur during the merge process (e.g. if two
- *      elements (way:1 & way:2) are merged into one element (way:3), then the
- *      replaced array should contain [[way:1, way:3], [way:1, way:3]] where all
- *      the "way:*" objects are of the ElementId type.
+ * @param replaced An empty array is passed in, the method should fill the array with all the
+   replacements that occur during the merge process (e.g. if two elements (way:1 & way:2) are merged
+   into one element (way:3), then the replaced array should contain [[way:1, way:3], [way:1, way:3]]
+   where all the "way:*" objects are of the ElementId type.
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
-  // TODO: diff logic path if we have a one to many match; not sure yet if merging many to one
-  // geometries is possible with the existing logic
+  hoot.trace("oneToManyMergeGeometries: " + oneToManyMergeGeometries);
+  hoot.trace("currentMergeIsOneToMany: " + currentMergeIsOneToMany);
 
-  // Snap the ways in the second input to the first input. Use the default tag merge method.
-  return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType);
+  if (currentMergeIsOneToMany)
+  {
+    hoot.trace("oneToManyTransferKeys: " + oneToManyTransferKeys);
+    hoot.set({'tag.merger.default': 'SelectedOverwriteTag1Merger'});
+    hoot.set({'selected.overwrite.tag.merger.keys': oneToManyTransferKeys});
+    //var newTags = hoot.TagMergerFactory.mergeTags(e1.getTags(), e2.getTags());
+    //hoot.trace("newTags: " + newTags);
+    //e1.setTags(newTags);
+
+    if (!oneToManyMergeGeometries)
+    {
+      hoot.set({'geometry.linear.merger.default': 'LinearTagOnlyMerger'});
+    }
+    else
+    {
+      hoot.set({'geometry.linear.merger.default': defaultLinearMerger});
+    }
+  }
+  else
+  {
+    hoot.set({'tag.merger.default': defaultTagMerger});
+    var empty = [];
+    hoot.set({'selected.overwrite.tag.merger.keys': empty});
+    hoot.set({'geometry.linear.merger.default': defaultLinearMerger});
+  }
+
+  //if (oneToManyMergeGeometries)
+  //{
+    // Snap the ways in the second input to the first input. Use the default tag merge method.
+    return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType/*, !currentMergeIsOneToMany*/);
+  //}
+  /*else
+  {
+    // TODO: not sure what to return here...not sure it matters
+    var pair = [ e2.getElementId(), e1.getElementId() ];
+    replaced.push(pair);
+  }*/
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)
@@ -233,13 +289,9 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
     var m1 = sublines.match1;
     var m2 = sublines.match2;
 
-    featureDetails["weightedShapeDistance"] = weightedShapeDistanceExtractor.extract(m, m1, m2);
     featureDetails["distanceScore"]         = distanceScoreExtractor.extract(m, m1, m2);
     featureDetails["edgeDistance"]          = edgeDistanceExtractor.extract(m, m1, m2);
-    featureDetails["euclideanDistance"]     = euclideanDistanceExtractor.extract(m, m1, m2);
     featureDetails["hausdorffDistance"]     = hausdorffDistanceExtractor.extract(m, m1, m2);
-    featureDetails["parallelScore"]         = parallelScoreExtractor.extract(m, m1, m2);
-    featureDetails["lengthScore"]           = lengthScoreExtractor.extract(m, m1, m2);
   }
 
   return featureDetails;

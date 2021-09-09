@@ -118,9 +118,8 @@ exports.matchScore = function(map, e1, e2)
 };
 
 /**
- * Simpler version of the mergeSets function. Maybe only support this at first.
- * It only supports merging two elements and the replaced list is determined
- * implicitly based on the result.
+ * Simpler version of the mergeSets function. Maybe only support this at first. It only supports
+   merging two elements and the replaced list is determined implicitly based on the result.
  */
 exports.mergePair = function(map, e1, e2)
 {
@@ -129,7 +128,8 @@ exports.mergePair = function(map, e1, e2)
   e1.setStatusString("conflated");
   if (exports.writeDebugTags == "true" && exports.writeMatchedBy == "true")
   {
-    // Technically, we should get this key from MetadataTags, but that's not integrated with hoot yet.
+    // Technically we should get this key from MetadataTags, but that's not integrated with hoot
+    // yet.
     e1.setTag("hoot:matchedBy", exports.baseFeatureType);
   }
   return e1;

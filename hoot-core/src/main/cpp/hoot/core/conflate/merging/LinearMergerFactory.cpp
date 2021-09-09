@@ -38,7 +38,8 @@ namespace hoot
 
 MergerPtr LinearMergerFactory::getMerger(
   const std::set<std::pair<ElementId, ElementId>>& eids,
-  const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const QString matchedBy)
+  const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const QString matchedBy/*,
+  const bool mergeTags*/)
 {
   MergerPtr merger =
     Factory::getInstance().constructObject<Merger>(
@@ -53,13 +54,14 @@ MergerPtr LinearMergerFactory::getMerger(
   linearMerger->setMatchedBy(matchedBy);
   linearMerger->setPairs(eids);
   linearMerger->setSublineMatcher(sublineMatcher);
+  //linearMerger->setMergeTags(mergeTags);
   return merger;
 }
 
 MergerPtr LinearMergerFactory::getMerger(
   const std::set<std::pair<ElementId, ElementId>>& eids,
   const QSet<ConstEdgeMatchPtr>& edgeMatches, const ConstNetworkDetailsPtr& details,
-  const QString matchedBy)
+  const QString matchedBy/*, const bool mergeTags*/)
 {
   MergerPtr merger;
 
@@ -69,7 +71,8 @@ MergerPtr LinearMergerFactory::getMerger(
   // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
   const bool isAverageConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
-  if (isAttributeConflate)
+  // TODO
+  if (isAttributeConflate /*&& mergeTags*/)
   {
     // This is messy, but we'll need some refactoring to get rid of it.
     merger =
@@ -89,6 +92,9 @@ MergerPtr LinearMergerFactory::getMerger(
     // Reference or Differential Network Conflation; The Network algorithm doesn't support
     // Differential Conflation partial match merging yet, so we don't use it.
     merger = std::make_shared<PartialNetworkMerger>(eids, edgeMatches, details);
+//    std::shared_ptr<MergerBase> mergerBase =
+//      std::dynamic_pointer_cast<MergerBase>(merger);
+//    mergerBase->setMergeTags(mergeTags);
   }
 
   return merger;

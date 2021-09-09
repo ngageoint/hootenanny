@@ -65,6 +65,7 @@ private:
 
   static void contains(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void get(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getFirstMatchingKey(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getInformationCount(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getNames(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void set(const v8::FunctionCallbackInfo<v8::Value>& args);

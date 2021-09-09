@@ -110,10 +110,23 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   vector<pair<ElementId, ElementId>> replaced = toCpp<vector<pair<ElementId, ElementId>>>(args[3]);
   const QString matchedBy = toCpp<QString>(args[4]);
   LOG_VART(matchedBy);
+//  bool mergeTags = true;
+//  if (args.Length() == 6)
+//  {
+//    mergeTags = toCpp<bool>(args[5]);
+//  }
 
-  MergerPtr merger = LinearMergerFactory::getMerger(pairs, sublineStringMatcher, matchedBy);
-  LOG_VART(merger->getClassName());
-  merger->apply(map, replaced);
+  MergerPtr merger =
+    LinearMergerFactory::getMerger(pairs, sublineStringMatcher, matchedBy/*, mergeTags*/);
+  //if (merger)
+  //{
+    LOG_VART(merger->getClassName());
+    merger->apply(map, replaced);
+  //}
+//  else
+//  {
+//    // TODO
+//  }
 
   // Modify the parameter that was passed in.
   Local<Array> newArr = Local<Array>::Cast(toV8(replaced));

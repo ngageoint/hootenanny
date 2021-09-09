@@ -94,7 +94,6 @@ private:
 
   void _processFullMatch(const OsmMapPtr& map,
                          std::vector<std::pair<ElementId, ElementId>>& replaced);
-
   void _processStubMatch(const OsmMapPtr& map,
                          const std::vector<std::pair<ElementId, ElementId>>& replaced,
                          ConstEdgeMatchPtr edgeMatch);

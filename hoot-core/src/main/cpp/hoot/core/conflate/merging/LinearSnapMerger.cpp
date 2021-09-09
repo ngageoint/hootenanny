@@ -172,8 +172,11 @@ bool LinearSnapMerger::_mergePair(
   // Snap the ends together.
   _snapEnds(e2Match, e1Match);
 
-  // Merge the attributes appropriately.
-  _mergeTags(e1->getTags(), e2->getTags(), e1Match);
+  //if (_mergeTags)
+  //{
+    // Merge the attributes appropriately.
+    _mergeElementTags(e1->getTags(), e2->getTags(), e1Match);
+  //}
 \
   // Do some ID handling for ways.
   bool swapWayIds = false;
@@ -281,7 +284,7 @@ WaySublineMatchString LinearSnapMerger::_matchSubline(ElementPtr e1, ElementPtr 
   return _sublineMatcher->findMatch(_map, e1, e2);
 }
 
-void LinearSnapMerger::_mergeTags(
+void LinearSnapMerger::_mergeElementTags(
   const Tags& e1Tags, const Tags& e2Tags, const ElementPtr& e1Match) const
 {
   LOG_TRACE("Merging tags...");
@@ -414,7 +417,7 @@ void LinearSnapMerger::_snapEnd(
   const QStringList nodeKvpExcludeList("highway=road");
   // If the node we just replaced has info and the one we're replacing it with does not, let's copy
   // that info over to the replacement.
-  if (replacedNode->getTags().hasInformationTag() &&
+  if (/*_mergeTags &&*/ replacedNode->getTags().hasInformationTag() &&
       !replacementNode->getTags().hasInformationTag() &&
       !replacedNode->getTags().hasAnyKvp(nodeKvpExcludeList))
   {
@@ -493,7 +496,10 @@ void LinearSnapMerger::_splitElement(
     LOG_VART(r->getElementId());
   }
 
-  match->setTags(splitee->getTags());
+  //if (_mergeTags)
+  //{
+    match->setTags(splitee->getTags());
+  //}
   match->setCircularError(splitee->getCircularError());
   match->setStatus(splitee->getStatus());
 
@@ -573,8 +579,11 @@ void LinearSnapMerger::_splitElement(
       multiLineStringAdded = true;
     }
 
-    // Make sure the tags are still legit on the scrap.
-    scrap->setTags(splitee->getTags());
+    //if (_mergeTags)
+    //{
+      // Make sure the tags are still legit on the scrap.
+      scrap->setTags(splitee->getTags());
+    //}
     // With the merging switching between split ways and relations, it gets a little hard to keep
     // track of where this tag is needed, so one final check here to make sure it gets added
     // correctly.
