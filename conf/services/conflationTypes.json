@@ -140,6 +140,7 @@
         "matcher": "ScriptMatchCreator,Railway.js",
         "merger": "ScriptMergerCreator",
         "members": {
+            "railway.one.to.many.keys": "Keys allowing for a one to many feature tag transfer from secondary to reference",
             "search.radius.railway": "Search radius (m); -1 for default"
         }
     },

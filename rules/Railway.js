@@ -13,9 +13,9 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 
 exports.searchRadius = parseFloat(hoot.get("search.radius.railway"));
 
-// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
-// If that ever changes, then the generic score threshold configuration options used below should 
-// be replaced with custom score threshold configuration options.
+// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't
+// used. If that ever changes, then the generic score threshold configuration options used below
+// should be replaced with custom score threshold configuration options.
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
@@ -30,13 +30,13 @@ exports.matchCandidateCriterion = "RailwayCriterion";
 var sublineStringMatcher = hoot.SublineStringMatcherFactory.getMatcher(exports.baseFeatureType);
 
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
-// Use default spacing, 5 meters
+// Use default spacing of 5 meters.
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
-var euclideanDistanceExtractor = new hoot.EuclideanDistanceExtractor();
 var hausdorffDistanceExtractor = new hoot.HausdorffDistanceExtractor();
-var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
-var parallelScoreExtractor = new hoot.ParallelScoreExtractor();
-var lengthScoreExtractor = new hoot.LengthScoreExtractor();
+
+//var oneToManyIdentifyingKeys = hoot.get("railway.one.to.many.identifying.keys").split(';');
+//var oneToManyTransferKeys = hoot.get("railway.one.to.many.transfer.keys").split(';');
+//var oneToManyMergeGeometries = hoot.get("railway.one.to.many.reference.merge.geometries");
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
@@ -61,6 +61,46 @@ exports.isWholeGroup = function()
   return false;
 };
 
+function geometryMismatch(map, e1, e2)
+{
+  hoot.trace("Processing geometry...");
+
+  var sublines;
+  hoot.trace("Extracting sublines with default...");
+  sublines = sublineStringMatcher.extractMatchingSublines(map, e1, e2);
+  hoot.trace(sublines);
+  if (sublines)
+  {
+    var m = sublines.map;
+    var m1 = sublines.match1;
+    var m2 = sublines.match2;
+
+    // TODO: diff logic path if we find a one to many identifying key in e2
+
+    /*
+     Classifier derived using WEKA 3.8.2, then tweaked the numbers a bit. Classifier chosen was
+     "REPTree".
+    */
+    var distanceScore = distanceScoreExtractor.extract(m, m1, m2);
+    if (distanceScore >= 0.577)
+    {
+      var hausdorffDistance = hausdorffDistanceExtractor.extract(m, m1, m2);
+      if (hausdorffDistance >= 0.8)
+      {
+        var edgeDistance  = edgeDistanceExtractor.extract(m, m1, m2);
+        if (edgeDistance >= 0.8)
+        {
+          hoot.trace("Geometry match");
+          return false;
+        }
+      }
+    }
+  }
+
+  hoot.trace("Geometry mismatch");
+  return true;
+}
+
 /**
  * Returns the match score for the three class relationships.
  * - match
@@ -79,30 +119,30 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  // Extract the sublines needed for matching.
+  var tags1 = e1.getTags();
+  var tags2 = e2.getTags();
 
-  var sublines;
-  hoot.trace("Extracting sublines with default...");
-  sublines = sublineStringMatcher.extractMatchingSublines(map, e1, e2);
-  hoot.trace(sublines);
-  if (sublines)
+  hoot.trace("**********************************");
+  hoot.trace("e1: " + e1.getElementId() + ", " + tags1.get("name"));
+  if (tags1.get("note"))
   {
-    var m = sublines.map;
-    var m1 = sublines.match1;
-    var m2 = sublines.match2;
-
-    var distanceScore = distanceScoreExtractor.extract(m, m1, m2);
-    var edgeDistance  = edgeDistanceExtractor.extract(m, m1, m2);
-    var hausdorffDistance = hausdorffDistanceExtractor.extract(m, m1, m2);
-
-    var attribs = [distanceScore, edgeDistance, hausdorffDistance];
-    var classification = WekaClassifier.classify(attribs);
-    if (0 === classification) {
-      hoot.trace("Found Match!");
-      result = { match: 1.0, explain:"match" };
-    }
+    hoot.trace("e1 note: " + tags1.get("note"));
+  }
+  hoot.trace("e2: " + e2.getElementId() + ", " + tags2.get("name"));
+  if (tags2.get("note"))
+  {
+    hoot.trace("e2 note: " + tags2.get("note"));
   }
 
+  // TODO: check for type and name mismatch
+
+  if (geometryMismatch(map, e1, e2))
+  {
+    return result;
+  }
+
+  hoot.trace("match");
+  result = { match: 1.0, explain:"match" };
   return result;
 };
 
@@ -123,8 +163,10 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
-  // snap the ways in the second input to the first input. Use the default tag
-  // merge method.
+  // TODO: diff logic path if we have a one to many match; not sure yet if merging many to one
+  // geometries is possible with the existing logic
+
+  // Snap the ways in the second input to the first input. Use the default tag merge method.
   return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType);
 };
 
@@ -151,59 +193,3 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
 
   return featureDetails;
 };
-
-/*
-Classifier derived using WEKA 3.8.2
-... And then I tweaked the numbers a bit
-Classifier chosen was "REPTree"
-
-Invoke WekaClassifier.classify(i) with:
-i[0] = distanceScore
-i[1] = edgeDistance
-i[2] = hausdorffDistance
-*/
-class WekaClassifier {
-
-  static classify(i) {
-    var p = NaN;
-    p = WekaClassifier.N1ddbfdb32(i);
-    return p;
-  }
-
-  static N1ddbfdb32(i) {
-    var p = NaN;
-    /* distanceScore */
-    if (i[0] == null) {
-      p = 1;
-    } else if (i[0] < 0.577) {
-      p = 1;
-    } else if (true) {
-    p = WekaClassifier.N4ee8593a3(i);
-    }
-    return p;
-  }
-  static N4ee8593a3(i) {
-    var p = NaN;
-    /* hausdorffDistance */
-    if (i[2] == null) {
-      p = 1;
-    } else if (i[2] < 0.800) {
-      p = 1;
-    } else if (true) {
-    p = WekaClassifier.N296715a14(i);
-    }
-    return p;
-  }
-  static N296715a14(i) {
-    var p = NaN;
-    /* edgeDistance */
-    if (i[1] == null) {
-      p = 1;
-    } else if (i[1] < 0.800) {
-      p = 1;
-    } else if (true) {
-      p = 0;
-    }
-    return p;
-  }
-}

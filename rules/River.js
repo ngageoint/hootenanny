@@ -202,8 +202,8 @@ exports.matchScore = function(map, e1, e2)
   hoot.trace("mostSpecificType 1: " + hoot.OsmSchema.mostSpecificType(e1));
   hoot.trace("mostSpecificType 2: " + hoot.OsmSchema.mostSpecificType(e2));
   
-  // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
-  // look for an explicit type mismatch.
+  // If both features have types and they aren't just generic types, let's do a detailed type
+  // comparison and look for an explicit type mismatch.
   var typeScorePassesThreshold = !hoot.OsmSchema.explicitTypeMismatch(e1, e2, exports.typeThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
   if (!typeScorePassesThreshold)

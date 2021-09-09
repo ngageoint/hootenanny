@@ -4418,14 +4418,6 @@ A quantile value, in the range [0.0, 1.0], for `QuantileAggregator`.
 Maximum length, in characters, allowed when logging a variable value during progress logging. Not
 honored by all progress logging.
 
-=== railway.angle.sample.distance
-
-* Data Type: double
-* Default Value: `20.0`
-
-Distance, in meters, used for sampling railway data during angle histogram extraction with
-`SampledAngleHistogramExtractor`.
-
 === railway.matcher.heading.delta
 
 * Data Type: double
@@ -4440,6 +4432,30 @@ The distance around a point on a railway to look when calculating the heading. S
 * Default Value: `90.0`
 
 Sets that maximum angle, in degrees, that is still considered a railway match.
+
+=== railway.one.to.many.identifying.keys
+
+* Data Type: list
+* Default Value:
+** `lines`
+** `lanes`
+
+TODO
+
+=== railway.one.to.many.reference.merge.geometries
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
+=== railway.one.to.many.transfer.keys
+
+* Data Type: list
+* Default Value:
+** `name`
+
+TODO
 
 === railway.subline.matcher
 
