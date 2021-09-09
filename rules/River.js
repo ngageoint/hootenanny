@@ -37,6 +37,7 @@ var sampledAngleHistogramExtractor =
       "way.matcher.heading.delta" : hoot.get("river.matcher.heading.delta"),
       "angle.histogram.extractor.process.relations" : "false" });
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
+
 var nameExtractor = new hoot.NameExtractor(
   new hoot.MaxWordSetDistance(
     { "token.separator": "[\\s-,';]+" },
@@ -210,8 +211,6 @@ exports.matchScore = function(map, e1, e2)
   {
     return result;
   }
-  hoot.trace("mostSpecificType(e1): " + hoot.OsmSchema.mostSpecificType(e1));
-  hoot.trace("mostSpecificType(e2): " + hoot.OsmSchema.mostSpecificType(e2));
   if (nameMismatch(map, e1, e2))
   {
     return result;

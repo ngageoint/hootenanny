@@ -19,6 +19,9 @@ exports.searchRadius = parseFloat(hoot.get("search.radius.railway"));
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
+// TODO: create custom options for these
+exports.nameThreshold = parseFloat(hoot.get("river.name.threshold"));
+exports.typeThreshold = parseFloat(hoot.get("river.type.threshold"));
 
 // This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
 // culling match candidates.
@@ -33,6 +36,13 @@ var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 // Use default spacing of 5 meters.
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
 var hausdorffDistanceExtractor = new hoot.HausdorffDistanceExtractor();
+
+var nameExtractor = new hoot.NameExtractor(
+  new hoot.MaxWordSetDistance(
+    { "token.separator": "[\\s-,';]+" },
+    // runs just a little faster w/ tokenize off
+    { "translate.string.distance.tokenize": "false" },
+    new hoot.LevenshteinDistance( { "levenshtein.distance.alpha": 1.15 } )));
 
 //var oneToManyIdentifyingKeys = hoot.get("railway.one.to.many.identifying.keys").split(';');
 //var oneToManyTransferKeys = hoot.get("railway.one.to.many.transfer.keys").split(';');
@@ -60,6 +70,32 @@ exports.isWholeGroup = function()
 {
   return false;
 };
+
+function nameMismatch(map, e1, e2)
+{
+  // TODO: move this to HootLib.js
+
+  hoot.trace("Processing name...");
+
+  var tags1 = e1.getTags();
+  var tags2 = e2.getTags();
+
+  var nameScore = 1.0;
+
+  // only score the name if both have one
+  if (bothElementsHaveName(e1, e2))
+  {
+    nameScore = nameExtractor.extract(map, e1, e2);
+  }
+
+  if (nameScore < exports.nameThreshold)
+  {
+    hoot.trace("Explict name mismatch: " + e1.getTags().get("name") + ", " + e2.getTags().get("name"));
+    return true;
+  }
+
+  return false;
+}
 
 function geometryMismatch(map, e1, e2)
 {
@@ -133,9 +169,24 @@ exports.matchScore = function(map, e1, e2)
   {
     hoot.trace("e2 note: " + tags2.get("note"));
   }
+  hoot.trace("mostSpecificType 1: " + hoot.OsmSchema.mostSpecificType(e1));
+  hoot.trace("mostSpecificType 2: " + hoot.OsmSchema.mostSpecificType(e2));
 
-  // TODO: check for type and name mismatch
-
+  // TODO: disabling this for now due to the typing on the regression test secondary data
+  // If both features have types and they aren't just generic types, let's do a detailed type
+  // comparison and look for an explicit type mismatch.
+  /*var typeScorePassesThreshold = !hoot.OsmSchema.explicitTypeMismatch(e1, e2, exports.typeThreshold);
+  hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
+  if (!typeScorePassesThreshold)
+  {
+    return result;
+  }*/
+  /*This is probably eventually a good idea, but don't have any test data to back up needing it
+  yet.*/
+  /*if (nameMismatch(map, e1, e2))
+  {
+    return result;
+  }*/
   if (geometryMismatch(map, e1, e2))
   {
     return result;
