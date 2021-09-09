@@ -140,7 +140,9 @@
         "matcher": "ScriptMatchCreator,Railway.js",
         "merger": "ScriptMergerCreator",
         "members": {
-            "railway.one.to.many.keys": "Keys allowing for a one to many feature tag transfer from secondary to reference",
+            "railway.one.to.many.identifying.keys": "Tag keys allowing for a one to many feature tag transfer from secondary to reference",
+            "railway.one.to.many.transfer.keys": "Tag keys to transfer in a one to many feature tag transfer from secondary to reference",
+            "railway.one.to.many.reference.merge.geometries": "Merge geometries when using Reference Conflation",
             "search.radius.railway": "Search radius (m); -1 for default"
         }
     },
