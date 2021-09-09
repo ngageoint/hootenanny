@@ -1423,3 +1423,20 @@ This tag merger is similar to `OverWriteTag1Merger` but completely replaces tags
 
 This tag merger is similar to `OverWriteTag2Merger` but completely replaces tags in the second input with tags from the first input. Implementation: `ReplaceTag2Merger`
 
+[[Selective-Overwrite-Tag-1-Tag-Merger]]
+===== Selective Overwrite Tag 1 Tag Merger
+
+This tag merger is similar to `OverWriteTag1Merger` but completely replaces tags in the first input 
+with tags from the second input based on a set of selected tag keys only. The keys are controlled by 
+the configuration option `selective.overwrite.tag.merger.keys`. Implementation: 
+`SelectiveOverwriteTag1Merger`
+
+[[Selective-Overwrite-Tag-2-Tag-Merger]]
+===== Selective Overwrite Tag 2 Tag Merger
+
+This tag merger is similar to `OverWriteTag2Merger` but completely replaces tags in the first input 
+with tags from the second input based on a set of selected tag keys only. The keys are controlled by 
+the configuration option `selective.overwrite.tag.merger.keys`. Implementation: 
+`SelectiveOverwriteTag2Merger`
+
+

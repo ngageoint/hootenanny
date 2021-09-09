@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef SELECTED_OVERWRITE_TAG_MERGER_H
-#define SELECTED_OVERWRITE_TAG_MERGER_H
+#ifndef SELECTIVE_OVERWRITE_TAG_MERGER_H
+#define SELECTIVE_OVERWRITE_TAG_MERGER_H
 
 // Hoot
 #include <hoot/core/schema/TagMerger.h>
@@ -36,17 +36,17 @@ namespace hoot
 /**
  * TODO
  */
-class SelectedOverwriteTagMerger : public TagMerger
+class SelectiveOverwriteTagMerger : public TagMerger
 {
 public:
 
-  static QString className() { return "SelectedOverwriteTagMerger"; }
+  static QString className() { return "SelectiveOverwriteTagMerger"; }
 
   /**
    * If swap is set to true then t1 will be overwritten with t2 values.
    */
-  SelectedOverwriteTagMerger(bool swap = false);
-  virtual ~SelectedOverwriteTagMerger() = default;
+  SelectiveOverwriteTagMerger(bool swap = false);
+  virtual ~SelectiveOverwriteTagMerger() = default;
 
   Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
@@ -70,14 +70,14 @@ private:
 /**
  * TODO
  */
-class SelectedOverwriteTag2Merger : public SelectedOverwriteTagMerger
+class SelectiveOverwriteTag2Merger : public SelectiveOverwriteTagMerger
 {
 public:
 
-  static QString className() { return "SelectedOverwriteTag2Merger"; }
+  static QString className() { return "SelectiveOverwriteTag2Merger"; }
 
-  SelectedOverwriteTag2Merger() : SelectedOverwriteTagMerger(false) { }
-  ~SelectedOverwriteTag2Merger() = default;
+  SelectiveOverwriteTag2Merger() : SelectiveOverwriteTagMerger(false) { }
+  ~SelectiveOverwriteTag2Merger() = default;
 
   QString getDescription() const override
   {  return "Overwrites selected conflicting tags only with those from the reference feature"; }
@@ -88,14 +88,14 @@ public:
 /**
  * TODO
  */
-class SelectedOverwriteTag1Merger : public SelectedOverwriteTagMerger
+class SelectiveOverwriteTag1Merger : public SelectiveOverwriteTagMerger
 {
 public:
 
-  static QString className() { return "SelectedOverwriteTag1Merger"; }
+  static QString className() { return "SelectiveOverwriteTag1Merger"; }
 
-  SelectedOverwriteTag1Merger() : SelectedOverwriteTagMerger(true) { }
-  ~SelectedOverwriteTag1Merger() = default;
+  SelectiveOverwriteTag1Merger() : SelectiveOverwriteTagMerger(true) { }
+  ~SelectiveOverwriteTag1Merger() = default;
 
   QString getDescription() const override
   {  return "Overwrites selected conflicting tags only with those from the secondary feature"; }
@@ -105,4 +105,4 @@ public:
 
 }
 
-#endif // SELECTED_OVERWRITE_TAG_MERGER_H
+#endif // SELECTIVE_OVERWRITE_TAG_MERGER_H

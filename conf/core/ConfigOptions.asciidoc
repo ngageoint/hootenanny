@@ -5174,7 +5174,7 @@ The search radius to use when conflating rivers. This value is not used if
 `river.auto.calc.search.radius=true`, and in that case the search radius is auto-calculated for
 the entire input dataset. See `search.radius.default`.
 
-=== selected.overwrite.tag.merger.keys
+=== selective.overwrite.tag.merger.keys
 
 * Data Type: list
 * Default Value:

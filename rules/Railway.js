@@ -241,7 +241,7 @@ exports.mergeSets = function(map, pairs, replaced)
   if (currentMergeIsOneToMany)
   {
     hoot.trace("oneToManyTransferKeys: " + oneToManyTransferKeys);
-    hoot.set({'tag.merger.default': 'SelectedOverwriteTag1Merger'});
+    hoot.set({'tag.merger.default': 'SelectiveOverwriteTag1Merger'});
     hoot.set({'selected.overwrite.tag.merger.keys': oneToManyTransferKeys});
 
     if (!oneToManyMergeGeometries)

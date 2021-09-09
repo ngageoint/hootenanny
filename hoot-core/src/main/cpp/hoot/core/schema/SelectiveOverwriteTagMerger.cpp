@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
-#include "SelectedOverwriteTagMerger.h"
+#include "SelectiveOverwriteTagMerger.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
@@ -32,23 +32,24 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(TagMerger, SelectedOverwriteTagMerger)
-HOOT_FACTORY_REGISTER(TagMerger, SelectedOverwriteTag1Merger)
-HOOT_FACTORY_REGISTER(TagMerger, SelectedOverwriteTag2Merger)
+HOOT_FACTORY_REGISTER(TagMerger, SelectiveOverwriteTagMerger)
+HOOT_FACTORY_REGISTER(TagMerger, SelectiveOverwriteTag1Merger)
+HOOT_FACTORY_REGISTER(TagMerger, SelectiveOverwriteTag2Merger)
 
-SelectedOverwriteTagMerger::SelectedOverwriteTagMerger(bool swap) :
+SelectiveOverwriteTagMerger::SelectiveOverwriteTagMerger(bool swap) :
 _swap(swap)
 {
 }
 
-void SelectedOverwriteTagMerger::setConfiguration(const Settings& conf)
+void SelectiveOverwriteTagMerger::setConfiguration(const Settings& conf)
 {
   TagMerger::setConfiguration(conf);
   ConfigOptions config = ConfigOptions(conf);
-  setTagKeys(config.getSelectedOverwriteTagMergerKeys());
+  setTagKeys(config.getSelectiveOverwriteTagMergerKeys());
 }
 
-Tags SelectedOverwriteTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
+Tags SelectiveOverwriteTagMerger::mergeTags(
+  const Tags& t1, const Tags& t2, ElementType /*et*/) const
 {
   LOG_VART(_tagKeys);
   LOG_VART(_caseSensitive);
