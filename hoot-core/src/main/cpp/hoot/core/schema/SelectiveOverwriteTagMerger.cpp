@@ -52,7 +52,6 @@ Tags SelectiveOverwriteTagMerger::mergeTags(
   const Tags& t1, const Tags& t2, ElementType /*et*/) const
 {
   LOG_VART(_tagKeys);
-  LOG_VART(_caseSensitive);
 
   Tags tagsToOverwriteWith;
   Tags tagsToBeOverwritten;
@@ -66,16 +65,20 @@ Tags SelectiveOverwriteTagMerger::mergeTags(
     tagsToOverwriteWith = t2;
     tagsToBeOverwritten = t1;
   }
+  LOG_VART(tagsToOverwriteWith);
+  LOG_VART(tagsToBeOverwritten);
 
   for (int i = 0; i < _tagKeys.size(); i++)
   {
     const QString tagKey = _tagKeys.at(i);
+    LOG_VART(tagKey);
     if (tagsToOverwriteWith.contains(tagKey))
     {
       tagsToBeOverwritten[tagKey] = tagsToOverwriteWith[tagKey];
     }
   }
 
+  LOG_VART(tagsToBeOverwritten);
   return tagsToBeOverwritten;
 }
 

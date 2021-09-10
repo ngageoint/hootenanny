@@ -129,7 +129,6 @@ vector<CreatorDescription> ScriptMergerCreator::getAllCreators() const
   d.setExperimental(false);
   vector<CreatorDescription> result;
   result.push_back(d);
-
   return result;
 }
 

@@ -34,7 +34,8 @@ namespace hoot
 {
 
 /**
- * TODO
+ * @brief The SelectiveOverwriteTagMerger class will only transfer tags specified in a list from on
+ * element to another.
  */
 class SelectiveOverwriteTagMerger : public TagMerger
 {
@@ -63,12 +64,13 @@ private:
 
   bool _swap;
 
-  // TODO
+  // list that determines which tags are transferred
   QStringList _tagKeys;
 };
 
 /**
- * TODO
+ * @brief The SelectiveOverwriteTag2Merger class will only transfer tags specified in a list from
+ * element 1 to element 2.
  */
 class SelectiveOverwriteTag2Merger : public SelectiveOverwriteTagMerger
 {
@@ -86,7 +88,8 @@ public:
 };
 
 /**
- * TODO
+ * @brief The SelectiveOverwriteTag1Merger class will only transfer tags specified in a list from
+ * element 2 to element 1.
  */
 class SelectiveOverwriteTag1Merger : public SelectiveOverwriteTagMerger
 {

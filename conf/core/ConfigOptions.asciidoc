@@ -4437,25 +4437,23 @@ Sets that maximum angle, in degrees, that is still considered a railway match.
 
 * Data Type: list
 * Default Value:
-** `lines`
-** `lanes`
+** ``
 
-TODO
-
-=== railway.one.to.many.reference.merge.geometries
-
-* Data Type: bool
-* Default Value: `false`
-
-TODO
+List of tag keys with values identifying how many tracks a particular rail has. If any of the tags
+are found in a rail from the second input, railway matching will attempt a one to many match from
+input 2 to input 1 with matches up to the number of tracks specified in the tag value (arbitarily,
+the first tag found from the key list is used). Only tag merging of selected tags (see
+`railway.one.to.many.transfer.keys`) will be performed with no geometry merging, regardless of the
+conflation workflow in use.
 
 === railway.one.to.many.transfer.keys
 
 * Data Type: list
 * Default Value:
-** `name`
+** ``
 
-TODO
+List of tags to transfer from input 2 rail feature to input 1 rail feature if the conditions
+described in `railway.one.to.many.identifying.keys` are satisfied.
 
 === railway.subline.matcher
 

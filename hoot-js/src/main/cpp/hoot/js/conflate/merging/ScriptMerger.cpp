@@ -245,7 +245,8 @@ bool ScriptMerger::hasFunction(QString name) const
   Context::Scope context_scope(_script->getContext(current));
   Local<Context> context = current->GetCurrentContext();
   Local<Object> plugin =
-    Local<Object>::Cast(_script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
+    Local<Object>::Cast(
+      _script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
   Local<Value> value = plugin->Get(context, toV8(name.toUtf8().data())).ToLocalChecked();
 
   bool result = true;
