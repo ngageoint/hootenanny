@@ -78,7 +78,7 @@ Tags SelectiveOverwriteTagMerger::mergeTags(
     }
   }
 
-  LOG_VART(tagsToBeOverwritten);
+  LOG_TRACE("merged tags: " << tagsToBeOverwritten);
   return tagsToBeOverwritten;
 }
 

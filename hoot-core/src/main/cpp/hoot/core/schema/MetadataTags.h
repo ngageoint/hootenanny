@@ -65,6 +65,14 @@ public:
 
   inline static QString HootBuildingMatch()             { return "hoot:building:match"; }
 
+  /**
+   * @brief HootRailwayOneToManyMatchSecondary This is used to identify secondary features to delete
+   * in the railway conflate one to many workflow.
+   * @return a string
+   */
+  inline static QString HootRailwayOneToManyMatchSecondary()
+  { return "hoot:railway:one:to:many:match:secondary"; }
+
   inline static QString HootActual()                    { return "hoot:actual"; }
   inline static QString HootExpected()                  { return "hoot:expected"; }
   inline static QString HootMismatch()                  { return "hoot:mismatch"; }

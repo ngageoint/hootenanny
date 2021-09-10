@@ -30,15 +30,15 @@ function testAdd(v1, v2)
  */
 function mergeElements(map, e1, e2) 
 {
-  // merge tags from e2 into e1 using default tag merging
+  // Merge tags from e2 into e1 using default tag merging.
   var newTags = hoot.TagMergerFactory.mergeTags(e1.getTags(), e2.getTags());
   e1.setTags(newTags);
 
   new hoot.ReplaceElementOp(e2, e1).apply(map);
-  // remove the tags on e2 just in case we can't delete it.
+  // Remove the tags on e2 just in case we can't delete it.
   e2.setTags(new hoot.Tags());
-  // try to delete e2. This may silently fail if it is still part of another
-  // element. Failure in this case isn't necessarily bad.
+  // Try to delete e2. This may silently fail if it is still part of another element. Failure in
+  // this case isn't necessarily bad.
   new hoot.RecursiveElementRemover(e2).apply(map);
 }
 

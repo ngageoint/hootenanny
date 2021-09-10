@@ -80,8 +80,8 @@ void ScriptMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>
   }
 }
 
-void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
-  vector<pair<ElementId, ElementId>>& replaced) const
+void ScriptMerger::_applyMergePair(
+  const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced) const
 {
   LOG_VART(_eid1);
   LOG_VART(_eid2);
@@ -158,8 +158,8 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
   }
 }
 
-void ScriptMerger::_applyMergeSets(const OsmMapPtr& map,
-  vector<pair<ElementId, ElementId>>& replaced) const
+void ScriptMerger::_applyMergeSets(
+  const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced) const
 {
   _callMergeSets(map, replaced);
 
@@ -204,8 +204,8 @@ Local<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
   return handleScope.Escape(result);
 }
 
-void ScriptMerger::_callMergeSets(const OsmMapPtr& map,
-  vector<pair<ElementId, ElementId>>& replaced) const
+void ScriptMerger::_callMergeSets(
+  const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced) const
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
@@ -234,11 +234,11 @@ void ScriptMerger::_callMergeSets(const OsmMapPtr& map,
   Local<Value> result = func->Call(context, ToLocal(&_plugin), argc, jsArgs).ToLocalChecked();
   HootExceptionJs::checkV8Exception(result, trycatch);
 
-  // read the replaced values back out
+  // Read the replaced values back out.
   toCpp(jsArgs[2], replaced);
 }
 
-bool ScriptMerger::hasFunction(QString name) const
+bool ScriptMerger::hasFunction(const QString& name) const
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);

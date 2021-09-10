@@ -39,13 +39,24 @@ var oneToManyIdentifyingKeys = hoot.get("railway.one.to.many.identifying.keys").
 // This contains the keys in a secondary feature that will be transferred to a reference feature
 // one a one to many tag only transfer is triggered.
 var oneToManyTransferKeys = hoot.get("railway.one.to.many.transfer.keys").split(';');
-hoot.trace("oneToManyTransferKeys: " + oneToManyTransferKeys);
 // Set the transfer keys on SelectiveOverwriteTag1Merger, as that's the tag merger we'll use for
 // this.
 hoot.set({'selective.overwrite.tag.merger.keys': oneToManyTransferKeys});
+// Used to tag secondary features to identify them for removal post conflate; matches a var in
+// MetadataTags
+var oneToManySecondaryMatchTagKey = "hoot:railway:one:to:many:match:secondary";
+// Determines whether the secondary feature gets deleted from output during merging.
+var oneToManyDeleteSecondary = (hoot.get("railway.one.to.many.delete.secondary") === 'true');
+if (oneToManyDeleteSecondary)
+{
+  hoot.prependToList({'conflate.post.ops': 'RailwayOneToManySecondaryMatchElementRemover'});
+}
 // Save off the default tag merger for merges not involving a one to many match.
 var defaultTagMerger = hoot.get("tag.merger.default");
-var currentMatchIsOneToMany = false;
+// The current one to many match identifying tag key.
+var oneToManyTagKey;
+// Bookkeeping for secondary match elements.
+var oneToManySecondaryMatchElementIds = [];
 // This maps secondary element IDs to the number of matches they're involved in.
 var oneToManyMatches = {};
 
@@ -71,32 +82,6 @@ exports.isWholeGroup = function()
 {
   return false;
 };
-
-function nameMismatch(map, e1, e2)
-{
-  // TODO: move this to HootLib.js
-
-  hoot.trace("Processing name...");
-
-  var tags1 = e1.getTags();
-  var tags2 = e2.getTags();
-
-  var nameScore = 1.0;
-
-  // only score the name if both have one
-  if (bothElementsHaveName(e1, e2))
-  {
-    nameScore = nameExtractor.extract(map, e1, e2);
-  }
-
-  if (nameScore < exports.nameThreshold)
-  {
-    hoot.trace("Explict name mismatch: " + e1.getTags().get("name") + ", " + e2.getTags().get("name"));
-    return true;
-  }
-
-  return false;
-}
 
 function geometryMismatch(map, e1, e2, minDistanceScore, minHausdorffDistanceScore, minEdgeDistanceScore)
 {
@@ -152,6 +137,7 @@ exports.matchScore = function(map, e1, e2)
 {
   var result = { miss: 1.0, explain:"miss" };
 
+  // No intra-dataset conflation is allowed.
   if (e1.getStatusString() === e2.getStatusString())
   {
     return result;
@@ -189,8 +175,8 @@ exports.matchScore = function(map, e1, e2)
   // of ref rails it matches with. Note that no geometry merging is done regardless of the type of
   // conflation being done. It *may* eventually make sense to only skip the geometry merging if
   // Attribute Conflation is selected and perform it when Reference Conflation is selected.
-  currentMatchIsOneToMany = false;
-  var oneToManyTagKey = tags2.getFirstMatchingKey(oneToManyIdentifyingKeys);
+  var currentMatchAttemptIsOneToMany = false;
+  oneToManyTagKey = tags2.getFirstMatchingKey(oneToManyIdentifyingKeys);
   hoot.trace("oneToManyTagKey: " + oneToManyTagKey);
   if (oneToManyTagKey !== "")
   {
@@ -204,7 +190,7 @@ exports.matchScore = function(map, e1, e2)
       return result;
     }
 
-    currentMatchIsOneToMany = true;
+    currentMatchAttemptIsOneToMany = true;
     // If we're doing a one to many, we need to cover a wider swath to get all the matches, so
     // lessen the distance score. This value may need to be tweaked over time, as well as the other
     // score thresholds.
@@ -218,7 +204,8 @@ exports.matchScore = function(map, e1, e2)
   }
 
   hoot.trace("railway match");
-  if (currentMatchIsOneToMany)
+  hoot.trace("currentMatchAttemptIsOneToMany: " + currentMatchAttemptIsOneToMany);
+  if (currentMatchAttemptIsOneToMany)
   {
     // If we found a one to many match, increment our total matches for the secondary feature.
     var numTotalMatches = 1;
@@ -228,6 +215,11 @@ exports.matchScore = function(map, e1, e2)
     }
     oneToManyMatches[e2.getElementId()] = numTotalMatches;
     hoot.trace("total matches for " + e2.getElementId() + ": " + String(numTotalMatches));
+    if (!oneToManySecondaryMatchElementIds.includes(String(e2.getElementId().toString())))
+    {
+      oneToManySecondaryMatchElementIds.push(String(e2.getElementId().toString()));
+    }
+    hoot.trace("oneToManySecondaryMatchElementIds: " + oneToManySecondaryMatchElementIds);
   }
   result = { match: 1.0, explain:"match" };
   return result;
@@ -248,28 +240,45 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
-  hoot.trace("currentMatchIsOneToMany: " + currentMatchIsOneToMany);
-  if (currentMatchIsOneToMany)
+  hoot.trace("Merging railways...");
+  hoot.trace("oneToManySecondaryMatchElementIds: " + oneToManySecondaryMatchElementIds);
+  var secondaryElementsIdsMerged = [];
+  var oneToManyMergeOccurred = false;
+  // If the current match is one to many, we're only bringing over tags from secondary to
+  // reference in our specified list and we're doing no geometry merging.
+  hoot.set({'tag.merger.default': 'SelectiveOverwriteTag1Merger'});
+  hoot.trace("pairs.length: " + pairs.length);
+  for (var i = 0; i < pairs.length; i++)
   {
-    // If the current match is one to many, we're only bringing over tags from secondary to
-    // reference in our specified list and we're doing no geometry merging.
-    hoot.set({'tag.merger.default': 'SelectiveOverwriteTag1Merger'});
-    for (var i = 0; i < pairs.length; i++)
+    var elementIdPair = pairs[i];
+    var element1 = map.getElement(elementIdPair[0]);
+    var element2 = map.getElement(elementIdPair[1]);
+    if (element1 && element2)
     {
-      var elementIdPair = pairs[i];
-      var element1 = map.getElement(elementIdPair[0]);
-      var element2 = map.getElement(elementIdPair[1]);
-      if (element1 && element2)
+      hoot.trace("element1.getElementId(): " + element1.getElementId());
+      hoot.trace("element2.getElementId(): " + element2.getElementId());
+    }
+    if (element1 && element2 && oneToManySecondaryMatchElementIds.includes(String(element2.getElementId().toString())))
+    {
+      hoot.trace("Merging one to many tags for " + element1.getElementId() + " and " + element2.getElementId() + "...");
+      var newTags = hoot.TagMergerFactory.mergeTags(element1.getTags(), element2.getTags());
+      element1.setTags(newTags);
+      element1.setStatusString("conflated");
+      // Record the element merges.
+      replaced.push(elementIdPair);
+      // If we're deleting secondary match features, mark it for removal later.
+      if (oneToManyDeleteSecondary)
       {
-        hoot.trace("Merging one to many tags for " + element1.getElementId() + " and " + element2.getElementId() + "...");
-        var newTags = hoot.TagMergerFactory.mergeTags(element1.getTags(), element2.getTags());
-        element1.setTags(newTags);
-        // Record the element merges.
-        replaced.push(elementIdPair);
+        element2.setTag(oneToManySecondaryMatchTagKey, "yes");
       }
+      oneToManyMergeOccurred = true;
     }
   }
-  else
+  hoot.trace("oneToManyMergeOccurred: " + oneToManyMergeOccurred);
+
+  // *Think* this is the correct behavior...if we had any many to one merges earlier during this
+  // merge call, then we shouldn't have any other types of merges to perform...not sure yet, though.
+  if (!oneToManyMergeOccurred)
   {
     // If its not a one to many match, business as usual...use the conflation behavior built into
     // the linear merger in use. Snap the ways in the second input to the first input. Use the
@@ -285,7 +294,7 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
 {
   var featureDetails = [];
 
-  // extract the sublines needed for matching
+  // Extract the sublines needed for matching.
   var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
   if (sublines)
   {
@@ -293,9 +302,9 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
     var m1 = sublines.match1;
     var m2 = sublines.match2;
 
-    featureDetails["distanceScore"]         = distanceScoreExtractor.extract(m, m1, m2);
-    featureDetails["edgeDistance"]          = edgeDistanceExtractor.extract(m, m1, m2);
-    featureDetails["hausdorffDistance"]     = hausdorffDistanceExtractor.extract(m, m1, m2);
+    featureDetails["distanceScore"] = distanceScoreExtractor.extract(m, m1, m2);
+    featureDetails["edgeDistance"] = edgeDistanceExtractor.extract(m, m1, m2);
+    featureDetails["hausdorffDistance"] = hausdorffDistanceExtractor.extract(m, m1, m2);
   }
 
   return featureDetails;
