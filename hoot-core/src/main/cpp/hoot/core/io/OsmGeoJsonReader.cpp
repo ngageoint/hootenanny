@@ -97,10 +97,10 @@ void OsmGeoJsonReader::read(const OsmMapPtr& map)
   }
   else
     _readFromHttp();
-  //  Process all of the result strings;
+  //  Process all of the result strings.
   for (int i = 0; i < _results.size(); ++i)
   {
-    // This will throw a hoot exception if JSON is invalid
+    // This will throw a hoot exception if JSON is invalid.
     _loadJSON(_results[i]);
     _parseGeoJson();
   }

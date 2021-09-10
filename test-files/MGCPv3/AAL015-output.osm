@@ -63,6 +63,7 @@
         <tag k="building" v="yes"/>
         <tag k="condition" v="damaged"/>
         <tag k="error:circular" v="28.65"/>
+        <tag k="industrial" v="petroleum_refining"/>
         <tag k="name" v="Petroleum Facility"/>
         <tag k="product" v="petroleum"/>
         <tag k="source" v="mgcp:aal015"/>

@@ -142,7 +142,7 @@ Score: -0.246293
 ---------------------------------------------------------
 
 These results were a little disconcerting, because adding in a new
-+FeatureExtractor+ decreased the results.  Of concern are the +4+
+`FeatureExtractor` decreased the results.  Of concern are the +4+
 matches (+1026 - 1022+) that are known matches but now have become reviews also
 the percentage correct went down from +85.396%+ to +84.926%+ nearly +0.5%+
 difference.  Next is the number of expected matches that are now reviews is up
@@ -161,15 +161,15 @@ matching in POI conflation.  In order to test the k-skip-n-gram algorithm
 against the Levenshtein distance algorithm for POI name comparisons, four
 countries were selected from the http://download.geonames.org/export/dump/[Geonames]
 dataset.  The four countries used were United States, Argentina, Afghanistan,
-and Russia.  Each test file was first converted to OSM using the +hoot convert+
-command and the +$HOOT_HOME/translations/GeoNames_to_OSM.js+ translation script.  The
-resulting OSM file was then loaded into a +OsmMap+ object.  Any nodes with
-only the +name+ tag were ignored and then those with the +alt_name+ tag had
+and Russia.  Each test file was first converted to OSM using the `convert`
+command and the `$HOOT_HOME/translations/GeoNames_to_OSM.js` translation script.  The
+resulting OSM file was then loaded into a `OsmMap` object.  Any nodes with
+only the `name` tag were ignored and then those with the `alt_name` tag had
 their alternate names compared one-by-one against the +name+ tag using both
-the +KskipBigramDistance+ and +LevenshteinDistance+ scoring
+the `KskipBigramDistance` and `LevenshteinDistance` scoring
 algorithms.  In order to make a direct comparison the
-+Translator::translateStreet+ method was called on all +name+ tags (and
-+alt_name+ tags) so that both algorithms could work on the same set of
+`Translator::translateStreet` method was called on all `name` tags (and
+`alt_name` tags) so that both algorithms could work on the same set of
 parameters.  The results are as follows:
 
 .Geonames Data Tests
@@ -196,8 +196,8 @@ k-skip-n-gram score.
 There are also times when Levenshtein returns a value of +0+ while skip-grams
 returns +1+.  This is in the case of reversed names, i. e. +Bandera County+ and
 +County Bandera+ which is actually taken care of in the Hootenanny software by
-using the +MeanWordSetDistance+ class wherever +LevenshteinDistance+
-is used.  So rerunning the the tests and applying the +MeanWordSetDistance+
+using the `MeanWordSetDistance` class wherever `LevenshteinDistance`
+is used.  So rerunning the the tests and applying the `MeanWordSetDistance`
 to both algorithms and following the same calculations on the USA data the
 results skew considerably in favor of Levenshtein.
 
@@ -217,7 +217,7 @@ than did Levenshtein.
 === Results
 
 This information indicates that Levenshtein, when used in
-conjunction with +MeanWordSetDistance+, is far and away superior when
+conjunction with `MeanWordSetDistance`, is far and away superior when
 matching names for POI conflation than is the k-skip-n-gram algorithm.  Because
 of this finding, the k-skip-n-gram algorithm has been added to the source code
 repository of Hootenanny for future reference but it isn't being used anywhere

@@ -58,7 +58,8 @@ mgcp = {
   // mgcp.fcodeList = translate.makeFcodeList(mgcp.rawSchema);
 
   // Now add an o2s[A,L,P] feature to the mgcp.rawSchema and an attribute to hold OSM tags
-  if (config.getOgrOutputFormat() == 'shp')
+  // if (config.getOgrOutputFormat() == 'shp')
+  if (hoot.Settings.get('ogr.output.format') == 'shp')
   {
     // Add OSMTAGS1-4 and tag1-4 attributes
     mgcp.rawSchema = translate.addO2sFeatures(translate.addTagFeatures(mgcp.rawSchema));
@@ -73,7 +74,8 @@ mgcp = {
   mgcp.rawSchema = translate.addReviewFeature(mgcp.rawSchema);
 
   // Add empty "extra" feature layers if needed
-  if (config.getOgrNoteExtra() == 'file') mgcp.rawSchema = translate.addExtraFeature(mgcp.rawSchema);
+  // if (config.getOgrNoteExtra() == 'file') mgcp.rawSchema = translate.addExtraFeature(mgcp.rawSchema);
+  if (hoot.Settings.get('ogr.note.extra') == 'file') mgcp.rawSchema = translate.addExtraFeature(mgcp.rawSchema);
 
   // This function dumps the schema to the screen for debugging
   // translate.dumpSchema(mgcp.rawSchema);
@@ -351,39 +353,44 @@ mgcp = {
   }, // End manyFeatures
 
 
-  // Cleanup the attributes
-  cleanAttrs: function (attrs)
+  // Function to drop  default and usless values
+  // NOTE: This is also called to remove translated tag values
+  dropDefaults: function (feat)
   {
-      // Clean up BEFORE trying to untangle
-    delete attrs.FCSUBTYPE;
-    delete attrs.FCSubtype;
-
-    // List of data values to drop/ignore
-    var ignoreList = { '-32765':1,'-32767':1,'-32768':1,
-               '998':1,'-999999':1,'fcsubtype':1,
-               'n_a':1,'n/a':1,'noinformation':1,'unknown':1,'unk':1 };
-
-    // Unit conversion. Some attributes are in centimetres, others in decimetres
-    // var unitList = { 'GAW':100,'HCA':10,'WD1':10,'WD2':10,'WD3':10,'WT2':10 };
-
-    for (var col in attrs)
+    for (var col in feat)
     {
       // slightly ugly but we would like to account for: 'No Information','noInformation' etc
       // First, push to lowercase
-      var attrValue = attrs[col].toString().toLowerCase();
+      var attrValue = feat[col].toString().toLowerCase();
 
       // Get rid of the spaces in the text
       attrValue = attrValue.replace(/\s/g, '');
 
       // Wipe out the useless values
-      // if (attrs[col] == '-32768' || attrValue == 'unk' || attrValue == 'n_a' || attrValue == 'noinformation' || attrs[col] == '')
-      if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ignoreList || attrs[col] in ignoreList)
+      if (feat[col] == '' || feat[col] == ' ' || attrValue in mgcp.rules.dropList || feat[col] in mgcp.rules.dropList)
       {
         // debug: Comment this out to leave all of the No Info stuff in for testing
-        delete attrs[col];
+        // print('Dropping: ' + col + ' = ' + attrs[col]);
+        delete feat[col];
         continue;
       }
+    } // End col in attrs loop
 
+  }, // End dropDefaults
+
+  // Cleanup the attributes
+  cleanAttrs: function (attrs)
+  {
+    // Switch to keep all of the default values. Mainly for the schema switcher
+    if (mgcp.configIn.ReaderInputFormat == 'OGR')
+    {
+      mgcp.dropDefaults(attrs);
+    }
+
+    // Unit conversion. Some attributes are in centimetres, others in decimetres
+    // var unitList = { 'GAW':100,'HCA':10,'WD1':10,'WD2':10,'WD3':10,'WT2':10 };
+    for (var col in attrs)
+    {
       // Sort out units - if needed
       // if (col in unitList) attrs[col] = attrs[col] / unitList[col];
 
@@ -534,6 +541,15 @@ mgcp = {
       attrs.GAW = Number(attrs.GAW) * 1000; // Convert M to MM
     }
 
+    // TRD3 vs TRD4.  SUC (Shed Type)
+    // TRD3 is a building AL015
+    // TRD4 is a Protection Shed AL210
+    if (attrs.F_CODE == 'AL015' && attrs.SUC)
+    {
+      attrs.xSUC = attrs.SUC;
+      delete attrs.SUC;
+    }
+
   }, // End of applyToOsmPreProcessing
 
   // Post Processing: Lots of cleanup
@@ -666,7 +682,7 @@ mgcp = {
     }
 
     // #####
-    if (attrs.HWT && attrs.HWT !== '0')
+    if (attrs.HWT && attrs.HWT !== '0' && attrs.HWT !== '998')
     {
       tags.amenity = 'place_of_worship';
 
@@ -892,6 +908,10 @@ mgcp = {
 
     case 'AL015': // Building
       if (tags.surface == 'unknown') delete tags.surface;
+      if (tags.industrial == 'petroleum_refining' && (tags.product == 'unknown' || tags.product == undefined))
+      {
+        tags.product = 'petroleum';
+      }
       break;
 
     case 'AL020': // AL020 (Built-up Area) should become a Place. NOTE: This is a bit vague...
@@ -1928,6 +1948,7 @@ mgcp = {
       case 'AD010': // Electric Power Plants
         if (notUsedTags['plant:output:electricity'] == 'yes') delete notUsedTags['plant:output:electricity'];
         if (notUsedTags.landuse == 'industrial') delete notUsedTags.landuse;
+        if (notUsedTags.power == 'plant') delete notUsedTags.power;
         if (notUsedTags['plant:method']) delete notUsedTags['plant:method'];
         break;
 
@@ -1964,6 +1985,7 @@ mgcp = {
         if (!attrs.FFN)
         {
           if (tags.shop || tags.office) attrs.FFN = '440';
+          if (tags.industrial == 'petroleum_refining') attrs.FFN = '192';
         }
         break;
 
@@ -1982,7 +2004,10 @@ mgcp = {
         if (tags.tunnel) attrs.LOC = '40'; // Below Surface
         if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
         if (tags.railway == 'rail') delete attrs.RRC; // Avoid sending RRC=0 when it is "unknown"
+        break;
 
+      case 'AN076': // Railway Roundhouse
+        if (attrs.railway == 'rail') delete attrs.RRC; // Avoid sending RRC=0 when it is "unknown"
         break;
 
       // case 'AP010': // Cart Track
@@ -2227,9 +2252,10 @@ mgcp = {
     if (mgcp.configIn == undefined)
     {
       mgcp.configIn = {};
-      mgcp.configIn.OgrAddUuid = config.getOgrAddUuid();
-      mgcp.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
-      mgcp.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+      mgcp.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
+      mgcp.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
+      mgcp.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      mgcp.configIn.ReaderInputFormat = hoot.Settings.get('reader.input.format');
 
       // Get any changes
       mgcp.toChange = hoot.Settings.get("schema.translation.override");
@@ -2278,7 +2304,7 @@ mgcp = {
       mgcp.fcodeLookupOut = translate.createBackwardsLookup(mgcp.rules.fcodeOne2oneOut);
 
       // Debug:
-      // translate.dumpOne2OneLookup(mgcp.fcodeLookup);
+      // translate.dumpOne2OneLookup(mgcp.fcodeLookupOut);
     }
 
     if (mgcp.lookup == undefined)
@@ -2364,6 +2390,13 @@ mgcp = {
     // post processing
     mgcp.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
+    // If we are reading from an OGR source, drop all of the output tags with default values
+    // This cleans up after the one2one rules since '0' can be a number or an enumerated attribute value
+    if (mgcp.configIn.ReaderInputFormat == 'OGR')
+    {
+      mgcp.dropDefaults(tags);
+    }
+
     // Debug: Add the FCODE to the tags
     if (mgcp.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
@@ -2396,15 +2429,15 @@ mgcp = {
     if (mgcp.configOut == undefined)
     {
       mgcp.configOut = {};
-      mgcp.configOut.OgrAddUuid = config.getOgrAddUuid();
-      mgcp.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
-      mgcp.configOut.OgrFormat = config.getOgrOutputFormat();
-      mgcp.configOut.OgrNoteExtra = config.getOgrNoteExtra();
-      mgcp.configOut.OgrThrowError = config.getOgrThrowError();
+      mgcp.configOut.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
+      mgcp.configOut.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      mgcp.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
+      mgcp.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
+      mgcp.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon
-      mgcp.toChange = hoot.Settings.get("schema.translation.override");
+      mgcp.toChange = hoot.Settings.get('schema.translation.override');
     }
 
     // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
@@ -2427,7 +2460,6 @@ mgcp = {
 
     if (mgcp.fcodeLookup == undefined)
     {
-
       // Order is important:
       // Start with the TRD4 specific FCODES and then add the valid MGCP ones from the common list
       fcodeCommon.one2one.forEach( function(item) { if (~mgcp.rules.fcodeList.indexOf(item[1])) mgcp.rules.fcodeOne2oneV4.push(item); });
@@ -2439,7 +2471,7 @@ mgcp = {
       mgcp.fcodeLookupOut = translate.createBackwardsLookup(mgcp.rules.fcodeOne2oneOut);
 
       // Debug
-      // translate.dumpOne2OneLookup(mgcp.fcodeLookup);
+      // translate.dumpOne2OneLookup(mgcp.fcodeLookupOut);
     }
 
     if (mgcp.lookup == undefined)
@@ -2473,15 +2505,11 @@ mgcp = {
     translate.txtToOgr(attrs, notUsedTags,  mgcp.rules.txtBiasedV4,transMap);
 
     // one 2 one
-    translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup, transMap);
+    translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup, transMap, mgcp.fcodeLookupOut);
 
     // post processing
     // mgcp.applyToOgrPostProcessing(attrs, tableName, geometryType);
     mgcp.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
-
-    // Debug
-    if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
-    if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'After Post: Attrs:: ');
 
     // Set the tablename: [P,A,L]<fcode>
     // tableName = geometryType.toString().substring(0,1) + attrs.F_CODE;

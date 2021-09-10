@@ -200,7 +200,8 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, co
   {
     msg += " over bounds: ..." + ConfigUtils::getBoundsString().right(_maxFilePrintLength);
   }
-  msg += " and writing the output to ..." + FileUtils::toLogFormat(output, _maxFilePrintLength) + "...";
+  msg +=
+    " and writing the output to ..." + FileUtils::toLogFormat(output, _maxFilePrintLength) + "...";
   if (_isDiffConflate)
   {
     if (_diffConflator.conflatingTags())
@@ -373,10 +374,9 @@ void ConflateExecutor::_load(
        ConfigOptions().getConflateUseDataSourceIds2() &&
       !_isDiffConflate)
   {
-    //  For Attribute conflation, the secondary IDs are the ones that we want
-    //  to preserve.  So loading them first allows for all of them to be loaded
-    //  without conflict, even if they are negative.  Then the reference dataset
-    //  is loaded with negative IDs
+    // For Attribute conflation, the secondary IDs are the ones that we want to preserve. So
+    // loading them first allows for all of them to be loaded without conflict, even if they are
+    // negative. Then, the reference dataset is loaded with negative IDs.
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
       "Loading secondary map: ..." + FileUtils::toLogFormat(input2, _maxFilePrintLength) + "...");

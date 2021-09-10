@@ -7,7 +7,7 @@
             "review.score.criterion.max.threshold": "Maximum review score; 0.0 to 1.0",
             "review.score.criterion.min.threshold": "Minimum review score; 0.0 to 1.0",
             "highway.corner.splitter.rounded.split": "Round corners when splitting roads",
-	          "circular.error.tag.keys": "Tag keys that contain accuracy (CE) data",
+	    "circular.error.tag.keys": "Tag keys that contain accuracy (CE) data",
             "overwrite.tag.merger.exclude": "Tag overwrite exclude list"
         }
     },
@@ -173,15 +173,15 @@
         "matcher": "NetworkMatchCreator",
         "merger": "NetworkMergerCreator",
         "members": {
-             "network.match.threshold": "Match threshold; 0.0 to 1.0"
+            "network.match.threshold": "Match threshold; 0.0 to 1.0"
         }
     },
     "RubberSheeting": {
         "members": {
             "rubber.sheet.max.allowed.ways": "Maximum number of ways allowed",
             "rubber.sheet.minimum.ties": "Minimum number of tie points required.",
-	          "rubber.sheet.log.missing.requirements.as.warning": "Log a warning if enough tie points are not found.",
-	          "conflate.unifying.rubbersheet.roads": "Rubbersheet roads with Unifying Algorithm"
+	    "rubber.sheet.log.missing.requirements.as.warning": "Log a warning if enough tie points are not found.",
+	    "conflate.unifying.rubber.sheet.roads": "Rubbersheet roads with Unifying Algorithm"
         }
     }
 }

@@ -9,7 +9,7 @@ Building conflation supports multiple forms:
 * One to many
 * Many to many
 
-The attribute merging in the one to one case when each building is made up of a single part is very simple and controlled through the typical +tag.merger.default+ configuration setting.
+The attribute merging in the one to one case when each building is made up of a single part is very simple and controlled through the typical `tag.merger.default` configuration setting.
 
 If one of the buildings contains multiple parts, each with their own attributes such as building height, roof type, etc. The problem becomes more complex. Additional complexity is added when you're conflating one multi-part building with multiple multi-part buildings, or in the worse case, multiple multi-part buildings all being conflated into a single building.
 
@@ -17,7 +17,7 @@ Obviously, combining n records into a single record requires that some attribute
 
 * Multi-part building tags are combined together incrementally to create a parent relation that minimizes conflicts with child buildings. A write up on the specifics will come in the future.
 * Multiple buildings on each side of the pairwise merger are combined further into a single building with minimal conflicting tags.
-* Two building groups are merged together using the +tag.merger.default+ merging method to create a new building. Only the building parts from the more complex building are kept.
+* Two building groups are merged together using the `tag.merger.default` merging method to create a new building. Only the building parts from the more complex building are kept.
 
 The approach described above generally provides good results. There is no getting around it, the approach will drop information during conflation in some situations. As new business rules are defined we expect to revisit the above attribute merging approach to create something that addresses specific user concerns and needs. Please create an issue at the https://github.com/ngageoint/hootenanny[Hootenanny GitHub page] if you have any specific needs or concerns that should be addressed.
 

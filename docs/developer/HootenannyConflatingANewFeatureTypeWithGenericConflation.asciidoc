@@ -40,11 +40,11 @@ is similar to the file provided with Hootenanny for conflating rivers,
 
 Creating a configuration file will save you time typing in the same settings over and over when
 invoking commands while experimenting with different settings as you develop your conflation model
-for the new feature type.  Of note from this example are: +match.creators+ and +merger.creators+.
-+match.creators+ uses the ScriptMatchCreator, taking advantage of the generic conflation framework
-and also specifies a conflation rules file, "River.js", which will be discussed in a later
-section.  +merger.creators+ specifies the ScriptMergerCreator, which is also part of the generic
-conflation framework.  "log.identical.message.limit" is included here only, so you can see all of the script match
+for the new feature type.  Of note from this example are: `match.creators` and `merger.creators`.
+`match.creators` uses the class `ScriptMatchCreator`, taking advantage of the generic conflation framework
+and also specifies a conflation rules file, `River.js`, which will be discussed in a later
+section. `merger.creators` specifies the class `ScriptMergerCreator`, which is also part of the generic
+conflation framework.  `log.identical.message.limit` is included here only, so you can see all of the script match
 log messages for debugging purposes.
 
 As you build your model, you may need to add new configuration options which can be customized at
@@ -55,7 +55,7 @@ To be able to go ahead and do an initial match scoring, copy one of the existing
 
 === Scoring Matches
 
-The Hootenanny +score-matches+ command can be used to determine how well Hootenanny conflates the
+The Hootenanny `score-matches` command can be used to determine how well Hootenanny conflates the
 test data by comparing its matches to the manually made matches.  Here is an example of using the
 command:
 

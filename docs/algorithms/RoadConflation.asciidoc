@@ -43,7 +43,7 @@ for road1 in input1:
         result.add(m);
 -----
 
-The +findAllElements+ function above uses the internal Hilbert R-Tree
+The `findAllElements` function above uses the internal Hilbert R-Tree
 <<kamel1993>> index to limit the number of candidates based on the distance.
 This provides _O(M log~M~n)_ average query performance where _M_ is the number
 of children at each level.
@@ -52,7 +52,7 @@ The astute reader may notice that the circular error of the second input is not
 being accounted for when searching the R-Tree for neighboring elements. The
 elements in the R-Tree contain the envelope of the element buffered by the
 circular error. This creates an efficient way to query out only the elements
-whose envelopes are within +ce1 + ce2+ distance.
+whose envelopes are within `ce1` + `ce2` distance.
 
 As mentioned in the <<RoadConflationFutureWork,Future Work>> section below,
 building an index made up solely of candidate roads may be more efficient than
@@ -65,7 +65,7 @@ NOTE: As of 12/9/2014, _M_ is 20 in Hootenanny
 
 All candidate matches as determined using the method described above are
 evaluated further for the associated match score. This is depicted by the
-+HighwayMatch+ class in <<RoadMatchCandidatePseudocode>>. Within this class the
+`HighwayMatch` class in <<RoadMatchCandidatePseudocode>>. Within this class the
 road match is further evaluated to determine the match relationship.
 
 [[RoadMatchingFlow]]

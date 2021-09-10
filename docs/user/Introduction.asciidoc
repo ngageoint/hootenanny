@@ -2,7 +2,7 @@
 [[Introduction]]
 == Detail Summary
 
-(https://github.com/ngageoint/hootenanny/blob/master/docs/user/SummaryDetail.asciidoc)[Detail Summary]
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/SummaryDetail.asciidoc[Detail Summary]
 
 == Conflation Background
 
@@ -121,7 +121,7 @@ image::images/VerticalConflation.png[]
 
 Reference conflation is most applicable when both data sets provide value and there is significant overlap between the data sets. In this scenario many of the features will be evaluated for conflation and possibly merged or marked as needing review. The primary advantage to using this strategy is maintaining much of the information available in both data sets. Because a large amount of the data is being evaluated for conflation it also increases the chances that errors will be introduced or unnecessary reviews may be generated.
 
-To use, pass +ReferenceConflation.conf+ to the conflate command.
+To use, pass `ReferenceConflation.conf` to the conflate command.
 
 e.g.
 --------
@@ -149,7 +149,7 @@ image::images/NotHorizontalConflation.png[]
 
 As demonstrated in <<UnsupportedHorizontalConflation>> two vector layers that don't quite touch are not conflated. If this is of interest please create an issue at the https://github.com/ngageoint/hootenanny[Hootenanny GitHub page].
 
-To use, pass +HorizontalConflation.conf+ to the conflate command.
+To use, pass `HorizontalConflation.conf` to the conflate command.
 
 e.g.
 --------
@@ -177,7 +177,7 @@ image::images/hootid-horizconfl.png[]
 .Process depicted in the Hootenanny User interface. The Horizontal & Cookie Cutter conflation performs an edge matching to merge the Street centerline data with the OSM data.  The resulting conflated dataset shown in bottom image (green).  Boulder, CO with DigitalGlobe Global Basemap (GBM).
 image::images/hootiD_horizontalconflation_boulder.png[scaledwidth="50%"]
 
-To use, pass +HorizontalConflation.conf+ to the conflate command.
+To use, pass `HorizontalConflation.conf` to the conflate command.
 
 e.g.
 --------
@@ -194,7 +194,7 @@ See also:
 
 ===== Differential Conflation
 
-To use, pass +DifferentialConflation.conf+ to the conflate command.
+To use, pass `DifferentialConflation.conf` to the conflate command.
 
 e.g.
 --------
@@ -205,7 +205,7 @@ More details: <<hootalgo, DifferentialConflation>>
 
 ===== Attribute Conflation
 
-To use, pass +AttributeConflation.conf+ to the conflate command.
+To use, pass `AttributeConflation.conf` to the conflate command.
 
 e.g.
 --------

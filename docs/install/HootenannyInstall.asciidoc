@@ -1,7 +1,6 @@
 == Overview
 
-This document describes how to install Hootenanny.  Hootenanny is supported on CentOS 7.x.  Both an RPM package and a virtual machine
-are provided.
+This document describes how to install Hootenanny.  Hootenanny is supported on CentOS 7.x.  Both an RPM package and a virtual machine are provided. Note that the some of the hyperlinks in this document only are navigable when the document is in PDF form.
 
 == Environment
 

@@ -33,7 +33,7 @@
 */
 
 hoot.require('translate');
-hoot.require('config');
+// hoot.require('config');
 
 geonames = {
     // Text rules
@@ -935,7 +935,7 @@ function translateToOsm(attrs, layerName, geometryType)
     if (geonames.configIn == undefined)
     {
       geonames.configIn = {};
-      geonames.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+      geonames.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
 
       // Get any changes
       geonames.toChange = hoot.Settings.get('schema.translation.override');

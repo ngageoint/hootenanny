@@ -11,9 +11,9 @@ The following sections describe the process flow and a summary of each operation
 
 === Process Flow
 
-Before processing can begin, both inputs must be translated and encoded as +.osm.pbf+ files using the translation mechanisms described in previous sections. In the case of OpenStreetMap, an entire +.osm.pbf+ planet file can be downloaded directly from http://www.openstreetmap.org[OpenStreetMap] without any modifications. Once translation has been completed, the files may be uploaded into HDFS using utilities provided with the Hadoop distribution. On completion, Hootenanny provides a utility to combine output Hadoop files into a single +.osm.pbf+ file that can be used by any number of OSM utilities to import the data into PostGIS or another convenient geospatial format.
+Before processing can begin, both inputs must be translated and encoded as `.osm.pbf` files using the translation mechanisms described in previous sections. In the case of OpenStreetMap, an entire `.osm.pbf` planet file can be downloaded directly from http://www.openstreetmap.org[OpenStreetMap] without any modifications. Once translation has been completed, the files may be uploaded into HDFS using utilities provided with the Hadoop distribution. On completion, Hootenanny provides a utility to combine output Hadoop files into a single `.osm.pbf` file that can be used by any number of OSM utilities to import the data into PostGIS or another convenient geospatial format.
 
-<<DataProcesingSteps>> illustrates the processing steps involved after the data has been prepared. The blue lines depict vector data encoded in the +.osm.pbf+ file format. Each colored box represents another step of processing. The boxes with the Hadoop elephant logo represent one or more jobs run on a Hadoop cluster. All data is stored and processed on the Hadoop Distributed File System (HDFS).
+<<DataProcesingSteps>> illustrates the processing steps involved after the data has been prepared. The blue lines depict vector data encoded in the `.osm.pbf` file format. Each colored box represents another step of processing. The boxes with the Hadoop elephant logo represent one or more jobs run on a Hadoop cluster. All data is stored and processed on the Hadoop Distributed File System (HDFS).
 
 [[DataProcesingSteps]]
 .Data Processing Steps
@@ -22,7 +22,7 @@ image::images/image047.png[]
 
 === File Format
 
-The +.osm.pbf+ file format (OpenStreetMap) is a binary format based on Google Protocol Buffers (Google Inc.). This format is a standard OpenStreetMap interchange format that combines efficient storage of data through delta encoding and table lookups and further compresses the data using zlib. The file is broken into independent "blobs" that are generally less than 16MB in size.
+The `.osm.pbf` file format (OpenStreetMap) is a binary format based on Google Protocol Buffers (Google Inc.). This format is a standard OpenStreetMap interchange format that combines efficient storage of data through delta encoding and table lookups and further compresses the data using zlib. The file is broken into independent "blobs" that are generally less than 16MB in size.
 
 [[AnatomyOSM-PBF]]
 .Anatomy of an OSM.pbf File
@@ -31,7 +31,7 @@ image::images/image048.png[]
 
 Hadoop generally breaks large files into blocks of 64MB for storage. Each of these blocks is stored on multiple nodes within the cluster. While the ~16MB blobs don't fall precisely on the 64MB block boundary, it is close enough to help improve node locality. The independent nature of the blobs allows a custom input format to be defined for Hadoop that enables easy splitting of the job around block boundaries. While this efficiency is convenient, CPU is by far the largest bottleneck, not IO.
 
-In most Hadoop jobs, intermediate OSM primitives (ways and nodes) must be emitted between the map and reduce tasks. For these intermediate values, a modified +.osm.pbf+ format is used to reduce the size of records that are shuffled.
+In most Hadoop jobs, intermediate OSM primitives (ways and nodes) must be emitted between the map and reduce tasks. For these intermediate values, a modified `.osm.pbf` format is used to reduce the size of records that are shuffled.
 
 === Join Ways to Nodes
 
@@ -40,9 +40,9 @@ The focus of this operation is three fold:
 	2. Split long ways into sections smaller than 0.01 degrees or ~1km – The 1km limit is explained in <<ExplConflation>>.
 	3. Re-number primitive IDs to avoid conflicts between the two data sets
 
-The +.osm.pbf+ file stores nodes and ways independently. For this reason, ways must be joined to nodes before the way length and bounding box can be calculated. A simple two-pass Map/Reduce job is used to join the ways to nodes. In the reduce phase of the second pass, the ways are split based on size, and the bounding box is generated. New IDs are assigned to the nodes and ways as needed while saving the output to a new +.osm.pbf.+
+The +.osm.pbf+ file stores nodes and ways independently. For this reason, ways must be joined to nodes before the way length and bounding box can be calculated. A simple two-pass Map/Reduce job is used to join the ways to nodes. In the reduce phase of the second pass, the ways are split based on size, and the bounding box is generated. New IDs are assigned to the nodes and ways as needed while saving the output to a new `.osm.pbf.`
 
-The final output is a directory full of +.osm.pbf+ blobs, where all primitives are re-numbered, ways have been broken into sections smaller than ~1km, and bounding boxes have been assigned to all ways.
+The final output is a directory full of `.osm.pbf` blobs, where all primitives are re-numbered, ways have been broken into sections smaller than ~1km, and bounding boxes have been assigned to all ways.
 
 [[ExplPaintTileDensity]]
 === Paint Tile Density
@@ -85,7 +85,7 @@ There are several steps involved in four pass conflation:
 
 <<NotionalTiling>> shows a notional example of the tiling. The tiles are assigned to groups such that no two tiles in the same group are adjacent to each other. This prevents overlapping data from being conflated during a single pass of conflation. During subsequent passes, the previously conflated data will be included to ensure that seams are matched properly.
 
-The output of this operation is a directory filled with conflated +.osm.pbf+ blobs.
+The output of this operation is a directory filled with conflated `.osm.pbf` blobs.
 
 === Export
 
@@ -102,7 +102,7 @@ The following table gives rough benchmarks for conflation:
 .Conflation Benchmarks
 [options="header"]
 |======
-| *Test Name* | *Local Conflation* | *Hadoop Conflation* | *Input Size (+.osm.pbf+)* | *Cluster*
+| *Test Name* | *Local Conflation* | *Hadoop Conflation* | *Input Size (`.osm.pbf`)* | *Cluster*
 | Local Test | 220min | 45min | 46MB | Pseudo-distributed 8 core (circa 2012 hardware)
 | Global Test | - | 15hrs | 19GB | 20 node X 8 cores (circa 2010 hardware)
 |======

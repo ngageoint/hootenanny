@@ -47,16 +47,16 @@ image::images/image019.png[]
 The example in <<IntersectAurora>> shows a road found in Aurora, CO. The tags
 for the way are:
 
-* highway=residential
-* surface=asphalt
-* name=East Roxbury Place
+* `highway=residential`
+* `surface=asphalt`
+* `name=East Roxbury Place`
 
 These tags show that the road is residential, paved with asphalt, and named
 "East Roxbury Place." By default the way is not one way (Key:oneway -
 OpenStreetMap Wiki, 2012). In the case of the roads just northeast, the
-+oneway=yes+ tag is specified to state explicitly that those roads are one way.
+`oneway=yes` tag is specified to state explicitly that those roads are one way.
 
-The highlighted red node is part of the labeled way and specifies +highway=stop+
+The highlighted red node is part of the labeled way and specifies `highway=stop`
 . When this tag is applied to a node, it designates that there is a stop sign at
 that location in the way. In contrast, the relationship between the stop sign
 and road can be encoded within a tabular data model though it is less natural
@@ -116,11 +116,11 @@ _f_ and d.
 ==== Find Implicit Divided Highways
 
 In some organization's maintained data sets, it not uncommon to map divided tunnels and bridges as
-undivided. In the scenario in <<UndividedOverpass>> is tagged as +bridge=yes+,
+undivided. In the scenario in <<UndividedOverpass>> is tagged as `bridge=yes`,
 but due to the strict tabular nature of the data, there is no field in the
-source Shapefile to specify +divider=yes+. For this reason, we deduce that if
-both of the red roads state +divider=yes+, then the green section is also likely
-to be divided, and we introduce the +divider=yes+ tag to the green way.
+source Shapefile to specify `divider=yes`. For this reason, we deduce that if
+both of the red roads state `divider=yes`, then the green section is also likely
+to be divided, and we introduce the `divider=yes` tag to the green way.
 
 [[UndividedOverpass]]
 .Undivided Overpass
@@ -141,10 +141,10 @@ and removes all others.
 ==== Duplicate Names
 
 If a name is recorded multiple times within the attributes, then the duplicate
-names are removed.  For instance, the attributes +name=Foo Street, alt_name=Foo
-Street;Bar Street+ will be converted to: +name=Foo Street, alt_name=Bar Street+.
+names are removed.  For instance, the attributes `name=Foo Street`, `alt_name=Foo
+Street;Bar Street` will be converted to: `name=Foo Street`, `alt_name=Bar Street`.
 You can control whether Hootenanny is sensitive to name case with the
-duplicate.name.case.sensitive configuration parameter.
+`duplicate.name.case.sensitive` configuration parameter.
 
 ==== Dual Way Splitter
 
@@ -152,7 +152,7 @@ Some data sets map divided highways as a single way. The generally accepted
 approach within OpenStreetMap (OpenStreetMap Wiki, 2012) is to map divided
 highways as two one-way ways. Hootenanny has adopted the two one-way ways
 standard. To accommodate this standard, ways that are marked with the
-+divider=yes+ tag are split into two one-way ways with a variation of the GIS
+`divider=yes` tag are split into two one-way ways with a variation of the GIS
 buffer operation.
 
 === Indexing
@@ -448,20 +448,20 @@ In this case, the average is 0.86. Using this approach, we can generate a score 
  +
 *_Merging Names_*
 
-To merge names from two features into one new set of names, we treat the names as a set, where overlapping name values get appended to the +alt_name+ tag. For fear of losing an important differentiation, we do not remove names unless there is an exact match. For example:
+To merge names from two features into one new set of names, we treat the names as a set, where overlapping name values get appended to the `alt_name` tag. For fear of losing an important differentiation, we do not remove names unless there is an exact match. For example:
 
 		* Pre-Merge
-			- Feature 1: +name=O'Neill Street, alt_name=Pub Alley;Route 128+
-			- Feature 2: +name=O'NEILL ST, local_name=Pub Alley+
+			- Feature 1: `name=O'Neill Street`, `alt_name=Pub Alley;Route 128`
+			- Feature 2: `name=O'NEILL ST`, `local_name=Pub Alley`
 		*  Post-Merge
-			- +name=O'Neill Street, local_name=Pub Alley, alt_name=O'NEILL ST;Route 128+
+			- `name=O'Neill Street`, `local_name=Pub Alley`, `alt_name=O'NEILL ST;Route 128`
  +
  +
  +
 [[CalculatingEnumeratedScore]]
 *_Calculating the Enumerated Score_*
 
-Enumerated tags are tags with predefined nominal values. This includes +surface=dirt+ , +surface=paved+ and +highway=primary+ . These tags have relationships that must be manually defined (<<HighwayTagRelate>>).
+Enumerated tags are tags with predefined nominal values. This includes `surface=dirt` , `surface=paved`, and `highway=primary` . These tags have relationships that must be manually defined (<<HighwayTagRelate>>).
 
 [[HighwayTagRelate]]
 .Highway Tag Relationship
@@ -470,37 +470,37 @@ image::images/image044.png[]
 
 To address this, we have created a configuration file that defines a directed graph of relationships between tags and supports the following relations:
 
-*  _isA_ - Defines a "is a" relationship. Such as +highway=primary+  _is a_  +highway=road+
+*  _isA_ - Defines a "is a" relationship. Such as `highway=primary`  _is a_  `highway=road`
 
-* _similarTo_ – Defines a "is similar to" relationship such as +highway=primary+ is similar to +highway=secondary+. A _similarTo_ relationships also include a weight from 0 to 1, where 0 is completely dissimilar and 1 is exactly the same.
+* _similarTo_ – Defines a "is similar to" relationship such as `highway=primary` is similar to `highway=secondary`. A _similarTo_ relationships also include a weight from 0 to 1, where 0 is completely dissimilar and 1 is exactly the same.
 
 <<HighwayTagRelate>> depicts the relationships between a subset of the road types along with their weights. A line ending with a circle represents _similarTo,_ and an arrow represents _isA_.
 
-Using the graph <<HighwayTagDistanceVal>>, we can calculate the "distance" between two nodes, where we define distance as the maximum product of the weights separating the two nodes. For example, the distance between +highway=motorway+ and +highway=primary+ is 0.8 * 0.8 or 0.64. <<HighwayTagDistanceVal>> shows all the distance values for <<HighwayTagRelate>>.
+Using the graph <<HighwayTagDistanceVal>>, we can calculate the "distance" between two nodes, where we define distance as the maximum product of the weights separating the two nodes. For example, the distance between `highway=motorway` and `highway=primary` is 0.8 * 0.8 or 0.64. <<HighwayTagDistanceVal>> shows all the distance values for <<HighwayTagRelate>>.
 
 [[HighwayTagDistanceVal]]
 .Highway Tag Distance Values
 [options="header"]
 |======
-|  | +highway = road+ | +highway = motorway+ | +highway = trunk+ | +highway = motorway_link+
-| +highway=road+ |  1 |  1 |  1 |  1
-| +highway = motorway+ |  1 |  1 |  0.8 |  1
-| +highway=trunk+ |  1 |  0.8 |  1 |  0.8
-| +highway = motorway_link+ |  1 |  1 |  0.8 |  1
-| +highway=primary+ |  1 |  0.64 |  0.8 |  0.64
-| +highway = trunk_link+ |  1 |  0.8 |  1 |  0.72
-| +highway = secondary+ |  1 |  0.512 |  0.64 |  0.512
-| +highway = primary_link+ |  1 |  0.64 |  0.8 |  0.576
-| +highway = tertiary+ |  1 |  0.4096 |  0.512 |  0.4096
+|  | `highway = road` | `highway = motorway` | `highway = trunk` | `highway = motorway_link`
+| `highway=road` |  1 |  1 |  1 |  1
+| `highway = motorway` |  1 |  1 |  0.8 |  1
+| `highway=trunk` |  1 |  0.8 |  1 |  0.8
+| `highway = motorway_link` |  1 |  1 |  0.8 |  1
+| `highway=primary` |  1 |  0.64 |  0.8 |  0.64
+| `highway = trunk_link` |  1 |  0.8 |  1 |  0.72
+| `highway = secondary` |  1 |  0.512 |  0.64 |  0.512
+| `highway = primary_link` |  1 |  0.64 |  0.8 |  0.576
+| `highway = tertiary` |  1 |  0.4096 |  0.512 |  0.4096
 |======
 
 We have defined over 140 relationships within OSM tags and can use that to compare enumerated values between two features and generate a score from 0 to 1. From this graph, we can generate an _n_ x _m_ matrix of scores, where _n_ is the number of enumerated tags in feature 1, and _m_ is the number of enumerated tags in feature 2. For example:
 
 |======
-|  | +highway=primary+ | +surface=paved+
-| +highway=secondary+ | 0.8 | 0.0
-| +surface=asphault+ | 0.0 | 1.0
-| +tunnel=yes+ | 0.0 | 0.0
+|  | `highway=primary` | `surface=paved`
+| `highway=secondary` | 0.8 | 0.0
+| `surface=asphault` | 0.0 | 1.0
+| `tunnel=yes` | 0.0 | 0.0
 |======
 
 We then take the product of the highest non-zero scores using each tag at most once. In this case, it is 0.8 * 1.0 or 0.8 for our final score. Using this approach, we can generate a score from 0 to 1 for a set of enumerated tags.

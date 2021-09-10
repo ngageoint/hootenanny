@@ -68,7 +68,7 @@ OSM XML format is a richer format than Shapefile and supports such things as mul
 inherit topology and arbitrary tagging. For these reasons the conversion to Shapefile is a lossy conversion.
 * Column filtering for shape files is supported with the `shape.file.writer.cols` configuration option.
 
-=== (https://github.com/ngageoint/hootenanny/blob/master/docs/user/OsmApiDb.asciidoc)[OSM API Database]
+=== https://github.com/ngageoint/hootenanny/blob/master/docs/user/OsmApiDb.asciidoc[OSM API Database]
 
 The format of a OSM API database URL is: 
 

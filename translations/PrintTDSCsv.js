@@ -39,7 +39,7 @@ hoot.require('tds61_schema');
 // tds40 = {}
 // hoot.require('tds40.schema')
 
-hoot.require('config');
+// hoot.require('config');
 
 
 // The initialize function gets called once BEFORE the translateToXXX functions
@@ -53,7 +53,7 @@ function initialize()
   var schema = tds61.schema.getDbSchema();
     
   // Print the tagList
-  switch (config.getTagPrintingFormat())
+  switch (hoot.Settings.get('tag.printing.format'))
   {
   //         case 'html':
   //             dumpHtmlTags(tagList);

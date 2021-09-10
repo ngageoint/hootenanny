@@ -36,6 +36,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(IdGenerator, DefaultIdGenerator)
 
+DefaultIdGenerator::DefaultIdGenerator()
+{
+  reset();
+}
+
 IdGeneratorPtr DefaultIdGenerator::clone() const
 {
   std::shared_ptr<DefaultIdGenerator> result = std::make_shared<DefaultIdGenerator>();
@@ -47,9 +52,9 @@ IdGeneratorPtr DefaultIdGenerator::clone() const
 
 void DefaultIdGenerator::reset()
 {
-  _wayId = ConfigOptions().getIdGeneratorWayStart();
-  _nodeId = ConfigOptions().getIdGeneratorNodeStart();
-  _relationId = ConfigOptions().getIdGeneratorRelationStart();
+  _wayId = (long)ConfigOptions().getIdGeneratorWayStart();
+  _nodeId = (long)ConfigOptions().getIdGeneratorNodeStart();
+  _relationId = (long)ConfigOptions().getIdGeneratorRelationStart();
 }
 
 }

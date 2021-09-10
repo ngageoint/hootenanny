@@ -1,0 +1,7 @@
+
+== Security
+
+=== Web Services
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/developer/OAUTH.md[described here]
+

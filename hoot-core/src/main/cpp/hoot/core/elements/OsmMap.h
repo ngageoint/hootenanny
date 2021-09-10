@@ -279,6 +279,8 @@ public:
   void appendSource(const QString& url);
   void replaceSource(const QString& url);
 
+  void resetIterator() override;
+
   /**
    * This returns an index of the OsmMap. Adding or removing ways from the map will make the index
    * out of date and will require calling getIndex again.
@@ -304,7 +306,6 @@ public:
 protected:
 
   void _next() override;
-  void resetIterator() override;
 
 private:
 

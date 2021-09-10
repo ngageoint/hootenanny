@@ -43,14 +43,14 @@ tds70 = {
     tds70.rawSchema = tds70.schema.getDbSchema();
 
     // Add the Very ESRI specific FCSubtype attribute
-    if (config.getOgrEsriFcsubtype() == 'true') tds70.rawSchema = translate.addFCSubtype(tds70.rawSchema);
+    if (hoot.Settings.get('ogr.esri.fcsubtype') == 'true') tds70.rawSchema = translate.addFCSubtype(tds70.rawSchema);
 
     // Add empty "extra" feature layers if needed
-    if (config.getOgrNoteExtra() == 'file') tds70.rawSchema = translate.addExtraFeature(tds70.rawSchema);
+    if (hoot.Settings.get('ogr.note.extra') == 'file') tds70.rawSchema = translate.addExtraFeature(tds70.rawSchema);
 
       // Build the TDS fcode/attrs lookup table. Note: This is <GLOBAL>
       // And, add the OSMTAGS, attribute as well
-    if (config.getOgrOutputFormat() == 'shp')
+    if (hoot.Settings.get('ogr.output.format') == 'shp')
     {
       tds70.attrLookup = translate.makeAttrLookup(translate.addTagFeatures(tds70.rawSchema));
     }
@@ -66,7 +66,7 @@ tds70 = {
 
     // Decide if we are going to use TDS structure or 1 FCODE / File
     // if we DON't want the new structure, just return the tds70.rawSchema
-    if (config.getOgrThematicStructure() == 'false')
+    if (hoot.Settings.get('ogr.thematic.structure') == 'false')
     {
       // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
       tds70.layerNameLookup = translate.makeLayerNameLookup(tds70.rawSchema);
@@ -76,7 +76,7 @@ tds70 = {
 
       // Now add an o2s[A,L,P] feature to the tds70.rawSchema
       // We can drop features but this is a nice way to see what we would drop
-      if (config.getOgrOutputFormat() == 'shp')
+      if (hoot.Settings.get('ogr.output.format') == 'shp')
       {
         // Add tag1, tag2, tag3 and tag4
         tds70.rawSchema = translate.addO2sFeatures(tds70.rawSchema);
@@ -212,13 +212,13 @@ tds70 = {
 
     // Add the ESRI Feature Dataset name to the schema
     //  newSchema = translate.addFdName(newSchema,'TDS');
-    if (config.getOgrEsriFdname() !== '') newSchema = translate.addFdName(newSchema,config.getOgrEsriFdname());
+    if (hoot.Settings.get('ogr.esri.fdname') !== '') newSchema = translate.addFdName(newSchema,hoot.Settings.get('ogr.esri.fdname'));
 
     // Now add the o2s feature to the tds70.rawSchema
     // We can drop features but this is a nice way to see what we would drop
     // NOTE: We add these feature AFTER adding the ESRI Feature Dataset so that they
     // DON'T get put under the Feature Dataset in the output.
-    if (config.getOgrOutputFormat() == 'shp')
+    if (hoot.Settings.get('ogr.output.format') == 'shp')
     {
       // Add tag1, tag2, tag3 and tag4
       newSchema = translate.addO2sFeatures(newSchema);
@@ -2717,13 +2717,13 @@ tds70 = {
     if (tds70.configIn == undefined)
     {
       tds70.configIn = {};
-      tds70.configIn.OgrAddUuid = config.getOgrAddUuid();
-      tds70.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
-      tds70.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+      tds70.configIn.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
+      tds70.configIn.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
+      tds70.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      tds70.configIn.ReaderInputFormat = hoot.Settings.get('reader.input.format');
 
       // Get any changes
-      tds70.toChange = hoot.Settings.get('schema.translation.override');
-    }
+      tds70.toChange = hoot.Settings.get("schema.translation.override");    }
 
     // Debug:
     if (tds70.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
@@ -2868,14 +2868,15 @@ tds70 = {
     if (tds70.configOut == undefined)
     {
       tds70.configOut = {};
-      tds70.configOut.OgrAddUuid = config.getOgrAddUuid();
-      tds70.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
-      tds70.configOut.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
-      tds70.configOut.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
-      tds70.configOut.OgrFormat = config.getOgrOutputFormat();
-      tds70.configOut.OgrNoteExtra = config.getOgrNoteExtra();
-      tds70.configOut.OgrThematicStructure = config.getOgrThematicStructure();
-      tds70.configOut.OgrThrowError = config.getOgrThrowError();
+      tds70.configOut.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
+      tds70.configOut.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      tds70.configOut.OgrDebugDumpvalidate = hoot.Settings.get('ogr.debug.dumpvalidate');
+      tds70.configOut.OgrEsriFcsubtype = hoot.Settings.get('ogr.esri.fcsubtype');
+      tds70.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
+      tds70.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
+      tds70.configOut.OgrThematicStructure = hoot.Settings.get('ogr.thematic.structure');
+      tds70.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
+
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon
@@ -3008,7 +3009,7 @@ tds70 = {
             // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             // returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
             var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
-            if (tds61.configOut.OgrFormat == 'shp')
+            if (tds70.configOut.OgrFormat == 'shp')
             {
               // Split the tags into a maximum of 4 fields, each no greater than 225 char long.
               var tList = translate.packText(notUsedTags,4,225);

@@ -143,13 +143,13 @@ criteria. For example, if we're conflating rivers then there is no need to look
 at roads, power-lines or walls. Failing to implement this method will not likely
 impact the final result, but will dramatically reduce performance.
 
-The exposed method is named +isCandidate+ and takes a single element as input.
+The exposed method is named `isCandidate` and takes a single element as input.
 If the element is a candidate for conflation the rest of the routines will be
 evaluated. Otherwise, the element will be ignored for the purposes of this
 specific line conflation routine.
 
 Routines are exposed to JavaScript for determining if the element is a candidate
-as needed. For example +isBuilding+, +isArea+, +isLinear+, etc.
+as needed. For example `isBuilding`, `isArea`, `isLinear`, etc.
 
 See _Modifying Hootenanny with JavaScript_ <<hootuser>> for details.
 

@@ -38,8 +38,8 @@ available and then performs the translation.
 
 The service side translator implementation used by the client is configurable and defaults to a translator that has language detection
 built in.  Because of that, requests can be made that specify no source language and ask that the service detect the language that
-needs to be translated from.  If a C\++ translation technology is ever implemented, the hoot-services translation service may be bypassed
-and a translator implemented in C\++ for that technology may be used instead by changing a configuration option.
+needs to be translated from.  If a C++ translation technology is ever implemented, the hoot-services translation service may be bypassed
+and a translator implemented in C++ for that technology may be used instead by changing a configuration option.
 
 Furthermore, a hoot core command exists, 'hoot languages', that will list currently supported languages hosted in the translation web service.
 
