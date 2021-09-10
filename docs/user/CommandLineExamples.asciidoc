@@ -451,6 +451,8 @@ See the User Guide for more specific details on command usage. Most of these exa
       input1.osm input2.osm output.osm --differential
 -----
 
+TODO: add one to many rail example
+
 === Conversion
 
 ==== Combine two maps into a single map without conflating:
