@@ -492,20 +492,17 @@ describe('TranslationServer', function () {
                 translation: 'MGCP',
                 path: '/translateTo'
             });
-
             xml2js.parseString(osm2trans, function(err, result) {
                 if (err) console.error(err);
                 assert.equal(result.osm.$.schema, "MGCP");
                 assert.equal(result.osm.way[0].tag[0].$.k, "FCODE");
                 assert.equal(result.osm.way[0].tag[0].$.v, "AP030");
-                assert.equal(result.osm.way[0].tag[2].$.k, "UID");
-                assert.equal(result.osm.way[0].tag[2].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
-                assert.equal(result.osm.way[0].tag[3].$.k, "HCT");
-                assert.equal(result.osm.way[0].tag[3].$.v, "0");
-                assert.equal(result.osm.way[0].tag[4].$.k, "WD1");
-                assert.equal(result.osm.way[0].tag[4].$.v, "20");
                 assert.equal(result.osm.way[0].tag[1].$.k, "LTN");
                 assert.equal(result.osm.way[0].tag[1].$.v, "2");
+                assert.equal(result.osm.way[0].tag[2].$.k, "UID");
+                assert.equal(result.osm.way[0].tag[2].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
+                assert.equal(result.osm.way[0].tag[3].$.k, "WD1");
+                assert.equal(result.osm.way[0].tag[3].$.v, "20");
             });
         });
 
@@ -580,7 +577,6 @@ describe('TranslationServer', function () {
         it('should be lossy to go from osm -> mgcp -> osm', function() {
 
             var data = '<osm version="0.6" upload="true" generator="JOSM"><node id="-4" lon="-105.24014094121263" lat="39.28928610944744" version="0"><tag k="poi" v="yes"/><tag k="amenity" v="cafe"/><tag k="uuid" v="{4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4}"/></node></osm>';
-
             var mgcp_xml = server.handleInputs({
                 osm: data,
                 method: 'POST',
@@ -772,23 +768,39 @@ describe('TranslationServer', function () {
                 translation: 'MGCP',
                 path: '/translateFrom'
             });
-
+            // NOTE: The translator now sends back unknown & N_A values
             var output = xml2js.parseString(trans2osm, function(err, result) {
                 if (err) console.error(err);
-                assert.equal(result.osm.node[0].tag[4].$.k, "use");
-                assert.equal(result.osm.node[0].tag[4].$.v, "other");
-                assert.equal(result.osm.node[0].tag[6].$.k, "place");
-                assert.equal(result.osm.node[0].tag[6].$.v, "yes");
-                assert.equal(result.osm.node[0].tag[5].$.k, "poi");
-                assert.equal(result.osm.node[0].tag[5].$.v, "yes");
-                assert.equal(result.osm.node[0].tag[3].$.k, "uuid");
-                assert.equal(result.osm.node[0].tag[3].$.v, "{c6df0618-ce96-483c-8d6a-afa33541646c}");
-                assert.equal(result.osm.node[0].tag[2].$.k, "name");
-                assert.equal(result.osm.node[0].tag[2].$.v, "Manitou Springs");
-                assert.equal(result.osm.node[0].tag[1].$.k, "landuse");
-                assert.equal(result.osm.node[0].tag[1].$.v, "built_up_area");
                 assert.equal(result.osm.node[0].tag[0].$.k, "source:accuracy:horizontal:category");
                 assert.equal(result.osm.node[0].tag[0].$.v, "accurate");
+                assert.equal(result.osm.node[0].tag[1].$.k, "source:name");
+                assert.equal(result.osm.node[0].tag[1].$.v, "unknown");
+                assert.equal(result.osm.node[0].tag[2].$.k, "source");
+                assert.equal(result.osm.node[0].tag[2].$.v, "N_A");
+                assert.equal(result.osm.node[0].tag[3].$.k, "place:importance");
+                assert.equal(result.osm.node[0].tag[3].$.v, "unknown");
+                assert.equal(result.osm.node[0].tag[4].$.k, "landuse");
+                assert.equal(result.osm.node[0].tag[4].$.v, "built_up_area");
+                assert.equal(result.osm.node[0].tag[5].$.k, "name");
+                assert.equal(result.osm.node[0].tag[5].$.v, "Manitou Springs");
+                assert.equal(result.osm.node[0].tag[6].$.k, "source:copyright");
+                assert.equal(result.osm.node[0].tag[6].$.v, "UNK");
+                assert.equal(result.osm.node[0].tag[7].$.k, "uuid");
+                assert.equal(result.osm.node[0].tag[7].$.v, "{c6df0618-ce96-483c-8d6a-afa33541646c}");
+                assert.equal(result.osm.node[0].tag[8].$.k, "use");
+                assert.equal(result.osm.node[0].tag[8].$.v, "other");
+                assert.equal(result.osm.node[0].tag[9].$.k, "source:datetime");
+                assert.equal(result.osm.node[0].tag[9].$.v, "UNK");
+                assert.equal(result.osm.node[0].tag[10].$.k, "gndb_id");
+                assert.equal(result.osm.node[0].tag[10].$.v, "UNK");
+                assert.equal(result.osm.node[0].tag[11].$.k, "gndb_id:2");
+                assert.equal(result.osm.node[0].tag[11].$.v, "UNK");
+                assert.equal(result.osm.node[0].tag[12].$.k, "poi");
+                assert.equal(result.osm.node[0].tag[12].$.v, "yes");
+                assert.equal(result.osm.node[0].tag[13].$.k, "condition");
+                assert.equal(result.osm.node[0].tag[13].$.v, "unknown");
+                assert.equal(result.osm.node[0].tag[14].$.k, "place");
+                assert.equal(result.osm.node[0].tag[14].$.v, "yes");
             });
         });
 

@@ -40,7 +40,7 @@ eggdm30 = {
         tdsData = ggdm30.toOgr(tags, elementType, geometryType)
 
         // Debug: Commenting this out to cut down the number of Hoot core calls
-//         if (config.getOgrDebugDumptags() == 'true')
+//         if (hoot.Settings.get('ogr.debug.dumptags') == 'true')
 //         {
 //             for (var i = 0, fLen = tdsData.length; i < fLen; i++)
 //             {
@@ -96,7 +96,7 @@ eggdm30 = {
 
         }
 
-//         if (config.getOgrDebugDumptags() == 'true')
+//         if (hoot.Settings.get('ogr.debug.dumptags')== 'true')
 //         {
 //             var kList = Object.keys(eAttrs).sort()
 //             for (var j = 0, kLen = kList.length; j < kLen; j++) print('Final Attrs:' + kList[j] + ': :' + eAttrs[kList[j]] + ':');

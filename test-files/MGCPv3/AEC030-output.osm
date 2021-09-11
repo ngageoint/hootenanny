@@ -74,7 +74,6 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:aec030"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.407Z"/>
         <tag k="uuid" v="{baa999b1-fa79-4c02-a1f4-f046fb0ecfe7}"/>
         <tag k="width" v="98.9"/>
@@ -95,7 +94,6 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:aec030"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.407Z"/>
         <tag k="uuid" v="{6236db9f-363c-4b42-891b-6cd126c3be91}"/>
         <tag k="width" v="98.9"/>
@@ -117,7 +115,6 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:aec030"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.406Z"/>
         <tag k="uuid" v="{b3089d36-8096-46f0-884e-063e4b51fc71}"/>
         <tag k="width" v="98.9"/>
@@ -139,7 +136,6 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:aec030"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.406Z"/>
         <tag k="uuid" v="{bb2ccaaf-3937-46e6-9e0a-da88a1ddc6e9}"/>
         <tag k="width" v="98.9"/>
@@ -161,7 +157,6 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:aec030"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.406Z"/>
         <tag k="uuid" v="{52cfa9ad-19a5-4e7c-b77b-36b0021203d3}"/>
         <tag k="width" v="98.9"/>
@@ -183,7 +178,6 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:aec030"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.405Z"/>
         <tag k="uuid" v="{1b10f766-44bb-466d-97ee-a0557acd14a8}"/>
         <tag k="width" v="98.9"/>
@@ -205,7 +199,6 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:aec030"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.405Z"/>
         <tag k="uuid" v="{6e15e51a-bf56-4b93-97b6-e66dbbb9ec93}"/>
         <tag k="width" v="98.9"/>
@@ -227,7 +220,6 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:aec030"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.404Z"/>
         <tag k="uuid" v="{a75d229a-075b-4532-becf-168c329e4310}"/>
         <tag k="width" v="98.9"/>
@@ -248,7 +240,6 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:aec030"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.404Z"/>
         <tag k="uuid" v="{4ba8cf79-ef94-4d7c-80c4-e09d5912168f}"/>
         <tag k="width" v="98.9"/>
@@ -270,7 +261,6 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:aec030"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.404Z"/>
         <tag k="uuid" v="{0e39d522-742d-486f-9247-c8e960054ded}"/>
         <tag k="width" v="98.9"/>
@@ -291,7 +281,6 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:aec030"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.403Z"/>
         <tag k="uuid" v="{b74a3f2a-d4b7-40bb-9c12-c97c65ffe51b}"/>
         <tag k="width" v="98.9"/>
@@ -313,7 +302,6 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:aec030"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.403Z"/>
         <tag k="uuid" v="{7935f7e4-e2cd-4718-b659-626e391d00ad}"/>
         <tag k="width" v="98.9"/>
@@ -335,7 +323,6 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:aec030"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.402Z"/>
         <tag k="uuid" v="{c79f688a-9fb4-4240-972a-90f8e363c60f}"/>
         <tag k="width" v="98.9"/>
@@ -356,7 +343,6 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:aec030"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.303Z"/>
         <tag k="uuid" v="{03d65d49-0955-48cf-ab0f-419604718d78}"/>
         <tag k="width" v="98.9"/>

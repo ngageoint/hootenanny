@@ -29,7 +29,7 @@
 // Convert NGA World Port Index shapefiles to OSM
 //
 
-hoot.require('config');
+// hoot.require('config');
 hoot.require('translate');
 hoot.require('wpi_rules');
 
@@ -40,7 +40,7 @@ function translateToOsm(attrs, layerName, geometryType)
   var tags = {};
 
   // Debug:
-  if (config.getOgrDebugDumptags() == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
+  if (hoot.Settings.get('ogr.debug.dumptags') == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
   translate.numToOSM(attrs, tags, wpi.numRules);
   translate.txtToOsm(attrs, tags, wpi.txtRules);
@@ -55,7 +55,7 @@ function translateToOsm(attrs, layerName, geometryType)
   tags.uuid = createUuid();
 
   // Debug:
-  if (config.getOgrDebugDumptags() == 'true')
+  if (hoot.Settings.get('ogr.debug.dumptags') == 'true')
   {
     translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
     print('');

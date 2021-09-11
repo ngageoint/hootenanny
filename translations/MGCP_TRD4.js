@@ -29,7 +29,7 @@
 // MGCP Conversion
 //
 
-hoot.require('config')
+// hoot.require('config')
 hoot.require('mgcp')
 hoot.require('mgcp_schema')
 hoot.require('mgcp_rules')

@@ -29,7 +29,7 @@
 // Convert OSM+ to ENCv311
 //
 
-hoot.require('config');
+// hoot.require('config');
 hoot.require('translate');
 
 function initialize()
@@ -53,7 +53,7 @@ function getDbSchema()
 
   // Now add an o2s[A,L,P] feature to the enc311.rawSchema
   // We can drop features but this is a nice way to see what we would drop
-  if (config.getOgrOutputFormat() == 'shp')
+  if (hoot.Settings.get('ogr.output.format') == 'shp')
   {
     // Add tag1, tag2, tag3 and tag4
     enc311.rawSchema = translate.addO2sFeatures(enc311.rawSchema);
@@ -566,11 +566,11 @@ enc311 = {
     if (enc311.configOut == undefined)
     {
       enc311.configOut = {};
-      enc311.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
-      enc311.configOut.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
-      enc311.configOut.OgrNoteExtra = config.getOgrNoteExtra();
-      enc311.configOut.OgrFormat = config.getOgrOutputFormat();
-      enc311.configOut.OgrThrowError = config.getOgrThrowError();
+      enc311.configOut.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      enc311.configOut.OgrDebugDumpvalidate = hoot.Settings.get('ogr.debug.dumpvalidate');
+      enc311.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
+      enc311.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
+      enc311.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon

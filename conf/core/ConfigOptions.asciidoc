@@ -4418,6 +4418,15 @@ A quantile value, in the range [0.0, 1.0], for `QuantileAggregator`.
 Maximum length, in characters, allowed when logging a variable value during progress logging. Not
 honored by all progress logging.
 
+=== railway.angle.sample.distance
+
+* Data Type: double
+* Default Value: `20.0`
+
+Distance, in meters, used for sampling railway data during angle histogram extraction with
+`SampledAngleHistogramExtractor`.
+>>>>>>> master
+
 === railway.matcher.heading.delta
 
 * Data Type: double
@@ -4611,8 +4620,19 @@ by `RandomWayGeneralizer`.
 * Data Type: bool
 * Default Value: `true`
 
+
 By default add the `source:datetime` or `source:ingest:datetime` stamp when reading files.  Not
 honored by all readers.
+
+=== reader.input.format
+
+* Data Type: string
+* Default Value: `OSM`
+
+The type of data that the reader is reading. This is the reader version of `ogr.output.format`
+This is used to pass the input format (OSM or OGR) to translation scripts to
+enable format specific translations.
+The OGR Reader changes this to be 'OGR'. All of the other readers use the default value.
 
 === reader.http.bbox.max.download.size
 
