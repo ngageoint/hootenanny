@@ -5205,7 +5205,8 @@ the entire input dataset. See `search.radius.default`.
 * Default Value:
 ** ``
 
-TODO
+List of keys for tags to be transferred by the `TagMergers` descending from
+`SelectiveOverwriteTagMerger`.
 
 === set.tag.value.visitor.append.to.existing.value
 
