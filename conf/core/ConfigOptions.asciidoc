@@ -4425,7 +4425,6 @@ honored by all progress logging.
 
 Distance, in meters, used for sampling railway data during angle histogram extraction with
 `SampledAngleHistogramExtractor`.
->>>>>>> master
 
 === railway.matcher.heading.delta
 
