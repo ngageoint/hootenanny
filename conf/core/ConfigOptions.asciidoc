@@ -3980,11 +3980,11 @@ runtime performance implications.
 * Data Type: bool
 * Default Value: `false`
 
-If true, POI/Polygon conflation will attempt to search for phone numbers within tag value text
-that may contain things other than phone numbers. If false, the conflation will assume the tag
-value is a phone number and will not search within it. `poi.polygon.phone.number.region.code` must
-be set to a valid region code when enabling this option. Enabling this option may have runtime
-performance implications.
+If true, conflation routines that parse phone numbers will attempt to search for phone numbers
+within tag value text that may contain things other than phone numbers. If false, conflation will
+assume the tag value is a phone number and will not search within its text.
+`phone.number.region.code` must be set to a valid region code when enabling this option. Enabling
+this option may have runtime performance implications.
 
 === plugin.context.includes
 

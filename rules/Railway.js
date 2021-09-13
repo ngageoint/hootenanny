@@ -184,17 +184,22 @@ exports.matchScore = function(map, e1, e2)
     var totalMatchesAllowed = parseInt(String(tags2.get(oneToManyTagKey)));
     // If its a one to many and we've already made the total number of matches, then we won't make
     // anymore (may eventually find this check isn't needed if the rail data isn't super dense).
-    if (parseInt(oneToManyMatches[e2.getElementId()]) >= totalMatchesAllowed)
+    if (totalMatchesAllowed > 1)
     {
-      hoot.trace(e2.getElementId() + " has already reached its maximum allowed matches: " + totalMatchesAllowed);
-      return result;
+      if (parseInt(oneToManyMatches[e2.getElementId()]) >= totalMatchesAllowed)
+      {
+        hoot.trace(e2.getElementId() + " has already reached its maximum allowed matches: " + totalMatchesAllowed);
+        return result;
+      }
+      else
+      {
+        currentMatchAttemptIsOneToMany = true;
+        // If we're doing a one to many, we need to cover a wider swath to get all the matches, so
+        // lessen the distance score. This value may need to be tweaked over time, as well as the other
+        // score thresholds.
+        minDistanceScore = 0.468;
+      }
     }
-
-    currentMatchAttemptIsOneToMany = true;
-    // If we're doing a one to many, we need to cover a wider swath to get all the matches, so
-    // lessen the distance score. This value may need to be tweaked over time, as well as the other
-    // score thresholds.
-    minDistanceScore = 0.468;
   }
 
   // Check for a geometry match.
