@@ -58,6 +58,12 @@ public:
     setResetType(ResetAll);
   }
 
+  void setUp() override
+  {
+    HootTestFixture::setUp();
+    TestUtils::resetAll();
+  }
+
   void runResolveMsTest()
   {
     // This test is here to illustrate the fact that calling a linear merger may leave

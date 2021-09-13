@@ -89,7 +89,9 @@ void TagMergerFactory::reset()
 
 QString TagMergerFactory::toString() const
 {
-  return QString("{ %1 }").arg(_mergers.keys().join(",\n"));
+  return QString("{ Default: %1\n  Mergers: %2 }")
+      .arg(_default ? _default->getName() : "null")
+      .arg(_mergers.keys().join(",\n"));
 }
 
 }

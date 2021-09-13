@@ -512,20 +512,24 @@ void HootTestFixture::tearDown()
   }
 }
 
-QString HootTestFixture::getEnvString()
+QString HootTestFixture::getEnvString(Environment env)
 {
   ostringstream oss;
   //  First comes the config settings
-  oss << Settings::getInstance().toString().toStdString() << std::endl;
+  if (env & Environment::EnvSettings)
+    oss << Settings::getInstance().toString().toStdString() << std::endl;
   //  Check the merger factory mergers
-  oss << MergerFactory::getInstance().toString() << std::endl;
+  if (env & Environment::EnvMerger)
+    oss << MergerFactory::getInstance().toString() << std::endl;
   //  Check the tag merger factory mergers
-  oss << TagMergerFactory::getInstance().toString() << std::endl;
+  if (env & Environment::EnvTagMerger)
+    oss << TagMergerFactory::getInstance().toString() << std::endl;
   //  Check the match factory
   //  Including this check for the match factory exposes a potential memory leak in our
   //  usage of v8 'Fatal javascript OOM in Ineffective mark-compacts near heap limit'
   //  Enable only when running few tests that have MatchFactory issues
-//  oss << MatchFactory::getInstance().toString() << std::endl;
+  if (env & Environment::EnvMatch)
+    oss << MatchFactory::getInstance().toString() << std::endl;
   return QString(oss.str().c_str());
 }
 
