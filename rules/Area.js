@@ -22,7 +22,7 @@ exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 
 exports.searchRadius = parseFloat(hoot.get("search.radius.area"));
-exports.typeThreshold = parseFloat(hoot.get("area.type.match.threshold"));
+exports.typeThreshold = parseFloat(hoot.get("area.type.threshold"));
 var overlapReviewThreshold = parseFloat(hoot.get("area.overlap.review.threshold"));
 var overlapReviewTypeThreshold = parseFloat(hoot.get("area.type.overlap.review.threshold"));
 exports.experimental = false;

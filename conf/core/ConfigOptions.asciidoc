@@ -328,7 +328,7 @@ input sizes.
 Areas that do not match and have a percentage overlap at or above this value will be marked for
 review.
 
-=== area.type.match.threshold
+=== area.type.threshold
 
 * Data Type: double
 * Default Value: `0.8`
@@ -4444,23 +4444,36 @@ Sets that maximum angle, in degrees, that is still considered a railway match.
 === railway.one.to.many.delete.secondary
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
-If true and the conditions specified in `railway.one.to.many.identifying.keys` are met, then
-matching secondary features will be deleted from conflated output.
+If true, `railway.one.to.many.match` is enabled, and the conditions specified in
+`railway.one.to.many.identifying.keys` are met, then matching secondary features will be deleted
+from conflated output.
 
 === railway.one.to.many.identifying.keys
 
 * Data Type: list
 * Default Value:
-** ``
+** `passenger_lines`
 
-List of tag keys with values identifying how many tracks a particular rail has (e.g. `lanes`,
-`lines`). If any of the tags are found in a rail from the second input, railway matching will
-attempt a one to many match from input 2 to input 1 with matches up to the number of tracks
-specified in the tag value (arbitarily, the first tag found from the key list is used). Only tag
-merging of selected tags (see `railway.one.to.many.transfer.keys`) will be performed with no
-geometry merging, regardless of the conflation workflow in use.
+List of tag keys with values identifying how many tracks a particular rail has used if
+`railway.one.to.many.match` is enabled. If any of the tags are found in a rail from the second
+input, railway matching will attempt a one to many match from input 2 to input 1 (arbitarily,
+the first tag found from the key list is used). The default value of this option maps to the
+OpenStreetMap tagging standard for railways. If your input data has other tag keys that identify
+your track count, either translate them to the default value here before hand or add them as
+additional entry values to this option.
+
+=== railway.one.to.many.match
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, railway matching will attempt a one to many match from input 2 to input 1. The rail feature
+from input 2 must contain at least one of the tag having a key matching that in
+`railway.one.to.many.identifying.keys`. Only tag merging of selected tags identified in
+`railway.one.to.many.transfer.keys` will be performed with no geometry merging, regardless of the
+conflation workflow in use.
 
 === railway.one.to.many.transfer.keys
 
@@ -4468,8 +4481,9 @@ geometry merging, regardless of the conflation workflow in use.
 * Default Value:
 ** ``
 
-List of tags to transfer from input 2 rail feature to input 1 rail feature if the conditions
-described in `railway.one.to.many.identifying.keys` are satisfied.
+List of tags to transfer from input 2 rail feature to input 1 rail feature if
+`railway.one.to.many.match` is enabled and the match conditions described in
+`railway.one.to.many.identifying.keys` are satisfied.
 
 === railway.subline.matcher
 
@@ -4477,6 +4491,14 @@ described in `railway.one.to.many.identifying.keys` are satisfied.
 * Default Value: `MaximalSublineMatcher`
 
 The way subline matcher to use when determining matching sublines.
+
+=== railway.type.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+Tag similarity threshold, in the range (0.0, 1.0], at or above which a railway feature is considered
+to have similar tags.
 
 === random.element.remover.probability
 

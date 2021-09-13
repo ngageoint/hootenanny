@@ -19,7 +19,7 @@ exports.searchRadius = parseFloat(hoot.get("search.radius.railway"));
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
-exports.typeThreshold = parseFloat(hoot.get("river.type.threshold"));
+exports.typeThreshold = parseFloat(hoot.get("railway.type.threshold"));
 
 // This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
 // culling match candidates.
@@ -35,6 +35,8 @@ var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
 var hausdorffDistanceExtractor = new hoot.HausdorffDistanceExtractor();
 
+// determines if one to many matching is enabled
+var oneToManyMatchEnabled = (hoot.get("railway.one.to.many.match") === 'true');
 // This contains the keys in a secondary feature that will trigger a one to many tag only transfer.
 var oneToManyIdentifyingKeys = hoot.get("railway.one.to.many.identifying.keys").split(';');
 // This contains the keys in a secondary feature that will be transferred to a reference feature
@@ -60,6 +62,8 @@ var oneToManyTagKey;
 var oneToManySecondaryMatchElementIds = [];
 // This maps secondary element IDs to the number of matches they're involved in.
 var oneToManyMatches = {};
+// This maps secondary element IDs to their matched ref elements (can be combined with
+// oneToManyMatches eventually).
 var oneToManyMatchIds = {};
 
 /**
@@ -183,7 +187,7 @@ exports.matchScore = function(map, e1, e2)
 
   // Note: No need has been apparent *yet* to do match filtering via name.
 
-  // TODO
+  // Check for a type mismatch.
   if (typeMismatch(e1, e2))
   {
     hoot.debug("type mismatch");
@@ -203,33 +207,34 @@ exports.matchScore = function(map, e1, e2)
   // conflation being done. It *may* eventually make sense to only skip the geometry merging if
   // Attribute Conflation is selected and perform it when Reference Conflation is selected.
   var currentMatchAttemptIsOneToMany = false;
-  oneToManyTagKey = tags2.getFirstMatchingKey(oneToManyIdentifyingKeys);
-  hoot.debug("oneToManyTagKey: " + oneToManyTagKey);
-  if (oneToManyTagKey !== "")
+  if (oneToManyMatchEnabled)
   {
-    // Check the identifying tag to see how many rail tracks this single secondary feature
-    // represents.
-    var totalMatchesAllowed = parseInt(String(tags2.get(oneToManyTagKey)));
-    // If its a one to many and we've already made the total number of matches, then we won't make
-    // anymore (may eventually find this check isn't needed if the rail data isn't super dense).
-    if (totalMatchesAllowed > 1)
+    oneToManyTagKey = tags2.getFirstMatchingKey(oneToManyIdentifyingKeys);
+    hoot.debug("oneToManyTagKey: " + oneToManyTagKey);
+    if (oneToManyTagKey !== "")
     {
-      /*if (parseInt(oneToManyMatches[e2.getElementId()]) >= totalMatchesAllowed)
+      // Check the identifying tag to see how many rail tracks this single secondary feature
+      // represents.
+      var totalMatchesAllowed = parseInt(String(tags2.get(oneToManyTagKey)));
+      // If its a one to many and we've already made the total number of matches, then we won't make
+      // anymore (TODO: not convinced this is doing much and we may eventually find this check isn't
+      // needed).
+      if (totalMatchesAllowed > 1)
       {
-        hoot.debug(e2.getElementId() + " has already reached its maximum allowed matches: " + totalMatchesAllowed + ". matched element IDs: " + oneToManyMatchIds[e2.getElementId()]);
-        return result;
+        if (parseInt(oneToManyMatches[e2.getElementId()]) >= totalMatchesAllowed)
+        {
+          hoot.debug(e2.getElementId() + " has already reached its maximum allowed matches: " + totalMatchesAllowed + ". matched element IDs: " + oneToManyMatchIds[e2.getElementId()]);
+          return result;
+        }
+        else
+        {
+          currentMatchAttemptIsOneToMany = true;
+          // If we're doing a one to many, we need to cover a wider swath to get all the matches, so
+          // lessen the distance score. This value may need to be tweaked over time, as well as the
+          // other score thresholds.
+          minDistanceScore = 0.468;
+        }
       }
-      else
-      {*/
-        currentMatchAttemptIsOneToMany = true;
-        // If we're doing a one to many, we need to cover a wider swath to get all the matches, so
-        // lessen the distance score. This value may need to be tweaked over time, as well as the
-        // other score thresholds.
-        minDistanceScore = 0.468;
-        //minDistanceScore = 0.0789;
-        //minHausdorffDistanceScore = 0.395;
-        //minEdgeDistanceScore = 0.406;
-      //}
     }
   }
 
@@ -309,6 +314,7 @@ exports.mergeSets = function(map, pairs, replaced)
     {
       var refElement;
       var secondaryElement;
+      // TODO: Is this necessary? Are they ever out of order?
       if (element2.getStatusString() === 'unknown2')
       {
         secondaryElement = element2;
