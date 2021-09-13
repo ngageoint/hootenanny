@@ -57,6 +57,8 @@ void TagsJs::Init(Local<Object> target)
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(), toV8(Tags::className()));
   tpl->PrototypeTemplate()->Set(current, "contains", FunctionTemplate::New(current, contains));
   tpl->PrototypeTemplate()->Set(
+    current, "onlyOneContainsKvp", FunctionTemplate::New(current, onlyOneContainsKvp));
+  tpl->PrototypeTemplate()->Set(
     current, "getFirstMatchingKey", FunctionTemplate::New(current, getFirstMatchingKey));
   tpl->PrototypeTemplate()->Set(current, "get", FunctionTemplate::New(current, get));
   tpl->PrototypeTemplate()->Set(
@@ -103,6 +105,17 @@ void TagsJs::contains(const FunctionCallbackInfo<Value>& args)
   QString key = toCpp<QString>(args[0]);
 
   args.GetReturnValue().Set(toV8(t.contains(key)));
+}
+
+void TagsJs::onlyOneContainsKvp(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
+
+  const Tags& tags1 = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+  const Tags& tags2 = toCpp<Tags>(args[0]);
+  const QString kvp = toCpp<QString>(args[1]);
+
+  args.GetReturnValue().Set(toV8(Tags::onlyOneContainsKvp(tags1, tags2, kvp)));
 }
 
 void TagsJs::getFirstMatchingKey(const FunctionCallbackInfo<Value>& args)
