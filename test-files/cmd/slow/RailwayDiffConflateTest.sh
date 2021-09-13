@@ -7,7 +7,6 @@ mkdir -p $OUT_DIR
 LOG_LEVEL=--warn
 CONFIG="-C UnifyingAlgorithm.conf -C DifferentialConflation.conf -C Testing.conf -D uuid.helper.repeatable=true -D match.creators=ScriptMatchCreator,Railway.js -D merger.creators=ScriptMergerCreator"
 
-# TODO
 # See related notes in DiffConflatePartialLinearMatchTest.
 
 # remove partial matches partially
