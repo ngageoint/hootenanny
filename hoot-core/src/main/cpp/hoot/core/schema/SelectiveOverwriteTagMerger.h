@@ -79,7 +79,7 @@ public:
   static QString className() { return "SelectiveOverwriteTag2Merger"; }
 
   SelectiveOverwriteTag2Merger() : SelectiveOverwriteTagMerger(false) { }
-  ~SelectiveOverwriteTag2Merger() = default;
+  ~SelectiveOverwriteTag2Merger() override = default;
 
   QString getDescription() const override
   {  return "Overwrites selected conflicting tags only with those from the reference feature"; }
@@ -98,7 +98,7 @@ public:
   static QString className() { return "SelectiveOverwriteTag1Merger"; }
 
   SelectiveOverwriteTag1Merger() : SelectiveOverwriteTagMerger(true) { }
-  ~SelectiveOverwriteTag1Merger() = default;
+  ~SelectiveOverwriteTag1Merger() override = default;
 
   QString getDescription() const override
   {  return "Overwrites selected conflicting tags only with those from the secondary feature"; }
