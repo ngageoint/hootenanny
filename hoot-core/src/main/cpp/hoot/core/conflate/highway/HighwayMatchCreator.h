@@ -55,7 +55,8 @@ public:
   /**
    * Search the provided map for highway matches and add the matches to the matches vector.
    */
-  void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+  void createMatches(
+    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
     ConstMatchThresholdPtr threshold) override;
 
   std::vector<CreatorDescription> getAllCreators() const override;

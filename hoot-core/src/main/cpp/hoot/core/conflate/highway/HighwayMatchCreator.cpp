@@ -76,8 +76,9 @@ class HighwayMatchVisitor : public ConstElementVisitor
 {
 public:
 
-  HighwayMatchVisitor(const ConstOsmMapPtr& map, vector<ConstMatchPtr>& result,
-                      ElementCriterionPtr filter = ElementCriterionPtr()) :
+  HighwayMatchVisitor(
+    const ConstOsmMapPtr& map, vector<ConstMatchPtr>& result,
+    ElementCriterionPtr filter = ElementCriterionPtr()) :
   _map(map),
   _result(result),
   _filter(filter)
@@ -90,8 +91,7 @@ public:
   HighwayMatchVisitor(const ConstOsmMapPtr& map,
     vector<ConstMatchPtr>& result, std::shared_ptr<HighwayClassifier> c,
     std::shared_ptr<SublineStringMatcher> sublineMatcher, Status matchStatus,
-    ConstMatchThresholdPtr threshold,
-    std::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
+    ConstMatchThresholdPtr threshold, std::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
     ElementCriterionPtr filter = ElementCriterionPtr()):
   _map(map),
   _result(result),
