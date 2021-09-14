@@ -27,6 +27,7 @@
 #ifndef WAYMATCHLOCATION_H
 #define WAYMATCHLOCATION_H
 
+// Hoot
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 
 namespace hoot
@@ -39,7 +40,7 @@ class WaySublineMatch
 public:
 
   WaySublineMatch();
-  WaySublineMatch(const WaySublineMatch& other, const ConstOsmMapPtr &newMap);
+  WaySublineMatch(const WaySublineMatch& other, const ConstOsmMapPtr& newMap);
   WaySublineMatch(const WaySubline& ws1, const WaySubline& ws2, bool reversed = false);
 
   /**

@@ -46,10 +46,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(MergerCreator, NetworkMergerCreator)
 
-NetworkMergerCreator::NetworkMergerCreator()
+NetworkMergerCreator::NetworkMergerCreator() :
+_map(nullptr),
+_minMatchOverlapPercentage(ConfigOptions().getNetworkMergerMinLargeMatchOverlapPercentage())
 {
-  _map = nullptr;
-  _minMatchOverlapPercentage = ConfigOptions().getNetworkMergerMinLargeMatchOverlapPercentage();
 }
 
 bool NetworkMergerCreator::createMergers(
