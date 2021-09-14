@@ -287,13 +287,24 @@ public:
 
   static const QString UNUSED_PATH;
 
+  enum Environment : unsigned int
+  {
+    EnvSettings   = 0x01,
+    EnvMerger     = 0x02,
+    EnvTagMerger  = 0x04,
+    EnvDefaultAll = EnvSettings | EnvMerger | EnvTagMerger,
+    EnvMatch      = 0x08,
+    EnvEverything = EnvDefaultAll | EnvMatch
+  };
+
   /**
    * @brief getEnvString Record the current state of the environment for comparison
+   * @param env bit flag for displaying environment string
    * @return the environment as a string
    */
-  static QString getEnvString();
+  static QString getEnvString(Environment env = Environment::EnvDefaultAll);
 
-private:
+protected:
 
   /** Reset flag on setup to reset nothing, basic IDs, or everything */
   HootTestReset _reset;
