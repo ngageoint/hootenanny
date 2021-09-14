@@ -45,8 +45,8 @@ using MatchPtr = std::shared_ptr<Match>;
 using ConstMatchPtr = std::shared_ptr<const Match>;
 
 /**
- * Describes a specific match between two sets of elements. e.g. the match between two
- * buildings or the match between an intersection and a round-a-bout.
+ * Describes a specific match between two sets of elements. e.g. the match between two buildings or
+ * the match between an intersection and a round-a-bout.
  *
  * This class is not re-entrant or thread safe.
  */
@@ -168,6 +168,9 @@ protected:
 
   friend class MatchPtrComparator;
 
+  /* All of this order silliness maintains a consistent ordering of matches when they're placed
+   * into a set as pointers.
+   */
   static long _orderCount;
   long _order;
 

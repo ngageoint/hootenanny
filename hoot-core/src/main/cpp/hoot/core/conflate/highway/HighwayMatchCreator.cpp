@@ -154,12 +154,10 @@ public:
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
 
-  static std::shared_ptr<HighwayMatch> createMatch(const ConstOsmMapPtr& map,
-    std::shared_ptr<HighwayClassifier> classifier,
-    std::shared_ptr<SublineStringMatcher> sublineMatcher,
-    ConstMatchThresholdPtr threshold,
-    std::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
-    ConstElementPtr e1, ConstElementPtr e2)
+  static std::shared_ptr<HighwayMatch> createMatch(
+    const ConstOsmMapPtr& map, std::shared_ptr<HighwayClassifier> classifier,
+    std::shared_ptr<SublineStringMatcher> sublineMatcher, ConstMatchThresholdPtr threshold,
+    std::shared_ptr<TagAncestorDifferencer> tagAncestorDiff, ConstElementPtr e1, ConstElementPtr e2)
   {
     std::shared_ptr<HighwayMatch> result;
 
@@ -249,7 +247,7 @@ public:
 
   bool isMatchCandidate(ConstElementPtr element) const
   {
-    // special tag is currently only used by roundabout processing to mark temporary features
+    // The special tag is currently only used by roundabout processing to mark temporary features.
     if (element->getTags().contains(MetadataTags::HootSpecial()) ||
         (_filter && !_filter->isSatisfied(element)))
     {

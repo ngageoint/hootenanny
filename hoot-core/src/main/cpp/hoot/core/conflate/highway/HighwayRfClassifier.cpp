@@ -54,7 +54,8 @@ int HighwayRfClassifier::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(HighwayClassifier, HighwayRfClassifier)
 
 MatchClassification HighwayRfClassifier::classify(
-  const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2, const WaySublineMatchString& match)
+  const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
+  const WaySublineMatchString& match)
 {
   _init();
 
@@ -119,7 +120,8 @@ void HighwayRfClassifier::_createExtractors() const
 }
 
 map<QString, double> HighwayRfClassifier::getFeatures(
-  const ConstOsmMapPtr& m, ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const
+  const ConstOsmMapPtr& m, const ElementId& eid1, const ElementId& eid2,
+  const WaySublineMatchString& match) const
 {
   _init();
 

@@ -58,7 +58,8 @@ HOOT_FACTORY_REGISTER(Match, HighwayMatch)
 const QString HighwayMatch::MATCH_NAME = "Highway";
 QString HighwayMatch::_noMatchingSubline = "No valid matching subline found.";
 
-HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
+HighwayMatch::HighwayMatch(
+  const std::shared_ptr<HighwayClassifier>& classifier,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const ConstOsmMapPtr& map,
   const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt) :
 Match(mt, eid1, eid2),
@@ -67,23 +68,21 @@ _score(0.0),
 _sublineMatcher(sublineMatcher),
 _minSplitSize(0.0)
 {
+  LOG_VART(_eid1);
+  LOG_VART(_eid2);
   assert(_eid1 != _eid2);
 
   const ConstElementPtr e1 = map->getElement(_eid1);
   const ConstElementPtr e2 = map->getElement(_eid2);
-
-  LOG_VART(_eid1);
-  LOG_VART(_eid2);
 
   try
   {
     // calculated the shared sublines
     _sublineMatch =
       _sublineMatcher->findMatch(map, e1, e2, ConfigOptions().getSearchRadiusHighway());
-
     if (_sublineMatch.isValid())
     {
-      // calculate the match score
+      // calculate the match score  
       _c = _classifier->classify(map, eid1, eid2, _sublineMatch);
 
       MatchType type = getType();
@@ -176,7 +175,7 @@ bool HighwayMatch::isConflicting(
   // if the other match is a highway match
   else
   {
-    // See ticket #5272
+    // See Redmine ticket #5272.
     if (getClassification().getReviewP() == 1.0 || other->getClassification().getReviewP() == 1.0)
     {
       return true;
@@ -195,7 +194,7 @@ bool HighwayMatch::isConflicting(
       sharedEid = _eid2;
     }
 
-    // if the matches don't share at least one eid then it isn't a conflict.
+    // If the matches don't share at least one eid then it isn't a conflict.
     if (sharedEid.isNull())
     {
       return false;
@@ -224,7 +223,7 @@ bool HighwayMatch::isConflicting(
       {
         result = false;
       }
-      // we need to check for a conflict in two directions. Is it conflicting if we merge the shared
+      // We need to check for a conflict in two directions. Is it conflicting if we merge the shared
       // EID with this class first, then is it a conflict if we merge with the other EID first.
       // checking for subline match containment first. This is very fast to check and if either one
       // is true then we know it is a conflict.
@@ -252,7 +251,8 @@ bool HighwayMatch::isConflicting(
 }
 
 bool HighwayMatch::_isOrderedConflicting(
-  const ConstOsmMapPtr& map, ElementId sharedEid, ElementId other1, ElementId other2) const
+  const ConstOsmMapPtr& map, const ElementId& sharedEid, const ElementId& other1,
+  const ElementId& other2) const
 {
   set<ElementId> eids;
   eids.insert(sharedEid);
@@ -263,7 +263,7 @@ bool HighwayMatch::_isOrderedConflicting(
 
   WaySublineMatchString match(_sublineMatch, copiedMap);
 
-  // split the shared line based on the matching subline
+  // Split the shared line based on the matching subline.
   ElementPtr matchShared, scrapsShared;
   ElementPtr match2, scraps2;
   WaySublineCollection string1 = match.getSublineString1();
@@ -271,18 +271,18 @@ bool HighwayMatch::_isOrderedConflicting(
 
   if (sharedEid == _eid1)
   {
-    MultiLineStringSplitter().split(copiedMap, string1, match.getReverseVector1(), matchShared,
-                                    scrapsShared);
+    MultiLineStringSplitter().split(
+      copiedMap, string1, match.getReverseVector1(), matchShared, scrapsShared);
     MultiLineStringSplitter().split(copiedMap, string2, match.getReverseVector2(), match2, scraps2);
   }
   else
   {
-    MultiLineStringSplitter().split(copiedMap, string2, match.getReverseVector1(), matchShared,
-                                    scrapsShared);
+    MultiLineStringSplitter().split(
+      copiedMap, string2, match.getReverseVector1(), matchShared, scrapsShared);
     MultiLineStringSplitter().split(copiedMap, string1, match.getReverseVector2(), match2, scraps2);
   }
 
-  // if the shared element has no scraps then there is a conflict
+  // If the shared element has no scraps then there is a conflict.
   if (!scrapsShared)
   {
     return true;
@@ -296,7 +296,7 @@ bool HighwayMatch::_isOrderedConflicting(
     return false;
   }
 
-  // we didn't find any valid matches, so this is a conflict.
+  // We didn't find any valid matches, so this is a conflict.
   return true;
 }
 

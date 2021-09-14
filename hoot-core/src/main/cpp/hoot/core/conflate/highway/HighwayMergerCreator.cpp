@@ -44,6 +44,11 @@ HighwayMergerCreator::HighwayMergerCreator()
   setConfiguration(conf());
 }
 
+void HighwayMergerCreator::setConfiguration(const Settings &conf)
+{
+  _minSplitSize = ConfigOptions(conf).getWayMergerMinSplitSize();
+}
+
 bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerPtr>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
@@ -120,11 +125,6 @@ bool HighwayMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPt
   {
     return false;
   }
-}
-
-void HighwayMergerCreator::setConfiguration(const Settings &conf)
-{
-  _minSplitSize = ConfigOptions(conf).getWayMergerMinSplitSize();
 }
 
 }

@@ -104,7 +104,8 @@ private:
   double _calculateExpertProbability(const ConstOsmMapPtr& map) const;
 
   bool _isOrderedConflicting(
-    const ConstOsmMapPtr& map, ElementId sharedEid, ElementId other1, ElementId other2) const;
+    const ConstOsmMapPtr& map, const ElementId& sharedEid, const ElementId& other1,
+    const ElementId& other2) const;
 
   void _updateNonMatchDescriptionBasedOnGeometricProperties(
     QStringList& description, const ConstOsmMapPtr& map, const ConstElementPtr e1,
