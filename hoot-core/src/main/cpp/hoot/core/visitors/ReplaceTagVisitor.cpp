@@ -35,21 +35,18 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ReplaceTagVisitor)
 
-ReplaceTagVisitor::ReplaceTagVisitor():
-  _matchKey(""),
-  _matchValue(""),
-  _replaceKey(""),
-  _replaceValue("")
+ReplaceTagVisitor::ReplaceTagVisitor()
 {
   setConfiguration(conf());
 }
 
-ReplaceTagVisitor::ReplaceTagVisitor(QString matchKey, QString matchValue,
-                                     QString replaceKey, QString replaceValue):
-  _matchKey(matchKey),
-  _matchValue(matchValue),
-  _replaceKey(replaceKey),
-  _replaceValue(replaceValue)
+ReplaceTagVisitor::ReplaceTagVisitor(
+  const QString& matchKey, const QString& matchValue, const QString& replaceKey,
+  const QString& replaceValue) :
+_matchKey(matchKey),
+_matchValue(matchValue),
+_replaceKey(replaceKey),
+_replaceValue(replaceValue)
 {
 }
 

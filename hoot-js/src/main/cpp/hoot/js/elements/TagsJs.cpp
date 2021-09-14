@@ -43,17 +43,6 @@ HOOT_JS_REGISTER(TagsJs)
 
 Persistent<Function> TagsJs::_constructor;
 
-void TagsJs::contains(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  const Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
-
-  QString key = toCpp<QString>(args[0]);
-
-  args.GetReturnValue().Set(toV8(t.contains(key)));
-}
-
 void TagsJs::Init(Local<Object> target)
 {
   Isolate* current = v8::Isolate::GetCurrent();
@@ -61,13 +50,19 @@ void TagsJs::Init(Local<Object> target)
   Local<Context> context = current->GetCurrentContext();
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, Tags::className().toStdString().data()).ToLocalChecked());
+  tpl->SetClassName(
+    String::NewFromUtf8(current, Tags::className().toStdString().data()).ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(), toV8(Tags::className()));
   tpl->PrototypeTemplate()->Set(current, "contains", FunctionTemplate::New(current, contains));
+  tpl->PrototypeTemplate()->Set(
+    current, "onlyOneContainsKvp", FunctionTemplate::New(current, onlyOneContainsKvp));
+  tpl->PrototypeTemplate()->Set(
+    current, "getFirstMatchingKey", FunctionTemplate::New(current, getFirstMatchingKey));
   tpl->PrototypeTemplate()->Set(current, "get", FunctionTemplate::New(current, get));
-  tpl->PrototypeTemplate()->Set(current, "getInformationCount", FunctionTemplate::New(current, getInformationCount));
+  tpl->PrototypeTemplate()->Set(
+    current, "getInformationCount", FunctionTemplate::New(current, getInformationCount));
   tpl->PrototypeTemplate()->Set(current, "getNames", FunctionTemplate::New(current, getNames));
   tpl->PrototypeTemplate()->Set(current, "set", FunctionTemplate::New(current, set));
   tpl->PrototypeTemplate()->Set(current, "toDict", FunctionTemplate::New(current, toDict));
@@ -99,6 +94,40 @@ void TagsJs::New(const FunctionCallbackInfo<Value>& args)
   obj->Wrap(args.This());
 
   args.GetReturnValue().Set(args.This());
+}
+
+void TagsJs::contains(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
+
+  const Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+
+  QString key = toCpp<QString>(args[0]);
+
+  args.GetReturnValue().Set(toV8(t.contains(key)));
+}
+
+void TagsJs::onlyOneContainsKvp(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
+
+  const Tags& tags1 = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+  const Tags& tags2 = toCpp<Tags>(args[0]);
+  const QString kvp = toCpp<QString>(args[1]);
+
+  args.GetReturnValue().Set(toV8(Tags::onlyOneContainsKvp(tags1, tags2, kvp)));
+}
+
+void TagsJs::getFirstMatchingKey(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
+
+  const Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+
+  QStringList list;
+  toCpp(args[0], list);
+
+  args.GetReturnValue().Set(toV8(t.getFirstMatchingKey(list)));
 }
 
 void TagsJs::get(const FunctionCallbackInfo<Value>& args)

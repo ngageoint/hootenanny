@@ -8,9 +8,9 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.description = "Matches generic points";
 exports.experimental = false;
 
-// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
-// If that ever changes, then the generic score threshold configuration options used below should 
-// be replaced with custom score threshold configuration options.
+// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't
+// used. If that ever changes, then the generic score threshold configuration options used below
+// should be replaced with custom score threshold configuration options.
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
@@ -43,12 +43,11 @@ exports.isMatchCandidate = function(map, e)
 };
 
 /**
- * If this function returns true then all overlapping matches will be treated
- * as a group. For now that means if two matches overlap then the whole group
- * will be marked as needing review.
+ * If this function returns true then all overlapping matches will be treated as a group. For now
+   that means if two matches overlap then the whole group will be marked as needing review.
  *
- * If this function returns false the conflation routines will attempt to 
- * pick the best subset of matches that do not conflict.
+ * If this function returns false the conflation routines will attempt to pick the best subset of
+   matches that do not conflict.
  */
 exports.isWholeGroup = function()
 {
@@ -61,8 +60,8 @@ exports.isWholeGroup = function()
  * - miss
  * - review
  *
- * The scores should always sum to one. If they don't you will be taunted 
- * mercilessly and we'll normalize it anyway. :P
+ * The scores should always sum to one. If they don't you will be taunted mercilessly and we'll
+   normalize it anyway. :P
  */
 exports.matchScore = function(map, e1, e2)
 {
@@ -85,8 +84,9 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
 
-  // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
-  // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
+  // If both features have types and they aren't just generic types, let's do a detailed type
+  // comparison and look for an explicit type mismatch. Otherwise, move on to the geometry
+  // comparison.
   var typeScorePassesThreshold = !hoot.OsmSchema.explicitTypeMismatch(e1, e2, exports.typeThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
   if (!typeScorePassesThreshold)
@@ -96,7 +96,8 @@ exports.matchScore = function(map, e1, e2)
 
   var error1 = e1.getCircularError();
   var error2 = e2.getCircularError();
-  // This is a simple check to see if the two points are within the worst CE of each other; could use EuclideanDistanceExtractor here instead
+  // This is a simple check to see if the two points are within the worst CE of each other; could
+  // use EuclideanDistanceExtractor here instead.
   var distanceBetweenFeatures = distance(e1, e2);
   var searchRadius = Math.max(error1, error2);
   var geometryMatch = false;
@@ -118,9 +119,8 @@ exports.matchScore = function(map, e1, e2)
 };
 
 /**
- * Simpler version of the mergeSets function. Maybe only support this at first.
- * It only supports merging two elements and the replaced list is determined
- * implicitly based on the result.
+ * Simpler version of the mergeSets function. Maybe only support this at first. It only supports
+   merging two elements and the replaced list is determined implicitly based on the result.
  */
 exports.mergePair = function(map, e1, e2)
 {
@@ -129,7 +129,8 @@ exports.mergePair = function(map, e1, e2)
   e1.setStatusString("conflated");
   if (exports.writeDebugTags == "true" && exports.writeMatchedBy == "true")
   {
-    // Technically, we should get this key from MetadataTags, but that's not integrated with hoot yet.
+    // Technically we should get this key from MetadataTags, but that's not integrated with hoot
+    // yet.
     e1.setTag("hoot:matchedBy", exports.baseFeatureType);
   }
   return e1;

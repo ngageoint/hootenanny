@@ -103,7 +103,7 @@ private:
     std::vector<std::pair<ElementId, ElementId>>& replaced,
     const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
 
-  void _mergeTags(const Tags& e1Tags, const Tags& e2Tags, const ElementPtr& e1Match) const;
+  void _mergeElementTags(const Tags& e1Tags, const Tags& e2Tags, const ElementPtr& e1Match) const;
 
   void _handleSplitWay(
     const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match,

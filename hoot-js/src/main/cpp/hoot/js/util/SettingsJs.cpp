@@ -106,11 +106,16 @@ void SettingsJs::set(const FunctionCallbackInfo<Value>& args)
 
   if (args[0]->IsObject())
   {
-    Local<Array> keys = args[0]->ToObject(context).ToLocalChecked()->GetPropertyNames(context).ToLocalChecked();
+    Local<Array> keys =
+      args[0]->ToObject(context).ToLocalChecked()->GetPropertyNames(context).ToLocalChecked();
     for (uint32_t i = 0; i < keys->Length(); i++)
     {
       Local<String> k = keys->Get(context, i).ToLocalChecked()->ToString(context).ToLocalChecked();
-      Local<String> v = args[0]->ToObject(context).ToLocalChecked()->Get(context, k).ToLocalChecked()->ToString(context).ToLocalChecked();
+      Local<String> v =
+        args[0]->ToObject(context)
+        .ToLocalChecked()->Get(context, k).ToLocalChecked()->ToString(context).ToLocalChecked();
+      LOG_VART(str(k));
+      LOG_VART(str(v));
       settings->set(str(k), str(v));
     }
     args.GetReturnValue().SetUndefined();
@@ -119,7 +124,8 @@ void SettingsJs::set(const FunctionCallbackInfo<Value>& args)
   {
     args.GetReturnValue().Set(
       current->ThrowException(
-        Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings").ToLocalChecked())));
+        Exception::TypeError(
+          String::NewFromUtf8(current, "Expected a dict of settings").ToLocalChecked())));
   }
 }
 

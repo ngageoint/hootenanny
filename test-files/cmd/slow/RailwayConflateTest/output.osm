@@ -1499,7 +1499,7 @@
         <tag k="location" v="surface"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -1719,7 +1719,7 @@
         <tag k="location" v="surface"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -1935,7 +1935,7 @@
         <tag k="gauge" v="144"/>
         <tag k="gauge:type" v="standard"/>
         <tag k="highway" v="primary"/>
-        <tag k="hoot:hash" v="sha1sum:97219d6df0d247ed1df8b84d9ea8f5d7bda39590;sha1sum:a6b8208c0b6e6e4c8fd3fce29c8f8b3e2dafa241"/>
+        <tag k="hoot:hash" v="sha1sum:97219d6df0d247ed1df8b84d9ea8f5d7bda39590;sha1sum:82910f4282d9443ed4166cf5ad90e95cb68ce1ed"/>
         <tag k="lanes" v="1"/>
         <tag k="layer" v="1"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -2077,7 +2077,7 @@
         <tag k="location" v="surface"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -2303,7 +2303,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="surface"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -3117,7 +3117,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="surface"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -3310,7 +3310,7 @@
         <tag k="location" v="surface"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -3399,7 +3399,7 @@
         <tag k="location" v="surface"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -3457,7 +3457,7 @@
         <tag k="location" v="surface"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -3548,7 +3548,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="surface"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -3776,7 +3776,7 @@
         <tag k="location" v="surface"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -4024,7 +4024,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="gauge" v="144"/>
         <tag k="gauge:type" v="standard"/>
-        <tag k="hoot:hash" v="sha1sum:fbe97df19c429e38f5cab206040344a248094afd;sha1sum:fb3084e46652f0a864088ad79b378f456988952e"/>
+        <tag k="hoot:hash" v="sha1sum:fbe97df19c429e38f5cab206040344a248094afd;sha1sum:8cd12704ed337c9adf6e712ec675219d576461ad"/>
         <tag k="lanes" v="1"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="surface"/>
@@ -4235,7 +4235,7 @@
         <tag k="location" v="surface"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -4363,7 +4363,7 @@
         <tag k="location" v="surface"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -4393,7 +4393,7 @@
         <tag k="location" v="surface"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -4487,7 +4487,7 @@
         <tag k="location" v="surface"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -4543,7 +4543,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="surface"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
@@ -4624,7 +4624,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="surface"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -4829,7 +4829,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="surface"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -4968,7 +4968,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="surface"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
@@ -5527,7 +5527,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="surface"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
@@ -5556,7 +5556,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="surface"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
@@ -5623,7 +5623,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="surface"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
@@ -5802,7 +5802,7 @@
         <tag k="location" v="underground"/>
         <tag k="name" v="Kaech'on-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -5837,7 +5837,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="surface"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -5912,7 +5912,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="surface"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -5946,7 +5946,7 @@
         <tag k="location" v="surface"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -5977,7 +5977,7 @@
         <tag k="location" v="overground"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6008,7 +6008,7 @@
         <tag k="location" v="overground"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6039,7 +6039,7 @@
         <tag k="location" v="overground"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6069,7 +6069,7 @@
         <tag k="location" v="overground"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6100,7 +6100,7 @@
         <tag k="location" v="overground"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6131,7 +6131,7 @@
         <tag k="location" v="overground"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6163,7 +6163,7 @@
         <tag k="location" v="overground"/>
         <tag k="name" v="Kaech'on-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6191,7 +6191,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="overground"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
@@ -6218,7 +6218,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="overground"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
@@ -6266,7 +6266,7 @@
         <tag k="location" v="surface"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6297,7 +6297,7 @@
         <tag k="location" v="overground"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6331,7 +6331,7 @@
         <tag k="location" v="surface"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6359,7 +6359,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="overground"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6391,7 +6391,7 @@
         <tag k="location" v="overground"/>
         <tag k="name" v="Kaech'on-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6419,7 +6419,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="overground"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
@@ -6446,7 +6446,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="overground"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
@@ -6473,7 +6473,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="overground"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6501,7 +6501,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="overground"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
@@ -6527,7 +6527,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="overground"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
@@ -6554,7 +6554,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="overground"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
@@ -6584,7 +6584,7 @@
         <tag k="location" v="overground"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6615,7 +6615,7 @@
         <tag k="location" v="overground"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6664,7 +6664,7 @@
         <tag k="location" v="surface"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6695,7 +6695,7 @@
         <tag k="location" v="overground"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6726,7 +6726,7 @@
         <tag k="location" v="overground"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6757,7 +6757,7 @@
         <tag k="location" v="overground"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6788,7 +6788,7 @@
         <tag k="location" v="overground"/>
         <tag k="name" v="Manp'o-son"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
@@ -6816,7 +6816,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="overground"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
@@ -6844,7 +6844,7 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="overground"/>
         <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:railrdl_rail;osm"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>

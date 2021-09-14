@@ -215,24 +215,12 @@ void Settings::clear()
   _settings.clear();
 }
 
-//void Settings::_addNamespacePrefixIfClassNameWithout(QString& val)
-//{
-//  // If the interal factory recognizes this option value as a factory class name and it doesn't have
-//  // the global namespace already prepended to it, we'll do that here.
-//  if (!val.isEmpty() && !val.startsWith(MetadataTags::HootNamespacePrefix()) &&
-//      Factory::getInstance().hasClass(MetadataTags::HootNamespacePrefix() + val))
-//  {
-//    val.prepend(MetadataTags::HootNamespacePrefix());
-//  }
-//}
-
 void Settings::_updateClassNamesInList(QStringList& list)
 {
   QStringList moddedList;
   for (int i = 0; i < list.size(); i++)
   {
     QString val = list.at(i);
-    //_addNamespacePrefixIfClassNameWithout(val);
     moddedList.append(val);
   }
   list = moddedList;
@@ -250,7 +238,6 @@ QVariant Settings::get(const QString& key) const
   {
     std::set<QString> used;
     QString val = _replaceVariables(key, used);
-    //_addNamespacePrefixIfClassNameWithout(val);
     result = val;
   }
   return result;

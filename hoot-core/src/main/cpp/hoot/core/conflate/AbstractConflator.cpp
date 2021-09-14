@@ -229,7 +229,6 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
   //LOG_VART(_matches);
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-match-optimization");
 
-
   // Search the matches for groups (subgraphs) of matches. In other words, groups where all the
   // matches are interrelated by element id
   MatchGraph mg;

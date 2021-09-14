@@ -34,7 +34,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 
-
 namespace hoot
 {
 
@@ -42,6 +41,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, RemoveElementsVisitor)
 
 RemoveElementsVisitor::RemoveElementsVisitor(bool negateCriteria) :
 _recursive(false),
+_recursiveRemoveRefsFromParents(false),
 _startElementCount(0)
 {
   _negateCriteria = negateCriteria;
@@ -115,7 +115,8 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
     if (_recursive)
     {
       LOG_TRACE("Removing element: " << e->getElementId() << " recursively...");
-      RecursiveElementRemover(e->getElementId()/*, true*/).apply(_map->shared_from_this());
+      RecursiveElementRemover(e->getElementId(), _recursiveRemoveRefsFromParents)
+        .apply(_map->shared_from_this());
     }
     else
     {
@@ -135,8 +136,8 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
   _numProcessed++;
 }
 
-void RemoveElementsVisitor::removeWays(const std::shared_ptr<OsmMap>& pMap,
-                                       const std::shared_ptr<ElementCriterion>& pCrit)
+void RemoveElementsVisitor::removeWays(
+  const std::shared_ptr<OsmMap>& pMap, const std::shared_ptr<ElementCriterion>& pCrit)
 {
   RemoveElementsVisitor v;
   v.addCriterion(pCrit);
