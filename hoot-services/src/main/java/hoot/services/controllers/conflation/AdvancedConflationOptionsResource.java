@@ -296,15 +296,11 @@ public class AdvancedConflationOptionsResource {
 
                 JSONArray data = new JSONArray();
                 JSONObject displayToHootMap = new JSONObject();
-                Pattern pattern = Pattern.compile("hoot::([A-Za-z]+)"); // matches hoot::*criterion* pattern
                 for (String criteria : output.split(";")) {
-                    Matcher matcher = pattern.matcher(criteria);
-                    if (matcher.find()) {
-                        // add space between capital letters
-                        String hootCriterion = matcher.group(1).replaceAll("([^_])([A-Z])", "$1 $2");
-                        data.add(hootCriterion);
-                        displayToHootMap.put(hootCriterion, criteria);
-                    }
+                    // add space between capital letters
+                    String hootCriterion = criteria.replaceAll("([^_])([A-Z])", "$1 $2");
+                    data.add(hootCriterion);
+                    displayToHootMap.put(hootCriterion, criteria);
                 }
 
                 obj.replace("input", "multiCombobox");

@@ -53,8 +53,6 @@ public:
    * @brief ReplaceTagVisitor - default constructor
    */
   ReplaceTagVisitor();
-  ~ReplaceTagVisitor() = default;
-
   /**
    * @brief ReplaceTagVisitor - This constructor lets you specify the tag
    * (k=v) to match, and the tag (k=v) to replace it with.
@@ -63,8 +61,10 @@ public:
    * @param replaceKey - key to use as a replacement
    * @param replaceValue - value to use as a replacement
    */
-  ReplaceTagVisitor(QString matchKey, QString matchValue,
-                    QString replaceKey, QString replaceValue);
+  ReplaceTagVisitor(
+    const QString& matchKey, const QString& matchValue, const QString& replaceKey,
+    const QString& replaceValue);
+  ~ReplaceTagVisitor() = default;
 
   /**
    * @brief visit - visit an element & perform check and replace

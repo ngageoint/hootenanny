@@ -129,6 +129,12 @@
     {
         "geometries": ["linestring"],
         "isA": "railway",
+        "name": "railway=subway",
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["linestring"],
+        "isA": "railway",
         "name": "railway=light_rail",
         "objectType": "tag",
         "similarTo": [
@@ -161,5 +167,11 @@
         "similarTo": [
             {"name": "railway=rail", "weight": 0.8 }
         ]
+    },
+    {
+        "geometries": ["linestring"],
+        "isA": "railway",
+        "name": "railway=tram",
+        "objectType": "tag"
     }
 ]

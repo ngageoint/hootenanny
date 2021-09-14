@@ -16,7 +16,7 @@ pipeline {
         booleanParam(name: 'Hoot_provision', defaultValue: true)
         booleanParam(name: 'Build', defaultValue: true)
         booleanParam(name: 'Valgrind_tests', defaultValue: true)
-        string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
+        string(name: 'Box', defaultValue: 'hoot_centos7', description: 'Vagrant Box')
         string(name: 'HOOT_AWS_ENV_TAG', defaultValue: 'testing')
         string(name: 'HOOT_AWS_USE_TAG', defaultValue: 'jenkins')
         string(name: 'HOOT_AWS_GROUP_TAG', defaultValue: 'devops')

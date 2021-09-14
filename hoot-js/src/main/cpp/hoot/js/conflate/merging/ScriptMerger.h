@@ -56,10 +56,9 @@ public:
   /**
    * Returns true if the plugin has a function with the specified name.
    */
-  bool hasFunction(QString name) const;
+  bool hasFunction(const QString& name) const;
 
   QString toString() const override { return QString("ScriptMerger"); }
-
   QString getDescription() const override
   { return "Merges elements matched with Generic Conflation"; }
   QString getName() const override { return className() + "-" + _matchType; }

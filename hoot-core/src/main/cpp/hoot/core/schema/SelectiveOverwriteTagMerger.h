@@ -22,10 +22,10 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef OVERWRITETAGMERGER_H
-#define OVERWRITETAGMERGER_H
+#ifndef SELECTIVE_OVERWRITE_TAG_MERGER_H
+#define SELECTIVE_OVERWRITE_TAG_MERGER_H
 
 // Hoot
 #include <hoot/core/schema/TagMerger.h>
@@ -34,20 +34,20 @@ namespace hoot
 {
 
 /**
- * Combine all names in a fashion where no unique names will be lost and then favor t1 tags over
- * t2 tags. See TagComparator::overwriteMerge.
+ * @brief The SelectiveOverwriteTagMerger class will only transfer tags specified in a list from on
+ * element to another.
  */
-class OverwriteTagMerger : public TagMerger
+class SelectiveOverwriteTagMerger : public TagMerger
 {
 public:
 
-  static QString className() { return "OverwriteTagMerger"; }
+  static QString className() { return "SelectiveOverwriteTagMerger"; }
 
   /**
    * If swap is set to true then t1 will be overwritten with t2 values.
    */
-  OverwriteTagMerger(bool swap = false);
-  virtual ~OverwriteTagMerger() = default;
+  SelectiveOverwriteTagMerger(bool swap = false);
+  virtual ~SelectiveOverwriteTagMerger() = default;
 
   Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
@@ -58,60 +58,54 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  void setOverwriteExcludeTagKeys(const QStringList& tagKeys)
-  { _overwriteExcludeTagKeys = tagKeys; }
-  void setAccumulateValuesTagKeys(const QStringList& tagKeys)
-  { _accumulateValuesTagKeys = tagKeys; }
+  void setTagKeys(const QStringList& tagKeys) { _tagKeys = tagKeys; }
 
 private:
 
   bool _swap;
 
-  // keys of tags not to be overwritten
-  QStringList _overwriteExcludeTagKeys;
-
-  // Any tags being merged with matching keys will have values appended rather than overwritten in
-  // the target.
-  QStringList _accumulateValuesTagKeys;
+  // list that determines which tags are transferred
+  QStringList _tagKeys;
 };
 
 /**
- * The same as OverwriteTagMerger with a more explicit name. Tag 2 will be overwritten with Tag 1
- * tags.
+ * @brief The SelectiveOverwriteTag2Merger class will only transfer tags specified in a list from
+ * element 1 to element 2.
  */
-class OverwriteTag2Merger : public OverwriteTagMerger
+class SelectiveOverwriteTag2Merger : public SelectiveOverwriteTagMerger
 {
 public:
 
-  static QString className() { return "OverwriteTag2Merger"; }
+  static QString className() { return "SelectiveOverwriteTag2Merger"; }
 
-  OverwriteTag2Merger() : OverwriteTagMerger(false) { }
-  ~OverwriteTag2Merger() override = default;
+  SelectiveOverwriteTag2Merger() : SelectiveOverwriteTagMerger(false) { }
+  ~SelectiveOverwriteTag2Merger() override = default;
 
   QString getDescription() const override
-  {  return "Overwrites conflicting tags with those from the reference feature"; }
+  {  return "Overwrites selected conflicting tags only with those from the reference feature"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
 };
 
 /**
- * Similar to OverwriteTagMerger, but tag 1 values will be overwritten with tag 2 values.
+ * @brief The SelectiveOverwriteTag1Merger class will only transfer tags specified in a list from
+ * element 2 to element 1.
  */
-class OverwriteTag1Merger : public OverwriteTagMerger
+class SelectiveOverwriteTag1Merger : public SelectiveOverwriteTagMerger
 {
 public:
 
-  static QString className() { return "OverwriteTag1Merger"; }
+  static QString className() { return "SelectiveOverwriteTag1Merger"; }
 
-  OverwriteTag1Merger() : OverwriteTagMerger(true) { }
-  ~OverwriteTag1Merger() override = default;
+  SelectiveOverwriteTag1Merger() : SelectiveOverwriteTagMerger(true) { }
+  ~SelectiveOverwriteTag1Merger() override = default;
 
   QString getDescription() const override
-  {  return "Overwrites conflicting tags with those from the secondary feature"; }
+  {  return "Overwrites selected conflicting tags only with those from the secondary feature"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
 };
 
 }
 
-#endif // OVERWRITETAGMERGER_H
+#endif // SELECTIVE_OVERWRITE_TAG_MERGER_H

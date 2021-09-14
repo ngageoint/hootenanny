@@ -94,8 +94,9 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
 
-  // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
-  // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
+  // If both features have types and they aren't just generic types, let's do a detailed type
+  // comparison and look for an explicit type mismatch. Otherwise, move on to the geometry
+  // comparison.
   var typeScorePassesThreshold = !hoot.OsmSchema.explicitTypeMismatch(e1, e2, exports.typeThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
   if (!typeScorePassesThreshold)
@@ -148,24 +149,22 @@ exports.matchScore = function(map, e1, e2)
 };
 
 /**
- * The internals of geometry merging can become quite complex. Typically this 
- * method will simply call another hoot method to perform the appropriate
- * merging of geometries.
+ * The internals of geometry merging can become quite complex. Typically this method will simply
+   call another hoot method to perform the appropriate merging of geometries.
  * 
  * If this method is exported then the mergePair method should not be exported.
  * 
  * @param map The map that is being conflated
  * @param pairs An array of ElementId pairs that will be merged.
- * @param replaced An empty array is passed in, the method should fill the array
- *      with all the replacements that occur during the merge process (e.g. if
- *      two elements (way:1 & way:2) are merged into one element (way:3), then
- *      the replaced array should contain [[way:1, way:3], [way:1, way:3]]
- *      where all the "way:*" objects are of the ElementId type.
+ * @param replaced An empty array is passed in, the method should fill the array with all the
+   replacements that occur during the merge process (e.g. if two elements (way:1 & way:2) are merged
+   into one element (way:3), then the replaced array should contain [[way:1, way:3], [way:1, way:3]]
+ * where all the "way:*" objects are of the ElementId type.
  */
 exports.mergeSets = function(map, pairs, replaced) 
 {
-  // Snap the ways in the second input to the first input. Use the default tag 
-  // merge method. See related notes in exports.mergeSets in River.js.
+  // Snap the ways in the second input to the first input. Use the default tag merge method. See
+  // related notes in exports.mergeSets in River.js.
   return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType);
 };
 

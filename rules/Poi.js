@@ -8,9 +8,9 @@ exports.baseFeatureType = "POI";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 
-// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
-// If that ever changes, then the generic score threshold configuration options used below should 
-// be replaced with custom score threshold configuration options.
+// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't
+// used. If that ever changes, then the generic score threshold configuration options used below
+// should be replaced with custom score threshold configuration options.
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
@@ -78,8 +78,8 @@ exports.getSearchRadius = function(e)
 {
   if (exports.searchRadius == -1.0)
   {
-    // If no search radius was defined by the config (it was set to default val of -1.0), then 
-    // use our distance table to calculate it.
+    // If no search radius was defined by the config (it was set to default val of -1.0), then use
+    // our distance table to calculate it.
 
     hoot.trace("Using custom search radius function...");
     
@@ -111,9 +111,9 @@ exports.getSearchRadius = function(e)
 }
 
 /**
- * Returns true if e is a candidate for a match. Implementing this method is
- * optional, but may dramatically increase speed if you can cull some features
- * early on. E.g. no need to check nodes for a polygon to polygon match.
+ * Returns true if e is a candidate for a match. Implementing this method is optional, but may
+   dramatically increase speed if you can cull some features early on. E.g. no need to check nodes
+   for a polygon to polygon match.
  */
 exports.isMatchCandidate = function(map, e)
 {
@@ -121,12 +121,11 @@ exports.isMatchCandidate = function(map, e)
 };
 
 /**
- * If this function returns true then all overlapping matches will be treated
- * as a group. For now that means if two matches overlap then the whole group
- * will be marked as needing review.
+ * If this function returns true then all overlapping matches will be treated as a group. For now
+   that means if two matches overlap then the whole group will be marked as needing review.
  *
- * If this function returns false the conflation routines will attempt to
- * pick the best subset of matches that do not conflict.
+ * If this function returns false the conflation routines will attempt to pick the best subset of
+   matches that do not conflict.
  */
 exports.isWholeGroup = function() {
     return true;
@@ -261,11 +260,11 @@ function additiveScore(map, e1, e2) {
 
     if (isSuperClose(e1, e2)) 
     {
-      // Adding a list here of things that don't normally have names and we want them to have a better 
-      // chance of matching if they are close together and their types match exactly. Specifically,
-      // choosing to handle railway=level_crossing as a POI rather than as part of railway conflation
-      // as its easier to implement and there are several other railway POI types being used. You *could*
-      // handle it as part of railway conflation, though.
+      // Adding a list here of things that don't normally have names and we want them to have a
+      // better chance of matching if they are close together and their types match exactly.
+      // Specifically, choosing to handle railway=level_crossing as a POI rather than as part of
+      // railway conflation as its easier to implement and there are several other railway POI types
+      // being used. You *could* handle it as part of railway conflation, though.
       if ((tags1.get("railway") == "level_crossing" && tags2.get("railway") == "level_crossing"))
       {
         score += 1.0;
@@ -291,9 +290,8 @@ function additiveScore(map, e1, e2) {
         reason.push("similar sport");
     }
 
-    // we're unlikely to get more evidence than the fact that it is a tower
-    // or pole. If the power tag matches exactly, give it 2 points of evidence
-    // if not, just give it one.
+    // we're unlikely to get more evidence than the fact that it is a tower or pole. If the power
+    // tag matches exactly, give it 2 points of evidence; if not, just give it one.
     var powerDistance = 1.0;
     if (!ignoreType)
     {
@@ -368,8 +366,8 @@ var totalCount = 0;
  * - miss
  * - review
  *
- * The scores should always sum to one. If they don't you will be taunted
- * mercilessly and we'll normalize it anyway. :P
+ * The scores should always sum to one. If they don't you will be taunted mercilessly and we'll
+   normalize it anyway. :P
  */
 exports.matchScore = function(map, e1, e2) {
     totalCount += 1;
@@ -452,8 +450,8 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
 };
 
 /**
- * Given a number return a result that contains no more than 2 significant
- * digits and no more than 1 digit after the decimal place. For example:
+ * Given a number return a result that contains no more than 2 significant digits and no more than 1
+   digit after the decimal place. For example:
  *
  * 123.456 -> 120
  * 1.234 -> 1.2

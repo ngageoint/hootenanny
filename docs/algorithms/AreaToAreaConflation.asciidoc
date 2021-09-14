@@ -4,6 +4,26 @@
 
 Area to Area Conflation is based on a Weka derived model and is controlled by the file rules/Area.js.
 
+[[AreaFeatureDefinitions]]
+=== Feature Definitions
+
+TODO
+
+[[AreaMatching]]
+=== Matching
+
+TODO
+
+[[AreaMerging]]
+=== Merging
+
+TODO
+
+[[AreaConfigurableOptions]]
+=== Configurable Options
+
+TODO
+
 [[AreaToAreaTestResults]]
 === Test Results
 

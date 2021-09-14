@@ -39,8 +39,7 @@ namespace hoot
  *
  * Should we make this inherit ConstElementVisitor instead, if that's possible.
  */
-class MultipleCriterionConsumerVisitor : public ElementVisitor,
-  public ElementCriterionConsumer
+class MultipleCriterionConsumerVisitor : public ElementVisitor, public ElementCriterionConsumer
 {
 public:
 
