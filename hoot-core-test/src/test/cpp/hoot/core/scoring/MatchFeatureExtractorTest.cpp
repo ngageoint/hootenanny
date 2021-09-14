@@ -58,12 +58,6 @@ public:
     setResetType(ResetAll);
   }
 
-  void setUp() override
-  {
-    HootTestFixture::setUp();
-    TestUtils::resetAll();
-  }
-
   void runBuildingTest()
   {
     // This test is primarily useful as an input to Weka for training models.
