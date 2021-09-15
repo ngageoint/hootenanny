@@ -81,14 +81,18 @@ public:
 
 private:
 
-  // TODO
+  // standard classifier used for road matching
   std::shared_ptr<HighwayClassifier> _classifier;
+  // classifier used for the road median to divided road tag transfer workflow
   std::shared_ptr<HighwayClassifier> _medianClassifier;
 
+  // geometry matcher
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
+  // threshold controlling the determined match classification
   std::shared_ptr<MatchThreshold> _matchThreshold;
 
+  // used to prevent roads of widely different types from matching
   std::shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
 };
 

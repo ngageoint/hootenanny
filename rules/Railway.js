@@ -132,7 +132,7 @@ function geometryMismatch(map, e1, e2, minDistanceScore, minHausdorffDistanceSco
 
 function typeMismatch(e1, e2)
 {
-  // TODO
+  // Don't match passenger rails against rails used internally by the railroad company.
   if (e1.getTags().onlyOneContainsKvp(e2.getTags(), "service=yard"))
   {
     hoot.trace("service=yard mismatch");

@@ -72,7 +72,7 @@ public:
   void addMatches(InputIterator first, InputIterator last);
 
   /**
-   * @brief clearMatches TODO
+   * @brief clearMatches clears out the matches used by this class
    */
   void clearMatches() { _matches.clear(); }
 
