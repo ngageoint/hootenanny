@@ -132,8 +132,8 @@ final output.
 Provenance can be provided in Hootenanny by specifying a uid (unique identifier
 tag). This uid tag will be carried along with all input data and as multiple
 features are conflated it will receive multiple uid values. For example,
-conflating two features with +uid=1234+ and +uid=4321+ will result in a new
-record with +uid=1234;4321+. It is recommended that the user use Universally
+conflating two features with `uid=1234` and `uid=4321` will result in a new
+record with `uid=1234;4321`. It is recommended that the user use Universally
 Unique Identifiers (<<UUID,UUID>>) for uid values, but any string is supported
 as long as it is guaranteed to be unique and semi-colons are escaped as double
 semi-colons as described on the <<OpenStreetMap,OpenStreetMap>> wiki. This
@@ -147,12 +147,12 @@ The input data must contain at least the following tags:
 * name - The name of the POI
 * error:circular - A real number (double) representing the number of meters of error. Typically this is 1000 or 56000, but any number is acceptable.
 
-A POI tag The simplest tag is +poi=yes+, but other more specific attributes are
-defined in +conf/PoiSchema.json+.
+A POI tag The simplest tag is `poi=yes`, but other more specific attributes are
+defined in `conf/PoiSchema.json`.
 
 You can use the typical translation mechanisms in Hootenanny to convert input
 data into the OSM schema. An example translation file for geonames.org data can
-be found in +translations/GeoNamesOrg.js+. Hootenanny does support reading
+be found in `translations/GeoNamesOrg.js`. Hootenanny does support reading
 geonames.org data directly from a geonames .org text file by renaming the
 extension to.geonames. For example:
 

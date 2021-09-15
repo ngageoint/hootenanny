@@ -312,7 +312,7 @@ bool OsmJsonReader::isValidJson(const QString& jsonStr)
   return true;
 }
 
-void OsmJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr &map)
+void OsmJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr& map)
 {
   _map = map;
   _loadJSON(jsonStr);
@@ -320,7 +320,7 @@ void OsmJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr &map)
   _map.reset();
 }
 
-OsmMapPtr OsmJsonReader::loadFromPtree(const boost::property_tree::ptree &tree)
+OsmMapPtr OsmJsonReader::loadFromPtree(const boost::property_tree::ptree& tree)
 {
   _propTree = tree;
   _map = std::make_shared<OsmMap>();
@@ -557,8 +557,6 @@ void OsmJsonReader::_updateChildRefs()
 
 void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
 {
-  const long debugId = -25928;
-
   // Get info we need to construct our node
   long id = item.get("id", id);
 
@@ -590,14 +588,7 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
   _nodeIdMap.insert(id, newId);
 
   const QString msg = "Reading " + ElementId(ElementType::Node, newId).toString() + "...";
-  if (newId == debugId)
-  {
-    LOG_VARD(msg);
-  }
-  else
-  {
-    LOG_VART(msg);
-  }
+  LOG_VART(msg);
 
   double lat = item.get("lat", 0.0);
   double lon = item.get("lon", 0.0);

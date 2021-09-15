@@ -52,7 +52,7 @@ namespace hoot
  * The main impetus in creating this class was to make the road output of Differential Conflation
  * better by snapping unconnected secondary roads to the nearest road in the reference dataset.
  * However, this op can also be used as a cleanup op after other types of conflation. Before using
- * this class in conflation, effort should be made, where possible, to try to fix the lack of
+ * this class in conflation, effort should be made where possible to try to fix the lack of
  * feature snapping in the conflation routines themselves rather than relying on this as a cleanup
  * utility.
  *
@@ -132,6 +132,8 @@ public:
 
   long getNumSnappedToWays() const { return _numSnappedToWays; }
   long getNumSnappedToWayNodes() const { return _numSnappedToWayNodes; }
+  QStringList getSnapWayStatuses() const { return  _snapWayStatuses; }
+  QStringList getSnapToWayStatuses() const { return  _snapToWayStatuses; }
 
   void setSnapToExistingWayNodes(bool snap) { _snapToExistingWayNodes = snap; }
   void setMaxNodeReuseDistance(double distance);
@@ -148,6 +150,7 @@ public:
   void setMarkOnly(bool markOnly) { _markOnly = markOnly; }
   void setMinTypeMatchScore(double score);
   void setTypeExcludeKvps(const QStringList& kvps) { _typeExcludeKvps = kvps; }
+  void setFavorReferenceWayNode(bool favor) { _favorReferenceWayNode = favor; }
 
 private:
 
@@ -156,6 +159,9 @@ private:
   // if true, will attempt to snap nodes to existing way nodes instead of adding them to the way as
   // a new way node
   bool _snapToExistingWayNodes;
+  // Enabling this attempts to always keep existing ref way nodes if the other way node involved in
+  // the snap is a secondary node.
+  bool _favorReferenceWayNode;
 
   // furthest away a way node can be from a unconnected node for us to consider snapping to it
   double _maxNodeReuseDistance;

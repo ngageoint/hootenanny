@@ -32,7 +32,7 @@
 hoot.require('mgcp');
 hoot.require('mgcp_schema');
 hoot.require('mgcp_rules');
-hoot.require('config');
+// hoot.require('config');
 hoot.require('translate');
 hoot.require('fcode_common');
 

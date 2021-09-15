@@ -44,4 +44,4 @@ rivers involved in river partial matches completely" option in the UI).
 
 
 Differential Conflation can further be customized by modifying the 
-+conf/core/DifferentialConflation.conf+ configuration options file.
+`conf/core/DifferentialConflation.conf` configuration options file.

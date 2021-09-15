@@ -37,9 +37,9 @@ HOOT_FACTORY_REGISTER(TagMerger, OverwriteTagMerger)
 HOOT_FACTORY_REGISTER(TagMerger, OverwriteTag1Merger)
 HOOT_FACTORY_REGISTER(TagMerger, OverwriteTag2Merger)
 
-OverwriteTagMerger::OverwriteTagMerger(bool swap)
+OverwriteTagMerger::OverwriteTagMerger(bool swap) :
+_swap(swap)
 {
-  _swap = swap;
 }
 
 Tags OverwriteTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const

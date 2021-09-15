@@ -105,3 +105,4 @@ eliminate outliers using the
 http://en.wikipedia.org/wiki/Interquartile_range[interquartile range] or similar
 method while evaluating interpolation methods. This may be done using
 expectation maximization or a similar method.
+

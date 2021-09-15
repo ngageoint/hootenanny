@@ -9765,7 +9765,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-479"/>
         <tag k="hoot:snapped" v="to_way_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="lanes" v="1"/>
         <tag k="name" v="Crystal Water Way"/>
         <tag k="oneway" v="-1"/>
@@ -10470,7 +10470,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-432"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Beach Front Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:29:15Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -10487,7 +10487,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-431"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Periscope Court"/>
         <tag k="name_1" v="Periscope"/>
         <tag k="source:datetime" v="2017-06-01T17:28:33Z"/>
@@ -10540,7 +10540,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-429"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Ocean View Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:28:08Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -10598,7 +10598,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-426"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Old Salt Circle"/>
         <tag k="source:datetime" v="2017-06-01T17:27:20Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -10640,7 +10640,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-424"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Darwell Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:26:34Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -10709,7 +10709,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-421"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Feather River Court"/>
         <tag k="source:datetime" v="2017-06-01T17:26:20Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -10726,7 +10726,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-420"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Hawksbill Court"/>
         <tag k="source:datetime" v="2017-06-01T17:26:14Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -10744,7 +10744,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-419"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Coast Walk Circle"/>
         <tag k="source:datetime" v="2017-06-01T17:26:10Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -10762,7 +10762,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-418"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Bluff Cove Circle"/>
         <tag k="source:datetime" v="2017-06-01T17:26:09Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -10798,7 +10798,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-416"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Emerald Cove Court"/>
         <tag k="source:datetime" v="2017-06-01T17:25:10Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -10912,7 +10912,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-410"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Grey Dolphin Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:24:35Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -10953,7 +10953,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-408"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Cape Sable Lane"/>
         <tag k="source:datetime" v="2017-06-01T17:23:41Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -10994,7 +10994,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-406"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Treasure Beach Court"/>
         <tag k="source:datetime" v="2017-06-01T17:23:30Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11028,7 +11028,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-404"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Safeport Cove Court"/>
         <tag k="name_1" v="Safeport Court"/>
         <tag k="source:datetime" v="2017-06-01T17:23:21Z"/>
@@ -11070,7 +11070,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-402"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Lazy River Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:23:01Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11088,7 +11088,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-401"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Port Side Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:22:55Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11143,7 +11143,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-398"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Abalone Way"/>
         <tag k="source:datetime" v="2017-06-01T17:22:00Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11174,7 +11174,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-396"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Shallow Point Circle"/>
         <tag k="source:datetime" v="2017-06-01T17:21:57Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11190,7 +11190,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-395"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Anchor Cove Court"/>
         <tag k="source:datetime" v="2017-06-01T17:21:51Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11223,7 +11223,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-393"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Higgins Court"/>
         <tag k="name_1" v="Higgins Lane"/>
         <tag k="source:datetime" v="2017-06-01T17:21:47Z"/>
@@ -11276,7 +11276,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-390"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Bayside Circle"/>
         <tag k="name_1" v="Bayside"/>
         <tag k="source:datetime" v="2017-06-01T17:21:28Z"/>
@@ -11294,7 +11294,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-389"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Shellfish Court"/>
         <tag k="source:datetime" v="2017-06-01T17:21:27Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11328,7 +11328,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-387"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Shipboard Court"/>
         <tag k="source:datetime" v="2017-06-01T17:21:23Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11381,7 +11381,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-384"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Millhouse Court"/>
         <tag k="name_1" v="Millhouse Way"/>
         <tag k="source:datetime" v="2017-06-01T17:21:03Z"/>
@@ -11400,7 +11400,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-383"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Pebble Shore Court"/>
         <tag k="source:datetime" v="2017-06-01T17:21:02Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11435,7 +11435,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-381"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Driftwood Cove Court"/>
         <tag k="name_1" v="Driftwood Cove"/>
         <tag k="source:datetime" v="2017-06-01T17:20:50Z"/>
@@ -11454,7 +11454,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-380"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Fox Hollow Way"/>
         <tag k="name_1" v="Fox Hollow Court"/>
         <tag k="source:datetime" v="2017-06-01T17:20:48Z"/>
@@ -11495,7 +11495,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-378"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Crystal Pool Drive"/>
         <tag k="name_1" v="Crystal Pool Way"/>
         <tag k="source:datetime" v="2017-06-01T17:20:45Z"/>
@@ -11519,7 +11519,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-377"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Sail Bay Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:20:42Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11535,7 +11535,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-376"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Low Tide Court"/>
         <tag k="source:datetime" v="2017-06-01T17:20:41Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11552,7 +11552,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-375"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Moss Creek Circle"/>
         <tag k="source:datetime" v="2017-06-01T17:20:33Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11645,7 +11645,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-371"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Swan Bay Drive"/>
         <tag k="source:datetime" v="2010-03-27T21:12:14Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11694,7 +11694,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-368"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Quail Lakes Court"/>
         <tag k="source:datetime" v="2017-06-01T17:18:48Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11710,7 +11710,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-367"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Agustine Circle"/>
         <tag k="source:datetime" v="2017-06-01T17:18:47Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11751,7 +11751,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-365"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Albrook Circle"/>
         <tag k="name_1" v="Albrook Court"/>
         <tag k="source:datetime" v="2017-06-01T17:18:15Z"/>
@@ -11794,7 +11794,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-363"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="High Tide Court"/>
         <tag k="source:datetime" v="2017-06-01T17:17:47Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11845,7 +11845,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-360"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Shelter Cove Court"/>
         <tag k="source:datetime" v="2017-06-01T17:17:40Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11865,7 +11865,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-359"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Whispering Wind Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:17:40Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11885,7 +11885,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-358"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Crystal Cove Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:17:38Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -11903,7 +11903,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-357"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Shallow Brook Circle"/>
         <tag k="name_1" v="Shallow Branch"/>
         <tag k="source:datetime" v="2017-06-01T17:17:29Z"/>
@@ -11980,7 +11980,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-353"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Cape Wood Court"/>
         <tag k="source:datetime" v="2017-06-01T17:16:58Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12017,7 +12017,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-351"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Channel Rock Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:16:51Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12033,7 +12033,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-350"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Schooner Cove Court"/>
         <tag k="name_1" v="Schooner Cove"/>
         <tag k="source:datetime" v="2017-06-01T17:16:46Z"/>
@@ -12052,7 +12052,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-349"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Runaway Court"/>
         <tag k="name_1" v="Runway"/>
         <tag k="source:datetime" v="2017-06-01T17:16:26Z"/>
@@ -12070,7 +12070,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-348"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Embassy Court"/>
         <tag k="source:datetime" v="2017-06-01T17:16:19Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12118,7 +12118,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-345"/>
         <tag k="hoot:snapped" v="to_way_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Discovery Bay Court"/>
         <tag k="name_1" v="Discovery Bay"/>
         <tag k="source:datetime" v="2018-08-31T09:49:46Z"/>
@@ -12220,7 +12220,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-340"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Trident Circle"/>
         <tag k="name_1" v="Trident"/>
         <tag k="source:datetime" v="2017-06-01T17:15:06Z"/>
@@ -12305,7 +12305,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-336"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Marina Port Circle"/>
         <tag k="source:datetime" v="2017-06-01T17:14:32Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12326,7 +12326,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-335"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Coral Way"/>
         <tag k="source:datetime" v="2017-06-01T17:14:24Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12344,7 +12344,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-334"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Klondike Court"/>
         <tag k="source:datetime" v="2017-06-01T17:14:11Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12360,7 +12360,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-333"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Salt Water Court"/>
         <tag k="source:datetime" v="2017-06-01T17:14:05Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12400,7 +12400,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-331"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Stern Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:13:37Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12450,7 +12450,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-329"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Mast Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:13:24Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12466,7 +12466,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-328"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Anchor Point Circle"/>
         <tag k="source:datetime" v="2010-03-27T23:26:26Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12485,7 +12485,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-327"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Carressa Court"/>
         <tag k="name_1" v="Caressa Court"/>
         <tag k="source:datetime" v="2017-06-01T17:12:56Z"/>
@@ -12529,7 +12529,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-325"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Beacon Shores Circle"/>
         <tag k="name_1" v="Beacon Shores"/>
         <tag k="source:datetime" v="2017-06-01T17:12:44Z"/>
@@ -12551,7 +12551,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-324"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Montego Bay Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:12:26Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12567,7 +12567,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-323"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Crescent Run Court"/>
         <tag k="name_1" v="Crescent Run"/>
         <tag k="source:datetime" v="2017-06-01T17:12:25Z"/>
@@ -12586,7 +12586,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-322"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Dolphin Cove Court"/>
         <tag k="source:datetime" v="2017-06-01T17:11:59Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12623,7 +12623,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-320"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Sunken Reef Circle"/>
         <tag k="source:datetime" v="2017-06-01T17:11:46Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12786,7 +12786,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-311"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Hollingworth Way"/>
         <tag k="name_1" v="Hollingworth Court"/>
         <tag k="source:datetime" v="2017-06-01T17:10:41Z"/>
@@ -12808,7 +12808,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-310"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Navy Blue Court"/>
         <tag k="source:datetime" v="2017-06-01T17:10:11Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12825,7 +12825,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-309"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Deep Water Circle"/>
         <tag k="source:datetime" v="2017-06-01T17:10:09Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12841,7 +12841,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-308"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Whittier Court"/>
         <tag k="source:datetime" v="2017-06-01T17:10:00Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12899,7 +12899,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-305"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Inlet Cove Court"/>
         <tag k="name_1" v="Inlet Cove"/>
         <tag k="source:datetime" v="2017-06-01T17:09:19Z"/>
@@ -12949,7 +12949,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-303"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Beacon Cove Court"/>
         <tag k="source:datetime" v="2017-06-01T17:08:33Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -12997,7 +12997,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-301"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Angelfish Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:08:10Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -13047,7 +13047,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-298"/>
         <tag k="hoot:snapped" v="to_way_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Sea View Court"/>
         <tag k="source:datetime" v="2017-06-01T17:07:51Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -13132,7 +13132,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-295"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Crystal Bay Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:07:33Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -13166,7 +13166,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-293"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Abaca Court"/>
         <tag k="source:datetime" v="2017-06-01T17:07:18Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -13189,7 +13189,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-292"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Bottle Creek Lane"/>
         <tag k="source:datetime" v="2017-06-01T17:07:02Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -13280,7 +13280,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-288"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Cliff View Way"/>
         <tag k="source:datetime" v="2017-06-01T17:06:34Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -13297,7 +13297,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-287"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Shadow Creek Circle"/>
         <tag k="source:datetime" v="2017-06-01T17:06:26Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -13440,7 +13440,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-280"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Misty Cove Court"/>
         <tag k="source:datetime" v="2017-06-01T17:05:15Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -13494,7 +13494,7 @@
         <tag k="highway" v="tertiary"/>
         <tag k="hoot:id" v="-277"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="South Grand Canyon Drive"/>
         <tag k="source:datetime" v="2019-08-07T23:02:09Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -13513,7 +13513,7 @@
         <tag k="highway" v="tertiary"/>
         <tag k="hoot:id" v="-276"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Lake North Drive"/>
         <tag k="oneway" v="no"/>
         <tag k="source:datetime" v="2019-01-17T22:38:25Z"/>
@@ -13558,7 +13558,7 @@
         <tag k="highway" v="tertiary"/>
         <tag k="hoot:id" v="-275"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="South Grand Canyon Drive"/>
         <tag k="oneway" v="no"/>
         <tag k="source:datetime" v="2019-01-17T09:58:37Z"/>
@@ -13775,7 +13775,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-270"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Crystal Water Way"/>
         <tag k="oneway" v="no"/>
         <tag k="source:datetime" v="2019-01-17T22:38:20Z"/>
@@ -13832,7 +13832,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-267"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Coast Line Court"/>
         <tag k="source:datetime" v="2018-07-18T19:25:52Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -13848,7 +13848,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-266"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Renwick Circle"/>
         <tag k="source:datetime" v="2017-06-01T17:05:43Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -13867,7 +13867,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-265"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Century Oaks Lane"/>
         <tag k="source:datetime" v="2010-03-27T22:59:35Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -13888,7 +13888,7 @@
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-264"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="South Fort Apache Road"/>
         <tag k="oneway" v="no"/>
         <tag k="source:datetime" v="2019-01-17T22:38:25Z"/>
@@ -13911,7 +13911,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-263"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Anchor Point Road"/>
         <tag k="name_1" v="Anchor Point Avenue"/>
         <tag k="source:datetime" v="2010-03-27T23:08:45Z"/>
@@ -13933,7 +13933,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-262"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Shady Pond Way"/>
         <tag k="source:datetime" v="2017-06-01T17:08:49Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -13954,7 +13954,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-261"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Chapel Pines Lane"/>
         <tag k="source:datetime" v="2017-06-01T17:09:43Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -13970,7 +13970,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-260"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="South Tidewater Court"/>
         <tag k="source:datetime" v="2018-08-31T09:49:45Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -13992,7 +13992,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-259"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Surfline Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:10:15Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14009,7 +14009,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-258"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Birch Tree Lane"/>
         <tag k="source:datetime" v="2017-06-01T17:10:42Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14026,7 +14026,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-257"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Quail Country Way"/>
         <tag k="name_1" v="Quail Country Lane"/>
         <tag k="source:datetime" v="2017-06-01T17:11:08Z"/>
@@ -14064,7 +14064,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-255"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Crystal Water Way"/>
         <tag k="oneway" v="no"/>
         <tag k="source:datetime" v="2019-01-17T22:38:25Z"/>
@@ -14090,7 +14090,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-253"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
     </way>
     <way visible="true" id="-252" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1003"/>
@@ -14111,7 +14111,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-251"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Cloudsdale Circle"/>
         <tag k="source:datetime" v="2017-06-01T17:13:07Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14135,7 +14135,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-250"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Sandy Shores Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:13:52Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14163,7 +14163,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-248"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Terrace Green Avenue"/>
         <tag k="source:datetime" v="2017-06-01T17:15:33Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14179,7 +14179,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-247"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Jamboree Road"/>
         <tag k="source:datetime" v="2010-03-27T21:00:30Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14223,7 +14223,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-244"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Norbeck Street"/>
         <tag k="source:datetime" v="2017-06-01T17:18:07Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14240,7 +14240,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-243"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Chianti Lane"/>
         <tag k="source:datetime" v="2017-06-01T17:18:49Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14257,7 +14257,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-242"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Quail Roost Way"/>
         <tag k="source:datetime" v="2019-12-09T09:20:31Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14278,7 +14278,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-241"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Hampton Bluff Street"/>
         <tag k="source:datetime" v="2017-06-01T17:20:19Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14294,7 +14294,7 @@
         <tag k="highway" v="tertiary"/>
         <tag k="hoot:id" v="-240"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Lake East Drive"/>
         <tag k="oneway" v="no"/>
         <tag k="source:datetime" v="2019-12-10T12:51:04Z"/>
@@ -14312,7 +14312,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-239"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Purtell Circle"/>
         <tag k="source:datetime" v="2017-06-01T17:20:50Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14332,7 +14332,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-238"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Hollycrest Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:21:34Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14349,7 +14349,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-237"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Beluga Way"/>
         <tag k="source:datetime" v="2017-06-01T17:21:43Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14365,7 +14365,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-236"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Brookstone Court"/>
         <tag k="source:datetime" v="2017-06-01T17:21:45Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14385,7 +14385,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-235"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Shoreline Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:21:55Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14405,7 +14405,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-234"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Ventana Hills Drive"/>
         <tag k="source:datetime" v="2010-03-27T21:24:36Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14424,7 +14424,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-233"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Horizon Hills Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:22:58Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14441,7 +14441,7 @@
         <tag k="highway" v="tertiary"/>
         <tag k="hoot:id" v="-232"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Lake South Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:23:37Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14461,7 +14461,7 @@
         <tag k="highway" v="tertiary"/>
         <tag k="hoot:id" v="-231"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Lake South Drive"/>
         <tag k="oneway" v="no"/>
         <tag k="source:datetime" v="2019-01-17T22:38:25Z"/>
@@ -14479,7 +14479,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-230"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Cascade Falls Avenue"/>
         <tag k="source:datetime" v="2017-06-01T17:23:50Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14516,7 +14516,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-228"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Cherry Springs Court"/>
         <tag k="source:datetime" v="2017-06-01T17:24:26Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14535,7 +14535,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-227"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Hidden Canyon Lane"/>
         <tag k="source:datetime" v="2017-06-01T17:24:56Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14551,7 +14551,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-226"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Great Bend Drive"/>
         <tag k="source:datetime" v="2010-03-27T21:35:19Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14570,7 +14570,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-225"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Stellar View Avenue"/>
         <tag k="source:datetime" v="2017-06-01T17:27:27Z"/>
         <tag k="tiger:cfcc" v="A41"/>
@@ -14591,7 +14591,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-224"/>
         <tag k="hoot:snapped" v="to_way_node_source"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Canyon Lake Drive"/>
         <tag k="source:datetime" v="2017-06-01T17:28:38Z"/>
         <tag k="tiger:cfcc" v="A41"/>

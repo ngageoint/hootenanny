@@ -45,13 +45,13 @@ ggdm30 = {
     ggdm30.rawSchema = ggdm30.schema.getDbSchema();
 
     // Add the Very ESRI specific FCSubtype attribute
-    if (config.getOgrEsriFcsubtype() == 'true') ggdm30.rawSchema = translate.addFCSubtype(ggdm30.rawSchema);
+    if (hoot.Settings.get('ogr.esri.fcsubtype') == 'true') ggdm30.rawSchema = translate.addFCSubtype(ggdm30.rawSchema);
 
     // Add empty "extra" feature layers if needed
-    if (config.getOgrNoteExtra() == 'file') ggdm30.rawSchema = translate.addExtraFeature(ggdm30.rawSchema);
+    if (hoot.Settings.get('ogr.note.extra') == 'file') ggdm30.rawSchema = translate.addExtraFeature(ggdm30.rawSchema);
 
     // Build the GGDM fcode/attrs lookup table. Note: This is <GLOBAL>
-    if (config.getOgrOutputFormat() == 'shp')
+    if (hoot.Settings.get('ogr.output.format') == 'shp')
     {
       ggdm30.ggdmAttrLookup = translate.makeAttrLookup(translate.addTagFeatures(ggdm30.rawSchema));
     }
@@ -67,14 +67,14 @@ ggdm30 = {
 
     // Decide if we are going to use the Thematic structure or 1 FCODE / File
     // if we DON't want the new structure, just return the ggdm30.rawSchema
-    if (config.getOgrThematicStructure() == 'false')
+    if (hoot.Settings.get('ogr.thematic.structure') == 'false')
     {
       // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
       ggdm30.layerNameLookup = translate.makeLayerNameLookup(ggdm30.rawSchema);
 
       // Now add an o2s[A,L,P] feature to the ggdm30.rawSchema
       // We can drop features but this is a nice way to see what we would drop
-      if (config.getOgrOutputFormat() == 'shp')
+      if (hoot.Settings.get('ogr.output.format') == 'shp')
       {
         // Add tag1, tag2, tag3 and tag4
         ggdm30.rawSchema = translate.addO2sFeatures(ggdm30.rawSchema);
@@ -212,13 +212,13 @@ ggdm30 = {
     //print("ggdm30.thematicLookup: End");
 
     // Add the ESRI Feature Dataset name to the schema
-    if (config.getOgrEsriFdname() !== '') newSchema = translate.addFdName(newSchema,config.getOgrEsriFdname());
+    if (hoot.Settings.get('ogr.esri.fdname') !== '') newSchema = translate.addFdName(newSchema,hoot.Settings.get('ogr.esri.fdname'));
 
     // Now add the o2s feature to the ggdm30.rawSchema
     // We can drop features but this is a nice way to see what we would drop
     // NOTE: We add these feature AFTER adding the ESRI Feature Dataset so that they
     // DON'T get put under the Feature Dataset in the output
-    if (config.getOgrOutputFormat() == 'shp')
+    if (hoot.Settings.get('ogr.output.format') == 'shp')
     {
       // Add tag1, tag2, tag3 and tag4
       newSchema = translate.addO2sFeatures(newSchema);
@@ -2661,9 +2661,9 @@ ggdm30 = {
     if (ggdm30.config == undefined)
     {
       ggdm30.config = {};
-      ggdm30.config.OgrAddUuid = config.getOgrAddUuid();
-      ggdm30.config.OgrDebugAddfcode = config.getOgrDebugAddfcode();
-      ggdm30.config.OgrDebugDumptags = config.getOgrDebugDumptags();
+      ggdm30.config.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
+      ggdm30.config.OgrDebugAddfcode = hoot.Settings.get('ogr.debug.addfcode');
+      ggdm30.config.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
 
       // Get any changes to OSM tags
       ggdm30.toChange = hoot.Settings.get('schema.translation.override');
@@ -2799,13 +2799,13 @@ ggdm30 = {
     if (ggdm30.config == undefined)
     {
       ggdm30.config = {};
-      ggdm30.config.OgrAddUuid = config.getOgrAddUuid();
-      ggdm30.config.OgrDebugDumptags = config.getOgrDebugDumptags();
-      ggdm30.config.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
-      ggdm30.config.OgrFormat = config.getOgrOutputFormat();
-      ggdm30.config.OgrNoteExtra = config.getOgrNoteExtra();
-      ggdm30.config.OgrThematicStructure = config.getOgrThematicStructure();
-      ggdm30.config.OgrThrowError = config.getOgrThrowError();
+      ggdm30.config.OgrAddUuid = hoot.Settings.get('ogr.add.uuid');
+      ggdm30.config.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
+      ggdm30.config.OgrEsriFcsubtype = hoot.Settings.get('ogr.esri.fcsubtype');
+      ggdm30.config.OgrFormat = hoot.Settings.get('ogr.output.format');
+      ggdm30.config.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
+      ggdm30.config.OgrThematicStructure = hoot.Settings.get('ogr.thematic.structure');
+      ggdm30.config.OgrThrowError = hoot.Settings.get('ogr.throw.error');
       ggdm30.config.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
 
       // Get any changes to OSM tags

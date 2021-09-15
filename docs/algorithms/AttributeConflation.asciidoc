@@ -11,7 +11,7 @@ detail, and your secondary dataset has good tag attribution.
 
 Attribute Conflation transfers tags from the secondary layer to the reference layer during conflation and favors the secondary layer when there 
 are conflicts. The only exception occurs with many to many building matches (see "Buildings" section below). Changes to the configuration option 
-+tag.merger.default+ outside of AttributeConflation.conf are always ignored.
+`tag.merger.default` outside of AttributeConflation.conf are always ignored
 
 === Roads
 
@@ -30,7 +30,7 @@ not conflate the road pair together so as not to lose road type accuracy.
 If the secondary layer being conflated has bridges connecting two road segments together and the reference data does not have those bridges,
 Attribute Conflation will need to make geometry change to the reference data to properly conflate the bridges.  If you wish to make
 no geometry changes to your reference dataset under any circumstance, you can disable the configuration option,
-+attribute.conflation.allow.ref.geometry.changes.for.bridges+.
+`attribute.conflation.allow.ref.geometry.changes.for.bridges`.
 
 ==== Post Conflate Re-joining
 
@@ -38,30 +38,30 @@ Another option for Attribute Conflation, disabled by default, is to enable aggre
 you will end up with fewer road type and name tag transfers from the secondary layer to the reference layer for some road segements but at the
 cost of potentially more empty road segments in the output. Generally, with the option enabled you will end up with more road type and name
 tag transfers from the secondary layer to the reference layer for some road segements but at the cost of some incorrect tag transfers.  To use
-this feature, enable the configuration option +attribute.conflation.aggressive.highway.joining+.
+this feature, enable the configuration option `attribute.conflation.aggressive.highway.joining`.
 
 === Buildings
 
 ==== Matching
 
 Unlike other types of conflation, Attribute Conflation will always force a match to occur if when two features are compared it is found that one
-contains the other. This is controlled by the +building.force.contained.match+ configuration option.
+contains the other. This is controlled by the `building.force.contained.match` configuration option.
 
 ==== Merging
 
 Attribute Conflation handles building merging differently than other types of conflation. It always passes the reference geometry to output by
-disabling the +building.keep.more.complex.geometry.when.auto.merging+ option. By default in Hootenanny, buildings involved in more than one
+disabling the `building.keep.more.complex.geometry.when.auto.merging   option. By default in Hootenanny, buildings involved in more than one
 match are always flagged for review. Attribute Conflation automatically merges buildings in those situations by enabling the
-+building.merge.many.to.many.matches+ and +poi.polygon.auto.merge.many.poi.to.one.poly.matches+ options. In the situation where a group of
+`building.merge.many.to.many.matches` and `poi.polygon.auto.merge.many.poi.to.one.poly.matches` options. In the situation where a group of
 buildings is merged together into a single building, the type tags of the merged buildings are retained. If two buildings have the same type tag
-key (e.g. shop=mall and shop=supermarked), arbitrarily the first tag will be kept and the others put into an "alt_types" tag.
+key (e.g. `shop=mall` and `shop=supermarket`), arbitrarily the first tag will be kept and the others put into an `alt_types` tag.
 
 ==== Output
 
 Attribute Conflation handles conflated building output relations slightly differently than other conflation types. The default building
 conflation behavior in Hootenanny generates both a building and multipolygon relation for each merged building, with the multipolygon relation
 added as a member of the building relation.  Attribute Conflation generates only the multipolygon relation for merged buildings by activating
-the +building.outline.update.op.remove.building.relations+ option.
+the `building.outline.update.op.remove.building.relations` option.
 
 === POI/Polygon
 
@@ -73,13 +73,14 @@ conflating other features types in that the secondary tags will always be kept.
 
 By default, Attribute Conflation drops all conflation reviews from the output. It also allows for manual review of features that Hootenanny
 was unable to conflate and flagged for review.  However, this option is disabled by default.  To use this feature, enable the
-+attribute.conflation.allow.reviews.by.score+ configuration option.  You also have the ability to threshold reviews by review score, in a
+`attribute.conflation.allow.reviews.by.score` configuration option.  You also have the ability to threshold reviews by review score, in a
 range of 0.0 to 1.0 (1.0 being the strongest case for feature pair to be reviewed), in order to reduce the number of reviews you are presented
-with.  See the configuration options +review.score.criterion.min.threshold+ and +review.score.criterion.max.threshold+.  Hootenanny will often
+with.  See the configuration options `review.score.criterion.min.threshold` and `review.score.criterion.max.threshold`.  Hootenanny will often
 return reviews with a score of 1.0 when it has no idea how to conflate a particular pair of features or those feature exhibit some unusual
 properties.  Therefore counterintuitively, setting a maximum threshold below 1.0 may reduce the number of reviews you see even further in the
 conflated output.
 
 === Configuration
 
-Attribute Conflation can further be customized by modifying the +conf/core/AttributeConflation.conf+ configuration options file.
+Attribute Conflation can further be customized by modifying the `conf/core/AttributeConflation.conf` configuration options file.
+

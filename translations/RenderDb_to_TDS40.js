@@ -32,7 +32,7 @@
 hoot.require('tds40');
 hoot.require('tds40_schema');
 hoot.require('tds40_rules');
-hoot.require('config');
+// hoot.require('config');
 hoot.require('translate');
 hoot.require('fcode_common');
 

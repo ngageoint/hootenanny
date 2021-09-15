@@ -33,7 +33,7 @@ hoot.require('SchemaTools');
 hoot.require('tds61');
 hoot.require('tds61_schema');
 hoot.require('tds61_rules');
-hoot.require('config');
+// hoot.require('config');
 hoot.require('translate');
 hoot.require('fcode_common');
 

@@ -2,15 +2,5 @@
 [[GenericGeometryConflation]]
 == Generic Geometry Conflation
 
-TODO
-
-[[GenericGeometryTestResults]]
-=== Test Results
-
-TODO
-
-[[GenericGeometryFutureWork]]
-=== Future Work
-
-TODO
+Generic Geomtry has not been extensively tested for conflation accuracy yet.
 

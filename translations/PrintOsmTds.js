@@ -37,7 +37,7 @@ hoot.require('SchemaTools');
 hoot.require('tds70');
 hoot.require('tds70_full_schema');
 hoot.require('tds70_rules');
-hoot.require('config');
+// hoot.require('config');
 hoot.require('translate');
 hoot.require('fcode_common');
 
@@ -67,7 +67,7 @@ function initialize()
   // print("#####");
 
   // Print the tagList
-  switch (config.getTagPrintingFormat())
+  switch (hoot.Settings.get('tag.printing.format'))
   {
   //         case 'html':
   //             dumpHtmlTags(tagList);

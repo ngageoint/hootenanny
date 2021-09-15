@@ -29,7 +29,7 @@
 // Convert ENCv311 to OSM+
 //
 
-hoot.require('config');
+// hoot.require('config');
 hoot.require('translate');
 
 // Layer name filter - Filter out all layers that match this regexp
@@ -357,7 +357,7 @@ enc311 = {
     if (enc311.configIn == undefined)
     {
       enc311.configIn = {};
-      enc311.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+      enc311.configIn.OgrDebugDumptags = hoot.Settings.get('ogr.debug.dumptags');
 
       // Get any changes
       enc311.toChange = hoot.Settings.get('schema.translation.override');

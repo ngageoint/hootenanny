@@ -70,7 +70,7 @@ specification was interpreted by the digitizer and on subtle interactions
 between FACC fields that impact one or more OSM tags. Despite this complexity,
 the OSM schema is rich enough to accommodate most FACC fields. In some cases,
 we've introduced new non-standard tags into the OSM schema to handle more
-obscure tags such as +building:shape=with_cupola+ and some military specific
+obscure tags such as `building:shape=with_cupola` and some military specific
 tags.
 
 As part of Hootenanny, we have implemented a _shp2osm_ conversion tool that uses

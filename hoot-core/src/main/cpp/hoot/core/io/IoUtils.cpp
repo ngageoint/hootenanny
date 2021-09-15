@@ -515,6 +515,9 @@ void IoUtils::loadMap(
   // layers per input file or multiple files per directory.
   if (isSupportedOgrFormat(justPath, true))
   {
+    // Expanding this to have the exact OGR format is not needed
+    conf().set(ConfigOptions::getReaderInputFormatKey(), "OGR");
+
     OgrReader reader;
     reader.setConfiguration(conf());
     reader.setDefaultStatus(defaultStatus);

@@ -135,7 +135,7 @@ Interface guide.  To conflate river data, a command similar to the following may
 hoot conflate <river-dataset-1> <river-dataset-2> <output>
 ------
 
-All of the settings that can be modified for river conflation exist in +conf/core/ConfigOptions.asciidoc+.  Tweaking the settings can
+All of the settings that can be modified for river conflation exist in `conf/core/ConfigOptions.asciidoc`.  Tweaking the settings can
 result in better conflation performance depending on the datasets being conflated. See the "Configuration Options" section of User Guide for
 more detail.
 
@@ -249,7 +249,7 @@ Or if you just wanted to conflate buildings at a 25m radius:
 
 Translation is the process of both converting tabular GIS data, such as
 Shapefiles, to the OSM format and schema. There are two main supported formats
-for OSM data, +.osm+ , an XML format, and +.osm.pbf+ , a compressed binary
+for OSM data, `.osm` , an XML format, and `.osm.pbf` , a compressed binary
 format. Discussions of OSM format reference either of these two data formats.
 
 By far the most complex portion of the translation process is the converting the
@@ -261,7 +261,7 @@ depending on their knowledge of Python/Javascript, create a custom translation v
 provides a mapping between the two schemas in a significantly shorter duration of time.
 
 The following sections discuss high level issues associated with translating
-files. For a more nuts and bolts discussion see the +convert+ section.
+files. For a more nuts and bolts discussion see the `convert` section.
 
 [[JavaScript-Translation]]
 === JavaScript Translation
@@ -279,20 +279,20 @@ Documentation] for details on which operations are supported.
 
 In addition to the operations exposed by Qt, the user also has access to:
 
-*  +require+ - Require a JavaScript module provided by Hootenanny. The list of
+*  `require` - Require a JavaScript module provided by Hootenanny. The list of
    supported modules is still being defined.
-*  +print+ - Print a line to stdout
-*  +debug+ , +logDebug+ - Print debug text to stdout using the Hootenanny
+*  `print` - Print a line to stdout
+*  `debug` , `logDebug` - Print debug text to stdout using the Hootenanny
    logging facilities. Each message will include date/time, filename, and line
-   number. E.g. logs if the +--debug+ flag has been set on the command line.
-*  +logInfo+ - Print information text to stdout using the Hootenanny logging
+   number. E.g. logs if the `--debug` flag has been set on the command line.
+*  `logInfo` - Print information text to stdout using the Hootenanny logging
    facilities. Each message will include date/time, filename, and line number.
-*  +warn+ , +logWarn+ - Print warning text to stdout using the Hootenanny
+*  `warn` , `logWarn` - Print warning text to stdout using the Hootenanny
    logging facilities. Each message will include date/time, filename, and line
    number.
-*  +logError+ - Print error text to stdout using the Hootenanny logging
+*  `logError` - Print error text to stdout using the Hootenanny logging
    facilities. Each message will include date/time, filename, and line number.
-*  +logFatal+ - Print fatal text to stdout using the Hootenanny logging
+*  `logFatal` - Print fatal text to stdout using the Hootenanny logging
    facilities. Each message will include date/time, filename, and line number.
 
 
@@ -301,23 +301,23 @@ In addition to the operations exposed by Qt, the user also has access to:
 
 There are several functions that may be called by Hootenanny:
 
-*  +initialize+ - An optional method that gets called before any other methods.
-*  +finalize+ - An optional method that gets called after all other methods have
+*  `initialize` - An optional method that gets called before any other methods.
+*  `finalize` - An optional method that gets called after all other methods have
    been completed. This can be useful if you want to print out statistics on the
    translation.
-*  +translateToOgr+ - Required by the +convert+ command to translate from OSM
+*  `translateToOgr` - Required by the `convert` command to translate from OSM
    to a custom schema.
-*  +translateToOsm+ - Required by the +convert+ command to translate from a
+*  `translateToOsm` - Required by the `convert` command to translate from a
    custom schema to the OSM schema. For backwards compatibility reasons
-   +translateAttributes+ is also supported, but +translateToOsm+ is preferred.
-*  +getDbSchema+ - Required by the +convert+ command to get the custom schema
+   `translateAttributes` is also supported, but `translateToOsm` is preferred.
+*  `getDbSchema` - Required by the `convert` command to get the custom schema
    that OSM data will be converted into.
 
 [[Simple-Example]]
 ===== Simple Example
 
 
-Below is about the simplest useful example that supports both +convert+. The following sections go into details on how these function are used.
+Below is about the simplest useful example that supports both `convert`. The following sections go into details on how these function are used.
 ------
 // an optional initialize function that gets called once before any
 // translateAttribute calls.
@@ -401,14 +401,14 @@ function getDbSchema()
 ==== JavaScript to OSM Translation
 
 
-The +translateToOsm+ method takes two parameters:
+The `translateToOsm` method takes two parameters:
 
-*  +attrs+ - A associative array of attributes and values from the source record.
-*  +layerName+ - The name of the layer being processed. In the case of a Database source it will be the table name. In the case of a file input it will be the full path to the file. Frequently the +layerName+ is useful in decoding the type of feature being processed.
+*  `attrs` - A associative array of attributes and values from the source record.
+*  `layerName` - The name of the layer being processed. In the case of a Database source it will be the table name. In the case of a file input it will be the full path to the file. Frequently the `layerName` is useful in decoding the type of feature being processed.
 
-_Note_: The +translateToOsm+ was previously called +translateAttributes+ . Either name will still work, but +translateToOsm+ is preferred. If both are specified then +translateToOsm+ will be used.
+_Note_: The `translateToOsm` was previously called `translateAttributes`. Either name will still work, but `translateToOsm` is preferred. If both are specified then `translateToOsm` will be used.
 
-This method will be called after the +initialize+ method is called when translating from an OGR format to a OSM schema. For instance if you call:
+This method will be called after the `initialize` method is called when translating from an OGR format to a OSM schema. For instance if you call:
 
 ------
 hoot convert -D schema.translation.script=tmp/SimpleExample.js "myinput1.shp myinput2.shp" myoutput.osm
@@ -416,13 +416,13 @@ hoot convert -D schema.translation.script=tmp/SimpleExample.js "myinput1.shp myi
 
 The functions will be called in the following order:
 
-.  +initialize+
+.  `initialize`
 
-.  +translateToOsm+ - This will be called once for every feature in myinput1.shp
+.  `translateToOsm` - This will be called once for every feature in myinput1.shp
 
-.  +translateToOsm+ - This will be called once for every feature in myinput2.shp
+.  `translateToOsm` - This will be called once for every feature in myinput2.shp
 
-.  +finalize+
+.  `finalize`
 
 
 [[Table-Based-Translation]]
@@ -491,19 +491,19 @@ The purpose of the translation file is to convert your custom Shapefile into the
 http://wiki.openstreetmap.org/wiki/Map_Features[OSM schema]. The translation
 file is a Python script with a global function with the following definition:
 
-* +def translateToOsm(attrs, layerName):+
-** +attrs+ - A dictionary of attributes for a single feature to be translated.
-** +layerName+ - The name of the layer being translated. This is provided in
+* `def translateToOsm(attrs, layerName):`
+** `attrs` - A dictionary of attributes for a single feature to be translated.
+** `layerName` - The name of the layer being translated. This is provided in
    case multiple files are being translated at one time such as roads, bridges
    and tunnels. Sometimes this provides additional context when translated a
    feature.
 
 The function must return either a dictionary of OSM tags or None if the feature
-should be filtered from the data set. When +convert+ is launched Hootenanny
-loads the specified Python file. The files in the +translations+ directory will
+should be filtered from the data set. When `convert` is launched Hootenanny
+loads the specified Python file. The files in the `translations` directory will
 be included in the Python path. The same Python instance will be used for the
 translations of all files in the _input_ list. This means that the script will
-only be intialized once and then +translateToOsm+ will be called once for
+only be intialized once and then `translateToOsm` will be called once for
 each feature in all of the input files.
 
 ===== Example Translation Work Flow
@@ -520,9 +520,9 @@ attributes:
 
 In my notional example there are three columns with the following definitions:
 
-* +STNAME+ - The name of the street.
-* +STTYPE+ - The type of the street.
-* +DIR+ - The flow of traffic, either 1 for one way traffic, or 2 for
+* `STNAME` - The name of the street.
+* `STTYPE` - The type of the street.
+* `DIR` - The flow of traffic, either 1 for one way traffic, or 2 for
   bidirectional traffic.
 
 Hootenanny will call the translateToOsm method 3 times for this input. Each
@@ -549,10 +549,10 @@ http://wiki.openstreetmap.org/wiki/Map_Features[Map Feature] reference on the
 OSM wiki you can determine what is appropriate for a given input, but in this
 notional example I'll give you the translations below:
 
-* +STNAME+ - Equivalent to the OSM +name+ tag.
-* +STTYPE+ - +main+ is equivalent to +highway=primary+ and +res+ is equivalent
-  to +highway=residential+
-* +DIR+ - 1 is equivalent to +oneway=yes+, 2 is equivalent to +oneway=no+.
+* `STNAME` - Equivalent to the OSM `name` tag.
+* `STTYPE` - `main` is equivalent to `highway=primary` and `res` is equivalent
+  to `highway=residential`
+* `DIR` - 1 is equivalent to `oneway=yes`, 2 is equivalent to `oneway=no`.
 
 So the input/output mapping we want is below:
 
@@ -727,25 +727,25 @@ function translateToOsm(attrs, layerName) {
 
 Using JavaScript translation files it is now possible to convert from OSM to more typical tabular geospatial formats such as Shapefile or FileGDB. In order to convert to these formats some information will likely be lost and these translation files define which attributes will be carried across and how they'll be put into tables/layers.
 
-The necessary functionality is accessed via two methods, +getDbSchema+ and +translateToOsm+ . Both methods are required.
+The necessary functionality is accessed via two methods, `getDbSchema` and `translateToOsm` . Both methods are required.
 
-The +getDbSchema+ method takes no arguments and returns a complex schema data structure that is described in theDB Schemasection.
+The `getDbSchema` method takes no arguments and returns a complex schema data structure that is described in theDB Schemasection.
 
-The +translateToOsm+ method takes three arguments and returns an associative array values.
+The `translateToOsm` method takes three arguments and returns an associative array values.
 Arguments:
 
-*  +tags+ - A associative array of tag key/value pairs from the source element/feature.
-*  +elementType+ - The OSM element type being passed in. This is one of "node", "way", or "relation". See the OSM data model for more information.
-*  +geometryType+ - The geometry type of the element being passed in. This is one of "Point", "Line", "Area" or "Collection". The value is determined based on both the element type and the tags on a given feature.
+*  `tags` - A associative array of tag key/value pairs from the source element/feature.
+*  `elementType` - The OSM element type being passed in. This is one of "node", "way", or "relation". See the OSM data model for more information.
+*  `geometryType` - The geometry type of the element being passed in. This is one of "Point", "Line", "Area" or "Collection". The value is determined based on both the element type and the tags on a given feature.
 
 Returns:
 
-*  +undefined+ if the feature should be dropped, or a single associative array with the following keys:
-*  +attrs+ - An associative array of attributes where the key is the column name and the value is the cell's value. The cell's value does not need to be in the same data type as specified by the schema, but must be convertible to that data type. For instance returns a string zero ( +"0"+ ) and integer zero ( +0+ ) are both acceptable for an integer field. The attrs must be consistent with the table schema defined for the given +tableName+ .
-*  +tableName+ - A string value the determines the table/layer that the feature will be inserted into. This must be one of the tables defined in the DB schema.
+*  `undefined` if the feature should be dropped, or a single associative array with the following keys:
+*  `attrs` - An associative array of attributes where the key is the column name and the value is the cell's value. The cell's value does not need to be in the same data type as specified by the schema, but must be convertible to that data type. For instance returns a string zero ( +"0"+ ) and integer zero ( +0+ ) are both acceptable for an integer field. The attrs must be consistent with the table schema defined for the given `tableName` .
+*  `tableName` - A string value the determines the table/layer that the feature will be inserted into. This must be one of the tables defined in the DB schema.
 
 
-The methods will be called after the +initialize+ method is called when translating from an OGR format to a OSM schema. For instance if you call:
+The methods will be called after the `initialize` method is called when translating from an OGR format to a OSM schema. For instance if you call:
 
 ------
 hoot convert -D schema.translation.script=tmp/SimpleExample.js myinput.osm myoutput.shp
@@ -753,15 +753,15 @@ hoot convert -D schema.translation.script=tmp/SimpleExample.js myinput.osm myout
 
 The functions will be called in the following order:
 
-.  +initialize+
+.  `initialize`
 
-.  +getDbSchema+
+.  `getDbSchema`
 
-.  +translateToOgr+ - This will be called once for every element in myinput.osm that has at least one non-metadata tag. The metadata tags are defined in +$HOOT_HOME/conf/MetadataSchema.json+
+.  `translateToOgr` - This will be called once for every element in myinput.osm that has at least one non-metadata tag. The metadata tags are defined in `$HOOT_HOME/conf/MetadataSchema.json`
 
-.  +finalize+
+.  `finalize`
 
-This is most commonly accessed through the +convert+ command.
+This is most commonly accessed through the `convert` command.
 
 
 [[DB-Schema]]
@@ -814,16 +814,16 @@ schema = [
 
 Supported output data types:
 
-*  +string+ - A variable length string.
-*  +enumeration+ - A 32bit signed integer with specific acceptable enumerated values.
-*  +double+ or +real+ - 64bit float
-*  +integer+ or +long integer+ - Aliased to +enumeration+, but it doesn't require an +enumerations+ array.
+*  `string` - A variable length string.
+*  `enumeration` - A 32bit signed integer with specific acceptable enumerated values.
+*  `double` or `real` - 64bit float
+*  `integer` or `long integer` - Aliased to `enumeration`, but it doesn't require an `enumerations` array.
 
-The numeric data types support +minimum+ and +maximum+ . By default +minimum+ and +maximum+ are disabled. If min/max values are specified or an enumeration table is populated then Hootenanny will validate all output data before it is written. The following rules are used to determine if a value is valid:
+The numeric data types support `minimum` and `maximum`. By default `minimum` and `maximum` are disabled. If min/max values are specified or an enumeration table is populated then Hootenanny will validate all output data before it is written. The following rules are used to determine if a value is valid:
 
-* If the enumeration table is present ( +enumeration+ type only) then a value is valid. If the value is in the enumeration table then min/max bounds are ignored.
-* If +maximum+ is specified then the value is invalid if it is greater than maximum.
-* If +minimum+ is specified then the value is invalid if it is less than minimum.
+* If the enumeration table is present ( `enumeration` type only) then a value is valid. If the value is in the enumeration table then min/max bounds are ignored.
+* If `maximum` is specified then the value is invalid if it is greater than maximum.
+* If `minimum` is specified then the value is invalid if it is less than minimum.
 
 
 [[File-Formats]]
@@ -843,14 +843,14 @@ When writing shapefiles a new directory will be created with the basename of the
 hoot convert -D schema.translation.script=translations/MyTranslation.js input.osm output.shp
 ------
 
-The above command will create a new directory called +output+ and the layers specified in the +translations/MyTranslation.js+ schema will be created as +output/<your layer name>.shp+ .
+The above command will create a new directory called `output` and the layers specified in the `translations/MyTranslation.js` schema will be created as `output/<your layer name>.shp` .
 
 
 [[CSV]]
 ===== CSV
 
 
-CSV files are created using the OGR CSV driver and will contain an associated +.csvt+ file that contains the column types. If you're exporting points then you will get an X/Y column prepended onto your data. If you're exporting any other geometry type then you will get a WKT column prepended that contains the Well Known Text representation of your data. If you would like to read from a CSV you must first create a VRT file as described in the OGR CSV documentation. E.g.
+CSV files are created using the OGR CSV driver and will contain an associated `.csvt` file that contains the column types. If you're exporting points then you will get an X/Y column prepended onto your data. If you're exporting any other geometry type then you will get a WKT column prepended that contains the Well Known Text representation of your data. If you would like to read from a CSV you must first create a VRT file as described in the OGR CSV documentation. E.g.
 
 Creating a new CSV file:
 
@@ -858,7 +858,7 @@ Creating a new CSV file:
 hoot convert test-files/conflate/unified/AllDataTypesA.osm foo.csv translations/Poi.js
 ------
 
-This uses a simple translation script ( +Poi.js+ ) that exports POI data and its associated tags. If you would then like to read that data create a new +.vrt+ file named +foo.vrt+ that contains the following:
+This uses a simple translation script ( `Poi.js` ) that exports POI data and its associated tags. If you would then like to read that data create a new `.vrt` file named `foo.vrt` that contains the following:
 
 ------
 <OGRVRTDataSource>
@@ -882,7 +882,7 @@ hoot convert -D schema.translation.script=translations/Poi.js foo.vrt ConvertedB
 === Buildings Translation
 
 
-In the simplest case a building is a way tagged with +building=yes+ . However, when it comes to 3D features buildings can get dramatically more complex. For a thorough discussion of Buildings and how they're mapped see the http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings[OSM wiki page on Simple 3D Buildings].
+In the simplest case a building is a way tagged with `building=yes`. However, when it comes to 3D features buildings can get dramatically more complex. For a thorough discussion of Buildings and how they're mapped see the http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings[OSM wiki page on Simple 3D Buildings].
 
 
 [[Translating-Building-Parts]]
@@ -947,9 +947,7 @@ The astute reader may notice that a new way was created during this process. The
 ===== Disabling Complex Buildings
 
 
-By default the when using the convert command to convert an OGR format to OSM +ogr2osm.simplify.complex.buildings+ is enabled.  If you
-would like to disable the automatic construction of complex buildings from the individual parts then simply set
-+ogr2osm.simplify.complex.buildings+ to false.  For example:
+By default the when using the convert command to convert an OGR format to OSM `ogr2osm.simplify.complex.buildings` is enabled.  If you would like to disable the automatic construction of complex buildings from the individual parts then simply set `ogr2osm.simplify.complex.buildings` to false.  For example:
 
 ------
 hoot convert -D schema.translation.script=MyTranslation -D ogr2osm.simplify.complex.buildings=false MyInput.shp MyOutput.osm
@@ -1016,7 +1014,7 @@ MTFCC: String (5.0)
 ==== Translate the Shapefiles
 
 
-Hootenanny provides a link:$$User_-_convert.html$$[convert] operation to translate and convert shapefiles into OSM files. If the projection is available for the Shapefile the input will be automatically reprojected to WGS84 during the process. If you do a good job of translating the input data into the OSM schema then Hootenanny will conflate the attributes on your features as well as the geometries. If you do not translate the data properly then you'll still get a result, but it may not be desirable.
+Hootenanny provides a https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc[convert] operation to translate and convert shapefiles into OSM files. If the projection is available for the Shapefile the input will be automatically reprojected to WGS84 during the process. If you do a good job of translating the input data into the OSM schema then Hootenanny will conflate the attributes on your features as well as the geometries. If you do not translate the data properly then you'll still get a result, but it may not be desirable.
 
 
 [[Crummy-Translation]]
@@ -1088,7 +1086,7 @@ def translateToOsm(attrs, layerName):
     return tags
 ------
 
-To run the tiger translation put the above code in a file named +translations/TigerRoads.py+ and run the following:
+To run the tiger translation put the above code in a file named `translations/TigerRoads.py` and run the following:
 
 ------
 hoot convert -D schema.translation.script=TigerRoads tmp/dc-roads/tl_2012_11001_roads.shp tmp/dc-roads/tiger.osm
@@ -1122,7 +1120,7 @@ def translateToOsm(attrs, layerName):
     return tags
 ------
 
-To run the DC GIS translation put the above code in a file named +translations/DcRoads.py+ and run the following:
+To run the DC GIS translation put the above code in a file named `translations/DcRoads.py` and run the following:
 
 ------
 hoot convert -D schema.translation.script=DcRoads tmp/dc-roads/Streets4326.shp tmp/dc-roads/dcgis.osm
@@ -1162,7 +1160,7 @@ hoot convert -D shape.file.writer.cols="name;highway;surface;foot;horse;bicycle"
 === Snap GPS Tracks to Roads
 
 
-. Create a translation file for "translating" your GPS tracks. This typically just adds the accuracy field. E.g. +accuracy=5+
+. Create a translation file for "translating" your GPS tracks. This typically just adds the accuracy field. E.g. `accuracy=5`
 
 . Convert your GPX file into an OSM file where each track is now a way.
 +
@@ -1182,10 +1180,10 @@ hoot convert -D shape.file.writer.cols "hoot:max:movement;hoot:mean:movement;hoo
 ==== Maintaining per node attributes
 
 
-If you have node attributes that you want to keep you can use the +PointsToTracksOp+ operation to join the nodes after translation. This requires two fields on each node:
+If you have node attributes that you want to keep you can use the `PointsToTracksOp` operation to join the nodes after translation. This requires two fields on each node:
 
-*  +hoot:track:id+ - The id of the track that the node belongs to. The id is simply treated as a string. Nodes with like ids will be grouped together.
-*  +hoot:track:seq+ - The sequence of the nodes within the track (way). This is treated as a string and sorted as a string where the smallest value is at the beginning of the track. Be certain to avoid problems with integers during translation. E.g. "13", "112" will not sort properly, but "013", "112" will sort properly. It is also recommended to use +MergeNearbyNodes+ as a poor man's line simplification to speed the process up a bit. If this causes problems with your data you can safely drop it.
+*  `hoot:track:id` - The id of the track that the node belongs to. The id is simply treated as a string. Nodes with like ids will be grouped together.
+*  `hoot:track:seq` - The sequence of the nodes within the track (way). This is treated as a string and sorted as a string where the smallest value is at the beginning of the track. Be certain to avoid problems with integers during translation. E.g. "13", "112" will not sort properly, but "013", "112" will sort properly. It is also recommended to use `MergeNearbyNodes` as a poor man's line simplification to speed the process up a bit. If this causes problems with your data you can safely drop it.
 
 The command used with a GPX input file is:
 
@@ -1209,7 +1207,7 @@ def translateToOsm(attrs, layerName):
     return tags
 ------
 
-*Special Rule* If all the nodes in a track have the same +highway=*+ setting then the highway attribute will be moved from the node to the way.
+*Special Rule* If all the nodes in a track have the same `highway=*` setting then the highway attribute will be moved from the node to the way.
 
 
 [[Add-NSG-TLM-Symbology-to-a-FileGeodatabase]]
@@ -1220,7 +1218,7 @@ ESRI ArcMap can use Visual Representation rules to display symbology. Hootenanny
 
 References:
 
-* http://resources.arcgis.com/en/help/main/10.2/index.html#/What_are_representations/00s50000004m000000/[What are representations
+* http://resources.arcgis.com/en/help/main/10.2/index.html#/What_are_representations/00s50000004m000000/[What are representations]
 * http://resources.arcgis.com/en/help/main/10.2/index.html#/What_are_visual_specifications/0103000001w9000000[What are visual specifications]
 
 ==== Requirements
@@ -1241,7 +1239,7 @@ C:\Program Files\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Local\Schema\Gdb\LTDS
 * Unpack this Zip file and copy the "LTDS_4_0.gdb" File GeoDatabase to your Hootenanny working directory.
 
 Run Hootenanny and add your data to the template File GeoDatabase::
-* Add the "Append Data" flag: +ogr.append.data+
+* Add the "Append Data" flag: `ogr.append.data`
 * Add the template File GeoDatabase to write to.
 +
 ----
@@ -1274,7 +1272,7 @@ http://resources.arcgis.com/en/help/main/10.2/index.html#/Calculate_Visual_Speci
 
 View the Default Symbology::
 * Open ArcMap
-* Add the +LTDS_4_0.gdb+ dataset
+* Add the `LTDS_4_0.gdb` dataset
 
 [[Tag-Merging-Configuration]]
 === Tag Merging
@@ -1284,7 +1282,7 @@ When two features/elements are merged into a single feature/element the tags mus
 hoot info --tag-mergers
 ----- 
 
-The default way to set this configuration for many functions is through the +tag.merger.default+ configuration option. Some older operations may not support configurable merging techniques. The default tag merger is: +OverwriteTag2Merger+. To specify a tag merger when conflating:
+The default way to set this configuration for many functions is through the `tag.merger.default` configuration option. Some older operations may not support configurable merging techniques. The default tag merger is: `OverwriteTag2Merger`. To specify a tag merger when conflating:
 -----
 hoot conflate -D tag.merger.default=<TagMergerClassName> input1.osm input2.osm output.osm
 -----
@@ -1292,27 +1290,27 @@ hoot conflate -D tag.merger.default=<TagMergerClassName> input1.osm input2.osm o
 [[Average-Tags]]
 ===== Averaging Tag Merger
 
-Use an internal method to average the tags between two features. Implementation: +AverageTagMerger+
+Use an internal method to average the tags between two features. Implementation: `AverageTagMerger`
 
 [[Building-Relation-Member-Tag-Merger]]
 ===== Building Relation Member Tag Merger
 
-Tag merging specific to buildings belonging to relations. Implementation: +BuildingRelationMemberTagMerger+
+Tag merging specific to buildings belonging to relations. Implementation: `BuildingRelationMemberTagMerger`
 
 [[Generalize-Tag-Merger]]
 ===== Generalizing Tag Merger
 
-Use an internal method to generalize the tags between two features. For instance, generalizing between +highway=primary+ and +highway=secondary+ results in +highway=road+ since road is the least general form that represents both primary and secondary. Implementation: +GeneralizeTagMerger+
+Use an internal method to generalize the tags between two features. For instance, generalizing between `highway=primary` and `highway=secondary` results in `highway=road` since road is the least general form that represents both primary and secondary. Implementation: `GeneralizeTagMerger`
 
 [[Most-Specific-Tag-Merger]]
 ===== Most Specific Tag Merger
 
-This tag merger keeps only the most specific types as recognized by the Hootenanny schema. If there is a tie in specificity the configuration option, `tag.merger.types.overwrite.reference`, determines which tag is kept. A value of false for the option keeps the tying tag from the reference feature and a value of true keeps the tying tag from the secondary feature. Implementation: +MostSpecificTagMerger+
+This tag merger keeps only the most specific types as recognized by the Hootenanny schema. If there is a tie in specificity the configuration option, `tag.merger.types.overwrite.reference`, determines which tag is kept. A value of false for the option keeps the tying tag from the reference feature and a value of true keeps the tying tag from the secondary feature. Implementation: `MostSpecificTagMerger`
 
 [[Overwrite-Tag-1]]
 ==== Overwriting Tag 1 Tag Merger
 
-Overwrite the values in the first input with the values in the second input that have key conflicts. This will still keep all unique names, but all other tags will simply be overwritten. Implementation: +OverwriteTag1Merger+  
+Overwrite the values in the first input with the values in the second input that have key conflicts. This will still keep all unique names, but all other tags will simply be overwritten. Implementation: `OverwriteTag1Merger`  
 
 Examples:
 
@@ -1359,7 +1357,7 @@ Examples:
 [[Overwrite-Tag-2]]
 ==== Overwriting Tag 2 Tag Merger
 
-Overwrite the values in the second input with the values in the first input that have key conflicts. This will still keep all unique names, but all other tags will simply be overwritten. Implementation: +OverwriteTag2Merger+
+Overwrite the values in the second input with the values in the first input that have key conflicts. This will still keep all unique names, but all other tags will simply be overwritten. Implementation: `OverwriteTag2Merger`
 
 Examples:
 
@@ -1408,20 +1406,20 @@ Examples:
 
 This tag merger assumes features in different input files have their provenance tracked with a tag with the key `hoot:source`.
 This tag merger will ensure that tag value is not overwritten for either feature being merged. Instead, the values from both
-features are concatenated together. Implementation +ProvenanceAwareOverwriteTagMerger+.
+features are concatenated together. Implementation `ProvenanceAwareOverwriteTagMerger`.
 
 [[Preserve-Types-Tag-Merger]]
 ===== Preserving Types Tag Merger
 
-This tag merger preserves tags from both features and is simliar to `MostSpecificTagMerger`. In instances where two features have the same type tag key, the most specific type is chosen and the less specific type is stored in an `alt_types` field. The rule for keeping tags with a tying specificity is the same as used with `MostSpecificTagMerger`. Implementation: +PreserveTypesTagMerger+.
+This tag merger preserves tags from both features and is simliar to `MostSpecificTagMerger`. In instances where two features have the same type tag key, the most specific type is chosen and the less specific type is stored in an `alt_types` field. The rule for keeping tags with a tying specificity is the same as used with `MostSpecificTagMerger`. Implementation: `PreserveTypesTagMerger`.
 
 [[Replace-Tag-1-Tag-Merger]]
 ===== Replacing Tag 1 Tag Merger
 
-This tag merger is similar to `OverWriteTag1Merger` but completely replaces tags in the first input with tags from the second input. Implementation: +ReplaceTag1Merger+
+This tag merger is similar to `OverWriteTag1Merger` but completely replaces tags in the first input with tags from the second input. Implementation: `ReplaceTag1Merger`
 
 [[Replace-Tag-2-Tag-Merger]]
 ===== Replacing Tag 2 Tag Merger
 
-This tag merger is similar to `OverWriteTag2Merger` but completely replaces tags in the second input with tags from the first input. Implementation: +ReplaceTag2Merger+
+This tag merger is similar to `OverWriteTag2Merger` but completely replaces tags in the second input with tags from the first input. Implementation: `ReplaceTag2Merger`
 

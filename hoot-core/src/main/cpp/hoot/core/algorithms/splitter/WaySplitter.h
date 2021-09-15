@@ -44,6 +44,7 @@ class WayLocation;
  * @brief The WaySplitter class splits ways.
  *
  * @todo Not all of the methods add the split parent ID...more may need to.
+ * @todo Are there redundancies with this and LargeWaySplitter?
  */
 class WaySplitter
 {
