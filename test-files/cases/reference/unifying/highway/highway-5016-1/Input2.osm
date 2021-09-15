@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-98980777' action='modify' visible='true' lat='38.91170197191' lon='-77.0237919715' />
+  <node id='-98980778' action='modify' visible='true' lat='38.91231139278' lon='-77.02208340436' />
+  <way id='-98884337' action='modify' visible='true'>
+    <nd ref='-98980777' />
+    <nd ref='-98980778' />
+    <tag k='highway' v='primary' />
+    <tag k='length' v='162.8' />
+    <tag k='median' v='yes' />
+    <tag k='name' v='Awesome Road' />
+    <tag k='note' v='Component of Dual Carriageway; traffic flowing in one direction' />
+    <tag k='seasonal' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='DigitalGlobe' />
+    <tag k='source:datetime' v='2021-08-30 19:03:11' />
+    <tag k='source:imagery' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2021-08-30 19:03:11' />
+    <tag k='source:imagery:id' v='6cf8fbe6d6893920154edabe8a0d7237' />
+    <tag k='source:imagery:layerName' v='Maxar Basemap +Vivid' />
+    <tag k='source:imagery:sensor' v='WV01' />
+    <tag k='surface' v='paved' />
+  </way>
+</osm>

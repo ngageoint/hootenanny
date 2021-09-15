@@ -224,14 +224,24 @@ See also:
 
 * `tag.merger.default` configuration option <<hootuser>>
 
+=== Median To Divided Highway Matching
+
+Road conflation has an alternate workflow that allows for transferring selected tags from single
+secondary road median features to associated reference divided roads (dual carriageways). The 
+configuration option which enables median to divided road matching is 
+`highway.median.to.dual.highway.match`. The configuration option that identifies features as road 
+medians is `highway.median.identifying.tags`. If a feature has any tag in the option's list, it will 
+be considered a road median feature. 
+
+In this workflow, median to divided road merging is done with tags only. No geometry merging is
+performed. The keys of the tags transferred from secondary medians to reference divided roads are 
+identified in `highway.median.to.dual.highway.transfer.keys`.
+
 [[RoadConflationFutureWork]]
 === Future Work
 
-* Creating a custom index (rather than using the global index) will likely be
-  faster.
-* There has been discussion around creating a new conflation approach that uses
-  collective classifiers with intersections to improve performance.
-* Expand the training data to include a more diverse set of regions and input
-  types.
-
+* Creating a custom index (rather than using the global index) will likely be faster.
+* There has been discussion around creating a new conflation approach that uses collective 
+classifiers with intersections to improve performance.
+* Expand the training data to include a more diverse set of regions and input types.
 

@@ -46,10 +46,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(MergerCreator, NetworkMergerCreator)
 
-NetworkMergerCreator::NetworkMergerCreator()
+NetworkMergerCreator::NetworkMergerCreator() :
+_map(nullptr),
+_minMatchOverlapPercentage(ConfigOptions().getNetworkMergerMinLargeMatchOverlapPercentage())
 {
-  _map = nullptr;
-  _minMatchOverlapPercentage = ConfigOptions().getNetworkMergerMinLargeMatchOverlapPercentage();
 }
 
 bool NetworkMergerCreator::createMergers(
@@ -83,6 +83,8 @@ bool NetworkMergerCreator::createMergers(
   {
     const bool matchOverlap = _containsOverlap(matches);
     LOG_VART(matchOverlap);
+
+    // Note that the road median matching workflow is not supported by the Network alg currently.
 
     if (!matchOverlap)
     {

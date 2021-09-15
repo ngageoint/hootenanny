@@ -40,8 +40,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(HighwayClassifier, HighwayExpertClassifier)
 
-MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
-  ElementId /*eid1*/, ElementId /*eid2*/, const WaySublineMatchString &match)
+MatchClassification HighwayExpertClassifier::classify(
+  const ConstOsmMapPtr& map, const ElementId& /*eid1*/, const ElementId& /*eid2*/,
+  const WaySublineMatchString& match)
 {
   // calculate the average classification. Is there a better approach? Max, min, mean? Dunno.
   MatchClassification result;
@@ -71,9 +72,8 @@ MatchClassification HighwayExpertClassifier::classify(
   MatchClassification result;
 
   OsmMapPtr mapCopy = std::make_shared<OsmMap>();
-  CopyMapSubsetOp(map,
-               match.getSubline1().getElementId(),
-               match.getSubline2().getElementId()).apply(mapCopy);
+  CopyMapSubsetOp(
+    map, match.getSubline1().getElementId(), match.getSubline2().getElementId()).apply(mapCopy);
 
   if (match.isValid() == false)
   {
@@ -119,7 +119,7 @@ MatchClassification HighwayExpertClassifier::classify(
 
   double p;
 
-  // if either of the lines are zero in length.
+  // if either of the lines are zero in length
   if (po1 == 0 || po2 == 0)
   {
     p = 0.0;
@@ -135,8 +135,9 @@ MatchClassification HighwayExpertClassifier::classify(
   return result;
 }
 
-map<QString, double> HighwayExpertClassifier::getFeatures(const ConstOsmMapPtr& /*m*/,
-  ElementId /*eid1*/, ElementId /*eid2*/, const WaySublineMatchString& /*match*/) const
+map<QString, double> HighwayExpertClassifier::getFeatures(
+  const ConstOsmMapPtr& /*m*/, const ElementId& /*eid1*/, const ElementId& /*eid2*/,
+  const WaySublineMatchString& /*match*/) const
 {
   return map<QString, double>();
 }

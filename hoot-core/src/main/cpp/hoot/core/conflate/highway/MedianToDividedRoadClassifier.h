@@ -22,38 +22,61 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef HIGHWAYEXPERTCLASSIFIER_H
-#define HIGHWAYEXPERTCLASSIFIER_H
+#ifndef MEDIAN_TO_DIVIDED_ROAD_CLASSIFIER_H
+#define MEDIAN_TO_DIVIDED_ROAD_CLASSIFIER_H
 
+// Hoot
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 
 namespace hoot
 {
 
-class WaySublineMatchString;
+class FeatureExtractor;
 
-class HighwayExpertClassifier : public HighwayClassifier
+/**
+ * @brief The MedianToDividedRoadClassifier class is used to classify road median to divided road
+ * (dual carriageway) matches.
+ *
+ * Its feature extractors have been derived directly from HighwayRfClassifer and may need tweaking
+ * over time. No actual RF model files has been generated to work with this classifier.
+ */
+class MedianToDividedRoadClassifier : public HighwayClassifier
 {
 public:
 
-  static QString className() { return "HighwayExpertClassifier"; }
+  static QString className() { return "MedianToDividedRoadClassifier"; }
 
-  HighwayExpertClassifier() = default;
-  ~HighwayExpertClassifier() = default;
+  static const QString MEDIAN_MATCHED_SUBROUTINE_NAME;
+  static const QString MEDIAN_MATCHED_DESCRIPTION;
 
+  MedianToDividedRoadClassifier();
+  ~MedianToDividedRoadClassifier() = default;
+
+  /**
+   * @see HighwayClassifier
+   */
   MatchClassification classify(
     const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     const WaySublineMatchString& match) override;
-  MatchClassification classify(
-    const ConstOsmMapPtr& map, const WaySublineMatch& match) const;
 
+  /**
+   * @see HighwayClassifier
+   */
   std::map<QString, double> getFeatures(
     const ConstOsmMapPtr& m, const ElementId& eid1, const ElementId& eid2,
     const WaySublineMatchString& match) const override;
+
+private:
+
+  // feature extractors used to create the classifier; extractors mapped to their minimum allowable
+  // score for the classifier to classify a match
+  QMap<std::shared_ptr<const FeatureExtractor>, double> _extractors;
+
+  void _createExtractors();
 };
 
 }
 
-#endif // HIGHWAYEXPERTCLASSIFIER_H
+#endif // MEDIAN_TO_DIVIDED_ROAD_CLASSIFIER_H

@@ -153,11 +153,12 @@ public:
     DisjointSetMap<ElementId> dsm;
     MatchSetVector result;
 
+    LOG_VART(_matches.size());
     for (size_t i = 0; i < _matches.size(); i++)
     {
       ConstMatchPtr m = _matches[i];
       MatchType type = m->getType();
-      // if this is a solid match, then add it into the group.
+      // If this is a solid match, then add it into the group.
       if (type == MatchType::Match)
       {
         set<pair<ElementId, ElementId>> eids = m->getMatchPairs();
@@ -167,7 +168,7 @@ public:
           dsm.joinT(it->first, it->second);
         }
       }
-      // if this is a match that requires review.
+      // if this is a match that requires review
       else if (type == MatchType::Review)
       {
         result.emplace_back();
@@ -189,11 +190,11 @@ public:
 
       for (size_t i = 0; i < v.size(); i++)
       {
-        // find all the matches that reference this element id and add them to the set.
+        // Find all the matches that reference this element id and add them to the set.
         _findMatches(v[i], matches);
       }
 
-      // while this is O(n^2) matches should generally be pretty small.
+      // While this is O(n^2), matches should generally be pretty small.
       for (MatchSet::const_iterator m1_it = matches.begin(); m1_it != matches.end(); ++m1_it)
       {
         ConstMatchPtr m1 = *m1_it;
@@ -203,14 +204,15 @@ public:
           if (m1 != m2 && checkForConflicts &&
               MergerFactory::getInstance().isConflicting(map, m1, m2, idIndexedMatches))
           {
-            LOG_INFO(m1->toString());
-            LOG_INFO(m2->toString());
+            LOG_TRACE(m1);
+            LOG_TRACE(m2);
             throw InternalErrorException("Found an unexpected conflicting match.");
           }
         }
       }
     }
 
+    LOG_VART(result.size());
     return result;
   }
 
@@ -285,11 +287,11 @@ private:
 
 };
 
-MatchGraph::MatchGraph()
+MatchGraph::MatchGraph() :
+_checkForConflicts(true),
+// The two classes share the matches vector.
+_d(std::make_shared<MatchGraphInternal>(_matches))
 {
-  _checkForConflicts = true;
-  // The two classes share the matches vector.
-  _d = std::make_shared<MatchGraphInternal>(_matches);
 }
 
 void MatchGraph::_resetGraph() const

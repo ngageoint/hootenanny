@@ -48,14 +48,14 @@ public:
    * Classifies the match type of a subline match and returns the results.
    */
   virtual MatchClassification classify(
-    const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2,
+    const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     const WaySublineMatchString& match) = 0;
 
   /**
    * See note in MatchDetails::getFeatures about the return type of this method.
    */
   virtual std::map<QString, double> getFeatures(
-    const ConstOsmMapPtr& m, ElementId eid1, ElementId eid2,
+    const ConstOsmMapPtr& m, const ElementId& eid1, const ElementId& eid2,
     const WaySublineMatchString& match) const = 0;
 };
 

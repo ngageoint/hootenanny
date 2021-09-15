@@ -55,13 +55,15 @@ public:
    *
    * @param eids element IDs of the features to be merged
    * @param sublineMatcher the subline matcher to be used to match the features
-   * @param matchedBy optional text to mark a feature with the type of matcher that matched it
+   * @param matchedBy optional name of the matcher used to match the features being merged; used to
+   * mark a feature with the type of matcher that matched it
+   * @param matchedBySubroutine name of the matching subroutine used (e.g. road median matching)
    * @return a merger
    */
   static MergerPtr getMerger(
     const std::set<std::pair<ElementId, ElementId>>& eids,
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
-    const QString matchedBy = QString());
+    const QString matchedBy = QString(), const QString matchedBySubroutine = QString());
 
   /**
    * Creates a linear feature merger matched by the Network Algorithm.
@@ -76,6 +78,15 @@ public:
     const std::set<std::pair<ElementId, ElementId>>& eids,
     const QSet<ConstEdgeMatchPtr>& edgeMatches, const ConstNetworkDetailsPtr& details,
     const QString matchedBy = QString());
+
+private:
+
+  /**
+   * @brief _getMedianMerger creates a custom merger for the road median to divided road conflation
+   * workflow.
+   * @return a merger
+   */
+  static MergerPtr _getMedianMerger();
 };
 
 }

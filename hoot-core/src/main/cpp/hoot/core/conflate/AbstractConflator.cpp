@@ -133,7 +133,7 @@ void AbstractConflator::_createMatches()
   if (_matchThreshold.get())
   {
     // Match scoring logic seems to be the only one that needs to pass in the match threshold now
-    // when the optimize param is activated.  Otherwise, we get the match threshold information from
+    // when the optimize param is activated. Otherwise, we get the match threshold information from
     // the config.
     _matchFactory.createMatches(_map, _matches, _bounds, _matchThreshold);
   }
@@ -174,6 +174,14 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-whole-group-removal");
 
   // Globally optimize the set of matches to maximize the conflation score.
+
+  // At this point, we need to separate out one to many matches (road median matching, etc.) from
+  // other matches as part of match optimization is focused on marking one to many matches as
+  // conflicting which forces them to reviews. Its assumed that merging routines involving one to
+  // many matches are going to be tag only, so we want to allow the one to many tag transfer.
+  std::vector<ConstMatchPtr> oneToManyMatches = _separateOneToManyMatches(matches);
+  LOG_VARD(matches.size());
+  LOG_VARD(oneToManyMatches.size());
 
   OptimalConstrainedMatches cm(_map);
   std::vector<ConstMatchPtr> cmMatches;
@@ -224,23 +232,56 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
   _stats.append(SingleStat("Number of Matches Optimized per Second",
     (double)matches.size() / optimizeMatchesTime));
   LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
-  // TODO: this stat isn't right for Network
+  // TODO: this stat isn't right for the Network alg
   LOG_DEBUG("Post constraining match count: " << matches.size());
   //LOG_VART(_matches);
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-match-optimization");
 
   // Search the matches for groups (subgraphs) of matches. In other words, groups where all the
-  // matches are interrelated by element id
+  // matches are interrelated by element id.
+
   MatchGraph mg;
   mg.addMatches(matches.begin(), matches.end());
-  std::vector<std::set<ConstMatchPtr, MatchPtrComparator>> tmpMatchSets = mg.findSubgraphs(_map);
+  MatchSetVector tmpMatchSets = mg.findSubgraphs(_map);
   matchSets.insert(matchSets.end(), tmpMatchSets.begin(), tmpMatchSets.end());
-  LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
 
+  // We're running the one to many matches in a separate optimization pass. Not completely convinced
+  // that they need any optimization but running them through findSubgraphs gets them into the
+  // correct format of MatchSetVector at least.
+  mg.clearMatches();
+  // Don't check for conflicts b/c one to many matches by definition are conflicting.
+  mg.setCheckForConflicts(false);
+  mg.addMatches(oneToManyMatches.begin(), oneToManyMatches.end());
+  MatchSetVector tmpOneToManyMatchSets = mg.findSubgraphs(_map);
+  matchSets.insert(matchSets.end(), tmpOneToManyMatchSets.begin(), tmpOneToManyMatchSets.end());
+
+  LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
   LOG_DEBUG("Match sets count: " << matchSets.size());
   OsmMapWriterFactory::writeDebugMap(_map, className(), "after-match-optimization-2");
 
   return matchSets;
+}
+
+std::vector<ConstMatchPtr> AbstractConflator::_separateOneToManyMatches(
+  std::vector<ConstMatchPtr>& matches) const
+{
+  std::vector<ConstMatchPtr> matchesCopy;
+  std::vector<ConstMatchPtr> oneToManyMatches;
+  for (std::vector<ConstMatchPtr>::const_iterator itr = matches.begin(); itr != matches.end();
+       ++itr)
+  {
+    ConstMatchPtr match = *itr;
+    if (match->isOneToMany())
+    {
+      oneToManyMatches.emplace_back(match);
+    }
+    else
+    {
+      matchesCopy.emplace_back(match);
+    }
+  }
+  matches = matchesCopy;
+  return oneToManyMatches;
 }
 
 void AbstractConflator::_removeWholeGroups(

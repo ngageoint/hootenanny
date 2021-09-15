@@ -72,6 +72,11 @@ public:
   void addMatches(InputIterator first, InputIterator last);
 
   /**
+   * @brief clearMatches clears out the matches used by this class
+   */
+  void clearMatches() { _matches.clear(); }
+
+  /**
    * Defaults to true. If set to false then it will not check to make sure all subgraphs contain
    * no conflicts.
    */

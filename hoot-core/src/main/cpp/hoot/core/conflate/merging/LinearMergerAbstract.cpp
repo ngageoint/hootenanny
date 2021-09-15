@@ -148,7 +148,7 @@ void LinearMergerAbstract::_markNeedsReview(
 }
 
 bool LinearMergerAbstract::_mergePair(
-  ElementId eid1, ElementId eid2, vector<pair<ElementId, ElementId>>& /*replaced*/)
+  const ElementId& eid1, const ElementId& eid2, vector<pair<ElementId, ElementId>>& /*replaced*/)
 {
   ElementPtr e1 = _map->getElement(eid1);
   ElementPtr e2 = _map->getElement(eid2);

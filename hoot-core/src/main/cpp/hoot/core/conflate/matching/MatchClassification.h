@@ -70,6 +70,11 @@ public:
   double getMissP() const { return _miss; }
   double getReviewP() const { return _review; }
 
+  // These assume no contradictions in the scoring.
+  bool isMatch() const { return _match == 1.0; }
+  bool isMiss() const { return _miss == 1.0; }
+  bool isReview() const { return _review == 1.0; }
+
   void setMatch() { _miss = 0; _match = 1; _review = 0; }
   void setMatchP(double match) { _match = match; }
   void setMiss() { _miss = 1; _match = 0; _review = 0; }

@@ -54,10 +54,10 @@ public:
   static const QString MATCH_NAME;
 
   HighwayMatch() = default;
-  HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
-               const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
-               const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
-               ConstMatchThresholdPtr mt);
+  HighwayMatch(
+    const std::shared_ptr<HighwayClassifier>& classifier,
+    const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const ConstOsmMapPtr& map,
+    const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt);
   ~HighwayMatch() = default;
 
   /**
@@ -67,10 +67,11 @@ public:
   double getProbability() const override;
   double getScore() const override { return _score; }
   QString explain() const override { return _explainText; }
-  const MatchClassification& getClassification() const override { return _c; }
+  const MatchClassification& getClassification() const override { return _classification; }
   MatchMembers getMatchMembers() const override { return MatchMembers::Polyline; }
 
-  bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map,
+  bool isConflicting(
+    const ConstMatchPtr& other, const ConstOsmMapPtr& map,
     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 
   std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
@@ -79,7 +80,6 @@ public:
   const std::shared_ptr<SublineStringMatcher>& getSublineMatcher() const { return _sublineMatcher; }
 
   QString toString() const override;
-
   QString getName() const override { return getHighwayMatchName(); }
   QString getClassName() const override { return className(); }
   QString getDescription() const override
@@ -90,7 +90,7 @@ public:
 private:
 
   std::shared_ptr<HighwayClassifier> _classifier;
-  MatchClassification _c;
+  MatchClassification _classification;
   double _score;
   QString _explainText;
 
@@ -104,7 +104,8 @@ private:
   double _calculateExpertProbability(const ConstOsmMapPtr& map) const;
 
   bool _isOrderedConflicting(
-    const ConstOsmMapPtr& map, ElementId sharedEid, ElementId other1, ElementId other2) const;
+    const ConstOsmMapPtr& map, const ElementId& sharedEid, const ElementId& other1,
+    const ElementId& other2) const;
 
   void _updateNonMatchDescriptionBasedOnGeometricProperties(
     QStringList& description, const ConstOsmMapPtr& map, const ConstElementPtr e1,
