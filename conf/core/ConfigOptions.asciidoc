@@ -3168,7 +3168,7 @@ notification. The same threshold value is used separately for both used physical
 ** `ScriptMergerCreator`
 
 List of merger creators to use during conflation. This can modify what features will be conflated
-(e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
+(e.g. buildings, roads, etc.). The ordering must match that in `match.creators`.
 `hoot info --mergers` displays information about the available mergers.
 
 === metadata.dataset.indicator.tag
