@@ -171,6 +171,9 @@
         "matcher": "HighwayMatchCreator",
         "merger": "HighwayMergerCreator",
         "members": {
+            "highway.median.to.dual.highway.match": "Enable custom secondary road median to reference divided road feature matching",
+            "highway.median.identifying.tags": "Tag keys allowing for a tag transfer from secondary road medians to reference divided roads",
+            "highway.median.to.dual.highway.transfer.keys": "Tag keys to transfer from secondary road medians to reference divided roads",
             "highway.match.threshold": "Match threshold; 0.0 to 1.0",
             "search.radius.highway": "Search radius (m); -1 for default"
         }
