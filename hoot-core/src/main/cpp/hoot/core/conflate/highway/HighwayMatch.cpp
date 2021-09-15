@@ -40,6 +40,7 @@
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
+#include <hoot/core/conflate/highway/MedianToDividedRoadClassifier.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/elements/ElementId.h>
@@ -83,7 +84,7 @@ _minSplitSize(0.0)
     if (_sublineMatch.isValid())
     {
       // calculate the match score  
-      _c = _classifier->classify(map, eid1, eid2, _sublineMatch);
+      _classification = _classifier->classify(map, eid1, eid2, _sublineMatch);
 
       MatchType type = getType();
       LOG_VART(type);
@@ -96,26 +97,37 @@ _minSplitSize(0.0)
       if (description.length() > 0)
         _explainText = description.join(" ");
       else
-        _explainText = mt->getTypeDetail(_c);
+        _explainText = mt->getTypeDetail(_classification);
+
+      // If the median classifier was used, we'll spruce up the explain text a bit and be sure to
+      // mark it as a one to many match so that needed matches don't get thrown out during match
+      // optimization.
+      if (type == MatchType::Match &&
+          std::dynamic_pointer_cast<MedianToDividedRoadClassifier>(_classifier))
+      {
+        _explainText += " " + MedianToDividedRoadClassifier::MEDIAN_MATCHED_DESCRIPTION;
+        LOG_VART(_explainText);
+        setIsOneToMany(true);
+      }
     }
     else
     {
-      _c.setMissP(1);
+      _classification.setMissP(1);
       _explainText = _noMatchingSubline;
     }
 
-    _score = _sublineMatch.getLength() * _c.getMatchP();
+    _score = _sublineMatch.getLength() * _classification.getMatchP();
   }
   // if this is an unsupported geometry configuration
   catch (const NeedsReviewException& e)
   {
-    _c.clear();
-    _c.setReviewP(1.0);
+    _classification.clear();
+    _classification.setReviewP(1.0);
     _explainText = e.getWhat();
   }
 
   LOG_VART(_score);
-  LOG_VART(_c);
+  LOG_VART(_classification);
   LOG_VART(_explainText);
 }
 
@@ -159,7 +171,7 @@ set<pair<ElementId, ElementId>> HighwayMatch::getMatchPairs() const
 
 double HighwayMatch::getProbability() const
 {
-  return _c.getMatchP();
+  return _classification.getMatchP();
 }
 
 bool HighwayMatch::isConflicting(
@@ -288,7 +300,9 @@ bool HighwayMatch::_isOrderedConflicting(
     return true;
   }
 
-  // check to see if the scraps match other2
+  // Check to see if the scraps match other2. So far there haven't been any problems with not
+  // checking to see if the median classifier should be passed here instead...it may eventually need
+  // to be done though.
   HighwayMatch m0(
     _classifier, _sublineMatcher, copiedMap, scrapsShared->getElementId(), other2, _threshold);
   if (m0.getType() == MatchType::Match)
@@ -303,7 +317,7 @@ bool HighwayMatch::_isOrderedConflicting(
 QString HighwayMatch::toString() const
 {
   stringstream ss;
-  ss << "HighwayMatch " << _eid1 << " " << _eid2 << " P: " << _c.toString();
+  ss << "HighwayMatch " << _eid1 << " " << _eid2 << " P: " << _classification.toString();
   return QString::fromUtf8(ss.str().c_str());
 }
 

@@ -39,7 +39,8 @@ long Match::_orderCount = 0;
 
 Match::Match(const std::shared_ptr<const MatchThreshold>& threshold) :
 _order(_orderCount++),
-_threshold(threshold)
+_threshold(threshold),
+_isOneToMany(false)
 {
 }
 
@@ -49,7 +50,8 @@ Match::Match(
 _order(_orderCount++),
 _threshold(threshold),
 _eid1(eid1),
-_eid2(eid2)
+_eid2(eid2),
+_isOneToMany(false)
 {
 }
 

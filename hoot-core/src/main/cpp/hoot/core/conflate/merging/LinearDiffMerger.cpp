@@ -80,7 +80,8 @@ void LinearDiffMerger::apply(
 }
 
 bool LinearDiffMerger::_mergePair(
-  ElementId eid1, ElementId eid2, std::vector<std::pair<ElementId, ElementId>>& replaced)
+  const ElementId& eid1, const ElementId& eid2,
+  std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   // Check for missing elements.
   ElementPtr e1 = _map->getElement(eid1);

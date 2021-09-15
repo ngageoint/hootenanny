@@ -81,9 +81,14 @@ public:
 
 private:
 
+  // TODO
   std::shared_ptr<HighwayClassifier> _classifier;
+  std::shared_ptr<HighwayClassifier> _medianClassifier;
+
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
+
   std::shared_ptr<MatchThreshold> _matchThreshold;
+
   std::shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
 };
 

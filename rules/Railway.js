@@ -272,6 +272,9 @@ exports.matchScore = function(map, e1, e2)
       oneToManySecondaryMatchElementIds.push(String(e2.getElementId().toString()));
     }
     hoot.trace("oneToManySecondaryMatchElementIds: " + oneToManySecondaryMatchElementIds);
+
+    // Technically, this match should also be labeled as a one to many match, but the script
+    // conflate workflow doesn't require that currently.
   }
   result = { match: 1.0, explain:"match" };
   return result;

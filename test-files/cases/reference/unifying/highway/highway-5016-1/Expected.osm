@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.91162475039" minlon="-77.02384293348" maxlat="38.91237400422" maxlon="-77.02208340436"/>
+    <node visible="true" id="-102485" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9123113927799977" lon="-77.0220834043600036">
+        <tag k="hoot:id" v="-102485"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-102484" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9117019719099986" lon="-77.0237919715000032">
+        <tag k="hoot:id" v="-102484"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-102483" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9122362589800019" lon="-77.0220941331999995">
+        <tag k="hoot:id" v="-102483"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-102482" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9116247503899970" lon="-77.0238000181300038">
+        <tag k="hoot:id" v="-102482"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-102480" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9123740042199984" lon="-77.0220968154099950">
+        <tag k="hoot:id" v="-102480"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-102479" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9117645838800001" lon="-77.0238429334799974">
+        <tag k="hoot:id" v="-102479"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <way visible="true" id="-102004" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-102484"/>
+        <nd ref="-102485"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-102004"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="length" v="162.8"/>
+        <tag k="median" v="yes"/>
+        <tag k="name" v="Awesome Road"/>
+        <tag k="note" v="Component of Dual Carriageway; traffic flowing in one direction"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="source:datetime" v="2021-08-30 19:03:11"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2021-08-30 19:03:11"/>
+        <tag k="source:imagery:id" v="6cf8fbe6d6893920154edabe8a0d7237"/>
+        <tag k="source:imagery:layerName" v="Maxar Basemap +Vivid"/>
+        <tag k="source:imagery:sensor" v="WV01"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-102003" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-102482"/>
+        <nd ref="-102483"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-102003"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="length" v="162.7"/>
+        <tag k="name" v="Awesome Road"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2021-08-30 19:03:11"/>
+        <tag k="source:imagery:id" v="6cf8fbe6d6893920154edabe8a0d7237"/>
+        <tag k="source:imagery:layerName" v="Maxar Basemap +Vivid"/>
+        <tag k="source:imagery:sensor" v="WV01"/>
+    </way>
+    <way visible="true" id="-102002" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-102479"/>
+        <nd ref="-102480"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-102002"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="length" v="165.8"/>
+        <tag k="name" v="Awesome Road"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2021-08-30 19:03:11"/>
+        <tag k="source:imagery:id" v="6cf8fbe6d6893920154edabe8a0d7237"/>
+        <tag k="source:imagery:layerName" v="Maxar Basemap +Vivid"/>
+        <tag k="source:imagery:sensor" v="WV01"/>
+    </way>
+</osm>

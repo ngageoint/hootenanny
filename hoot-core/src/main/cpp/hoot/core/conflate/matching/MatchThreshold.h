@@ -54,8 +54,9 @@ public:
    * generally want to honor that range for thresholds. In some instances, though, we don't want to.
    * e.g. match feature extraction or Multiary Conflation
    */
-  MatchThreshold(double matchThreshold = 0.5, double missThreshold = 0.5,
-                 double reviewThreshold = 1.0, bool validateRange = true);
+  MatchThreshold(
+    double matchThreshold = 0.5, double missThreshold = 0.5, double reviewThreshold = 1.0,
+    bool validateRange = true);
 
   double getMatchThreshold() const { return _matchThreshold; }
   double getMissThreshold() const { return _missThreshold; }

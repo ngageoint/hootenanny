@@ -50,7 +50,8 @@ public:
 
   std::vector<CreatorDescription> getAllCreators() const override;
 
-  bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+  bool isConflicting(
+    const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 
   void setConfiguration(const Settings &conf) override;

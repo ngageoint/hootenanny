@@ -31,6 +31,7 @@
 #include <hoot/core/conflate/IdSwap.h>
 #include <hoot/core/conflate/merging/LinearSnapMerger.h>
 #include <hoot/core/conflate/network/PartialNetworkMerger.h>
+#include <hoot/core/schema/TagMerger.h>
 
 namespace hoot
 {
@@ -54,22 +55,26 @@ public:
   LinearTagOnlyMerger(
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     std::shared_ptr<PartialNetworkMerger> networkMerger);
-
   ~LinearTagOnlyMerger() = default;
 
   QString getDescription() const override
   { return "Merges linear feature tags only with minimal geometry exceptions"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
+  void setTagMerger(TagMergerPtr tagMerger) { _tagMerger = tagMerger; }
 
 protected:
 
   bool _mergePair(
-    ElementId eid1, ElementId eid2,
+    const ElementId& eid1, const ElementId& eid2,
     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
 private:
 
   bool _performBridgeGeometryMerging;
   std::shared_ptr<PartialNetworkMerger> _networkMerger;
+  TagMergerPtr _tagMerger;
 
   void _determineKeeperFeature(
     ElementPtr element1, ElementPtr element2, ElementPtr& keeper, ElementPtr& toRemove,

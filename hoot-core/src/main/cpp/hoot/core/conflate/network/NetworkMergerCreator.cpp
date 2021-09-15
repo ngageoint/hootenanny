@@ -84,6 +84,8 @@ bool NetworkMergerCreator::createMergers(
     const bool matchOverlap = _containsOverlap(matches);
     LOG_VART(matchOverlap);
 
+    // Note that the road median matching workflow is not supported by the Network alg currently.
+
     if (!matchOverlap)
     {
       // create a merger that can merge multiple partial matches

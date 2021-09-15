@@ -28,7 +28,9 @@
 
 // hoot
 #include <hoot/core/conflate/highway/HighwayMatch.h>
+#include <hoot/core/conflate/highway/MedianToDividedRoadClassifier.h>
 #include <hoot/core/conflate/merging/LinearMergerFactory.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 
@@ -57,7 +59,9 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
   assert(matches.size() > 0);
 
   set<pair<ElementId, ElementId>> eids;
+  set<pair<ElementId, ElementId>> medianMatchedEids;
 
+  const bool medianMatchEnabled = ConfigOptions().getHighwayMedianToDualHighwayMatch();
   std::shared_ptr<SublineStringMatcher> sublineMatcher;
   // Go through all the matches.
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
@@ -77,19 +81,40 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
     // Add all the element to element pairs to a set.
     else
     {
-      // There should only be one HighwayMatch in a set.
+      // There should only be one subline matcher used by the matches in a set.
       sublineMatcher = highwayMatch->getSublineMatcher();
       set<pair<ElementId, ElementId>> matchPairs = highwayMatch->getMatchPairs();
-      eids.insert(matchPairs.begin(), matchPairs.end());
+      // We're going to separate out regular road matches from those matched median to divided
+      // roads, as the merging is different for each.
+      if (medianMatchEnabled &&
+          highwayMatch->explain().contains(
+            MedianToDividedRoadClassifier::MEDIAN_MATCHED_DESCRIPTION))
+      {
+        medianMatchedEids.insert(matchPairs.begin(), matchPairs.end());
+      }
+      else
+      {
+        eids.insert(matchPairs.begin(), matchPairs.end());
+      }
     }
   }
-  LOG_VART(eids);
+  LOG_VART(eids.size());
+  LOG_VART(medianMatchedEids.size());
 
   // Only add the highway merger if there are elements to merge.
   if (!eids.empty())
   {
     mergers.push_back(
       LinearMergerFactory::getMerger(eids, sublineMatcher, HighwayMatch::MATCH_NAME));
+    result = true;
+  }
+  // Use a different merger for the one to many median matches.
+  if (!medianMatchedEids.empty())
+  {
+    mergers.push_back(
+      LinearMergerFactory::getMerger(
+        medianMatchedEids, sublineMatcher, HighwayMatch::MATCH_NAME,
+        MedianToDividedRoadClassifier::MEDIAN_MATCHED_SUBROUTINE_NAME));
     result = true;
   }
 
@@ -106,8 +131,9 @@ vector<CreatorDescription> HighwayMergerCreator::getAllCreators() const
   return result;
 }
 
-bool HighwayMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1,
-  ConstMatchPtr m2, const QHash<QString, ConstMatchPtr>& /*matches*/) const
+bool HighwayMergerCreator::isConflicting(
+  const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+  const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   const HighwayMatch* hm1 = dynamic_cast<const HighwayMatch*>(m1.get());
   const HighwayMatch* hm2 = dynamic_cast<const HighwayMatch*>(m2.get());

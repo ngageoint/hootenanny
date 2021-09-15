@@ -58,7 +58,8 @@ LinearMergerAbstract(pairs, nullptr)
 }
 
 bool LinearAverageMerger::_mergePair(
-  ElementId eid1, ElementId eid2, std::vector<std::pair<ElementId, ElementId>>& replaced)
+  const ElementId& eid1, const ElementId& eid2,
+  std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   if (LinearMergerAbstract::_mergePair(eid1, eid2, replaced))
   {
