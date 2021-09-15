@@ -48,6 +48,11 @@ class MultiaryUtilitiesTest : public HootTestFixture
 
 public:
 
+  MultiaryUtilitiesTest()
+  {
+    setResetType(HootTestReset::ResetAll);
+  }
+
   QByteArray convertJsonToPbf(QString json)
   {
     OsmMapPtr map = std::make_shared<OsmMap>();

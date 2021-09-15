@@ -73,12 +73,14 @@ public:
   QString getDescription() const override { return "Removes elements that satisfy a criterion"; }
 
   void setRecursive(bool recursive) { _recursive = recursive; }
+  void setRecursiveRemoveRefsFromParents(bool remove) { _recursiveRemoveRefsFromParents = remove; }
 
 private:
 
   OsmMap* _map;
 
   bool _recursive;
+  bool _recursiveRemoveRefsFromParents;
   long _startElementCount;
 };
 

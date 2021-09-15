@@ -14,6 +14,21 @@ You will also need some Vagrant plugins:
 
 You may also need to enable hardware virtualization extensions in your BIOS.
 
+# Quick Start
+### AKA "I just want to get Hootenanny up and running" 😁
+
+This method will clone the git repository, but instead of installing dependencies with the provision script and building the source code from scratch, it will use the RPMs built nightly from the master branch.
+```
+git clone git@github.com:ngageoint/hootenanny.git hoot
+cd hoot
+vagrant up hoot_centos7_rpm
+```
+
+To update Hoot to the latest nightly RPM from the master branch, simply run this provisioner:
+```
+vagrant provision hoot_centos7_rpm --provision-with updatehoot
+```
+
 # Setting Up Hootenanny
 
 Hootenanny is thoroughly tested against the Virtualbox provider.  You are welcome to try other providers, and they can be configured in Vagrantfile.  Make sure the the umask of the terminal used to start the vagrant vm is set to `002` (see [#1332](https://github.com/ngageoint/hootenanny/issues/1382))

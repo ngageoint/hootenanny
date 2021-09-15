@@ -86,7 +86,7 @@ public:
   static QString className() { return "OverwriteTag2Merger"; }
 
   OverwriteTag2Merger() : OverwriteTagMerger(false) { }
-  ~OverwriteTag2Merger() = default;
+  ~OverwriteTag2Merger() override = default;
 
   QString getDescription() const override
   {  return "Overwrites conflicting tags with those from the reference feature"; }
@@ -104,7 +104,7 @@ public:
   static QString className() { return "OverwriteTag1Merger"; }
 
   OverwriteTag1Merger() : OverwriteTagMerger(true) { }
-  ~OverwriteTag1Merger() = default;
+  ~OverwriteTag1Merger() override = default;
 
   QString getDescription() const override
   {  return "Overwrites conflicting tags with those from the secondary feature"; }

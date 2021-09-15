@@ -173,7 +173,7 @@ bool LinearSnapMerger::_mergePair(
   _snapEnds(e2Match, e1Match);
 
   // Merge the attributes appropriately.
-  _mergeTags(e1->getTags(), e2->getTags(), e1Match);
+  _mergeElementTags(e1->getTags(), e2->getTags(), e1Match);
 \
   // Do some ID handling for ways.
   bool swapWayIds = false;
@@ -281,7 +281,7 @@ WaySublineMatchString LinearSnapMerger::_matchSubline(ElementPtr e1, ElementPtr 
   return _sublineMatcher->findMatch(_map, e1, e2);
 }
 
-void LinearSnapMerger::_mergeTags(
+void LinearSnapMerger::_mergeElementTags(
   const Tags& e1Tags, const Tags& e2Tags, const ElementPtr& e1Match) const
 {
   LOG_TRACE("Merging tags...");

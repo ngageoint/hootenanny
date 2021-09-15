@@ -1972,9 +1972,9 @@ QString OsmSchema::mostSpecificType(const Tags& tags)
     {
       const bool kvpIsCombo = hasCategory(kvp, OsmSchemaCategory::combination());
       // If this tag is considered a "combo" tag, or one that must be used in combination with some
-      // other type tag to uniquely identify a type, we considering it a less specific type than a
-      // non-combo tag. So, if we already have a non-combo tag for our most specific type, then skip
-      // this if its a combot tag.
+      // other type tag to uniquely identify a type, we consider it a less specific type than a
+      // non-combo tag. So if we already have a non-combo tag for our most specific type, then skip
+      // this if its a combo tag.
       if ((!kvpIsCombo || currentMostSpecificTypeIsCombo) &&
           // Ensure that this tag isn't more generic (ancestor) than the current specific type tag.
           (mostSpecificType.isEmpty() || !isAncestor(kvp, mostSpecificType)))

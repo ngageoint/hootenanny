@@ -15,40 +15,41 @@ echo HOOT_HOME: $HOOT_HOME
 
 export LANG=en_US.UTF-8
 
-echo "Adding additional software repositories..."
-echo "### Add epel repo and handy packages ###" | tee CentOS_install.txt
-sudo yum install -y wget curl vim epel-release yum-utils 2>&1 | tee -a CentOS_install.txt
+# Common set of file versions
+source $HOOT_HOME/VagrantProvisionVars.sh
 
-# add the repo for the current Hootenanny release rpm's.
-echo "### Add Hoot deps repo ###" | tee -a CentOS_install.txt
-sudo $HOOT_HOME/scripts/yum/hoot-repo.sh
+echo "Adding software repositories..."
 
-echo "### Add the Hoot release repo ###" | tee -a CentOS_install.txt
-sudo bash -c 'cat >> /etc/yum.repos.d/hoot_rpm.repo <<EOF
-[hoot-release]
-name = Hootenanny Release
-baseurl = https://s3.amazonaws.com/hoot-repo/el7/release
-enable = 1
-gpgcheck = 1
-repo_gpgcheck = 1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Hoot
-EOF'
+# Ensure that CentOS Yum repository data is GPG-verified.
+echo "### Configuring CentOS to verify repository metadata ###" | tee -a CentOS_install.txt
+sudo yum-config-manager \
+    --save \
+    --setopt=base.repo_gpgcheck=1 \
+    --setopt=extras.repo_gpgcheck=1 \
+    --setopt=updates.repo_gpgcheck=1 &> /dev/null
 
+# add EPEL repo for extra packages
+echo "### Add epel repo ###" | tee -a CentOS_install.txt
+sudo yum -y install epel-release 2>&1 | tee -a CentOS_install.txt
 
-# Now check if we should switch to the "nightly" RPM's
+# add GEOINT for spatial libraries and utilities.
+echo "### Add geoint-deps repo ###"  | tee -a CentOS_install.txt
+sudo $HOOT_HOME/scripts/yum/geoint-repo.sh
+
+# configure PGDG repository for PostgreSQL
+echo "### Add pgdg repo ###"  | tee -a CentOS_install.txt
+sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh $POSTGRESQL_VERSION
+
+# Now check if we should use the release or nightly (master) RPM's
 # NOTE: The nightly RPM's are not signed
-if [ "${NIGHTLY:-no}" = "yes" ]; then
-    echo "### Swap the release repo for the nightly one ###" | tee -a CentOS_install.txt
-    sudo yum-config-manager \
-     --setopt=hoot-release.baseurl=https://hoot-repo.s3.amazonaws.com/el7/master \
-     --setopt=hoot-release.gpgcheck=0 \
-     --setopt=hoot-release.repo_gpgcheck=0 \
-     --save
-fi
+if [ "${NIGHTLY:-yes}" = "no" ]; then
+    echo "### Adding the Hoot release repo ###" | tee -a CentOS_install.txt
+    sudo yum-config-manager --add-repo https://hoot-repo.s3.amazonaws.com/el7/release/hoot.repo
 
-# configure PGDG repository for PostgreSQL 9.5.
-echo "### Add pgdg repo ###" | tee -a CentOS_install.txt
-sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh 9.5
+else
+    echo "### Adding the Hoot nightly master repo ###" | tee -a CentOS_install.txt
+    sudo yum-config-manager --add-repo https://hoot-repo.s3.amazonaws.com/el7/master/hoot.repo
+fi
 
 if [ "${YUMUPDATE:-no}" = "yes" ]; then
     echo "Updating OS..."
@@ -70,6 +71,10 @@ fi
 
 # Sanity check
 hoot version
+
+echo "### Configure OAuth redirect url for port 8888 ###" | tee -a CentOS_install.txt
+sudo $HOOT_HOME/scripts/tomcat/configure_oauth_8888.sh
+
 
 echo "See VAGRANT.md for additional configuration instructions and then run 'vagrant ssh' to log into the Hootenanny virtual machine."
 echo "See $HOOT_HOME/docs on the virtual machine for Hootenanny documentation files."

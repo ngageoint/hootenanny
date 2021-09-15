@@ -57,12 +57,14 @@ std::shared_ptr<TagMerger> TagMergerFactory::getDefaultPtr()
 
 std::shared_ptr<TagMerger> TagMergerFactory::getMergerPtr(const QString& name)
 {
+  LOG_VART(name);
   std::shared_ptr<TagMerger> result;
   QHash<QString, std::shared_ptr<TagMerger>>::const_iterator it = _mergers.find(name);
   if (it == _mergers.end())
   {
     result = Factory::getInstance().constructObject<TagMerger>(name);
     std::shared_ptr<Configurable> configurable = std::dynamic_pointer_cast<Configurable>(result);
+    LOG_VART(configurable.get());
     if (configurable)
     {
       configurable->setConfiguration(conf());
@@ -89,7 +91,9 @@ void TagMergerFactory::reset()
 
 QString TagMergerFactory::toString() const
 {
-  return QString("{ %1 }").arg(_mergers.keys().join(",\n"));
+  return QString("{ Default: %1\n  Mergers: %2 }")
+      .arg(_default ? _default->getName() : "null")
+      .arg(_mergers.keys().join(",\n"));
 }
 
 }

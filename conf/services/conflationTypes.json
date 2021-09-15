@@ -17,7 +17,7 @@
         "members": {
             "area.overlap.review.threshold": "Overlap review threshold; 0.0 to 1.0",
             "search.radius.area": "Search radius (m); -1 for default",
-            "area.tag.threshold": "Tag match threshold; 0.0 to 1.0"
+            "area.type.threshold": "Type match threshold; 0.0 to 1.0"
         }
     },
     "Attribute": {
@@ -67,7 +67,7 @@
         "merger": "ScriptMergerCreator",
         "members": {
             "search.radius.generic.line": "Search radius (m); -1 for default",
-            "generic.line.tag.threshold": "Tag match threshold; 0.0 to 1.0"
+            "generic.line.type.threshold": "Type match threshold; 0.0 to 1.0"
         }
     },
     "GenericPoints": {
@@ -75,7 +75,7 @@
         "merger": "ScriptMergerCreator",
         "members": {
             "search.radius.generic.point": "Search radius (m); -1 for default",
-            "generic.point.tag.threshold": "Tag match threshold; 0.0 to 1.0"
+            "generic.point.type.threshold": "Type match threshold; 0.0 to 1.0"
         }
     },
     "GenericPointPolygon": {
@@ -83,7 +83,7 @@
         "merger": "ScriptMergerCreator",
         "members": {
             "search.radius.generic.point.polygon": "Search radius (m); -1 for default",
-            "generic.point.polygon.tag.threshold": "Tag match threshold; 0.0 to 1.0"
+            "generic.point.polygon.type.threshold": "Type match threshold; 0.0 to 1.0"
         }
     },
     "GenericPolygons": {
@@ -91,7 +91,7 @@
         "merger": "ScriptMergerCreator",
         "members": {
             "search.radius.generic.polygon": "Search radius (m); -1 for default",
-            "generic.polygon.tag.threshold": "Tag match threshold; 0.0 to 1.0"
+            "generic.polygon.type.threshold": "Type match threshold; 0.0 to 1.0"
         }
     },
     "Pois": {
@@ -140,7 +140,12 @@
         "matcher": "ScriptMatchCreator,Railway.js",
         "merger": "ScriptMergerCreator",
         "members": {
-            "search.radius.railway": "Search radius (m); -1 for default"
+            "railway.one.to.many.match": "Enable one to many matching from secondary to reference features",
+            "railway.one.to.many.delete.secondary": "Delete the secondary feature from output when a one to many feature tag transfer occurs from secondary to reference",
+            "railway.one.to.many.identifying.keys": "Tag keys allowing for a one to many feature tag transfer from secondary to reference",
+            "railway.one.to.many.transfer.keys": "Tag keys to transfer in a one to many feature tag transfer from secondary to reference",
+            "search.radius.railway": "Search radius (m); -1 for default",
+            "railway.type.threshold": "Type match threshold; 0.0 to 1.0"
         }
     },
     "Relations": {
@@ -149,7 +154,7 @@
         "members": {
             "relation.name.threshold": "Name match threshold; 0.0 to 1.0",
             "search.radius.relation": "Search radius (m); -1 for default",
-            "relation.tag.threshold": "Tag match threshold; 0.0 to 1.0"
+            "relation.type.threshold": "Type match threshold; 0.0 to 1.0"
         }
     },
     "Rivers": {
@@ -158,7 +163,8 @@
         "members": {
             "river.name.threshold": "Name match threshold; 0.0 to 1.0",
             "river.maximal.subline.auto.optimize": "Automatically optimize runtime performance",
-            "search.radius.river": "Search radius (m); -1 for default"
+            "search.radius.river": "Search radius (m); -1 for default",
+            "river.type.threshold": "Type match threshold; 0.0 to 1.0"
         }
     },
     "Roads": {
@@ -173,7 +179,8 @@
         "matcher": "NetworkMatchCreator",
         "merger": "NetworkMergerCreator",
         "members": {
-             "network.match.threshold": "Match threshold; 0.0 to 1.0"
+            "network.match.threshold": "Match threshold; 0.0 to 1.0",
+            "search.radius.highway": "Search radius (m); -1 for default"
         }
     },
     "RubberSheeting": {
@@ -181,7 +188,7 @@
             "rubber.sheet.max.allowed.ways": "Maximum number of ways allowed",
             "rubber.sheet.minimum.ties": "Minimum number of tie points required.",
 	          "rubber.sheet.log.missing.requirements.as.warning": "Log a warning if enough tie points are not found.",
-	          "conflate.unifying.rubbersheet.roads": "Rubbersheet roads with Unifying Algorithm"
+	          "conflate.unifying.rubber.sheet.roads": "Rubbersheet roads with Unifying Algorithm"
         }
     }
 }

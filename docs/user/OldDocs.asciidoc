@@ -111,8 +111,8 @@ To read more information on Area to Area Conflation, see <<hootalgo, AreaToAreaC
 [[River-Conflation]]
 === River Conflation
 
-Rivers may be conflated using the Javascript generic conflation capability.  For more information on generic conflation, see the
-related sections in this document.  See the algorithms documentation for more details on the algorithms and techniques used in
+Rivers may be conflated using the Javascript generic conflation capability. For more information on script conflation, see the
+related sections in this document. See the algorithms documentation for more details on the algorithms and techniques used in
 this conflation.
 
 ==== Configurable Files
@@ -127,22 +127,22 @@ this conflation.
 
 ==== Usage
 
-River conflation can be done from the command line or the web user interface.  This section describes how to conflate river data
+River conflation can be done from the command line or the web user interface. This section describes how to conflate river data
 from the command line.  For details on how to do it in the web user interface, see the associated section in the Hootenanny User
-Interface guide.  To conflate river data, a command similar to the following may be issued:
+Interface guide. To conflate river data, a command similar to the following may be issued:
 
 ------
 hoot conflate <river-dataset-1> <river-dataset-2> <output>
 ------
 
-All of the settings that can be modified for river conflation exist in `conf/core/ConfigOptions.asciidoc`.  Tweaking the settings can
+All of the settings that can be modified for river conflation exist in `conf/core/ConfigOptions.asciidoc`. Tweaking the settings can
 result in better conflation performance depending on the datasets being conflated. See the "Configuration Options" section of User Guide for
 more detail.
 
 [[Power-Line-Conflation]]
 === Power Line Conflation
 
-Power lines may be conflated using the Javascript generic conflation capability.  For more information on generic conflation, see the
+Power lines may be conflated using the Javascript generic conflation capability.  For more information on script conflation, see the
 related sections in this document.  See the algorithms documentation for more details on the algorithms and techniques used in
 this conflation.
 
@@ -165,9 +165,16 @@ in the above River Conflation section.  Railway Conflation can further be custom
 [[RailwayConflation]]
 === Railway Conflation
 
-Railways may be conflated using the Javascript generic conflation capability.  For more information on generic conflation, see the
-related sections in this document.  See the algorithms documentation for more details on the algorithms and techniques used in
-this conflation.
+Railways may be conflated using the Javascript generic conflation capability. For more information 
+on script conflation, see the related sections in this document. See the Algorithms documentation 
+for more details on the algorithms and techniques used by this conflation.
+
+==== One to Many Matching
+
+Railway conflation has an alternate workflow that allows for transferring selected tags from single 
+rail features in secondary data to multiple rail features in reference data when the single 
+secondary rail identifies how many tracks it represents. See the the "One to Many Matching" section 
+under "Railways" in the Algorithms documentation for more detail. 
 
 ==== Configurable Files
 
@@ -179,8 +186,8 @@ this conflation.
 | `rules/Railway.js` | custom rule based conflation model
 |======
 
-Railway Conflation can further be customized with the railway.* configuration options. See the "Configuration Options" section of User Guide
-for more detail.
+Railway Conflation can further be customized with the railway.* configuration options. See the 
+"Configuration Options" section of User Guide for more detail.
 
 [[GenericGeometry]]
 === Generic Geometry
@@ -1422,4 +1429,21 @@ This tag merger is similar to `OverWriteTag1Merger` but completely replaces tags
 ===== Replacing Tag 2 Tag Merger
 
 This tag merger is similar to `OverWriteTag2Merger` but completely replaces tags in the second input with tags from the first input. Implementation: `ReplaceTag2Merger`
+
+[[Selective-Overwrite-Tag-1-Tag-Merger]]
+===== Selective Overwrite Tag 1 Tag Merger
+
+This tag merger is similar to `OverWriteTag1Merger` but completely replaces tags in the first input 
+with tags from the second input based on a set of selected tag keys only. The keys are controlled by 
+the configuration option `selective.overwrite.tag.merger.keys`. Implementation: 
+`SelectiveOverwriteTag1Merger`
+
+[[Selective-Overwrite-Tag-2-Tag-Merger]]
+===== Selective Overwrite Tag 2 Tag Merger
+
+This tag merger is similar to `OverWriteTag2Merger` but completely replaces tags in the first input 
+with tags from the second input based on a set of selected tag keys only. The keys are controlled by 
+the configuration option `selective.overwrite.tag.merger.keys`. Implementation: 
+`SelectiveOverwriteTag2Merger`
+
 

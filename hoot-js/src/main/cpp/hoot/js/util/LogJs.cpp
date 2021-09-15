@@ -107,6 +107,9 @@ void LogJs::log(const FunctionCallbackInfo<Value>& args, Log::WarningLevel level
       script = toString(frame->GetScriptName()).replace("\"", "");
       functionName = toString(frame->GetFunctionName());
     }
+    //std::cout << "lineNumber: " << lineNumber << std::endl;
+    //std::cout << "script: " << script << std::endl;
+    //std::cout << "functionName: " << functionName << std::endl;
 
     std::stringstream rMessage;
     for (int i = 0; i < args.Length(); i++)
