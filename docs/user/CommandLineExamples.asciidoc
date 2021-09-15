@@ -451,7 +451,9 @@ See the User Guide for more specific details on command usage. Most of these exa
       input1.osm input2.osm output.osm --differential
 -----
 
-==== Conflate railways with the https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RailwayConflation.asciidoc#one-to-many-matching[One To Many Railway Conflation Workflow]:
+==== Conflate railways with the One To Many Railway Conflation Workflow:
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RailwayConflation.asciidoc#one-to-many-matching[detail]
 
 -----
     # Conflate railways by transferring only the "name" tag from secondary to reference rail features.
@@ -460,7 +462,9 @@ See the User Guide for more specific details on command usage. Most of these exa
       -D railway.one.to.many.transfer.keys="name" input1.osm input2.osm output.osm
 -----
 
-==== Conflate roads with the https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RoadConflation.asciidoc#median-to-divided-highway-matching[Road Median to Divided Road Conflation Workflow]:
+==== Conflate roads with the Road Median to Divided Road Conflation Workflow:
+
+https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RoadConflation.asciidoc#median-to-divided-highway-matching[detail]
 
 -----
     # Conflate roads transferring only the "name" tag from secondary median features to reference divided road features.
