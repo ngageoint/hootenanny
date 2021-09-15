@@ -981,14 +981,6 @@ set to `HighwayRfClassifier`.
 If enabled, features will be matched but not merged during conflation. Combine with
 `writer.include.conflate.score.tags=true` to see conflate match scores in the output.
 
-=== conflate.match.poi.model
-
-* Data Type: string
-* Default Value: `models/PoiModel.rf`
-
-Path to the POI match classifier model. A new model can be created with `build-model`. Searches
-local path and then `$HOOT_HOME/conf/`.
-
 === conflate.match.threshold.default
 
 * Data Type: double

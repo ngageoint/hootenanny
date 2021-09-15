@@ -3,14 +3,15 @@
 == Regenerating Random Forest Models For Conflation
 
 Random Forest models (.rf) are used in conflation for Road with the Unifying Algorithm and Building 
-Conflation only. Attribute Relation Files (.arff) are used to build the RF files. POI Conflation 
-only uses its ARFF file, although its RF file is available. 
+Conflation only. Attribute Relation Files (.arff) are used to build the RF files. Note that several
+of the script conflation routines are capable of generating an ARFF file but currently do not 
+(`Poi.js`, `Railway.js`, etc.). Performing classification with calls to a model generally leads to
+cleaner conflation implementations than doing so inside Javascript.
 
 The building and road RF files must be regenerated if changes are made to code that affects the 
 extracted features collected (see `FeatureExtractor`) to create the ARFF files, they must be 
-manually regenerated. The POI ARFF need only be regnerated if conflation rules in its generic script 
-file, `rules/Poi.js`, are modified. The Hootenanny build process automatically handles converting 
-the manually generated ARFF files to RF files. 
+manually regenerated. The Hootenanny build process automatically handles converting  the manually 
+generated ARFF files to RF files. 
 
 To regenerate the building ARFF file:
 --------
@@ -42,23 +43,6 @@ bzip2 train-highway.child/tmp/HighwayModelAll.arff
 # Copy the compressed file to hoot:
 cp train-highway.child/tmp/HighwayModelAll.arff.bz2 $HOOT_HOME/conf/models/HighwayModel.arff.bz2
 --------
-
-To regenerate the POI ARFF file:
---------
-# Build the POI model files (TODO: verify this is right and update the regression test Makefile to 
-# do it automatically):
-cd train-poi.child && make all'
-hoot build-model -C GenericPoi.conf tmp/Train1PoiRef1.osm tmp/Train1PoiRef2.osm tmp/Train2PoiRef1.osm tmp/Train2PoiRef2.osm tmp/Train3PoiRef1.osm tmp/Train3PoiRef2.osm tmp/Train4PoiRef1.osm tmp/Train4PoiRef1.osm tmp/Train5PoiRef1.osm tmp/Train5PoiRef2.osm tmp/Train6PoiRef1.osm tmp/Train6PoiRef2.osm tmp/Train7PoiRef1.osm tmp/Train7PoiRef2.osm tmp/PoiModel.rf
-
-# Remove the existing POI model:
-rm -f $HOOT_HOME/conf/models/PoiModel*
-
-# Compress the arff file:
-bzip2 train-highway.child/tmp/HighwayModelAll.arff
-
-# Copy the compressed model to hoot:
-cp train-poi.child/tmp/?.arff.bz2 $HOOT_HOME/conf/models/PoiModel.arff.bz2
--------
 
 After regenerating all ARFF files, build hoot and it will auto-detect that the ARFF files have 
 changed using a SHA1 hash. New RF files and their SHA1 hashes will be automatically regenerated. 

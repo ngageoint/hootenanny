@@ -282,12 +282,10 @@ endif
 # Build automatically generated JS files
 js-make: $(SCHEMA_FILES) translations/config.js
 
-# Only PoiModel.rf is being generated this way at this time. The older .arff
-# files don't have the precision to recreate the exact model. That is a
-# task for another time.
+# The older .arff files don't have the precision to recreate the exact model. That is a task for 
+# another time.
 ARFFS=$(wildcard conf/models/*.arff.bz2)
 RF_MODELS=$(ARFFS:.arff.bz2=.rf)
-BASE_MODELS=$(ARFFS:.arff.bz2=)
 model-build: $(RF_MODELS)
 
 # These are not cleaned b/c they take a long time to build and it would simply
@@ -465,11 +463,6 @@ archive: js-make services-docs docs
 	cp translations/ggdm30_full_schema.js $(HOOT_TARNAME)/translations/ggdm30_full_schema.js
 	cp translations/eggdm30_rules.js $(HOOT_TARNAME)/translations/eggdm30_osm_rules.js
 	cp translations/eggdm30_osm_rules.js $(HOOT_TARNAME)/translations/eggdm30_osm_rules.js
-	# Don't include RF files at this time, to speed up archive
-	#mkdir -p $(HOOT_TARNAME)/conf/models/
-	#cp conf/models/BuildingModel.rf $(HOOT_TARNAME)/conf/models/BuildingModel.rf
-	#cp conf/models/HighwayModel.rf $(HOOT_TARNAME)/conf/models/HighwayModel.rf
-	#cp conf/models/PoiModel.rf $(HOOT_TARNAME)/conf/models/PoiModel.rf
 	# Create the version file
 	echo $(HOOT_VERSION) > $(HOOT_TARNAME)/version
 	# tar the file and zip it
