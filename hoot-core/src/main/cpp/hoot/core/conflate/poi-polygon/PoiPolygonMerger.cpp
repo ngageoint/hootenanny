@@ -37,7 +37,6 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/PreserveTypesTagMerger.h>
-#include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/FilteredVisitor.h>

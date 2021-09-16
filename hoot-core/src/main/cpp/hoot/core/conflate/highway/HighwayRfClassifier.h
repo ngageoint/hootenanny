@@ -27,6 +27,7 @@
 #ifndef HIGHWAYRFCLASSIFIER_H
 #define HIGHWAYRFCLASSIFIER_H
 
+// Hoot
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 
 // tgs
@@ -47,11 +48,12 @@ public:
   ~HighwayRfClassifier() = default;
 
   MatchClassification classify(
-    const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2,
+    const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     const WaySublineMatchString& match) override;
 
-  std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const override;
+  std::map<QString, double> getFeatures(
+    const ConstOsmMapPtr& m, const ElementId& eid1, const ElementId& eid2,
+    const WaySublineMatchString& match) const override;
 
 private:
 
@@ -65,8 +67,6 @@ private:
    * @todo At some point names will make sense, but for now there isn't enough name data (#4874).
    */
   void _createExtractors() const;
-
-  const std::vector<std::shared_ptr<const FeatureExtractor>>& _getExtractors() const;
 
   /**
    * This provides a lazy load and should be called before any private members are accessed. This

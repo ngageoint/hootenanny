@@ -45,8 +45,8 @@ using MatchPtr = std::shared_ptr<Match>;
 using ConstMatchPtr = std::shared_ptr<const Match>;
 
 /**
- * Describes a specific match between two sets of elements. e.g. the match between two
- * buildings or the match between an intersection and a round-a-bout.
+ * Describes a specific match between two sets of elements. e.g. the match between two buildings or
+ * the match between an intersection and a round-a-bout.
  *
  * This class is not re-entrant or thread safe.
  */
@@ -140,6 +140,23 @@ public:
   virtual MatchType getType() const;
 
   /**
+   * @brief isOneToMany determines if a match is a one to many element match
+   * @return true if the match is a one to many match; false otherwise
+   */
+  virtual bool isOneToMany() const { return _isOneToMany; }
+  /**
+   * @brief setIsOneToMany sets the variable that determines if a match is a one to many element
+   * match
+   * @param isOneToMany one to many value to set
+   */
+  virtual void setIsOneToMany(bool isOneToMany) { _isOneToMany = isOneToMany; }
+
+  /**
+   * @todo This already exists in ApiEntityInfo
+   */
+  virtual QString toString() const = 0;
+
+  /**
    * Returns a collection of matches indexed by the IDs of the elements involved
    *
    * @param matches the matches to index
@@ -157,23 +174,26 @@ public:
   static QString matchPairsToString(
     const std::set<std::pair<ElementId, ElementId>>& matchPairs);
 
-  /**
-   * @todo This already exists in ApiEntityInfo
-   */
-  virtual QString toString() const = 0;
-
   std::shared_ptr<const MatchThreshold> getThreshold() const { return _threshold; }
 
 protected:
 
   friend class MatchPtrComparator;
 
+  /* All of this order silliness maintains a consistent ordering of matches when they're placed
+   * into a set as pointers.
+   */
   static long _orderCount;
   long _order;
 
   const std::shared_ptr<const MatchThreshold> _threshold;
 
   ElementId _eid1, _eid2;
+
+  // The original implementation of hoot matching always forced one to many matches into reviews.
+  // Follow on workflows (road median matching, etc.) have been created to meet the requirement of
+  // merging tags only from a single feature to many.
+  bool _isOneToMany;
 
   Match(const std::shared_ptr<const MatchThreshold>& threshold);
   Match(

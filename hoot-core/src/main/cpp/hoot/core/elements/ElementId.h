@@ -74,12 +74,10 @@ public:
    * Shorthand for ElementId(ElementType::Node, nid)
    */
   static ElementId node(long nid) { return ElementId(ElementType::Node, nid); }
-
   /**
    * Shorthand for ElementId(ElementType::Relation, rid)
    */
   static ElementId relation(long rid) { return ElementId(ElementType::Relation, rid); }
-
   /**
    * Shorthand for ElementId(ElementType::Way, wid)
    */

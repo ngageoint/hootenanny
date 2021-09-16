@@ -43,14 +43,15 @@ public:
   HighwayExpertClassifier() = default;
   ~HighwayExpertClassifier() = default;
 
-  MatchClassification classify(const ConstOsmMapPtr& map,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) override;
+  MatchClassification classify(
+    const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
+    const WaySublineMatchString& match) override;
+  MatchClassification classify(
+    const ConstOsmMapPtr& map, const WaySublineMatch& match) const;
 
-  MatchClassification classify(const ConstOsmMapPtr& map,
-    const WaySublineMatch& match) const;
-
-  std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const override;
+  std::map<QString, double> getFeatures(
+    const ConstOsmMapPtr& m, const ElementId& eid1, const ElementId& eid2,
+    const WaySublineMatchString& match) const override;
 };
 
 }

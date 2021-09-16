@@ -29,20 +29,35 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/conflate/highway/HighwayMatch.h>
+#include <hoot/core/conflate/highway/MedianToDividedRoadClassifier.h>
 #include <hoot/core/conflate/network/PartialNetworkMerger.h>
 #include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 #include <hoot/core/conflate/merging/LinearAverageMerger.h>
+#include <hoot/core/schema/SelectiveOverwriteTagMerger.h>
 
 namespace hoot
 {
 
 MergerPtr LinearMergerFactory::getMerger(
   const std::set<std::pair<ElementId, ElementId>>& eids,
-  const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const QString matchedBy)
+  const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const QString matchedBy,
+  const QString matchedBySubroutine)
 {
-  MergerPtr merger =
-    Factory::getInstance().constructObject<Merger>(
-      ConfigOptions().getGeometryLinearMergerDefault());
+  MergerPtr merger;
+  LOG_VART(matchedBy);
+  LOG_VART(matchedBySubroutine);
+  if (matchedBy == HighwayMatch::MATCH_NAME &&
+      matchedBySubroutine == MedianToDividedRoadClassifier::MEDIAN_MATCHED_SUBROUTINE_NAME)
+  {
+    merger = _getMedianMerger();
+  }
+  else
+  {
+    merger =
+      Factory::getInstance().constructObject<Merger>(
+        ConfigOptions().getGeometryLinearMergerDefault());
+  }
   std::shared_ptr<LinearMergerAbstract> linearMerger =
     std::dynamic_pointer_cast<LinearMergerAbstract>(merger);
   if (!linearMerger)
@@ -50,6 +65,7 @@ MergerPtr LinearMergerFactory::getMerger(
     throw IllegalArgumentException(
       "Invalid linear merger class name: " + ConfigOptions().getGeometryLinearMergerDefault());
   }
+  LOG_VART(merger->getClassName());
   linearMerger->setMatchedBy(matchedBy);
   linearMerger->setPairs(eids);
   linearMerger->setSublineMatcher(sublineMatcher);
@@ -92,6 +108,17 @@ MergerPtr LinearMergerFactory::getMerger(
   }
 
   return merger;
+}
+
+MergerPtr LinearMergerFactory::_getMedianMerger()
+{
+  std::shared_ptr<LinearTagOnlyMerger> tagOnlyMerger = std::make_shared<LinearTagOnlyMerger>();
+  std::shared_ptr<SelectiveOverwriteTag1Merger> tagMerger =
+    std::dynamic_pointer_cast<SelectiveOverwriteTag1Merger>(
+      std::make_shared<SelectiveOverwriteTag1Merger>());
+  tagMerger->setTagKeys(ConfigOptions().getHighwayMedianToDualHighwayTransferKeys());
+  tagOnlyMerger->setTagMerger(tagMerger);
+  return tagOnlyMerger;
 }
 
 }

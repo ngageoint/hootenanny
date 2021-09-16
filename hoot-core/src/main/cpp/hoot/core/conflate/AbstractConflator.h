@@ -159,6 +159,13 @@ private:
    */
   void _removeWholeGroups(std::vector<ConstMatchPtr>& matches, MatchSetVector& matchSets) const;
 
+  /**
+   * @brief _separateOneToManyMatches Separates one to many matches from one to one matches
+   * @param matches the matches to be separated
+   * @return the separated one to many matches
+   */
+  std::vector<ConstMatchPtr> _separateOneToManyMatches(std::vector<ConstMatchPtr>& matches) const;
+
   void _applyMergers(const std::vector<MergerPtr>& mergers, const OsmMapPtr& map);
 };
 

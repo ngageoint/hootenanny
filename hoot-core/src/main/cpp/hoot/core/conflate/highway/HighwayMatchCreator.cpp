@@ -76,28 +76,27 @@ class HighwayMatchVisitor : public ConstElementVisitor
 {
 public:
 
-  HighwayMatchVisitor(const ConstOsmMapPtr& map, vector<ConstMatchPtr>& result,
-                      ElementCriterionPtr filter = ElementCriterionPtr()) :
+  HighwayMatchVisitor(
+    const ConstOsmMapPtr& map, vector<ConstMatchPtr>& result,
+    ElementCriterionPtr filter = ElementCriterionPtr()) :
   _map(map),
   _result(result),
   _filter(filter)
   {
   }
 
-  /**
-   * @param matchStatus If the element's status matches this status, then it is checked for a match.
-   */
-  HighwayMatchVisitor(const ConstOsmMapPtr& map,
-    vector<ConstMatchPtr>& result, std::shared_ptr<HighwayClassifier> c,
-    std::shared_ptr<SublineStringMatcher> sublineMatcher, Status matchStatus,
-    ConstMatchThresholdPtr threshold,
+  HighwayMatchVisitor(
+    const ConstOsmMapPtr& map, vector<ConstMatchPtr>& result,
+    std::shared_ptr<HighwayClassifier> classifier,
+    std::shared_ptr<HighwayClassifier> medianClassifier,
+    std::shared_ptr<SublineStringMatcher> sublineMatcher, ConstMatchThresholdPtr threshold,
     std::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
     ElementCriterionPtr filter = ElementCriterionPtr()):
   _map(map),
   _result(result),
-  _c(c),
+  _classifier(classifier),
+  _medianClassifier(medianClassifier),
   _sublineMatcher(sublineMatcher),
-  _matchStatus(matchStatus),
   _neighborCountMax(-1),
   _neighborCountSum(0),
   _elementsEvaluated(0),
@@ -122,26 +121,50 @@ public:
   {
     LOG_VART(e->getElementId());
 
+    // Find other nearby candidates.
     std::shared_ptr<Envelope> env(e->getEnvelope(_map));
     env->expandBy(getSearchRadius(e));
-
-    // find other nearby candidates
     set<ElementId> neighbors =
       SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
-
-    ElementId from(e->getElementType(), e->getId());
+    ElementId elementBeingMatched(e->getElementType(), e->getId());
 
     _elementsEvaluated++;
     int neighborCount = 0;
 
+    const bool medianMatchEnabled = ConfigOptions().getHighwayMedianToDualHighwayMatch();
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
-      if (from != *it)
+      if (elementBeingMatched != *it)
       {
-        const std::shared_ptr<const Element>& n = _map->getElement(*it);
-        // score each candidate and push it on the result vector
+        const std::shared_ptr<const Element>& neighbor = _map->getElement(*it);
+
+        std::shared_ptr<HighwayClassifier> classifier;
+
+        // Highway median to multiple divided road matching is separate matching routine from
+        // regular road conflate. Check to see if the conditions for it are satisfied, and if so,
+        // employ a different classifier.
+        bool medianTagFound = false;
+        if (medianMatchEnabled)
+        {
+          // neighbor always is a secondary feature (unknown2).
+          const QString kvp =
+            neighbor->getTags().getFirstMatchingKvp(
+              ConfigOptions().getHighwayMedianIdentifyingTags());
+          medianTagFound = !kvp.isEmpty();
+          LOG_VART(medianTagFound);
+          if (medianTagFound)
+          {
+            classifier = _medianClassifier;
+          }
+        }
+        if (!medianTagFound)
+        {
+          classifier = _classifier;
+        }
+
+        // Score each candidate.
         std::shared_ptr<HighwayMatch> match =
-          createMatch(_map, _c, _sublineMatcher, _threshold, _tagAncestorDiff, e, n);
+          createMatch(_map, classifier, _sublineMatcher, _threshold, _tagAncestorDiff, e, neighbor);
         if (match)
         {
           _result.push_back(match);
@@ -154,12 +177,10 @@ public:
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
 
-  static std::shared_ptr<HighwayMatch> createMatch(const ConstOsmMapPtr& map,
-    std::shared_ptr<HighwayClassifier> classifier,
-    std::shared_ptr<SublineStringMatcher> sublineMatcher,
-    ConstMatchThresholdPtr threshold,
-    std::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
-    ConstElementPtr e1, ConstElementPtr e2)
+  static std::shared_ptr<HighwayMatch> createMatch(
+    const ConstOsmMapPtr& map, std::shared_ptr<HighwayClassifier> classifier,
+    std::shared_ptr<SublineStringMatcher> sublineMatcher, ConstMatchThresholdPtr threshold,
+    std::shared_ptr<TagAncestorDifferencer> tagAncestorDiff, ConstElementPtr e1, ConstElementPtr e2)
   {
     std::shared_ptr<HighwayMatch> result;
 
@@ -218,7 +239,7 @@ public:
 
   void visit(const ConstElementPtr& e) override
   {
-    if (e->getStatus() == _matchStatus && isMatchCandidate(e))
+    if (e->getStatus() == Status::Unknown1 && isMatchCandidate(e))
     {
       checkForMatch(e);
 
@@ -249,7 +270,7 @@ public:
 
   bool isMatchCandidate(ConstElementPtr element) const
   {
-    // special tag is currently only used by roundabout processing to mark temporary features
+    // The special tag is currently only used by roundabout processing to mark temporary features.
     if (element->getTags().contains(MetadataTags::HootSpecial()) ||
         (_filter && !_filter->isSatisfied(element)))
     {
@@ -300,9 +321,9 @@ private:
   const ConstOsmMapPtr& _map;
   vector<ConstMatchPtr>& _result;
   set<ElementId> _empty;
-  std::shared_ptr<HighwayClassifier> _c;
+  std::shared_ptr<HighwayClassifier> _classifier;
+  std::shared_ptr<HighwayClassifier> _medianClassifier;
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
-  Status _matchStatus;
   int _neighborCountMax;
   int _neighborCountSum;
   int _elementsEvaluated;
@@ -325,6 +346,9 @@ HighwayMatchCreator::HighwayMatchCreator() :
 _classifier(
   Factory::getInstance().constructObject<HighwayClassifier>(
     ConfigOptions().getConflateMatchHighwayClassifier())),
+_medianClassifier(
+  Factory::getInstance().constructObject<HighwayClassifier>(
+    ConfigOptions().getConflateMatchHighwayMedianClassifier())),
 _sublineMatcher(
   SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway)),
 _tagAncestorDiff(std::make_shared<TagAncestorDifferencer>("highway"))
@@ -364,7 +388,7 @@ void HighwayMatchCreator::createMatches(
   const int matchesSizeBefore = matches.size();
 
   HighwayMatchVisitor v(
-    map, matches, _classifier, _sublineMatcher, Status::Unknown1, threshold, _tagAncestorDiff,
+    map, matches, _classifier, _medianClassifier, _sublineMatcher, threshold, _tagAncestorDiff,
     _filter);
   map->visitWaysRo(v);
   map->visitRelationsRo(v);

@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-102479' action='modify' visible='true' lat='38.91176458388' lon='-77.02384293348' />
+  <node id='-102480' action='modify' visible='true' lat='38.91237400422' lon='-77.02209681541' />
+  <node id='-102482' action='modify' visible='true' lat='38.91162475039' lon='-77.02380001813' />
+  <node id='-102483' action='modify' visible='true' lat='38.91223625898' lon='-77.0220941332' />
+  <way id='-102002' action='modify' visible='true'>
+    <nd ref='-102479' />
+    <nd ref='-102480' />
+    <tag k='highway' v='primary' />
+    <tag k='length' v='165.8' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:imagery' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2021-08-30 19:03:11' />
+    <tag k='source:imagery:id' v='6cf8fbe6d6893920154edabe8a0d7237' />
+    <tag k='source:imagery:layerName' v='Maxar Basemap +Vivid' />
+    <tag k='source:imagery:sensor' v='WV01' />
+  </way>
+  <way id='-102003' action='modify' visible='true'>
+    <nd ref='-102482' />
+    <nd ref='-102483' />
+    <tag k='highway' v='primary' />
+    <tag k='length' v='162.7' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:imagery' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2021-08-30 19:03:11' />
+    <tag k='source:imagery:id' v='6cf8fbe6d6893920154edabe8a0d7237' />
+    <tag k='source:imagery:layerName' v='Maxar Basemap +Vivid' />
+    <tag k='source:imagery:sensor' v='WV01' />
+  </way>
+</osm>
