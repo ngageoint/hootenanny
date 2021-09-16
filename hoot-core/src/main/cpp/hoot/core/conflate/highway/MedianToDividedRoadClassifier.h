@@ -40,7 +40,7 @@ class FeatureExtractor;
  * (dual carriageway) matches.
  *
  * Its feature extractors have been derived directly from HighwayRfClassifer and may need tweaking
- * over time. No actual RF model files has been generated to work with this classifier.
+ * over time. No actual RF model file has been generated to be used by this classifier.
  */
 class MedianToDividedRoadClassifier : public HighwayClassifier
 {
@@ -52,7 +52,7 @@ public:
   static const QString MEDIAN_MATCHED_DESCRIPTION;
 
   MedianToDividedRoadClassifier();
-  ~MedianToDividedRoadClassifier() = default;
+  ~MedianToDividedRoadClassifier() override = default;
 
   /**
    * @see HighwayClassifier
