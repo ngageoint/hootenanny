@@ -37,6 +37,8 @@ class FileUtilsTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(FileUtilsTest);
   CPPUNIT_TEST(runFilesTest);
   CPPUNIT_TEST(runLogFormatTest);
+  // TODO
+  //CPPUNIT_TEST(appendToPathsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

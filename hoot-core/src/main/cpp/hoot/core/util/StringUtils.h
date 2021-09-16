@@ -111,22 +111,6 @@ public:
   static QString padFrontOfNumberStringWithZeroes(const int number, const int padSize);
 
   /**
-   * Removes all empty/blank strings from a list
-   *
-   * @param strings the strings to modify
-   */
-  static void removeEmptyStrings(QStringList& strings);
-
-  /**
-   * Removes matching prefixes from a collection of strings
-   *
-   * @param prefix the prefix to remove from the strings
-   * @param input the collection of strings to modify
-   * @return the number of prefixes removed
-   */
-  static int removePrefixes(const QString& prefix, QStringList& input);
-
-  /**
    * Determines if a string is made up of entirely alphanumeric characters
    *
    * @param input string to examine
@@ -153,7 +137,6 @@ public:
   static bool containsSubstring(
     const QStringList& input, const QString& substring,
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
-
   /**
    * Determines whether any string in a list of strings contains a substring
    *
@@ -166,7 +149,6 @@ public:
   static bool containsSubstrings(
     const QStringList& input, const QStringList& substrings,
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
-
   /**
    * Returns the first index of a substring in a collection of input strings
    *
@@ -178,26 +160,6 @@ public:
   static int indexOfSubstring(
     const QStringList& input, const QString& substring,
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
-
-  /**
-   * Removes all strings in a specified list from another string list
-   *
-   * @param input the list to remove strings from
-   * @param toRemove the list of string to remove
-   */
-  static void removeAll(QStringList& input, const QStringList& toRemove);
-
-  /**
-   * Removes the last occurrence of a group of strings from a single string
-   *
-   * @param input the string to remove from
-   * @param toRemove the tokens to remove
-   * @param caseSensitivity determines whether comparisons are case sensitive
-   */
-  static void removeLastIndexOf(
-    QString& input, const QStringList& toRemove,
-    Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
-
   /**
    * Determines if a list contains any strings from another list
    *
@@ -209,7 +171,6 @@ public:
   static bool containsAny(
     const QStringList& input, const QStringList& compareList,
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
-
   /**
    * Determines if a string matches any of a collection of wildcard strings
    *
@@ -230,7 +191,6 @@ public:
   static bool endsWithAny(
     const QString& input, const QStringList& compareList,
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
-
   /**
    * Determines if any one of a group of strings ends with a single string
    *
@@ -242,7 +202,6 @@ public:
   static bool endsWithAny(
     const QStringList& inputs, const QString& compareStr,
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
-
   /**
    * Returns the first string at the end of the input that matches any one of a group of strings
    *
@@ -268,16 +227,45 @@ public:
   static bool bisectsAny(const QString& input, const QList<QRegExp>& compareList);
 
   /**
-   * Splits a string on the first matching token in a group of regular expressions and returns it
-   * only if is of a specified size
+   * Removes all strings in a specified list from another string list
    *
-   * @param input string to split
-   * @param tokenList list of regular expression to match with
-   * @param numOutputTokens the split output list must contain this number of strings
-   * @return a collection of strings
+   * @param input the list to remove strings from
+   * @param toRemove the list of string to remove
    */
-  static QStringList splitOnAny(
-    const QString& input, const QList<QRegExp>& tokenList, const int numOutputTokens);
+  static void removeAll(QStringList& input, const QStringList& toRemove);
+  /**
+   * @brief removeAllContaining TODO
+   * @param input
+   * @param text
+   * @param caseSensitivity determines whether comparisons are case sensitive
+   */
+  static void removeAllContaining(
+    QStringList& input, const QString& text,
+    Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
+  /**
+   * Removes the last occurrence of a group of strings from a single string
+   *
+   * @param input the string to remove from
+   * @param toRemove the tokens to remove
+   * @param caseSensitivity determines whether comparisons are case sensitive
+   */
+  static void removeLastIndexOf(
+    QString& input, const QStringList& toRemove,
+    Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
+  /**
+   * Removes all empty/blank strings from a list
+   *
+   * @param strings the strings to modify
+   */
+  static void removeEmptyStrings(QStringList& strings);
+  /**
+   * Removes matching prefixes from a collection of strings
+   *
+   * @param prefix the prefix to remove from the strings
+   * @param input the collection of strings to modify
+   * @return the number of prefixes removed
+   */
+  static int removePrefixes(const QString& prefix, QStringList& input);
 
   /**
    * Removes all map entries from input that are contained in a specified list
@@ -300,6 +288,17 @@ public:
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
 
   /**
+   * Splits a string on the first matching token in a group of regular expressions and returns it
+   * only if is of a specified size
+   *
+   * @param input string to split
+   * @param tokenList list of regular expression to match with
+   * @param numOutputTokens the split output list must contain this number of strings
+   * @return a collection of strings
+   */
+  static QStringList splitOnAny(
+    const QString& input, const QList<QRegExp>& tokenList, const int numOutputTokens);
+  /**
    * Splits a string on a regular expression and removes the token found at the specified index
    *
    * @param input the string to remove from; the string remains unmodified if the string split parts
@@ -308,7 +307,6 @@ public:
    * @param index the index at which to remove from the split string parts
    */
   static void splitAndRemoveAtIndex(QString& input, const QRegExp& splitExp, const int index);
-
   /**
    * Splits a string on a regular expression and returns the token found at the specified index
    *

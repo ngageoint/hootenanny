@@ -236,6 +236,21 @@ void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
   }
 }
 
+void StringUtils::removeAllContaining(
+  QStringList& input, const QString& text, Qt::CaseSensitivity caseSensitivity)
+{
+  QStringList toReturn;
+  for (int i = 0; i < input.size(); i++)
+  {
+    const QString inputStr = input.at(i);
+    if (text.compare(inputStr, caseSensitivity) != 0)
+    {
+      toReturn.append(inputStr);
+    }
+  }
+  input = toReturn;
+}
+
 void StringUtils::removeLastIndexOf(
   QString& input, const QStringList& toRemove, Qt::CaseSensitivity caseSensitivity)
 {

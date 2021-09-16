@@ -37,6 +37,8 @@ class StringUtilsTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(StringUtilsTest);
   CPPUNIT_TEST(runHasAlphabeticCharTest);
   CPPUNIT_TEST(jsonParseTest);
+  // TODO
+  //CPPUNIT_TEST(removeAllContainingTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

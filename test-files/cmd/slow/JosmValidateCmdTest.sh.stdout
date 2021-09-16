@@ -61,3 +61,9 @@ Total failing Hootenanny validators: 0
 
 Validating files, writing to separate outputs, and writing the report to a file...
 
+
+Testing deleting of validated outputs...
+
+22:01:01.755 STATUS ...ion/ValidatedOutputCleaner.cpp(  43) Deleting validated outputs from root dir: ... st-output/cmd/slow/JosmValidateCmdTest/delete-test...
+22:01:01.756 STATUS .../hoot/josm/cmd/ValidateCmd.cpp(  98) Deleted 2 validated outputs.
+test-output/cmd/slow/JosmValidateCmdTest/delete-test exists.

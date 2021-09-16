@@ -108,7 +108,7 @@ public class JosmUtils
         Logging.setLogLevel(Logging.LEVEL_WARN);
         break;
       case "STATUS":
-        Logging.setLogLevel(Logging.LEVEL_INFO);
+        Logging.setLogLevel(Logging.LEVEL_WARN);
         break;
       case "INFO":
         Logging.setLogLevel(Logging.LEVEL_INFO);

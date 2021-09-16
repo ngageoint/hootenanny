@@ -53,6 +53,7 @@ _addValidationTags(false),
 _numRoads(0),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
+  setConfiguration(conf());
 }
 
 void RoadCrossingPolyMarker::setConfiguration(const Settings& conf)

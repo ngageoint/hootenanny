@@ -44,6 +44,8 @@ class MapValidator
 
 public:
 
+  static const int FILE_PRINT_SIZE;
+
   MapValidator() = default;
   ~MapValidator() = default;
 

@@ -36,18 +36,24 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/validation/Validator.h>
+
 #include <hoot/josm/ops/JosmMapValidator.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
+
+const int MapValidator::FILE_PRINT_SIZE = 40;
 
 void MapValidator::setReportFile(const QString& file)
 {
   _reportFile = file;
   if (!IoUtils::isUrl(file))
   {
-    // Write the output dir the report is in now so we don't get a nasty surprise at the end
-    // of a long job that it can't be written.
+    // Write the output dir the report is in now so we don't get a nasty surprise at the end of a
+    // long job that it can't be written.
     IoUtils::writeOutputDir(file);
   }
 }
@@ -61,6 +67,8 @@ void MapValidator::printValidators()
 
 QString MapValidator::validate(const QStringList& inputs, const QString& output) const
 {
+  LOG_VARD(inputs);
+  LOG_VARD(output);
   if (output.trimmed().isEmpty())
   {
     return _validateSeparateOutput(inputs);
@@ -123,7 +131,7 @@ QString MapValidator::_validateWithJosm(OsmMapPtr& map) const
 {
   JosmMapValidator validator;
   validator.setConfiguration(conf());
-  LOG_STATUS(validator.getInitStatusMessage());
+  //LOG_STATUS(validator.getInitStatusMessage());
   validator.apply(map);
   return validator.getSummary().trimmed();
 }
@@ -161,38 +169,68 @@ QString MapValidator::_validateWithHoot(OsmMapPtr& map) const
 
 QString MapValidator::_validate(const QStringList& inputs, const QString& output) const
 {
+  QString errorMsg;
+
   LOG_STATUS("Loading " << inputs.size() << " map(s)...");
   OsmMapPtr map = std::make_shared<OsmMap>();
   QString inputName;
-  // We need the whole map in memory to validate it, so no point in trying to stream it in.
-  if (inputs.size() == 1)
+  try
   {
-    inputName = inputs.at(0);
-    IoUtils::loadMap(map, inputs.at(0), true, Status::Unknown1);
-  }
-  else
-  {
-    // Avoid ID conflicts across multiple inputs.
-    for (int i = 0; i < inputs.size(); i++)
+    // We need the whole map in memory to validate it, so no point in trying to stream it in.
+    if (inputs.size() == 1)
     {
-      inputName += inputs.at(i) + ";";
+      inputName = inputs.at(0);
+      IoUtils::loadMap(
+        map, inputName, true, Status::Unknown1, ConfigOptions().getSchemaTranslationScript());
     }
-    inputName.chop(1);
-    IoUtils::loadMaps(map, inputs, false, Status::Unknown1);
+    else
+    {
+      // Avoid ID conflicts across multiple inputs.
+      for (int i = 0; i < inputs.size(); i++)
+      {
+        inputName += inputs.at(i) + ";";
+      }
+      inputName.chop(1);
+      IoUtils::loadMaps(
+        map, inputs, false, Status::Unknown1, ConfigOptions().getSchemaTranslationScript());
+    }
+  }
+  catch (const HootException& e)
+  {
+    errorMsg = "Validation failed for ..." + inputName.right(FILE_PRINT_SIZE) + ".\n\n";
+    LOG_ERROR(errorMsg << ": " << e.getWhat());
+    return errorMsg;
   }
 
   LOG_STATUS("Validating combined map...");
-  const QString validationSummary = "Input: " + inputName + "\n\n" + _validate(map);
+  QString validationSummary = "Input: " + inputName + "\n\n";
 
-  if (!output.isEmpty())
+  try
   {
-    MapProjector::projectToWgs84(map);
-    IoUtils::saveMap(map, output);
+    QElapsedTimer timer;
+    timer.start();
+
+    validationSummary += _validate(map);
+
+    LOG_STATUS("Validation took " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+
+    if (!output.isEmpty())
+    {
+      MapProjector::projectToWgs84(map);
+      IoUtils::saveMap(map, output);
+    }
+  }
+  catch (const HootException& e)
+  {
+    errorMsg = "Validation failed for ..." + inputName.right(FILE_PRINT_SIZE) + ".\n\n";
+    LOG_ERROR(errorMsg << ": " << e.getWhat());
+    validationSummary += errorMsg;
   }
 
   if (!_reportFile.isEmpty())
   {
-    LOG_STATUS("Writing validation report summary to: ..." << _reportFile.left(25) << "...");
+    LOG_STATUS(
+      "Writing validation report summary to: ..." << _reportFile.right(FILE_PRINT_SIZE) << "...");
     FileUtils::writeFully(_reportFile, validationSummary);
   }
   return validationSummary;
@@ -201,35 +239,64 @@ QString MapValidator::_validate(const QStringList& inputs, const QString& output
 QString MapValidator::_validateSeparateOutput(const QStringList& inputs) const
 {
   QString validationSummary;
+  QString errorMsg;
   for (int i = 0; i < inputs.size(); i++)
   {
     const QString input = inputs.at(i);
+    LOG_VARD(input);
 
-    LOG_STATUS(
-      "Loading map " << i + 1 << " of " << inputs.size() << ": ..." << input.right(25) <<
-      "...");
+    LOG_INFO(
+      "Loading map " << i + 1 << " of " << inputs.size() << ": ..." <<
+      input.right(FILE_PRINT_SIZE) << "...");
     OsmMapPtr map = std::make_shared<OsmMap>();
-    IoUtils::loadMap(map, input, true, Status::Unknown1);
+    try
+    {
+      IoUtils::loadMap(
+        map, input, true, Status::Unknown1, ConfigOptions().getSchemaTranslationScript());
+    }
+    catch (const HootException& e)
+    {
+      errorMsg = "Validation failed for ..." + input.right(FILE_PRINT_SIZE) + ".\n\n";
+      LOG_ERROR(errorMsg << ": " << e.getWhat());
+      validationSummary += errorMsg;
+      continue;
+    }
 
     LOG_STATUS(
-      "Validating map " << i + 1 << " of " << inputs.size() << ": ..." << input.right(25) <<
-      "...");
+      "Validating map " << i + 1 << " of " << inputs.size() << ": ..." <<
+      input.right(FILE_PRINT_SIZE) << "...");
     validationSummary += "Input: " + input + "\n\n";
-    validationSummary += _validate(map) + "\n\n";
 
-    // Write the output to a similarly named path as the input with some text appended to the
-    // input name.
-    const QString output = IoUtils::getOutputUrlFromInput(input, "-validated");
-    LOG_STATUS(
-      "Saving map " << i + 1 << " of " << inputs.size() << ": ..." << output.right(25) <<
-      "...");
-    MapProjector::projectToWgs84(map);
-    IoUtils::saveMap(map, output);
+    try
+    {   
+      QElapsedTimer timer;
+      timer.start();
+
+      validationSummary += _validate(map) + "\n\n";
+
+      LOG_STATUS("Validation took " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+
+      // Write the output to a similarly named path as the input with some text appended to the
+      // input name.
+      const QString output = IoUtils::getOutputUrlFromInput(input, "-validated");
+      LOG_INFO(
+        "Saving map " << i + 1 << " of " << inputs.size() << ": ..." <<
+        output.right(FILE_PRINT_SIZE) << "...");
+      MapProjector::projectToWgs84(map);
+      IoUtils::saveMap(map, output);
+    }
+    catch (const HootException& e)
+    {
+      errorMsg = "Validation failed for ..." + input.right(FILE_PRINT_SIZE) + ".\n\n";
+      LOG_ERROR(errorMsg << ": " << e.getWhat());
+      validationSummary += errorMsg;
+    }
   }
   validationSummary = validationSummary.trimmed();
   if (!_reportFile.isEmpty())
   {
-    LOG_STATUS("Writing validation report summary to: ..." << _reportFile.left(25) << "...");
+    LOG_STATUS(
+      "Writing validation report summary to: ..." << _reportFile.right(FILE_PRINT_SIZE) << "...");
     FileUtils::writeFully(_reportFile, validationSummary);
   }
   return validationSummary;

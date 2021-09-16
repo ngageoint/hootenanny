@@ -29,14 +29,20 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 #include <hoot/josm/validation/MapValidator.h>
+#include <hoot/josm/validation/ValidatedOutputCleaner.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
 
 /*
- * @todo think there's still a but here with certain combinations of --report-output, --output,
+ * @todo think there's still problems here with certain combinations of --report-output, --output,
  * --separate-output, and --recursive
  */
 class ValidateCmd : public BaseCommand
@@ -60,9 +66,36 @@ public:
       args.removeAt(args.indexOf("--validators"));
     }
 
+    bool cleanValidatedOutputRecursively = false;
+    if (args.contains("--cleanValidatedOutput"))
+    {
+      cleanValidatedOutputRecursively = true;
+      args.removeAt(args.indexOf("--cleanValidatedOutput"));
+    }
+
+    if (showAvailableValidatorsOnly && cleanValidatedOutputRecursively)
+    {
+      throw IllegalArgumentException(
+        "--validators and --cleanValidatedOutput cannot both be specified.");
+    }
+
     if (showAvailableValidatorsOnly)
     {
       MapValidator::printValidators();
+    }
+    else if (cleanValidatedOutputRecursively)
+    {
+      if (args.size() != 1)
+      {
+        std::cout << getHelp() << std::endl << std::endl;
+        throw HootException(
+          QString(
+            "%1 with --cleanValidatedOutput takes a single directory name as an input parameter.")
+            .arg(getName()));
+      }
+
+      const int numDeleted = ValidatedOutputCleaner::clean(args[0]);
+      LOG_STATUS("Deleted " << numDeleted << " validated outputs.");
     }
     else
     {
@@ -92,9 +125,11 @@ public:
       LOG_VARD(recursive);
       LOG_VARD(inputFilters);
 
-      if (recursive && output.isEmpty())
+      if (recursive && !separateOutput && output.isEmpty())
       {
-        throw IllegalArgumentException("--output must be specified with --recursive is specified.");
+        throw IllegalArgumentException(
+          QString("--output must be specified when --recursive is specified and ") +
+          QString("--separate-output is not specified."));
       }
 
       MapValidator validator;
@@ -115,6 +150,9 @@ public:
         throw HootException(QString("%1 takes at least one parameter.").arg(getName()));
       }
 
+      QElapsedTimer timer;
+      timer.start();
+
       // Everything left is an input.
       QStringList inputs;
       if (!recursive)
@@ -125,6 +163,10 @@ public:
       {
         inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
       }
+      // Even though we have the cleaning routine available with --cleanValidatedOutput, we're still
+      // going to clean out all previously validated files. Clearly will cause problems if anyone
+      // want to validate files with "-validated" in the name.
+      StringUtils::removeAllContaining(inputs, "-validated");
       LOG_VARD(inputs);
 
       const QString validationSummary = validator.validate(inputs, output);
@@ -132,6 +174,10 @@ public:
       {
         std::cout << validationSummary << std::endl;
       }
+
+      LOG_STATUS(
+        "Validate operation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
+        " total.");
     }
 
     return 0;

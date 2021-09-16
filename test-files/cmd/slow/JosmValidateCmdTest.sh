@@ -83,3 +83,28 @@ hoot validate $LOG_LEVEL $CONFIG -D josm.validators=$JOSM_VALIDATORS \
 hoot diff $LOG_LEVEL $CONFIG $SEPARATE_OUTPUT_GOLD_1 $SEPARATE_OUTPUT_OUT_1
 hoot diff $LOG_LEVEL $CONFIG $SEPARATE_OUTPUT_GOLD_2 $SEPARATE_OUTPUT_OUT_2
 diff $IN_DIR/separate-output-validation-report $OUT_DIR/separate-output-validation-report
+
+echo ""
+echo "Testing deleting of validated outputs..."
+echo ""
+DELETE_TEST_DIR=$OUT_DIR/delete-test
+rm -rf $DELETE_TEST_DIR
+mkdir -p $DELETE_TEST_DIR
+# create some dummy files in a dummy dir with format that will get picked up
+DELETE_TEST_FILE_1=$DELETE_TEST_DIR/test1-validated.osm
+DELETE_TEST_FILE_2=$DELETE_TEST_DIR/test2-validated.geojson
+touch $DELETE_TEST_FILE_1
+touch $DELETE_TEST_FILE_2
+# delete the files
+hoot validate --status $CONFIG $DELETE_TEST_DIR --cleanValidatedOutput
+# make sure the files no longer exist
+if [ -f "$DELETE_TEST_FILE_1" ]; then
+  echo "$DELETE_TEST_FILE_1 exists."
+fi
+if [ -f "$DELETE_TEST_FILE_2" ]; then
+  echo "$DELETE_TEST_FILE_2 exists."
+fi
+# the dir should still exist
+if [ -d "$DELETE_TEST_DIR" ]; then
+  echo "$DELETE_TEST_DIR exists."
+fi
