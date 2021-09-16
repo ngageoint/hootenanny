@@ -3565,6 +3565,14 @@ Add the ESRI specific FCSUBTYPE field to the output.
 The name to use for the ESRI Feature Dataset on export. Note: This only applies to ESRI File
 Geodatabases.
 
+=== ogr.text.field.number
+
+* Data Type: int
+* Default Value: `8`
+
+The maximum number of O2S_[P,L,A] tags attributes and OSMTAGS attributes to create when writing a translated schema to a shapefile.
+Unused OSM tags and values will be split and stored in these fields on export.
+
 === ogr.import.filter
 
 * Data Type: string
