@@ -53,7 +53,7 @@ public:
   static QString className() { return "NonEnglishLanguageDetectionVisitor"; }
 
   NonEnglishLanguageDetectionVisitor();
-  ~NonEnglishLanguageDetectionVisitor();
+  ~NonEnglishLanguageDetectionVisitor() override;
 
   /**
    * @see ElementVisitor
@@ -62,14 +62,12 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  QString getDescription() const override
-  { return "Detects source languages for selected tags"; }
-
   QString getInitStatusMessage() const override;
   QString getCompletedStatusMessage() const override;
 
+  QString getDescription() const override
+  { return "Detects source languages for selected tags"; }
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

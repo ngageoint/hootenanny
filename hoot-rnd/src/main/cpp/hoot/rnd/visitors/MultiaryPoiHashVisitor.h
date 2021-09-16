@@ -44,12 +44,10 @@ public:
   static QString className() { return "MultiaryPoiHashVisitor"; }
 
   MultiaryPoiHashVisitor() = default;
-  ~MultiaryPoiHashVisitor() = default;
+  ~MultiaryPoiHashVisitor() override = default;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
-
   QString getDescription() const override
   { return "Calculates unique hash values for POIs conflated with Multiary POI Conflation"; }
 

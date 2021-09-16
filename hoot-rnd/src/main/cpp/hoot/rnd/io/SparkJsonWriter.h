@@ -48,7 +48,7 @@ public:
   static QString className() { return "SparkJsonWriter"; }
 
   SparkJsonWriter();
-  ~SparkJsonWriter() = default;
+  ~SparkJsonWriter() override = default;
 
   /**
    * @see OsmMapWriter

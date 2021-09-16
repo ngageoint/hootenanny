@@ -48,18 +48,14 @@ public:
   static QString className() { return "ToEnglishTranslationComparisonVisitor"; }
 
   ToEnglishTranslationComparisonVisitor();
-  ~ToEnglishTranslationComparisonVisitor() = default;
+  ~ToEnglishTranslationComparisonVisitor() override = default;
 
   void visit(const std::shared_ptr<Element>& e) override;
 
   void setConfiguration(const Settings& conf) override;
 
-  QString getDescription() const override
-  { return "Translates selected tags to English and scores them against known translations"; }
-
   QString getInitStatusMessage() const override
   { return "Comparing to English tag translations..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
@@ -67,8 +63,9 @@ public:
       QString::number(_numProcessedElements) + " different elements";
   }
 
+  QString getDescription() const override
+  { return "Translates selected tags to English and scores them against known translations"; }
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

@@ -47,21 +47,20 @@ public:
   static QString className() { return "MultiaryPoiMerger"; }
 
   MultiaryPoiMerger() = default;
-  ~MultiaryPoiMerger() = default;
   /**
    * Construct with a subgraph of pairs. The links in the set of pairs are used to determine links
    * between elements so it is important that the pairs are represenetative of the matches.
    */
   MultiaryPoiMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
+  ~MultiaryPoiMerger() override = default;
 
   /**
    * See parent.
    */
-  void apply(const OsmMapPtr& map,
-    std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  void apply(
+    const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   QString toString() const override { return "MultiaryPoiMerger"; }
-
   QString getDescription() const override
   { return "Merges POIs matched with Multiary Conflation (experimental)"; }
   QString getName() const override { return className(); }
@@ -77,8 +76,8 @@ private:
    * @param map Add reviews to this map.
    * @param reviews List of links that should be reviewed.
    */
-  void _createReviews(const OsmMapPtr& map,
-    QList<MultiaryClusterAlgorithm::ClusterLinkPtr> reviews) const;
+  void _createReviews(
+    const OsmMapPtr& map, QList<MultiaryClusterAlgorithm::ClusterLinkPtr> reviews) const;
 
   /**
    * Merge all the elements that make up each of the clusters into a single element.
@@ -86,8 +85,8 @@ private:
    * @param replaced The elements that are replaced will be recorded in this set. (from, to)
    * @param clusters The list of clusters to merge in the map.
    */
-  void _mergeClusters(const OsmMapPtr& map,
-    std::vector<std::pair<ElementId, ElementId>>& replaced,
+  void _mergeClusters(
+    const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced,
     MultiaryClusterAlgorithm::ClusterList clusters) const;
 };
 

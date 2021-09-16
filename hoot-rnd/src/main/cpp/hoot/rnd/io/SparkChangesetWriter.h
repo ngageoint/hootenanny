@@ -49,7 +49,7 @@ public:
   static QString className() { return "SparkChangesetWriter"; }
 
   SparkChangesetWriter();
-  ~SparkChangesetWriter();
+  ~SparkChangesetWriter() override;
 
   /**
    * @see OsmChangeWriter
@@ -80,7 +80,6 @@ private:
   int _precision;
   OsmJsonWriter _jsonWriter;
   AddExportTagsVisitor _exportTagsVisitor;
-
 };
 
 }
