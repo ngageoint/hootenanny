@@ -46,8 +46,8 @@ public:
 
   static QString className() { return "JsFunctionVisitor"; }
 
-  JsFunctionVisitor() : _map(nullptr) { }
-  ~JsFunctionVisitor() = default;
+  JsFunctionVisitor();
+  ~JsFunctionVisitor() override = default;
 
   void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) override
   { _func.Reset(isolate, func); }

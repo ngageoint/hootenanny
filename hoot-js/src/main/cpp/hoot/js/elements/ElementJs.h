@@ -44,13 +44,13 @@ class ElementJs : public HootBaseJs
 {
 public:
 
+  ~ElementJs() override = default;
+
   virtual ConstElementPtr getConstElement() const = 0;
   virtual ElementPtr getElement() = 0;
 
   static v8::Local<v8::Object> New(ConstElementPtr e);
   static v8::Local<v8::Object> New(ElementPtr e);
-
-  virtual ~ElementJs() = default;
 
 protected:
 

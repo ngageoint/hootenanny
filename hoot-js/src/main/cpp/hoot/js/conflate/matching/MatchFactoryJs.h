@@ -28,7 +28,7 @@
 #ifndef MATCHFACTORYJS_H
 #define MATCHFACTORYJS_H
 
-// node.js
+// hoot
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/js/HootBaseJs.h>
 #include <hoot/js/io/DataConvertJs.h>
@@ -40,9 +40,9 @@ class MatchFactoryJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Local<v8::Object> target);
+  ~MatchFactoryJs() override = default;
 
-  virtual ~MatchFactoryJs() = default;
+  static void Init(v8::Local<v8::Object> target);
 
 private:
 

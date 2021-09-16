@@ -38,9 +38,9 @@ class RelationMemberUtilsJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Local<v8::Object> target);
+  ~RelationMemberUtilsJs() override = default;
 
-  virtual ~RelationMemberUtilsJs() = default;
+  static void Init(v8::Local<v8::Object> target);
 
   static void isMemberOfRelationWithType(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMemberOfRelationInCategory(const v8::FunctionCallbackInfo<v8::Value>& args);

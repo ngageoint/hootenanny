@@ -27,7 +27,7 @@
 #ifndef RIVER_MAXIMAL_SUBLINE_SETTING_OPTIMIZER_JS_H
 #define RIVER_MAXIMAL_SUBLINE_SETTING_OPTIMIZER_JS_H
 
-// node.js
+// hoot
 #include <hoot/js/SystemNodeJs.h>
 
 namespace hoot
@@ -52,7 +52,7 @@ public:
 private:
 
   RiverMaximalSublineSettingOptimizerJs() = default;
-  virtual ~RiverMaximalSublineSettingOptimizerJs() = default;
+  ~RiverMaximalSublineSettingOptimizerJs() override = default;
 };
 
 }

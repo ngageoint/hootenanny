@@ -51,9 +51,9 @@ public:
 
 private:
 
-  RelationJs(ConstRelationPtr r) : _constRelation(r) { }
   RelationJs() = default;
-  ~RelationJs() = default;
+  RelationJs(ConstRelationPtr r);
+  ~RelationJs() override = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getType(const v8::FunctionCallbackInfo<v8::Value>& args);

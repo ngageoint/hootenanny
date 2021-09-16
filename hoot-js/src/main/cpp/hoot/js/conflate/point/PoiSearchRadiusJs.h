@@ -27,7 +27,7 @@
 #ifndef POI_SEARCH_RADIUS_JS_H
 #define POI_SEARCH_RADIUS_JS_H
 
-// node.js
+// hoot
 #include <hoot/js/SystemNodeJs.h>
 
 namespace hoot
@@ -43,7 +43,7 @@ public:
 private:
 
   PoiSearchRadiusJs() = default;
-  virtual ~PoiSearchRadiusJs() = default;
+  ~PoiSearchRadiusJs() override = default;
 
   static bool _searchRadiiOptionIsConfigFile(const QString data);
   static bool _searchRadiiOptionIsJsonString(const QString data);
