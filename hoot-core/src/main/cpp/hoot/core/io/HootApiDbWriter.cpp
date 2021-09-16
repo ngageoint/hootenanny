@@ -115,7 +115,7 @@ void HootApiDbWriter::finalizePartial()
   }
 }
 
-bool HootApiDbWriter::isSupported(const QString& urlStr)
+bool HootApiDbWriter::isSupported(const QString& urlStr) const
 {
   QUrl url(urlStr);
   return _hootdb.isSupported(url) && !_copyBulkInsertActivated;

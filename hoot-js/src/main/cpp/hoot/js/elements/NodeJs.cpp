@@ -44,6 +44,11 @@ HOOT_JS_REGISTER(NodeJs)
 
 Persistent<Function> NodeJs::_constructor;
 
+NodeJs::NodeJs(ConstNodePtr n) :
+_constNode(n)
+{
+}
+
 void NodeJs::getX(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();

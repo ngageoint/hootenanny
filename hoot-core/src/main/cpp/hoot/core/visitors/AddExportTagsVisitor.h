@@ -27,6 +27,7 @@
 #ifndef ADDEXPORTTAGSVISITOR_H
 #define ADDEXPORTTAGSVISITOR_H
 
+// hoot
 #include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
@@ -62,7 +63,7 @@ class AddExportTagsVisitor : public ElementVisitor
 public:
 
   AddExportTagsVisitor();
-  ~AddExportTagsVisitor() = default;
+  ~AddExportTagsVisitor() override = default;
 
   static QString className() { return "AddExportTagsVisitor"; }
 

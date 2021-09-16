@@ -53,7 +53,7 @@ public:
   static QString className() { return "RemoveDuplicateWayNodesVisitor"; }
 
   RemoveDuplicateWayNodesVisitor() = default;
-  ~RemoveDuplicateWayNodesVisitor() = default;
+  ~RemoveDuplicateWayNodesVisitor() override = default;
 
   void visit(const ElementPtr& e) override;
 

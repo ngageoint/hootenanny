@@ -49,7 +49,7 @@ public:
 
   void setConfiguration(const Settings &conf) override;
 
-  QString supportedFormats() override { return MetadataTags::OsmApiDbScheme() + "://"; }
+  QString supportedFormats() const override { return MetadataTags::OsmApiDbScheme() + "://"; }
 
 protected:
 

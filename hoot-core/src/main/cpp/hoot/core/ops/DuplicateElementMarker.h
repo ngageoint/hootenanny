@@ -45,7 +45,7 @@ public:
   static QString className() { return "DuplicateElementMarker"; }
 
   DuplicateElementMarker();
-  ~DuplicateElementMarker() = default;
+  ~DuplicateElementMarker() override = default;
 
   /**
    * @see OsmMapOperation

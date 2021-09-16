@@ -69,7 +69,7 @@ _keepImmediatelyConnectedWaysOutsideBounds(
 {
 }
 
-bool ApiDbReader::isSupported(const QString& urlStr)
+bool ApiDbReader::isSupported(const QString& urlStr) const
 {
   QUrl url(urlStr);
   return _getDatabase()->isSupported(url);

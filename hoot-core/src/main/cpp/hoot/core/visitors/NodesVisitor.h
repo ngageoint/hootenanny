@@ -40,8 +40,8 @@ public:
 
   static QString className() { return "NodesVisitor"; }
 
-  NodesVisitor(QList<ConstNodePtr>& n) : _n(n) { }
-  ~NodesVisitor() = default;
+  NodesVisitor(QList<ConstNodePtr>& n);
+  ~NodesVisitor() override = default;
 
   void visit(const std::shared_ptr<const Element>& e) override;
 

@@ -52,7 +52,7 @@ public:
   static QString className() { return "DuplicateWayRemover"; }
 
   DuplicateWayRemover();
-  ~DuplicateWayRemover() = default;
+  ~DuplicateWayRemover() override = default;
 
   void apply(OsmMapPtr& map) override;
 

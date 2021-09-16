@@ -46,31 +46,28 @@ public:
   static QString className() { return "RandomMapCropper"; }
 
   RandomMapCropper();
-  ~RandomMapCropper() = default;
+  ~RandomMapCropper() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
   void setConfiguration(const Settings& conf) override;
 
-  QString getDescription() const override
-  { return "Crops a random tile out of a map of a specified node size (experimental)"; }
-
   QString getInitStatusMessage() const override
   { return _cropper.getInitStatusMessage(); }
-
   QString getCompletedStatusMessage() const override
   {
     return _cropper.getCompletedStatusMessage();
   }
 
+  QString getDescription() const override
+  { return "Crops a random tile out of a map of a specified node size (experimental)"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
   void setMaxNodeCount(int count) { _maxNodeCount = count; }
   void setRandomSeed(int seed) { _randomSeed = seed; }
   void setTileFootprintOutputPath(QString path);
   void setPixelSize(double size) { _pixelSize = size; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 private:
 

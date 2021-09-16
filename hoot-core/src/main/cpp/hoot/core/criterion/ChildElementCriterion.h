@@ -46,7 +46,7 @@ public:
 
   ChildElementCriterion() = default;
   ChildElementCriterion(ConstOsmMapPtr map) : _map(map) { }
-  ~ChildElementCriterion() = default;
+  ~ChildElementCriterion() override = default;
 
   /**
    * @see ElementCriterion

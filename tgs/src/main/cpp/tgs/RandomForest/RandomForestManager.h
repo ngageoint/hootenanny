@@ -28,13 +28,14 @@
 #ifndef __RANDOM_FOREST_MANAGER_H__
 #define __RANDOM_FOREST_MANAGER_H__
 
-//STD Includes
+// Std
 #include <fstream>
 #include <map>
 #include <set>
 #include <utility>
 #include <vector>
 
+// Tgs
 #include <tgs/TgsExport.h>
 #include <tgs/RandomForest/BaseRandomForestManager.h>
 
@@ -55,7 +56,7 @@ namespace Tgs
     /**
     *  Destructor
     */
-    ~RandomForestManager() = default;
+    ~RandomForestManager() override = default;
 
   protected:
 
@@ -69,7 +70,7 @@ namespace Tgs
      * @brief _parseXmlForestNodes loads the XML form of a fores
      * @param forestsNode the list of <RandomForest> DOM nodes
      */
-    void _parseXmlForestNodes(QDomNodeList & forestNodes) override;
+    void _parseXmlForestNodes(QDomNodeList& forestNodes) override;
   };
 }
 #endif

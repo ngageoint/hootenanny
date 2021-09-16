@@ -213,7 +213,7 @@ public:
    */
   ChangesetNode(const XmlObject& node, ElementIdToIdMap* idMap);
   /** Destructor */
-  ~ChangesetNode() = default;
+  ~ChangesetNode() override = default;
   /**
    * @brief toString Get the XML string equivalent for the node
    * @param changesetId ID of the changeset to insert into the node
@@ -243,7 +243,7 @@ public:
    */
   ChangesetWay(const XmlObject& way, ElementIdToIdMap* idMap);
   /** Destructor */
-  ~ChangesetWay() = default;
+  ~ChangesetWay() override = default;
   /**
    * @brief addNode Add a node ID to the node (in order)
    * @param id Node ID
@@ -356,7 +356,7 @@ public:
    */
   ChangesetRelation(const XmlObject& relation, ElementIdToIdMap* idMap);
   /** Destructor */
-  ~ChangesetRelation() = default;
+  ~ChangesetRelation() override = default;
   /**
    * @brief addMember Add relation member
    * @param member XML attributes of the relation member

@@ -27,6 +27,7 @@
 #ifndef ADDGEOMETRYTYPEVISITOR_H
 #define ADDGEOMETRYTYPEVISITOR_H
 
+// hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
@@ -39,7 +40,7 @@ public:
   static QString className() { return "AddGeometryTypeVisitor"; }
 
   AddGeometryTypeVisitor() = default;
-  ~AddGeometryTypeVisitor() = default;
+  ~AddGeometryTypeVisitor() override = default;
 
   void visit(const std::shared_ptr<Element>& e) override;
 

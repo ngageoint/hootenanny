@@ -28,6 +28,7 @@
 #ifndef RIVER_CRITERION_H
 #define RIVER_CRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
@@ -43,7 +44,7 @@ public:
   static QString className() { return "RiverCriterion"; }
 
   RiverCriterion() = default;
-  ~RiverCriterion() = default;
+  ~RiverCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<RiverCriterion>(); }

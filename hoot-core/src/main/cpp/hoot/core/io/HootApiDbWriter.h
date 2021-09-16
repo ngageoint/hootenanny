@@ -49,18 +49,26 @@ public:
   ~HootApiDbWriter();
 
   void close() override;
+  bool isSupported(const QString& urlStr) const override;
+  void open(const QString& urlStr) override;
+  QString supportedFormats() const override { return MetadataTags::HootApiDbScheme() + "://"; }
 
   void finalizePartial() override;
+  void writePartial(const ConstNodePtr& n) override;
+  void writePartial(const ConstWayPtr& w) override;
+  void writePartial(const ConstRelationPtr& r) override;
 
-  long getMapId() const { return _hootdb.getMapId(); }
+  void setConfiguration(const Settings &conf) override;
 
-  bool isSupported(const QString& urlStr) override;
-
-  void open(const QString& urlStr) override;
+  /**
+   * @see OsmChangeWriter
+   */
+  void writeChange(const Change& change) override;
+  void setElementPayloadFormat(const QString& /*format*/) override {}
 
   void deleteMap(const QString& urlStr);
 
-  void setConfiguration(const Settings &conf) override;
+  long getMapId() const { return _hootdb.getMapId(); }
 
   void setCreateUser(bool createIfNotFound) { _createUserIfNotFound = createIfNotFound; }
   void setOverwriteMap(bool overwriteMap) { _overwriteMap = overwriteMap; }
@@ -76,20 +84,7 @@ public:
   void setUserEmail(const QString& email) { _userEmail = email; }
   void setJobId(const QString& id) { _jobId = id; }
   void setPreserveVersionOnInsert(bool preserve) { _preserveVersionOnInsert = preserve; }
-
-  void writePartial(const ConstNodePtr& n) override;
-  void writePartial(const ConstWayPtr& w) override;
-  void writePartial(const ConstRelationPtr& r) override;
-
-  /**
-   * @see OsmChangeWriter
-   */
-  void writeChange(const Change& change) override;
-  void setElementPayloadFormat(const QString& /*format*/) override {}
-
   void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
-
-  QString supportedFormats() override { return MetadataTags::HootApiDbScheme() + "://"; }
 
 protected:
 

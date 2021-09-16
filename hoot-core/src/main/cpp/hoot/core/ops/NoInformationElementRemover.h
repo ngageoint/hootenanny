@@ -50,7 +50,7 @@ public:
   static QString className() { return "NoInformationElementRemover"; }
 
   NoInformationElementRemover() = default;
-  ~NoInformationElementRemover() = default;
+  ~NoInformationElementRemover() override = default;
 
   /**
     @see OsmMapOperation

@@ -50,7 +50,7 @@ public:
   static QString className() { return "HootServicesLanguageInfoMockClient"; }
 
   HootServicesLanguageInfoMockClient();
-  ~HootServicesLanguageInfoMockClient() = default;
+  ~HootServicesLanguageInfoMockClient() override = default;
 
   /**
    * Retrieves available language apps

@@ -49,10 +49,9 @@ public:
 
   ToEnglishTranslateStringDistance();
   explicit ToEnglishTranslateStringDistance(const StringDistancePtr& d);
-  ToEnglishTranslateStringDistance(const StringDistancePtr& d,
-                                   const std::shared_ptr<ToEnglishTranslator>& translator);
-
-  ~ToEnglishTranslateStringDistance() = default;
+  ToEnglishTranslateStringDistance(
+    const StringDistancePtr& d, const std::shared_ptr<ToEnglishTranslator>& translator);
+  ~ToEnglishTranslateStringDistance() override = default;
 
   void setStringDistance(const StringDistancePtr& sd) override { _d = sd; }
 

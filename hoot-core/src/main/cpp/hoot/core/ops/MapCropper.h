@@ -57,7 +57,7 @@ public:
   static QString className() { return "MapCropper"; }
 
   MapCropper();
-  ~MapCropper() = default;
+  ~MapCropper() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

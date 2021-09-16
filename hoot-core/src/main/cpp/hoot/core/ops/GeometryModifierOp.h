@@ -61,7 +61,7 @@ namespace hoot
   public:
 
     GeometryModifierOp();
-    ~GeometryModifierOp() = default;
+    ~GeometryModifierOp() override = default;
 
     static QString className() { return "GeometryModifierOp"; }
 

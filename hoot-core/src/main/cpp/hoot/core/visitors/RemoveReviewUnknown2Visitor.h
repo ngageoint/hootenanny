@@ -44,7 +44,7 @@ public:
   static QString className() { return "RemoveReviewUnknown2Visitor"; }
 
   RemoveReviewUnknown2Visitor() = default;
-  ~RemoveReviewUnknown2Visitor() = default;
+  ~RemoveReviewUnknown2Visitor() override = default;
 
   void visit(const std::shared_ptr<Element>& e) override;
 

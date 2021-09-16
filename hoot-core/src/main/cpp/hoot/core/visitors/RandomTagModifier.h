@@ -45,7 +45,7 @@ public:
   static QString className() { return "RandomTagModifier"; }
 
   RandomTagModifier();
-  ~RandomTagModifier() = default;
+  ~RandomTagModifier() override = default;
 
   QString permuteName(const QString& s);
 

@@ -52,7 +52,6 @@ public:
   static int logWarnCount;
 
   ScriptMatch() = default;
-
   /**
    * mapObj could be derived from the map, but destructing an OsmMapJs object is quite expensive
    * due to the amount of memory cleanup we must do in the general case.
@@ -61,7 +60,7 @@ public:
     const std::shared_ptr<PluginContext>& script, const v8::Persistent<v8::Object>& plugin,
     const ConstOsmMapPtr& map, const v8::Local<v8::Object>& mapObj, const ElementId& eid1,
     const ElementId& eid2, const ConstMatchThresholdPtr& mt);
-  ~ScriptMatch() = default;
+  ~ScriptMatch() override = default;
 
   const MatchClassification& getClassification() const override { return _p; }
 

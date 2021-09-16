@@ -53,7 +53,7 @@ public:
 
   RemoveTagsVisitor();
   explicit RemoveTagsVisitor(const QStringList& keys);
-  virtual ~RemoveTagsVisitor()  = default;
+  ~RemoveTagsVisitor() override = default;
 
   void addCriterion(const ElementCriterionPtr& e) override;
 

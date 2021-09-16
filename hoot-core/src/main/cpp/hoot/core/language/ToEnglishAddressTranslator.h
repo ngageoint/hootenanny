@@ -44,7 +44,7 @@ public:
   static QString className() { return "ToEnglishAddressTranslator"; }
 
   ToEnglishAddressTranslator() = default;
-  ~ToEnglishAddressTranslator() = default;
+  ~ToEnglishAddressTranslator() override = default;
 
   void setConfiguration(const Settings& conf) override;
 

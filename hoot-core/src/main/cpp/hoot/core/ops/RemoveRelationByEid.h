@@ -47,14 +47,13 @@ public:
    * Constructor
    */
   RemoveRelationByEid();
-  ~RemoveRelationByEid() = default;
-
   /**
    * Constructor
    *
    * @param rId ID of the relation to remove
    */
   RemoveRelationByEid(long rId);
+  ~RemoveRelationByEid() override = default;
 
   /**
    * @see OsmMapOperation

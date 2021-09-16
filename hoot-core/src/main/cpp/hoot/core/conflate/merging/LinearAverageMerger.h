@@ -45,7 +45,7 @@ public:
 
   LinearAverageMerger();
   LinearAverageMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
-  ~LinearAverageMerger() = default;
+  ~LinearAverageMerger() override = default;
 
   QString getDescription() const override
   { return "Merges linear features by averaging tags and geometries"; }

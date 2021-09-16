@@ -67,7 +67,7 @@ OsmApiDbBulkInserter::~OsmApiDbBulkInserter()
   close();
 }
 
-bool OsmApiDbBulkInserter::isSupported(const QString& urlStr)
+bool OsmApiDbBulkInserter::isSupported(const QString& urlStr) const
 {
   LOG_VART(urlStr);
   QUrl url(urlStr);

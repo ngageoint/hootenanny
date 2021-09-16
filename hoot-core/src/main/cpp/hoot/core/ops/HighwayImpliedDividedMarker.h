@@ -54,7 +54,7 @@ public:
 
   HighwayImpliedDividedMarker() = default;
   HighwayImpliedDividedMarker(const std::shared_ptr<const OsmMap>& map) : _inputMap(map) { }
-  ~HighwayImpliedDividedMarker() = default;
+  ~HighwayImpliedDividedMarker() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
@@ -62,7 +62,6 @@ public:
    * Splits all the ways in the input map and returns the resulting map.
    */
   static std::shared_ptr<OsmMap> markDivided(const std::shared_ptr<const OsmMap>& map);
-
   std::shared_ptr<OsmMap> markDivided();
 
   QString getInitStatusMessage() const override

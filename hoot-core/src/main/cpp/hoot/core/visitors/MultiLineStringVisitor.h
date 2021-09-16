@@ -47,7 +47,7 @@ public:
   static QString className() { return "MultiLineStringVisitor"; }
 
   MultiLineStringVisitor();
-  virtual ~MultiLineStringVisitor() = default;
+  ~MultiLineStringVisitor() override = default;
 
   /**
    * Retrieves the multiline string created by this visitor. If the method is called multiple times

@@ -28,7 +28,7 @@
 #ifndef JSFUNCTIONCONSUMER_H
 #define JSFUNCTIONCONSUMER_H
 
-// node.js
+// hoot
 #include <hoot/js/SystemNodeJs.h>
 
 namespace hoot

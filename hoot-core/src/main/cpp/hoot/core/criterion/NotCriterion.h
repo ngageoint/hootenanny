@@ -27,6 +27,7 @@
 #ifndef NOTCRITERION_H
 #define NOTCRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
@@ -45,7 +46,7 @@ public:
   NotCriterion() = default;
   NotCriterion(ElementCriterion* c);
   NotCriterion(ElementCriterionPtr c);
-  ~NotCriterion() = default;
+  ~NotCriterion() override = default;
 
   void addCriterion(const ElementCriterionPtr& e) override;
 

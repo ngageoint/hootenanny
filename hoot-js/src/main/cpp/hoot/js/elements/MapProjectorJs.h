@@ -38,9 +38,9 @@ class MapProjectorJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Local<v8::Object> target);
+  ~MapProjectorJs() override = default;
 
-  virtual ~MapProjectorJs() = default;
+  static void Init(v8::Local<v8::Object> target);
 
   static void projectToPlanar(const v8::FunctionCallbackInfo<v8::Value>& args);
 

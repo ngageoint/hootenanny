@@ -49,7 +49,7 @@ public:
 
   HighwayIntersectionCriterion() = default;
   explicit HighwayIntersectionCriterion(ConstOsmMapPtr map);
-  ~HighwayIntersectionCriterion() = default;
+  ~HighwayIntersectionCriterion() override = default;
 
   ElementCriterionPtr clone() override
   { return std::make_shared<HighwayIntersectionCriterion>(_map); }

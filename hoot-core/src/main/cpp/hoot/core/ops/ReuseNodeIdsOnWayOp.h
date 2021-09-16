@@ -50,7 +50,7 @@ public:
 
   ReuseNodeIdsOnWayOp(ElementId from, ElementId to);
   ReuseNodeIdsOnWayOp() = default;
-  ~ReuseNodeIdsOnWayOp() = default;
+  ~ReuseNodeIdsOnWayOp() override = default;
 
   void apply(const std::shared_ptr<OsmMap> &map) override;
   void addElement(const ConstElementPtr& e) override;

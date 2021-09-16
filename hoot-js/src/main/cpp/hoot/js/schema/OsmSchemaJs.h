@@ -27,9 +27,9 @@
 #ifndef OSMSCHEMA_JS_H
 #define OSMSCHEMA_JS_H
 
+// hoot
 #include <hoot/core/schema/SchemaVertex.h>
 
-// node.js
 #include <hoot/js/HootBaseJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 
@@ -40,9 +40,9 @@ class OsmSchemaJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Local<v8::Object> target);
+  ~OsmSchemaJs() override = default;
 
-  virtual ~OsmSchemaJs() = default;
+  static void Init(v8::Local<v8::Object> target);
 
 private:
 

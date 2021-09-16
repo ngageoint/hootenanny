@@ -49,12 +49,12 @@ public:
   static QString className() { return "SparkChangesetWriter"; }
 
   SparkChangesetWriter();
-  ~SparkChangesetWriter();
+  ~SparkChangesetWriter() override;
 
   /**
    * @see OsmChangeWriter
    */
-  bool isSupported(const QString& url) override { return url.endsWith(".spark.1"); }
+  bool isSupported(const QString& url) const override { return url.endsWith(".spark.1"); }
 
   /**
    * Open the specified filename for writing.
@@ -80,7 +80,6 @@ private:
   int _precision;
   OsmJsonWriter _jsonWriter;
   AddExportTagsVisitor _exportTagsVisitor;
-
 };
 
 }

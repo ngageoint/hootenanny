@@ -61,7 +61,7 @@ public:
   static QString className() { return "OsmGeoJsonReader"; }
 
   OsmGeoJsonReader() = default;
-  ~OsmGeoJsonReader() = default;
+  ~OsmGeoJsonReader() override = default;
 
   /**
    * @brief isSupported returns true if the URL is likely supported. This isn't
@@ -70,7 +70,7 @@ public:
    * @param url
    * @return
    */
-  bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) const override;
 
   /**
    * @brief read Reads the data specified by the last call to open(...)
@@ -97,7 +97,7 @@ public:
    */
   OsmMapPtr loadFromFile(const QString& path) override;
 
-  QString supportedFormats() override { return ".geojson"; }
+  QString supportedFormats() const override { return ".geojson"; }
 
 private:
 

@@ -62,7 +62,7 @@ bool GeoNamesReader::hasMoreElements()
   return !_fp.atEnd();
 }
 
-bool GeoNamesReader::isSupported(const QString& url)
+bool GeoNamesReader::isSupported(const QString& url) const
 {
   QString path = QDir().absoluteFilePath(url);
   QFile f(path);

@@ -49,7 +49,7 @@ public:
   static QString className() { return "SchemaTranslationVisitor"; }
 
   SchemaTranslationVisitor();
-  ~SchemaTranslationVisitor() = default;
+  ~SchemaTranslationVisitor() override = default;
 
   /**
    * @see Configurable

@@ -46,7 +46,7 @@ public:
   static QString className() { return "HootServicesLanguageDetectorMockClient"; }
 
   HootServicesLanguageDetectorMockClient();
-  ~HootServicesLanguageDetectorMockClient() = default;
+  ~HootServicesLanguageDetectorMockClient() override = default;
 
   QString detect(const QString& text) override;
 

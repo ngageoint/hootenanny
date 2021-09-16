@@ -70,7 +70,7 @@ class FindHighwayIntersectionsOp : public FindIntersectionsOp
 public:
 
   FindHighwayIntersectionsOp() = default;
-  ~FindHighwayIntersectionsOp() = default;
+  ~FindHighwayIntersectionsOp() override = default;
 
   static QString className() { return "FindHighwayIntersectionsOp"; }
 
@@ -89,7 +89,7 @@ class FindRailwayIntersectionsOp : public FindIntersectionsOp
 public:
 
   FindRailwayIntersectionsOp() = default;
-  ~FindRailwayIntersectionsOp() = default;
+  ~FindRailwayIntersectionsOp() override = default;
 
   static QString className() { return "FindRailwayIntersectionsOp"; }
 

@@ -43,7 +43,7 @@ public:
   static QString className() { return "UniqueTagsVisitor"; }
 
   UniqueTagsVisitor() = default;
-  ~UniqueTagsVisitor() = default;
+  ~UniqueTagsVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override;
 

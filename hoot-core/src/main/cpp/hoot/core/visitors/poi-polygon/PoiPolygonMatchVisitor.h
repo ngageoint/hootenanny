@@ -59,7 +59,7 @@ public:
   PoiPolygonMatchVisitor(
     const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result, ConstMatchThresholdPtr threshold,
     PoiPolygonInfoCachePtr infoCache, ElementCriterionPtr filter = ElementCriterionPtr());
-  ~PoiPolygonMatchVisitor() = default;
+  ~PoiPolygonMatchVisitor() override = default;
 
   /**
    * Determines whether an element is a Poi/Polygon conflation match candidate and, if so,

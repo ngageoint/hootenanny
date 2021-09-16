@@ -45,7 +45,7 @@ public:
   static QString className() { return "RailwayOneToManySecondaryMatchElementRemover"; }
 
   RailwayOneToManySecondaryMatchElementRemover();
-  ~RailwayOneToManySecondaryMatchElementRemover() = default;
+  ~RailwayOneToManySecondaryMatchElementRemover() override = default;
 
   /**
    * @see Configurable

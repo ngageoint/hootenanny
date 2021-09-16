@@ -27,12 +27,13 @@
 #ifndef ELEMENTCACHE_H
 #define ELEMENTCACHE_H
 
+// Hoot
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/ElementOutputStream.h>
 
+// GDAL
 #include <ogr_spatialref.h>
-
 
 namespace hoot
 {
@@ -52,7 +53,7 @@ public:
   /**
    * @brief ~ElementCache
    */
-  virtual ~ElementCache() = default;
+  ~ElementCache() override = default;
 
   /**
    * @brief isEmpty

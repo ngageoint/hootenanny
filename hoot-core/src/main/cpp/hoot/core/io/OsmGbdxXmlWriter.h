@@ -47,18 +47,23 @@ public:
   static QString className() { return "OsmGbdxXmlWriter"; }
 
   OsmGbdxXmlWriter();
-  ~OsmGbdxXmlWriter();
+  ~OsmGbdxXmlWriter() override;
 
-  bool isSupported(const QString& url) override { return url.toLower().endsWith(".gxml"); }
-
-  QString supportedFormats() override {return ".gxml";}
-
+  bool isSupported(const QString& url) const override { return url.toLower().endsWith(".gxml"); }
+  QString supportedFormats() const override { return ".gxml"; }
   void open(const QString& url) override;
-
   void close() override;
 
-  // Set the precision for writing coordinates
-  void setPrecision(int p) { _precision = p; }
+  /**
+   * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
+   */
+  void write(const ConstOsmMapPtr& map, const QString& path);
+  void write(const ConstOsmMapPtr& map) override;
+
+  void writePartial(const ConstNodePtr& node) override;
+  void writePartial(const ConstWayPtr& way) override;
+  void writePartial(const ConstRelationPtr& relation) override;
+  void finalizePartial() override;
 
   /**
    * Write the map out to a string and return it. This is handy for debugging, but has obvious
@@ -71,24 +76,15 @@ public:
   static QString toString(const ConstOsmMapPtr& map, const bool formatXml = true);
 
   /**
-   * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
-   */
-  void write(const ConstOsmMapPtr& map, const QString& path);
-
-  void write(const ConstOsmMapPtr& map) override;
-
-  void writePartial(const ConstNodePtr& node) override;
-  void writePartial(const ConstWayPtr& way) override;
-  void writePartial(const ConstRelationPtr& relation) override;
-  void finalizePartial() override;
-
-  /**
    * Remove any invalid characters from the string s and print an error if one is found.
    */
   QString removeInvalidCharacters(const QString& s);
 
   bool getFormatXml() const { return _formatXml; }
+
   void setFormatXml(const bool format) { _formatXml = format; }
+  // Set the precision for writing coordinates
+  void setPrecision(int p) { _precision = p; }
 
 private:
 

@@ -50,7 +50,7 @@ public:
   ElementIdRemapper(const ElementCriterionPtr& remapFilter);
   ElementIdRemapper(
     const ElementCriterionPtr& remapFilter, const ElementCriterionPtr& restoreFilter);
-  ~ElementIdRemapper() = default;
+  ~ElementIdRemapper() override = default;
 
   /**
    * @see OsmMapOperation

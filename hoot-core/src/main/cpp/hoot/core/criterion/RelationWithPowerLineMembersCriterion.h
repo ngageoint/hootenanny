@@ -44,7 +44,7 @@ public:
   static QString className() { return "RelationWithPowerLineMembersCriterion"; }
 
   RelationWithPowerLineMembersCriterion();
-  ~RelationWithPowerLineMembersCriterion() = default;
+  ~RelationWithPowerLineMembersCriterion() override = default;
 
   ElementCriterionPtr clone() override
   { return std::make_shared<RelationWithPowerLineMembersCriterion>(); }

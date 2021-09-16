@@ -46,7 +46,7 @@ public:
   WayLengthCriterion(
     const double comparisonLength, const NumericComparisonType& numericComparisonType,
     ConstOsmMapPtr map);
-  ~WayLengthCriterion() = default;
+  ~WayLengthCriterion() override = default;
 
   /**
    * @see ElementCriterion

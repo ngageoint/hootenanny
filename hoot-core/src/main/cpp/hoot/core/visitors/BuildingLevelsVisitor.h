@@ -44,7 +44,7 @@ public:
   static QString className() { return "BuildingLevelsVisitor"; }
 
   BuildingLevelsVisitor();
-  ~BuildingLevelsVisitor() = default;
+  ~BuildingLevelsVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override;
 

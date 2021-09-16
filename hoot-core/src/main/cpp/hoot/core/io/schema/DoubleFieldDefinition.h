@@ -38,27 +38,23 @@ class DoubleFieldDefinition : public FieldDefinition
 public:
 
   DoubleFieldDefinition();
-  ~DoubleFieldDefinition() = default;
-
-  void addEnumeratedValue(double v) { _enumeratedValues.insert(v); }
+  ~DoubleFieldDefinition() override = default;
 
   QVariant::Type getType() const override { return QVariant::Double; }
-
   QVariant getDefaultValue() const override;
+  bool hasDefaultValue() const override;
+  QString toString() const override;
+  void validate(const QVariant& v, StrictChecking strict) const override;
+
+  void addEnumeratedValue(double v) { _enumeratedValues.insert(v); }
+  bool hasEnumeratedValue(double v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
 
   double getMaxValue() const { return _max; }
   double getMinValue() const { return _min; }
 
-  bool hasDefaultValue() const override;
-  bool hasEnumeratedValue(double v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
-
   void setDefaultValue(double v) { _defaultValue = v; }
   void setMaxValue(double max) { _max = max; }
   void setMinValue(double min) { _min = min; }
-
-  QString toString() const override;
-
-  void validate(const QVariant& v, StrictChecking strict) const;
 
 private:
 

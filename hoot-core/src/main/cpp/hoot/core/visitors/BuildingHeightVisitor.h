@@ -48,7 +48,7 @@ public:
   static int logWarnCount;
 
   BuildingHeightVisitor();
-  ~BuildingHeightVisitor() = default;
+  ~BuildingHeightVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override;
 

@@ -46,7 +46,7 @@ public:
 
   AddUuidVisitor() = default;
   AddUuidVisitor(QString key);
-  ~AddUuidVisitor() = default;
+  ~AddUuidVisitor() override = default;
 
   /**
    * Adds a tag with a UUID to all valid elements.

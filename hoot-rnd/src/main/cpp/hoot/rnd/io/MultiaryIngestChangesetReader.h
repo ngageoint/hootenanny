@@ -44,8 +44,7 @@ class MultiaryIngestChangesetReader : public ChangesetProvider
 public:
 
   MultiaryIngestChangesetReader();
-
-  ~MultiaryIngestChangesetReader();
+  ~MultiaryIngestChangesetReader() override;
 
   /**
    * @see ChangesetProvider

@@ -43,7 +43,7 @@ public:
   static QString className() { return "MultiUseBuildingCriterion"; }
 
   MultiUseBuildingCriterion() = default;
-  ~MultiUseBuildingCriterion() = default;
+  ~MultiUseBuildingCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::shared_ptr<MultiUseBuildingCriterion>(); }

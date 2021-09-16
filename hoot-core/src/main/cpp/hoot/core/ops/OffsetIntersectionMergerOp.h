@@ -53,7 +53,7 @@ public:
   static QString className() { return "OffsetIntersectionMergerOp"; }
 
   OffsetIntersectionMergerOp();
-  ~OffsetIntersectionMergerOp() = default;
+  ~OffsetIntersectionMergerOp() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

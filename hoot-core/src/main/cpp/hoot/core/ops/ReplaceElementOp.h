@@ -77,7 +77,7 @@ public:
    */
   ReplaceElementOp(
     ElementId from, ElementId to, bool clearAndRemove = false, bool removeParentRefs = false);
-  ~ReplaceElementOp() = default;
+  ~ReplaceElementOp() override = default;
 
   /**
    * If the elements aren't specified in the constructor this must be called exactly two times, once

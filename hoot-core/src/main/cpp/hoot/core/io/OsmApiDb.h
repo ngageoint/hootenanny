@@ -52,10 +52,10 @@ public:
   static const QString TIMESTAMP_FUNCTION;
 
   OsmApiDb();
-  ~OsmApiDb();
+  ~OsmApiDb() override;
 
   void close() override;
-  bool isSupported(const QUrl& url) override;
+  bool isSupported(const QUrl& url) const override;
   void open(const QUrl& url) override;
   void commit() override;
 

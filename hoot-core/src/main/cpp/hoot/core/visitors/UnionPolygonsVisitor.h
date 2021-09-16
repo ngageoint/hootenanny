@@ -49,7 +49,7 @@ public:
   static QString className() { return "UnionPolygonsVisitor"; }
 
   UnionPolygonsVisitor();
-  ~UnionPolygonsVisitor() = default;
+  ~UnionPolygonsVisitor() override = default;
 
   const std::shared_ptr<geos::geom::Geometry>& getUnion() const { return _result; }
 

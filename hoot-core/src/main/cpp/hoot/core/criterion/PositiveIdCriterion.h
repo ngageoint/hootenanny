@@ -27,6 +27,7 @@
 #ifndef POSITIVE_ID_CRITERION_H
 #define POSITIVE_ID_CRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
@@ -42,7 +43,7 @@ public:
   static QString className() { return "PositiveIdCriterion"; }
 
   PositiveIdCriterion() = default;
-  ~PositiveIdCriterion() = default;
+  ~PositiveIdCriterion() override = default;
 
   /**
    * @see ElementCriterion

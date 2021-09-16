@@ -28,6 +28,7 @@
 #ifndef HAS_ADDRESS_CRITERION_H
 #define HAS_ADDRESS_CRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/util/Configurable.h>
@@ -45,7 +46,7 @@ public:
   static QString className() { return "HasAddressCriterion"; }
 
   HasAddressCriterion() = default;
-  ~HasAddressCriterion() = default;
+  ~HasAddressCriterion() override = default;
 
   void setConfiguration(const Settings& conf) override;
 

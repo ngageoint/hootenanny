@@ -48,7 +48,7 @@ public:
   static QString className() { return "RefRemoveOp"; }
 
   RefRemoveOp() = default;
-  ~RefRemoveOp() = default;
+  ~RefRemoveOp() override = default;
 
   void addCriterion(const ElementCriterionPtr &e) override { assert(!_criterion); _criterion = e; }
 

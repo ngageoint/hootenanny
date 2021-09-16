@@ -47,14 +47,11 @@ public:
   SqlBulkInsert(
     const QSqlDatabase& db, const QString& tableName, const QStringList& columns,
     bool ignoreConflict = false);
-  ~SqlBulkInsert();
+  ~SqlBulkInsert() override;
 
   void flush() override;
-
   int getPendingCount() const override { return _pending.size(); }
-
   QString getTableName() const override { return _tableName; }
-
   void insert(const QList<QVariant> l) override;
 
 private:

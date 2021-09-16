@@ -40,7 +40,7 @@ class FeatureExtractorJs : public HootBaseJs
 public:
 
   static void Init(v8::Local<v8::Object> target);
-  virtual ~FeatureExtractorJs() = default;
+  ~FeatureExtractorJs() override = default;
 
   FeatureExtractorPtr getFeatureExtractor() const { return _fe; }
 

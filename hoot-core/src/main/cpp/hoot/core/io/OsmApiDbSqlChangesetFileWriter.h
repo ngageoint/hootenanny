@@ -57,7 +57,7 @@ public:
 
   OsmApiDbSqlChangesetFileWriter();
   OsmApiDbSqlChangesetFileWriter(const QUrl& url);
-  ~OsmApiDbSqlChangesetFileWriter();
+  ~OsmApiDbSqlChangesetFileWriter() override;
 
   /**
    * @see ChangesetFileWriter

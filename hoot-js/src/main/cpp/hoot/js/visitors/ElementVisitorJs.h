@@ -39,11 +39,11 @@ class ElementVisitorJs : public HootBaseJs
 {
 public:
 
+  ~ElementVisitorJs() override = default;
+
   static void Init(v8::Local<v8::Object> target);
 
   std::shared_ptr<ElementVisitor> getVisitor() const { return _v; }
-
-  virtual ~ElementVisitorJs() = default;
 
 private:
 

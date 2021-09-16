@@ -44,8 +44,8 @@ public:
 
   static QString className() { return "MaxIdVisitor"; }
 
-  MaxIdVisitor() : _maxId(-std::numeric_limits<long>::max()) { }
-  ~MaxIdVisitor() = default;
+  MaxIdVisitor();
+  ~MaxIdVisitor() override = default;
 
   double getStat() const override { return _maxId; }
 

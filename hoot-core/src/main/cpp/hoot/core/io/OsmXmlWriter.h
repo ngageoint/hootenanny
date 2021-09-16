@@ -48,12 +48,12 @@ public:
   static QString className() { return "OsmXmlWriter"; }
 
   OsmXmlWriter();
-  ~OsmXmlWriter();
+  ~OsmXmlWriter() override;
 
-  bool isSupported(const QString& url) override { return url.toLower().endsWith(".osm"); }
+  bool isSupported(const QString& url) const override { return url.toLower().endsWith(".osm"); }
   void open(const QString& url) override;
   void close() override;
-  QString supportedFormats() override { return ".osm"; }
+  QString supportedFormats() const override { return ".osm"; }
   void write(const ConstOsmMapPtr& map) override;
   void writePartial(const ConstNodePtr& node) override;
   void writePartial(const ConstWayPtr& way) override;

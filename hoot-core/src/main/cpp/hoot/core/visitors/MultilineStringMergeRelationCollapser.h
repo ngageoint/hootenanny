@@ -63,7 +63,7 @@ public:
   static QString className() { return "MultilineStringMergeRelationCollapser"; }
 
   MultilineStringMergeRelationCollapser();
-  ~MultilineStringMergeRelationCollapser() = default;
+  ~MultilineStringMergeRelationCollapser() override = default;
 
   /**
    * @see ElementVisitor

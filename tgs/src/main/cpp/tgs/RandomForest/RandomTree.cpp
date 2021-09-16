@@ -26,11 +26,11 @@
  */
 #include "RandomTree.h"
 
-//Qt Includes
+// Qt
 #include <QStringList>
 #include <QtGlobal>
 
-//STD Includes
+// Std
 #include <algorithm>
 #include <ctime>
 #include <fstream>
@@ -39,7 +39,7 @@
 #include <sstream>
 #include <vector>
 
-//TGS Includes
+// Tgs
 #include <tgs/TgsException.h>
 #include <tgs/Statistics/Random.h>
 

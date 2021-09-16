@@ -46,7 +46,7 @@ public:
 
   BuildingCriterion() = default;
   BuildingCriterion(ConstOsmMapPtr map);
-  ~BuildingCriterion() = default;
+  ~BuildingCriterion() override = default;
 
   bool isParentABuilding(ElementId eid) const;
 

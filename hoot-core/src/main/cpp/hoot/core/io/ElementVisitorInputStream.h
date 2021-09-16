@@ -27,6 +27,7 @@
 #ifndef ELEMENTVISITORINPUTSTREAM_H
 #define ELEMENTVISITORINPUTSTREAM_H
 
+// Hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/io/ElementInputStream.h>
@@ -46,7 +47,7 @@ public:
    */
   ElementVisitorInputStream(
     const ElementInputStreamPtr& elementSource, const ElementVisitorPtr& visitor);
-  ~ElementVisitorInputStream() = default;
+  ~ElementVisitorInputStream() override = default;
 
   /**
    * @brief close

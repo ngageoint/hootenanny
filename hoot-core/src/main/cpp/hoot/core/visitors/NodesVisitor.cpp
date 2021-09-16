@@ -29,6 +29,11 @@
 namespace hoot
 {
 
+NodesVisitor::NodesVisitor(QList<ConstNodePtr>& n) :
+_n(n)
+{
+}
+
 void NodesVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Node)

@@ -49,7 +49,7 @@ public:
   NameCriterion();
   NameCriterion(const QStringList& names, const bool caseSensitive = false,
                 const bool partialMatch = false);
-  ~NameCriterion() = default;
+  ~NameCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override

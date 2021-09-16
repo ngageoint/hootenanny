@@ -38,8 +38,8 @@ namespace hoot
  *
  * The original reason for needing this class in addition to its parent was for the relation role
  * comparison. Now that role is part of the relation hash created by ElementHashVisitor, it seems
- * like we wouldn't need this class. However, note the call to getRole() in
- * RelationMerger...so at this time, so this class is needed.
+ * like we wouldn't need this class. However, note the call to getRole() in RelationMerger...so at
+ * this time, so this class is needed.
  *
  * @see ElementComparison
  */
@@ -48,9 +48,10 @@ class RelationMemberComparison : public ElementComparison
 public:
 
   RelationMemberComparison() = default;
-  RelationMemberComparison(ElementPtr element, const OsmMap& sourceMap, const QString& role,
-                           const bool ignoreElementId = false);
-  ~RelationMemberComparison() = default;
+  RelationMemberComparison(
+    ElementPtr element, const OsmMap& sourceMap, const QString& role,
+    const bool ignoreElementId = false);
+  ~RelationMemberComparison() override = default;
 
   bool operator==(const RelationMemberComparison& memberComp) const;
 

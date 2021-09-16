@@ -27,6 +27,7 @@
 #ifndef NEGATIVE_ID_CRITERION_H
 #define NEGATIVE_ID_CRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
@@ -42,7 +43,7 @@ public:
   static QString className() { return "NegativeIdCriterion"; }
 
   NegativeIdCriterion() = default;
-  ~NegativeIdCriterion() = default;
+  ~NegativeIdCriterion() override = default;
 
   /**
    * @see ElementCriterion

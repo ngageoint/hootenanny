@@ -45,8 +45,7 @@ public:
   static QString className() { return "HootApiDbReader"; }
 
   HootApiDbReader();
-
-  virtual ~HootApiDbReader();
+  ~HootApiDbReader() override;
 
   /**
    * Called after open. This will read the bounds of the specified layer in a relatively efficient
@@ -70,7 +69,7 @@ protected:
 
   std::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
 
-  QString supportedFormats() override { return MetadataTags::HootApiDbScheme() + "://"; }
+  QString supportedFormats() const override { return MetadataTags::HootApiDbScheme() + "://"; }
 
 private:
 

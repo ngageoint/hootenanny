@@ -43,7 +43,7 @@ public:
   static QString className() { return "BuildingMatchCreator"; }
 
   BuildingMatchCreator();
-  ~BuildingMatchCreator() = default;
+  ~BuildingMatchCreator() override = default;
 
   MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) override;
 

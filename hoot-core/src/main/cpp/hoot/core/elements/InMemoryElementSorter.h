@@ -47,7 +47,7 @@ class InMemoryElementSorter : public ElementInputStream
 public:
 
   InMemoryElementSorter(ConstOsmMapPtr map);
-  ~InMemoryElementSorter() = default;
+  ~InMemoryElementSorter() override = default;
 
   /**
    * @see ElementInputStream

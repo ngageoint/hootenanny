@@ -62,7 +62,7 @@ class NodeIdVisitor : public ConstElementVisitor
 public:
 
   NodeIdVisitor(set<long>& nodes) : allNodes(nodes) { }
-  ~NodeIdVisitor() = default;
+  ~NodeIdVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override
   {
@@ -88,7 +88,7 @@ public:
   NodeReplaceVisitor(OsmMap& map, const std::map<long, long>& fromTo)
     : _fromTo(fromTo), _map(map)
   { }
-  ~NodeReplaceVisitor() = default;
+  ~NodeReplaceVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override
   {

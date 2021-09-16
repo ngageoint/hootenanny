@@ -46,7 +46,7 @@ public:
   static QString className() { return "IsSortedVisitor"; }
 
   IsSortedVisitor();
-  ~IsSortedVisitor() = default;
+  ~IsSortedVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override;
 

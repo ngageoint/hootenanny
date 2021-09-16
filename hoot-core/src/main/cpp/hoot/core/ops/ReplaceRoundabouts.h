@@ -60,7 +60,7 @@ public:
    * @brief ReplaceRoundabouts - default constructor
    */
   ReplaceRoundabouts() = default;
-  ~ReplaceRoundabouts() = default;
+  ~ReplaceRoundabouts() override = default;
 
   /**
    * @brief apply - Apply the ReplaceRoundabouts Op to the map.

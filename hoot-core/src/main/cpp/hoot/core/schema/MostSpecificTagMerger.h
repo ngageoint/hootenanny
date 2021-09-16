@@ -49,7 +49,7 @@ public:
    * list will be not be preserved.
    */
   MostSpecificTagMerger(const QSet<QString>& skipTagKeys = QSet<QString>());
-  ~MostSpecificTagMerger() = default;
+  ~MostSpecificTagMerger() override = default;
 
   /**
    * @see TypesTagMerger

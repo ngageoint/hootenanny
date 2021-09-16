@@ -45,7 +45,7 @@ class ConvertUuidToRefVisitor : public ElementOsmMapVisitor
 public:
 
   ConvertUuidToRefVisitor() = default;
-  ~ConvertUuidToRefVisitor() = default;
+  ~ConvertUuidToRefVisitor() override = default;
 
   void visit(const ElementPtr& e) override
   {

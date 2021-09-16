@@ -46,7 +46,7 @@ public:
   static QString className() { return "NormalizePhoneNumbersVisitor"; }
 
   NormalizePhoneNumbersVisitor() = default;
-  ~NormalizePhoneNumbersVisitor() = default;
+  ~NormalizePhoneNumbersVisitor() override = default;
 
   void setConfiguration(const Settings& conf) override;
 

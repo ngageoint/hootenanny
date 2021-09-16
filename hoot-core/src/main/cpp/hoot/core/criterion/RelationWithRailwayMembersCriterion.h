@@ -44,7 +44,7 @@ public:
   static QString className() { return "RelationWithRailwayMembersCriterion"; }
 
   RelationWithRailwayMembersCriterion();
-  ~RelationWithRailwayMembersCriterion() = default;
+  ~RelationWithRailwayMembersCriterion() override = default;
 
   ElementCriterionPtr clone() override
   { return std::make_shared<RelationWithRailwayMembersCriterion>(); }

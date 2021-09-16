@@ -46,7 +46,7 @@ class GetRefVisitor : public ElementConstOsmMapVisitor
 public:
 
   GetRefVisitor(ElementCriterionPtr c) : _criterion(c) { }
-  ~GetRefVisitor() = default;
+  ~GetRefVisitor() override = default;
 
   const set<QString>& getRefs() const { return _refs; }
 
@@ -73,7 +73,7 @@ class RefRemoveVisitor : public ElementOsmMapVisitor
 public:
 
   RefRemoveVisitor(ElementCriterionPtr c) : _criterion(c) { }
-  ~RefRemoveVisitor() = default;
+  ~RefRemoveVisitor() override = default;
 
   void visit(const std::shared_ptr<Element>& e) override
   {
@@ -98,7 +98,7 @@ class UpdateRefVisitor : public ElementOsmMapVisitor
 public:
 
   UpdateRefVisitor(const set<QString>& refs) : _refs(refs) { }
-  ~UpdateRefVisitor() = default;
+  ~UpdateRefVisitor() override = default;
 
   QStringList _removeRef1(QStringList refs) const
   {

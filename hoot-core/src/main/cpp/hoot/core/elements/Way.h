@@ -47,7 +47,7 @@ public:
       QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
       bool visible = ElementData::VISIBLE_EMPTY, long pid = WayData::PID_EMPTY);
   Way(const Way& way);
-  ~Way() = default;
+  ~Way() override = default;
 
   void addNode(long id);
   void insertNode(long index, long id);

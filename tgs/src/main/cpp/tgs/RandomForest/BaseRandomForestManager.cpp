@@ -26,14 +26,15 @@
  */
 #include "BaseRandomForestManager.h"
 
-//Qt Includes
+// Qt
 #include <QFile>
 #include <QStringList>
 #include <QTextStream>
 
-//Std Includes
+// Std
 #include <cmath>
 
+// Tgs
 #include <tgs/RandomForest/MissingDataHandler.h>
 
 namespace Tgs

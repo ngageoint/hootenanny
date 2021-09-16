@@ -43,19 +43,19 @@ public:
   static QString className() { return "OsmCsvWriter"; }
 
   OsmPgCsvWriter();
-  ~OsmPgCsvWriter() = default;
+  ~OsmPgCsvWriter() override = default;
 
   /**
    * @brief isSupported returns true if the URL is likely supported
    * @param url Filename ending in ".pgcsv"
    * @return
    */
-  bool isSupported(const QString& url) override { return url.toLower().endsWith(".pgcsv"); }
+  bool isSupported(const QString& url) const override { return url.toLower().endsWith(".pgcsv"); }
   /**
    * @brief supportedFormats
    * @return
    */
-  QString supportedFormats() override { return ".pgcsv"; }
+  QString supportedFormats() const override { return ".pgcsv"; }
   /**
    * @brief open
    * @param url

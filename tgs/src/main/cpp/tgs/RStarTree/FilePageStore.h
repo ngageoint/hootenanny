@@ -48,7 +48,7 @@ class TGS_EXPORT FilePageStore : public PageStore
 public:
 
   FilePageStore(int pageSize, const char * fileName, bool readOnly = false);
-  ~FilePageStore();
+  ~FilePageStore() override;
 
   std::shared_ptr<Page> createPage() override;
 

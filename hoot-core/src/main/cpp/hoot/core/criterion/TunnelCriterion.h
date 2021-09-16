@@ -44,7 +44,7 @@ public:
   static QString className() { return "TunnelCriterion"; }
 
   TunnelCriterion() = default;
-  ~TunnelCriterion() = default;
+  ~TunnelCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<TunnelCriterion>(); }

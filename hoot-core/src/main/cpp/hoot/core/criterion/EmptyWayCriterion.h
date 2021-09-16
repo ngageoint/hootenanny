@@ -48,7 +48,7 @@ public:
   static QString className() { return "EmptyWayCriterion"; }
 
   EmptyWayCriterion();
-  ~EmptyWayCriterion() = default;
+  ~EmptyWayCriterion() override = default;
 
   ElementCriterionPtr clone() override { return std::make_shared<EmptyWayCriterion>(); }
 

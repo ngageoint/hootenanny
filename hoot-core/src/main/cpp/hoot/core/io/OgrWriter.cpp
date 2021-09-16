@@ -192,7 +192,7 @@ void OgrWriter::close()
   _ds.reset();
 }
 
-bool OgrWriter::isSupported(const QString& url)
+bool OgrWriter::isSupported(const QString& url) const
 {
   LOG_VARD(_scriptPath.isEmpty());
   if (_scriptPath.isEmpty())

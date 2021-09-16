@@ -28,17 +28,18 @@
 #ifndef __DATA_FRAME_H__
 #define __DATA_FRAME_H__
 
-//Qt Includes
+// Qt
 #include <QDomDocument>
 #include <QDomElement>
 
-//Std Includes
+// Std
 #include <limits>
 #include <map>
 #include <set>
 #include <string>
 #include <vector>
 
+// Tgs
 #include <tgs/HashMap.h>
 #include <tgs/TgsExport.h>
 

@@ -49,7 +49,7 @@ public:
 
   WayEndNodeCriterion(const bool allowShared = true);
   WayEndNodeCriterion(ConstOsmMapPtr map, const bool allowShared = true);
-  ~WayEndNodeCriterion() = default;
+  ~WayEndNodeCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<WayEndNodeCriterion>(_map); }

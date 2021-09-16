@@ -40,7 +40,7 @@ public:
   static QString className() { return "TransliterateNameVisitor"; }
 
   TransliterateNameVisitor() = default;
-  ~TransliterateNameVisitor() = default;
+  ~TransliterateNameVisitor() override = default;
 
   void visit(const std::shared_ptr<Element>& e) override;
 

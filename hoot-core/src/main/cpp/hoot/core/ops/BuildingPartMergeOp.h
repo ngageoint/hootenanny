@@ -98,9 +98,8 @@ public:
 
   static QString className() { return "BuildingPartMergeOp"; }
 
-
   BuildingPartMergeOp(bool preserveTypes = false);
-  ~BuildingPartMergeOp() = default;
+  ~BuildingPartMergeOp() override = default;
 
   void apply(OsmMapPtr& map) override;
 

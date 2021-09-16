@@ -41,7 +41,7 @@ public:
   static QString className() { return "MultiVisitor"; }
 
   MultiVisitor() = default;
-   ~MultiVisitor() = default;
+   ~MultiVisitor() override = default;
 
   void visit(const std::shared_ptr<Element>& e) override;
 

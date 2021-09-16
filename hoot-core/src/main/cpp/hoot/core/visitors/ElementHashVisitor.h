@@ -54,7 +54,7 @@ public:
   static QString className() { return "ElementHashVisitor"; }
 
   ElementHashVisitor();
-  ~ElementHashVisitor() = default;
+  ~ElementHashVisitor() override = default;
 
   void visit(const ElementPtr& e) override;
 

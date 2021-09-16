@@ -48,7 +48,7 @@ public:
 
   VisitorOp() = default;
   VisitorOp(const ElementVisitorPtr& v) { _visitor = v; }
-  ~VisitorOp() = default;
+  ~VisitorOp() override = default;
 
   /**
    * Takes ownership of the visitor.

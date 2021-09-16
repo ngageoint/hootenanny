@@ -45,6 +45,11 @@ HOOT_JS_REGISTER(RelationJs)
 
 Persistent<Function> RelationJs::_constructor;
 
+RelationJs::RelationJs(ConstRelationPtr r) :
+_constRelation(r)
+{
+}
+
 void RelationJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();

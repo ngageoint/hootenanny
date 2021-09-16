@@ -61,7 +61,7 @@ public:
    * @brief IdSwapOp - Constructor taking two elements to swap IDs
    */
   IdSwapOp(ElementId e1, ElementId e2);
-  ~IdSwapOp() = default;
+  ~IdSwapOp() override = default;
 
   /**
    * @brief apply - Apply the IdSwap op

@@ -40,7 +40,7 @@ public:
   static QString className() { return "DefaultIdGenerator"; }
 
   DefaultIdGenerator();
-  ~DefaultIdGenerator() = default;
+  ~DefaultIdGenerator() override = default;
 
   IdGeneratorPtr clone() const override;
 

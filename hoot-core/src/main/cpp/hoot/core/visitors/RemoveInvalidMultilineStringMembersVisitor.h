@@ -27,7 +27,7 @@
 #ifndef REMOVEINVALIDMULTILINESTRINGMEMBERSVISITOR_H
 #define REMOVEINVALIDMULTILINESTRINGMEMBERSVISITOR_H
 
-//  hoot
+// hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/StringUtils.h>
@@ -47,7 +47,7 @@ public:
   static QString className() { return "RemoveInvalidMultilineStringMembersVisitor"; }
 
   RemoveInvalidMultilineStringMembersVisitor();
-  ~RemoveInvalidMultilineStringMembersVisitor() = default;
+  ~RemoveInvalidMultilineStringMembersVisitor() override = default;
 
   void visit(const ElementPtr& e) override;
 

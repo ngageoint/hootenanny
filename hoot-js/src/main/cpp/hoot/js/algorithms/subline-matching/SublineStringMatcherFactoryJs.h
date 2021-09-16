@@ -40,8 +40,9 @@ public:
 
   static QString className() { return "SublineStringMatcherFactoryJs"; }
 
+  ~SublineStringMatcherFactoryJs() override = default;
+
   static void Init(v8::Local<v8::Object> target);
-  virtual ~SublineStringMatcherFactoryJs() = default;
 
 private:
 
