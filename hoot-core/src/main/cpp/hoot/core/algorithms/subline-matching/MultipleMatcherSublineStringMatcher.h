@@ -56,7 +56,7 @@ public:
   MultipleMatcherSublineStringMatcher(
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher1,
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher2);
-  virtual ~MultipleMatcherSublineStringMatcher() = default;
+  ~MultipleMatcherSublineStringMatcher() override = default;
 
   /**
    * @see SublineStringMatcher

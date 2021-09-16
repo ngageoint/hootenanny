@@ -40,7 +40,7 @@ public:
   static QString className() { return "BuildingMergerCreator"; }
 
   BuildingMergerCreator() = default;
-  ~BuildingMergerCreator() = default;
+  ~BuildingMergerCreator() override = default;
 
   /**
    * If all the matches are BuildingMatches, a single BuildingMerge will be created and returned.
@@ -49,7 +49,8 @@ public:
 
   std::vector<CreatorDescription> getAllCreators() const override;
 
-  bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+  bool isConflicting(
+    const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 };
 

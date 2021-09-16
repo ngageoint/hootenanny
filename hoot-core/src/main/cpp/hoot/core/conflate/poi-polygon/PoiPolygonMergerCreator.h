@@ -48,7 +48,7 @@ public:
   static QString className() { return "PoiPolygonMergerCreator"; }
 
   PoiPolygonMergerCreator();
-  ~PoiPolygonMergerCreator() = default;
+  ~PoiPolygonMergerCreator() override = default;
 
   /**
    * If there is one match and it is a PoiPolygonMatch then a PoiPolygonMerger is created and
