@@ -43,7 +43,7 @@ namespace Tgs
   public:
 
     HilbertRTree(const std::shared_ptr<PageStore>& ps, int dimensions);
-    ~HilbertRTree() = default;
+    ~HilbertRTree() override = default;
 
     /**
      * This method can only be called before the tree has been built. 

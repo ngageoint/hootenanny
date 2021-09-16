@@ -57,8 +57,8 @@ namespace Tgs
     class LeafDistance
     {
     public:
-      LeafDistance() : distance(0.0), fid(0) { }
 
+      LeafDistance() : distance(0.0), fid(0) { }
       LeafDistance(double dist, int fid) : distance(dist), fid(fid) { }
 
       double distance;
@@ -69,6 +69,7 @@ namespace Tgs
       : public std::binary_function<KnnIteratorNd::LeafDistance, KnnIteratorNd::LeafDistance, bool>
     {
     public:
+
       bool operator()(const KnnIteratorNd::LeafDistance& _Left, 
         const KnnIteratorNd::LeafDistance& _Right) const
       {	
@@ -87,8 +88,8 @@ namespace Tgs
     class NodeDistance
     {
     public:
-      NodeDistance() : minPossibleDistance(0.0), id(0) { }
 
+      NodeDistance() : minPossibleDistance(0.0), id(0) { }
       NodeDistance(double dist, int nodeId)
       {
         minPossibleDistance = dist;
@@ -103,6 +104,7 @@ namespace Tgs
       : public std::binary_function<KnnIteratorNd::NodeDistance*, KnnIteratorNd::NodeDistance*, bool>
     {
     public:
+
       bool operator()(/*const*/ KnnIteratorNd::NodeDistance*& _Left, 
         /*const*/ KnnIteratorNd::NodeDistance*& _Right) const
       {	
@@ -110,9 +112,9 @@ namespace Tgs
       }
     };
 
-    KnnIteratorNd(const RStarTree* tree, const std::vector<double>& point, 
-      const Box& searchRegion = Box());
-    ~KnnIteratorNd();
+    KnnIteratorNd(
+      const RStarTree* tree, const std::vector<double>& point, const Box& searchRegion = Box());
+    ~KnnIteratorNd() override;
 
     const Box& getBox() const override;
     int getId() const override { return _knnId; }
@@ -162,8 +164,8 @@ namespace Tgs
     void _releaseNodeDistance(NodeDistance* nd);
   };
 
-  inline double KnnIteratorNd::euclideanDistance(const std::vector<double>& p1, 
-    const std::vector<double>& p2)
+  inline double KnnIteratorNd::euclideanDistance(
+    const std::vector<double>& p1, const std::vector<double>& p2)
   {
     assert(p1.size() == p2.size());
     double sum = 0.0;

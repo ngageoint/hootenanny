@@ -28,15 +28,16 @@
 #ifndef __RANDOM_TREE_H__
 #define __RANDOM_TREE_H__
 
-//Qt Includes
+// Qt
 #include <QDomElement>
 
-//STL Includes
+// Std
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
 
+// Tgs
 #include <tgs/TgsException.h>
 #include <tgs/RandomForest/DataFrame.h>
 #include <tgs/RandomForest/InfoGainCalculator.h>
