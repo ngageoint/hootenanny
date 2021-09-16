@@ -607,6 +607,11 @@ void Settings::parseCommonArguments(QStringList& args)
       Log::getInstance().setLevel(Log::Fatal);
       args = args.mid(1);
     }
+    else if (args[0] == "--color")
+    {
+      Log::getInstance().setDecorateLogs(true);
+      args.pop_front();
+    }
     // HootTest settings have already been parsed by this point
     else if (hootTestCmdsIgnore.contains(args[0]))
     {
