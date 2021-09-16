@@ -47,8 +47,8 @@ public:
 
   static QString className() { return "AddressCountVisitor"; }
 
-  AddressCountVisitor() : _totalCount(0) { }
-  ~AddressCountVisitor() = default;
+  AddressCountVisitor();
+  ~AddressCountVisitor() override = default;
 
   void setConfiguration(const Settings& conf) override;
 

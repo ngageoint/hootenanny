@@ -56,9 +56,8 @@ class AddMeasurementTagsVisitor : public ElementOsmMapVisitor
 public:
 
   AddMeasurementTagsVisitor() = default;
-  AddMeasurementTagsVisitor(bool area, bool length, bool width) :
-    _addArea(area), _addLength(length), _addWidth(width) { }
-  ~AddMeasurementTagsVisitor() = default;
+  AddMeasurementTagsVisitor(bool area, bool length, bool width);
+  ~AddMeasurementTagsVisitor() override = default;
 
   static QString className() { return "AddMeasurementTagsVisitor"; }
 

@@ -31,6 +31,7 @@
 #include <ogr_geometry.h>
 #include <ogr_spatialref.h>
 
+// hoot
 #include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot

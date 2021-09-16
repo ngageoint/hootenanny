@@ -27,6 +27,7 @@
 #ifndef UPDATE_WAY_PARENT_VISITOR_H
 #define UPDATE_WAY_PARENT_VISITOR_H
 
+// hoot
 #include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
 
