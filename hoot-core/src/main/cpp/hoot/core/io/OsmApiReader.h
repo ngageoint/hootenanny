@@ -73,7 +73,7 @@ public:
    * @brief supportedFormats
    * @return the supported formats
    */
-  QString supportedFormats() override;
+  QString supportedFormats() const override;
   /**
    * @brief setConfiguration
    * @param conf Updated configuration

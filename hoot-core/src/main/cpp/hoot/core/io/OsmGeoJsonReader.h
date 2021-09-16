@@ -97,7 +97,7 @@ public:
    */
   OsmMapPtr loadFromFile(const QString& path) override;
 
-  QString supportedFormats() override { return ".geojson"; }
+  QString supportedFormats() const override { return ".geojson"; }
 
 private:
 

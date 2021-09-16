@@ -69,7 +69,7 @@ protected:
 
   std::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
 
-  QString supportedFormats() override { return MetadataTags::HootApiDbScheme() + "://"; }
+  QString supportedFormats() const override { return MetadataTags::HootApiDbScheme() + "://"; }
 
 private:
 

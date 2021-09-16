@@ -106,7 +106,7 @@ public:
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   // leaving this empty
-  QString supportedFormats() override { return ""; }
+  QString supportedFormats() const override { return ""; }
 
   /**
    * @see ProgressReporter

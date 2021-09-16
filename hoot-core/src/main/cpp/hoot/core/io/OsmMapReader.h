@@ -83,7 +83,7 @@ public:
    *
    * @return a formats string
    */
-  virtual QString supportedFormats() = 0;
+  virtual QString supportedFormats() const = 0;
 
   /** Configurable interface */
   void setConfiguration(const Settings& conf) override;

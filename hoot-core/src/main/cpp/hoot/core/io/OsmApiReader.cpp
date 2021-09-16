@@ -84,7 +84,7 @@ void OsmApiReader::setUseDataSourceIds(bool /*useDataSourceIds*/)
   _useDataSourceId = true;
 }
 
-QString OsmApiReader::supportedFormats()
+QString OsmApiReader::supportedFormats() const
 {
   return "http://;https://";
 }

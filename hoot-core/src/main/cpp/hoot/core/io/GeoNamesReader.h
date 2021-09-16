@@ -57,7 +57,7 @@ public:
   void setDefaultStatus(const Status& s) override { _status = s; }
   void setUseDataSourceIds(bool useDataSourceIds) override { _useDataSourceIds = useDataSourceIds; }
 
-  QString supportedFormats() override { return ".geonames"; }
+  QString supportedFormats() const override { return ".geonames"; }
 
 private:
 

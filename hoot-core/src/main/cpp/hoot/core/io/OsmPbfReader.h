@@ -111,7 +111,7 @@ public:
    */
   void setUseDataSourceIds(bool useDataSourceIds) override { _useFileId = useDataSourceIds; }
   void setUseFileStatus(bool useFileStatus) override { _useFileStatus = useFileStatus; }
-  QString supportedFormats() override { return ".osm.pbf"; }
+  QString supportedFormats() const override { return ".osm.pbf"; }
 
   /**
    * Scan through the file and calculate the offsets of every blob. This is handy when

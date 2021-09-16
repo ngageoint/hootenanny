@@ -200,7 +200,7 @@ public:
    */
   static void scrubBigInts(QString &jsonStr);
 
-  QString supportedFormats() override { return ".json"; }
+  QString supportedFormats() const override { return ".json"; }
 
   /**
    * Set the configuration for this object.
