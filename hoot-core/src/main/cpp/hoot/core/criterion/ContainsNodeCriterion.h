@@ -27,6 +27,7 @@
 #ifndef CONTAINSNODECRITERION_H
 #define CONTAINSNODECRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -44,7 +45,7 @@ public:
 
   ContainsNodeCriterion() = default;
   explicit ContainsNodeCriterion(long nodeId);
-  ~ContainsNodeCriterion() = default;
+  ~ContainsNodeCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<ContainsNodeCriterion>(_nodeId); }

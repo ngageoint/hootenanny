@@ -55,7 +55,7 @@ public:
   static QString className() { return "OgrWriter"; }
 
   OgrWriter();
-  ~OgrWriter() = default;
+  ~OgrWriter() override = default;
 
   void setConfiguration(const Settings& conf) override;
 

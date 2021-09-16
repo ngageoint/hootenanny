@@ -47,7 +47,7 @@ public:
 
   ParallelWayCriterion() = default;
   ParallelWayCriterion(const ConstOsmMapPtr& map, ConstWayPtr baseWay, bool isParallel = true);
-  ~ParallelWayCriterion();
+  ~ParallelWayCriterion() override;
 
   Radians calculateDifference(const ConstWayPtr& w) const;
   static bool isParallel(

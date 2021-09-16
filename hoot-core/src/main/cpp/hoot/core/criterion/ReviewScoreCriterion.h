@@ -45,7 +45,7 @@ public:
   static QString className() { return "ReviewScoreCriterion"; }
 
   ReviewScoreCriterion();
-  ~ReviewScoreCriterion() = default;
+  ~ReviewScoreCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<ReviewScoreCriterion>(); }

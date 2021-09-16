@@ -52,7 +52,7 @@ public:
   static const long DEBUG_ID = 0;
 
   ElementComparer();
-  ~ElementComparer() = default;
+  ~ElementComparer() override = default;
 
   /**
    * Determines if two elements are the same

@@ -45,7 +45,7 @@ public:
   static QString className() { return "OsmGbdxJsonWriter"; }
 
   OsmGbdxJsonWriter(int precision = ConfigOptions().getWriterPrecision());
-  ~OsmGbdxJsonWriter() = default;
+  ~OsmGbdxJsonWriter() override = default;
 
   /**
    * @brief Create a directory to hold all of the GeoJSON files

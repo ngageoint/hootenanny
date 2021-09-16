@@ -50,7 +50,7 @@ public:
 
   NonConflatableCriterion();
   NonConflatableCriterion(ConstOsmMapPtr map);
-  ~NonConflatableCriterion() = default;
+  ~NonConflatableCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<NonConflatableCriterion>(_map); }

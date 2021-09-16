@@ -57,7 +57,7 @@ public:
 
   OgrReader();
   OgrReader(const QString& path);
-  ~OgrReader() = default;
+  ~OgrReader() override = default;
 
   void initializePartial() override;
   bool hasMoreElements() override;
@@ -117,7 +117,7 @@ public:
    */
   unsigned int getNumSteps() const override { return 1; }
 
-  void setDefaultStatus(Status s) override;
+  void setDefaultStatus(const Status& s) override;
   void setLimit(long limit) const;
   void setSchemaTranslationScript(const QString& translate) const;
 

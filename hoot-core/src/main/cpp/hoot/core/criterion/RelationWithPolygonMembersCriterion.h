@@ -45,7 +45,7 @@ public:
 
   RelationWithPolygonMembersCriterion();
   RelationWithPolygonMembersCriterion(ConstOsmMapPtr map);
-  ~RelationWithPolygonMembersCriterion() = default;
+  ~RelationWithPolygonMembersCriterion() override = default;
 
   ElementCriterionPtr clone() override
   { return std::make_shared<RelationWithPolygonMembersCriterion>(_map); }

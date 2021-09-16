@@ -45,8 +45,7 @@ public:
   static QString className() { return "HootApiDbReader"; }
 
   HootApiDbReader();
-
-  virtual ~HootApiDbReader();
+  ~HootApiDbReader() override;
 
   /**
    * Called after open. This will read the bounds of the specified layer in a relatively efficient

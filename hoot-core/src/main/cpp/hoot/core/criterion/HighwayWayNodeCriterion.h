@@ -41,7 +41,7 @@ public:
 
   HighwayWayNodeCriterion();
   HighwayWayNodeCriterion(ConstOsmMapPtr map);
-  ~HighwayWayNodeCriterion() = default;
+  ~HighwayWayNodeCriterion() override = default;
 
   void setOsmMap(const OsmMap* map) override;
 

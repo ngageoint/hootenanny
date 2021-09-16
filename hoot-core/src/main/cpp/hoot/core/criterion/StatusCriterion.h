@@ -27,6 +27,7 @@
 #ifndef STATUSCRITERION_H
 #define STATUSCRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/Status.h>
 #include <hoot/core/util/Configurable.h>
@@ -46,7 +47,7 @@ public:
 
   StatusCriterion();
   StatusCriterion(Status s);
-  ~StatusCriterion() = default;
+  ~StatusCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<StatusCriterion>(_status); }

@@ -153,7 +153,7 @@ public:
    *        in the map
    * @param status
    */
-  void setDefaultStatus(Status status) override { _defaultStatus = status; }
+  void setDefaultStatus(const Status& status) override { _defaultStatus = status; }
 
   /**
    * @brief setUseDataSourceIds Sets whether the reader should use the element IDs
@@ -186,30 +186,6 @@ public:
   virtual OsmMapPtr loadFromFile(const QString& path);
 
   /**
-   * @brief getVersion Overpass API version, if that's where JSON comes from
-   * @return version string
-   */
-  QString getVersion() const { return _version; }
-
-  /**
-   * @brief getGenerator Map generator name, if supplied in JSON
-   * @return generator name string
-   */
-  QString getGenerator() const { return _generator; }
-
-  /**
-   * @brief getTimestampBase OSM timestamp base, if supplied in JSON
-   * @return timestamp base string
-   */
-  QString getTimestampBase() const { return _timestamp_base; }
-
-  /**
-   * @brief getCopyright Copyright statement, if supplied in JSON
-   * @return copyright string
-   */
-  QString getCopyright() const { return _copyright; }
-
-  /**
    * @brief scrubQuotes Converts single quotes to double quotes, and escaped
    *         apostrophes to regular apostrophes
    * @param jsonStr proper JSON string
@@ -231,11 +207,32 @@ public:
    */
   void setConfiguration(const Settings& conf) override;
 
+  bool isValidJson(const QString& jsonStr);
+
+  /**
+   * @brief getVersion Overpass API version, if that's where JSON comes from
+   * @return version string
+   */
+  QString getVersion() const { return _version; }
+  /**
+   * @brief getGenerator Map generator name, if supplied in JSON
+   * @return generator name string
+   */
+  QString getGenerator() const { return _generator; }
+  /**
+   * @brief getTimestampBase OSM timestamp base, if supplied in JSON
+   * @return timestamp base string
+   */
+  QString getTimestampBase() const { return _timestamp_base; }
+  /**
+   * @brief getCopyright Copyright statement, if supplied in JSON
+   * @return copyright string
+   */
+  QString getCopyright() const { return _copyright; }
+
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
   void setLogWarningsForMissingElements(bool log) { _logWarningsForMissingElements = log; }
-
-  bool isValidJson(const QString& jsonStr);
 
 protected:
 

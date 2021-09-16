@@ -46,7 +46,7 @@ public:
   TagValueNumericRangeCriterion();
   TagValueNumericRangeCriterion(const QStringList tagKeys, const long rangeMin,
                                 const long rangeMax);
-  ~TagValueNumericRangeCriterion() = default;
+  ~TagValueNumericRangeCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<TagValueNumericRangeCriterion>(); }

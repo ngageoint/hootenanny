@@ -50,7 +50,7 @@ public:
   static QString className() { return "HootApiDb"; }
 
   HootApiDb();
-  ~HootApiDb();
+  ~HootApiDb() override;
 
   void close() override;
   bool isSupported(const QUrl& url) override;

@@ -58,7 +58,7 @@ public:
   static QString className() { return "HootApiDbBulkInserter"; }
 
   HootApiDbBulkInserter();
-  ~HootApiDbBulkInserter();
+  ~HootApiDbBulkInserter() override;
 
   bool isSupported(const QString& url) override;
   void open(const QString& url) override;

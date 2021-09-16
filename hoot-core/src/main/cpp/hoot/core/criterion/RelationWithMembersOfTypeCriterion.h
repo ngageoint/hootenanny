@@ -49,7 +49,7 @@ public:
 
   RelationWithMembersOfTypeCriterion();
   RelationWithMembersOfTypeCriterion(ConstOsmMapPtr map);
-  virtual ~RelationWithMembersOfTypeCriterion() = default;
+  ~RelationWithMembersOfTypeCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
 

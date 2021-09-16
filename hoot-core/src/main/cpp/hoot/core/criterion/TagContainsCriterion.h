@@ -46,7 +46,7 @@ public:
 
   TagContainsCriterion();
   TagContainsCriterion(QString key, QString valueSubstring);
-  ~TagContainsCriterion() = default;
+  ~TagContainsCriterion() override = default;
 
  /**
   * Adds an additional pair to the search list. If any one of the pairs matches then it is

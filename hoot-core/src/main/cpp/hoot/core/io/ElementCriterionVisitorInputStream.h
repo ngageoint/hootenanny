@@ -51,10 +51,9 @@ public:
    * @param criterion criteria to filter the stream with
    * @param visitor an element visitor to filter the stream with
    */
-  ElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
-                                     const ElementCriterionPtr& criterion,
-                                     const ElementVisitorPtr& visitor);
-
+  ElementCriterionVisitorInputStream(
+    const ElementInputStreamPtr& elementSource, const ElementCriterionPtr& criterion,
+    const ElementVisitorPtr& visitor);
   /**
    * Creates a filtered stream of elements
    *
@@ -62,11 +61,10 @@ public:
    * @param criterion riteria to filter the stream with
    * @param visitors an element visitor to filter the stream with
    */
-  ElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
-                                     const ElementCriterionPtr& criterion,
-                                     const QList<ElementVisitorPtr>& visitors);
-
-  ~ElementCriterionVisitorInputStream();
+  ElementCriterionVisitorInputStream(
+    const ElementInputStreamPtr& elementSource, const ElementCriterionPtr& criterion,
+    const QList<ElementVisitorPtr>& visitors);
+  ~ElementCriterionVisitorInputStream() override;
 
   /**
    * @brief close

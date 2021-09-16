@@ -64,7 +64,7 @@ public:
   /**
    * Determines the reader's default element status
    */
-  virtual void setDefaultStatus(Status status) = 0;
+  virtual void setDefaultStatus(const Status& status) = 0;
 
   /**
    * Determines whether the reader should use the element id's from the data being read

@@ -27,6 +27,7 @@
 #ifndef CHAINCRITERION_H
 #define CHAINCRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>

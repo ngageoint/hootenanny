@@ -61,7 +61,7 @@ public:
 
   TagAdvancedCriterion();
   TagAdvancedCriterion(const QString& filterJsonStrOrPath);
-  ~TagAdvancedCriterion() = default;
+  ~TagAdvancedCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<TagAdvancedCriterion>(); }

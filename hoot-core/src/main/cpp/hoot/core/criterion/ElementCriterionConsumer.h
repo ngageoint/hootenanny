@@ -27,6 +27,7 @@
 #ifndef __ELEMENT_CRITERIONCONSUMER_H
 #define __ELEMENT_CRITERIONCONSUMER_H
 
+// Hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot

@@ -105,7 +105,7 @@ public:
   /**
    * Determines the reader's default element status
    */
-  void setDefaultStatus(Status status) override { _status = status; }
+  void setDefaultStatus(const Status& status) override { _status = status; }
   /**
    * Determines whether the reader should use the element id's from the file being read
    */

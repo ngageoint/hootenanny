@@ -45,7 +45,7 @@ public:
 
   RelationWithHighwayMembersCriterion();
   RelationWithHighwayMembersCriterion(ConstOsmMapPtr map);
-  ~RelationWithHighwayMembersCriterion() = default;
+  ~RelationWithHighwayMembersCriterion() override = default;
 
   ElementCriterionPtr clone() override
   { return std::make_shared<RelationWithHighwayMembersCriterion>(_map); }

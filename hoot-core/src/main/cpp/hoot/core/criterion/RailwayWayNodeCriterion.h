@@ -41,7 +41,7 @@ public:
 
   RailwayWayNodeCriterion();
   RailwayWayNodeCriterion(ConstOsmMapPtr map);
-  ~RailwayWayNodeCriterion() = default;
+  ~RailwayWayNodeCriterion() override = default;
 
   ElementCriterionPtr clone() override { return std::make_shared<RailwayWayNodeCriterion>(_map); }
 

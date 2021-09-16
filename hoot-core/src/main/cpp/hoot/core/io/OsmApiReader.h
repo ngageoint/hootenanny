@@ -48,7 +48,7 @@ public:
   /** Constructor */
   OsmApiReader();
   /** Destructor */
-  ~OsmApiReader();
+  ~OsmApiReader() override;
   /**
    * @brief close Close the reader
    */

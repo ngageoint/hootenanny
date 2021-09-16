@@ -45,7 +45,7 @@ public:
   static QString className() { return "RelationWithRiverMembersCriterion"; }
 
   RelationWithRiverMembersCriterion();
-  ~RelationWithRiverMembersCriterion() = default;
+  ~RelationWithRiverMembersCriterion() override = default;
 
   ElementCriterionPtr clone() override
   { return std::make_shared<RelationWithRiverMembersCriterion>(); }

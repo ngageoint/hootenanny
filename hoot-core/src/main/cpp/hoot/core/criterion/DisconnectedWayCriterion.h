@@ -46,7 +46,7 @@ public:
 
   DisconnectedWayCriterion() = default;
   DisconnectedWayCriterion(ConstOsmMapPtr map);
-  ~DisconnectedWayCriterion() = default;
+  ~DisconnectedWayCriterion() override = default;
 
   /**
    * @see ElementCriterion

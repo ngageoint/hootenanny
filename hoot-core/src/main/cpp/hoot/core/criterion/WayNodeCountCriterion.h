@@ -43,7 +43,7 @@ public:
   WayNodeCountCriterion();
   WayNodeCountCriterion(
     const int comparisonCount, const NumericComparisonType& numericComparisonType);
-  ~WayNodeCountCriterion() = default;
+  ~WayNodeCountCriterion() override = default;
 
   /**
    * @see ElementCriterion

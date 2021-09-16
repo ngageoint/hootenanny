@@ -85,7 +85,7 @@ public:
   void read(const OsmMapPtr& map) override;
   void close() override;
   ElementPtr readNextElement() override;
-  void setDefaultStatus(Status s) override { _status = s; }
+  void setDefaultStatus(const Status& s) override { _status = s; }
   void setUseFileStatus(bool useFileStatus) override { _useFileStatus = useFileStatus; }
   void setUseDataSourceIds(bool useDataSourceIds) override { _useDataSourceId = useDataSourceIds; }
   QString supportedFormats() override { return ".osm;.osm.bz2;.osm.gz"; }

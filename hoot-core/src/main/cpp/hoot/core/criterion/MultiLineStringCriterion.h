@@ -43,7 +43,7 @@ public:
   static QString className() { return "MultiLineStringCriterion"; }
 
   MultiLineStringCriterion() = default;
-  ~MultiLineStringCriterion() = default;
+  ~MultiLineStringCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<MultiLineStringCriterion>(); }

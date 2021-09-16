@@ -61,7 +61,7 @@ public:
   static QString className() { return "OsmGeoJsonReader"; }
 
   OsmGeoJsonReader() = default;
-  ~OsmGeoJsonReader() = default;
+  ~OsmGeoJsonReader() override = default;
 
   /**
    * @brief isSupported returns true if the URL is likely supported. This isn't

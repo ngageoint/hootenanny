@@ -40,7 +40,7 @@ public:
   static QString className() { return "GeoNamesReader"; }
 
   GeoNamesReader();
-  ~GeoNamesReader() = default;
+  ~GeoNamesReader() override = default;
 
   void close() override;
   void initializePartial() override { }
@@ -54,7 +54,7 @@ public:
   ElementPtr readNextElement() override;
 
   void setDefaultAccuracy(Meters circularError) { _defaultCircularError = circularError; }
-  void setDefaultStatus(Status s) override { _status = s; }
+  void setDefaultStatus(const Status& s) override { _status = s; }
   void setUseDataSourceIds(bool useDataSourceIds) override { _useDataSourceIds = useDataSourceIds; }
 
   QString supportedFormats() override { return ".geonames"; }

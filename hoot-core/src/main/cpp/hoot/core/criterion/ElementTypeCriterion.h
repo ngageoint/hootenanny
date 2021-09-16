@@ -27,6 +27,7 @@
 #ifndef ELEMENTTYPECRITERION_H
 #define ELEMENTTYPECRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Relation.h>

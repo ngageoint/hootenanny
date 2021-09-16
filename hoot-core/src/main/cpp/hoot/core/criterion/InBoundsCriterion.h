@@ -55,7 +55,7 @@ public:
 
   InBoundsCriterion();
   InBoundsCriterion(const bool mustCompletelyContain);
-  ~InBoundsCriterion();
+  ~InBoundsCriterion() override;
 
   /**
    * @see ElementCriterion

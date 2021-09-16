@@ -74,7 +74,7 @@ public:
   explicit OsmMap(const std::shared_ptr<const OsmMap>&);
   explicit OsmMap(const std::shared_ptr<OsmMap>&);
   explicit OsmMap(const std::shared_ptr<OGRSpatialReference>& srs);
-  ~OsmMap() = default;
+  ~OsmMap() override = default;
 
   ///////////////////////////////////////GENERIC ELEMENT////////////////////////////////////////////
 

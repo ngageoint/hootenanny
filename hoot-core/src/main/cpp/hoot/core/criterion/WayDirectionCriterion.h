@@ -43,7 +43,7 @@ public:
 
   WayDirectionCriterion(
     const ConstOsmMapPtr& map, ConstWayPtr baseWay, bool similarDirection = true);
-  ~WayDirectionCriterion() = default;
+  ~WayDirectionCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override

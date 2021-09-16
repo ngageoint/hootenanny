@@ -46,7 +46,7 @@ public:
 
   ReversedRoadCriterion() = default;
   ReversedRoadCriterion(ConstOsmMapPtr map);
-  ~ReversedRoadCriterion() = default;
+  ~ReversedRoadCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<ReversedRoadCriterion>(_map); }

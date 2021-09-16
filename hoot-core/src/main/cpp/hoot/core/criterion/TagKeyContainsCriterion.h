@@ -46,7 +46,7 @@ public:
 
   TagKeyContainsCriterion() : _text(""), _caseSensitive(false) { }
   explicit TagKeyContainsCriterion(const QString& text);
-  ~TagKeyContainsCriterion() = default;
+  ~TagKeyContainsCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<TagKeyContainsCriterion>(); }

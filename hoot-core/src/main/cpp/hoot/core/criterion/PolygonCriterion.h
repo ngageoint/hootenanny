@@ -47,7 +47,7 @@ public:
 
   PolygonCriterion() = default;
   PolygonCriterion(ConstOsmMapPtr map);
-  ~PolygonCriterion() = default;
+  ~PolygonCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<PolygonCriterion>(_map); }

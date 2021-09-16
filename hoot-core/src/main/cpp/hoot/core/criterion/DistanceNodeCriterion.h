@@ -47,7 +47,7 @@ public:
 
   DistanceNodeCriterion() = default;
   DistanceNodeCriterion(geos::geom::Coordinate center, Meters distance);
-  ~DistanceNodeCriterion() = default;
+  ~DistanceNodeCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override
