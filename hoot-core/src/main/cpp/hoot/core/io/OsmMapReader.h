@@ -49,7 +49,7 @@ public:
    * check. It will look to see if the URL is properly formatted (e.g. ends in .osm, or starts
    * with postgresql:, etc.)
    */
-  virtual bool isSupported(const QString& url) = 0;
+  virtual bool isSupported(const QString& url) const = 0;
 
   /**
    * Opens the specified URL for reading.

@@ -49,8 +49,8 @@ public:
   OsmGbdxXmlWriter();
   ~OsmGbdxXmlWriter() override;
 
-  bool isSupported(const QString& url) override { return url.toLower().endsWith(".gxml"); }
-  QString supportedFormats() override {return ".gxml";}
+  bool isSupported(const QString& url) const override { return url.toLower().endsWith(".gxml"); }
+  QString supportedFormats() const override { return ".gxml"; }
   void open(const QString& url) override;
   void close() override;
 

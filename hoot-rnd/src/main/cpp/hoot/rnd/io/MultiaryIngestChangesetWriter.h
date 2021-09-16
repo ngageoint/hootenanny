@@ -56,7 +56,7 @@ public:
    *
    * "mic" stands for "multiary ingest changeset"
    */
-  bool isSupported(const QString& url) override { return url.endsWith(".mic"); }
+  bool isSupported(const QString& url) const override { return url.endsWith(".mic"); }
 
   /**
    * Open the specified filename for writing.

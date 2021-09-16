@@ -63,7 +63,7 @@ public:
   bool hasMoreElements() override;
   ElementPtr readNextElement() override;
   void close() override;
-  bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) const override;
   void open(const QString& url) override;
   void setUseDataSourceIds(bool useDataSourceIds) override;
   void finalizePartial() override;

@@ -132,7 +132,7 @@ void ApiDb::_resetQueries()
   }
 }
 
-bool ApiDb::isSupported(const QUrl& url)
+bool ApiDb::isSupported(const QUrl& url) const
 {
   bool valid = url.isValid();
   if (url.scheme() == "postgresql")

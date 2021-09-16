@@ -569,7 +569,7 @@ void OgrReader::finalizePartial()
   _elementsRead = 0;
 }
 
-bool OgrReader::isSupported(const QString& url)
+bool OgrReader::isSupported(const QString& url) const
 {
   LOG_VART(url);
   QString justPath = url;

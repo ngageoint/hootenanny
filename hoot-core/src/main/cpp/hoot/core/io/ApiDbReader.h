@@ -59,7 +59,7 @@ public:
   ApiDbReader();
   virtual ~ApiDbReader() = default;
 
-  bool isSupported(const QString& urlStr) override;
+  bool isSupported(const QString& urlStr) const override;
 
   void setBoundingBox(const QString& bbox);
   void setOverrideBoundingBox(const QString& bbox);

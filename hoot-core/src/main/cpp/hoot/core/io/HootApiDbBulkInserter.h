@@ -60,7 +60,7 @@ public:
   HootApiDbBulkInserter();
   ~HootApiDbBulkInserter() override;
 
-  bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) const override;
   void open(const QString& url) override;
 
   void finalizePartial() override;
@@ -77,7 +77,7 @@ public:
   void setOverwriteMap(bool overwriteMap) { _overwriteMap = overwriteMap; }
   void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
 
-  QString supportedFormats() override { return MetadataTags::HootApiDbScheme() + "://"; }
+  QString supportedFormats() const override { return MetadataTags::HootApiDbScheme() + "://"; }
 
 protected:
 

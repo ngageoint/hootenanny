@@ -91,7 +91,7 @@ public:
 
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
-  bool isSupported(const QString& urlStr) override;
+  bool isSupported(const QString& urlStr) const override;
   void open(const QString& urlStr) override;
   void initializePartial() override;
   /**

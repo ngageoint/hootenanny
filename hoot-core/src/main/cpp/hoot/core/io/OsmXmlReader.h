@@ -82,7 +82,7 @@ public:
   void initializePartial() override {}
   void finalizePartial() override;
   bool hasMoreElements() override;
-  bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) const override;
   void read(const OsmMapPtr& map) override;
   void close() override;
   ElementPtr readNextElement() override;

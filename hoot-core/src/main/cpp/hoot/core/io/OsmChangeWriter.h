@@ -58,7 +58,7 @@ public:
   /**
    * Returns true if the output URL is supported.
    */
-  virtual bool isSupported(const QString& url) = 0;
+  virtual bool isSupported(const QString& url) const = 0;
 
   /**
    * Opens the specified URL for writing.

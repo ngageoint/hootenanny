@@ -58,7 +58,7 @@ public:
    * @param url URL of the OSM API to read
    * @return True if the URL is a supported format
    */
-  bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) const override;
   /**
    * @brief read Read the OSM from the API into the map
    * @param map Pointer to the map to read into

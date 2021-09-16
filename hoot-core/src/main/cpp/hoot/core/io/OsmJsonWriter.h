@@ -57,11 +57,11 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  bool isSupported(const QString& url) override { return url.toLower().endsWith(".json"); }
+  bool isSupported(const QString& url) const override { return url.toLower().endsWith(".json"); }
   void open(const QString& url) override;
   virtual void close() { if (_fp.isOpen()) { _fp.close(); } }
   void write(const ConstOsmMapPtr& map) override;
-  QString supportedFormats() override { return ".json"; }
+  QString supportedFormats() const override { return ".json"; }
 
   /**
    * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()

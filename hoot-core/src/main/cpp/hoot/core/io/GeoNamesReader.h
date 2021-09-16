@@ -49,7 +49,7 @@ public:
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   bool hasMoreElements() override;
-  bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) const override;
   void open(const QString& url) override;
   ElementPtr readNextElement() override;
 

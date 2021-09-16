@@ -70,7 +70,7 @@ public:
    * @param url
    * @return
    */
-  bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) const override;
 
   /**
    * @brief read Reads the data specified by the last call to open(...)

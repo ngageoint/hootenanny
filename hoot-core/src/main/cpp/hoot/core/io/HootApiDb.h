@@ -53,7 +53,7 @@ public:
   ~HootApiDb() override;
 
   void close() override;
-  bool isSupported(const QUrl& url) override;
+  bool isSupported(const QUrl& url) const override;
   void open(const QUrl& url) override;
   void commit() override;
 

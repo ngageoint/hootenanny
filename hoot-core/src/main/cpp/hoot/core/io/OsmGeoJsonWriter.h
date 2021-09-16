@@ -64,8 +64,8 @@ public:
    * @param url Filename ending in ".geojson"
    * @return
    */
-  bool isSupported(const QString& url) override { return url.toLower().endsWith(".geojson"); }
-  QString supportedFormats() override { return ".geojson"; }
+  bool isSupported(const QString& url) const override { return url.toLower().endsWith(".geojson"); }
+  QString supportedFormats() const override { return ".geojson"; }
 
   QString toString(const ConstOsmMapPtr& map);
 

@@ -89,7 +89,7 @@ QString OsmApiReader::supportedFormats() const
   return "http://;https://";
 }
 
-bool OsmApiReader::isSupported(const QString& url)
+bool OsmApiReader::isSupported(const QString& url) const
 {
   QStringList validPrefixes = supportedFormats().split(";");
   const QString checkString(url.toLower());

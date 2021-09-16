@@ -125,7 +125,7 @@ public:
    * @param url
    * @return
    */
-  bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) const override;
 
   /**
    * @brief open Specifies the URL to read from. Can be a file (file://some/path/to/a/file)
