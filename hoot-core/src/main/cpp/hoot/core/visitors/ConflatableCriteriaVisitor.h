@@ -47,7 +47,7 @@ public:
   static QString className() { return "ConflatableCriteriaVisitor"; }
 
   ConflatableCriteriaVisitor() = default;
-  ~ConflatableCriteriaVisitor() = default;
+  ~ConflatableCriteriaVisitor() override = default;
 
   void visit(const std::shared_ptr<Element>& e) override;
 

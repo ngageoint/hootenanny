@@ -45,7 +45,7 @@ public:
   static QString className() { return "CalculateAreaVisitor"; }
 
   CalculateAreaVisitor() : _total(0) { }
-  ~CalculateAreaVisitor() = default;
+  ~CalculateAreaVisitor() override = default;
 
   double getStat() const override { return getArea(); }
 

@@ -49,10 +49,10 @@ public:
 
   static QString className() { return "ReportMissingElementsVisitor"; }
 
-  ReportMissingElementsVisitor(const bool removeMissing = false,
-                               const Log::WarningLevel& logLevel = Log::Trace,
-                               const int maxReport = Log::getWarnMessageLimit());
-  ~ReportMissingElementsVisitor() = default;
+  ReportMissingElementsVisitor(
+    const bool removeMissing = false, const Log::WarningLevel& logLevel = Log::Trace,
+    const int maxReport = Log::getWarnMessageLimit());
+  ~ReportMissingElementsVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override;
 

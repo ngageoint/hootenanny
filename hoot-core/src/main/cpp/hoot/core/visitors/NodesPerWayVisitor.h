@@ -53,7 +53,7 @@ public:
   static QString className() { return "NodesPerWayVisitor"; }
 
   NodesPerWayVisitor();
-  ~NodesPerWayVisitor() = default;
+  ~NodesPerWayVisitor() override = default;
 
   void addCriterion(const ElementCriterionPtr& e) override;
 

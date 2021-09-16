@@ -48,7 +48,7 @@ public:
   static QString className() { return "RemoveInvalidReviewRelationsVisitor"; }
 
   RemoveInvalidReviewRelationsVisitor() = default;
-  ~RemoveInvalidReviewRelationsVisitor() = default;
+  ~RemoveInvalidReviewRelationsVisitor() override = default;
 
   void visit(const ElementPtr& e) override;
 

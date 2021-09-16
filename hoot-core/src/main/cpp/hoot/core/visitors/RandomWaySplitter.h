@@ -63,7 +63,7 @@ public:
   static QString className() { return "RandomWaySplitter"; }
 
   RandomWaySplitter();
-  ~RandomWaySplitter() = default;
+  ~RandomWaySplitter() override = default;
 
   void setConfiguration(const Settings& conf) override;
 

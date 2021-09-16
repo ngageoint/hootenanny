@@ -46,7 +46,7 @@ public:
   static QString className() { return "FindIntersectionsVisitor"; }
 
   FindIntersectionsVisitor() = default;
-  ~FindIntersectionsVisitor() = default;
+  ~FindIntersectionsVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override;
 
@@ -82,7 +82,7 @@ public:
   static QString className() { return "FindHighwayIntersectionsVisitor"; }
 
   FindHighwayIntersectionsVisitor() = default;
-  ~FindHighwayIntersectionsVisitor() = default;
+  ~FindHighwayIntersectionsVisitor() override = default;
 
   QString getDescription() const override { return "Identifies road intersections"; }
 
@@ -104,7 +104,7 @@ public:
   static QString className() { return "FindRailwayIntersectionsVisitor"; }
 
   FindRailwayIntersectionsVisitor() = default;
-  ~FindRailwayIntersectionsVisitor() = default;
+  ~FindRailwayIntersectionsVisitor() override = default;
 
   QString getDescription() const override { return "Identifies railway intersections"; }
 

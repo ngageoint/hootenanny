@@ -46,7 +46,7 @@ public:
 
   TagKeyCountVisitor();
   TagKeyCountVisitor(const QString& key);
-  ~TagKeyCountVisitor() = default;
+  ~TagKeyCountVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override;
 

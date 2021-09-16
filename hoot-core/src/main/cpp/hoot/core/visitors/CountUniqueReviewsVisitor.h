@@ -46,7 +46,7 @@ public:
   static QString className() { return "CountUniqueReviewsVisitor"; }
 
   CountUniqueReviewsVisitor() = default;
-  ~CountUniqueReviewsVisitor() = default;
+  ~CountUniqueReviewsVisitor() override = default;
 
   double getStat() const override { return _reviews.size(); }
 

@@ -44,9 +44,10 @@ public:
 
   static QString className() { return "RemoveMissingElementsVisitor"; }
 
-  RemoveMissingElementsVisitor(const Log::WarningLevel& logLevel = Log::Trace,
-                               const int maxReport = Log::getWarnMessageLimit());
-  ~RemoveMissingElementsVisitor() = default;
+  RemoveMissingElementsVisitor(
+    const Log::WarningLevel& logLevel = Log::Trace,
+    const int maxReport = Log::getWarnMessageLimit());
+  ~RemoveMissingElementsVisitor() override = default;
 
   void setOsmMap(OsmMap* map) override { _v->setOsmMap(map);}
   void setOsmMap(const OsmMap* /*map*/) const

@@ -48,7 +48,7 @@ public:
   static int logWarnCount;
 
   SplitLongLinearWaysVisitor();
-  ~SplitLongLinearWaysVisitor() = default;
+  ~SplitLongLinearWaysVisitor() override = default;
 
   void setOsmMap(OsmMap* map) override { _map = map; }
   void setOsmMap(const OsmMap*) override { assert(false); }

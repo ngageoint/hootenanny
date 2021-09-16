@@ -48,7 +48,7 @@ public:
   static QString className() { return "CalculateMapBoundsVisitor"; }
 
   CalculateMapBoundsVisitor() = default;
-  ~CalculateMapBoundsVisitor() = default;
+  ~CalculateMapBoundsVisitor() override = default;
 
   OGREnvelope getBounds() const { return _envelope; }
 

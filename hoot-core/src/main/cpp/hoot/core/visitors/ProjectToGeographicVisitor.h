@@ -46,7 +46,7 @@ public:
   static QString className() { return "ProjectToGeographicVisitor"; }
 
   ProjectToGeographicVisitor();
-  ~ProjectToGeographicVisitor();
+  ~ProjectToGeographicVisitor() override;
 
   void initialize(const std::shared_ptr<OGRSpatialReference>& projection);
 

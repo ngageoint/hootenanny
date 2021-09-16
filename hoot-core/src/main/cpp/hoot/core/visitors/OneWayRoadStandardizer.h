@@ -45,7 +45,7 @@ public:
   static QString className() { return "OneWayRoadStandardizer"; }
 
   OneWayRoadStandardizer() = default;
-  ~OneWayRoadStandardizer() = default;
+  ~OneWayRoadStandardizer() override = default;
 
   void visit(const std::shared_ptr<Element>& e) override;
 

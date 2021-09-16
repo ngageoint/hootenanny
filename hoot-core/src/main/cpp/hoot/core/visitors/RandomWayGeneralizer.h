@@ -57,7 +57,7 @@ public:
   static QString className() { return "RandomWayGeneralizer"; }
 
   RandomWayGeneralizer();
-  ~RandomWayGeneralizer() = default;
+  ~RandomWayGeneralizer() override = default;
 
   void setConfiguration(const Settings& conf) override;
 

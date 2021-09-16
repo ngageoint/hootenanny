@@ -47,7 +47,7 @@ public:
 
   StatusUpdateVisitor();
   StatusUpdateVisitor(Status status, bool onlyUpdateIfStatusInvalid = false);
-  ~StatusUpdateVisitor() = default;
+  ~StatusUpdateVisitor() override = default;
 
   void setConfiguration(const Settings& conf) override;
 

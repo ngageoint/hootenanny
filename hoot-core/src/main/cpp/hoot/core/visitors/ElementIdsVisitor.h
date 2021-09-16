@@ -48,9 +48,9 @@ public:
 
   static QString className() { return "ElementIdsVisitor"; }
 
-  ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit);
   ElementIdsVisitor() = default;
-  ~ElementIdsVisitor() = default;
+  ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit);
+  ~ElementIdsVisitor() override = default;
 
   void visit(const std::shared_ptr<const Element>& e) override;
 

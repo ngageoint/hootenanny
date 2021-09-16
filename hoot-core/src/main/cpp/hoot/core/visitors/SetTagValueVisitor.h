@@ -55,7 +55,9 @@ public:
     const QString& key, const QString& value, bool appendToExistingValue = false,
     const QStringList& criteriaClassNames = QStringList(), const bool overwriteExistingTag = true,
     const bool negateCriteria = false);
-  ~SetTagValueVisitor() = default;
+  ~SetTagValueVisitor() override = default;
+
+  bool isValid() const { return !_keys.isEmpty() && !_vals.isEmpty(); }
 
   void setConfiguration(const Settings& conf) override;
 
@@ -68,8 +70,6 @@ public:
   QString getName() const override { return className(); }
   QString getDescription() const override { return "Adds or updates specific tags on elements"; }
   QString getClassName() const override { return className(); }
-
-  bool isValid() const { return !_keys.isEmpty() && !_vals.isEmpty(); }
 
 private:
 

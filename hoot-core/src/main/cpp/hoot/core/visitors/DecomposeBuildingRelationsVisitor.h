@@ -52,7 +52,7 @@ public:
   static int logWarnCount;
 
   DecomposeBuildingRelationsVisitor() = default;
-  ~DecomposeBuildingRelationsVisitor() = default;
+  ~DecomposeBuildingRelationsVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override;
 

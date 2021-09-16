@@ -44,7 +44,7 @@ public:
 
   KeepTagsVisitor() = default;
   explicit KeepTagsVisitor(const QStringList& keys);
-  ~KeepTagsVisitor() = default;
+  ~KeepTagsVisitor() override = default;
 
   void visit(const std::shared_ptr<Element>& e) override;
 

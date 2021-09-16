@@ -48,7 +48,7 @@ public:
   static QString className() { return "CollapsePolyGeoModifierAction"; }
 
   CollapsePolyGeoModifierAction() = default;
-  ~CollapsePolyGeoModifierAction() = default;
+  ~CollapsePolyGeoModifierAction() override = default;
 
   QString getCommandName() const override { return "collapse_poly"; }
   QList<QString> getParameterNames() const override

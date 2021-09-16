@@ -58,12 +58,11 @@ public:
 
   static QString className() { return "SpatialIndexer"; }
 
-  explicit SpatialIndexer(std::shared_ptr<Tgs::HilbertRTree>& index,
-                          std::deque<ElementId>& indexToEid,
-                          const std::shared_ptr<ElementCriterion>& criterion,
-                          const std::function<Meters (const ConstElementPtr&)>& getSearchRadius,
-                          ConstOsmMapPtr pMap);
-  ~SpatialIndexer() = default;
+  explicit SpatialIndexer(
+    std::shared_ptr<Tgs::HilbertRTree>& index, std::deque<ElementId>& indexToEid,
+    const std::shared_ptr<ElementCriterion>& criterion,
+    const std::function<Meters (const ConstElementPtr&)>& getSearchRadius, ConstOsmMapPtr pMap);
+  ~SpatialIndexer() override = default;
 
   void addCriterion(const ElementCriterionPtr& e) override;
 

@@ -45,7 +45,7 @@ public:
   static QString className() { return "MedianNodeVisitor"; }
 
   MedianNodeVisitor() = default;
-  ~MedianNodeVisitor() = default;
+  ~MedianNodeVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override;
 

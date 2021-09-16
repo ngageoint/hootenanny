@@ -47,7 +47,7 @@ public:
   static QString className() { return "RemoveInvalidMultilineStringMembersVisitor"; }
 
   RemoveInvalidMultilineStringMembersVisitor();
-  ~RemoveInvalidMultilineStringMembersVisitor() = default;
+  ~RemoveInvalidMultilineStringMembersVisitor() override = default;
 
   void visit(const ElementPtr& e) override;
 

@@ -40,8 +40,8 @@ public:
 
   static QString className() { return "WaysVisitor"; }
 
-  WaysVisitor(std::vector<ConstWayPtr>& w) : _w(w) { }
-  ~WaysVisitor() = default;
+  WaysVisitor(std::vector<ConstWayPtr>& w);
+  ~WaysVisitor() override = default;
 
   void visit(const std::shared_ptr<const Element>& e) override;
 

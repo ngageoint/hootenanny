@@ -44,8 +44,8 @@ public:
 
   static QString className() { return "CountManualMatchesVisitor"; }
 
-  CountManualMatchesVisitor() : _numManualMatches(0) { }
-  ~CountManualMatchesVisitor() = default;
+  CountManualMatchesVisitor();
+  ~CountManualMatchesVisitor() override = default;
 
   double getStat() const override { return _numManualMatches; }
 
