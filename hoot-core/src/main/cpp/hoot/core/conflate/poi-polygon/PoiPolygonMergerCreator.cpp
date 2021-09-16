@@ -258,12 +258,6 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
       result = true;
     }
   }
-  // If you don't dereference the m1/m2 pointers it always returns Match as the typeid. Odd.
-  else if (typeid(*m1) == typeid(*m2))
-  {
-    result = m1->isConflicting(m2, map);
-    LOG_TRACE("type ids match; conflict=" << result);
-  }
   else
   {
     LOG_TRACE("no conflict");

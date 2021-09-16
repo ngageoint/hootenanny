@@ -27,9 +27,8 @@
 #include "LinearMergerJs.h"
 
 // hoot
-#include <hoot/core/conflate/merging/LinearAverageMerger.h>
 #include <hoot/core/conflate/merging/LinearMergerFactory.h>
-#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/merging/MergerBase.h>
 #include <hoot/core/util/Factory.h>
 
 #include <hoot/js/JsRegistrar.h>

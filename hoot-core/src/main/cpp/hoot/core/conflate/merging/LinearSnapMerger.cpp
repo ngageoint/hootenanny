@@ -90,7 +90,7 @@ _markAddedMultilineStringRelations
 }
 
 bool LinearSnapMerger::_mergePair(
-  ElementId eid1, ElementId eid2, vector<pair<ElementId, ElementId>>& replaced)
+  const ElementId& eid1, const ElementId& eid2, vector<pair<ElementId, ElementId>>& replaced)
 {
   // An element null check is performed by this call.
   if (LinearMergerAbstract::_mergePair(eid1, eid2, replaced))

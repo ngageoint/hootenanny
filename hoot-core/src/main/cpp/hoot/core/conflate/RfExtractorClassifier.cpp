@@ -47,7 +47,7 @@ namespace hoot
 int RfExtractorClassifier::logWarnCount = 0;
 
 MatchClassification RfExtractorClassifier::classify(
-  const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const
+  const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2) const
 {
   LOG_TRACE("Determining classification for match between: " << eid1 << " and " << eid2 << "...");
 
@@ -81,7 +81,7 @@ const vector<std::shared_ptr<const FeatureExtractor>>& RfExtractorClassifier::_g
 }
 
 map<QString, double> RfExtractorClassifier::getFeatures(
-  const ConstOsmMapPtr& m, ElementId eid1, ElementId eid2) const
+  const ConstOsmMapPtr& m, const ElementId& eid1, const ElementId& eid2) const
 {
   map<QString, double> result;
 

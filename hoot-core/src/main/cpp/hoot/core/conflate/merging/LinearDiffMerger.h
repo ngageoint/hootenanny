@@ -69,7 +69,7 @@ public:
 protected:
 
   bool _mergePair(
-    ElementId eid1, ElementId eid2,
+    const ElementId& eid1, const ElementId& eid2,
     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /*

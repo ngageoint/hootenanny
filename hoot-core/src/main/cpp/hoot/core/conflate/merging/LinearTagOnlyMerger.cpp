@@ -47,7 +47,8 @@ HOOT_FACTORY_REGISTER(Merger, LinearTagOnlyMerger)
 LinearTagOnlyMerger::LinearTagOnlyMerger() :
 LinearSnapMerger(),
 _performBridgeGeometryMerging(
-  ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
+  ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
+_tagMerger(TagMergerFactory::getInstance().getDefaultPtr())
 {
   _removeTagsFromWayMembers = false;
 }
@@ -57,13 +58,15 @@ LinearTagOnlyMerger::LinearTagOnlyMerger(const std::set<std::pair<ElementId, Ele
 LinearSnapMerger(pairs, std::shared_ptr<SublineStringMatcher>()),
 _performBridgeGeometryMerging(
   ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
-_networkMerger(networkMerger)
+_networkMerger(networkMerger),
+_tagMerger(TagMergerFactory::getInstance().getDefaultPtr())
 {
   _removeTagsFromWayMembers = false;
 }
 
 bool LinearTagOnlyMerger::_mergePair(
-  ElementId eid1, ElementId eid2, std::vector<std::pair<ElementId, ElementId>>& replaced)
+  const ElementId& eid1, const ElementId& eid2,
+  std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   ElementPtr e1 = _map->getElement(eid1);
   ElementPtr e2 = _map->getElement(eid2);
@@ -112,10 +115,8 @@ bool LinearTagOnlyMerger::_mergePair(
     }
   }
 
-  // Otherwise, proceed with tag only merging.
-
-  // Used to copy relation tags back to their way members here, but it doesn't actually seem to
-  // come up in any test cases so no longer doing it.;
+  // Otherwise, proceed with tag only merging. We used to copy relation tags back to their way
+  // members here, but it doesn't actually seem to come up in any test cases so no longer doing it.
 
   // Merge the ways, bringing the secondary feature's attributes over to the reference feature.
 
@@ -176,7 +177,7 @@ bool LinearTagOnlyMerger::_mergeWays(
 
   // merge the tags
   Tags mergedTags =
-    TagMergerFactory::mergeTags(
+    _tagMerger->mergeTags(
       elementWithTagsToKeep->getTags(), elementWithTagsToRemove->getTags(), ElementType::Way);
   // sanity check to prevent the multilinestring tag, later used to remove multilinestring
   // relations added during conflation, from being added to anything other than relations

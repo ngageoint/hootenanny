@@ -681,6 +681,7 @@ translate = {
   packText(input,num,maxLen)
   {
     var outTags = [];
+
     // Yes, arrays start at 0 but we are going to build values like tag1, tag2, tag3 etc
     // NOTE: This may bite me later
     for (var i = 1; i <= num; i++) outTags[i] = '';
@@ -700,14 +701,51 @@ translate = {
       for (var j = 1; j <= num; j++)
       {
         // print('item' + j + '  len:' + (sTag.length + outTags[j].length) );
-        if ((sTag.length + outTags[j].length) < maxLen)
+        if ((sTag.length + outTags[j].length) < Number(maxLen))
         {
           outTags[j] += sTag + ',';
           packed = true;
           break;
         }
       }
-        if (!packed) hoot.logError('Unable to store ' + sTag + ' in a text field!');
+
+      if (!packed)
+      {
+        // hoot.logError('Unable to store ' + sTag + ' in a text field!  Tag length is ' + sTag.length + ' char');
+        hoot.logWarn('Tag ' + sTag + ' is longer than the maximum tag length and will be split. length ' + sTag.length + ', max length: ' + maxLen);
+
+        // We don't know what has already been stored so try splitting it into smaller bits and name them sequentially
+        var tString = input[key].toString();
+        var chunkLength = 100; // Split string length
+        var numChunks = Math.ceil(input[key].length / chunkLength)
+
+        for (var m = 1, o = 0; m <= numChunks; ++m, o += chunkLength)
+        {
+          // tmpObj = tString.substr(o,chunkLength);
+          var nKey = 'xs' + m + ':' + key;
+          var nObj = {}
+
+          nObj[nKey] = tString.substr(o,chunkLength);
+
+          var ssTag = JSON.stringify(nObj).slice(1,-1);
+
+          var sPacked = false;
+          for (var n = 1; n <= num; n++)
+          {
+            // print('item' + j + '  len:' + (sTag.length + outTags[j].length) );
+            if ((ssTag.length + outTags[n].length) < Number(maxLen))
+            {
+              outTags[n] += ssTag + ',';
+              sPacked = true;
+              break;
+            }
+          }
+          if (!sPacked)
+          {
+            hoot.logError('Unable to store text chunk: ' + 'xs' + m + ':' + key + '  : ' + ssTag);
+          }
+        }
+      } // End Not Packed
     }
 
     // Now clean up dangling ',' and add braces
@@ -721,23 +759,28 @@ translate = {
 
 
   // Parse JSON packed attributes
-  unpackText(input, attribute, num)
+  unpackText(input, attribute)
   {
     var outTags = {};
-
-    // Check if the tags got split
-    // NOTE: This should handle tag, tag1, tag2 etc or obj1, obj2, obj3
-
     var tList = [];
-    if (input[attribute]) tList.push('' + attribute);
-    for (var i = 1; i <= num; i++)
+    var tTags = '';
+
+    // Handle OSMTAGS, ot tag
+    if (input[attribute]) tTags = tTags.concat(input[attribute]);
+
+    // Handle tags1, tags2 etc vs OSMTAGS, OSMTAGS2
+    if (input[attribute + '1']) tTags = tTags.concat(input['' + attribute + '1']);
+
+    // We expect to see XX2, XX3 etc
+    var tNum = 2;
+    while (input['' + attribute + tNum])
     {
-      tList.push('' + attribute + i);
+      tTags = tTags.concat(input['' + attribute + tNum])
+      tNum++;
     }
 
-    var tTags = '';
-    tList.forEach( item => { if (input[item]) tTags = tTags.concat(input[item]); });
     tTags = tTags.split('}{').join(','); // Join the JSON if needed
+
     try
     {
       outTags = JSON.parse(tTags);
@@ -773,6 +816,35 @@ translate = {
         }
       }
     } // End else Bad o2s
+
+    // Now join any attribute values that got split during the packing process. This mainly occurs with shapefiles.
+    var kList = Object.keys(outTags).sort();
+    if (kList.length > 0)
+    {
+      for (var i = 0, fLen = kList.length; i < fLen; i++)
+      {
+        // We do delete items so make sure they exist before trying to process them
+        if (!outTags[kList[i]]) continue;
+
+        // Find the first part of a split.
+        // Name format is:  xs[1-N]:<tag name>
+        if (kList[i].indexOf('xs1:') == 0)
+        {
+          nTag = kList[i].replace('xs1:','');
+          outTags[nTag] = outTags[kList[i]];
+          delete outTags[kList[i]];
+
+          // Now go find the rest: xs2:<tag>, xs3:<tag> etc
+          var splitNum = 2;
+          while (outTags['xs' + splitNum + ':' + nTag])
+          {
+            outTags[nTag] = outTags[nTag].concat(outTags['xs' + splitNum + ':' + nTag]);
+            delete outTags['xs' + splitNum + ':' + nTag];
+            splitNum++;
+          }
+        }
+      }
+    }
 
     return outTags;
   },
@@ -1358,22 +1430,6 @@ translate = {
   // Note: t = tags, a = attrs and attrs can only be on the RHS
   applyComplexRules : function(tgs, atrs, rulesList)
   {
-    /*
-        var rulesFunction = [];
-
-        for (var i = 0, rLen = rulesList.length; i < rLen; i++)
-        {
-            rulesFunction.push([new Function('t', 'return ' + rulesList[i][0]), new Function('t','a', rulesList[i][1])]);
-        }
-
-        function applyRules(t,a)
-        {
-            for (var i = 0, rLen = rulesFunction.length; i < rLen; i++)
-            {
-                if (rulesFunction[i][0](t)) rulesFunction[i][1](t,a);
-            }
-        }
-    */
     rulesList.forEach( function (item) {
       if (item[0](tgs)) item[1](tgs,atrs);
     });
@@ -1478,27 +1534,15 @@ translate = {
   // addO2sFeatures - Add split o2s features to a schema
   addO2sFeatures: function(schema)
   {
-    schema.push({ name:'o2s_A',desc:'o2s',geom:'Area',
-      columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'254'},
-        {name:'tag2',desc:'Tag List',type:'String',defValue:'',length:'254'},
-        {name:'tag3',desc:'Tag List',type:'String',defValue:'',length:'254'},
-        {name:'tag4',desc:'Tag List',type:'String',defValue:'',length:'254'}
-      ]
-    });
-    schema.push({ name:'o2s_L',desc:'o2s',geom:'Line',
-      columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'254'},
-        {name:'tag2',desc:'Tag List',type:'String',defValue:'',length:'254'},
-        {name:'tag3',desc:'Tag List',type:'String',defValue:'',length:'254'},
-        {name:'tag4',desc:'Tag List',type:'String',defValue:'',length:'254'}
-      ]
-    });
-    schema.push({ name:'o2s_P',desc:'o2s',geom:'Point',
-      columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'254'},
-        {name:'tag2',desc:'Tag List',type:'String',defValue:'',length:'254'},
-        {name:'tag3',desc:'Tag List',type:'String',defValue:'',length:'254'},
-        {name:'tag4',desc:'Tag List',type:'String',defValue:'',length:'254'}
-      ]
-    });
+    var tList = [];
+    for (var i = 1,maxNum = hoot.Settings.get("ogr.text.field.number"); i <= maxNum; i++)
+    {
+      tList.push({name:'tag' + i,desc:'Tag List',type:'String',defValue:'',length:'254'});
+    }
+
+    schema.push({ name:'o2s_P',desc:'o2s',geom:'Point',columns:tList });
+    schema.push({ name:'o2s_L',desc:'o2s',geom:'Line',columns:tList });
+    schema.push({ name:'o2s_A',desc:'o2s',geom:'Area',columns:tList });
 
     return schema;
   }, // End addO2sFeatures
@@ -1520,9 +1564,11 @@ translate = {
   {
     schema.forEach( function (item) {
       item.columns.push({name:'OSMTAGS',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'254'});
-      item.columns.push({name:'OSMTAGS2',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'254'});
-      item.columns.push({name:'OSMTAGS3',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'254'});
-      item.columns.push({name:'OSMTAGS4',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'254'});
+
+      for (var i = 2,maxNum = hoot.Settings.get("ogr.text.field.number"); i <= maxNum; i++)
+      {
+        item.columns.push({name:'OSMTAGS' + i,desc:'Stored OSM tags and values',type:'String',defValue:'',length:'254'});
+      }
     });
 
     return schema;

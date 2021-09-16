@@ -12,7 +12,7 @@ mkdir -p $outputDir
 rm -rf $outputDir/*
 
 # Normal Hoot options
-HOOT_OPT="--debug -C Testing.conf"
+HOOT_OPT="--info -C Testing.conf"
 
 # Hoot options for debugging the test input and output
 # NOTE: This will generate HEAPS of output.

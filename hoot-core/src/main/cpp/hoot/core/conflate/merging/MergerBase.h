@@ -27,6 +27,7 @@
 #ifndef MERGERBASE_H
 #define MERGERBASE_H
 
+// Hoot
 #include <hoot/core/conflate/merging/Merger.h>
 
 namespace hoot

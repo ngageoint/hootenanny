@@ -571,6 +571,7 @@ enc311 = {
       enc311.configOut.OgrNoteExtra = hoot.Settings.get('ogr.note.extra');
       enc311.configOut.OgrFormat = hoot.Settings.get('ogr.output.format');
       enc311.configOut.OgrThrowError = hoot.Settings.get('ogr.throw.error');
+      enc311.configOut.OgrTextFieldNumber = hoot.Settings.get("ogr.text.field.number");
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon
@@ -733,11 +734,11 @@ enc311 = {
       if (enc311.configOut.OgrFormat == 'shp')
       {
         // Throw a warning that text will get truncated.
-        if (str.length > 900) hoot.logWarn('o2s tags truncated to fit in available space.');
+        if (str.length > (enc311.configOut.OgrTextFieldNumber * 250)) hoot.logWarn('o2s tags truncated to fit in available space.');
 
         attrs = {};
-        var tList = translate.packText(tags,4,225);
-        for (var i = 1; i < 5; i++)
+        var tList = translate.packText(tags,enc311.configOut.OgrTextFieldNumber,250);
+        for (var i = 1, tLen = tList.length; i < tLen; i++)
         {
           attrs['tag'+i] = tList[i];
         }

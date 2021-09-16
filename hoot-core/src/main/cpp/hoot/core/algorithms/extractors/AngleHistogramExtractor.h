@@ -62,7 +62,8 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+  double extract(
+    const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
   /**

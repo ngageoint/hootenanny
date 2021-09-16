@@ -40,6 +40,7 @@
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
+#include <hoot/core/conflate/highway/MedianToDividedRoadClassifier.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/elements/ElementId.h>
@@ -58,7 +59,8 @@ HOOT_FACTORY_REGISTER(Match, HighwayMatch)
 const QString HighwayMatch::MATCH_NAME = "Highway";
 QString HighwayMatch::_noMatchingSubline = "No valid matching subline found.";
 
-HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
+HighwayMatch::HighwayMatch(
+  const std::shared_ptr<HighwayClassifier>& classifier,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const ConstOsmMapPtr& map,
   const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt) :
 Match(mt, eid1, eid2),
@@ -67,24 +69,22 @@ _score(0.0),
 _sublineMatcher(sublineMatcher),
 _minSplitSize(0.0)
 {
+  LOG_VART(_eid1);
+  LOG_VART(_eid2);
   assert(_eid1 != _eid2);
 
   const ConstElementPtr e1 = map->getElement(_eid1);
   const ConstElementPtr e2 = map->getElement(_eid2);
-
-  LOG_VART(_eid1);
-  LOG_VART(_eid2);
 
   try
   {
     // calculated the shared sublines
     _sublineMatch =
       _sublineMatcher->findMatch(map, e1, e2, ConfigOptions().getSearchRadiusHighway());
-
     if (_sublineMatch.isValid())
     {
-      // calculate the match score
-      _c = _classifier->classify(map, eid1, eid2, _sublineMatch);
+      // calculate the match score  
+      _classification = _classifier->classify(map, eid1, eid2, _sublineMatch);
 
       MatchType type = getType();
       LOG_VART(type);
@@ -97,26 +97,37 @@ _minSplitSize(0.0)
       if (description.length() > 0)
         _explainText = description.join(" ");
       else
-        _explainText = mt->getTypeDetail(_c);
+        _explainText = mt->getTypeDetail(_classification);
+
+      // If the median classifier was used, we'll spruce up the explain text a bit and be sure to
+      // mark it as a one to many match so that needed matches don't get thrown out during match
+      // optimization.
+      if (type == MatchType::Match &&
+          std::dynamic_pointer_cast<MedianToDividedRoadClassifier>(_classifier))
+      {
+        _explainText += " " + MedianToDividedRoadClassifier::MEDIAN_MATCHED_DESCRIPTION;
+        LOG_VART(_explainText);
+        setIsOneToMany(true);
+      }
     }
     else
     {
-      _c.setMissP(1);
+      _classification.setMissP(1);
       _explainText = _noMatchingSubline;
     }
 
-    _score = _sublineMatch.getLength() * _c.getMatchP();
+    _score = _sublineMatch.getLength() * _classification.getMatchP();
   }
   // if this is an unsupported geometry configuration
   catch (const NeedsReviewException& e)
   {
-    _c.clear();
-    _c.setReviewP(1.0);
+    _classification.clear();
+    _classification.setReviewP(1.0);
     _explainText = e.getWhat();
   }
 
   LOG_VART(_score);
-  LOG_VART(_c);
+  LOG_VART(_classification);
   LOG_VART(_explainText);
 }
 
@@ -160,7 +171,7 @@ set<pair<ElementId, ElementId>> HighwayMatch::getMatchPairs() const
 
 double HighwayMatch::getProbability() const
 {
-  return _c.getMatchP();
+  return _classification.getMatchP();
 }
 
 bool HighwayMatch::isConflicting(
@@ -176,7 +187,7 @@ bool HighwayMatch::isConflicting(
   // if the other match is a highway match
   else
   {
-    // See ticket #5272
+    // See Redmine ticket #5272.
     if (getClassification().getReviewP() == 1.0 || other->getClassification().getReviewP() == 1.0)
     {
       return true;
@@ -195,7 +206,7 @@ bool HighwayMatch::isConflicting(
       sharedEid = _eid2;
     }
 
-    // if the matches don't share at least one eid then it isn't a conflict.
+    // If the matches don't share at least one eid then it isn't a conflict.
     if (sharedEid.isNull())
     {
       return false;
@@ -224,7 +235,7 @@ bool HighwayMatch::isConflicting(
       {
         result = false;
       }
-      // we need to check for a conflict in two directions. Is it conflicting if we merge the shared
+      // We need to check for a conflict in two directions. Is it conflicting if we merge the shared
       // EID with this class first, then is it a conflict if we merge with the other EID first.
       // checking for subline match containment first. This is very fast to check and if either one
       // is true then we know it is a conflict.
@@ -252,7 +263,8 @@ bool HighwayMatch::isConflicting(
 }
 
 bool HighwayMatch::_isOrderedConflicting(
-  const ConstOsmMapPtr& map, ElementId sharedEid, ElementId other1, ElementId other2) const
+  const ConstOsmMapPtr& map, const ElementId& sharedEid, const ElementId& other1,
+  const ElementId& other2) const
 {
   set<ElementId> eids;
   eids.insert(sharedEid);
@@ -263,7 +275,7 @@ bool HighwayMatch::_isOrderedConflicting(
 
   WaySublineMatchString match(_sublineMatch, copiedMap);
 
-  // split the shared line based on the matching subline
+  // Split the shared line based on the matching subline.
   ElementPtr matchShared, scrapsShared;
   ElementPtr match2, scraps2;
   WaySublineCollection string1 = match.getSublineString1();
@@ -271,24 +283,26 @@ bool HighwayMatch::_isOrderedConflicting(
 
   if (sharedEid == _eid1)
   {
-    MultiLineStringSplitter().split(copiedMap, string1, match.getReverseVector1(), matchShared,
-                                    scrapsShared);
+    MultiLineStringSplitter().split(
+      copiedMap, string1, match.getReverseVector1(), matchShared, scrapsShared);
     MultiLineStringSplitter().split(copiedMap, string2, match.getReverseVector2(), match2, scraps2);
   }
   else
   {
-    MultiLineStringSplitter().split(copiedMap, string2, match.getReverseVector1(), matchShared,
-                                    scrapsShared);
+    MultiLineStringSplitter().split(
+      copiedMap, string2, match.getReverseVector1(), matchShared, scrapsShared);
     MultiLineStringSplitter().split(copiedMap, string1, match.getReverseVector2(), match2, scraps2);
   }
 
-  // if the shared element has no scraps then there is a conflict
+  // If the shared element has no scraps then there is a conflict.
   if (!scrapsShared)
   {
     return true;
   }
 
-  // check to see if the scraps match other2
+  // Check to see if the scraps match other2. So far there haven't been any problems with not
+  // checking to see if the median classifier should be passed here instead...it may eventually need
+  // to be done though.
   HighwayMatch m0(
     _classifier, _sublineMatcher, copiedMap, scrapsShared->getElementId(), other2, _threshold);
   if (m0.getType() == MatchType::Match)
@@ -296,14 +310,14 @@ bool HighwayMatch::_isOrderedConflicting(
     return false;
   }
 
-  // we didn't find any valid matches, so this is a conflict.
+  // We didn't find any valid matches, so this is a conflict.
   return true;
 }
 
 QString HighwayMatch::toString() const
 {
   stringstream ss;
-  ss << "HighwayMatch " << _eid1 << " " << _eid2 << " P: " << _c.toString();
+  ss << "HighwayMatch " << _eid1 << " " << _eid2 << " P: " << _classification.toString();
   return QString::fromUtf8(ss.str().c_str());
 }
 

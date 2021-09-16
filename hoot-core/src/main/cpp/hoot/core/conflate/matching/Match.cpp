@@ -37,13 +37,10 @@ namespace hoot
 
 long Match::_orderCount = 0;
 
-/*
- * All of this order silliness maintains a consistent ordering of matches when they're placed
- * into a set as pointers.
- */
 Match::Match(const std::shared_ptr<const MatchThreshold>& threshold) :
 _order(_orderCount++),
-_threshold(threshold)
+_threshold(threshold),
+_isOneToMany(false)
 {
 }
 
@@ -53,7 +50,8 @@ Match::Match(
 _order(_orderCount++),
 _threshold(threshold),
 _eid1(eid1),
-_eid2(eid2)
+_eid2(eid2),
+_isOneToMany(false)
 {
 }
 
