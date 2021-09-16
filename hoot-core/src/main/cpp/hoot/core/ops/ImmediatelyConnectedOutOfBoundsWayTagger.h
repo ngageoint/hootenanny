@@ -50,7 +50,7 @@ public:
 
   ImmediatelyConnectedOutOfBoundsWayTagger();
   ImmediatelyConnectedOutOfBoundsWayTagger(const bool strictBounds);
-  ~ImmediatelyConnectedOutOfBoundsWayTagger() = default;
+  ~ImmediatelyConnectedOutOfBoundsWayTagger() override = default;
 
   /**
    * @see OsmMapOperation

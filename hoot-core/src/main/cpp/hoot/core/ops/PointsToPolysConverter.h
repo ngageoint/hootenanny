@@ -46,7 +46,7 @@ public:
   static QString className() { return "PointsToPolysConverter"; }
 
   PointsToPolysConverter(const double bufferSize = 1.0);
-  ~PointsToPolysConverter() = default;
+  ~PointsToPolysConverter() override = default;
 
   void apply(OsmMapPtr& map) override;
 

@@ -39,7 +39,7 @@ public:
   static QString className() { return "AverageTagMerger"; }
 
   AverageTagMerger() = default;
-  ~AverageTagMerger() = default;
+  ~AverageTagMerger() override = default;
 
   Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 

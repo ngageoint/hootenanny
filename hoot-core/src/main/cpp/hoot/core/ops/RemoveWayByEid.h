@@ -58,7 +58,7 @@ public:
    * map's way collection.
    */
   RemoveWayByEid(long wId, bool removeFully = false);
-  ~RemoveWayByEid() = default;
+  ~RemoveWayByEid() override = default;
 
   /**
    * see OsmMapOperation

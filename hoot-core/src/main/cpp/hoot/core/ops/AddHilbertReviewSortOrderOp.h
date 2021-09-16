@@ -44,7 +44,7 @@ public:
   static int logWarnCount;
 
   AddHilbertReviewSortOrderOp() = default;
-  ~AddHilbertReviewSortOrderOp() = default;
+  ~AddHilbertReviewSortOrderOp() override = default;
 
   void apply(OsmMapPtr& map) override;
 

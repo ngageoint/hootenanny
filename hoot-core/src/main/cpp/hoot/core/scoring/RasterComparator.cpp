@@ -56,7 +56,7 @@ public:
 
   PaintVisitor(OsmMapPtr map, QPainter& pt, QMatrix& m) :
     _map(map), _pt(pt), _m(m) { }
-  ~PaintVisitor() = default;
+  ~PaintVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override
   {

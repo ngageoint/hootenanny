@@ -47,7 +47,7 @@ public:
   static QString className() { return "BuildingOutlineUpdateOp"; }
 
   BuildingOutlineUpdateOp() = default;
-  ~BuildingOutlineUpdateOp() = default;
+  ~BuildingOutlineUpdateOp() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

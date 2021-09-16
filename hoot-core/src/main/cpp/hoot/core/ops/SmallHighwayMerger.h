@@ -63,7 +63,7 @@ public:
   static QString className() { return "SmallHighwayMerger"; }
 
   SmallHighwayMerger(Meters threshold = -1);
-  ~SmallHighwayMerger() = default;
+  ~SmallHighwayMerger() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

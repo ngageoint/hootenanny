@@ -50,7 +50,7 @@ class WayJoinerOp : public OsmMapOperation, public Configurable
 public:
 
   WayJoinerOp();
-  ~WayJoinerOp() = default;
+  ~WayJoinerOp() override = default;
 
   static QString className() { return "WayJoinerOp"; }
 

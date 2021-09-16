@@ -57,8 +57,7 @@ public:
   using RefToEid = map<QString, set<ElementId>>;
 
   explicit RefToEidVisitor(QString ref) : _ref(ref) { }
-
-  ~RefToEidVisitor() = default;
+  ~RefToEidVisitor() override = default;
 
   const RefToEid& getRefToEid() const { return _ref2Eid; }
 
@@ -100,8 +99,7 @@ public:
 
   CoOccurrenceVisitor(const RefToEidVisitor::RefToEid& refSet, AttributeCoOccurrence::CoOccurrenceHash& h) :
   _refSet(refSet), _coOccurrence(h) { }
-
-  ~CoOccurrenceVisitor() = default;
+  ~CoOccurrenceVisitor() override = default;
 
   void setOsmMap(const OsmMap* map) override { _map = map; }
 

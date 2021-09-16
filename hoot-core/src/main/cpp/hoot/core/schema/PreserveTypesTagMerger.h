@@ -52,7 +52,7 @@ public:
    * list will be not be preserved.
    */
   PreserveTypesTagMerger(const QSet<QString>& skipTagKeys = QSet<QString>());
-  ~PreserveTypesTagMerger() = default;
+  ~PreserveTypesTagMerger() override = default;
 
   /**
    * @see TypesTagMerger

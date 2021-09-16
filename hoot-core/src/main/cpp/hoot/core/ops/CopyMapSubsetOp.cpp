@@ -53,7 +53,7 @@ public:
   {
     LOG_VART(_copyChildren);
   }
-  ~AddAllVisitor() = default;
+  ~AddAllVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override
   {

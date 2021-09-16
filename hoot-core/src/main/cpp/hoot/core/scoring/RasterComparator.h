@@ -49,7 +49,7 @@ public:
    * Takes two maps for comparison as input
    */
   RasterComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
-  ~RasterComparator() = default;
+  ~RasterComparator() override = default;
 
   /**
    * @see BaseComparator

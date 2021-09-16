@@ -47,7 +47,7 @@ public:
    * If swap is set to true then t1 will be overwritten with t2 values.
    */
   SelectiveOverwriteTagMerger(bool swap = false);
-  virtual ~SelectiveOverwriteTagMerger() = default;
+  ~SelectiveOverwriteTagMerger() override = default;
 
   Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
