@@ -59,7 +59,7 @@ class ColumnVisitor : public ElementConstOsmMapVisitor
 public:
 
   ColumnVisitor(ElementType type) : _type(type) { }
-  ~ColumnVisitor() = default;
+  ~ColumnVisitor() override = default;
 
   void visit(const std::shared_ptr<const Element>& e) override
   {

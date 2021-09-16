@@ -85,7 +85,7 @@ public:
    * @param urlString URL of file to immediately attempt to open
    */
   OsmPbfReader(const QString& urlString);
-  ~OsmPbfReader();
+  ~OsmPbfReader() override;
 
   void setConfiguration(const Settings &conf) override;
 

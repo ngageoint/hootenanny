@@ -46,7 +46,7 @@ public:
   static QString className() { return "ShapefileWriter"; }
 
   ShapefileWriter();
-  ~ShapefileWriter() = default;
+  ~ShapefileWriter() override = default;
 
   /**
    * Set the configuration for this object.

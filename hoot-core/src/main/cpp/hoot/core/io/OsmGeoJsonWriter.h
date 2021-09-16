@@ -46,7 +46,7 @@ public:
   static QString className() { return "OsmGeoJsonWriter"; }
 
   OsmGeoJsonWriter(int precision = ConfigOptions().getWriterPrecision());
-  ~OsmGeoJsonWriter() = default;
+  ~OsmGeoJsonWriter() override = default;
 
   /**
    * @brief setConfiguration allows configuration settings to override the defaults

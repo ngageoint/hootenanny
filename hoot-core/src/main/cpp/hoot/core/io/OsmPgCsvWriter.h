@@ -43,7 +43,7 @@ public:
   static QString className() { return "OsmCsvWriter"; }
 
   OsmPgCsvWriter();
-  ~OsmPgCsvWriter() = default;
+  ~OsmPgCsvWriter() override = default;
 
   /**
    * @brief isSupported returns true if the URL is likely supported

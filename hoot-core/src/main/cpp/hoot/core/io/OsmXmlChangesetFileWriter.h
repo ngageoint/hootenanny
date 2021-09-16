@@ -56,7 +56,7 @@ public:
   static QString className() { return "OsmXmlChangesetFileWriter"; }
 
   OsmXmlChangesetFileWriter();
-  ~OsmXmlChangesetFileWriter() = default;
+  ~OsmXmlChangesetFileWriter() override = default;
 
   /**
    * @see ChangesetFileWriter

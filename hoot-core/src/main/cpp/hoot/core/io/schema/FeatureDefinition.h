@@ -39,7 +39,6 @@ public:
   FeatureDefinition() = default;
 
   void addField(const std::shared_ptr<FieldDefinition>& fd) { _fields.push_back(fd); }
-
   bool hasField(const QString& name) const;
 
   size_t getFieldCount() const { return _fields.size(); }

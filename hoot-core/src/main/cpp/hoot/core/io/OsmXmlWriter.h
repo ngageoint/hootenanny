@@ -48,7 +48,7 @@ public:
   static QString className() { return "OsmXmlWriter"; }
 
   OsmXmlWriter();
-  ~OsmXmlWriter();
+  ~OsmXmlWriter() override;
 
   bool isSupported(const QString& url) const override { return url.toLower().endsWith(".osm"); }
   void open(const QString& url) override;

@@ -38,22 +38,21 @@ class LongIntegerFieldDefinition : public FieldDefinition
 public:
 
   LongIntegerFieldDefinition();
-  ~LongIntegerFieldDefinition() = default;
+  ~LongIntegerFieldDefinition() override = default;
 
   void validate(const QVariant& v, StrictChecking strict) const override;
-
-  void addEnumeratedValue(long long v) { _enumeratedValues.insert(v); }
-
   QVariant getDefaultValue() const override;
   QVariant::Type getType() const override { return QVariant::LongLong; }
   bool hasDefaultValue() const override;
-  bool hasEnumeratedValue(long long v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
+  QString toString() const override;
+
+  void addEnumeratedValue(long long v) { _enumeratedValues.insert(v); }
+  bool hasEnumeratedValue(long long v)
+  { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
 
   void setDefaultValue(long long v) { _defaultValue = v; }
   void setMaxValue(long long max) { _max = max; }
   void setMinValue(long long min) { _min = min; }
-
-  QString toString() const override;
 
 private:
 

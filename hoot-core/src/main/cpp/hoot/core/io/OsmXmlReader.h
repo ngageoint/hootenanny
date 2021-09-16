@@ -52,7 +52,7 @@ public:
   static QString className() { return "OsmXmlReader"; }
 
   OsmXmlReader();
-  ~OsmXmlReader();
+  ~OsmXmlReader() override;
 
   /**
    * Converts OSM XML to a map
