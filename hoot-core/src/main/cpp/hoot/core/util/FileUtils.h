@@ -127,13 +127,6 @@ public:
    */
   static QString toLogFormat(QString url, int characters = -1);
   static QString toLogFormat(QStringList urls, int characters = -1);
-
-  /**
-   * @brief appendToPaths TODO
-   * @param text
-   * @param paths
-   */
-  static void appendToPaths(const QString& text, QStringList& paths);
 };
 
 }

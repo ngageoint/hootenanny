@@ -44,13 +44,13 @@ using namespace std;
 namespace hoot
 {
 
-ScriptTest::ScriptTest(QString script, bool printDiff, bool suppressFailureDetail,
-                       int waitToFinishTime)
-  : CppUnit::TestCase(script.toStdString()),
-    _printDiff(printDiff),
-    _suppressFailureDetail(suppressFailureDetail),
-    _script(script),
-    _waitToFinishTime(waitToFinishTime)
+ScriptTest::ScriptTest(
+  QString script, bool printDiff, bool suppressFailureDetail, int waitToFinishTime) :
+CppUnit::TestCase(script.toStdString()),
+_printDiff(printDiff),
+_suppressFailureDetail(suppressFailureDetail),
+_script(script),
+_waitToFinishTime(waitToFinishTime)
 {
 }
 
@@ -268,7 +268,7 @@ void ScriptTest::_runDiff(QString file1, QString file2)
       first = false;
     }
 
-    //if the process hangs this will allows us to get out
+    // If the process hangs this will allows us to get out.
     const qint64 timeElapsedSeconds = timer.elapsed() / 1000;
     if (scriptTimeOutSpecified && timeElapsedSeconds >= scriptTestTimeOutSeconds)
     {

@@ -14,8 +14,9 @@ To generate validation reports and/or mark data with validation errors use the f
 
 * `input(s)`          - Input(s); may be any supported input format (e.g. .osm file) or a directory 
                         if `--recursive` is specified. Files with "-validated" in the name will be 
-                        ignored, as these are considered to be the output of a previous validation.
-* `--report-output`   - Writes combined report output to a file instead of writing it to the display.
+                        ignored, as these are considered to be output of a previous validation.
+* `--report-output`   - Writes combined report output to a file instead of writing it to the 
+                        display.
 * `--output`          - Optional single validated file output; may be any supported output format 
                         (e.g. .osm file). If specified, all inputs will be combined and elements 
                         with validation errors will be marked with tags in the output file. Required 
@@ -31,12 +32,26 @@ To generate validation reports and/or mark data with validation errors use the f
                         "*.osm;*.json" or "*myFile*". This parameter is not compatible with the OGR 
                         layer input syntax.   
                         
-To recursively clean validated output:
+To recursively clean validated output, specify one or more directory inputs along with use of this 
+single option:
 
-* `--cleanValidatedOutput` - Cleans all validated output files and directories recursively beginning 
-                             from the specified input directory. This is very simple and will delete
-                             any supported input file that has the text "-validated" appended to it. 
-                             Use with caution.
+* `--cleanValidatedOutput`
+
+Using this option cleans all validated output files and directories recursively beginning from the 
+specified input directories. This is a very simple routine that will delete any file or directory 
+that has the text "-validated" in its name. Use with caution.
+                             
+To run validation on case test output use the single option:
+
+* `--test`
+
+Using this option validates all test output files found under the `test-files/cases` directory 
+(`Output.osm`). It assumes you have previously run `HootTest --case-only` or any other test suite 
+that also runs the case tests). Use of this option automatically forces use of the option 
+`--separate-output`. A separate validated file named `validated-output.osm` and a separate 
+validation report named `validated-output-report` will be generated for each test output. The 
+generated report is compared to a "gold" report file in the same directory named 
+`validation-report`, and if a difference is found, the validation test is considered as failing.
 
 === Usage
 
@@ -52,6 +67,9 @@ hoot validate (input1) [input2...] [--recursive "*"|"filter1;filter2..."] [--sep
 
 # recursively clean validated output
 hoot validate (inputDir) --cleanValidatedOutput
+
+# run validation tests; HootTest --glacial must be run beforehand when using the default configuration.
+hoot validate --test
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#validation[Examples]

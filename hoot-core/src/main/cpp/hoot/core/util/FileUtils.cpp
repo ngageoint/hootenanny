@@ -263,24 +263,4 @@ bool FileUtils::anyAreDirs(const QStringList& paths)
   return false;
 }
 
-void FileUtils::appendToPaths(const QString& text, QStringList& paths)
-{
-  QStringList pathsToReturn;
-  for (int i = 0; i < paths.size(); i++)
-  {
-    QString path = paths.at(i);
-    QFileInfo fileInfo(path);
-    if (fileInfo.isDir())
-    {
-      pathsToReturn.append(path + text);
-    }
-    else if (fileInfo.isFile())
-    {
-      pathsToReturn.append(path.replace(fileInfo.baseName(), fileInfo.baseName() + text));
-    }
-  }
-  paths = pathsToReturn;
-  LOG_VART(paths);
-}
-
 }

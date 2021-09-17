@@ -55,7 +55,9 @@ using namespace geos::geom;
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/SignalCatcher.h>
 #include <hoot/core/util/Settings.h>
+
 #include <hoot/js/v8Engine.h>
+
 #include <hoot/test/ProcessPool.h>
 #include <hoot/test/ScriptTestSuite.h>
 using namespace hoot;
@@ -221,8 +223,9 @@ void getTestVector(const vector<TestPtr>& from, vector<CppUnit::Test*>& to)
   }
 }
 
-void filterPattern(const std::vector<CppUnit::Test*>& from, std::vector<CppUnit::Test*>& to,
-                   QString pattern, bool includeOnMatch)
+void filterPattern(
+  const std::vector<CppUnit::Test*>& from, std::vector<CppUnit::Test*>& to, QString pattern,
+  bool includeOnMatch)
 {
   QRegExp regex(pattern);
 
@@ -390,8 +393,9 @@ void runSingleTest(CppUnit::Test* pTest, QStringList& args, CppUnit::TextTestRes
   pTest->run(pResult);
 }
 
-void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
-                   bool suppressFailureDetail, bool hideDisableTests = false)
+void populateTests(
+  _TestType t, std::vector<TestPtr>& vTests, bool printDiff, bool suppressFailureDetail,
+  bool hideDisableTests = false)
 {
   //  Add glacial tests if the bit flag is set
   if (t & GLACIAL_TESTS)
@@ -649,7 +653,7 @@ int main(int argc, char* argv[])
       Log::getInstance().setLevel(Log::Error);
     }
 
-    // Print all names & exit without running anything
+    // Print all names & exit without running anything.
     if (args.contains("--all-names"))
     {
       populateTests(getTestType(args), vAllTests, printDiff, suppressFailureDetail);
@@ -660,7 +664,7 @@ int main(int argc, char* argv[])
       return 0;
     }
 
-    // Setup the environment checks if requested
+    // Setup the environment checks if requested.
     if (args.contains("--check-env"))
       HootTestFixture::setCompareEnv(true);
 

@@ -52,7 +52,8 @@ _verbose(verbose)
 {
 }
 
-Tgs::StateDescriptionPtr ConflateTestSettingsOptimizer::_initStateDescription(const QString& testSettingsFile)
+Tgs::StateDescriptionPtr ConflateTestSettingsOptimizer::_initStateDescription(
+  const QString& testSettingsFile)
 {
   LOG_VARD(testSettingsFile);
 

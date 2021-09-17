@@ -72,7 +72,8 @@ private:
   /*
    * Writes a summary of the optimization results to file
    */
-  void _writeOutput(const std::shared_ptr<AbstractTestFitnessFunction>& fitnessFunction,
+  void _writeOutput(
+    const std::shared_ptr<AbstractTestFitnessFunction>& fitnessFunction,
     const QSet<Tgs::ConstStatePtr>& bestStates, const int numIterations, const QString& outputFile);
 };
 

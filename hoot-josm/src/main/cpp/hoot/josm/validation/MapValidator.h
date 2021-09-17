@@ -49,14 +49,28 @@ public:
   MapValidator() = default;
   ~MapValidator() = default;
 
+  /**
+   * @brief validate TODO
+   * @param inputs
+   * @param output
+   * @return
+   */
   QString validate(const QStringList& inputs, const QString& output = QString()) const;
 
+  /**
+   * @brief printValidators TODO
+   */
   static void printValidators();
 
+  /**
+   * @brief setReportFile TODO
+   * @param file
+   */
   void setReportFile(const QString& file);
 
 private:
 
+  // TODO
   QString _reportFile;
 
   static void _printValidatorOutput(const QMap<QString, QString>& validatorInfo);

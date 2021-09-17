@@ -27,6 +27,7 @@
 
 #include "CaseTestFitnessFunction.h"
 
+// Hoot
 #include <hoot/core/test/ConflateCaseTestSuite.h>
 
 namespace hoot

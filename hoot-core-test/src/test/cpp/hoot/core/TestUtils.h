@@ -280,7 +280,6 @@ protected:
 public:
 
   void setUp() override;
-
   void tearDown() override;
 
   static void setCompareEnv(bool compare) { _compareEnv = compare; }
