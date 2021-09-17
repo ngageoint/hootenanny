@@ -59,38 +59,38 @@ int main(int argc, char *argv[])
   QCoreApplication app(argc, argv);
 
   vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
-  std::shared_ptr<Command> c;
+  std::shared_ptr<Command> command;
   for (size_t i = 0; i < cmds.size(); i++)
   {
-    c = Factory::getInstance().constructObject<Command>(cmds[i]);
-    QString argName = c->getName();
+    command = Factory::getInstance().constructObject<Command>(cmds[i]);
+    QString argName = command->getName();
     if (QString(argv[1]) == argName)
     {
       break;
     }
     else
     {
-      c.reset();
+      command.reset();
     }
   }
 
-  if (c != nullptr)
+  if (command != nullptr)
   {
     try
     {
-      return c->run(argv, argc);
+      return command->run(argv, argc);
     }
     catch (const std::exception& e)
     {
-      cerr << "Error running " << c->getName().toStdString() << ":" << endl;
+      cerr << "Error running " << command->getName().toStdString() << ":" << endl;
       cerr << e.what() << endl;
       return -1;
     }
   }
   else
   {
-    c = Factory::getInstance().constructObject<Command>("HelpCmd");
-    c->run(argv, argc);
+    command = Factory::getInstance().constructObject<Command>("HelpCmd");
+    command->run(argv, argc);
     return -1;
   }
 }
