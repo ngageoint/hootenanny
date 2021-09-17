@@ -49,7 +49,7 @@ public:
   static QString className() { return "RemoveElementsVisitor"; }
 
   RemoveElementsVisitor(bool negateCriteria = false);
-  ~RemoveElementsVisitor() = default;
+  ~RemoveElementsVisitor() override = default;
 
   void visit(const ElementPtr& e) override;
 

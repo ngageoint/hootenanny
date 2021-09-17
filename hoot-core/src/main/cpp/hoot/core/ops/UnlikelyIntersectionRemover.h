@@ -53,7 +53,7 @@ public:
   static QString className() { return "UnlikelyIntersectionRemover"; }
 
   UnlikelyIntersectionRemover() = default;
-  ~UnlikelyIntersectionRemover() = default;
+  ~UnlikelyIntersectionRemover() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

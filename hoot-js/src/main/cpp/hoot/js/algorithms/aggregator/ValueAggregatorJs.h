@@ -44,7 +44,7 @@ class ValueAggregatorJs : public HootBaseJs
 public:
 
   static void Init(v8::Local<v8::Object> target);
-  virtual ~ValueAggregatorJs() = default;
+  ~ValueAggregatorJs() override = default;
 
   ValueAggregatorPtr getValueAggregator() const { return _va; }
 

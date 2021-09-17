@@ -46,7 +46,7 @@ public:
   static QString className() { return "TagCountVisitor"; }
 
   TagCountVisitor();
-  ~TagCountVisitor() = default;
+  ~TagCountVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override;
 

@@ -45,7 +45,7 @@ public:
   static QString className() { return "Soundex"; }
 
   Soundex() = default;
-  ~Soundex() = default;
+  ~Soundex() override = default;
 
   double compare(const QString& s1, const QString& s2) const override;
 

@@ -45,7 +45,7 @@ public:
   static QString className() { return "ElementIdToTagValueMapper"; }
 
   ElementIdToTagValueMapper() = default;
-  ~ElementIdToTagValueMapper() = default;
+  ~ElementIdToTagValueMapper() override = default;
 
   void visit(const ConstElementPtr& e) override;
 

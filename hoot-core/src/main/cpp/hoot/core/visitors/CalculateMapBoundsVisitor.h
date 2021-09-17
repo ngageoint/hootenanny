@@ -28,6 +28,7 @@
 #ifndef CALCULATEMAPBOUNDSVISITOR_H
 #define CALCULATEMAPBOUNDSVISITOR_H
 
+// hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 
@@ -47,7 +48,7 @@ public:
   static QString className() { return "CalculateMapBoundsVisitor"; }
 
   CalculateMapBoundsVisitor() = default;
-  ~CalculateMapBoundsVisitor() = default;
+  ~CalculateMapBoundsVisitor() override = default;
 
   OGREnvelope getBounds() const { return _envelope; }
 

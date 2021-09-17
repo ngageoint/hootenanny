@@ -60,7 +60,7 @@ class ImplicitTagRawRulesDeriver : public Configurable
 public:
 
   ImplicitTagRawRulesDeriver();
-  ~ImplicitTagRawRulesDeriver() = default;
+  ~ImplicitTagRawRulesDeriver() override = default;
 
   /**
    * Derives implicit tag rules for POIs given input data and writes the rules to output
@@ -70,8 +70,8 @@ public:
    * specified by the inputs parameter
    * @param output the file to write the rules to
    */
-  void deriveRawRules(const QStringList& inputs, const QStringList& translationScripts,
-                      const QString& output);
+  void deriveRawRules(
+    const QStringList& inputs, const QStringList& translationScripts, const QString& output);
 
   void setConfiguration(const Settings& conf) override;
 

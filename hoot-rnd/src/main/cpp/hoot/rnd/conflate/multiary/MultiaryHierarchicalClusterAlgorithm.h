@@ -45,22 +45,22 @@ class MultiaryHierarchicalClusterAlgorithm : public MultiaryClusterAlgorithm
 {
 public:
 
-  ~MultiaryHierarchicalClusterAlgorithm() = default;
-
   /**
    * Constructor.
    * @param mergeCache Cache to use when merging elements.
    * @param scoreCache Cache to use for scoring elements.
    * @param matchThreshold The threshold at which a score is called a match/miss/review.
    */
-  MultiaryHierarchicalClusterAlgorithm(MultiaryPoiMergeCachePtr mergeCache,
-    MultiaryScoreCachePtr scoreCache, const MatchThreshold& matchThreshold);
+  MultiaryHierarchicalClusterAlgorithm(
+    MultiaryPoiMergeCachePtr mergeCache, MultiaryScoreCachePtr scoreCache,
+    const MatchThreshold& matchThreshold);
+  ~MultiaryHierarchicalClusterAlgorithm() override = default;
 
   /**
    * See parent class.
    */
-  ClusterList calculateClusters(OsmMapPtr map,
-    std::set<std::pair<ElementId, ElementId>> &pairs) override;
+  ClusterList calculateClusters(
+    OsmMapPtr map, std::set<std::pair<ElementId, ElementId>> &pairs) override;
 
   /**
    * See parent class.

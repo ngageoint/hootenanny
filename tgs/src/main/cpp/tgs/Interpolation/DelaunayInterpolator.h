@@ -56,7 +56,7 @@ public:
   static QString className() { return "Tgs::DelaunayInterpolator"; }
 
   DelaunayInterpolator();
-  ~DelaunayInterpolator() = default;
+  ~DelaunayInterpolator() override = default;
 
   /**
    * Use k-fold cross validation to estimate the error.

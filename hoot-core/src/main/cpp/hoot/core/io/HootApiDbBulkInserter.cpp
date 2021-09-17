@@ -62,7 +62,7 @@ HootApiDbBulkInserter::~HootApiDbBulkInserter()
   close();
 }
 
-bool HootApiDbBulkInserter::isSupported(const QString& urlStr)
+bool HootApiDbBulkInserter::isSupported(const QString& urlStr) const
 {
   LOG_VART(urlStr);
   QUrl url(urlStr);

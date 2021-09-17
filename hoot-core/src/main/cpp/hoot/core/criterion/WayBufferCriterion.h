@@ -46,7 +46,7 @@ public:
   static QString className() { return "WayBufferCriterion"; }
 
   WayBufferCriterion() = default;
-  ~WayBufferCriterion() = default;
+  ~WayBufferCriterion() override = default;
   /**
    * Buffer is the buffer in meters to put around the way. The circular
    * error of the base way and the way being evaluated will automatically

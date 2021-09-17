@@ -27,9 +27,10 @@
 #ifndef MULTITHREADEDRANDOMFOREST_H
 #define MULTITHREADEDRANDOMFOREST_H
 
-//Qt Includes
+// Qt
 #include <QDomElement>
 
+// Tgs
 #include <tgs/RandomForest/BaseRandomForest.h>
 
 namespace Tgs
@@ -42,15 +43,15 @@ namespace Tgs
   class MultithreadedRandomForest : public BaseRandomForest
   {
   public:
+
     /**
      * @brief MultithreadedRandomForest Constructor
      */
     MultithreadedRandomForest();
-
     /**
      * @brief ~MultithreadedRandomForest destructor
      */
-    ~MultithreadedRandomForest() = default;
+    ~MultithreadedRandomForest() override = default;
 
     /**
     * Build the forest from a data set
@@ -60,12 +61,14 @@ namespace Tgs
     * @param numFactors the number of factors to randomly choose as candidates for node splitting
     * @param posClass the name of the positive class
     * @param nodeSize the minimum number of data vectors in a set to split a node
-    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
+    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors
+    * and no retraining)
     * @param balanced true if the forest will be balanced
     */
-    void trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
-      unsigned int numFactors, const std::string& posClass, unsigned int nodeSize = 1,
-      double retrain = 1.0, bool balanced = false) override;
+    void trainBinary(
+      const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
+      const std::string& posClass, unsigned int nodeSize = 1, double retrain = 1.0,
+      bool balanced = false) override;
 
     /**
     * Build the forest from a data set
@@ -74,12 +77,13 @@ namespace Tgs
     * @param numTrees the number of random trees to create
     * @param numFactors the number of factors to randomly choose as candidates for node splitting
     * @param nodeSize the minimum number of data vectors in a set to split a node
-    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
+    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors
+    * and no retraining)
     * @param balanced true if the forest will be balanced
     */
-    void trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
-      unsigned int numFactors, unsigned int nodeSize = 1, double retrain = 1.0,
-      bool balanced = false) override;
+    void trainMulticlass(
+      const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
+      unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) override;
 
     /**
      * @brief trainMulticlass the map class to train a tree
@@ -97,13 +101,14 @@ namespace Tgs
     * @param posClass the name of the positive class
     * @param negClass the name of the negative class
     * @param nodeSize the minimum number of data vectors in a set to split a node
-    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
+    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors
+    * and no retraining)
     * @param balanced true if the forest will be balanced
     */
-    void trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
-      unsigned int numFactors, const std::string& posClass, const std::string& negClass,
-      unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) override;
-
+    void trainRoundRobin(
+      const std::shared_ptr<DataFrame>& data, unsigned int numTrees, unsigned int numFactors,
+      const std::string& posClass, const std::string& negClass, unsigned int nodeSize = 1,
+      double retrain = 1.0, bool balanced = false) override;
   };
 }
 

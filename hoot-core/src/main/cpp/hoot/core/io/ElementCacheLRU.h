@@ -52,18 +52,18 @@ class ElementCacheLRU : public ElementCache
 public:
 
   /**
-   * @brief ElementCacheLRU
+   * @brief ElementCacheLRU Constructor
    * @param maxNodeCount Total size of node cache before items start being replaced.
    * @param maxWayCount Total size of ways cache before items start being replaced.
    * @param maxRelationCount Total size of relation cache before items start being replaced.
    */
-  ElementCacheLRU(const unsigned long maxNodeCount,
-                  const unsigned long maxWayCount,
-                  const unsigned long maxRelationCount);
+  ElementCacheLRU(
+    const unsigned long maxNodeCount, const unsigned long maxWayCount,
+    const unsigned long maxRelationCount);
   /**
    * @brief ~ElementCache
    */
-  ~ElementCacheLRU() = default;
+  ~ElementCacheLRU() override = default;
 
   bool isEmpty() const override;
   unsigned long size() const override;

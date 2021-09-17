@@ -50,8 +50,7 @@ public:
 
   IntersectionIterator(const RStarTree* tree, const std::vector<double>& minBounds,
                        const std::vector<double>& maxBounds);
-
-  ~IntersectionIterator() = default;
+  ~IntersectionIterator() override = default;
 
   const Box& getBox() const override;
   int getId() const override;

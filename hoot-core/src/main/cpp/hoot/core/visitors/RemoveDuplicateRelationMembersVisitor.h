@@ -47,7 +47,7 @@ public:
   static QString className() { return "RemoveDuplicateRelationMembersVisitor"; }
 
   RemoveDuplicateRelationMembersVisitor() = default;
-  ~RemoveDuplicateRelationMembersVisitor() = default;
+  ~RemoveDuplicateRelationMembersVisitor() override = default;
 
   void visit(const ElementPtr& e) override;
 

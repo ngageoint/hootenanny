@@ -51,7 +51,7 @@ class GraphComparator : public BaseComparator
 public:
 
   GraphComparator(OsmMapPtr map1, OsmMapPtr map2);
-  ~GraphComparator() = default;
+  ~GraphComparator() override = default;
 
   double compareMaps() override;
 

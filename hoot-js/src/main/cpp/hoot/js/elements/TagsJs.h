@@ -46,22 +46,22 @@ class TagsJs : public HootBaseJs
 {
 public:
 
+  ~TagsJs() override = default;
+
   static void Init(v8::Local<v8::Object> target);
 
   Tags& getTags() { return _tags; }
 
   static v8::Local<v8::Object> New(const Tags& t);
 
-  virtual ~TagsJs() = default;
-
 private:
+
+  Tags _tags;
+  static v8::Persistent<v8::Function> _constructor;
 
   TagsJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
-
-  Tags _tags;
-  static v8::Persistent<v8::Function> _constructor;
 
   static void contains(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void onlyOneContainsKvp(const v8::FunctionCallbackInfo<v8::Value>& args);

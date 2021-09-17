@@ -45,7 +45,7 @@ public:
   static QString className() { return "LengthOfWaysVisitor"; }
 
   LengthOfWaysVisitor();
-  ~LengthOfWaysVisitor() = default;
+  ~LengthOfWaysVisitor() override = default;
 
   static Meters getLengthOfWays(const OsmMapPtr& map, ElementPtr e);
   Meters getLengthOfWays() const { return _total; }

@@ -55,7 +55,7 @@ public:
   static const QString JOB_SOURCE;
 
   DataConverter();
-  ~DataConverter() = default;
+  ~DataConverter() override = default;
 
   /**
    * @see Configurable

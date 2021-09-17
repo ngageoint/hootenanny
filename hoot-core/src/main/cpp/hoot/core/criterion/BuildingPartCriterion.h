@@ -43,7 +43,7 @@ public:
   static QString className() { return "BuildingPartCriterion"; }
 
   BuildingPartCriterion() = default;
-  ~BuildingPartCriterion() = default;
+  ~BuildingPartCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<BuildingPartCriterion>(); }

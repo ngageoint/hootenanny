@@ -40,7 +40,7 @@ public:
   static QString className() { return "MultiaryMatchTrainingValidator"; }
 
   MultiaryMatchTrainingValidator() = default;
-  ~MultiaryMatchTrainingValidator() = default;
+  ~MultiaryMatchTrainingValidator() override = default;
 
   /**
    * @see OsmMapOperation::apply()

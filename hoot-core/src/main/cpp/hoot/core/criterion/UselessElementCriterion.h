@@ -50,7 +50,7 @@ public:
 
   UselessElementCriterion() = default;
   UselessElementCriterion(ConstOsmMapPtr map) : _map(map) { }
-  ~UselessElementCriterion() = default;
+  ~UselessElementCriterion() override = default;
 
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 

@@ -46,7 +46,7 @@ public:
   static QString className() { return "RailwayCriterion"; }
 
   RailwayCriterion() = default;
-  ~RailwayCriterion() = default;
+  ~RailwayCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<RailwayCriterion>(); }

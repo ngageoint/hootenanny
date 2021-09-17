@@ -47,7 +47,7 @@ public:
   static QString className() { return "ReprojectToGeographicOp"; }
 
   ReprojectToGeographicOp() = default;
-  ~ReprojectToGeographicOp() = default;
+  ~ReprojectToGeographicOp() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

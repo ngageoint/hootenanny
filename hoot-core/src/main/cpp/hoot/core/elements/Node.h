@@ -53,7 +53,7 @@ public:
        unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
        QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
        bool visible = ElementData::VISIBLE_EMPTY);
-  ~Node() = default;
+  ~Node() override = default;
 
   /**
    * Allocate a node as a shared pointer. At this time the allocated node will be allocated as

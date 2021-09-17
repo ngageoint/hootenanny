@@ -46,7 +46,7 @@ public:
   static QString className() { return "OsmGeoJsonWriter"; }
 
   OsmGeoJsonWriter(int precision = ConfigOptions().getWriterPrecision());
-  ~OsmGeoJsonWriter() = default;
+  ~OsmGeoJsonWriter() override = default;
 
   /**
    * @brief setConfiguration allows configuration settings to override the defaults
@@ -64,8 +64,8 @@ public:
    * @param url Filename ending in ".geojson"
    * @return
    */
-  bool isSupported(const QString& url) override { return url.toLower().endsWith(".geojson"); }
-  QString supportedFormats() override { return ".geojson"; }
+  bool isSupported(const QString& url) const override { return url.toLower().endsWith(".geojson"); }
+  QString supportedFormats() const override { return ".geojson"; }
 
   QString toString(const ConstOsmMapPtr& map);
 

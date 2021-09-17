@@ -46,7 +46,7 @@ public:
   static QString className() { return "HootServicesTranslatorMockClient"; }
 
   HootServicesTranslatorMockClient();
-  ~HootServicesTranslatorMockClient() = default;
+  ~HootServicesTranslatorMockClient() override = default;
 
   QString translate(const QString& text) override;
   void setSourceLanguages(const QStringList& langCodes) override;

@@ -51,7 +51,7 @@ class GeometryModifierVisitor : public ElementVisitor
 public:
 
   GeometryModifierVisitor() = default;
-  ~GeometryModifierVisitor() = default;
+  ~GeometryModifierVisitor() override = default;
 
   // TODO: implement OsmMapConsumer
   void setOsmMap(OsmMap* pMap) { _pMap = pMap; }

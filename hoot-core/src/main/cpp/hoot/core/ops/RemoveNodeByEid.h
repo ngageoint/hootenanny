@@ -63,7 +63,7 @@ public:
    */
   RemoveNodeByEid(
     long nId, bool doCheck = true, bool removeFully = false, bool removeOnlyUnused = false);
-  ~RemoveNodeByEid() = default;
+  ~RemoveNodeByEid() override = default;
 
   /**
    * @see OsmMapOperation

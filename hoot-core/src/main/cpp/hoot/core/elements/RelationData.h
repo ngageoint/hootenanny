@@ -79,7 +79,7 @@ public:
     unsigned int timestamp = ElementData::TIMESTAMP_EMPTY, QString user = ElementData::USER_EMPTY,
     long uid = ElementData::UID_EMPTY, bool visible = ElementData::VISIBLE_EMPTY);
   RelationData(const RelationData& rd);
-  ~RelationData() = default;
+  ~RelationData() override = default;
 
   void addElement(const QString& role, ElementId eid);
 

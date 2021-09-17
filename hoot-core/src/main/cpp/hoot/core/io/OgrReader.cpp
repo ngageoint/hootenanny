@@ -76,7 +76,7 @@ public:
   static int logWarnCount;
 
   OgrReaderInternal();
-  ~OgrReaderInternal();
+  ~OgrReaderInternal() override;
 
   void close();
   /**
@@ -108,7 +108,7 @@ public:
   Status getDefaultStatus() const { return _status; }
 
   void setDefaultCircularError(Meters circularError) { _defaultCircularError = circularError; }
-  void setDefaultStatus(Status s) { _status = s; }
+  void setDefaultStatus(const Status& s) { _status = s; }
   void setLimit(long limit) { _limit = limit; }
   void setSchemaTranslationScript(const QString& translate)
   { _finalizeTranslate(); _translatePath = translate; }
@@ -207,7 +207,7 @@ public:
     _map = std::make_shared<OsmMap>();
   }
 
-  ~OgrElementIterator()
+  ~OgrElementIterator() override
   {
     _d->close();
   }
@@ -529,7 +529,7 @@ void OgrReader::read(
   _d->close();
 }
 
-void OgrReader::setDefaultStatus(Status s)
+void OgrReader::setDefaultStatus(const Status& s)
 {
   _d->setDefaultStatus(s);
 }
@@ -569,7 +569,7 @@ void OgrReader::finalizePartial()
   _elementsRead = 0;
 }
 
-bool OgrReader::isSupported(const QString& url)
+bool OgrReader::isSupported(const QString& url) const
 {
   LOG_VART(url);
 

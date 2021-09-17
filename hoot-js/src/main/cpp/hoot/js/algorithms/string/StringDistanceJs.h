@@ -41,7 +41,7 @@ class StringDistanceJs : public HootBaseJs
 public:
 
   static void Init(v8::Local<v8::Object> target);
-  virtual ~StringDistanceJs() = default;
+  ~StringDistanceJs() override = default;
 
   StringDistancePtr getStringDistance() const { return _sd; }
 

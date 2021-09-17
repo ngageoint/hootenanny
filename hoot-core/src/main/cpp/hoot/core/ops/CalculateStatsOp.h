@@ -58,7 +58,7 @@ public:
   CalculateStatsOp(QString mapName = "", bool inputIsConflatedMapOutput = false);
   CalculateStatsOp(
     ElementCriterionPtr criterion, QString mapName = "", bool inputIsConflatedMapOutput = false);
-  ~CalculateStatsOp() = default;
+  ~CalculateStatsOp() override = default;
 
   double getSingleStat(const QString& n) const;
   bool hasSingleStat(const QString& n) const;

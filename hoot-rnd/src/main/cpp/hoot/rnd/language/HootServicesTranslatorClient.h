@@ -58,7 +58,7 @@ public:
   static QString className() { return "HootServicesTranslatorClient"; }
 
   HootServicesTranslatorClient();
-  virtual ~HootServicesTranslatorClient();
+  ~HootServicesTranslatorClient() override;
 
   QStringList getSourceLanguages() const override { return _sourceLangs; }
   void setSourceLanguages(const QStringList& langCodes) override;

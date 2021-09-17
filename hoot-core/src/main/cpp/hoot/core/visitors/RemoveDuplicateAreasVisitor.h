@@ -59,7 +59,7 @@ public:
   static QString className() { return "RemoveDuplicateAreasVisitor"; }
 
   RemoveDuplicateAreasVisitor();
-  ~RemoveDuplicateAreasVisitor() = default;
+  ~RemoveDuplicateAreasVisitor() override = default;
 
   void visit(const std::shared_ptr<Element>& e) override;
 

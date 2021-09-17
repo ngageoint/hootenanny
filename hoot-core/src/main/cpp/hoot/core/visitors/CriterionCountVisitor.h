@@ -45,7 +45,7 @@ public:
 
   CriterionCountVisitor();
   CriterionCountVisitor(const ElementCriterionPtr& pCrit);
-  ~CriterionCountVisitor() = default;
+  ~CriterionCountVisitor() override = default;
 
   void addCriterion(const ElementCriterionPtr& pCrit) override
   {

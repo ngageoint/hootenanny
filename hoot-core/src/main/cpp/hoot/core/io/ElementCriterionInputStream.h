@@ -46,7 +46,7 @@ public:
    */
   ElementCriterionInputStream(const ElementInputStreamPtr& elementSource,
                               const ElementCriterionPtr& criterion);
-  ~ElementCriterionInputStream() = default;
+  ~ElementCriterionInputStream() override = default;
 
   /**
    * @brief close

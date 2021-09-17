@@ -54,7 +54,7 @@ public:
    * @param epsilon Find x within epsilon of a local minimum.
    */
   GoldenSectionSearch(double epsilon, const int maxCacheSize = 100000);
-  ~GoldenSectionSearch() = default;
+  ~GoldenSectionSearch() override = default;
 
   double argmin(Function& f, double minx, double maxx) override;
 

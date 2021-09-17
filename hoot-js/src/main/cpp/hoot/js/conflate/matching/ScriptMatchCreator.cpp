@@ -117,7 +117,7 @@ public:
     _timer.start();
   }
 
-  ~ScriptMatchVisitor()
+  ~ScriptMatchVisitor() override
   {
     //  Free the persistent object
     if (_mapJs.IsEmpty())

@@ -48,7 +48,7 @@ void ElementToRelationMap::addRelation(const OsmMap& map,
       _rid = rid;
       LOG_VART(_rid);
     }
-    ~AddMemberVisitor() = default;
+    ~AddMemberVisitor() override = default;
 
     void visit(const ConstElementPtr& e) override
     {
@@ -111,7 +111,7 @@ void ElementToRelationMap::removeRelation(const OsmMap& map,
     {
       _rid = rid;
     }
-    ~RemoveMemberVisitor() = default;
+    ~RemoveMemberVisitor() override = default;
 
     QString getDescription() const override { return ""; }
     QString getName() const override { return ""; }
@@ -149,7 +149,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     {
       _found = false;
     }
-    ~ContainsElementVisitor() = default;
+    ~ContainsElementVisitor() override = default;
 
     QString getDescription() const override { return ""; }
     QString getName() const override { return ""; }
@@ -182,7 +182,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     {
       _good = true;
     }
-    ~CheckVisitor() = default;
+    ~CheckVisitor() override = default;
 
     QString getDescription() const override { return ""; }
     QString getName() const override { return ""; }

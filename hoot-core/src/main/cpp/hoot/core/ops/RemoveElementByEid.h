@@ -52,7 +52,7 @@ public:
    * @param doCheck check to see if element belongs to another element
    */
   RemoveElementByEid(ElementId eId, bool doCheck = true);
-  ~RemoveElementByEid() = default;
+  ~RemoveElementByEid() override = default;
 
   /**
    * @see OsmMapOperation

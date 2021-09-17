@@ -64,7 +64,7 @@ public:
   ReplaceTagVisitor(
     const QString& matchKey, const QString& matchValue, const QString& replaceKey,
     const QString& replaceValue);
-  ~ReplaceTagVisitor() = default;
+  ~ReplaceTagVisitor() override = default;
 
   /**
    * @brief visit - visit an element & perform check and replace

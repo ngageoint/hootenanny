@@ -49,7 +49,7 @@ public:
 
   NonBuildingAreaCriterion() = default;
   NonBuildingAreaCriterion(ConstOsmMapPtr map) : _map(map) { }
-  ~NonBuildingAreaCriterion() = default;
+  ~NonBuildingAreaCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<NonBuildingAreaCriterion>(_map); }

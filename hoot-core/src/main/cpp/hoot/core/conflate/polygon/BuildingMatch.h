@@ -55,7 +55,7 @@ public:
   BuildingMatch(const ConstMatchThresholdPtr& mt);
   BuildingMatch(const ConstOsmMapPtr& map, const std::shared_ptr<const BuildingRfClassifier>& rf,
                 const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt);
-  ~BuildingMatch() = default;
+  ~BuildingMatch() override = default;
 
   const MatchClassification& getClassification() const override { return _p; }
   std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;

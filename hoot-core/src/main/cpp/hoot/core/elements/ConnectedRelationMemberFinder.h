@@ -44,7 +44,7 @@ class ConnectedRelationMemberFinder : public ConstOsmMapConsumer
 public:
 
   ConnectedRelationMemberFinder() = default;
-  ~ConnectedRelationMemberFinder() = default;
+  ~ConnectedRelationMemberFinder() override = default;
 
   /**
    * Determines if any way from one relation is connected to a way in another relation

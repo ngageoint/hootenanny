@@ -37,9 +37,9 @@ class ElementGeometryUtilsJs : public HootBaseJs
 {
 public:
 
- static void Init(v8::Local<v8::Object> target);
+ ~ElementGeometryUtilsJs() override = default;
 
- virtual ~ElementGeometryUtilsJs() = default;
+ static void Init(v8::Local<v8::Object> target);
 
 private:
 

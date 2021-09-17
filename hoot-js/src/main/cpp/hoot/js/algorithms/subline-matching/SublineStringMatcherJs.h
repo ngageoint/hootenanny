@@ -43,8 +43,9 @@ public:
 
   static int logWarnCount;
 
+  ~SublineStringMatcherJs() override = default;
+
   static void Init(v8::Local<v8::Object> target);
-  virtual ~SublineStringMatcherJs() = default;
   static v8::Local<v8::Object> New(const SublineStringMatcherPtr& sd);
 
   SublineStringMatcherPtr getSublineStringMatcher() const { return _sm; }

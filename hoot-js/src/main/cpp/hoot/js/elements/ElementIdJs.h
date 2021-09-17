@@ -40,9 +40,10 @@ class ElementIdJs : public HootBaseJs
 {
 public:
 
+  ~ElementIdJs() override = default;
+
   static void Init(v8::Local<v8::Object> target);
   static v8::Local<v8::Object> New(ElementId eid);
-  virtual ~ElementIdJs() = default;
 
   ElementId& getElementId() { return _eid; }
 

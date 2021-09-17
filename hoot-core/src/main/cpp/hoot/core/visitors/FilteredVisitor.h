@@ -54,7 +54,7 @@ public:
    * Similar to the first, but takes smart pointer params.
    */
   FilteredVisitor(ElementCriterionPtr criterion, ElementVisitorPtr visitor);
-  ~FilteredVisitor() = default;
+  ~FilteredVisitor() override = default;
 
   static double getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
                         const ConstOsmMapPtr& map);

@@ -41,7 +41,8 @@ public:
 
   Layer() = default;
 
-  const std::shared_ptr<const FeatureDefinition>& getFeatureDefinition() const { return _definition; }
+  const std::shared_ptr<const FeatureDefinition>& getFeatureDefinition() const
+  { return _definition; }
   geos::geom::GeometryTypeId getGeometryType() const { return _geometryType; }
   QString getName() const { return _name; }
   QString getFdName() const { return _fdname; }

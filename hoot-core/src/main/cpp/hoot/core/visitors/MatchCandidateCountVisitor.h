@@ -43,14 +43,14 @@ class MatchCreator;
  * of match creators.
  */
 class MatchCandidateCountVisitor : public ElementConstOsmMapVisitor, public SingleStatistic,
-                                   public DataProducer
+  public DataProducer
 {
 public:
 
   static QString className() { return "MatchCandidateCountVisitor"; }
 
   MatchCandidateCountVisitor(const std::vector<std::shared_ptr<MatchCreator>>& matchCreators);
-  ~MatchCandidateCountVisitor() = default;
+  ~MatchCandidateCountVisitor() override = default;
 
   void visit(const std::shared_ptr<const Element>& e) override;
 

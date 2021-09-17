@@ -79,7 +79,7 @@ public:
   static QString className() { return "UnconnectedWaySnapper"; }
 
   UnconnectedWaySnapper();
-  ~UnconnectedWaySnapper() = default;
+  ~UnconnectedWaySnapper() override = default;
 
   /**
    * @see OsmMapOperation

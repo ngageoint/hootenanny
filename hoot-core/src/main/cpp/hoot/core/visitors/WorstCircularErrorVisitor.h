@@ -28,6 +28,7 @@
 #ifndef WORSTCIRCULARERRORVISITOR_H
 #define WORSTCIRCULARERRORVISITOR_H
 
+// hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/SingleStatistic.h>
@@ -45,7 +46,7 @@ public:
   static QString className() { return "WorstCircularErrorVisitor"; }
 
   WorstCircularErrorVisitor() : _worst(ElementData::CIRCULAR_ERROR_EMPTY) {}
-  ~WorstCircularErrorVisitor() = default;
+  ~WorstCircularErrorVisitor() override = default;
 
   double getStat() const override { return _worst; }
 

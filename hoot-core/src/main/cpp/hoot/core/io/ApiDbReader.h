@@ -59,7 +59,7 @@ public:
   ApiDbReader();
   virtual ~ApiDbReader() = default;
 
-  bool isSupported(const QString& urlStr) override;
+  bool isSupported(const QString& urlStr) const override;
 
   void setBoundingBox(const QString& bbox);
   void setOverrideBoundingBox(const QString& bbox);
@@ -70,7 +70,7 @@ public:
    * Determines the reader's default element status. By default this is Invalid which specifies that
    * the file's status will be used.
    */
-  void setDefaultStatus(Status status) override { _status = status; }
+  void setDefaultStatus(const Status& status) override { _status = status; }
 
   /**
    * Determines whether the reader should use the element id's from the file being read

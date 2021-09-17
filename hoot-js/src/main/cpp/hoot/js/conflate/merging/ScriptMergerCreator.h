@@ -43,13 +43,12 @@ public:
   static QString className() { return "ScriptMergerCreator"; }
 
   ScriptMergerCreator() = default;
-  ~ScriptMergerCreator() = default;
+  ~ScriptMergerCreator() override = default;
 
   /**
    * If all the matches are CustomPoiMatches, a single CustomPoiMerger will be created and returned.
    */
-  bool createMergers(const MatchSet& matches,
-                             std::vector<MergerPtr>& mergers) const override;
+  bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
 
   std::vector<CreatorDescription> getAllCreators() const override;
 

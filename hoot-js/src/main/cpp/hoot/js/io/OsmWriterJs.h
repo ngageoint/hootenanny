@@ -28,7 +28,7 @@
 #ifndef OSMWRITERJS_H
 #define OSMWRITERJS_H
 
-// node.js
+// hoot
 #include <hoot/js/HootBaseJs.h>
 
 namespace hoot
@@ -38,9 +38,9 @@ class OsmWriterJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Local<v8::Object> target);
+  ~OsmWriterJs() override = default;
 
-  virtual ~OsmWriterJs() = default;
+  static void Init(v8::Local<v8::Object> target);
 
 private:
 

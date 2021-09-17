@@ -45,7 +45,7 @@ public:
   static QString className() { return "OsmGbdxJsonWriter"; }
 
   OsmGbdxJsonWriter(int precision = ConfigOptions().getWriterPrecision());
-  ~OsmGbdxJsonWriter() = default;
+  ~OsmGbdxJsonWriter() override = default;
 
   /**
    * @brief Create a directory to hold all of the GeoJSON files
@@ -64,9 +64,9 @@ public:
    * @param url Filename ending in ".gbdx"
    * @return
    */
-  bool isSupported(const QString& url) override { return url.toLower().endsWith(".gbdx"); }
+  bool isSupported(const QString& url) const override { return url.toLower().endsWith(".gbdx"); }
 
-  QString supportedFormats() override { return ".gdbx"; }
+  QString supportedFormats() const override { return ".gdbx"; }
 
 protected:
 

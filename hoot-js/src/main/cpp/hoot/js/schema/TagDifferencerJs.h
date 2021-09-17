@@ -39,11 +39,11 @@ class TagDifferencerJs : public HootBaseJs
 {
 public:
 
+  ~TagDifferencerJs() override = default;
+
   static void Init(v8::Local<v8::Object> target);
 
   TagDifferencer* getDifferencer() { return _td.get(); }
-
-  virtual ~TagDifferencerJs() = default;
 
 private:
 

@@ -27,6 +27,7 @@
 #ifndef ELEMENT_IDS_VISITOR_H
 #define ELEMENT_IDS_VISITOR_H
 
+// hoot
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/TagCriterion.h>
@@ -47,9 +48,9 @@ public:
 
   static QString className() { return "ElementIdsVisitor"; }
 
-  ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit);
   ElementIdsVisitor() = default;
-  ~ElementIdsVisitor() = default;
+  ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit);
+  ~ElementIdsVisitor() override = default;
 
   void visit(const std::shared_ptr<const Element>& e) override;
 

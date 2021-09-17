@@ -65,11 +65,7 @@ public:
   static int logWarnCount;
 
   JavaScriptSchemaTranslator();
-  virtual ~JavaScriptSchemaTranslator();
-
-  QString getScriptPath() const { return _scriptPath; }
-
-  const Settings& getConfiguration() const { return _conf; }
+  ~JavaScriptSchemaTranslator() override;
 
   bool isValidScript() override;
 
@@ -79,21 +75,21 @@ public:
   void _checkError();
 
   std::shared_ptr<const Schema> getOgrOutputSchema() override;
-
   // Filter for file names
   QString getLayerNameFilter() override;
+  std::vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
+    geos::geom::GeometryTypeId geometryType) override;
+  std::vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
+    geos::geom::GeometryTypeId geometryType) override;
+  void setConfiguration(const Settings& conf) override;
+
+  QString getScriptPath() const { return _scriptPath; }
+  const Settings& getConfiguration() const { return _conf; }
 
   /**
    * Uses the specified script text instead of loading the script from a file.
    */
   void setScriptText(const QString& text) { close(); _scriptText = text; _scriptPath = QString(); }
-
-  std::vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
-    geos::geom::GeometryTypeId geometryType) override;
-  std::vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
-    geos::geom::GeometryTypeId geometryType) override;
-
-  void setConfiguration(const Settings& conf) override;
 
 protected:
 

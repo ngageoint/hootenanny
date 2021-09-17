@@ -46,14 +46,14 @@ public:
   static QString className() { return "ShapefileWriter"; }
 
   ShapefileWriter();
-  ~ShapefileWriter() = default;
+  ~ShapefileWriter() override = default;
 
   /**
    * Set the configuration for this object.
    */
   void setConfiguration(const Settings& conf) override;
 
-  bool isSupported(const QString& url) override { return url.toLower().endsWith(".shp"); }
+  bool isSupported(const QString& url) const override { return url.toLower().endsWith(".shp"); }
   void open(const QString& url) override;
   /**
    * Will write out up to three files:
@@ -62,7 +62,7 @@ public:
    * path + "Polygons.shp"
    */
   void write(const ConstOsmMapPtr& map) override;
-  QString supportedFormats() override { return ".shp"; }
+  QString supportedFormats() const override { return ".shp"; }
 
   /**
    * @deprecated Use open and write instead.

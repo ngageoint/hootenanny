@@ -59,7 +59,7 @@ public:
   static QString className() { return "TranslatedTagDifferencer"; }
 
   TranslatedTagDifferencer();
-  ~TranslatedTagDifferencer() = default;
+  ~TranslatedTagDifferencer() override = default;
 
   double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
     const ConstElementPtr& e2) const override;

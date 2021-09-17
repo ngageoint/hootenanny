@@ -41,7 +41,7 @@ public:
 
   PowerLineWayNodeCriterion();
   PowerLineWayNodeCriterion(ConstOsmMapPtr map);
-  ~PowerLineWayNodeCriterion() = default;
+  ~PowerLineWayNodeCriterion() override = default;
 
   ElementCriterionPtr clone() override { return std::make_shared<PowerLineWayNodeCriterion>(_map); }
 

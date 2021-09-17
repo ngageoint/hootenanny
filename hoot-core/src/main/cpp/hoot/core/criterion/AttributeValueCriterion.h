@@ -50,7 +50,7 @@ public:
   AttributeValueCriterion(
     const ElementAttributeType& attributeType, const double comparisonVal,
     const NumericComparisonType& comparisonType);
-  ~AttributeValueCriterion() = default;
+  ~AttributeValueCriterion() override = default;
 
   /**
    * @see ElementCriterion

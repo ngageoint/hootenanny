@@ -39,8 +39,7 @@ public:
   NodeData() = default;
   NodeData(const NodeData& nd);
   NodeData(long id, double x, double y);
-
-  ~NodeData() = default;
+  ~NodeData() override = default;
 
   void init(long id, double x, double y, long changeset = ElementData::CHANGESET_EMPTY,
             long version = ElementData::VERSION_EMPTY,

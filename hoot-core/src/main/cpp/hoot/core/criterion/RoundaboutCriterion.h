@@ -43,7 +43,7 @@ public:
   static QString className() { return "RoundaboutCriterion"; }
 
   RoundaboutCriterion() = default;
-  ~RoundaboutCriterion() = default;
+  ~RoundaboutCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<RoundaboutCriterion>(); }

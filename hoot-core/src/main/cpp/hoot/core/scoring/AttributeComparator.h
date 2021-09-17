@@ -38,7 +38,7 @@ class AttributeComparator : public BaseComparator
 public:
 
   AttributeComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
-  ~AttributeComparator() = default;
+  ~AttributeComparator() override = default;
 
   double compareMaps() override;
 

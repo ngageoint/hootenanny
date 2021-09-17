@@ -55,7 +55,7 @@ public:
   static QString className() { return "WayToIntersectionGeoModifier"; }
 
   WayToIntersectionGeoModifier() = default;
-  ~WayToIntersectionGeoModifier() = default;
+  ~WayToIntersectionGeoModifier() override = default;
 
   QString getCommandName() const override { return "way_to_intersection"; }
   QList<QString> getParameterNames() const override { return QList<QString>(); }

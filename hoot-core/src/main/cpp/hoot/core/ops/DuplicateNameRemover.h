@@ -49,7 +49,7 @@ public:
   static QString className() { return "DuplicateNameRemover"; }
 
   DuplicateNameRemover();
-  ~DuplicateNameRemover() = default;
+  ~DuplicateNameRemover() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

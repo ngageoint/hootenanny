@@ -46,7 +46,7 @@ public:
 
   RelationMemberCriterion() = default;
   RelationMemberCriterion(ConstOsmMapPtr map);
-  ~RelationMemberCriterion() = default;
+  ~RelationMemberCriterion() override = default;
 
   /**
    * @see ElementVisitor

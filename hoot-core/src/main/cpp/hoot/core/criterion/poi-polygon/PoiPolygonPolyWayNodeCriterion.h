@@ -41,7 +41,7 @@ public:
 
   PoiPolygonPolyWayNodeCriterion();
   PoiPolygonPolyWayNodeCriterion(ConstOsmMapPtr map);
-  ~PoiPolygonPolyWayNodeCriterion() = default;
+  ~PoiPolygonPolyWayNodeCriterion() override = default;
 
   ElementCriterionPtr clone() override
   { return std::make_shared<PoiPolygonPolyWayNodeCriterion>(_map); }

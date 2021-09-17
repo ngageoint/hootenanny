@@ -48,7 +48,7 @@ public:
   static QString className() { return "RemoveRef2VisitorMultipleCriterion"; }
 
   RemoveRef2VisitorMultipleCriterion() = default;
-  ~RemoveRef2VisitorMultipleCriterion() = default;
+  ~RemoveRef2VisitorMultipleCriterion() override = default;
 
   void addCriterion(const ElementCriterionPtr& e) override;
 

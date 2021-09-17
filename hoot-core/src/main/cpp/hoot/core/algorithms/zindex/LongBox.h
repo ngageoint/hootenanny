@@ -27,12 +27,6 @@
 #ifndef LONGBOX_H
 #define LONGBOX_H
 
-//Std Includes
-
-
-//Qt includes
-
-
 namespace hoot
 {
 

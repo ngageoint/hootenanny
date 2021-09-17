@@ -41,7 +41,7 @@ public:
 
   RiverWayNodeCriterion();
   RiverWayNodeCriterion(ConstOsmMapPtr map);
-  ~RiverWayNodeCriterion() = default;
+  ~RiverWayNodeCriterion() override = default;
 
   ElementCriterionPtr clone() override { return std::make_shared<RiverWayNodeCriterion>(_map); }
 

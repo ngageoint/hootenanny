@@ -43,7 +43,7 @@ class RelationMemberNodeCounter : public ConstOsmMapConsumer
 public:
 
   RelationMemberNodeCounter() = default;
-  ~RelationMemberNodeCounter() = default;
+  ~RelationMemberNodeCounter() override = default;
 
   /**
    * Returns the total recursive count of all nodes contained in a relation

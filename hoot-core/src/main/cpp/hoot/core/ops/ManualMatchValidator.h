@@ -56,7 +56,7 @@ public:
   static QString className() { return "ManualMatchValidator"; }
 
   ManualMatchValidator();
-  ~ManualMatchValidator() = default;
+  ~ManualMatchValidator() override = default;
 
   /**
    * Validates all manual matches in the map and records the first error found for each element

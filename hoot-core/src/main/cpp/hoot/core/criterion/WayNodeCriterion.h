@@ -43,7 +43,7 @@ public:
 
   WayNodeCriterion() = default;
   WayNodeCriterion(ConstOsmMapPtr map);
-  ~WayNodeCriterion() = default;
+  ~WayNodeCriterion() override = default;
 
   /**
    * Returns the ID of the first way that owns input node

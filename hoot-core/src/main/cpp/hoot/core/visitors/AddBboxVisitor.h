@@ -27,6 +27,7 @@
 #ifndef ADDBBOXVISITOR_H
 #define ADDBBOXVISITOR_H
 
+// hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot

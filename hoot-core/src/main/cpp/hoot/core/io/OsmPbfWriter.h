@@ -75,10 +75,10 @@ public:
   void finalizePartial() override;
 
   void initializePartial() override;
-  bool isSupported(const QString& url) override { return url.toLower().endsWith("osm.pbf"); }
+  bool isSupported(const QString& url) const override { return url.toLower().endsWith("osm.pbf"); }
   void open(const QString& url) override;
   void close() override;
-  QString supportedFormats() override { return ".osm.pbf"; }
+  QString supportedFormats() const override { return ".osm.pbf"; }
   /**
    * The write command called after open.
    */

@@ -27,6 +27,7 @@
 #ifndef MULTITHREADEDRANDOMFORESTMANAGER_H
 #define MULTITHREADEDRANDOMFORESTMANAGER_H
 
+// Tgs
 #include <tgs/RandomForest/BaseRandomForestManager.h>
 #include <tgs/RandomForest/MultithreadedRandomForest.h>
 
@@ -44,11 +45,10 @@ namespace Tgs
      * @brief MultithreadedRandomForestManager Constructor
      */
     MultithreadedRandomForestManager() = default;
-
     /**
     *  @brief ~MultithreadedRandomForestManager Destructor
     */
-    ~MultithreadedRandomForestManager() = default;
+    ~MultithreadedRandomForestManager() override = default;
 
   protected:
 
@@ -62,43 +62,50 @@ namespace Tgs
      * @brief _parseXmlForestNodes loads the XML form of a fores
      * @param forestsNode the list of <RandomForest> DOM nodes
      */
-    void _parseXmlForestNodes(QDomNodeList & forestNodes) override;
+    void _parseXmlForestNodes(QDomNodeList& forestNodes) override;
 
-    /**
-    *  Trains a set of binary 1 to all random forests on the training vectors previously added
+   /**
+    * Trains a set of binary 1 to all random forests on the training vectors previously added
     *
     * @param numTrees the number of random trees to create
     * @param numFactors the number of factors to randomly choose as candidates for node splitting
     * @param nodeSize the minimum number of data vectors in a set to split a node
-    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
+    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors
+    * and no retraining)
     * @param balanced true if the random forests should be balanced
     */
-    void _trainBinary(unsigned int numTrees, unsigned int numFactors, unsigned int nodeSize,
-      double retrain, bool balanced) override;
+    void _trainBinary(
+      unsigned int numTrees, unsigned int numFactors, unsigned int nodeSize, double retrain,
+      bool balanced) override;
 
-    /**
-    *  Trains a single multi-class random forest on the training vectors previously added
+   /**
+    * Trains a single multi-class random forest on the training vectors previously added
     *
     * @param numTrees the number of random trees to create
     * @param numFactors the number of factors to randomly choose as candidates for node splitting
     * @param nodeSize the minimum number of data vectors in a set to split a node
-    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
+    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors
+    * and no retraining)
     * @param balanced true if the random forests should be balanced
     */
-    void _trainMultiClass(unsigned int numTrees, unsigned int numFactors, unsigned int nodeSize,
-      double retrain, bool balanced) override;
+    void _trainMultiClass(
+      unsigned int numTrees, unsigned int numFactors, unsigned int nodeSize, double retrain,
+      bool balanced) override;
 
-    /**
-    *  Trains a set of pair wise class to class random forests on the training vectors previously added
+   /**
+    * Trains a set of pair wise class to class random forests on the training vectors previously
+    * added
     *
     * @param numTrees the number of random trees to create
     * @param numFactors the number of factors to randomly choose as candidates for node splitting
     * @param nodeSize the minimum number of data vectors in a set to split a node
-    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
+    * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors
+    * and no retraining)
     * @param balanced true if the random forests should be balanced
     */
-    void _trainRoundRobin(unsigned int numTrees, unsigned int numFactors, unsigned int nodeSize,
-      double retrain, bool balanced) override;
+    void _trainRoundRobin(
+      unsigned int numTrees, unsigned int numFactors, unsigned int nodeSize, double retrain,
+      bool balanced) override;
   };
 }
 

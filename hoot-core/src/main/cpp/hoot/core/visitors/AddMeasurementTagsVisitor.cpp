@@ -53,6 +53,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, AddMeasurementTagsVisitor)
 
+AddMeasurementTagsVisitor::AddMeasurementTagsVisitor(bool area, bool length, bool width) :
+_addArea(area),
+_addLength(length),
+_addWidth(width)
+{
+}
+
 void AddMeasurementTagsVisitor::visit(const ElementPtr& pElement)
 {
   if (!_addArea && !_addWidth && !_addLength) return;

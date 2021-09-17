@@ -45,7 +45,7 @@ public:
   static QString className() { return "PoiPolygonMatchCreator"; }
 
   PoiPolygonMatchCreator() = default;
-  ~PoiPolygonMatchCreator() = default;
+  ~PoiPolygonMatchCreator() override = default;
 
   MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) override;
 

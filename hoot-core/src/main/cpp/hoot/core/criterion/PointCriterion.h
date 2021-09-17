@@ -48,7 +48,7 @@ public:
 
   PointCriterion() = default;
   PointCriterion(ConstOsmMapPtr map);
-  ~PointCriterion() = default;
+  ~PointCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<PointCriterion>(_map); }

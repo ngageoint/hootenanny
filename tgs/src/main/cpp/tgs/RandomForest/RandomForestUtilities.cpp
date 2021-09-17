@@ -26,14 +26,15 @@
  */
 #include "RandomForestUtilities.h"
 
-//Qt Includes
+// Qt
 #include <QFileInfo>
 #include <QString>
 
-//Std Includes
+// Std
 #include <fstream>
 #include <iostream>
 
+// Tgs
 #include <tgs/TgsException.h>
 #include <tgs/RandomForest/RandomForestManager.h>
 

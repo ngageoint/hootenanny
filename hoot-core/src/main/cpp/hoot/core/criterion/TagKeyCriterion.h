@@ -48,7 +48,7 @@ public:
   explicit TagKeyCriterion(QStringList keys);
   TagKeyCriterion(QString key1, QString key2);
   TagKeyCriterion(QString key1, QString key2, QString key3);
-  ~TagKeyCriterion() = default;
+  ~TagKeyCriterion() override = default;
 
   void addKey(QString key);
 

@@ -65,7 +65,7 @@ public:
   static QString className() { return "SuperfluousNodeRemover"; }
 
   SuperfluousNodeRemover();
-  ~SuperfluousNodeRemover() = default;
+  ~SuperfluousNodeRemover() override = default;
 
   /**
    * @see OsmMapOperation

@@ -41,7 +41,7 @@ public:
 
   PolygonWayNodeCriterion();
   PolygonWayNodeCriterion(ConstOsmMapPtr map);
-  ~PolygonWayNodeCriterion() = default;
+  ~PolygonWayNodeCriterion() override = default;
 
   void setOsmMap(const OsmMap* map) override;
 

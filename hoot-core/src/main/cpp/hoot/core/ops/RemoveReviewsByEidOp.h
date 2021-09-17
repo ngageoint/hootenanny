@@ -65,7 +65,7 @@ public:
    */
   RemoveReviewsByEidOp(
     ElementId eid, bool clearAndRemoveElement = false, bool removeParentRefs = false);
-  ~RemoveReviewsByEidOp() = default;
+  ~RemoveReviewsByEidOp() override = default;
 
   /**
    * If the elements aren't specified in the constructor, this must be called exactly two times.

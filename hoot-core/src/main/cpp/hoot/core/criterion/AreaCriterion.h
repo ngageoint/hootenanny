@@ -46,7 +46,7 @@ public:
 
   AreaCriterion() = default;
   AreaCriterion(ConstOsmMapPtr map) : _map(map) { }
-  ~AreaCriterion() = default;
+  ~AreaCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   bool isSatisfied(const Tags& tags, const ElementType& elementType) const;

@@ -50,7 +50,7 @@ public:
   static QString className() { return "DataQualityMetricTagger"; }
 
   DataQualityMetricTagger();
-  ~DataQualityMetricTagger() = default;
+  ~DataQualityMetricTagger() override = default;
 
   /**
    * Calculates select data quality metrics for a map and tags features with issues

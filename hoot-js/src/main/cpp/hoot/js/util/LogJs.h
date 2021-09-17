@@ -30,10 +30,6 @@
 //  Hoot
 #include <hoot/js/HootBaseJs.h>
 
-//  Qt
-
-
-
 namespace hoot
 {
 
@@ -41,9 +37,9 @@ class LogJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Local<v8::Object> target);
+  ~LogJs() override = default;
 
-  virtual ~LogJs() = default;
+  static void Init(v8::Local<v8::Object> target);
 
 private:
 

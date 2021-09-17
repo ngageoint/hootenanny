@@ -48,7 +48,7 @@ public:
   static QString className() { return "WayToPolyGeoModifierAction"; }
 
   WayToPolyGeoModifierAction() = default;
-  ~WayToPolyGeoModifierAction() = default;
+  ~WayToPolyGeoModifierAction() override = default;
 
   QString getCommandName() const override { return "way_to_poly"; }
   QList<QString> getParameterNames() const override

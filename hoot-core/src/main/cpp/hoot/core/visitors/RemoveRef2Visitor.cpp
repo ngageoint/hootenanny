@@ -51,7 +51,7 @@ class Ref1ToEidVisitor : public ConstElementVisitor
 public:
 
   Ref1ToEidVisitor() = default;
-  ~Ref1ToEidVisitor() = default;
+  ~Ref1ToEidVisitor() override = default;
 
   const RemoveRef2Visitor::Ref1ToEid& getRef1ToEid() const { return _ref1ToEid; }
 

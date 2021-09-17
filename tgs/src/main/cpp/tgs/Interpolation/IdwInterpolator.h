@@ -51,19 +51,19 @@ public:
    * evaluation.
    */
   IdwInterpolator(double p = -1.0);
-  ~IdwInterpolator() = default;
+  ~IdwInterpolator() override = default;
 
   QString getName() const override { return className(); }
 
   const std::vector<double>& interpolate(const std::vector<double>& point) const override;
+
+  QString toString() const override;
 
   void setP(double p) { _p = p; }
   /**
    * Stop looking for a sigma when sigma is within this distance of "optimal".
    */
   void setStopDelta(double stopDelta) { _stopDelta = stopDelta; }
-
-  QString toString() const override;
 
 protected:
 

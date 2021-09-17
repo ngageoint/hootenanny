@@ -61,7 +61,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmGeoJsonReader)
 
-bool OsmGeoJsonReader::isSupported(const QString& url)
+bool OsmGeoJsonReader::isSupported(const QString& url) const
 {
   QUrl myUrl(url);
 

@@ -43,6 +43,11 @@ HOOT_JS_REGISTER(WayJs)
 
 Persistent<Function> WayJs::_constructor;
 
+WayJs::WayJs(ConstWayPtr w) :
+_constWay(w)
+{
+}
+
 void WayJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();

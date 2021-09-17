@@ -47,7 +47,7 @@ public:
   static QString className() { return "CookieCutterOp"; }
 
   CookieCutterOp();
-  ~CookieCutterOp() = default;
+  ~CookieCutterOp() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

@@ -27,11 +27,11 @@
 
 #include "DataFrame.h"
 
-//Qt Includes
+// Qt
 #include <QStringList>
 #include <qnumeric.h>
 
-//STD Includes
+// Std
 #include <algorithm>
 #include <assert.h>
 #include <cmath>

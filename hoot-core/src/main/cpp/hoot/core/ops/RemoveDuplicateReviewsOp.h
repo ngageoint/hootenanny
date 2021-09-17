@@ -45,7 +45,7 @@ public:
   static QString className() { return "RemoveDuplicateReviewsOp"; }
 
   RemoveDuplicateReviewsOp();
-  ~RemoveDuplicateReviewsOp() = default;
+  ~RemoveDuplicateReviewsOp() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

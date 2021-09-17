@@ -55,7 +55,7 @@ public:
     quint64 timestamp = ElementData::TIMESTAMP_EMPTY, QString user = ElementData::USER_EMPTY,
     long uid = ElementData::UID_EMPTY, bool visible = ElementData::VISIBLE_EMPTY);
   explicit Relation(const Relation& from);
-  ~Relation() = default;
+  ~Relation() override = default;
 
   ElementPtr clone() const override { return std::make_shared<Relation>(*this); }
 

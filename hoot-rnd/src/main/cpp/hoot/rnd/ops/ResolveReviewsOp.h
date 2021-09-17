@@ -49,7 +49,7 @@ public:
   static QString className() { return "ResolveReviewsOp"; }
 
   ResolveReviewsOp();
-  virtual ~ResolveReviewsOp() = default;
+  ~ResolveReviewsOp() override = default;
 
   /**
    * @brief The ResolveType enum Keep, Resolve, or Remove all reviews

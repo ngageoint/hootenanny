@@ -57,13 +57,13 @@ public:
 
   OgrReader();
   OgrReader(const QString& path);
-  ~OgrReader() = default;
+  ~OgrReader() override = default;
 
   void initializePartial() override;
   bool hasMoreElements() override;
   ElementPtr readNextElement() override;
   void close() override;
-  bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) const override;
   void open(const QString& url) override;
   void setUseDataSourceIds(bool useDataSourceIds) override;
   void finalizePartial() override;
@@ -106,7 +106,7 @@ public:
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   // leaving this empty
-  QString supportedFormats() override { return ""; }
+  QString supportedFormats() const override { return ""; }
 
   /**
    * @see ProgressReporter
@@ -117,7 +117,7 @@ public:
    */
   unsigned int getNumSteps() const override { return 1; }
 
-  void setDefaultStatus(Status s) override;
+  void setDefaultStatus(const Status& s) override;
   void setLimit(long limit) const;
   void setSchemaTranslationScript(const QString& translate) const;
 

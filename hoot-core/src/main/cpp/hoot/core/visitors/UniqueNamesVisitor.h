@@ -44,7 +44,7 @@ public:
   static QString className() { return "UniqueNamesVisitor"; }
 
   UniqueNamesVisitor() = default;
-  ~UniqueNamesVisitor() = default;
+  ~UniqueNamesVisitor() override = default;
 
   double getStat() const override { return _names.size(); }
 

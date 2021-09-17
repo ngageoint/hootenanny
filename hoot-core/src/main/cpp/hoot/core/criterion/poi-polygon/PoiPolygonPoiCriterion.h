@@ -44,7 +44,7 @@ public:
   static QString className() { return "PoiPolygonPoiCriterion"; }
 
   PoiPolygonPoiCriterion();
-  ~PoiPolygonPoiCriterion() = default;
+  ~PoiPolygonPoiCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<PoiPolygonPoiCriterion>(); }

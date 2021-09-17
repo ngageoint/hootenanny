@@ -27,7 +27,7 @@
 #ifndef OSMGEOJSONWRITER_H
 #define OSMGEOJSONWRITER_H
 
-// node.js
+// hoot
 #include <hoot/js/HootBaseJs.h>
 
 namespace hoot
@@ -37,9 +37,9 @@ class OsmGeoJsonWriterJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Local<v8::Object> target);
+  ~OsmGeoJsonWriterJs() override = default;
 
-  virtual ~OsmGeoJsonWriterJs() = default;
+  static void Init(v8::Local<v8::Object> target);
 
 private:
 

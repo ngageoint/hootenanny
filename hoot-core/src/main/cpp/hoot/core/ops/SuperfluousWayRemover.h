@@ -51,7 +51,7 @@ public:
   static QString className() { return "SuperfluousWayRemover"; }
 
   SuperfluousWayRemover() = default;
-  ~SuperfluousWayRemover() = default;
+  ~SuperfluousWayRemover() override = default;
 
   /**
    * @see OsmMapOperation

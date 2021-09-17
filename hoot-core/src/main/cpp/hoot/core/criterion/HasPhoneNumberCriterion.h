@@ -28,6 +28,7 @@
 #ifndef HAS_PHONE_NUMBER_CRITERION_H
 #define HAS_PHONE_NUMBER_CRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/conflate/phone/PhoneNumberParser.h>
 #include <hoot/core/util/Configurable.h>
@@ -44,7 +45,7 @@ public:
   static QString className() { return "HasPhoneNumberCriterion"; }
 
   HasPhoneNumberCriterion() = default;
-  ~HasPhoneNumberCriterion() = default;
+  ~HasPhoneNumberCriterion() override = default;
 
   void setConfiguration(const Settings& conf) override;
 

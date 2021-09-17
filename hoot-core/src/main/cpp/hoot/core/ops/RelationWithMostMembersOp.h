@@ -50,7 +50,7 @@ public:
   static QString className() { return "RelationWithMostMembersOp"; }
 
   RelationWithMostMembersOp();
-  ~RelationWithMostMembersOp() = default;
+  ~RelationWithMostMembersOp() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

@@ -47,8 +47,8 @@ public:
 
   static QString className() { return "MinIdVisitor"; }
 
-  MinIdVisitor() : _minId(std::numeric_limits<long>::max()) { }
-  ~MinIdVisitor() = default;
+  MinIdVisitor();
+  ~MinIdVisitor() override = default;
 
   double getStat() const override { return _minId; }
 

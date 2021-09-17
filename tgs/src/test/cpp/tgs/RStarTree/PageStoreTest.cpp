@@ -30,13 +30,13 @@
 #include <tgs/RStarTree/MemoryPageStore.h>
 #include <tgs/RStarTree/Page.h>
 
-// CPP Unit Includes
+// CPPUnit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt Includes
+// Qt
 #include <QFile>
 
 #include "../PluginFactory.h"

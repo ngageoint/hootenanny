@@ -42,7 +42,7 @@ public:
   static QString className() { return "ElementIdToVersionMapper"; }
 
   ElementIdToVersionMapper() = default;
-  ~ElementIdToVersionMapper() = default;
+  ~ElementIdToVersionMapper() override = default;
 
   void apply(const OsmMapPtr& map) override;
 

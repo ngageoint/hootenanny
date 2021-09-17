@@ -27,7 +27,7 @@
 #ifndef BASERANDOMFOREST_H
 #define BASERANDOMFOREST_H
 
-// Qt includes
+// Qt
 #include <QFile>
 
 // Tgs
