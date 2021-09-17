@@ -123,9 +123,8 @@ void Hoot::_init() const
 # endif
 
   Log::getInstance().setLevel(Log::Status);
-  //  Registering these metatypes here removes warning messages
-  //  in threads that use QNetworkAccessManager whose initialization
-  //  routine isn't thread safe
+  // Registering these metatypes here removes warning messages in threads that use
+  // QNetworkAccessManager whose initialization routine isn't thread safe.
   qRegisterMetaType<QPair<QByteArray, QByteArray>>();
   qRegisterMetaType<QList<QPair<QByteArray,QByteArray>>>();
   qRegisterMetaType<QSharedPointer<QNetworkSession>>();
@@ -133,7 +132,7 @@ void Hoot::_init() const
 
 void Hoot::loadLibrary(const QString& name) const
 {
-  // this library sticks around in ram even after the object is destroyed.
+  // This library sticks around in ram even after the object is destroyed.
   QLibrary lib(name);
   LOG_DEBUG("Loading library " << name);
   if (lib.load() == false)

@@ -37,6 +37,8 @@
 #include <exception>
 #include <iostream>
 #include <string>
+// Strangely getting compile errors in hoot-test w/o this, even though its in HootCoreStable.h.
+#include <memory>
 
 namespace hoot
 {

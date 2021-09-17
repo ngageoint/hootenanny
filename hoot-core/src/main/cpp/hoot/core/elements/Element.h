@@ -38,6 +38,10 @@
 // Standard
 #include <cassert>
 
+// GEOS Includes
+// Strangely getting compile errors in hoot-test w/o this, even though its in HootCoreStable.h.
+#include <geos/geom/Envelope.h>
+
 namespace geos
 {
   namespace geom
