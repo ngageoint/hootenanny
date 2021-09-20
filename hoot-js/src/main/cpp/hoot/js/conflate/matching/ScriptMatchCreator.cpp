@@ -762,6 +762,8 @@ void ScriptMatchCreator::setRunOneToManyRailMatching(
         "No railway one to many transfer tag keys specified in " +
         ConfigOptions::getHighwayMedianToDualHighwayTransferKeysKey() + ".");
     }
+
+    LOG_STATUS("Running railway one to many custom conflation workflow...");
   }
 }
 

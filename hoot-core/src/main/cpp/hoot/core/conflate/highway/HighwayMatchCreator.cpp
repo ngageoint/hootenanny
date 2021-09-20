@@ -387,6 +387,8 @@ void HighwayMatchCreator::setRunMedianMatching(
     _medianClassifier =
       Factory::getInstance().constructObject<HighwayClassifier>(
         ConfigOptions().getConflateMatchHighwayMedianClassifier());
+
+    LOG_STATUS("Running highway road median custom conflation workflow...");
   }
   else
   {
