@@ -47,14 +47,14 @@ namespace hoot
 
 const int MapValidator::FILE_PRINT_SIZE = 40;
 
-void MapValidator::setReportFile(const QString& file)
+void MapValidator::setReportPath(const QString& filePath)
 {
-  _reportFile = file;
-  if (!IoUtils::isUrl(file))
+  _reportFile = filePath;
+  if (!IoUtils::isUrl(_reportFile))
   {
     // Write the output dir the report is in now so we don't get a nasty surprise at the end of a
     // long job that it can't be written.
-    IoUtils::writeOutputDir(file);
+    IoUtils::writeOutputDir(_reportFile);
   }
 }
 
@@ -216,6 +216,7 @@ QString MapValidator::_validate(const QStringList& inputs, const QString& output
 
     if (!output.isEmpty())
     {
+      LOG_STATUS("Writing validated output to: " << output << "...");
       MapProjector::projectToWgs84(map);
       IoUtils::saveMap(map, output);
     }
@@ -227,6 +228,7 @@ QString MapValidator::_validate(const QStringList& inputs, const QString& output
     validationSummary += errorMsg;
   }
 
+  LOG_VART(_reportFile);
   if (!_reportFile.isEmpty())
   {
     LOG_STATUS(

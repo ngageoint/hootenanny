@@ -128,6 +128,7 @@ void ConflateCaseTest::_runConflateCmd()
   LOG_VART(ConfigOptions().getTestValidationEnable());
   if (ConfigOptions().getTestValidationEnable())
   {
+    // Make sure we have a base validation report to compare against.
     const QString goldReportPath = _d.absolutePath() + "/validation-report";
     QFileInfo goldReport(goldReportPath);
     if (!goldReport.exists())
@@ -135,9 +136,16 @@ void ConflateCaseTest::_runConflateCmd()
       throw HootException("No gold validation report exists for case test: " + _d.absolutePath());
     }
 
+    // Write our validated output and validation report. The validated output is for debugging
+    // purposes only.
     const QString outputReportPath = _d.absolutePath() + "/validated-output-report";
-    MapValidator().validate(QStringList(_d.absolutePath() + "/Output.osm"), outputReportPath);
+    QString conflateOutputPath = _d.absolutePath() + "/Output.osm";
+    QString validatedOutputPath = conflateOutputPath.replace("Output.osm", "ValidatedOutput.osm");
+    MapValidator validator;
+    validator.setReportPath(outputReportPath);
+    validator.validate(QStringList(_d.absolutePath() + "/Output.osm"), validatedOutputPath);
 
+    // Compare the validation reports.
     if (FileUtils::readFully(goldReportPath) != FileUtils::readFully(outputReportPath))
     {
       CPPUNIT_ASSERT_MESSAGE(QString("Validation reports do not match").toStdString(), false);

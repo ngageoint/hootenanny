@@ -1,6 +1,8 @@
 
 == Using Validation Checks to Improve Conflated Maps
 
+TODO: update for usage in tests
+
 It is quite easy to produce conflated map output that initially seems accurate but upon further 
 examination has quality issues. https://josm.openstreetmap.de/[JOSM] has an extensive collection of 
 validation tools that can be used to detect such issues. Hootenanny is integrated with 
@@ -20,6 +22,13 @@ certain circumstances.
 * A large number of tests failing due to just validation errors only would be disruptive to the 
 incremental conflation development process. It is easier to make a series of conflated relation 
 changes and check validation manually towards the end of the development process.
+
+Notes:
+
+* "Total failing validators" in the validation reports refer to the number of validators which 
+exited program execution abnormally due to not being able to properly validate the input data 
+provided. It does not refer to the number of validators which had validation errors. That total can
+be inferred from the total number of unique validation error types that occurred.
 
 === Generating Validation Reports
 

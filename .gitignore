@@ -169,6 +169,8 @@ id_rsa.pub
 coverage/
 userfiles/
 test-files/cases/**/out
+test-files/cases/**/validated-output-report
+test-files/cases/**/ValidatedOutput.osm
 .bundle/
 vendor/
 
