@@ -49,8 +49,9 @@ using namespace geos::geom;
 #include <hoot/core/HootConfig.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/test/ConflateCaseTestSuite.h>
+#include <hoot/test/ConflateCaseTestSuite.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/SignalCatcher.h>
@@ -60,6 +61,7 @@ using namespace geos::geom;
 
 #include <hoot/test/ProcessPool.h>
 #include <hoot/test/ScriptTestSuite.h>
+#include <hoot/test/cmd/TestCommand.h>
 using namespace hoot;
 
 // Qt
@@ -599,7 +601,7 @@ void reportFailedTests(int failedTests, int totalTests)
 
 int main(int argc, char* argv[])
 {
-  // set the Qt hash seed to 0 for consistent test results
+  // Set the Qt hash seed to 0 for consistent test results.
   conf().set(ConfigOptions().getHashSeedZeroKey(), true);
   qSetGlobalQHashSeed(0);
 
@@ -614,6 +616,38 @@ int main(int argc, char* argv[])
     Log::getInstance().setLevel(Log::Warn);
 
     QCoreApplication app(argc, argv);
+
+    // HootTest has some utility commands that don't actually run the tests. Check for those first
+    // before running the tests.
+    vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(TestCommand::className());
+    std::shared_ptr<TestCommand> command;
+    for (size_t i = 0; i < cmds.size(); i++)
+    {
+      command = Factory::getInstance().constructObject<TestCommand>(cmds[i]);
+      QString argName = command->getName();
+      if (QString(argv[1]) == argName)
+      {
+        break;
+      }
+      else
+      {
+        command.reset();
+      }
+    }
+
+    if (command != nullptr)
+    {
+      try
+      {
+        return command->run(argv, argc);
+      }
+      catch (const std::exception& e)
+      {
+        cerr << "Error running " << command->getName().toStdString() << ":" << endl;
+        cerr << e.what() << endl;
+        return -1;
+      }
+    }
 
     QStringList args;
     for (int i = 1; i < argc; i++)
@@ -748,7 +782,7 @@ int main(int argc, char* argv[])
       cout << "Running core tests.  Test count: " << vTestsToRun.size() << endl;
     }
 
-    //  Error out here is there is no HootTestListener created by this point
+    // Error out here as there is no HootTestListener created by this point.
     if (!listener)
     {
       usage(argv[0]);

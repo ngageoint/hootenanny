@@ -32,6 +32,10 @@
 #include <QRegularExpression>
 #include <QVariant>
 
+// Std
+// Strangely getting compile errors in hoot-test w/o this, even though its in HootCoreStable.h.
+#include <set>
+
 namespace hoot
 {
 
