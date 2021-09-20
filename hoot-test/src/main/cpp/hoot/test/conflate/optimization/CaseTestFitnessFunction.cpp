@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/util/Log.h>
 
-#include <hoot/test/ConflateCaseTestSuite.h>s
+#include <hoot/test/ConflateCaseTestSuite.h>
 
 namespace hoot
 {
