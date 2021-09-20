@@ -1,0 +1,11 @@
+Input: /ramdisk/hoot/test-files/cases/reference/network/pap-004/Output.osm
+
+Found 29 validation errors in 562 features with JOSM.
+Highways errors: 1
+Similarly named ways errors: 3
+Tag checker (MapCSS based) errors: 9
+Untagged, empty and one node ways errors: 16
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

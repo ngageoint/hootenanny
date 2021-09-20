@@ -35,7 +35,9 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 
+# ifdef HOOT_HAVE_JOSM
 #include <hoot/josm/validation/MapValidator.h>
+# endif
 
 #include <hoot/test/TestSetup.h>
 
@@ -52,7 +54,7 @@ AbstractTest(d, confs)
 {
 }
 
-void ConflateCaseTest::_runConflateCmd()
+void ConflateCaseTest::_runConflateCmd() const
 {
   if (QFileInfo(_d, "README.txt").exists() == false)
   {
@@ -123,38 +125,9 @@ void ConflateCaseTest::_runConflateCmd()
   {
     CPPUNIT_ASSERT_MESSAGE(QString("Maps do not match").toStdString(), false);
   }
-
-# ifdef HOOT_HAVE_JOSM
-  LOG_VART(ConfigOptions().getTestValidationEnable());
-  if (ConfigOptions().getTestValidationEnable())
-  {
-    // Make sure we have a base validation report to compare against.
-    const QString goldReportPath = _d.absolutePath() + "/validation-report";
-    QFileInfo goldReport(goldReportPath);
-    if (!goldReport.exists())
-    {
-      throw HootException("No gold validation report exists for case test: " + _d.absolutePath());
-    }
-
-    // Write our validated output and validation report. The validated output is for debugging
-    // purposes only.
-    const QString outputReportPath = _d.absolutePath() + "/validated-output-report";
-    QString conflateOutputPath = _d.absolutePath() + "/Output.osm";
-    QString validatedOutputPath = conflateOutputPath.replace("Output.osm", "ValidatedOutput.osm");
-    MapValidator validator;
-    validator.setReportPath(outputReportPath);
-    validator.validate(QStringList(_d.absolutePath() + "/Output.osm"), validatedOutputPath);
-
-    // Compare the validation reports.
-    if (FileUtils::readFully(goldReportPath) != FileUtils::readFully(outputReportPath))
-    {
-      CPPUNIT_ASSERT_MESSAGE(QString("Validation reports do not match").toStdString(), false);
-    }
-  }
-# endif
 }
 
-void ConflateCaseTest::_runMultiaryConflateCmd()
+void ConflateCaseTest::_runMultiaryConflateCmd() const
 {
   BaseCommandPtr cmd =
     std::dynamic_pointer_cast<BaseCommand>(
@@ -208,8 +181,8 @@ void ConflateCaseTest::_runMultiaryConflateCmd()
   QFileInfo expected(_d, "Expected.osm");
   if (expected.exists() == false)
   {
-    throw IllegalArgumentException("Unable to find Expected.osm in conflate case: " +
-      _d.absolutePath());
+    throw IllegalArgumentException(
+      "Unable to find Expected.osm in conflate case: " + _d.absolutePath());
   }
 
   if (result != 0)
@@ -224,6 +197,41 @@ void ConflateCaseTest::_runMultiaryConflateCmd()
   }
 }
 
+void ConflateCaseTest::_runValidation() const
+{
+  // Make sure we have a base validation report to compare against.
+  const QString goldReportPath = _d.absolutePath() + "/validation-report";
+  const QString goldReportOffPath = goldReportPath + ".off";
+  QFileInfo goldReport(goldReportPath);
+  QFileInfo goldReportOff(goldReportOffPath);
+  if (!goldReport.exists() && !goldReportOff.exists())
+  {
+    throw TestConfigurationException(
+      "No gold validation report exists for case test: " + _d.absolutePath());
+  }
+  // If we have a .off file, skip validation.
+  if (goldReportOff.exists())
+  {
+    LOG_STATUS("Skipping validation for " << _d.absolutePath());
+    return;
+  }
+
+  // Write our validated output and validation report. The validated output is for debugging
+  // purposes only.
+  const QString outputReportPath = _d.absolutePath() + "/validated-output-report";
+  QString conflateOutputPath = _d.absolutePath() + "/Output.osm";
+  QString validatedOutputPath = conflateOutputPath.replace("Output.osm", "ValidatedOutput.osm");
+  MapValidator validator;
+  validator.setReportPath(outputReportPath);
+  validator.validate(QStringList(_d.absolutePath() + "/Output.osm"), validatedOutputPath);
+
+  // Compare the validation reports.
+  if (FileUtils::readFully(goldReportPath) != FileUtils::readFully(outputReportPath))
+  {
+    CPPUNIT_ASSERT_MESSAGE(QString("Validation reports do not match").toStdString(), false);
+  }
+}
+
 void ConflateCaseTest::runTest()
 {
   LOG_DEBUG("Running conflate case test...");
@@ -235,10 +243,20 @@ void ConflateCaseTest::runTest()
   if (ConfigOptions().getTestCaseConflateCmd() == ConflateCmd::className())
   {
     _runConflateCmd();
+    // Run validation on case test output if configured for it.
+  # ifdef HOOT_HAVE_JOSM
+    LOG_VART(ConfigOptions().getTestValidationEnable());
+    if (ConfigOptions().getTestValidationEnable())
+    {
+      _runValidation();
+    }
+  # endif
   }
   else if (ConfigOptions().getTestCaseConflateCmd() == multiaryConflateClass)
   {
     _runMultiaryConflateCmd();
+    // Electing not to run validation against Multiary POI case tests due their being more research
+    // focused at this point.
   }
 }
 

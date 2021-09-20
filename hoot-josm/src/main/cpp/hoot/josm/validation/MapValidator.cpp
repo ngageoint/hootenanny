@@ -131,7 +131,6 @@ QString MapValidator::_validateWithJosm(OsmMapPtr& map) const
 {
   JosmMapValidator validator;
   validator.setConfiguration(conf());
-  //LOG_STATUS(validator.getInitStatusMessage());
   validator.apply(map);
   return validator.getSummary().trimmed();
 }

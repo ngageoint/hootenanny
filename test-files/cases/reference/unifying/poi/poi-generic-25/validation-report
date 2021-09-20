@@ -1,0 +1,8 @@
+Input: /ramdisk/hoot/test-files/cases/reference/unifying/poi/poi-generic-25/Output.osm
+
+Found 2 validation errors in 2 features with JOSM.
+Tag checker (MapCSS based) errors: 2
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

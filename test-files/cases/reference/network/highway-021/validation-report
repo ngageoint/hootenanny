@@ -1,0 +1,7 @@
+Input: /ramdisk/hoot/test-files/cases/reference/network/highway-021/Output.osm
+
+Found 0 validation errors in 5 features with JOSM.
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

@@ -1,0 +1,8 @@
+Input: /ramdisk/hoot/test-files/cases/reference/unifying/poi/poi-generic-28/Output.osm
+
+Found 1 validation errors in 3 features with JOSM.
+Relation checker errors: 1
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

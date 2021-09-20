@@ -1,0 +1,9 @@
+Input: /ramdisk/hoot/test-files/cases/attribute/unifying/highway/highway-2927-multiple-types-1/Output.osm
+
+Found 3 validation errors in 233 features with JOSM.
+Crossing ways errors: 2
+Highways errors: 1
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

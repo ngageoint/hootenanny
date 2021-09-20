@@ -1,0 +1,10 @@
+Input: /ramdisk/hoot/test-files/cases/reference/network/highway-023/Output.osm
+
+Found 4 validation errors in 22 features with JOSM.
+Crossing ways errors: 1
+Self crossing ways errors: 1
+Tag checker (MapCSS based) errors: 2
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

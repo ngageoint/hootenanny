@@ -359,6 +359,11 @@ HootTest --case-only
 
 See `test-files/cases/README` for additional information on case tests.
 
+===== Validation Integration
+
+See the section "Unit Test Integration" under the section 
+"Using Validation Checks to Improve Conflated Maps" with the Developer Documentation.
+
 ==== Running Tests in Parallel
 
 Hootenanny can run all Core tests in parallel, except those in the Translation test suite. This is 

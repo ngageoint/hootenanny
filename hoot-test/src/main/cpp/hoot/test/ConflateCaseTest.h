@@ -51,8 +51,10 @@ public:
 
 protected:
 
-  void _runConflateCmd();
-  void _runMultiaryConflateCmd();
+  void _runConflateCmd() const;
+  void _runMultiaryConflateCmd() const;
+
+  void _runValidation() const;
 };
 
 }

@@ -1,0 +1,14 @@
+Input: /ramdisk/hoot/test-files/cases/reference/unifying/geometry-generic-1/Output.osm
+
+Found 73 validation errors in 93 features with JOSM.
+Almost right angle buildings errors: 2
+Crossing ways errors: 2
+Duplicated ways errors: 1
+Long segments errors: 58
+Relation checker errors: 1
+Tag checker (MapCSS based) errors: 7
+Unclosed Ways errors: 2
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 18 features with Hootenanny.
+Total failing Hootenanny validators: 0

@@ -34,6 +34,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.PrintWriter;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
@@ -98,6 +100,9 @@ public class JosmUtils
   {
     switch (logLevel.toUpperCase())
     {
+      case "NONE":
+        Logging.getLogger().setLevel(Level.OFF);
+        break;
       case "FATAL":
         Logging.setLogLevel(Logging.LEVEL_ERROR);
         break;

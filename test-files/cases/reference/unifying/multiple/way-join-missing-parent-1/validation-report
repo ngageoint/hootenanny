@@ -1,0 +1,16 @@
+Input: /ramdisk/hoot/test-files/cases/reference/unifying/multiple/way-join-missing-parent-1/Output.osm
+
+Found 30 validation errors in 273 features with JOSM.
+Almost right angle buildings errors: 1
+Crossing boundaries errors: 1
+Crossing ways errors: 4
+Multipolygon errors: 2
+Overlapping ways errors: 1
+Relation checker errors: 3
+Tag checker errors: 3
+Tag checker (MapCSS based) errors: 12
+Untagged, empty and one node ways errors: 3
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 55 features with Hootenanny.
+Total failing Hootenanny validators: 0

@@ -51,7 +51,7 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
   // see related note in JosmMapCleaner::_getUpdatedMap
   if ((int)inputMap->size() > _maxElementsForMapString)
   {
-    // pass map as temp file and get it back as a temp file
+    // Pass the map as temp file and get it back as a temp file.
 
     std::shared_ptr<QTemporaryFile> tempInputFile =
       std::make_shared<QTemporaryFile>(
@@ -80,7 +80,7 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
   }
   else
   {
-    // pass map as string and get it back as a string
+    // Pass the map as string and get it back as a string.
     return
       OsmXmlReader::fromXml(
         _validate(

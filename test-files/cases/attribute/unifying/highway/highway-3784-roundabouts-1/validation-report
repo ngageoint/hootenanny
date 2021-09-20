@@ -1,0 +1,9 @@
+Input: /ramdisk/hoot/test-files/cases/attribute/unifying/highway/highway-3784-roundabouts-1/Output.osm
+
+Found 19 validation errors in 405 features with JOSM.
+Tag checker (MapCSS based) errors: 8
+Untagged, empty and one node ways errors: 11
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

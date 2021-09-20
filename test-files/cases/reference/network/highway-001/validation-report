@@ -1,0 +1,8 @@
+Input: /ramdisk/hoot/test-files/cases/reference/network/highway-001/Output.osm
+
+Found 5 validation errors in 14 features with JOSM.
+Tag checker (MapCSS based) errors: 5
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

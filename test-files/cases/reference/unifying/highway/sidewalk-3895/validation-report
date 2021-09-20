@@ -1,0 +1,10 @@
+Input: /ramdisk/hoot/test-files/cases/reference/unifying/highway/sidewalk-3895/Output.osm
+
+Found 6 validation errors in 48 features with JOSM.
+Highways errors: 4
+Tag checker errors: 1
+Tag checker (MapCSS based) errors: 1
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

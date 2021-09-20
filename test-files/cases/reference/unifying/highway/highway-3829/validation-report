@@ -1,0 +1,11 @@
+Input: /ramdisk/hoot/test-files/cases/reference/unifying/highway/highway-3829/Output.osm
+
+Found 62 validation errors in 737 features with JOSM.
+Crossing ways errors: 1
+Duplicated way nodes errors: 1
+Tag checker (MapCSS based) errors: 37
+Untagged, empty and one node ways errors: 23
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

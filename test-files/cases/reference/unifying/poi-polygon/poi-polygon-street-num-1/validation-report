@@ -1,0 +1,12 @@
+Input: /ramdisk/hoot/test-files/cases/reference/unifying/poi-polygon/poi-polygon-street-num-1/Output.osm
+
+Found 12 validation errors in 29 features with JOSM.
+Almost right angle buildings errors: 3
+Missing name:* translation errors: 2
+Opening hours syntax errors: 1
+Relation checker errors: 1
+Tag checker (MapCSS based) errors: 5
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 5 features with Hootenanny.
+Total failing Hootenanny validators: 0

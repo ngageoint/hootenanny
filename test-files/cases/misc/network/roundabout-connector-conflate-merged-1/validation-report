@@ -1,0 +1,14 @@
+Input: /ramdisk/hoot/test-files/cases/misc/network/roundabout-connector-conflate-merged-1/Output.osm
+
+Found 36 validation errors in 900 features with JOSM.
+Crossing boundaries errors: 2
+Crossing ways errors: 5
+Duplicated ways errors: 2
+Multipolygon errors: 4
+Relation checker errors: 12
+Tag checker (MapCSS based) errors: 10
+Untagged, empty and one node ways errors: 1
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 120 features with Hootenanny.
+Total failing Hootenanny validators: 0
