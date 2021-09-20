@@ -27,7 +27,7 @@
 #ifndef PRINTJS_H
 #define PRINTJS_H
 
-// node.js
+// hoot
 #include <hoot/js/HootBaseJs.h>
 
 namespace hoot
@@ -37,9 +37,9 @@ class PrintJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Local<v8::Object> target);
+  ~PrintJs() override = default;
 
-  virtual ~PrintJs() = default;
+  static void Init(v8::Local<v8::Object> target);
 
 private:
 

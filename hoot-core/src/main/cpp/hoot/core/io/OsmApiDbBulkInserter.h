@@ -27,14 +27,7 @@
 #ifndef OSMAPIDBBULKINSERTER_H
 #define OSMAPIDBBULKINSERTER_H
 
-
-
-
-
-
-#include <QTemporaryFile>
-#include <QElapsedTimer>
-
+// Hoot
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/io/OsmApiDb.h>
@@ -42,6 +35,11 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
 
+// Qt
+#include <QTemporaryFile>
+#include <QElapsedTimer>
+
+// Tgs
 #include <tgs/BigContainers/BigMap.h>
 
 namespace hoot
@@ -139,9 +137,10 @@ public:
   OsmApiDbBulkInserter();
   virtual ~OsmApiDbBulkInserter();
 
-  bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) const override;
   void open(const QString& url) override;
   void close() override;
+  QString supportedFormats() const override { return MetadataTags::OsmApiDbScheme() + "://"; }
 
   void finalizePartial() override;
   void writePartial(const ConstNodePtr& node) override;
@@ -190,8 +189,6 @@ public:
   { _disableDatabaseIndexesDuringWrite = disable; }
   void setWriteIdSequenceUpdates(bool write)
   { _writeIdSequenceUpdates = write; }
-
-  QString supportedFormats() override { return MetadataTags::OsmApiDbScheme() + "://"; }
 
 protected:
 

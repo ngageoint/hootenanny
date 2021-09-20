@@ -72,14 +72,14 @@ public:
    BuildingToBuilding   // supports multiple
   };
 
+ ~ElementMergerJs() override = default;
+
  static void Init(v8::Local<v8::Object> target);
  static void mergeElements(const v8::FunctionCallbackInfo<v8::Value>& args);
 
- virtual ~ElementMergerJs() = default;
-
 private:
 
- friend class ElementMergerJsTest;
+  friend class ElementMergerJsTest;
 
   ElementMergerJs() = default;
 

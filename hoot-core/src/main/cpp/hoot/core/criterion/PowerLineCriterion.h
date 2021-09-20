@@ -43,7 +43,7 @@ public:
   static QString className() { return "PowerLineCriterion"; }
 
   PowerLineCriterion() = default;
-  ~PowerLineCriterion() = default;
+  ~PowerLineCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<PowerLineCriterion>(); }

@@ -45,7 +45,7 @@ public:
   static QString className() { return "UniqueTagCounter"; }
 
   UniqueTagCounter() = default;
-  ~UniqueTagCounter() = default;
+  ~UniqueTagCounter() override = default;
 
   /**
    * @see ConstElementVisitor

@@ -48,7 +48,7 @@ public:
   static QString className() { return "RandomNodeDuplicator"; }
 
   RandomNodeDuplicator();
-  ~RandomNodeDuplicator() = default;
+  ~RandomNodeDuplicator() override = default;
 
   void apply(OsmMapPtr& map) override;
 

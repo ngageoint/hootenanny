@@ -27,6 +27,7 @@
 #ifndef WAY_CRITERION_H
 #define WAY_CRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 
 namespace hoot

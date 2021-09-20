@@ -43,7 +43,7 @@ public:
   static QString className() { return "ImplicitTagEligiblePoiCriterion"; }
 
   ImplicitTagEligiblePoiCriterion() = default;
-  ~ImplicitTagEligiblePoiCriterion() = default;
+  ~ImplicitTagEligiblePoiCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override

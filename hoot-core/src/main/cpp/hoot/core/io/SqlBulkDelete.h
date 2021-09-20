@@ -45,14 +45,11 @@ class SqlBulkDelete : public BulkDelete
 public:
 
   SqlBulkDelete(const QSqlDatabase& db, const QString& tableName);
-  ~SqlBulkDelete();
+  ~SqlBulkDelete() override;
 
   void flush() override;
-
   int getPendingCount() const override { return _pending.size(); }
-
   QString getTableName() const override { return _tableName; }
-
   void deleteElement(const long id) override;
 
 private:

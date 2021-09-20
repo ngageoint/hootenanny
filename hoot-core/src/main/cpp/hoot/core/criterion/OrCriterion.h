@@ -27,6 +27,7 @@
 #ifndef ORCRITERION_H
 #define ORCRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ChainCriterion.h>
 
 namespace hoot
@@ -44,7 +45,7 @@ public:
   OrCriterion() = default;
   OrCriterion(ElementCriterion* child1, ElementCriterion* child2);
   OrCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2);
-  ~OrCriterion() = default;
+  ~OrCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
 

@@ -48,7 +48,7 @@ public:
    * and Unknown2 as second.
    */
   explicit BuildingMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
-    ~BuildingMerger() = default;
+  ~BuildingMerger() override = default;
 
   void apply(const OsmMapPtr& map,
              std::vector<std::pair<ElementId, ElementId>>& replaced) override;

@@ -369,7 +369,7 @@ bool OsmXmlReader::fatalError(const QXmlParseException& exception)
   return false;
 }
 
-bool OsmXmlReader::isSupported(const QString& url)
+bool OsmXmlReader::isSupported(const QString& url) const
 {
   QStringList validExtensions = supportedFormats().split(";");
   const QString checkString(url.toLower());

@@ -49,7 +49,7 @@ public:
   static QString className() { return "PhoneNumberCountVisitor"; }
 
   PhoneNumberCountVisitor();
-  ~PhoneNumberCountVisitor() = default;
+  ~PhoneNumberCountVisitor() override = default;
 
   /**
    * @see Configurable

@@ -26,7 +26,7 @@
  */
 #include "MultithreadedRandomForestManager.h"
 
-//Qt Includes
+// Qt
 #include <QDomDocument>
 #include <QFile>
 #include <QStringList>

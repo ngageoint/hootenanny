@@ -37,6 +37,8 @@ class HootExceptionJs : public HootBaseJs
 {
 public:
 
+  ~HootExceptionJs() override = default;
+
   static void Init(v8::Local<v8::Object> target);
 
   static v8::Local<v8::Object> create(const HootException& e) { return create(std::shared_ptr<HootException>(e.clone())); }
@@ -61,8 +63,6 @@ public:
    * @param tc Try catch object. Must be instantiated before the V8 function is called.
    */
   static void throwAsHootException(const v8::TryCatch& tc);
-
-  virtual ~HootExceptionJs() = default;
 
 private:
 

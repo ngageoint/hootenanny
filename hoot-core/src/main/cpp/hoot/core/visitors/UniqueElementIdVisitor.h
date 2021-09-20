@@ -46,7 +46,7 @@ public:
   static QString className() { return "UniqueElementIdVisitor"; }
 
   UniqueElementIdVisitor() = default;
-  ~UniqueElementIdVisitor() = default;
+  ~UniqueElementIdVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override;
 

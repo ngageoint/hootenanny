@@ -43,7 +43,7 @@ public:
   static QString className() { return "MultiUseCriterion"; }
 
   MultiUseCriterion() = default;
-  ~MultiUseCriterion() = default;
+  ~MultiUseCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<MultiUseCriterion>(); }

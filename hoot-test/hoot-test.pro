@@ -28,15 +28,8 @@ DESTDIR = ../bin/
 LIBS += \
     -L../lib/ -lHootCore -lHootCoreTest -lHootJs -lTgs -ltbs -lnode \
 
-HEADERS += \
-    src/main/cpp/hoot/test/ScriptTestSuite.h \
-    src/main/cpp/hoot/test/ScriptTest.h \
-    src/main/cpp/hoot/test/ProcessPool.h
-
-SOURCES += src/main/cpp/hoot/test/main.cpp \
-    src/main/cpp/hoot/test/ScriptTestSuite.cpp \
-    src/main/cpp/hoot/test/ScriptTest.cpp \
-    src/main/cpp/hoot/test/ProcessPool.cpp
+SOURCES += $$files(src/*.cpp, true)
+HEADERS += $$files(src/*.h, true)
 
 OTHER_FILES = \
     $$files(../test-files/cmd/*.sh, true) \

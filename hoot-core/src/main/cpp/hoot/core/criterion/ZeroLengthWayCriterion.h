@@ -45,7 +45,7 @@ public:
   static QString className() { return "ZeroLengthWayCriterion"; }
 
   ZeroLengthWayCriterion();
-  ~ZeroLengthWayCriterion() = default;
+  ~ZeroLengthWayCriterion() override = default;
 
   ElementCriterionPtr clone() override { return std::make_shared<ZeroLengthWayCriterion>(); }
 

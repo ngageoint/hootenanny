@@ -40,8 +40,8 @@ public:
 
   static QString className() { return "LongestTagVisitor"; }
 
-  LongestTagVisitor() : _longestTag(0) { }
-  ~LongestTagVisitor() = default;
+  LongestTagVisitor();
+  ~LongestTagVisitor() override = default;
 
   double getStat() const override { return _longestTag; }
 

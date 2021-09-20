@@ -28,6 +28,7 @@
 #ifndef STATSAREACRITERION_H
 #define STATSAREACRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
@@ -43,7 +44,7 @@ public:
   static QString className() { return "StatsAreaCriterion"; }
 
   StatsAreaCriterion() = default;
-  ~StatsAreaCriterion() = default;
+  ~StatsAreaCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<StatsAreaCriterion>(); }

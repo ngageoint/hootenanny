@@ -95,7 +95,7 @@ public:
   _ignoreTagKeys(ignoreTagKeys)
   {
   }
-  ~CompareVisitor() = default;
+  ~CompareVisitor() override = default;
 
   bool isMatch() const { return _matches; }
 

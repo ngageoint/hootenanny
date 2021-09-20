@@ -44,7 +44,7 @@ public:
   static QString className() { return "LinearCriterion"; }
 
   LinearCriterion() = default;
-  ~LinearCriterion() = default;
+  ~LinearCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<LinearCriterion>(); }

@@ -124,7 +124,7 @@ void OsmApiDb::deleteData() const
   DbUtils::execNoPrepare(_db, "TRUNCATE TABLE " + ApiDb::getUsersTableName() + " RESTART IDENTITY CASCADE");
 }
 
-bool OsmApiDb::isSupported(const QUrl& url)
+bool OsmApiDb::isSupported(const QUrl& url) const
 {
   bool valid = ApiDb::isSupported(url);
 

@@ -93,7 +93,7 @@ public:
   /**
    * Check if the url is supported.
    */
-  virtual bool isSupported(const QUrl& url);
+  virtual bool isSupported(const QUrl& url) const;
 
   /**
    * Open the database.

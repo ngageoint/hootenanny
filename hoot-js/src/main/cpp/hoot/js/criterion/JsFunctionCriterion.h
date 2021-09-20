@@ -48,7 +48,7 @@ public:
   JsFunctionCriterion() = default;
   JsFunctionCriterion(const v8::Persistent<v8::Function>& func)
   { _func.Reset(v8::Isolate::GetCurrent(), func); }
-  ~JsFunctionCriterion() = default;
+  ~JsFunctionCriterion() override = default;
 
   void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) override
   { _func.Reset(isolate, func); }

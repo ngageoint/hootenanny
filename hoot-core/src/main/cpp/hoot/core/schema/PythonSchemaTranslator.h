@@ -42,7 +42,7 @@ public:
   static QString className() { return "PythonSchemaTranslator"; }
 
   PythonSchemaTranslator() = default;
-  ~PythonSchemaTranslator();
+  ~PythonSchemaTranslator() override;
 
   bool isValidScript() override;
 

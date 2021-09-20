@@ -50,7 +50,7 @@ public:
    * check. It will look to see if the URL is properly formatted (e.g. ends in .osm, or starts
    * with postgresql:, etc.)
    */
-  virtual bool isSupported(const QString& url) = 0;
+  virtual bool isSupported(const QString& url) const = 0;
 
   /**
    * Opens the specified URL for writing.
@@ -70,7 +70,7 @@ public:
    *
    * @return a formats string
    */
-  virtual QString supportedFormats() = 0;
+  virtual QString supportedFormats() const = 0;
 
   /**
    * Sets flag indicating the writer is writing a debug map so that extra debugging metadata is

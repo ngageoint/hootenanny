@@ -71,7 +71,7 @@ public:
   static QString className() { return "PolyClusterGeoModifierAction"; }
 
   PolyClusterGeoModifierAction() = default;
-  ~PolyClusterGeoModifierAction() = default;
+  ~PolyClusterGeoModifierAction() override = default;
 
   QString getCommandName() const override { return "poly_cluster"; }
   QList<QString> getParameterNames() const override { return QList<QString>

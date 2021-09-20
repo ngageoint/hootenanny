@@ -38,22 +38,20 @@ class IntegerFieldDefinition : public FieldDefinition
 public:
 
   IntegerFieldDefinition();
-  ~IntegerFieldDefinition() = default;
-
-  void addEnumeratedValue(int v) { _enumeratedValues.insert(v); }
+  ~IntegerFieldDefinition() override = default;
 
   QVariant getDefaultValue() const override;
   QVariant::Type getType() const override { return QVariant::Int; }
   bool hasDefaultValue() const override;
+  QString toString() const override;
+  void validate(const QVariant& v, StrictChecking strict) const override;
+
+  void addEnumeratedValue(int v) { _enumeratedValues.insert(v); }
   bool hasEnumeratedValue(int v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
 
   void setDefaultValue(double v) { _defaultValue = v; }
   void setMaxValue(double max) { _max = max; }
   void setMinValue(double min) { _min = min; }
-
-  QString toString() const override;
-
-  void validate(const QVariant& v, StrictChecking strict) const override;
 
 private:
 

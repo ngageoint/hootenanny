@@ -52,7 +52,7 @@ public:
   static QString className() { return "WayGeneralizeVisitor"; }
 
   WayGeneralizeVisitor();
-  ~WayGeneralizeVisitor() = default;
+  ~WayGeneralizeVisitor() override = default;
 
   void setConfiguration(const Settings& conf) override;
 

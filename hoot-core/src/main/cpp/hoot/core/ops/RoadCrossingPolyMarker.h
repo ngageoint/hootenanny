@@ -54,7 +54,7 @@ public:
   static QString className() { return "RoadCrossingPolyMarker"; }
 
   RoadCrossingPolyMarker();
-  ~RoadCrossingPolyMarker() = default;
+  ~RoadCrossingPolyMarker() override = default;
 
   /**
    * @see ConstOsmMapOperation

@@ -44,7 +44,7 @@ public:
   static QString className() { return "PositiveIdGenerator"; }
 
   PositiveIdGenerator();
-  ~PositiveIdGenerator() = default;
+  ~PositiveIdGenerator() override = default;
 
   IdGeneratorPtr clone() const override;
 

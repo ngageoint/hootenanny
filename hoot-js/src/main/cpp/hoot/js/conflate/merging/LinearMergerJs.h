@@ -41,8 +41,9 @@ class LinearMergerJs : public HootBaseJs
 {
 public:
 
+  ~LinearMergerJs() override = default;
+
   static void Init(v8::Local<v8::Object> target);
-  virtual ~LinearMergerJs() = default;
 
 private:
 

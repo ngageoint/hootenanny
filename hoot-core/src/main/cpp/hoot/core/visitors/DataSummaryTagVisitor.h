@@ -48,7 +48,7 @@ public:
 
   DataSummaryTagVisitor();
   DataSummaryTagVisitor(const QString& sources);
-  ~DataSummaryTagVisitor() = default;
+  ~DataSummaryTagVisitor() override = default;
 
   /**
    * Adds a tag with a UUID to all valid elements.

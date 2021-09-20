@@ -44,8 +44,8 @@ public:
 
   static QString className() { return "FeatureCountVisitor"; }
 
-  FeatureCountVisitor() : _count(0) { }
-  ~FeatureCountVisitor() = default;
+  FeatureCountVisitor();
+  ~FeatureCountVisitor() override = default;
 
   int getCount() const { return _count; }
 

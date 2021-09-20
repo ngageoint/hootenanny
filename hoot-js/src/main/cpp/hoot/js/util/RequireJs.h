@@ -37,11 +37,12 @@ class RequireJs : public HootBaseJs
 {
 public:
 
+  ~RequireJs() override = default;
+
   static void Init(v8::Local<v8::Object> target);
 
-  virtual ~RequireJs() = default;
-
 private:
+
   RequireJs() = default;
 
   static void jsRequire(const v8::FunctionCallbackInfo<v8::Value>& args);

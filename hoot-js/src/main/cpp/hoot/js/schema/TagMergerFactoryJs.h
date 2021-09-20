@@ -27,7 +27,7 @@
 #ifndef TAGMERGERFACTORYJS_H
 #define TAGMERGERFACTORYJS_H
 
-// node.js
+// hoot
 #include <hoot/js/HootBaseJs.h>
 
 namespace hoot
@@ -37,8 +37,9 @@ class TagMergerFactoryJs : public HootBaseJs
 {
 public:
 
+  ~TagMergerFactoryJs() override = default;
+
   static void Init(v8::Local<v8::Object> target);
-  virtual ~TagMergerFactoryJs() = default;
 
 private:
 

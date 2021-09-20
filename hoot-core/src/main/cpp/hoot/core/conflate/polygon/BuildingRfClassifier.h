@@ -38,7 +38,7 @@ class BuildingRfClassifier : public RfExtractorClassifier
 public:
 
   BuildingRfClassifier() = default;
-  virtual ~BuildingRfClassifier() = default;
+  ~BuildingRfClassifier() override = default;
 
 protected:
 

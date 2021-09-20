@@ -54,7 +54,7 @@ class ClassInitializerTemplate : public ClassInitializer
 public:
 
   ClassInitializerTemplate() = default;
-  ~ClassInitializerTemplate() = default;
+  ~ClassInitializerTemplate() override = default;
 
   void Init(v8::Local<v8::Object> exports) override
   {

@@ -45,7 +45,7 @@ public:
   static QString className() { return "RemoveEmptyAreasVisitor"; }
 
   RemoveEmptyAreasVisitor();
-  ~RemoveEmptyAreasVisitor() = default;
+  ~RemoveEmptyAreasVisitor() override = default;
 
   void visit(const std::shared_ptr<Element>& e) override;
 

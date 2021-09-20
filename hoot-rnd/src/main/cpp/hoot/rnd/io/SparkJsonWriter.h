@@ -48,7 +48,7 @@ public:
   static QString className() { return "SparkJsonWriter"; }
 
   SparkJsonWriter();
-  ~SparkJsonWriter() = default;
+  ~SparkJsonWriter() override = default;
 
   /**
    * @see OsmMapWriter
@@ -63,7 +63,7 @@ public:
   /**
    * @see OsmMapWriter
    */
-  bool isSupported(const QString& url) override { return url.endsWith(".spark"); }
+  bool isSupported(const QString& url) const override { return url.endsWith(".spark"); }
 
   /**
    * Open the specified filename for writing.
@@ -85,8 +85,8 @@ public:
    */
   void writePartial(const ConstRelationPtr&) override { throw NotImplementedException(); }
 
-  //no point in showing this in the format list at this point, since its not actively maintained
-  QString supportedFormats() override { return ""; }
+  // no point in showing this in the format list at this point, since its not actively maintained
+  QString supportedFormats() const override { return ""; }
 
 private:
 

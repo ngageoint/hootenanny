@@ -45,7 +45,7 @@ public:
 
   TagCategoryDifferencer() = default;
   TagCategoryDifferencer(OsmSchemaCategory category);
-  ~TagCategoryDifferencer() = default;
+  ~TagCategoryDifferencer() override = default;
 
   void setConfiguration(const Settings& conf) override;
 

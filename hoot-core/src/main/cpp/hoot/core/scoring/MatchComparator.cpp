@@ -60,8 +60,7 @@ public:
   using RefToUuid = map<QString, set<QString>>;
 
   GetRefUuidVisitor(QString ref) : _ref(ref) { }
-
-  ~GetRefUuidVisitor() = default;
+  ~GetRefUuidVisitor() override = default;
 
   const RefToUuid& getRefToUuid() const { return _ref2Uuid; }
 
@@ -116,7 +115,7 @@ class UuidToEidVisitor : public ConstElementVisitor
 public:
 
   UuidToEidVisitor() = default;
-  ~UuidToEidVisitor() = default;
+  ~UuidToEidVisitor() override = default;
 
   const MatchComparator::UuidToEid& getUuidToEid() const { return _uuidToEid; }
 

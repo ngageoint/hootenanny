@@ -35,8 +35,7 @@ class NegateFunction : public LineSearch::Function
 public:
 
   NegateFunction(LineSearch::Function& f) : _f(f) { }
-
-  ~NegateFunction() = default;
+  ~NegateFunction() override = default;
 
   /**
    * Calculates a function f for the given x.

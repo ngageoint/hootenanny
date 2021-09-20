@@ -46,7 +46,7 @@ public:
 
   KnnWayIterator(const OsmMap& map, ConstWayPtr way, const Tgs::RStarTree* tree,
                  const std::vector<long>& treeIdToWid, bool addError = false);
-  ~KnnWayIterator() = default;
+  ~KnnWayIterator() override = default;
 
   long getWayId() const { return _treeIdToWid[getId()]; }
   ConstWayPtr getWay() const { return _map.getWay(getWayId()); }

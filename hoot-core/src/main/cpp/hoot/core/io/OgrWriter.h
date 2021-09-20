@@ -55,7 +55,7 @@ public:
   static QString className() { return "OgrWriter"; }
 
   OgrWriter();
-  ~OgrWriter() = default;
+  ~OgrWriter() override = default;
 
   void setConfiguration(const Settings& conf) override;
 
@@ -67,9 +67,9 @@ public:
   void writePartial(const ConstRelationPtr& relation) override;
   void writeElement(ElementPtr& element) override;
   void close() override;
-  bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) const override;
   // leaving this empty for the time being
-  QString supportedFormats() override { return ""; }
+  QString supportedFormats() const override { return ""; }
 
   void initTranslator();
 

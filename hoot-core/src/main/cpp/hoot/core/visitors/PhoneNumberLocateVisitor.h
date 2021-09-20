@@ -45,10 +45,10 @@ class PhoneNumberLocateVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  PhoneNumberLocateVisitor();
-  ~PhoneNumberLocateVisitor() = default;
-
   static QString className() { return "PhoneNumberLocateVisitor"; }
+
+  PhoneNumberLocateVisitor();
+  ~PhoneNumberLocateVisitor() override = default;
 
   /**
    * @see Configurable

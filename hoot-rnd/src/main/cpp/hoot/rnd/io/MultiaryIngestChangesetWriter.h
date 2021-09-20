@@ -46,8 +46,7 @@ public:
   static QString className() { return "MultiaryIngestChangesetWriter"; }
 
   MultiaryIngestChangesetWriter();
-
-  ~MultiaryIngestChangesetWriter();
+  ~MultiaryIngestChangesetWriter() override;
 
   void close() override { if (_fp.get()) { _fp->close(); _fp.reset(); } }
 
@@ -56,7 +55,7 @@ public:
    *
    * "mic" stands for "multiary ingest changeset"
    */
-  bool isSupported(const QString& url) override { return url.endsWith(".mic"); }
+  bool isSupported(const QString& url) const override { return url.endsWith(".mic"); }
 
   /**
    * Open the specified filename for writing.
@@ -71,6 +70,7 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   QString getElementPayloadFormat() const { return _elementPayloadFormat; }
+
   void setElementPayloadFormat(const QString& format) override;
 
 private:
@@ -81,7 +81,6 @@ private:
   AddExportTagsVisitor _exportTagsVisitor;
   //needed due to #1772 - options are "json" (default) and "xml"
   QString _elementPayloadFormat;
-
 };
 
 }

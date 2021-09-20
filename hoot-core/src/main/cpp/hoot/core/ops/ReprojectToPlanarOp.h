@@ -45,7 +45,7 @@ public:
   static QString className() { return "ReprojectToPlanarOp"; }
 
   ReprojectToPlanarOp() = default;
-  ~ReprojectToPlanarOp() = default;
+  ~ReprojectToPlanarOp() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

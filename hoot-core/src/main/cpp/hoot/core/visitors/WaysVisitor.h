@@ -27,6 +27,7 @@
 #ifndef WAYSVISITOR_H
 #define WAYSVISITOR_H
 
+// hoot
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
 
@@ -39,8 +40,8 @@ public:
 
   static QString className() { return "WaysVisitor"; }
 
-  WaysVisitor(std::vector<ConstWayPtr>& w) : _w(w) { }
-  ~WaysVisitor() = default;
+  WaysVisitor(std::vector<ConstWayPtr>& w);
+  ~WaysVisitor() override = default;
 
   void visit(const std::shared_ptr<const Element>& e) override;
 

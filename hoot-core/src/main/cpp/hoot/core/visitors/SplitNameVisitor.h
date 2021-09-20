@@ -45,7 +45,7 @@ public:
   static QString className() { return "SplitNameVisitor"; }
 
   SplitNameVisitor();
-  ~SplitNameVisitor() = default;
+  ~SplitNameVisitor() override = default;
 
   void visit(const std::shared_ptr<Element>& e) override;
 

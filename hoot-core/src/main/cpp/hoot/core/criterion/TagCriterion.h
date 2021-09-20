@@ -45,7 +45,7 @@ public:
 
   TagCriterion();
   TagCriterion(const QString& k, const QString& v);
-  ~TagCriterion() = default;
+  ~TagCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<TagCriterion>(); }

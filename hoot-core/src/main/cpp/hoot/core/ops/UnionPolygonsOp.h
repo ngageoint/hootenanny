@@ -47,7 +47,7 @@ public:
   static QString className() { return "UnionPolygonsOp"; }
 
   UnionPolygonsOp();
-  ~UnionPolygonsOp() = default;
+  ~UnionPolygonsOp() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

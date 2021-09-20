@@ -50,7 +50,7 @@ public:
 
   OpExecutor();
   OpExecutor(const QStringList& namedOps, const bool operateOnlyOnConflatableElements = false);
-  ~OpExecutor() = default;
+  ~OpExecutor() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

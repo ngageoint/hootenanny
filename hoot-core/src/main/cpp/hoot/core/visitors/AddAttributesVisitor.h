@@ -48,7 +48,7 @@ public:
 
   AddAttributesVisitor();
   explicit AddAttributesVisitor(const QStringList attributes, const bool negateCriteria = false);
-  ~AddAttributesVisitor() = default;
+  ~AddAttributesVisitor() override = default;
 
   void visit(const std::shared_ptr<Element>& e) override;
 

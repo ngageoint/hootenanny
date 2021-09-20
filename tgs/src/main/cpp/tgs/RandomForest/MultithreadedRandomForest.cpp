@@ -26,14 +26,14 @@
  */
 #include "MultithreadedRandomForest.h"
 
-//Std Includes
+// Std
 #include <cmath>
 
-//Qt Includes
+// Qt
 #include <QtConcurrent/QtConcurrent>
 #include <QThreadPool>
 
-
+// Tgs
 #include <tgs/TgsException.h>
 
 namespace Tgs

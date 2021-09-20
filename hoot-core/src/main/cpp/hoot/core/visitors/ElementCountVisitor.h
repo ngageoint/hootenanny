@@ -44,7 +44,7 @@ public:
   static QString className() { return "ElementCountVisitor"; }
 
   ElementCountVisitor();
-  ~ElementCountVisitor() = default;
+  ~ElementCountVisitor() override = default;
 
   double getStat() const override { return _count; }
 

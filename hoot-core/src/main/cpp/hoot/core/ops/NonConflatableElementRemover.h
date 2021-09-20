@@ -44,7 +44,7 @@ public:
   static QString className() { return "NonConflatableElementRemover"; }
 
   NonConflatableElementRemover() = default;
-  ~NonConflatableElementRemover() = default;
+  ~NonConflatableElementRemover() override = default;
 
   /**
     @see OsmMapOperation

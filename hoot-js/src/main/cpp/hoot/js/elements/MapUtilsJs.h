@@ -38,9 +38,9 @@ class MapUtilsJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Local<v8::Object> target);
+  ~MapUtilsJs() override = default;
 
-  virtual ~MapUtilsJs() = default;
+  static void Init(v8::Local<v8::Object> target);
 
   static void getFirstElementWithTag(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getFirstElementWithNote(const v8::FunctionCallbackInfo<v8::Value>& args);

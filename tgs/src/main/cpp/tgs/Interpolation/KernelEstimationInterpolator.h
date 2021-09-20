@@ -52,11 +52,13 @@ public:
    * appropriate sigma.
    */
   KernelEstimationInterpolator(double sigma = -1);
-  ~KernelEstimationInterpolator() = default;
+  ~KernelEstimationInterpolator() override = default;
 
   QString getName() const override { return className(); }
 
   const std::vector<double>& interpolate(const std::vector<double>& point) const override;
+
+  QString toString() const override;
 
   double getSigma() const { return _sigma; }
   double getStopDelta() const { return _stopDelta; }
@@ -66,8 +68,6 @@ public:
    * Stop looking for a sigma when sigma is within this distance of "optimal".
    */
   void setStopDelta(double stopDelta) { _stopDelta = stopDelta; _checkRebuild(); }
-
-  QString toString() const override;
 
 protected:
 

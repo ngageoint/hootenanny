@@ -47,7 +47,7 @@ public:
     : _f(f) { }
   explicit ArbitraryCriterion(const std::function<bool (const std::shared_ptr<const Element> &e)>& f)
     : _f(f) { }
-  ~ArbitraryCriterion() = default;
+  ~ArbitraryCriterion() override = default;
 
   bool isSatisfied(const std::shared_ptr<const Element>& e) const override
   {

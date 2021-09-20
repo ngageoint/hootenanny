@@ -46,7 +46,7 @@ public:
   static QString className() { return "RemoveEmptyRelationsOp"; }
 
   RemoveEmptyRelationsOp() = default;
-  ~RemoveEmptyRelationsOp() = default;
+  ~RemoveEmptyRelationsOp() override = default;
 
   void apply(OsmMapPtr& map) override;
 

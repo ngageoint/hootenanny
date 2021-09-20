@@ -39,6 +39,8 @@ class OsmMapJs : public HootBaseJs
 {
 public:
 
+  ~OsmMapJs() override = default;
+
   static void Init(v8::Local<v8::Object> target);
 
   static v8::Local<v8::Object> create(ConstOsmMapPtr map);
@@ -48,8 +50,6 @@ public:
   ConstOsmMapPtr& getConstMap() { return _constMap; }
 
   bool isConst() const { return !_map.get() && _constMap.get(); }
-
-  virtual ~OsmMapJs() = default;
 
 private:
 

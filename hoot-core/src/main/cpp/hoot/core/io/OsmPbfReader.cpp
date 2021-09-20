@@ -1183,7 +1183,7 @@ void OsmPbfReader::read(const OsmMapPtr& map)
   map->visitRw(v);
 }
 
-bool OsmPbfReader::isSupported(const QString& urlStr)
+bool OsmPbfReader::isSupported(const QString& urlStr) const
 {
   QFileInfo fileInfo(urlStr);
   if (fileInfo.isDir())

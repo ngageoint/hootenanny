@@ -41,7 +41,7 @@ public:
 
   TunnelWayNodeCriterion();
   TunnelWayNodeCriterion(ConstOsmMapPtr map);
-  ~TunnelWayNodeCriterion() = default;
+  ~TunnelWayNodeCriterion() override = default;
 
   ElementCriterionPtr clone() override { return std::make_shared<TunnelWayNodeCriterion>(); }
 

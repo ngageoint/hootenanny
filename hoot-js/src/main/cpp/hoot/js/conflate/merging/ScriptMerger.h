@@ -49,7 +49,7 @@ public:
   ScriptMerger(
     const std::shared_ptr<PluginContext>& script, const v8::Persistent<v8::Object>& plugin,
     const std::set<std::pair<ElementId, ElementId>>& pairs);
-  ~ScriptMerger() = default;
+  ~ScriptMerger() override = default;
 
   void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 

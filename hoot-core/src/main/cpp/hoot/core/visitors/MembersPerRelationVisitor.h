@@ -43,7 +43,7 @@ public:
   static QString className() { return "MembersPerRelationVisitor"; }
 
   MembersPerRelationVisitor();
-  ~MembersPerRelationVisitor() = default;
+  ~MembersPerRelationVisitor() override = default;
 
   void visit(const ConstElementPtr& e) override;
 

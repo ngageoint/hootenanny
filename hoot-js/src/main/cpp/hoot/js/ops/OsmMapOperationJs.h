@@ -39,11 +39,11 @@ class OsmMapOperationJs : public HootBaseJs
 {
 public:
 
+  ~OsmMapOperationJs() override = default;
+
   static void Init(v8::Local<v8::Object> target);
 
   OsmMapOperation* getMapOp() { return _op.get(); }
-
-  virtual ~OsmMapOperationJs() = default;
 
 private:
 

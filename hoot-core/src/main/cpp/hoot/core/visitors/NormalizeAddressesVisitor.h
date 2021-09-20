@@ -45,7 +45,7 @@ public:
   static QString className() { return "NormalizeAddressesVisitor"; }
 
   NormalizeAddressesVisitor() = default;
-  ~NormalizeAddressesVisitor() = default;
+  ~NormalizeAddressesVisitor() override = default;
 
   /**
    * @see ElementVisitor

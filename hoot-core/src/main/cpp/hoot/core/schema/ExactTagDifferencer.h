@@ -43,7 +43,7 @@ public:
   static QString className() { return "ExactTagDifferencer"; }
 
   ExactTagDifferencer() = default;
-  ~ExactTagDifferencer() = default;
+  ~ExactTagDifferencer() override = default;
 
   /**
    * @see TagDifferencer

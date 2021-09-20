@@ -45,7 +45,7 @@ public:
   static QString className() { return "RandomElementRenamer"; }
 
   RandomElementRenamer();
-  ~RandomElementRenamer() = default;
+  ~RandomElementRenamer() override = default;
 
   QString permuteName(const QString& s);
 

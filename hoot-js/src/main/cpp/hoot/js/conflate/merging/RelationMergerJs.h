@@ -38,9 +38,9 @@ class RelationMergerJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Local<v8::Object> target);
+  ~RelationMergerJs() override = default;
 
-  virtual ~RelationMergerJs() = default;
+  static void Init(v8::Local<v8::Object> target);
 
   static void mergeRelations(const v8::FunctionCallbackInfo<v8::Value>& args);
 

@@ -45,12 +45,10 @@ public:
   static int logWarnCount;
 
   JsonOsmSchemaLoader();
-  ~JsonOsmSchemaLoader() = default;
+  ~JsonOsmSchemaLoader() override = default;
 
   bool isSupported(QString url) const override { return url.endsWith(".json"); }
-
   void load(QString path, OsmSchema& s) override;
-
   std::set<QString> getDependencies() override { return _deps; }
 
 private:

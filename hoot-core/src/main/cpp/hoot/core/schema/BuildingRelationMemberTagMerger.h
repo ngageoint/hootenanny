@@ -43,7 +43,7 @@ public:
 
   BuildingRelationMemberTagMerger() = default;
   BuildingRelationMemberTagMerger(const QSet<QString>& ignoreTagKeys);
-  ~BuildingRelationMemberTagMerger() = default;
+  ~BuildingRelationMemberTagMerger() override = default;
 
   /**
    * Merges tags between a building and a single building part

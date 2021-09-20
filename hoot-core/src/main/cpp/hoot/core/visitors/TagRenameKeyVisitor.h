@@ -45,7 +45,7 @@ public:
 
   TagRenameKeyVisitor() = default;
   TagRenameKeyVisitor(const QString& oldKey, const QString& newKey);
-  ~TagRenameKeyVisitor() = default;
+  ~TagRenameKeyVisitor() override = default;
 
   void visit(const ElementPtr& e) override;
 

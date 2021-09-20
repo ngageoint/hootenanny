@@ -27,6 +27,7 @@
 #ifndef HAS_NAME_CRITERION_H
 #define HAS_NAME_CRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
@@ -42,7 +43,7 @@ public:
   static QString className() { return "HasNameCriterion"; }
 
   HasNameCriterion() = default;
-  ~HasNameCriterion() = default;
+  ~HasNameCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<HasNameCriterion>(); }

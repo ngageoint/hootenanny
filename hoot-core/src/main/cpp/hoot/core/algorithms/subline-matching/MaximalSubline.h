@@ -65,7 +65,7 @@ public:
   public:
 
     MatchCriteria() = default;
-    virtual ~MatchCriteria() = default;
+    ~MatchCriteria() = default;
 
     /**
      * @brief match returns a match score for @a index1 way segment matches @a index2.

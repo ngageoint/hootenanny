@@ -52,7 +52,7 @@ public:
   static QString className() { return "CompletelyContainedByMapElementVisitor"; }
 
   CompletelyContainedByMapElementVisitor();
-  ~CompletelyContainedByMapElementVisitor() = default;
+  ~CompletelyContainedByMapElementVisitor() override = default;
 
   /**
    * Returns true if all the children of this element are available within the specified map.

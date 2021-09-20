@@ -85,13 +85,13 @@ public:
    * @param urlString URL of file to immediately attempt to open
    */
   OsmPbfReader(const QString& urlString);
-  ~OsmPbfReader();
+  ~OsmPbfReader() override;
 
   void setConfiguration(const Settings &conf) override;
 
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
-  bool isSupported(const QString& urlStr) override;
+  bool isSupported(const QString& urlStr) const override;
   void open(const QString& urlStr) override;
   void initializePartial() override;
   /**
@@ -105,13 +105,13 @@ public:
   /**
    * Determines the reader's default element status
    */
-  void setDefaultStatus(Status status) override { _status = status; }
+  void setDefaultStatus(const Status& status) override { _status = status; }
   /**
    * Determines whether the reader should use the element id's from the file being read
    */
   void setUseDataSourceIds(bool useDataSourceIds) override { _useFileId = useDataSourceIds; }
   void setUseFileStatus(bool useFileStatus) override { _useFileStatus = useFileStatus; }
-  QString supportedFormats() override { return ".osm.pbf"; }
+  QString supportedFormats() const override { return ".osm.pbf"; }
 
   /**
    * Scan through the file and calculate the offsets of every blob. This is handy when

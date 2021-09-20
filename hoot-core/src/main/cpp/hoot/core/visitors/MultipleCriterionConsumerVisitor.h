@@ -46,7 +46,7 @@ public:
   static QString className() { return "MultipleCriterionConsumerVisitor"; }
 
   MultipleCriterionConsumerVisitor();
-  virtual ~MultipleCriterionConsumerVisitor() = default;
+  ~MultipleCriterionConsumerVisitor() override = default;
 
   void addCriterion(const ElementCriterionPtr& crit) override;
 

@@ -42,14 +42,14 @@ public:
 
   static QString className() { return "RemoveUnknownVisitor"; }
 
-  virtual ~RemoveUnknownVisitor() = default;
-
-  void set(Status status) { _status = status; }
+  ~RemoveUnknownVisitor() override = default;
 
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " elements."; }
+
+  void set(Status status) { _status = status; }
 
 protected:
 
@@ -72,7 +72,7 @@ public:
   static QString className() { return "RemoveUnknown1Visitor"; }
 
   RemoveUnknown1Visitor() : RemoveUnknownVisitor(Status::Unknown1) {}
-  ~RemoveUnknown1Visitor() = default;
+  ~RemoveUnknown1Visitor() override = default;
 
   QString getInitStatusMessage() const override { return "Removing unknown1 elements..."; }
 
@@ -92,7 +92,7 @@ public:
   static QString className() { return "RemoveUnknown2Visitor"; }
 
   RemoveUnknown2Visitor() : RemoveUnknownVisitor(Status::Unknown2) {}
-  ~RemoveUnknown2Visitor() = default;
+  ~RemoveUnknown2Visitor() override = default;
 
   QString getInitStatusMessage() const override { return "Removing unknown2 elements..."; }
 

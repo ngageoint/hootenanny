@@ -26,18 +26,13 @@
  */
 #include "ZCurveRanger.h"
 
-//Std Includes
+// Std
 #include <math.h>
 #include <queue>
 
-//Hoot Inlcudes
+// Hoot
 #include <hoot/core/algorithms/zindex/BBox.h>
 #include <hoot/core/algorithms/zindex/Range.h>
-
-
-
-//Qt includes
-
 
 using namespace std;
 

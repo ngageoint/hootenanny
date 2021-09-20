@@ -40,7 +40,7 @@ public:
   static QString className() { return "GeneralizeTagMerger"; }
 
   GeneralizeTagMerger() = default;
-  ~GeneralizeTagMerger() = default;
+  ~GeneralizeTagMerger() override = default;
 
   Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 

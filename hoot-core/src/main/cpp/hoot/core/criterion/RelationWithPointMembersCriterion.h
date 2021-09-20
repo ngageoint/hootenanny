@@ -45,7 +45,7 @@ public:
 
   RelationWithPointMembersCriterion();
   RelationWithPointMembersCriterion(ConstOsmMapPtr map);
-  ~RelationWithPointMembersCriterion() = default;
+  ~RelationWithPointMembersCriterion() override = default;
 
   ElementCriterionPtr clone() override
   { return std::make_shared<RelationWithPointMembersCriterion>(_map); }

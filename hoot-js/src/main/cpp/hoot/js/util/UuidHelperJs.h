@@ -27,7 +27,7 @@
 #ifndef UUIDHELPERJS_H
 #define UUIDHELPERJS_H
 
-// node.js
+// hoot
 #include <hoot/js/HootBaseJs.h>
 
 namespace hoot
@@ -37,9 +37,9 @@ class UuidHelperJs : public HootBaseJs
 {
 public:
 
- static void Init(v8::Local<v8::Object> target);
+ ~UuidHelperJs() override = default;
 
- virtual ~UuidHelperJs() = default;
+ static void Init(v8::Local<v8::Object> target);
 
 private:
 

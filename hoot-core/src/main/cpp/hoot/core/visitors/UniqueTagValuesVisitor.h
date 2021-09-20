@@ -51,7 +51,7 @@ public:
    * in the bag.
    */
   UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split = false);
-  ~UniqueTagValuesVisitor() = default;
+  ~UniqueTagValuesVisitor() override = default;
 
   /**
    * Puts all values for the given key into a bag. If you want to filter based on type see

@@ -45,7 +45,7 @@ public:
 
   RelationWithBuildingMembersCriterion();
   RelationWithBuildingMembersCriterion(ConstOsmMapPtr map);
-  ~RelationWithBuildingMembersCriterion() = default;
+  ~RelationWithBuildingMembersCriterion() override = default;
 
   ElementCriterionPtr clone() override
   { return std::make_shared<RelationWithBuildingMembersCriterion>(_map); }

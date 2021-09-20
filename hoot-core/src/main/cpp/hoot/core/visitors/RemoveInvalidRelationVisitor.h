@@ -51,7 +51,7 @@ public:
   static QString className() { return "RemoveInvalidRelationVisitor"; }
 
   RemoveInvalidRelationVisitor();
-  ~RemoveInvalidRelationVisitor() = default;
+  ~RemoveInvalidRelationVisitor() override = default;
 
   void visit(const ElementPtr& e) override;
 

@@ -48,7 +48,7 @@ public:
   static QString className() { return "SchemaTranslationOp"; }
 
   SchemaTranslationOp() = default;
-  ~SchemaTranslationOp() = default;
+  ~SchemaTranslationOp() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

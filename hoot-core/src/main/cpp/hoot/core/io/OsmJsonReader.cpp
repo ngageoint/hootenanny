@@ -85,7 +85,7 @@ OsmJsonReader::~OsmJsonReader()
   close();
 }
 
-bool OsmJsonReader::isSupported(const QString& url)
+bool OsmJsonReader::isSupported(const QString& url) const
 {
   QUrl myUrl(url);
 

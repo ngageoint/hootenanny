@@ -27,7 +27,7 @@
 #ifndef MAPIOJS_H
 #define MAPIOJS_H
 
-// node.js
+// hoot
 #include <hoot/js/SystemNodeJs.h>
 
 namespace hoot

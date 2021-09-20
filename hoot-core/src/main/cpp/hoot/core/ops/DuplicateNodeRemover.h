@@ -55,7 +55,7 @@ public:
   static QString className() { return "DuplicateNodeRemover"; }
 
   DuplicateNodeRemover(Meters distanceThreshold = -1.0);
-  ~DuplicateNodeRemover() = default;
+  ~DuplicateNodeRemover() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

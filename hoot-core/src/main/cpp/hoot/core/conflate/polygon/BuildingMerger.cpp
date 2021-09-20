@@ -72,7 +72,7 @@ class DeletableBuildingCriterion : public ElementCriterion
 public:
 
   DeletableBuildingCriterion() = default;
-  ~DeletableBuildingCriterion() = default;
+  ~DeletableBuildingCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override
   {

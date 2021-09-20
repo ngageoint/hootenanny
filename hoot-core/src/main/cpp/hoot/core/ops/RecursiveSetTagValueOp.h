@@ -55,7 +55,7 @@ public:
   RecursiveSetTagValueOp(
     const QString& key, const QString& value, ElementCriterionPtr elementCriterion,
     bool appendToExistingValue = false, const bool overwriteExistingTag = true);
-    ~RecursiveSetTagValueOp() = default;
+  ~RecursiveSetTagValueOp() override = default;
 
   /**
    * @see OsmMapOperation

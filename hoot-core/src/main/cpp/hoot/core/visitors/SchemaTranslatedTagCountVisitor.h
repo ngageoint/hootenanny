@@ -50,12 +50,7 @@ public:
 
   SchemaTranslatedTagCountVisitor();
   SchemaTranslatedTagCountVisitor(const std::shared_ptr<ScriptSchemaTranslator>& t);
-  ~SchemaTranslatedTagCountVisitor() = default;
-
-  long getPopulatedCount() const { return _populatedCount; }
-  long getDefaultCount() const { return _defaultCount; }
-  long getNullCount() const { return _nullCount; }
-  long getTotalCount() const { return getPopulatedCount() + getDefaultCount() + getNullCount(); }
+  ~SchemaTranslatedTagCountVisitor() override = default;
 
   double getStat() const override { return (double)getPopulatedCount() / (double)getTotalCount(); }
 
@@ -75,6 +70,11 @@ public:
       "Counted " + StringUtils::formatLargeNumber(getTotalCount()) + " translated tags on " +
       StringUtils::formatLargeNumber(_numAffected) + " features.";
   }
+
+  long getPopulatedCount() const { return _populatedCount; }
+  long getDefaultCount() const { return _defaultCount; }
+  long getNullCount() const { return _nullCount; }
+  long getTotalCount() const { return getPopulatedCount() + getDefaultCount() + getNullCount(); }
 
   void setTranslator(const std::shared_ptr<ScriptSchemaTranslator>& translator);
 

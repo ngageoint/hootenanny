@@ -61,7 +61,7 @@ public:
   static QString className() { return "PoiPolygonMerger"; }
 
   PoiPolygonMerger();
-  ~PoiPolygonMerger() = default;
+  ~PoiPolygonMerger() override = default;
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.

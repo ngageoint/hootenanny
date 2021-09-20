@@ -84,7 +84,7 @@ class ExternalMergeElementSorter : public ElementInputStream
 public:
 
   ExternalMergeElementSorter();
-  ~ExternalMergeElementSorter();
+  ~ExternalMergeElementSorter() override;
 
   /**
    * Sorts elements first by type, then increasing by ID

@@ -44,7 +44,7 @@ public:
   static QString className() { return "OneWayCriterion"; }
 
   OneWayCriterion() = default;
-  virtual ~OneWayCriterion() = default;
+  ~OneWayCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<OneWayCriterion>(); }

@@ -58,7 +58,7 @@ public:
   static QString className() { return "ApiTagTruncateVisitor"; }
 
   ApiTagTruncateVisitor();
-  ~ApiTagTruncateVisitor() = default;
+  ~ApiTagTruncateVisitor() override = default;
 
   void visit(const ElementPtr& e) override;
 

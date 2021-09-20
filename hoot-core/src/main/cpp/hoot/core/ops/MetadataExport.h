@@ -65,7 +65,7 @@ public:
   static QString className() { return "MetadataExport"; }
 
   MetadataExport() = default;
-  ~MetadataExport() = default;
+  ~MetadataExport() override = default;
 
   QString getDescription() const override { return "Creates and exports metadata"; }
   QString getName() const override { return className(); }

@@ -45,7 +45,7 @@ public:
 
   RelationWithAreaMembersCriterion();
   RelationWithAreaMembersCriterion(ConstOsmMapPtr map);
-  ~RelationWithAreaMembersCriterion() = default;
+  ~RelationWithAreaMembersCriterion() override = default;
 
   ElementCriterionPtr clone() override
   { return std::make_shared<RelationWithAreaMembersCriterion>(_map); }

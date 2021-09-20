@@ -48,7 +48,7 @@ public:
   /** Constructor */
   OsmApiReader();
   /** Destructor */
-  ~OsmApiReader();
+  ~OsmApiReader() override;
   /**
    * @brief close Close the reader
    */
@@ -58,7 +58,7 @@ public:
    * @param url URL of the OSM API to read
    * @return True if the URL is a supported format
    */
-  bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) const override;
   /**
    * @brief read Read the OSM from the API into the map
    * @param map Pointer to the map to read into
@@ -73,7 +73,7 @@ public:
    * @brief supportedFormats
    * @return the supported formats
    */
-  QString supportedFormats() override;
+  QString supportedFormats() const override;
   /**
    * @brief setConfiguration
    * @param conf Updated configuration

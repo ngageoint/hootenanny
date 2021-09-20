@@ -67,7 +67,7 @@ public:
     const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr(),
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>());
-  ~PoiPolygonMatch() = default;
+  ~PoiPolygonMatch() override = default;
 
   void calculateMatch(const ElementId& eid1, const ElementId& eid2);
 

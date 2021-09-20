@@ -48,7 +48,7 @@ public:
    * @arg p Probability that any given feature will be removed.
    */
   RandomElementRemover();
-  ~RandomElementRemover() = default;
+  ~RandomElementRemover() override = default;
 
   void setConfiguration(const Settings& conf) override;
 

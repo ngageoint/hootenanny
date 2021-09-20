@@ -45,7 +45,7 @@ public:
 
   TagAncestorDifferencer() = default;
   TagAncestorDifferencer(QString ancestor);
-  ~TagAncestorDifferencer() = default;
+  ~TagAncestorDifferencer() override = default;
 
   void setConfiguration(const Settings& conf) override;
 

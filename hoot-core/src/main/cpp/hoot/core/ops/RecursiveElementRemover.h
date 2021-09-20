@@ -87,7 +87,7 @@ public:
   RecursiveElementRemover(
     ElementId eid, const bool removeRefsFromParents = false,
     const ElementCriterionPtr& criterion = ElementCriterionPtr());
-  ~RecursiveElementRemover() = default;
+  ~RecursiveElementRemover() override = default;
 
   void addElement(const ConstElementPtr& e) override { _eid = e->getElementId(); }
   void addCriterion(const ElementCriterionPtr& crit) override { _criterion = crit; }

@@ -31,6 +31,7 @@
 #include <ogr_geometry.h>
 #include <ogr_spatialref.h>
 
+// hoot
 #include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
@@ -45,7 +46,7 @@ public:
   static QString className() { return "ProjectToGeographicVisitor"; }
 
   ProjectToGeographicVisitor();
-  ~ProjectToGeographicVisitor();
+  ~ProjectToGeographicVisitor() override;
 
   void initialize(const std::shared_ptr<OGRSpatialReference>& projection);
 

@@ -51,7 +51,7 @@ public:
   LinearDiffMerger(
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
-  virtual ~LinearDiffMerger() = default;
+  ~LinearDiffMerger() override = default;
 
   /**
    * @see OsmMapOperation

@@ -48,7 +48,7 @@ public:
 
   MapCleaner() = default;
   MapCleaner(const Progress& progress);
-  ~MapCleaner() = default;
+  ~MapCleaner() override = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 

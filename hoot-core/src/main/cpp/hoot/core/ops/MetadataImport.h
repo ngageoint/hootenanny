@@ -66,7 +66,7 @@ public:
   static QString className() { return "MetadataImport"; }
 
   MetadataImport() = default;
-  ~MetadataImport() = default;
+  ~MetadataImport() override = default;
 
   QString getDescription() const override { return "Imports metadata"; }
   QString getName() const override { return className(); }

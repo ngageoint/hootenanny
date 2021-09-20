@@ -109,7 +109,7 @@ public:
     _memoryCheckUpdateInterval = opts.getMemoryUsageCheckerInterval();
   }
 
-  ~BuildingMatchVisitor()
+  ~BuildingMatchVisitor() override
   {
     LOG_TRACE("neighbor counts, max: " << _neighborCountMax << " mean: " <<
               (double)_neighborCountSum / (double)_elementsEvaluated);

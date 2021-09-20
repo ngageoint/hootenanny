@@ -41,7 +41,7 @@ public:
   static QString className() { return "AddRef2Visitor"; }
 
   AddRef2Visitor();
-  ~AddRef2Visitor() = default;
+  ~AddRef2Visitor() override = default;
 
   void setConfiguration(const Settings& conf) override;
 

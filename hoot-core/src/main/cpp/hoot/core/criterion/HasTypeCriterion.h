@@ -43,7 +43,7 @@ public:
   static QString className() { return "HasTypeCriterion"; }
 
   HasTypeCriterion() = default;
-  ~HasTypeCriterion() = default;
+  ~HasTypeCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override { return std::make_shared<HasTypeCriterion>(); }

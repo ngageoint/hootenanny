@@ -47,7 +47,7 @@ public:
 
   NoInformationCriterion();
   NoInformationCriterion(bool treatReviewTagsAsMetadata);
-  ~NoInformationCriterion() = default;
+  ~NoInformationCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   ElementCriterionPtr clone() override

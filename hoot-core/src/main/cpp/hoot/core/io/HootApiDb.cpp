@@ -1013,7 +1013,7 @@ long HootApiDb::_insertRecord(QSqlQuery& query) const
   return id;
 }
 
-bool HootApiDb::isSupported(const QUrl& url)
+bool HootApiDb::isSupported(const QUrl& url) const
 {
   bool valid = ApiDb::isSupported(url);
 

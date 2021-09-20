@@ -27,7 +27,7 @@
 #ifndef SETTINGSJS_H
 #define SETTINGSJS_H
 
-// node.js
+// hoot
 #include <hoot/js/HootBaseJs.h>
 
 namespace hoot
@@ -37,9 +37,9 @@ class SettingsJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Local<v8::Object> target);
+  ~SettingsJs() override = default;
 
-  virtual ~SettingsJs() = default;
+  static void Init(v8::Local<v8::Object> target);
 
 private:
 

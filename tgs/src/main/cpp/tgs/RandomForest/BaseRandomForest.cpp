@@ -26,12 +26,13 @@
  */
 #include "BaseRandomForest.h"
 
-//Qt Includes
+// Qt
 #include <QStringList>
 
-//Std Includes
+// Std
 #include <cmath>
 
+// Tgs
 #include <tgs/TgsException.h>
 
 using namespace std;

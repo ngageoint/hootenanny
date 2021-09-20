@@ -52,7 +52,7 @@ public:
   static QString className() { return "OsmXmlReader"; }
 
   OsmXmlReader();
-  ~OsmXmlReader();
+  ~OsmXmlReader() override;
 
   /**
    * Converts OSM XML to a map
@@ -71,24 +71,25 @@ public:
   void read(const QString& path, const OsmMapPtr& map);
   void readFromString(const QString& xml, const OsmMapPtr& map);
 
-  bool startElement(const QString& namespaceURI, const QString& localName,
-                    const QString& qName, const QXmlAttributes& attributes) override;
-  bool endElement(const QString& namespaceURI, const QString& localName,
-                  const QString& qName) override;
+  bool startElement(
+   const QString& namespaceURI, const QString& localName, const QString& qName,
+   const QXmlAttributes& attributes) override;
+  bool endElement(
+    const QString& namespaceURI, const QString& localName, const QString& qName) override;
   bool fatalError(const QXmlParseException &exception) override;
   QString errorString() const override { return _errorString; }
 
   void initializePartial() override {}
   void finalizePartial() override;
   bool hasMoreElements() override;
-  bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) const override;
   void read(const OsmMapPtr& map) override;
   void close() override;
   ElementPtr readNextElement() override;
-  void setDefaultStatus(Status s) override { _status = s; }
+  void setDefaultStatus(const Status& s) override { _status = s; }
   void setUseFileStatus(bool useFileStatus) override { _useFileStatus = useFileStatus; }
   void setUseDataSourceIds(bool useDataSourceIds) override { _useDataSourceId = useDataSourceIds; }
-  QString supportedFormats() override { return ".osm;.osm.bz2;.osm.gz"; }
+  QString supportedFormats() const override { return ".osm;.osm.bz2;.osm.gz"; }
 
   void setConfiguration(const Settings& conf) override;
 

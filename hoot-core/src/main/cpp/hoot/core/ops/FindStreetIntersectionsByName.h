@@ -49,7 +49,7 @@ public:
   static QString className() { return "FindStreetIntersectionsByName"; }
 
   FindStreetIntersectionsByName() = default;
-  ~FindStreetIntersectionsByName() = default;
+  ~FindStreetIntersectionsByName() override = default;
 
   void apply(OsmMapPtr& map) override;
 

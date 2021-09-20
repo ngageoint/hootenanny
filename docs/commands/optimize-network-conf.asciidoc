@@ -19,13 +19,13 @@ for a user specified group of configuration options.
 === Usage
 
 --------------------------------------
-hoot optimize-network-conf (testsDir) (testType) (testSettings) (numIterations) (output) [customConfig]
+HootTest optimize-network-conf (testsDir) (testType) (testSettings) (numIterations) (output) [customConfig]
 --------------------------------------
 
 ==== Example
 
 --------------------------------------
-hoot optimize-network-conf test-files/cases/hoot-rnd/network/conflicts case settings.json 50 output Config.conf
+HootTest optimize-network-conf test-files/cases/hoot-rnd/network/conflicts case settings.json 50 output Config.conf
 --------------------------------------
 
 NOTE: To use tests of type 'release' or 'perty' you must have access to the regression tests, which are not supplied 

@@ -55,7 +55,7 @@ public:
   static QString className() { return "ToEnglishDictionaryTranslator"; }
 
   ToEnglishDictionaryTranslator();
-  ~ToEnglishDictionaryTranslator() = default;
+  ~ToEnglishDictionaryTranslator() override = default;
 
   /**
    * Translates the given input string into a translation & transliteration of the input.

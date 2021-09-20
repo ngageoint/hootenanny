@@ -27,6 +27,7 @@
 #ifndef RELATION_CRITERION_H
 #define RELATION_CRITERION_H
 
+// Hoot
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 
 namespace hoot

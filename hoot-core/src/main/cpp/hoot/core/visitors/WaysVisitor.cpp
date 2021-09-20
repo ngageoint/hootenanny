@@ -31,6 +31,11 @@ using namespace std;
 namespace hoot
 {
 
+WaysVisitor::WaysVisitor(std::vector<ConstWayPtr>& w) :
+_w(w)
+{
+}
+
 void WaysVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Way)

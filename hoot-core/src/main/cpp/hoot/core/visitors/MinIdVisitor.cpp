@@ -34,6 +34,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, MinIdVisitor)
 
+MinIdVisitor::MinIdVisitor() :
+_minId(std::numeric_limits<long>::max())
+{
+}
+
 void MinIdVisitor::visit(const ConstElementPtr& e)
 {
   _minId = std::min(e->getId(), _minId);

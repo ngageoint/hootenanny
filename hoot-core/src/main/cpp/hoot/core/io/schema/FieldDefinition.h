@@ -49,7 +49,7 @@ public:
       _fieldName(fieldName)
     {
     }
-    ~InvalidValueException() throw() = default;
+    ~InvalidValueException() throw() override = default;
 
   private:
 
@@ -62,25 +62,22 @@ public:
   virtual bool getAllowNull() const { return _allowNull; }
   virtual bool getDefaultIsNull() const { return _defaultIsNull; }
   virtual QVariant getDefaultValue() const = 0;
-
-  QString getName() const { return _name; }
-  virtual QVariant::Type getType() const = 0;
-  int getWidth() const { return _width; }
-
   virtual bool hasDefaultValue() const = 0;
-
   /**
    * If v is valid then nothing happens, if v is invalid then an exception is thrown.
    * @throws InvalidValueException
    */
   virtual void validate(const QVariant& v, StrictChecking strict) const = 0;
+  virtual QString toString() const = 0;
+  virtual QVariant::Type getType() const = 0;
+
+  QString getName() const { return _name; }
+  int getWidth() const { return _width; }
 
   void setAllowNull(bool a) { _allowNull = a; }
   void setDefaultIsNull(bool defaultIsNull) { _defaultIsNull = defaultIsNull; }
   void setName(const QString& name) { _name = name; }
   void setWidth(int w) { _width = w; }
-
-  virtual QString toString() const = 0;
 
 protected:
 
