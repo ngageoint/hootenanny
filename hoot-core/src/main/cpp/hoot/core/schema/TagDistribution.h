@@ -67,7 +67,7 @@ public:
   void setProcessAllTagKeys(const bool process) { _processAllTagKeys = process; }
   void setCountOnlyMatchingElementsInTotal(const bool count)
   { _countOnlyMatchingElementsInTotal = count; }
-  void setCriteria(QStringList& names);
+  void setCriteria(const QStringList& names);
   void setSortByFrequency(const bool sort) { _sortByFrequency = sort; }
   void setTokenize(const bool tokenize) { _tokenize = tokenize; }
   void setLimit(const int limit) { _limit = limit; }

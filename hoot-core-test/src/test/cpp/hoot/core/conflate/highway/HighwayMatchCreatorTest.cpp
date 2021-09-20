@@ -42,13 +42,12 @@ class HighwayMatchCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(HighwayMatchCreatorTest);
   CPPUNIT_TEST(runIsCandidateTest);
+  CPPUNIT_TEST(runBadMedianOptionsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  HighwayMatchCreatorTest()
-    : HootTestFixture("test-files/",
-                      UNUSED_PATH)
+  HighwayMatchCreatorTest() : HootTestFixture("test-files/", UNUSED_PATH)
   {
   }
 
@@ -66,7 +65,8 @@ public:
     CPPUNIT_ASSERT(
       !uut.isMatchCandidate(
         map->getWay(
-          ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "Panera Bread")[0]), map));
+          ElementIdsVisitor::findElementsByTag(
+            map, ElementType::Way, "name", "Panera Bread")[0]), map));
 
     map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
@@ -75,9 +75,43 @@ public:
 
     CPPUNIT_ASSERT(
       uut.isMatchCandidate(
-        map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "1")[0]), map));
+        map->getWay(
+          ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "1")[0]), map));
   }
 
+  void runBadMedianOptionsTest()
+  {
+    HighwayMatchCreator uut;
+    QString exceptionMsg;
+
+    // No error here, despite empty option values, since median matching is turned off.
+    uut.setRunMedianMatching(false, QStringList(), QStringList());
+
+    // No error here since validation only errors on empty option values.
+    uut.setRunMedianMatching(true, QStringList("blah"), QStringList("blah"));
+
+    try
+    {
+      // Error here since one of the option values list is empty.
+      uut.setRunMedianMatching(true, QStringList(), QStringList("blah"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("No road median identifying tags specified in"));
+
+    try
+    {
+      // Error here since one of the option values list is empty.
+      uut.setRunMedianMatching(true, QStringList("blah"), QStringList());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("No road median transfer tag keys specified in"));
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HighwayMatchCreatorTest, "quick");

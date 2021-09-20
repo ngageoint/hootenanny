@@ -79,6 +79,17 @@ public:
    */
   QStringList getCriteria() const override;
 
+  /**
+   * @brief setRunMedianMatching toggles activation of the custom road median matching routine.
+   * @param runMatching turns median matching on/off
+   * @param identifyingTags tags used to identify secondary road median features (only one must be
+   * satisfied)
+   * @param transferKeys tag keys transferred from matching secondary road median features to
+   * reference road median features
+   */
+  void setRunMedianMatching(
+    const bool runMatching, const QStringList& identifyingTags, const QStringList& transferKeys);
+
 private:
 
   // standard classifier used for road matching

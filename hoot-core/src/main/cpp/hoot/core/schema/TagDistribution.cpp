@@ -59,7 +59,7 @@ _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
   _nonWord.setPattern("[^\\w\\s]");
 }
 
-void TagDistribution::setCriteria(QStringList& names)
+void TagDistribution::setCriteria(const QStringList& names)
 {
   if (!names.isEmpty())
   {
