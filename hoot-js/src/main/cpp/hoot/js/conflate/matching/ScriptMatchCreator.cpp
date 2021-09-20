@@ -741,7 +741,7 @@ void ScriptMatchCreator::setArguments(const QStringList& args)
 
 void ScriptMatchCreator::setRunOneToManyRailMatching(
   const bool runMatching, const CreatorDescription::BaseFeatureType& baseFeatureType,
-  const QStringList& identifyingKeys, const QStringList& transferKeys)
+  const QStringList& identifyingKeys, const QStringList& transferKeys) const
 {
   if (runMatching && baseFeatureType == CreatorDescription::BaseFeatureType::Railway)
   {

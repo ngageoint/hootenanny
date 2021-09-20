@@ -123,7 +123,7 @@ public:
    */
   void setRunOneToManyRailMatching(
     const bool runMatching, const CreatorDescription::BaseFeatureType& scriptInfo,
-    const QStringList& identifyingKeys, const QStringList& transferKeys);
+    const QStringList& identifyingKeys, const QStringList& transferKeys) const;
 
 private:
 

@@ -57,7 +57,7 @@ _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
-void ElementCounter::setCriteria(QStringList& names)
+void ElementCounter::setCriteria(const QStringList& names)
 {
   if (!names.isEmpty())
   {
