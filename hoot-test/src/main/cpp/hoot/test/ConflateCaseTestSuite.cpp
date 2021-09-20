@@ -62,13 +62,13 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
   {
     const QString testConfFile = fi.absoluteFilePath();
 
-    // load the test's config file
+    // Load the test's config file.
     confs.append(testConfFile);
 
     LOG_VART(confs);
   }
 
-  // a list of strings paths to ignore if this string is found in the path.
+  // a list of strings paths to ignore if this string is found in the path
   QStringList ignoreList;
 
 # ifndef HOOT_HAVE_RND
@@ -109,7 +109,7 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
 
   if (dirs.size() > 0)
   {
-    // this is entirely a preference thing. I want people to keep the tests clean and uncluttered.
+    // This is entirely a preference thing. I want people to keep the tests clean and uncluttered.
     if (QFileInfo(d, "Input1.osm").exists() ||
         QFileInfo(d, "Input2.osm").exists() ||
         QFileInfo(d, "Output.osm").exists())

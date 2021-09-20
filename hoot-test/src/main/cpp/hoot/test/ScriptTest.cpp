@@ -247,7 +247,7 @@ void ScriptTest::_runDiff(QString file1, QString file2)
     LOG_WARN("Waiting for process to start: " + _script);
   }
 
-  const int scriptTestTimeOutSeconds = ConfigOptions(conf()).getScriptTestMaxExecTime();
+  const int scriptTestTimeOutSeconds = ConfigOptions(conf()).getTestScriptMaxExecTime();
   bool scriptTimeOutSpecified = false;
   if (scriptTestTimeOutSeconds != -1)
   {
@@ -295,7 +295,7 @@ void ScriptTest::_runProcess()
     LOG_WARN("Waiting for process to start: " + _script);
   }
 
-  const int scriptTestTimeOutSeconds = ConfigOptions(conf()).getScriptTestMaxExecTime();
+  const int scriptTestTimeOutSeconds = ConfigOptions(conf()).getTestScriptMaxExecTime();
   bool scriptTimeOutSpecified = false;
   if (scriptTestTimeOutSeconds != -1)
   {

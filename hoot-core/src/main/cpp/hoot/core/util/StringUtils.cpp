@@ -243,7 +243,7 @@ void StringUtils::removeAllContaining(
   for (int i = 0; i < input.size(); i++)
   {
     const QString inputStr = input.at(i);
-    if (text.compare(inputStr, caseSensitivity) != 0)
+    if (!inputStr.contains(text, caseSensitivity))
     {
       toReturn.append(inputStr);
     }

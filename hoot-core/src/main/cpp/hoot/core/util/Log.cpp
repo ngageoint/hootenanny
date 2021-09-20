@@ -96,7 +96,7 @@ int Log::getWarnMessageLimit()
   return _warnMessageLimit;
 }
 
-Log::WarningLevel Log::levelFromString(QString l)
+Log::WarningLevel Log::levelFromString(QString& l)
 {
   l = l.toLower();
   if (l == "none")

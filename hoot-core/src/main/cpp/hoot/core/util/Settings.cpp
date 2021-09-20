@@ -533,28 +533,12 @@ void Settings::_validateOperatorRefs(const QStringList& operators)
   }
 }
 
-void Settings::parseCommonArguments(QStringList& args)
+void Settings::parseCommonArguments(QStringList& args, const QStringList toIgnore)
 {
   LOG_DEBUG("Parsing command arguments...");
   LOG_VART(args);
 
   bool foundOne = true;
-
-  // TODO: This list really should be fed from the options defined in main.cpp in hoot-core-test.
-  QStringList hootTestCmdsIgnore;
-  hootTestCmdsIgnore.append("--quick");
-  hootTestCmdsIgnore.append("--slow");
-  hootTestCmdsIgnore.append("--glacial");
-  hootTestCmdsIgnore.append("--all");
-  hootTestCmdsIgnore.append("--quick-only");
-  hootTestCmdsIgnore.append("--slow-only");
-  hootTestCmdsIgnore.append("--glacial-only");
-  hootTestCmdsIgnore.append("--single");
-  hootTestCmdsIgnore.append("--names");
-  hootTestCmdsIgnore.append("--all-names");
-  hootTestCmdsIgnore.append("--diff");
-  hootTestCmdsIgnore.append("--include");
-  hootTestCmdsIgnore.append("--exclude");
 
   const QString optionInputFormatErrorMsg =
     "Define with -D must take the form key=value, key+=value, key++=value, or key-=value";
@@ -607,8 +591,8 @@ void Settings::parseCommonArguments(QStringList& args)
       Log::getInstance().setLevel(Log::Fatal);
       args = args.mid(1);
     }
-    // HootTest settings have already been parsed by this point
-    else if (hootTestCmdsIgnore.contains(args[0]))
+    // HootTest settings have already been parsed by this point.
+    else if (toIgnore.contains(args[0]))
     {
       args = args.mid(1);
     }

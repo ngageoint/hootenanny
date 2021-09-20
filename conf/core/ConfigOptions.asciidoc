@@ -5142,16 +5142,6 @@ runtimes. When this is done, sometimes `REF1` features will be removed from the 
 this option allows for score-matches to run when there are missing `REF1` features. Warnings will be
 logged for any that are found.
 
-=== script.test.max.exec.time
-
-* Data Type: int
-* Default Value: `-1`
-
-For script test debugging only. Sets a maximum allowed time, in seconds, for a script test to run.
-If the script runs longer than the specified time, then it is forcefully stopped by the system. If
-the value is set to -1, then there is no time limit for script tests. This is useful when
-debugging tests which may hang on a remote build server.
-
 === search.radius.area
 
 * Data Type: double
@@ -5851,6 +5841,23 @@ Enabling this always forces the orthographic projection when determining a prope
 In typical usage this will never be used (the automatically selected projection should always be at
 least as good). This is most useful if you want to get consistent results even if the list of
 potential projections change over time. Very handy in unit tests.
+
+=== test.script.max.exec.time
+
+* Data Type: int
+* Default Value: `-1`
+
+For script test debugging only. Sets a maximum allowed time, in seconds, for a script test to run.
+If the script runs longer than the specified time, then it is forcefully stopped by the system. If
+the value is set to -1, then there is no time limit for script tests. This is useful when
+debugging tests which may hang on a remote build server.
+
+=== test.validation.enable
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
 
 === token.keep.non.words
 

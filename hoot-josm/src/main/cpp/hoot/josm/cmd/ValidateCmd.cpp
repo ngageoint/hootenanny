@@ -29,7 +29,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/FileUtils.h>
+//#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 #include <hoot/josm/validation/MapValidator.h>
@@ -78,13 +78,13 @@ public:
       standaloneOptionCount++;
     }
 
-    bool runTests = false;
-    if (args.contains("--test"))
-    {
-      runTests = true;
-      args.removeAt(args.indexOf("--test"));
-      standaloneOptionCount++;
-    }
+//    bool runTests = false;
+//    if (args.contains("--test"))
+//    {
+//      runTests = true;
+//      args.removeAt(args.indexOf("--test"));
+//      standaloneOptionCount++;
+//    }
 
     if (standaloneOptionCount > 1)
     {
@@ -111,16 +111,16 @@ public:
       const int numDeleted = ValidatedOutputCleaner::clean(args[0]);
       LOG_STATUS("Deleted " << numDeleted << " validated outputs.");
     }
-    else if (runTests)
-    {
-      if (args.size() != 0)
-      {
-        std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(QString("%1 with --test takes no input parameters.").arg(getName()));
-      }
+//    else if (runTests)
+//    {
+//      if (args.size() != 0)
+//      {
+//        std::cout << getHelp() << std::endl << std::endl;
+//        throw HootException(QString("%1 with --test takes no input parameters.").arg(getName()));
+//      }
 
-      return _runTests();
-    }
+//      return _runTests();
+//    }
     else
     {
       _validate(args);
@@ -222,109 +222,109 @@ private:
    * @brief _runTests TODO
    * @return
    */
-  static int _runTests()
-  {
-    QElapsedTimer timer;
-    timer.start();
+//  static int _runTests()
+//  {
+//    QElapsedTimer timer;
+//    timer.start();
 
-    // Currently, we support validating case test output only.
-    QStringList caseTestOutputs;
-    const bool anyTestOutputMissing = _getCaseTestOutputs(caseTestOutputs);
-    LOG_VARD(caseTestOutputs);
-    LOG_VARD(anyTestOutputMissing);
+//    // Currently, we support validating case test output only.
+//    QStringList caseTestOutputs;
+//    const bool anyTestOutputMissing = _getCaseTestOutputs(caseTestOutputs);
+//    LOG_VARD(caseTestOutputs);
+//    LOG_VARD(anyTestOutputMissing);
 
-    MapValidator().validate(caseTestOutputs);
+//    MapValidator().validate(caseTestOutputs);
 
-    QStringList caseTestValidationReports = caseTestOutputs;
-    caseTestValidationReports =
-      caseTestValidationReports.replaceInStrings("Output.osm", "validated-output-report");
-    LOG_VARD(caseTestValidationReports);
+//    QStringList caseTestValidationReports = caseTestOutputs;
+//    caseTestValidationReports =
+//      caseTestValidationReports.replaceInStrings("Output.osm", "validated-output-report");
+//    LOG_VARD(caseTestValidationReports);
 
-    bool anyReportOutputMissing = false;
-    bool anyReportGoldFilesMissing = false;
-    bool anyReportDifferences = false;
-    for (int i = 0; i < caseTestValidationReports.size(); i++)
-    {
-      QString validationReportOutput = caseTestValidationReports.at(i);
-      if (!QFileInfo(validationReportOutput).exists())
-      {
-        anyReportOutputMissing = true;
-        continue;
-      }
-      const QString validationReportOutputContent = FileUtils::readFully(validationReportOutput);
+//    bool anyReportOutputMissing = false;
+//    bool anyReportGoldFilesMissing = false;
+//    bool anyReportDifferences = false;
+//    for (int i = 0; i < caseTestValidationReports.size(); i++)
+//    {
+//      QString validationReportOutput = caseTestValidationReports.at(i);
+//      if (!QFileInfo(validationReportOutput).exists())
+//      {
+//        anyReportOutputMissing = true;
+//        continue;
+//      }
+//      const QString validationReportOutputContent = FileUtils::readFully(validationReportOutput);
 
-      const QString validationReportGold =
-        validationReportOutput.replace("validated-output-report", "validation-report");
-      if (!QFileInfo(validationReportGold).exists())
-      {
-        anyReportGoldFilesMissing = true;
-        continue;
-      }
-      const QString validationReportGoldContent = FileUtils::readFully(validationReportGold);
+//      const QString validationReportGold =
+//        validationReportOutput.replace("validated-output-report", "validation-report");
+//      if (!QFileInfo(validationReportGold).exists())
+//      {
+//        anyReportGoldFilesMissing = true;
+//        continue;
+//      }
+//      const QString validationReportGoldContent = FileUtils::readFully(validationReportGold);
 
-      if (validationReportOutputContent != validationReportGoldContent)
-      {
-        LOG_ERROR(
-          "Report output does not match for " << validationReportGold << " and " <<
-          validationReportOutput << ".");
-        anyReportDifferences = true;
-      }
-    }
-    LOG_VARD(anyTestOutputMissing);
-    LOG_VARD(anyReportOutputMissing);
-    LOG_VARD(anyReportGoldFilesMissing);
+//      if (validationReportOutputContent != validationReportGoldContent)
+//      {
+//        LOG_ERROR(
+//          "Report output does not match for " << validationReportGold << " and " <<
+//          validationReportOutput << ".");
+//        anyReportDifferences = true;
+//      }
+//    }
+//    LOG_VARD(anyTestOutputMissing);
+//    LOG_VARD(anyReportOutputMissing);
+//    LOG_VARD(anyReportGoldFilesMissing);
 
-    LOG_STATUS(
-      "Validation tests ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
-      " total.");
+//    LOG_STATUS(
+//      "Validation tests ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
+//      " total.");
 
-    if (anyTestOutputMissing || anyReportOutputMissing || anyReportGoldFilesMissing ||
-        anyReportDifferences)
-    {
-      return 1;
-    }
-    else
-    {
-      return 0;
-    }
-  }
+//    if (anyTestOutputMissing || anyReportOutputMissing || anyReportGoldFilesMissing ||
+//        anyReportDifferences)
+//    {
+//      return 1;
+//    }
+//    else
+//    {
+//      return 0;
+//    }
+//  }
 
   /**
    * @brief _getCaseTestOutputs TODO
    * @param outputs
    * @return
    */
-  static bool _getCaseTestOutputs(QStringList& outputs)
-  {
-    int logErrorCount = 0;
-    bool anyOutputsMissing = false;
-    QDirIterator itr(
-      "test-files/cases", QStringList(), QDir::AllDirs|QDir::Files, QDirIterator::Subdirectories);
-    while (itr.hasNext())
-    {
-      const QString path = itr.next();
-      if (QFileInfo(path).isDir())
-      {
-        QDirIterator itr2(path, QStringList("Output.osm"), QDir::Files);
-        const QString testOutputFile = itr2.next();
-        if (testOutputFile.isEmpty())
-        {
-          if (logErrorCount <= ConfigOptions().getLogWarnMessageLimit())
-          {
-            LOG_ERROR("No case test output found in directory: ..." << path.right(40) << ".");
-          }
-          anyOutputsMissing = true;
-          logErrorCount++;
-        }
-        else
-        {
-          outputs.append(testOutputFile);
-        }
-      }
-    }
-    outputs.sort();
-    return anyOutputsMissing;
-  }
+//  static bool _getCaseTestOutputs(QStringList& outputs)
+//  {
+//    int logErrorCount = 0;
+//    bool anyOutputsMissing = false;
+//    QDirIterator itr(
+//      "test-files/cases", QStringList(), QDir::AllDirs|QDir::Files, QDirIterator::Subdirectories);
+//    while (itr.hasNext())
+//    {
+//      const QString path = itr.next();
+//      if (QFileInfo(path).isDir())
+//      {
+//        QDirIterator itr2(path, QStringList("Output.osm"), QDir::Files);
+//        const QString testOutputFile = itr2.next();
+//        if (testOutputFile.isEmpty())
+//        {
+//          if (logErrorCount <= ConfigOptions().getLogWarnMessageLimit())
+//          {
+//            LOG_ERROR("No case test output found in directory: ..." << path.right(40) << ".");
+//          }
+//          anyOutputsMissing = true;
+//          logErrorCount++;
+//        }
+//        else
+//        {
+//          outputs.append(testOutputFile);
+//        }
+//      }
+//    }
+//    outputs.sort();
+//    return anyOutputsMissing;
+//  }
 };
 
 HOOT_FACTORY_REGISTER(Command, ValidateCmd)

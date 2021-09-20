@@ -56,6 +56,7 @@ using namespace geos::geom;
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/SignalCatcher.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/StringUtils.h>
 
 #include <hoot/js/v8Engine.h>
 
@@ -375,15 +376,70 @@ void printNames(const std::vector<CppUnit::Test*>& vTests)
     cout << *it << endl;
 }
 
+QMap<QString, QString> getAllowedOptions()
+{
+  // keep this list alphabetized
+  QMap<QString, QString> options;
+  options["--all"] = "Run all the tests";
+  options["--all-names"] = "Print the names of all the tests without running them";
+  options["--case-only"] = "Run the conflate case tests only";
+  options["--check-env"] = "Check the environment before and after the test is run, good for debugging";
+  options["--current"] = "Run the 'current' level tests";
+  options["--debug"] = "Show debug level log messages and above";
+  options["--diff"] = "Print a diff when a script test fails";
+  options["--disable-failure-retries"] = "Disables retrying test runs when they fail in parallel";
+  options["--error"] = "Show error log level messages and above";
+  options["--exclude=[regex]"] =
+    "Exclude tests that match the specified regex; e.g. HootTest '--exclude=.*building.*'";
+  options["--fatal"] = "Show fatal error log level messages only";
+  options["--glacial"] = "Run 'glacial' level tests and below";
+  options["--glacial-only"] = "Run the 'glacial' level tests only";
+  options["--include=[regex]"] =
+    "Include only tests that match the specified regex; e.g. HootTest '--include=.*building.*'";
+  options["--info"] = "Show info log level messages and above";
+  options["--quick"] = "Run the 'quick' level' tests";
+  options["--quick-only"] = "Run the 'quick' level tests only";
+  options["--names"] = "Show the names of all the tests as they run";
+  options["--parallel [process count]"] =
+    "Run the specified tests in parallel with the specified number of processes";
+  options["--single [test name]"] = "Run only the test specified";
+  options["--slow"] = "Run the 'slow' level tests and above";
+  options["--slow-only"] = "Run the 'slow' level tests only";
+  options["--status"] = "Show status log level messages and above";
+  options["--suppress-failure-detail"] =
+    "Do not show test failure detailed messages; disables --diff for script tests";
+  options["--trace"] = "Show trace log level messages and abov";
+  options["--verbose"] = "Show verbose log level messages and above";
+  options["--warn"] = "Show warning log level messages and above";
+  return options;
+}
+
+QStringList getAllowedOptionNames()
+{
+  QStringList optionNames;
+  const QMap<QString, QString> options = getAllowedOptions();
+  for (QMap<QString, QString>::const_iterator it = options.begin(); it != options.end(); ++it)
+  {
+    optionNames.append(it.key().split(QRegExp("\\s+|="))[0]);
+  }
+  return optionNames;
+}
+
 void setupTestingConfig(QStringList& args)
 {
   //  Clear all user configuration so we have consistent tests.
   conf().clear();
   ConfigOptions::populateDefaults(conf());
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
-  Settings::parseCommonArguments(args);
-  //  We require that all tests use Testing.conf as a starting point and any conf values
-  //  specified by it may be overridden when necessary.
+  StringUtils::removeAllContaining(args, "hoottest");
+  LOG_VART(args);
+  // Settings doesn't recognize all HootTest specific options, so pass in a list from here to
+  // ignore. Don't worry about getAllowedOptionNames() returning the log level options...Settings
+  // will parse them anyway.
+  Settings::parseCommonArguments(args, getAllowedOptionNames());
+  LOG_VART(args);
+  // We require that all tests use Testing.conf as a starting point and any conf values specified by
+  // it may be overridden when necessary.
   conf().loadJson(ConfPath::search("Testing.conf"));
 }
 
@@ -480,55 +536,6 @@ void populateTests(
   }
 }
 
-QMap<QString, QString> getAllowedOptions()
-{
-  // keep this list alphabetized
-  QMap<QString, QString> options;
-  options["--all"] = "Run all the tests";
-  options["--all-names"] = "Print the names of all the tests without running them";
-  options["--case-only"] = "Run the conflate case tests only";
-  options["--check-env"] = "Check the environment before and after the test is run, good for debugging";
-  options["--current"] = "Run the 'current' level tests";
-  options["--debug"] = "Show debug level log messages and above";
-  options["--diff"] = "Print a diff when a script test fails";
-  options["--disable-failure-retries"] = "Disables retrying test runs when they fail in parallel";
-  options["--error"] = "Show error log level messages and above";
-  options["--exclude=[regex]"] =
-    "Exclude tests that match the specified regex; e.g. HootTest '--exclude=.*building.*'";
-  options["--fatal"] = "Show fatal error log level messages only";
-  options["--glacial"] = "Run 'glacial' level tests and below";
-  options["--glacial-only"] = "Run the 'glacial' level tests only";
-  options["--include=[regex]"] =
-    "Include only tests that match the specified regex; e.g. HootTest '--include=.*building.*'";
-  options["--info"] = "Show info log level messages and above";
-  options["--quick"] = "Run the 'quick' level' tests";
-  options["--quick-only"] = "Run the 'quick' level tests only";
-  options["--names"] = "Show the names of all the tests as they run";
-  options["--parallel [process count]"] =
-    "Run the specified tests in parallel with the specified number of processes";
-  options["--single [test name]"] = "Run only the test specified";
-  options["--slow"] = "Run the 'slow' level tests and above";
-  options["--slow-only"] = "Run the 'slow' level tests only";
-  options["--status"] = "Show status log level messages and above";
-  options["--suppress-failure-detail"] =
-    "Do not show test failure detailed messages; disables --diff for script tests";
-  options["--trace"] = "Show trace log level messages and abov";
-  options["--verbose"] = "Show verbose log level messages and above";
-  options["--warn"] = "Show warning log level messages and above";
-  return options;
-}
-
-QStringList getAllowedOptionNames()
-{
-  QStringList optionNames;
-  const QMap<QString, QString> options = getAllowedOptions();
-  for (QMap<QString, QString>::const_iterator it = options.begin(); it != options.end(); ++it)
-  {
-    optionNames.append(it.key().split(QRegExp("\\s+|="))[0]);
-  }
-  return optionNames;
-}
-
 int largestOptionNameSize()
 {
   int largest = 0;
@@ -601,10 +608,6 @@ void reportFailedTests(int failedTests, int totalTests)
 
 int main(int argc, char* argv[])
 {
-  // Set the Qt hash seed to 0 for consistent test results.
-  conf().set(ConfigOptions().getHashSeedZeroKey(), true);
-  qSetGlobalQHashSeed(0);
-
   if (argc == 1)
   {
     usage(argv[0]);
@@ -612,6 +615,11 @@ int main(int argc, char* argv[])
   }
   else
   {
+    // Set the Qt hash seed to 0 for consistent test results.
+    conf().set(ConfigOptions().getHashSeedZeroKey(), true);
+    qSetGlobalQHashSeed(0);
+
+    // Init hoot, as it handles loading any configured submodules.
     Hoot::getInstance();
     Log::getInstance().setLevel(Log::Warn);
 
@@ -649,11 +657,8 @@ int main(int argc, char* argv[])
       }
     }
 
-    QStringList args;
-    for (int i = 1; i < argc; i++)
-    {
-      args << argv[i];
-    }
+    QStringList args = BaseCommand::toQStringList(argv, argc);
+    LOG_VART(args);
 
     // This will run on a subsequent pass as part of --listen if --parallel was used.
     if (!args.contains("--parallel"))

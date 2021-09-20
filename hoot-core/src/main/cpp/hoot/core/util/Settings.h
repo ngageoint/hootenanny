@@ -130,10 +130,13 @@ public:
   bool hasKey(const QString& key) const { return _settings.contains(key); }
 
   /**
-   * Parses common arguments (e.g. "-D foo=bar --debug")
+   * @brief parseCommonArguments parses common arguments (e.g. "-D foo=bar --debug")
+   *
    * Any arguments parsed are removed from args.
+   * @param args TODO
+   * @param toIgnore TODO
    */
-  static void parseCommonArguments(QStringList& args);
+  static void parseCommonArguments(QStringList& args, const QStringList toIgnore = QStringList());
 
   void set(const QString& key, const char* value) { set(key, QString(value)); }
   void set(const QString& key, const std::string& value)

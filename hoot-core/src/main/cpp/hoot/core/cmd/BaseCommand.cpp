@@ -79,7 +79,7 @@ int BaseCommand::run(char* argv[], int argc)
   return runSimple(args);
 }
 
-QStringList BaseCommand::toQStringList(char* argv[], int argc) const
+QStringList BaseCommand::toQStringList(char* argv[], int argc)
 {
   QStringList result;
   for (int i = 0; i < argc; i++)

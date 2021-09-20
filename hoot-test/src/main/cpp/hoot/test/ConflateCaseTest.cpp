@@ -35,7 +35,12 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 
+#include <hoot/josm/validation/MapValidator.h>
+
 #include <hoot/test/TestSetup.h>
+
+// Qt
+#include <QFileInfo>
 
 namespace hoot
 {
@@ -118,6 +123,27 @@ void ConflateCaseTest::_runConflateCmd()
   {
     CPPUNIT_ASSERT_MESSAGE(QString("Maps do not match").toStdString(), false);
   }
+
+# ifdef HOOT_HAVE_JOSM
+  LOG_VART(ConfigOptions().getTestValidationEnable());
+  if (ConfigOptions().getTestValidationEnable())
+  {
+    const QString goldReportPath = _d.absolutePath() + "/validation-report";
+    QFileInfo goldReport(goldReportPath);
+    if (!goldReport.exists())
+    {
+      throw HootException("No gold validation report exists for case test: " + _d.absolutePath());
+    }
+
+    const QString outputReportPath = _d.absolutePath() + "/validated-output-report";
+    MapValidator().validate(QStringList(_d.absolutePath() + "/Output.osm"), outputReportPath);
+
+    if (FileUtils::readFully(goldReportPath) != FileUtils::readFully(outputReportPath))
+    {
+      CPPUNIT_ASSERT_MESSAGE(QString("Validation reports do not match").toStdString(), false);
+    }
+  }
+# endif
 }
 
 void ConflateCaseTest::_runMultiaryConflateCmd()
