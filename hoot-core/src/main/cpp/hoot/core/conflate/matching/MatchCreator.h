@@ -81,7 +81,7 @@ public:
   /**
    * Arguments are passed in by the MatchFactory.
    */
-  virtual void setArguments(QStringList /*args*/)
+  virtual void setArguments(const QStringList& /*args*/)
   {
     throw HootException("This match creator takes no arguments.");
   }

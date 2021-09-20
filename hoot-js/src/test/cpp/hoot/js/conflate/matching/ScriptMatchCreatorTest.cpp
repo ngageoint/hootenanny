@@ -28,9 +28,11 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/info/CreatorDescription.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/MapProjector.h>
+
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/conflate/matching/ScriptMatch.h>
 #include <hoot/js/conflate/matching/ScriptMatchCreator.h>
@@ -47,6 +49,7 @@ class ScriptMatchCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ScriptMatchCreatorTest);
   CPPUNIT_TEST(runIsCandidateTest);
+  CPPUNIT_TEST(runBadOneToManyRailOptionsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -87,6 +90,48 @@ public:
     way1->setStatus(Status::Unknown1);
     way1->getTags().clear();
     HOOT_STR_EQUALS(true, uut.isMatchCandidate(way1, map));
+  }
+
+  void runBadOneToManyRailOptionsTest()
+  {
+    ScriptMatchCreator uut;
+    QString exceptionMsg;
+
+    // No error here, despite empty option values, since one to many rail matching is turned off.
+    uut.setRunOneToManyRailMatching(
+      false, CreatorDescription::BaseFeatureType::Railway, QStringList(), QStringList());
+
+    // No error here, despite empty option values, since a non-rail feature type is passed in.
+    uut.setRunOneToManyRailMatching(
+      false, CreatorDescription::BaseFeatureType::Highway, QStringList(), QStringList());
+
+    // No error here since validation only errors on empty option values.
+    uut.setRunOneToManyRailMatching(
+      true, CreatorDescription::BaseFeatureType::Railway, QStringList("blah"), QStringList("blah"));
+
+    try
+    {
+      // Error here since one of the option values list is empty.
+      uut.setRunOneToManyRailMatching(
+        true, CreatorDescription::BaseFeatureType::Railway, QStringList(), QStringList("blah"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("No railway one to many identifying keys specified in"));
+
+    try
+    {
+      // Error here since one of the option values list is empty.
+      uut.setRunOneToManyRailMatching(
+        true, CreatorDescription::BaseFeatureType::Railway, QStringList("blah"), QStringList());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("No railway one to many transfer tag keys specified in"));
   }
 };
 
