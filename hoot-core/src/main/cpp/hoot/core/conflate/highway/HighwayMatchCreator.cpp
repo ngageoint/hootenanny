@@ -97,11 +97,11 @@ public:
   _classifier(classifier),
   _medianClassifier(medianClassifier),
   _sublineMatcher(sublineMatcher),
+  _threshold(threshold),
   _neighborCountMax(-1),
   _neighborCountSum(0),
   _elementsEvaluated(0),
   _searchRadius(ConfigOptions().getSearchRadiusHighway()),
-  _threshold(threshold),
   _tagAncestorDiff(tagAncestorDiff),
   _filter(filter),
   _numElementsVisited(0),
@@ -131,7 +131,7 @@ public:
     _elementsEvaluated++;
     int neighborCount = 0;
 
-    const bool medianMatchEnabled = ConfigOptions().getHighwayMedianToDualHighwayMatch();
+    const bool medianMatchEnabled = _medianClassifier.get();
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       if (elementBeingMatched != *it)
@@ -321,18 +321,22 @@ private:
   const ConstOsmMapPtr& _map;
   vector<ConstMatchPtr>& _result;
   set<ElementId> _empty;
+
   std::shared_ptr<HighwayClassifier> _classifier;
   std::shared_ptr<HighwayClassifier> _medianClassifier;
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
+  ConstMatchThresholdPtr _threshold;
+
   int _neighborCountMax;
   int _neighborCountSum;
   int _elementsEvaluated;
   Meters _searchRadius;
-  ConstMatchThresholdPtr _threshold;
+
   std::shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
+
   ElementCriterionPtr _filter;
 
-  // Used for finding neighbors
+  // used for finding neighbors
   std::shared_ptr<HilbertRTree> _index;
   deque<ElementId> _indexToEid;
 
@@ -346,13 +350,50 @@ HighwayMatchCreator::HighwayMatchCreator() :
 _classifier(
   Factory::getInstance().constructObject<HighwayClassifier>(
     ConfigOptions().getConflateMatchHighwayClassifier())),
-_medianClassifier(
-  Factory::getInstance().constructObject<HighwayClassifier>(
-    ConfigOptions().getConflateMatchHighwayMedianClassifier())),
 _sublineMatcher(
   SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway)),
 _tagAncestorDiff(std::make_shared<TagAncestorDifferencer>("highway"))
 {
+  // Enable/disable road median matching and validate associated configuration options.
+  setRunMedianMatching(
+    ConfigOptions().getHighwayMedianToDualHighwayMatch(),
+    ConfigOptions().getHighwayMedianIdentifyingTags(),
+    ConfigOptions().getHighwayMedianToDualHighwayTransferKeys());
+}
+
+void HighwayMatchCreator::setRunMedianMatching(
+  const bool runMatching, const QStringList& identifyingTags, const QStringList& transferKeys)
+{
+  if (runMatching)
+  {
+    QStringList identifyingTagsTemp = identifyingTags;
+    StringUtils::removeEmptyStrings(identifyingTagsTemp);
+    if (identifyingTagsTemp.empty())
+    {
+      throw IllegalArgumentException(
+        "No road median identifying tags specified in " +
+          ConfigOptions::getHighwayMedianIdentifyingTagsKey() + ".");
+    }
+
+    QStringList transferKeysTemp = transferKeys;
+    StringUtils::removeEmptyStrings(transferKeysTemp);
+    if (transferKeysTemp.empty())
+    {
+      throw IllegalArgumentException(
+        "No road median transfer tag keys specified in " +
+        ConfigOptions::getHighwayMedianToDualHighwayTransferKeysKey() + ".");
+    }
+
+    _medianClassifier =
+      Factory::getInstance().constructObject<HighwayClassifier>(
+        ConfigOptions().getConflateMatchHighwayMedianClassifier());
+  }
+  else
+  {
+    // HighwayMatchVisitor determines whether to run the median matching routine based on whether
+    // this variable is initialized.
+    _medianClassifier.reset();
+  }
 }
 
 MatchPtr HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)

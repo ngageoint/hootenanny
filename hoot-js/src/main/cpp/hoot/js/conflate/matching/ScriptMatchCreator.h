@@ -74,7 +74,8 @@ public:
   /**
    * Search the provided map for POI matches and add the matches to the matches vector.
    */
-  void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+  void createMatches(
+    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
     ConstMatchThresholdPtr threshold) override;
 
   /**
@@ -85,7 +86,7 @@ public:
   /**
    * @see MatchCreator
    */
-  void setArguments(QStringList args) override;
+  void setArguments(const QStringList& args) override;
 
   /**
    * Determines whether an element is a candidate for matching for this match creator
@@ -111,7 +112,22 @@ public:
    */
   QStringList getCriteria() const override;
 
+  /**
+   * @brief setRunOneToManyRailMatching toggles activation of the one to many rail matching routine
+   * when this instance runs Railway Conflation (uses Railway.js).
+   * @param runMatching turns one to many rail matching on/off
+   * @param scriptInfo determines which feature type is being conflated by this match creator
+   * @param identifyingKeys tags used to identify secondary one to many matching eligible rail
+   * features (only one must be satisfied)
+   * @param transferKeys
+   */
+  void setRunOneToManyRailMatching(
+    const bool runMatching, const CreatorDescription::BaseFeatureType& scriptInfo,
+    const QStringList& identifyingKeys, const QStringList& transferKeys);
+
 private:
+
+  friend class ScriptMatchCreatorTest;
 
   std::shared_ptr<PluginContext> _script;
   QString _scriptPath;
