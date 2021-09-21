@@ -187,6 +187,34 @@ public:
   static bool matchesWildcard(const QString& str, const QStringList& wildcards);
 
   /**
+   * @brief containsDuplicatePropertyKeys TODO
+   * @param input
+   * @param lineText
+   * @param separator
+   * @return
+   */
+  static bool containsDuplicatePropertyKeys(
+    const QStringList& input, const QString& lineText, const QString& separator);
+  /**
+   * @brief filterToPropertyKeysContaining TODO
+   * @param input
+   * @param lineText
+   * @param separator
+   * @return
+   */
+  static QStringList filterToPropertyKeysContaining(
+    const QStringList& input, const QString& lineText, const QString& separator);
+  /**
+   * @brief filterToPropertyValuesContaining TODO
+   * @param input
+   * @param lineText
+   * @param separator
+   * @return
+   */
+  static QStringList filterToPropertyValuesContaining(
+    const QStringList& input, const QString& lineText, const QString& separator);
+
+  /**
    * Determines if a string ends with any one of a group of strings
    *
    * @param input the string to examine
@@ -360,6 +388,9 @@ private:
 
   static QString _splitAndRemoveAtIndex(
     QStringList& input, const int index, const QString& separator);
+
+  static QStringList _filterToPropertiesContaining(
+    const QStringList& input, const QString& lineText, const QString& separator, const bool key);
 };
 
 }

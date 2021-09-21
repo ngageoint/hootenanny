@@ -431,4 +431,55 @@ void StringUtils::reverse(QStringList& strList)
   strList = QStringList::fromStdList(strStdList);
 }
 
+bool StringUtils::containsDuplicatePropertyKeys(
+  const QStringList& input, const QString& lineText, const QString& separator)
+{
+  QStringList keys;
+  for (int i = 0; i < input.size(); i++)
+  {
+    const QString text = input.at(i);
+    if (text.contains(lineText))
+    {
+      const QStringList textParts = text.split(separator);
+      if (textParts.size() == 2)
+      {
+        keys.append(textParts[0]);
+      }
+    }
+  }
+  return hasDuplicates(keys);
+}
+
+QStringList StringUtils::_filterToPropertiesContaining(
+  const QStringList& input, const QString& lineText, const QString& separator, const bool key)
+{
+  QStringList tokens;
+  const int index = key ? 0 : 1;
+  for (int i = 0; i < input.size(); i++)
+  {
+    const QString text = input.at(i);
+    if (text.contains(lineText))
+    {
+      const QStringList tokenParts = text.split(separator);
+      if (tokenParts.size() == 2)
+      {
+        tokens.append(tokenParts[index]);
+      }
+    }
+  }
+  return tokens;
+}
+
+QStringList StringUtils::filterToPropertyKeysContaining(
+  const QStringList& input, const QString& lineText, const QString& separator)
+{
+  return _filterToPropertiesContaining(input, lineText, separator, true);
+}
+
+QStringList StringUtils::filterToPropertyValuesContaining(
+  const QStringList& input, const QString& lineText, const QString& separator)
+{
+  return _filterToPropertiesContaining(input, lineText, separator, false);
+}
+
 }

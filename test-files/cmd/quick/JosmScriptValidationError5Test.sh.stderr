@@ -1,0 +1,1 @@
+In script test: JosmScriptValidationError5Test the number of files to validate specified by TO_VALIDATE: 1 does not match the number of validation report gold files specified by VALIDATION_REPORT_GOLD: 0

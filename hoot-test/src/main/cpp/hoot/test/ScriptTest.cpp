@@ -129,6 +129,16 @@ void ScriptTest::runTest()
 
   _runProcess();
 
+  // Run validation on test output if configured for it and a file to validate was specified in the
+  // script.
+# ifdef HOOT_HAVE_JOSM
+  LOG_VART(ConfigOptions().getTestValidationEnable());
+  if (ConfigOptions().getTestValidationEnable())
+  {
+    _runValidation();
+  }
+# endif
+
   if (QFile(_script + ".stdout").exists() == false || QFile(_script + ".stderr").exists() == false)
   {
     LOG_WARN("STDOUT or STDERR doesn't exist for " + _script +
@@ -238,16 +248,6 @@ void ScriptTest::runTest()
   {
     CPPUNIT_ASSERT_MESSAGE(QString("STDOUT or STDERR does not match").toStdString(), false);
   }
-
-  // Run validation on test output if configured for it and a file to validate was specified in the
-  // script.
-# ifdef HOOT_HAVE_JOSM
-  LOG_VART(ConfigOptions().getTestValidationEnable());
-  if (ConfigOptions().getTestValidationEnable())
-  {
-    _runValidation();
-  }
-# endif
 }
 
 void ScriptTest::_runDiff(const QString& file1, const QString& file2)
@@ -342,64 +342,92 @@ void ScriptTest::_runProcess()
   _stderr = QString::fromUtf8(p.readAllStandardError());
 }
 
-void ScriptTest::_runValidation() const
+void ScriptTest::_runValidation()
+{
+  QStringList filesToValidate;
+  QStringList goldValidationReports;
+  if (!_validateScriptForValidation(filesToValidate, goldValidationReports))
+  {
+    return;
+  }
+
+  assert(filesToValidate.size() == goldValidationReports.size());
+  const QString testName = QFileInfo(_script).completeBaseName();
+  for (int i = 0; i < filesToValidate.size(); i++)
+  {
+    TestOutputValidator::validate(testName, filesToValidate.at(i), goldValidationReports.at(i));
+  }
+}
+
+bool ScriptTest::_validateScriptForValidation(
+  QStringList& filesToValidate, QStringList& goldValidationReports)
 {
   const QString fileToValidatePropertyKey = "TO_VALIDATE";
   const QString validationReportGoldPropertyKey = "VALIDATION_REPORT_GOLD";
+  const QStringList scriptFileLines = FileUtils::readFileToLines(_script);
 
-  // TODO
-  if (FileUtils::containsDuplicatePropertyKeys(_script, fileToValidatePropertyKey, "="))
+  // Check for typo duplications of validation variables to save some tedious debugging later on.
+  if (StringUtils::containsDuplicatePropertyKeys(scriptFileLines, fileToValidatePropertyKey, "="))
   {
-    throw TestConfigurationException(
+    _stderr +=
       "Script test: " + _script + " has duplicated " + fileToValidatePropertyKey +
-      " property keys.");
+      " property keys." + "\n";
+    return false;
   }
-  if (FileUtils::containsDuplicatePropertyKeys(_script, validationReportGoldPropertyKey, "="))
+  if (StringUtils::containsDuplicatePropertyKeys(
+        scriptFileLines, validationReportGoldPropertyKey, "="))
   {
-    throw TestConfigurationException(
+    _stderr +=
       "Script test: " + _script + " has duplicated " + validationReportGoldPropertyKey +
-      " property keys.");
+      " property keys." + "\n";
+    return false;
   }
-  // TODO
+  // Since script tests can support multiple outputs and validations for each, we require that a
+  // numeric index be appended to each property key.
   const QString propKeyNonNumericEndErrorMsg = "property keys must end with a numeric character.";
   if (!StringUtils::allEndWithNumericChar(
-       FileUtils::readFileToPropertyKeysContaining(_script, fileToValidatePropertyKey, "=")))
+        StringUtils::filterToPropertyKeysContaining(
+          scriptFileLines, fileToValidatePropertyKey, "=")))
   {
-    throw TestConfigurationException(
-      fileToValidatePropertyKey + " " + propKeyNonNumericEndErrorMsg);
+    _stderr += fileToValidatePropertyKey + " " + propKeyNonNumericEndErrorMsg + "\n";
+    return false;
   }
   if (!StringUtils::allEndWithNumericChar(
-       FileUtils::readFileToPropertyKeysContaining(_script, validationReportGoldPropertyKey, "=")))
+        StringUtils::filterToPropertyKeysContaining(
+          scriptFileLines, validationReportGoldPropertyKey, "=")))
   {
-    throw TestConfigurationException(
-      validationReportGoldPropertyKey + " " + propKeyNonNumericEndErrorMsg);
+    _stderr += validationReportGoldPropertyKey + " " + propKeyNonNumericEndErrorMsg + "\n";
+    return false;
   }
 
   // If a test script contains TO_VALIDATE_<index>, that indicates it wants to perform validation on
   // a test output file. Validation is optional.
-  const QStringList filesToValidate =
-    FileUtils::readFileToPropertyValuesContaining(_script, fileToValidatePropertyKey, "=");
+  filesToValidate =
+    StringUtils::filterToPropertyValuesContaining(scriptFileLines, fileToValidatePropertyKey, "=");
+  LOG_VART(filesToValidate);
   if (!filesToValidate.empty())
   {
     // A validation report to compare with must also be specified with
     // VALIDATION_REPORT_GOLD_<index>. Both sets of file names are sorted so the indexes between the
     // two file lists will match up correctly if they were written in the script correctly.
-    const QStringList goldValidationReports =
-      FileUtils::readFileToPropertyValuesContaining(_script, validationReportGoldPropertyKey, "=");
-    const QString testName = QFileInfo(_script).completeBaseName() ;
+    goldValidationReports =
+      StringUtils::filterToPropertyValuesContaining(
+        scriptFileLines, validationReportGoldPropertyKey, "=");
+    LOG_VART(goldValidationReports);
+    const QString testName = QFileInfo(_script).completeBaseName();
     if (filesToValidate.size() != goldValidationReports.size())
     {
-      throw TestConfigurationException(
+      _stderr +=
         "In script test: " + testName + " the number of files to validate specified by " +
-        fileToValidatePropertyKey + ": " + QString::number(filesToValidate.size()) + " does " +
-        "not match the number of validation report gold files specified by " +
-        validationReportGoldPropertyKey + ": " + QString::number(goldValidationReports.size()));
-    }
-    for (int i = 0; i < filesToValidate.size(); i++)
-    {
-      TestOutputValidator::validate(testName, filesToValidate.at(i), goldValidationReports.at(i));
+        fileToValidatePropertyKey + ": " + QString::number(filesToValidate.size()) +
+        " does not match the number of validation report gold files specified by " +
+        validationReportGoldPropertyKey + ": " + QString::number(goldValidationReports.size()) +
+        "\n";
+      return false;
     }
   }
+
+  return true;
 }
 
 void ScriptTest::_writeFile(const QString& path, const QString& content)

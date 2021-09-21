@@ -76,7 +76,15 @@ private:
   /**
    * @brief _runValidation TODO
    */
-  void _runValidation() const;
+  void _runValidation();
+  /**
+   * @brief _validateScriptForValidation TODO
+   * @param filesToValidate
+   * @param goldValidationReports
+   * @return
+   */
+  bool _validateScriptForValidation(
+    QStringList& filesToValidate, QStringList& goldValidationReports);
 };
 
 }
