@@ -237,6 +237,8 @@ public class DbUtils {
         createQuery().delete(maps)
                 .where(maps.id.eq(mapId))
                 .execute();
+
+        deleteFolderMapping(mapId);
     }
 
     /**
@@ -321,7 +323,6 @@ public class DbUtils {
     }
 
     public static List<Tuple> getMapsForUser(Users user) {
-
         // return empty list if user is null
         if(user == null) {
             return Collections.emptyList();
@@ -333,19 +334,18 @@ public class DbUtils {
                 .leftJoin(folderMapMappings).on(folderMapMappings.mapId.eq(maps.id))
                 .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
                 .orderBy(maps.displayName.asc());
+
         // if user is not admin enforce visiblity rules
         // admins can see everything
         if (!UserResource.adminUserCheck(user)) {
             BooleanExpression isVisible = maps.userId.eq(user.getId()) // Owned by the current user
-                    // or not in a folder
-                    .or(folderMapMappings.id.isNull().or(folderMapMappings.folderId.eq(0L))
-                    // or in a public folder
-                    .or(folders.publicCol.isTrue()));
-                q.where(isVisible);
-        }
-        List<Tuple> mapLayerRecords = q.fetch();
+                .or(folderMapMappings.id.isNull().or(folderMapMappings.folderId.eq(0L)) // or not in a folder
+                .or(folders.publicCol.isTrue()));// or in a public folder
 
-        return mapLayerRecords;
+            q.where(isVisible);
+        }
+
+        return q.fetch();
     }
 
     /*
@@ -541,6 +541,16 @@ public class DbUtils {
                 .set(folderMapMappings.folderId, folderId)
                 .execute();
         }
+    }
+
+    /**
+     * Deletes the folder_map_mapping record with the specified mapId
+     * @param mapId
+     */
+    public static void deleteFolderMapping(Long mapId) {
+        createQuery().delete(folderMapMappings)
+            .where(folderMapMappings.mapId.eq(mapId))
+            .execute();
     }
 
     public static Map<String, String> getMapsTableTags(long mapId) {
