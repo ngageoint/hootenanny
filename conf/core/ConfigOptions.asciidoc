@@ -5857,7 +5857,7 @@ debugging tests which may hang on a remote build server.
 * Data Type: bool
 * Default Value: `false`
 
-TODO
+Enables validation of test output for selected tests.
 
 === token.keep.non.words
 
