@@ -126,12 +126,15 @@ public:
   WarningLevel getLevel() const { return _level; }
   void setLevel(WarningLevel l);
 
+  void setDecorateLogs(bool decorate) { _decorateLogs = decorate; }
+
 private:
 
   WarningLevel _level;
   static int _warnMessageLimit;
   QStringList _includeClassFilter;
   QStringList _excludeClassFilter;
+  bool _decorateLogs;
 
   Log();
   /** Default destructor */
@@ -150,6 +153,9 @@ private:
    * This isn't really a bug, but just something to be aware of.
    */
   bool _passesFilter(const std::string& prettyFunction);
+  /** Get ANSI color codes for output in logs based on log level */
+  const char* beginDecoration(WarningLevel l) const;
+  const char* endDecoration() const;
 };
 
 /**
@@ -201,7 +207,7 @@ private:
 #define PROGRESS_DEBUG(str) { PROGRESS_LEVEL(hoot::Log::Debug, str) }
 #define PROGRESS_TRACE(str) { PROGRESS_LEVEL(hoot::Log::Trace, str) }
 
-/// print out a variable along w/ it's value. E.g. int a = 3; LOG_VAR(a); => logs "a: 3"
+/// print out a variable along w/ its value. E.g. int a = 3; LOG_VAR(a); => logs "a: 3"
 #define LOG_VART(var) LOG_TRACE(#var << ": " << (var))
 #define LOG_VARD(var) LOG_DEBUG(#var << ": " << (var))
 #define LOG_VARI(var) LOG_INFO(#var << ": " << (var))

@@ -69,14 +69,16 @@ private:
    * LOG statements of info or debug.
    */
   QString _removeIgnoredSubstrings(const QString& input) const;
+  /** Remove the coloring markings from the script output */
+  QString _removeLogColoring(const QString& input) const;
 
   void _runDiff(const QString& file1, const QString& file2);
   void _runProcess();
-
   /**
    * @brief _runValidation TODO
    */
   void _runValidation();
+
   /**
    * @brief _validateScriptForValidation TODO
    * @param filesToValidate
