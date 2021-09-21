@@ -49,11 +49,17 @@ public:
    */
   virtual void runTest();
 
-protected:
+private:
 
   void _runConflateCmd() const;
   void _runMultiaryConflateCmd() const;
 
+  /**
+   * @brief _runValidation TODO
+   * @param testName
+   * @param testOutputPath
+   * @param goldValidationReportPath
+   */
   void _runValidation(
     const QString& testName, const QString& testOutputPath,
     const QString& goldValidationReportPath) const;

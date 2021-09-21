@@ -49,10 +49,23 @@ public:
    * @param testName
    * @param testOutputPath
    * @param goldValidationReportPath
+   * @param caseTest
    */
   static void validate(
     const QString& testName, const QString& testOutputPath,
-    const QString& goldValidationReportPath);
+    const QString& goldValidationReportPath, const bool caseTest = false);
+
+private:
+
+  /**
+   * @brief _validateGoldReport TODO
+   * @param testName
+   * @param goldValidationReportPath
+   * @param caseTest
+   * @return
+   */
+  static bool _validateGoldReport(
+    const QString& testName, const QString& goldValidationReportPath, const bool caseTest);
 };
 
 }

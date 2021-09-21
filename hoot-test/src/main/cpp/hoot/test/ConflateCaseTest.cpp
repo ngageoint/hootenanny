@@ -211,7 +211,8 @@ void ConflateCaseTest::runTest()
     if (ConfigOptions().getTestValidationEnable())
     {
       TestOutputValidator::validate(
-        _d.dirName(), _d.absolutePath() + "/Output.osm", _d.absolutePath() + "/validation-report");
+        _d.dirName(), _d.absolutePath() + "/Output.osm", _d.absolutePath() + "/validation-report",
+        true);
     }
   # endif
   }

@@ -32,6 +32,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 #include <hoot/test/validation/TestOutputValidator.h>
 
@@ -343,19 +344,61 @@ void ScriptTest::_runProcess()
 
 void ScriptTest::_runValidation() const
 {
-  const QString fileToValidate = FileUtils::readFileToLineContaining(_script, "TO_VALIDATE");
-  if (!fileToValidate.isEmpty())
+  const QString fileToValidatePropertyKey = "TO_VALIDATE";
+  const QString validationReportGoldPropertyKey = "VALIDATION_REPORT_GOLD";
+
+  // TODO
+  if (FileUtils::containsDuplicatePropertyKeys(_script, fileToValidatePropertyKey, "="))
   {
-    const QString goldValidationReport =
-      FileUtils::readFileToLineContaining(_script, "VALIDATION_REPORT_GOLD");
-    if (goldValidationReport.isEmpty())
+    throw TestConfigurationException(
+      "Script test: " + _script + " has duplicated " + fileToValidatePropertyKey +
+      " property keys.");
+  }
+  if (FileUtils::containsDuplicatePropertyKeys(_script, validationReportGoldPropertyKey, "="))
+  {
+    throw TestConfigurationException(
+      "Script test: " + _script + " has duplicated " + validationReportGoldPropertyKey +
+      " property keys.");
+  }
+  // TODO
+  const QString propKeyNonNumericEndErrorMsg = "property keys must end with a numeric character.";
+  if (!StringUtils::allEndWithNumericChar(
+       FileUtils::readFileToPropertyKeysContaining(_script, fileToValidatePropertyKey, "=")))
+  {
+    throw TestConfigurationException(
+      fileToValidatePropertyKey + " " + propKeyNonNumericEndErrorMsg);
+  }
+  if (!StringUtils::allEndWithNumericChar(
+       FileUtils::readFileToPropertyKeysContaining(_script, validationReportGoldPropertyKey, "=")))
+  {
+    throw TestConfigurationException(
+      validationReportGoldPropertyKey + " " + propKeyNonNumericEndErrorMsg);
+  }
+
+  // If a test script contains TO_VALIDATE_<index>, that indicates it wants to perform validation on
+  // a test output file. Validation is optional.
+  const QStringList filesToValidate =
+    FileUtils::readFileToPropertyValuesContaining(_script, fileToValidatePropertyKey, "=");
+  if (!filesToValidate.empty())
+  {
+    // A validation report to compare with must also be specified with
+    // VALIDATION_REPORT_GOLD_<index>. Both sets of file names are sorted so the indexes between the
+    // two file lists will match up correctly if they were written in the script correctly.
+    const QStringList goldValidationReports =
+      FileUtils::readFileToPropertyValuesContaining(_script, validationReportGoldPropertyKey, "=");
+    const QString testName = QFileInfo(_script).completeBaseName() ;
+    if (filesToValidate.size() != goldValidationReports.size())
     {
       throw TestConfigurationException(
-        "File to validate: ..." + fileToValidate.right(25) +
-        " but no report vaildation gold file specified with VALIDATION_REPORT_GOLD.");
+        "In script test: " + testName + " the number of files to validate specified by " +
+        fileToValidatePropertyKey + ": " + QString::number(filesToValidate.size()) + " does " +
+        "not match the number of validation report gold files specified by " +
+        validationReportGoldPropertyKey + ": " + QString::number(goldValidationReports.size()));
     }
-    TestOutputValidator::validate(
-      QFileInfo(_script).baseName(), fileToValidate, goldValidationReport);
+    for (int i = 0; i < filesToValidate.size(); i++)
+    {
+      TestOutputValidator::validate(testName, filesToValidate.at(i), goldValidationReports.at(i));
+    }
   }
 }
 

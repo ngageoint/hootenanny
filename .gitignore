@@ -170,7 +170,7 @@ coverage/
 userfiles/
 test-files/cases/**/out
 test-files/cases/**/validated-output-report
-test-files/cases/**/ValidatedOutput.osm
+test-files/cases/**/Output-validated.osm
 .bundle/
 vendor/
 

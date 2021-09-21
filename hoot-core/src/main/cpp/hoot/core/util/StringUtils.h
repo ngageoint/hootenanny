@@ -125,6 +125,12 @@ public:
    * @return a collection of duplicated strings
    */
   static QSet<QString> getDuplicates(const QStringList& input);
+  /**
+   * @brief hasDuplicates TODO
+   * @param input
+   * @return
+   */
+  static bool hasDuplicates(const QStringList& input);
 
   /**
    * Determines whether any string in a list of strings contains a substring
@@ -214,6 +220,12 @@ public:
   static QString endsWithAnyAsStr(
     const QString& input, const QStringList& compareList,
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
+  /**
+   * @brief allEndWithNumericChar TODO
+   * @param input
+   * @return
+   */
+  static bool allEndWithNumericChar(const QStringList& input);
 
   /**
    * Determines if a string contains a matching instance of any one of a group of regular

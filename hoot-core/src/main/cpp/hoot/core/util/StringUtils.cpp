@@ -178,6 +178,11 @@ QSet<QString> StringUtils::getDuplicates(const QStringList& input)
   return duplicateStrings;
 }
 
+bool StringUtils::hasDuplicates(const QStringList& input)
+{
+  return getDuplicates(input).size() > 0;
+}
+
 bool StringUtils::containsSubstring(
   const QStringList& input, const QString& substring, Qt::CaseSensitivity caseSensitivity)
 {
@@ -328,6 +333,20 @@ QString StringUtils::endsWithAnyAsStr(
     }
   }
   return "";
+}
+
+bool StringUtils::allEndWithNumericChar(const QStringList& input)
+{
+  for (int i = 0; i < input.size(); i++)
+  {
+    const QString text = input.at(i);
+    if (!text.at(text.size() - 1).isDigit())
+    {
+      LOG_TRACE("Not numeric: " << text);
+      return false;
+    }
+  }
+  return true;
 }
 
 bool StringUtils::bisectsAny(const QString& input, const QList<QRegExp>& toCompare)

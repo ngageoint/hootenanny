@@ -45,40 +45,111 @@ namespace hoot
 
 void TestOutputValidator::validate(
   const QString& testName, const QString& testOutputPath,
-  const QString& goldValidationReportPath)
+  const QString& goldValidationReportPath, const bool caseTest)
 {
+  # ifndef HOOT_HAVE_JOSM
+    throw IllegalArgumentException("Test output validation requires compilation --with-josm.");
+  # endif
+
+  LOG_VART(testName);
+  LOG_VART(testOutputPath);
+  LOG_VART(goldValidationReportPath);
+
+  // TODO
+  if (!_validateGoldReport(testName, goldValidationReportPath, caseTest))
+  {
+    return;
+  }
+
+  QFileInfo goldValidationReport(goldValidationReportPath);
+  QFileInfo testOutput(testOutputPath);
+  // e.g. For case tests, a gold validation report from the test input dir, "validation-report",
+  // yields a test output validation report of "validated-output-report" in the output dir. All case
+  // test gold validation report must be named exactly as "validation-report". For script tests, a
+  // gold validation report from the test input dir, "output-validation-report", yields a test
+  // output validation report of "output-validated-output-report". All script test gold validation
+  // reports should have the base name of the output test file prefixed to "validation-report". The
+  // difference between case and script test naming conventions is due to the fact that all case
+  // tests only have a single output being validated, but a script test may have multiple outputs
+  // being validated.
+  const QString outputValidationReportPath =
+    testOutput.dir().absolutePath() + "/" +
+    goldValidationReport.completeBaseName().replace("validation-report", "validated-output-report");
+  LOG_VART(outputValidationReportPath);
+  // e.g. A "Output.osm" test output as input yields a "Output-validated.osm" validated test output.
+  // The same behavior occurs for both case and script tests.
+  const QString validatedOutputPath =
+    testOutput.dir().absolutePath() + "/" +
+    testOutput.completeBaseName().replace(
+      testOutput.baseName(), testOutput.baseName() + "-validated.") + testOutput.completeSuffix();
+  LOG_VART(validatedOutputPath);
+
+  # ifdef HOOT_HAVE_JOSM
+    // Write our validated output and validation report. The validated output is for debugging
+    // purposes only and is not compared to anything.
+    MapValidator validator;
+    validator.setReportPath(outputValidationReportPath);
+    validator.validate(QStringList(testOutputPath), validatedOutputPath);
+  # endif
+
+  // Compare the validation reports and fail if there are any differences.
+  if (FileUtils::readFully(goldValidationReportPath) !=
+      FileUtils::readFully(outputValidationReportPath))
+  {
+    CPPUNIT_ASSERT_MESSAGE(
+      QString(
+        "Validation reports for test: " + testName + " do not match: " + goldValidationReportPath +
+        " and " + outputValidationReportPath)
+      .toStdString(),
+      false);
+  }
+}
+
+bool TestOutputValidator::_validateGoldReport(
+  const QString& testName, const QString& goldValidationReportPath, const bool caseTest)
+{
+  // TODO
+  QString goldValidationReportPathEndText = "validation-report";
+  if (!caseTest)
+  {
+    goldValidationReportPathEndText.prepend("-");
+  }
   // Make sure we have a base validation report to compare against.
+  if (!goldValidationReportPath.endsWith(goldValidationReportPathEndText))
+  {
+    QString errorMsg;
+    if (caseTest)
+    {
+      errorMsg =
+        QString("Validation report gold files for case tests should follow the naming ") +
+        QString("convention: \"validation-report\".");
+    }
+    else
+    {
+      errorMsg =
+        QString("Validation report gold files for script tests should follow the naming ") +
+        QString("convention: <testOutputFileBaseName>-validation-report. e.g. a gold report ") +
+        QString("named: \"output-validation-report\" for the test output: \"output.osm\"");
+    }
+    throw TestConfigurationException(errorMsg);
+  }
   const QString goldValidationReportOffPath = goldValidationReportPath + ".off";
   QFileInfo goldValidationReport(goldValidationReportPath);
   QFileInfo goldValidationReportOff(goldValidationReportOffPath);
   if (!goldValidationReport.exists() && !goldValidationReportOff.exists())
   {
-    throw TestConfigurationException("No gold validation report exists for test: " + testName);
+    throw TestConfigurationException(
+      "No gold validation report exists for test: " + testName + " at: " +
+      goldValidationReportPath);
   }
   // If we have an .off file present, skip validation.
   if (goldValidationReportOff.exists())
   {
-    LOG_STATUS("Skipping validation for " << testName);
-    return;
+    LOG_STATUS("Skipping validation for " << testName << ".");
+    return false;
   }
 
-  const QString outputValidationReportPath =
-    goldValidationReport.dir().absolutePath() + "/validated-output-report";
-  QFileInfo testOutput(testOutputPath);
-  const QString validatedOutputPath = testOutput.dir().absolutePath() + "/ValidatedOutput.osm";
-
-  // Write our validated output and validation report. The validated output is for debugging
-  // purposes only and is not compared to anything.
-  MapValidator validator;
-  validator.setReportPath(outputValidationReportPath);
-  validator.validate(QStringList(testOutputPath), validatedOutputPath);
-
-  // Compare the validation reports.
-  if (FileUtils::readFully(goldValidationReportPath) !=
-      FileUtils::readFully(outputValidationReportPath))
-  {
-    CPPUNIT_ASSERT_MESSAGE(QString("Validation reports do not match").toStdString(), false);
-  }
+  return true;
 }
 
 }

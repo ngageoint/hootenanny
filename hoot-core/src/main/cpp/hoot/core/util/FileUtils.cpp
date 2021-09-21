@@ -27,6 +27,9 @@
 
 #include "FileUtils.h"
 
+// Hoot
+#include <hoot/core/util/StringUtils.h>
+
 // Qt
 #include <QFileInfoList>
 #include <QHostAddress>
@@ -224,12 +227,95 @@ QStringList FileUtils::readFileToList(const QString& inputPath, const bool toLow
 
 QString FileUtils::readFileToLineContaining(const QString& inputPath, const QString& lineText)
 {
-  const QStringList matchingFileLines = readFileToList(inputPath).filter(lineText);
+  QStringList matchingFileLines = readFileToList(inputPath).filter(lineText);
   if (matchingFileLines.size() == 0)
   {
     return "";
   }
+  matchingFileLines.sort();
   return matchingFileLines.at(0);
+}
+
+QStringList FileUtils::readFileToLinesContaining(const QString& inputPath, const QString& lineText)
+{
+  QStringList matchingFileLines = readFileToList(inputPath).filter(lineText);
+  matchingFileLines.sort();
+  return matchingFileLines;
+}
+
+QString FileUtils::readFileToPropertyKeyContaining(
+  const QString& inputPath, const QString& lineText, const QString& separator)
+{
+  return _readFileToPropertyContaining(inputPath, lineText, separator, true);
+}
+
+QStringList FileUtils::readFileToPropertyKeysContaining(
+  const QString& inputPath, const QString& lineText, const QString& separator)
+{
+  return _readFileToPropertiesContaining(inputPath, lineText, separator, true);
+}
+
+QString FileUtils::readFileToPropertyValueContaining(
+  const QString& inputPath, const QString& lineText, const QString& separator)
+{
+  return _readFileToPropertyContaining(inputPath, lineText, separator, false);
+}
+
+QStringList FileUtils::readFileToPropertyValuesContaining(
+  const QString& inputPath, const QString& lineText, const QString& separator)
+{
+  return _readFileToPropertiesContaining(inputPath, lineText, separator, false);
+}
+
+QString FileUtils::_readFileToPropertyContaining(
+  const QString& inputPath, const QString& lineText, const QString& separator, const bool key)
+{
+  const QString fileLine = readFileToLineContaining(inputPath, lineText);
+  if (fileLine.isEmpty())
+  {
+    return "";
+  }
+  const QStringList fileLineParts = fileLine.split(separator);
+  if (fileLineParts.size() != 2)
+  {
+    return "";
+  }
+  const int index = key ? 0 : 1;
+  return fileLineParts[index];
+}
+
+QStringList FileUtils::_readFileToPropertiesContaining(
+  const QString& inputPath, const QString& lineText, const QString& separator, const bool key)
+{
+  QStringList values;
+  QStringList fileLines = readFileToLinesContaining(inputPath, lineText);
+  fileLines.sort();
+  const int index = key ? 0 : 1;
+  for (int i = 0; i < fileLines.size(); i++)
+  {
+    const QStringList fileLineParts = fileLines.at(i).split(separator);
+    if (fileLineParts.size() == 2)
+    {
+      values.append(fileLineParts[index]);
+    }
+  }
+  return values;
+}
+
+bool FileUtils::containsDuplicatePropertyKeys(
+  const QString& inputPath, const QString& lineText, const QString& separator)
+{
+  QStringList keys;
+  const QStringList fileLines = readFileToLinesContaining(inputPath, lineText);
+  for (int i = 0; i < fileLines.size(); i++)
+  {
+    const QStringList fileLineParts = fileLines.at(i).split(separator);
+    if (fileLineParts.size() == 2)
+    {
+      keys.append(fileLineParts[0]);
+    }
+  }
+  return StringUtils::hasDuplicates(keys);
 }
 
 QString FileUtils::toLogFormat(QString url, int characters)

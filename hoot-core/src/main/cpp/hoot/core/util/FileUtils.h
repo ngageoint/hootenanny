@@ -95,6 +95,58 @@ public:
    * @return
    */
   static QString readFileToLineContaining(const QString& inputPath, const QString& lineText);
+  /**
+   * @brief readFileToLinesContaining TODO
+   * @param inputPath
+   * @param lineText
+   * @return
+   */
+  static QStringList readFileToLinesContaining(const QString& inputPath, const QString& lineText);
+  /**
+   * @brief readFileToPropertyValueContaining TODO
+   * @param inputPath
+   * @param lineText
+   * @param separator
+   * @return
+   */
+  static QString readFileToPropertyValueContaining(
+    const QString& inputPath, const QString& lineText, const QString& separator);
+  /**
+   * @brief readFileToPropertyValuesContaining TODO
+   * @param inputPath
+   * @param lineText
+   * @param separator
+   * @return
+   */
+  static QStringList readFileToPropertyValuesContaining(
+    const QString& inputPath, const QString& lineText, const QString& separator);
+  /**
+   * @brief readFileToPropertyKeyContaining TODO
+   * @param inputPath
+   * @param lineText
+   * @param separator
+   * @return
+   */
+  static QString readFileToPropertyKeyContaining(
+    const QString& inputPath, const QString& lineText, const QString& separator);
+  /**
+   * @brief readFileToPropertyKeysContaining TODO
+   * @param inputPath
+   * @param lineText
+   * @param separator
+   * @return
+   */
+  static QStringList readFileToPropertyKeysContaining(
+    const QString& inputPath, const QString& lineText, const QString& separator);
+  /**
+   * @brief containsDuplicatePropertyKeys TODO
+   * @param inputPath
+   * @param lineText
+   * @param separator
+   * @return
+   */
+  static bool containsDuplicatePropertyKeys(
+    const QString& inputPath, const QString& lineText, const QString& separator);
 
   /**
    * Writes an entire file to string.  Closes the file on success.
@@ -130,6 +182,13 @@ public:
    */
   static QString toLogFormat(QString url, int characters = -1);
   static QString toLogFormat(QStringList urls, int characters = -1);
+
+private:
+
+  static QString _readFileToPropertyContaining(
+    const QString& inputPath, const QString& lineText, const QString& separator, const bool key);
+  static QStringList _readFileToPropertiesContaining(
+    const QString& inputPath, const QString& lineText, const QString& separator, const bool key);
 };
 
 }
