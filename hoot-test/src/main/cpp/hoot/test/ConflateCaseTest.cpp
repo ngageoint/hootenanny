@@ -209,7 +209,7 @@ void ConflateCaseTest::_runValidation() const
     throw TestConfigurationException(
       "No gold validation report exists for case test: " + _d.absolutePath());
   }
-  // If we have a .off file, skip validation.
+  // If we have an .off file present, skip validation.
   if (goldReportOff.exists())
   {
     LOG_STATUS("Skipping validation for " << _d.absolutePath());
@@ -217,7 +217,7 @@ void ConflateCaseTest::_runValidation() const
   }
 
   // Write our validated output and validation report. The validated output is for debugging
-  // purposes only.
+  // purposes only and is not compared to anything.
   const QString outputReportPath = _d.absolutePath() + "/validated-output-report";
   QString conflateOutputPath = _d.absolutePath() + "/Output.osm";
   QString validatedOutputPath = conflateOutputPath.replace("Output.osm", "ValidatedOutput.osm");

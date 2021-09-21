@@ -44,8 +44,9 @@ class ScriptTest : public CppUnit::TestCase
 {
 public:
 
-  ScriptTest(QString script, bool printDiff, bool suppressFailureDetail = false,
-             int waitToFinishTime = 30000);
+  ScriptTest(
+    const QString& script, bool printDiff, bool suppressFailureDetail = false,
+    int waitToFinishTime = 30000);
 
   virtual void runTest();
 
@@ -59,19 +60,17 @@ private:
   /** Timeout before emitting warning "Waiting for process to finish" in msecs */
   int _waitToFinishTime;
 
-  QString _readFile(QString path);
-  void _writeFile(QString path, QString content);
-
-  void _removeFile(QString path);
+  QString _readFile(const QString& path);
+  void _writeFile(const QString& path, const QString& content);
+  void _removeFile(const QString& path);
 
   /**
    * Given an input string remove any strings that aren't relevant to testing. Examples include
    * LOG statements of info or debug.
    */
-  QString _removeIgnoredSubstrings(QString input) const;
+  QString _removeIgnoredSubstrings(const QString& input) const;
 
-  void _runDiff(QString file1, QString file2);
-
+  void _runDiff(const QString& file1, const QString& file2);
   void _runProcess();
 };
 

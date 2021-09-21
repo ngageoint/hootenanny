@@ -45,7 +45,7 @@ namespace hoot
 {
 
 ScriptTest::ScriptTest(
-  QString script, bool printDiff, bool suppressFailureDetail, int waitToFinishTime) :
+  const QString& script, bool printDiff, bool suppressFailureDetail, int waitToFinishTime) :
 CppUnit::TestCase(script.toStdString()),
 _printDiff(printDiff),
 _suppressFailureDetail(suppressFailureDetail),
@@ -54,7 +54,7 @@ _waitToFinishTime(waitToFinishTime)
 {
 }
 
-QString ScriptTest::_readFile(QString path)
+QString ScriptTest::_readFile(const QString& path)
 {
   QFile fp(path);
 
@@ -66,7 +66,7 @@ QString ScriptTest::_readFile(QString path)
   return QString::fromUtf8(fp.readAll());
 }
 
-void ScriptTest::_removeFile(QString path)
+void ScriptTest::_removeFile(const QString& path)
 {
   QFile f(path);
 
@@ -79,7 +79,7 @@ void ScriptTest::_removeFile(QString path)
   }
 }
 
-QString ScriptTest::_removeIgnoredSubstrings(QString output) const
+QString ScriptTest::_removeIgnoredSubstrings(const QString& output) const
 {
   QStringList outLines;
   QStringList inLines = output.split("\n");
@@ -140,8 +140,7 @@ void ScriptTest::runTest()
              "  Make a new baseline:\n"
              "    mv " + _script + ".stdout.first " + _script + ".stdout\n"
              "    mv " + _script + ".stderr.first " + _script + ".stderr\n"
-             "*************************\n"
-             );
+             "*************************\n");
 
     _baseStderr = "<invalid/>";
     _baseStdout = "<invalid/>";
@@ -237,7 +236,7 @@ void ScriptTest::runTest()
   }
 }
 
-void ScriptTest::_runDiff(QString file1, QString file2)
+void ScriptTest::_runDiff(const QString& file1, const QString& file2)
 {
   QProcess p;
   p.start("diff", QStringList() << file1 << file2, QProcess::ReadOnly);
@@ -285,8 +284,8 @@ void ScriptTest::_runDiff(QString file1, QString file2)
 
 void ScriptTest::_runProcess()
 {
-  // TODO: It would be nice if we could specify Testing.conf here to avoid having to specify it
-  // in every test files (#3823).
+  // TODO: It would be nice if we could specify Testing.conf here to avoid having to specify it in
+  // every test file (#3823).
   QProcess p;
   p.start(_script, QProcess::ReadOnly);
 
@@ -329,7 +328,7 @@ void ScriptTest::_runProcess()
   _stderr = QString::fromUtf8(p.readAllStandardError());
 }
 
-void ScriptTest::_writeFile(QString path, QString content)
+void ScriptTest::_writeFile(const QString& path, const QString& content)
 {
   QFile fp(path);
 
