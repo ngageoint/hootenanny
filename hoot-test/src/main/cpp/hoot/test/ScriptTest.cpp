@@ -31,6 +31,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/LogColor.h>
 
 // Qt
 #include <QCoreApplication>
@@ -44,7 +45,7 @@ using namespace std;
 namespace hoot
 {
 
-ScriptTest::ScriptTest(QString script, bool printDiff, bool suppressFailureDetail,
+ScriptTest::ScriptTest(const QString& script, bool printDiff, bool suppressFailureDetail,
                        int waitToFinishTime)
   : CppUnit::TestCase(script.toStdString()),
     _printDiff(printDiff),
@@ -54,7 +55,7 @@ ScriptTest::ScriptTest(QString script, bool printDiff, bool suppressFailureDetai
 {
 }
 
-QString ScriptTest::_readFile(QString path)
+QString ScriptTest::_readFile(const QString& path)
 {
   QFile fp(path);
 
@@ -66,7 +67,7 @@ QString ScriptTest::_readFile(QString path)
   return QString::fromUtf8(fp.readAll());
 }
 
-void ScriptTest::_removeFile(QString path)
+void ScriptTest::_removeFile(const QString& path)
 {
   QFile f(path);
 
@@ -79,10 +80,10 @@ void ScriptTest::_removeFile(QString path)
   }
 }
 
-QString ScriptTest::_removeIgnoredSubstrings(QString output) const
+QString ScriptTest::_removeIgnoredSubstrings(const QString& input) const
 {
   QStringList outLines;
-  QStringList inLines = output.split("\n");
+  QStringList inLines = input.split("\n");
 
   // takes the form: "09:34:21.635 WARN  src/main/cpp/hoot/core/io/OsmPbfReader.cpp(455) - "
   QRegExp reWarn("[0-9:\\.]+ WARN  .*\\( *-?[0-9]+\\) ");
@@ -109,6 +110,13 @@ QString ScriptTest::_removeIgnoredSubstrings(QString output) const
   return outLines.join("\n");
 }
 
+QString ScriptTest::_removeLogColoring(const QString& input) const
+{
+  QString output = input;
+  output.replace(LogColor::ColorRegex, "");
+  return output;
+}
+
 void ScriptTest::runTest()
 {
   // before we start remove any temporary files that we generated last time.
@@ -125,23 +133,26 @@ void ScriptTest::runTest()
 
   _runProcess();
 
+  //  Replace colored text in the standard out
+  _stdout.replace(LogColor::ColorRegex, "");
+
   if (QFile(_script + ".stdout").exists() == false || QFile(_script + ".stderr").exists() == false)
   {
-    LOG_WARN("STDOUT or STDERR doesn't exist for " + _script +
-             "\n*************************\n"
-             "  This can be resolved by reviewing the output for correctness and then \n"
-             "  creating a new baseline. E.g.\n"
-             "  verify: \n"
-             "    less " + _script + ".stdout.first\n"
-             "    less " + _script + ".stderr.first\n"
-             "  ### NOTE: If the test is comparing against a known good file (e.g. .osm\n"
-             "  ### then it may be better to update that file. You'll have to look at\n"
-             "  ### the source files to be sure.\n"
-             "  Make a new baseline:\n"
-             "    mv " + _script + ".stdout.first " + _script + ".stdout\n"
-             "    mv " + _script + ".stderr.first " + _script + ".stderr\n"
-             "*************************\n"
-             );
+    LOG_ERROR("STDOUT or STDERR doesn't exist for " + _script +
+              "\n*************************\n"
+              "  This can be resolved by reviewing the output for correctness and then \n"
+              "  creating a new baseline. E.g.\n"
+              "  verify: \n"
+              "    less " + _script + ".stdout.first\n"
+              "    less " + _script + ".stderr.first\n"
+              "  ### NOTE: If the test is comparing against a known good file (e.g. .osm\n"
+              "  ### then it may be better to update that file. You'll have to look at\n"
+              "  ### the source files to be sure.\n"
+              "  Make a new baseline:\n"
+              "    mv " + _script + ".stdout.first " + _script + ".stdout\n"
+              "    mv " + _script + ".stderr.first " + _script + ".stderr\n"
+              "*************************"
+              );
 
     _baseStderr = "<invalid/>";
     _baseStdout = "<invalid/>";
@@ -167,11 +178,11 @@ void ScriptTest::runTest()
       "STDOUT does not match for:\n" + _script + ".stdout" + " " + _script + ".stdout.failed";
     if (_suppressFailureDetail)
     {
-      LOG_WARN(msg);
+      LOG_ERROR(msg);
     }
     else if (_printDiff)
     {
-      LOG_WARN(msg);
+      LOG_ERROR(msg);
       _runDiff(_script + ".stdout.stripped", _script + ".stdout.failed.stripped");
     }
     else
@@ -187,8 +198,8 @@ void ScriptTest::runTest()
              "  ### the source files to be sure.\n"
              "  Make a new baseline:\n"
              "    mv " + _script + ".stdout.failed " + _script + ".stdout\n"
-             "*************************\n";
-      LOG_WARN(msg);
+             "*************************";
+      LOG_ERROR(msg);
     }
 
     failed = true;
@@ -204,11 +215,11 @@ void ScriptTest::runTest()
       "STDERR does not match for:\n" + _script + ".stderr" + " " + _script + ".stderr.failed";
     if (_suppressFailureDetail)
     {
-      LOG_WARN(msg);
+      LOG_ERROR(msg);
     }
     else if (_printDiff)
     {
-      LOG_WARN(msg);
+      LOG_ERROR(msg);
       _runDiff(_script + ".stderr.stripped", _script + ".stderr.failed.stripped");
     }
     else
@@ -224,8 +235,8 @@ void ScriptTest::runTest()
              "  ### the source files to be sure.\n"
              "  Make a new baseline:\n"
              "    mv " + _script + ".stderr.failed " + _script + ".stderr\n"
-             "*************************\n";
-      LOG_WARN(msg);
+             "*************************";
+      LOG_ERROR(msg);
     }
 
     failed = true;
@@ -237,7 +248,7 @@ void ScriptTest::runTest()
   }
 }
 
-void ScriptTest::_runDiff(QString file1, QString file2)
+void ScriptTest::_runDiff(const QString& file1, const QString& file2)
 {
   QProcess p;
   p.start("diff", QStringList() << file1 << file2, QProcess::ReadOnly);
@@ -272,7 +283,7 @@ void ScriptTest::_runDiff(QString file1, QString file2)
     const qint64 timeElapsedSeconds = timer.elapsed() / 1000;
     if (scriptTimeOutSpecified && timeElapsedSeconds >= scriptTestTimeOutSeconds)
     {
-      LOG_WARN("Forcefully ending test script test after " << timeElapsedSeconds << " seconds.");
+      LOG_ERROR("Forcefully ending test script test after " << timeElapsedSeconds << " seconds.");
       break;
     }
   }
@@ -320,7 +331,7 @@ void ScriptTest::_runProcess()
     const qint64 timeElapsedSeconds = timer.elapsed() / 1000;
     if (scriptTimeOutSpecified && timeElapsedSeconds >= scriptTestTimeOutSeconds)
     {
-      LOG_WARN("Forcefully ending test script test after " << timeElapsedSeconds << " seconds.");
+      LOG_ERROR("Forcefully ending test script test after " << timeElapsedSeconds << " seconds.");
       break;
     }
   }
@@ -329,7 +340,7 @@ void ScriptTest::_runProcess()
   _stderr = QString::fromUtf8(p.readAllStandardError());
 }
 
-void ScriptTest::_writeFile(QString path, QString content)
+void ScriptTest::_writeFile(const QString& path, const QString& content)
 {
   QFile fp(path);
 
