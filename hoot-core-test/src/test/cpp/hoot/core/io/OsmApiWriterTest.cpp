@@ -769,10 +769,9 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "slow");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "serial");
 //  Don't run the tests in parallel when dealing with a local OSM API server
-//#ifdef RUN_LOCAL_OSM_API_SERVER
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "serial");
-//#endif
+#ifdef RUN_LOCAL_OSM_API_SERVER
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "serial");
+#endif
 
 }
