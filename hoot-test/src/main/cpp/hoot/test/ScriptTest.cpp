@@ -29,8 +29,11 @@
 
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+
+#include <hoot/test/validation/TestOutputValidator.h>
 
 // Qt
 #include <QCoreApplication>
@@ -234,6 +237,16 @@ void ScriptTest::runTest()
   {
     CPPUNIT_ASSERT_MESSAGE(QString("STDOUT or STDERR does not match").toStdString(), false);
   }
+
+  // Run validation on test output if configured for it and a file to validate was specified in the
+  // script.
+# ifdef HOOT_HAVE_JOSM
+  LOG_VART(ConfigOptions().getTestValidationEnable());
+  if (ConfigOptions().getTestValidationEnable())
+  {
+    _runValidation();
+  }
+# endif
 }
 
 void ScriptTest::_runDiff(const QString& file1, const QString& file2)
@@ -326,6 +339,24 @@ void ScriptTest::_runProcess()
 
   _stdout = QString::fromUtf8(p.readAllStandardOutput());
   _stderr = QString::fromUtf8(p.readAllStandardError());
+}
+
+void ScriptTest::_runValidation() const
+{
+  const QString fileToValidate = FileUtils::readFileToLineContaining(_script, "TO_VALIDATE");
+  if (!fileToValidate.isEmpty())
+  {
+    const QString goldValidationReport =
+      FileUtils::readFileToLineContaining(_script, "VALIDATION_REPORT_GOLD");
+    if (goldValidationReport.isEmpty())
+    {
+      throw TestConfigurationException(
+        "File to validate: ..." + fileToValidate.right(25) +
+        " but no report vaildation gold file specified with VALIDATION_REPORT_GOLD.");
+    }
+    TestOutputValidator::validate(
+      QFileInfo(_script).baseName(), fileToValidate, goldValidationReport);
+  }
 }
 
 void ScriptTest::_writeFile(const QString& path, const QString& content)

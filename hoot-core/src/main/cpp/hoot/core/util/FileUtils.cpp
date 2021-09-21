@@ -222,6 +222,16 @@ QStringList FileUtils::readFileToList(const QString& inputPath, const bool toLow
   return outputList;
 }
 
+QString FileUtils::readFileToLineContaining(const QString& inputPath, const QString& lineText)
+{
+  const QStringList matchingFileLines = readFileToList(inputPath).filter(lineText);
+  if (matchingFileLines.size() == 0)
+  {
+    return "";
+  }
+  return matchingFileLines.at(0);
+}
+
 QString FileUtils::toLogFormat(QString url, int characters)
 {
   //  Remove username/password from URLs

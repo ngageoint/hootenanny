@@ -72,6 +72,11 @@ private:
 
   void _runDiff(const QString& file1, const QString& file2);
   void _runProcess();
+
+  /**
+   * @brief _runValidation TODO
+   */
+  void _runValidation() const;
 };
 
 }

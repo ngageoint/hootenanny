@@ -22,43 +22,39 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef CONFLATECASETEST_H
-#define CONFLATECASETEST_H
+#ifndef TEST_OUTPUT_VALIDATOR_H
+#define TEST_OUTPUT_VALIDATOR_H
 
-// Hoot
-#include <hoot/test/AbstractTest.h>
+// Qt
+#include <QString>
 
 namespace hoot
 {
 
 /**
- * @brief The ConflateCaseTest class is a conflate case test to be run as part of the hoot testing
- * suite.
+ * @brief The TestOutputValidator class TODO
  */
-class ConflateCaseTest : public AbstractTest
+class TestOutputValidator
 {
 
 public:
 
-  ConflateCaseTest(QDir d, QStringList confs);
+  TestOutputValidator() = default;
+  ~TestOutputValidator() = default;
 
   /**
-   * @see AbstractTest
+   * @brief validate TODO
+   * @param testName
+   * @param testOutputPath
+   * @param goldValidationReportPath
    */
-  virtual void runTest();
-
-protected:
-
-  void _runConflateCmd() const;
-  void _runMultiaryConflateCmd() const;
-
-  void _runValidation(
+  static void validate(
     const QString& testName, const QString& testOutputPath,
-    const QString& goldValidationReportPath) const;
+    const QString& goldValidationReportPath);
 };
 
 }
 
-#endif // CONFLATECASETEST_H
+#endif // TEST_OUTPUT_VALIDATOR_H
