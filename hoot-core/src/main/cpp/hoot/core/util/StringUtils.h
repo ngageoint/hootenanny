@@ -196,6 +196,15 @@ public:
   static bool containsDuplicatePropertyKeys(
     const QStringList& input, const QString& lineText, const QString& separator);
   /**
+   * @brief containsDuplicatePropertyValues TODO
+   * @param input
+   * @param lineText
+   * @param separator
+   * @return
+   */
+  static bool containsDuplicatePropertyValues(
+    const QStringList& input, const QString& lineText, const QString& separator);
+  /**
    * @brief filterToPropertyKeysContaining TODO
    * @param input
    * @param lineText
@@ -390,6 +399,9 @@ private:
     QStringList& input, const int index, const QString& separator);
 
   static QStringList _filterToPropertiesContaining(
+    const QStringList& input, const QString& lineText, const QString& separator, const bool key);
+
+  static bool _containsDuplicateProperties(
     const QStringList& input, const QString& lineText, const QString& separator, const bool key);
 };
 

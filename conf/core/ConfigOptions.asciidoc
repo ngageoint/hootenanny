@@ -5855,7 +5855,7 @@ debugging tests which may hang on a remote build server.
 === test.validation.enable
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 Enables validation of test output for selected tests.
 

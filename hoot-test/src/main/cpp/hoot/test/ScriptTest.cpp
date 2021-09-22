@@ -393,6 +393,21 @@ bool ScriptTest::_validateScriptForValidation(
       " property keys." + "\n";
     return false;
   }
+  if (StringUtils::containsDuplicatePropertyValues(scriptFileLines, fileToValidatePropertyKey, "="))
+  {
+    _stderr +=
+      "Script test: " + _script + " has duplicated " + fileToValidatePropertyKey +
+      " property values." + "\n";
+    return false;
+  }
+  if (StringUtils::containsDuplicatePropertyValues(
+        scriptFileLines, validationReportGoldPropertyKey, "="))
+  {
+    _stderr +=
+      "Script test: " + _script + " has duplicated " + validationReportGoldPropertyKey +
+      " property values." + "\n";
+    return false;
+  }
   // Since script tests can support multiple outputs and validations for each, we require that a
   // numeric index be appended to each property key.
   const QString propKeyNonNumericEndErrorMsg = "property keys must end with a numeric character.";

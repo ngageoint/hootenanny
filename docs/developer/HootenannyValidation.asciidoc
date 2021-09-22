@@ -46,7 +46,7 @@ To enable validation during testing, enable the `test.validation.enable` configu
 the `Testing.conf` configuration file. Currently, only the case tests have their output validated 
 (that may change). TODO: finish
 
-.off file, etc
+TODO: .off file, script properties, etc
 
 
 

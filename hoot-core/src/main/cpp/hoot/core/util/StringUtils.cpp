@@ -431,10 +431,11 @@ void StringUtils::reverse(QStringList& strList)
   strList = QStringList::fromStdList(strStdList);
 }
 
-bool StringUtils::containsDuplicatePropertyKeys(
-  const QStringList& input, const QString& lineText, const QString& separator)
+bool StringUtils::_containsDuplicateProperties(
+  const QStringList& input, const QString& lineText, const QString& separator, const bool key)
 {
   QStringList keys;
+  const int index = key ? 0 : 1;
   for (int i = 0; i < input.size(); i++)
   {
     const QString text = input.at(i);
@@ -443,11 +444,23 @@ bool StringUtils::containsDuplicatePropertyKeys(
       const QStringList textParts = text.split(separator);
       if (textParts.size() == 2)
       {
-        keys.append(textParts[0]);
+        keys.append(textParts[index]);
       }
     }
   }
   return hasDuplicates(keys);
+}
+
+bool StringUtils::containsDuplicatePropertyKeys(
+  const QStringList& input, const QString& lineText, const QString& separator)
+{
+  return _containsDuplicateProperties(input, lineText, separator, true);
+}
+
+bool StringUtils::containsDuplicatePropertyValues(
+  const QStringList& input, const QString& lineText, const QString& separator)
+{
+  return _containsDuplicateProperties(input, lineText, separator, false);
 }
 
 QStringList StringUtils::_filterToPropertiesContaining(
