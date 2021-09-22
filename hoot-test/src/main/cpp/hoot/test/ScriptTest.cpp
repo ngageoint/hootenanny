@@ -55,8 +55,7 @@ CppUnit::TestCase(script.toStdString()),
 _printDiff(printDiff),
 _suppressFailureDetail(suppressFailureDetail),
 _script(script),
-_waitToFinishTime(waitToFinishTime),
-_scriptValidationFailed(false)
+_waitToFinishTime(waitToFinishTime)
 {
 }
 
@@ -138,14 +137,16 @@ void ScriptTest::runTest()
 
   _runProcess();
 
-  // TODO
+  // Run validation on test output if configured for it and a file to validate was specified in the
+  // script. TODO
 # ifdef HOOT_HAVE_JOSM
+  LOG_VART(ConfigOptions().getTestValidationEnable());
   if (ConfigOptions().getTestValidationEnable())
   {
-    _scriptValidationFailed =
-      _validateScriptForValidation(_filesToValidate, _goldValidationReports);
+    _runValidation();
   }
 # endif
+
 
   //  Replace colored text in the standard out
   _stdout.replace(LogColor::ColorRegex, "");
@@ -337,28 +338,25 @@ void ScriptTest::_runProcess()
     }
   }
 
-  // Run validation on test output if configured for it and a file to validate was specified in the
-  // script. TODO
-# ifdef HOOT_HAVE_JOSM
-  LOG_VART(ConfigOptions().getTestValidationEnable());
-  if (ConfigOptions().getTestValidationEnable() && !_scriptValidationFailed)
-  {
-    _runValidation();
-  }
-# endif
-
   _stdout = QString::fromUtf8(p.readAllStandardOutput());
   _stderr = QString::fromUtf8(p.readAllStandardError());
 }
 
 void ScriptTest::_runValidation()
 {
-  assert(_filesToValidate.size() == _goldValidationReports.size());
+  QStringList filesToValidate;
+  QStringList goldValidationReports;
+  if (!_validateScriptForValidation(filesToValidate, goldValidationReports))
+  {
+    return;
+  }
+
+  assert(filesToValidate.size() == goldValidationReports.size());
   const QString testName = QFileInfo(_script).completeBaseName();
-  for (int i = 0; i < _filesToValidate.size(); i++)
+  for (int i = 0; i < filesToValidate.size(); i++)
   {
     TestOutputValidator::validate(
-      testName, _filesToValidate.at(i), _goldValidationReports.at(i), _suppressFailureDetail);
+      testName, filesToValidate.at(i), goldValidationReports.at(i), _suppressFailureDetail);
   }
 }
 

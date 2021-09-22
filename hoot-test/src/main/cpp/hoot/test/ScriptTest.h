@@ -35,7 +35,7 @@
 
 // Qt
 #include <QRunnable>
-#include <QStringList>
+#include <QString>
 
 namespace hoot
 {
@@ -66,11 +66,6 @@ private:
   QString _stdout, _baseStdout;
   /** Timeout before emitting warning "Waiting for process to finish" in msecs */
   int _waitToFinishTime;
-
-  // TODO
-  QStringList _filesToValidate;
-  QStringList _goldValidationReports;
-  bool _scriptValidationFailed;
 
   QString _readFile(const QString& path);
   void _writeFile(const QString& path, const QString& content);
