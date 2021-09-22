@@ -16,6 +16,8 @@ GENERAL_OPTS="-D differential.remove.linear.partial.matches.as.whole=true"
 echo ""
 echo "Running diff..."
 echo ""
+TO_VALIDATE_1=test-output/cmd/glacial/DiffConflateCmdTest/output.osm
+VALIDATION_REPORT_GOLD_1=test-files/cmd/glacial/DiffConflateCmdTest/output-validation-report
 hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output.osm --differential
 
@@ -152,6 +154,8 @@ hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-output.osm $INPUT_DIR/snapp
 echo ""
 echo "Checking conflation with road snapping and keeping ref data..."
 echo ""
+TO_VALIDATE_2=test-output/cmd/glacial/DiffConflateCmdTest/snapped-with-ref-output.osm
+VALIDATION_REPORT_GOLD_2=test-files/cmd/glacial/DiffConflateCmdTest/snapped-with-ref-output-validation-report
 hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
  -D writer.include.debug.tags=true -D differential.snap.unconnected.features=true \
  -D snap.unconnected.ways.snap.criteria=HighwayCriterion \

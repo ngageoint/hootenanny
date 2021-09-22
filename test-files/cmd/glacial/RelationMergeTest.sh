@@ -13,5 +13,8 @@ mkdir -p $OUT_DIR
 CONFIG="--warn -C Testing.conf"
 
 # Note that we need to include all matchers here due to the feature richness of the input data.
-hoot conflate $CONFIG -D writer.include.debug.tags=true -D uuid.helper.repeatable=true $IN_DIR/input1.osm $IN_DIR/input2.osm $OUT_DIR/output.osm
+TO_VALIDATE_1=test-output/cmd/glacial/RelationMergeTest/output.osm
+VALIDATION_REPORT_GOLD_1=test-files/cmd/glacial/RelationMergeTest/output-validation-report
+hoot conflate $CONFIG -D writer.include.debug.tags=true -D uuid.helper.repeatable=true \
+  $IN_DIR/input1.osm $IN_DIR/input2.osm $OUT_DIR/output.osm
 hoot diff $CONFIG $IN_DIR/output.osm $OUT_DIR/output.osm || diff $IN_DIR/output.osm $OUT_DIR/output.osm

@@ -42,7 +42,13 @@ class ConflateCaseTest : public AbstractTest
 
 public:
 
-  ConflateCaseTest(QDir d, QStringList confs);
+  /**
+   * @brief ConflateCaseTest TODO
+   * @param d
+   * @param confs
+   * @param suppressFailureDetail
+   */
+  ConflateCaseTest(QDir d, QStringList confs, bool suppressFailureDetail = false);
 
   /**
    * @see AbstractTest
@@ -50,6 +56,8 @@ public:
   virtual void runTest();
 
 private:
+
+  bool _suppressFailureDetail;
 
   void _runConflateCmd() const;
   void _runMultiaryConflateCmd() const;

@@ -1,0 +1,13 @@
+Input: test-output/cmd/slow/RailwayConflateTest/output.osm
+
+Found 184 validation errors in 1,557 features with JOSM.
+Crossing ways errors: 5
+Duplicated way nodes errors: 1
+Duplicated ways errors: 2
+Overlapping ways errors: 1
+Tag checker (MapCSS based) errors: 174
+Untagged, empty and one node ways errors: 1
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 242 features with Hootenanny.
+Total failing Hootenanny validators: 0

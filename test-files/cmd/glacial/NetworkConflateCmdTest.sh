@@ -6,6 +6,8 @@ mkdir -p test-output/cmd/glacial/NetworkConflateCmdTest
 
 HOOT_OPTS="-D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D match.creators=NetworkMatchCreator -D merger.creators=NetworkMergerCreator"
 
+TO_VALIDATE_1=test-output/cmd/glacial/NetworkConflateCmdTest/output.osm
+VALIDATION_REPORT_GOLD_1=test-files/cmd/glacial/NetworkConflateCmdTest/output-validation-report
 hoot conflate --warn -C ReferenceConflation.conf -C NetworkAlgorithm.conf -C Testing.conf  \
  $HOOT_OPTS \
  test-files/DcGisRoads.osm test-files/DcTigerRoads.osm \

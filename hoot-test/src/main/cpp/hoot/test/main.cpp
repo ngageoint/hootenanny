@@ -434,8 +434,8 @@ void setupTestingConfig(QStringList& args)
   StringUtils::removeAllContaining(args, "hoottest");
   LOG_VART(args);
   // Settings doesn't recognize all HootTest specific options, so pass in a list from here to
-  // ignore. Don't worry about getAllowedOptionNames() returning the log level options...Settings
-  // will parse them anyway.
+  // ignore. Don't worry about getAllowedOptionNames() returning the log level options to be
+  // ignored...the Settings class will parse them anyway.
   Settings::parseCommonArguments(args, getAllowedOptionNames());
   LOG_VART(args);
   // We require that all tests use Testing.conf as a starting point and any conf values specified by
@@ -532,7 +532,9 @@ void populateTests(
   //  Test cases go last because of the way they change the environment
   if (t & CASE_ONLY)
   {
-    vTests.push_back(std::make_shared<ConflateCaseTestSuite>("test-files/cases", hideDisableTests));
+    vTests.push_back(
+      std::make_shared<ConflateCaseTestSuite>(
+        "test-files/cases", suppressFailureDetail, hideDisableTests));
   }
 }
 

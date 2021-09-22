@@ -49,11 +49,13 @@ public:
    * @param testName
    * @param testOutputPath
    * @param goldValidationReportPath
+   * @param suppressFailureDetail
    * @param caseTest
    */
   static void validate(
     const QString& testName, const QString& testOutputPath,
-    const QString& goldValidationReportPath, const bool caseTest = false);
+    const QString& goldValidationReportPath, const bool suppressFailureDetail = false,
+    const bool caseTest = false);
 
 private:
 

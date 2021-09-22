@@ -38,10 +38,12 @@
 namespace hoot
 {
 
-ConflateCaseTestSuite::ConflateCaseTestSuite(const QString& dir, bool hideDisableTests)
-  : AbstractTestSuite(dir),
-    _hideDisableTests(hideDisableTests),
-    _numTests(0)
+ConflateCaseTestSuite::ConflateCaseTestSuite(
+  const QString& dir, bool suppressFailureDetail, bool hideDisableTests) :
+AbstractTestSuite(dir),
+_hideDisableTests(hideDisableTests),
+_numTests(0),
+_suppressFailureDetail(suppressFailureDetail)
 {
   QStringList confs;
   loadDir(dir, confs);
@@ -61,10 +63,8 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
   if (fi.exists())
   {
     const QString testConfFile = fi.absoluteFilePath();
-
     // Load the test's config file.
     confs.append(testConfFile);
-
     LOG_VART(confs);
   }
 
@@ -123,7 +123,7 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
     // test a chance to override it when necessary.
     confs.prepend(ConfPath::search("Testing.conf"));
 
-    addTest(new ConflateCaseTest(d, confs));
+    addTest(new ConflateCaseTest(d, confs, _suppressFailureDetail));
     _numTests++;
   }
 }

@@ -195,7 +195,7 @@ bool FileUtils::dirContainsFileWithExtension(const QDir& dir, const QString& ext
 
 QStringList FileUtils::readFileToLines(const QString& inputPath, const bool toLowerCase)
 {
-  LOG_VARD(inputPath);
+  LOG_VART(inputPath);
   QStringList outputList;
   if (!inputPath.trimmed().isEmpty())
   {

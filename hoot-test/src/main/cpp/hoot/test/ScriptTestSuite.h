@@ -41,8 +41,17 @@ class ScriptTestSuite : public CppUnit::TestSuite
 {
 public:
 
-  ScriptTestSuite(QString dir, bool printDiff, double waitTime, bool hideDisableTests,
-                  bool suppressFailureDetail);
+  /**
+   * @brief ScriptTestSuite TODO
+   * @param dir
+   * @param printDiff
+   * @param waitTime
+   * @param hideDisableTests
+   * @param suppressFailureDetail
+   */
+  ScriptTestSuite(
+    QString dir, bool printDiff, double waitTime, bool hideDisableTests,
+    bool suppressFailureDetail);
 
 private:
 

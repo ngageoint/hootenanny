@@ -38,8 +38,9 @@
 namespace hoot
 {
 
-ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff, double waitTimeSec,
-                                 bool hideDisableTests, bool suppressFailureDetail) :
+ScriptTestSuite::ScriptTestSuite(
+  QString dir, bool printDiff, double waitTimeSec, bool hideDisableTests,
+  bool suppressFailureDetail) :
 TestSuite((ConfPath::getHootHome() + "/" + dir).toStdString())
 {
   QDir d(ConfPath::getHootHome() + "/" + dir);

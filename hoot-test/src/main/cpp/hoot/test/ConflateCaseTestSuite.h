@@ -41,7 +41,14 @@ class ConflateCaseTestSuite : public AbstractTestSuite
 
 public:
 
-  ConflateCaseTestSuite(const QString& dir, bool hideDisableTests = false);
+  /**
+   * @brief ConflateCaseTestSuite TODO
+   * @param dir
+   * @param suppressFailureDetail
+   * @param hideDisableTests
+   */
+  ConflateCaseTestSuite(
+    const QString& dir, bool suppressFailureDetail = false, bool hideDisableTests = false);
 
   /**
    * @see AbstractTestSuite
@@ -52,6 +59,7 @@ private:
 
   bool _hideDisableTests;
   int _numTests;
+  bool _suppressFailureDetail;
 };
 
 }

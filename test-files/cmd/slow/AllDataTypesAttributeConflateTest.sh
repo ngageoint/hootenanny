@@ -7,6 +7,8 @@ mkdir -p $OUT_DIR
 
 CONFIG="--warn -C Testing.conf"
 
+TO_VALIDATE_1=test-output/cmd/slow/AllDataTypesAttributeConflateTest/output.osm
+VALIDATION_REPORT_GOLD_1=test-files/cmd/slow/AllDataTypesAttributeConflateTest/output-validation-report
 hoot conflate $CONFIG -C UnifyingAlgorithm.conf -C AttributeConflation.conf \
   -D writer.include.debug.tags=true \
   -D match.creators="HighwayMatchCreator;BuildingMatchCreator;ScriptMatchCreator,Poi.js" \

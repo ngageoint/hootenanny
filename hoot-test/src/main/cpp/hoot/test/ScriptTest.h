@@ -35,7 +35,7 @@
 
 // Qt
 #include <QRunnable>
-#include <QString>
+#include <QStringList>
 
 namespace hoot
 {
@@ -44,6 +44,13 @@ class ScriptTest : public CppUnit::TestCase
 {
 public:
 
+  /**
+   * @brief ScriptTest TODO
+   * @param script
+   * @param printDiff
+   * @param suppressFailureDetail
+   * @param waitToFinishTime
+   */
   ScriptTest(
     const QString& script, bool printDiff, bool suppressFailureDetail = false,
     int waitToFinishTime = 30000);
@@ -59,6 +66,11 @@ private:
   QString _stdout, _baseStdout;
   /** Timeout before emitting warning "Waiting for process to finish" in msecs */
   int _waitToFinishTime;
+
+  // TODO
+  QStringList _filesToValidate;
+  QStringList _goldValidationReports;
+  bool _scriptValidationFailed;
 
   QString _readFile(const QString& path);
   void _writeFile(const QString& path, const QString& content);

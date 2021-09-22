@@ -55,7 +55,8 @@ CppUnit::TestCase(script.toStdString()),
 _printDiff(printDiff),
 _suppressFailureDetail(suppressFailureDetail),
 _script(script),
-_waitToFinishTime(waitToFinishTime)
+_waitToFinishTime(waitToFinishTime),
+_scriptValidationFailed(false)
 {
 }
 
@@ -137,13 +138,12 @@ void ScriptTest::runTest()
 
   _runProcess();
 
-  // Run validation on test output if configured for it and a file to validate was specified in the
-  // script.
+  // TODO
 # ifdef HOOT_HAVE_JOSM
-  LOG_VART(ConfigOptions().getTestValidationEnable());
   if (ConfigOptions().getTestValidationEnable())
   {
-    _runValidation();
+    _scriptValidationFailed =
+      _validateScriptForValidation(_filesToValidate, _goldValidationReports);
   }
 # endif
 
@@ -154,15 +154,11 @@ void ScriptTest::runTest()
   {
     LOG_ERROR("STDOUT or STDERR doesn't exist for " + _script +
               "\n*************************\n"
-              "  This can be resolved by reviewing the output for correctness and then \n"
-              "  creating a new baseline. E.g.\n"
-              "  verify: \n"
+              "  This can be resolved by reviewing the output for correctness and then creating a new baseline:\n"
+              "  Verify the changes in the output are satisfactory: \n"
               "    less " + _script + ".stdout.first\n"
               "    less " + _script + ".stderr.first\n"
-              "  ### NOTE: If the test is comparing against a known good file (e.g. .osm\n"
-              "  ### then it may be better to update that file. You'll have to look at\n"
-              "  ### the source files to be sure.\n"
-              "  Make a new baseline:\n"
+              "  Make a new baseline for the output:\n"
               "    mv " + _script + ".stdout.first " + _script + ".stdout\n"
               "    mv " + _script + ".stderr.first " + _script + ".stderr\n"
               "*************************");
@@ -202,14 +198,10 @@ void ScriptTest::runTest()
     {
       msg += "\n"
              "\n*************************\n"
-             "  This can be resolved by reviewing the output for correctness and then \n"
-             "  creating a new baseline. E.g.\n"
-             "  verify: \n"
+             "  This can be resolved by reviewing the output for correctness and then creating a new baseline:"
+             "  Verify the changes in the output are satisfactory: \n"
              "    diff " + _script + ".stdout.stripped " + _script + ".stdout.failed.stripped\n"
-             "  ### NOTE: If the test is comparing against a known good file (e.g. .osm\n"
-             "  ### then it may be better to update that file. You'll have to look at\n"
-             "  ### the source files to be sure.\n"
-             "  Make a new baseline:\n"
+             "  Make a new baseline for the output:\n"
              "    mv " + _script + ".stdout.failed " + _script + ".stdout\n"
              "*************************";
       LOG_ERROR(msg);
@@ -239,14 +231,10 @@ void ScriptTest::runTest()
     {
       msg += "\n"
              "\n*************************\n"
-             "  This can be resolved by reviewing the output for correctness and then \n"
-             "  creating a new baseline. E.g.\n"
-             "  verify: \n"
+             "  This can be resolved by reviewing the output for correctness and then creating a new baseline:"
+             "  Verify the changes in the output are satisfactory: \n"
              "    diff " + _script + ".stderr.stripped " + _script + ".stderr.failed.stripped\n"
-             "  ### NOTE: If the test is comparing against a known good file (e.g. .osm\n"
-             "  ### then it may be better to update that file. You'll have to look at\n"
-             "  ### the source files to be sure.\n"
-             "  Make a new baseline:\n"
+             "  Make a new baseline for the output:\n"
              "    mv " + _script + ".stderr.failed " + _script + ".stderr\n"
              "*************************";
       LOG_ERROR(msg);
@@ -334,13 +322,13 @@ void ScriptTest::_runProcess()
   {
     if (first && !scriptTimeOutSpecified)
     {
-      // throw an endl in there so the dots in the test list don't look funny.
+      // Throw an endl in there so the dots in the test list don't look funny.
       cout << endl;
       LOG_WARN("Waiting for process to finish: " + _script);
       first = false;
     }
 
-    //if the process hangs this will allows us to get out
+    // If the process hangs, this will allows us to get out.
     const qint64 timeElapsedSeconds = timer.elapsed() / 1000;
     if (scriptTimeOutSpecified && timeElapsedSeconds >= scriptTestTimeOutSeconds)
     {
@@ -349,24 +337,28 @@ void ScriptTest::_runProcess()
     }
   }
 
+  // Run validation on test output if configured for it and a file to validate was specified in the
+  // script. TODO
+# ifdef HOOT_HAVE_JOSM
+  LOG_VART(ConfigOptions().getTestValidationEnable());
+  if (ConfigOptions().getTestValidationEnable() && !_scriptValidationFailed)
+  {
+    _runValidation();
+  }
+# endif
+
   _stdout = QString::fromUtf8(p.readAllStandardOutput());
   _stderr = QString::fromUtf8(p.readAllStandardError());
 }
 
 void ScriptTest::_runValidation()
 {
-  QStringList filesToValidate;
-  QStringList goldValidationReports;
-  if (!_validateScriptForValidation(filesToValidate, goldValidationReports))
-  {
-    return;
-  }
-
-  assert(filesToValidate.size() == goldValidationReports.size());
+  assert(_filesToValidate.size() == _goldValidationReports.size());
   const QString testName = QFileInfo(_script).completeBaseName();
-  for (int i = 0; i < filesToValidate.size(); i++)
+  for (int i = 0; i < _filesToValidate.size(); i++)
   {
-    TestOutputValidator::validate(testName, filesToValidate.at(i), goldValidationReports.at(i));
+    TestOutputValidator::validate(
+      testName, _filesToValidate.at(i), _goldValidationReports.at(i), _suppressFailureDetail);
   }
 }
 

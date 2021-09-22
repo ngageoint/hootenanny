@@ -45,10 +45,10 @@ namespace hoot
 
 void TestOutputValidator::validate(
   const QString& testName, const QString& testOutputPath,
-  const QString& goldValidationReportPath, const bool caseTest)
+  const QString& goldValidationReportPath, const bool suppressFailureDetail, const bool caseTest)
 {
   # ifndef HOOT_HAVE_JOSM
-    throw IllegalArgumentException("Test output validation requires compilation --with-josm.");
+    throw TestConfigurationException("Test output validation requires compilation --with-josm.");
   # endif
 
   LOG_VART(testName);
@@ -96,12 +96,19 @@ void TestOutputValidator::validate(
   if (FileUtils::readFully(goldValidationReportPath) !=
       FileUtils::readFully(outputValidationReportPath))
   {
-    CPPUNIT_ASSERT_MESSAGE(
-      QString(
-        "Validation reports for test: " + testName + " do not match: " + goldValidationReportPath +
-        " and " + outputValidationReportPath)
-      .toStdString(),
-      false);
+    QString msg = "Validation reports for test: " + testName + " do not match.";
+    if (!suppressFailureDetail)
+    {
+      msg += "\n"
+             "\n*************************\n"
+             "  This can be resolved by reviewing the validation report output for correctness and then creating a new baseline:\n"
+             "  Verify the changes in the output are satisfactory: \n"
+             "    diff " + goldValidationReportPath + " " + outputValidationReportPath + "\n"
+             "  Make a new baseline for the output:\n"
+             "    mv " + outputValidationReportPath + " " + goldValidationReportPath + "\n"
+             "*************************";
+    }
+    CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
   }
 }
 
