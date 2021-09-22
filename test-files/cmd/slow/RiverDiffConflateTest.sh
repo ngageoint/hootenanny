@@ -13,20 +13,27 @@ CONFIG="-C UnifyingAlgorithm.conf -C DifferentialConflation.conf -C Testing.conf
 # See related notes in DiffConflatePartialLinearMatchTest.
 
 # remove partial matches partially
-TO_VALIDATE_1=test-output/cmd/slow/RiverDiffConflateTest/output-partial.osm
-VALIDATION_REPORT_GOLD_1=test-files/cmd/slow/RiverDiffConflateTest/output-partial-validation-report
 hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.river.partial.matches.as.whole=false \
   $IN_DIR_2/Haiti_CNIGS_Rivers_REF1-cropped-2.osm $IN_DIR_2/Haiti_osm_waterway_ss_REF2-cropped-2.osm \
   $OUT_DIR/output-partial.osm --differential
 hoot diff $LOG_LEVEL -C Testing.conf $IN_DIR/output-partial.osm $OUT_DIR/output-partial.osm || \
   diff $IN_DIR/output-partial.osm $OUT_DIR/output-partial.osm
+if [ -f "test-output/test-validation-enabled" ]; then
+  hoot validate $LOG_LEVEL $CONFIG $OUT_DIR/output-partial.osm \
+    --report-output $OUT_DIR/output-partial-validation-report \
+    --output $OUT_DIR/output-partial-validated.osm
+  diff $IN_DIR/output-partial-validation-report $OUT_DIR/output-partial-validation-report
+fi
 
 # remove partial matches completely
-TO_VALIDATE_2=test-output/cmd/slow/RiverDiffConflateTest/output-complete.osm
-VALIDATION_REPORT_GOLD_2=test-files/cmd/slow/RiverDiffConflateTest/output-complete-validation-report
 hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.river.partial.matches.as.whole=true \
   $IN_DIR_2/Haiti_CNIGS_Rivers_REF1-cropped-2.osm $IN_DIR_2/Haiti_osm_waterway_ss_REF2-cropped-2.osm \
   $OUT_DIR/output-complete.osm --differential
 hoot diff $LOG_LEVEL -C Testing.conf $IN_DIR/output-complete.osm $OUT_DIR/output-complete.osm || \
   diff $IN_DIR/output-complete.osm $OUT_DIR/output-complete.osm
-
+if [ -f "test-output/test-validation-enabled" ]; then
+  hoot validate $LOG_LEVEL $CONFIG $OUT_DIR/output-complete.osm \
+    --report-output $OUT_DIR/output-complete-validation-report \
+    --output $OUT_DIR/output-complete-validated.osm
+  diff $IN_DIR/output-complete-validation-report $OUT_DIR/output-complete-validation-report
+fi

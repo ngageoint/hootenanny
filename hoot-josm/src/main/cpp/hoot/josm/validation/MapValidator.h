@@ -62,10 +62,6 @@ public:
    */
   static void printValidators();
 
-  /**
-   * @brief setReportPath TODO
-   * @param filePath
-   */
   void setReportPath(const QString& filePath);
 
 private:

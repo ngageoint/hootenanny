@@ -50,12 +50,10 @@ public:
    * @param testOutputPath
    * @param goldValidationReportPath
    * @param suppressFailureDetail
-   * @param caseTest
    */
   static void validate(
     const QString& testName, const QString& testOutputPath,
-    const QString& goldValidationReportPath, const bool suppressFailureDetail = false,
-    const bool caseTest = false);
+    const QString& goldValidationReportPath, const bool suppressFailureDetail = false);
 
 private:
 
@@ -63,11 +61,10 @@ private:
    * @brief _validateGoldReport TODO
    * @param testName
    * @param goldValidationReportPath
-   * @param caseTest
    * @return
    */
   static bool _validateGoldReport(
-    const QString& testName, const QString& goldValidationReportPath, const bool caseTest);
+    const QString& testName, const QString& goldValidationReportPath);
 };
 
 }

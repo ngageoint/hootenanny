@@ -16,10 +16,13 @@ GENERAL_OPTS="-D differential.remove.linear.partial.matches.as.whole=true"
 echo ""
 echo "Running diff..."
 echo ""
-TO_VALIDATE_1=test-output/cmd/glacial/DiffConflateCmdTest/output.osm
-VALIDATION_REPORT_GOLD_1=test-files/cmd/glacial/DiffConflateCmdTest/output-validation-report
 hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
- $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output.osm --differential
+  $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output.osm --differential
+if [ -f "test-output/test-validation-enabled" ]; then
+  hoot validate $LOG_LEVEL $CONFIG $OUTPUT_DIR/output.osm \
+    --report-output $OUTPUT_DIR/output-validation-report --output $OUTPUT_DIR/output-validated.osm
+  diff $INPUT_DIR/output-validation-report $OUTPUT_DIR/output-validation-report
+fi
 
 # Run changeset w/tags to produce a unified changeset output (geometry and tags)
 echo ""
@@ -154,16 +157,21 @@ hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-output.osm $INPUT_DIR/snapp
 echo ""
 echo "Checking conflation with road snapping and keeping ref data..."
 echo ""
-TO_VALIDATE_2=test-output/cmd/glacial/DiffConflateCmdTest/snapped-with-ref-output.osm
-VALIDATION_REPORT_GOLD_2=test-files/cmd/glacial/DiffConflateCmdTest/snapped-with-ref-output-validation-report
 hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
  -D writer.include.debug.tags=true -D differential.snap.unconnected.features=true \
  -D snap.unconnected.ways.snap.criteria=HighwayCriterion \
  -D differential.remove.reference.data=false \
  $INPUT_DIR/input3.osm $INPUT_DIR/input4.osm \
  $OUTPUT_DIR/snapped-with-ref-output.osm --differential
-hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-with-ref-output.osm $INPUT_DIR/snapped-with-ref-output.osm || \
-     diff $OUTPUT_DIR/snapped-with-ref-output.osm $INPUT_DIR/snapped-with-ref-output.osm
+hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-with-ref-output.osm \
+  $INPUT_DIR/snapped-with-ref-output.osm || \
+  diff $OUTPUT_DIR/snapped-with-ref-output.osm $INPUT_DIR/snapped-with-ref-output.osm
+if [ -f "test-output/test-validation-enabled" ]; then
+  hoot validate $LOG_LEVEL $CONFIG $OUTPUT_DIR/snapped-with-ref-output.osm \
+    --report-output $OUTPUT_DIR/snapped-with-ref-output-validation-report --output \
+    $OUTPUT_DIR/snapped-with-ref-output-validated.osm
+  diff $INPUT_DIR/snapped-with-ref-output-validation-report $OUTPUT_DIR/snapped-with-ref-output-validation-report
+fi
      
 echo ""
 echo "Checking conflation with road snapping and remove all ref data, even snapped..."

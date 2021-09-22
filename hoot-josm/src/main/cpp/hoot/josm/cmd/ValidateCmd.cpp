@@ -167,7 +167,7 @@ private:
     if (args.size() < 1)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes at least one parameter.").arg(getName()));
+      throw IllegalArgumentException(QString("%1 takes at least one parameter.").arg(getName()));
     }
 
     QElapsedTimer timer;

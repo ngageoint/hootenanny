@@ -45,7 +45,7 @@ namespace hoot
 
 void TestOutputValidator::validate(
   const QString& testName, const QString& testOutputPath,
-  const QString& goldValidationReportPath, const bool suppressFailureDetail, const bool caseTest)
+  const QString& goldValidationReportPath, const bool suppressFailureDetail)
 {
   # ifndef HOOT_HAVE_JOSM
     throw TestConfigurationException("Test output validation requires compilation --with-josm.");
@@ -56,7 +56,7 @@ void TestOutputValidator::validate(
   LOG_VART(goldValidationReportPath);
 
   // TODO
-  if (!_validateGoldReport(testName, goldValidationReportPath, caseTest))
+  if (!_validateGoldReport(testName, goldValidationReportPath))
   {
     return;
   }
@@ -101,7 +101,7 @@ void TestOutputValidator::validate(
     {
       msg += "\n"
              "\n*************************\n"
-             "  This can be resolved by reviewing the validation report output for correctness and then creating a new baseline:\n"
+             "  This can be resolved by reviewing the validation report output for correctness and then creating a new baseline.\n"
              "  Verify the changes in the output are satisfactory: \n"
              "    diff " + goldValidationReportPath + " " + outputValidationReportPath + "\n"
              "  Make a new baseline for the output:\n"
@@ -113,31 +113,16 @@ void TestOutputValidator::validate(
 }
 
 bool TestOutputValidator::_validateGoldReport(
-  const QString& testName, const QString& goldValidationReportPath, const bool caseTest)
+  const QString& testName, const QString& goldValidationReportPath)
 {
   // TODO
   QString goldValidationReportPathEndText = "validation-report";
-  if (!caseTest)
-  {
-    goldValidationReportPathEndText.prepend("-");
-  }
   // Make sure we have a base validation report to compare against.
   if (!goldValidationReportPath.endsWith(goldValidationReportPathEndText))
   {
-    QString errorMsg;
-    if (caseTest)
-    {
-      errorMsg =
-        QString("Validation report gold files for case tests should follow the naming ") +
-        QString("convention: \"validation-report\".");
-    }
-    else
-    {
-      errorMsg =
-        QString("Validation report gold files for script tests should follow the naming ") +
-        QString("convention: <testOutputFileBaseName>-validation-report. e.g. a gold report ") +
-        QString("named: \"output-validation-report\" for the test output: \"output.osm\"");
-    }
+    QString errorMsg =
+      QString("Validation report gold files for case tests should follow the naming ") +
+      QString("convention: \"validation-report\".");
     throw TestConfigurationException(errorMsg);
   }
   const QString goldValidationReportOffPath = goldValidationReportPath + ".off";

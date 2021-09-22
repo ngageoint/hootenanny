@@ -4,7 +4,7 @@
 === Description
 
 The `validate` command uses https://josm.openstreetmap.de/[JOSM] to identify map data with erroneous 
-aspects.
+aspects. This command is only available when Hootenanny is compiled `--with-josm`.
 
 To list information about the available validators use the following options:
 
@@ -48,13 +48,13 @@ that has the text "-validated" in its name. Use with caution.
 hoot validate [--validators]
 
 # perform validation
-hoot validate (input1) [input2...] [--report-output path] [--output path] [--recursive "*"|"filter1;filter2..."]
+hoot validate (input1) [input2...] [--report-output path] [--output path] [--recursive "*"|"filter1;filter2..."] [--test]
 
 # perform validation and write to separate outputs
-hoot validate (input1) [input2...] [--recursive "*"|"filter1;filter2..."] [--separate-output]
+hoot validate (input1) [input2...] [--recursive "*"|"filter1;filter2..."] [--separate-output] [--test]
 
 # recursively clean validated output
-hoot validate (inputDir) --cleanValidatedOutput
+hoot validate (inputDir) --cleanValidatedOutput 
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#validation[Examples]

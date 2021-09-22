@@ -1,15 +1,21 @@
 #!/bin/bash
 set -e
 
-mkdir -p test-output/cmd/slow/ConflatePoiStatsTest
-STATS_OUT=test-output/cmd/slow/ConflatePoiStatsTest/poi-out
+IN_DIR=test-files/cmd/slow/ConflatePoiStatsTest
+OUT_DIR=test-output/cmd/slow/ConflatePoiStatsTest
+mkdir -p $OUT_DIR
+STATS_OUT=$OUT_DIR/poi-out
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-TO_VALIDATE_1=test-output/cmd/slow/ConflatePoiStatsTest/poi-out.osm
-VALIDATION_REPORT_GOLD_1=test-files/cmd/slow/ConflatePoiStatsTest/poi-out-validation-report
 hoot conflate -C Testing.conf -D writer.include.debug.tags=true \
   -D "match.creators=ScriptMatchCreator,Poi.js" -D "merger.creators=ScriptMergerCreator" \
   test-files/dcpoi_clip.osm test-files/mapcruzinpoi_clip.osm $STATS_OUT.osm --stats > $STATS_OUT
+  
+if [ -f "test-output/test-validation-enabled" ]; then
+  hoot validate --warn $CONFIG $OUT_DIR/poi-out.osm \
+    --report-output $OUT_DIR/poi-out-validation-report --output $OUT_DIR/poi-out-validated.osm
+  diff $IN_DIR/poi-out-validation-report $OUT_DIR/poi-out-validation-report
+fi
 
 #read in a set of stat names from a file, delete them from the hoot command stats output, and write the remaining stats to the final output
 EDIT_CMD=""

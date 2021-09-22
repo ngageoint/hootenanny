@@ -60,13 +60,13 @@ void ConflateCaseTest::_runConflateCmd() const
   QFileInfo in1(_d, "Input1.osm");
   if (in1.exists() == false)
   {
-    throw IllegalArgumentException(
+    throw TestConfigurationException(
       "Unable to find Input1.osm in conflate case: " + _d.absolutePath());
   }
   QFileInfo in2(_d, "Input2.osm");
   if (in2.exists() == false)
   {
-    throw IllegalArgumentException(
+    throw TestConfigurationException(
       "Unable to find Input2.osm in conflate case: " + _d.absolutePath());
   }
 
@@ -108,7 +108,7 @@ void ConflateCaseTest::_runConflateCmd() const
   QFileInfo expected(_d, "Expected.osm");
   if (expected.exists() == false)
   {
-    throw IllegalArgumentException(
+    throw TestConfigurationException(
       "Unable to find Expected.osm in conflate case: " + _d.absolutePath());
   }
 
@@ -153,7 +153,7 @@ void ConflateCaseTest::_runMultiaryConflateCmd() const
 
   if (in.size() < 2)
   {
-    throw IllegalArgumentException(
+    throw TestConfigurationException(
       "Found fewer than two inputs in conflate case: " + _d.absolutePath());
   }
 
@@ -178,7 +178,7 @@ void ConflateCaseTest::_runMultiaryConflateCmd() const
   QFileInfo expected(_d, "Expected.osm");
   if (expected.exists() == false)
   {
-    throw IllegalArgumentException(
+    throw TestConfigurationException(
       "Unable to find Expected.osm in conflate case: " + _d.absolutePath());
   }
 
@@ -213,7 +213,7 @@ void ConflateCaseTest::runTest()
     {
       TestOutputValidator::validate(
         _d.dirName(), _d.absolutePath() + "/Output.osm", _d.absolutePath() + "/validation-report",
-        _suppressFailureDetail, true);
+        _suppressFailureDetail);
     }
   # endif
   }

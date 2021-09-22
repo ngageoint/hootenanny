@@ -617,6 +617,27 @@ int main(int argc, char* argv[])
   }
   else
   {
+    // TODO
+  # ifndef HOOT_HAVE_JOSM
+    if (ConfigOptions().getTestValidationEnable())
+    {
+      throw TestConfigurationException("Test output validation requires compilation --with-josm.");
+    }
+  # else
+    const QString testValidationEnabledFile = "test-output/test-validation-enabled";
+    if (ConfigOptions().getTestValidationEnable())
+    {
+      FileUtils::writeFully(testValidationEnabledFile, "");
+    }
+    else
+    {
+      if (QFile::exists(testValidationEnabledFile) && !QFile::remove(testValidationEnabledFile))
+      {
+        throw TestConfigurationException("Unable to remove: " + testValidationEnabledFile);
+      }
+    }
+  # endif
+
     // Set the Qt hash seed to 0 for consistent test results.
     conf().set(ConfigOptions().getHashSeedZeroKey(), true);
     qSetGlobalQHashSeed(0);

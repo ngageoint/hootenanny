@@ -7,13 +7,18 @@ mkdir -p $OUT_DIR
 STATS_OUT=$OUT_DIR/toy-roads-out
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-HOOT_OPTS="-C Testing.conf -C UnifyingAlgorithm.conf -C ReferenceConflation.conf -D writer.include.debug.tags=true"
+CONFIG="-C Testing.conf -C UnifyingAlgorithm.conf -C ReferenceConflation.conf -D writer.include.debug.tags=true"
 
-TO_VALIDATE_1=test-output/cmd/slow/ConflateCmdStatsTest/toy-roads-out.osm
-VALIDATION_REPORT_GOLD_1=test-files/cmd/slow/ConflateCmdStatsTest/toy-roads-out-validation-report
-hoot conflate $HOOT_OPTS -D match.creators="HighwayMatchCreator" -D merger.creators="HighwayMergerCreator" \
+hoot conflate $CONFIG -D match.creators="HighwayMatchCreator" -D merger.creators="HighwayMergerCreator" \
   test-files/ToyTestA.osm test-files/ToyTestB.osm $STATS_OUT.osm --stats > $STATS_OUT
-hoot diff $HOOT_OPTS $STATS_OUT.osm $IN_DIR/toy-roads-out.osm || diff $STATS_OUT.osm $IN_DIR/toy-roads-out.osm
+hoot diff $CONFIG $STATS_OUT.osm $IN_DIR/toy-roads-out.osm || diff $STATS_OUT.osm $IN_DIR/toy-roads-out.osm
+
+if [ -f "test-output/test-validation-enabled" ]; then
+  hoot validate --warn $CONFIG $OUT_DIR/toy-roads-out.osm \
+    --report-output $OUT_DIR/toy-roads-out-validation-report \
+    --output $OUT_DIR/toy-roads-out-validated.osm
+  diff $IN_DIR/toy-roads-out-validation-report $OUT_DIR/toy-roads-out-validation-report
+fi
 
 #read in a set of stat names from a file, delete them from the hoot command stats output, and write the remaining stats to the final output
 EDIT_CMD=""

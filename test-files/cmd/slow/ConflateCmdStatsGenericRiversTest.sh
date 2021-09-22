@@ -10,13 +10,18 @@ SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 CONFIG="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf -C Testing.conf"
 
-TO_VALIDATE_1=test-output/cmd/slow/ConflateCmdStatsTest/generic-rivers-out.osm
-VALIDATION_REPORT_GOLD_1=test-files/cmd/slow/ConflateCmdStatsTest/generic-rivers-out-validation-report
 hoot conflate $CONFIG -D "match.creators=ScriptMatchCreator,River.js" \
   -D "merger.creators=ScriptMergerCreator" -D writer.include.debug.tags=true \
   $IN_DIR_2/Haiti_CNIGS_Rivers_REF1-cropped-2.osm $IN_DIR_2/Haiti_osm_waterway_ss_REF2-cropped-2.osm \
   $STATS_OUT.osm --stats > $STATS_OUT
 hoot diff $CONFIG $STATS_OUT.osm $IN_DIR/generic-rivers-out.osm || diff $STATS_OUT.osm $IN_DIR/generic-rivers-out.osm
+
+if [ -f "test-output/test-validation-enabled" ]; then
+  hoot validate --warn $CONFIG $OUT_DIR/generic-rivers-out.osm \
+    --report-output $OUT_DIR/generic-rivers-out-validation-report \
+    --output $OUT_DIR/generic-rivers-out-validated.osm
+  diff $IN_DIR/generic-rivers-out-validation-report $OUT_DIR/generic-rivers-out-validation-report
+fi
 
 #read in a set of stat names from a file, delete them from the hoot command stats output, and write the remaining stats to the final output
 EDIT_CMD=""

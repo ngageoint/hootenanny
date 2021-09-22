@@ -29,13 +29,13 @@
 
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/LogColor.h>
-#include <hoot/core/util/StringUtils.h>
 
-#include <hoot/test/validation/TestOutputValidator.h>
+# ifdef HOOT_HAVE_JOSM
+#include <hoot/josm/validation/MapValidator.h>
+# endif
 
 // Qt
 #include <QCoreApplication>
@@ -96,18 +96,21 @@ QString ScriptTest::_removeIgnoredSubstrings(const QString& input) const
   for (int i = 0; i < inLines.size(); i++)
   {
     bool keep = true;
-    if (inLines[i].contains(" STATUS ") || inLines[i].contains(" INFO ") ||
-        inLines[i].contains(" DEBUG ") || inLines[i].contains(" elapsed: ") ||
-        inLines[i].contains("Time (sec)"))
+    QString line = inLines[i];
+
+    if (line.contains(" STATUS ") || line.contains(" INFO ") ||
+        line.contains(" DEBUG ") || line.contains(" elapsed: ") ||
+        line.contains("Time (sec)")/* ||
+        (ignoreValidationReportOutput && isValidationReportLine)*/)
     {
       keep = false;
     }
 
     if (keep)
     {
-      inLines[i].replace(reWarn, "WARN - ");
-      inLines[i].replace(reError, "ERROR - ");
-      outLines.append(inLines[i]);
+      line.replace(reWarn, "WARN - ");
+      line.replace(reError, "ERROR - ");
+      outLines.append(line);
     }
   }
 
@@ -123,7 +126,7 @@ QString ScriptTest::_removeLogColoring(const QString& input) const
 
 void ScriptTest::runTest()
 {
-  // before we start remove any temporary files that we generated last time.
+  // Before we start, remove any temporary files that we generated last time.
   _removeFile(_script + ".stdout.failed");
   _removeFile(_script + ".stderr.failed");
   _removeFile(_script + ".stdout.failed.stripped");
@@ -137,17 +140,6 @@ void ScriptTest::runTest()
 
   _runProcess();
 
-  // Run validation on test output if configured for it and a file to validate was specified in the
-  // script. TODO
-# ifdef HOOT_HAVE_JOSM
-  LOG_VART(ConfigOptions().getTestValidationEnable());
-  if (ConfigOptions().getTestValidationEnable())
-  {
-    _runValidation();
-  }
-# endif
-
-
   //  Replace colored text in the standard out
   _stdout.replace(LogColor::ColorRegex, "");
 
@@ -155,7 +147,7 @@ void ScriptTest::runTest()
   {
     LOG_ERROR("STDOUT or STDERR doesn't exist for " + _script +
               "\n*************************\n"
-              "  This can be resolved by reviewing the output for correctness and then creating a new baseline:\n"
+              "  This can be resolved by reviewing the output for correctness and then creating a new baseline.\n"
               "  Verify the changes in the output are satisfactory: \n"
               "    less " + _script + ".stdout.first\n"
               "    less " + _script + ".stderr.first\n"
@@ -184,29 +176,28 @@ void ScriptTest::runTest()
     _writeFile(_script + ".stdout.failed.stripped", _removeIgnoredSubstrings(_stdout));
     _writeFile(_script + ".stdout.stripped", _removeIgnoredSubstrings(_baseStdout));
 
-    QString msg =
-      "STDOUT does not match for:\n" + _script + ".stdout" + " " + _script + ".stdout.failed";
-    if (_suppressFailureDetail)
+    if (!_suppressFailureDetail)
     {
-      LOG_ERROR(msg);
-    }
-    else if (_printDiff)
-    {
-      LOG_ERROR(msg);
-      _runDiff(_script + ".stdout.stripped", _script + ".stdout.failed.stripped");
-    }
-    else
-    {
-      msg += "\n"
-             "\n*************************\n"
-             "  This can be resolved by reviewing the output for correctness and then creating a new baseline:"
-             "  Verify the changes in the output are satisfactory: \n"
-             "    diff " + _script + ".stdout.stripped " + _script + ".stdout.failed.stripped\n"
-             "  Make a new baseline for the output:\n"
-             "    mv " + _script + ".stdout.failed " + _script + ".stdout\n"
-             "*************************";
-      LOG_ERROR(msg);
-    }
+      QString msg =
+        "STDOUT does not match for:\n" + _script + ".stdout" + " " + _script + ".stdout.failed";
+      if (_printDiff)
+      {
+        LOG_ERROR(msg);
+        _runDiff(_script + ".stdout.stripped", _script + ".stdout.failed.stripped");
+      }
+      else
+      {
+        msg += "\n"
+               "\n*************************\n"
+               "  This can be resolved by reviewing the output for correctness and then creating a new baseline.\n"
+               "  Verify the changes in the output are satisfactory: \n"
+               "    diff " + _script + ".stdout.stripped " + _script + ".stdout.failed.stripped\n"
+               "  Make a new baseline for the output:\n"
+               "    mv " + _script + ".stdout.failed " + _script + ".stdout\n"
+               "*************************";
+        LOG_ERROR(msg);
+      }
+    } 
 
     failed = true;
   }
@@ -217,28 +208,27 @@ void ScriptTest::runTest()
     _writeFile(_script + ".stderr.failed.stripped", _removeIgnoredSubstrings(_stderr));
     _writeFile(_script + ".stderr.stripped", _removeIgnoredSubstrings(_baseStderr));
 
-    QString msg =
-      "STDERR does not match for:\n" + _script + ".stderr" + " " + _script + ".stderr.failed";
-    if (_suppressFailureDetail)
+    if (!_suppressFailureDetail)
     {
-      LOG_ERROR(msg);
-    }
-    else if (_printDiff)
-    {
-      LOG_ERROR(msg);
-      _runDiff(_script + ".stderr.stripped", _script + ".stderr.failed.stripped");
-    }
-    else
-    {
-      msg += "\n"
-             "\n*************************\n"
-             "  This can be resolved by reviewing the output for correctness and then creating a new baseline:"
-             "  Verify the changes in the output are satisfactory: \n"
-             "    diff " + _script + ".stderr.stripped " + _script + ".stderr.failed.stripped\n"
-             "  Make a new baseline for the output:\n"
-             "    mv " + _script + ".stderr.failed " + _script + ".stderr\n"
-             "*************************";
-      LOG_ERROR(msg);
+      QString msg =
+        "STDERR does not match for:\n" + _script + ".stderr" + " " + _script + ".stderr.failed";
+      if (_printDiff)
+      {
+        LOG_ERROR(msg);
+        _runDiff(_script + ".stderr.stripped", _script + ".stderr.failed.stripped");
+      }
+      else
+      {
+        msg += "\n"
+               "\n*************************\n"
+               "  This can be resolved by reviewing the output for correctness and then creating a new baseline.\n"
+               "  Verify the changes in the output are satisfactory: \n"
+               "    diff " + _script + ".stderr.stripped " + _script + ".stderr.failed.stripped\n"
+               "  Make a new baseline for the output:\n"
+               "    mv " + _script + ".stderr.failed " + _script + ".stderr\n"
+               "*************************";
+        LOG_ERROR(msg);
+      }
     }
 
     failed = true;
@@ -340,110 +330,6 @@ void ScriptTest::_runProcess()
 
   _stdout = QString::fromUtf8(p.readAllStandardOutput());
   _stderr = QString::fromUtf8(p.readAllStandardError());
-}
-
-void ScriptTest::_runValidation()
-{
-  QStringList filesToValidate;
-  QStringList goldValidationReports;
-  if (!_validateScriptForValidation(filesToValidate, goldValidationReports))
-  {
-    return;
-  }
-
-  assert(filesToValidate.size() == goldValidationReports.size());
-  const QString testName = QFileInfo(_script).completeBaseName();
-  for (int i = 0; i < filesToValidate.size(); i++)
-  {
-    TestOutputValidator::validate(
-      testName, filesToValidate.at(i), goldValidationReports.at(i), _suppressFailureDetail);
-  }
-}
-
-bool ScriptTest::_validateScriptForValidation(
-  QStringList& filesToValidate, QStringList& goldValidationReports)
-{
-  const QString fileToValidatePropertyKey = "TO_VALIDATE";
-  const QString validationReportGoldPropertyKey = "VALIDATION_REPORT_GOLD";
-  const QStringList scriptFileLines = FileUtils::readFileToLines(_script);
-
-  // Check for typo duplications of validation variables to save some tedious debugging later on.
-  if (StringUtils::containsDuplicatePropertyKeys(scriptFileLines, fileToValidatePropertyKey, "="))
-  {
-    _stderr +=
-      "Script test: " + _script + " has duplicated " + fileToValidatePropertyKey +
-      " property keys." + "\n";
-    return false;
-  }
-  if (StringUtils::containsDuplicatePropertyKeys(
-        scriptFileLines, validationReportGoldPropertyKey, "="))
-  {
-    _stderr +=
-      "Script test: " + _script + " has duplicated " + validationReportGoldPropertyKey +
-      " property keys." + "\n";
-    return false;
-  }
-  if (StringUtils::containsDuplicatePropertyValues(scriptFileLines, fileToValidatePropertyKey, "="))
-  {
-    _stderr +=
-      "Script test: " + _script + " has duplicated " + fileToValidatePropertyKey +
-      " property values." + "\n";
-    return false;
-  }
-  if (StringUtils::containsDuplicatePropertyValues(
-        scriptFileLines, validationReportGoldPropertyKey, "="))
-  {
-    _stderr +=
-      "Script test: " + _script + " has duplicated " + validationReportGoldPropertyKey +
-      " property values." + "\n";
-    return false;
-  }
-  // Since script tests can support multiple outputs and validations for each, we require that a
-  // numeric index be appended to each property key.
-  const QString propKeyNonNumericEndErrorMsg = "property keys must end with a numeric character.";
-  if (!StringUtils::allEndWithNumericChar(
-        StringUtils::filterToPropertyKeysContaining(
-          scriptFileLines, fileToValidatePropertyKey, "=")))
-  {
-    _stderr += fileToValidatePropertyKey + " " + propKeyNonNumericEndErrorMsg + "\n";
-    return false;
-  }
-  if (!StringUtils::allEndWithNumericChar(
-        StringUtils::filterToPropertyKeysContaining(
-          scriptFileLines, validationReportGoldPropertyKey, "=")))
-  {
-    _stderr += validationReportGoldPropertyKey + " " + propKeyNonNumericEndErrorMsg + "\n";
-    return false;
-  }
-
-  // If a test script contains TO_VALIDATE_<index>, that indicates it wants to perform validation on
-  // a test output file. Validation is optional.
-  filesToValidate =
-    StringUtils::filterToPropertyValuesContaining(scriptFileLines, fileToValidatePropertyKey, "=");
-  LOG_VART(filesToValidate);
-  if (!filesToValidate.empty())
-  {
-    // A validation report to compare with must also be specified with
-    // VALIDATION_REPORT_GOLD_<index>. Both sets of file names are sorted so the indexes between the
-    // two file lists will match up correctly if they were written in the script correctly.
-    goldValidationReports =
-      StringUtils::filterToPropertyValuesContaining(
-        scriptFileLines, validationReportGoldPropertyKey, "=");
-    LOG_VART(goldValidationReports);
-    const QString testName = QFileInfo(_script).completeBaseName();
-    if (filesToValidate.size() != goldValidationReports.size())
-    {
-      _stderr +=
-        "In script test: " + testName + " the number of files to validate specified by " +
-        fileToValidatePropertyKey + ": " + QString::number(filesToValidate.size()) +
-        " does not match the number of validation report gold files specified by " +
-        validationReportGoldPropertyKey + ": " + QString::number(goldValidationReports.size()) +
-        "\n";
-      return false;
-    }
-  }
-
-  return true;
 }
 
 void ScriptTest::_writeFile(const QString& path, const QString& content)

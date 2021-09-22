@@ -81,19 +81,6 @@ private:
 
   void _runDiff(const QString& file1, const QString& file2);
   void _runProcess();
-  /**
-   * @brief _runValidation TODO
-   */
-  void _runValidation();
-
-  /**
-   * @brief _validateScriptForValidation TODO
-   * @param filesToValidate
-   * @param goldValidationReports
-   * @return
-   */
-  bool _validateScriptForValidation(
-    QStringList& filesToValidate, QStringList& goldValidationReports);
 };
 
 }

@@ -88,6 +88,13 @@ public:
    * @return a list of strings
    */
   static QStringList readFileToLines(const QString& inputPath, const bool toLowerCase = false);
+  /**
+   * Returns the number of lines in a file
+   *
+   * @param file file to examine
+   * @return a line count
+   */
+  static long getNumberOfLinesInFile(const QString& file);
 
   /**
    * Writes an entire file to string.  Closes the file on success.
@@ -96,14 +103,6 @@ public:
    * @param text text to be written
    */
   static void writeFully(const QString& path, const QString& text);
-
-  /**
-   * Returns the number of lines in a file
-   *
-   * @param file file to examine
-   * @return a line count
-   */
-  static long getNumberOfLinesInFile(const QString& file);
 
   /**
    * Tokenize a file by line and remove the date from each line

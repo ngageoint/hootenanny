@@ -50,7 +50,6 @@ public:
    * @return a DD:MM:SS string
    */
   static QString millisecondsToDhms(const qint64 durationInMilliseconds);
-
   /**
    * Converts a large number to a more human readable format
    *
@@ -58,49 +57,6 @@ public:
    * @return a formatted number string
    */
   static QString formatLargeNumber(const unsigned long number);
-
-  /**
-   * Determines whether a string contains an alphabetic character
-   *
-   * @param input string to examine
-   * @return true if the input has at least one alphabetic character; false otherwise
-   */
-  static bool hasAlphabeticCharacter(const QString& input);
-
-  /**
-   * Determines whether a string contains a number
-   *
-   * @param input string to examine
-   * @return true if the input has at least one number; false otherwise
-   */
-  static bool hasDigit(const QString& input);
-
-  /**
-   * Converts a JSON string to a Boost property tree
-   *
-   * @param jsonStr the string to convert
-   * @return a Boost property tree
-   */
-  static std::shared_ptr<boost::property_tree::ptree> jsonStringToPropTree(const QString& jsonStr);
-
-  /**
-   * Creates a JSON array from a list of strings
-   *
-   * @param stringList a list of strings
-   * @return a Boost JSON property tree containing a string array
-   */
-  static std::shared_ptr<boost::property_tree::ptree> stringListToJsonStringArray(
-    const QStringList& stringList);
-
-  /**
-   * Determines if text is a number
-   *
-   * @param input text to examine
-   * @return true if the input is a number; false otherwise
-   * @note only implemented for long int
-   */
-  static bool isNumber(const QString& input);
-
   /**
    * Pads the front of a number string with zeroes
    *
@@ -111,12 +67,50 @@ public:
   static QString padFrontOfNumberStringWithZeroes(const int number, const int padSize);
 
   /**
+   * Determines whether a string contains an alphabetic character
+   *
+   * @param input string to examine
+   * @return true if the input has at least one alphabetic character; false otherwise
+   */
+  static bool hasAlphabeticCharacter(const QString& input);
+  /**
+   * Determines whether a string contains a number
+   *
+   * @param input string to examine
+   * @return true if the input has at least one number; false otherwise
+   */
+  static bool hasDigit(const QString& input);
+  /**
+   * Determines if text is a number
+   *
+   * @param input text to examine
+   * @return true if the input is a number; false otherwise
+   * @note only implemented for long int
+   */
+  static bool isNumber(const QString& input);
+  /**
    * Determines if a string is made up of entirely alphanumeric characters
    *
    * @param input string to examine
    * @return true if the string contains only alphanumeric characters; false otherwise
    */
   static bool isAlphaNumeric(const QString& input);
+
+  /**
+   * Converts a JSON string to a Boost property tree
+   *
+   * @param jsonStr the string to convert
+   * @return a Boost property tree
+   */
+  static std::shared_ptr<boost::property_tree::ptree> jsonStringToPropTree(const QString& jsonStr);
+  /**
+   * Creates a JSON array from a list of strings
+   *
+   * @param stringList a list of strings
+   * @return a Boost JSON property tree containing a string array
+   */
+  static std::shared_ptr<boost::property_tree::ptree> stringListToJsonStringArray(
+    const QStringList& stringList);
 
   /**
    * Finds duplicate strings in a list
@@ -185,43 +179,6 @@ public:
    * @return true if at least one match is found; false otherwise
    */
   static bool matchesWildcard(const QString& str, const QStringList& wildcards);
-
-  /**
-   * @brief containsDuplicatePropertyKeys TODO
-   * @param input
-   * @param lineText
-   * @param separator
-   * @return
-   */
-  static bool containsDuplicatePropertyKeys(
-    const QStringList& input, const QString& lineText, const QString& separator);
-  /**
-   * @brief containsDuplicatePropertyValues TODO
-   * @param input
-   * @param lineText
-   * @param separator
-   * @return
-   */
-  static bool containsDuplicatePropertyValues(
-    const QStringList& input, const QString& lineText, const QString& separator);
-  /**
-   * @brief filterToPropertyKeysContaining TODO
-   * @param input
-   * @param lineText
-   * @param separator
-   * @return
-   */
-  static QStringList filterToPropertyKeysContaining(
-    const QStringList& input, const QString& lineText, const QString& separator);
-  /**
-   * @brief filterToPropertyValuesContaining TODO
-   * @param input
-   * @param lineText
-   * @param separator
-   * @return
-   */
-  static QStringList filterToPropertyValuesContaining(
-    const QStringList& input, const QString& lineText, const QString& separator);
 
   /**
    * Determines if a string ends with any one of a group of strings
@@ -315,7 +272,6 @@ public:
    * @return the number of prefixes removed
    */
   static int removePrefixes(const QString& prefix, QStringList& input);
-
   /**
    * Removes all map entries from input that are contained in a specified list
    *
@@ -397,12 +353,6 @@ private:
 
   static QString _splitAndRemoveAtIndex(
     QStringList& input, const int index, const QString& separator);
-
-  static QStringList _filterToPropertiesContaining(
-    const QStringList& input, const QString& lineText, const QString& separator, const bool key);
-
-  static bool _containsDuplicateProperties(
-    const QStringList& input, const QString& lineText, const QString& separator, const bool key);
 };
 
 }
