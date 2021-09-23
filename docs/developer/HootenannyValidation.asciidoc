@@ -13,6 +13,18 @@ uses the `JosmMapValidator` class, and the `JosmMapCleaner` class.
 Hootenanny has validation integration with some unit tests. See the "Test Output Validation" section 
 under the "Hootenanny Tests" section in the Hootenanny Developer Guide for more information.
 
+Notes:
+
+* Not all validation failures are critical and some may be unavoidable in conflated output under 
+certain circumstances.
+* Validation failures across multiple validators are sometimes contradictory with each other.
+* If conflation job is passed inputs that have validation errors, the output will almost undoubtedly
+have some of the same validation errors. The input should be cleaned beforehand when possible.
+* "Total failing validators" in the validation reports refer to the number of validators which 
+exited program execution abnormally due to not being able to properly validate the input data 
+provided (crashed). It does not refer to the number of validators which had validation errors. That 
+total can be inferred from the total number of unique validation error types that occurred.
+
 === Generating Validation Reports
 
 The Hootenanny/JOSM integration is a useful tool to detect undesirable changes to conflated output 
@@ -28,16 +40,6 @@ hoot validate test-output/cmd/slow/AreaConflateStandaloneTest/Output.osm \
   --report-output test-output/cmd/slow/AreaConflateStandaloneTest/MyValidationReport \
   --output test-output/cmd/slow/AreaConflateStandaloneTest/ValidatedOutput.osm
 -----
-
-Notes:
-
-* Not all validation failures are critical and some may be unavoidable in conflated output under 
-certain circumstances.
-* Validation failures across multiple validators are sometimes contradictory with each other.
-* "Total failing validators" in the validation reports refer to the number of validators which 
-exited program execution abnormally due to not being able to properly validate the input data 
-provided (crashed). It does not refer to the number of validators which had validation errors. That 
-total can be inferred from the total number of unique validation error types that occurred.
 
 === JOSM Configuration
 

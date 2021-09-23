@@ -16,7 +16,7 @@ hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.a
   $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output-partial.osm --differential
 hoot diff $LOG_LEVEL -C Testing.conf $INPUT_DIR/output-partial.osm $OUTPUT_DIR/output-partial.osm
 if [ -f "test-output/test-validation-enabled" ]; then
-  hoot validate $LOG_LEVEL $CONFIG $OUTPUT_DIR/output.osm \
+  hoot validate $LOG_LEVEL $CONFIG $OUTPUT_DIR/output-partial.osm \
     --report-output $OUTPUT_DIR/output-partial-validation-report --output \
     $OUTPUT_DIR/output-partial-validated.osm
   diff $INPUT_DIR/output-partial-validation-report $OUTPUT_DIR/output-partial-validation-report
@@ -27,7 +27,7 @@ hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.a
   $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm $OUTPUT_DIR/output-complete.osm --differential
 hoot diff $LOG_LEVEL -C Testing.conf $INPUT_DIR/output-complete.osm $OUTPUT_DIR/output-complete.osm
 if [ -f "test-output/test-validation-enabled" ]; then
-  hoot validate $LOG_LEVEL $CONFIG $OUTPUT_DIR/output.osm \
+  hoot validate $LOG_LEVEL $CONFIG $OUTPUT_DIR/output-complete.osm \
     --report-output $OUTPUT_DIR/output-complete-validation-report --output \
     $OUTPUT_DIR/output-complete-validated.osm
   diff $INPUT_DIR/output-complete-validation-report $OUTPUT_DIR/output-complete-validation-report
@@ -42,7 +42,7 @@ hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.a
 hoot diff $LOG_LEVEL -C Testing.conf \
   $INPUT_DIR/output-partial-cleaned.osm $OUTPUT_DIR/output-partial-cleaned.osm
 if [ -f "test-output/test-validation-enabled" ]; then
-  hoot validate $LOG_LEVEL $CONFIG $OUTPUT_DIR/output.osm \
+  hoot validate $LOG_LEVEL $CONFIG $OUTPUT_DIR/output-partial-cleaned.osm \
     --report-output $OUTPUT_DIR/output-partial-cleaned-validation-report --output \
     $OUTPUT_DIR/output-partial-cleaned-validated.osm
   diff $INPUT_DIR/output-partial-cleaned-validation-report $OUTPUT_DIR/output-partial-cleaned-validation-report

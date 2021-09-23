@@ -398,6 +398,11 @@ Any test may have its output validated but in practice we limit the number of te
 validated to avoid adding unnecessary test runtime. Currently, all case tests and selected script 
 tests have their output validated when `test.validation.enable=true`.
 
+Note: Many of the initial baseline validation reports contain validation errors. For the initial
+implementation of test output validation it has been assumed that the starting output files were a 
+good baseline, despite any errors. Going forward, the errors may either be accepted or prevented via
+conflation code improvements.
+
 ===== Case Tests
 
 Case tests make calls to `TestOutputValidator` to validate their output. Details:

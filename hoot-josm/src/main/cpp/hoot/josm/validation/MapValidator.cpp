@@ -196,8 +196,9 @@ QString MapValidator::_validate(const QStringList& inputs, const QString& output
   }
   catch (const HootException& e)
   {
-    errorMsg = "Validation failed for ..." + inputName.right(FILE_PRINT_SIZE) + ".\n\n";
-    LOG_ERROR(errorMsg << ": " << e.getWhat());
+    errorMsg =
+      "Validation failed for ..." + inputName.right(FILE_PRINT_SIZE) + ": " + e.getWhat() + ".\n\n";
+    LOG_ERROR(errorMsg);
     return errorMsg;
   }
 
@@ -222,8 +223,9 @@ QString MapValidator::_validate(const QStringList& inputs, const QString& output
   }
   catch (const HootException& e)
   {
-    errorMsg = "Validation failed for ..." + inputName.right(FILE_PRINT_SIZE) + ".\n\n";
-    LOG_ERROR(errorMsg << ": " << e.getWhat());
+    errorMsg =
+      "Validation failed for ..." + inputName.right(FILE_PRINT_SIZE) + ": " + e.getWhat() + ".\n\n";
+    LOG_ERROR(errorMsg);
     validationSummary += errorMsg;
   }
 

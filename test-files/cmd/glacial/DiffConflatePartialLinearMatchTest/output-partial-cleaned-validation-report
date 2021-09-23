@@ -1,15 +1,15 @@
-Input: test-output/cmd/glacial/DiffConflatePartialLinearMatchTest/output-partial.osm
+Input: test-output/cmd/glacial/DiffConflatePartialLinearMatchTest/output-partial-cleaned.osm
 
-Found 556 validation errors in 8,485 features with JOSM.
+Found 500 validation errors in 8,355 features with JOSM.
 API Capabilities errors: 1
 Almost right angle buildings errors: 38
 Crossing ways errors: 15
 Duplicated ways errors: 4
 Multipolygon errors: 6
 Tag checker errors: 9
-Tag checker (MapCSS based) errors: 45
-Untagged, empty and one node ways errors: 438
+Tag checker (MapCSS based) errors: 42
+Untagged, empty and one node ways errors: 385
 Total failing JOSM validators: 0
 
-Found 14 validation errors in 547 features with Hootenanny.Roads crossing polygons: 14
+Found 14 validation errors in 494 features with Hootenanny.Roads crossing polygons: 14
 Total failing Hootenanny validators: 0
