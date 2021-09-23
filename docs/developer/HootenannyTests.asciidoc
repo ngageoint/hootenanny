@@ -359,17 +359,99 @@ HootTest --case-only
 
 See `test-files/cases/README` for additional information on case tests.
 
-===== Validation Integration
+==== Translation Tests
 
-See the section "Unit Test Integration" under the section 
-"Using Validation Checks to Improve Conflated Maps" with the Developer Documentation. TODO: more
+Formerly known as the "Plugins" tests, these test a variety of `hoot-js` functionality. Not all of 
+the tests are strictly translation related. Tests may be invoked in isolation with:
+--------------
+# configure step required once per configuration only
+aclocal && autoconf && autoheader && automake && ./configure
+make -sj$(nproc) translations-test
+--------------
+
+To run an individual test:
+--------------
+cd $HOOT_HOME/translations/test
+mocha <test name>.js
+--------------
+
+==== Regression Tests
+
+The Regression Tests run Hootenanny command line operations against specific datasets to measure
+Hootenanny performance against particular scenarios. The tests are run against non-public data and,
+therefore, are kept in a private Maxar repository and run on a nightly basis only. For
+more information about the tests, create an issue at https://github.com/ngageoint/hootenanny.
+
+Many of the regression tests score Hootenanny's conflation accuracy on a dataset and mark the test
+as passing or failing based on an allowable score range.  See
+hoot-tests/release_test.child/jakarta-spaghetti.release as an example.
+
+==== Test Output Validation
+
+Hootenanny has the capability to run validation routines on test output and generate a report with 
+validation failures. See the section "Using Validation Checks to Improve Conflated Maps" in the 
+Developer Documentation to understand the benefits of validating test output. It also contains 
+detail on configuring https://josm.openstreetmap.de/[JOSM] for use with Hootenanny.
+
+To enable validation during testing, enable the `test.validation.enable` configuration option. 
+Any test may have its output validated but in practice we limit the number of tests whose output is
+validated to avoid adding unnecessary test runtime. Currently, all case tests and selected script 
+tests have their output validated when `test.validation.enable=true`.
+
+===== Case Tests
+
+Case tests make calls to `TestOutputValidator` to validate their output. Details:
+
+* A case test must contain either a file named `validation-report` containing the baseline (gold) 
+validation report for the test output or a file named `validation-report.off` indicating that test 
+output validation should be skipped for the test. 
+* If test output validation is enabled and the actual test validation report (`validation-report` 
+file written to the test output directory) does not match the baseline validation report, the test 
+will fail. 
+* Case tests output a copy of the test output file, `Output-validated.osm` derived from 
+`Output.osm`, with validation error tags attached to any involved features. This file may be useful 
+for debugging. 
+* Any other CPPUnit test can have its output validated using `TestOutputValidator`, if desired, 
+however some modifications to the code may need to be made to `TestOutputValidator` to do so.
+
+===== Script Tests
+
+Script tests may voluntarily elect to have test output validated. To avoid excessive core test suite 
+runtimes, only script tests running conflation and generating smaller outputs (<100k?) should have 
+validation enabled. If validation adds too much runtime to a script test, it may have to be moved 
+to a different suite (e.g. moved from the "slow" suite to the "glacial" suite). Generally, though, 
+that practice should be avoided when possible. 
+
+The excerpt below taken from `ConflateCmdTest.sh` shows how to use validation within a script test:
+--------------
+if [ -f "test-output/test-validation-enabled" ]; then
+  hoot validate --warn $CONFIG $OUT_DIR/output.osm \
+    --report-output $OUT_DIR/output-validation-report --output $OUT_DIR/output-validated.osm
+  diff $IN_DIR_2/output-validation-report $OUT_DIR/output-validation-report
+fi
+--------------
+
+Details:
+
+* The empty file, `test-output/test-validation-enabled`, should be checked for existance before
+running validation from a script test. `HootTest` will automatically create this dummy file if the 
+pre-requisites for running validation are met (compiled `--with-josm` and 
+`test.validation.enable=true`). If the pre-requisites have not been met, this file will be removed 
+by `HootTest` and scripts will skip running validation. This is the needed due to the fact the 
+script has no way itself of knowing if the validation pre-requisites have been met.
+* Validation should be run as above with a report file output and a validated file output.
+* A diff is performed against the test output validation report and a baseline validation report. 
+Any differences will show up in the test output and cause the test to fail.
+* Their is no set naming convention for validation report and validated output files. Just ensure 
+that if running multiple validations within a single script tests that all file names are unique.
 
 ==== Running Tests in Parallel
 
-Hootenanny can run all Core tests in parallel, except those in the Translation test suite. This is 
-accomplished with the `HootTest` option, `--parallel [n]`, where the optional `[n]` specifies the 
-number of worker processes to spawn.  Leaving off the `[n]` parameter makes an implicit call to the 
-operating system to get the total number of online processing units (The same as `$(nproc)` ).
+Hootenanny can run Core tests in parallel. Tests in the Translation suite are excluded, however. 
+This is accomplished with the `HootTest` option, `--parallel [n]`, where the optional `[n]` 
+specifies the number of worker processes to spawn.  Leaving off the `[n]` parameter makes an 
+implicit call to the operating system to get the total number of online processing units (The same 
+as `$(nproc)` ).
 --------------
 # Runs quick tests serially
 HootTest --quick
@@ -400,32 +482,8 @@ NOTE: While creating new unit tests every effort should be made to allow for the
 in parallel. Do not reuse output filenames to avoid stomping on files. Input files can be reused
 though.
 
-==== Translation Tests
-
-Formerly known as the "Plugins" tests, these test a variety of `hoot-js` functionality. Not all of 
-the tests are strictly translation related. Tests may be invoked in isolation with:
---------------
-# configure step required once per configuration only
-aclocal && autoconf && autoheader && automake && ./configure
-make -sj$(nproc) translations-test
---------------
-
-To run an individual test:
---------------
-cd $HOOT_HOME/translations/test
-mocha <test name>.js
---------------
-
-==== Regression Tests
-
-The Regression Tests run Hootenanny command line operations against specific datasets to measure
-Hootenanny performance against particular scenarios. The tests are run against non-public data and,
-therefore, are kept in a private Maxar repository and run on a nightly basis only. For
-more information about the tests, create an issue at https://github.com/ngageoint/hootenanny.
-
-Many of the regression tests score Hootenanny's conflation accuracy on a dataset and mark the test
-as passing or failing based on an allowable score range.  See
-hoot-tests/release_test.child/jakarta-spaghetti.release as an example.
+Regression tests are not run by `HootTest` but may be run in parallel via `make`. e.g. 
+`make -j<nproc>`.
 
 === Web Services Tests
 
