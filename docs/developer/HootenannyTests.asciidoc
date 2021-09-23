@@ -400,6 +400,10 @@ Any test may have its output validated but in practice we limit the number of te
 validated to avoid adding unnecessary test runtime. Currently, all case tests and selected script 
 tests have their output validated when `test.validation.enable=true`.
 
+NOTE: Currently, there is a bug where `test.validation.enable` must be set in 
+`ConfigOptions.asciidoc` and is not read from `Testing.conf` or from the command line by `HootTest` 
+(may only occur when tests are run in parallel).
+
 NOTE: Many of the initial baseline validation reports contain validation errors. For the initial
 implementation of test output validation it has been assumed that the starting output files were a 
 good baseline, despite any errors. Going forward, the errors may either be accepted or prevented via

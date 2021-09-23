@@ -622,7 +622,10 @@ void _verifyValidationConfig()
   const QString testValidationEnabledFile = "test-output/test-validation-enabled";
   if (ConfigOptions().getTestValidationEnable())
   {
-    FileUtils::writeFully(testValidationEnabledFile, "");
+    if (!QFile::exists(testValidationEnabledFile))
+    {
+      FileUtils::writeFully(testValidationEnabledFile, "");
+    }
   }
   else
   {
