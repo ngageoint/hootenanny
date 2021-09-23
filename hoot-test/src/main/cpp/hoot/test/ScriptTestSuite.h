@@ -42,20 +42,30 @@ class ScriptTestSuite : public CppUnit::TestSuite
 public:
 
   /**
-   * @brief ScriptTestSuite TODO
-   * @param dir
-   * @param printDiff
-   * @param waitTime
-   * @param hideDisableTests
-   * @param suppressFailureDetail
+   * @brief ScriptTestSuite constructor
+   * @param dir top level directory for script tests
+   * @param printDiff if enabled, any differences between baseline and actual test output are
+   * displayed
+   * @param waitTime maximum time, in seconds, to wait for script to finish execution
+   * @param hideDisableTests if true, status messages for disabled tests are suppressed
+   * @param suppressFailureDetail if true, detailed test failure information is not displayed
+   * @param validatedOnly if true, only script tests which validate any output will be run
    */
   ScriptTestSuite(
     QString dir, bool printDiff, double waitTime, bool hideDisableTests,
-    bool suppressFailureDetail);
+    bool suppressFailureDetail, bool validatedOnly);
 
 private:
 
   std::vector<std::shared_ptr<ScriptTest>> _tests;
+
+  /**
+   * @brief _scriptValidatesAnyOutput Determines if a script test runs validation with a simple text
+   * comparison
+   * @param scriptPath path to the test's script
+   * @return true if the test runs the validate command; false otherwise
+   */
+  bool _scriptValidatesAnyOutput(const QString& scriptPath) const;
 };
 
 }
