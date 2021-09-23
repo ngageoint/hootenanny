@@ -33,7 +33,6 @@
 #include <hoot/core/util/StringUtils.h>
 
 #include <hoot/josm/validation/MapValidator.h>
-#include <hoot/josm/validation/ValidatedOutputCleaner.h>
 
 // Qt
 #include <QElapsedTimer>

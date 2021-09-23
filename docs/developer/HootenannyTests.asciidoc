@@ -389,16 +389,18 @@ hoot-tests/release_test.child/jakarta-spaghetti.release as an example.
 ==== Test Output Validation
 
 Hootenanny has the capability to run validation routines on test output and generate a report with 
-validation failures. See the section "Using Validation Checks to Improve Conflated Maps" in the 
-Developer Documentation to understand the benefits of validating test output. It also contains 
-detail on configuring https://josm.openstreetmap.de/[JOSM] for use with Hootenanny.
+validation failures. A benefit of running the test output validation is that new validation errors 
+introduced by conflation may be caught before the software is released to production. See the 
+section "Using Validation Checks to Improve Conflated Maps" in the Developer Documentation for more
+information on validating test output. It also contains detail on configuring 
+https://josm.openstreetmap.de/[JOSM] for use with Hootenanny.
 
 To enable validation during testing, enable the `test.validation.enable` configuration option. 
 Any test may have its output validated but in practice we limit the number of tests whose output is
 validated to avoid adding unnecessary test runtime. Currently, all case tests and selected script 
 tests have their output validated when `test.validation.enable=true`.
 
-Note: Many of the initial baseline validation reports contain validation errors. For the initial
+NOTE: Many of the initial baseline validation reports contain validation errors. For the initial
 implementation of test output validation it has been assumed that the starting output files were a 
 good baseline, despite any errors. Going forward, the errors may either be accepted or prevented via
 conflation code improvements.
