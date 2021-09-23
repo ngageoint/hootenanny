@@ -65,7 +65,7 @@ public:
 
   void setCountFeaturesOnly(const bool countFeaturesOnly)
   { _countFeaturesOnly = countFeaturesOnly; }
-  void setCriteria(QStringList& names);
+  void setCriteria(const QStringList& names);
   void setCriteria(const ElementCriterionPtr& criteria) { _crit = criteria; }
 
 private:

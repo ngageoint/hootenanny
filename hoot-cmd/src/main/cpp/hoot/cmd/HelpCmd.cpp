@@ -135,7 +135,7 @@ private:
 
     // Please update the asciidoc user documentation if you change this usage.
     cout << "Usage:" << endl << endl;
-    cout << "hoot <command> [--logLevel] [-C configFile ] [-D optionName=optionValue] \\" << endl <<
+    cout << "hoot <command> [--logLevel] [--color] [-C configFile ] [-D optionName=optionValue] \\" << endl <<
             "  [-D optionName=\"<optionValueEntry 1>;<optionValueEntry 2>;...\"] [args]"
          << endl << endl;
 
@@ -183,6 +183,8 @@ private:
     cout << "  --info" << endl;
     cout << "  --debug" << endl;
     cout << "  --trace" << endl;
+    cout << endl;
+    cout << "  --color                     Colorize the output logs using ANSI colors" << endl;
     cout << endl;
 
     cout << "List Option Operations:" << endl << endl;

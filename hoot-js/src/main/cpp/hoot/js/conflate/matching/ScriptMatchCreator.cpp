@@ -32,6 +32,7 @@
 #include <hoot/core/criterion/ArbitraryCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/info/CreatorDescription.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -704,13 +705,13 @@ void ScriptMatchCreator::init(const ConstOsmMapPtr& map)
   _getCachedVisitor(map)->initSearchRadiusInfo();
 }
 
-Meters ScriptMatchCreator::calculateSearchRadius(const ConstOsmMapPtr& map,
-  const ConstElementPtr& e)
+Meters ScriptMatchCreator::calculateSearchRadius(
+  const ConstOsmMapPtr& map, const ConstElementPtr& e)
 {
   return _getCachedVisitor(map)->getSearchRadius(e);
 }
 
-void ScriptMatchCreator::setArguments(QStringList args)
+void ScriptMatchCreator::setArguments(const QStringList& args)
 {
   if (args.size() != 1)
   {
@@ -727,9 +728,43 @@ void ScriptMatchCreator::setArguments(QStringList args)
   _description = className() + "," + args[0];
   _cachedScriptVisitor.reset();
   _scriptInfo = _getScriptDescription(_scriptPath);
+  // Validate one to many rail matching config options based on the currently configured options and
+  // whether this match creator is dealing with rail matches or not.
+  setRunOneToManyRailMatching(
+    ConfigOptions().getRailwayOneToManyMatch(), _scriptInfo.getBaseFeatureType(),
+    ConfigOptions().getRailwayOneToManyIdentifyingKeys(),
+    ConfigOptions().getRailwayOneToManyTransferKeys());
 
   LOG_DEBUG(
     "Set arguments for: " << className() << " - rules: " << QFileInfo(_scriptPath).fileName());
+}
+
+void ScriptMatchCreator::setRunOneToManyRailMatching(
+  const bool runMatching, const CreatorDescription::BaseFeatureType& baseFeatureType,
+  const QStringList& identifyingKeys, const QStringList& transferKeys) const
+{
+  if (runMatching && baseFeatureType == CreatorDescription::BaseFeatureType::Railway)
+  {
+    QStringList identifyingKeysTemp = identifyingKeys;
+    StringUtils::removeEmptyStrings(identifyingKeysTemp);
+    if (identifyingKeysTemp.empty())
+    {
+      throw IllegalArgumentException(
+        "No railway one to many identifying keys specified in " +
+        ConfigOptions::getRailwayOneToManyIdentifyingKeysKey() + ".");
+    }
+
+    QStringList transferKeysTemp = transferKeys;
+    StringUtils::removeEmptyStrings(transferKeysTemp);
+    if (transferKeysTemp.empty())
+    {
+      throw IllegalArgumentException(
+        "No railway one to many transfer tag keys specified in " +
+        ConfigOptions::getHighwayMedianToDualHighwayTransferKeysKey() + ".");
+    }
+
+    LOG_STATUS("Running railway one to many custom conflation workflow...");
+  }
 }
 
 MatchPtr ScriptMatchCreator::createMatch(

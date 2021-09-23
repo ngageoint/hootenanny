@@ -67,7 +67,7 @@ _HootTest()
   cur=${COMP_WORDS[COMP_CWORD]}
   prev=${COMP_WORDS[COMP_CWORD-1]}
 
-  OPTIONS='--current --quick --slow --glacial --all --quick-only --slow-only --glacial-only --case-only --single --names --all-names --fatal --error --status --warn --info --verbose --debug --trace --diff --include --exclude --parallel'
+  OPTIONS='--current --quick --slow --glacial --all --quick-only --slow-only --glacial-only --case-only --single --names --all-names --fatal --error --status --warn --info --verbose --debug --trace --diff --include --exclude --parallel --color'
   case "$cur" in
     *)
         COMPREPLY=( $( compgen -W '$OPTIONS' -- $cur ) )

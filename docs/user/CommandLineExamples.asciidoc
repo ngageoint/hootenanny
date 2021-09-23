@@ -1405,6 +1405,12 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 === Utilities
 
+==== Colorize the output of a command:
+
+-----
+    hoot convert --trace --color input.osm output.osm
+-----
+
 ==== Create a shape that covers a set of features with a buffer:
 
 -----
