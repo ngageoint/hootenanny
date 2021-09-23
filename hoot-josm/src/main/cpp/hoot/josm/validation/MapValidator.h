@@ -50,23 +50,28 @@ public:
   ~MapValidator() = default;
 
   /**
-   * @brief validate TODO
-   * @param inputs
-   * @param output
-   * @return
+   * @brief validate Runs validations on inputs, optionally writes validation errors to output, and
+   * displays a report or generates a report file
+   * @param inputs URLs to validate
+   * @param output optional combined copy of the input with validation errors
+   * @return validation report text
    */
   QString validate(const QStringList& inputs, const QString& output = QString()) const;
 
   /**
-   * @brief printValidators TODO
+   * @brief printValidators Displays the available validators
    */
   static void printValidators();
 
+  /**
+   * @brief setReportPath Sets a path for an output report
+   * @param filePath path to write the report to
+   */
   void setReportPath(const QString& filePath);
 
 private:
 
-  // TODO
+  // If this is populated, the validation summary will be written to a file instead of displayed.
   QString _reportFile;
 
   static void _printValidatorOutput(const QMap<QString, QString>& validatorInfo);

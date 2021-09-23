@@ -43,10 +43,10 @@ class ConflateCaseTest : public AbstractTest
 public:
 
   /**
-   * @brief ConflateCaseTest TODO
-   * @param d
-   * @param confs
-   * @param suppressFailureDetail
+   * @brief ConflateCaseTest constructor
+   * @param d the directory containing the test files
+   * @param confs configuration files to be used by the test
+   * @param suppressFailureDetail if true, detailed test failure information is not displayed
    */
   ConflateCaseTest(QDir d, QStringList confs, bool suppressFailureDetail = false);
 
@@ -61,16 +61,6 @@ private:
 
   void _runConflateCmd() const;
   void _runMultiaryConflateCmd() const;
-
-  /**
-   * @brief _runValidation TODO
-   * @param testName
-   * @param testOutputPath
-   * @param goldValidationReportPath
-   */
-  void _runValidation(
-    const QString& testName, const QString& testOutputPath,
-    const QString& goldValidationReportPath) const;
 };
 
 }

@@ -133,8 +133,8 @@ public:
    * @brief parseCommonArguments parses common arguments (e.g. "-D foo=bar --debug")
    *
    * Any arguments parsed are removed from args.
-   * @param args TODO
-   * @param toIgnore TODO
+   * @param args the arguments to parse
+   * @param toIgnore option skip list; arguments in this list are not parsed
    */
   static void parseCommonArguments(QStringList& args, const QStringList toIgnore = QStringList());
 

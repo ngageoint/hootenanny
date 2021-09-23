@@ -120,9 +120,9 @@ public:
    */
   static QSet<QString> getDuplicates(const QStringList& input);
   /**
-   * @brief hasDuplicates TODO
-   * @param input
-   * @return
+   * @brief hasDuplicates Determines if duplicate strings are in a list of strings
+   * @param input the list to check for duplicates
+   * @return true if the list contains at least one duplicate; false otherwise
    */
   static bool hasDuplicates(const QStringList& input);
 
@@ -214,12 +214,6 @@ public:
   static QString endsWithAnyAsStr(
     const QString& input, const QStringList& compareList,
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
-  /**
-   * @brief allEndWithNumericChar TODO
-   * @param input
-   * @return
-   */
-  static bool allEndWithNumericChar(const QStringList& input);
 
   /**
    * Determines if a string contains a matching instance of any one of a group of regular
@@ -240,9 +234,9 @@ public:
    */
   static void removeAll(QStringList& input, const QStringList& toRemove);
   /**
-   * @brief removeAllContaining TODO
-   * @param input
-   * @param text
+   * @brief removeAllContaining Removes all strings from a list containing a particular text
+   * @param input the list to remove strings from
+   * @param text the text to match in the list
    * @param caseSensitivity determines whether comparisons are case sensitive
    */
   static void removeAllContaining(

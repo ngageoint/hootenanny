@@ -45,16 +45,20 @@ class ScriptTest : public CppUnit::TestCase
 public:
 
   /**
-   * @brief ScriptTest TODO
-   * @param script
-   * @param printDiff
-   * @param suppressFailureDetail
-   * @param waitToFinishTime
+   * @brief ScriptTest constructor
+   * @param script script file to execute
+   * @param printDiff if enabled, any differences between baseline and actual test output are
+   * displayed
+   * @param suppressFailureDetail if true, detailed test failure information is not displayed
+   * @param waitToFinishTime maximum time, in seconds, to wait for script to finish execution
    */
   ScriptTest(
     const QString& script, bool printDiff, bool suppressFailureDetail = false,
     int waitToFinishTime = 30000);
 
+  /**
+   * @brief see TestCase
+   */
   virtual void runTest();
 
 private:

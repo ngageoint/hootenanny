@@ -47,6 +47,7 @@ void TestOutputValidator::validate(
   const QString& testName, const QString& testOutputPath,
   const QString& goldValidationReportPath, const bool suppressFailureDetail)
 {
+  // Validators primarily use JOSM, so we need to be compiled with JOSM support to do this.
   # ifndef HOOT_HAVE_JOSM
     throw TestConfigurationException("Test output validation requires compilation --with-josm.");
   # endif
@@ -55,7 +56,7 @@ void TestOutputValidator::validate(
   LOG_VART(testOutputPath);
   LOG_VART(goldValidationReportPath);
 
-  // TODO
+  // Make sure the baseline report file is valid first.
   if (!_validateGoldReport(testName, goldValidationReportPath))
   {
     return;
@@ -115,7 +116,8 @@ void TestOutputValidator::validate(
 bool TestOutputValidator::_validateGoldReport(
   const QString& testName, const QString& goldValidationReportPath)
 {
-  // TODO
+  // Arbitrarily, we pick a standardized name for validation reports. Note this is currently used
+  // with case tests only.
   QString goldValidationReportPathEndText = "validation-report";
   // Make sure we have a base validation report to compare against.
   if (!goldValidationReportPath.endsWith(goldValidationReportPathEndText))

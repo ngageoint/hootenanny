@@ -60,48 +60,16 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
-    int standaloneOptionCount = 0;
-
     bool showAvailableValidatorsOnly = false;
     if (args.contains("--validators"))
     {
       showAvailableValidatorsOnly = true;
       args.removeAt(args.indexOf("--validators"));
-      standaloneOptionCount++;
-    }
-
-    bool cleanValidatedOutputRecursively = false;
-    if (args.contains("--cleanValidatedOutput"))
-    {
-      cleanValidatedOutputRecursively = true;
-      args.removeAt(args.indexOf("--cleanValidatedOutput"));
-      standaloneOptionCount++;
-    }
-
-    if (standaloneOptionCount > 1)
-    {
-      throw IllegalArgumentException(
-        QString("--validators and --cleanValidatedOutput must be specified ") +
-        QString("independently of each other."));
     }
 
     if (showAvailableValidatorsOnly)
     {
       MapValidator::printValidators();
-    }
-    else if (cleanValidatedOutputRecursively)
-    {
-      if (args.size() != 1)
-      {
-        std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(
-          QString(
-            "%1 with --cleanValidatedOutput takes a single directory name as an input parameter.")
-            .arg(getName()));
-      }
-
-      const int numDeleted = ValidatedOutputCleaner::clean(args[0]);
-      LOG_STATUS("Deleted " << numDeleted << " validated outputs.");
     }
     else
     {
@@ -113,10 +81,6 @@ public:
 
 private:
 
-  /**
-   * @brief _validate TODO
-   * @param args
-   */
   void _validate(QStringList& args)
   {
     bool separateOutput = false;

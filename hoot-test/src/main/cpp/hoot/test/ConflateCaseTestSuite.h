@@ -42,10 +42,10 @@ class ConflateCaseTestSuite : public AbstractTestSuite
 public:
 
   /**
-   * @brief ConflateCaseTestSuite TODO
-   * @param dir
-   * @param suppressFailureDetail
-   * @param hideDisableTests
+   * @brief ConflateCaseTestSuite constructor
+   * @param dir top level directory for case tests
+   * @param suppressFailureDetail if true, detailed test failure information is not displayed
+   * @param hideDisableTests if true, status messages for disabled tests are suppressed
    */
   ConflateCaseTestSuite(
     const QString& dir, bool suppressFailureDetail = false, bool hideDisableTests = false);

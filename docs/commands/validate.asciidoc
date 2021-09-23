@@ -31,15 +31,6 @@ To generate validation reports and/or mark data with validation errors use the f
                         denote no filtering or one or more wildcard name filters. e.g. 
                         "*.osm;*.json" or "*myFile*". This parameter is not compatible with the OGR 
                         layer input syntax.   
-                        
-To recursively clean validated output, specify one or more directory inputs along with use of this 
-single option:
-
-* `--cleanValidatedOutput`
-
-Using this option cleans all validated output files and directories recursively beginning from the 
-specified input directories. This is a very simple routine that will delete any file or directory 
-that has the text "-validated" in its name. Use with caution.
 
 === Usage
 
@@ -48,13 +39,10 @@ that has the text "-validated" in its name. Use with caution.
 hoot validate [--validators]
 
 # perform validation
-hoot validate (input1) [input2...] [--report-output path] [--output path] [--recursive "*"|"filter1;filter2..."] [--test]
+hoot validate (input1) [input2...] [--report-output path] [--output path] [--recursive "*"|"filter1;filter2..."]
 
 # perform validation and write to separate outputs
-hoot validate (input1) [input2...] [--recursive "*"|"filter1;filter2..."] [--separate-output] [--test]
-
-# recursively clean validated output
-hoot validate (inputDir) --cleanValidatedOutput 
+hoot validate (input1) [input2...] [--recursive "*"|"filter1;filter2..."] [--separate-output]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#validation[Examples]

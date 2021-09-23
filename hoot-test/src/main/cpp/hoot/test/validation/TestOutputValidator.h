@@ -34,7 +34,9 @@ namespace hoot
 {
 
 /**
- * @brief The TestOutputValidator class TODO
+ * @brief The TestOutputValidator class validates test output.
+ *
+ * Currently, this is only used for case test output.
  */
 class TestOutputValidator
 {
@@ -45,11 +47,11 @@ public:
   ~TestOutputValidator() = default;
 
   /**
-   * @brief validate TODO
-   * @param testName
-   * @param testOutputPath
-   * @param goldValidationReportPath
-   * @param suppressFailureDetail
+   * @brief validate validates test output
+   * @param testName name of the test whose output is being validated
+   * @param testOutputPath output directory for the test
+   * @param goldValidationReportPath path to the baseline validation report for the test
+   * @param suppressFailureDetail if true, detailed test failure information is not displayed
    */
   static void validate(
     const QString& testName, const QString& testOutputPath,
@@ -58,10 +60,11 @@ public:
 private:
 
   /**
-   * @brief _validateGoldReport TODO
-   * @param testName
-   * @param goldValidationReportPath
-   * @return
+   * @brief _validateGoldReport validates the baseline report file used during test output
+   * validation
+   * @param testName name of the test whose output is being validated
+   * @param goldValidationReportPath path to the baseline validation report for the test
+   * @return true if the baseline report file is valid; false otherwise
    */
   static bool _validateGoldReport(
     const QString& testName, const QString& goldValidationReportPath);
