@@ -651,7 +651,7 @@ void reportFailedTests(int failedTests, int totalTests)
   cout << failedTests << " of " << totalTests << " tests failed" << endl;
 }
 
-void _verifyValidationConfig()
+void verifyValidationConfig()
 {
   // Verify that we have JOSM if running validation on test output is enabled.
 # ifndef HOOT_HAVE_JOSM
@@ -680,6 +680,26 @@ void _verifyValidationConfig()
 # endif
 }
 
+std::shared_ptr<TestCommand> parseTestCommand(char* argv[])
+{
+  vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(TestCommand::className());
+  std::shared_ptr<TestCommand> command;
+  for (size_t i = 0; i < cmds.size(); i++)
+  {
+    command = Factory::getInstance().constructObject<TestCommand>(cmds[i]);
+    QString argName = command->getName();
+    if (QString(argv[1]) == argName)
+    {
+      break;
+    }
+    else
+    {
+      command.reset();
+    }
+  }
+  return command;
+}
+
 int main(int argc, char* argv[])
 {
   if (argc == 1)
@@ -700,23 +720,8 @@ int main(int argc, char* argv[])
     QCoreApplication app(argc, argv);
 
     // HootTest has some utility commands that don't actually run the tests. Check for those first
-    // before running the tests.
-    vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(TestCommand::className());
-    std::shared_ptr<TestCommand> command;
-    for (size_t i = 0; i < cmds.size(); i++)
-    {
-      command = Factory::getInstance().constructObject<TestCommand>(cmds[i]);
-      QString argName = command->getName();
-      if (QString(argv[1]) == argName)
-      {
-        break;
-      }
-      else
-      {
-        command.reset();
-      }
-    }
-
+    // before running the tests. Each command will set up its own config.
+    std::shared_ptr<TestCommand> command = parseTestCommand(argv);
     if (command != nullptr)
     {
       try
@@ -733,7 +738,7 @@ int main(int argc, char* argv[])
 
     // Determine whether we validating any test output or not and set the environment up
     // appropriately.
-    _verifyValidationConfig();
+    verifyValidationConfig();
 
     QStringList args = BaseCommand::toQStringList(argv, argc);
     LOG_VART(args);
