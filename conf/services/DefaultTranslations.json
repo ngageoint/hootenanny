@@ -1,82 +1,82 @@
 [
     {
-        "NAME" : "TDSv61",
-        "DESCRIPTION" : "NSG Topographic Data Store (TDS) v6.1",
-        "CANEXPORT" : true,
-        "PATH" : "translations/TDSv61.js"
+        "name" : "TDSv61",
+        "description" : "NSG Topographic Data Store (TDS) v6.1",
+        "canExport" : true,
+        "path" : "translations/TDSv61.js"
     },
     {
-        "NAME" : "TDSv40",
-        "DESCRIPTION" : "NSG Topographic Data Store (TDS) v4.0",
-        "CANEXPORT" : true,
-        "PATH" : "translations/TDSv40.js"
+        "name" : "TDSv40",
+        "description" : "NSG Topographic Data Store (TDS) v4.0",
+        "canExport" : true,
+        "path" : "translations/TDSv40.js"
     },
     {
-        "NAME" : "TDSv70",
-        "DESCRIPTION" : "NSG Topographic Data Store (TDS) v7.0",
-        "CANEXPORT" : true,
-        "PATH" : "translations/TDSv70.js"
+        "name" : "TDSv70",
+        "description" : "NSG Topographic Data Store (TDS) v7.0",
+        "canExport" : true,
+        "path" : "translations/TDSv70.js"
     },
     {
-        "NAME" : "MGCP",
-        "DESCRIPTION" : "Multinational Geospatial Co-production Program (MGCP) TRD3&4",
-        "CANEXPORT" : true,
-        "PATH" : "translations/MGCP_TRD4.js"
+        "name" : "MGCP",
+        "description" : "Multinational Geospatial Co-production Program (MGCP) TRD3&4",
+        "canExport" : true,
+        "path" : "translations/MGCP_TRD4.js"
     },
     {
-        "NAME" : "MGCP - Cartographic",
-        "DESCRIPTION" : "MGCP TRD4 For Cartographic Use Only",
-        "CANEXPORT" : true,
-        "PATH" : "translations/MGCP_TRD4_Cartographic.js"
+        "name" : "MGCP - Cartographic",
+        "description" : "MGCP TRD4 For Cartographic Use Only",
+        "canExport" : true,
+        "path" : "translations/MGCP_TRD4_Cartographic.js"
     },
     {
-        "NAME" : "GGDMv30",
-        "DESCRIPTION" : "Ground-Warfighter Geospatial Data Model (GGDM) v3.0",
-        "CANEXPORT" : true,
-        "PATH" : "translations/GGDMv30.js"
+        "name" : "GGDMv30",
+        "description" : "Ground-Warfighter Geospatial Data Model (GGDM) v3.0",
+        "canExport" : true,
+        "path" : "translations/GGDMv30.js"
     },
     {
-        "NAME" : "DNC",
-        "DESCRIPTION" : "Digital Nautical Chart",
-        "CANEXPORT" : true,
-        "PATH" : "translations/DNC.js"
+        "name" : "DNC",
+        "description" : "Digital Nautical Chart",
+        "canExport" : true,
+        "path" : "translations/DNC.js"
     },
     {
-        "NAME" : "OSM",
-        "DESCRIPTION" : "OpenStreetMap.org (OSM)",
-        "CANEXPORT" : true,
-        "IMPORTPATH" : "translations/OSM_Ingest.js",
-        "EXPORTPATH" : "translations/RenderDb.js"
+        "name" : "OSM",
+        "description" : "OpenStreetMap.org (OSM)",
+        "canExport" : true,
+        "importPath" : "translations/OSM_Ingest.js",
+        "exportPath" : "translations/RenderDb.js"
     },
     {
-        "NAME" : "ENC",
-        "DESCRIPTION" : "S-57 Electronic Navigation Chart V3.1.1",
-        "CANEXPORT" : true,
-        "IMPORTPATH" : "translations/ENCv311_to_OSM.js",
-        "EXPORTPATH" : "translations/ENCv311_to_OGR.js"
+        "name" : "ENC",
+        "description" : "S-57 Electronic Navigation Chart V3.1.1",
+        "canExport" : true,
+        "importPath" : "translations/ENCv311_to_OSM.js",
+        "exportPath" : "translations/ENCv311_to_OGR.js"
     },
     {
-        "NAME" : "GIFD D4",
-        "DESCRIPTION" : "Geospatial Intelligence Feature Database (GIFD) D4",
-        "CANEXPORT" : false,
-        "PATH" : "translations/GIFD_D4.js",
+        "name" : "GIFD D4",
+        "description" : "Geospatial Intelligence Feature Database (GIFD) D4",
+        "canExport" : false,
+        "path" : "translations/GIFD_D4.js",
     },
     {
-        "NAME" : "UFD",
-        "DESCRIPTION" : "Urban Feature Data (UFD) Levels 1-3",
-        "CANEXPORT" : false,
-        "PATH" : "translations/UFD_to_OSM.js",
+        "name" : "UFD",
+        "description" : "Urban Feature Data (UFD) Levels 1-3",
+        "canExport" : false,
+        "path" : "translations/UFD_to_OSM.js",
     },
     {
-        "NAME" : "WorldPortIndex",
-        "DESCRIPTION" : "NGA World Port Index",
-        "CANEXPORT" : false,
-        "PATH" : "translations/WorldPortIndex.js",
+        "name" : "WorldPortIndex",
+        "description" : "NGA World Port Index",
+        "canExport" : false,
+        "path" : "translations/WorldPortIndex.js",
     },
     {
-        "NAME" : "GEONAMES",
-        "DESCRIPTION" : "GeoNames.org and geonames.nga.mil",
-        "CANEXPORT" : false,
-        "PATH" : "translations/GeoNames_to_OSM.js"
+        "name" : "GEOnameS",
+        "description" : "Geonames.org and geonames.nga.mil",
+        "canExport" : false,
+        "path" : "translations/Geonames_to_OSM.js"
     }
 ]

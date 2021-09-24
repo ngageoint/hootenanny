@@ -126,15 +126,15 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
     @Category(UnitTest.class)
     public void testProcessSave() throws Exception {
         Response response = target("/customscript/save")
-                .queryParam("SCRIPT_NAME", "testName")
-                .queryParam("SCRIPT_DESCRIPTION", "Test Description")
+                .queryParam("scriptName", "testName")
+                .queryParam("scriptDescription", "Test Description")
                 .queryParam("folderId", 0)
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity("test", MediaType.TEXT_PLAIN), Response.class);
 
         JSONParser parser = new JSONParser();
         JSONArray actualObj = (JSONArray) parser.parse(response.readEntity(String.class));
-        JSONArray expectedObj = (JSONArray) parser.parse("[{\"NAME\":\"testName\",\"DESCRIPTION\":\"Test Description\",\"CANEXPORT\":false}]");
+        JSONArray expectedObj = (JSONArray) parser.parse("[{\"name\":\"testName\",\"description\":\"Test Description\",\"canExport\":false}]");
 
         assertEquals(expectedObj, actualObj);
         assertEquals(200, response.getStatus());
@@ -154,8 +154,8 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         CustomScriptResource res = new CustomScriptResource();
         try {
             Response response = target("/customscript/save")
-                    .queryParam("SCRIPT_NAME", "testName")
-                    .queryParam("SCRIPT_DESCRIPTION", "Test Description")
+                    .queryParam("scriptName", "testName")
+                    .queryParam("scriptDescription", "Test Description")
                     .queryParam("folderId", 0)
                     .request(MediaType.APPLICATION_JSON)
                     .post(Entity.entity("{ test", MediaType.TEXT_PLAIN), Response.class);
@@ -187,7 +187,7 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         assertTrue(file.exists());
 
         JSONParser parser = new JSONParser();
-        JSONObject expectedObj = (JSONObject) parser.parse("{\"NAME\":\"testName1\",\"DESCRIPTION\":\"Test Description 1\",\"CANEXPORT\":false}");
+        JSONObject expectedObj = (JSONObject) parser.parse("{\"name\":\"testName1\",\"description\":\"Test Description 1\",\"canExport\":false}");
 
         String expectedStr = "/*<<<" + expectedObj + ">>>*/" + System.lineSeparator() + "test1";
         String actualStr = FileUtils.readFileToString(file, "UTF-8");
@@ -197,7 +197,7 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         file = new File(customScriptFolder, "testName2.js");
         assertTrue(file.exists());
 
-        expectedObj = (JSONObject) parser.parse("{\"NAME\":\"testName2\",\"DESCRIPTION\":\"Test Description 2\",\"CANEXPORT\":false}");
+        expectedObj = (JSONObject) parser.parse("{\"name\":\"testName2\",\"description\":\"Test Description 2\",\"canExport\":false}");
 
         expectedStr = "/*<<<" + expectedObj + ">>>*/" + System.lineSeparator() + "test2";
         actualStr = FileUtils.readFileToString(file, "UTF-8");
@@ -230,7 +230,7 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         assertTrue(file.exists());
 
         JSONParser parser = new JSONParser();
-        JSONObject expectedObj = (JSONObject) parser.parse("{\"NAME\":\"testName1\",\"DESCRIPTION\":\"Test Description 1\",\"CANEXPORT\":false}");
+        JSONObject expectedObj = (JSONObject) parser.parse("{\"name\":\"testName1\",\"description\":\"Test Description 1\",\"canExport\":false}");
 
         String expectedStr = "/*<<<" + expectedObj + ">>>*/" + System.lineSeparator() + "test1";
         String actualStr = FileUtils.readFileToString(file, "UTF-8");
@@ -240,7 +240,7 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         file = new File(customScriptFolder, "testName2.js");
         assertTrue(file.exists());
 
-        expectedObj = (JSONObject) parser.parse("{\"NAME\":\"testName2\",\"DESCRIPTION\":\"Test Description 2\",\"CANEXPORT\":false}");
+        expectedObj = (JSONObject) parser.parse("{\"name\":\"testName2\",\"description\":\"Test Description 2\",\"canExport\":false}");
 
         expectedStr = "/*<<<" + expectedObj + ">>>*/" + System.lineSeparator() + "test2";
         actualStr = FileUtils.readFileToString(file, "UTF-8");
@@ -275,7 +275,7 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         assertTrue(file.exists());
 
         JSONParser parser = new JSONParser();
-        JSONObject expectedObj = (JSONObject) parser.parse("{\"NAME\":\"testName1\",\"DESCRIPTION\":\"Test Description 1\",\"CANEXPORT\":false}");
+        JSONObject expectedObj = (JSONObject) parser.parse("{\"name\":\"testName1\",\"description\":\"Test Description 1\",\"canExport\":false}");
 
         String expectedStr = "/*<<<" + expectedObj + ">>>*/" + System.lineSeparator() + "test1";
         String actualStr = FileUtils.readFileToString(file, "UTF-8");
@@ -309,7 +309,7 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         assertTrue(file.exists());
 
         JSONParser parser = new JSONParser();
-        JSONObject expectedObj = (JSONObject) parser.parse("{\"NAME\":\"testName1\",\"DESCRIPTION\":\"Test Description 1\",\"CANEXPORT\":false}");
+        JSONObject expectedObj = (JSONObject) parser.parse("{\"name\":\"testName1\",\"description\":\"Test Description 1\",\"canExport\":false}");
 
         String expectedStr = "/*<<<" + expectedObj + ">>>*/" + System.lineSeparator() + "test1";
         String actualStr = FileUtils.readFileToString(file, "UTF-8");
@@ -319,7 +319,7 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         file = new File(customScriptFolder, "testName2.js");
         assertTrue(file.exists());
 
-        expectedObj = (JSONObject) parser.parse("{\"NAME\":\"testName2\",\"DESCRIPTION\":\" \",\"CANEXPORT\":false}");
+        expectedObj = (JSONObject) parser.parse("{\"name\":\"testName2\",\"description\":\" \",\"canExport\":false}");
 
         expectedStr = "/*<<<" + expectedObj + ">>>*/" + System.lineSeparator() + "test2";
         actualStr = FileUtils.readFileToString(file, "UTF-8");
@@ -347,7 +347,7 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
 
         JSONParser parser = new JSONParser();
         String actualStr = FileUtils.readFileToString(file, "UTF-8");
-        JSONObject expectedObj = (JSONObject) parser.parse("{\"NAME\":\"testName1\",\"DESCRIPTION\":\"Test Description 1\",\"CANEXPORT\":false}");
+        JSONObject expectedObj = (JSONObject) parser.parse("{\"name\":\"testName1\",\"description\":\"Test Description 1\",\"canExport\":false}");
 
         String expectedStr = "/*<<<" + expectedObj + ">>>*/" + System.lineSeparator() + "test1";
 
@@ -361,16 +361,16 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
     @Category(UnitTest.class)
     public void testGetScriptsList() throws Exception {
         Response response = target("/customscript/save")
-                .queryParam("SCRIPT_NAME", "testName3")
-                .queryParam("SCRIPT_DESCRIPTION", "Test3 Description")
+                .queryParam("scriptName", "testName3")
+                .queryParam("scriptDescription", "Test3 Description")
                 .queryParam("folderId", 0)
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity("test3", MediaType.TEXT_PLAIN), Response.class);
         assertEquals(200, response.getStatus());
 
         response = target("/customscript/save")
-                .queryParam("SCRIPT_NAME", "testName4")
-                .queryParam("SCRIPT_DESCRIPTION", "Test4 Description")
+                .queryParam("scriptName", "testName4")
+                .queryParam("scriptDescription", "Test4 Description")
                 .queryParam("folderId", 0)
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity("test1", MediaType.TEXT_PLAIN), Response.class);
@@ -394,10 +394,10 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
 
         for (Object jo : arr) {
             JSONObject o = (JSONObject) jo;
-            if (o.get("NAME") != null) {
-                if (o.get("NAME").toString().equals("testName3")) {
-                    assertTrue(o.get("NAME").toString().startsWith("testName"));
-                    assertTrue(o.get("DESCRIPTION").toString().startsWith("Test"));
+            if (o.get("name") != null) {
+                if (o.get("name").toString().equals("testName3")) {
+                    assertTrue(o.get("name").toString().startsWith("testName"));
+                    assertTrue(o.get("description").toString().startsWith("Test"));
                 }
             }
         }
@@ -409,16 +409,16 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         CustomScriptResource res = new CustomScriptResource();
 
         Response resp = target("/customscript/save")
-                .queryParam("SCRIPT_NAME", "testName5")
-                .queryParam("SCRIPT_DESCRIPTION", "Test5 Description")
+                .queryParam("scriptName", "testName5")
+                .queryParam("scriptDescription", "Test5 Description")
                 .queryParam("folderId", 0)
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity("test5", MediaType.TEXT_PLAIN), Response.class);
         assertEquals(200, resp.getStatus());
 
         resp = target("/customscript/save")
-                .queryParam("SCRIPT_NAME", "testName6")
-                .queryParam("SCRIPT_DESCRIPTION", "Test6 Description")
+                .queryParam("scriptName", "testName6")
+                .queryParam("scriptDescription", "Test6 Description")
                 .queryParam("folderId", 0)
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity("test6", MediaType.TEXT_PLAIN), Response.class);
@@ -431,7 +431,7 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         assertTrue(file.exists());
 
         resp = target("/customscript/getscript")
-                .queryParam("SCRIPT_NAME", "testName5")
+                .queryParam("scriptName", "testName5")
                 .request(MediaType.TEXT_PLAIN)
                 .get();
         String scriptStr = resp.readEntity(String.class);
@@ -439,7 +439,7 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         assertEquals("test5", scriptStr);
 
         resp = target("/customscript/getscript")
-                .queryParam("SCRIPT_NAME", "testName6")
+                .queryParam("scriptName", "testName6")
                 .request(MediaType.TEXT_PLAIN)
                 .get();
         scriptStr = resp.readEntity(String.class);
@@ -451,8 +451,8 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
     @Category(UnitTest.class)
     public void testDeleteScript() throws Exception {
         Response resp = target("/customscript/save")
-                .queryParam("SCRIPT_NAME", "testName9")
-                .queryParam("SCRIPT_DESCRIPTION", "Test9 Description")
+                .queryParam("scriptName", "testName9")
+                .queryParam("scriptDescription", "Test9 Description")
                 .queryParam("folderId", 0)
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity("test9", MediaType.TEXT_PLAIN), Response.class);
@@ -469,7 +469,7 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
 
         JSONParser parser = new JSONParser();
         JSONArray actualObj = (JSONArray) parser.parse(deletedStr);
-        JSONArray expectedObj = (JSONArray) parser.parse("[{\"NAME\":\"testName9\",\"DESCRIPTION\":\"Test9 Description\",\"CANEXPORT\":false}]");
+        JSONArray expectedObj = (JSONArray) parser.parse("[{\"name\":\"testName9\",\"description\":\"Test9 Description\",\"canExport\":false}]");
 
         assertEquals(expectedObj, actualObj);
     }
@@ -478,8 +478,8 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
     @Category(UnitTest.class)
     public void testDeleteMultiple() throws SQLException {
         Response saveResponse = target("/customscript/save")
-                .queryParam("SCRIPT_NAME", "testName9")
-                .queryParam("SCRIPT_DESCRIPTION", "Test9 Description")
+                .queryParam("scriptName", "testName9")
+                .queryParam("scriptDescription", "Test9 Description")
                 .queryParam("folderId", 0)
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity("test9", MediaType.TEXT_PLAIN), Response.class);
@@ -488,8 +488,8 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         assertTrue(file.exists());
 
         saveResponse = target("/customscript/save")
-                .queryParam("SCRIPT_NAME", "testName10")
-                .queryParam("SCRIPT_DESCRIPTION", "Test10 Description")
+                .queryParam("scriptName", "testName10")
+                .queryParam("scriptDescription", "Test10 Description")
                 .queryParam("folderId", 0)
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity("test10", MediaType.TEXT_PLAIN), Response.class);
@@ -547,8 +547,8 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
          * See explanation in testSaveMultipleEmptyName why no failure occurs here
          */
         Response saveResponse = target("/customscript/save")
-                .queryParam("SCRIPT_NAME", "testName9")
-                .queryParam("SCRIPT_DESCRIPTION", "Test9 Description")
+                .queryParam("scriptName", "testName9")
+                .queryParam("scriptDescription", "Test9 Description")
                 .queryParam("folderId", 0)
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity("test9", MediaType.TEXT_PLAIN), Response.class);
@@ -557,8 +557,8 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         assertTrue(file.exists());
 
         saveResponse = target("/customscript/save")
-                .queryParam("SCRIPT_NAME", "testName10")
-                .queryParam("SCRIPT_DESCRIPTION", "Test10 Description")
+                .queryParam("scriptName", "testName10")
+                .queryParam("scriptDescription", "Test10 Description")
                 .queryParam("folderId", 0)
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity("test10", MediaType.TEXT_PLAIN), Response.class);
@@ -612,8 +612,8 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
     @Category(UnitTest.class)
     public void testDeleteMultipleScriptToBeDeletedHasNoHeader() throws Exception {
         Response saveResponse = target("/customscript/save")
-                .queryParam("SCRIPT_NAME", "testName9")
-                .queryParam("SCRIPT_DESCRIPTION", "Test9 Description")
+                .queryParam("scriptName", "testName9")
+                .queryParam("scriptDescription", "Test9 Description")
                 .queryParam("folderId", 0)
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity("test9", MediaType.TEXT_PLAIN), Response.class);
@@ -622,8 +622,8 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         assertTrue(file.exists());
 
         saveResponse = target("/customscript/save")
-                .queryParam("SCRIPT_NAME", "testName10")
-                .queryParam("SCRIPT_DESCRIPTION", "Test10 Description")
+                .queryParam("scriptName", "testName10")
+                .queryParam("scriptDescription", "Test10 Description")
                 .queryParam("folderId", 0)
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity("test10", MediaType.TEXT_PLAIN), Response.class);
@@ -694,13 +694,13 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         for (Object o : trans) {
             JSONObject jsTrans = (JSONObject) o;
 
-            Object oName = jsTrans.get("NAME");
+            Object oName = jsTrans.get("name");
             assertNotNull(oName);
             assertTrue(!oName.toString().isEmpty());
-            assertNotNull(jsTrans.get("DESCRIPTION"));
+            assertNotNull(jsTrans.get("description"));
 
-            if (jsTrans.containsKey("PATH")) {
-                Object oPath = jsTrans.get("PATH");
+            if (jsTrans.containsKey("path")) {
+                Object oPath = jsTrans.get("path");
                 assertNotNull(oPath);
                 assertTrue(!oPath.toString().isEmpty());
 
@@ -711,8 +711,8 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
                 validateExportMethod.invoke(null, sScript);
             }
             else {
-                if (jsTrans.containsKey("IMPORTPATH")) {
-                    Object oPath = jsTrans.get("IMPORTPATH");
+                if (jsTrans.containsKey("importPath")) {
+                    Object oPath = jsTrans.get("importPath");
                     assertNotNull(oPath);
                     assertTrue(!oPath.toString().isEmpty());
 
@@ -723,8 +723,8 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
                     validateExportMethod.invoke(null, sScript);
                 }
 
-                if (jsTrans.containsKey("EXPORTPATH")) {
-                    Object oPath = jsTrans.get("EXPORTPATH");
+                if (jsTrans.containsKey("exportPath")) {
+                    Object oPath = jsTrans.get("exportPath");
                     assertNotNull(oPath);
                     assertTrue(!oPath.toString().isEmpty());
 
