@@ -4381,17 +4381,6 @@ for details on the JSON format.
 Automatically calculates the search radius to be used during conflation of power lines using rubber
 sheet tie point distances.
 
-=== power.line.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for power lines. The valid range is (0.0, 1.0].
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === power.line.matcher.distance.weight.coefficient
 
 * Data Type: double
@@ -4415,28 +4404,6 @@ The distance around a point on a power line to look when calculating the heading
 * Default Value: `155.0`
 
 Sets that maximum angle, in degrees, that is still considered a power line match.
-
-=== power.line.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for power lines. The valid range is (0.0, 1.0].
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== power.line.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for power lines. The valid range is (0.0, 1.0].
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === power.line.subline.matcher
 
@@ -4534,13 +4501,22 @@ are satisfied for a railway match.
 
 The way subline matcher to use when determining matching sublines.
 
-=== railway.type.threshold
+=== railway.type.match.threshold
 
 * Data Type: double
 * Default Value: `0.8`
 
 Tag similarity threshold, in the range (0.0, 1.0], at or above which a railway feature is considered
-to have similar tags.
+to have tags similar enough with another rail feature to be considered match.
+
+=== railway.type.review.threshold
+
+* Data Type: double
+* Default Value: `0.7`
+
+Tag similarity threshold, in the range (0.0, 1.0], at or above which a railway feature is considered
+to have tags similar enough with another rail feature to be considered a review if not already
+considered a match.
 
 === random.element.remover.probability
 

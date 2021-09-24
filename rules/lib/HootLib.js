@@ -21,6 +21,13 @@ function testAdd(v1, v2)
   return v1 + v2;
 }
 
+/////////////////GENERAL////////////////
+
+function stringIsEmpty(str)
+{
+  return str === null || str === '' || str === 'undefined';
+}
+
 /////////////////MERGING////////////////
 
 /**

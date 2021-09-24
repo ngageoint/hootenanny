@@ -43,12 +43,13 @@
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/criterion/NonConflatableCriterion.h>
 #include <hoot/core/criterion/PointCriterion.h>
-#include <hoot/js/conflate/matching/ScriptMatch.h>
-#include <hoot/js/elements/OsmMapJs.h>
-#include <hoot/js/elements/ElementJs.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+
+#include <hoot/js/conflate/matching/ScriptMatch.h>
+#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/js/elements/ElementJs.h>
 
 // Qt
 #include <qnumeric.h>
@@ -262,8 +263,8 @@ public:
 
       if (result < minValue)
       {
-        throw IllegalArgumentException(QString("Expected %1 to be greater than %2.")
-                                       .arg(key).arg(minValue));
+        throw IllegalArgumentException(
+          QString("Expected %1 to be greater than %2.").arg(key).arg(minValue));
       }
     }
     return result;
@@ -728,6 +729,7 @@ void ScriptMatchCreator::setArguments(const QStringList& args)
   _description = className() + "," + args[0];
   _cachedScriptVisitor.reset();
   _scriptInfo = _getScriptDescription(_scriptPath);
+
   // Validate one to many rail matching config options based on the currently configured options and
   // whether this match creator is dealing with rail matches or not.
   setRunOneToManyRailMatching(
@@ -1029,8 +1031,8 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   Context::Scope context_scope(script->getContext(current));
   Local<Context> context = current->GetCurrentContext();
   script->loadScript(path, "plugin");
-
   Persistent<Object> plugin(current, ScriptMatchVisitor::getPlugin(script));
+
   Local<String> descriptionStr = String::NewFromUtf8(current, "description").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, descriptionStr).ToChecked())
   {
@@ -1041,17 +1043,22 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   {
     throw IllegalArgumentException("No script description provided for: " + path);
   }
+
   Local<String> experimentalStr = String::NewFromUtf8(current, "experimental").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, experimentalStr).ToChecked())
   {
     Local<Value> value = ToLocal(&plugin)->Get(context, experimentalStr).ToLocalChecked();
     result.setExperimental(toCpp<bool>(value));
   }
+
+  CreatorDescription::BaseFeatureType baseFeatureType =
+    CreatorDescription::BaseFeatureType::Unknown;
   Local<String> featureTypeStr = String::NewFromUtf8(current, "baseFeatureType").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, featureTypeStr).ToChecked())
   {
     Local<Value> value = ToLocal(&plugin)->Get(context, featureTypeStr).ToLocalChecked();
-    result.setBaseFeatureType(CreatorDescription::stringToBaseFeatureType(toCpp<QString>(value)));
+    baseFeatureType = CreatorDescription::stringToBaseFeatureType(toCpp<QString>(value));
+    result.setBaseFeatureType(baseFeatureType);
   }
   // A little kludgy, but we'll identify generic geometry Point/Polygon conflation by its script
   // name.
@@ -1059,6 +1066,7 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   {
     throw IllegalArgumentException("No base feature type provided for: " + path);
   }
+
   Local<String> geometryTypeStr = String::NewFromUtf8(current, "geometryType").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, geometryTypeStr).ToChecked())
   {
@@ -1069,6 +1077,7 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   {
     throw IllegalArgumentException("No geometry type provided for: " + path);
   }
+
   // The criteria parsed here describe which feature types a script conflates. Its used only for
   // determining which conflate ops to disable with SuperfluousConflateOpRemover and for some
   // scripts, also to determine how to cull features when performing rubbersheeting during search
@@ -1097,6 +1106,14 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
 
   QFileInfo fi(path);
   result.setClassName(className() + "," + fi.fileName());
+
+  // config error handling - This really belongs in the associated conflate script but haven't
+  // figured out how to throw HootException from a script yet. There's probably other error checking
+  // that needs to be done too.
+  if (baseFeatureType == CreatorDescription::BaseFeatureType::Railway)
+  {
+    _validateRailConfig(ToLocal(&plugin));
+  }
 
   return result;
 }
@@ -1158,6 +1175,21 @@ QString ScriptMatchCreator::getName() const
 QStringList ScriptMatchCreator::getCriteria() const
 {
   return _scriptInfo.getMatchCandidateCriteria();
+}
+
+void ScriptMatchCreator::_validateRailConfig(Local<Object> plugin) const
+{
+  const double railwayTypeMatchThreshold =
+    ScriptMatchVisitor::getNumber(plugin, "typeMatchThreshold", 0.0, 1.0);
+  const double railwayTypeReviewThreshold =
+    ScriptMatchVisitor::getNumber(plugin, "typeReviewThreshold", 0.0, 1.0);
+  if (railwayTypeReviewThreshold > railwayTypeMatchThreshold)
+  {
+    throw IllegalArgumentException(
+      "Railway type review threshold: " + QString::number(railwayTypeReviewThreshold) +
+      " greater than railway type match threshold: " +
+      QString::number(railwayTypeMatchThreshold) + ".");
+  }
 }
 
 }

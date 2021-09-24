@@ -1,5 +1,5 @@
 /**
- * This script conflates power lines using Generic Conflation.
+ * This is the script used for Power Line Conflation.
  */
 
 "use strict";
@@ -8,27 +8,30 @@ exports.description = "Matches power lines";
 exports.experimental = false;
 exports.baseFeatureType = "PowerLine";
 exports.geometryType = "line";
-
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
-exports.matchThreshold = parseFloat(hoot.get("power.line.match.threshold"));
-exports.missThreshold = parseFloat(hoot.get("power.line.miss.threshold"));
-exports.reviewThreshold = parseFloat(hoot.get("power.line.review.threshold"));
-
 // This is needed for disabling superfluous conflate ops and calculating a search radius only.
 // exports.isMatchCandidate handles culling match candidates.
 exports.matchCandidateCriterion = "PowerLineCriterion";
+
+// This matcher only sets match/miss/review values to 1.0. Therefore, we just use the default
+// conflate thresholds and they're effectively ignored. If more custom values are ever required,
+// then the generic score threshold configuration options used below should be replaced with custom
+// score threshold configuration options.
+exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold"));
+exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold"));
+exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold"));
+
+// geometry matchers
 
 // We're just using the default max recursions here for MaximalSubline. May need to come up with a
 // custom value via empirical testing. This will not work if we ever end up needing to pass map in
 // here for this data type.
 var sublineStringMatcher = hoot.SublineStringMatcherFactory.getMatcher(exports.baseFeatureType);
-
 var centroidDistanceExtractor = new hoot.CentroidDistanceExtractor();
 var edgeDistanceExtractor1 = new hoot.EdgeDistanceExtractor(new hoot.MeanAggregator());
 var weightedMetricDistanceExtractor1 = new hoot.WeightedMetricDistanceExtractor(new hoot.MeanAggregator());
 var weightedShapeDistanceExtractor7 = new hoot.WeightedShapeDistanceExtractor(new hoot.SigmaAggregator());
-
-//for distance weighting
+// used for distance weighting
 var distanceWeightCoeff = parseFloat(hoot.get("power.line.matcher.distance.weight.coefficient")) * -1.0;
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 

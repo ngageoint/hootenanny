@@ -1,6 +1,6 @@
-/**
- * This script conflates railways using Generic Conflation.
- */
+/*
+  This is the conflate script for Railway Conflation. This handles linear railway features only.
+*/
 
 "use strict";
 
@@ -8,32 +8,37 @@ exports.description = "Matches railways";
 exports.experimental = false;
 exports.baseFeatureType = "Railway";
 exports.geometryType = "line";
-
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
-
 exports.searchRadius = parseFloat(hoot.get("search.radius.railway"));
-
-// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't
-// used. If that ever changes, then the generic score threshold configuration options used below
-// should be replaced with custom score threshold configuration options.
-exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
-exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
-exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
-exports.typeThreshold = parseFloat(hoot.get("railway.type.threshold"));
-
 // This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
 // culling match candidates.
 exports.matchCandidateCriterion = "RailwayCriterion";
+
+// This matcher only sets match/miss/review values to 1.0. Therefore, we just use the default
+// conflate thresholds and they're effectively ignored. If more custom values are ever required,
+// then the generic score threshold configuration options used below should be replaced with custom
+// score threshold configuration options.
+exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
+exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
+exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
+
+// These are used only to determine type similarity and are independent of the other score
+// thresholds.
+exports.typeMatchThreshold = parseFloat(hoot.get("railway.type.match.threshold"));
+exports.typeReviewThreshold = parseFloat(hoot.get("railway.type.review.threshold"));
+
+// geometry matchers
 
 // We're just using the default max recursions here for MaximalSubline. May need to come up with a
 // custom value via empirical testing. This will not work if we ever end up needing to pass map in
 // here for this data type.
 var sublineStringMatcher = hoot.SublineStringMatcherFactory.getMatcher(exports.baseFeatureType);
-
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 // Use the default spacing of 5 meters.
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
 var hausdorffDistanceExtractor = new hoot.HausdorffDistanceExtractor();
+
+// one to many matching
 
 // determines if one to many matching is enabled
 var oneToManyMatchEnabled = (hoot.get("railway.one.to.many.match") === 'true');
@@ -130,23 +135,41 @@ function geometryMismatch(map, e1, e2, minDistanceScore, minHausdorffDistanceSco
   return true;
 }
 
-function typeMismatch(e1, e2)
+function getTypeScore(e1, e2, reviewMessage)
 {
+  var tags1 = e1.getTags();
+  var tags2 = e2.getTags();
+  
   // Don't match passenger rails against rails used internally by the railroad company.
-  if (e1.getTags().onlyOneContainsKvp(e2.getTags(), "service=yard"))
+  if (tags1.onlyOneContainsKvp(tags2, "service=yard"))
   {
     hoot.trace("service=yard mismatch");
-    return true;
+    return 0.0;
   }
-  // If both features have types and they aren't just generic types, let's do a detailed type
-  // comparison and look for an explicit type mismatch.
-  var typeScorePassesThreshold = !hoot.OsmSchema.explicitTypeMismatch(e1, e2, exports.typeThreshold);
-  hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
-  if (!typeScorePassesThreshold)
+
+  // TODO: convert to function
+  // We'll assume rails w/o the location tag are above ground (location=surface or
+  // location=overground). If the tags explicitly disagree on the location value or one is
+  // underground and the other doesn't have a location tag, we'll review.
+  var locationVal1 = String(tags1.get("location")).trim();
+  hoot.trace("locationVal1: " + locationVal1);
+  var locationVal1Empty = stringIsEmpty(locationVal1);
+  hoot.trace("locationVal1Empty: " + locationVal1Empty);
+  var locationVal2 = String(tags2.get("location")).trim();
+  hoot.trace("locationVal2: " + locationVal2);
+  var locationVal2Empty = stringIsEmpty(locationVal2);
+  hoot.trace("locationVal2Empty: " + locationVal2Empty);
+  if (!(locationVal1Empty && locationVal2Empty) &&
+      ((locationVal1Empty && locationVal2 === "underground") ||
+       (locationVal2Empty && locationVal1 === "underground") ||
+       (!locationVal1Empty && !locationVal2Empty && locationVal1 !== locationVal2)))
   {
-    return true;
+    hoot.trace("location mismatch");
+    reviewMessage.message = "Location mismatch";
+    return exports.typeReviewThreshold;
   }
-  return false;
+
+  return hoot.OsmSchema.scoreTypes(tags1, tags2, true);
 }
 
 /**
@@ -160,7 +183,7 @@ function typeMismatch(e1, e2)
  */
 exports.matchScore = function(map, e1, e2)
 {
-  var result = { miss: 1.0, explain:"miss" };
+  var result = { miss: 1.0, explain: "miss" };
 
   // No intra-dataset conflation is allowed.
   if (e1.getStatusString() === e2.getStatusString())
@@ -187,10 +210,12 @@ exports.matchScore = function(map, e1, e2)
 
   // Note: No need has been apparent *yet* to do match filtering via name.
 
-  // Check for a type mismatch.
-  if (typeMismatch(e1, e2))
+  // Check for a type match.
+  var typeReviewMessage = { message: "" };
+  var typeScore = getTypeScore(e1, e2, typeReviewMessage);
+  hoot.trace("typeScore: " + typeScore);
+  if (typeScore < exports.typeReviewThreshold)
   {
-    hoot.trace("type mismatch");
     return result;
   }
 
@@ -200,6 +225,7 @@ exports.matchScore = function(map, e1, e2)
   var minHausdorffDistanceScore = 0.8;
   var minEdgeDistanceScore = 0.8;
 
+  // TODO: convert to function
   // Check the secondary element to see if it has any of the one to many identifying tag keys.
   // Arbitrarily use the first one found (assumes that if more than one is found that they're in
   // agreement). If so, we'll perform a one to many tag transfer from the feature up to the number
@@ -244,6 +270,7 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
+  // TODO: convert to function
   hoot.trace("railway match");
   hoot.trace("currentMatchAttemptIsOneToMany: " + currentMatchAttemptIsOneToMany);
   if (currentMatchAttemptIsOneToMany)
@@ -276,7 +303,15 @@ exports.matchScore = function(map, e1, e2)
     // Technically, this match should also be labeled as a one to many match, but the script
     // conflate workflow doesn't require that currently.
   }
-  result = { match: 1.0, explain:"match" };
+
+  if (typeScore >= exports.typeMatchThreshold)
+  {
+    result = { match: 1.0, explain: "match" };
+  }
+  else if (typeScore >= exports.typeReviewThreshold)
+  {
+    result = { review: 1.0, explain: typeReviewMessage.message };
+  }
   return result;
 };
 
@@ -295,6 +330,7 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
+  // TODO: convert to function
   hoot.trace("Merging railways...");
   hoot.trace("oneToManySecondaryMatchElementIds: " + oneToManySecondaryMatchElementIds);
   var secondaryElementsIdsMerged = [];

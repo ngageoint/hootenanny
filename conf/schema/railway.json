@@ -123,7 +123,12 @@
         "name": "railway=rail",
         "objectType": "tag",
         "similarTo": [
-            {"name": "railway=light_rail", "weight": 0.8 }
+            {"name": "railway=subway", "weight": 0.7 },
+            {"name": "railway=light_rail", "weight": 0.8 },
+            {"name": "electrified=*", "weight": 0.8 },
+            {"name": "railway=disused", "weight": 0.8 },
+            {"name": "railway=construction", "weight": 0.8 },
+            {"name": "railway=tram", "weight": 0.8 }
         ]
     },
     {
@@ -136,37 +141,25 @@
         "geometries": ["linestring"],
         "isA": "railway",
         "name": "railway=light_rail",
-        "objectType": "tag",
-        "similarTo": [
-            {"name": "railway=rail", "weight": 0.8 }
-        ]
+        "objectType": "tag"
     },
     {
         "geometries": ["linestring"],
         "isA": "railway",
         "name": "electrified=*",
-        "objectType": "tag",
-        "similarTo": [
-            {"name": "railway=rail", "weight": 0.8 }
-        ]
+        "objectType": "tag"
     },
     {
         "geometries": ["linestring"],
         "isA": "railway",
         "name": "railway=disused",
-        "objectType": "tag",
-        "similarTo": [
-            {"name": "railway=rail", "weight": 0.8 }
-        ]
+        "objectType": "tag"
     },
     {
         "geometries": ["linestring", "area"],
         "isA": "railway",
         "name": "railway=construction",
-        "objectType": "tag",
-        "similarTo": [
-            {"name": "railway=rail", "weight": 0.8 }
-        ]
+        "objectType": "tag"
     },
     {
         "geometries": ["linestring"],

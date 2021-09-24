@@ -375,7 +375,6 @@ public:
    * @return true if the tags contain at least one of the keys; false otherwise
    */
   bool hasAnyKey(const QStringList& keys) const;
-
   /**
    * Returns the first tag key found from an input list of keys
    *
@@ -417,7 +416,6 @@ public:
    */
   static bool haveMatchingName(
     const Tags& tags1, const Tags& tags2, const bool strictNameMatch = false);
-
   /**
    * Determines whether a name exists in the set of tag
    *
