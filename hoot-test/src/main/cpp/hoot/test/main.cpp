@@ -637,6 +637,8 @@ _TimeOutValue getTimeoutValue(_TestType type)
       return GLACIAL_WAIT;
   else if (type & SLOW_ONLY)
     return SLOW_WAIT;
+  else if (type == VALIDATED_ONLY)
+    return GLACIAL_WAIT;
   else
     return QUICK_WAIT;
 }
