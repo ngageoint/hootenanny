@@ -57,3 +57,7 @@ built by Hootenanny and copied to `hoot-josm/target/hoot-josm.jar`.
 See the jni.* and josm.* configuration options in `conf/core/ConfigOptions.asciidoc` for more detail 
 on configuring Hootenanny to use JOSM.
 
+JNI is notoriously difficult to debug and can become very brittle with underlying changes. Upgrading
+JOSM should be done with care and never automatically. JOSM upgrades may involve significant changes
+to Hootenanny code.
+

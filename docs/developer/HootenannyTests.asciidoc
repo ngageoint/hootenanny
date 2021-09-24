@@ -400,6 +400,11 @@ Any test may have its output validated but in practice we limit the number of te
 validated to avoid adding unnecessary test runtime. Currently, all case tests and selected script 
 tests have their output validated when `test.validation.enable=true`.
 
+The memory used by JNI can be controlled from the entries in `conf/core/Testing.conf` for the 
+configuration options `jni.initial.memory` and `jni.max.memory`. The maximum memory is set to the 
+lowest possible setting that does not cause out of memory errors when the tests are run. The value 
+may have to periodically be adjusted.
+
 NOTE: Currently, there is a bug where `test.validation.enable` must be set in 
 `ConfigOptions.asciidoc` and it is not read from `Testing.conf` or from the command line by 
 `HootTest` (may only occur when tests are run in parallel).
