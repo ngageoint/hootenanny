@@ -461,6 +461,21 @@ Any differences will show up in the test output and cause the test to fail.
 * Their is no set naming convention for validation report and validated output files. Just ensure 
 that if running multiple validations within a single script tests that all file names are unique.
 
+===== Running Only Tests Which Use Validation
+
+The `--validated-only` only option passed to `HootTest` allows you to only run tests which perform 
+test output validation when `test.validation.enable` is activated. This may be useful for debugging
+purposes. Example:
+--------------
+HootTest --warn --validated-only
+--------------
+
+===== Switching JOSM Implementations
+
+There may be a need to run the tests against a different JOSM implementation than specified in the
+default configuration. To do this, see the "JOSM Configuration" section under the 
+"Using Validation Checks to Improve Conflated Maps" section in the Developer Documentation.
+
 ==== Running Tests in Parallel
 
 Hootenanny can run Core tests in parallel. Tests in the Translation suite are excluded, however. 
