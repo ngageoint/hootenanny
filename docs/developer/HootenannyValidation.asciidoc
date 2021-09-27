@@ -43,23 +43,23 @@ hoot validate test-output/cmd/slow/AreaConflateStandaloneTest/Output.osm \
 
 === JOSM Configuration
 
-The https://josm.openstreetmap.de/[JOSM] library used in Hootenanny validation and, optionally, 
-cleaning may be customized. To configure it:
-* (optional) If you need to reference a local JOSM jar (one not available in the default configured 
-public Maven JOSM repository), you must manually install it with `mvn install:install-file`. See 
+The https://josm.openstreetmap.de/[JOSM] library version used in validation, and optionally also 
+in cleaning, may be customized. To configure it:
+* (optional) If you need to reference a local JOSM JAR (one not available in the default configured 
+public Maven JOSM repository), you must manually install it with Maven. See 
 `scripts/core/make-hoot-josm-java.sh` for an example.
 * Within `hoot-josm/pom.xml`. Under the `<properties>` XML tag, configure `josm.artifactId` and 
 `josm.version` for the JOSM JAR you wish to use. This will use the configured Maven repository to 
-locate the jar file.
+locate and download the JAR file.
 * At build time the JOSM jar will be copied to `hoot-josm/target/dependency-jars/josm.jar`, and the 
 path is referenced within the `jni.class.path` configuration option.
-* Hootenanny produces its own JAR file to interact with the JOSM jar. By default, this jar will be 
+* Hootenanny produces its own JAR file to interact with the JOSM JAR. By default, this file will be 
 copied to `hoot-josm/target/hoot-josm.jar`.
 
-See the jni.* and josm.* configuration options in `conf/core/ConfigOptions.asciidoc` for more detail 
-on configuring Hootenanny to use JOSM.
+See the jni.* and josm.* configuration options for more detail on JOSM configuration.
 
-JNI is notoriously difficult to debug and can become very brittle with underlying changes. Upgrading
-JOSM should be done with care and with the expectation of integration work involved. JOSM upgrades 
-may involve significant changes to `hoot-josm` code.
+JNI is notoriously difficult to debug and its usage with JOSM can become very brittle with 
+underlying changes between JOSM versions. Upgrading JOSM should be done with care and with the 
+expectation of involved integration work. JOSM upgrades may involve significant changes to 
+`hoot-josm` code.
 
