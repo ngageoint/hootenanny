@@ -100,8 +100,7 @@ QString ScriptTest::_removeIgnoredSubstrings(const QString& input) const
 
     if (line.contains(" STATUS ") || line.contains(" INFO ") ||
         line.contains(" DEBUG ") || line.contains(" elapsed: ") ||
-        line.contains("Time (sec)")/* ||
-        (ignoreValidationReportOutput && isValidationReportLine)*/)
+        line.contains("Time (sec)"))
     {
       keep = false;
     }

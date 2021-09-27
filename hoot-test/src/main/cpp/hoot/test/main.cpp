@@ -411,7 +411,8 @@ QMap<QString, QString> getAllowedOptions()
   options["--status"] = "Show status log level messages and above";
   options["--suppress-failure-detail"] =
     "Do not show test failure detailed messages; disables --diff for script tests";
-  options["--trace"] = "Show trace log level messages and abov";
+  options["--trace"] = "Show trace log level messages and above";
+  // Don't show this option if we're not configured to validate test output.
 # ifdef HOOT_HAVE_JOSM
   if (ConfigOptions().getTestValidationEnable())
   {

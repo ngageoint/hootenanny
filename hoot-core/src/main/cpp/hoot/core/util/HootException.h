@@ -190,6 +190,7 @@ HOOT_DEFINE_EXCEPTION(InternalErrorException)
 HOOT_DEFINE_EXCEPTION(IoException)
 HOOT_DEFINE_EXCEPTION(NeedsReviewException)
 HOOT_DEFINE_EXCEPTION(UnsupportedException)
+// Was the error a result of a test being misconfigured? If so, use this.
 HOOT_DEFINE_EXCEPTION(TestConfigurationException)
 
 // This exception exists to kick out of logic whose performance ends up having a very poor runtime

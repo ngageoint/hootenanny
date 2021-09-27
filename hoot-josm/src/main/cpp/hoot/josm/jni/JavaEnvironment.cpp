@@ -99,7 +99,6 @@ void JavaEnvironment::_initVm()
   }
   JavaVMOption options[numOptions];
 
-  //LOG_VARW(ConfigOptions().getJniClassPath());
   const QString classPathStr = "-Djava.class.path=" + ConfigOptions().getJniClassPath().join(":");
   QString classPathStrTemp = classPathStr;
   const QStringList jars = classPathStrTemp.remove("-Djava.class.path=").split(":");
