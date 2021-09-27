@@ -1,7 +1,8 @@
 Input: /ramdisk/hoot/test-files/cases/reference/network/pap-003/Output.osm
 
-Found 19 validation errors in 259 features with JOSM.
+Found 22 validation errors in 259 features with JOSM.
 Crossing ways errors: 1
+Duplicated nodes errors: 3
 Similarly named ways errors: 1
 Tag checker (MapCSS based) errors: 11
 Untagged, empty and one node ways errors: 6

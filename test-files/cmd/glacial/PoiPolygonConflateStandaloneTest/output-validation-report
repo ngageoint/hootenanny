@@ -1,9 +1,10 @@
 Input: test-output/cmd/glacial/PoiPolygonConflateStandaloneTest/output.osm
 
-Found 1,299 validation errors in 6,004 features with JOSM.
+Found 1,301 validation errors in 6,004 features with JOSM.
 Addresses errors: 1
 Almost right angle buildings errors: 649
 Crossing ways errors: 3
+Duplicated nodes errors: 2
 Missing name:* translation errors: 4
 Multipolygon errors: 6
 Opening hours syntax errors: 6

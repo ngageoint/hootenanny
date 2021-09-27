@@ -2538,6 +2538,7 @@ The default value was determined experimentally and may need tweaking per enviro
 ** `CrossingWays.SelfCrossing`
 ** `CrossingWays.Ways`
 ** `DirectionNodes`
+** `DuplicateNode`
 ** `DuplicateRelation`
 ** `DuplicateWay`
 ** `DuplicatedWayNodes`
@@ -2572,9 +2573,9 @@ The default value was determined experimentally and may need tweaking per enviro
 
 List of JOSM validator Java class names without namespace prefixes or file extensions (e.g.
 `DuplicatedWayNodes`) to use during validation or cleaning. With each JOSM upgrade a check needs to
-be made for new available validators by looking at the hardcoded list in the
-`OsmValidator::CORE_TEST_CLASSES` member variable. Last updated version: 18118. See also:
-`hoot.validators`.
+be made for new available validators by comparing the hardcoded list in the
+`OsmValidator::CORE_TEST_CLASSES` member variable for the current version with the previous version.
+See also: `hoot.validators`.
 
 === json.format.hootenanny
 

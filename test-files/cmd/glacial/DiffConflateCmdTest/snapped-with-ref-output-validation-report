@@ -1,7 +1,8 @@
 Input: test-output/cmd/glacial/DiffConflateCmdTest/snapped-with-ref-output.osm
 
-Found 118 validation errors in 665 features with JOSM.
+Found 119 validation errors in 665 features with JOSM.
 Crossing ways errors: 16
+Duplicated nodes errors: 1
 Self crossing ways errors: 1
 Sharp angles errors: 2
 Untagged, empty and one node ways errors: 99

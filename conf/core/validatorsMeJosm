@@ -1,48 +1,48 @@
-# 10.0.3 - This is kept as a reference only.
+# 10.2.2 - This is kept as a reference only.
 
-Addresses
-ApproximateWay
-BarriersEntrances
-Buildings
-Coastlines
-ConditionalKeys
-ConnectivityRelations
-CrossingWaysNew
-DirectionNodes
-DuplicateNode
-DuplicateRelation
-DuplicateWay
-DuplicatedWayNodes
-Highways
-InternetTags
-Lanes
-LongSegment
-MultipolygonTest
-NameMismatch
-NonOsmSchema
-OpeningHourTest
-OverlappingWays
-ParallelBridges
-PowerLines
-PtNearWay
-PublicTransport
-PublicTransportRouteTest
-Railways
-RelationChecker
-RequiredTags
-RightAngleBuildingTest
-SelfIntersectingWay
-SharpTurns
-SimilarNamedWays
-SurveyPoints
-TagChecker
-TunnelsBridges
-TurnrestrictionTest
-UnclosedWays
-UnconnectedWaysNew
-UntaggedNode
-UntaggedWay
-WaterStructures
-Waterways
-WayConnectedToArea
-WronglyOrderedWays
+** `Addresses`
+** `ApproximateWay`
+** `BarriersEntrances`
+** `Buildings`
+** `Coastlines`
+** `ConditionalKeys`
+** `ConnectivityRelations`
+** `CrossingWaysNew`
+** `DirectionNodes`
+** `DuplicateNode`
+** `DuplicateRelation`
+** `DuplicateWay`
+** `DuplicatedWayNodes`
+** `Highways`
+** `InternetTags`
+** `Lanes`
+** `LongSegment`
+** `MultipolygonTest`
+** `NameMismatch`
+** `NonOsmSchema`
+** `OpeningHourTest`
+** `OverlappingWays`
+** `ParallelBridges`
+** `PowerLines`
+** `PtNearWay`
+** `PublicTransport`
+** `PublicTransportRouteTest`
+** `Railways`
+** `RelationChecker`
+** `RequiredTags`
+** `RightAngleBuildingTest`
+** `SelfIntersectingWay`
+** `SharpTurns`
+** `SimilarNamedWays`
+** `SurveyPoints`
+** `TagChecker`
+** `TunnelsBridges`
+** `TurnrestrictionTest`
+** `UnclosedWays`
+** `UnconnectedWaysNew`
+** `UntaggedNode`
+** `UntaggedWay`
+** `WaterStructures`
+** `Waterways`
+** `WayConnectedToArea`
+** `WronglyOrderedWays`

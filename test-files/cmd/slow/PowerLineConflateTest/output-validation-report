@@ -1,7 +1,8 @@
 Input: test-output/cmd/slow/PowerLineConflateTest/output.osm
 
-Found 1,879 validation errors in 3,408 features with JOSM.
+Found 1,890 validation errors in 3,408 features with JOSM.
 Addresses errors: 1
+Duplicated nodes errors: 11
 Duplicated way nodes errors: 2
 Duplicated ways errors: 2
 Power lines errors: 1862

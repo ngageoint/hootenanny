@@ -1,7 +1,8 @@
 Input: test-output/cmd/slow/PowerLineDiffConflateTest/output-partial.osm
 
-Found 80 validation errors in 871 features with JOSM.
+Found 83 validation errors in 871 features with JOSM.
 Addresses errors: 1
+Duplicated nodes errors: 3
 Power lines errors: 70
 Tag checker (MapCSS based) errors: 9
 Total failing JOSM validators: 0

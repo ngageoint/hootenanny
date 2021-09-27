@@ -1,7 +1,8 @@
 Input: test-output/cmd/slow/RailwayDiffConflateTest/output-partial.osm
 
-Found 61 validation errors in 429 features with JOSM.
+Found 64 validation errors in 429 features with JOSM.
 Crossing ways errors: 3
+Duplicated nodes errors: 3
 Tag checker (MapCSS based) errors: 58
 Total failing JOSM validators: 0
 

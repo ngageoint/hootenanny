@@ -24,7 +24,7 @@
 		<josm.version>18193</josm.version>
 		
 	  <!-- josm.artifactId>me-josm</josm.artifactId -->
-		<!-- josm.version>10.0.3</josm.version -->
+		<!-- josm.version>10.2.2</josm.version -->
 		
 	</properties>
 

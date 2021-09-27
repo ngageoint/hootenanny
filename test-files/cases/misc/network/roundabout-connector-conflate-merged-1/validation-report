@@ -1,8 +1,9 @@
 Input: /ramdisk/hoot/test-files/cases/misc/network/roundabout-connector-conflate-merged-1/Output.osm
 
-Found 36 validation errors in 900 features with JOSM.
+Found 58 validation errors in 900 features with JOSM.
 Crossing boundaries errors: 2
 Crossing ways errors: 5
+Duplicated nodes errors: 22
 Duplicated ways errors: 2
 Multipolygon errors: 4
 Relation checker errors: 12

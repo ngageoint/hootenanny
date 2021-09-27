@@ -1,7 +1,8 @@
 Input: test-output/cmd/glacial/NetworkConflateCmdTest/output.osm
 
-Found 6,674 validation errors in 5,591 features with JOSM.
+Found 6,676 validation errors in 5,591 features with JOSM.
 Crossing ways errors: 20
+Duplicated nodes errors: 2
 Duplicated relations errors: 1
 Overlapping ways errors: 4
 Relation checker errors: 21

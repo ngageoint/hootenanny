@@ -61,6 +61,9 @@ the JAR file via a monkey patch. This is necessary to get around some compatibil
 more detail.
 * Hootenanny produces its own JAR file to interact with the JOSM JAR. By default, this file will be 
 copied to `hoot-josm/target/hoot-josm.jar`.
+* The value of the configuration option, `josm.validators`, must match the expected validators
+available in the JAR. By default the option is configured to work with public JOSM. Other versions
+may use different validators.
 
 See the jni.* and josm.* configuration options for more detail on JOSM configuration.
 

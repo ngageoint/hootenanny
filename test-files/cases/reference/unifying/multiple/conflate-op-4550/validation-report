@@ -1,9 +1,10 @@
 Input: /ramdisk/hoot/test-files/cases/reference/unifying/multiple/conflate-op-4550/Output.osm
 
-Found 184 validation errors in 2,180 features with JOSM.
+Found 185 validation errors in 2,180 features with JOSM.
 Addresses errors: 8
 Almost right angle buildings errors: 58
 Crossing ways errors: 15
+Duplicated nodes errors: 1
 Duplicated relations errors: 2
 Highways errors: 1
 Missing name:* translation errors: 2
