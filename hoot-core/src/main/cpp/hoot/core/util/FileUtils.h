@@ -103,6 +103,13 @@ public:
    * @param text text to be written
    */
   static void writeFully(const QString& path, const QString& text);
+  /**
+   * @brief appendLine TODO The file is opend and closed during writing, so this should not be used
+   * within a loop for performance reasons.
+   * @param path
+   * @param text
+   */
+  static void appendLine(const QString& path, const QString& text);
 
   /**
    * Tokenize a file by line and remove the date from each line

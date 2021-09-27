@@ -461,8 +461,6 @@ Any differences will show up in the test output and cause the test to fail.
 * Their is no set naming convention for validation report and validated output files. Just ensure 
 that if running multiple validations within a single script tests that all file names are unique.
 
-TODO: add blurb about regression tests
-
 ==== Running Tests in Parallel
 
 Hootenanny can run Core tests in parallel. Tests in the Translation suite are excluded, however. 
