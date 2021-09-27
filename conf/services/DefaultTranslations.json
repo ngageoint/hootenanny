@@ -74,9 +74,9 @@
         "path" : "translations/WorldPortIndex.js",
     },
     {
-        "name" : "GEOnameS",
-        "description" : "Geonames.org and geonames.nga.mil",
+        "name" : "GeoNames",
+        "description" : "GeoNames.org and geonames.nga.mil",
         "canExport" : false,
-        "path" : "translations/Geonames_to_OSM.js"
+        "path" : "translations/GeoNames_to_OSM.js"
     }
 ]
