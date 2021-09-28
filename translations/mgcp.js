@@ -1103,25 +1103,8 @@ mgcp = {
     delete tags['error:circular'];
     delete tags['hoot:status'];
 
-    // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
-    // We need to unpack this before we can do anything.
-    // Adding this because we might not be reading from OSM
-    if (tags.other_tags)
-    {
-      var tList = tags.other_tags.toString().replace(/\\/g,'').replace(/\"/g,'"').split('","');
-
-      delete tags.other_tags;
-
-      for (var val in tList)
-      {
-        vList = tList[val].split('"=>"');
-
-        tags[vList[0].replace('"','')] = vList[1].replace('"','');
-
-        // Debug
-        // print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
-      }
-    }
+    // Unpack othertags if required
+    translate.unpackOtherTags(tags);
 
     // initial cleanup
     for (var i in tags)

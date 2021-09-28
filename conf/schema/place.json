@@ -156,14 +156,14 @@
     },
     {
         "isA": "place",
-        "geometries": ["node", "area"],
+        "geometries": ["node", "way", "area"],
         "name": "place=island",
         "objectType": "tag",
         "similarTo": {"name": "place=archipelago", "weight": 0.7 }
     },
     {
         "isA": "place",
-        "geometries": ["node", "area"],
+        "geometries": ["node", "way", "area"],
         "name": "place=islet",
         "objectType": "tag",
         "similarTo": {"name": "place=island", "weight": 0.7 }
