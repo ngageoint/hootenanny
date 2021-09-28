@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/unifying/poi-polygon/poi-polygon-review-conflict-4331-2/Output.osm
+Input: test-files/cases/reference/unifying/poi-polygon/poi-polygon-review-conflict-4331-2/Output.osm
 
 Found 31 validation errors in 173 features with JOSM.
 Almost right angle buildings errors: 25

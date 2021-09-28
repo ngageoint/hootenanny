@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/differential/unifying/generic-geometry/generic-3894-1/Output.osm
+Input: test-files/cases/differential/unifying/generic-geometry/generic-3894-1/Output.osm
 
 Found 0 validation errors in 3,164 features with JOSM.
 Total failing JOSM validators: 0

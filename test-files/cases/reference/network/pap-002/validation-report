@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/network/pap-002/Output.osm
+Input: test-files/cases/reference/network/pap-002/Output.osm
 
 Found 50 validation errors in 605 features with JOSM.
 Crossing ways errors: 3

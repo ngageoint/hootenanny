@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/network/roundabout-001/Output.osm
+Input: test-files/cases/reference/network/roundabout-001/Output.osm
 
 Found 8 validation errors in 185 features with JOSM.
 Relation checker errors: 3

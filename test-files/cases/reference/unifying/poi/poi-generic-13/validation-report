@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/unifying/poi/poi-generic-13/Output.osm
+Input: test-files/cases/reference/unifying/poi/poi-generic-13/Output.osm
 
 Found 1 validation errors in 3 features with JOSM.
 Relation checker errors: 1

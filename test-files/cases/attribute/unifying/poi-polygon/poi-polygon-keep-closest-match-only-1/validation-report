@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/attribute/unifying/poi-polygon/poi-polygon-keep-closest-match-only-1/Output.osm
+Input: test-files/cases/attribute/unifying/poi-polygon/poi-polygon-keep-closest-match-only-1/Output.osm
 
 Found 7 validation errors in 276 features with JOSM.
 Almost right angle buildings errors: 5

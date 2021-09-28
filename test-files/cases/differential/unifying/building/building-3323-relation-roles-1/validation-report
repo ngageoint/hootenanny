@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/differential/unifying/building/building-3323-relation-roles-1/Output.osm
+Input: test-files/cases/differential/unifying/building/building-3323-relation-roles-1/Output.osm
 
 Found 3 validation errors in 14 features with JOSM.
 Multipolygon errors: 1

@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/attribute/unifying/building/building-3022-duplicate-relation-member-ways-1/Output.osm
+Input: test-files/cases/attribute/unifying/building/building-3022-duplicate-relation-member-ways-1/Output.osm
 
 Found 5 validation errors in 21 features with JOSM.
 Multipolygon errors: 1

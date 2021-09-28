@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/unifying/multiple/conflate-op-4550/Output.osm
+Input: test-files/cases/reference/unifying/multiple/conflate-op-4550/Output.osm
 
 Found 185 validation errors in 2,180 features with JOSM.
 Addresses errors: 8

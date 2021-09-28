@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/unifying/multiple/way-join-missing-parent-1/Output.osm
+Input: test-files/cases/reference/unifying/multiple/way-join-missing-parent-1/Output.osm
 
 Found 30 validation errors in 273 features with JOSM.
 Almost right angle buildings errors: 1

@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/attribute/unifying/highway/highway-2927-multiple-types-1/Output.osm
+Input: test-files/cases/attribute/unifying/highway/highway-2927-multiple-types-1/Output.osm
 
 Found 3 validation errors in 233 features with JOSM.
 Crossing ways errors: 2

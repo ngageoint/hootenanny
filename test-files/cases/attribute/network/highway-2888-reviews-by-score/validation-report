@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/attribute/network/highway-2888-reviews-by-score/Output.osm
+Input: test-files/cases/attribute/network/highway-2888-reviews-by-score/Output.osm
 
 Found 135 validation errors in 1,426 features with JOSM.
 Crossing ways errors: 52

@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/attribute/unifying/geometry-generic-1/Output.osm
+Input: test-files/cases/attribute/unifying/geometry-generic-1/Output.osm
 
 Found 48 validation errors in 63 features with JOSM.
 Almost right angle buildings errors: 1

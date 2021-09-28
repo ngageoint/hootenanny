@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/unifying/poi-polygon/poi-polygon-7/Output.osm
+Input: test-files/cases/reference/unifying/poi-polygon/poi-polygon-7/Output.osm
 
 Found 0 validation errors in 10 features with JOSM.
 Total failing JOSM validators: 0

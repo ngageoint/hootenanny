@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/network/pap-010/Output.osm
+Input: test-files/cases/reference/network/pap-010/Output.osm
 
 Found 6 validation errors in 89 features with JOSM.
 Tag checker (MapCSS based) errors: 6

@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/unifying/railway/railway-5014-1/Output.osm
+Input: test-files/cases/reference/unifying/railway/railway-5014-1/Output.osm
 
 Found 1 validation errors in 21 features with JOSM.
 Tag checker (MapCSS based) errors: 1

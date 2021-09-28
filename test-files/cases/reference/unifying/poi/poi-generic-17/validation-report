@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/unifying/poi/poi-generic-17/Output.osm
+Input: test-files/cases/reference/unifying/poi/poi-generic-17/Output.osm
 
 Found 0 validation errors in 2 features with JOSM.
 Total failing JOSM validators: 0

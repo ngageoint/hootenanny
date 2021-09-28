@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/unifying/highway/highway-search-radius-1/Output.osm
+Input: test-files/cases/reference/unifying/highway/highway-search-radius-1/Output.osm
 
 Found 13 validation errors in 28 features with JOSM.
 Tag checker (MapCSS based) errors: 13

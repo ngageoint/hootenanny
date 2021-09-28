@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/network/highway-007/Output.osm
+Input: test-files/cases/reference/network/highway-007/Output.osm
 
 Found 6 validation errors in 18 features with JOSM.
 Untagged, empty and one node ways errors: 6

@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/differential/unifying/area/area-3978-1/Output.osm
+Input: test-files/cases/differential/unifying/area/area-3978-1/Output.osm
 
 Found 0 validation errors in 6 features with JOSM.
 Total failing JOSM validators: 0

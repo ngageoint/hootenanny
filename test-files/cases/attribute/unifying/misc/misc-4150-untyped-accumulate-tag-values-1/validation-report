@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/attribute/unifying/misc/misc-4150-untyped-accumulate-tag-values-1/Output.osm
+Input: test-files/cases/attribute/unifying/misc/misc-4150-untyped-accumulate-tag-values-1/Output.osm
 
 Found 3 validation errors in 501 features with JOSM.
 Tag checker errors: 3

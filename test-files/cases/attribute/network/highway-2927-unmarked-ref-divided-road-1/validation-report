@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/attribute/network/highway-2927-unmarked-ref-divided-road-1/Output.osm
+Input: test-files/cases/attribute/network/highway-2927-unmarked-ref-divided-road-1/Output.osm
 
 Found 4 validation errors in 90 features with JOSM.
 Tag checker (MapCSS based) errors: 4

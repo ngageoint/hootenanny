@@ -34,6 +34,7 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/validation/Validator.h>
 
@@ -203,7 +204,17 @@ QString MapValidator::_validate(const QStringList& inputs, const QString& output
   }
 
   LOG_STATUS("Validating combined map...");
-  QString validationSummary = "Input: " + inputName + "\n\n";
+  // Removing HOOT_HOME to appease the case tests so validation report outputs match between
+  // different environments. If this validation wasn't run on a file under HOOT_HOME, this will do
+  // nothing.
+  QString hootHome = ConfPath::getHootHome();
+  if (!hootHome.endsWith("/"))
+  {
+    hootHome += "/";
+  }
+  QString inputDisplayName = inputName;
+  inputDisplayName.replace(hootHome, "");
+  QString validationSummary = "Input: " + inputDisplayName + "\n\n";
 
   try
   {
@@ -268,7 +279,15 @@ QString MapValidator::_validateSeparateOutput(const QStringList& inputs) const
     LOG_STATUS(
       "Validating map " << i + 1 << " of " << inputs.size() << ": ..." <<
       input.right(FILE_PRINT_SIZE) << "...");
-    validationSummary += "Input: " + input + "\n\n";
+    // See note above.
+    QString hootHome = ConfPath::getHootHome();
+    if (!hootHome.endsWith("/"))
+    {
+      hootHome += "/";
+    }
+    QString inputDisplayName = input;
+    inputDisplayName.replace(hootHome, "");
+    validationSummary += "Input: " + inputDisplayName + "\n\n";
 
     try
     {   

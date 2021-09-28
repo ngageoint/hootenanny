@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/differential/unifying/poi/reviews-as-matches-off-3387-1/Output.osm
+Input: test-files/cases/differential/unifying/poi/reviews-as-matches-off-3387-1/Output.osm
 
 Found 14 validation errors in 133 features with JOSM.
 Almost right angle buildings errors: 1

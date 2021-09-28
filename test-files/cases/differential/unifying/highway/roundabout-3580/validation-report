@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/differential/unifying/highway/roundabout-3580/Output.osm
+Input: test-files/cases/differential/unifying/highway/roundabout-3580/Output.osm
 
 Found 8 validation errors in 161 features with JOSM.
 Almost right angle buildings errors: 4

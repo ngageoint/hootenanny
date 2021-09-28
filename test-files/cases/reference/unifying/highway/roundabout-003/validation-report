@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/unifying/highway/roundabout-003/Output.osm
+Input: test-files/cases/reference/unifying/highway/roundabout-003/Output.osm
 
 Found 5 validation errors in 51 features with JOSM.
 Tag checker (MapCSS based) errors: 4

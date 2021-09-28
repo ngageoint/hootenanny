@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/unifying/building/building-4/Output.osm
+Input: test-files/cases/reference/unifying/building/building-4/Output.osm
 
 Found 8 validation errors in 49 features with JOSM.
 Almost right angle buildings errors: 3

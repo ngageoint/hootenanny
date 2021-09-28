@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/unifying/railway/railway-3855/Output.osm
+Input: test-files/cases/reference/unifying/railway/railway-3855/Output.osm
 
 Found 4 validation errors in 2,247 features with JOSM.
 Crossing ways errors: 1

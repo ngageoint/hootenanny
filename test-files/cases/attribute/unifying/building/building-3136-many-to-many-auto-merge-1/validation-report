@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/attribute/unifying/building/building-3136-many-to-many-auto-merge-1/Output.osm
+Input: test-files/cases/attribute/unifying/building/building-3136-many-to-many-auto-merge-1/Output.osm
 
 Found 5 validation errors in 31 features with JOSM.
 Multipolygon errors: 1

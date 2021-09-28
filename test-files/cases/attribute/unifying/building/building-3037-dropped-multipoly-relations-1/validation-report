@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/attribute/unifying/building/building-3037-dropped-multipoly-relations-1/Output.osm
+Input: test-files/cases/attribute/unifying/building/building-3037-dropped-multipoly-relations-1/Output.osm
 
 Found 2 validation errors in 149 features with JOSM.
 Multipolygon errors: 1

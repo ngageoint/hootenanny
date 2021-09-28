@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/unifying/highway/sidewalk-3895/Output.osm
+Input: test-files/cases/reference/unifying/highway/sidewalk-3895/Output.osm
 
 Found 6 validation errors in 48 features with JOSM.
 Highways errors: 4

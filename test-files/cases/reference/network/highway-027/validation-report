@@ -1,4 +1,4 @@
-Input: /ramdisk/hoot/test-files/cases/reference/network/highway-027/Output.osm
+Input: test-files/cases/reference/network/highway-027/Output.osm
 
 Found 11 validation errors in 70 features with JOSM.
 Similarly named ways errors: 4
