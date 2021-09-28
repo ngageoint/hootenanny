@@ -544,9 +544,16 @@ void populateTests(
   //  Test cases go last because of the way they change the environment.
   if (t & CASE_ONLY)
   {
+    bool printValidationReportDiff = false;
+  # ifdef HOOT_HAVE_JOSM
+    if (ConfigOptions().getTestValidationEnable() && printDiff)
+    {
+      printValidationReportDiff = true;
+    }
+  # endif
     vTests.push_back(
       std::make_shared<ConflateCaseTestSuite>(
-        "test-files/cases", suppressFailureDetail, hideDisableTests));
+        "test-files/cases", suppressFailureDetail, printValidationReportDiff, hideDisableTests));
   }
   // If test output validation is enabled, then we want to enable only those tests that use it. This
   // is currently used by the regression tests to run an additional round of validation tests with a
@@ -558,20 +565,22 @@ void populateTests(
   // suppressed from availability before this point if the option isn't enabled.
   if (t == VALIDATED_ONLY)
   {
+    const bool printValidationReportDiff = printDiff;
     vTests.push_back(
       TestPtr(
         new ScriptTestSuite(
-          "test-files/cmd/glacial/", printDiff, GLACIAL_WAIT, hideDisableTests,
+          "test-files/cmd/glacial/", printValidationReportDiff, GLACIAL_WAIT, hideDisableTests,
           suppressFailureDetail, true)));
     vTests.push_back(
       TestPtr(
         new ScriptTestSuite(
-          "test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests, suppressFailureDetail,
+          "test-files/cmd/slow/", printValidationReportDiff, SLOW_WAIT, hideDisableTests,
+          suppressFailureDetail,
           true)));
     // Run case tests last for the reason noted previously.
     vTests.push_back(
       std::make_shared<ConflateCaseTestSuite>(
-        "test-files/cases", suppressFailureDetail, hideDisableTests));
+        "test-files/cases", suppressFailureDetail, printValidationReportDiff, hideDisableTests));
   }
 }
 
@@ -883,7 +892,7 @@ int main(int argc, char* argv[])
       double start = Tgs::Time::getTime();
 
       int nproc = 1;
-      //  With no number after --parallel use the number of online processors
+      //  With no number after --parallel, use the number of online processors.
       int nprocs_available = sysconf(_SC_NPROCESSORS_ONLN);
       int i = args.indexOf("--parallel") + 1;
       if (i >= args.size())
@@ -906,7 +915,7 @@ int main(int argc, char* argv[])
       getNames(allNames, vTestsToRun);
       set<string> nameCheck(allNames.begin(), allNames.end());
 
-      //  Get a list of all conflate cases jobs that must be processed last
+      //  Get a list of all conflate cases jobs that must be processed last.
       vector<TestPtr> conflateCases;
       populateTests(CASE_ONLY, conflateCases, printDiff, suppressFailureDetail, true);
       vector<CppUnit::Test*> vConflateCases;
@@ -915,7 +924,7 @@ int main(int argc, char* argv[])
       getNames(casesNames, vConflateCases);
       set<string> casesSet(casesNames.begin(), casesNames.end());
 
-      //  Add all of the jobs that must be done serially and are a part of the selected tests
+      //  Add all of the jobs that must be done serially and are a part of the selected tests.
       vector<TestPtr> serialTests;
       populateTests(SERIAL, serialTests, printDiff, suppressFailureDetail, true);
       vector<CppUnit::Test*> vSerialTests;
@@ -927,10 +936,10 @@ int main(int argc, char* argv[])
         if (nameCheck.find(*it) != nameCheck.end())
           pool.addJob(QString(it->c_str()), ProcessPool::SerialJob);
       }
-      //  Add all of the remaining non-case jobs in the test suite
+      //  Add all of the remaining non-case jobs in the test suite.
       for (vector<string>::iterator it = allNames.begin(); it != allNames.end(); ++it)
       {
-        //  Jobs in the casesSet are ConflateJob's and the rest are ParallelJob's
+        //  Jobs in the casesSet are ConflateJob's and the rest are ParallelJob's.
         pool.addJob(QString(it->c_str()),
           (casesSet.find(*it) != casesSet.end()) ? ProcessPool::ConflateJob : ProcessPool::ParallelJob);
       }
@@ -950,7 +959,7 @@ int main(int argc, char* argv[])
       if (args.contains("--names"))
         listener->showTestNames(true);
 
-      //  Setup the testing configs
+      //  Setup the testing configs.
       setupTestingConfig(args);
 
       // set up listener

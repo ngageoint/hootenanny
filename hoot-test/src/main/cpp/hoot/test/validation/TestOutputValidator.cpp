@@ -39,13 +39,15 @@
 
 // Qt
 #include <QFileInfo>
+#include <QProcess>
+#include <QElapsedTimer>
 
 namespace hoot
 {
 
 void TestOutputValidator::validate(
   const QString& testName, const QString& testOutputPath,
-  const QString& goldValidationReportPath, const bool suppressFailureDetail)
+  const QString& goldValidationReportPath, const bool suppressFailureDetail, const bool printDiff)
 {
   // Validators primarily use JOSM, so we need to be compiled with JOSM support to do this.
   # ifndef HOOT_HAVE_JOSM
@@ -55,6 +57,7 @@ void TestOutputValidator::validate(
   LOG_VART(testName);
   LOG_VART(testOutputPath);
   LOG_VART(goldValidationReportPath);
+  LOG_VART(printDiff);
 
   // Make sure the baseline report file is valid first.
   if (!_validateGoldReport(testName, goldValidationReportPath))
@@ -109,6 +112,20 @@ void TestOutputValidator::validate(
              "    mv " + outputValidationReportPath + " " + goldValidationReportPath + "\n"
              "*************************";
     }
+    if (printDiff)
+    {
+      int scriptTestTimeOutSeconds = ConfigOptions().getTestScriptMaxExecTime();
+      if (scriptTestTimeOutSeconds == -1)
+      {
+        // Validation report output is very small...no need for anything big here.
+        scriptTestTimeOutSeconds = 10;
+      }
+      msg +=
+        "\n" +
+        _printValidationReportDiff(
+          testName, goldValidationReportPath, outputValidationReportPath, scriptTestTimeOutSeconds)
+          .trimmed();
+    }
     CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
   }
 }
@@ -144,6 +161,49 @@ bool TestOutputValidator::_validateGoldReport(
   }
 
   return true;
+}
+
+QString TestOutputValidator::_printValidationReportDiff(
+  const QString& testName, const QString& filePath1, const QString& filePath2, const int timeout)
+{
+  // Lifted this code from ScriptTest. It initially proved to be painful to try to refactor it out
+  // of there for shared use...should probably eventually be done.
+
+  QProcess diffProcess;
+  diffProcess.start("diff", QStringList() << filePath1 << filePath2, QProcess::ReadOnly);
+
+  while (diffProcess.waitForStarted(500) == false)
+  {
+    LOG_WARN("Waiting for diff process to start for: " + testName);
+  }
+
+  bool first = true;
+  QElapsedTimer timer;
+  timer.start();
+  while (diffProcess.waitForFinished(timeout * 1000) == false)
+  {
+    if (first)
+    {
+      // Throw an endl in there so the dots in the test list don't look funny.
+      std::cout << std::endl;
+      LOG_WARN("Waiting for diff process to finish for: " + testName);
+      first = false;
+    }
+
+    // If the process hangs, this will allow us to get out.
+    const qint64 timeElapsedSeconds = timer.elapsed() / 1000;
+    if (timeElapsedSeconds >= timeout)
+    {
+      LOG_ERROR(
+        "Forcefully ending diff command for: " << testName << " after " << timeElapsedSeconds <<
+        " seconds.");
+      break;
+    }
+  }
+
+ return
+   "Validation report diff: \n" + QString::fromUtf8(diffProcess.readAllStandardOutput()) + "\n" +
+   QString::fromUtf8(diffProcess.readAllStandardError());
 }
 
 }

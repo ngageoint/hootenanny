@@ -45,9 +45,11 @@ namespace hoot
 
 static const QString multiaryConflateClass = "MultiaryPoiConflateCmd";
 
-ConflateCaseTest::ConflateCaseTest(QDir d, QStringList confs, bool suppressFailureDetail) :
+ConflateCaseTest::ConflateCaseTest(
+  QDir d, QStringList confs, bool suppressFailureDetail, bool printValidationReportDiff ) :
 AbstractTest(d, confs),
-_suppressFailureDetail(suppressFailureDetail)
+_suppressFailureDetail(suppressFailureDetail),
+_printValidationReportDiff(printValidationReportDiff)
 {
 }
 
@@ -213,7 +215,7 @@ void ConflateCaseTest::runTest()
     {
       TestOutputValidator::validate(
         _d.dirName(), _d.absolutePath() + "/Output.osm", _d.absolutePath() + "/validation-report",
-        _suppressFailureDetail);
+        _suppressFailureDetail, _printValidationReportDiff);
     }
   # endif
   }

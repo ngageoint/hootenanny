@@ -246,7 +246,7 @@ void ScriptTest::_runDiff(const QString& file1, const QString& file2)
 
   while (p.waitForStarted(500) == false)
   {
-    LOG_WARN("Waiting for process to start: " + _script);
+    LOG_WARN("Waiting for diff process to start for: " + _script);
   }
 
   const int scriptTestTimeOutSeconds = ConfigOptions(conf()).getTestScriptMaxExecTime();
@@ -264,17 +264,19 @@ void ScriptTest::_runDiff(const QString& file1, const QString& file2)
   {
     if (first)
     {
-      // throw an endl in there so the dots in the test list don't look funny.
+      // Throw an endl in there so the dots in the test list don't look funny.
       cout << endl;
-      LOG_WARN("Waiting for process to finish: " + _script);
+      LOG_WARN("Waiting for diff process to finish for: " + _script);
       first = false;
     }
 
-    // If the process hangs this will allows us to get out.
+    // If the process hangs, this will allow us to get out.
     const qint64 timeElapsedSeconds = timer.elapsed() / 1000;
     if (scriptTimeOutSpecified && timeElapsedSeconds >= scriptTestTimeOutSeconds)
     {
-      LOG_ERROR("Forcefully ending test script test after " << timeElapsedSeconds << " seconds.");
+      LOG_ERROR(
+        "Forcefully ending diff command for: " << _script << " after " << timeElapsedSeconds <<
+        " seconds.");
       break;
     }
   }
@@ -287,8 +289,8 @@ void ScriptTest::_runDiff(const QString& file1, const QString& file2)
 
 void ScriptTest::_runProcess()
 {
-  // TODO: It would be nice if we could specify Testing.conf here to avoid having to specify it in
-  // every test file (#3823).
+  // It would be nice if we could specify Testing.conf here to avoid having to specify it in every
+  // test file (#3823).
   QProcess p;
   p.start(_script, QProcess::ReadOnly);
 

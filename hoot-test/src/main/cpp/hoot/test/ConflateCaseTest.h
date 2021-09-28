@@ -47,8 +47,12 @@ public:
    * @param d the directory containing the test files
    * @param confs configuration files to be used by the test
    * @param suppressFailureDetail if true, detailed test failure information is not displayed
+   * @param printValidationReportDiff if true, for failing tests prints the difference between the
+   * baseline validation report and the test validation report output
    */
-  ConflateCaseTest(QDir d, QStringList confs, bool suppressFailureDetail = false);
+  ConflateCaseTest(
+    QDir d, QStringList confs, bool suppressFailureDetail = false,
+    bool printValidationReportDiff = false);
 
   /**
    * @see AbstractTest
@@ -58,6 +62,7 @@ public:
 private:
 
   bool _suppressFailureDetail;
+  bool _printValidationReportDiff;
 
   void _runConflateCmd() const;
   void _runMultiaryConflateCmd() const;

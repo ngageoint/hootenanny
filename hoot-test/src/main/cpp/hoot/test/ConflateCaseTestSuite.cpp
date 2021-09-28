@@ -39,11 +39,13 @@ namespace hoot
 {
 
 ConflateCaseTestSuite::ConflateCaseTestSuite(
-  const QString& dir, bool suppressFailureDetail, bool hideDisableTests) :
+  const QString& dir, bool suppressFailureDetail, bool printValidationReportDiff,
+  bool hideDisableTests) :
 AbstractTestSuite(dir),
 _hideDisableTests(hideDisableTests),
 _numTests(0),
-_suppressFailureDetail(suppressFailureDetail)
+_suppressFailureDetail(suppressFailureDetail),
+_printValidationReportDiff(printValidationReportDiff)
 {
   QStringList confs;
   loadDir(dir, confs);
@@ -110,8 +112,7 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
   if (dirs.size() > 0)
   {
     // This is entirely a preference thing. I want people to keep the tests clean and uncluttered.
-    if (QFileInfo(d, "Input1.osm").exists() ||
-        QFileInfo(d, "Input2.osm").exists() ||
+    if (QFileInfo(d, "Input1.osm").exists() || QFileInfo(d, "Input2.osm").exists() ||
         QFileInfo(d, "Output.osm").exists())
     {
       throw HootException("Please put conflate test cases in a directory w/o sub directories.");
@@ -123,7 +124,7 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
     // test a chance to override it when necessary.
     confs.prepend(ConfPath::search("Testing.conf"));
 
-    addTest(new ConflateCaseTest(d, confs, _suppressFailureDetail));
+    addTest(new ConflateCaseTest(d, confs, _suppressFailureDetail, _printValidationReportDiff));
     _numTests++;
   }
 }

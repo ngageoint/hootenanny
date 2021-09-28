@@ -52,10 +52,12 @@ public:
    * @param testOutputPath output directory for the test
    * @param goldValidationReportPath path to the baseline validation report for the test
    * @param suppressFailureDetail if true, detailed test failure information is not displayed
+   * @param printDiff TODO
    */
   static void validate(
     const QString& testName, const QString& testOutputPath,
-    const QString& goldValidationReportPath, const bool suppressFailureDetail = false);
+    const QString& goldValidationReportPath, const bool suppressFailureDetail = false,
+    const bool printDiff = false);
 
 private:
 
@@ -68,6 +70,17 @@ private:
    */
   static bool _validateGoldReport(
     const QString& testName, const QString& goldValidationReportPath);
+
+  /**
+   * @brief _printValidationReportDiff Prints the difference between two files
+   * @param testName name of the current test
+   * @param filePath1 first file to compare
+   * @param filePath2 second file to compare
+   * @param timeout how long to wait for the diff command to finish
+   * @return difference string
+   */
+  static QString _printValidationReportDiff(
+    const QString& testName, const QString& filePath1, const QString& filePath2, const int timeout);
 };
 
 }
