@@ -46,19 +46,22 @@ namespace hoot
 class OsmApiReaderTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmApiReaderTest);
+#ifdef ENABLE_OSM_API_READER_TEST
+
+#ifdef RUN_LOCAL_TEST_SERVER
   CPPUNIT_TEST(runSimpleTest);
   CPPUNIT_TEST(runSplitGeographicTest);
   CPPUNIT_TEST(runSplitElementsTest);
   CPPUNIT_TEST(runFailureTest);
+#endif
+
+#endif
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   const QString OSM_API_URL = "https://www.openstreetmap.org";
   const QString LOCAL_TEST_API_URL = "http://localhost:%1";
-#ifdef RUN_LOCAL_OSM_API_SERVER
-  const QString LOCAL_OSM_API_URL = "http://<Enter local OSM API URL here>";
-#endif
 
   /** Separate port numbers so that tests can run in parallel */
   const int PORT_SIMPLE =         9900;
@@ -73,6 +76,7 @@ public:
 
   void runSimpleTest()
   {
+#ifdef RUN_LOCAL_TEST_SERVER
     SimpleReaderTestServer server(PORT_SIMPLE);
     server.start();
 
@@ -93,10 +97,12 @@ public:
     writer.close();
 
     HOOT_FILE_EQUALS(_inputPath + "SimpleTestExpected.osm", output);
+#endif
   }
 
   void runSplitGeographicTest()
   {
+#ifdef RUN_LOCAL_TEST_SERVER
     GeographicSplitReaderTestServer server(PORT_SPLIT_GEO);
     server.start();
 
@@ -120,10 +126,12 @@ public:
     writer.close();
 
     HOOT_FILE_EQUALS(_inputPath + "SplitTestExpected.osm", output);
+#endif
   }
 
   void runSplitElementsTest()
   {
+#ifdef RUN_LOCAL_TEST_SERVER
     ElementSplitReaderTestServer server(PORT_SPLIT_ELEMENTS);
     server.start();
 
@@ -147,10 +155,12 @@ public:
     writer.close();
 
     HOOT_FILE_EQUALS(_inputPath + "SplitTestExpected.osm", output);
+#endif
   }
 
   void runFailureTest()
   {
+#ifdef RUN_LOCAL_TEST_SERVER
     QString exceptionMsg("");
     try
     {
@@ -167,6 +177,7 @@ public:
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT(exceptionMsg == "Cannot request areas larger than 1.0000 square degrees.");
+#endif
   }
 };
 

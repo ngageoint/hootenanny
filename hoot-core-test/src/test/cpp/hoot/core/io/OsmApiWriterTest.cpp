@@ -47,6 +47,8 @@ namespace hoot
 class OsmApiWriterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmApiWriterTest);
+#ifdef ENABLE_OSM_API_WRITER_TEST
+
   CPPUNIT_TEST(runParseStatusTest);
   CPPUNIT_TEST(runParseCapabilitiesTest);
   CPPUNIT_TEST(runCapabilitesTest);
@@ -70,6 +72,8 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runChangesetTrottleTest);
   CPPUNIT_TEST(runChangesetConflictTest);
   CPPUNIT_TEST(oauthTest);
+#endif
+
 #endif
   CPPUNIT_TEST_SUITE_END();
 
