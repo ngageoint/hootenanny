@@ -142,6 +142,7 @@ QString MapValidator::_validateWithHoot(OsmMapPtr& map) const
   QString validationSummary;
   int numFeaturesValidated = 0;
   int numValidationErrors = 0;
+  int numFailingValidators = 0;
   for (int i = 0; i < hootValidators.size(); i++)
   {
     std::shared_ptr<OsmMapOperation> op =
@@ -152,18 +153,29 @@ QString MapValidator::_validateWithHoot(OsmMapPtr& map) const
       if (validator)
       {
         validator->enableValidation();
-        op->apply(map);
-        validationSummary += validator->getValidationErrorMessage() + "\n";
-        numFeaturesValidated += validator->getNumFeaturesValidated();
-        numValidationErrors += validator->getNumValidationErrors();
+        try
+        {
+          op->apply(map);
+          const QString validationErrorMessage = validator->getValidationErrorMessage();
+          if (!validationErrorMessage.isEmpty())
+          {
+            validationSummary += validationErrorMessage + "\n";
+          }
+          numFeaturesValidated += validator->getNumFeaturesValidated();
+          numValidationErrors += validator->getNumValidationErrors();
+        }
+        catch (...)
+        {
+          numFailingValidators++;
+        }
       }
     }
   }
   validationSummary.prepend(
     "Found " + QString::number(numValidationErrors) + " validation errors in " +
     QString::number(numFeaturesValidated) + " features with Hootenanny.\n");
-  // hardcoding this for now
-  validationSummary += "Total failing Hootenanny validators: 0";
+  validationSummary +=
+    "Total failing Hootenanny validators: " + QString::number(numFailingValidators);
   return validationSummary.trimmed();
 }
 
