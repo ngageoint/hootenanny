@@ -99,7 +99,7 @@ TestSuite((ConfPath::getHootHome() + "/" + dir).toStdString())
 
 bool ScriptTestSuite::_scriptValidatesAnyOutput(const QString& scriptPath) const
 {
-  return FileUtils::readFully(scriptPath).contains("hoot validate");
+  return FileUtils::readFully(scriptPath).contains("validateTestOutput");
 }
 
 }

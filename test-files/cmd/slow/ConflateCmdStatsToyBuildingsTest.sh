@@ -8,20 +8,18 @@ STATS_OUT=$OUT_DIR/toy-buildings-out
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 CONFIG="-C Testing.conf"
+source scripts/core/ScriptTestUtils.sh
 
 hoot conflate $CONFIG -D writer.include.debug.tags=true -D match.creators="BuildingMatchCreator" \
   -D merger.creators="BuildingMergerCreator" test-files/ToyBuildingsTestA.osm \
   test-files/ToyBuildingsTestB.osm $STATS_OUT.osm --stats > $STATS_OUT
 hoot diff $CONFIG $STATS_OUT.osm $IN_DIR/toy-buildings-out.osm || diff $STATS_OUT.osm $IN_DIR/toy-buildings-out.osm
 
-if [ -f "test-output/test-validation-enabled" ]; then
-  hoot validate --warn $CONFIG $OUT_DIR/toy-buildings-out.osm \
-    --report-output $OUT_DIR/toy-buildings-out-validation-report \
-    --output $OUT_DIR/toy-buildings-out-validated.osm
-  diff $IN_DIR/toy-buildings-out-validation-report $OUT_DIR/toy-buildings-out-validation-report
-fi
+validateTestOutput $OUT_DIR/toy-buildings-out.osm $OUT_DIR/toy-buildings-out-validation-report \
+  $OUT_DIR/toy-buildings-out-validated.osm $IN_DIR/toy-buildings-out-validation-report
 
-#read in a set of stat names from a file, delete them from the hoot command stats output, and write the remaining stats to the final output
+# Read in a set of stat names from a file, delete them from the hoot command stats output, and write 
+# the remaining stats to the final output.
 EDIT_CMD=""
 while read line
 do

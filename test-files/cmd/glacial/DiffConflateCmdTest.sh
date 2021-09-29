@@ -11,6 +11,7 @@ CONFIG="-C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf"
 # remove partial match elements in a partial fashion at this time, so change the default setting to 
 # avoid a warning.
 GENERAL_OPTS="-D differential.remove.linear.partial.matches.as.whole=true"
+source scripts/core/ScriptTestUtils.sh
 
 # Run differential conflation to produce a map output
 echo ""
@@ -23,6 +24,10 @@ if [ -f "test-output/test-validation-enabled" ]; then
     --report-output $OUTPUT_DIR/output-validation-report --output $OUTPUT_DIR/output-validated.osm
   diff $INPUT_DIR/output-validation-report $OUTPUT_DIR/output-validation-report
 fi
+validateTestOutput $OUTPUT_DIR/output.osm \
+  $OUTPUT_DIR/snapped-with-ref-output-validation-report \
+  $OUTPUT_DIR/output-validated.osm \
+  $INPUT_DIR/output-validation-report
 
 # Run changeset w/tags to produce a unified changeset output (geometry and tags)
 echo ""
@@ -152,7 +157,7 @@ hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
  $INPUT_DIR/input3.osm $INPUT_DIR/input4.osm \
  $OUTPUT_DIR/snapped-output.osm --differential
 hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-output.osm $INPUT_DIR/snapped-output.osm || \
-     diff $OUTPUT_DIR/snapped-output.osm $INPUT_DIR/snapped-output.osm
+  diff $OUTPUT_DIR/snapped-output.osm $INPUT_DIR/snapped-output.osm
 
 echo ""
 echo "Checking conflation with road snapping and keeping ref data..."
@@ -172,6 +177,10 @@ if [ -f "test-output/test-validation-enabled" ]; then
     $OUTPUT_DIR/snapped-with-ref-output-validated.osm
   diff $INPUT_DIR/snapped-with-ref-output-validation-report $OUTPUT_DIR/snapped-with-ref-output-validation-report
 fi
+validateTestOutput $OUTPUT_DIR/snapped-with-ref-output.osm \
+  $OUTPUT_DIR/snapped-with-ref-output-validation-report \
+  $OUTPUT_DIR/snapped-with-ref-output-validated.osm \
+  $INPUT_DIR/snapped-with-ref-output-validation-report
      
 echo ""
 echo "Checking conflation with road snapping and remove all ref data, even snapped..."

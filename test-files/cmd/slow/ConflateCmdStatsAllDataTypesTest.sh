@@ -15,18 +15,15 @@ STATS_OUT=$OUT_DIR/all-data-types-out
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 CONFIG="-C Testing.conf"
+source scripts/core/ScriptTestUtils.sh
 
 hoot conflate $CONFIG -C UnifyingAlgorithm.conf -C ReferenceConflation.conf \
   -D writer.include.debug.tags=true $IN_DIR_2/AllDataTypesA.osm $IN_DIR_2/AllDataTypesB.osm \
   $STATS_OUT.osm --stats > $STATS_OUT
 hoot diff $CONFIG $STATS_OUT.osm $IN_DIR/all-data-types-out.osm || diff $STATS_OUT.osm $IN_DIR/all-data-types-out.osm
 
-if [ -f "test-output/test-validation-enabled" ]; then
-  hoot validate --warn $CONFIG $OUT_DIR/all-data-types-out.osm \
-    --report-output $OUT_DIR/all-data-types-out-validation-report \
-    --output $OUT_DIR/all-data-types-out-validated.osm
-  diff $IN_DIR/all-data-types-out-validation-report $OUT_DIR/all-data-types-out-validation-report
-fi
+validateTestOutput $OUT_DIR/all-data-types-out.osm $OUT_DIR/all-data-types-out-validation-report \
+  $OUT_DIR/all-data-types-out-validated.osm $IN_DIR/all-data-types-out-validation-report
 
 #read in a set of stat names from a file, delete them from the hoot command stats output, and write the remaining stats to the final output
 EDIT_CMD=""

@@ -7,6 +7,7 @@ OUT_DIR=test-output/cmd/slow/PowerLineConflateTest
 mkdir -p $OUT_DIR
 
 CONFIG="-C Testing.conf"
+source scripts/core/ScriptTestUtils.sh
 
 hoot conflate --warn $CONFIG -C UnifyingAlgorithm.conf -C ReferenceConflation.conf \
   -D uuid.helper.repeatable=true -D match.creators="ScriptMatchCreator,PowerLine.js" \
@@ -14,8 +15,5 @@ hoot conflate --warn $CONFIG -C UnifyingAlgorithm.conf -C ReferenceConflation.co
   $OUT_DIR/output.osm
 hoot diff $CONFIG $OUT_DIR/output.osm $IN_DIR/output.osm || diff $OUT_DIR/output.osm $IN_DIR/output.osm
 
-if [ -f "test-output/test-validation-enabled" ]; then
-  hoot validate --warn $CONFIG $OUT_DIR/output.osm \
-    --report-output $OUT_DIR/output-validation-report --output $OUT_DIR/output-validated.osm
-  diff $IN_DIR/output-validation-report $OUT_DIR/output-validation-report
-fi
+validateTestOutput $OUT_DIR/output.osm $OUT_DIR/output-validation-report \
+  $OUT_DIR/output-validated.osm $IN_DIR/output-validation-report

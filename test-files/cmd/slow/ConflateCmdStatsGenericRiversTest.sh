@@ -9,6 +9,7 @@ STATS_OUT=$OUT_DIR/generic-rivers-out
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 CONFIG="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf -C Testing.conf"
+source scripts/core/ScriptTestUtils.sh
 
 hoot conflate $CONFIG -D "match.creators=ScriptMatchCreator,River.js" \
   -D "merger.creators=ScriptMergerCreator" -D writer.include.debug.tags=true \
@@ -22,8 +23,11 @@ if [ -f "test-output/test-validation-enabled" ]; then
     --output $OUT_DIR/generic-rivers-out-validated.osm
   diff $IN_DIR/generic-rivers-out-validation-report $OUT_DIR/generic-rivers-out-validation-report
 fi
+validateTestOutput $OUT_DIR/generic-rivers-out.osm $OUT_DIR/generic-rivers-out-validation-report \
+  $OUT_DIR/generic-rivers-out-validated.osm $IN_DIR/generic-rivers-out-validation-report
 
-#read in a set of stat names from a file, delete them from the hoot command stats output, and write the remaining stats to the final output
+# Rread in a set of stat names from a file, delete them from the hoot command stats output, and 
+# write the remaining stats to the final output.
 EDIT_CMD=""
 while read line
 do

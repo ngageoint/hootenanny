@@ -440,25 +440,24 @@ that practice should be avoided when possible.
 
 The excerpt below taken from `ConflateCmdTest.sh` shows how to use validation within a script test:
 --------------
-if [ -f "test-output/test-validation-enabled" ]; then
-  hoot validate --warn $CONFIG $OUT_DIR/output.osm \
-    --report-output $OUT_DIR/output-validation-report --output $OUT_DIR/output-validated.osm
-  diff $IN_DIR_2/output-validation-report $OUT_DIR/output-validation-report
-fi
+source ./$HOOT_HOME/scripts/core/ScriptUtils.sh
+validateTestOutput $OUT_DIR/output.osm $OUT_DIR/output-validation-report \
+  $OUT_DIR/output-validated.osm $IN_DIR_2/output-validation-report
 --------------
 
 Details:
 
-* The empty file, `test-output/test-validation-enabled`, should be checked for existance before
-running validation from a script test. `HootTest` will automatically create this dummy file if the 
+Looking at the function `validateTestOutput` in `ScriptTestUtils.sh`:
+* The empty file, `test-output/test-validation-enabled`, is checked for existence before running 
+validation from a script test. `HootTest` will automatically create this dummy file if the 
 pre-requisites for running validation are met (compiled `--with-josm` and 
 `test.validation.enable=true`). If the pre-requisites have not been met, this file will be removed 
 by `HootTest` and scripts will skip running validation. This is the needed due to the fact the 
 script has no way itself of knowing if the validation pre-requisites have been met.
-* Validation should be run as above with a report file output and a validated file output.
+* Read the `validateTestOutput` function header for information on the function input variables.
 * A diff is performed against the test output validation report and a baseline validation report. 
 Any differences will show up in the test output and cause the test to fail.
-* Their is no set naming convention for validation report and validated output files. Just ensure 
+* There is no set naming convention for validation report and validated output files. Just ensure 
 that if running multiple validations within a single script tests that all file names are unique.
 
 ===== Running Only Tests Which Use Validation

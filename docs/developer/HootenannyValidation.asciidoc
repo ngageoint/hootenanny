@@ -70,5 +70,7 @@ See the jni.* and josm.* configuration options for more detail on JOSM configura
 JNI is notoriously difficult to debug and its usage with JOSM can become very brittle with 
 underlying changes between JOSM versions. Upgrading JOSM should be done with care and with the 
 expectation of involved integration work. JOSM upgrades may involve significant changes to 
-`hoot-josm` code.
+`hoot-josm` code. Also if any validators are added in a new JOSM version (assuming you want to use 
+the new ones), all the baseline validation reports used by the unit test output validation will need 
+to be updated after the new output is examined for accuracy.
 
