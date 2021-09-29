@@ -75,8 +75,9 @@ class BuildingMatchVisitor : public ConstElementVisitor
 {
 public:
 
-  BuildingMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
-                       ElementCriterionPtr filter = ElementCriterionPtr()) :
+  BuildingMatchVisitor(
+    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
+    ElementCriterionPtr filter = ElementCriterionPtr()) :
   _map(map),
   _result(result),
   _filter(filter)
@@ -86,10 +87,10 @@ public:
   /**
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
-  BuildingMatchVisitor(const ConstOsmMapPtr& map,
-    std::vector<ConstMatchPtr>& result, std::shared_ptr<BuildingRfClassifier> rf,
-    ConstMatchThresholdPtr threshold, ElementCriterionPtr filter = ElementCriterionPtr(),
-    Status matchStatus = Status::Invalid) :
+  BuildingMatchVisitor(
+    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
+    std::shared_ptr<BuildingRfClassifier> rf, ConstMatchThresholdPtr threshold,
+    ElementCriterionPtr filter = ElementCriterionPtr(), Status matchStatus = Status::Invalid) :
     _map(map),
     _result(result),
     _rf(rf),
@@ -410,8 +411,8 @@ _conflateMatchBuildingModel(ConfigOptions().getConflateMatchBuildingModel())
 {
 }
 
-MatchPtr BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
-                                           ElementId eid2)
+MatchPtr BuildingMatchCreator::createMatch(
+  const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
   std::shared_ptr<BuildingMatch> result;
   if (eid1.getType() != ElementType::Node && eid2.getType() != ElementType::Node)
@@ -428,9 +429,8 @@ MatchPtr BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
   return result;
 }
 
-void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
-                                         std::vector<ConstMatchPtr>& matches,
-                                         ConstMatchThresholdPtr threshold)
+void BuildingMatchCreator::createMatches(
+  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches, ConstMatchThresholdPtr threshold)
 {
   QElapsedTimer timer;
   timer.start();

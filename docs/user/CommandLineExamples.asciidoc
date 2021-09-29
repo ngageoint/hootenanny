@@ -722,6 +722,12 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot info --config-options poi.polygon --option-names
 -----
 
+==== List all configuration option names and details containing "poi.polygon":
+
+-----
+    hoot info --config-options poi.polygon --option-details
+-----
+
 ==== List all available cleaning operations:
 
 -----

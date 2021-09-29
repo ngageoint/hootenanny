@@ -58,7 +58,7 @@
 namespace hoot
 {
 
-const int ApiEntityDisplayInfo::MAX_NAME_SIZE = 48;
+const int ApiEntityDisplayInfo::MAX_NAME_SIZE = 55;
 const int ApiEntityDisplayInfo::MAX_TYPE_SIZE = 18;
 
 template<typename ApiEntity>
@@ -183,6 +183,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     msg += ":";
     msg.prepend("Feature Extractors");
     ts << msg << endl;
+    // TODO: would be nice to alphabetize these
     ts <<
       _getApiEntities<FeatureExtractor, FeatureExtractor>(
         FeatureExtractor::className(), "feature extractor", false, MAX_NAME_SIZE);
@@ -289,6 +290,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     msg += ":";
     msg.prepend("Criterion Consumers");
     ts << msg << endl;
+    // TODO: would be nice to alphabetize these
     ts <<
       _getApiEntities<OsmMapOperation, ElementCriterionConsumer>(
         OsmMapOperation::className(), "criterion consumer", false, MAX_NAME_SIZE - 10);

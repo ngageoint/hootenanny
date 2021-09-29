@@ -17,9 +17,9 @@ exports.matchCandidateCriterion = "PowerLineCriterion";
 // conflate thresholds and they're effectively ignored. If more custom values are ever required,
 // then the generic score threshold configuration options used below should be replaced with custom
 // score threshold configuration options.
-exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold"));
-exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold"));
-exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold"));
+exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
+exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
+exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 
 // geometry matchers
 
