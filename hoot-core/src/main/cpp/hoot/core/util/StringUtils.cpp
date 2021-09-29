@@ -180,7 +180,7 @@ QSet<QString> StringUtils::getDuplicates(const QStringList& input)
 
 bool StringUtils::hasDuplicates(const QStringList& input)
 {
-  return getDuplicates(input).size() > 0;
+  return !getDuplicates(input).empty();
 }
 
 bool StringUtils::containsSubstring(
