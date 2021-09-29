@@ -257,7 +257,8 @@ QString MapValidator::_validate(const QStringList& inputs, const QString& output
   {
     LOG_STATUS(
       "Writing validation report summary to: ..." << _reportFile.right(FILE_PRINT_SIZE) << "...");
-    FileUtils::writeFully(_reportFile, validationSummary);
+    // Add a new line at the end of the file to keep source control happy.
+    FileUtils::writeFully(_reportFile, validationSummary + "\n");
   }
   return validationSummary;
 }
@@ -331,7 +332,8 @@ QString MapValidator::_validateSeparateOutput(const QStringList& inputs) const
   {
     LOG_STATUS(
       "Writing validation report summary to: ..." << _reportFile.right(FILE_PRINT_SIZE) << "...");
-    FileUtils::writeFully(_reportFile, validationSummary);
+    // Add a new line at the end of the file to keep source control happy.
+    FileUtils::writeFully(_reportFile, validationSummary + "\n");
   }
   return validationSummary;
 }
