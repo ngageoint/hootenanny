@@ -47,7 +47,8 @@ namespace hoot
 
 void TestOutputValidator::validate(
   const QString& testName, const QString& testOutputPath,
-  const QString& goldValidationReportPath, const bool suppressFailureDetail, const bool printDiff)
+  const QString& goldValidationReportPath, const bool suppressFailureDetail,
+  const bool printValidationReportDiff)
 {
   // Validators primarily use JOSM, so we need to be compiled with JOSM support to do this.
   # ifndef HOOT_HAVE_JOSM
@@ -57,7 +58,7 @@ void TestOutputValidator::validate(
   LOG_VART(testName);
   LOG_VART(testOutputPath);
   LOG_VART(goldValidationReportPath);
-  LOG_VART(printDiff);
+  LOG_VART(printValidationReportDiff);
 
   // Make sure the baseline report file is valid first.
   if (!_validateGoldReport(testName, goldValidationReportPath))
@@ -112,7 +113,7 @@ void TestOutputValidator::validate(
              "    mv " + outputValidationReportPath + " " + goldValidationReportPath + "\n"
              "*************************";
     }
-    if (printDiff)
+    if (printValidationReportDiff)
     {
       int scriptTestTimeOutSeconds = ConfigOptions().getTestScriptMaxExecTime();
       if (scriptTestTimeOutSeconds == -1)

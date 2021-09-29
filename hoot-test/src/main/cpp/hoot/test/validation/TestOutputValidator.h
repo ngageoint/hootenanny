@@ -52,12 +52,13 @@ public:
    * @param testOutputPath output directory for the test
    * @param goldValidationReportPath path to the baseline validation report for the test
    * @param suppressFailureDetail if true, detailed test failure information is not displayed
-   * @param printDiff TODO
+   * @param printValidationReportDiff if true, for failing tests prints the difference between the
+   * baseline validation report and the test validation report output
    */
   static void validate(
     const QString& testName, const QString& testOutputPath,
     const QString& goldValidationReportPath, const bool suppressFailureDetail = false,
-    const bool printDiff = false);
+    const bool printValidationReportDiff = false);
 
 private:
 
