@@ -18,5 +18,6 @@ Tag checker (MapCSS based) errors: 55
 Untagged, empty and one node ways errors: 21
 Total failing JOSM validators: 0
 
-Found 2 validation errors in 379 features with Hootenanny.Roads crossing polygons: 2
+Found 2 validation errors in 379 features with Hootenanny.
+Roads crossing polygons errors: 2
 Total failing Hootenanny validators: 0

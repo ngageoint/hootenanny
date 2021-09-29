@@ -161,7 +161,7 @@ QString MapValidator::_validateWithHoot(OsmMapPtr& map) const
   }
   validationSummary.prepend(
     "Found " + QString::number(numValidationErrors) + " validation errors in " +
-    QString::number(numFeaturesValidated) + " features with Hootenanny.");
+    QString::number(numFeaturesValidated) + " features with Hootenanny.\n");
   // hardcoding this for now
   validationSummary += "Total failing Hootenanny validators: 0";
   return validationSummary.trimmed();

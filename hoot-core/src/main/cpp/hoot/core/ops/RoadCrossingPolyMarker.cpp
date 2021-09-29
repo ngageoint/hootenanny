@@ -178,7 +178,8 @@ QStringList RoadCrossingPolyMarker::getCriteria() const
 
 QString RoadCrossingPolyMarker::getValidationErrorMessage() const
 {
-  return _numAffected == 0 ? "" : "Roads crossing polygons: " + QString::number(_numAffected);
+  return
+    _numAffected == 0 ? "" : "Roads crossing polygons errors: " + QString::number(_numAffected);
 }
 
 }
