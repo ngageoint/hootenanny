@@ -133,7 +133,8 @@ try {
             });
     });
 } catch (e) {
-    console.log('Skipping translations-local config');
+    // Skipping the log statement due to it causing test failures when using diff on the output
+    // console.log('Skipping translations-local config');
 }
 
 availableTranslations = Object.keys(schemaMap);
