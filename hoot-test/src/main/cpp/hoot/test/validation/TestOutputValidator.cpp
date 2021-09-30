@@ -115,16 +115,11 @@ void TestOutputValidator::validate(
     }
     if (printValidationReportDiff)
     {
-      int scriptTestTimeOutSeconds = ConfigOptions().getTestScriptMaxExecTime();
-      if (scriptTestTimeOutSeconds == -1)
-      {
-        // Validation report output is very small...no need for anything big here.
-        scriptTestTimeOutSeconds = 10;
-      }
       msg +=
         "\n" +
         _printValidationReportDiff(
-          testName, goldValidationReportPath, outputValidationReportPath, scriptTestTimeOutSeconds)
+          testName, goldValidationReportPath, outputValidationReportPath,
+          ConfigOptions().getTestScriptMaxExecTime())
           .trimmed();
     }
     CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
@@ -178,6 +173,7 @@ QString TestOutputValidator::_printValidationReportDiff(
     LOG_WARN("Waiting for diff process to start for: " + testName);
   }
 
+  const bool scriptTimeOutSpecified = scriptTestTimeOutSeconds != -1;
   bool first = true;
   QElapsedTimer timer;
   timer.start();
@@ -193,7 +189,7 @@ QString TestOutputValidator::_printValidationReportDiff(
 
     // If the process hangs, this will allow us to get out.
     const qint64 timeElapsedSeconds = timer.elapsed() / 1000;
-    if (timeElapsedSeconds >= timeout)
+    if (scriptTimeOutSpecified && timeElapsedSeconds >= timeout)
     {
       LOG_ERROR(
         "Forcefully ending diff command for: " << testName << " after " << timeElapsedSeconds <<
