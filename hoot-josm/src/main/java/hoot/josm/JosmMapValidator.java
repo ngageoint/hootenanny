@@ -219,7 +219,7 @@ public class JosmMapValidator
     List<String> validators, String elementsXml, boolean cleanValidated,
     boolean addTags) throws Exception
   {
-    //Logging.trace("elementsXml: " + elementsXml);
+    // Logging.trace("elementsXml: " + elementsXml);
     if (elementsXml == null || elementsXml.trim().isEmpty())
     {
       throw new Exception("No elements passed to validation.");

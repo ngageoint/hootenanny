@@ -1,0 +1,9 @@
+Input: test-output/cmd/slow/ConflateCmdStatsTest/generic-rivers-out.osm
+
+Found 20 validation errors in 464 features with JOSM.
+Crossing ways errors: 8
+Tag checker (MapCSS based) errors: 12
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

@@ -58,8 +58,8 @@ bool RoadCrossingPolyRule::operator<(const RoadCrossingPolyRule& other) const
   return getName() < other.getName();
 }
 
-QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rulesFile,
-                                                            ConstOsmMapPtr map)
+QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(
+  const QString& rulesFile, ConstOsmMapPtr map)
 { 
   QFileInfo rulesFileInfo(rulesFile);
   if (!rulesFileInfo.exists())

@@ -190,13 +190,15 @@ HOOT_DEFINE_EXCEPTION(InternalErrorException)
 HOOT_DEFINE_EXCEPTION(IoException)
 HOOT_DEFINE_EXCEPTION(NeedsReviewException)
 HOOT_DEFINE_EXCEPTION(UnsupportedException)
+// Was the error a result of a test being misconfigured? If so, use this.
+HOOT_DEFINE_EXCEPTION(TestConfigurationException)
+
 // This exception exists to kick out of logic whose performance ends up having a very poor runtime
 // against certain input data. Not the most elegant solution but necessary at this time. See River
 // Conflation as an example.
 HOOT_DEFINE_EXCEPTION_STR(RecursiveComplexityException, "RecursiveComplexityException")
 HOOT_DEFINE_EXCEPTION_STR(NotImplementedException, "Not Implemented")
 HOOT_DEFINE_EXCEPTION_STR(EmptyMapInputException, "Empty map input.")
-
 }
 
 #endif // HOOTEXCEPTION_H

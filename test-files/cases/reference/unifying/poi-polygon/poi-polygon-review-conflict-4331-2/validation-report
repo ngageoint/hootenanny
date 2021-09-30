@@ -1,0 +1,11 @@
+Input: test-files/cases/reference/unifying/poi-polygon/poi-polygon-review-conflict-4331-2/Output.osm
+
+Found 31 validation errors in 173 features with JOSM.
+Almost right angle buildings errors: 25
+Relation checker errors: 4
+Tag checker (MapCSS based) errors: 1
+Untagged, empty and one node ways errors: 1
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 29 features with Hootenanny.
+Total failing Hootenanny validators: 0

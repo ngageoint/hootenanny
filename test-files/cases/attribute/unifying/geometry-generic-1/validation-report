@@ -1,0 +1,11 @@
+Input: test-files/cases/attribute/unifying/geometry-generic-1/Output.osm
+
+Found 48 validation errors in 63 features with JOSM.
+Almost right angle buildings errors: 1
+Long segments errors: 40
+Tag checker (MapCSS based) errors: 5
+Unclosed Ways errors: 2
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 13 features with Hootenanny.
+Total failing Hootenanny validators: 0

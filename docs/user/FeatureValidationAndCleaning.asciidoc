@@ -12,6 +12,10 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExample
 
 === Hootenanny Validator Detail
 
+Hootenanny primarily relies on https://josm.openstreetmap.de/[JOSM] for validation, as most of its
+cleaning routines do not double as validators (some could be made to, though, if needed). The 
+validators Hootenanny does have are documented here.
+
 ==== Crossing Roads
 
 Hootenanny will attempt to detect roads that incorrectly cross polygons automatically after 
@@ -72,20 +76,4 @@ auto-fix capabilities may be used for cleaning.
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#clean-erroneous-data-from-two-maps[cleaning examples]
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-available-cleaning-operations[list cleaners example]
-
-== JOSM Configuration
-
-The https://josm.openstreetmap.de/[JOSM] library used in Hootenanny validation and, optionally, 
-cleaning may be configured within `hoot-josm/pom.xml`. Under the `<properties>` XML tag, configure 
-`josm.artifactId` and `josm.version` for the JOSM JAR you wish to use. By default, this jar will be 
-copied to `hoot-josm/target/dependency-jars/josm.jar`, and the path is referenced by the 
-`jni.class.path` configuration option. If you need to reference a local jar (one not available in a 
-public Maven repository), you must manually install it with `mvn install:install-file`. See 
-`scripts/core/make-hoot-josm-java.sh` for an example.
-
-Hootenanny produces its own JAR file to interact with the JOSM jar. By default, this jar will be 
-built by Hootenanny and copied to `hoot-josm/target/hoot-josm.jar`.
-
-See the jni.* and josm.* configuration options in `conf/core/ConfigOptions.asciidoc` for more detail 
-on configuring Hootenanny to use JOSM.
 

@@ -1,0 +1,17 @@
+Input: test-output/cmd/glacial/NetworkConflateCmdTest/output.osm
+
+Found 6,676 validation errors in 5,591 features with JOSM.
+Crossing ways errors: 20
+Duplicated nodes errors: 2
+Duplicated relations errors: 1
+Overlapping ways errors: 4
+Relation checker errors: 21
+Self crossing ways errors: 2
+Sharp angles errors: 7
+Similarly named ways errors: 6233
+Tag checker errors: 6
+Tag checker (MapCSS based) errors: 380
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

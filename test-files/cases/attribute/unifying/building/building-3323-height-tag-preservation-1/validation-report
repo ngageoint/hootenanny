@@ -1,0 +1,11 @@
+Input: test-files/cases/attribute/unifying/building/building-3323-height-tag-preservation-1/Output.osm
+
+Found 10 validation errors in 47 features with JOSM.
+Duplicated ways errors: 6
+Multipolygon errors: 1
+Relation checker errors: 1
+Tag checker errors: 2
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 12 features with Hootenanny.
+Total failing Hootenanny validators: 0

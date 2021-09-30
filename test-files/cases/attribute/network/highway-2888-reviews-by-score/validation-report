@@ -1,0 +1,12 @@
+Input: test-files/cases/attribute/network/highway-2888-reviews-by-score/Output.osm
+
+Found 135 validation errors in 1,426 features with JOSM.
+Crossing ways errors: 52
+Duplicated relations errors: 1
+Relation checker errors: 4
+Similarly named ways errors: 26
+Tag checker (MapCSS based) errors: 52
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

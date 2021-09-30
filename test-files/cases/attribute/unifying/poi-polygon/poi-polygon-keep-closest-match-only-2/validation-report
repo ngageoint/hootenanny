@@ -1,0 +1,12 @@
+Input: test-files/cases/attribute/unifying/poi-polygon/poi-polygon-keep-closest-match-only-2/Output.osm
+
+Found 54 validation errors in 579 features with JOSM.
+Almost right angle buildings errors: 14
+Missing name:* translation errors: 5
+Multipolygon errors: 12
+Tag checker errors: 15
+Tag checker (MapCSS based) errors: 8
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 77 features with Hootenanny.
+Total failing Hootenanny validators: 0

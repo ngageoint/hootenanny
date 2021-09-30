@@ -1,0 +1,8 @@
+Input: test-output/cmd/slow/RailwayDiffConflateTest/output-complete.osm
+
+Found 32 validation errors in 216 features with JOSM.
+Tag checker (MapCSS based) errors: 32
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

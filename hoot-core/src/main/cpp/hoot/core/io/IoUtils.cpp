@@ -537,12 +537,16 @@ void IoUtils::loadMap(
 }
 
 void IoUtils::loadMaps(
-  const OsmMapPtr& map, const QStringList& paths, bool useFileId, Status defaultStatus)
+  const OsmMapPtr& map, const QStringList& paths, bool useFileId, Status defaultStatus,
+  const QString& translationScript, const int ogrFeatureLimit, const QString& jobSource,
+  const int numTasks)
 {
   // TODO: it would be nice to allow this to take in Progress for updating
   for (int i = 0; i < paths.size(); i++)
   {
-    loadMap(map, paths.at(i), useFileId, defaultStatus);
+    loadMap(
+      map, paths.at(i), useFileId, defaultStatus, translationScript, ogrFeatureLimit, jobSource,
+      numTasks);
   }
 }
 

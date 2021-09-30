@@ -74,7 +74,7 @@ public:
     CPPUNIT_ASSERT(FileUtils::dirContainsFileWithExtension(test_directory, "txt"));
     CPPUNIT_ASSERT(!FileUtils::dirContainsFileWithExtension(test_directory, "osm"));
 
-    QStringList lines = FileUtils::readFileToList(output_file, true);
+    QStringList lines = FileUtils::readFileToLines(output_file, true);
     QString joined_lines = lines.join("\n");
 
     HOOT_STR_EQUALS(file_content, joined_lines);

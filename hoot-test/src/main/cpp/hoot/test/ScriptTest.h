@@ -44,9 +44,21 @@ class ScriptTest : public CppUnit::TestCase
 {
 public:
 
-  ScriptTest(const QString& script, bool printDiff, bool suppressFailureDetail = false,
-             int waitToFinishTime = 30000);
+  /**
+   * @brief ScriptTest constructor
+   * @param script script file to execute
+   * @param printDiff if enabled, any differences between baseline and actual test output are
+   * displayed
+   * @param suppressFailureDetail if true, detailed test failure information is not displayed
+   * @param waitToFinishTime maximum time, in seconds, to wait for script to finish execution
+   */
+  ScriptTest(
+    const QString& script, bool printDiff, bool suppressFailureDetail = false,
+    int waitToFinishTime = 30000);
 
+  /**
+   * @brief see TestCase
+   */
   virtual void runTest();
 
 private:
@@ -61,7 +73,6 @@ private:
 
   QString _readFile(const QString& path);
   void _writeFile(const QString& path, const QString& content);
-
   void _removeFile(const QString& path);
 
   /**
@@ -69,12 +80,10 @@ private:
    * LOG statements of info or debug.
    */
   QString _removeIgnoredSubstrings(const QString& input) const;
-
   /** Remove the coloring markings from the script output */
   QString _removeLogColoring(const QString& input) const;
 
   void _runDiff(const QString& file1, const QString& file2);
-
   void _runProcess();
 };
 
