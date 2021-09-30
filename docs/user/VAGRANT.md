@@ -24,9 +24,9 @@ cd hoot
 vagrant up hoot_centos7_rpm
 ```
 
-To update Hoot to the latest nightly RPM from the master branch, simply run this provisioner:
+To update Hoot on this vm to the latest nightly version from the master branch (after it's intial creation), simply run this provisioner when bringing the box up in the future:
 ```
-vagrant provision hoot_centos7_rpm --provision-with updatehoot
+vagrant up hoot_centos7_rpm --provision-with updatehoot
 ```
 
 # Setting Up Hootenanny

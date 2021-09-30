@@ -38,6 +38,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import hoot.services.command.ExternalCommand;
@@ -150,7 +151,8 @@ class ExportCommand extends ExternalCommand {
         }
         options.add("schema.translation.direction=" + direction);
 
-        options.add("schema.translation.script=" + new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
+        File transFile = new File(HOME_FOLDER, params.getTranslation());
+        options.add("schema.translation.script=" + transFile.getAbsolutePath());
 
         // By default export removes hoot conflation review related tags
         if (!params.getTagOverrides().isEmpty() && !("{}".equalsIgnoreCase(params.getTagOverrides())) ) {
@@ -171,12 +173,9 @@ class ExportCommand extends ExternalCommand {
         options.add("convert.ops=" + String.join(";", convertOps));
 
         //Add conf files for specific translation ops
-        if (params.getTranslation().equalsIgnoreCase("translations/DNC.js")) {
-            options.add("DncExport.conf");
-        }
-
-        if (params.getTranslation().equalsIgnoreCase("translations/MGCP_TRD4_Cartographic.js")) {
-            options.add("MgcpCartoExport.conf");
+        File confFile = new File(transFile.getParent(), FilenameUtils.getBaseName(params.getTranslation()) + "Export.conf");
+        if (confFile.isFile()) {
+            options.add(confFile.getAbsolutePath());
         }
 
         return options;

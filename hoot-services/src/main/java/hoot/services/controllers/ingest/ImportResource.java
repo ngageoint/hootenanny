@@ -246,10 +246,9 @@ public class ImportResource {
                     etlName, noneTranslation, debugLevel, finalUploadClassification, this.getClass(), user);
             workflow.add(importCommand);
 
-            if(folderId != null) {
-                InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, Long.parseLong(folderId), etlName, user, this.getClass());
-                workflow.add(setFolderCommand);
-            }
+            long parentFolderId = folderId != null ? Long.parseLong(folderId) : 0;
+            InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, parentFolderId, etlName, user, this.getClass());
+            workflow.add(setFolderCommand);
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
 

@@ -1,0 +1,1338 @@
+---------------
+MGCP  F_CODE: AA010  Geom: Area  Desc: Extraction Mine
+OSM: {"landuse":"surface_mining"}
+Ogr: {"F_CODE":"AA010"}
+OSM: {"landuse":"surface_mining"}
+-----
+MGCP  F_CODE: AA012  Geom: Area  Desc: Quarry
+OSM: {"landuse":"quarry"}
+Ogr: {"F_CODE":"AA012"}
+OSM: {"landuse":"quarry"}
+-----
+MGCP  F_CODE: AA052  Geom: Area  Desc: Hydrocarbons Field
+OSM: {"industrial":"hydrocarbons_field","landuse":"industrial"}
+Ogr: {"F_CODE":"AA052"}
+OSM: {"industrial":"hydrocarbons_field","landuse":"industrial"}
+-----
+MGCP  F_CODE: AB000  Geom: Area  Desc: Disposal Site
+OSM: {"landuse":"landfill"}
+Ogr: {"F_CODE":"AB000"}
+OSM: {"landuse":"landfill"}
+-----
+MGCP  F_CODE: AB010  Geom: Area  Desc: Recycling Site
+OSM: {"amenity":"recycling"}
+Ogr: {"F_CODE":"AB010"}
+OSM: {"amenity":"recycling"}
+-----
+MGCP  F_CODE: AC000  Geom: Area  Desc: Processing Facility
+OSM: {"area":"yes","facility":"yes","product":"unknown"}
+Ogr: {"F_CODE":"AC000"}
+OSM: {"area":"yes","facility":"yes","product":"unknown"}
+-----
+MGCP  F_CODE: AC030  Geom: Area  Desc: Settling Pond
+OSM: {"natural":"water","water":"settling_basin"}
+Ogr: {"F_CODE":"AC030"}
+OSM: {"natural":"water","water":"settling_basin"}
+-----
+MGCP  F_CODE: AD010  Geom: Area  Desc: Electric Power Station
+OSM: {"landuse":"industrial","plant:output:electricity":"yes","power":"plant"}
+Ogr: {"F_CODE":"AD010"}
+OSM: {"landuse":"industrial","plant:output:electricity":"yes","power":"plant"}
+-----
+MGCP  F_CODE: AD030  Geom: Area  Desc: Power Substation
+OSM: {"power":"substation"}
+Ogr: {"F_CODE":"AD030"}
+OSM: {"power":"substation"}
+-----
+MGCP  F_CODE: AD050  Geom: Area  Desc: Heating Facility
+OSM: {"amenity":"heating"}
+Ogr: {"F_CODE":"AD050"}
+OSM: {"amenity":"heating"}
+-----
+MGCP  F_CODE: AH050  Geom: Area  Desc: Fortification
+OSM: {"building":"bunker","military":"bunker"}
+Ogr: {"F_CODE":"AH050"}
+OSM: {"building":"bunker","military":"bunker"}
+-----
+MGCP  F_CODE: AI030  Geom: Area  Desc: Camp
+OSM: {"area":"yes","camp":"yes"}
+Ogr: {"F_CODE":"AI030"}
+OSM: {"area":"yes","camp":"yes"}
+-----
+MGCP  F_CODE: AJ010  Geom: Area  Desc: Circular Irrigation System
+OSM: {"area":"yes","farm:irrigation":"centre_pivot"}
+Ogr: {"F_CODE":"AJ010"}
+OSM: {"area":"yes","farm:irrigation":"centre_pivot"}
+-----
+MGCP  F_CODE: AJ030  Geom: Area  Desc: Holding Pen
+OSM: {"landuse":"holding_pen"}
+Ogr: {"F_CODE":"AJ030"}
+OSM: {"landuse":"holding_pen"}
+-----
+MGCP  F_CODE: AJ110  Geom: Area  Desc: Greenhouse
+OSM: {"building":"greenhouse"}
+Ogr: {"F_CODE":"AJ110"}
+OSM: {"building":"greenhouse"}
+-----
+MGCP  F_CODE: AK030  Geom: Area  Desc: Amusement Park
+OSM: {"tourism":"theme_park"}
+Ogr: {"F_CODE":"AK030"}
+OSM: {"tourism":"theme_park"}
+-----
+MGCP  F_CODE: AK040  Geom: Area  Desc: Sports Ground
+OSM: {"leisure":"pitch"}
+Ogr: {"F_CODE":"AK040"}
+OSM: {"leisure":"pitch"}
+-----
+MGCP  F_CODE: AK060  Geom: Area  Desc: Camp-site
+OSM: {"tourism":"camp_site"}
+Ogr: {"F_CODE":"AK060"}
+OSM: {"tourism":"camp_site"}
+-----
+MGCP  F_CODE: AK090  Geom: Area  Desc: Fairground
+OSM: {"leisure":"fairground"}
+Ogr: {"F_CODE":"AK090"}
+OSM: {"leisure":"fairground"}
+-----
+MGCP  F_CODE: AK100  Geom: Area  Desc: Golf Course
+OSM: {"leisure":"golf_course"}
+Ogr: {"F_CODE":"AK100"}
+OSM: {"leisure":"golf_course"}
+-----
+MGCP  F_CODE: AK120  Geom: Area  Desc: Park
+OSM: {"leisure":"park"}
+Ogr: {"F_CODE":"AK120"}
+OSM: {"leisure":"park"}
+-----
+MGCP  F_CODE: AK160  Geom: Area  Desc: Stadium
+OSM: {"building":"yes","leisure":"stadium"}
+Ogr: {"F_CODE":"AK160"}
+OSM: {"building":"yes","leisure":"stadium"}
+-----
+MGCP  F_CODE: AK170  Geom: Area  Desc: Swimming Pool
+OSM: {"leisure":"swimming_pool"}
+Ogr: {"F_CODE":"AK170"}
+OSM: {"leisure":"swimming_pool"}
+-----
+MGCP  F_CODE: AK180  Geom: Area  Desc: Zoo
+OSM: {"tourism":"zoo"}
+Ogr: {"F_CODE":"AK180"}
+OSM: {"tourism":"zoo"}
+-----
+MGCP  F_CODE: AK190  Geom: Area  Desc: Recreational Pier
+OSM: {"man_made":"recreational_pier"}
+Ogr: {"F_CODE":"AK190"}
+OSM: {"man_made":"recreational_pier"}
+-----
+MGCP  F_CODE: AL010  Geom: Area  Desc: Facility
+OSM: {"area":"yes","facility":"yes"}
+Ogr: {"F_CODE":"AL010"}
+OSM: {"area":"yes","facility":"yes"}
+-----
+MGCP  F_CODE: AL012  Geom: Area  Desc: Archeological Site
+OSM: {"historic":"archaeological_site"}
+Ogr: {"F_CODE":"AL012"}
+OSM: {"historic":"archaeological_site"}
+-----
+MGCP  F_CODE: AL015  Geom: Area  Desc: General Building
+OSM: {"building":"yes"}
+Ogr: {"F_CODE":"AL015"}
+OSM: {"building":"yes"}
+-----
+MGCP  F_CODE: AL019  Geom: Area  Desc: Shed
+OSM: {"building":"shed"}
+Ogr: {"F_CODE":"AL019"}
+OSM: {"building":"shed"}
+-----
+MGCP  F_CODE: AL020  Geom: Area  Desc: Built-Up Area
+OSM: {"landuse":"built_up_area","place":"yes"}
+Ogr: {"F_CODE":"AL020"}
+OSM: {"landuse":"built_up_area","place":"yes"}
+-----
+MGCP  F_CODE: AL030  Geom: Area  Desc: Cemetery
+OSM: {"landuse":"cemetery"}
+Ogr: {"F_CODE":"AL030"}
+OSM: {"landuse":"cemetery"}
+-----
+MGCP  F_CODE: AL060  Geom: Area  Desc: Dragon's Teeth
+OSM: {"area":"yes","barrier":"tank_trap","tank_trap":"dragons_teeth"}
+Ogr: {"F_CODE":"AL060"}
+OSM: {"area":"yes","barrier":"tank_trap","tank_trap":"dragons_teeth"}
+-----
+MGCP  F_CODE: AL105  Geom: Area  Desc: Settlement
+OSM: {"place":"settlement"}
+Ogr: {"F_CODE":"AL105"}
+OSM: {"place":"settlement"}
+-----
+MGCP  F_CODE: AL140  Geom: Area  Desc: Particle Accelerator
+OSM: {"man_made":"particle_accelerator"}
+Ogr: {"F_CODE":"AL140"}
+OSM: {"man_made":"particle_accelerator"}
+-----
+MGCP  F_CODE: AL170  Geom: Area  Desc: Public Square
+OSM: {"landuse":"plaza"}
+Ogr: {"F_CODE":"AL170"}
+OSM: {"landuse":"plaza"}
+-----
+MGCP  F_CODE: AL200  Geom: Area  Desc: Ruins
+OSM: {"historic":"ruins"}
+Ogr: {"F_CODE":"AL200"}
+OSM: {"historic":"ruins"}
+-----
+MGCP  F_CODE: AL208  Geom: Area  Desc: Shanty Town
+OSM: {"place":"shanty_town"}
+Ogr: {"F_CODE":"AL208"}
+OSM: {"place":"shanty_town"}
+-----
+MGCP  F_CODE: AM010  Geom: Area  Desc: Storage Depot
+OSM: {"landuse":"depot"}
+Ogr: {"F_CODE":"AM010"}
+OSM: {"landuse":"depot"}
+-----
+MGCP  F_CODE: AM020  Geom: Area  Desc: Grain Storage Structure
+OSM: {"man_made":"silo"}
+Ogr: {"F_CODE":"AM020"}
+OSM: {"man_made":"silo"}
+-----
+MGCP  F_CODE: AM030  Geom: Area  Desc: Grain Elevator
+OSM: {"man_made":"grain_elevator"}
+Ogr: {"F_CODE":"AM030"}
+OSM: {"man_made":"grain_elevator"}
+-----
+MGCP  F_CODE: AM040  Geom: Area  Desc: Mineral Pile
+OSM: {"landuse":"mineral_pile"}
+Ogr: {"F_CODE":"AM040"}
+OSM: {"landuse":"mineral_pile"}
+-----
+MGCP  F_CODE: AM060  Geom: Area  Desc: Surface Bunker
+OSM: {"man_made":"bunker"}
+Ogr: {"F_CODE":"AM060"}
+OSM: {"man_made":"bunker"}
+-----
+MGCP  F_CODE: AM070  Geom: Area  Desc: Storage Tank
+OSM: {"man_made":"storage_tank"}
+Ogr: {"F_CODE":"AM070"}
+OSM: {"man_made":"storage_tank"}
+-----
+MGCP  F_CODE: AN060  Geom: Area  Desc: Railway Yard
+OSM: {"landuse":"railway"}
+Ogr: {"F_CODE":"AN060"}
+OSM: {"landuse":"railway"}
+-----
+MGCP  F_CODE: AN076  Geom: Area  Desc: Roundhouse
+OSM: {"railway":"roundhouse"}
+Ogr: {"F_CODE":"AN076"}
+OSM: {"railway":"roundhouse"}
+-----
+MGCP  F_CODE: AQ040  Geom: Area  Desc: Bridge
+OSM: {"area":"yes","bridge":"yes"}
+Ogr: {"F_CODE":"AQ040"}
+OSM: {"area":"yes","bridge":"yes"}
+-----
+MGCP  F_CODE: AQ116  Geom: Area  Desc: Pumping Station
+OSM: {"man_made":"pumping_station"}
+Ogr: {"F_CODE":"AQ116"}
+OSM: {"man_made":"pumping_station"}
+-----
+MGCP  F_CODE: AQ125  Geom: Area  Desc: Transportation Station
+OSM: {"public_transport":"station"}
+Ogr: {"F_CODE":"AQ125"}
+OSM: {"public_transport":"station"}
+-----
+MGCP  F_CODE: AQ130  Geom: Area  Desc: Tunnel
+OSM: {"area":"yes","tunnel":"yes"}
+Ogr: {"F_CODE":"AQ130"}
+OSM: {"area":"yes","tunnel":"yes"}
+-----
+MGCP  F_CODE: AQ135  Geom: Area  Desc: Roadside Rest Area
+OSM: {"highway":"rest_area"}
+Ogr: {"F_CODE":"AQ135"}
+OSM: {"highway":"rest_area"}
+-----
+MGCP  F_CODE: AQ140  Geom: Area  Desc: Vehicle Lot
+OSM: {"amenity":"parking"}
+Ogr: {"F_CODE":"AQ140"}
+OSM: {"amenity":"parking"}
+-----
+MGCP  F_CODE: AT050  Geom: Area  Desc: Communication Station
+OSM: {"area":"yes","use":"communication"}
+Ogr: {"F_CODE":"AT050"}
+OSM: {"area":"yes","use":"communication"}
+-----
+MGCP  F_CODE: BA030  Geom: Area  Desc: Island
+OSM: {"place":"island"}
+Ogr: {"F_CODE":"BA030"}
+OSM: {"place":"island"}
+-----
+MGCP  F_CODE: BA040  Geom: Area  Desc: Tidal Water
+OSM: {"natural":"water","tidal":"yes"}
+Ogr: {"F_CODE":"BA040"}
+OSM: {"natural":"water","tidal":"yes"}
+-----
+MGCP  F_CODE: BA050  Geom: Area  Desc: Beach
+OSM: {"natural":"beach"}
+Ogr: {"F_CODE":"BA050"}
+OSM: {"natural":"beach"}
+-----
+MGCP  F_CODE: BB005  Geom: Area  Desc: Harbour
+OSM: {"landuse":"harbour"}
+Ogr: {"F_CODE":"BB005"}
+OSM: {"landuse":"harbour"}
+-----
+MGCP  F_CODE: BB041  Geom: Area  Desc: Breakwater
+OSM: {"man_made":"breakwater"}
+Ogr: {"F_CODE":"BB041"}
+OSM: {"man_made":"breakwater"}
+-----
+MGCP  F_CODE: BB043  Geom: Area  Desc: Groin
+OSM: {"man_made":"groyne"}
+Ogr: {"F_CODE":"BB043"}
+OSM: {"man_made":"groyne"}
+-----
+MGCP  F_CODE: BB090  Geom: Area  Desc: Dry Dock
+OSM: {"area":"yes","dock":"drydock"}
+Ogr: {"F_CODE":"BB090"}
+OSM: {"area":"yes","dock":"drydock"}
+-----
+MGCP  F_CODE: BB140  Geom: Area  Desc: Training Wall
+OSM: {"man_made":"training_wall"}
+Ogr: {"F_CODE":"BB140"}
+OSM: {"man_made":"training_wall"}
+-----
+MGCP  F_CODE: BB190  Geom: Area  Desc: Berthing Structure
+OSM: {"man_made":"shoreline_construction"}
+Ogr: {"F_CODE":"BB190"}
+OSM: {"man_made":"shoreline_construction"}
+-----
+MGCP  F_CODE: BB240  Geom: Area  Desc: Slipway
+OSM: {"leisure":"slipway"}
+Ogr: {"F_CODE":"BB240"}
+OSM: {"leisure":"slipway"}
+-----
+MGCP  F_CODE: BD100  Geom: Area  Desc: Structural Pile
+OSM: {"area":"yes","structural_pile":"yes"}
+Ogr: {"F_CODE":"BD100"}
+OSM: {"area":"yes","structural_pile":"yes"}
+-----
+MGCP  F_CODE: BD120  Geom: Area  Desc: Reef
+OSM: {"natural":"reef"}
+Ogr: {"F_CODE":"BD120"}
+OSM: {"natural":"reef"}
+-----
+MGCP  F_CODE: BH010  Geom: Area  Desc: Aqueduct
+OSM: {"area":"yes","bridge":"aqueduct"}
+Ogr: {"F_CODE":"BH010"}
+OSM: {"area":"yes","bridge":"aqueduct"}
+-----
+MGCP  F_CODE: BH015  Geom: Area  Desc: Bog
+OSM: {"natural":"wetland","wetland":"bog"}
+Ogr: {"F_CODE":"BH015"}
+OSM: {"natural":"wetland","wetland":"bog"}
+-----
+MGCP  F_CODE: BH020  Geom: Area  Desc: Canal
+OSM: {"area":"yes","waterway":"canal"}
+Ogr: {"F_CODE":"BH020"}
+OSM: {"area":"yes","waterway":"canal"}
+-----
+MGCP  F_CODE: BH030  Geom: Area  Desc: Ditch
+OSM: {"area":"yes","waterway":"ditch"}
+Ogr: {"F_CODE":"BH030"}
+OSM: {"area":"yes","waterway":"ditch"}
+-----
+MGCP  F_CODE: BH040  Geom: Area  Desc: Water Treatment Bed
+OSM: {"natural":"water","water":"wastewater"}
+Ogr: {"F_CODE":"BH040"}
+OSM: {"natural":"water","water":"wastewater"}
+-----
+MGCP  F_CODE: BH050  Geom: Area  Desc: Mariculture Site
+OSM: {"landuse":"aquaculture"}
+Ogr: {"F_CODE":"BH050"}
+OSM: {"landuse":"aquaculture"}
+-----
+MGCP  F_CODE: BH051  Geom: Area  Desc: Fish Farm Facility
+OSM: {"place":"maritime_farm"}
+Ogr: {"F_CODE":"BH051"}
+OSM: {"place":"maritime_farm"}
+-----
+MGCP  F_CODE: BH080  Geom: Area  Desc: Lake
+OSM: {"natural":"water","water":"lake"}
+Ogr: {"F_CODE":"BH080"}
+OSM: {"natural":"water","water":"lake"}
+-----
+MGCP  F_CODE: BH090  Geom: Area  Desc: Land Subject to Inundation
+OSM: {"area":"yes","subject_to_inundation":"yes"}
+Ogr: {"F_CODE":"BH090"}
+OSM: {"area":"yes","subject_to_inundation":"yes"}
+-----
+MGCP  F_CODE: BH120  Geom: Area  Desc: Rapids
+OSM: {"area":"yes","waterway":"rapids"}
+Ogr: {"F_CODE":"BH120"}
+OSM: {"area":"yes","waterway":"rapids"}
+-----
+MGCP  F_CODE: BH130  Geom: Area  Desc: Reservoir
+OSM: {"natural":"water","water":"reservoir"}
+Ogr: {"F_CODE":"BH130"}
+OSM: {"natural":"water","water":"reservoir"}
+-----
+MGCP  F_CODE: BH135  Geom: Area  Desc: Rice Field
+OSM: {"landuse":"rice_field"}
+Ogr: {"F_CODE":"BH135"}
+OSM: {"landuse":"rice_field"}
+-----
+MGCP  F_CODE: BH140  Geom: Area  Desc: River
+OSM: {"natural":"water","water":"river"}
+Ogr Multi: {"F_CODE":"BH140","TID":"1000","WCC":"7","WST":"998"}
+OSM: {"natural":"water","water":"river"}
+-----
+MGCP  F_CODE: BH150  Geom: Area  Desc: Salt Flat
+OSM: {"natural":"salt_flat"}
+Ogr: {"F_CODE":"BH150"}
+OSM: {"natural":"salt_flat"}
+-----
+MGCP  F_CODE: BH155  Geom: Area  Desc: Salt Evaporator
+OSM: {"landuse":"salt_pond"}
+Ogr: {"F_CODE":"BH155"}
+OSM: {"landuse":"salt_pond"}
+-----
+MGCP  F_CODE: BH160  Geom: Area  Desc: Sabkha
+OSM: {"natural":"sabkha"}
+Ogr: {"F_CODE":"BH160"}
+OSM: {"natural":"sabkha"}
+-----
+MGCP  F_CODE: BH165  Geom: Area  Desc: Spillway
+OSM: {"area":"yes","waterway":"spillway"}
+Ogr: {"F_CODE":"BH165"}
+OSM: {"area":"yes","waterway":"spillway"}
+-----
+MGCP  F_CODE: BI020  Geom: Area  Desc: Dam
+OSM: {"waterway":"dam"}
+Ogr: {"F_CODE":"BI020"}
+OSM: {"waterway":"dam"}
+-----
+MGCP  F_CODE: BI030  Geom: Area  Desc: Lock
+OSM: {"area":"yes","lock":"yes"}
+Ogr: {"F_CODE":"BI030"}
+OSM: {"area":"yes","lock":"yes"}
+-----
+MGCP  F_CODE: BJ020  Geom: Area  Desc: Moraine
+OSM: {"area":"yes","geological":"moraine"}
+Ogr: {"F_CODE":"BJ020"}
+OSM: {"area":"yes","geological":"moraine"}
+-----
+MGCP  F_CODE: BJ030  Geom: Area  Desc: Glacier
+OSM: {"natural":"glacier"}
+Ogr: {"F_CODE":"BJ030"}
+OSM: {"natural":"glacier"}
+-----
+MGCP  F_CODE: BJ031  Geom: Area  Desc: Crevasse
+OSM: {"natural":"crevasse"}
+Ogr: {"F_CODE":"BJ031"}
+OSM: {"natural":"crevasse"}
+-----
+MGCP  F_CODE: BJ100  Geom: Area  Desc: Snow Field and/or Ice-field
+OSM: {"area":"yes","landcover":"snowfield"}
+Ogr: {"F_CODE":"BJ100"}
+OSM: {"area":"yes","landcover":"snowfield"}
+-----
+MGCP  F_CODE: BJ110  Geom: Area  Desc: Tundra
+OSM: {"natural":"tundra"}
+Ogr: {"F_CODE":"BJ110"}
+OSM: {"natural":"tundra"}
+-----
+MGCP  F_CODE: DA010  Geom: Area  Desc: Soil Surface Region
+OSM: {"area":"yes","geological":"soil_surface_region"}
+Ogr: {"F_CODE":"DA010"}
+OSM: {"area":"yes","geological":"soil_surface_region"}
+-----
+MGCP  F_CODE: DB061  Geom: Area  Desc: Crevice
+OSM: {"natural":"crevice"}
+Ogr: {"F_CODE":"DB061"}
+OSM: {"natural":"crevice"}
+-----
+MGCP  F_CODE: DB090  Geom: Area  Desc: Embankment
+OSM: {"area":"yes","embankment":"yes"}
+Ogr: {"F_CODE":"DB090"}
+OSM: {"area":"yes","embankment":"yes"}
+-----
+MGCP  F_CODE: DB115  Geom: Area  Desc: Geothermal Outlet
+OSM: {"natural":"geothermal_outlet"}
+Ogr: {"F_CODE":"DB115"}
+OSM: {"natural":"geothermal_outlet"}
+-----
+MGCP  F_CODE: DB160  Geom: Area  Desc: Rock Formation
+OSM: {"natural":"rock_formation"}
+Ogr: {"F_CODE":"DB160"}
+OSM: {"natural":"rock_formation"}
+-----
+MGCP  F_CODE: DB170  Geom: Area  Desc: Sand Dunes
+OSM: {"natural":"dune"}
+Ogr: {"F_CODE":"DB170"}
+OSM: {"natural":"dune"}
+-----
+MGCP  F_CODE: DB180  Geom: Area  Desc: Volcano
+OSM: {"natural":"volcano"}
+Ogr: {"F_CODE":"DB180"}
+OSM: {"natural":"volcano"}
+-----
+MGCP  F_CODE: DB200  Geom: Area  Desc: Gully
+OSM: {"natural":"gully"}
+Ogr: {"F_CODE":"DB200"}
+OSM: {"natural":"gully"}
+-----
+MGCP  F_CODE: EA010  Geom: Area  Desc: Crop Land
+OSM: {"landuse":"farmland"}
+Ogr: {"F_CODE":"EA010"}
+OSM: {"landuse":"farmland"}
+-----
+MGCP  F_CODE: EA040  Geom: Area  Desc: Orchard
+OSM: {"landuse":"orchard"}
+Ogr: {"F_CODE":"EA040"}
+OSM: {"landuse":"orchard"}
+-----
+MGCP  F_CODE: EA050  Geom: Area  Desc: Vineyard
+OSM: {"landuse":"vineyard"}
+Ogr: {"F_CODE":"EA050"}
+OSM: {"landuse":"vineyard"}
+-----
+MGCP  F_CODE: EA055  Geom: Area  Desc: Hop Field
+OSM: {"landuse":"hop_garden"}
+Ogr: {"F_CODE":"EA055"}
+OSM: {"landuse":"hop_garden"}
+-----
+MGCP  F_CODE: EB010  Geom: Area  Desc: Grassland
+OSM: {"natural":"grassland"}
+Ogr: {"F_CODE":"EB010"}
+OSM: {"natural":"grassland"}
+-----
+MGCP  F_CODE: EB020  Geom: Area  Desc: Thicket
+OSM: {"natural":"scrub"}
+Ogr: {"F_CODE":"EB020"}
+OSM: {"natural":"scrub"}
+-----
+MGCP  F_CODE: EC010  Geom: Area  Desc: Cane
+OSM: {"natural":"cane"}
+Ogr: {"F_CODE":"EC010"}
+OSM: {"natural":"cane"}
+-----
+MGCP  F_CODE: EC020  Geom: Area  Desc: Oasis
+OSM: {"natural":"oasis"}
+Ogr: {"F_CODE":"EC020"}
+OSM: {"natural":"oasis"}
+-----
+MGCP  F_CODE: EC030  Geom: Area  Desc: Wood
+OSM: {"landuse":"forest"}
+Ogr: {"F_CODE":"EC030"}
+OSM: {"landuse":"forest"}
+-----
+MGCP  F_CODE: EC040  Geom: Area  Desc: Cleared Way
+OSM: {"area":"yes","man_made":"cutline"}
+Ogr: {"F_CODE":"EC040"}
+OSM: {"area":"yes","man_made":"cutline"}
+-----
+MGCP  F_CODE: EC060  Geom: Area  Desc: Forest Clearing
+OSM: {"natural":"forest_clearing"}
+Ogr: {"F_CODE":"EC060"}
+OSM: {"natural":"forest_clearing"}
+-----
+MGCP  F_CODE: ED010  Geom: Area  Desc: Marsh
+OSM: {"natural":"wetland","wetland":"marsh"}
+Ogr: {"F_CODE":"ED010"}
+OSM: {"natural":"wetland","wetland":"marsh"}
+-----
+MGCP  F_CODE: ED020  Geom: Area  Desc: Swamp
+OSM: {"natural":"wetland","wetland":"swamp"}
+Ogr: {"F_CODE":"ED020"}
+OSM: {"natural":"wetland","wetland":"swamp"}
+-----
+MGCP  F_CODE: ED030  Geom: Area  Desc: Mangrove Swamp
+OSM: {"natural":"wetland","tidal":"yes","wetland":"mangrove"}
+Ogr Multi: {"F_CODE":"ED030","TID":"1001"}
+OSM: {"natural":"wetland","tidal":"yes","wetland":"mangrove"}
+-----
+MGCP  F_CODE: FA015  Geom: Area  Desc: Firing Range
+OSM: {"landuse":"military","military":"range"}
+Ogr: {"F_CODE":"FA015"}
+OSM: {"landuse":"military","military":"range"}
+-----
+MGCP  F_CODE: FA100  Geom: Area  Desc: Test Site
+OSM: {"landuse":"test_area"}
+Ogr: {"F_CODE":"FA100"}
+OSM: {"landuse":"test_area"}
+-----
+MGCP  F_CODE: GB005  Geom: Area  Desc: Land Aerodrome
+OSM: {"aeroway":"aerodrome"}
+Ogr: {"F_CODE":"GB005"}
+OSM: {"aeroway":"aerodrome"}
+-----
+MGCP  F_CODE: GB015  Geom: Area  Desc: Apron
+OSM: {"aeroway":"apron"}
+Ogr: {"F_CODE":"GB015"}
+OSM: {"aeroway":"apron"}
+-----
+MGCP  F_CODE: GB035  Geom: Area  Desc: Heliport
+OSM: {"aeroway":"heliport"}
+Ogr: {"F_CODE":"GB035"}
+OSM: {"aeroway":"heliport"}
+-----
+MGCP  F_CODE: GB045  Geom: Area  Desc: Stopway
+OSM: {"aeroway":"stopway"}
+Ogr: {"F_CODE":"GB045"}
+OSM: {"aeroway":"stopway"}
+-----
+MGCP  F_CODE: GB055  Geom: Area  Desc: Runway
+OSM: {"aeroway":"runway"}
+Ogr: {"F_CODE":"GB055"}
+OSM: {"aeroway":"runway"}
+-----
+MGCP  F_CODE: GB065  Geom: Area  Desc: Water Aerodrome
+OSM: {"amenity":"seaplane_terminal"}
+Ogr: {"F_CODE":"GB065"}
+OSM: {"amenity":"seaplane_terminal"}
+-----
+MGCP  F_CODE: GB075  Geom: Area  Desc: Taxiway
+OSM: {"aeroway":"taxiway","area":"yes"}
+Ogr: {"F_CODE":"GB075"}
+OSM: {"aeroway":"taxiway","area":"yes"}
+-----
+MGCP  F_CODE: GB230  Geom: Area  Desc: Aircraft Hangar
+OSM: {"building":"hangar"}
+Ogr: {"F_CODE":"GB230"}
+OSM: {"building":"hangar"}
+-----
+MGCP  F_CODE: SU001  Geom: Area  Desc: Military Installation
+OSM: {"area":"yes","military":"installation"}
+Ogr: {"F_CODE":"SU001"}
+OSM: {"area":"yes","military":"installation"}
+-----
+MGCP  F_CODE: ZD020  Geom: Area  Desc: Void Collection Area
+OSM: {"area":"yes","void_collection_area":"yes"}
+Ogr: {"F_CODE":"ZD020"}
+OSM: {"area":"yes","void_collection_area":"yes"}
+-----
+MGCP  F_CODE: AF020  Geom: Line  Desc: Conveyor
+OSM: {"man_made":"goods_conveyor"}
+Ogr: {"F_CODE":"AF020"}
+OSM: {"man_made":"goods_conveyor"}
+-----
+MGCP  F_CODE: AH025  Geom: Line  Desc: Engineered Earthwork
+OSM: {"military":"trench"}
+Ogr Multi: {"EET":"3","F_CODE":"AH025"}
+OSM: {"military":"trench"}
+-----
+MGCP  F_CODE: AK130  Geom: Line  Desc: Racetrack
+OSM: {"leisure":"track"}
+Ogr: {"F_CODE":"AK130"}
+OSM: {"leisure":"track"}
+-----
+MGCP  F_CODE: AK150  Geom: Line  Desc: Ski-jump
+OSM: {"man_made":"ski_jump"}
+Ogr: {"F_CODE":"AK150"}
+OSM: {"man_made":"ski_jump"}
+-----
+MGCP  F_CODE: AK190  Geom: Line  Desc: Recreational Pier
+OSM: {"man_made":"recreational_pier"}
+Ogr: {"F_CODE":"AK190"}
+OSM: {"man_made":"recreational_pier"}
+-----
+MGCP  F_CODE: AL060  Geom: Line  Desc: Dragon's Teeth
+OSM: {"barrier":"tank_trap","tank_trap":"dragons_teeth"}
+Ogr: {"F_CODE":"AL060"}
+OSM: {"barrier":"tank_trap","tank_trap":"dragons_teeth"}
+-----
+MGCP  F_CODE: AL070  Geom: Line  Desc: Fence
+OSM: {"barrier":"fence"}
+Ogr: {"F_CODE":"AL070"}
+OSM: {"barrier":"fence"}
+-----
+MGCP  F_CODE: AL210  Geom: Line  Desc: Protection Shed
+OSM: {"route:protection":"yes"}
+Ogr: {"F_CODE":"AL210"}
+OSM: {"route:protection":"yes"}
+-----
+MGCP  F_CODE: AL260  Geom: Line  Desc: Wall
+OSM: {"barrier":"wall"}
+Ogr: {"F_CODE":"AL260"}
+OSM: {"barrier":"wall"}
+-----
+MGCP  F_CODE: AN010  Geom: Line  Desc: Railway
+OSM: {"railway":"rail"}
+Ogr: {"F_CODE":"AN010"}
+OSM: {"railway":"rail"}
+-----
+MGCP  F_CODE: AN050  Geom: Line  Desc: Railway Sidetrack
+OSM: {"sidetrack":"yes"}
+Ogr: {"F_CODE":"AN050"}
+OSM: {"sidetrack":"yes"}
+-----
+MGCP  F_CODE: AP010  Geom: Line  Desc: Cart Track
+OSM: {"highway":"track"}
+Ogr Multi: {"F_CODE":"AP010","WTC":"2"}
+OSM: {"highway":"track","seasonal":"fair"}
+  ## Not Same OSM Tags: AP010 vs AP010
+-----
+MGCP  F_CODE: AP030  Geom: Line  Desc: Road
+OSM: {"highway":"road"}
+Ogr: {"F_CODE":"AP030"}
+OSM: {"highway":"road"}
+-----
+MGCP  F_CODE: AP050  Geom: Line  Desc: Trail
+OSM: {"highway":"path"}
+Ogr Multi: {"F_CODE":"AP050","WTC":"2"}
+OSM: {"highway":"path","seasonal":"fair"}
+  ## Not Same OSM Tags: AP050 vs AP050
+-----
+MGCP  F_CODE: AQ040  Geom: Line  Desc: Bridge
+OSM: {"bridge":"yes"}
+Ogr: {"F_CODE":"AQ040"}
+OSM: {"bridge":"yes"}
+-----
+MGCP  F_CODE: AQ063  Geom: Line  Desc: Causeway Structure
+OSM: {"man_made":"causeway"}
+Ogr: {"F_CODE":"AQ063"}
+OSM: {"man_made":"causeway"}
+-----
+MGCP  F_CODE: AQ070  Geom: Line  Desc: Ferry Crossing
+OSM: {"route":"ferry"}
+Ogr: {"F_CODE":"AQ070"}
+OSM: {"route":"ferry"}
+-----
+MGCP  F_CODE: AQ075  Geom: Line  Desc: Ice Route
+OSM: {"highway":"road","ice_road":"yes"}
+Ogr: {"F_CODE":"AQ075"}
+OSM: {"highway":"road","ice_road":"yes"}
+-----
+MGCP  F_CODE: AQ113  Geom: Line  Desc: Pipeline
+OSM: {"man_made":"pipeline"}
+Ogr: {"F_CODE":"AQ113"}
+OSM: {"man_made":"pipeline"}
+-----
+MGCP  F_CODE: AQ130  Geom: Line  Desc: Tunnel
+OSM: {"tunnel":"yes"}
+Ogr: {"F_CODE":"AQ130"}
+OSM: {"tunnel":"yes"}
+-----
+MGCP  F_CODE: AT030  Geom: Line  Desc: Power Line
+OSM: {"power":"line"}
+Ogr: {"F_CODE":"AT030"}
+OSM: {"power":"line"}
+-----
+MGCP  F_CODE: AT041  Geom: Line  Desc: Cableway
+OSM: {"cableway":"yes"}
+Ogr: {"F_CODE":"AT041"}
+OSM: {"cableway":"yes"}
+-----
+MGCP  F_CODE: AT060  Geom: Line  Desc: Communication Line
+OSM: {"cable":"yes","cable:type":"communication"}
+Ogr: {"F_CODE":"AT060"}
+OSM: {"cable":"yes","cable:type":"communication"}
+-----
+MGCP  F_CODE: BA010  Geom: Line  Desc: Land Water Boundary
+OSM: {"natural":"coastline"}
+Ogr: {"F_CODE":"BA010"}
+OSM: {"natural":"coastline"}
+-----
+MGCP  F_CODE: BB041  Geom: Line  Desc: Breakwater
+OSM: {"man_made":"breakwater"}
+Ogr: {"F_CODE":"BB041"}
+OSM: {"man_made":"breakwater"}
+-----
+MGCP  F_CODE: BB043  Geom: Line  Desc: Groin
+OSM: {"man_made":"groyne"}
+Ogr: {"F_CODE":"BB043"}
+OSM: {"man_made":"groyne"}
+-----
+MGCP  F_CODE: BB140  Geom: Line  Desc: Training Wall
+OSM: {"man_made":"training_wall"}
+Ogr: {"F_CODE":"BB140"}
+OSM: {"man_made":"training_wall"}
+-----
+MGCP  F_CODE: BB190  Geom: Line  Desc: Berthing Structure
+OSM: {"man_made":"shoreline_construction"}
+Ogr: {"F_CODE":"BB190"}
+OSM: {"man_made":"shoreline_construction"}
+-----
+MGCP  F_CODE: BB230  Geom: Line  Desc: Seawall
+OSM: {"wall":"seawall"}
+Ogr: {"F_CODE":"BB230"}
+OSM: {"wall":"seawall"}
+-----
+MGCP  F_CODE: BD120  Geom: Line  Desc: Reef
+OSM: {"natural":"reef"}
+Ogr: {"F_CODE":"BD120"}
+OSM: {"natural":"reef"}
+-----
+MGCP  F_CODE: BH010  Geom: Line  Desc: Aqueduct
+OSM: {"bridge":"aqueduct"}
+Ogr: {"F_CODE":"BH010"}
+OSM: {"bridge":"aqueduct"}
+-----
+MGCP  F_CODE: BH020  Geom: Line  Desc: Canal
+OSM: {"waterway":"canal"}
+Ogr: {"F_CODE":"BH020"}
+OSM: {"waterway":"canal"}
+-----
+MGCP  F_CODE: BH030  Geom: Line  Desc: Ditch
+OSM: {"waterway":"ditch"}
+Ogr: {"F_CODE":"BH030"}
+OSM: {"waterway":"ditch"}
+-----
+MGCP  F_CODE: BH060  Geom: Line  Desc: Flume
+OSM: {"water:race":"flume"}
+Ogr: {"F_CODE":"BH060"}
+OSM: {"water:race":"flume"}
+-----
+MGCP  F_CODE: BH070  Geom: Line  Desc: Ford
+OSM: {"ford":"yes"}
+Ogr: {"F_CODE":"BH070"}
+OSM: {"ford":"yes"}
+-----
+MGCP  F_CODE: BH110  Geom: Line  Desc: Penstock
+OSM: {"pipeline:type":"penstock"}
+Ogr: {"F_CODE":"BH110"}
+OSM: {"pipeline:type":"penstock"}
+-----
+MGCP  F_CODE: BH120  Geom: Line  Desc: Rapids
+OSM: {"waterway":"rapids"}
+Ogr: {"F_CODE":"BH120"}
+OSM: {"waterway":"rapids"}
+-----
+MGCP  F_CODE: BH140  Geom: Line  Desc: River
+OSM: {"waterway":"river"}
+Ogr Multi: {"F_CODE":"BH140","TID":"1000","WCC":"7","WST":"998"}
+OSM: {"waterway":"river"}
+-----
+MGCP  F_CODE: BH165  Geom: Line  Desc: Spillway
+OSM: {"waterway":"spillway"}
+Ogr: {"F_CODE":"BH165"}
+OSM: {"waterway":"spillway"}
+-----
+MGCP  F_CODE: BH180  Geom: Line  Desc: Waterfall
+OSM: {"waterway":"waterfall"}
+Ogr: {"F_CODE":"BH180"}
+OSM: {"waterway":"waterfall"}
+-----
+MGCP  F_CODE: BI020  Geom: Line  Desc: Dam
+OSM: {"waterway":"dam"}
+Ogr: {"F_CODE":"BI020"}
+OSM: {"waterway":"dam"}
+-----
+MGCP  F_CODE: BI030  Geom: Line  Desc: Lock
+OSM: {"lock":"yes"}
+Ogr: {"F_CODE":"BI030"}
+OSM: {"lock":"yes"}
+-----
+MGCP  F_CODE: BI040  Geom: Line  Desc: Sluice Gate
+OSM: {"waterway":"sluice_gate"}
+Ogr: {"F_CODE":"BI040"}
+OSM: {"waterway":"sluice_gate"}
+-----
+MGCP  F_CODE: BI041  Geom: Line  Desc: Water Gate
+OSM: {"man_made":"basin_gate"}
+Ogr: {"F_CODE":"BI041"}
+OSM: {"man_made":"basin_gate"}
+-----
+MGCP  F_CODE: BJ031  Geom: Line  Desc: Crevasse
+OSM: {"natural":"crevasse"}
+Ogr: {"F_CODE":"BJ031"}
+OSM: {"natural":"crevasse"}
+-----
+MGCP  F_CODE: BJ040  Geom: Line  Desc: Ice Cliff
+OSM: {"natural":"ice_cliff"}
+Ogr: {"F_CODE":"BJ040"}
+OSM: {"natural":"ice_cliff"}
+-----
+MGCP  F_CODE: DB010  Geom: Line  Desc: Steep Terrain Face
+OSM: {"natural":"cliff"}
+Ogr: {"F_CODE":"DB010"}
+OSM: {"natural":"cliff"}
+-----
+MGCP  F_CODE: DB061  Geom: Line  Desc: Crevice
+OSM: {"natural":"crevice"}
+Ogr: {"F_CODE":"DB061"}
+OSM: {"natural":"crevice"}
+-----
+MGCP  F_CODE: DB070  Geom: Line  Desc: Cut
+OSM: {"cutting":"yes"}
+Ogr: {"F_CODE":"DB070"}
+OSM: {"cutting":"yes"}
+-----
+MGCP  F_CODE: DB071  Geom: Line  Desc: Cut Line
+OSM: {"man_made":"cut_edge"}
+Ogr: {"F_CODE":"DB071"}
+OSM: {"man_made":"cut_edge"}
+-----
+MGCP  F_CODE: DB090  Geom: Line  Desc: Embankment
+OSM: {"embankment":"yes"}
+Ogr: {"F_CODE":"DB090"}
+OSM: {"embankment":"yes"}
+-----
+MGCP  F_CODE: DB100  Geom: Line  Desc: Esker
+OSM: {"landform":"esker"}
+Ogr: {"F_CODE":"DB100"}
+OSM: {"landform":"esker"}
+-----
+MGCP  F_CODE: DB110  Geom: Line  Desc: Geologic Fault
+OSM: {"geological":"fault"}
+Ogr: {"F_CODE":"DB110"}
+OSM: {"geological":"fault"}
+-----
+MGCP  F_CODE: DB160  Geom: Line  Desc: Rock Formation
+OSM: {"natural":"rock_formation"}
+Ogr: {"F_CODE":"DB160"}
+OSM: {"natural":"rock_formation"}
+-----
+MGCP  F_CODE: DB200  Geom: Line  Desc: Gully
+OSM: {"natural":"gully"}
+Ogr: {"F_CODE":"DB200"}
+OSM: {"natural":"gully"}
+-----
+MGCP  F_CODE: EA020  Geom: Line  Desc: Hedgerow
+OSM: {"barrier":"hedge"}
+Ogr: {"F_CODE":"EA020"}
+OSM: {"barrier":"hedge"}
+-----
+MGCP  F_CODE: EC030  Geom: Line  Desc: Wood
+OSM: {"natural":"tree_row"}
+Ogr: {"F_CODE":"EC030"}
+OSM: {"natural":"tree_row"}
+-----
+MGCP  F_CODE: FA090  Geom: Line  Desc: Geophysical Prospecting Grid
+OSM: {"man_made":"geophysical_prospecting_grid"}
+Ogr: {"F_CODE":"FA090"}
+OSM: {"man_made":"geophysical_prospecting_grid"}
+-----
+MGCP  F_CODE: GB050  Geom: Line  Desc: Aircraft Revetment
+OSM: {"military":"revetment"}
+Ogr: {"F_CODE":"GB050"}
+OSM: {"military":"revetment"}
+-----
+MGCP  F_CODE: AA010  Geom: Point  Desc: Extraction Mine
+OSM: {"landuse":"surface_mining"}
+Ogr: {"F_CODE":"AA010"}
+OSM: {"landuse":"surface_mining"}
+-----
+MGCP  F_CODE: AA012  Geom: Point  Desc: Quarry
+OSM: {"landuse":"quarry"}
+Ogr: {"F_CODE":"AA012"}
+OSM: {"landuse":"quarry"}
+-----
+MGCP  F_CODE: AA040  Geom: Point  Desc: Rig
+OSM: {"man_made":"rig"}
+Ogr: {"F_CODE":"AA040"}
+OSM: {"man_made":"rig"}
+-----
+MGCP  F_CODE: AA050  Geom: Point  Desc: Well
+OSM: {"man_made":"well"}
+Ogr: {"F_CODE":"AA050"}
+OSM: {"man_made":"well"}
+-----
+MGCP  F_CODE: AC000  Geom: Point  Desc: Processing Facility
+OSM: {"facility":"yes","product":"unknown"}
+Ogr: {"F_CODE":"AC000"}
+OSM: {"facility":"yes","product":"unknown"}
+-----
+MGCP  F_CODE: AC020  Geom: Point  Desc: Catalytic Cracker
+OSM: {"man_made":"catalytic_cracker"}
+Ogr: {"F_CODE":"AC020"}
+OSM: {"man_made":"catalytic_cracker"}
+-----
+MGCP  F_CODE: AC030  Geom: Point  Desc: Settling Pond
+OSM: {"natural":"water","water":"settling_basin"}
+Ogr: {"F_CODE":"AC030"}
+OSM: {"natural":"water","water":"settling_basin"}
+-----
+MGCP  F_CODE: AD010  Geom: Point  Desc: Electric Power Station
+OSM: {"landuse":"industrial","plant:output:electricity":"yes","power":"plant"}
+Ogr: {"F_CODE":"AD010"}
+OSM: {"landuse":"industrial","plant:output:electricity":"yes","power":"plant"}
+-----
+MGCP  F_CODE: AD020  Geom: Point  Desc: Solar Panel
+OSM: {"generator:source":"solar","power":"generator"}
+Ogr: {"F_CODE":"AD020"}
+OSM: {"generator:source":"solar","power":"generator"}
+-----
+MGCP  F_CODE: AD030  Geom: Point  Desc: Power Substation
+OSM: {"power":"substation"}
+Ogr: {"F_CODE":"AD030"}
+OSM: {"power":"substation"}
+-----
+MGCP  F_CODE: AD050  Geom: Point  Desc: Heating Facility
+OSM: {"amenity":"heating"}
+Ogr: {"F_CODE":"AD050"}
+OSM: {"amenity":"heating"}
+-----
+MGCP  F_CODE: AF010  Geom: Point  Desc: Smokestack
+OSM: {"man_made":"chimney"}
+Ogr: {"F_CODE":"AF010"}
+OSM: {"man_made":"chimney"}
+-----
+MGCP  F_CODE: AF040  Geom: Point  Desc: Crane
+OSM: {"man_made":"crane"}
+Ogr: {"F_CODE":"AF040"}
+OSM: {"man_made":"crane"}
+-----
+MGCP  F_CODE: AF070  Geom: Point  Desc: Flare Pipe
+OSM: {"man_made":"flare"}
+Ogr: {"F_CODE":"AF070"}
+OSM: {"man_made":"flare"}
+-----
+MGCP  F_CODE: AH050  Geom: Point  Desc: Fortification
+OSM: {"building":"bunker","military":"bunker"}
+Ogr: {"F_CODE":"AH050"}
+OSM: {"building":"bunker","military":"bunker"}
+-----
+MGCP  F_CODE: AH070  Geom: Point  Desc: Checkpoint
+OSM: {"barrier":"check_point"}
+Ogr: {"F_CODE":"AH070"}
+OSM: {"barrier":"check_point"}
+-----
+MGCP  F_CODE: AJ030  Geom: Point  Desc: Holding Pen
+OSM: {"landuse":"holding_pen"}
+Ogr: {"F_CODE":"AJ030"}
+OSM: {"landuse":"holding_pen"}
+-----
+MGCP  F_CODE: AJ050  Geom: Point  Desc: Windmill
+OSM: {"man_made":"windmill"}
+Ogr: {"F_CODE":"AJ050"}
+OSM: {"man_made":"windmill"}
+-----
+MGCP  F_CODE: AJ051  Geom: Point  Desc: Wind Turbine
+OSM: {"generator:source":"wind","power":"generator"}
+Ogr: {"F_CODE":"AJ051"}
+OSM: {"generator:source":"wind","power":"generator"}
+-----
+MGCP  F_CODE: AJ110  Geom: Point  Desc: Greenhouse
+OSM: {"building":"greenhouse"}
+Ogr: {"F_CODE":"AJ110"}
+OSM: {"building":"greenhouse"}
+-----
+MGCP  F_CODE: AK040  Geom: Point  Desc: Sports Ground
+OSM: {"leisure":"pitch"}
+Ogr: {"F_CODE":"AK040"}
+OSM: {"leisure":"pitch"}
+-----
+MGCP  F_CODE: AK150  Geom: Point  Desc: Ski-jump
+OSM: {"man_made":"ski_jump"}
+Ogr: {"F_CODE":"AK150"}
+OSM: {"man_made":"ski_jump"}
+-----
+MGCP  F_CODE: AK160  Geom: Point  Desc: Stadium
+OSM: {"building":"yes","leisure":"stadium"}
+Ogr: {"F_CODE":"AK160"}
+OSM: {"building":"yes","leisure":"stadium"}
+-----
+MGCP  F_CODE: AK170  Geom: Point  Desc: Swimming Pool
+OSM: {"leisure":"swimming_pool"}
+Ogr: {"F_CODE":"AK170"}
+OSM: {"leisure":"swimming_pool"}
+-----
+MGCP  F_CODE: AL012  Geom: Point  Desc: Archeological Site
+OSM: {"historic":"archaeological_site"}
+Ogr: {"F_CODE":"AL012"}
+OSM: {"historic":"archaeological_site"}
+-----
+MGCP  F_CODE: AL015  Geom: Point  Desc: General Building
+OSM: {"building":"yes"}
+Ogr: {"F_CODE":"AL015"}
+OSM: {"building":"yes"}
+-----
+MGCP  F_CODE: AL019  Geom: Point  Desc: Shed
+OSM: {"building":"shed"}
+Ogr: {"F_CODE":"AL019"}
+OSM: {"building":"shed"}
+-----
+MGCP  F_CODE: AL020  Geom: Point  Desc: Built-Up Area
+OSM: {"landuse":"built_up_area","place":"yes"}
+Ogr: {"F_CODE":"AL020"}
+OSM: {"landuse":"built_up_area","place":"yes"}
+-----
+MGCP  F_CODE: AL025  Geom: Point  Desc: Cairn
+OSM: {"man_made":"cairn"}
+Ogr: {"F_CODE":"AL025"}
+OSM: {"man_made":"cairn"}
+-----
+MGCP  F_CODE: AL030  Geom: Point  Desc: Cemetery
+OSM: {"landuse":"cemetery"}
+Ogr: {"F_CODE":"AL030"}
+OSM: {"landuse":"cemetery"}
+-----
+MGCP  F_CODE: AL099  Geom: Point  Desc: Hut
+OSM: {"building":"hut"}
+Ogr: {"F_CODE":"AL099"}
+OSM: {"building":"hut"}
+-----
+MGCP  F_CODE: AL105  Geom: Point  Desc: Settlement
+OSM: {"place":"settlement"}
+Ogr: {"F_CODE":"AL105"}
+OSM: {"place":"settlement"}
+-----
+MGCP  F_CODE: AL130  Geom: Point  Desc: Memorial Monument
+OSM: {"historic":"monument"}
+Ogr: {"F_CODE":"AL130"}
+OSM: {"historic":"monument"}
+-----
+MGCP  F_CODE: AL210  Geom: Point  Desc: Protection Shed
+OSM: {"route:protection":"yes"}
+Ogr: {"F_CODE":"AL210"}
+OSM: {"route:protection":"yes"}
+-----
+MGCP  F_CODE: AL241  Geom: Point  Desc: Tower
+OSM: {"man_made":"tower"}
+Ogr: {"F_CODE":"AL241"}
+OSM: {"man_made":"tower"}
+-----
+MGCP  F_CODE: AM020  Geom: Point  Desc: Grain Storage Structure
+OSM: {"man_made":"silo"}
+Ogr: {"F_CODE":"AM020"}
+OSM: {"man_made":"silo"}
+-----
+MGCP  F_CODE: AM030  Geom: Point  Desc: Grain Elevator
+OSM: {"man_made":"grain_elevator"}
+Ogr: {"F_CODE":"AM030"}
+OSM: {"man_made":"grain_elevator"}
+-----
+MGCP  F_CODE: AM040  Geom: Point  Desc: Mineral Pile
+OSM: {"landuse":"mineral_pile"}
+Ogr: {"F_CODE":"AM040"}
+OSM: {"landuse":"mineral_pile"}
+-----
+MGCP  F_CODE: AM060  Geom: Point  Desc: Surface Bunker
+OSM: {"man_made":"bunker"}
+Ogr: {"F_CODE":"AM060"}
+OSM: {"man_made":"bunker"}
+-----
+MGCP  F_CODE: AM070  Geom: Point  Desc: Storage Tank
+OSM: {"man_made":"storage_tank"}
+Ogr: {"F_CODE":"AM070"}
+OSM: {"man_made":"storage_tank"}
+-----
+MGCP  F_CODE: AN075  Geom: Point  Desc: Railway Turntable
+OSM: {"railway":"turntable"}
+Ogr: {"F_CODE":"AN075"}
+OSM: {"railway":"turntable"}
+-----
+MGCP  F_CODE: AN076  Geom: Point  Desc: Roundhouse
+OSM: {"railway":"roundhouse"}
+Ogr: {"F_CODE":"AN076"}
+OSM: {"railway":"roundhouse"}
+-----
+MGCP  F_CODE: AQ065  Geom: Point  Desc: Culvert
+OSM: {"tunnel":"culvert"}
+Ogr: {"F_CODE":"AQ065"}
+OSM: {"tunnel":"culvert"}
+-----
+MGCP  F_CODE: AQ070  Geom: Point  Desc: Ferry Crossing
+OSM: {"route":"ferry"}
+Ogr: {"F_CODE":"AQ070"}
+OSM: {"route":"ferry"}
+-----
+MGCP  F_CODE: AQ090  Geom: Point  Desc: Entrance and/or Exit
+OSM: {"entrance":"yes"}
+Ogr: {"F_CODE":"AQ090"}
+OSM: {"entrance":"yes"}
+-----
+MGCP  F_CODE: AQ110  Geom: Point  Desc: Mooring Mast
+OSM: {"seamark:type":"mooring"}
+Ogr: {"F_CODE":"AQ110"}
+OSM: {"seamark:type":"mooring"}
+-----
+MGCP  F_CODE: AQ116  Geom: Point  Desc: Pumping Station
+OSM: {"man_made":"pumping_station"}
+Ogr: {"F_CODE":"AQ116"}
+OSM: {"man_made":"pumping_station"}
+-----
+MGCP  F_CODE: AQ125  Geom: Point  Desc: Transportation Station
+OSM: {"public_transport":"station"}
+Ogr: {"F_CODE":"AQ125"}
+OSM: {"public_transport":"station"}
+-----
+MGCP  F_CODE: AT010  Geom: Point  Desc: Dish Aerial
+OSM: {"man_made":"satellite_dish"}
+Ogr: {"F_CODE":"AT010"}
+OSM: {"man_made":"satellite_dish"}
+-----
+MGCP  F_CODE: AT042  Geom: Point  Desc: Pylon
+OSM: {"pylon":"yes"}
+Ogr: {"F_CODE":"AT042"}
+OSM: {"pylon":"yes"}
+-----
+MGCP  F_CODE: AT045  Geom: Point  Desc: Radar Station
+OSM: {"man_made":"radar_station"}
+Ogr: {"F_CODE":"AT045"}
+OSM: {"man_made":"radar_station"}
+-----
+MGCP  F_CODE: BA050  Geom: Point  Desc: Beach
+OSM: {"natural":"beach"}
+Ogr: {"F_CODE":"BA050"}
+OSM: {"natural":"beach"}
+-----
+MGCP  F_CODE: BB155  Geom: Point  Desc: Maritime Signal Station
+OSM: {"seamark:type":"signal_station"}
+Ogr: {"F_CODE":"BB155"}
+OSM: {"seamark:type":"signal_station"}
+-----
+MGCP  F_CODE: BD100  Geom: Point  Desc: Structural Pile
+OSM: {"structural_pile":"yes"}
+Ogr: {"F_CODE":"BD100"}
+OSM: {"structural_pile":"yes"}
+-----
+MGCP  F_CODE: BD110  Geom: Point  Desc: Offshore Platform
+OSM: {"man_made":"offshore_construction"}
+Ogr: {"F_CODE":"BD110"}
+OSM: {"man_made":"offshore_construction"}
+-----
+MGCP  F_CODE: BD130  Geom: Point  Desc: Hazardous Rock
+OSM: {"seamark:obstruction:category":"rock"}
+Ogr: {"F_CODE":"BD130"}
+OSM: {"seamark:obstruction:category":"rock"}
+-----
+MGCP  F_CODE: BD180  Geom: Point  Desc: Wreck
+OSM: {"historic":"wreck","seamark:type":"wreck"}
+Ogr: {"F_CODE":"BD180"}
+OSM: {"historic":"wreck","seamark:type":"wreck"}
+-----
+MGCP  F_CODE: BH010  Geom: Point  Desc: Aqueduct
+OSM: {"bridge":"aqueduct"}
+Ogr: {"F_CODE":"BH010"}
+OSM: {"bridge":"aqueduct"}
+-----
+MGCP  F_CODE: BH070  Geom: Point  Desc: Ford
+OSM: {"ford":"yes"}
+Ogr: {"F_CODE":"BH070"}
+OSM: {"ford":"yes"}
+-----
+MGCP  F_CODE: BH120  Geom: Point  Desc: Rapids
+OSM: {"waterway":"rapids"}
+Ogr: {"F_CODE":"BH120"}
+OSM: {"waterway":"rapids"}
+-----
+MGCP  F_CODE: BH145  Geom: Point  Desc: Vanishing Point
+OSM: {"waterway":"vanishing_point"}
+Ogr: {"F_CODE":"BH145"}
+OSM: {"waterway":"vanishing_point"}
+-----
+MGCP  F_CODE: BH170  Geom: Point  Desc: Natural Pool
+OSM: {"natural":"spring"}
+Ogr Multi: {"F_CODE":"BH170","SWT":"4"}
+OSM: {"natural":"spring"}
+-----
+MGCP  F_CODE: BH180  Geom: Point  Desc: Waterfall
+OSM: {"waterway":"waterfall"}
+Ogr: {"F_CODE":"BH180"}
+OSM: {"waterway":"waterfall"}
+-----
+MGCP  F_CODE: BI010  Geom: Point  Desc: Cistern
+OSM: {"man_made":"cistern"}
+Ogr: {"F_CODE":"BI010"}
+OSM: {"man_made":"cistern"}
+-----
+MGCP  F_CODE: BI020  Geom: Point  Desc: Dam
+OSM: {"waterway":"dam"}
+Ogr: {"F_CODE":"BI020"}
+OSM: {"waterway":"dam"}
+-----
+MGCP  F_CODE: BI030  Geom: Point  Desc: Lock
+OSM: {"lock":"yes"}
+Ogr: {"F_CODE":"BI030"}
+OSM: {"lock":"yes"}
+-----
+MGCP  F_CODE: BI040  Geom: Point  Desc: Sluice Gate
+OSM: {"waterway":"sluice_gate"}
+Ogr: {"F_CODE":"BI040"}
+OSM: {"waterway":"sluice_gate"}
+-----
+MGCP  F_CODE: BI041  Geom: Point  Desc: Water Gate
+OSM: {"man_made":"basin_gate"}
+Ogr: {"F_CODE":"BI041"}
+OSM: {"man_made":"basin_gate"}
+-----
+MGCP  F_CODE: BI050  Geom: Point  Desc: Water Intake Tower
+OSM: {"tower":"water_intake"}
+Ogr: {"F_CODE":"BI050"}
+OSM: {"tower":"water_intake"}
+-----
+MGCP  F_CODE: BJ060  Geom: Point  Desc: Ice Peak
+OSM: {"natural":"ice_peak"}
+Ogr: {"F_CODE":"BJ060"}
+OSM: {"natural":"ice_peak"}
+-----
+MGCP  F_CODE: DB029  Geom: Point  Desc: Cave Mouth
+OSM: {"natural":"cave_entrance"}
+Ogr: {"F_CODE":"DB029"}
+OSM: {"natural":"cave_entrance"}
+-----
+MGCP  F_CODE: DB115  Geom: Point  Desc: Geothermal Outlet
+OSM: {"natural":"geothermal_outlet"}
+Ogr: {"F_CODE":"DB115"}
+OSM: {"natural":"geothermal_outlet"}
+-----
+MGCP  F_CODE: DB150  Geom: Point  Desc: Mountain Pass
+OSM: {"mountain_pass":"yes"}
+Ogr: {"F_CODE":"DB150"}
+OSM: {"mountain_pass":"yes"}
+-----
+MGCP  F_CODE: DB160  Geom: Point  Desc: Rock Formation
+OSM: {"natural":"rock_formation"}
+Ogr: {"F_CODE":"DB160"}
+OSM: {"natural":"rock_formation"}
+-----
+MGCP  F_CODE: DB180  Geom: Point  Desc: Volcano
+OSM: {"natural":"volcano"}
+Ogr: {"F_CODE":"DB180"}
+OSM: {"natural":"volcano"}
+-----
+MGCP  F_CODE: EC030  Geom: Point  Desc: Wood
+OSM: {"landuse":"forest"}
+Ogr: {"F_CODE":"EC030"}
+OSM: {"landuse":"forest"}
+-----
+MGCP  F_CODE: GA034  Geom: Point  Desc: Aeronautical Radio Navigation Service
+OSM: {"airmark":"beacon"}
+Ogr: {"F_CODE":"GA034"}
+OSM: {"airmark":"beacon"}
+-----
+MGCP  F_CODE: GB030  Geom: Point  Desc: Helipad
+OSM: {"aeroway":"helipad"}
+Ogr: {"F_CODE":"GB030"}
+OSM: {"aeroway":"helipad"}
+-----
+MGCP  F_CODE: GB040  Geom: Point  Desc: Launch Pad
+OSM: {"aeroway":"launchpad"}
+Ogr: {"F_CODE":"GB040"}
+OSM: {"aeroway":"launchpad"}
+-----
+MGCP  F_CODE: GB050  Geom: Point  Desc: Aircraft Revetment
+OSM: {"military":"revetment"}
+Ogr: {"F_CODE":"GB050"}
+OSM: {"military":"revetment"}
+-----
+MGCP  F_CODE: GB065  Geom: Point  Desc: Water Aerodrome
+OSM: {"amenity":"seaplane_terminal"}
+Ogr: {"F_CODE":"GB065"}
+OSM: {"amenity":"seaplane_terminal"}
+-----
+MGCP  F_CODE: GB220  Geom: Point  Desc: Aeronautical Obstacle
+OSM: {"aeroway":"obstacle"}
+Ogr: {"F_CODE":"GB220"}
+OSM: {"aeroway":"obstacle"}
+-----
+MGCP  F_CODE: GB230  Geom: Point  Desc: Aircraft Hangar
+OSM: {"building":"hangar"}
+Ogr: {"F_CODE":"GB230"}
+OSM: {"building":"hangar"}
+-----
+MGCP  F_CODE: GB485  Geom: Point  Desc: Approach Lighting System
+OSM: {"aeroway":"navigationaid","navigationaid":"als"}
+Ogr: {"F_CODE":"GB485"}
+OSM: {"aeroway":"navigationaid","navigationaid":"als"}
+-----
+MGCP  F_CODE: SU001  Geom: Point  Desc: Military Installation
+OSM: {"military":"installation"}
+Ogr: {"F_CODE":"SU001"}
+OSM: {"military":"installation"}
+-----
+MGCP  F_CODE: ZD040  Geom: Point  Desc: Named Location
+OSM: {"named_location":"yes"}
+Ogr: {"F_CODE":"ZD040"}
+OSM: {"named_location":"yes"}
+-----

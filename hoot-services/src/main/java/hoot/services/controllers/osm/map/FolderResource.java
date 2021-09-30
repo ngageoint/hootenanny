@@ -152,45 +152,30 @@ public class FolderResource {
     @Produces(MediaType.APPLICATION_JSON)
     public LinkRecords getLinks(@Context HttpServletRequest request) {
         Users user = Users.fromRequest(request);
-        LinkRecords linkRecords = null;
-
-        createQuery().delete(folderMapMappings)
-            .where(new SQLQuery<>().from(maps).where(folderMapMappings.mapId.eq(maps.id)).notExists())
-            .execute();
-
-        try {
-            createQuery().insert(folderMapMappings).columns(folderMapMappings.mapId, folderMapMappings.folderId)
-                    .select(new SQLQuery<>().select(maps.id, Expressions.numberTemplate(Long.class, "0")).from(maps)
-                            .where(maps.id.notIn(new SQLQuery<>().select(folderMapMappings.mapId).distinct()
-                            .from(folderMapMappings))))
-                    .execute();
-        }
-        catch (Exception e) {
-            logger.error("getLinks(): Could not add missing records...", e);
-        }
 
         SQLQuery<FolderMapMappings> sql = createQuery()
-                .select(folderMapMappings)
-                .from(folderMapMappings)
-                .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
-                .where(folders.id.ne(0L));
+            .select(folderMapMappings)
+            .from(folderMapMappings)
+            .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
+            .where(folders.id.ne(0L));
+
         if (user != null && !UserResource.adminUserCheck(user)) {
             // public or folder owned by current user or user is admin
             sql.where(folders.publicCol.isTrue().or(folders.userId.eq(user.getId())));
         }
-        List<FolderMapMappings> links = sql.orderBy(folderMapMappings.folderId.asc()).fetch();
-        List<FolderMapMappings> linksOut = new ArrayList<FolderMapMappings>(links.size());
 
-        // The above query is only a rough filter, we need to filter
-        // recursively:
+        List<FolderMapMappings> links = sql.orderBy(folderMapMappings.folderId.asc()).fetch();
+        List<FolderMapMappings> linksOut = new ArrayList<>(links.size());
+
+        // The above query is only a rough filter
         Set<Long> foldersUserCanSee = DbUtils.getFolderIdsForUser(user);
         for(FolderMapMappings link : links) {
             if(foldersUserCanSee.contains(link.getFolderId())) {
                 linksOut.add(link);
             }
         }
-        linkRecords = mapLinkRecordsToLinks(linksOut);
-        return linkRecords;
+
+        return mapLinkRecordsToLinks(linksOut);
     }
 
     /**
@@ -527,20 +512,17 @@ public class FolderResource {
      *
      */
     public static List<Tuple> getFolderMaps(Users user, Long folder_id) {
-        List<Tuple> mapsInfo = new ArrayList<>();
-        try {
-            getFolderForUser(user, folder_id); // will throw an exception if folder not visible to user...
-            mapsInfo = createQuery()
-                .select(maps.id, maps.displayName)
-                .from(maps)
-                .innerJoin(folderMapMappings)
-                .on(maps.id.eq(folderMapMappings.mapId))
-                .where(folderMapMappings.folderId.eq(folder_id))
-                .fetch();
+        List<Tuple> mapsInfo;
+        getFolderForUser(user, folder_id); // will throw an exception if folder not visible to user...
 
-        } catch (ForbiddenException | NotFoundException e) {
-            throw e;
-        }
+        mapsInfo = createQuery()
+            .select(maps.id, maps.displayName)
+            .from(maps)
+            .innerJoin(folderMapMappings)
+            .on(maps.id.eq(folderMapMappings.mapId))
+            .where(folderMapMappings.folderId.eq(folder_id))
+            .fetch();
+
         return mapsInfo;
     }
 
