@@ -57,7 +57,7 @@ var oneToManySecondaryMatchTagKey = "hoot:railway:one:to:many:match:secondary";
 var oneToManyDeleteSecondary = (hoot.get("railway.one.to.many.delete.secondary") === 'true');
 if (oneToManyDeleteSecondary)
 {
-  hoot.prependToList({'conflate.post.ops': 'RailwayOneToManySecondaryMatchElementRemover'});
+  hoot.prependToList({'conflate.post.ops': 'RailwayOneToManySecondaryMatchElementRemover'}, false);
 }
 // Save off the default tag merger for merges not involving a one to many match.
 var defaultTagMerger = hoot.get("tag.merger.default");
@@ -67,7 +67,7 @@ var oneToManyTagKey;
 var oneToManySecondaryMatchElementIds = [];
 // This maps secondary element IDs to the number of matches they're involved in.
 var oneToManyMatches = {};
-// This maps secondary element IDs to their matched ref elements (can be combined with
+// This maps secondary element IDs to their matched ref elements (could be combined with
 // oneToManyMatches eventually).
 var oneToManyMatchIds = {};
 
@@ -96,10 +96,10 @@ exports.isWholeGroup = function()
 
 function geometryMismatch(map, e1, e2, minDistanceScore, minHausdorffDistanceScore, minEdgeDistanceScore)
 {
-  hoot.trace("Processing geometry...");
+  hoot.debug("Processing geometry...");
 
   var sublines;
-  hoot.trace("Extracting sublines with default...");
+  hoot.debug("Extracting sublines with default...");
   sublines = sublineStringMatcher.extractMatchingSublines(map, e1, e2);
   hoot.trace(sublines);
   if (sublines)
@@ -113,25 +113,25 @@ function geometryMismatch(map, e1, e2, minDistanceScore, minHausdorffDistanceSco
      "REPTree".
     */
     var distanceScore = distanceScoreExtractor.extract(m, m1, m2);
-    hoot.trace("distanceScore: " + distanceScore);
+    hoot.debug("distanceScore: " + distanceScore);
     if (distanceScore >= minDistanceScore)
     {
       var hausdorffDistance = hausdorffDistanceExtractor.extract(m, m1, m2);
-      hoot.trace("hausdorffDistance: " + hausdorffDistance);
+      hoot.debug("hausdorffDistance: " + hausdorffDistance);
       if (hausdorffDistance >= minHausdorffDistanceScore)
       {
         var edgeDistance  = edgeDistanceExtractor.extract(m, m1, m2);
-        hoot.trace("edgeDistance: " + edgeDistance);
+        hoot.debug("edgeDistance: " + edgeDistance);
         if (edgeDistance >= minEdgeDistanceScore)
         {
-          hoot.trace("Geometry match");
+          hoot.debug("Geometry match: " + e1.getElementId()  + ", " + e2.getElementId());
           return false;
         }
       }
     }
   }
 
-  hoot.trace("Geometry mismatch");
+  hoot.debug("Geometry mismatch: " + e1.getElementId()  + ", " + e2.getElementId());
   return true;
 }
 
@@ -143,7 +143,7 @@ function getTypeScore(e1, e2, reviewMessage)
   // Don't match passenger rails against rails used internally by the railroad company.
   if (tags1.onlyOneContainsKvp(tags2, "service=yard"))
   {
-    hoot.trace("service=yard mismatch");
+    hoot.debug("service=yard mismatch");
     return 0.0;
   }
 
@@ -151,23 +151,23 @@ function getTypeScore(e1, e2, reviewMessage)
   // We'll assume rails w/o the location tag are above ground (location=surface or
   // location=overground). If the tags explicitly disagree on the location value or one is
   // underground and the other doesn't have a location tag, we'll review.
-  var locationVal1 = String(tags1.get("location")).trim();
-  hoot.trace("locationVal1: " + locationVal1);
+  /*var locationVal1 = String(tags1.get("location")).trim();
+  hoot.debug("locationVal1: " + locationVal1);
   var locationVal1Empty = stringIsEmpty(locationVal1);
-  hoot.trace("locationVal1Empty: " + locationVal1Empty);
+  hoot.debug("locationVal1Empty: " + locationVal1Empty);
   var locationVal2 = String(tags2.get("location")).trim();
-  hoot.trace("locationVal2: " + locationVal2);
+  hoot.debug("locationVal2: " + locationVal2);
   var locationVal2Empty = stringIsEmpty(locationVal2);
-  hoot.trace("locationVal2Empty: " + locationVal2Empty);
+  hoot.debug("locationVal2Empty: " + locationVal2Empty);
   if (!(locationVal1Empty && locationVal2Empty) &&
       ((locationVal1Empty && locationVal2 === "underground") ||
        (locationVal2Empty && locationVal1 === "underground") ||
        (!locationVal1Empty && !locationVal2Empty && locationVal1 !== locationVal2)))
   {
-    hoot.trace("location mismatch");
+    hoot.debug("location mismatch");
     reviewMessage.message = "Location mismatch";
     return exports.typeReviewThreshold;
-  }
+  }*/
 
   return hoot.OsmSchema.scoreTypes(tags1, tags2, true);
 }
@@ -194,28 +194,30 @@ exports.matchScore = function(map, e1, e2)
   var tags1 = e1.getTags();
   var tags2 = e2.getTags();
 
-  hoot.trace("**********************************");
-  hoot.trace("e1: " + e1.getElementId() + ", " + tags1.get("name"));
+  hoot.debug("**********************************");
+  hoot.debug("e1: " + e1.getElementId() + ", " + tags1.get("name"));
   if (tags1.get("note"))
   {
-    hoot.trace("e1 note: " + tags1.get("note"));
+    hoot.debug("e1 note: " + tags1.get("note"));
   }
-  hoot.trace("e2: " + e2.getElementId() + ", " + tags2.get("name"));
+  hoot.debug("e2: " + e2.getElementId() + ", " + tags2.get("name"));
   if (tags2.get("note"))
   {
-    hoot.trace("e2 note: " + tags2.get("note"));
+    hoot.debug("e2 note: " + tags2.get("note"));
   }
-  hoot.trace("mostSpecificType 1: " + hoot.OsmSchema.mostSpecificType(e1));
-  hoot.trace("mostSpecificType 2: " + hoot.OsmSchema.mostSpecificType(e2));
+  hoot.debug("mostSpecificType 1: " + hoot.OsmSchema.mostSpecificType(e1));
+  hoot.debug("mostSpecificType 2: " + hoot.OsmSchema.mostSpecificType(e2));
 
   // Note: No need has been apparent *yet* to do match filtering via name.
 
   // Check for a type match.
   var typeReviewMessage = { message: "" };
   var typeScore = getTypeScore(e1, e2, typeReviewMessage);
-  hoot.trace("typeScore: " + typeScore);
-  if (typeScore < exports.typeReviewThreshold)
+  hoot.debug("typeScore: " + typeScore);
+  //if (typeScore < exports.typeReviewThreshold)
+  if (typeScore < exports.typeMatchThreshold)
   {
+    hoot.debug("Type mismatch: " + e1.getElementId()  + ", " + e2.getElementId());
     return result;
   }
 
@@ -236,7 +238,7 @@ exports.matchScore = function(map, e1, e2)
   if (oneToManyMatchEnabled)
   {
     oneToManyTagKey = tags2.getFirstMatchingKey(oneToManyIdentifyingKeys);
-    hoot.trace("oneToManyTagKey: " + oneToManyTagKey);
+    hoot.debug("oneToManyTagKey: " + oneToManyTagKey);
     if (oneToManyTagKey !== "")
     {
       // Check the identifying tag to see how many rail tracks this single secondary feature
@@ -247,19 +249,19 @@ exports.matchScore = function(map, e1, e2)
       // needed).
       if (totalMatchesAllowed > 1)
       {
-        if (parseInt(oneToManyMatches[e2.getElementId()]) >= totalMatchesAllowed)
+        /*if (parseInt(oneToManyMatches[e2.getElementId()]) >= totalMatchesAllowed)
         {
-          hoot.trace(e2.getElementId() + " has already reached its maximum allowed matches: " + totalMatchesAllowed + ". matched element IDs: " + oneToManyMatchIds[e2.getElementId()]);
+          hoot.debug(e2.getElementId() + " has already reached its maximum allowed matches: " + totalMatchesAllowed + ". matched element IDs: " + oneToManyMatchIds[e2.getElementId()]);
           return result;
         }
         else
-        {
+        {*/
           currentMatchAttemptIsOneToMany = true;
           // If we're doing a one to many, we need to cover a wider swath to get all the matches, so
           // lessen the distance score. This value may need to be tweaked over time, as well as the
           // other score thresholds.
           minDistanceScore = 0.468;
-        }
+        //}
       }
     }
   }
@@ -271,8 +273,8 @@ exports.matchScore = function(map, e1, e2)
   }
 
   // TODO: convert to function
-  hoot.trace("railway match");
-  hoot.trace("currentMatchAttemptIsOneToMany: " + currentMatchAttemptIsOneToMany);
+  hoot.debug("railway match");
+  hoot.debug("currentMatchAttemptIsOneToMany: " + currentMatchAttemptIsOneToMany);
   if (currentMatchAttemptIsOneToMany)
   {
     // If we found a one to many match, increment our total matches for the secondary feature.
@@ -293,7 +295,7 @@ exports.matchScore = function(map, e1, e2)
       matchIds = String(e1.getElementId()) + ";";
     }
     oneToManyMatchIds[e2.getElementId()] = matchIds;
-    hoot.trace("total matches for " + e2.getElementId() + ": " + String(numTotalMatches));
+    hoot.debug("total matches for " + e2.getElementId() + ": " + String(numTotalMatches));
     if (!oneToManySecondaryMatchElementIds.includes(String(e2.getElementId().toString())))
     {
       oneToManySecondaryMatchElementIds.push(String(e2.getElementId().toString()));
@@ -304,14 +306,15 @@ exports.matchScore = function(map, e1, e2)
     // conflate workflow doesn't require that currently.
   }
 
-  if (typeScore >= exports.typeMatchThreshold)
-  {
+  //if (typeScore >= exports.typeMatchThreshold)
+  //{
+    hoot.debug("Match: " + e1.getElementId()  + ", " + e2.getElementId());
     result = { match: 1.0, explain: "match" };
-  }
-  else if (typeScore >= exports.typeReviewThreshold)
+  //}
+  /*else if (typeScore >= exports.typeReviewThreshold)
   {
     result = { review: 1.0, explain: typeReviewMessage.message };
-  }
+  }*/
   return result;
 };
 
@@ -331,7 +334,7 @@ exports.matchScore = function(map, e1, e2)
 exports.mergeSets = function(map, pairs, replaced)
 {
   // TODO: convert to function
-  hoot.trace("Merging railways...");
+  hoot.debug("Merging railways...");
   hoot.trace("oneToManySecondaryMatchElementIds: " + oneToManySecondaryMatchElementIds);
   var secondaryElementsIdsMerged = [];
   var oneToManyMergeOccurred = false;
@@ -372,7 +375,7 @@ exports.mergeSets = function(map, pairs, replaced)
 
       if (oneToManySecondaryMatchElementIds.includes(String(secondaryElement.getElementId().toString())))
       {
-        hoot.trace("Merging one to many tags for " + refElement.getElementId() + " and " + secondaryElement.getElementId() + "...");
+        hoot.debug("Merging one to many tags for " + refElement.getElementId() + " and " + secondaryElement.getElementId() + "...");
         var newTags = hoot.TagMergerFactory.mergeTags(refElement.getTags(), secondaryElement.getTags());
         refElement.setTags(newTags);
         refElement.setStatusString("conflated");
@@ -390,7 +393,7 @@ exports.mergeSets = function(map, pairs, replaced)
       }
     }
   }
-  hoot.trace("oneToManyMergeOccurred: " + oneToManyMergeOccurred);
+  hoot.debug("oneToManyMergeOccurred: " + oneToManyMergeOccurred);
 
   // *Think* this is the correct behavior...if we had any many to one merges earlier during this
   // merge call, then we shouldn't have any other types of merges to perform...not sure yet, though.
@@ -399,7 +402,7 @@ exports.mergeSets = function(map, pairs, replaced)
     // If its not a one to many match, business as usual...use the conflation behavior built into
     // the linear merger in use. Snap the ways in the second input to the first input. Use the
     // default tag merge method.
-    hoot.trace("Performing linear merge...");
+    hoot.debug("Performing linear merge...");
     // Go back to the original default tag merger.
     hoot.set({'tag.merger.default': defaultTagMerger});
     return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType);
