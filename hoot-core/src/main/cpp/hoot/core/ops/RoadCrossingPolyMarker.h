@@ -105,7 +105,7 @@ public:
    */
   long getNumFeaturesValidated() const override { return _numProcessed; }
 
- private:
+private:
 
   OsmMapPtr _map;
 

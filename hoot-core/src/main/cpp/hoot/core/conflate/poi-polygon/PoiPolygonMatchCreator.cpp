@@ -121,7 +121,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   map->visitNodesRo(matchVis);
   const int matchesSizeAfter = matches.size();
 
-  LOG_INFO(
+  LOG_STATUS(
     "Found " << StringUtils::formatLargeNumber(matchVis.getNumMatchCandidatesFound()) <<
     " POI to Polygon match candidate features and " <<
     StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) << " total matches in: " <<

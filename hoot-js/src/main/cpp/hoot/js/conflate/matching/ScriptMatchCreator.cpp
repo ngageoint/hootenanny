@@ -923,7 +923,7 @@ void ScriptMatchCreator::createMatches(
     matchType = "PointPolygon";
   }
 
-  LOG_INFO(
+  LOG_STATUS(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
     matchType << " match candidates and " <<
     StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
@@ -1124,7 +1124,6 @@ bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOs
   {
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
-
   return _getCachedVisitor(map)->isMatchCandidate(element);
 }
 

@@ -139,15 +139,22 @@ void SettingsJs::appendToList(const FunctionCallbackInfo<Value>& args)
 
   if (args[0]->IsObject())
   {
-    Local<Array> keys = args[0]->ToObject(context).ToLocalChecked()->GetPropertyNames(context).ToLocalChecked();
+    const bool allowDuplicates = toCpp<bool>(args[1]);
+    Local<Array> keys =
+      args[0]->ToObject(context).ToLocalChecked()->GetPropertyNames(context).ToLocalChecked();
     for (uint32_t i = 0; i < keys->Length(); i++)
     {
       Local<String> k = keys->Get(context, i).ToLocalChecked()->ToString(context).ToLocalChecked();
-      Local<String> v = args[0]->ToObject(context).ToLocalChecked()->Get(context, k).ToLocalChecked()->ToString(context).ToLocalChecked();
+      Local<String> v =
+        args[0]->ToObject(context)
+        .ToLocalChecked()->Get(context, k).ToLocalChecked()->ToString(context).ToLocalChecked();
 
       QStringList settingVal = settings->getList(str(k));
-      settingVal.append(str(v));
-      settings->set(str(k), settingVal);
+      if (allowDuplicates || !settingVal.contains(str(v)))
+      {
+        settingVal.append(str(v));
+        settings->set(str(k), settingVal);
+      }
     }
     args.GetReturnValue().SetUndefined();
   }
@@ -155,7 +162,8 @@ void SettingsJs::appendToList(const FunctionCallbackInfo<Value>& args)
   {
     args.GetReturnValue().Set(
       current->ThrowException(
-        Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings").ToLocalChecked())));
+        Exception::TypeError(
+          String::NewFromUtf8(current, "Expected a dict of settings").ToLocalChecked())));
   }
 }
 
@@ -169,15 +177,22 @@ void SettingsJs::prependToList(const FunctionCallbackInfo<Value>& args)
 
   if (args[0]->IsObject())
   {
-    Local<Array> keys = args[0]->ToObject(context).ToLocalChecked()->GetPropertyNames(context).ToLocalChecked();
+    const bool allowDuplicates = toCpp<bool>(args[1]);
+    Local<Array> keys =
+      args[0]->ToObject(context).ToLocalChecked()->GetPropertyNames(context).ToLocalChecked();
     for (uint32_t i = 0; i < keys->Length(); i++)
     {
       Local<String> k = keys->Get(context, i).ToLocalChecked()->ToString(context).ToLocalChecked();
-      Local<String> v = args[0]->ToObject(context).ToLocalChecked()->Get(context, k).ToLocalChecked()->ToString(context).ToLocalChecked();
+      Local<String> v =
+        args[0]->ToObject(context)
+          .ToLocalChecked()->Get(context, k).ToLocalChecked()->ToString(context).ToLocalChecked();
 
       QStringList settingVal = settings->getList(str(k));
-      settingVal.prepend(str(v));
-      settings->set(str(k), settingVal);
+      if (allowDuplicates || !settingVal.contains(str(v)))
+      {
+        settingVal.prepend(str(v));
+        settings->set(str(k), settingVal);
+      }
     }
     args.GetReturnValue().SetUndefined();
   }
@@ -185,7 +200,8 @@ void SettingsJs::prependToList(const FunctionCallbackInfo<Value>& args)
   {
     args.GetReturnValue().Set(
       current->ThrowException(
-        Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings").ToLocalChecked())));
+        Exception::TypeError(
+          String::NewFromUtf8(current, "Expected a dict of settings").ToLocalChecked())));
   }
 }
 
@@ -199,11 +215,14 @@ void SettingsJs::removeFromList(const FunctionCallbackInfo<Value>& args)
 
   if (args[0]->IsObject())
   {
-    Local<Array> keys = args[0]->ToObject(context).ToLocalChecked()->GetPropertyNames(context).ToLocalChecked();
+    Local<Array> keys =
+      args[0]->ToObject(context).ToLocalChecked()->GetPropertyNames(context).ToLocalChecked();
     for (uint32_t i = 0; i < keys->Length(); i++)
     {
       Local<String> k = keys->Get(context, i).ToLocalChecked()->ToString(context).ToLocalChecked();
-      Local<String> v = args[0]->ToObject(context).ToLocalChecked()->Get(context, k).ToLocalChecked()->ToString(context).ToLocalChecked();
+      Local<String> v =
+        args[0]->ToObject(context)
+          .ToLocalChecked()->Get(context, k).ToLocalChecked()->ToString(context).ToLocalChecked();
 
       QStringList settingVal = settings->getList(str(k));
       settingVal.removeAll(str(v));
@@ -215,7 +234,8 @@ void SettingsJs::removeFromList(const FunctionCallbackInfo<Value>& args)
   {
     args.GetReturnValue().Set(
       current->ThrowException(
-        Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings").ToLocalChecked())));
+        Exception::TypeError(
+          String::NewFromUtf8(current, "Expected a dict of settings").ToLocalChecked())));
   }
 }
 
@@ -229,11 +249,14 @@ void SettingsJs::replaceInList(const FunctionCallbackInfo<Value>& args)
 
   if (args[0]->IsObject())
   {
-    Local<Array> keys = args[0]->ToObject(context).ToLocalChecked()->GetPropertyNames(context).ToLocalChecked();
+    Local<Array> keys =
+      args[0]->ToObject(context).ToLocalChecked()->GetPropertyNames(context).ToLocalChecked();
     for (uint32_t i = 0; i < keys->Length(); i++)
     {
       Local<String> k = keys->Get(context, i).ToLocalChecked()->ToString(context).ToLocalChecked();
-      Local<String> v = args[0]->ToObject(context).ToLocalChecked()->Get(context, k).ToLocalChecked()->ToString(context).ToLocalChecked();
+      Local<String> v =
+        args[0]->ToObject(context)
+          .ToLocalChecked()->Get(context, k).ToLocalChecked()->ToString(context).ToLocalChecked();
 
       Settings::replaceListOptionEntryValues(*settings, str(k), str(v).split(";"));
     }
@@ -243,7 +266,8 @@ void SettingsJs::replaceInList(const FunctionCallbackInfo<Value>& args)
   {
     args.GetReturnValue().Set(
       current->ThrowException(
-        Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings").ToLocalChecked())));
+        Exception::TypeError(
+          String::NewFromUtf8(current, "Expected a dict of settings").ToLocalChecked())));
   }
 }
 

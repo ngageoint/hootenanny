@@ -458,7 +458,7 @@ void BuildingMatchCreator::createMatches(
   map->visitRelationsRo(v);
   const int matchesSizeAfter = matches.size();
 
-  LOG_INFO(
+  LOG_STATUS(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
     " building match candidates and " <<
     StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<

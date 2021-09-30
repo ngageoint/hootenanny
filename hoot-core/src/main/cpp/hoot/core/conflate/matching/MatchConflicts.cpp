@@ -131,7 +131,7 @@ void MatchConflicts::_calculateSubsetConflicts(
   LOG_VART(conflicts.size());
   LOG_VART(matchSet.size());
 
-  // search for all possible match pair conflicts within a set
+  // Search for all possible match pair conflicts within a set.
   for (size_t i = 0; i < matchSet.size(); i++)
   {
     size_t m1 = matchSet[i];
@@ -145,7 +145,7 @@ void MatchConflicts::_calculateSubsetConflicts(
            MergerFactory::getInstance().isConflicting(
              _map, matches[m2], matches[m1], idIndexedMatches)))
       {
-        // make sure we're consistent and put the smaller one first.
+        // Make sure we're consistent and put the smaller one first.
         if (m2 < m1)
         {
           swap(m1, m2);
