@@ -583,7 +583,7 @@ public class CustomScriptResource {
     /**
      * Deletes the specified script.
      *
-     * GET hoot-services/ingest/customscript/deletescript?SCRIPT_INFO=My Test6
+     * GET hoot-services/ingest/customscript/deletescript?scriptInfo=My Test6
      *
      * //TODO: should be an HTTP DELETE
      *
@@ -594,7 +594,7 @@ public class CustomScriptResource {
     @GET
     @Path("/deletescript")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteScript(@Context HttpServletRequest request, @QueryParam("SCRIPT_INFO") String identifier) {
+    public Response deleteScript(@Context HttpServletRequest request, @QueryParam("scriptInfo") String identifier) {
         Users user = Users.fromRequest(request);
         JSONArray delArr = new JSONArray();
 

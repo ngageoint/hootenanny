@@ -462,7 +462,7 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         assertTrue(file.exists());
 
         resp = target("/customscript/deletescript")
-                .queryParam("SCRIPT_INFO", "testName9")
+                .queryParam("scriptInfo", "testName9")
                 .request(MediaType.APPLICATION_JSON)
                 .get();
         String deletedStr = resp.readEntity(String.class);
