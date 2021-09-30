@@ -173,7 +173,7 @@ QString TestOutputValidator::_printValidationReportDiff(
     LOG_WARN("Waiting for diff process to start for: " + testName);
   }
 
-  const bool scriptTimeOutSpecified = scriptTestTimeOutSeconds != -1;
+  const bool scriptTimeOutSpecified = timeout != -1;
   bool first = true;
   QElapsedTimer timer;
   timer.start();
