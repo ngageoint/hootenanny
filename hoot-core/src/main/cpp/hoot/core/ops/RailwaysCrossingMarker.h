@@ -101,6 +101,8 @@ private:
 
   // skip comparison of railways having these tags
   ChainCriterionPtr _tagExcludeFilter;
+  // TODO
+  bool _markIntraDatasetCrossings;
 
   /*QSet<ElementId>*/QSet<QString> _markedRailways;
   int _numRailways;

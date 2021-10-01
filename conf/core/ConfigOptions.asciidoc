@@ -4534,6 +4534,13 @@ List of tag key/value pairs that the `RailwaysCrossingMarker` will ignore when m
 which cross each other. Add to this list tags rail features possess where rail crossing is deemed
 acceptable.
 
+=== railways.crossing.marker.mark.intra.dataset.crossings
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === random.element.remover.probability
 
 * Data Type: double

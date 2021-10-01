@@ -57,6 +57,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, RailwaysCrossingMarker)
 
 RailwaysCrossingMarker::RailwaysCrossingMarker() :
+_markIntraDatasetCrossings(false),
 _numRailways(0),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
@@ -64,7 +65,9 @@ _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 
 void RailwaysCrossingMarker::setConfiguration(const Settings& conf)
 {
-  _createTagExcludeFilter(ConfigOptions(conf).getRailwaysCrossingMarkerIgnoreTypes());
+  ConfigOptions configOptions(conf);
+  _createTagExcludeFilter(configOptions.getRailwaysCrossingMarkerIgnoreTypes());
+  _markIntraDatasetCrossings = configOptions.getRailwaysCrossingMarkerMarkIntraDatasetCrossings();
 }
 
 void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
@@ -122,6 +125,7 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
                 way->getElementId().toString() + ";" + neighbor->getElementId().toString()) &&
               !_markedRailways.contains(
                 neighbor->getElementId().toString() + ";" + way->getElementId().toString()) &&
+              (!_markIntraDatasetCrossings || way->getStatus() != neighbor->getStatus()) &&
               ElementGeometryUtils::haveGeometricRelationship(
                 way, neighbor, GeometricRelationship::Crosses, _map))
           {
