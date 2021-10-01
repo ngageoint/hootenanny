@@ -123,7 +123,7 @@
         "name": "railway=rail",
         "objectType": "tag",
         "similarTo": [
-            {"name": "railway=subway", "weight": 0.7 },
+            {"name": "railway=subway", "weight": 0.8 },
             {"name": "railway=light_rail", "weight": 0.8 },
             {"name": "electrified=*", "weight": 0.8 },
             {"name": "railway=disused", "weight": 0.8 },

@@ -101,7 +101,7 @@ function geometryMismatch(map, e1, e2, minDistanceScore, minHausdorffDistanceSco
   var sublines;
   hoot.debug("Extracting sublines with default...");
   sublines = sublineStringMatcher.extractMatchingSublines(map, e1, e2);
-  hoot.trace(sublines);
+  hoot.debug(sublines);
   if (sublines)
   {
     var m = sublines.map;
@@ -178,8 +178,8 @@ function getTypeScore(e1, e2, reviewMessage)
  * - miss
  * - review
  *
- * The scores should always sum to one. If they don't you will be taunted
- * mercilessly and we'll normalize it anyway. :P
+ * The scores should always sum to one. If they don't you will be taunted mercilessly and we'll
+ * normalize it anyway. :P
  */
 exports.matchScore = function(map, e1, e2)
 {
@@ -220,10 +220,20 @@ exports.matchScore = function(map, e1, e2)
     hoot.debug("Type mismatch: " + e1.getElementId()  + ", " + e2.getElementId());
     return result;
   }
+  else if (typeScore == exports.typeReviewThreshold)
+  {
+    var reviewMessageEmpty = stringIsEmpty(typeReviewMessage.message);
+    if (reviewMessageEmpty)
+    {
+      typeReviewMessage.message = "type mismatch";
+    }
+    result = { review: 1.0, explain: typeReviewMessage.message };
+    return result;
+  }
 
   // These score thresholds were determined experimentally (see geometryMismatch) for the default
   // rail conflation routine.
-  var minDistanceScore = 0.577;
+  var minDistanceScore = /*0.577*/0.569/*0.05*/;
   var minHausdorffDistanceScore = 0.8;
   var minEdgeDistanceScore = 0.8;
 
@@ -300,7 +310,7 @@ exports.matchScore = function(map, e1, e2)
     {
       oneToManySecondaryMatchElementIds.push(String(e2.getElementId().toString()));
     }
-    hoot.trace("oneToManySecondaryMatchElementIds: " + oneToManySecondaryMatchElementIds);
+    hoot.debug("oneToManySecondaryMatchElementIds: " + oneToManySecondaryMatchElementIds);
 
     // Technically, this match should also be labeled as a one to many match, but the script
     // conflate workflow doesn't require that currently.
@@ -311,10 +321,6 @@ exports.matchScore = function(map, e1, e2)
     hoot.debug("Match: " + e1.getElementId()  + ", " + e2.getElementId());
     result = { match: 1.0, explain: "match" };
   //}
-  /*else if (typeScore >= exports.typeReviewThreshold)
-  {
-    result = { review: 1.0, explain: typeReviewMessage.message };
-  }*/
   return result;
 };
 
@@ -335,13 +341,13 @@ exports.mergeSets = function(map, pairs, replaced)
 {
   // TODO: convert to function
   hoot.debug("Merging railways...");
-  hoot.trace("oneToManySecondaryMatchElementIds: " + oneToManySecondaryMatchElementIds);
+  hoot.debug("oneToManySecondaryMatchElementIds: " + oneToManySecondaryMatchElementIds);
   var secondaryElementsIdsMerged = [];
   var oneToManyMergeOccurred = false;
   // If the current match is one to many, we're only bringing over tags from secondary to
   // reference in our specified list and we're doing no geometry merging.
   hoot.set({'tag.merger.default': 'SelectiveOverwriteTag1Merger'});
-  hoot.trace("pairs.length: " + pairs.length);
+  hoot.debug("pairs.length: " + pairs.length);
   for (var i = 0; i < pairs.length; i++)
   {
     var elementIdPair = pairs[i];
@@ -349,8 +355,8 @@ exports.mergeSets = function(map, pairs, replaced)
     var element2 = map.getElement(elementIdPair[1]);
     if (element1 && element2)
     {
-      hoot.trace("element1.getElementId(): " + element1.getElementId());
-      hoot.trace("element2.getElementId(): " + element2.getElementId());
+      hoot.debug("element1.getElementId(): " + element1.getElementId());
+      hoot.debug("element2.getElementId(): " + element2.getElementId());
     }
     if (element1 && element2)
     {
@@ -372,6 +378,8 @@ exports.mergeSets = function(map, pairs, replaced)
         hoot.error("No secondary element found for elements: " + element1.getElementId() + " and " + element2.getElementId() + ".");
         return;
       }
+      hoot.debug("refElement: " + refElement.getElementId());
+      hoot.debug("secondaryElement: " + secondaryElement.getElementId());
 
       if (oneToManySecondaryMatchElementIds.includes(String(secondaryElement.getElementId().toString())))
       {
@@ -387,6 +395,7 @@ exports.mergeSets = function(map, pairs, replaced)
         // If we're deleting secondary match features, mark it for removal later.
         if (oneToManyDeleteSecondary)
         {
+          hoot.debug("Adding one to many match tag key to: " + secondaryElement.getElementId());
           secondaryElement.setTag(oneToManySecondaryMatchTagKey, "yes");
         }
         oneToManyMergeOccurred = true;

@@ -66,8 +66,7 @@ public:
    */
   void setConfiguration(const Settings& conf) override;
 
-  QString getInitStatusMessage() const override
-  { return "Marking roads crossing polygons for review..."; }
+  QString getInitStatusMessage() const override { return "Marking roads crossing polygons..."; }
   QString getCompletedStatusMessage() const override
   {
     return

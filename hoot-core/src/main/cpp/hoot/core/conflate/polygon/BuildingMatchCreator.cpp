@@ -218,7 +218,7 @@ public:
       if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 100) == 0)
       {
         PROGRESS_DEBUG(
-          "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
+          "\tProcessed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
           " match candidates / " <<
           StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
           " elements.");
@@ -229,7 +229,7 @@ public:
     if (_numElementsVisited % (_taskStatusUpdateInterval * 100) == 0)
     {
       PROGRESS_STATUS(
-        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
+        "\tProcessed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
         StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
         " elements.");
     }
@@ -459,7 +459,7 @@ void BuildingMatchCreator::createMatches(
   const int matchesSizeAfter = matches.size();
 
   LOG_STATUS(
-    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
+    "\tFound " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
     " building match candidates and " <<
     StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
     " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");

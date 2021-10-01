@@ -1036,6 +1036,7 @@ See also:
 ** `RelationCircularRefRemover`
 ** `MultilineStringMergeRelationCollapser`
 ** `RoadCrossingPolyMarker`
+** `RailwaysCrossingMarker`
 ** `ApiTagTruncateVisitor`
 ** `AddHilbertReviewSortOrderOp`
 
@@ -4518,6 +4519,16 @@ to have tags similar enough with another rail feature to be considered match.
 Tag similarity threshold, in the range (0.0, 1.0], at or above which a railway feature is considered
 to have tags similar enough with another rail feature to be considered a review if not already
 considered a match.
+
+=== railways.crossing.marker.ignore.types
+
+* Data Type: list
+* Default Value:
+** `subway`
+** `tram`
+
+List of tag values with `railway` as their key that the `RailwaysCrossingMarker` will ignore when
+marking railways which cross each other.
 
 === random.element.remover.probability
 
