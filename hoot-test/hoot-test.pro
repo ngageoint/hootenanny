@@ -14,6 +14,7 @@ DEPENDPATH += \
   ../hoot-core/src/main/cpp/ \
   ../hoot-core-test/src/test/cpp/ \
   ../hoot-js/src/main/cpp/ \
+  ../hoot-josm/src/main/cpp/ \
   ../hoot-test/src/main/cpp \
 
 INCLUDEPATH += \
@@ -26,7 +27,7 @@ else:OBJECTS_DIR = tmp/debug
 DESTDIR = ../bin/
 
 LIBS += \
-    -L../lib/ -lHootCore -lHootCoreTest -lHootJs -lTgs -ltbs -lnode \
+    -L../lib/ -lHootCore -lHootCoreTest -lHootJs -lHootJosm -lTgs -ltbs -lnode \
 
 SOURCES += $$files(src/*.cpp, true)
 HEADERS += $$files(src/*.h, true)

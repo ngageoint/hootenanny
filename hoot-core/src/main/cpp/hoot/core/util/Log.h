@@ -104,7 +104,7 @@ public:
    */
   void init() const;
 
-  static WarningLevel levelFromString(QString l);
+  static WarningLevel levelFromString(QString& l);
   static QString levelToString(WarningLevel l);
   QString getLevelAsString() const;
 

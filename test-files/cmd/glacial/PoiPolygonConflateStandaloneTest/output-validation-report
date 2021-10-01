@@ -1,0 +1,20 @@
+Input: test-output/cmd/glacial/PoiPolygonConflateStandaloneTest/output.osm
+
+Found 1,301 validation errors in 6,004 features with JOSM.
+Addresses errors: 1
+Almost right angle buildings errors: 649
+Crossing ways errors: 3
+Duplicated nodes errors: 2
+Missing name:* translation errors: 4
+Multipolygon errors: 6
+Opening hours syntax errors: 6
+Relation checker errors: 523
+Similarly named ways errors: 1
+Tag checker errors: 18
+Tag checker (MapCSS based) errors: 85
+Unclosed Ways errors: 1
+Untagged, empty and one node ways errors: 2
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 802 features with Hootenanny.
+Total failing Hootenanny validators: 0

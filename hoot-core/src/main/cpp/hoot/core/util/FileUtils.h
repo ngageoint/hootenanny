@@ -49,7 +49,6 @@ public:
    * @return true if successful
    */
   static bool makeDir(const QString& path);
-
   /**
    * Delete a directory along with all of its contents.
    *
@@ -57,39 +56,6 @@ public:
    * @return true on success; false on error.
    */
   static void removeDir(const QString& dirName);
-
-  /**
-   * Tokenize a file by line and remove the date from each line
-   *
-   * @param filePath file to read
-   * @return a list of file lines
-   */
-  static QStringList tokenizeOutputFileWithoutDates(const QString& filePath);
-
-  /**
-   * Reads an entire file to string
-   *
-   * @param path file path to read from
-   * @return a string
-   */
-  static QString readFully(const QString& path);
-
-  /**
-   * Writes an entire file to string.  Closes the file on success.
-   *
-   * @param path file path to write to
-   * @param text text to be written
-   */
-  static void writeFully(const QString& path, const QString& text);
-
-  /**
-   * Returns the number of lines in a file
-   *
-   * @param file file to examine
-   * @return a line count
-   */
-  static long getNumberOfLinesInFile(const QString& file);
-
   /**
    * Determines if a directory contains a file with the specified extension
    *
@@ -99,16 +65,6 @@ public:
    * extension; false otherwise
    */
   static bool dirContainsFileWithExtension(const QDir& dir, const QString& extension);
-
-  /**
-   * Reads file lines into a string list
-   *
-   * @param inputPath file to read
-   * @param toLowerCase if true, converts each line to lower case
-   * @return a list of strings
-   */
-  static QStringList readFileToList(const QString& inputPath, const bool toLowerCase = false);
-
   /**
    * Determines if any path in a collection of paths are directories
    *
@@ -116,6 +72,54 @@ public:
    * @return true if any input path is a directory; false otherwise
    */
   static bool anyAreDirs(const QStringList& paths);
+
+  /**
+   * Reads an entire file to string
+   *
+   * @param path file path to read from
+   * @return a string
+   */
+  static QString readFully(const QString& path);
+  /**
+   * Reads file lines into a string list
+   *
+   * @param inputPath file to read
+   * @param toLowerCase if true, converts each line to lower case
+   * @return a list of strings
+   */
+  static QStringList readFileToLines(const QString& inputPath, const bool toLowerCase = false);
+  /**
+   * Returns the number of lines in a file
+   *
+   * @param file file to examine
+   * @return a line count
+   */
+  static long getNumberOfLinesInFile(const QString& file);
+
+  /**
+   * Writes an entire file to string.  Closes the file on success.
+   *
+   * @param path file path to write to
+   * @param text text to be written
+   */
+  static void writeFully(const QString& path, const QString& text);
+  /**
+   * @brief appendLine Appends a single line to an existing file.
+   *
+   * The file is opend and closed during writing, so this should not be used within a loop for
+   * performance reasons.
+   * @param path path to an existing file
+   * @param text line of text to write
+   */
+  static void appendLine(const QString& path, const QString& text);
+
+  /**
+   * Tokenize a file by line and remove the date from each line
+   *
+   * @param filePath file to read
+   * @return a list of file lines
+   */
+  static QStringList tokenizeOutputFileWithoutDates(const QString& filePath);
 
   /**
    * Convert a URL (file path, database URL, or other resource location) to a loggable format

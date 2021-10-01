@@ -8,16 +8,22 @@ set -e
 # properties get handled.
 
 IN_DIR=test-files/cmd/slow/ConflateCmdStatsTest
+IN_DIR_2=test-files/conflate/unified
 OUT_DIR=test-output/cmd/slow/ConflateCmdStatsTest
 mkdir -p $OUT_DIR
 STATS_OUT=$OUT_DIR/all-data-types-out
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 CONFIG="-C Testing.conf"
+source scripts/core/ScriptTestUtils.sh
 
-hoot conflate $CONFIG -C UnifyingAlgorithm.conf -C ReferenceConflation.conf -D writer.include.debug.tags=true test-files/conflate/unified/AllDataTypesA.osm test-files/conflate/unified/AllDataTypesB.osm $STATS_OUT.osm --stats > $STATS_OUT
-
+hoot conflate $CONFIG -C UnifyingAlgorithm.conf -C ReferenceConflation.conf \
+  -D writer.include.debug.tags=true $IN_DIR_2/AllDataTypesA.osm $IN_DIR_2/AllDataTypesB.osm \
+  $STATS_OUT.osm --stats > $STATS_OUT
 hoot diff $CONFIG $STATS_OUT.osm $IN_DIR/all-data-types-out.osm || diff $STATS_OUT.osm $IN_DIR/all-data-types-out.osm
+
+validateTestOutput $OUT_DIR/all-data-types-out.osm $OUT_DIR/all-data-types-out-validation-report \
+  $OUT_DIR/all-data-types-out-validated.osm $IN_DIR/all-data-types-out-validation-report
 
 #read in a set of stat names from a file, delete them from the hoot command stats output, and write the remaining stats to the final output
 EDIT_CMD=""

@@ -1,0 +1,9 @@
+Input: test-output/cmd/slow/AllDataTypesAttributeConflateTest/output.osm
+
+Found 19 validation errors in 131 features with JOSM.
+Almost right angle buildings errors: 9
+Tag checker (MapCSS based) errors: 10
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 14 features with Hootenanny.
+Total failing Hootenanny validators: 0

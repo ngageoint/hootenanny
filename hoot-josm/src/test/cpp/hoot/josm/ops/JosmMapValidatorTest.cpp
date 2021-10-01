@@ -76,7 +76,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    HOOT_STR_EQUALS("No validators configured.", exceptionMsg);
+    HOOT_STR_EQUALS("No JOSM validators configured.", exceptionMsg);
   }
 
   void runValidateTest()

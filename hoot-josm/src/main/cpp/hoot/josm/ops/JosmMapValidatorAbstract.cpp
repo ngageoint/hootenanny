@@ -67,7 +67,7 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
 
   LOG_VART(_josmInterfaceName);
   jstring interfaceJavaStr = JniConversion::toJavaString(_javaEnv, _josmInterfaceName);
-  //LOG_VART(interfaceJavaStr);
+  LOG_VART(interfaceJavaStr);
   jboolean isCopy;
   const char* interfaceChars = _javaEnv->GetStringUTFChars(interfaceJavaStr, &isCopy);
   LOG_VART(interfaceChars);
@@ -75,7 +75,17 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
   LOG_VART(_josmInterfaceClass == 0);
   _javaEnv->ReleaseStringUTFChars(interfaceJavaStr, interfaceChars);
 
-  jstring logLevel = JniConversion::toJavaString(_javaEnv, Log::getInstance().getLevelAsString());
+  QString coreLogLevel;
+  if (ConfigOptions().getTestValidationEnable())
+  {
+    // When testing, we're not interested in seeing logging from josm or hoot-josm.
+    coreLogLevel = Log::getInstance().levelToString(Log::None);
+  }
+  else
+  {
+    coreLogLevel = Log::getInstance().getLevelAsString();
+  }
+  jstring logLevel = JniConversion::toJavaString(_javaEnv, coreLogLevel);
   _josmInterface =
     // Thought it would be best to wrap this in a global ref, since its possible it could be garbage
     // collected at any time. Then it could have been cleaned up in the destructor. However, that's
@@ -98,7 +108,7 @@ QMap<QString, QString> JosmMapValidatorAbstract::getValidatorDetail()
 {
   if (_josmValidators.isEmpty())
   {
-    throw IllegalArgumentException("No validators configured.");
+    throw IllegalArgumentException("No JOSM validators configured.");
   }
 
   LOG_DEBUG("Retrieving available validators...");
@@ -124,7 +134,7 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
 {
   if (_josmValidators.isEmpty())
   {
-    throw IllegalArgumentException("No validators configured.");
+    throw IllegalArgumentException("No JOSM validators configured.");
   }
 
   LOG_VARD(map->size());
@@ -133,7 +143,7 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
     LOG_DEBUG("Skipping processing of empty map.");
     return;
   }
-  //LOG_TRACE("Input map: " << OsmXmlWriter::toString(map, true));
+  //LOG_TRACE("Input map contents: " << OsmXmlWriter::toString(map, true));
 
   _numAffected = map->size();
   _numValidationErrors = 0;

@@ -1734,29 +1734,54 @@ translate = {
     return maxVal + '';
   },
 
+
+  // Unpack "other_tags" if it exists
+  // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
+  // We need to unpack this before we can do anything.
+  unpackOtherTags: function(tags)
+  {
+    // Sanity check
+    if (tags.other_tags)
+    {
+
+      var string = tags['other_tags'].toString();
+      delete tags.other_tags;
+
+      // NOTE: This is not my code.I found it when looking for how to parse hstore format from StackOverflow.
+      // I have tweaked it a bit
+
+      //using [\s\S] to match any character, including line feed and carriage return,
+      var r = /(["])(?:\\\1|\\\\|[\s\S])*?\1|NULL/g,
+          matches = string.match(r);
+
+      var clean = function (value) {
+                value = value.replace(/^\"|\"$/g, ""); // Remove leading double quotes
+                value = value.replace(/\\"/g, "\""); // Unescape quotes
+                value = value.replace(/\\\\/g,"\\"); //Unescape backslashes
+                value = value.replace(/''/g,"'"); //Unescape single quotes
+
+                return value;
+            };
+
+        if(matches) {
+          for (var i = 0, l = matches.length; i < l; i+= 2) {
+            if (matches[i] && matches[i + 1]) {
+              var key = clean(matches[i]);
+              var value = matches[i + 1];
+
+              // Taking the chance that this may stomp on an existing tag value.
+              tags[key] = value=="NULL"?null:clean(value);
+            }
+          }
+        }
+    }
+  }, // End unpackOtherTags
+
+
   // Untangle TDS attributes & OSM tags.
   // Some people have been editing OSM files and inserting TDS attributes
   untangleAttributes: function (attrs, tags, spec)
   {
-    // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
-    // We need to unpack this before we can do anything.
-    if (attrs.other_tags)
-    {
-      var tList = tags.other_tags.toString().replace(/\\/g,'').replace(/\"/g,'"').split('","');
-
-      delete attrs.other_tags;
-
-      for (var val in tList)
-      {
-        vList = tList[val].split('"=>"');
-
-        attrs[vList[0].replace('"','')] = vList[1].replace('"','');
-
-        // Debug
-        //print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
-      }
-    }
-
     for (var col in attrs)
     {
       // Sort out FCODE funkyness:  f_CODE, F_Code etc

@@ -27,6 +27,9 @@
 
 #include "FileUtils.h"
 
+// Hoot
+#include <hoot/core/util/StringUtils.h>
+
 // Qt
 #include <QFileInfoList>
 #include <QHostAddress>
@@ -161,6 +164,21 @@ void FileUtils::writeFully(const QString& path, const QString& text)
   outFile.close();
 }
 
+void FileUtils::appendLine(const QString& path, const QString& text)
+{
+  QFile file(path);
+  if (file.open(QFile::Append | QFile::Text))
+  {
+    QTextStream out(&file);
+    out << text << "\n";
+    file.close();
+  }
+  else
+  {
+    throw HootException("Unable to append text to file: " + path);
+  }
+}
+
 long FileUtils::getNumberOfLinesInFile(const QString& file)
 {
   std::ifstream inFile(file.toStdString().c_str());
@@ -190,9 +208,9 @@ bool FileUtils::dirContainsFileWithExtension(const QDir& dir, const QString& ext
   return false;
 }
 
-QStringList FileUtils::readFileToList(const QString& inputPath, const bool toLowerCase)
+QStringList FileUtils::readFileToLines(const QString& inputPath, const bool toLowerCase)
 {
-  LOG_VARD(inputPath);
+  LOG_VART(inputPath);
   QStringList outputList;
   if (!inputPath.trimmed().isEmpty())
   {

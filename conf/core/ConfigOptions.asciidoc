@@ -2538,6 +2538,7 @@ The default value was determined experimentally and may need tweaking per enviro
 ** `CrossingWays.SelfCrossing`
 ** `CrossingWays.Ways`
 ** `DirectionNodes`
+** `DuplicateNode`
 ** `DuplicateRelation`
 ** `DuplicateWay`
 ** `DuplicatedWayNodes`
@@ -2572,9 +2573,9 @@ The default value was determined experimentally and may need tweaking per enviro
 
 List of JOSM validator Java class names without namespace prefixes or file extensions (e.g.
 `DuplicatedWayNodes`) to use during validation or cleaning. With each JOSM upgrade a check needs to
-be made for new available validators by looking at the hardcoded list in the
-`OsmValidator::CORE_TEST_CLASSES` member variable. Last updated version: 18118. See also:
-`hoot.validators`.
+be made for new available validators by comparing the hardcoded list in the
+`OsmValidator::CORE_TEST_CLASSES` member variable for the current version with the previous version.
+See also: `hoot.validators`.
 
 === json.format.hootenanny
 
@@ -5118,16 +5119,6 @@ runtimes. When this is done, sometimes `REF1` features will be removed from the 
 this option allows for score-matches to run when there are missing `REF1` features. Warnings will be
 logged for any that are found.
 
-=== script.test.max.exec.time
-
-* Data Type: int
-* Default Value: `-1`
-
-For script test debugging only. Sets a maximum allowed time, in seconds, for a script test to run.
-If the script runs longer than the specified time, then it is forcefully stopped by the system. If
-the value is set to -1, then there is no time limit for script tests. This is useful when
-debugging tests which may hang on a remote build server.
-
 === search.radius.area
 
 * Data Type: double
@@ -5827,6 +5818,23 @@ Enabling this always forces the orthographic projection when determining a prope
 In typical usage this will never be used (the automatically selected projection should always be at
 least as good). This is most useful if you want to get consistent results even if the list of
 potential projections change over time. Very handy in unit tests.
+
+=== test.script.max.exec.time
+
+* Data Type: int
+* Default Value: `-1`
+
+For script test debugging only. Sets a maximum allowed time, in seconds, for a script test to run.
+If the script runs longer than the specified time, then it is forcefully stopped by the system. If
+the value is set to -1, then there is no time limit for script tests. This is useful when
+debugging tests which may hang on a remote build server.
+
+=== test.validation.enable
+
+* Data Type: bool
+* Default Value: `true`
+
+Enables validation of test output for selected tests.
 
 === token.keep.non.words
 

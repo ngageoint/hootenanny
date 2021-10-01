@@ -178,6 +178,11 @@ QSet<QString> StringUtils::getDuplicates(const QStringList& input)
   return duplicateStrings;
 }
 
+bool StringUtils::hasDuplicates(const QStringList& input)
+{
+  return !getDuplicates(input).empty();
+}
+
 bool StringUtils::containsSubstring(
   const QStringList& input, const QString& substring, Qt::CaseSensitivity caseSensitivity)
 {
@@ -234,6 +239,21 @@ void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
   {
     input.removeAll(toRemove.at(i));
   }
+}
+
+void StringUtils::removeAllContaining(
+  QStringList& input, const QString& text, Qt::CaseSensitivity caseSensitivity)
+{
+  QStringList toReturn;
+  for (int i = 0; i < input.size(); i++)
+  {
+    const QString inputStr = input.at(i);
+    if (!inputStr.contains(text, caseSensitivity))
+    {
+      toReturn.append(inputStr);
+    }
+  }
+  input = toReturn;
 }
 
 void StringUtils::removeLastIndexOf(

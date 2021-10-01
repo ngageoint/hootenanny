@@ -1,0 +1,8 @@
+Input: test-files/cases/reference/unifying/poi-polygon/poi-polygon-6/Output.osm
+
+Found 1 validation errors in 11 features with JOSM.
+Multipolygon errors: 1
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

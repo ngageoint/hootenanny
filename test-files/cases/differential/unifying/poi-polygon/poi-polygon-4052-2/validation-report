@@ -1,0 +1,9 @@
+Input: test-files/cases/differential/unifying/poi-polygon/poi-polygon-4052-2/Output.osm
+
+Found 43 validation errors in 523 features with JOSM.
+Almost right angle buildings errors: 41
+Missing name:* translation errors: 2
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 44 features with Hootenanny.
+Total failing Hootenanny validators: 0
