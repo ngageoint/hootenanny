@@ -102,7 +102,9 @@ void RoadCrossingPolyMarker::apply(const OsmMapPtr& map)
         RoadCrossingPolyRule rule = *rulesItr;
 
         // If we haven't already marked this road for review, its not in another review, and it
-        // isn't allowed to cross the type of poly specified by the current rule...
+        // isn't allowed to cross the type of poly specified by the current rule... (actually, now
+        // not sure that skipping the road if its already involved in another review is the best
+        // behavior)
         if (!_markedRoads.contains(way->getElementId()) &&
             !ReviewMarker::isNeedsReview(_map, way) &&
             (!rule.getAllowedRoadTagFilter() || !rule.getAllowedRoadTagFilter()->isSatisfied(way)))

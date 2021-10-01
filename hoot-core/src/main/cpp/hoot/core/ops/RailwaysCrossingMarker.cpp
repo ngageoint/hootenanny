@@ -99,10 +99,10 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
     if (_isMatchCandidate(way))
     {
       // if we haven't already marked it as crossing another and its not already involved
-      // in a review,
-      if (!_markedRailways.contains(way->getElementId()) &&
-          !ReviewMarker::isNeedsReview(_map, way))
-      {
+      // in a review, TODO: update
+      //if (!_markedRailways.contains(way->getElementId()) &&
+          //!ReviewMarker::isNeedsReview(_map, way))
+      //{
         // and for each rail that is nearby the rail,
         std::shared_ptr<geos::geom::Envelope> env(way->getEnvelope(_map));
         const std::set<ElementId> neighborIdsSet =
@@ -117,18 +117,27 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
           ConstElementPtr neighbor = _map->getElement(neighborId);
 
           // if the rail crosses the nearby rail, mark it.
-          if (neighbor &&
+          if (neighbor && /*!ReviewMarker::isNeedsReview(map, way, neighbor) && */
+              !_markedRailways.contains(
+                way->getElementId().toString() + ";" + neighbor->getElementId().toString()) &&
+              !_markedRailways.contains(
+                neighbor->getElementId().toString() + ";" + way->getElementId().toString()) &&
               ElementGeometryUtils::haveGeometricRelationship(
                 way, neighbor, GeometricRelationship::Crosses, _map))
           {
             LOG_TRACE("Marking " << way->getElementId() << "...");
             reviewMarker.mark(
-              _map, way, "Crossing railways", MetadataTags::HootReviewCrossingRailways(), 1.0);
-            _markedRailways.insert(way->getElementId());
+              _map, way, neighbor, "Crossing railways", MetadataTags::HootReviewCrossingRailways(),
+              1.0);
+            //_markedRailways.insert(way->getElementId());
+            _markedRailways.insert(
+              way->getElementId().toString() + ";" + neighbor->getElementId().toString());
+            _markedRailways.insert(
+              neighbor->getElementId().toString() + ";" + way->getElementId().toString());
             _numAffected++;
           }
         }
-      }
+      //}
       _numRailways++;
     }
 
@@ -143,19 +152,27 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
   }
 }
 
-void RailwaysCrossingMarker::_createTagExcludeFilter(const QStringList& excludeTagVals)
+void RailwaysCrossingMarker::_createTagExcludeFilter(const QStringList& excludeTags)
 {
-  if (excludeTagVals.empty())
+  if (excludeTags.empty())
   {
     return;
   }
 
   _tagExcludeFilter = std::make_shared<ChainCriterion>();
-  for (int i = 0; i < excludeTagVals.size(); i++)
+  for (int i = 0; i < excludeTags.size(); i++)
   {
-    _tagExcludeFilter->addCriterion(
-      std::make_shared<NotCriterion>(
-        std::make_shared<TagCriterion>("railway", excludeTagVals.at(i))));
+    const QString kvp = excludeTags.at(i);
+    const QStringList kvpParts = Tags::kvpToParts(kvp);
+    if (!kvpParts.empty())
+    {
+      _tagExcludeFilter->addCriterion(
+        std::make_shared<NotCriterion>(std::make_shared<TagCriterion>(kvpParts[0], kvpParts[1])));
+    }
+    else
+    {
+      LOG_WARN("Invalid exclude tag KVP: " << kvp);
+    }
   }
 }
 
@@ -165,8 +182,7 @@ void RailwaysCrossingMarker::_createIndex()
 
   // Create an index for all rails within the default search radius.
 
-  // No tuning was done, I just copied these settings from OsmMapIndex.
-  // 10 children - 368 - see #3054
+  // No tuning was done, just copied these settings from OsmMapIndex. 10 children - 368 - see #3054
   _index = std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
 
   // Only index elements that satisfy isMatchCandidate.

@@ -347,6 +347,12 @@ public:
    */
   static QString kvpToVal(const QString& kvp);
   /**
+   * @brief kvpToParts Breaks a KVP string into its constituent parts
+   * @param kvp a KVP string of the form <key>=<value>
+   * @return a list of strings
+   */
+  static QStringList kvpToParts(const QString& kvp);
+  /**
    * Returns true if the tags have the specified kvp
    *
    * @param kvp kvp to search for; value wildcards are supported using '*'
@@ -367,6 +373,19 @@ public:
    * @return a kvp or an empty string if no matching kvp is found
    */
   QString getFirstMatchingKvp(const QStringList& kvps) const;
+  /**
+   * Converts a list of KVPs into tags
+   *
+   * @param kvps kvps to convert
+   * @return a set of tags
+   */
+  static Tags kvpListToTags(const QStringList& kvps);
+  /**
+   * Returns the tags as key/value pair strings
+   *
+   * @return a list of key/value pairs
+   */
+  QStringList toKvps() const;
 
   /**
    * Returns true if the tags have any key in the input list
@@ -382,21 +401,6 @@ public:
    * @return a non-empty string if any key in the list was found; otherwise an empty string
    */
   QString getFirstMatchingKey(const QStringList& keys) const;
-
-  /**
-   * Converts a list of KVPs into tags
-   *
-   * @param kvps kvps to convert
-   * @return a set of tags
-   */
-  static Tags kvpListToTags(const QStringList& kvps);
-
-  /**
-   * Returns the tags as key/value pair strings
-   *
-   * @return a list of key/value pairs
-   */
-  QStringList toKvps() const;
 
   /**
    * Converts a collection of schema vertices to tags

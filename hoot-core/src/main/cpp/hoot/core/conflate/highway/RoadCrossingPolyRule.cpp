@@ -287,8 +287,7 @@ void RoadCrossingPolyRule::createIndex()
   // create an index for all roads and all polys that satisfy our crit within the default
   // search radius
 
-  // No tuning was done, I just copied these settings from OsmMapIndex.
-  // 10 children - 368 - see #3054
+  // No tuning was done, just copied these settings from OsmMapIndex. 10 children - 368 - see #3054
   _index = std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
 
   // Only index elements that satisfy isMatchCandidate.

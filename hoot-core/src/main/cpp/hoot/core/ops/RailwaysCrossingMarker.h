@@ -47,6 +47,11 @@ namespace hoot
  *
  * Choosing not to make this a validator since there is already a crossing rails marker in JOSM.
  *
+ * Technically, the default configured exclude tags aren't completely accurate. For instance,
+ * `railway=subway` is always ignored to be marked as crossing. If its crossing under another above
+ * ground rail that is fine, but if it was crossing with another underground rail that should be
+ * detected...haven't seen that happen yet, though.
+ *
  * @todo abstract RoadCrossingPolyMarker and this into a base class?
  */
 class RailwaysCrossingMarker : public ConstOsmMapOperation, public Configurable
@@ -97,7 +102,7 @@ private:
   // skip comparison of railways having these tags
   ChainCriterionPtr _tagExcludeFilter;
 
-  QSet<ElementId> _markedRailways;
+  /*QSet<ElementId>*/QSet<QString> _markedRailways;
   int _numRailways;
 
   int _taskStatusUpdateInterval;
@@ -105,7 +110,7 @@ private:
   void _createIndex();
   Meters _getSearchRadius(const ConstElementPtr& e) const;
   bool _isMatchCandidate(ConstElementPtr element) const;
-  void _createTagExcludeFilter(const QStringList& excludeTagVals);
+  void _createTagExcludeFilter(const QStringList& excludeTags);
 };
 
 }

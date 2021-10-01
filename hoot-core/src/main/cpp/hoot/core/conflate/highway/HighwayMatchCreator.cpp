@@ -285,8 +285,8 @@ public:
     {
       LOG_INFO("Creating highway feature index...");
 
-      // No tuning was done, I just copied these settings from OsmMapIndex.
-      // 10 children - 368 - see #3054
+      // No tuning was done, just copied these settings from OsmMapIndex. 10 children - 368 - see
+      // #3054
       _index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
       // Only index elements satisfy isMatchCandidate(e)
