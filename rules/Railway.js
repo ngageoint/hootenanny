@@ -218,13 +218,13 @@ exports.matchScore = function(map, e1, e2)
   var typeReviewMessage = { message: "" };
   var typeScore = getTypeScore(e1, e2, typeReviewMessage);
   hoot.trace("typeScore: " + typeScore);
-  //if (typeScore < exports.typeReviewThreshold)
   if (typeScore < exports.typeMatchThreshold)
   {
     hoot.trace("Type mismatch: " + e1.getElementId()  + ", " + e2.getElementId());
     return result;
   }
-  else if (typeScore == exports.typeReviewThreshold)
+  // Since we're not actually generating reviews yet, this is merely a placeholder block.
+  /*else if (typeScore == exports.typeReviewThreshold)
   {
     var reviewMessageEmpty = stringIsEmpty(typeReviewMessage.message);
     if (reviewMessageEmpty)
@@ -233,11 +233,11 @@ exports.matchScore = function(map, e1, e2)
     }
     result = { review: 1.0, explain: typeReviewMessage.message };
     return result;
-  }
+  }*/
 
   // These score thresholds were determined experimentally (see geometryMismatch) for the default
   // rail conflation routine.
-  var minDistanceScore = /*0.577*/0.569/*0.05*/;
+  var minDistanceScore = 0.569;
   var minHausdorffDistanceScore = 0.8;
   var minEdgeDistanceScore = 0.8;
 
@@ -320,11 +320,8 @@ exports.matchScore = function(map, e1, e2)
     // conflate workflow doesn't require that currently.
   }
 
-  //if (typeScore >= exports.typeMatchThreshold)
-  //{
-    hoot.trace("Match: " + e1.getElementId()  + ", " + e2.getElementId());
-    result = { match: 1.0, explain: "match" };
-  //}
+  hoot.trace("Match: " + e1.getElementId()  + ", " + e2.getElementId());
+  result = { match: 1.0, explain: "match" };
   return result;
 };
 
