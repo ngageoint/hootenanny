@@ -73,7 +73,7 @@ defaultTranslationsConfig=$(homeFolder)/conf/services/DefaultTranslations.json
 defaultFOUOTranslationsConfig=$(homeFolder)/translations-local/DefaultTranslationsFOUO.json
 
 # Main document name
-documentName=Hootenanny - User Interface Guide.pdf
+documentName=Hootenanny - User Guide.pdf
 
 # The size of thread pool used during job processing
 internalJobThreadSize=90

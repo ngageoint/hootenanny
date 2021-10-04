@@ -16,4 +16,4 @@ Feature: Check Version
         Then I should see "Download User Guide"
         When I click on "a.dark.fr.button.loud.pad2x"
         Then I wait 5 seconds
-        Then the download file "Hootenanny - User Interface Guide.pdf" should exist
+        Then the download file "Hootenanny - User Guide.pdf" should exist
