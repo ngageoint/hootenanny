@@ -4530,8 +4530,8 @@ considered a match.
 ** `service=yard`
 ** `tunnel=yes`
 
-List of tag key/value pairs that the `RailwaysCrossingMarker` will ignore when marking railways
-which cross each other. Add to this list tags rail features possess where rail crossing is deemed
+List of tag key/value pairs that `RailwaysCrossingMarker` will ignore when marking railways which
+cross each other. Add to this list tags rail features possess where rail crossing is deemed
 acceptable.
 
 === railways.crossing.marker.mark.intra.dataset.crossings
@@ -4539,7 +4539,12 @@ acceptable.
 * Data Type: bool
 * Default Value: `false`
 
-TODO
+If true, `RailwaysCrossingMarker` will skip marking any crossing railways for review that are from
+the same input dataset. Primarily meant to be utilized in conjunction with the `conflate` command.
+It is still possible when this option is disabled that portions of features originally from the same
+dataset may be marked for review due to the merging of features during conflation. If using
+`RailwaysCrossingMarker` with the `convert` command on a single dataset, this option should be
+enabled.
 
 === random.element.remover.probability
 

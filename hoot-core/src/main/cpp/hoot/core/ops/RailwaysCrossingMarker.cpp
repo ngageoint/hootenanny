@@ -102,55 +102,73 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
     // For each rail,
     if (_isMatchCandidate(way))
     {
-      // if we haven't already marked it as crossing another and its not already involved
-      // in a review, TODO: update
-      //if (!_markedRailways.contains(way->getElementId()) &&
-          //!ReviewMarker::isNeedsReview(_map, way))
-      //{
-        // and for each rail that is nearby the rail,
-        std::shared_ptr<geos::geom::Envelope> env(way->getEnvelope(_map));
-        const std::set<ElementId> neighborIdsSet =
-          SpatialIndexer::findNeighbors(
-            *env, _index, _indexToEid, _map, ElementType::Way, false);
-        LOG_VART(neighborIdsSet.size());
-        for (std::set<ElementId>::const_iterator neighborIdsItr = neighborIdsSet.begin();
-             neighborIdsItr != neighborIdsSet.end(); ++neighborIdsItr)
-        {
-          const ElementId neighborId = *neighborIdsItr;
-          LOG_VART(neighborId);
-          ConstElementPtr neighbor = _map->getElement(neighborId);
+      // and for each rail that is nearby the rail,
+      std::shared_ptr<geos::geom::Envelope> env(way->getEnvelope(_map));
+      const std::set<ElementId> neighborIdsSet =
+        SpatialIndexer::findNeighbors(*env, _index, _indexToEid, _map, ElementType::Way, false);
+      LOG_VART(neighborIdsSet.size());
+      for (std::set<ElementId>::const_iterator neighborIdsItr = neighborIdsSet.begin();
+           neighborIdsItr != neighborIdsSet.end(); ++neighborIdsItr)
+      {
+        const ElementId neighborId = *neighborIdsItr;
+        LOG_VART(neighborId);
+        ConstElementPtr neighbor = _map->getElement(neighborId);
 
-          // if the rail crosses the nearby rail, mark it.
-          if (neighbor /*&& !ReviewMarker::isNeedsReview(map, way, neighbor) && */)
+        // if the rail crosses the nearby rail, mark it.
+        if (neighbor)
+        {
+          // Create a unique ID string made from the two feature ID's. If we've already processed
+          // this pair, then skip.
+          const QString idStr1 =
+            way->getElementId().toString() + ";" + neighbor->getElementId().toString();
+          const QString idStr2 =
+            neighbor->getElementId().toString() + ";" + way->getElementId().toString();
+          const bool pairNotProcessed =
+            !_markedRailways.contains(idStr1) && !_markedRailways.contains(idStr2);
+
+          // This tells us if the two features were from the same input dataset *and* unmodified. If
+          // either was conflated, there's not a way to tell if they were from the same dataset by
+          // this point (maybe a way around that; but not sure we need it).
+          const bool haveSameStatus =
+            way->getStatus() != Status::Conflated && neighbor->getStatus() != Status::Conflated &&
+            way->getStatus() == neighbor->getStatus();
+
+          // Was either feature involved in a one to many match?
+          const bool oneToManyMatch =
+            way->getTags().contains(MetadataTags::HootRailwayOneToManyMatchSecondary()) ||
+            neighbor->getTags().contains(MetadataTags::HootRailwayOneToManyMatchSecondary());
+
+          LOG_VART(way->getElementId());
+          LOG_VART(neighborId);
+          LOG_VART(pairNotProcessed);
+          LOG_VART(haveSameStatus);
+          LOG_VART(oneToManyMatch);
+
+          // If we haven't already processed the pair, we're either allowing intra-dataset features
+          // to be marked as crossing OR we aren't and they don't have the same status, neither
+          // feature was involved in a one to many match, and they cross, then mark the pair for
+          // review. We skip anything involved in a one to many match since we know that in that
+          // case the secondary feature will not have been geometrically merged into the reference
+          // feature. Due to that, there's no way conflation could have created a new crossing pair
+          // of rails in that situation.
+          if (pairNotProcessed && (_markIntraDatasetCrossings || !haveSameStatus) &&
+              !oneToManyMatch &&
+              ElementGeometryUtils::haveGeometricRelationship(
+                way, neighbor, GeometricRelationship::Crosses, _map))
           {
-            const QString idStr1 =
-              way->getElementId().toString() + ";" + neighbor->getElementId().toString();
-            const QString idStr2 =
-              neighbor->getElementId().toString() + ";" + way->getElementId().toString();
-            const bool pairNotProcessed =
-              !_markedRailways.contains(idStr1) && !_markedRailways.contains(idStr2);
-            const bool haveSameStatus =
-              way->getStatus() != Status::Conflated && neighbor->getStatus() != Status::Conflated &&
-              way->getStatus() == neighbor->getStatus();
-            const bool oneToManyMatch =
-              way->getTags().contains(MetadataTags::HootRailwayOneToManyMatchSecondary()) ||
-              neighbor->getTags().contains(MetadataTags::HootRailwayOneToManyMatchSecondary());
-            if (pairNotProcessed && (_markIntraDatasetCrossings || !haveSameStatus) &&
-                !oneToManyMatch &&
-                ElementGeometryUtils::haveGeometricRelationship(
-                  way, neighbor, GeometricRelationship::Crosses, _map))
-            {
-              LOG_TRACE("Marking " << way->getElementId() << "...");
-              reviewMarker.mark(
-                _map, way, neighbor,
-                "Crossing railways", MetadataTags::HootReviewCrossingRailways(), 1.0);
-              _markedRailways.insert(idStr1);
-              _markedRailways.insert(idStr2);
-              _numAffected++;
-            }
+            // TODO: It would be helpful if we'd could also mark the points at which they cross here
+            // and tag those for debugging purposes.
+            LOG_TRACE(
+              "Marking for review: " << way->getElementId() << " and " << neighborId << "...");
+            reviewMarker.mark(
+              _map, way, neighbor,
+              "Crossing railways", MetadataTags::HootReviewCrossingRailways(), 1.0);
+            _markedRailways.insert(idStr1);
+            _markedRailways.insert(idStr2);
+            _numAffected++;
           }
         }
-      //}
+      }
       _numRailways++;
     }
 
