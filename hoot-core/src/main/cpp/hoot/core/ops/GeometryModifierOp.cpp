@@ -175,6 +175,8 @@ void GeometryModifierOp::_parseArguments(GeometryModifierActionDesc& actionDesc,
 {
   QList<QString> availableParameters = actionDesc.pAction->getParameterNames();
 
+  LOG_VARW(availableParameters);
+
   foreach (bpt::ptree::value_type data, ptree)
   {
     QString arg = QString::fromStdString(data.first);
