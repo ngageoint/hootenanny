@@ -3,6 +3,7 @@
 
 include::install/InstallationHeader.asciidoc[]
 include::install/HootenannyInstall.asciidoc[]
+include::user/UserHeader.asciidoc[]
 include::user/Hootenanny-id.asciidoc[]
 include::user/History.asciidoc[]
 :imagesdir: ./user
@@ -11,19 +12,15 @@ include::user/Limitations.asciidoc[]
 include::user/OldDocs.asciidoc[]
 :imagesdir: ./
 include::JavascriptOverview.asciidoc[]
-:leveloffset: 1
-include::tmp/RulesLib.asciidoc[]
-include::tmp/RulesTemplate.asciidoc[]
-:leveloffset: 0
 :imagesdir: ./user
 include::user/SupportedDataFormats.asciidoc[]
-include::user/OsmApiDb.asciidoc[]
 include::user/SchemaFiles.asciidoc[]
+include::user/RubberSheeting.asciidoc[]
 include::user/ObtainingMatchInformation.asciidoc[]
 include::user/CumulativeConflation.asciidoc[]
 include::user/FeatureFiltering.asciidoc[]
 include::user/FeatureValidationAndCleaning.asciidoc[]
-include::user/RubberSheeting.asciidoc[]
+include::user/OsmApiDb.asciidoc[]
 include::user/ImplicitTypeTagging.asciidoc[]
 include::user/LanguageTranslation.asciidoc[]
 include::user/Support.asciidoc[]
@@ -87,6 +84,8 @@ include::developer/ConfiguringOsmApiDatabaseConflation.asciidoc[]
 include::developer/HootenannyTroubleshooting.asciidoc[]
 include::commands/HootCommandLineReference.asciidoc[]
 include::user/CommandLineExamples.asciidoc[]
+include::tmp/RulesLib.asciidoc[]
+include::tmp/RulesTemplate.asciidoc[]
 include::HootenannyConfigOptions.asciidoc[]
 include::References.asciidoc[]
 

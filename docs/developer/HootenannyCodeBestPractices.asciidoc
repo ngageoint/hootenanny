@@ -75,6 +75,9 @@ geometry types a map operator (classes inheriting `OsmMapOperation`, `ElementVis
 * Create new exception types by deriving them from `HootException` with the `HOOT_DEFINE_EXCEPTION` 
 macro.
 * Refrain from use of `using namespace std;` and the like to avoid potential namespace collisions.
+* Run `make docs` to test your asciidoc documentation changes. Specifically, ensure that your 
+section headers are at appropriate levels in the hierarchy and that newlines have been placed in 
+appropriate places for the table of contents to format properly.
 * See the "Hootenanny Specific Test Writing Guidelines" section in the 
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[testing document] 
 for some test writing tips.
@@ -91,5 +94,6 @@ cd $HOOT_HOME
 cppclean .
 -----
 
-Some hoot code causes it to crash, and it also doesn't pick up unnecessary includes in .cpp files.
+Some Hootenanny code causes it to crash, and it also doesn't pick up unnecessary includes in .cpp 
+files.
 

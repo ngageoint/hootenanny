@@ -1,6 +1,6 @@
 
 [[Support]]
-== Support
+=== Support
 
 Don't hesitate to ask for help if features aren't conflating how you expect them to or if you're 
 experiencing difficulty while installing the software. We officially support installing RPMs to 
