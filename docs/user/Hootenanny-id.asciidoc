@@ -7,9 +7,9 @@ Note that the some of the hyperlinks in this document only are navigable when th
 
 Hootenanny deploys with an interactive web-based user interface adapted from the MapBox iD Editor. This offers several benefits including its open license that allows users to customize and add functionality, along with an in-depth editing capability that was originally designed for interactive editing of OSM features. Hootenanny is designed to facilitate automated and semi-automated conflation of critical Foundation GEOINT features in the topographic domain, namely roads (polylines), buildings (polygons), and points-of-interest (POIs) (points). Conflation happens at the dataset level, where the user’s workflow determines the best reference dataset and source content, geometry and attributes, to transfer to the output map. The input data must be normalized to allow processing and matching of features and attributes from different schemas. Hootenanny internal processing leverages the key value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups, e.g. normalized attributes can be used to aid in feature matching and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature. Depending on the data and selected conflation options, the process of resolving ambiguous features is handled by an interactive conflict resolution workflow. Hootenanny cues up conflicts and drives the user to each conflict to make the appropriate geometry or attribute fix. Additionally, the user has the option to edit other features they may come across that need correcting while working through the conflict cue. For users that do not want to perform this manual editing or want to accept the automated solution in full, there is the option to accept all or discard all conflicts. This becomes a user choice and ultimately a risk assessment between accepting geometry and attribute errors resulting from automated algorithms versus the use purpose of the end product.
 
-The general case of the Hootenanny conflation workflow is shown in <<HootConflationWorkflow>> and depicts the high-level steps necessary to conflate data and generate an output map in Hootenanny. It is important for the user to understand these functions as each have implications on the conflated results. The squares represent a specific conflation task, while the oval canisters represent a database function. The workflow is described as follows:
+The general case of the Hootenanny conflation workflow is shown in <<HootConflationWorkflow2>> and depicts the high-level steps necessary to conflate data and generate an output map in Hootenanny. It is important for the user to understand these functions as each have implications on the conflated results. The squares represent a specific conflation task, while the oval canisters represent a database function. The workflow is described as follows:
 
-[[HootConflationWorkflow]]
+[[HootConflationWorkflow2]]
 .Hootenanny Conflation Workflow.
 image::images/id/hoot_general_workflow.png[]
 
@@ -596,7 +596,7 @@ image::images/id/hoot_save_output.png[]
 
 The example describes a cookie cutter and horizontal conflation using a Street centerline data obtained from the link:$$https://www-static.bouldercolorado.gov/docs/opendata/Streets.zip$$[City of Boulder] and a Highway dataset obtained from OSM. The figure below shows the two layers displayed on top OpenStreetMap data. The dark gray lines represents the higher quality street centerline data and red lines represent the OSM highway layers for Boulder and the surrounding area.
 
-[[horizontalconflate_Boulder1]]
+[[horizontalconflate_Boulder2]]
 .Boulder OSM map with with roads data overlayed. Boulder, CO; Boulder city street centerline (gray), OSM highways (red); OSM Basemap.
 image::images/id/hoot_horizontal.png[scaledwidth="50%"]
 

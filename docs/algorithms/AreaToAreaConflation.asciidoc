@@ -1,5 +1,5 @@
 
-[[AreaToAreaConflation]]
+[[AreaToAreaConflationAlgs]]
 == Area to Area Conflation
 
 Area to Area Conflation is based on a Weka derived model and is controlled by the file rules/Area.js.

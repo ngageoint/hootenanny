@@ -10,7 +10,7 @@ Unifying conflation is the newer conflation approach for all feature types initi
 subsequent efforts with the following design goals:
 
 * Process the <<RoadConflation,road>>, <<BuildingConflation,building>> and
-  <<PoiToPoi,POI>> conflation routines in a single process flow.
+  <<PoiToPoiAlgs,POI>> conflation routines in a single process flow.
 * Take advantage of the optimization methods presented in <<li2011>>.
 * Flag reviewable items for the user.
 

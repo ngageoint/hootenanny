@@ -1,5 +1,5 @@
 
-[[PoiToPolygonConflation]]
+[[PoiToPolygonConflationAlgs]]
 == POI to Polygon Conflation
 
 [[PoiToPolygonFeatureDefinitions]]
@@ -89,7 +89,7 @@ building geometry and if both are the same complexity then pick the first geomet
 over secondary layer tags
 * Remove the POI geometries as they’ve been “merged” with the building geometries.
 
-[[PoiToPolygonConfigurableOptions]]
+[[PoiToPolygonConfigurableOptionsAlg]]
 === Configurable Options
 
 See the User Guide Command Line Documentation section for all configuration options beginning with the text "poi.polygon".

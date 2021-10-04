@@ -1,5 +1,5 @@
 
-[[PoiToPoi]]
+[[PoiToPoiAlgs]]
 == POI Conflation
 
 NOTE: This description is current as of Hootenanny v0.2.18.
