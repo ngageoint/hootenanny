@@ -20,7 +20,8 @@ define buildAsciidoc
 endef
 
 all: \
-	Hootenanny\ -\ User\ Guide.pdf
+	Hootenanny\ -\ User\ Guide.pdf \
+	CoreAPI
 
 # A generic dep for all asciidoc documents. Make sure the environment is setup properly.
 tmp/asciidoc-config: $(HOME)/.asciidoc/filters/gnuplot/gnuplot-filter.conf node_modules
@@ -49,9 +50,10 @@ tmp/rules-template-doxygen: RulesTemplate.dox ../rules/template/*
 	mkdir -p tmp
 	doxygen RulesTemplate.dox
 
-# Tried without success to embed the Core API docs into asciidoc via XML, like the Javascript API is 
-# done, but it errors out with a non-descript message during the conversion from xml to asciidoc. 
-# Worth trying to fix at some point. Going with HTML instead for now.
+# This target builds the the core API documentation with doxygen. Tried without success to embed the 
+# Core API docs into asciidoc via XML, like the Javascript API is done, but it errors out with a 
+# non-descript message during the conversion from xml to asciidoc. May be worth trying to fix at 
+# some point. Going with HTML instead for now.
 CoreAPI: developer/CoreAPI/html/index.html
 
 developer/CoreAPI/html/index.html: CoreAPI.dox
@@ -85,21 +87,5 @@ Hootenanny\ -\ User\ Guide.pdf: \
 	../conf/core/ConfigOptions.asciidoc \
 	References.asciidoc \
 	user/*.asciidoc
-	#CoreAPI
 	$(call buildAsciidoc)
-
-#Hootenanny\ -\ Developer\ Guide.pdf: \
-#	HootenannyDeveloperGuide.asciidoc \
-#	tmp/asciidoc-config \
-#	../HOOT_VERSION_FILE \
-#	docinfo.xml \
-#	styles/* \
-#	developer/* \
-#	tmp/RulesLib.asciidoc \
-#	tmp/RulesTemplate.asciidoc \
-#	tmp/rules-lib-doxygen \
-#	tmp/rules-template-doxygen \
-#	user/*.asciidoc \
-#	CoreAPI
-#	$(call buildAsciidoc)
 
