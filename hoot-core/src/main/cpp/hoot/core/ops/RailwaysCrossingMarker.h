@@ -43,14 +43,18 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Marks railway features which cross each other. Has options to ignore certain rail types and to
+ * prevent marking features that are source from the same input.
  *
- * Choosing not to make this a validator since there is already a crossing rails marker in JOSM.
+ * Choosing not to make this a validator since there is already a crossing rails marker in JOSM. The
+ * case could be made at some point to implement Validator if there are differences in the
+ * implementations.
  *
- * Technically, the default configured exclude tags aren't completely accurate. For instance,
- * `railway=subway` is always ignored to be marked as crossing. If its crossing under another above
- * ground rail that is fine, but if it was crossing with another underground rail that should be
- * detected...haven't seen that happen yet, though.
+ * Technically, the current default configured exclude tags could cause problems. For instance,
+ * `railway=subway` is part of the config option and is thus always ignored to be marked as
+ * crossing. If a `railway=subway` is crossing under another above ground rail, that is fine.
+ * However, if it was crossing with another underground rail that should be detected by this
+ * class...haven't actually seen that happen yet, though.
  *
  * @todo abstract RoadCrossingPolyMarker and this into a base class?
  */
@@ -101,7 +105,8 @@ private:
 
   // skip comparison of railways having these tags
   ChainCriterionPtr _tagExcludeFilter;
-  // TODO
+  // if true, no feature status check is done; otherwise input1 vs input1 or input2 vs input2 won't
+  // be considered
   bool _markIntraDatasetCrossings;
 
   QSet<QString> _markedRailways;
