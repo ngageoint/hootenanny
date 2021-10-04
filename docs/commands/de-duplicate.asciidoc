@@ -3,10 +3,11 @@
 
 === Description
 
-The `de-duplicate` command removes intra-map duplicate elements from a single map or inter-map duplicate elements across 
-two separate maps. For inter-map de-duplication, the first map's features are kept. Unlike duplicate element removal 
-cleaning operations, such as `DuplicateWayRemover`, this command will only remove completely identical elements and not 
-simply those that are very similar.
+The `de-duplicate` command (experimental) removes intra-map duplicate elements from a single map or 
+inter-map duplicate elements across two separate maps. For inter-map de-duplication, the first map's 
+features are kept. Unlike duplicate element removal cleaning operations, such as 
+`DuplicateWayRemover`, this command will only remove completely identical elements and not simply 
+those that are very similar.
 
 * `input1`                 - The first input map with features to de-duplicate; may be any supported input format 
                              (e.g. .osm file). If only one map input is specified, only intra-map de-duplication is 
