@@ -38,15 +38,13 @@ namespace hoot
 
 class RailwaysCrossingMarkerTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(DuplicateNodeRemoverTest);
+    CPPUNIT_TEST_SUITE(RailwaysCrossingMarkerTest);
     CPPUNIT_TEST(runBasicTest);
     CPPUNIT_TEST(runTagExcludeTest);
     CPPUNIT_TEST(runPreventIntraDatasetMarkingTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  // TODO: finish
 
   RailwaysCrossingMarkerTest() :
   HootTestFixture("test-files/", UNUSED_PATH)
@@ -69,6 +67,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RailwaysCrossingMarker, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RailwaysCrossingMarkerTest, "quick");
 
 }
