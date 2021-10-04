@@ -1,5 +1,5 @@
 
-== Building Hootenanny
+=== Building Hootenanny
 
 Hootenanny uses a top level Makefile to control the building and testing of code from all three of its codebases: 
 Hootenanny Core (C++), Hootenanny Web Services (Java), and Hootenanny User Interface (Javascript).  Underneath, 
@@ -73,7 +73,7 @@ The documentation can be found in PDF format in the `docs` folder.
 
 Running Hootenanny tests is covered in a subsequent section of this document.
 
-=== Managing the Build
+==== Managing the Build
 
 Make files of note:
 
@@ -100,11 +100,11 @@ CONFIG += debug
 CONFIG -= release
 ------
 
-=== Integrated Development Environment
+==== Integrated Development Environment
 
 # TODO: We should move developer environment setup to its own doc and enhance it with more detail.
 
-==== Core
+===== Core
 
 For Hootenanny core development, Qt Creator is an excellent choice for an IDE. Details on its installation and 
 configuration are outside of the scope of this document.

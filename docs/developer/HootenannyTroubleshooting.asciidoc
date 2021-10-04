@@ -1,10 +1,10 @@
 
 [[HootInstallTroubleshooting]]
-== Troubleshooting
+=== Troubleshooting
 
-Note: Some of this information is specific to the formerly supported Ubuntu installation.
+NOTE: Some of this information is specific to the formerly supported Ubuntu installation.
 
-=== Core
+==== Core
 
 * *Don't think the correct version of Hootenanny core is installed?* -> You can check the version of the core by clicking on the "Hootenanny" logo from within the UI. Or as a sanity check, type 'hoot version' from the command line.  The version displayed should match the version you installed. Finally, the core version used by the services can be found by navigating to the following URLs:
 	** `http://localhost/hoot-services/info/about/coreVersionInfo`
@@ -16,7 +16,7 @@ Note: Some of this information is specific to the formerly supported Ubuntu inst
 	**  `/usr/local/hootenanny-X.Y.Z/conf/database/DatabaseConfigLocal.sh`
 	**  `/usr/local/hootenanny-X.Y.Z/conf/database/DatabaseConfigDefault.sh`
 
-=== Database
+==== Database
 
 * *Want to clear data out of the hoot database?* ->
 --------------------------------------
@@ -54,7 +54,7 @@ psql -U hoot
 delete from databasechangeloglock *;
 --------------------------------------
 
-=== Firewall
+==== Firewall
 
 *Trouble accessing Tomcat?* -> Compare your `/etc/sysconfig/iptables` with this working version. Sometimes I have to move the `-A INPUT -j REJECT --reject-with icmp-host-prohibited` line below the `--dport 8080` line. I haven't spent the time to figure out how to fix this on the command line.
 
@@ -85,7 +85,7 @@ COMMIT
 # Completed on Tue Apr 29 10:42:18 2014
 --------------------------------------
 
-=== Services
+==== Services
 
 * *Need to monitor the Tomcat log?* ->
 
@@ -100,7 +100,7 @@ sudo journalctl -eu tomcat8
 * *Do you want to see more granular services log output or redirect it to a file?* -> Edit `/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/log4j2.xml` . See the log4j2 documentation for details on how to edit the file. Restart Tomcat after any changes made to the file.
 
 [[HootUITroubleshoot]]
-=== UI
+==== UI
 
 * *Authentication issues?* See `docs/developer/OAUTH.md`
 

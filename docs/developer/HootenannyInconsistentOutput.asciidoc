@@ -1,5 +1,5 @@
 
-== Inconsistent Conflated Data Output
+=== Inconsistent Conflated Data Output
 
 Given the following conditions the output of Hootenanny should always be exactly the same:
 
@@ -8,7 +8,7 @@ Given the following conditions the output of Hootenanny should always be exactly
 * You've enabled any necessary flags for consistency between runs (e.g. `-D uuid.helper.repeatable=true`, `unify.optimizer.time.limit=-1`, there may be others depending on the command)
 * You're using the exact same input between runs
 
-=== Common Problems
+==== Common Problems
 
 While there are any number of issues that can cause these problems, below are a few common problems to check for:
 
@@ -18,21 +18,21 @@ While there are any number of issues that can cause these problems, below are a 
 * Uninitialized variables
 * Using pointer locations to determine program flow
 
-==== Using Time to Determine Program Flow
+===== Using Time to Determine Program Flow
 
 Don't do it.
 
 Check out `unify.optimizer.time.limit` for a case when Hoot uses time for determining program flow. It may make sense to replace this with the `it_lim` option in GLPK. This isn't quite as user friendly, but it will create reproducible results.
 
-==== Inconsistent Random Variables
+===== Inconsistent Random Variables
 
 Provide flags for using a consistent seed as needed. See `uuid.helper.repeatable` for an example.
 
-==== UUIDs
+===== UUIDs
 
 Don't use Qt's UUID generation directly. See UuidHelper::createUuid() and the asssociated `uuid.helper.repeatable` key.
 
-==== Uninitialized Variables
+===== Uninitialized Variables
 
 Sometimes GCC doesn't warn about uninitialized variables. There are some link:$$http://valgrind.org/docs/manual/mc-manual.html#mc-manual.uninitvals$$[tools in valgrind] that will identify uninitialized variables.
 
@@ -46,7 +46,7 @@ QMAKE_CXXFLAGS+=-Wuninitialized -fno-common
 QMAKE_CXXFLAGS+=-fzero-initialized-in-bss
 -----
 
-==== Using Pointer Locations to Determine Program Flow
+===== Using Pointer Locations to Determine Program Flow
 
 For example:
 
@@ -80,7 +80,7 @@ set<ConstWayPtr> w1;
 set<ConstWayPtr, WayPtrCompare> w2;
 -----
 
-==== Listing unsorted files from FS
+===== Listing unsorted files from FS
 
 E.g. using `QDir::entryList` without a sorting option may return the files in a different order each time.
 

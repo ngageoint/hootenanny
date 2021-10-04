@@ -1,7 +1,7 @@
 
-== Coding Best Practices
+=== Coding Best Practices
 
-=== General
+==== General
 
 Some of these come directly from https://sonarcloud.io/dashboard?id=hoot[Sonar] recommendations.
 
@@ -29,7 +29,7 @@ classes.
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[testing document] 
 for some test writing tips.
 
-=== Core Specific
+==== Core Specific
 
 * If you're using a commonly used class from a 3rd party library and its already included in 
 `HootCoreStable.h`, then you don't need to add an include for it.
@@ -79,7 +79,7 @@ macro.
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[testing document] 
 for some test writing tips.
 
-== Cleaning Up Header Includes
+=== Cleaning Up Header Includes
 
 Maybe we work this into the build and/or find a better tool, but this is what has been tried so far:
 
