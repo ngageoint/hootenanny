@@ -1,7 +1,6 @@
 
-
 [[UnifyingConflation]]
-== Unifying Conflation
+=== Unifying Conflation
 
 There have been two conflation designs built into Hootenanny over the course of its development for all feature types and three for road features. The original design, from the initial software design stage (circa 2012) uses a custom approach built upon a greedy optimization method.
 However, this legacy approach only dealt with roads and did not flag questionable situations as reviews.  This approach is no longer available.
@@ -47,7 +46,7 @@ See also:
 * `conflate` command, <<hootuser>>
 
 [[IngestAndClean]]
-=== Ingest & Clean
+==== Ingest & Clean
 
 This part of the data flow is consistent with the legacy road conflation
 approach. For details on the cleaning operations please see <<hootuser>>.
@@ -58,7 +57,7 @@ See also:
 * `map.cleaner.transforms` configuration option, <<hootuser>>
 
 [[EstimatePairwiseRelationships]]
-=== Estimate Pairwise Relationships
+==== Estimate Pairwise Relationships
 
 The relationship between all features in a data set are estimated in a pairwise
 fashion during this stage. Because calculating all the relationships explicitly
@@ -119,7 +118,7 @@ See also:
 * `match.creators` configuration option, <<hootuser>>
 * `matchScore` JavaScript method, <<hootuser>>
 
-=== Split Data Based on Sub-graphs
+==== Split Data Based on Sub-graphs
 
 During conflation matches are processed using either an aggressive or
 conservative approach to selecting the best set of matches. Before a best set of
@@ -155,7 +154,7 @@ See also:
 
 * `isWholeGroup` JavaScript method, <<hootuser>>
 
-=== Optimize
+==== Optimize
 
 The data selected for the more aggressive optimization goes through the
 following steps:
@@ -181,7 +180,7 @@ See also:
 
 * `unify.optimizer.time.limit` configuration option, <<hootuser>>
 
-=== Apply Merges
+==== Apply Merges
 
 While there may have been some clean operations that modified the map, up
 until this point there have been no changes made to the map during conflation.
@@ -197,7 +196,7 @@ _Conflated_. Features marked for review maintain the _Unknown*_ status.
 
 * `merger.creators` configuration option, <<hootuser>>
 
-==== Orphaned Matches
+===== Orphaned Matches
 
 In some cases it is too computationally expensive to determine that a conflict
 exists. To account for this the detection of the conflict may be delayed until
@@ -211,7 +210,7 @@ This is an open problem that require more investigation.
 .Example of delayed conflict detection
 image::images/DelayedConflict.png[]
 
-=== Export
+==== Export
 
 After conflation the data is ready for export. The data goes through the typical
 Hootenanny save process to store the output data.

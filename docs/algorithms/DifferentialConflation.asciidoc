@@ -1,7 +1,7 @@
 
 
 [[DifferentialConflation]]
-== Differential Conflation
+=== Differential Conflation
 
 Differential Conflation makes use of the Unifying conflation framework within Hootenanny, but 
 attempts a much simpler operation than "full" conflation. The idea is to allow a user to take two 
@@ -42,6 +42,6 @@ involved in linear partial matches completely" option in the UI). To control riv
 with Differential Conflation, use the `differential.remove.river.partial.matches.as.whole` ("Remove 
 rivers involved in river partial matches completely" option in the UI).
 
-
 Differential Conflation can further be customized by modifying the 
 `conf/core/DifferentialConflation.conf` configuration options file.
+

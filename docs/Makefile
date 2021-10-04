@@ -66,16 +66,6 @@ tmp/RulesTemplate.asciidoc: tmp/rules-template-doxygen DoxygenToAsciiDoc.xslt
 	xsltproc tmp/rules-template-doxygen/xml/combine.xslt tmp/rules-template-doxygen/xml/index.xml > tmp/rules-template-doxygen/xml/combined.xml
 	xsltproc DoxygenToAsciiDoc.xslt tmp/rules-template-doxygen/xml/combined.xml > $@
 
-#Hootenanny\ -\ Algorithms.pdf: \
-#	HootenannyAlgorithms.asciidoc \
-#	tmp/asciidoc-config \
-#	../HOOT_VERSION_FILE \
-#	docinfo.xml \
-#	styles/* \
-#	References.asciidoc \
-#	algorithms/*.asciidoc
-#	$(call buildAsciidoc)
-
 Hootenanny\ -\ User\ Guide.pdf: \
 	HootenannyUserGuide.asciidoc \
 	tmp/asciidoc-config \
@@ -98,19 +88,6 @@ Hootenanny\ -\ User\ Guide.pdf: \
 	#CoreAPI
 	$(call buildAsciidoc)
 
-#Hootenanny\ -\ User\ Interface\ Guide.pdf: \
-#	HootenannyUI.asciidoc \
-#	tmp/asciidoc-config \
-#	../HOOT_VERSION_FILE \
-#	docinfo.xml \
-#	styles/* \
-#	tmp/RulesLib.asciidoc \
-#	tmp/RulesTemplate.asciidoc \
-#	tmp/rules-lib-doxygen \
-#	tmp/rules-template-doxygen \
-#	user/*.asciidoc
-#	$(call buildAsciidoc)
-
 #Hootenanny\ -\ Developer\ Guide.pdf: \
 #	HootenannyDeveloperGuide.asciidoc \
 #	tmp/asciidoc-config \
@@ -125,14 +102,4 @@ Hootenanny\ -\ User\ Guide.pdf: \
 #	user/*.asciidoc \
 #	CoreAPI
 #	$(call buildAsciidoc)
-
-#Hootenanny\ -\ Installation\ Instructions.pdf: \
-#	HootenannyInstallDocs.asciidoc \
-#	tmp/asciidoc-config \
-#	../HOOT_VERSION_FILE \
-#	docinfo.xml \
-#	install/* \
-#	styles/*
-#	$(call buildAsciidoc)
-
 

@@ -5,11 +5,6 @@ Hootenanny can be accessed from both command line and via a simple web user inte
 
 This document provides background on how to use Hootenanny in a number of common use cases and work flows with a strong emphasis on the command line interface. Note that there are a number of undocumented features in Hootenanny that are referenced from the command line help. If you need more detailed information on that functionality please contact the developers at the https://github.com/ngageoint/hootenanny[Hootenanny Github page].
 
-[[Installation]]
-== Installation
-
-See the <<hootInstall, Hootenanny Installation>> and <<hootDevGuide, Hootenanny Developer>> Guides for additional information.
-
 [[OldDocsConflation]]
 == Supported Feature Types
 

@@ -1,9 +1,9 @@
 
 [[PoiToPolygonConflationAlgs]]
-== POI to Polygon Conflation
+=== POI to Polygon Conflation
 
 [[PoiToPolygonFeatureDefinitions]]
-=== Feature Definitions
+==== Feature Definitions
 
 POI to polygon conflation defines the following feature types:
 
@@ -12,7 +12,7 @@ POI to polygon conflation defines the following feature types:
 any other tag which causes it to be classified as a POI or a building by the Hootenanny schema definitions.
 
 [[PoiToPolygonMatching]]
-=== Matching
+==== Matching
 
 POI to Polygon conflation in Hootenanny is an additive, rule based conflation which follows these rules:
 
@@ -57,7 +57,7 @@ Techniques that were experimented with but proved to add no benefit to the model
 * using Weka to fine tune the factors and score thresholds used
 
 [[PoiToPolygonMerging]]
-=== Merging
+==== Merging
 
 The first layer selected is the reference layer and the second, the secondary layer, same as in all other hoot conflation types.  Which tags
 are kept is dependent on the selected tag merging strategy as described later.  Geometry merging is a little more complex as later described.
@@ -90,12 +90,12 @@ over secondary layer tags
 * Remove the POI geometries as they’ve been “merged” with the building geometries.
 
 [[PoiToPolygonConfigurableOptionsAlg]]
-=== Configurable Options
+==== Configurable Options
 
 See the User Guide Command Line Documentation section for all configuration options beginning with the text "poi.polygon".
 
 [[PoiToPolygonTestResults]]
-=== Test Results
+==== Test Results
 
 Match truth for several datasets was obtained by having a human manual match features
 (see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx for more details on the process
@@ -130,7 +130,7 @@ involved).  Then, Hootenanny conflated the same data and scored how many matches
 Combined Correct = number of correct matches + number of unnecessary reviews
 
 [[PoiToPolygonPoiFutureWork]]
-=== Future Work
+==== Future Work
 
 * improve tag similarity calculation
 * more intelligent POI merging

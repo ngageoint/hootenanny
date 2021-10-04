@@ -1,6 +1,6 @@
 
 [[skip-grams]]
-== K-Skip Bi-gram Modeling
+=== K-Skip Bi-gram Modeling
 
 As an attempt to increase name matching in conflation over the current matching
 scheme, Levenshtein distance <<levenshtein1966>>, a modified *K-Skip Bi-gram*
@@ -46,7 +46,7 @@ or
 
 +s1 &cup; s2={ab, ac, ad, bc, bd, cd, ef, eg, eh, fg, fh, gh}+.
 
-=== Scoring
+==== Scoring
 
 The comparison and scoring of two k-skip-n-grams is set forth in the paper
 "Non-adjacent Digrams Improve Matching of Cross-Lingual Spelling Variants"
@@ -81,7 +81,7 @@ and thus
 \[ f(S,T) = \frac{3}{9} \approx 0.\overline{3} \]
 +++++++++++++++
 
-=== Testing
+==== Testing
 
 Using the above definitions and scoring algorithm, the +KskipBigramDistance+
 class was added to Hootenanny that implemented k-skip-n-grams.  Early unit
@@ -214,7 +214,7 @@ results skew considerably in favor of Levenshtein.
 Only +1.77%+ of the time did Skip-grams give a better result on training data
 than did Levenshtein.
 
-=== Results
+==== Results
 
 This information indicates that Levenshtein, when used in
 conjunction with `MeanWordSetDistance`, is far and away superior when
@@ -222,3 +222,4 @@ matching names for POI conflation than is the k-skip-n-gram algorithm.  Because
 of this finding, the k-skip-n-gram algorithm has been added to the source code
 repository of Hootenanny for future reference but it isn't being used anywhere
 at this time.
+

@@ -1,6 +1,6 @@
 
 [[ImplicitTypeTaggingAlg]]
-== Implicit Type Tagging Based On Name
+=== Implicit Type Tagging Based On Name
 
 Hootenanny has the capability to derive type tag information automatically for features based solely on the contents of their name tags.
 This capability can be used simply to add better tags to poorly typed data and improve conflated output between datasets.  Specifics on
@@ -8,7 +8,7 @@ how to use this feature are described in the "Implicit Element Type Tagging Base
 on how to generate a new implicit tag rules database are described in the "Hootenanny Implicit Tag Rules Database Generation" section of
 the Hootenanny Developer Guide.  This section gives an overview of how the implicit tagging works and its current performance results.
 
-=== Approach
+==== Approach
 
 Hootenanny implements implicit feature tagging by parsing feature names from well known open source data (OSM and GeoNames at the time of
 this writing), counting the number of times a particular name (or part of a name) is associated with a particular OSM tag, and then
@@ -17,7 +17,7 @@ the tag rules are generated, an element visitor can then be used to apply tags t
 generated rules.  This is done with the goal of eliminating as many incorrectly added tags as possible but realizing that eliminating
 all incorrect tag additions is likely impossible.
 
-==== Rule Generation
+===== Rule Generation
 
 For implicit tag rule generation there are two strategies: 1) auto-generate as many tagging rules as possible and then manually ignore
 any bad ones or 2) auto-generate a modest amount of rules and manually add custom rules to fill any gaps in rule coverage.  Initially,
@@ -33,7 +33,7 @@ must be translated to English before rules can be derived.  Initially, it was de
 reduce the number of generated rules.  Over time, however, it became apparent that too many incorrect tags were being added without the
 restriction.  A future area of research could involve trying to remove the restriction to achieve better tagging results.
 
-==== Rule Filtering/Customization
+===== Rule Filtering/Customization
 
 As mentioned in the previous section, the final step in the process of an implicit tag rules database generation is that of filtering
 rules.  Hootenanny separates the logic to filter rules from that used to generate rules to allow for quickly re-filtering rules repeatedly
@@ -44,7 +44,7 @@ Part of the filtering includes the customization provided in the form of editabl
 for ignore words/tags, adding specific rules, and are described in the "Hootenanny Implicit Tag Rules Database Generation" section of
 the Hootenanny Developer Guide.
 
-==== Rule Generation Runtime Performance
+===== Rule Generation Runtime Performance
 
 Using OSM planet and GeoNames allCountries data acquired on 11/2/17 containing 36 million POIs eligible for implicit tag extraction
 (40.8 GB compressed), using circa 2013 hardware, it takes ~5.5 hours to generate a raw implicit tag rules file.  The POI filtering takes
@@ -58,7 +58,7 @@ default configuration options.
 Note: As of 4/16/18, implicit tagging has been extended to parse more than just POIs from open source data (also buildings, areas, etc.), so
 these times have likely increased as a result.
 
-==== Tagger Behavior
+===== Tagger Behavior
 
 The implicit feature tagger can be used to add tags to data once the implicit tag rules database has been created.  The tagger has
 some configuration options available which greatly influence its behavior:
@@ -76,7 +76,7 @@ See the documentation on the configuration options for more information.
 Note that if the implicit tag rules generated with all data being first translated to English, then the tagger must also be set up
 to translate all parsed data to English.
 
-==== Tagger Runtime Performance
+===== Tagger Runtime Performance
 
 Implicit tagging runtime performance is directly dependent on the number of rules in the rules database.  In the initial implicit tagging
 implementation, before adding the restriction that name tokens be schema tag values, rule querying would begin become noticeably slower when
@@ -86,7 +86,7 @@ performance does not have a noticeable bottleneck.  If for some reason, the mini
 significantly lowered in the future, then implicit tagging of features may encounter a performance bottleneck which could possibly be
 alleviated by further optimization of the tagging logic.
 
-==== False Tag Additions
+===== False Tag Additions
 
 The conclusion has been reached that it is pretty much impossible to not add some incorrect tags to an input dataset when performing
 implicit feature tagging.  With a lot of manual custom rule file additions, however, the number of incorrectly added tags to the
@@ -94,17 +94,18 @@ input data used by the Unifying POI, Unifying POI/Polygon, and Global Multiary P
 still a lot of work to be done to reduce adding incorrect tags going forward.  The bottom line is that implicit feature tagging should
 never be used with data where the addition of any incorrect tags cannot be tolerated.
 
-=== Results
+==== Results
 
-==== Unifying POI/Polygon Conflation
+===== Unifying POI/Polygon Conflation
 
 Applying implicit feature tagging to the data used by the Unifying POI/Polygon regression tests resulted in moderate correct match
 increases, very slight incorrect match increases, and large reductions in unnecessary reviews.  An examination of the output data
 revealed quite a bit of valuable type information added to the output with a small amount of falsely typed data.
 
-==== Global POI Multiary Conflation
+===== Global POI Multiary Conflation
 
 The Global POI Multiary conflation regression tests use Wikimapia as one of its input datasets (see the "Hootenanny Implicit Tag
 Rules Database Generation" section of the Hootenanny Developer Guide for tests location).  The Wikimapia data used had relatively
 poor type tag information associated with it.  Due to that fact, a 4% reduction in incorrectly conflated data occurs when applying
 implicit POI tagging as a conflation pre-operation.  Falsely typed data exists but is relatively small compared to correctly added type tags.
+
