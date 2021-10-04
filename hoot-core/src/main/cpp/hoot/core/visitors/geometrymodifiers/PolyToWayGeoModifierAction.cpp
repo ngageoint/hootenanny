@@ -28,13 +28,8 @@
 #include "PolyToWayGeoModifierAction.h"
 
 // Hoot
-//#include <hoot/core/geometry/CoordinateExt.h>
 #include <hoot/core/util/Factory.h>
 
-// Standard
-//#include <math.h>
-
-//using namespace geos::geom;
 using namespace std;
 
 namespace hoot
@@ -46,9 +41,9 @@ const QString PolyToWayGeoModifierAction::NOOP_PARAM = "nothing";
 
 bool PolyToWayGeoModifierAction::processElement(const ElementPtr& pElement, OsmMap* pMap)
 {
-  // NOTE: This need for this code been met by a combination of AreaCriterion, TagCriterion and a SetTagVisitor
+  // NOTE: The need for this code been met by a combination of AreaCriterion, TagCriterion and a SetTagVisitor
   // The code will be removed if, after more testing, the Criterion/Visitor approach is successful
-
+  // Currently, this is faster than using the Criterion.
 
   // only process closed area ways
   if (pElement->getElementType() != ElementType::Way) return false;

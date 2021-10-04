@@ -29,9 +29,6 @@
 
 #include "GeometryModifierAction.h"
 
-// Hoot
-//#include <hoot/core/geometry/CoordinateExt.h>
-
 namespace hoot
 {
 
