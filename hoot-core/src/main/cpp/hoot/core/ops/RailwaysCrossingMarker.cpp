@@ -41,6 +41,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/GeometricRelationship.h>
 #include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
@@ -120,25 +121,33 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
           ConstElementPtr neighbor = _map->getElement(neighborId);
 
           // if the rail crosses the nearby rail, mark it.
-          if (neighbor && /*!ReviewMarker::isNeedsReview(map, way, neighbor) && */
-              !_markedRailways.contains(
-                way->getElementId().toString() + ";" + neighbor->getElementId().toString()) &&
-              !_markedRailways.contains(
-                neighbor->getElementId().toString() + ";" + way->getElementId().toString()) &&
-              (!_markIntraDatasetCrossings || way->getStatus() != neighbor->getStatus()) &&
-              ElementGeometryUtils::haveGeometricRelationship(
-                way, neighbor, GeometricRelationship::Crosses, _map))
+          if (neighbor /*&& !ReviewMarker::isNeedsReview(map, way, neighbor) && */)
           {
-            LOG_TRACE("Marking " << way->getElementId() << "...");
-            reviewMarker.mark(
-              _map, way, neighbor, "Crossing railways", MetadataTags::HootReviewCrossingRailways(),
-              1.0);
-            //_markedRailways.insert(way->getElementId());
-            _markedRailways.insert(
-              way->getElementId().toString() + ";" + neighbor->getElementId().toString());
-            _markedRailways.insert(
-              neighbor->getElementId().toString() + ";" + way->getElementId().toString());
-            _numAffected++;
+            const QString idStr1 =
+              way->getElementId().toString() + ";" + neighbor->getElementId().toString();
+            const QString idStr2 =
+              neighbor->getElementId().toString() + ";" + way->getElementId().toString();
+            const bool pairNotProcessed =
+              !_markedRailways.contains(idStr1) && !_markedRailways.contains(idStr2);
+            const bool haveSameStatus =
+              way->getStatus() != Status::Conflated && neighbor->getStatus() != Status::Conflated &&
+              way->getStatus() == neighbor->getStatus();
+            const bool oneToManyMatch =
+              way->getTags().contains(MetadataTags::HootRailwayOneToManyMatchSecondary()) ||
+              neighbor->getTags().contains(MetadataTags::HootRailwayOneToManyMatchSecondary());
+            if (pairNotProcessed && (_markIntraDatasetCrossings || !haveSameStatus) &&
+                !oneToManyMatch &&
+                ElementGeometryUtils::haveGeometricRelationship(
+                  way, neighbor, GeometricRelationship::Crosses, _map))
+            {
+              LOG_TRACE("Marking " << way->getElementId() << "...");
+              reviewMarker.mark(
+                _map, way, neighbor,
+                "Crossing railways", MetadataTags::HootReviewCrossingRailways(), 1.0);
+              _markedRailways.insert(idStr1);
+              _markedRailways.insert(idStr2);
+              _numAffected++;
+            }
           }
         }
       //}

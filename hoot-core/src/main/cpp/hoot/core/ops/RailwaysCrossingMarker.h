@@ -104,7 +104,7 @@ private:
   // TODO
   bool _markIntraDatasetCrossings;
 
-  /*QSet<ElementId>*/QSet<QString> _markedRailways;
+  QSet<QString> _markedRailways;
   int _numRailways;
 
   int _taskStatusUpdateInterval;
