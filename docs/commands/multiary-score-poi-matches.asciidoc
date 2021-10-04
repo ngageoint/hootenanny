@@ -21,5 +21,5 @@ hoot multiary-score-poi-matches (input1 input2) [input1 input2 ...] (output) [--
 
 === See Also
 
-* <<hootDevGuide, ManualMultiaryConflation>>
+* <<hootuser, ManualMultiaryConflation>>
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

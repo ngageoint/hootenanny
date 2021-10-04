@@ -112,7 +112,7 @@ not be modified at all and stitch in data from map B around it.
 
 See also:
 
-* _Unifying Conflation_, <<hootalgo>>
+* _Unifying Conflation_, <<hootuser>>
 
 *_Reference Conflation_*
 
@@ -190,7 +190,7 @@ See also:
 * <<conflate,conflate command>>
 * <<cut,cut command>>
 * <<crop,crop command>>
-* <<hootUI, horizontal conflation example>>
+* <<hootuser, horizontal conflation example>>
 
 *_Differential Conflation_*
 
@@ -201,7 +201,7 @@ e.g.
 hoot conflate -C DifferentialConflation.conf input1.osm input2.osm output.osm
 --------
 
-More details: <<hootalgo, DifferentialConflation>>
+More details: <<hootuser, DifferentialConflation>>
 
 *_Attribute Conflation_*
 
@@ -212,7 +212,7 @@ e.g.
 hoot conflate -C AttributeConflation.conf input1.osm input2.osm output.osm
 --------
 
-More details: <<hootalgo, AttributeConflation>>
+More details: <<hootuser, AttributeConflation>>
 
 ===== Review Conflated Results
 
@@ -281,7 +281,7 @@ formats:
   very space efficient.
 
 Despite the potential for some minor changes to data precision (see
-<<hootalgo>>, _Sources of Processing Error_ for details), these formats maintain
+<<hootuser>>, _Sources of Processing Error_ for details), these formats maintain
 the full richness of the topology and tagging structure.
 
 Hootenanny also uses GDAL/OGR footnote:[http://www.gdal.org/] for reading and

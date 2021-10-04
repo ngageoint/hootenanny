@@ -34,6 +34,6 @@ hoot score-matches --confusion --optimize input1.osm input2.osm
 
 === See Also
 
-* <<hootDevGuide, HootenannyManualConflation>>
+* <<hootuser, HootenannyManualConflation>>
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

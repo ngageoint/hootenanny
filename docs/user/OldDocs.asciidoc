@@ -4,17 +4,17 @@
 
 ==== Road Conflation
 
-<<hootalgo, RoadConflation>>
+<<hootuser, RoadConflation>>
 
 ===== Conflation Road Algorithms
 
 *_2nd Generation (aka Unifying)_*
 
-<<hootalgo, UnifyingConflation>>
+<<hootuser, UnifyingConflation>>
 
 *_Network_*
 
-<<hootalgo, NetworkConflation>>
+<<hootuser, NetworkConflation>>
 
 ===== Configuration
 
@@ -27,8 +27,8 @@ for more detail.
 Hootenanny provides the ability to perform point to point, i.e. POI to POI, conflation to merge input dataset geometry and attribution using the Unify approach. The _Unify_ POI to POI conflation code uses the Hootenanny JavaScript interface described in <<HootJavaScriptOverview>>
 to find, label and merge match candidate features. Because this code deals with a broader range of POI conditions, conflating POI
 datasets using Unify will invariably produce reviews that the user must manually confirm using the workflow described in the
-<<hootUI>>, _Reviewing Conflicts_.  Further background on Unifying POI conflation can be found in <<hootalgo>>, _Unifying
-POI Conflation_. For more details on the POI to POI conflation algorithm, see <<hootalgo, PoiToPoi>>
+<<hootuser>>, _Reviewing Conflicts_.  Further background on Unifying POI conflation can be found in <<hootuser>>, _Unifying
+POI Conflation_. For more details on the POI to POI conflation algorithm, see <<hootuser, PoiToPoi>>
 
 There are a number of configurable distance thresholds that can be specified if
 you are comfortable making changes to JavaScript. Please see
@@ -47,14 +47,14 @@ For background on leveraging the Hootenanny JavaScript interface to call functio
 [[Building-Conflation]]
 ==== Building Conflation
 
-<<hootalgo, BuildingConflation>>
+<<hootuser, BuildingConflation>>
 
 [[PoiToPolygonConflation]]
 ==== POI to Polygon Conflation
 
 Hootenanny conflates POIs with both building and area polygons.  It uses the following criteria for matching features: distance between
 the two features, name similarity, type similarity, address similarity, and phone number similarity.  See
-<<hootalgo, PoiToPolygonConflation>> for specific algorithm details.
+<<hootuser, PoiToPolygonConflation>> for specific algorithm details.
 
 [[PoiToPolygonConfigurableOptions]]
 ===== Configurable Options
@@ -69,7 +69,7 @@ Conflation statistics for POI to Polygon Conflation are available from the comma
 Interface, the same as with all other types of conflation.  Note that POIs conflatable with polygons have a different definition than those
 conflatable with other POIs, which is less strict.  Therefore, POIs conflatable with polygons are a superset of POIs conflatable with other
 POIs.  Likewise, polygons are a superset of buildings and also include features such as parks, parking lots, etc.  See the Feature Definitions
-section <<hootalgo, Hootenanny - Algorithms>> for POI and polygon definition details.
+section <<hootuser, Hootenanny - User Guide>> for POI and polygon definition details.
 
 [[PoiToPolygonUseCases]]
 ===== Use Cases
@@ -95,7 +95,7 @@ poi.polygon.match.threshold=1 - This will prevent reviews from being presented c
 
 Hootenanny makes Area to Area Conflation available, which is turned on by default when using command line conflation.  Hootenanny
 defines an area as a non-building polygon that possesses the OSM `area=yes` tag or equivalent.  Examples: parks, parking lots.
-To read more information on Area to Area Conflation, see <<hootalgo, AreaToAreaConflation>>.
+To read more information on Area to Area Conflation, see <<hootuser, AreaToAreaConflation>>.
 
 [[River-Conflation]]
 ==== River Conflation
