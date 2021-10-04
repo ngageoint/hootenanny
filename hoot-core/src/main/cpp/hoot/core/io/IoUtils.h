@@ -56,7 +56,6 @@ public:
    * @return true if the URL points to a valid input format; false otherwise
    */
   static bool isSupportedInputFormat(const QString& url);
-
   /**
    * Determines if the a URL is a supported output format
    *
@@ -64,7 +63,6 @@ public:
    * @return true if the URL points to a valid output format; false otherwise
    */
   static bool isSupportedOutputFormat(const QString& url);
-
   /**
    * Returns true if the input format is a Hootenanny supported OSM format
    *
@@ -72,7 +70,6 @@ public:
    * @return true if the input is OSM and supported; false otherwise
    */
   static bool isSupportedOsmFormat(const QString& input);
-
   /**
    * Returns true if the input format is a Hootenanny supported OGR format
    *
@@ -81,7 +78,6 @@ public:
    * @return true if the input is supported by OGR; false otherwise
    */
   static bool isSupportedOgrFormat(const QString& input, const bool allowDir = false);
-
   /**
    * Determines if a set of inputs paths are all OGR supported formats
    *
@@ -90,7 +86,6 @@ public:
    * @return true if all inputs passed in are supported by OGR; false otherwise
    */
   static bool areSupportedOgrFormats(const QStringList& inputs, const bool allowDir = false);
-
   /**
    * Determines if any in a set of inputs paths are OGR supported formats
    *
@@ -107,7 +102,6 @@ public:
    * @return a list of paths
    */
   static void ogrPathsAndLayersToPaths(QStringList& inputs);
-
   /**
    * Converts the OGR input with layer syntax to the input path
    *
@@ -115,7 +109,6 @@ public:
    * @return a path
    */
   static void ogrPathAndLayerToPath(QString& input);
-
   /**
    * Converts the OGR input with layer syntax to the layer
    *
@@ -123,7 +116,6 @@ public:
    * @return a layer name
    */
   static void ogrPathAndLayerToLayer(QString& input);
-
   /**
    * Determines if an OGR input URL has the layer syntax: file;layer
    *
@@ -141,7 +133,6 @@ public:
    */
   static QStringList getSupportedInputsRecursively(
     const QStringList& topLevelPaths, const QStringList& nameFilters = QStringList());
-
   /**
    * Returns all valid input file paths expanding any paths by looking inside of VSI files
    *
@@ -159,7 +150,6 @@ public:
    * @return true if both formats are streamable; false otherwise
    */
   static bool isStreamableIo(const QString& input, const QString& output);
-
   /**
    * Determines whether both inputs and output are streamable data sources (associated
    * readers/writers must implemented the partial map interfaces)
@@ -169,7 +159,6 @@ public:
    * @return true if all formats are streamable; false otherwise
    */
   static bool areStreamableIo(const QStringList& inputs, const QString& output);
-
   /**
    * Determines whether inputs and are streamable data sources (associated
    * readers/writers must implemented the partial map interfaces)
@@ -180,7 +169,6 @@ public:
    * @return true if all inputs are streamable; false otherwise
    */
   static bool areStreamableInputs(const QStringList& inputs, const bool logUnstreamable = false);
-
   /**
    * Return true if all the specified operations are valid streaming operations.
    *
@@ -191,7 +179,6 @@ public:
    * @return true if all inputs represent streamable operations; false otherwise
    */
   static bool areValidStreamingOps(const QStringList& ops);
-
   /**
    * @brief toStreamingOps returns a list of instantiated streaming operation objects
    * @param ops the class names of the operations to instantiate
@@ -201,7 +188,6 @@ public:
    * class that is an OsmMap consumer (implements OsmMapConsumer or ConstOsmMapConsumer)
    */
   static QList<ElementVisitorPtr> toStreamingOps(const QStringList& ops);
-
   /**
    * Determines if a URL points to a valid streamable input
    *
@@ -209,7 +195,6 @@ public:
    * @return true if the URL points to a valid streamable input; false otherwise
    */
   static bool isStreamableInput(const QString& url);
-
   /**
    * Determines if a URL points to a valid streamable output
    *
@@ -217,7 +202,6 @@ public:
    * @return true if the URL points to a valid streamable output; false otherwise
    */
   static bool isStreamableOutput(const QString& url);
-
   /**
    * Get an input stream set up to be filtered by operations
    *
@@ -227,6 +211,15 @@ public:
    */
   static ElementInputStreamPtr getFilteredInputStream(
     ElementInputStreamPtr streamToFilter, const QStringList& ops);
+  /**
+   * Creates an input stream with a visitor in the loop
+   *
+   * @param input the data soruce to read
+   * @param visitorClassName the class name of the visitor to use
+   * @return an input stream
+   */
+  static std::shared_ptr<ElementVisitorInputStream> getVisitorInputStream(
+    const QString& input, const QString& visitorClassName, const bool useDataSourceIds = false);
 
   /**
     Loads an OSM map into an OsmMap object
@@ -248,7 +241,6 @@ public:
     const OsmMapPtr& map, const QString& path, bool useFileId = true,
     Status defaultStatus = Status::Invalid, const QString& translationScript = "",
     const int ogrFeatureLimit = -1, const QString& jobSource = "", const int numTasks = -1);
-
   /**
     Loads multiple OSM maps into an OsmMap object
 
@@ -257,11 +249,18 @@ public:
     @param useFileId if true, uses the element ID's in the map file; otherwise, generates new
     element ID's
     @param defaultStatus the hoot status to assign to all elements
+    @param translationScript script used to translate data; required only if the input is an OGR
+    format; ignored otherwise
+    @param ogrFeatureLimit limit of features to read per input; applicable to OGR inputs only;
+    ignored otherwise
+    @param jobSource job name for status reporting; applicable to OGR inputs only; ignored otherwise
+    @param numTasks number of job tasks being performed for status reporting; applicable to OGR
+    inputs only; ignored otherwise
     */
   static void loadMaps(
     const OsmMapPtr& map, const QStringList& paths, bool useFileId,
-    Status defaultStatus = Status::Invalid);
-
+    Status defaultStatus = Status::Invalid, const QString& translationScript = "",
+    const int ogrFeatureLimit = -1, const QString& jobSource = "", const int numTasks = -1);
   /**
     Saves an OSM map to an OsmMap object
 
@@ -280,7 +279,6 @@ public:
    */
   static void cropToBounds(
     OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepConnectedOobWays = false);
-
   /**
    * Crops a map to a given bounds
    *
@@ -294,30 +292,18 @@ public:
     const bool keepConnectedOobWays = false);
 
   /**
-   * Creates an input stream with a visitor in the loop
-   *
-   * @param input the data soruce to read
-   * @param visitorClassName the class name of the visitor to use
-   * @return an input stream
-   */
-  static std::shared_ptr<ElementVisitorInputStream> getVisitorInputStream(
-    const QString& input, const QString& visitorClassName, const bool useDataSourceIds = false);
-
-  /**
    * Determines if an input string is a URL by the hoot definition
    *
    * @param str string to examine
    * @return true if the input is a hoot URL, false otherwise
    */
   static bool isUrl(const QString& str);
-
   /**
    * Writes an output directory
    *
    * @param dirName name of the directory to write
    */
   static void writeOutputDir(const QString& dirName);
-
   /**
    * Determines if all specified URLs are supported readers implementing Boundable
    *
@@ -326,7 +312,6 @@ public:
    * interface
    */
   static bool urlsAreBoundable(const QStringList& urls);
-
   /**
    * Creates an output URL based on an input URL that will not overwrite the input
    *

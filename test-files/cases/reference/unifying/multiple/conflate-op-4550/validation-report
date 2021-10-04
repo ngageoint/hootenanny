@@ -1,0 +1,23 @@
+Input: test-files/cases/reference/unifying/multiple/conflate-op-4550/Output.osm
+
+Found 185 validation errors in 2,180 features with JOSM.
+Addresses errors: 8
+Almost right angle buildings errors: 58
+Crossing ways errors: 15
+Duplicated nodes errors: 1
+Duplicated relations errors: 2
+Highways errors: 1
+Missing name:* translation errors: 2
+Multipolygon errors: 6
+Power lines errors: 4
+Relation checker errors: 9
+Self-intersecting ways errors: 1
+Sharp angles errors: 1
+Tag checker errors: 1
+Tag checker (MapCSS based) errors: 55
+Untagged, empty and one node ways errors: 21
+Total failing JOSM validators: 0
+
+Found 2 validation errors in 379 features with Hootenanny.
+Roads crossing polygons errors: 2
+Total failing Hootenanny validators: 0

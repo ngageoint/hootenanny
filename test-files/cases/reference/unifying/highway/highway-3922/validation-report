@@ -1,0 +1,7 @@
+Input: test-files/cases/reference/unifying/highway/highway-3922/Output.osm
+
+Found 0 validation errors in 14 features with JOSM.
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

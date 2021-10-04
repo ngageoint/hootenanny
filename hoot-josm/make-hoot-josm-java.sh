@@ -12,7 +12,7 @@ JOSM_JAR=$JOSM_ARTIFACT_ID-$JOSM_VERSION.jar
 # done first time for each new version of a local jar only. Download the jar and install it with the 
 # mvn line below. You can check to see if your public josm jar is already installed by looking at 
 # the contents of ~/.m2/repository/org/openstreetmap/josm/<JOSM_ARTIFACT_ID>/<JOSM_VERSION>.
-# mvn install:install-file -Dfile=<path>/$JOSM_JAR -DgroupId=org.openstreetmap.josm -DartifactId=$JOSM_ARTIFACT_ID -Dversion=$JOSM_VERSION -Dpackaging=jar -DgeneratePom=true
+# mvn install:install-file -Dfile=<path-to-jar> -DgroupId=org.openstreetmap.josm -DartifactId=<ID> -Dversion=<version> -Dpackaging=jar -DgeneratePom=true
 
 # Build the hoot josm integration jar and copy over the josm jar.
 mvn -q package

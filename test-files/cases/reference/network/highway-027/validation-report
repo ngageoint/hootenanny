@@ -1,0 +1,9 @@
+Input: test-files/cases/reference/network/highway-027/Output.osm
+
+Found 11 validation errors in 70 features with JOSM.
+Similarly named ways errors: 4
+Tag checker (MapCSS based) errors: 7
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0

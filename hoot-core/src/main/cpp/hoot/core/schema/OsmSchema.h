@@ -42,15 +42,13 @@ namespace hoot
 class Tags;
 
 // There are some unused and now disabled types here that the original design intention of which is
-// unclear.
+// unclear. The following were part of the original implementation but never used, so were removed:
+// CanHave, ParentOf, CompoundComponent.
 enum EdgeType
 {
-  //CanHave,  // not used
   IsA,
   SimilarTo,
-  //ParentOf, // not used
-  AssociatedWith//,
-  //CompoundComponent // not used
+  AssociatedWith
 };
 
 struct OsmSchemaCategory
@@ -71,8 +69,7 @@ struct OsmSchemaCategory
     // feature with it as a tag. TODO: This probably makes more sense as an EdgeType rather than a
     // category (maybe CompoundComponent?), but have been unable to come up with a simple design
     // where it could be used in that way yet.
-    Combination =     0x80//,
-    //All = Poi | Building | Transportation | Use | Name | PseudoName | Multiuse
+    Combination =     0x80
   };
 
   OsmSchemaCategory() : _type(Empty) {}

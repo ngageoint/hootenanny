@@ -1,0 +1,11 @@
+Input: test-output/cmd/slow/ConflateCmdStatsTest/toy-buildings-out.osm
+
+Found 21 validation errors in 103 features with JOSM.
+Almost right angle buildings errors: 10
+Multipolygon errors: 3
+Tag checker errors: 6
+Tag checker (MapCSS based) errors: 2
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 12 features with Hootenanny.
+Total failing Hootenanny validators: 0

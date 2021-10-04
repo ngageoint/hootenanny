@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/HootConfig.h>
 #include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -38,8 +39,9 @@
 namespace hoot
 {
 
-ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff, double waitTimeSec,
-                                 bool hideDisableTests, bool suppressFailureDetail) :
+ScriptTestSuite::ScriptTestSuite(
+  QString dir, bool printDiff, double waitTimeSec, bool hideDisableTests,
+  bool suppressFailureDetail, bool validatedOnly) :
 TestSuite((ConfPath::getHootHome() + "/" + dir).toStdString())
 {
   QDir d(ConfPath::getHootHome() + "/" + dir);
@@ -81,14 +83,23 @@ TestSuite((ConfPath::getHootHome() + "/" + dir).toStdString())
           ignore = true;
         }
       }
+      const QString path = d.absoluteFilePath(files[i]);
+      if (validatedOnly && !_scriptValidatesAnyOutput(path))
+      {
+        ignore = true;
+      }
 
       if (!ignore)
       {
-        QString path = d.absoluteFilePath(files[i]);
         addTest(new ScriptTest(path, printDiff, suppressFailureDetail, waitTimeSec * 1000));
       }
     }
   }
+}
+
+bool ScriptTestSuite::_scriptValidatesAnyOutput(const QString& scriptPath) const
+{
+  return FileUtils::readFully(scriptPath).contains("validateTestOutput");
 }
 
 }

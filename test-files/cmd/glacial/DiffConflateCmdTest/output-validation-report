@@ -1,0 +1,10 @@
+Input: test-output/cmd/glacial/DiffConflateCmdTest/output.osm
+
+Found 28 validation errors in 341 features with JOSM.
+Almost right angle buildings errors: 1
+Power lines errors: 9
+Untagged, empty and one node ways errors: 18
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 23 features with Hootenanny.
+Total failing Hootenanny validators: 0

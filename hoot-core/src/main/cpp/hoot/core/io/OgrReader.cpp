@@ -572,8 +572,16 @@ void OgrReader::finalizePartial()
 bool OgrReader::isSupported(const QString& url) const
 {
   LOG_VART(url);
+
+  if (url.endsWith(".osc") || url.endsWith(".osc.sql"))
+  {
+    return false;
+  }
+
   QString justPath = url;
   IoUtils::ogrPathAndLayerToPath(justPath); // in case the layer syntax is in use
+  LOG_VART(OgrUtilities::getInstance().isReasonableUrl(justPath));
+  LOG_VART(IoUtils::isSupportedOgrFormat(url, true));
   return
     OgrUtilities::getInstance().isReasonableUrl(justPath) ||
     IoUtils::isSupportedOgrFormat(url, true);

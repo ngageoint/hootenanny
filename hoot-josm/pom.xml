@@ -14,15 +14,17 @@
 	
 		<jdk.version>1.8</jdk.version>
 		
-		<!-- The hoot/JOSM integration is via JNI, which has no compile time checks and can be a fairly 
-		brittle interface that is difficult to debug. Think long and hard before you update the JOSM 
-		version here. -->
+		<!-- 
+		The hoot/JOSM integration is via JNI, which has no compile time checks and can be a fairly 
+		brittle interface that is difficult to debug. Upgrades may involve significant work. Think long 
+		and hard before you update the JOSM version here. 
+		-->
 		
     <josm.artifactId>josm</josm.artifactId>
-		<josm.version>18118</josm.version>
+		<josm.version>18193</josm.version>
 		
 	  <!-- josm.artifactId>me-josm</josm.artifactId -->
-		<!-- josm.version>10.0.3</josm.version -->
+		<!-- josm.version>10.2.2</josm.version -->
 		
 	</properties>
 

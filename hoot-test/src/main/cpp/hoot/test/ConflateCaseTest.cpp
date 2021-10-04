@@ -32,22 +32,28 @@
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 
 #include <hoot/test/TestSetup.h>
+#include <hoot/test/validation/TestOutputValidator.h>
+
+// Qt
+#include <QFileInfo>
 
 namespace hoot
 {
 
 static const QString multiaryConflateClass = "MultiaryPoiConflateCmd";
 
-ConflateCaseTest::ConflateCaseTest(QDir d, QStringList confs) :
-AbstractTest(d, confs)
+ConflateCaseTest::ConflateCaseTest(
+  QDir d, QStringList confs, bool suppressFailureDetail, bool printValidationReportDiff ) :
+AbstractTest(d, confs),
+_suppressFailureDetail(suppressFailureDetail),
+_printValidationReportDiff(printValidationReportDiff)
 {
 }
 
-void ConflateCaseTest::_runConflateCmd()
+void ConflateCaseTest::_runConflateCmd() const
 {
   if (QFileInfo(_d, "README.txt").exists() == false)
   {
@@ -56,13 +62,13 @@ void ConflateCaseTest::_runConflateCmd()
   QFileInfo in1(_d, "Input1.osm");
   if (in1.exists() == false)
   {
-    throw IllegalArgumentException(
+    throw TestConfigurationException(
       "Unable to find Input1.osm in conflate case: " + _d.absolutePath());
   }
   QFileInfo in2(_d, "Input2.osm");
   if (in2.exists() == false)
   {
-    throw IllegalArgumentException(
+    throw TestConfigurationException(
       "Unable to find Input2.osm in conflate case: " + _d.absolutePath());
   }
 
@@ -104,7 +110,7 @@ void ConflateCaseTest::_runConflateCmd()
   QFileInfo expected(_d, "Expected.osm");
   if (expected.exists() == false)
   {
-    throw IllegalArgumentException(
+    throw TestConfigurationException(
       "Unable to find Expected.osm in conflate case: " + _d.absolutePath());
   }
 
@@ -120,7 +126,7 @@ void ConflateCaseTest::_runConflateCmd()
   }
 }
 
-void ConflateCaseTest::_runMultiaryConflateCmd()
+void ConflateCaseTest::_runMultiaryConflateCmd() const
 {
   BaseCommandPtr cmd =
     std::dynamic_pointer_cast<BaseCommand>(
@@ -149,7 +155,7 @@ void ConflateCaseTest::_runMultiaryConflateCmd()
 
   if (in.size() < 2)
   {
-    throw IllegalArgumentException(
+    throw TestConfigurationException(
       "Found fewer than two inputs in conflate case: " + _d.absolutePath());
   }
 
@@ -174,8 +180,8 @@ void ConflateCaseTest::_runMultiaryConflateCmd()
   QFileInfo expected(_d, "Expected.osm");
   if (expected.exists() == false)
   {
-    throw IllegalArgumentException("Unable to find Expected.osm in conflate case: " +
-      _d.absolutePath());
+    throw TestConfigurationException(
+      "Unable to find Expected.osm in conflate case: " + _d.absolutePath());
   }
 
   if (result != 0)
@@ -201,10 +207,24 @@ void ConflateCaseTest::runTest()
   if (ConfigOptions().getTestCaseConflateCmd() == ConflateCmd::className())
   {
     _runConflateCmd();
+
+    // Run validation on test output if configured for it.
+  # ifdef HOOT_HAVE_JOSM
+    LOG_VART(ConfigOptions().getTestValidationEnable());
+    if (ConfigOptions().getTestValidationEnable())
+    {
+      TestOutputValidator::validate(
+        _d.dirName(), _d.absolutePath() + "/Output.osm", _d.absolutePath() + "/validation-report",
+        _suppressFailureDetail, _printValidationReportDiff);
+    }
+  # endif
   }
   else if (ConfigOptions().getTestCaseConflateCmd() == multiaryConflateClass)
   {
     _runMultiaryConflateCmd();
+
+    // Electing not to run validation against Multiary POI case tests due their being more research
+    // focused at this point.
   }
 }
 

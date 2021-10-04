@@ -53,6 +53,7 @@ _addValidationTags(false),
 _numRoads(0),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
+  setConfiguration(conf());
 }
 
 void RoadCrossingPolyMarker::setConfiguration(const Settings& conf)
@@ -177,7 +178,8 @@ QStringList RoadCrossingPolyMarker::getCriteria() const
 
 QString RoadCrossingPolyMarker::getValidationErrorMessage() const
 {
-  return _numAffected == 0 ? "" : "Roads crossing polygons: " + QString::number(_numAffected);
+  return
+    _numAffected == 0 ? "" : "Roads crossing polygons errors: " + QString::number(_numAffected);
 }
 
 }
