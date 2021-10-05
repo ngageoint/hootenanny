@@ -23,5 +23,5 @@ hoot multiary-poi-conflate input1.osm input2.osm input3.osm output.osm
 
 === See Also
 
-* <<hootDevGuide, ManualMultiaryConflation>>
+* <<hootuser, ManualMultiaryConflation>>
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

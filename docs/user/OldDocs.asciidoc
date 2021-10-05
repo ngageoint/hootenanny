@@ -1,45 +1,34 @@
 
-== Using Hootenanny
-
-Hootenanny can be accessed from both command line and via a simple web user interface (Hootenanny-iD) built on top of the https://www.openstreetmap.org/edit?editor=id[OpenStreetMap iD] Editor.  At its core, Hootenanny  provides a set of tools for manipulating and conflating vector data as well as translating data between various out of the box supported reference tag schemas such as OSM, TDS, UTP, MGCP.  As an extension to the existing translation capabilities within Hootenanny, the Hootenanny-iD web interface provides a simple translation tool known as the _Translation Assistant_ that will walk users through a custom translation of any customer data format into a supported tag schema.  Additional background on the Hootenanny-iD interface and Translation Assistant can be found in the Hootenanny User Interface Guide.
-
-This document provides background on how to use Hootenanny in a number of common use cases and work flows with a strong emphasis on the command line interface. Note that there are a number of undocumented features in Hootenanny that are referenced from the command line help. If you need more detailed information on that functionality please contact the developers at the https://github.com/ngageoint/hootenanny[Hootenanny Github page].
-
-[[Installation]]
-== Installation
-
-See the <<hootInstall, Hootenanny Installation>> and <<hootDevGuide, Hootenanny Developer>> Guides for additional information.
-
 [[OldDocsConflation]]
-== Supported Feature Types
+=== Supported Feature Types
 
-=== Road Conflation
+==== Road Conflation
 
-<<hootalgo, RoadConflation>>
+<<hootuser, RoadConflation>>
 
-==== Conflation Road Algorithms
+===== Conflation Road Algorithms
 
-===== 2nd Generation (aka Unifying)
+*_2nd Generation (aka Unifying)_*
 
-<<hootalgo, UnifyingConflation>>
+<<hootuser, UnifyingConflation>>
 
-===== Network
+*_Network_*
 
-<<hootalgo, NetworkConflation>>
+<<hootuser, NetworkConflation>>
 
-==== Configuration
+===== Configuration
 
 Road Conflation can further be customized with the highway.* configuration options. See the "Configuration Options" section of User Guide
 for more detail.
 
 [[PoiToPoi]]
-=== POI Conflation
+==== POI Conflation
 
 Hootenanny provides the ability to perform point to point, i.e. POI to POI, conflation to merge input dataset geometry and attribution using the Unify approach. The _Unify_ POI to POI conflation code uses the Hootenanny JavaScript interface described in <<HootJavaScriptOverview>>
 to find, label and merge match candidate features. Because this code deals with a broader range of POI conditions, conflating POI
 datasets using Unify will invariably produce reviews that the user must manually confirm using the workflow described in the
-<<hootUI>>, _Reviewing Conflicts_.  Further background on Unifying POI conflation can be found in <<hootalgo>>, _Unifying
-POI Conflation_. For more details on the POI to POI conflation algorithm, see <<hootalgo, PoiToPoi>>
+<<hootuser>>, _Reviewing Conflicts_.  Further background on Unifying POI conflation can be found in <<hootuser>>, _Unifying
+POI Conflation_. For more details on the POI to POI conflation algorithm, see <<hootuser, PoiToPoi>>
 
 There are a number of configurable distance thresholds that can be specified if
 you are comfortable making changes to JavaScript. Please see
@@ -56,36 +45,36 @@ configuration options:
 For background on leveraging the Hootenanny JavaScript interface to call functions using Node.js, see <<HootJavaScriptOverview>>.
 
 [[Building-Conflation]]
-=== Building Conflation
+==== Building Conflation
 
-<<hootalgo, BuildingConflation>>
+<<hootuser, BuildingConflation>>
 
 [[PoiToPolygonConflation]]
-=== POI to Polygon Conflation
+==== POI to Polygon Conflation
 
 Hootenanny conflates POIs with both building and area polygons.  It uses the following criteria for matching features: distance between
 the two features, name similarity, type similarity, address similarity, and phone number similarity.  See
-<<hootalgo, PoiToPolygonConflation>> for specific algorithm details.
+<<hootuser, PoiToPolygonConflation>> for specific algorithm details.
 
 [[PoiToPolygonConfigurableOptions]]
-==== Configurable Options
+===== Configurable Options
 
 POI to Polygon Conflation can further be customized with the poi.polygon.* configuration options. See the "Configuration Options" section of
 User Guide for more detail.
 
 [[PoiToPolygonStatistics]]
-==== Statistics
+===== Statistics
 
 Conflation statistics for POI to Polygon Conflation are available from the command line with the `--stats` option as well as in the User
 Interface, the same as with all other types of conflation.  Note that POIs conflatable with polygons have a different definition than those
 conflatable with other POIs, which is less strict.  Therefore, POIs conflatable with polygons are a superset of POIs conflatable with other
 POIs.  Likewise, polygons are a superset of buildings and also include features such as parks, parking lots, etc.  See the Feature Definitions
-section <<hootalgo, Hootenanny - Algorithms>> for POI and polygon definition details.
+section <<hootuser, Hootenanny - User Guide>> for POI and polygon definition details.
 
 [[PoiToPolygonUseCases]]
-==== Use Cases
+===== Use Cases
 
-===== Keep Closest Matches Only
+*_Keep Closest Matches Only_*
 
 By default, POI to Polygon uses a fairly large search radius to try consider as many things possible that might need to be matched together.
 If the following are true, you may want to tweak POI to Polygon conflation to keep the closest distance matches only:
@@ -102,20 +91,20 @@ runtime performance.
 poi.polygon.match.threshold=1 - This will prevent reviews from being presented completely.
 
 [[AreaToAreaConflation]]
-=== Area to Area Conflation
+==== Area to Area Conflation
 
 Hootenanny makes Area to Area Conflation available, which is turned on by default when using command line conflation.  Hootenanny
 defines an area as a non-building polygon that possesses the OSM `area=yes` tag or equivalent.  Examples: parks, parking lots.
-To read more information on Area to Area Conflation, see <<hootalgo, AreaToAreaConflation>>.
+To read more information on Area to Area Conflation, see <<hootuser, AreaToAreaConflation>>.
 
 [[River-Conflation]]
-=== River Conflation
+==== River Conflation
 
 Rivers may be conflated using the Javascript generic conflation capability. For more information on script conflation, see the
 related sections in this document. See the algorithms documentation for more details on the algorithms and techniques used in
 this conflation.
 
-==== Configurable Files
+===== Configurable Files
 
 .*River Conflation Related Files*
 [width="65%"]
@@ -125,7 +114,7 @@ this conflation.
 | `rules/River.js` | custom rule based conflation model
 |======
 
-==== Usage
+===== Usage
 
 River conflation can be done from the command line or the web user interface. This section describes how to conflate river data
 from the command line.  For details on how to do it in the web user interface, see the associated section in the Hootenanny User
@@ -140,13 +129,13 @@ result in better conflation performance depending on the datasets being conflate
 more detail.
 
 [[Power-Line-Conflation]]
-=== Power Line Conflation
+==== Power Line Conflation
 
 Power lines may be conflated using the Javascript generic conflation capability.  For more information on script conflation, see the
 related sections in this document.  See the algorithms documentation for more details on the algorithms and techniques used in
 this conflation.
 
-==== Configurable Files
+===== Configurable Files
 
 .*Power Line Conflation Related Files*
 [width="65%"]
@@ -156,27 +145,27 @@ this conflation.
 | `rules/PowerLine.js` | custom rule based conflation model
 |======
 
-==== Usage
+===== Usage
 
 Power line conflation can be done from the command line or the web user interface.  Conflating in both environments is similar as described
 in the above River Conflation section.  Railway Conflation can further be customized with the power.line.* configuration options. See the
 "Configuration Options" section of User Guide for more detail.
 
 [[RailwayConflation]]
-=== Railway Conflation
+==== Railway Conflation
 
 Railways may be conflated using the Javascript generic conflation capability. For more information 
 on script conflation, see the related sections in this document. See the Algorithms documentation 
 for more details on the algorithms and techniques used by this conflation.
 
-==== One to Many Matching
+===== One to Many Matching
 
 Railway conflation has an alternate workflow that allows for transferring selected tags from single 
 rail features in secondary data to multiple rail features in reference data when the single 
 secondary rail identifies how many tracks it represents. See the the "One to Many Matching" section 
 under "Railways" in the Algorithms documentation for more detail. 
 
-==== Configurable Files
+===== Configurable Files
 
 .*Railway Conflation Related Files*
 [width="65%"]
@@ -190,7 +179,7 @@ Railway Conflation can further be customized with the railway.* configuration op
 "Configuration Options" section of User Guide for more detail.
 
 [[GenericGeometry]]
-=== Generic Geometry
+==== Generic Geometry
 
 Hootenanny uses machine learning techniques, customizable scripts, and flexible configuration options to develop algorithms 
 that will yield good conflated output for a given type of data (roads, buildings, etc.). If a type of map data is 
@@ -208,7 +197,7 @@ The scripts use very simple techniques to attempt to conflate data, including Eu
 tag similarity scoring. Related configuration options include the `search.generic.*` and `generic.*` options.
 
 [[Feature-Review]]
-== Feature Review
+=== Feature Review
 
 During the conflation process if Hootenanny cannot determine with confidence the best way to
 conflate features, it will mark one or more features as needing a manual review by the user.  Below
@@ -226,7 +215,7 @@ are listed the possible solutions where Hootenanny may request a manual review f
 |======
 
 [[ConflationFeatureAccuracyHandling]]
-== Feature Accuracy Handling
+=== Feature Accuracy Handling
 
 Feature accuracy is measure of the confidence in how accurately a feature's geospatial coordinates are. Feature accuracy values affect the
 accuracy of conflated output data. Feature circular error (accuracy) can be processed in one of two ways: 1) on a feature by feature basis manually or 2) use Hootenanny's default value to assign it to all features.
@@ -252,7 +241,7 @@ Or if you just wanted to conflate buildings at a 25m radius:
 `hoot conflate -D search.radius.building=25 -D match.creators="BuildingMatchCreator" -D merger.creators="BuildingMergerCreator" input1.osm input2.osm out.osm`
 
 [[Translation]]
-== Translation
+=== Translation
 
 Translation is the process of both converting tabular GIS data, such as
 Shapefiles, to the OSM format and schema. There are two main supported formats
@@ -271,7 +260,7 @@ The following sections discuss high level issues associated with translating
 files. For a more nuts and bolts discussion see the `convert` section.
 
 [[JavaScript-Translation]]
-=== JavaScript Translation
+==== JavaScript Translation
 
 Hootenanny support translation files written in both Python and JavaScript (AKA
 ECMA Script). The JavaScript engine used by Hootenanny is the engine integrated
@@ -279,10 +268,10 @@ with Qt. See the http://qt-project.org/doc/qt-4.7/ecmascript.html[Qt ECMA Script
 Documentation] for details on which operations are supported.
 
 [[Overview]]
-==== Overview
+===== Overview
 
 [[Special-Operations]]
-===== Special Operations
+*_Special Operations_*
 
 In addition to the operations exposed by Qt, the user also has access to:
 
@@ -304,7 +293,7 @@ In addition to the operations exposed by Qt, the user also has access to:
 
 
 [[Functions-Called-by-Hootenanny]]
-===== Functions Called by Hootenanny
+*_Functions Called by Hootenanny_*
 
 There are several functions that may be called by Hootenanny:
 
@@ -321,8 +310,7 @@ There are several functions that may be called by Hootenanny:
    that OSM data will be converted into.
 
 [[Simple-Example]]
-===== Simple Example
-
+*_Simple Example_*
 
 Below is about the simplest useful example that supports both `convert`. The following sections go into details on how these function are used.
 ------
@@ -403,10 +391,8 @@ function getDbSchema()
 }
 ------
 
-
 [[JavaScript-to-OSM-Translation]]
-==== JavaScript to OSM Translation
-
+===== JavaScript to OSM Translation
 
 The `translateToOsm` method takes two parameters:
 
@@ -433,7 +419,7 @@ The functions will be called in the following order:
 
 
 [[Table-Based-Translation]]
-===== Table Based Translation
+*_Table Based Translation_*
 
 For more advanced translations it may make sense to define a simple set of tables and use those tables to translate values. An example is below:
 
@@ -490,9 +476,9 @@ function translateToOsm(attrs, layerName) {
 ------
 
 [[OGR-to-OSM-Translation]]
-==== OGR to OSM Translation
+===== OGR to OSM Translation
 
-===== Translation File
+*_Translation File_*
 
 The purpose of the translation file is to convert your custom Shapefile into the
 http://wiki.openstreetmap.org/wiki/Map_Features[OSM schema]. The translation
@@ -513,7 +499,7 @@ translations of all files in the _input_ list. This means that the script will
 only be intialized once and then `translateToOsm` will be called once for
 each feature in all of the input files.
 
-===== Example Translation Work Flow
+*_Example Translation Work Flow_*
 
 Imagine you have a Shapefile named _MyRoads.shp_ for input with the following
 attributes:
@@ -637,7 +623,7 @@ function translateToOsm(attrs, layerName) {
 The translation scripts above will give the values found in the _Inputs/Outputs
 Table_.
 
-===== Example Python Translation File
+*_Example Python Translation File_*
 
 The following script provides a more thorough example for translating
 http://www.census.gov/geo/www/tiger/tgrshp2012/tgrshp2012.html[2010 Tiger road data]:
@@ -688,7 +674,7 @@ def translateToOsm(attrs, layerName):
     return tags
 ----
 
-===== Example JavaScript Translation File
+*_Example JavaScript Translation File*_
 
 ----
 function translateToOsm(attrs, layerName) {
@@ -729,8 +715,7 @@ function translateToOsm(attrs, layerName) {
 ----
 
 [[OSM-to-OGR-Translation]]
-==== OSM to OGR Translation
-
+===== OSM to OGR Translation
 
 Using JavaScript translation files it is now possible to convert from OSM to more typical tabular geospatial formats such as Shapefile or FileGDB. In order to convert to these formats some information will likely be lost and these translation files define which attributes will be carried across and how they'll be put into tables/layers.
 
@@ -772,8 +757,7 @@ This is most commonly accessed through the `convert` command.
 
 
 [[DB-Schema]]
-===== DB Schema
-
+*_DB Schema_*
 
 Hootenanny supports converting OSM data into multiple layers where each layer has its own output schema including data types and column names.
 
@@ -834,15 +818,14 @@ The numeric data types support `minimum` and `maximum`. By default `minimum` and
 
 
 [[File-Formats]]
-==== File Formats
+===== File Formats
 
 For the translation operations (and several others) Hootenanny utilizes the well known GDAL/OGR libraries. These libraries support a number of file formats including Shapefile, FileGDB, GeoJSON, PostGIS, etc. While not every format has been tested, many will work with Hootenanny without any modification. Others, such as FileGDB, may require a specially compiled version of GDAL. Please see the GDAL documentation and talk to your administrator for details.
 
 Below are a discussion of some special handling situations when reading and writing to specific formats.
 
-
 [[Shapefile]]
-===== Shapefile
+*_Shapefile_*
 
 When writing shapefiles a new directory will be created with the basename of the specified path and the new layers will be created within that directory. For example:
 
@@ -852,10 +835,8 @@ hoot convert -D schema.translation.script=translations/MyTranslation.js input.os
 
 The above command will create a new directory called `output` and the layers specified in the `translations/MyTranslation.js` schema will be created as `output/<your layer name>.shp` .
 
-
 [[CSV]]
-===== CSV
-
+*_CSV_*
 
 CSV files are created using the OGR CSV driver and will contain an associated `.csvt` file that contains the column types. If you're exporting points then you will get an X/Y column prepended onto your data. If you're exporting any other geometry type then you will get a WKT column prepended that contains the Well Known Text representation of your data. If you would like to read from a CSV you must first create a VRT file as described in the OGR CSV documentation. E.g.
 
@@ -886,15 +867,12 @@ hoot convert -D schema.translation.script=translations/Poi.js foo.vrt ConvertedB
 
 
 [[Buildings-Translation]]
-=== Buildings Translation
-
+==== Buildings Translation
 
 In the simplest case a building is a way tagged with `building=yes`. However, when it comes to 3D features buildings can get dramatically more complex. For a thorough discussion of Buildings and how they're mapped see the http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings[OSM wiki page on Simple 3D Buildings].
 
-
 [[Translating-Building-Parts]]
-==== Translating Building Parts
-
+===== Translating Building Parts
 
 Some Shapefiles contain buildings that are mapped out as independent parts. Where each part refers to the roof type and height of a portion of the building. E.g. The Capital building might be mapped out as one large, low flat roof record and a second tall domed roof record. This provides for very rich data, but also a complex representation in OSM. Fortunately Hootenanny handles most of the heavy lifting for you.
 
@@ -902,7 +880,7 @@ To translate complex building parts simply translate them in the same way you wo
 
 
 [[Complex-Building-Example]]
-===== Complex Building Example
+*_Complex Building Example_*
 
 .Example of a Complex Building
 
@@ -951,7 +929,7 @@ The astute reader may notice that a new way was created during this process. The
 
 
 [[Disabling-Complex-Buildings]]
-===== Disabling Complex Buildings
+*_Disabling Complex Buildings_*
 
 
 By default the when using the convert command to convert an OGR format to OSM `ogr2osm.simplify.complex.buildings` is enabled.  If you would like to disable the automatic construction of complex buildings from the individual parts then simply set `ogr2osm.simplify.complex.buildings` to false.  For example:
@@ -961,15 +939,12 @@ hoot convert -D schema.translation.script=MyTranslation -D ogr2osm.simplify.comp
 ------
 
 [[Common-Use-Cases]]
-== Common Use Cases
-
+=== Common Use Cases
 
 The following sections describe some common use cases and how to approach them using Hootenanny.
 
-
 [[Conflate-Two-Shapefiles]]
-=== Conflate Two Shapefiles
-
+==== Conflate Two Shapefiles
 
 The following subsections describe how to do the following steps:
 
@@ -988,8 +963,7 @@ We'll be using files from the http://www.census.gov/geo/www/tiger/tgrshp2012/tgr
 
 
 [[Prepare-the-Shapefiles]]
-==== Prepare the Shapefiles
-
+===== Prepare the Shapefiles
 
 First validate that your input shapefiles are both Line String (AKA Polyline) shapefiles. This is easily done with +ogrinfo+:
 
@@ -1016,17 +990,14 @@ RTTYP: String (1.0)
 MTFCC: String (5.0)
 ------
 
-
 [[Translate-the-Shapefiles]]
-==== Translate the Shapefiles
-
+===== Translate the Shapefiles
 
 Hootenanny provides a https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc[convert] operation to translate and convert shapefiles into OSM files. If the projection is available for the Shapefile the input will be automatically reprojected to WGS84 during the process. If you do a good job of translating the input data into the OSM schema then Hootenanny will conflate the attributes on your features as well as the geometries. If you do not translate the data properly then you'll still get a result, but it may not be desirable.
 
 
 [[Crummy-Translation]]
-===== Crummy Translation
-
+*_Crummy Translation*_
 
 The following translation code will always work for roads, but drops all the attribution on the input file.
 
@@ -1038,10 +1009,8 @@ def translateToOsm(attrs, layerName):
     return {'highway':'road'}
 ------
 
-
 [[Better-Translation]]
-===== Better Translation
-
+*_Better Translation_*
 
 The following translation will work well with the tiger data.
 
@@ -1133,10 +1102,8 @@ To run the DC GIS translation put the above code in a file named `translations/D
 hoot convert -D schema.translation.script=DcRoads tmp/dc-roads/Streets4326.shp tmp/dc-roads/dcgis.osm
 ------
 
-
 [[Conflate-the-Data]]
-==== Conflate the Data
-
+===== Conflate the Data
 
 If you're just doing this for fun, then you probably want to crop your data down to something that runs quickly before conflating.
 
@@ -1151,10 +1118,8 @@ All the hard work is done. Now we let the computer do the work. If you're using 
 hoot conflate tmp/dc-roads/dcgis-cropped.osm tmp/dc-roads/tiger-cropped.osm tmp/dc-roads/output.osm
 ------
 
-
 [[Convert-Back-to-Shapefile]]
-==== Convert Back to Shapefile
-
+===== Convert Back to Shapefile
 
 Now we can convert the final result back into a Shapefile.
 
@@ -1162,10 +1127,8 @@ Now we can convert the final result back into a Shapefile.
 hoot convert -D shape.file.writer.cols="name;highway;surface;foot;horse;bicycle" tmp/dc-roads/output.osm tmp/dc-roads/output.shp
 ------
 
-
 [[Snap-GPS-Tracks-to-Roads]]
-=== Snap GPS Tracks to Roads
-
+==== Snap GPS Tracks to Roads
 
 . Create a translation file for "translating" your GPS tracks. This typically just adds the accuracy field. E.g. `accuracy=5`
 
@@ -1181,11 +1144,8 @@ hoot conflate -D conflator.manipulators=WaySnapMerger HighQualityRoads.osm tmp/M
 hoot convert -D shape.file.writer.cols "hoot:max:movement;hoot:mean:movement;hoot:score;name;foot" tmp/MySnappedTracks.shp tmp/MySnappedTracks.osm
 ------
 
-
-
 [[Maintaining-per-node-attributes]]
-==== Maintaining per node attributes
-
+===== Maintaining per node attributes
 
 If you have node attributes that you want to keep you can use the `PointsToTracksOp` operation to join the nodes after translation. This requires two fields on each node:
 
@@ -1218,9 +1178,10 @@ def translateToOsm(attrs, layerName):
 
 
 [[Add-NSG-TLM-Symbology-to-a-FileGeodatabase]]
-=== Add NSG TLM Symbology to a FileGeodatabase
+==== Add NSG TLM Symbology to a FileGeodatabase
 
-==== Overview
+===== Overview
+
 ESRI ArcMap can use Visual Representation rules to display symbology. Hootenanny is able to export Topographic Data Store (TDS) compliant data in a FileGeodatabase that is able to have default symbology applied to it. The command line procedure to create default symbology is as follows.
 
 References:
@@ -1228,14 +1189,14 @@ References:
 * http://resources.arcgis.com/en/help/main/10.2/index.html#/What_are_representations/00s50000004m000000/[What are representations]
 * http://resources.arcgis.com/en/help/main/10.2/index.html#/What_are_visual_specifications/0103000001w9000000[What are visual specifications]
 
-==== Requirements
+===== Requirements
 The main requirement is access to a copy of ESRI ArcGIS with the following:
 
 * ArcGIS Standard or ArcGIS Desktop license
 * Production Mapping Extension & license
 * Defense Mapping Extension & license
 
-==== Process:
+===== Process
 
 Get an empty TDS template FileGeodatabase::
 * From the ArcGIS Defence Mapping Extension install location.
@@ -1282,7 +1243,7 @@ View the Default Symbology::
 * Add the `LTDS_4_0.gdb` dataset
 
 [[Tag-Merging-Configuration]]
-=== Tag Merging
+==== Tag Merging
 
 When two features/elements are merged into a single feature/element the tags must be merged into a single set of tags. Depending on the use case, there may be many different desirable ways to merge tags. Described below are the options available for merging tags, although at times the list here may be incomplete. To see a complete list of available tag mergers, use the `info` command:
 -----
@@ -1295,27 +1256,27 @@ hoot conflate -D tag.merger.default=<TagMergerClassName> input1.osm input2.osm o
 -----
 
 [[Average-Tags]]
-===== Averaging Tag Merger
+*_Averaging Tag Merger_*
 
 Use an internal method to average the tags between two features. Implementation: `AverageTagMerger`
 
 [[Building-Relation-Member-Tag-Merger]]
-===== Building Relation Member Tag Merger
+*_Building Relation Member Tag Merger_*
 
 Tag merging specific to buildings belonging to relations. Implementation: `BuildingRelationMemberTagMerger`
 
 [[Generalize-Tag-Merger]]
-===== Generalizing Tag Merger
+*_Generalizing Tag Merger_*
 
 Use an internal method to generalize the tags between two features. For instance, generalizing between `highway=primary` and `highway=secondary` results in `highway=road` since road is the least general form that represents both primary and secondary. Implementation: `GeneralizeTagMerger`
 
 [[Most-Specific-Tag-Merger]]
-===== Most Specific Tag Merger
+*_Most Specific Tag Merger_*
 
 This tag merger keeps only the most specific types as recognized by the Hootenanny schema. If there is a tie in specificity the configuration option, `tag.merger.types.overwrite.reference`, determines which tag is kept. A value of false for the option keeps the tying tag from the reference feature and a value of true keeps the tying tag from the secondary feature. Implementation: `MostSpecificTagMerger`
 
 [[Overwrite-Tag-1]]
-==== Overwriting Tag 1 Tag Merger
+*_Overwriting Tag 1 Tag Merger_*
 
 Overwrite the values in the first input with the values in the second input that have key conflicts. This will still keep all unique names, but all other tags will simply be overwritten. Implementation: `OverwriteTag1Merger`  
 
@@ -1362,7 +1323,7 @@ Examples:
 |======
 
 [[Overwrite-Tag-2]]
-==== Overwriting Tag 2 Tag Merger
+*_Overwriting Tag 2 Tag Merger_*
 
 Overwrite the values in the second input with the values in the first input that have key conflicts. This will still keep all unique names, but all other tags will simply be overwritten. Implementation: `OverwriteTag2Merger`
 
@@ -1409,29 +1370,29 @@ Examples:
 |======
 
 [[Provenance-Aware-Overwrite-Tag-Merger]]
-===== Provenance Aware Overwriting Tag Merger
+*_Provenance Aware Overwriting Tag Merger_*
 
 This tag merger assumes features in different input files have their provenance tracked with a tag with the key `hoot:source`.
 This tag merger will ensure that tag value is not overwritten for either feature being merged. Instead, the values from both
 features are concatenated together. Implementation `ProvenanceAwareOverwriteTagMerger`.
 
 [[Preserve-Types-Tag-Merger]]
-===== Preserving Types Tag Merger
+*_Preserving Types Tag Merger_*
 
 This tag merger preserves tags from both features and is simliar to `MostSpecificTagMerger`. In instances where two features have the same type tag key, the most specific type is chosen and the less specific type is stored in an `alt_types` field. The rule for keeping tags with a tying specificity is the same as used with `MostSpecificTagMerger`. Implementation: `PreserveTypesTagMerger`.
 
 [[Replace-Tag-1-Tag-Merger]]
-===== Replacing Tag 1 Tag Merger
+*_Replacing Tag 1 Tag Merger_*
 
 This tag merger is similar to `OverWriteTag1Merger` but completely replaces tags in the first input with tags from the second input. Implementation: `ReplaceTag1Merger`
 
 [[Replace-Tag-2-Tag-Merger]]
-===== Replacing Tag 2 Tag Merger
+*_Replacing Tag 2 Tag Merger_*
 
 This tag merger is similar to `OverWriteTag2Merger` but completely replaces tags in the second input with tags from the first input. Implementation: `ReplaceTag2Merger`
 
 [[Selective-Overwrite-Tag-1-Tag-Merger]]
-===== Selective Overwrite Tag 1 Tag Merger
+*_Selective Overwrite Tag 1 Tag Merger_*
 
 This tag merger is similar to `OverWriteTag1Merger` but completely replaces tags in the first input 
 with tags from the second input based on a set of selected tag keys only. The keys are controlled by 
@@ -1439,11 +1400,10 @@ the configuration option `selective.overwrite.tag.merger.keys`. Implementation:
 `SelectiveOverwriteTag1Merger`
 
 [[Selective-Overwrite-Tag-2-Tag-Merger]]
-===== Selective Overwrite Tag 2 Tag Merger
+*_Selective Overwrite Tag 2 Tag Merger_*
 
 This tag merger is similar to `OverWriteTag2Merger` but completely replaces tags in the first input 
 with tags from the second input based on a set of selected tag keys only. The keys are controlled by 
 the configuration option `selective.overwrite.tag.merger.keys`. Implementation: 
 `SelectiveOverwriteTag2Merger`
-
 

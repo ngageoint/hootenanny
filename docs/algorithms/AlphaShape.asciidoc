@@ -1,5 +1,5 @@
 
-== Cookie Cutter
+=== Cookie Cutter
 
 The _Cookie Cutter_ is a method of clipping a region out of a map before
 conflation. See `--cookie-cut` in <<hootuser>> for more details. When one
@@ -20,7 +20,7 @@ By tuning the _alpha_ value the alpha shape can be made to generalize the set of
 points, or tightly fit the points. If a large enough alpha value is specified
 then the shape will be a convex hull.
 
-=== Automatically Selecting an Alpha Value (Proposed)
+==== Automatically Selecting an Alpha Value (Proposed)
 
 In <<bernardini99>> (Section 6.2) they discuss an approach of performing a
 binary search across possible alpha values to determine an alpha value that
@@ -38,7 +38,7 @@ such that a specified number of components are returned. In this case it may be
 desirable to return two or more polygons if we know that there is significant
 distance between two mapped areas such as cities.
 
-==== Efficiently Selecting an Alpha Value (Proposed)
+===== Efficiently Selecting an Alpha Value (Proposed)
 
 NOTE: This approach has not been tested.
 

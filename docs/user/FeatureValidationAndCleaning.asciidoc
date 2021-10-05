@@ -1,6 +1,6 @@
 
 [[FeatureValidation]]
-== Feature Validation
+=== Feature Validation
 
 Hootenanny allows for tagging features which fail https://josm.openstreetmap.de/[JOSM] validation 
 tests or its own validation checks without attempting to fix the validation errors. Map elements 
@@ -10,7 +10,7 @@ will be tagged with 'hoot:validation:error' which describes the error and
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#run-josm-validation-on-a-map[validation examples]
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-the-available-josm-validators[list validators example]
 
-=== Hootenanny Validator Detail
+==== Hootenanny Validator Detail
 
 Hootenanny primarily relies on https://josm.openstreetmap.de/[JOSM] for validation, as most of its
 cleaning routines do not double as validators (some could be made to if needed). The validators 
@@ -20,7 +20,7 @@ validators are usually set up to generate conflate feature reviews (something th
 done with the JOSM validators in the future if needed) and sometimes Hootenanny validators used 
 during conflation have different requirements than JOSM validators.
 
-==== Crossing Roads
+===== Crossing Roads
 
 Using `RoadCrossingPolyMarker`, Hootenanny will detect roads that incorrectly cross polygon features 
 automatically after conflation or, alternatively, outside of conflation as part of validation. A 
@@ -82,7 +82,7 @@ NOTE: This feature currently is not available as a validator but may be used to 
 feature reviews.
 
 [[FeatureCleaning]]
-== Feature Cleaning
+=== Feature Cleaning
 
 Hootenanny allows for cleaning features which fail JOSM validation tests and/or those that 
 Hootenanny internally identifies as requiring cleaning. Both Hootenanny cleaning operations and JOSM 

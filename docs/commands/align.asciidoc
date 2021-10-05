@@ -67,5 +67,5 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExample
 
 === See Also
 
-* <<hootalgo, RubberSheeting>>
+* <<hootuser, RubberSheeting>>
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

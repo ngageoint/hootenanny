@@ -33,5 +33,5 @@ with Hootenanny by default. Only the Network Conflation versions of those tests 
 
 === See Also
 
-* <<hootalgo, NetworkConflation>>
+* <<hootuser, NetworkConflation>>
 

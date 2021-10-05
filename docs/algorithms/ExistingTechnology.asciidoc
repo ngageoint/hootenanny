@@ -1,7 +1,7 @@
 
-== Existing Technology
+=== Existing Technology
 
-=== NGA R&D Framework Paper 
+==== NGA R&D Framework Paper 
 
 In 2009, the National Technology Alliance prepared a paper titled "Fusion in an
 R&D environment" (National Technology Alliance, 2009)for the NGA.  This paper
@@ -14,7 +14,7 @@ highlights:
 
 This paper provided valuable context and direction to this effort.
 
-=== Variants of Conflation
+==== Variants of Conflation
 
 There are three main forms of Conflation:
 
@@ -26,7 +26,7 @@ There are three main forms of Conflation:
 
 NOTE: Hootenanny is currently focused on vector-to-vector conflation.
 
-==== Conflation implementation
+===== Conflation implementation
 
 Vector conflation can be executed in two ways: fused and related.  From a
 conventional standpoint, the conflation of vector datasets is implemented by
@@ -42,7 +42,7 @@ Such an approach has a less destructive impact on the original data whereby the
 geometry and attributes are not merged, but instead the matching features
 between datasets are related to one another through a database relationship.
 
-==== Conflation across multiple dimensions
+===== Conflation across multiple dimensions
 
 Geometry matching is closely associated with feature matching in the conflation
 process.  In this type of processing, features are considered similar based on
@@ -53,7 +53,7 @@ that run parallel to each other.  Given this possibility, Sehgal suggests
 implementing multi-dimensional feature matching, specifically combining
 geometric matching to feature attributes and names (Sehgal, 2006).
 
-==== Attributes/Semantics/Ontology
+===== Attributes/Semantics/Ontology
 
 Feature attributes and related semantic/ontological relationships can be used to
 correlate features between two datasets to extend geometry capabilities. 
@@ -63,7 +63,7 @@ problem" (Adams Benjamin, 2010)In particular, this technique would help weed out
 possible matches that could link very different features to each other (i.e., a
 highway to a railroad).
 
-===== _Formal name variants_
+_Formal name variants_
 
 In cases where formal names exist for features, their similarities can be used
 to link features to each other. Linna Li, 2011 and Sehgal, 2006 suggest using
@@ -71,7 +71,7 @@ Levenshtein distance (VI, 1966) to measure the closeness of feature names, then
 merging these similarities into the scores that characterize the geometric
 similarities.
 
-=== Potential Contributions to the Conflation R&D Agenda
+==== Potential Contributions to the Conflation R&D Agenda
 
 National Technology Alliance suggests a need for "… a service-oriented
 architecture to call conflation functions from other data fusion software via
@@ -83,5 +83,4 @@ requirement, large conflation jobs can be divided into smaller components and
 addressed and processed in parallel (Linna Li, 2011). Such an approach would
 lend itself well to modern cloud computing techniques that are designed to
 operate on discrete tasks in parallel.
-
 

@@ -612,7 +612,7 @@ The threshold at which a match is called a match for buildings. The valid range 
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === building.merge.many.to.many.matches
 
@@ -631,7 +631,7 @@ The threshold at which a miss is called a miss for buildings. The valid range is
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === building.part.merger.thread.count
 
@@ -667,7 +667,7 @@ The threshold at which a review is called a review for buildings. The valid rang
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === changeset.allow.deleting.reference.features
 
@@ -998,7 +998,7 @@ The default threshold at which a match is called a match. The valid range is (0.
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === conflate.miss.threshold.default
 
@@ -1009,7 +1009,7 @@ The default threshold at which a miss is called a miss. The valid range is (0.0,
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === conflate.post.ops
 
@@ -1087,7 +1087,7 @@ other situations when the relationship is not clear. The valid range is (0.0, 1.
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === conflate.rubber.sheet.element.criteria
 
@@ -1812,7 +1812,7 @@ The threshold at which a match is called a match for roads. The valid range is (
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === highway.matcher.heading.delta
 
@@ -1883,7 +1883,7 @@ The threshold at which a miss is called a miss for roads. The valid range is (0.
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === highway.review.threshold
 
@@ -1894,7 +1894,7 @@ The threshold at which a review is called a review for roads. The valid range is
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === highway.subline.matcher
 
@@ -3352,7 +3352,7 @@ range is (0.0, 1.0].
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === network.matcher
 
@@ -3387,7 +3387,7 @@ The threshold at which a network miss is called a miss. The valid range is (0.0,
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === network.optimization.iterations
 
@@ -3416,7 +3416,7 @@ other situations when the relationship is not clear. The valid range is (0.0, 1.
 
 See also:
 
- * _Estimate Pairwise Relationships_, <<hootalgo>>
+ * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === network.subline.max.cache.size
 

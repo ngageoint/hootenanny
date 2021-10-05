@@ -1,5 +1,5 @@
 
-== Conflating a New Feature Type With Script Conflation
+=== Conflating a New Feature Type With Script Conflation
 
 This document discusses in detail some of the processes involved with using generic conflation to
 conflate a new type of feature with Hootenanny.  Hootenanny's generic conflation framework allows for
@@ -17,14 +17,14 @@ rapidly causing this documentation's accuracy to lag.  So, when in doubt about c
 documentation, pose questions to members of the Hootenanny development team.  For more information on
 Hootenanny's Javascript API, see the User Guide.
 
-=== Test Data
+==== Test Data
 
 This document assumes you are testing with data that had matches made in test data manually by a human.  If more than 200 matches were made
 in the test data, you may want to crop your data down to a smaller size so that test runs complete in five minutes or less, if possible.
 Since you will be running many tests as you tweak the model, this will prevent testing from taking an unreasonable amount of time.
 See the "Hootenanny Manual Conflation" section in this document for more details on this process.
 
-=== Initial Setup
+==== Initial Setup
 
 First, you will want to set up a Hootenanny JSON configuration file.  An example shown here
 is similar to the file provided with Hootenanny for conflating rivers,
@@ -53,7 +53,7 @@ runtime.  To do this, see `$HOOT_HOME/conf/core/ConfigOptions.asciidoc`.
 To be able to go ahead and do an initial match scoring, copy one of the existing *.js rules files in
 `$HOOT_HOME/rules` to a new file and make sure its referenced from your configuration file.
 
-=== Scoring Matches
+==== Scoring Matches
 
 The Hootenanny `score-matches` command can be used to determine how well Hootenanny conflates the
 test data by comparing its matches to the manually made matches.  Here is an example of using the
@@ -106,7 +106,7 @@ later section).  "unnecessary reviews" result in features being flagged for insp
 human, to be resolved as matching or non-matching.  The maximum number of manual reviews that is
 acceptable for a conflation run is dependent on the use case of the conflator.
 
-=== Creating a Schema
+==== Creating a Schema
 
 Creating a schema involves identifying the tags in the dataset that denote what type of feature is
 contained.  The Attribute Score section in the Algorithms document goes into this process in detail.
@@ -145,7 +145,7 @@ Here you can see an example of the schema used for waterways:
 The goal is to make sure the conflation routines correctly identify every feature with the correct
 type.  In this example, the type is "waterway".
 
-==== C++ Code Changes Required
+===== C++ Code Changes Required
 
 The following code C++ code changes are required to add a new schema for a feature type:
 
@@ -197,7 +197,7 @@ if (HighwayCriterion().isSatisfied(w) == false &&
 -------------
 * IntersectionSplitter::_mapNodesToWays - You'll need to make a change similar to the previous one in this method.
 
-==== Javascript Code Changes Required
+===== Javascript Code Changes Required
 
 The following Javascript code changes are required to add new schema entries:
 
@@ -215,7 +215,7 @@ exports.isMatchCandidate = function(map, e)
 };
 ------------
 
-=== Conflation Thresholds
+==== Conflation Thresholds
 
 Your Javascript rules file can be configured to set the conflation match/miss/review threshold based
 on existing Hootenanny configuration settings.  This examples shows how it is done in the river rules
@@ -233,7 +233,7 @@ to do it is by passing a new value in for each setting.  e.g.:
 -D river.match.threshold=0.8 -D river.miss.threshold=0.8 -D river.review.threshold=0.8
 ------------
 
-=== Search Radius
+==== Search Radius
 
 Generic conflation can be set up to automatically calculate the search radius of the input data with
 a modification to the associated Javascript rules file.  It can be done by adding a single line making
@@ -277,7 +277,7 @@ river data:
 }
 ---------
 
-=== Rubber Sheeting
+==== Rubber Sheeting
 
 Using the Hootenanny rubber sheeting operation before conflating data, which is described in detail
 in the User Guide, can also lead to improvements in the quality of your conflation model.  You may
@@ -285,24 +285,24 @@ have to configure the minimum number of ties allowed to perform rubber sheeting 
 rubber sheeting occur.  Also, remember that you cannot use rubber sheeting when using the automatic
 search radius calculation.
 
-=== Extracting Features
+==== Extracting Features
 
 You can use Hootenanny to extract features that describe the data you wish to conflate.  These extracted
 features can yield more insight into the behavior of the data and can be used to build a model
 which effectively conflates the data.
 
-==== Existing Feature Extractors
+===== Existing Feature Extractors
 
 Hootenanny has a set of existing feature extractors which may be of use to you.  The list is constantly
 changing, but you can find them in the codebase by locating all classes which inherit from the
 FeatureExtractor interface.
 
-==== Creating a New Feature Extractor
+===== Creating a New Feature Extractor
 
 If you need to create a new feature extractor, simply create a class which implements
 FeatureExtractor.
 
-==== Extracting a Feature
+===== Extracting a Feature
 
 To use a feature extractor to extract features in the generic conflation framework, you can implement
 the getMatchFeatureDetails method in your rules file and extract the feature there.  Here is an
@@ -331,7 +331,7 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
 Extracting the features in this method will allow you to add them to a model file which can be viewed
 in Weka described <<Weka,here>>.
 
-=== Building a Model
+==== Building a Model
 
 Building a model to conflate your new feature type involves several steps.  This section suggests
 one way to go about building the model, but the exact steps will always be closely tied to the
@@ -342,7 +342,7 @@ deriving a model for conflation in certain situations.  The most authoritative g
 Weka is the Weka manual itself, but this section contains some condensed steps to give you a
 quick start.
 
-==== Install Weka
+===== Install Weka
 
 Weka can be downloaded from here: http://www.cs.waikato.ac.nz/ml/weka/  Its available for both Windows
 and Linux.  Here is an example to launch it from Linux:
@@ -351,7 +351,7 @@ and Linux.  Here is an example to launch it from Linux:
 nohup java -Xmx1000M -jar /usr/local/weka-3-6-12/weka.jar &
 ---------
 
-==== Creating the Weka Model File Output
+===== Creating the Weka Model File Output
 
 After you have implemented the getMatchFeatureDetails method in your Javascript rules file, a Weka
 model file can be output from Hootenanny using the build-model command.  An example:
@@ -360,13 +360,13 @@ model file can be output from Hootenanny using the build-model command.  An exam
 hoot build-model -C conf/River.conf dataset-1.osm dataset-2.osm model-file
 ----------------
 
-==== Examining the Model in Weka
+===== Examining the Model in Weka
 
 1. Launch the Weka Explorer application.
 2. From the Preprocess tab, select the Open File button and open the file you exported with the
 build-model command.
 
-===== Visualizing Relationships
+*_Visualizing Relationships_*
 
 From the Preprocess tab mentioned in the previous step, you can quickly visualize the match/miss
 classifications for each of your extracted features by clicking the Visualize All button.
@@ -374,7 +374,7 @@ classifications for each of your extracted features by clicking the Visualize Al
 For a more detailed visualization, click the Visualize tab.  From this tab you can see pairwise plots
 of the classifications between all of the imported features.
 
-===== Selecting Features
+*_Selecting Features_*
 
 Weka has the capability to tell you which features (attributes) it thinks are important for building
 a classification model and which are not.  There are two ways to come up with an attribute set.
@@ -403,7 +403,7 @@ use the visualization interface to further help you reduce the list of features 
 model.  Look for pairs of features that exhibit a clear relationship between match and miss
 classifications to help you to decide which ones to keep.
 
-===== Building a Classifier
+*_Building a Classifier_*
 
 Now, a classifier can be built which can be ported to the Javascript rules file and used during the
 generic conflation process.
@@ -470,11 +470,11 @@ It is also important to note that the Correct Classified Instances percentage pr
 not necessarily translate to a Hootenanny conflation model with the same correct conflation
 percentage, due to many factors encountered during the conflation process.
 
-==== Tweaking Feature Extractors
+===== Tweaking Feature Extractors
 
 Feature extractors themselves may be tweaked to tune the model.
 
-===== Value Aggregators
+*_Value Aggregators_*
 
 Value aggregators determine how calculated feature values are combined.  There are several types of value
 aggregators.  For a list, in the code, look for all classes implementing ValueAggregator.  In
@@ -484,7 +484,7 @@ this example, an attribute score feature extractor is configured with an RMSE va
 var attributeScoreExtractor = new hoot.AttributeScoreExtractor(new hoot.RmseAggregator(),  {"attribute.score.extractor.use.weight": "true"});
 ---------
 
-===== Custom Configuration
+*_Custom Configuration_*
 
 Feature extractors have some custom configuration options which, when tweaked, may have a positive outcome
 on the generic conflation model.  Many extractors allow for passing in Hootenanny configuration
@@ -495,7 +495,7 @@ extractor is configured with a weighting option:
 var attributeScoreExtractor = new hoot.AttributeScoreExtractor(new hoot.RmseAggregator(),  {"attribute.score.extractor.use.weight": "true"});
 ---------
 
-==== Increasing the Review Count
+*_Increasing the Review Count_*
 
 The overall goal for your derived conflation model is to correctly conflate as much of the data as
 possible (highest correct percentage; see the confusion matrix in the Scoring Matches section).  If
@@ -560,7 +560,7 @@ exports.matchScore = function(map, e1, e2)
 Note: Setting the match value to 0.000000001 rather than equal to zero is related to a current
 issue within Hootenanny scheduled to be resolved.
 
-==== Distance Weighting
+===== Distance Weighting
 
 You may discover that after having specified or automatically calculated the optimum search
 radius for a dataset that Hootenanny is failing to conflate features for that dataset where the
@@ -613,7 +613,7 @@ exports.matchScore = function(map, e1, e2)
 };
 -----------
 
-==== Finding the Best Classifier for Multiple Test Datasets
+===== Finding the Best Classifier for Multiple Test Datasets
 
 You will end up with the best classification model when you test your model against multiple datasets containing your
 new feature type.  How many datasets you need to test against will be dependent on the type of data
@@ -624,7 +624,7 @@ increase performance when testing against another.
 
 It can be distracting and time consuming to continually test against all of your datasets all of the time, so it's  recommended that as you add new datasets to test against and tweak their models that you only  periodically go back and look at how your current model performs against previously tested datasets.   Also, as you add new datasets, you can use the model derived from testing against previous datasets  as your starting point.  However, if the reused model immediately performs very poorly against the new dataset,  then you may need to start from scratch and build a brand new model for the new dataset.  Only after you've tested initially against all your datasets will you then need to combine models to come up with a single model that performs acceptably for all the datasets.
 
-=== Exposing Generic Conflation for the Feature Type to the User Interface
+==== Exposing Generic Conflation for the Feature Type to the User Interface
 
 Currently, accessing the generic conflation routine for the new model can be done via the Advanced
 Settings dialog in the Hootenanny User Interface.  To expose the generic conflation rules file to the

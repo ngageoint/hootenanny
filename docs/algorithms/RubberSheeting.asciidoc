@@ -1,6 +1,6 @@
 
 [[RubberSheeting]]
-== Rubber Sheeting
+=== Rubber Sheeting
 
 An option while conflating two datasets is to use rubber sheeting (See
 <<hootuser>>, _Rubber Sheeting_ for usage details). The rubber sheeting
@@ -8,7 +8,7 @@ operation uses intersections in roads to determine high confidence intersection
 matches. The high confidence matches are then considered to be tie points for
 determining rubber sheeting transforms.
 
-=== Identify Tie Points
+==== Identify Tie Points
 
 Intersections are matched if there are three or more roads that intersect at a
 point and the intersection does not have any similar pairs nearby. Generally
@@ -81,7 +81,7 @@ The candidate tie points are sorted by score, descending. All candidate tie
 points with a score greater than 0.5 are accepted as _confident tie points_. No
 intersection is used in more than one confident tie point.
 
-=== Evaluate Interpolation Methods
+==== Evaluate Interpolation Methods
 
 Multiple interpolation methods are evaluated using cross-validation to determine
 the lowest RMSE. The best approach is selected.
@@ -90,14 +90,14 @@ the lowest RMSE. The best approach is selected.
 * Inverse Distance Weighted
 * Kernel Estimation
 
-=== Application
+==== Application
 
 The best interpolation method is applied to the data by either moving one dataset
 toward the other, or moving both datasets towards each other. There is also
 functionality for storing the solution and applying it at a later time using
 `align --derive` and `align --apply` (see <<hootuser>> for details).
 
-=== Future Work
+==== Future Work
 
 At times the confident tie points sometimes give false positives, especially on
 extremely noisy data. In these cases it may be worthwhile to determine and

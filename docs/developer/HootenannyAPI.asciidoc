@@ -1,5 +1,5 @@
 
-== Hootenanny API Documentation
+=== Hootenanny API Documentation
 
 Run `make archive` to generate the documentation. The generated file is: 
 `$HOOT_HOME/hootenanny-$(HOOT_VERSION).tar.gz`. Alternatively, you can configure your Jenkins pull 
@@ -7,7 +7,7 @@ request job to archive the documentation by selecting: "Build with Parameters" a
 "Archive_docs" checkbox. The documentation can be downloaded from the Jenkins job page as 
 `docs.tar.gz`.
 
-=== Core C++
+==== Core C++
 
 When running `make archive`, see `docs/developer/CoreAPI/html/index.html` in 
 `hootenanny-core-API-$(HOOT_VERSION).tar.gz` in the `docs` directory of 
@@ -17,11 +17,11 @@ When generating the documentation from a pull request job look for
 `docs/developer/CoreAPI/html/index.html` in the `docs` directory of 
 `$HOOT_HOME/hootenanny-$(HOOT_VERSION).tar.gz`.
 
-=== Core JavaScript
+==== Core JavaScript
 
 See the "JavaScript Overview" section in `docs/Hootenanny - User Guide.pdf` in the `docs` directory of `$HOOT_HOME/hootenanny-$(HOOT_VERSION).tar.gz`.
 
-=== Services Java
+==== Services Java
 
 See `hoot-services/target/site/apidocs/index.html` in `hootenanny-services-API-$(HOOT_VERSION).tar.gz` in the `docs` directory of `$HOOT_HOME/hootenanny-$(HOOT_VERSION).tar.gz`.
 

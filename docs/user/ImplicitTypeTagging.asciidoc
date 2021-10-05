@@ -1,6 +1,6 @@
 
 [[ImplicitTypeTaggingUser]]
-== Implicit Type Tagging Based On Name
+=== Implicit Type Tagging Based On Name
 
 Hootenanny has the capability to derive type tag information automatically for elements based soley on the contents of 
 their name tags. This feature can be used simply to add better tags to poorly typed data or to add tags with the goal 

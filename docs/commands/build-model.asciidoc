@@ -37,4 +37,4 @@ build-model (input.arff) (output.rf)
 
 See also:
 
-* <<hootDevGuide, RegenerateRandomForestModels>>
+* <<hootuser, RegenerateRandomForestModels>>
