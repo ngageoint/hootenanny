@@ -75,8 +75,9 @@ class BuildingMatchVisitor : public ConstElementVisitor
 {
 public:
 
-  BuildingMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
-                       ElementCriterionPtr filter = ElementCriterionPtr()) :
+  BuildingMatchVisitor(
+    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
+    ElementCriterionPtr filter = ElementCriterionPtr()) :
   _map(map),
   _result(result),
   _filter(filter)
@@ -86,10 +87,10 @@ public:
   /**
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
-  BuildingMatchVisitor(const ConstOsmMapPtr& map,
-    std::vector<ConstMatchPtr>& result, std::shared_ptr<BuildingRfClassifier> rf,
-    ConstMatchThresholdPtr threshold, ElementCriterionPtr filter = ElementCriterionPtr(),
-    Status matchStatus = Status::Invalid) :
+  BuildingMatchVisitor(
+    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
+    std::shared_ptr<BuildingRfClassifier> rf, ConstMatchThresholdPtr threshold,
+    ElementCriterionPtr filter = ElementCriterionPtr(), Status matchStatus = Status::Invalid) :
     _map(map),
     _result(result),
     _rf(rf),
@@ -217,7 +218,7 @@ public:
       if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 100) == 0)
       {
         PROGRESS_DEBUG(
-          "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
+          "\tProcessed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
           " match candidates / " <<
           StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
           " elements.");
@@ -228,7 +229,7 @@ public:
     if (_numElementsVisited % (_taskStatusUpdateInterval * 100) == 0)
     {
       PROGRESS_STATUS(
-        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
+        "\tProcessed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
         StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
         " elements.");
     }
@@ -253,8 +254,8 @@ public:
     {
       LOG_INFO("Creating building feature index...");
 
-      // No tuning was done, I just copied these settings from OsmMapIndex.
-      // 10 children - 368 - see #3054
+      // No tuning was done, just copied these settings from OsmMapIndex. 10 children - 368 - see
+      // #3054
       _index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
       // Only index elements that isMatchCandidate(e)
@@ -410,8 +411,8 @@ _conflateMatchBuildingModel(ConfigOptions().getConflateMatchBuildingModel())
 {
 }
 
-MatchPtr BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
-                                           ElementId eid2)
+MatchPtr BuildingMatchCreator::createMatch(
+  const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
   std::shared_ptr<BuildingMatch> result;
   if (eid1.getType() != ElementType::Node && eid2.getType() != ElementType::Node)
@@ -428,9 +429,8 @@ MatchPtr BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
   return result;
 }
 
-void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
-                                         std::vector<ConstMatchPtr>& matches,
-                                         ConstMatchThresholdPtr threshold)
+void BuildingMatchCreator::createMatches(
+  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches, ConstMatchThresholdPtr threshold)
 {
   QElapsedTimer timer;
   timer.start();
@@ -458,8 +458,8 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
   map->visitRelationsRo(v);
   const int matchesSizeAfter = matches.size();
 
-  LOG_INFO(
-    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
+  LOG_STATUS(
+    "\tFound " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
     " building match candidates and " <<
     StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
     " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");

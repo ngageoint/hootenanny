@@ -84,7 +84,11 @@ public:
   }
 
   QString getDescription() const override
-  { return "Matches lines based on the maximal subline string found"; }
+  {
+    return
+      QString("Matches lines based on the maximal subline string found using a different") +
+      QString("matcher for more complex features");
+  }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
 

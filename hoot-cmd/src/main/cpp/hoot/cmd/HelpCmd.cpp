@@ -183,9 +183,9 @@ private:
     cout << "  --info" << endl;
     cout << "  --debug" << endl;
     cout << "  --trace" << endl;
-    cout << endl;
-    cout << "  --color                     Colorize the output logs using ANSI colors" << endl;
-    cout << endl;
+
+    cout << endl << "Miscellaneous:" << endl << endl;
+    cout << "  --color                     Colorize the output logs using ANSI colors" << endl << endl;
 
     cout << "List Option Operations:" << endl << endl;
     cout << "  Append:  [-D optionName+=optionValue]" << endl;

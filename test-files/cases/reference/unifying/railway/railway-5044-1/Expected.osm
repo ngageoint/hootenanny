@@ -1,0 +1,1158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="29.9952" minlon="31.263263" maxlat="30.0751" maxlon="31.2918755"/>
+    <node visible="true" id="-98889328" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0161122659990411" lon="31.2656007597051158">
+        <tag k="hoot:id" v="-98889328"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-98889295" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0743224818425432" lon="31.2859461902460687">
+        <tag k="hoot:id" v="-98889295"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-98889294" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0682015847269248" lon="31.2917921092982603">
+        <tag k="hoot:id" v="-98889294"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-98889261" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0160609829115650" lon="31.2656280794895096">
+        <tag k="hoot:id" v="-98889261"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-98889260" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0089729101849976" lon="31.2694494750165966">
+        <tag k="hoot:id" v="-98889260"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-98889243" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0593168730625209" lon="31.2872910680458496">
+        <tag k="hoot:id" v="-98889243"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-98889234" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0018760934693312" lon="31.2704724210998073">
+        <tag k="hoot:id" v="-98889234"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-98889233" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0000024185198058" lon="31.2706056892680628">
+        <tag k="hoot:id" v="-98889233"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-98889216" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0744739501090379" lon="31.2857186812133143">
+        <tag k="hoot:id" v="-98889216"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-98889207" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0672060584860077" lon="31.2917745789731931">
+        <tag k="hoot:id" v="-98889207"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-98889206" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0664954714919155" lon="31.2916876229454033">
+        <tag k="hoot:id" v="-98889206"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-98889197" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0519029463472158" lon="31.2886767033445850">
+        <tag k="hoot:id" v="-98889197"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-98889196" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0513151175832220" lon="31.2886494527750969">
+        <tag k="hoot:id" v="-98889196"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-98888345" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0611005000000020" lon="31.2877970000000047">
+        <tag k="hoot:id" v="-98888345"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888344" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0607299999999995" lon="31.2875900000000016">
+        <tag k="hoot:id" v="-98888344"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888343" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0602699999999992" lon="31.2873804999999976">
+        <tag k="hoot:id" v="-98888343"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888342" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0600100000000019" lon="31.2873005000000006">
+        <tag k="hoot:id" v="-98888342"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888341" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0596900000000034" lon="31.2872300000000010">
+        <tag k="hoot:id" v="-98888341"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888340" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0594700000000117" lon="31.2872100000000053">
+        <tag k="hoot:id" v="-98888340"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888338" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0634300000000003" lon="31.2899899999999995">
+        <tag k="hoot:id" v="-98888338"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888337" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0633480000000013" lon="31.2899109999999965">
+        <tag k="hoot:id" v="-98888337"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888336" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0628600000000041" lon="31.2894399999999990">
+        <tag k="hoot:id" v="-98888336"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888335" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0624000000000002" lon="31.2889699999999991">
+        <tag k="hoot:id" v="-98888335"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888334" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0084605000000053" lon="31.2695985000000043">
+        <tag k="hoot:id" v="-98888334"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888333" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0084300000000113" lon="31.2696100000000001">
+        <tag k="hoot:id" v="-98888333"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888332" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0082909999999998" lon="31.2696624999999955">
+        <tag k="hoot:id" v="-98888332"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888331" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0082200000000014" lon="31.2696900000000042">
+        <tag k="hoot:id" v="-98888331"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888330" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0080615000000037" lon="31.2697380000000038">
+        <tag k="hoot:id" v="-98888330"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888329" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0079900000000066" lon="31.2697600000000016">
+        <tag k="hoot:id" v="-98888329"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888328" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0077900000000000" lon="31.2698195000000005">
+        <tag k="hoot:id" v="-98888328"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888327" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0076735000000028" lon="31.2698494999999994">
+        <tag k="hoot:id" v="-98888327"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888326" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0075100000000035" lon="31.2698900000000002">
+        <tag k="hoot:id" v="-98888326"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888325" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0069784999999953" lon="31.2699464999999996">
+        <tag k="hoot:id" v="-98888325"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888324" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0065700000000035" lon="31.2699900000000000">
+        <tag k="hoot:id" v="-98888324"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888323" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0062675000000034" lon="31.2700100000000027">
+        <tag k="hoot:id" v="-98888323"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888322" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0056800000000017" lon="31.2700604999999996">
+        <tag k="hoot:id" v="-98888322"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888321" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0044300000000028" lon="31.2701799999999999">
+        <tag k="hoot:id" v="-98888321"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888320" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0035740000000004" lon="31.2702500000000043">
+        <tag k="hoot:id" v="-98888320"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888319" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0033855000000003" lon="31.2702655000000007">
+        <tag k="hoot:id" v="-98888319"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888318" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0030800000000006" lon="31.2702899999999957">
+        <tag k="hoot:id" v="-98888318"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888317" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0638599999999947" lon="31.2904000000000053">
+        <tag k="hoot:id" v="-98888317"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888316" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0641399999999948" lon="31.2906600000000026">
+        <tag k="hoot:id" v="-98888316"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888315" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0642800000000037" lon="31.2907900000000012">
+        <tag k="hoot:id" v="-98888315"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888314" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0643799999999963" lon="31.2908605000000009">
+        <tag k="hoot:id" v="-98888314"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888313" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0645200000000052" lon="31.2909599999999983">
+        <tag k="hoot:id" v="-98888313"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888312" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0646799999999992" lon="31.2910599999999981">
+        <tag k="hoot:id" v="-98888312"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888311" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0648799999999952" lon="31.2911600000000014">
+        <tag k="hoot:id" v="-98888311"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888310" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0650900000000014" lon="31.2912600000000012">
+        <tag k="hoot:id" v="-98888310"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888309" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0652599999999985" lon="31.2913199999999954">
+        <tag k="hoot:id" v="-98888309"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888308" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0654499999999913" lon="31.2913800000000002">
+        <tag k="hoot:id" v="-98888308"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888307" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0679334999999952" lon="31.2918670000000034">
+        <tag k="hoot:id" v="-98888307"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888306" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0678499999999964" lon="31.2918754999999997">
+        <tag k="hoot:id" v="-98888306"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888305" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0675999999999952" lon="31.2918700000000030">
+        <tag k="hoot:id" v="-98888305"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888304" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0615545000000033" lon="31.2881804999999993">
+        <tag k="hoot:id" v="-98888304"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888303" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0613980000000005" lon="31.2880150000000015">
+        <tag k="hoot:id" v="-98888303"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888302" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0612545000000004" lon="31.2878974999999997">
+        <tag k="hoot:id" v="-98888302"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888301" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0617549999999945" lon="31.2884230000000052">
+        <tag k="hoot:id" v="-98888301"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888270" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0743824999999951" lon="31.2857450000000021">
+        <tag k="hoot:id" v="-98888270"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888269" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0743449999999974" lon="31.2857969999999952">
+        <tag k="hoot:id" v="-98888269"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888268" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0743395000000007" lon="31.2858045000000011">
+        <tag k="hoot:id" v="-98888268"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888267" timestamp="2021-09-03T13:13:07Z" version="1" lat="30.0743014999999971" lon="31.2858570000000000">
+        <tag k="hoot:id" v="-98888267"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-98888155" timestamp="1970-01-01T00:00:00Z" version="1" lat="29.9952000000000005" lon="31.2710107182300021">
+        <tag k="hoot:id" v="-98888155"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-98888154" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0750999999999991" lon="31.2847783253300022">
+        <tag k="hoot:id" v="-98888154"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316662829" timestamp="2016-02-02T18:50:51Z" version="1" changeset="4625" lat="30.0362389999999948" lon="31.2702889000000006">
+        <tag k="hoot:id" v="316662829"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316662830" timestamp="2016-02-02T18:50:51Z" version="1" changeset="4625" lat="30.0378662999999975" lon="31.2720826999999986">
+        <tag k="hoot:id" v="316662830"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316662832" timestamp="2016-02-02T18:50:51Z" version="1" changeset="4625" lat="30.0409497999999964" lon="31.2753014000000000">
+        <tag k="hoot:id" v="316662832"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316662833" timestamp="2016-02-02T18:50:51Z" version="1" changeset="4625" lat="30.0425843999999991" lon="31.2768549000000036">
+        <tag k="hoot:id" v="316662833"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316662834" timestamp="2016-02-02T18:50:51Z" version="1" changeset="4625" lat="30.0441298000000003" lon="31.2785200000000003">
+        <tag k="hoot:id" v="316662834"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316662835" timestamp="2016-02-02T18:50:51Z" version="1" changeset="4625" lat="30.0456752000000016" lon="31.2800992999999963">
+        <tag k="hoot:id" v="316662835"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316662836" timestamp="2016-02-02T18:50:51Z" version="1" changeset="4625" lat="30.0468714000000006" lon="31.2815842000000011">
+        <tag k="hoot:id" v="316662836"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952436" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0473695999999997" lon="31.2822467000000053">
+        <tag k="hoot:id" v="316952436"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952439" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0482983000000026" lon="31.2844611000000050">
+        <tag k="hoot:id" v="316952439"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952442" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0488778000000032" lon="31.2860662000000005">
+        <tag k="hoot:id" v="316952442"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952445" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0495613000000006" lon="31.2873966000000010">
+        <tag k="hoot:id" v="316952445"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952447" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0499477000000006" lon="31.2878085000000006">
+        <tag k="hoot:id" v="316952447"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952449" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0505866000000026" lon="31.2883579000000047">
+        <tag k="hoot:id" v="316952449"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952452" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0508614999999963" lon="31.2885123999999983">
+        <tag k="hoot:id" v="316952452"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952454" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0513444000000014" lon="31.2886582999999980">
+        <tag k="hoot:id" v="316952454"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952456" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0521244000000003" lon="31.2886839999999999">
+        <tag k="hoot:id" v="316952456"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952459" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0530901999999998" lon="31.2885723999999996">
+        <tag k="hoot:id" v="316952459"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952461" timestamp="2020-04-09T12:03:11Z" version="2" changeset="907438" user="yara" uid="1000002043" lat="30.0559421000000029" lon="31.2879221999999970">
+        <tag k="hoot:id" v="316952461"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952463" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0571391000000006" lon="31.2875939999999950">
+        <tag k="hoot:id" v="316952463"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952465" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0586917000000007" lon="31.2872592000000047">
+        <tag k="hoot:id" v="316952465"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952468" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0597019999999979" lon="31.2873106999999990">
+        <tag k="hoot:id" v="316952468"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952470" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0600288999999883" lon="31.2873708000000050">
+        <tag k="hoot:id" v="316952470"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952472" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0607569000000012" lon="31.2877398999999983">
+        <tag k="hoot:id" v="316952472"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952474" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0614254000000045" lon="31.2882290999999988">
+        <tag k="hoot:id" v="316952474"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952478" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0642780000000016" lon="31.2909327999999967">
+        <tag k="hoot:id" v="316952478"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952480" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0648721999999999" lon="31.2913447999999974">
+        <tag k="hoot:id" v="316952480"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952482" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0656299000000011" lon="31.2915765000000015">
+        <tag k="hoot:id" v="316952482"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952486" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0671675000000036" lon="31.2917738999999990">
+        <tag k="hoot:id" v="316952486"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316952488" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0686309000000023" lon="31.2917996999999986">
+        <tag k="hoot:id" v="316952488"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957272" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="29.9962099999999978" lon="31.2709448999999999">
+        <tag k="hoot:id" v="316957272"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957276" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0015842000000035" lon="31.2704641999999993">
+        <tag k="hoot:id" v="316957276"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957277" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0034127000000019" lon="31.2705157000000007">
+        <tag k="hoot:id" v="316957277"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957279" timestamp="2020-04-08T21:06:34Z" version="2" changeset="906844" user="mrbg2010" uid="1000002518" lat="30.0064090000000085" lon="31.2702522999999992">
+        <tag k="hoot:id" v="316957279"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957280" timestamp="2020-04-08T21:06:34Z" version="2" changeset="906844" user="mrbg2010" uid="1000002518" lat="30.0073763000000042" lon="31.2701226000000005">
+        <tag k="hoot:id" v="316957280"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957281" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0086231000000012" lon="31.2697174999999987">
+        <tag k="hoot:id" v="316957281"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957282" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0093960000000060" lon="31.2691253000000025">
+        <tag k="hoot:id" v="316957282"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957284" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0114325000000015" lon="31.2680266000000024">
+        <tag k="hoot:id" v="316957284"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957285" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0126217000000040" lon="31.2674601999999986">
+        <tag k="hoot:id" v="316957285"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957289" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0166497999999997" lon="31.2653144000000012">
+        <tag k="hoot:id" v="316957289"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957290" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0175045000000011" lon="31.2649796999999978">
+        <tag k="hoot:id" v="316957290"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957294" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0198232000000118" lon="31.2645676999999971">
+        <tag k="hoot:id" v="316957294"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957296" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0212575000000008" lon="31.2640527000000041">
+        <tag k="hoot:id" v="316957296"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957297" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0220230000000008" lon="31.2637094000000033">
+        <tag k="hoot:id" v="316957297"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957300" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0242227000000028" lon="31.2633660000000049">
+        <tag k="hoot:id" v="316957300"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957303" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0252630999999965" lon="31.2632629999999985">
+        <tag k="hoot:id" v="316957303"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957304" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0257460999999921" lon="31.2632629999999985">
+        <tag k="hoot:id" v="316957304"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957305" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0262290999999983" lon="31.2634519000000033">
+        <tag k="hoot:id" v="316957305"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957306" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0276336000000015" lon="31.2645933999999990">
+        <tag k="hoot:id" v="316957306"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957308" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0286535000000079" lon="31.2661301999999992">
+        <tag k="hoot:id" v="316957308"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957309" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0291835000000056" lon="31.2667031000000044">
+        <tag k="hoot:id" v="316957309"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957310" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0294905000000050" lon="31.2669375000000045">
+        <tag k="hoot:id" v="316957310"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957311" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0297570000000036" lon="31.2670942000000025">
+        <tag k="hoot:id" v="316957311"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957313" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0304132999999993" lon="31.2672523999999967">
+        <tag k="hoot:id" v="316957313"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957316" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0329615000000061" lon="31.2670053000000046">
+        <tag k="hoot:id" v="316957316"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957317" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0334371000000040" lon="31.2671425999999997">
+        <tag k="hoot:id" v="316957317"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957319" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0342099000000040" lon="31.2675546000000004">
+        <tag k="hoot:id" v="316957319"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957321" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0350569999999983" lon="31.2683013000000010">
+        <tag k="hoot:id" v="316957321"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957322" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0353096000000015" lon="31.2686360000000008">
+        <tag k="hoot:id" v="316957322"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316957323" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0357332000000028" lon="31.2696573999999963">
+        <tag k="hoot:id" v="316957323"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316974200" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0693015000000052" lon="31.2916394000000047">
+        <tag k="hoot:id" v="316974200"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316974201" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0709556000000049" lon="31.2903921999999994">
+        <tag k="hoot:id" v="316974201"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="316974204" timestamp="2016-02-02T18:50:47Z" version="1" changeset="4619" lat="30.0742297999999941" lon="31.2860854000000010">
+        <tag k="hoot:id" v="316974204"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="2414602653" timestamp="2016-02-03T00:55:08Z" version="1" changeset="37726" lat="30.0360724000000019" lon="31.2700809000000000">
+        <tag k="hoot:id" v="2414602653"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="3110142329" timestamp="2016-02-03T03:10:09Z" version="1" changeset="49723" lat="30.0346279000000038" lon="31.2678674000000001">
+        <tag k="hoot:id" v="3110142329"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="3265916148" timestamp="2016-02-03T03:38:49Z" version="1" changeset="52303" lat="30.0685644999999973" lon="31.2917984999999987">
+        <tag k="hoot:id" v="3265916148"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="4281675046" timestamp="2020-04-08T21:06:33Z" version="1" changeset="906844" user="mrbg2010" uid="1000002518" lat="30.0076058000000003" lon="31.2700529000000031">
+        <tag k="hoot:id" v="4281675046"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="4281675048" timestamp="2020-04-08T21:06:33Z" version="1" changeset="906844" user="mrbg2010" uid="1000002518" lat="30.0079880000000010" lon="31.2699661000000049">
+        <tag k="hoot:id" v="4281675048"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="4281675049" timestamp="2020-04-08T21:06:33Z" version="1" changeset="906844" user="mrbg2010" uid="1000002518" lat="30.0068827000000020" lon="31.2701908000000053">
+        <tag k="hoot:id" v="4281675049"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <way visible="true" id="-98868135" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-98889261"/>
+        <nd ref="-98889328"/>
+        <nd ref="316957289"/>
+        <nd ref="316957290"/>
+        <nd ref="316957294"/>
+        <nd ref="316957296"/>
+        <nd ref="316957297"/>
+        <nd ref="316957300"/>
+        <nd ref="316957303"/>
+        <nd ref="316957304"/>
+        <nd ref="316957305"/>
+        <nd ref="316957306"/>
+        <nd ref="316957308"/>
+        <nd ref="316957309"/>
+        <nd ref="316957310"/>
+        <nd ref="316957311"/>
+        <nd ref="316957313"/>
+        <nd ref="316957316"/>
+        <nd ref="316957317"/>
+        <nd ref="316957319"/>
+        <nd ref="3110142329"/>
+        <nd ref="316957321"/>
+        <nd ref="316957322"/>
+        <nd ref="316957323"/>
+        <nd ref="2414602653"/>
+        <nd ref="316662829"/>
+        <nd ref="316662830"/>
+        <nd ref="316662832"/>
+        <nd ref="316662833"/>
+        <nd ref="316662834"/>
+        <nd ref="316662835"/>
+        <nd ref="316662836"/>
+        <nd ref="316952436"/>
+        <nd ref="316952439"/>
+        <nd ref="316952442"/>
+        <nd ref="316952445"/>
+        <nd ref="316952447"/>
+        <nd ref="316952449"/>
+        <nd ref="316952452"/>
+        <nd ref="-98889196"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98868135"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="40"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length" v="11925.5"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="disused"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2015-01-02T20:29:24.000Z;2021-09-03T13:13:07Z"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2019-09-25"/>
+        <tag k="source:imagery:id" v="103001009B598900"/>
+        <tag k="source:imagery:layerName" v="Ecopia African Imagery"/>
+        <tag k="source:imagery:sensor" v="WV02"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.208Z"/>
+        <tag k="uuid" v="{3a6a0439-ef8b-4dac-ab52-62bf2a8e4bda}"/>
+    </way>
+    <way visible="true" id="-98868099" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-98889207"/>
+        <nd ref="-98889294"/>
+        <nd ref="3265916148"/>
+        <nd ref="316952488"/>
+        <nd ref="316974200"/>
+        <nd ref="316974201"/>
+        <nd ref="316974204"/>
+        <nd ref="-98889295"/>
+        <nd ref="-98889216"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98868099"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="9"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length" v="11925.5"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="disused"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2015-01-02T20:29:24.000Z;2021-09-03T13:13:07Z"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2019-09-25"/>
+        <tag k="source:imagery:id" v="103001009B598900"/>
+        <tag k="source:imagery:layerName" v="Ecopia African Imagery"/>
+        <tag k="source:imagery:sensor" v="WV02"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.206Z"/>
+        <tag k="uuid" v="{663f9730-2330-46e3-ab2a-8c2371cc449a}"/>
+    </way>
+    <way visible="true" id="-98868079" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-98889234"/>
+        <nd ref="316957277"/>
+        <nd ref="316957279"/>
+        <nd ref="4281675049"/>
+        <nd ref="316957280"/>
+        <nd ref="4281675046"/>
+        <nd ref="4281675048"/>
+        <nd ref="316957281"/>
+        <nd ref="-98889260"/>
+        <nd ref="316957282"/>
+        <nd ref="316957284"/>
+        <nd ref="316957285"/>
+        <nd ref="-98889261"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98868079"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="13"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length" v="11925.5"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="disused"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2015-01-02T20:29:24.000Z;2021-09-03T13:13:07Z"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2019-09-25"/>
+        <tag k="source:imagery:id" v="103001009B598900"/>
+        <tag k="source:imagery:layerName" v="Ecopia African Imagery"/>
+        <tag k="source:imagery:sensor" v="WV02"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.188Z"/>
+        <tag k="uuid" v="{ee70db9d-917b-4304-a72b-0910d4889bb8}"/>
+    </way>
+    <way visible="true" id="-98868067" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-98889197"/>
+        <nd ref="316952456"/>
+        <nd ref="316952459"/>
+        <nd ref="316952461"/>
+        <nd ref="316952463"/>
+        <nd ref="316952465"/>
+        <nd ref="-98889243"/>
+        <nd ref="316952468"/>
+        <nd ref="316952470"/>
+        <nd ref="316952472"/>
+        <nd ref="316952474"/>
+        <nd ref="316952478"/>
+        <nd ref="316952480"/>
+        <nd ref="316952482"/>
+        <nd ref="-98889206"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98868067"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="15"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length" v="11925.5"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="disused"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2015-01-02T20:29:24.000Z;2021-09-03T13:13:07Z"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2019-09-25"/>
+        <tag k="source:imagery:id" v="103001009B598900"/>
+        <tag k="source:imagery:layerName" v="Ecopia African Imagery"/>
+        <tag k="source:imagery:sensor" v="WV02"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.208Z"/>
+        <tag k="uuid" v="{8ce0c85f-1d49-4531-957c-5e72618563d8}"/>
+    </way>
+    <way visible="true" id="-98868057" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-98888155"/>
+        <nd ref="316957272"/>
+        <nd ref="-98889233"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98868057"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length" v="11925.5"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="disused"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2015-01-02T20:29:24.000Z;2021-09-03T13:13:07Z"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2019-09-25"/>
+        <tag k="source:imagery:id" v="103001009B598900"/>
+        <tag k="source:imagery:layerName" v="Ecopia African Imagery"/>
+        <tag k="source:imagery:sensor" v="WV02"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.199Z"/>
+        <tag k="uuid" v="{75f8d985-839f-4638-a0b7-a55afb3747e5}"/>
+    </way>
+    <way visible="true" id="-98868037" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-98889233"/>
+        <nd ref="316957276"/>
+        <nd ref="-98889234"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98868037"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length" v="11925.5"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="disused"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2015-01-02T20:29:24.000Z;2021-09-03T13:13:07Z"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2019-09-25"/>
+        <tag k="source:imagery:id" v="103001009B598900"/>
+        <tag k="source:imagery:layerName" v="Ecopia African Imagery"/>
+        <tag k="source:imagery:sensor" v="WV02"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.174Z"/>
+        <tag k="uuid" v="{8251d2cc-8611-4244-a1ed-4bdc3152c37a}"/>
+    </way>
+    <way visible="true" id="-98868026" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-98889216"/>
+        <nd ref="-98888154"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98868026"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length" v="11925.5"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="disused"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2015-01-02T20:29:24.000Z;2021-09-03T13:13:07Z"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2019-09-25"/>
+        <tag k="source:imagery:id" v="103001009B598900"/>
+        <tag k="source:imagery:layerName" v="Ecopia African Imagery"/>
+        <tag k="source:imagery:sensor" v="WV02"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.198Z"/>
+        <tag k="uuid" v="{a6506d0a-02b2-49de-96e7-4e3c36252705}"/>
+    </way>
+    <way visible="true" id="-98868014" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-98889206"/>
+        <nd ref="316952486"/>
+        <nd ref="-98889207"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98868014"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length" v="11925.5"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="disused"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2015-01-02T20:29:24.000Z;2021-09-03T13:13:07Z"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2019-09-25"/>
+        <tag k="source:imagery:id" v="103001009B598900"/>
+        <tag k="source:imagery:layerName" v="Ecopia African Imagery"/>
+        <tag k="source:imagery:sensor" v="WV02"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.203Z"/>
+        <tag k="uuid" v="{22f8107b-9a89-4410-8572-29f3c9744e42}"/>
+    </way>
+    <way visible="true" id="-98867058" timestamp="2021-09-03T13:13:07Z" version="1">
+        <nd ref="-98889261"/>
+        <nd ref="-98889328"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98867058"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2021-09-03T13:13:07Z"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.175Z"/>
+        <tag k="uuid" v="{54d12aa0-11ef-4662-bce6-0a14be35e2d2}"/>
+    </way>
+    <way visible="true" id="-98867056" timestamp="2021-09-03T13:13:07Z" version="1">
+        <nd ref="-98888345"/>
+        <nd ref="-98888344"/>
+        <nd ref="-98888343"/>
+        <nd ref="-98888342"/>
+        <nd ref="-98888341"/>
+        <nd ref="-98888340"/>
+        <nd ref="-98889243"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98867056"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="7"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2021-09-03T13:13:07Z"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.189Z"/>
+        <tag k="uuid" v="{ac6326f6-8384-4fa0-af7c-8f84b4e5c957}"/>
+    </way>
+    <way visible="true" id="-98867055" timestamp="2021-09-03T13:13:07Z" version="1">
+        <nd ref="-98888338"/>
+        <nd ref="-98888337"/>
+        <nd ref="-98888336"/>
+        <nd ref="-98888335"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98867055"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="4"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2021-09-03T13:13:07Z"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.193Z"/>
+        <tag k="uuid" v="{b67b469d-d117-4c6b-bf4f-71f1f5242c1d}"/>
+    </way>
+    <way visible="true" id="-98867054" timestamp="2021-09-03T13:13:07Z" version="1">
+        <nd ref="-98889260"/>
+        <nd ref="-98888334"/>
+        <nd ref="-98888333"/>
+        <nd ref="-98888332"/>
+        <nd ref="-98888331"/>
+        <nd ref="-98888330"/>
+        <nd ref="-98888329"/>
+        <nd ref="-98888328"/>
+        <nd ref="-98888327"/>
+        <nd ref="-98888326"/>
+        <nd ref="-98888325"/>
+        <nd ref="-98888324"/>
+        <nd ref="-98888323"/>
+        <nd ref="-98888322"/>
+        <nd ref="-98888321"/>
+        <nd ref="-98888320"/>
+        <nd ref="-98888319"/>
+        <nd ref="-98888318"/>
+        <nd ref="-98889234"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98867054"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="19"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2021-09-03T13:13:07Z"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.195Z"/>
+        <tag k="uuid" v="{bacc23ba-a10a-4ba7-9c45-7a197d08c0b9}"/>
+    </way>
+    <way visible="true" id="-98867053" timestamp="2021-09-03T13:13:07Z" version="1">
+        <nd ref="-98888338"/>
+        <nd ref="-98888317"/>
+        <nd ref="-98888316"/>
+        <nd ref="-98888315"/>
+        <nd ref="-98888314"/>
+        <nd ref="-98888313"/>
+        <nd ref="-98888312"/>
+        <nd ref="-98888311"/>
+        <nd ref="-98888310"/>
+        <nd ref="-98888309"/>
+        <nd ref="-98888308"/>
+        <nd ref="-98889206"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98867053"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="12"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2021-09-03T13:13:07Z"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.196Z"/>
+        <tag k="uuid" v="{61485933-9fb1-4088-a20f-ae6e399f5612}"/>
+    </way>
+    <way visible="true" id="-98867052" timestamp="2021-09-03T13:13:07Z" version="1">
+        <nd ref="-98889294"/>
+        <nd ref="-98888307"/>
+        <nd ref="-98888306"/>
+        <nd ref="-98888305"/>
+        <nd ref="-98889207"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98867052"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="5"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2021-09-03T13:13:07Z"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.198Z"/>
+        <tag k="uuid" v="{706fe7af-d063-4b8c-9df6-10108da939e0}"/>
+    </way>
+    <way visible="true" id="-98867051" timestamp="2021-09-03T13:13:07Z" version="1">
+        <nd ref="-98888301"/>
+        <nd ref="-98888304"/>
+        <nd ref="-98888303"/>
+        <nd ref="-98888302"/>
+        <nd ref="-98888345"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98867051"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="5"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2021-09-03T13:13:07Z"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.199Z"/>
+        <tag k="uuid" v="{4c89bb1a-29e1-44b4-b6d5-e9fa086d8330}"/>
+    </way>
+    <way visible="true" id="-98867050" timestamp="2021-09-03T13:13:07Z" version="1">
+        <nd ref="-98888335"/>
+        <nd ref="-98888301"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98867050"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2021-09-03T13:13:07Z"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.199Z"/>
+        <tag k="uuid" v="{e76d96f0-c2b1-4146-ab34-bf16efa7efc6}"/>
+    </way>
+    <way visible="true" id="-98867047" timestamp="2021-09-03T13:13:07Z" version="1">
+        <nd ref="-98889216"/>
+        <nd ref="-98888270"/>
+        <nd ref="-98888269"/>
+        <nd ref="-98888268"/>
+        <nd ref="-98888267"/>
+        <nd ref="-98889295"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98867047"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="6"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2021-09-03T13:13:07Z"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.207Z"/>
+        <tag k="uuid" v="{f1cea19c-1946-4da2-805a-e2d91ca98f10}"/>
+    </way>
+    <way visible="true" id="-98867041" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-98889196"/>
+        <nd ref="316952454"/>
+        <nd ref="-98889197"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1440"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="height" v="0"/>
+        <tag k="hoot:id" v="-98867041"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="incline" v="0"/>
+        <tag k="lanes" v="1"/>
+        <tag k="length" v="11925.5"/>
+        <tag k="length2" v="0"/>
+        <tag k="location" v="underground"/>
+        <tag k="name" v="EGYPTIAN RAILWAYS"/>
+        <tag k="railway" v="disused"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="ufd:railroad_l"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2015-01-02T20:29:24.000Z;2021-09-03T13:13:07Z"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2019-09-25"/>
+        <tag k="source:imagery:id" v="103001009B598900"/>
+        <tag k="source:imagery:layerName" v="Ecopia African Imagery"/>
+        <tag k="source:imagery:sensor" v="WV02"/>
+        <tag k="source:ingest:datetime" v="2021-09-03T13:13:07.208Z"/>
+        <tag k="uuid" v="{2abbfaa0-4ef9-4ffe-960e-ff06574e5b6d}"/>
+    </way>
+</osm>

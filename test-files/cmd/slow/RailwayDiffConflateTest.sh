@@ -2,6 +2,7 @@
 set -e
 
 IN_DIR=test-files/cmd/slow/RailwayDiffConflateTest
+IN_DIR_2=test-files/cmd/slow/RailwayConflateTest
 OUT_DIR=test-output/cmd/slow/RailwayDiffConflateTest
 mkdir -p $OUT_DIR
 LOG_LEVEL=--warn
@@ -15,9 +16,8 @@ source scripts/core/ScriptTestUtils.sh
 # remove partial matches partially
 hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.as.whole=false \
   -D conflate.pre.ops++=ReplaceTagVisitor -D replace.tag.visitor.match.tag="railway=Other" \
-  -D replace.tag.visitor.replace.tag="railway=rail" \
-  test-files/cmd/slow/RailwayConflateTest/RR_Ref1_ManuallyMatched.osm \
-  test-files/cmd/slow/RailwayConflateTest/RR_Ref2_ManuallyMatched.osm $OUT_DIR/output-partial.osm --differential
+  -D replace.tag.visitor.replace.tag="railway=rail" $IN_DIR_2/RR_Ref1_ManuallyMatched.osm \
+  $IN_DIR_2/RR_Ref2_ManuallyMatched.osm $OUT_DIR/output-partial.osm --differential
 hoot diff $LOG_LEVEL -C Testing.conf $IN_DIR/output-partial.osm $OUT_DIR/output-partial.osm || \
   diff $IN_DIR/output-partial.osm $OUT_DIR/output-partial.osm
 validateTestOutput $OUT_DIR/output-partial.osm $OUT_DIR/output-partial-validation-report \
@@ -26,9 +26,8 @@ validateTestOutput $OUT_DIR/output-partial.osm $OUT_DIR/output-partial-validatio
 # remove partial matches completely
 hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.as.whole=true \
   -D conflate.pre.ops++=ReplaceTagVisitor -D replace.tag.visitor.match.tag="railway=Other" \
-  -D replace.tag.visitor.replace.tag="railway=rail" \
-  test-files/cmd/slow/RailwayConflateTest/RR_Ref1_ManuallyMatched.osm \
-  test-files/cmd/slow/RailwayConflateTest/RR_Ref2_ManuallyMatched.osm $OUT_DIR/output-complete.osm --differential
+  -D replace.tag.visitor.replace.tag="railway=rail" $IN_DIR_2/RR_Ref1_ManuallyMatched.osm \
+  $IN_DIR_2/RR_Ref2_ManuallyMatched.osm $OUT_DIR/output-complete.osm --differential
 hoot diff $LOG_LEVEL -C Testing.conf $IN_DIR/output-complete.osm $OUT_DIR/output-complete.osm || \
   diff $IN_DIR/output-complete.osm $OUT_DIR/output-complete.osm
 validateTestOutput $OUT_DIR/output-complete.osm $OUT_DIR/output-complete-validation-report \

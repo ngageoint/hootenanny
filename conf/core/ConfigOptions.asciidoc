@@ -1036,6 +1036,7 @@ See also:
 ** `RelationCircularRefRemover`
 ** `MultilineStringMergeRelationCollapser`
 ** `RoadCrossingPolyMarker`
+** `RailwaysCrossingMarker`
 ** `ApiTagTruncateVisitor`
 ** `AddHilbertReviewSortOrderOp`
 
@@ -4382,17 +4383,6 @@ for details on the JSON format.
 Automatically calculates the search radius to be used during conflation of power lines using rubber
 sheet tie point distances.
 
-=== power.line.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for power lines. The valid range is (0.0, 1.0].
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootuser>>
-
 === power.line.matcher.distance.weight.coefficient
 
 * Data Type: double
@@ -4416,28 +4406,6 @@ The distance around a point on a power line to look when calculating the heading
 * Default Value: `155.0`
 
 Sets that maximum angle, in degrees, that is still considered a power line match.
-
-=== power.line.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for power lines. The valid range is (0.0, 1.0].
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootuser>>
-
-=== power.line.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for power lines. The valid range is (0.0, 1.0].
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootuser>>
 
 === power.line.subline.matcher
 
@@ -4541,7 +4509,34 @@ The way subline matcher to use when determining matching sublines.
 * Default Value: `0.8`
 
 Tag similarity threshold, in the range (0.0, 1.0], at or above which a railway feature is considered
-to have similar tags.
+to have tags similar enough with another rail feature to be considered match.
+
+=== railways.crossing.marker.ignore.types
+
+* Data Type: list
+* Default Value:
+** `bridge=yes`
+** `railway=level_crossing`
+** `railway=subway`
+** `railway=tram`
+** `service=yard`
+** `tunnel=yes`
+
+List of tag key/value pairs that `RailwaysCrossingMarker` will ignore when marking railways which
+cross each other. Add to this list tags rail features possess where rail crossing is deemed
+acceptable.
+
+=== railways.crossing.marker.mark.intra.dataset.crossings
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, `RailwaysCrossingMarker` will skip marking any crossing railways for review that are from
+the same input dataset. Primarily meant to be utilized in conjunction with the `conflate` command.
+It is still possible when this option is disabled that portions of features originally from the same
+dataset may be marked for review due to the merging of features during conflation. If using
+`RailwaysCrossingMarker` with the `convert` command on a single dataset, this option should be
+enabled.
 
 === random.element.remover.probability
 

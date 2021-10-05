@@ -143,6 +143,7 @@ private:
   ElementCriterionPtr _pointPolyPointCrit;
 
   CreatorDescription _getScriptDescription(QString path) const;
+  void _validateRailConfig(v8::Local<v8::Object> plugin) const;
 
   std::shared_ptr<ScriptMatchVisitor> _getCachedVisitor(const ConstOsmMapPtr& map);
 };

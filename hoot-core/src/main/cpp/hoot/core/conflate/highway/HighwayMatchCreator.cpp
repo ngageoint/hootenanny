@@ -247,7 +247,7 @@ public:
       if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 10) == 0)
       {
         PROGRESS_DEBUG(
-          "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
+          "\tProcessed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
           " match candidates / " <<
           StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
           " elements.");
@@ -258,7 +258,7 @@ public:
     if (_numElementsVisited % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_STATUS(
-        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
+        "\tProcessed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
         StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
         " elements.");
     }
@@ -285,8 +285,8 @@ public:
     {
       LOG_INFO("Creating highway feature index...");
 
-      // No tuning was done, I just copied these settings from OsmMapIndex.
-      // 10 children - 368 - see #3054
+      // No tuning was done, just copied these settings from OsmMapIndex. 10 children - 368 - see
+      // #3054
       _index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
       // Only index elements satisfy isMatchCandidate(e)
@@ -437,8 +437,8 @@ void HighwayMatchCreator::createMatches(
   map->visitRelationsRo(v);
   const int matchesSizeAfter = matches.size();
 
-  LOG_INFO(
-    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
+  LOG_STATUS(
+    "\tFound " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
     " highway match candidates and " <<
     StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
     " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");

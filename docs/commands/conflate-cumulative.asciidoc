@@ -3,7 +3,8 @@
 
 === Description
 
-The `conflate-cumulative` command conflates multiple maps into a single map in a cumulative fashion.
+The `conflate-cumulative` command (experimental) conflates multiple maps into a single map in a 
+cumulative fashion.
 
 It is primarily used as a research test bed for prototyping which ultimately gets implemented in 
 production fashion within scripts/conflate/ConflateDirectory.sh.

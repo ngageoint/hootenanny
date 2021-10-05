@@ -41,7 +41,8 @@ public:
 
   static void Init(v8::Local<v8::Object> target);
 
-  static v8::Local<v8::Object> create(const HootException& e) { return create(std::shared_ptr<HootException>(e.clone())); }
+  static v8::Local<v8::Object> create(const HootException& e)
+  { return create(std::shared_ptr<HootException>(e.clone())); }
   static v8::Local<v8::Object> create(const std::shared_ptr<HootException>& e);
 
   std::shared_ptr<HootException> getException() const { return _e; }

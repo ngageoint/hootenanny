@@ -1,4 +1,5 @@
-# 10.2.2 - This is kept as a reference only.
+# 10.2.2 - This is kept as a reference only and can be substituted into the `josm.validators` option 
+# for testing.
 
 ** `Addresses`
 ** `ApproximateWay`
