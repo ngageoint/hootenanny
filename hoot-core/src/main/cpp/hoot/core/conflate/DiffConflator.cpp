@@ -968,7 +968,7 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
   // little weird, but we want something very specific here. We want the old element as it was...
   // with new tags.
 
-  // Copy the old one to get the geometry
+  // Copy the old one to get the geometry.
   ElementPtr pChangeElement = pOldElement->clone();
   assert(pChangeElement->getId() == pOldElement->getId());
 
@@ -981,7 +981,7 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
       ConfigOptions().getDuplicateNameCaseSensitive());
   pChangeElement->setTags(newTags);
 
-  // Create the change
+  // Create the change.
   return Change(Change::Modify, pChangeElement);
 }
 
