@@ -1,6 +1,6 @@
 
 [[ImplicitTagRulesDatabaseGeneration]]
-== Implicit Tag Rules Database Generation
+=== Implicit Tag Rules Database Generation
 
 Hootenanny has the capability to derive type tag information automatically for elements based soley on the contents of their name tags.
 To do this tagging Hootenanny first parses global data, currently OSM and GeoNames, and generates a tag rules database.  The configured
@@ -9,12 +9,12 @@ with the goal of improving the tagging performance.  This document outlines the 
 implicit tagging command line documentation for additional details.  Furthermore, familiarize yourself with the implicit tagging
 configuration options by reading their descriptions (configuration options beginning with implicit.tagging.* and implicit.tagger.*).
 
-=== Acquire Input Data
+==== Acquire Input Data
 
 Download the latest OSM Planet (.osm.pbf) and GeoNames allCountries (.geonames) files.  Additional datasets can be also be used as inputs,
 if desired.
 
-=== Input Pre-filtering (optional)
+==== Input Pre-filtering (optional)
 
 If you will be repeatedly generating implicit tag raw rules files as part of raw rules generation code changes or rule experimentation,
 you should pre-filter your input datasets to data that is eligible to have implicit tags derived from it to save future processing time.
@@ -26,7 +26,7 @@ hoot convert -D convert.ops="TranslationVisitor;ImplicitTagEligiblePoiPolyCriter
 hoot convert -D convert.ops="ImplicitTagEligiblePoiPolyCriterion" planet.osm.pbf planet-filtered.osm.pbf
 ---------------------------
 
-=== Raw Rules Derivation
+==== Raw Rules Derivation
 
 Next, you need to generate a raw rules flat file from the input data.  Here is an example:
 
@@ -43,7 +43,7 @@ hoot type-tagger-rules --create-raw -D implicit.tagging.raw.rules.deriver.skip.f
 "planet-filtered.osm.pbf;allCountries-filtered.geonames" "none;none" osm-geonames-poi.implicitTagRules
 ---------------------------
 
-=== Rules Database Derivation
+==== Rules Database Derivation
 
 Finally, you need to generate the implicit tag rules database.  An example:
 
@@ -62,7 +62,7 @@ Also, you can examine the output rules database in a Sqlite database viewer, suc
 Once rules have been generated, database derivation is then fairly quick, so you can tweak configuration parameters and regenerate
 databases many times with ease over the course of trying to improve a set of implicit tag rules.
 
-=== Customizing Database Generation Behavior
+==== Customizing Database Generation Behavior
 
 The following configuration options point to files which may be used to add customization to the behavior of the implicit tag rules:
 
@@ -73,7 +73,7 @@ The following configuration options point to files which may be used to add cust
 You may need to modify the aforementioned files and then regenerate the rules database in order to achieve the desired tagging performance.
 There are additional customization options available.  See the configuration options "implicit.tagging.*" and "implicit.tagger.*".
 
-=== Tagger Influence on Conflation Performance
+==== Tagger Influence on Conflation Performance
 
 At the time of this writing, the only tests currently set up to measure implicit feature tagger performance are those that are part
 of the Global POI conflation multiary and Unifying POI/Polygon regression tests.  The multiary tests can be found in the global-pois

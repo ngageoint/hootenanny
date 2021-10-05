@@ -1,7 +1,7 @@
 
-== Code Style
+=== Code Style
 
-=== C++
+==== C++
 
 The file `conf/core/QtCreatorStyle.xml` should take care of settings up most of the styling for you. 
 Here are the highlights:
@@ -30,3 +30,4 @@ correct copyright date.
 * Not specifically code related, but all asciidoc files used in the documentation must have at least
 one blank line at the beginning and end of the document in order for the PDF documentation to 
 generate correctly.
+

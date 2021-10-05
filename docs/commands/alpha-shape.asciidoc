@@ -33,8 +33,8 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExample
 * https://github.com/ngageoint/hootenanny/files/595246/Hootenanny.-.Alpha.Shape.2013-03-07.pptx[Alpha Shape Presentation]
 * https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AlphaShape.asciidoc[Alpha Shape Documentation]
 * https://github.com/ngageoint/hootenanny/wiki/files/2010-B-01-AlphaShapes.pdf[Alpha Shape Research Paper]
-* _Horizontal Conflation_, <<hootalgo,Hootenanny - Algorithms>>
-* _Cookie Cutter_ section of <<hootalgo, Hootenanny - Algorithms>>
+* _Horizontal Conflation_, <<hootuser,Hootenanny - User Guide>>
+* _Cookie Cutter_ section of <<hootuser, Hootenanny - User Guide>>
 * `cookie.cutter.*` configuration options
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

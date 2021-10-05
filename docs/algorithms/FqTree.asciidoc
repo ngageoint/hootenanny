@@ -1,6 +1,6 @@
 
 [[fq-tree]]
-== FQ-Tree/R-Tree Hybrid
+=== FQ-Tree/R-Tree Hybrid
 
 The PLACES POI conflation routine depends heavily on two predicates: "Are the
 names similar enough?" and "Are the two points close enough?". Given an input
@@ -19,7 +19,7 @@ R-Tree or the FQ-Tree, but not both at the same time. The following sections
 describe how the two indexes are combined to perform more efficient queries
 over POI data.
 
-=== Short Review
+==== Short Review
 
 The internals of the R-Tree and FQ-Tree are beyond the scope of this document,
 but the basic principal behind an R-Tree is that the data is broken up into
@@ -38,7 +38,7 @@ method the tree is built recursively. To query all elements within distance X of
 a specific string all child nodes that meet the distance criteria are searched
 recursively until the set of matching children are found.
 
-=== A Hybrid Tree
+==== A Hybrid Tree
 
 For POI conflation we need a tree that can answer both the string similarity and
 spatial queries. To accomplish this we simply alternate the type of tree at each
@@ -85,13 +85,13 @@ default parameters were determined:
 * rDepth = 5
 * fqDepth = 27
 
-=== Results
+==== Results
 
 Using this approach provides about a 50 fold improvement in performance over a
 R-Tree alone. For our test region is provides an even more dramatic improvement
 over the FQ-Tree.
 
-=== Future Work
+==== Future Work
 
 * Investigate using Sort Tile Recursive (STR) for packing the R-Tree.
   <<leutenegger1997>>

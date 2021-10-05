@@ -1,5 +1,5 @@
 
-== Hootenanny Advanced Options Design
+=== User Interface Advanced Options Design
 
 This description is for a quick overview of the conflation advanced option meta data rule rest endpoint in the Hootenanny Web Services.
 

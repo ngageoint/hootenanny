@@ -15,18 +15,13 @@ define buildAsciidoc
 	REVDATE=`date -d @$$(git log -n 1 "--pretty=%at" ../.) "+%B %e, %Y"`; \
 	a2x -a docinfo --dblatex-opts "-P latex.output.revhistory=0 -P latex.unicode.use=1 -s styles/nga.sty --param doc.publisher.show=0" -a HasLatexMath -a "revdate=v$$REVNUMBER, $$REVDATE" $(A2X_QUIET) -f pdf $<
 	a2x -a docinfo --dblatex-opts "-P latex.output.revhistory=0 -P latex.unicode.use=1 -s styles/nga.sty --param doc.publisher.show=0" -a "revdate=v$$REVNUMBER, $$REVDATE" $(A2X_QUIET) -f text $<
-	#a2x --dblatex-opts "-P latex.output.revhistory=0 -s styles/nga.sty --param doc.publisher.show=0" -a HasLatexMath -a authorinitials=DG -a revnumber=$$REVNUMBER -a "revdate=v$$REVNUMBER, $$REVDATE" -a "revremark=foo" $(A2X_QUIET) -f pdf $<
 	asciidoc -a authorinitials=DG -a revnumber=$$REVNUMBER -a "revdate=$$REVDATE" -b html $<
-	#a2x --dblatex-opts "-s styles/dg.sty --param doc.publisher.show=0" -a HasLatexMath -a authorinitials=DG -a revnumber=$$REVNUMBER -a revdate=$$REVDATE $(A2X_QUIET) -f pdf $<
 	@mv $(patsubst %.asciidoc,%.pdf,$<) "$@"
 endef
 
 all: \
 	Hootenanny\ -\ User\ Guide.pdf \
-	Hootenanny\ -\ User\ Interface\ Guide.pdf \
-	Hootenanny\ -\ Installation\ Instructions.pdf \
-	Hootenanny\ -\ Developer\ Guide.pdf \
-  Hootenanny\ -\ Algorithms.pdf
+	CoreAPI
 
 # A generic dep for all asciidoc documents. Make sure the environment is setup properly.
 tmp/asciidoc-config: $(HOME)/.asciidoc/filters/gnuplot/gnuplot-filter.conf node_modules
@@ -55,9 +50,10 @@ tmp/rules-template-doxygen: RulesTemplate.dox ../rules/template/*
 	mkdir -p tmp
 	doxygen RulesTemplate.dox
 
-# Tried without success to embed the Core API docs into asciidoc via XML, like the Javascript API is 
-# done, but it errors out with a non-descript message during the conversion from xml to asciidoc. 
-# Worth trying to fix at some point. Going with HTML instead for now.
+# This target builds the the core API documentation with doxygen. Tried without success to embed the 
+# Core API docs into asciidoc via XML, like the Javascript API is done, but it errors out with a 
+# non-descript message during the conversion from xml to asciidoc. May be worth trying to fix at 
+# some point. Going with HTML instead for now.
 CoreAPI: developer/CoreAPI/html/index.html
 
 developer/CoreAPI/html/index.html: CoreAPI.dox
@@ -72,22 +68,14 @@ tmp/RulesTemplate.asciidoc: tmp/rules-template-doxygen DoxygenToAsciiDoc.xslt
 	xsltproc tmp/rules-template-doxygen/xml/combine.xslt tmp/rules-template-doxygen/xml/index.xml > tmp/rules-template-doxygen/xml/combined.xml
 	xsltproc DoxygenToAsciiDoc.xslt tmp/rules-template-doxygen/xml/combined.xml > $@
 
-Hootenanny\ -\ Algorithms.pdf: \
-	HootenannyAlgorithms.asciidoc \
-	tmp/asciidoc-config \
-	../HOOT_VERSION_FILE \
-	docinfo.xml \
-	styles/* \
-	References.asciidoc \
-	algorithms/*.asciidoc
-	$(call buildAsciidoc)
-
 Hootenanny\ -\ User\ Guide.pdf: \
 	HootenannyUserGuide.asciidoc \
 	tmp/asciidoc-config \
 	../HOOT_VERSION_FILE \
 	docinfo.xml \
+	install/* \
 	styles/* \
+	developer/* \
 	tmp/RulesLib.asciidoc \
 	tmp/RulesTemplate.asciidoc \
 	tmp/rules-lib-doxygen \
@@ -100,42 +88,4 @@ Hootenanny\ -\ User\ Guide.pdf: \
 	References.asciidoc \
 	user/*.asciidoc
 	$(call buildAsciidoc)
-
-Hootenanny\ -\ User\ Interface\ Guide.pdf: \
-	HootenannyUI.asciidoc \
-	tmp/asciidoc-config \
-	../HOOT_VERSION_FILE \
-	docinfo.xml \
-	styles/* \
-	tmp/RulesLib.asciidoc \
-	tmp/RulesTemplate.asciidoc \
-	tmp/rules-lib-doxygen \
-	tmp/rules-template-doxygen \
-	user/*.asciidoc
-	$(call buildAsciidoc)
-
-Hootenanny\ -\ Developer\ Guide.pdf: \
-	HootenannyDeveloperGuide.asciidoc \
-	tmp/asciidoc-config \
-	../HOOT_VERSION_FILE \
-	docinfo.xml \
-	styles/* \
-	developer/* \
-	tmp/RulesLib.asciidoc \
-	tmp/RulesTemplate.asciidoc \
-	tmp/rules-lib-doxygen \
-	tmp/rules-template-doxygen \
-	user/*.asciidoc \
-	CoreAPI
-	$(call buildAsciidoc)
-
-Hootenanny\ -\ Installation\ Instructions.pdf: \
-	HootenannyInstallDocs.asciidoc \
-	tmp/asciidoc-config \
-	../HOOT_VERSION_FILE \
-	docinfo.xml \
-	install/* \
-	styles/*
-	$(call buildAsciidoc)
-
 

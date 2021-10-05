@@ -1,8 +1,5 @@
-== Overview
 
-This document describes how to install Hootenanny.  Hootenanny is supported on CentOS 7.x.  Both an RPM package and a virtual machine are provided. Note that the some of the hyperlinks in this document only are navigable when the document is in PDF form.
-
-== Environment
+=== Environment
 
 * Hardware specs may vary. Hootenanny has been successfully installed on VMs. Some suggested specifications:
 	** At least 8GB of RAM, but you can certainly run small datasets on far less.
@@ -10,12 +7,12 @@ This document describes how to install Hootenanny.  Hootenanny is supported on C
 * An installation of CentOS/RHEL 7 64bit with a working yum repository or access to downloadable installable RPM's.
 * A client machine with the Chrome (or Chromium) browser installed. Hootenanny is only supported in Chrome.
 
-== Virtual Machine
+=== Virtual Machine
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/VAGRANT.md[VAGRANT.md]
 
 [[fullinstall]]
-== CentOS/RHEL RPM
+=== CentOS/RHEL RPM
 
 The recommended and easiest installation method is to install from RPMs.  This can be accomplished by running the following commands:
 
@@ -31,7 +28,7 @@ This will set up the EPEL, PGDG, and Hootennanny repositories.  All packages in 
 
 For additional details on configuring the database connection pool, see <<HootDBConnectionPool>>.
 
-== Language Translation Service
+=== Language Translation Service
 
 By default, the Joshua language translation service is not enabled with any languages.  To launch a Joshua translation 
 service for a given language:

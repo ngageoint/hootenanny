@@ -1,5 +1,0 @@
-:imagesdir: ./user
-
-= Hootenanny - User Interface Guide
-
-include::user/Hootenanny-id.asciidoc[]

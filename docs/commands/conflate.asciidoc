@@ -55,9 +55,9 @@ call to the `changeset-derive` command as well.
 
 === See Also
 
-* _Unifying Conflation_, <<hootalgo,Hootenanny - Algorithms>>
-* _Differential Conflation_, <<hootalgo,Hootenanny - Algorithms>>
-* _Attribute Conflation_, <<hootalgo,Hootenanny - Algorithms>>
-* _Horizontal Conflation_, <<hootalgo,Hootenanny - Algorithms>>
+* _Unifying Conflation_, <<hootuser,Hootenanny - User Guide>>
+* _Differential Conflation_, <<hootuser,Hootenanny - User Guide>>
+* _Attribute Conflation_, <<hootuser,Hootenanny - User Guide>>
+* _Horizontal Conflation_, <<hootuser,Hootenanny - User Guide>>
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

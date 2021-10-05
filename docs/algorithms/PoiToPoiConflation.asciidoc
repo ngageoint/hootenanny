@@ -1,8 +1,6 @@
 
-[[PoiToPoi]]
-== POI Conflation
-
-NOTE: This description is current as of Hootenanny v0.2.18.
+[[PoiToPoiAlgs]]
+=== POI Conflation
 
 The PLACES algorithm formerly supported in Hootenanny was designed specifically
 to handle GeoNames style data. In the case of GeoNames it is very fast, but
@@ -25,7 +23,7 @@ The following sections describe the POI to POI conflation design, the test setup
 and finally the test results.
 
 [[PoiToPoiDesign]]
-=== Design
+==== Design
 
 This section covers the POI to POI design by going into details about
 finding match candidates, labeling match candidates and merging matched
@@ -47,7 +45,7 @@ are:
 
 The following sections will detail each of the steps above.
 
-==== Filter Elements to Only POIs
+===== Filter Elements to Only POIs
 
 Hootenanny takes a fairly liberal view on what should be considered a POI. This
 overly optimistic approach may increase the number of unnecessary reviews but
@@ -77,7 +75,7 @@ Some examples of nodes that are not considered to be POIs are below:
 * Stop signs, stop lights, speed bumps.
 * Entrances to buildings.
 
-==== Find Match Candidates
+===== Find Match Candidates
 
 A match candidate is a pair of POIs that need to have a relationship assigned.
 If a pair of POIs are not considered a match candidate then they will never be
@@ -111,7 +109,7 @@ candidates. B and C have search radii that overlap, but B's search radius
 doesn't overlap the node C, neither does C's search radius overlap the node B.
 For this reason B & C are not match candidates.
 
-==== Label Based on Additive Scores
+===== Label Based on Additive Scores
 
 Establishing a relationship between two points is a simple additive score.
 Generally the score starts at zero and as evidence is found of a match the score
@@ -147,7 +145,7 @@ relationship:
 * If the score is between 0.5 and 1.9 the relationship is a review.
 * If the score is >= 1.9 the relationship is a match.
 
-==== Comparing POI Types
+===== Comparing POI Types
 
 Types are not always the same in the input data. One user may have an extraction
 guide that specifies a point should have the type of its primary use (e.g.
@@ -162,7 +160,7 @@ graph contains both `isA` and `similarTo` relationships. Details on how the
 graph works can be found in <<CalculatingEnumeratedScore,Calculating the
 Enumerated Score>>.
 
-==== Example Scores
+===== Example Scores
 
 The table below lists a handful of examples as well as the associated scores and
 relationships.
@@ -179,7 +177,7 @@ relationships.
 | name=Izbat Hawd an Nada, place=village | name=Izbat as Sab'in, place=populated | 0 Miss | None given by routine (Izbat is a common word so it is given a low weight when comparing names)
 |======
 
-==== Merging POIs
+===== Merging POIs
 
 After relationships have been determined the system then determines how to apply
 said relationships. The simplest cases are when a point is only involved in a
@@ -196,7 +194,7 @@ The first input is always used as the reference geometry.
 The tags are merged using the default tag merging routine. Unless otherwise
 specified the default tag merging routine is averaging.
 
-=== Test Setup
+==== Test Setup
 
 To evaluate the performance of automatically conflated results manually matched
 data is used. The manually matched data was translated into the OSM schema
@@ -263,7 +261,7 @@ mileage will vary. There can be a great deal of variance in input data sets. To
 get accuracy values over a new dataset a small test region should be evaluated
 to obtain values specific to your data set.
 
-=== Test Results
+==== Test Results
 
 The test results are presented in the tables below. Note that the tables below
 represent the categorization of relationships between POIs (not the number of
@@ -301,7 +299,7 @@ POI pair is relatively quick at about 12-20 seconds per review.
 |======
 
 [[PoiToPoiPoiFutureWork]]
-=== Future Work
+==== Future Work
 
 In this section we discuss some areas of possible improvement.
 
@@ -326,5 +324,4 @@ efficiency the user could be guided through the matching process with the UI.
 This would dramatically speed up the process of creating training data, but
 there is the possibility that false negatives (matches that Hootenanny misses)
 will be dropped from the data.
-
 

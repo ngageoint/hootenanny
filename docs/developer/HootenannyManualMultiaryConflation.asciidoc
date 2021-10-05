@@ -1,19 +1,19 @@
 
 [[ManualMultiaryConflation]]
-== Manual Multiary Conflation
+=== Manual Multiary Conflation
 
 To train a conflation model for a particular data type when using Hootenanny, it often relies on data manually matched by a human. The manual matching process for multiary conflation varies from the typical pairwise conflation. This section describes the manual multiary conflation process to generate training data.
 
-=== Prerequisites
+==== Prerequisites
 
 * Install JOSM on your PC.  It can be found here: http://josm.openstreetmap.de/  The quick start (easiest, but slowest install) can be accessed here: http://josm.openstreetmap.de/download/josm.jnlp
 * Use the Highlight Todo "paint style":https://josm.openstreetmap.de/wiki/Styles : https://github.com/ngageoint/hootenanny/tree/develop/docs/styles/TrainingDataStyle.mapcss
 
-=== Test Data Preparation
+==== Test Data Preparation
 
 For some detailed background information that is generally relevant please see <<HootenannyManualConflation>>.
 
-==== Test Data Preparation Quick Start
+===== Test Data Preparation Quick Start
 
 Put all of your data into an OSM format/schema.
 
@@ -41,8 +41,7 @@ REVIEW=none
 
 The ID, `1-00171` is a number that is unique to these three files. The first section `1-` refers to the _file number_ that was specified on the command line (in this case, 1, 2 or 3). The following sections will describe how this information will be used.
 
-
-==== POI Matching Standards
+===== POI Matching Standards
 
 POI matching is the process of tagging nodes with information that explicitly states the matching relationship between POIs. What is a POI? This definition gets nasty and rather than play semantics police we call all point data representing semi-permanent locations a POI. Or in other words, anything OSM tags as a node. (E.g. stop signs, bridges, restaurants, cities, etc.)
 
@@ -52,7 +51,7 @@ The possible relationships between two POIs are below. A pair of POIs should onl
 * Miss - The user is confident that the two POIs do not represent the same entity.
 * Review - The user is confused. This data requires more research to figure out which data set is right/wrong.
 
-===== POI Match Tagging
+*_POI Match Tagging_*
 
 When manually matching data a single value will be assigned to all the elements that represent the same physical entity. The value given should be the lowest ID of any of the members in the cluster. E.g. if `1-000010`, `1-000023`, `2-000007` and `3-000abc` are all in the same cluster then all the associated `MATCH` tags should be assigned `1-000010` as the value. Lowest is determined by sorting first by input number, then the number inside the data set. E.g. `1-009999` is lower than `2-000000`.
 
@@ -95,3 +94,4 @@ ID=1-000111; MATCH=none; REVIEW=none; amenity=restaurant; name=Bill's Burgers
 ID=2-000079; MATCH=none; REVIEW=1-000111;1-000835; amenity=restaurant;
 ID=1-000835; MATCH=none; REVIEW=none; amenity=restaurant; name=Tim's Tacos
 ----------------------------
+

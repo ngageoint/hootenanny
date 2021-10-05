@@ -1,6 +1,6 @@
 
 [[LanguageTranslation]]
-== Language Translation
+=== Language Translation
 
 Hootenanny supports translating tag values to English.  At the time of this writing, translation is available only via 
 the command line (alternatively, you could write your own translation client), you must have the Hootenanny Web 
@@ -166,5 +166,5 @@ hoot convert -D convert.ops="ToEnglishTranslationVisitor" -D language.translatio
   -D language.translation.translator=MyTranslator input.osm output.osm
 -------------------
 
-Note that the translator used must implement the `ToEnglishTranslator` interface.
+NOTE: The translator used must implement the `ToEnglishTranslator` interface.
 

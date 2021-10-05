@@ -1,6 +1,6 @@
 
 [[GenericGeometryConflation]]
-== Generic Geometry Conflation
+=== Generic Geometry Conflation
 
 Generic Geomtry has not been extensively tested for conflation accuracy yet.
 

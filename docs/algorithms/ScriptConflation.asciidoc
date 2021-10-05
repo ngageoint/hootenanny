@@ -1,5 +1,5 @@
 
-== Javascript Conflation
+=== Javascript Conflation
 
 Hootenanny supports "highway" conflation as defined by OpenStreetMap (OSM). In
 OSM jargon a "highway" refers to paths, roads, cart tracks and possibly bridges
@@ -18,7 +18,7 @@ The following sections discuss an approach to conflating lines in the general
 case. This approach is currently being investigated and will likely generate
 more discussion and refinement.
 
-=== Background
+==== Background
 
 Hootenanny currently supports generic conflation of data sets through the
 JavaScript (<<JS,JS>>) Application Programmers Interface (API). See the
@@ -83,7 +83,7 @@ See also:
 * <<UnifyingConflation,Unifying Conflation>>
 * <<RoadConflation,Road Conflation>>
 
-==== Example Data Sets
+===== Example Data Sets
 
 [[coastlines]]
 .Coastlines
@@ -96,7 +96,7 @@ road conflation routine with coastlines would likely produce sub-optimal
 results, but conflating with a user derived set of rules could perform quite
 well.
 
-=== Approach
+==== Approach
 
 For the next phase of development we propose creating a new JavaScript API for
 conflating linear data. This new approach will support some of the more complex
@@ -114,7 +114,7 @@ This generic approach to conflation rules will allow the user to define a number
 of different conflation algorithms without getting into the details of the
 geometry manipulations.
 
-==== Designate Line Candidate Bounds
+===== Designate Line Candidate Bounds
 
 Before any match relationships are established a pair of lines or sublines must
 be designated as a potential match. This is generally comparable to the maximum
@@ -135,7 +135,7 @@ bounds:
 * Maximum angular difference
 * Maximal subline routine
 
-==== Designate an Element as a Candidate for Conflation
+===== Designate an Element as a Candidate for Conflation
 
 For optimization purposes we don't want to evaluate all element pairs for
 conflation if we know in advance that we can filter based on very coarse
@@ -153,7 +153,7 @@ as needed. For example `isBuilding`, `isArea`, `isLinear`, etc.
 
 See _Modifying Hootenanny with JavaScript_ <<hootuser>> for details.
 
-==== Estimate Subline Relationships
+===== Estimate Subline Relationships
 
 Given a pair of line segments, assign a score to the relationship. This score is
 in the form of 3 numbers that represent the probability of match, miss and
@@ -166,7 +166,7 @@ section to determine the best set of matches to merge or mark as needing review.
 
 See _Modifying Hootenanny with JavaScript_ <<hootuser>> for the interface.
 
-==== Merge Lines
+===== Merge Lines
 
 Finally, the JavaScript routines must designate how the lines are to be merged.
 This falls into two broad categories.
@@ -199,7 +199,7 @@ See also:
 
 * `snapWays` in <<hootuser>>
 
-=== Exposed Hootenanny APIs
+==== Exposed Hootenanny APIs
 
 As the effort evolves we will surely determine additional points to expose
 appropriate functionality from Hootenanny code to the JS interface. At that
@@ -216,7 +216,7 @@ interfaces that may be exposed.
 Example uses of these methods can be found in the hoot source code under
 `rules/Line.js`.
 
-=== Generic Line Conflation Test
+==== Generic Line Conflation Test
 
 The various test configuration are described in the sections below. All of these
 tests compare a generic line conflation technique against the tuned Random
@@ -228,7 +228,7 @@ thoroughness. These tests give a general impression of the performance
 characteristics, but more time could be spent to provide better explanations and
 more diverse scenarios. See <<GenericLineConflationFutureWork>> for details.
 
-==== DC Tiger Perty
+===== DC Tiger Perty
 
 This test configuration uses Tiger data over the DC region to determine
 performance. The `perturb --test` command is used with the following configuration:
@@ -247,14 +247,14 @@ During each test run the `perty.systematic.error.x` and
 `perty.systematic.error.y` values are modified to vary the amount of error in
 the tests.
 
-==== Jakarta Easy Test
+===== Jakarta Easy Test
 
 This test scenario uses two manually conflated data in a simple region of
 Jakarta as a baseline for evaluation. The methods described in the
 <<Evaluation,Evaluation>> section are used for comparison. A higher value means
 closer agreement with the manually conflated data.
 
-==== Jakarta Spaghetti Test
+===== Jakarta Spaghetti Test
 
 Similar to above, this test scenario uses two manually conflated data sets, but
 in a more complex interchange region of Jakarta. The methods described in the
@@ -263,7 +263,7 @@ closer agreement with the manually conflated data. Maintaining proper network
 topology is much more complicated in this scenario due to multiple overpasses,
 one way streets and tunnels.
 
-==== Manually Matched
+===== Manually Matched
 
 This data set contains test data over the regions described in _Classify the
 Match_ section. This is likely the most comprehensive of the tests for match
@@ -271,7 +271,7 @@ results as it uses data over several regions extracted using several different
 methods. However, this test does very little for evaluating how well features
 are merged.
 
-==== Test Results
+===== Test Results
 
 [[GenericConflationQuality]]
 .Conflation Quality
@@ -353,15 +353,15 @@ time demonstrating that the runtime difference will be data set specific.
 Further work is required if we want to quantify when to expect those
 differences.
 
-=== River Conflation
+==== River Conflation
 
-==== Overview
+===== Overview
 
 A variant of generic line conflation specific to conflating rivers (linear waterways) is available within
 Hootenanny.  A river conflation model was developed based on test scenarios using manually matched data
 in the regions of Haiti and San Diego, USA as a baseline for evaluation.
 
-==== Approach
+===== Approach
 
 The goal for the initial conflation of rivers was that the number of correctly conflated features plus
 the number of features marked for manual review would equal at least 80% of the overall conflated
@@ -412,7 +412,7 @@ extracted sublines closer in distance higher than those that were further apart.
 
 See the User Guide section on river conflation for details on configuration options.
 
-==== Results
+===== Results
 
 .*Generic River Conflation Test Results*
 [width="100%"]
@@ -425,7 +425,7 @@ See the User Guide section on river conflation for details on configuration opti
 The goal of 80% combined correct and reviewable was met with the Haiti river data, but was not met with the San Diego river data.
 Future work listed in a following section should help to increase the conflation accuracy further.
 
-==== Future Work
+===== Future Work
 
 There are opportunities for improving river conflation using Hootenanny:
 
@@ -433,9 +433,9 @@ There are opportunities for improving river conflation using Hootenanny:
 with larger amounts of nodes and overlapping sublines will improve the performance of river conflation.
 2. Using Frechet distance could possibly improve Hootenanny river conflation.
 
-=== Power Line Conflation
+==== Power Line Conflation
 
-==== Overview
+===== Overview
 
 The goal for the initial conflation of power lines was that the number of correctly conflated features plus the number of features marked
 for manual review would equal at least 80% of the overall conflated features in each test dataset.  An attempt was made to have a as close
@@ -443,7 +443,7 @@ to a minimum of 200 manually matched features as possible in each dataset, while
 them could be run in roughly ten minutes or less.  A rules based conflation model was constructed that maximized the conflation output quality
 for all input datasets.
 
-==== Approach
+===== Approach
 
 .*Power Line Conflation Attempted Techniques*
 [width="100%"]
@@ -461,20 +461,20 @@ for all input datasets.
 | voltage tag matching | yes | disambiguate matches using the voltage rating of the power line
 |======
 
-===== Subline Matching
+Subline Matching
 
 Due to the detail in some of the input datasets containing many small power line sections, Frechet Distance based subline matching was the
 only available subline matcher that had reasonable runtime performance.  At times, maximal subline matching could catch additional desirable
 feature matches that Frechet did not (most of which should be reviewed instead of matched).  However, when attempting to combine the two
 within the model, results did not improve and runtime suffered.
 
-===== Rubber Sheeting
+Rubber Sheeting
 
 Initially, rubber sheeting resulted in runtime exceptions for some of the input data.  The cause for this seems due to multiple ways
 sharing the same node, however the exact cause wasn't immediately obvious.  Adding a configuration option to disable the error handling,
 turned on by default, for the situation resulted in an increased conflation score without having an adverse affect on any other conflation.
 
-===== Tags
+Tags
 
 For the input data that contained them, voltage tags were very valuable when trying to disambiguate matches in dense areas of power lines
 (especially near power stations).  Fortunately, a lot of the open source data had fairly accurate voltage tags.
@@ -482,7 +482,7 @@ For the input data that contained them, voltage tags were very valuable when try
 To a lesser degree, the location tag used in the OpenStreetMap power line mapping specification was valuable.  Since power lines can exist
 both above and under, it can be difficult to correctly conflate underground power lines if they are not so labeled.
 
-==== Difficulties
+===== Difficulties
 
 The largest difficulty in conflating power lines was due to: 1) differing standards on mapping power lines on towers, 2) data mapped incorrectly based off of aerial imagery, 3) power lines that start as overhead and are later buried underground.
 
@@ -496,7 +496,7 @@ Since power lines can become very dense in urban areas, it can be difficult to c
 the OpenStreetMap data used during testing that had been mapped from aerial imagery appeared to incorrectly connect power line ways when
 compared to the more specialized open source power line datasets coming from power companies (ENERGYDATA.INFO, California State Government).
 
-==== Results
+===== Results
 
 .*Power Line Conflation Test Results - July 2018*
 [width="100%"]
@@ -520,7 +520,7 @@ custom data sources due to OSM's richness as a result of open source contributio
 valid.
 
 [[GenericLineConflationFutureWork]]
-=== Future Work
+==== Future Work
 
 To investigate this approach and it's performance on known data we will likely
 follow the steps listed below. These steps may change with

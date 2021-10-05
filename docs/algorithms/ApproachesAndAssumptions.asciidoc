@@ -1,6 +1,6 @@
 
 
-== Approach & Assumptions
+=== Approach & Assumptions
 
 Hootenanny is designed to facilitate automated and semi-automated conflation of
 critical Foundation GEOINT features in the topographic domain, namely roads (polylines),
@@ -36,7 +36,7 @@ No attempt has been made to accurately handle data that spans the anti-meridian
 anti-meridian problem is proposed in <<HootExplFutureWork>>.
 
 [[HootConflationWorkflow]]
-=== Conflation Workflow
+==== Conflation Workflow
 
 The general case of the Hootenanny conflation workflow is shown in <<HootConflationWorkflowDiagram>>
 and depicts the high-level steps necessary to conflate data and generate an output
@@ -50,7 +50,7 @@ workflow is described as follows:
 image::images/hoot_general_workflow.png[]
 
 [[HootExplFileConversion]]
-=== File Conversion
+==== File Conversion
 
 Before any data set is used by Hootenanny, it must be converted to the OSM
 format and schema. In the case of FACC data this means performing conversions
@@ -85,14 +85,14 @@ data to other formats such as File Geodatabase with the FACC or NFDD schema.
 NOTE: Hootenanny allows users to append new non-standard tags to OSM schema in
 order to retain unique values from input data sets.
 
-=== Conflation
+==== Conflation
 
 Hootenanny provides both a web based User Interface and command line interface
 for performing data manipulations and conflation. While there are tunable
 parameters that can be set, all the conflation steps are fully automated.
 
 [[ExplDataCurrency]]
-=== Data Currency
+==== Data Currency
 
 While merging two data sets that represent the same world is difficult, merging
 two data sets that represent the world at different times is significantly

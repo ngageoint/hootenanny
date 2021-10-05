@@ -1,0 +1,5 @@
+
+== Developer
+
+This section describes documentation useful to Hootenanny software developers.
+

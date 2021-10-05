@@ -1,6 +1,6 @@
 
 [[HootConfiguringOsmApiDatabaseConflation]]
-== Configuring an OSM API Database Connection
+=== Configuring an OSM API Database Connection
 
 Hootenanny stores conflated data internally in a custom OSM API database (hootapidb://). Hootenanny also keeps a copy of a
 standard OSM API database for internal testing purposes. By default, Hootenanny is configured with an empty test OSM 

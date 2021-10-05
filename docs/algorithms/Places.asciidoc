@@ -1,6 +1,6 @@
 
 [[PoiConflation]]
-== PLACES POI Conflation
+=== PLACES POI Conflation
 
 The following sections describe the attempt to emulated PLACES point conflation
 and provides some simple examples of data processing.
@@ -18,7 +18,7 @@ also maintains a database of all the conflated results with links to the source
 data. These sections are only concerned with the POI conflation and do not
 address the database, web interface or persisting source data.
 
-=== PLACES Conflation Process
+==== PLACES Conflation Process
 
 The conflation process is a rule based approach to determining point matches and
 then merging those matches into a single feature. Because there may be features
@@ -47,7 +47,7 @@ Challenge conflation contains the same steps as Self-Conflation but performs the
 4. Place Challenge - Match and merge POIs where there is an exact latitude/longitude match and name does not have to be the same.
 5. Challenge NoMatch - Insert unmatched data from the challenge dataset into the base dataset.
 
-==== Goodness
+===== Goodness
 
 Goodness is a concept in the PLACES code for determining if two points are a
 match or not. It is based on rules for geometric distance as well as edit
@@ -55,17 +55,17 @@ distance between names. If both the names are considered close enough and the
 distance is considered close enough then the points are merged. The sections
 below describe the algorithms used to determine these matches.
 
-===== Point Accuracy
+Point Accuracy
 
 Each point is classified as either accurate or inaccurate based on the point location of the data. If the point rounds to the nearest arcminute then it is considered inaccurate. Otherwise it is considered accurate.
 
-===== Geometry Matching
+Geometry Matching
 
 If the distance between the two points is less than _x_ distance then the POIs are candidates for matching.
 
 _x_ is determined based on the inaccurate/accurate class of the POI. If the POI is _inaccurate_ then x is 56km. If the POI is _accurate_ then _x_ is 1km.
 
-===== Name Matching
+Name Matching
 
 A Levenshtein Similarity score is calculated for each candidate POI. To calculate the similarity the highest scoring similarity of all name combinations is used where Levenshtein Similarity is defined as:
 
@@ -73,7 +73,7 @@ A Levenshtein Similarity score is calculated for each candidate POI. To calculat
 
 image::images/places/image007.png[]
 
-===== Calculating Goodness
+Calculating Goodness
 
 Goodness is calculated as:
 
@@ -90,7 +90,7 @@ image::images/places/image009.png[]
 
 Any goodness score greater than or equal to a threshold is considered a match. The threshold defaults to 0.3.
 
-==== Merge Matched Records
+===== Merge Matched Records
 
 If one record is considered accurate and the other is not, then the accurate
 geometry is used as the geometry for both names. Otherwise the chosen geometry
@@ -99,7 +99,7 @@ links such that the original data can be retrieved for any conflated record. The
 Name Conflation portion of the algorithm removes duplicate names at the same
 point, while retaining all other associated information.
 
-=== Hootenanny's PLACES Conflation
+==== Hootenanny's PLACES Conflation
 
 In the POI conflation code Hootenanny attempts to follow the PLACES approach
 closely but rather than perform both a Self-Conflation and Challenge-Conflation
@@ -107,7 +107,7 @@ step, Hootenanny conflates all the data as a single step. This may introduce
 some differences with the PLACES conflation process. A discussion occurs at the
 end of the document as well as some potential solutions to the problems.
 
-==== Geometry Matching
+===== Geometry Matching
 
 With regards to an exact geometry match, Hootenanny defines an exact geometry
 match as any two points that are within \~1mm to avoid minor floating point
@@ -119,7 +119,7 @@ circular error values as the threshold, but for PLACES compatibility it uses the
 maximum of the two values as the threshold. It is expected that the input data
 will have this field populated with either 56km or 1km as appropriate.
 
-==== POI Merging
+===== POI Merging
 
 When two or more features are identified as matching, they are grouped into a
 set. The feature with the lowest CE is used as merged geometry and adopt that
@@ -127,7 +127,7 @@ geometry's CE. At this point only name merging is supported (not the full
 attribute conflation). To this end any name that is unique will be kept in the
 final output.
 
-==== Provenance
+===== Provenance
 
 Provenance can be provided in Hootenanny by specifying a uid (unique identifier
 tag). This uid tag will be carried along with all input data and as multiple
@@ -140,7 +140,7 @@ semi-colons as described on the <<OpenStreetMap,OpenStreetMap>> wiki. This
 provenance information can be used to link the conflated output to the original
 source data and possibly used to recreate the links that PLACES maintains.
 
-=== Calling Hootenanny Conflation
+==== Calling Hootenanny Conflation
 
 The input data must contain at least the following tags:
 
@@ -163,7 +163,7 @@ mv allCountries.txt allCountries.geonames
 hoot convert -D "convert.ops=SchemaTranslationVisitor" -D schema.translation.script=$HOOT_HOME/translations/GeoNamesOrg.js allCountries.geonames allCountries.osm.pbf
 -------
 
-=== Hootenanny Example Conflation Results
+==== Hootenanny Example Conflation Results
 
 Below is an example using generated data over Colorado Springs, CO. There are a
 total of 21 input features including four park POIs, five city/town center
