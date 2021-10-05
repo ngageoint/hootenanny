@@ -1178,7 +1178,7 @@ QStringList ScriptMatchCreator::getCriteria() const
 void ScriptMatchCreator::_validateRailConfig(Local<Object> plugin) const
 {
   const double railwayTypeMatchThreshold =
-    ScriptMatchVisitor::getNumber(plugin, "typeMatchThreshold", 0.0, 1.0);
+    ScriptMatchVisitor::getNumber(plugin, "typeThreshold", 0.0, 1.0);
   if (railwayTypeMatchThreshold < 0.0 ||  railwayTypeMatchThreshold > 1.0)
   {
     throw IllegalArgumentException(

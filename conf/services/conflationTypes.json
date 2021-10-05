@@ -147,7 +147,7 @@
             "railways.crossing.marker.ignore.types": "Types to ignore when detecting crossing railways",
             "railways.crossing.marker.mark.intra.dataset.crossings": "Allows for marking crossing railways within the same input dataset",
             "search.radius.railway": "Search radius (m); -1 for default",
-            "railway.type.match.threshold": "Type match threshold; 0.0 to 1.0"
+            "railway.type.threshold": "Type match threshold; 0.0 to 1.0"
         }
     },
     "Relations": {

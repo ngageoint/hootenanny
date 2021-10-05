@@ -24,8 +24,8 @@ exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default")
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 
-// This is used only to determine type similarity and are independent of the other score thresholds.
-exports.typeMatchThreshold = parseFloat(hoot.get("railway.type.match.threshold"));
+// This is used only to determine type similarity and is independent of the other score thresholds.
+exports.typeThreshold = parseFloat(hoot.get("railway.type.threshold"));
 
 // geometry matchers
 
@@ -135,19 +135,23 @@ function geometryMismatch(map, e1, e2, minDistanceScore, minHausdorffDistanceSco
   return true;
 }
 
-function getTypeScore(e1, e2, reviewMessage)
+function typeMismatch(e1, e2)
 {
-  var tags1 = e1.getTags();
-  var tags2 = e2.getTags();
-  
   // Don't match passenger rails against rails used internally by the railroad company.
-  if (tags1.onlyOneContainsKvp(tags2, "service=yard"))
+  if (e1.getTags().onlyOneContainsKvp(e2.getTags(), "service=yard"))
   {
     hoot.trace("service=yard mismatch");
-    return 0.0;
+    return true;
   }
-
-  return hoot.OsmSchema.scoreTypes(tags1, tags2, true);
+  // If both features have types and they aren't just generic types, let's do a detailed type
+  // comparison and look for an explicit type mismatch.
+  var typeScorePassesThreshold = !hoot.OsmSchema.explicitTypeMismatch(e1, e2, exports.typeThreshold);
+  hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
+  if (!typeScorePassesThreshold)
+  {
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -188,13 +192,10 @@ exports.matchScore = function(map, e1, e2)
 
   // Note: No need has been apparent *yet* to do match filtering via name.
 
-  // Check for a type match.
-  var typeReviewMessage = { message: "" };
-  var typeScore = getTypeScore(e1, e2, typeReviewMessage);
-  hoot.trace("typeScore: " + typeScore);
-  if (typeScore < exports.typeMatchThreshold)
+  // Check for a type mismatch.
+  if (typeMismatch(e1, e2))
   {
-    hoot.trace("Type mismatch: " + e1.getElementId()  + ", " + e2.getElementId());
+    hoot.trace("type mismatch");
     return result;
   }
 

@@ -4503,7 +4503,7 @@ are satisfied for a railway match.
 
 The way subline matcher to use when determining matching sublines.
 
-=== railway.type.match.threshold
+=== railway.type.threshold
 
 * Data Type: double
 * Default Value: `0.8`
