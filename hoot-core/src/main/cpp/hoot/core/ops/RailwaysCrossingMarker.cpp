@@ -67,8 +67,8 @@ _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 void RailwaysCrossingMarker::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  _createTagExcludeFilter(configOptions.getRailwaysCrossingMarkerIgnoreTypes());
-  _markIntraDatasetCrossings = configOptions.getRailwaysCrossingMarkerMarkIntraDatasetCrossings();
+  setTagExcludeFilter(configOptions.getRailwaysCrossingMarkerIgnoreTypes());
+  setMarkIntraDatasetCrossings(configOptions.getRailwaysCrossingMarkerMarkIntraDatasetCrossings());
 }
 
 void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
@@ -183,7 +183,7 @@ void RailwaysCrossingMarker::apply(const OsmMapPtr& map)
   }
 }
 
-void RailwaysCrossingMarker::_createTagExcludeFilter(const QStringList& excludeTags)
+void RailwaysCrossingMarker::setTagExcludeFilter(const QStringList& excludeTags)
 {
   if (excludeTags.empty())
   {
@@ -241,7 +241,7 @@ bool RailwaysCrossingMarker::_isMatchCandidate(ConstElementPtr element) const
 {
   return
     RailwayCriterion().isSatisfied(element) &&
-    (_tagExcludeFilter && _tagExcludeFilter->isSatisfied(element));
+    (!_tagExcludeFilter || _tagExcludeFilter->isSatisfied(element));
 }
 
 QStringList RailwaysCrossingMarker::getCriteria() const

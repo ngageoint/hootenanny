@@ -26,44 +26,80 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RailwaysCrossingMarker.h>
-#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
 
 class RailwaysCrossingMarkerTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(RailwaysCrossingMarkerTest);
-    CPPUNIT_TEST(runBasicTest);
-    CPPUNIT_TEST(runTagExcludeTest);
-    CPPUNIT_TEST(runPreventIntraDatasetMarkingTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(RailwaysCrossingMarkerTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runTagExcludeTest);
+  CPPUNIT_TEST(runPreventIntraDatasetMarkingTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
   RailwaysCrossingMarkerTest() :
-  HootTestFixture("test-files/", UNUSED_PATH)
+  HootTestFixture(
+    "test-files/ops/RailwaysCrossingMarkerTest/", "test-output/ops/RailwaysCrossingMarkerTest/")
   {
   }
 
   void runBasicTest()
   {
+    // The basic config will create a review for any crossing rail pairs. One review should be
+    // generated.
 
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, _inputPath + "input.osm", false, Status::Unknown1);
+
+    RailwaysCrossingMarker uut;
+    uut.setMarkIntraDatasetCrossings(true);
+    uut.apply(map);
+
+    CPPUNIT_ASSERT_EQUAL(1, MapUtils::getNumReviews(map));
   }
 
   void runTagExcludeTest()
   {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, _inputPath + "input.osm", false, Status::Unknown1);
+    RailwaysCrossingMarker uut;
+    uut.setMarkIntraDatasetCrossings(true);
 
+    // Exclude railway=subway, which one of the features has. No reviews should be generated.
+
+    uut.setTagExcludeFilter(QStringList("railway=subway"));
+    uut.apply(map);
+
+    CPPUNIT_ASSERT_EQUAL(0, MapUtils::getNumReviews(map));
+
+    // Exclude railway=tram, which one of the features has. No reviews should be generated.
+
+    uut.setTagExcludeFilter(QStringList("railway=tram"));
+    uut.apply(map);
+
+    CPPUNIT_ASSERT_EQUAL(0, MapUtils::getNumReviews(map));
   }
 
   void runPreventIntraDatasetMarkingTest()
   {
+    // Prevent intra-dataset marking. Since all features are read in with the same status, no
+    // reviews should be generated.
 
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, _inputPath + "input.osm", false, Status::Unknown1);
+
+    RailwaysCrossingMarker uut;
+    uut.setMarkIntraDatasetCrossings(false);
+    uut.apply(map);
+
+    CPPUNIT_ASSERT_EQUAL(0, MapUtils::getNumReviews(map));
   }
 };
 

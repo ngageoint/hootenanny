@@ -43,8 +43,8 @@ namespace hoot
 {
 
 /**
- * Marks railway features which cross each other. Has options to ignore certain rail types and to
- * prevent marking features that are source from the same input.
+ * Marks railway features for review which cross each other. Has options to ignore certain rail
+ * types and to prevent marking features that are source from the same input.
  *
  * Choosing not to make this a validator since there is already a crossing rails marker in JOSM. The
  * case could be made at some point to implement Validator if there are differences in the
@@ -95,6 +95,18 @@ public:
    */
   QStringList getCriteria() const override;
 
+  /**
+   * @brief setTagExcludeFilter adds tag kvp's for features which should be excluded from marking
+   * @param excludeTags list of tag kvp's to exclude
+   */
+  void setTagExcludeFilter(const QStringList& excludeTags);
+  /**
+   * @brief setMarkIntraDatasetCrossings determines whether feature pairs from within the same input
+   * dataset may be marked.
+   * @param mark true to mark features within the same input dataset; false otherwise
+   */
+  void setMarkIntraDatasetCrossings(const bool mark) { _markIntraDatasetCrossings = mark; }
+
 private:
 
   OsmMapPtr _map;
@@ -109,7 +121,9 @@ private:
   // be considered
   bool _markIntraDatasetCrossings;
 
+  // set of concatenated feature pair ID strings; e.g. Way(-1);Way(-2)
   QSet<QString> _markedRailways;
+  // total number of railways parsed
   int _numRailways;
 
   int _taskStatusUpdateInterval;
@@ -117,7 +131,6 @@ private:
   void _createIndex();
   Meters _getSearchRadius(const ConstElementPtr& e) const;
   bool _isMatchCandidate(ConstElementPtr element) const;
-  void _createTagExcludeFilter(const QStringList& excludeTags);
 };
 
 }

@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="30.0806552" minlon="31.2778168" maxlat="30.1661741" maxlon="31.341477"/>
+    <node visible="true" id="316642887" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.0806551999999989" lon="31.2856908000000011"/>
+    <node visible="true" id="316642888" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.0822320000000012" lon="31.2878076000000007">
+        <tag k="int_name" v="Manshiet El-Sadr"/>
+        <tag k="name:ar" v="منشية الصدر"/>
+        <tag k="name:en" v="Manshiet Al-Sadr"/>
+        <tag k="railway" v="station"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="منشية الصدر"/>
+        <tag k="note" v="correct arabic tag"/>
+        <tag k="source:datetime" v="2013-03-02T12:05:44.000Z"/>
+    </node>
+    <node visible="true" id="316643067" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.0869381999999987" lon="31.2938091000000007">
+        <tag k="int_name" v="Kobri El-Qobba"/>
+        <tag k="name:ar" v="كوبري القبة"/>
+        <tag k="name:en" v="Kobri Al-Qobba"/>
+        <tag k="railway" v="station"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="كوبري القبة"/>
+        <tag k="source:datetime" v="2013-03-02T12:05:43.000Z"/>
+    </node>
+    <node visible="true" id="316643069" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.0903397999999989" lon="31.2980580999999987">
+        <tag k="int_name" v="Hammamat El-Qobba"/>
+        <tag k="name:ar" v="حمامات القبة"/>
+        <tag k="name:en" v="Hammamat Al-Qobba"/>
+        <tag k="railway" v="station"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="حمامات القبة"/>
+        <tag k="source:datetime" v="2013-03-02T12:05:43.000Z"/>
+    </node>
+    <node visible="true" id="316643070" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.0931850999999995" lon="31.3010334999999991"/>
+    <node visible="true" id="316643072" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.0967854999999993" lon="31.3038856000000010"/>
+    <node visible="true" id="316643073" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.0980767000000000" lon="31.3047326000000012">
+        <tag k="int_name" v="Saray El-Qobba"/>
+        <tag k="name:ar" v="سراي القبة"/>
+        <tag k="name:en" v="Saray Al-Qobba"/>
+        <tag k="railway" v="station"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="سراي القبة"/>
+        <tag k="source:datetime" v="2013-03-02T12:05:43.000Z"/>
+    </node>
+    <node visible="true" id="316643074" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1002977999999999" lon="31.3059541000000010"/>
+    <node visible="true" id="316643075" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1017234999999985" lon="31.3069755000000001"/>
+    <node visible="true" id="316643076" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1033720000000002" lon="31.3084431999999993"/>
+    <node visible="true" id="316643077" timestamp="2020-04-02T13:32:53Z" version="2" changeset="890350" user="sboggiano" uid="1000002028" lat="30.1052147999999988" lon="31.3099309999999988">
+        <tag k="int_name" v="Hadayeq El-Zaitoun"/>
+        <tag k="source:imagery:layerName" v="Ecopia African Imagery"/>
+        <tag k="name:ar" v="حدائق الزيتون"/>
+        <tag k="name:en" v="Hadayeq Al-Zaitoun"/>
+        <tag k="railway" v="station"/>
+        <tag k="source:imagery:datetime" v="acq_date"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="حدائق الزيتون"/>
+        <tag k="source:imagery:id" v="1040010046A12B00"/>
+        <tag k="source:datetime" v="2013-03-02T12:05:43.000Z"/>
+        <tag k="source:imagery:sensor" v="sensor"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+    </node>
+    <node visible="true" id="316643079" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1068396000000007" lon="31.3110695999999997"/>
+    <node visible="true" id="316643081" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1085102000000013" lon="31.3123742000000007"/>
+    <node visible="true" id="316643083" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1096536999999991" lon="31.3130780000000009"/>
+    <node visible="true" id="316643085" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1107377000000014" lon="31.3135158000000011"/>
+    <node visible="true" id="316643089" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1128761000000011" lon="31.3140135999999991"/>
+    <node visible="true" id="316643091" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1138264000000007" lon="31.3139448999999992">
+        <tag k="int_name" v="Helmeyet El-Zaitoun"/>
+        <tag k="name:ar" v="حلمية الزيتون"/>
+        <tag k="name:en" v="Helmeyet Al-Zaitoun"/>
+        <tag k="railway" v="station"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="حلمية الزيتون"/>
+        <tag k="source:datetime" v="2013-03-02T12:05:43.000Z"/>
+    </node>
+    <node visible="true" id="316643093" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1151182999999989" lon="31.3138590999999984"/>
+    <node visible="true" id="316643095" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1166848000000016" lon="31.3135243999999986"/>
+    <node visible="true" id="316643097" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1189493000000006" lon="31.3134556999999987"/>
+    <node visible="true" id="316643098" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1201000000000008" lon="31.3134814000000006"/>
+    <node visible="true" id="316643099" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1213215000000005" lon="31.3138682999999993">
+        <tag k="int_name" v="El-Matareyya"/>
+        <tag k="name:ar" v="المطرية"/>
+        <tag k="name:en" v="El-Matareyya"/>
+        <tag k="railway" v="station"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="المطرية"/>
+        <tag k="source:datetime" v="2013-03-02T12:05:44.000Z"/>
+    </node>
+    <node visible="true" id="316643100" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1229508000000017" lon="31.3147431999999988"/>
+    <node visible="true" id="316643102" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1260906000000013" lon="31.3164911000000004"/>
+    <node visible="true" id="316643104" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1300998000000000" lon="31.3186226999999988"/>
+    <node visible="true" id="316643108" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1358825000000010" lon="31.3216611000000000"/>
+    <node visible="true" id="316643109" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1371147000000015" lon="31.3224336000000001"/>
+    <node visible="true" id="316643111" timestamp="2020-06-17T19:43:32Z" version="3" changeset="1142348" user="AndrewKerr" uid="1000001312" lat="30.1392448000000002" lon="31.3244092000000016">
+        <tag k="int_name" v="Ezbet El-Nakhl"/>
+        <tag k="name:de" v="Ezbet en Nakhl"/>
+        <tag k="source:imagery:layerName" v="Ecopia African Imagery"/>
+        <tag k="name:ar" v="محطة عزبة النخل"/>
+        <tag k="name:en" v="Ezbet en Nakhl"/>
+        <tag k="railway" v="station"/>
+        <tag k="name:fr" v="Ezbet en Nakhl"/>
+        <tag k="source:imagery:datetime" v="acq_date"/>
+        <tag k="alt_name" v="محطة عزبة النخل"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="محطة عزبة النخل"/>
+        <tag k="source:imagery:id" v="1040010046A12B00"/>
+        <tag k="source:datetime" v="2013-03-02T12:05:43.000Z"/>
+        <tag k="source:imagery:sensor" v="sensor"/>
+        <tag k="name:ar1" v="محطة عزبة النخل"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+    </node>
+    <node visible="true" id="316643112" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1407592000000015" lon="31.3262016000000010"/>
+    <node visible="true" id="316643113" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1417612999999989" lon="31.3274976000000009"/>
+    <node visible="true" id="316643114" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1427188000000008" lon="31.3285619000000004"/>
+    <node visible="true" id="316643115" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1448044999999993" lon="31.3312999000000012"/>
+    <node visible="true" id="316643116" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1466525999999995" lon="31.3334027000000006"/>
+    <node visible="true" id="316643117" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1475729000000001" lon="31.3341838000000017"/>
+    <node visible="true" id="316643118" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1488346999999983" lon="31.3348790000000008"/>
+    <node visible="true" id="316643120" timestamp="2020-06-17T19:43:32Z" version="4" changeset="1142348" user="AndrewKerr" uid="1000001312" lat="30.1520718999999993" lon="31.3358196999999983">
+        <tag k="name" v="المرج"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="name:ar1" v="المرج"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:layerName" v="+Vivid"/>
+        <tag k="name:ar" v="المرج"/>
+        <tag k="alt_name" v="المرج"/>
+        <tag k="source:datetime" v="2013-03-02T12:05:43.000Z"/>
+        <tag k="source:imagery:latestDate" v="2019-09-25 00:00:00"/>
+        <tag k="name:de" v="Al Marj"/>
+        <tag k="name:fr" v="Al Marj"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:sensor" v="Multiple"/>
+        <tag k="name:en" v="Al Marj"/>
+        <tag k="source:imagery:mosaic" v="yes"/>
+        <tag k="source:imagery:id" v="467b4f47f216e445911c9f71d7c5a4e9"/>
+        <tag k="int_name" v="El-Marg"/>
+        <tag k="source:imagery:earliestDate" v="2019-09-25 00:00:00"/>
+        <tag k="railway" v="station"/>
+    </node>
+    <node visible="true" id="316643121" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1545346000000016" lon="31.3362695000000002"/>
+    <node visible="true" id="316643123" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1583046999999986" lon="31.3373595000000016"/>
+    <node visible="true" id="316643124" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1600189999999984" lon="31.3375912999999997"/>
+    <node visible="true" id="316643125" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1615129999999994" lon="31.3376288999999986"/>
+    <node visible="true" id="316643126" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1625550999999987" lon="31.3378152000000014"/>
+    <node visible="true" id="316643127" timestamp="2016-02-02T18:50:50Z" version="1" changeset="4624" lat="30.1635495999999996" lon="31.3383217999999992">
+        <tag k="int_name" v="New El-Marg"/>
+        <tag k="name:ar" v="المرج الجديدة"/>
+        <tag k="name:en" v="New El-Marg"/>
+        <tag k="railway" v="station"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="المرج الجديدة"/>
+        <tag k="source:datetime" v="2013-03-02T12:05:44.000Z"/>
+    </node>
+    <node visible="true" id="317162811" timestamp="2020-04-02T16:37:51Z" version="2" changeset="891359" user="Bill Gray" uid="1000002478" lat="30.1573919000000004" lon="31.3370564999999992"/>
+    <node visible="true" id="325776224" timestamp="2016-02-02T18:52:18Z" version="1" changeset="4748" lat="30.1660891000000007" lon="31.3414372999999991"/>
+    <node visible="true" id="326979593" timestamp="2016-02-02T18:52:33Z" version="1" changeset="4770" lat="30.0862182999999987" lon="31.2929770000000005"/>
+    <node visible="true" id="326990887" timestamp="2016-02-02T18:52:33Z" version="1" changeset="4771" lat="30.1057580000000016" lon="31.2778168000000001"/>
+    <node visible="true" id="326990891" timestamp="2016-02-02T18:52:33Z" version="1" changeset="4771" lat="30.1055177000000000" lon="31.2802851000000004"/>
+    <node visible="true" id="326990893" timestamp="2016-02-02T18:52:33Z" version="1" changeset="4771" lat="30.1058173999999994" lon="31.2807350000000000"/>
+    <node visible="true" id="326990895" timestamp="2016-02-02T18:52:33Z" version="1" changeset="4771" lat="30.1056843000000001" lon="31.2812389000000017"/>
+    <node visible="true" id="326990897" timestamp="2016-02-02T18:52:33Z" version="1" changeset="4771" lat="30.1058601000000010" lon="31.2816690000000008"/>
+    <node visible="true" id="326990898" timestamp="2016-02-02T18:52:33Z" version="1" changeset="4771" lat="30.1073355999999990" lon="31.2823886999999985"/>
+    <node visible="true" id="326990899" timestamp="2016-02-02T18:52:33Z" version="1" changeset="4771" lat="30.1077203000000004" lon="31.2826552999999983"/>
+    <node visible="true" id="326994537" timestamp="2016-02-02T18:52:33Z" version="1" changeset="4771" lat="30.1126235000000015" lon="31.3153249000000002">
+        <tag k="railway" v="tram_stop"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2012-02-21T21:18:53.000Z"/>
+    </node>
+    <node visible="true" id="326994540" timestamp="2016-02-02T18:52:33Z" version="1" changeset="4771" lat="30.1115643000000013" lon="31.3172646000000015"/>
+    <node visible="true" id="326994543" timestamp="2016-02-02T18:52:33Z" version="1" changeset="4771" lat="30.1101536000000003" lon="31.3203545000000005"/>
+    <node visible="true" id="326994545" timestamp="2016-02-02T18:52:33Z" version="1" changeset="4771" lat="30.1095596000000008" lon="31.3209981999999982"/>
+    <node visible="true" id="326994548" timestamp="2016-02-02T18:52:33Z" version="1" changeset="4771" lat="30.1075474000000014" lon="31.3227748999999989"/>
+    <node visible="true" id="326994550" timestamp="2016-02-02T18:52:33Z" version="1" changeset="4771" lat="30.1064976999999985" lon="31.3237941999999983"/>
+    <node visible="true" id="326994553" timestamp="2016-02-02T18:52:33Z" version="1" changeset="4771" lat="30.1056556999999998" lon="31.3251671000000016"/>
+    <node visible="true" id="326999879" timestamp="2016-02-02T18:52:33Z" version="1" changeset="4771" lat="30.1134868000000004" lon="31.3121672000000011"/>
+    <node visible="true" id="335320643" timestamp="2016-02-02T18:53:50Z" version="1" changeset="4880" lat="30.1012352000000014" lon="31.3325384000000007"/>
+    <node visible="true" id="1641667076" timestamp="2016-02-02T22:32:31Z" version="1" changeset="24578" lat="30.1049141999999996" lon="31.3264251999999992"/>
+    <node visible="true" id="1642253992" timestamp="2016-02-02T22:32:36Z" version="1" changeset="24585" lat="30.1621443000000014" lon="31.3376930000000016"/>
+    <node visible="true" id="1642253994" timestamp="2016-02-02T22:32:36Z" version="1" changeset="24585" lat="30.1591479000000007" lon="31.3375439000000000"/>
+    <node visible="true" id="1642253997" timestamp="2016-02-02T22:32:36Z" version="1" changeset="24585" lat="30.1629605000000005" lon="31.3379973000000014"/>
+    <node visible="true" id="1642286325" timestamp="2016-02-02T22:32:36Z" version="1" changeset="24585" lat="30.1128764999999987" lon="31.3147762000000007"/>
+    <node visible="true" id="1642286349" timestamp="2016-02-02T22:32:36Z" version="1" changeset="24585" lat="30.1129873000000003" lon="31.3144768999999989"/>
+    <node visible="true" id="1642286385" timestamp="2016-02-02T22:32:36Z" version="1" changeset="24585" lat="30.1121482000000000" lon="31.3161977000000000"/>
+    <node visible="true" id="1642286403" timestamp="2020-06-17T20:14:48Z" version="2" changeset="1142457" user="AndrewKerr" uid="1000001312" lat="30.1310247000000011" lon="31.3191087000000010">
+        <tag k="int_name" v="Ain Shams"/>
+        <tag k="name:de" v="Ain Shams"/>
+        <tag k="name:ar" v="عين شمس"/>
+        <tag k="name:en" v="Ain Shams"/>
+        <tag k="railway" v="station"/>
+        <tag k="name:fr" v="Ain Shams"/>
+        <tag k="alt_name" v="عين شمس"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="عين شمس"/>
+        <tag k="source:datetime" v="2013-03-02T12:05:43.000Z"/>
+        <tag k="name:ar1" v="عين شمس"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+    </node>
+    <node visible="true" id="1642383278" timestamp="2016-02-02T22:32:37Z" version="1" changeset="24587" lat="30.0813451000000001" lon="31.2867947999999991"/>
+    <node visible="true" id="1738656902" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1088352999999991" lon="31.2835777999999998"/>
+    <node visible="true" id="1738656903" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1133477999999997" lon="31.2850256999999985"/>
+    <node visible="true" id="1738656905" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1153620000000011" lon="31.3061003000000007"/>
+    <node visible="true" id="1738656906" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1097490999999984" lon="31.2839609000000003"/>
+    <node visible="true" id="1738656912" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1079213000000010" lon="31.2828754000000018"/>
+    <node visible="true" id="1738656915" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1083083999999985" lon="31.2831633999999994"/>
+    <node visible="true" id="1738656916" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1135427000000000" lon="31.2862140000000011"/>
+    <node visible="true" id="1738656927" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1121668000000007" lon="31.2848593999999984"/>
+    <node visible="true" id="1738656928" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1057117000000005" lon="31.2814632000000010"/>
+    <node visible="true" id="1738656931" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1079816999999998" lon="31.2829478999999999"/>
+    <node visible="true" id="1738656932" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1135036999999990" lon="31.2854257999999987"/>
+    <node visible="true" id="1738656938" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1112526000000003" lon="31.2844544000000013"/>
+    <node visible="true" id="1738656939" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1153785999999997" lon="31.3051969999999997"/>
+    <node visible="true" id="1738656941" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1140651999999989" lon="31.3024203000000014"/>
+    <node visible="true" id="1738656942" timestamp="2020-04-02T13:04:03Z" version="2" changeset="890194" user="Jorel Linares" uid="1000002215" lat="30.1134765999999985" lon="31.2851141999999989"/>
+    <node visible="true" id="1738656944" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1114080999999985" lon="31.2846609999999998"/>
+    <node visible="true" id="1738656945" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1140346000000001" lon="31.3021382000000017"/>
+    <node visible="true" id="1738656947" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1112433000000017" lon="31.2843176000000014"/>
+    <node visible="true" id="1738656949" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1152638000000010" lon="31.3064155000000000"/>
+    <node visible="true" id="1738656952" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1141325000000002" lon="31.3026374999999994"/>
+    <node visible="true" id="1738656955" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1149051000000014" lon="31.3076425000000000"/>
+    <node visible="true" id="1738656958" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1140828999999997" lon="31.3102061999999997">
+        <tag k="railway" v="tram_stop"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2012-05-02T20:57:16.000Z"/>
+    </node>
+    <node visible="true" id="1738656963" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1143472000000010" lon="31.3093366000000017"/>
+    <node visible="true" id="1738656973" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1137613000000002" lon="31.2921447999999991"/>
+    <node visible="true" id="1738656975" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1129184999999993" lon="31.2849800999999985"/>
+    <node visible="true" id="1738656979" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1154377000000011" lon="31.3053892000000005"/>
+    <node visible="true" id="1738656982" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1139547999999984" lon="31.2989549999999994"/>
+    <node visible="true" id="1738656983" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1138553999999985" lon="31.2958770000000008"/>
+    <node visible="true" id="1738656987" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1146220000000007" lon="31.3085222999999999"/>
+    <node visible="true" id="1738656994" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1137444999999992" lon="31.2918331999999992"/>
+    <node visible="true" id="1738656995" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1137866999999986" lon="31.2925286999999983"/>
+    <node visible="true" id="1738656996" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1139018000000007" lon="31.2976495999999997"/>
+    <node visible="true" id="1738656997" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1138443000000002" lon="31.2953548999999995"/>
+    <node visible="true" id="1738656998" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1057357000000003" lon="31.2805320000000009"/>
+    <node visible="true" id="1738657000" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1154499000000015" lon="31.3057592000000007"/>
+    <node visible="true" id="1738657003" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1138450000000013" lon="31.2956384999999990"/>
+    <node visible="true" id="1738657006" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1104753000000009" lon="31.2841111000000005"/>
+    <node visible="true" id="1738657011" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1113244999999985" lon="31.2846127000000003"/>
+    <node visible="true" id="1738657012" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1092066000000003" lon="31.2837843000000007"/>
+    <node visible="true" id="1738657013" timestamp="2020-04-02T13:04:03Z" version="2" changeset="890194" user="Jorel Linares" uid="1000002215" lat="30.1135906999999996" lon="31.2868326000000003"/>
+    <node visible="true" id="1738657018" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1153268999999995" lon="31.3050967000000000"/>
+    <node visible="true" id="1738657019" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1112693000000000" lon="31.2845432999999993"/>
+    <node visible="true" id="1738657023" timestamp="2016-02-02T22:49:19Z" version="1" changeset="26135" lat="30.1111691000000015" lon="31.2842210999999999"/>
+    <node visible="true" id="2265532923" timestamp="2016-02-03T00:26:21Z" version="1" changeset="35087" lat="30.1039178999999990" lon="31.3279837999999984">
+        <tag k="railway" v="tram_stop"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2013-04-13T06:33:19.000Z"/>
+    </node>
+    <node visible="true" id="2265532926" timestamp="2016-02-03T00:26:21Z" version="1" changeset="35087" lat="30.1035350000000008" lon="31.3288259999999994">
+        <tag k="railway" v="tram_stop"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2013-04-13T06:33:19.000Z"/>
+    </node>
+    <node visible="true" id="3744066373" timestamp="2016-02-03T05:02:54Z" version="1" changeset="60087" lat="30.1655403000000000" lon="31.3406953000000001"/>
+    <node visible="true" id="3744066374" timestamp="2016-02-03T05:02:54Z" version="1" changeset="60087" lat="30.1658769999999983" lon="31.3411237999999983"/>
+    <node visible="true" id="3744066375" timestamp="2016-02-03T05:02:54Z" version="1" changeset="60087" lat="30.1661740999999992" lon="31.3414770000000011"/>
+    <node visible="true" id="4280044580" timestamp="2020-04-02T16:37:50Z" version="1" changeset="891359" user="Bill Gray" uid="1000002478" lat="30.1518601000000004" lon="31.3357634000000012"/>
+    <node visible="true" id="4280044583" timestamp="2020-04-02T16:37:50Z" version="1" changeset="891359" user="Bill Gray" uid="1000002478" lat="30.1522654999999986" lon="31.3358659999999993"/>
+    <node visible="true" id="4280044585" timestamp="2020-04-02T16:37:50Z" version="1" changeset="891359" user="Bill Gray" uid="1000002478" lat="30.1144138000000012" lon="31.3138643999999999"/>
+    <node visible="true" id="4280044587" timestamp="2020-04-02T16:37:50Z" version="1" changeset="891359" user="Bill Gray" uid="1000002478" lat="30.1147981000000016" lon="31.3138214999999995"/>
+    <node visible="true" id="4280044589" timestamp="2020-04-02T16:37:50Z" version="1" changeset="891359" user="Bill Gray" uid="1000002478" lat="30.1142628999999999" lon="31.3138791000000012"/>
+    <way visible="true" id="29561415" timestamp="2016-02-03T06:09:52Z" version="1" changeset="64007">
+        <nd ref="3744066373"/>
+        <nd ref="3744066374"/>
+        <nd ref="325776224"/>
+        <tag k="service" v="siding"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="railway" v="rail"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2015-09-15T12:10:52.000Z"/>
+        <tag k="electrified" v="no"/>
+    </way>
+    <way visible="true" id="29697974" timestamp="2020-04-19T15:13:05Z" version="3" changeset="939513" user="hootbot" uid="1000001323">
+        <nd ref="326990887"/>
+        <nd ref="326990891"/>
+        <nd ref="1738656998"/>
+        <nd ref="326990893"/>
+        <nd ref="326990895"/>
+        <nd ref="1738656928"/>
+        <nd ref="326990897"/>
+        <nd ref="326990898"/>
+        <nd ref="326990899"/>
+        <nd ref="1738656912"/>
+        <nd ref="1738656931"/>
+        <nd ref="1738656915"/>
+        <nd ref="1738656902"/>
+        <nd ref="1738657012"/>
+        <nd ref="1738656906"/>
+        <nd ref="1738657006"/>
+        <nd ref="1738657023"/>
+        <nd ref="1738656947"/>
+        <nd ref="1738656938"/>
+        <nd ref="1738657019"/>
+        <nd ref="1738657011"/>
+        <nd ref="1738656944"/>
+        <nd ref="1738656927"/>
+        <nd ref="1738656975"/>
+        <nd ref="1738656903"/>
+        <nd ref="1738656942"/>
+        <nd ref="1738656932"/>
+        <nd ref="1738656916"/>
+        <nd ref="1738657013"/>
+        <nd ref="1738656994"/>
+        <nd ref="1738656973"/>
+        <nd ref="1738656995"/>
+        <nd ref="1738656997"/>
+        <nd ref="1738657003"/>
+        <nd ref="1738656983"/>
+        <nd ref="1738656996"/>
+        <nd ref="1738656982"/>
+        <nd ref="1738656945"/>
+        <nd ref="1738656941"/>
+        <nd ref="1738656952"/>
+        <nd ref="1738657018"/>
+        <nd ref="1738656939"/>
+        <nd ref="1738656979"/>
+        <nd ref="1738657000"/>
+        <nd ref="1738656905"/>
+        <nd ref="1738656949"/>
+        <nd ref="1738656955"/>
+        <nd ref="1738656987"/>
+        <nd ref="1738656963"/>
+        <tag k="source:imagery:layerName" v="Ecopia African Imagery"/>
+        <tag k="railway" v="tram"/>
+        <tag k="source:imagery:datetime" v="2019-07-08"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:imagery:id" v="1030010098736C00"/>
+        <tag k="length" v="3727.2"/>
+        <tag k="source:datetime" v="2012-05-02T20:57:29.000Z"/>
+        <tag k="source:imagery:sensor" v="WV02"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+    </way>
+    <way visible="true" id="29698105" timestamp="2016-02-03T06:09:58Z" version="1" changeset="64009">
+        <nd ref="326994537"/>
+        <nd ref="1642286385"/>
+        <nd ref="326994540"/>
+        <nd ref="326994543"/>
+        <nd ref="326994545"/>
+        <nd ref="326994548"/>
+        <nd ref="326994550"/>
+        <nd ref="326994553"/>
+        <nd ref="1641667076"/>
+        <nd ref="335320643"/>
+        <tag k="railway" v="tram"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2012-02-21T21:18:59.000Z"/>
+    </way>
+    <way visible="true" id="29698111" timestamp="2016-02-03T06:09:58Z" version="1" changeset="64009">
+        <nd ref="326994537"/>
+        <nd ref="1642286325"/>
+        <nd ref="1642286349"/>
+        <nd ref="326999879"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="railway" v="tram"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2012-02-21T21:18:59.000Z"/>
+    </way>
+    <way visible="true" id="45928744" timestamp="2020-04-02T16:37:53Z" version="4" changeset="891359" user="Bill Gray" uid="1000002478">
+        <nd ref="316642887"/>
+        <nd ref="1642383278"/>
+        <nd ref="316642888"/>
+        <nd ref="326979593"/>
+        <nd ref="316643067"/>
+        <nd ref="316643069"/>
+        <nd ref="316643070"/>
+        <nd ref="316643072"/>
+        <nd ref="316643073"/>
+        <nd ref="316643074"/>
+        <nd ref="316643075"/>
+        <nd ref="316643076"/>
+        <nd ref="316643077"/>
+        <nd ref="316643079"/>
+        <nd ref="316643081"/>
+        <nd ref="316643083"/>
+        <nd ref="316643085"/>
+        <nd ref="316643089"/>
+        <nd ref="4280044589"/>
+        <nd ref="4280044585"/>
+        <nd ref="4280044587"/>
+        <nd ref="316643093"/>
+        <nd ref="316643095"/>
+        <nd ref="316643097"/>
+        <nd ref="316643098"/>
+        <nd ref="316643099"/>
+        <nd ref="316643100"/>
+        <nd ref="316643102"/>
+        <nd ref="316643104"/>
+        <nd ref="1642286403"/>
+        <nd ref="316643108"/>
+        <nd ref="316643109"/>
+        <nd ref="316643111"/>
+        <nd ref="316643112"/>
+        <nd ref="316643113"/>
+        <nd ref="316643114"/>
+        <nd ref="316643115"/>
+        <nd ref="316643116"/>
+        <nd ref="316643117"/>
+        <nd ref="316643118"/>
+        <nd ref="4280044580"/>
+        <nd ref="316643120"/>
+        <nd ref="4280044583"/>
+        <nd ref="316643121"/>
+        <nd ref="317162811"/>
+        <tag k="source:imagery:latestDate" v="2019-09-25 00:00:00"/>
+        <tag k="tunnel" v="no"/>
+        <tag k="source:imagery:layerName" v="+Vivid"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="railway" v="subway"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="1"/>
+        <tag k="source:imagery:id" v="467b4f47f216e445911c9f71d7c5a4e9"/>
+        <tag k="length" v="10217.6"/>
+        <tag k="source:datetime" v="2013-02-14T10:20:47.000Z"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="source:imagery:earliestDate" v="2019-09-25 00:00:00"/>
+        <tag k="source:imagery:sensor" v="Multiple"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:mosaic" v="yes"/>
+    </way>
+    <way visible="true" id="45928753" timestamp="2020-04-02T16:37:53Z" version="2" changeset="891359" user="Bill Gray" uid="1000002478">
+        <nd ref="317162811"/>
+        <nd ref="316643123"/>
+        <nd ref="1642253994"/>
+        <nd ref="316643124"/>
+        <nd ref="316643125"/>
+        <nd ref="1642253992"/>
+        <nd ref="316643126"/>
+        <nd ref="1642253997"/>
+        <nd ref="316643127"/>
+        <tag k="source:imagery:latestDate" v="2019-09-25 00:00:00"/>
+        <tag k="tunnel" v="no"/>
+        <tag k="source:imagery:layerName" v="+Vivid"/>
+        <tag k="railway" v="subway"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="1"/>
+        <tag k="source:imagery:id" v="467b4f47f216e445911c9f71d7c5a4e9"/>
+        <tag k="source:datetime" v="2012-02-21T20:56:44.000Z"/>
+        <tag k="source:imagery:earliestDate" v="2019-09-25 00:00:00"/>
+        <tag k="source:imagery:sensor" v="Multiple"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:mosaic" v="yes"/>
+    </way>
+    <way visible="true" id="161915739" timestamp="2016-02-03T08:00:07Z" version="1" changeset="66076">
+        <nd ref="1738656963"/>
+        <nd ref="1738656958"/>
+        <nd ref="326999879"/>
+        <tag k="railway" v="tram"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2012-05-02T20:57:20.000Z"/>
+    </way>
+    <way visible="true" id="370714683" timestamp="2016-02-03T10:51:02Z" version="1" changeset="69758">
+        <nd ref="3744066374"/>
+        <nd ref="3744066375"/>
+        <tag k="service" v="siding"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="railway" v="rail"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2015-09-15T12:10:52.000Z"/>
+        <tag k="electrified" v="no"/>
+    </way>
+</osm>
