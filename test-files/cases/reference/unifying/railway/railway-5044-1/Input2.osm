@@ -1,29 +1,789 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <osm version='0.6' generator='JOSM'>
-  <node id='-102214' action='modify' visible='true' lat='39.12841652664' lon='-76.69622451335' />
-  <node id='-102216' action='modify' visible='true' lat='39.12821470044' lon='-76.69618964463' />
-  <node id='-102217' action='modify' visible='true' lat='39.12800247021' lon='-76.69614404708' />
-  <node id='-102218' action='modify' visible='true' lat='39.12753639373' lon='-76.69605016977' />
-  <node id='-102219' action='modify' visible='true' lat='39.12696419741' lon='-76.69595092803' />
-  <way id='-101886' action='modify' visible='true'>
-    <nd ref='-102214' />
-    <nd ref='-102216' />
-    <nd ref='-102217' />
-    <nd ref='-102218' />
-    <nd ref='-102219' />
-    <tag k='arrangement' v='multiple' />
-    <tag k='lanes' v='3' />
-    <tag k='length' v='163.4' />
-    <tag k='lines' v='3' />
-    <tag k='name' v='AwesomeRail' />
+  <bounds minlat='29.9952' minlon='31.2552' maxlat='30.0751' maxlon='31.2918755' origin='hootenanny' />
+  <node id='-98888185' visible='true' version='1' lat='30.0751' lon='31.28479493827' />
+  <node id='-98888186' visible='true' version='1' lat='29.9952' lon='31.27099064162' />
+  <node id='-98888187' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.051335' lon='31.2885625' />
+  <node id='-98888188' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.051534' lon='31.2885945' />
+  <node id='-98888189' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0517555' lon='31.2886305' />
+  <node id='-98888190' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0519035' lon='31.2886545' />
+  <node id='-98888191' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01677' lon='31.26536' />
+  <node id='-98888192' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01709' lon='31.26521' />
+  <node id='-98888193' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0171965' lon='31.265163' />
+  <node id='-98888194' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01734' lon='31.2651' />
+  <node id='-98888195' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01755' lon='31.26503' />
+  <node id='-98888196' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01781' lon='31.26495' />
+  <node id='-98888197' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01812' lon='31.26486' />
+  <node id='-98888198' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01853' lon='31.26478' />
+  <node id='-98888199' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01884' lon='31.26472' />
+  <node id='-98888200' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01911' lon='31.2646795' />
+  <node id='-98888201' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01936' lon='31.26464' />
+  <node id='-98888202' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01975' lon='31.26455' />
+  <node id='-98888203' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01999' lon='31.26447' />
+  <node id='-98888204' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02024' lon='31.26438' />
+  <node id='-98888205' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02056' lon='31.26427' />
+  <node id='-98888206' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02099' lon='31.26412' />
+  <node id='-98888207' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.021002' lon='31.2641155' />
+  <node id='-98888208' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0211425' lon='31.2640625' />
+  <node id='-98888209' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02131' lon='31.264' />
+  <node id='-98888210' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0215685' lon='31.2639145' />
+  <node id='-98888211' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0216785' lon='31.2638755' />
+  <node id='-98888212' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02218' lon='31.26372' />
+  <node id='-98888213' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.022822' lon='31.263554' />
+  <node id='-98888214' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02295' lon='31.26352' />
+  <node id='-98888215' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02398' lon='31.26336' />
+  <node id='-98888216' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0243715' lon='31.2633095' />
+  <node id='-98888217' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02438' lon='31.2633085' />
+  <node id='-98888218' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.024514' lon='31.2632915' />
+  <node id='-98888219' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0246' lon='31.26328' />
+  <node id='-98888220' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02518' lon='31.26324' />
+  <node id='-98888221' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02536' lon='31.26323' />
+  <node id='-98888222' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0254065' lon='31.263239' />
+  <node id='-98888223' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.025666' lon='31.263288' />
+  <node id='-98888224' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02605' lon='31.26339' />
+  <node id='-98888225' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02641' lon='31.26354' />
+  <node id='-98888226' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.026588' lon='31.26363' />
+  <node id='-98888227' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.026829' lon='31.263753' />
+  <node id='-98888228' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0270425' lon='31.2638875' />
+  <node id='-98888229' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02736' lon='31.26418' />
+  <node id='-98888230' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0276' lon='31.26443' />
+  <node id='-98888231' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0278' lon='31.26469' />
+  <node id='-98888232' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0279905' lon='31.2649935' />
+  <node id='-98888233' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02812' lon='31.2652' />
+  <node id='-98888234' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0284895' lon='31.26584' />
+  <node id='-98888235' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02866' lon='31.26612' />
+  <node id='-98888236' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02881' lon='31.2663' />
+  <node id='-98888237' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02904' lon='31.26654' />
+  <node id='-98888238' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02925' lon='31.26671' />
+  <node id='-98888239' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0295605' lon='31.26692' />
+  <node id='-98888240' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0296055' lon='31.2669445' />
+  <node id='-98888241' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.02986' lon='31.26708' />
+  <node id='-98888242' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.029938' lon='31.2671135' />
+  <node id='-98888243' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03017' lon='31.26721' />
+  <node id='-98888244' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03038' lon='31.26727' />
+  <node id='-98888245' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03061' lon='31.26731' />
+  <node id='-98888246' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.030998' lon='31.2673005' />
+  <node id='-98888247' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03101' lon='31.2673' />
+  <node id='-98888248' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03128' lon='31.26726' />
+  <node id='-98888249' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03161' lon='31.26721' />
+  <node id='-98888250' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03224' lon='31.26709' />
+  <node id='-98888251' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03259' lon='31.26704' />
+  <node id='-98888252' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0328805' lon='31.26703' />
+  <node id='-98888253' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03308' lon='31.26705' />
+  <node id='-98888254' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03349' lon='31.26714' />
+  <node id='-98888255' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03382' lon='31.26726' />
+  <node id='-98888256' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03423' lon='31.2674905' />
+  <node id='-98888257' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0345405' lon='31.26772' />
+  <node id='-98888258' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03482' lon='31.268' />
+  <node id='-98888259' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03514' lon='31.26839' />
+  <node id='-98888260' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03551' lon='31.26897' />
+  <node id='-98888261' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.035589' lon='31.2691305' />
+  <node id='-98888262' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0356015' lon='31.2691565' />
+  <node id='-98888263' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03581' lon='31.26958' />
+  <node id='-98888264' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03591' lon='31.26976' />
+  <node id='-98888265' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03624' lon='31.27032' />
+  <node id='-98888266' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03639' lon='31.27051' />
+  <node id='-98888267' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.03662' lon='31.27079' />
+  <node id='-98888268' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.036912' lon='31.2711475' />
+  <node id='-98888269' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.037433' lon='31.271683' />
+  <node id='-98888270' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0464365' lon='31.280953' />
+  <node id='-98888271' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.046676' lon='31.2812725' />
+  <node id='-98888272' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0469635' lon='31.2817295' />
+  <node id='-98888273' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.047804' lon='31.283248' />
+  <node id='-98888274' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.048075' lon='31.283865' />
+  <node id='-98888275' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.048676' lon='31.285282' />
+  <node id='-98888276' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0492435' lon='31.2866685' />
+  <node id='-98888277' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0494335' lon='31.2870485' />
+  <node id='-98888278' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.04964' lon='31.287307' />
+  <node id='-98888279' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0499125' lon='31.287638' />
+  <node id='-98888280' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.050272' lon='31.287975' />
+  <node id='-98888281' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.050839' lon='31.288346' />
+  <node id='-98888282' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0511095' lon='31.2885005' />
+  <node id='-98888283' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.052' lon='31.2886635' />
+  <node id='-98888284' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.052407' lon='31.288697' />
+  <node id='-98888285' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.05259' lon='31.2887275' />
+  <node id='-98888286' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0528155' lon='31.2887205' />
+  <node id='-98888287' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0530585' lon='31.288656' />
+  <node id='-98888288' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0558445' lon='31.287939' />
+  <node id='-98888289' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.056137' lon='31.287864' />
+  <node id='-98888290' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.056463' lon='31.287785' />
+  <node id='-98888291' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0569225' lon='31.287674' />
+  <node id='-98888292' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.058471' lon='31.287299' />
+  <node id='-98888293' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.058809' lon='31.2872315' />
+  <node id='-98888294' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0590465' lon='31.287214' />
+  <node id='-98888295' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.07427' lon='31.2859' />
+  <node id='-98888296' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0743015' lon='31.285857' />
+  <node id='-98888297' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0743395' lon='31.2858045' />
+  <node id='-98888298' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.074345' lon='31.285797' />
+  <node id='-98888299' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0743825' lon='31.285745' />
+  <node id='-98888300' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.07443' lon='31.28568' />
+  <node id='-98888301' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.068201' lon='31.291836' />
+  <node id='-98888302' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06853' lon='31.29181' />
+  <node id='-98888303' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0686535' lon='31.29179' />
+  <node id='-98888304' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0687105' lon='31.291781' />
+  <node id='-98888305' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0687685' lon='31.291772' />
+  <node id='-98888306' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06888' lon='31.2917375' />
+  <node id='-98888307' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.069058' lon='31.2916825' />
+  <node id='-98888308' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0692055' lon='31.2916375' />
+  <node id='-98888309' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.069347' lon='31.291594' />
+  <node id='-98888310' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0693725' lon='31.291586' />
+  <node id='-98888311' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.069501' lon='31.2915305' />
+  <node id='-98888312' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0695895' lon='31.291493' />
+  <node id='-98888313' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0697525' lon='31.2914255' />
+  <node id='-98888314' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0705025' lon='31.2909095' />
+  <node id='-98888315' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0708485' lon='31.2905705' />
+  <node id='-98888316' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.070982' lon='31.2903995' />
+  <node id='-98888317' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.071028' lon='31.2903405' />
+  <node id='-98888318' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.07207' lon='31.28901' />
+  <node id='-98888319' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0729' lon='31.28777' />
+  <node id='-98888320' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.07344' lon='31.28701' />
+  <node id='-98888363' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0672055' lon='31.2918165' />
+  <node id='-98888364' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0669205' lon='31.2917455' />
+  <node id='-98888365' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.066607' lon='31.2916675' />
+  <node id='-98888366' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0665' lon='31.291641' />
+  <node id='-98888367' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='29.998082' lon='31.270742' />
+  <node id='-98888368' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='29.99857' lon='31.2707' />
+  <node id='-98888369' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='29.9988955' lon='31.270668' />
+  <node id='-98888370' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='29.99908' lon='31.27065' />
+  <node id='-98888371' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='29.99975' lon='31.27059' />
+  <node id='-98888372' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.061755' lon='31.288423' />
+  <node id='-98888373' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0612545' lon='31.2878975' />
+  <node id='-98888374' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.061398' lon='31.288015' />
+  <node id='-98888375' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0615545' lon='31.2881805' />
+  <node id='-98888376' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0676' lon='31.29187' />
+  <node id='-98888377' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06785' lon='31.2918755' />
+  <node id='-98888378' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0679335' lon='31.291867' />
+  <node id='-98888379' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06545' lon='31.29138' />
+  <node id='-98888380' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06526' lon='31.29132' />
+  <node id='-98888381' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06509' lon='31.29126' />
+  <node id='-98888382' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06488' lon='31.29116' />
+  <node id='-98888383' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06468' lon='31.29106' />
+  <node id='-98888384' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06452' lon='31.29096' />
+  <node id='-98888385' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06438' lon='31.2908605' />
+  <node id='-98888386' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06428' lon='31.29079' />
+  <node id='-98888387' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06414' lon='31.29066' />
+  <node id='-98888388' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06386' lon='31.2904' />
+  <node id='-98888389' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.00308' lon='31.27029' />
+  <node id='-98888390' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0033855' lon='31.2702655' />
+  <node id='-98888391' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.003574' lon='31.27025' />
+  <node id='-98888392' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.00443' lon='31.27018' />
+  <node id='-98888393' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.00568' lon='31.2700605' />
+  <node id='-98888394' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0062675' lon='31.27001' />
+  <node id='-98888395' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.00657' lon='31.26999' />
+  <node id='-98888396' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0069785' lon='31.2699465' />
+  <node id='-98888397' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.00751' lon='31.26989' />
+  <node id='-98888398' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0076735' lon='31.2698495' />
+  <node id='-98888399' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.00779' lon='31.2698195' />
+  <node id='-98888400' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.00799' lon='31.26976' />
+  <node id='-98888401' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0080615' lon='31.269738' />
+  <node id='-98888402' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.00822' lon='31.26969' />
+  <node id='-98888403' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.008291' lon='31.2696625' />
+  <node id='-98888404' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.00843' lon='31.26961' />
+  <node id='-98888405' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0084605' lon='31.2695985' />
+  <node id='-98888406' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0624' lon='31.28897' />
+  <node id='-98888407' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06286' lon='31.28944' />
+  <node id='-98888408' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.063348' lon='31.289911' />
+  <node id='-98888409' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06343' lon='31.28999' />
+  <node id='-98888418' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.05932' lon='31.28721' />
+  <node id='-98888419' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.05947' lon='31.28721' />
+  <node id='-98888420' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.05969' lon='31.28723' />
+  <node id='-98888421' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06001' lon='31.2873005' />
+  <node id='-98888422' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06027' lon='31.2873805' />
+  <node id='-98888423' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.06073' lon='31.28759' />
+  <node id='-98888424' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0611005' lon='31.287797' />
+  <node id='-98888425' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.00895' lon='31.26941' />
+  <node id='-98888426' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.009957' lon='31.2688085' />
+  <node id='-98888427' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0117985' lon='31.267794' />
+  <node id='-98888428' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0138185' lon='31.266828' />
+  <node id='-98888429' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.013927' lon='31.2667755' />
+  <node id='-98888430' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01484' lon='31.26632' />
+  <node id='-98888431' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01529' lon='31.26609' />
+  <node id='-98888432' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01587' lon='31.2658' />
+  <node id='-98888433' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01609' lon='31.2657' />
+  <node id='-98888457' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.01614' lon='31.2656695' />
+  <node id='-98888458' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0' lon='31.27057' />
+  <node id='-98888459' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.00048' lon='31.27053' />
+  <node id='-98888460' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.001788' lon='31.2704145' />
+  <node id='-98888461' timestamp='2021-09-03T13:13:07Z' visible='true' version='1' lat='30.0018775' lon='31.2704065' />
+  <way id='-98867061' visible='true' version='1'>
+    <nd ref='-98888300' />
+    <nd ref='-98888185' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
     <tag k='railway' v='rail' />
-    <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='DigitalGlobe' />
-    <tag k='source:datetime' v='2021-01-24 18:58:59' />
-    <tag k='source:imagery' v='DigitalGlobe' />
-    <tag k='source:imagery:datetime' v='2021-01-24 18:58:59' />
-    <tag k='source:imagery:id' v='397a1b477b5a791a8ec7943edc6f9ce5' />
-    <tag k='source:imagery:layerName' v='Maxar Basemap +Vivid' />
-    <tag k='source:imagery:sensor' v='WV01' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.198Z' />
+    <tag k='uuid' v='{a6506d0a-02b2-49de-96e7-4e3c36252705}' />
+  </way>
+  <way id='-98867062' visible='true' version='1'>
+    <nd ref='-98888458' />
+    <nd ref='-98888371' />
+    <nd ref='-98888370' />
+    <nd ref='-98888369' />
+    <nd ref='-98888368' />
+    <nd ref='-98888367' />
+    <nd ref='-98888186' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.199Z' />
+    <tag k='uuid' v='{75f8d985-839f-4638-a0b7-a55afb3747e5}' />
+  </way>
+  <way id='-98867063' timestamp='2021-09-03T13:13:07Z' visible='true' version='1'>
+    <nd ref='-98888190' />
+    <nd ref='-98888189' />
+    <nd ref='-98888188' />
+    <nd ref='-98888187' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='underground' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.208Z' />
+    <tag k='uuid' v='{2abbfaa0-4ef9-4ffe-960e-ff06574e5b6d}' />
+  </way>
+  <way id='-98867064' timestamp='2021-09-03T13:13:07Z' visible='true' version='1'>
+    <nd ref='-98888187' />
+    <nd ref='-98888282' />
+    <nd ref='-98888281' />
+    <nd ref='-98888280' />
+    <nd ref='-98888279' />
+    <nd ref='-98888278' />
+    <nd ref='-98888277' />
+    <nd ref='-98888276' />
+    <nd ref='-98888275' />
+    <nd ref='-98888274' />
+    <nd ref='-98888273' />
+    <nd ref='-98888272' />
+    <nd ref='-98888271' />
+    <nd ref='-98888270' />
+    <nd ref='-98888269' />
+    <nd ref='-98888268' />
+    <nd ref='-98888267' />
+    <nd ref='-98888266' />
+    <nd ref='-98888265' />
+    <nd ref='-98888264' />
+    <nd ref='-98888263' />
+    <nd ref='-98888262' />
+    <nd ref='-98888261' />
+    <nd ref='-98888260' />
+    <nd ref='-98888259' />
+    <nd ref='-98888258' />
+    <nd ref='-98888257' />
+    <nd ref='-98888256' />
+    <nd ref='-98888255' />
+    <nd ref='-98888254' />
+    <nd ref='-98888253' />
+    <nd ref='-98888252' />
+    <nd ref='-98888251' />
+    <nd ref='-98888250' />
+    <nd ref='-98888249' />
+    <nd ref='-98888248' />
+    <nd ref='-98888247' />
+    <nd ref='-98888246' />
+    <nd ref='-98888245' />
+    <nd ref='-98888244' />
+    <nd ref='-98888243' />
+    <nd ref='-98888242' />
+    <nd ref='-98888241' />
+    <nd ref='-98888240' />
+    <nd ref='-98888239' />
+    <nd ref='-98888238' />
+    <nd ref='-98888237' />
+    <nd ref='-98888236' />
+    <nd ref='-98888235' />
+    <nd ref='-98888234' />
+    <nd ref='-98888233' />
+    <nd ref='-98888232' />
+    <nd ref='-98888231' />
+    <nd ref='-98888230' />
+    <nd ref='-98888229' />
+    <nd ref='-98888228' />
+    <nd ref='-98888227' />
+    <nd ref='-98888226' />
+    <nd ref='-98888225' />
+    <nd ref='-98888224' />
+    <nd ref='-98888223' />
+    <nd ref='-98888222' />
+    <nd ref='-98888221' />
+    <nd ref='-98888220' />
+    <nd ref='-98888219' />
+    <nd ref='-98888218' />
+    <nd ref='-98888217' />
+    <nd ref='-98888216' />
+    <nd ref='-98888215' />
+    <nd ref='-98888214' />
+    <nd ref='-98888213' />
+    <nd ref='-98888212' />
+    <nd ref='-98888211' />
+    <nd ref='-98888210' />
+    <nd ref='-98888209' />
+    <nd ref='-98888208' />
+    <nd ref='-98888207' />
+    <nd ref='-98888206' />
+    <nd ref='-98888205' />
+    <nd ref='-98888204' />
+    <nd ref='-98888203' />
+    <nd ref='-98888202' />
+    <nd ref='-98888201' />
+    <nd ref='-98888200' />
+    <nd ref='-98888199' />
+    <nd ref='-98888198' />
+    <nd ref='-98888197' />
+    <nd ref='-98888196' />
+    <nd ref='-98888195' />
+    <nd ref='-98888194' />
+    <nd ref='-98888193' />
+    <nd ref='-98888192' />
+    <nd ref='-98888191' />
+    <nd ref='-98888457' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.208Z' />
+    <tag k='uuid' v='{3a6a0439-ef8b-4dac-ab52-62bf2a8e4bda}' />
+  </way>
+  <way id='-98867065' timestamp='2021-09-03T13:13:07Z' visible='true' version='1'>
+    <nd ref='-98888418' />
+    <nd ref='-98888294' />
+    <nd ref='-98888293' />
+    <nd ref='-98888292' />
+    <nd ref='-98888291' />
+    <nd ref='-98888290' />
+    <nd ref='-98888289' />
+    <nd ref='-98888288' />
+    <nd ref='-98888287' />
+    <nd ref='-98888286' />
+    <nd ref='-98888285' />
+    <nd ref='-98888284' />
+    <nd ref='-98888283' />
+    <nd ref='-98888190' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.208Z' />
+    <tag k='uuid' v='{8ce0c85f-1d49-4531-957c-5e72618563d8}' />
+  </way>
+  <way id='-98867066' timestamp='2021-09-03T13:13:07Z' visible='true' version='1'>
+    <nd ref='-98888300' />
+    <nd ref='-98888299' />
+    <nd ref='-98888298' />
+    <nd ref='-98888297' />
+    <nd ref='-98888296' />
+    <nd ref='-98888295' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='overground' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.207Z' />
+    <tag k='uuid' v='{f1cea19c-1946-4da2-805a-e2d91ca98f10}' />
+  </way>
+  <way id='-98867067' timestamp='2021-09-03T13:13:07Z' visible='true' version='1'>
+    <nd ref='-98888295' />
+    <nd ref='-98888320' />
+    <nd ref='-98888319' />
+    <nd ref='-98888318' />
+    <nd ref='-98888317' />
+    <nd ref='-98888316' />
+    <nd ref='-98888315' />
+    <nd ref='-98888314' />
+    <nd ref='-98888313' />
+    <nd ref='-98888312' />
+    <nd ref='-98888311' />
+    <nd ref='-98888310' />
+    <nd ref='-98888309' />
+    <nd ref='-98888308' />
+    <nd ref='-98888307' />
+    <nd ref='-98888306' />
+    <nd ref='-98888305' />
+    <nd ref='-98888304' />
+    <nd ref='-98888303' />
+    <nd ref='-98888302' />
+    <nd ref='-98888301' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.206Z' />
+    <tag k='uuid' v='{663f9730-2330-46e3-ab2a-8c2371cc449a}' />
+  </way>
+  <way id='-98867068' timestamp='2021-09-03T13:13:07Z' visible='true' version='1'>
+    <nd ref='-98888366' />
+    <nd ref='-98888365' />
+    <nd ref='-98888364' />
+    <nd ref='-98888363' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.203Z' />
+    <tag k='uuid' v='{22f8107b-9a89-4410-8572-29f3c9744e42}' />
+  </way>
+  <way id='-98867069' timestamp='2021-09-03T13:13:07Z' visible='true' version='1'>
+    <nd ref='-98888406' />
+    <nd ref='-98888372' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.199Z' />
+    <tag k='uuid' v='{e76d96f0-c2b1-4146-ab34-bf16efa7efc6}' />
+  </way>
+  <way id='-98867070' timestamp='2021-09-03T13:13:07Z' visible='true' version='1'>
+    <nd ref='-98888372' />
+    <nd ref='-98888375' />
+    <nd ref='-98888374' />
+    <nd ref='-98888373' />
+    <nd ref='-98888424' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.199Z' />
+    <tag k='uuid' v='{4c89bb1a-29e1-44b4-b6d5-e9fa086d8330}' />
+  </way>
+  <way id='-98867071' timestamp='2021-09-03T13:13:07Z' visible='true' version='1'>
+    <nd ref='-98888301' />
+    <nd ref='-98888378' />
+    <nd ref='-98888377' />
+    <nd ref='-98888376' />
+    <nd ref='-98888363' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.198Z' />
+    <tag k='uuid' v='{706fe7af-d063-4b8c-9df6-10108da939e0}' />
+  </way>
+  <way id='-98867072' timestamp='2021-09-03T13:13:07Z' visible='true' version='1'>
+    <nd ref='-98888409' />
+    <nd ref='-98888388' />
+    <nd ref='-98888387' />
+    <nd ref='-98888386' />
+    <nd ref='-98888385' />
+    <nd ref='-98888384' />
+    <nd ref='-98888383' />
+    <nd ref='-98888382' />
+    <nd ref='-98888381' />
+    <nd ref='-98888380' />
+    <nd ref='-98888379' />
+    <nd ref='-98888366' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.196Z' />
+    <tag k='uuid' v='{61485933-9fb1-4088-a20f-ae6e399f5612}' />
+  </way>
+  <way id='-98867073' timestamp='2021-09-03T13:13:07Z' visible='true' version='1'>
+    <nd ref='-98888425' />
+    <nd ref='-98888405' />
+    <nd ref='-98888404' />
+    <nd ref='-98888403' />
+    <nd ref='-98888402' />
+    <nd ref='-98888401' />
+    <nd ref='-98888400' />
+    <nd ref='-98888399' />
+    <nd ref='-98888398' />
+    <nd ref='-98888397' />
+    <nd ref='-98888396' />
+    <nd ref='-98888395' />
+    <nd ref='-98888394' />
+    <nd ref='-98888393' />
+    <nd ref='-98888392' />
+    <nd ref='-98888391' />
+    <nd ref='-98888390' />
+    <nd ref='-98888389' />
+    <nd ref='-98888461' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.195Z' />
+    <tag k='uuid' v='{bacc23ba-a10a-4ba7-9c45-7a197d08c0b9}' />
+  </way>
+  <way id='-98867074' timestamp='2021-09-03T13:13:07Z' visible='true' version='1'>
+    <nd ref='-98888409' />
+    <nd ref='-98888408' />
+    <nd ref='-98888407' />
+    <nd ref='-98888406' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.193Z' />
+    <tag k='uuid' v='{b67b469d-d117-4c6b-bf4f-71f1f5242c1d}' />
+  </way>
+  <way id='-98867075' timestamp='2021-09-03T13:13:07Z' visible='true' version='1'>
+    <nd ref='-98888424' />
+    <nd ref='-98888423' />
+    <nd ref='-98888422' />
+    <nd ref='-98888421' />
+    <nd ref='-98888420' />
+    <nd ref='-98888419' />
+    <nd ref='-98888418' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.189Z' />
+    <tag k='uuid' v='{ac6326f6-8384-4fa0-af7c-8f84b4e5c957}' />
+  </way>
+  <way id='-98867076' timestamp='2021-09-03T13:13:07Z' visible='true' version='1'>
+    <nd ref='-98888433' />
+    <nd ref='-98888432' />
+    <nd ref='-98888431' />
+    <nd ref='-98888430' />
+    <nd ref='-98888429' />
+    <nd ref='-98888428' />
+    <nd ref='-98888427' />
+    <nd ref='-98888426' />
+    <nd ref='-98888425' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.188Z' />
+    <tag k='uuid' v='{ee70db9d-917b-4304-a72b-0910d4889bb8}' />
+  </way>
+  <way id='-98867077' timestamp='2021-09-03T13:13:07Z' visible='true' version='1'>
+    <nd ref='-98888433' />
+    <nd ref='-98888457' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='overground' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.175Z' />
+    <tag k='uuid' v='{54d12aa0-11ef-4662-bce6-0a14be35e2d2}' />
+  </way>
+  <way id='-98867078' timestamp='2021-09-03T13:13:07Z' visible='true' version='1'>
+    <nd ref='-98888461' />
+    <nd ref='-98888460' />
+    <nd ref='-98888459' />
+    <nd ref='-98888458' />
+    <tag k='arrangement' v='single' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1440' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='height' v='0' />
+    <tag k='incline' v='0' />
+    <tag k='lanes' v='1' />
+    <tag k='length2' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='EGYPTIAN RAILWAYS' />
+    <tag k='railway' v='rail' />
+    <tag k='source' v='ufd:railroad_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:datetime' v='2021-09-03T13:13:07Z' />
+    <tag k='source:ingest:datetime' v='2021-09-03T13:13:07.174Z' />
+    <tag k='uuid' v='{8251d2cc-8611-4244-a1ed-4bdc3152c37a}' />
   </way>
 </osm>
