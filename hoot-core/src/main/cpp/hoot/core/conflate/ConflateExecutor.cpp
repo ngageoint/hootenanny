@@ -680,7 +680,7 @@ void ConflateExecutor::_updateConfigOptionsForDifferentialConflation() const
   // The list option removal being done here could be made obsolete by handling it in the JSON
   // config instead with custom syntax (#3442).
 
-  // TODO
+  // These don't seem to make a lot of sense for diff conflate.
   ConfigUtils::removeListOpEntry(
     ConfigOptions::getConflatePostOpsKey(), RoadCrossingPolyMarker::className());
   ConfigUtils::removeListOpEntry(
