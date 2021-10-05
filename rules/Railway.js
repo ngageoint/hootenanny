@@ -24,10 +24,8 @@ exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default")
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 
-// These are used only to determine type similarity and are independent of the other score
-// thresholds.
+// This is used only to determine type similarity and are independent of the other score thresholds.
 exports.typeMatchThreshold = parseFloat(hoot.get("railway.type.match.threshold"));
-exports.typeReviewThreshold = parseFloat(hoot.get("railway.type.review.threshold"));
 
 // geometry matchers
 
@@ -149,30 +147,6 @@ function getTypeScore(e1, e2, reviewMessage)
     return 0.0;
   }
 
-  // TODO: The below block was an attempt to solve some bad matching but the solution ended up being
-  // something else. Keeping this in here for now in case its needed later.
-
-  // We'll assume rails w/o the location tag are above ground (location=surface or
-  // location=overground). If the tags explicitly disagree on the location value or one is
-  // underground and the other doesn't have a location tag, we'll review.
-  /*var locationVal1 = String(tags1.get("location")).trim();
-  hoot.trace("locationVal1: " + locationVal1);
-  var locationVal1Empty = stringIsEmpty(locationVal1);
-  hoot.trace("locationVal1Empty: " + locationVal1Empty);
-  var locationVal2 = String(tags2.get("location")).trim();
-  hoot.trace("locationVal2: " + locationVal2);
-  var locationVal2Empty = stringIsEmpty(locationVal2);
-  hoot.trace("locationVal2Empty: " + locationVal2Empty);
-  if (!(locationVal1Empty && locationVal2Empty) &&
-      ((locationVal1Empty && locationVal2 === "underground") ||
-       (locationVal2Empty && locationVal1 === "underground") ||
-       (!locationVal1Empty && !locationVal2Empty && locationVal1 !== locationVal2)))
-  {
-    hoot.trace("location mismatch");
-    reviewMessage.message = "Location mismatch";
-    return exports.typeReviewThreshold;
-  }*/
-
   return hoot.OsmSchema.scoreTypes(tags1, tags2, true);
 }
 
@@ -223,17 +197,6 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("Type mismatch: " + e1.getElementId()  + ", " + e2.getElementId());
     return result;
   }
-  // Since we're not actually generating reviews yet, this is merely a placeholder block.
-  /*else if (typeScore == exports.typeReviewThreshold)
-  {
-    var reviewMessageEmpty = stringIsEmpty(typeReviewMessage.message);
-    if (reviewMessageEmpty)
-    {
-      typeReviewMessage.message = "type mismatch";
-    }
-    result = { review: 1.0, explain: typeReviewMessage.message };
-    return result;
-  }*/
 
   // These score thresholds were determined experimentally (see geometryMismatch) for the default
   // rail conflation routine.

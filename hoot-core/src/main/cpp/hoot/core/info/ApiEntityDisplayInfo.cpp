@@ -58,7 +58,7 @@
 namespace hoot
 {
 
-const int ApiEntityDisplayInfo::MAX_NAME_SIZE = 55;
+const int ApiEntityDisplayInfo::MAX_NAME_SIZE = 48;
 const int ApiEntityDisplayInfo::MAX_TYPE_SIZE = 18;
 
 template<typename ApiEntity>

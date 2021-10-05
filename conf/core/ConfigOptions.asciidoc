@@ -4511,20 +4511,12 @@ The way subline matcher to use when determining matching sublines.
 Tag similarity threshold, in the range (0.0, 1.0], at or above which a railway feature is considered
 to have tags similar enough with another rail feature to be considered match.
 
-=== railway.type.review.threshold
-
-* Data Type: double
-* Default Value: `0.7`
-
-Tag similarity threshold, in the range (0.0, 1.0], at or above which a railway feature is considered
-to have tags similar enough with another rail feature to be considered a review if not already
-considered a match.
-
 === railways.crossing.marker.ignore.types
 
 * Data Type: list
 * Default Value:
 ** `bridge=yes`
+** `railway=level_crossing`
 ** `railway=subway`
 ** `railway=tram`
 ** `service=yard`

@@ -1123,7 +1123,7 @@
     <node visible="true" id="-3" timestamp="2018-02-15T20:56:52Z" version="1" lat="39.6318742999999927" lon="125.8983422000000161"/>
     <node visible="true" id="-2" timestamp="2018-02-15T20:56:52Z" version="1" lat="39.6350596000000053" lon="125.9030146000000059"/>
     <node visible="true" id="-1" timestamp="2018-02-15T20:56:52Z" version="1" lat="39.6350844000000038" lon="125.9030951000000016"/>
-    <way visible="true" id="-1711" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1716" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-38"/>
         <nd ref="-39"/>
         <tag k="FCSubtype" v="0"/>
@@ -1151,7 +1151,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{7aa51969-242a-424c-9049-46da45bbd6d8};{2d02ea64-a2b9-44f9-bc2b-f456ccd1c7df}"/>
     </way>
-    <way visible="true" id="-1708" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1713" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-123"/>
         <nd ref="-163"/>
         <tag k="FCSubtype" v="0"/>
@@ -1178,7 +1178,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{f8b23bcb-cfb7-4c74-b2fa-97cb5b929382};{21bb637b-e73a-4421-80a6-222d6365cc54}"/>
     </way>
-    <way visible="true" id="-1705" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1710" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-12"/>
         <nd ref="-467"/>
         <tag k="FCSubtype" v="0"/>
@@ -1210,7 +1210,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{a4915a46-b9a3-44e1-8e2c-7d29f0a2080c};{08af4d1f-dfbe-4c33-90f7-dc88ca6e5807}"/>
     </way>
-    <way visible="true" id="-1702" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1707" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-141"/>
         <nd ref="-142"/>
         <tag k="FCSubtype" v="0"/>
@@ -1242,7 +1242,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{88e2319e-e3c4-4d97-91fb-39835b024283};{7ee8145a-25c3-4dcb-bf9f-465ee7d86ae5}"/>
     </way>
-    <way visible="true" id="-1699" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1704" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-531"/>
         <nd ref="-272"/>
         <tag k="FCSubtype" v="0"/>
@@ -1269,7 +1269,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{88e1f975-2d23-4d22-8835-9d2674006aa0};{8681b06c-91ee-46e2-b417-8c31ebb3831d}"/>
     </way>
-    <way visible="true" id="-1696" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1701" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-453"/>
         <nd ref="-60"/>
         <tag k="FCSubtype" v="0"/>
@@ -1301,7 +1301,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{7156dd33-941b-44bf-9220-07415b1de2dc};{a6667db0-47ed-49a4-a7b6-a547ce7f4947}"/>
     </way>
-    <way visible="true" id="-1693" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1698" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-484"/>
         <nd ref="-15"/>
         <tag k="FCSubtype" v="0"/>
@@ -1333,7 +1333,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{d86b419c-cfc1-4bca-8af1-eb8ebd4d5de1};{cd3bd5b1-d7fe-4a3c-b9ec-07e93e17a8ed}"/>
     </way>
-    <way visible="true" id="-1690" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1695" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-290"/>
         <nd ref="-5"/>
         <tag k="FCSubtype" v="0"/>
@@ -1365,7 +1365,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{0e7b66c7-c9a3-4848-9049-14616c584ff5};{0d2f2625-15c4-47cf-b2d4-d1b1498684e7}"/>
     </way>
-    <way visible="true" id="-1687" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1692" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-719"/>
         <nd ref="-720"/>
         <tag k="FCSubtype" v="0"/>
@@ -1394,7 +1394,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{c4580f50-6ce7-4580-8e5f-ee924ecff7e8};{823b9844-de80-4b95-973e-f572f8784c16}"/>
     </way>
-    <way visible="true" id="-1684" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1689" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-718"/>
         <nd ref="-785"/>
         <tag k="FCSubtype" v="0"/>
@@ -1425,7 +1425,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{7eaf829c-4b09-4bef-b3b5-40c9f6b4b358};{ec1f8089-9b4f-4d65-a0f2-fa646679d9e2}"/>
     </way>
-    <way visible="true" id="-1681" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1686" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-777"/>
         <nd ref="-697"/>
         <tag k="FCSubtype" v="0"/>
@@ -1454,7 +1454,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{7e6ab770-8e64-47b2-ba39-e698de655fb8};{238a441e-98a8-4383-b2a4-8f83d9ad3797}"/>
     </way>
-    <way visible="true" id="-1678" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1683" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-792"/>
         <nd ref="-793"/>
         <tag k="FCSubtype" v="0"/>
@@ -1483,7 +1483,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{e1d70a4b-bd24-4ca8-91b4-2ea57d57b5e2};{6b6b2225-4a1b-4f37-817e-50d70a903a60}"/>
     </way>
-    <way visible="true" id="-1675" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1680" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-327"/>
         <nd ref="-328"/>
         <tag k="FCSubtype" v="0"/>
@@ -1515,7 +1515,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{b38f1856-cc10-45a8-be85-f16fc7f99abe};{33c630e0-ba67-4efd-96a1-fd7e98ce3e11}"/>
     </way>
-    <way visible="true" id="-1672" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1677" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-394"/>
         <nd ref="-283"/>
         <tag k="FCSubtype" v="0"/>
@@ -1547,7 +1547,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{92e1c92c-4846-469f-b408-c32bc00c5bf1};{b911fb54-f7aa-45ca-ad97-851c90344b7f}"/>
     </way>
-    <way visible="true" id="-1669" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1674" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-920"/>
         <nd ref="-821"/>
         <nd ref="-281"/>
@@ -1581,7 +1581,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{7c1f2ac9-78fe-4037-8f5b-d879f6f7c846};{04da109f-9c58-4372-b621-222405a9861e};{ff459033-3209-49f5-970e-451a705a9e0e};{befd5aa7-889e-4bfc-a898-818bdc36a454}"/>
     </way>
-    <way visible="true" id="-1658" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1663" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-892"/>
         <nd ref="-893"/>
         <tag k="FCSubtype" v="0"/>
@@ -1613,7 +1613,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{92cb72af-9207-4072-830d-6bfbbbc2ce28};{140d45f3-8040-40f2-bdb1-87ede657812d}"/>
     </way>
-    <way visible="true" id="-1652" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1657" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-816"/>
         <nd ref="-817"/>
         <tag k="FCSubtype" v="0"/>
@@ -1645,7 +1645,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{92cb72af-9207-4072-830d-6bfbbbc2ce28};{5d6eaf32-1bcb-44b3-88a4-affd416c3882}"/>
     </way>
-    <way visible="true" id="-1647" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1652" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-3"/>
         <nd ref="-4"/>
         <tag k="FCSubtype" v="0"/>
@@ -1677,7 +1677,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{93f3e200-8a80-48c6-8295-52655354fea7};{7bb5177e-2b1c-4d85-85eb-3ec07f389e3e}"/>
     </way>
-    <way visible="true" id="-1641" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1646" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-13"/>
         <nd ref="-14"/>
         <tag k="FCSubtype" v="0"/>
@@ -2021,15 +2021,43 @@
     </way>
     <way visible="true" id="-117" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-153"/>
-        <nd ref="-154"/>
-        <nd ref="-155"/>
-        <nd ref="-156"/>
-        <nd ref="-157"/>
-        <nd ref="-158"/>
-        <nd ref="-159"/>
+        <nd ref="-826"/>
+        <nd ref="-160"/>
+        <nd ref="-827"/>
+        <nd ref="-828"/>
+        <nd ref="-829"/>
+        <nd ref="-830"/>
+        <nd ref="-831"/>
+        <nd ref="-832"/>
+        <nd ref="-833"/>
+        <nd ref="-834"/>
+        <nd ref="-835"/>
+        <nd ref="-836"/>
+        <nd ref="-837"/>
+        <nd ref="-838"/>
+        <nd ref="-839"/>
+        <nd ref="-840"/>
+        <nd ref="-841"/>
+        <nd ref="-842"/>
+        <nd ref="-843"/>
+        <nd ref="-844"/>
+        <nd ref="-845"/>
+        <nd ref="-846"/>
+        <nd ref="-847"/>
+        <nd ref="-848"/>
+        <nd ref="-849"/>
+        <nd ref="-850"/>
+        <nd ref="-851"/>
+        <nd ref="-852"/>
+        <nd ref="-853"/>
+        <nd ref="-854"/>
+        <nd ref="-855"/>
+        <nd ref="-856"/>
+        <nd ref="-857"/>
+        <nd ref="-806"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="F77EA7D0-7840-4273-B57B-C52AB69B7E85"/>
-        <tag k="REF1" v="000029"/>
+        <tag k="REF1" v="000082"/>
         <tag k="REF2" v="todo"/>
         <tag k="SHAPE_Leng" v="0.018886577265199999"/>
         <tag k="attribution" v="osm"/>
@@ -2045,10 +2073,10 @@
         <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="osm"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T15:07:03.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.960Z"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T15:31:46.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.960Z;2018-02-13T20:09:15.961Z"/>
         <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{2154ca17-2a83-4a8a-b425-07cff4f5c4b2};{f5512778-c63c-457b-999d-dbe6d1000f3e}"/>
+        <tag k="uuid" v="{2154ca17-2a83-4a8a-b425-07cff4f5c4b2};{076ee02e-1d1b-4063-b045-a01b58cf07f1};{5f08faf6-1221-46e6-a257-d834e0a8986f};{2284fda4-0857-40fa-848b-ef90534f57df}"/>
     </way>
     <way visible="true" id="-116" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-822"/>
@@ -2117,37 +2145,6 @@
         <tag k="source" v="osm"/>
         <tag k="source:datetime" v="2014-01-20T23:08:39.000Z"/>
         <tag k="uuid" v="{9c80edad-4e61-43d0-97bf-bfad7c346a1f}"/>
-    </way>
-    <way visible="true" id="-108" timestamp="2018-02-15T20:56:52Z" version="1">
-        <nd ref="-807"/>
-        <nd ref="-721"/>
-        <nd ref="-808"/>
-        <nd ref="-809"/>
-        <nd ref="-810"/>
-        <nd ref="-719"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="F1E58184-26DB-4689-8468-79C12AAD3EB2"/>
-        <tag k="REF1" v="000079"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="SHAPE_Leng" v="0.0065427624618700003"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="rail"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="service" v="spur"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T15:31:44.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.962Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{d7d4ba79-5452-4ceb-9869-336b33a55595};{ec1f595f-ed98-482c-a259-30e7107143ea}"/>
     </way>
     <way visible="true" id="-106" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-776"/>
@@ -3247,13 +3244,44 @@
         <nd ref="-161"/>
         <nd ref="-162"/>
         <nd ref="-155"/>
-        <tag k="REF1" v="00002a"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="F77EA7D0-7840-4273-B57B-C52AB69B7E85"/>
+        <tag k="REF1" v="000082;00002a"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="SHAPE_Leng" v="0.018886577265199999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="rail"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T15:31:46.000Z;2013-09-15T15:07:03.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.960Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{2154ca17-2a83-4a8a-b425-07cff4f5c4b2};{076ee02e-1d1b-4063-b045-a01b58cf07f1};{8d9d9138-2716-449f-9921-5e46cecd2dc0}"/>
+    </way>
+    <way visible="true" id="-28" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-153"/>
+        <nd ref="-154"/>
+        <nd ref="-155"/>
+        <nd ref="-156"/>
+        <nd ref="-157"/>
+        <nd ref="-158"/>
+        <nd ref="-159"/>
+        <tag k="REF1" v="000029"/>
         <tag k="attribution" v="osm"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="railway" v="rail"/>
         <tag k="source" v="osm"/>
         <tag k="source:datetime" v="2013-09-15T15:07:03.000Z"/>
-        <tag k="uuid" v="{8d9d9138-2716-449f-9921-5e46cecd2dc0}"/>
+        <tag k="uuid" v="{f5512778-c63c-457b-999d-dbe6d1000f3e}"/>
     </way>
     <way visible="true" id="-25" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-145"/>
@@ -3653,65 +3681,6 @@
         <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.961Z"/>
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{9ceb959a-707c-466d-afd2-d46ca5c0c42b};{27d8ee7d-db24-4cda-8190-35dea3214570}"/>
-    </way>
-    <way visible="true" id="13" timestamp="2018-02-15T20:56:52Z" version="1">
-        <nd ref="-153"/>
-        <nd ref="-826"/>
-        <nd ref="-160"/>
-        <nd ref="-827"/>
-        <nd ref="-828"/>
-        <nd ref="-829"/>
-        <nd ref="-830"/>
-        <nd ref="-831"/>
-        <nd ref="-832"/>
-        <nd ref="-833"/>
-        <nd ref="-834"/>
-        <nd ref="-835"/>
-        <nd ref="-836"/>
-        <nd ref="-837"/>
-        <nd ref="-838"/>
-        <nd ref="-839"/>
-        <nd ref="-840"/>
-        <nd ref="-841"/>
-        <nd ref="-842"/>
-        <nd ref="-843"/>
-        <nd ref="-844"/>
-        <nd ref="-845"/>
-        <nd ref="-846"/>
-        <nd ref="-847"/>
-        <nd ref="-848"/>
-        <nd ref="-849"/>
-        <nd ref="-850"/>
-        <nd ref="-851"/>
-        <nd ref="-852"/>
-        <nd ref="-853"/>
-        <nd ref="-854"/>
-        <nd ref="-855"/>
-        <nd ref="-856"/>
-        <nd ref="-857"/>
-        <nd ref="-806"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="F77EA7D0-7840-4273-B57B-C52AB69B7E85"/>
-        <tag k="REF1" v="000029;000082"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="SHAPE_Leng" v="0.018886577265199999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="rail"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T15:07:03.000Z;2013-09-15T15:31:46.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.960Z;2018-02-13T20:09:15.961Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{2154ca17-2a83-4a8a-b425-07cff4f5c4b2};{f5512778-c63c-457b-999d-dbe6d1000f3e};{076ee02e-1d1b-4063-b045-a01b58cf07f1};{5f08faf6-1221-46e6-a257-d834e0a8986f};{2284fda4-0857-40fa-848b-ef90534f57df}"/>
     </way>
     <way visible="true" id="14" timestamp="2018-02-15T20:56:52Z" version="1" changeset="17283">
         <nd ref="-59"/>
@@ -4795,5 +4764,36 @@
         <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.859Z"/>
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{8bea8c4a-389e-4858-8aa1-80c944fece58};{5894d6b1-749a-4d31-a98e-4a2406eca280}"/>
+    </way>
+    <way visible="true" id="133" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-807"/>
+        <nd ref="-721"/>
+        <nd ref="-808"/>
+        <nd ref="-809"/>
+        <nd ref="-810"/>
+        <nd ref="-719"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="F1E58184-26DB-4689-8468-79C12AAD3EB2"/>
+        <tag k="REF1" v="000079"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="SHAPE_Leng" v="0.0065427624618700003"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="surface"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="rail"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="service" v="spur"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T15:31:44.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.962Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{d7d4ba79-5452-4ceb-9869-336b33a55595};{ec1f595f-ed98-482c-a259-30e7107143ea}"/>
     </way>
 </osm>

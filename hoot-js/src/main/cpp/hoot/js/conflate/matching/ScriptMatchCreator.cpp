@@ -1107,9 +1107,8 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   QFileInfo fi(path);
   result.setClassName(className() + "," + fi.fileName());
 
-  // config error handling - This really belongs in the associated conflate script but haven't
-  // figured out how to throw HootException from a script yet. There's probably other error checking
-  // that needs to be done too.
+  // config error handling
+  // TODO: The type match threshold range checking needs to be extended to all scripts that use it.
   if (baseFeatureType == CreatorDescription::BaseFeatureType::Railway)
   {
     _validateRailConfig(ToLocal(&plugin));
@@ -1180,14 +1179,11 @@ void ScriptMatchCreator::_validateRailConfig(Local<Object> plugin) const
 {
   const double railwayTypeMatchThreshold =
     ScriptMatchVisitor::getNumber(plugin, "typeMatchThreshold", 0.0, 1.0);
-  const double railwayTypeReviewThreshold =
-    ScriptMatchVisitor::getNumber(plugin, "typeReviewThreshold", 0.0, 1.0);
-  if (railwayTypeReviewThreshold > railwayTypeMatchThreshold)
+  if (railwayTypeMatchThreshold < 0.0 ||  railwayTypeMatchThreshold > 1.0)
   {
     throw IllegalArgumentException(
-      "Railway type review threshold: " + QString::number(railwayTypeReviewThreshold) +
-      " greater than railway type match threshold: " +
-      QString::number(railwayTypeMatchThreshold) + ".");
+      "Railway type match threshold out of range: " + QString::number(railwayTypeMatchThreshold) +
+      ".");
   }
 }
 
