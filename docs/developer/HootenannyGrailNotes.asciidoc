@@ -1,10 +1,10 @@
-== Grail Notes
+=== Grail Notes
 
 The term 'Grail' describes the process for updating data in a versioned, OpenStreetMap API enabled data store with data from some
 other external source using various conflation techniques. Often this manifests itself as updating data in a private OSM data store with that from the public OSM data store. Described here are various operations we labeled as 'Grail' work and these 
 notes should be used as a reminder of implementation decisions.
 
-=== Grail pull from OSM Overpass and the Rails Port
+==== Grail pull from OSM Overpass and the Rails Port
 
 Under the tools section in the Hootenanny UI there will be a section labeled "Grail Tools". Under that
 you should see the option to "Pull Remote Data". Once selected you will be prompted to select a bounding
@@ -13,8 +13,7 @@ you can submit the job for running. After the job has completed you should see a
 grail_*coordinates for your bounding box* which should contain a filed named "reference" (the Rails Port data)
 and a file named "secondary" (the OSM Overpass data).
 
-
-=== Derive Differential Changeset
+==== Derive Differential Changeset
 
 Under the tools section in the Hootenanny UI there will be a section labeled "Grail Tools". Under that
 you should see the option for "Derive Differential Changeset". This tool is used for gathering only the data
@@ -23,8 +22,7 @@ be any files generated that you can view in the UI because this service will tak
 the database and calculate the differential on the server without saving the datasets. While the datasets will not
 be saved, an osm file will be generated on the server.
 
-
-=== Upload Changeset
+==== Upload Changeset
 
 In the jobs panel you can find the Derive Changeset job and under the actions there will be a cloud icon with an up arrow.
 This is what you use to upload the differential results to the Rails Port, but before doing that you can view stats on the differential
@@ -33,15 +31,13 @@ completed, the parent job will be marked as 'STALE' so that the parent job actio
 will no longer be viable (versions have been incremented on the server). If there was a reference dataset from the rails port used in the process of making the upload job, that
 will be refreshed with the newly uploaded data.
 
-
-=== Derive Changeset Replacement
+==== Derive Changeset Replacement
 
 This feature can be accessed under the Jobs panel for conflate or import jobs under the rows action buttons using the square
 button with dots icon. Once you click the icon a popup box will instruct you to select a reference dataset for which the
 replace data will be compared to and run.
 
-
-=== Grail Conflate
+==== Grail Conflate
 
 The result of a conflation job, where the reference dataset is the result of a grail pull, becomes grail conflate
 eligible. In the jobs panel you will see under actions a triangle icon, the same icon that is to the left

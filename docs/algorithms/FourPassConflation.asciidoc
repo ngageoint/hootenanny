@@ -1,6 +1,6 @@
 
 [[ExplFourPassConflation]]
-== Four Pass Conflation
+=== Four Pass Conflation
 
 NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been
 left here for references purposes only.
@@ -9,7 +9,7 @@ All Hootenanny desktop conflation operations assume that the operation can be co
 
 The following sections describe the process flow and a summary of each operation. It is assumed that the reader has a working knowledge of distributed systems and Hadoop. For specific details on how to execute these operations as well as software and hardware requirements, please reference the _Hootenanny User Documentation_ .
 
-=== Process Flow
+==== Process Flow
 
 Before processing can begin, both inputs must be translated and encoded as `.osm.pbf` files using the translation mechanisms described in previous sections. In the case of OpenStreetMap, an entire `.osm.pbf` planet file can be downloaded directly from http://www.openstreetmap.org[OpenStreetMap] without any modifications. Once translation has been completed, the files may be uploaded into HDFS using utilities provided with the Hadoop distribution. On completion, Hootenanny provides a utility to combine output Hadoop files into a single `.osm.pbf` file that can be used by any number of OSM utilities to import the data into PostGIS or another convenient geospatial format.
 
@@ -20,7 +20,7 @@ Before processing can begin, both inputs must be translated and encoded as `.osm
 
 image::images/image047.png[]
 
-=== File Format
+==== File Format
 
 The `.osm.pbf` file format (OpenStreetMap) is a binary format based on Google Protocol Buffers (Google Inc.). This format is a standard OpenStreetMap interchange format that combines efficient storage of data through delta encoding and table lookups and further compresses the data using zlib. The file is broken into independent "blobs" that are generally less than 16MB in size.
 
@@ -33,7 +33,7 @@ Hadoop generally breaks large files into blocks of 64MB for storage. Each of the
 
 In most Hadoop jobs, intermediate OSM primitives (ways and nodes) must be emitted between the map and reduce tasks. For these intermediate values, a modified `.osm.pbf` format is used to reduce the size of records that are shuffled.
 
-=== Join Ways to Nodes
+==== Join Ways to Nodes
 
 The focus of this operation is three fold:
 	1. Generate a bounding box for the way
@@ -45,12 +45,12 @@ The +.osm.pbf+ file stores nodes and ways independently. For this reason, ways m
 The final output is a directory full of `.osm.pbf` blobs, where all primitives are re-numbered, ways have been broken into sections smaller than ~1km, and bounding boxes have been assigned to all ways.
 
 [[ExplPaintTileDensity]]
-=== Paint Tile Density
+==== Paint Tile Density
 
 The density of nodes for both inputs will be used when determining tile boundaries. Calculating the node density is one of the fastest Hadoop operations and simply requires mapping each node in the input to an output pixel during the map stage, then summing the output pixels in the reduce stage. To improve efficiency, a hash map of pixels and counts is maintained in the map stage. The final output is a matrix of node counts in each pixel. The size of a pixel is tunable, but through experimentation 0.01 degree pixel size seems to be optimal. This provides for a large number of tiles that do not exceed the 2GB RAM task limit.
 
 [[ExplDeterminingTileBounds]]
-=== Determining Tile Bounds
+==== Determining Tile Bounds
 
 Tile boundaries are calculated such that the data is divided into approximately four equally sized portions at each stage while minimizing boundary overlap with complex regions. An approach similar to the building of a KD-Tree is used (Bentley, 1975). Because our input data sets are much larger than can be fit into RAM, we approximate this solution by first using Hadoop to create a raster that counts the number of nodes in each pixel (see <<ExplPaintTileDensity>>). The raster is then loaded into RAM and used for calculating all split points as below:
 
@@ -63,7 +63,7 @@ Through experimentation, we have found that 10e^6^ is a good number of max nodes
 
 Depending on the size of the input data, there may be scenarios where the data is too large to fit within a tile and a max node count of 10e^6^. If this is the case, either the pixel size must decreased or the amount of RAM available to each task in Hadoop increased. See <<ExplImproveDistrTiling>> for potential improvements.
 
-=== Conflation
+==== Conflation
 
 Four-pass conflation is a process to create seamless conflated data over arbitrarily large data sets. It is assumed that very large objects such as long roads and country boundaries can be broken into small pieces. As long as this assumption is valid, we hypothesize that this approach will work with all common geometry types.
 
@@ -87,15 +87,15 @@ There are several steps involved in four pass conflation:
 
 The output of this operation is a directory filled with conflated `.osm.pbf` blobs.
 
-=== Export
+==== Export
 
 The final output file is created by concatenating the output of the four-pass conflation and prepending an appropriate header. This output file can be used directly within many common OSM tools or ingested into PostGIS for use with common GIS tools.
 
-=== Impact of Tiling on Output
+==== Impact of Tiling on Output
 
 Initial experimentation with tiling on small data sets does not show a significant difference in the output with a sufficiently large overlap between tiles. Experimentation is required to determine the optimal value, but values as low as a kilometer give visually reasonable results. Very small values, such as 10 meters, show artifacts in the conflation process. More experimentation is necessary to quantify the impacts on the conflation output.
 
-=== Performance
+==== Performance
 
 The following table gives rough benchmarks for conflation:
 

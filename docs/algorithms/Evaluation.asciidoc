@@ -1,6 +1,6 @@
 
 [[Evaluation]]
-== Evaluation
+=== Evaluation
 
 Creating a conflation routine is easy; creating a conflation routine that performs well is far more challenging. We spent a significant amount of time creating a set of evaluation functions and data that quantitatively score our conflation routines. This provided a metric for evaluating each new change that we made to the system to determine if it was a net benefit or not.
 
@@ -8,7 +8,7 @@ To give meaningful metrics, we compared our automated routine to the performance
 
 The following sections describe how we evaluate the results using three different comparison functions, each capturing a different aspect of data accuracy and with scores and processing times for three test sets.
 
-=== Location & Completeness Score
+==== Location & Completeness Score
 
 The location and completeness score determines how closely two sets of geometries match. It is a combined score that drops if one data set is more complete than the other or if the geometries have significant differences in location or shape. We refer to the method as the _Shuey Method,_ as it was inspired by Senior Geospatial Scientist Chad Shuey. The routine is fairly resilient to minor perturbations but does not detect more complex problems such as missing intersections or one-way streets.  The images in <<ExplLocationCompletenessScore>> show some of the intermediate results for a simple example.
 
@@ -34,7 +34,7 @@ The final score is a value of 0 to 1 and is calculated as the following equation
 
 The toy example in <<Equation1>> gives a score of 0.882.
 
-===  Routing Score
+==== Routing Score
 
 The routing score determines how similar routes calculated on the two input datasets agree. This test is designed to simulate how a user would approach a routing problem and determine the difference they would see in the two outputs.
 
@@ -69,7 +69,7 @@ To convert the rasters into a score an equation similar to this equation is used
 
 To get a reasonable representation of the entire image, the score is calculated 100 times, and the mean and 90% confidence interval are reported. In this case the score is 987 +/- 4.
 
-=== Attribution Score
+==== Attribution Score
 
 The Attribution score compares the set of attributes between two features in a data set. This provides a quantitative value describing how closely matched attributes are over the map. If features are missing from the data set, it will generally not count against the overall attribution score.
 
@@ -82,11 +82,11 @@ The following steps are used to calculate the overall Attribution Score.
 3. The highest scoring feature comparison within the 10m buffer is recorded. If there are not two features within 10m, a new random point is generated.
 4. Repeat the above steps many times (currently 300) and calculate the mean and 90% confidence interval of the resulting scores.
 
-===  Results
+====  Results
 
 The following sections outline three test scenarios picked to exercise different aspects of Hootenanny. The final section draws conclusions based on the test results. We selected scenarios that show combination of more than two sources, urban and rural environments, and complex topologies such as interchanges.
 
-==== Easy Roads
+===== Easy Roads
 
 The _Easy Roads_ test scenario was picked for its good geometry and straightforward topology. It was the first data set that we attempted to solve with Hootenanny, and it provided invaluable insight into the conflation problem.  The simplicity of the data yielded evaluation scores that were high.
 
@@ -104,7 +104,7 @@ The conflation runtime for this test was approximately 2 seconds. This runtime i
 
 image::images/image009.png[]
 
-==== Spaghetti Bowl
+===== Spaghetti Bowl
 
 The _Spaghetti Bowl_ test scenario is from a city with left hand driving rules and was picked for the relatively high geometric accuracy and the complex topology. This test conflates Urban Feature Data and OSM and compares the result against two human conflated data sets.
 
@@ -143,7 +143,7 @@ The scores for Spaghetti Bowl were within the 90% confidence interval for the ma
 
 The conflation runtime for this test was approximately 10 seconds.  The first manual conflation took approximately 29 hours. This dramatic speed improvement is consistent across the three test scenarios. The second manual conflation did not include attribute conflation so that time is not meaningful.
 
-==== City Edge
+===== City Edge
 
 The city edge conflation includes UFD, FFD and OSM. The UFD data is very high quality, but only extends to the southern edge of the city and is only in the top \~10% of the test bounds. The FFD and OSM data cover the whole extent but do not have the same density, fidelity, or features. The southern half of the data set is very rural, with dirt roads and very few complex intersections.
 
@@ -182,7 +182,7 @@ The Location & Completeness score performs as expected. The FFD + UFD show a dra
 
 Conflation scoring for this data set was very close to the manual scores and higher than all the input data in every meaningful way. The conflation runtime for this test was approximately 11 seconds.  The first manual conflation took approximately 10 hours and the second took approximately 9 hours.
 
-==== Evaluation Conclusions
+===== Evaluation Conclusions
 
 We have shown in our three test scenarios that automated conflation performs approximately on par with human conflation on our three metrics. However, these metrics do not include subjective measurements such as aesthetics. <<BadConflateResult>> shows one scenario within Spaghetti Bowl where the difference in results does not significantly impact routing, location, and completeness or attribute scores, but it is incorrect and jarring to the eye. This specific scenario could be resolved by encoding a better understanding of interchanges and traffic flow as described in <<ExplConfidenceValuesFeatures>>. There are a number of similar scenarios that occur mostly relating to conflicting input data.
 

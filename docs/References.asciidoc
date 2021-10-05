@@ -9,10 +9,6 @@
 [bibliography]
 .Hootenanny Documentation
 - [[[hootuser]]] "Hootenanny - User Guide"
-- [[[hootalgo]]] "Hootenanny - Algorithms"
-- [[[hootUI]]] "Hootenanny - User Interface Guide"
-- [[[hootDevGuide]]] "Hootenanny Developer Guide": Provides developer guidance on building a Hootenanny instance on Ubuntu 14.04 manually as well as in a semi-automated fashion using the preconfigured Vagrant script procedure.  This guide also provides background on optional third party tools that are useful for extending out of the box Hootenanny capabilities.
-- [[[hootInstall]]] "Hootenanny - Installation Instructions": Provides installation instruction for CentOS/RHEL 6.5 for Hootenanny and its dependencies.
 - https://github.com/ngageoint/hootenanny/wiki/Conflation-Algorithm-Information[slides]
 
 

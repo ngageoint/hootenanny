@@ -1,6 +1,6 @@
 
 [[ObtainingMatchInformation]]
-== Obtaining Match Information
+=== Obtaining Match Information
 
 There are times when you may be more interested in the matches Hootenanny calculates instead of the
 final conflated output. With regular conflation tracking such matches is difficult as features are

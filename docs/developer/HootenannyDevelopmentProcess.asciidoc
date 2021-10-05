@@ -1,5 +1,5 @@
 
-== Hootenanny Development Process
+=== Development Process
 
 * Open a https://github.com/ngageoint/hootenanny/issues[GitHub issue] for the work to be done and 
 assign it to yourself.
@@ -14,7 +14,7 @@ as part of the pull request job.
 * Ensure your changes are https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyCodeDocumentation.asciidoc[properly documented] with code comments. 
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyAPI.asciidoc[API documentation] 
 may be generated from the command line or as part of the pull request job.
-* Ensure your changes are adequately documented in the Algorithms, Developer, and/or User Guide(s).
+* Ensure your changes are adequately documented in the User Guide.
 * If you are making significant changes to the conflation algorithms, you may want to run the 
 regression tests at this point. They will run automatically nightly against the master branch.
 * Create a https://github.com/ngageoint/hootenanny/pulls[pull request] to merge the work branch into 
@@ -32,5 +32,4 @@ Hootenanny development team. If that is not possible, then someone from the team
 you.
 * Check the status of the nightly regression tests the following day and fix failing regression 
 tests if necessary.
-
 

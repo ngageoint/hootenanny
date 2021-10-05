@@ -1,6 +1,6 @@
 
 [[OptimizeNetworkAlgorithmSettings]]
-== Optimizing Network Algorithm Settings
+=== Optimizing Network Algorithm Settings
 
 Hootenanny includes a utility to determine the optimal configurable settings for the Network Road 
 Conflation Algorithm. This document describes the process involved in using it.

@@ -1,19 +1,19 @@
 
-[[RailwayConflation]]
-== Railway Conflation
+[[RailwayConflationAlgs]]
+=== Railway Conflation
 
 [[RailwayFeatureDefinitions]]
-=== Feature Definitions
+==== Feature Definitions
 
 TODO
 
 [[RailwayMatching]]
-=== Matching
+==== Matching
 
 Default railway matching is determined by geometric similarity only using a maching learning trained 
 model on limited data. See `rules/Railway.js` for the extracted features used.
 
-==== One to Many Matching
+===== One to Many Matching
 
 Railway conflation has an alternate workflow that allows for transferring selected tags from single 
 rail features in secondary data to multiple rail features in reference data when the single 
@@ -25,12 +25,12 @@ involved in with other reference rail features. Once that match limit is reached
 will occur for the secondary feature.
 
 [[RailwayMerging]]
-=== Merging
+==== Merging
 
 Default railway merging uses the default linear merger used by all linear script conflation 
 routines.
 
-==== One to Many Merging
+===== One to Many Merging
 
 In the one to many workflow, selected tags are transferred from one secondary feature to potentially 
 multiple reference features. No geometry merging is performed. The tags transferred are configurable
@@ -39,17 +39,17 @@ feature with key matching those in the option list value will be transferred to 
 feature. Optionally, the secondary feature may be deleted from conflated output by specifying `railway.one.to.many.delete.secondary=true`.
 
 [[RailwayConfigurableOptions]]
-=== Configurable Options
+==== Configurable Options
 
 See `railway.*` options.
 
 [[RailwayTestResults]]
-=== Test Results
+==== Test Results
 
 TODO
 
 [[RailwayFutureWork]]
-=== Future Work
+==== Future Work
 
 TODO
 

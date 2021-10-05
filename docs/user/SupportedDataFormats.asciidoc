@@ -1,8 +1,8 @@
 
 [[SupportedDataFormats]]
-== Supported Data Formats
+=== Supported Data Formats
 
-=== Input
+==== Input
 
 * File Geodatabase (.gdb)
 * GeoJSON (.geojson or http://) (memory bound)
@@ -19,7 +19,7 @@
 * Zip files containing shape files and/or File Geodatabase files (.zip)
 * Any additional OGR supported format not listed here (untested)
 
-=== Output
+==== Output
 
 * File Geodatabase (.gdb) (memory bound)
 * GeoJSON (.geojson) (memory bound)
@@ -38,7 +38,7 @@
 Additional data types can be made supportable via development effort using Hootenanny's pluggable I/O architecture. See 
 the Hootenanny Developer Guide for details.
 
-=== Memory Consumption
+==== Memory Consumption
 
 * An I/O operation is memory bound if either the input or output format is memory bound.
 * Writing to OGR formats, while streamable, requires an internal element cache be maintained for 
@@ -48,7 +48,7 @@ configuration option to false and leave the elements unsorted by ID in output.
 * With the exception of database formats, read operation are memory bound when specifying a bounding 
 box filter.
 
-=== OGR
+==== OGR
 
 * OGR layers may selectively be read with the syntax:
 -----
@@ -61,14 +61,14 @@ box filter.
 recognized correctly.
 * A directory of shape files must have the top level directory named as *.shp in order to be recognized correctly.
 
-==== Shape Files
+===== Shape Files
 
 * The conversion from OSM file to shape file is a lossy process that generates a point, line and polygon shapefile. The 
 OSM XML format is a richer format than Shapefile and supports such things as multiple geometry types within one file, 
 inherit topology and arbitrary tagging. For these reasons the conversion to Shapefile is a lossy conversion.
 * Column filtering for shape files is supported with the `shape.file.writer.cols` configuration option.
 
-=== https://github.com/ngageoint/hootenanny/blob/master/docs/user/OsmApiDb.asciidoc[OSM API Database]
+==== https://github.com/ngageoint/hootenanny/blob/master/docs/user/OsmApiDb.asciidoc[OSM API Database]
 
 The format of a OSM API database URL is: 
 
@@ -78,7 +78,7 @@ osmapidb://<user name>:<password>@<host name>:<port>/<database name>
 
 Writing to OSM API database is intended to be a bulk operation for new data only (no updates on existing data).
 
-=== Hootenanny API Database
+==== Hootenanny API Database
 
 The format of a Hootenanny API database URL is: 
 
@@ -92,11 +92,11 @@ for multiple feature layers with each one corresponding to a map stored in its o
 supports a single feature layer for the entire world. The Hootenanny API database format is meant for internal use 
 by Hootenanny only.
 
-=== OSM API Web Service
+==== OSM API Web Service
 
 Only changesets may be written to an OSM API Web Service (http://).
 
-=== Archive Files (Compressed or Uncompressed)
+==== Archive Files (Compressed or Uncompressed)
 
 * For the `hoot convert` command zip files (.ZIP), tar files (.TAR and compressed .TAR.GZ and .TGZ), and gzip files (.GZ)
 can be used as input using regular path syntax.  When used this way, all GDAL compatible files are read from the file and
@@ -111,3 +111,4 @@ The "/" are field separators. If you get errors using absolute paths, check that
 ** The path to the shapefile inside the Zip file: "dir/LAP010.shp
 ** The input is: "/vsizip//gis-data/test_data.zip/dir/LAP010.shp"
 ** If the Zip file is in the current directory, the input will be: /vsizip/./test_data.zip/dir/LAP010.shp
+
