@@ -4,8 +4,8 @@
 
 LOG="--status"
 CONF="-C Testing.conf -D writer.include.debug.tags=true"
-IN=test-files/cmd/slow/SynchronizeElementIdsCmdTest
-OUT=test-output/cmd/slow/SynchronizeElementIdsCmdTest
+IN=test-files/cmd/quick/SynchronizeElementIdsCmdTest
+OUT=test-output/cmd/quick/SynchronizeElementIdsCmdTest
 mkdir -p $OUT
 
 # Write out a copy of two maps combined without their element IDs preserved.

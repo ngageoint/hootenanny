@@ -5,8 +5,8 @@ set -e
 # the first input was created running poi/poly with default options; the second raises the review threshold 
 # (poi.polygon.review.evidence.threshold) to 2 to force some incorrect matches
 
-IN_DIR=test-files/cmd/slow/ScoreMatchesDiffCmdTest
-OUT_DIR=test-output/cmd/slow/ScoreMatchesDiffCmdTest
+IN_DIR=test-files/cmd/quick/ScoreMatchesDiffCmdTest
+OUT_DIR=test-output/cmd/quick/ScoreMatchesDiffCmdTest
 mkdir -p $OUT_DIR
 
 hoot score-matches-diff --warn -C Testing.conf $IN_DIR/input1.osm $IN_DIR/input2.osm $OUT_DIR/output
