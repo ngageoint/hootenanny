@@ -49,7 +49,7 @@ public:
 
   ResolveReviewsOpTest() :
   HootTestFixture(
-    "test-files/rnd/ops/ResolveReviewsOpTest/", "test-output/rnd/ops/ResolveReviewsOpTest/")
+    "test-files/ops/ResolveReviewsOpTest/", "test-output/ops/ResolveReviewsOpTest/")
   {
   }
 

@@ -53,7 +53,7 @@ public:
 
   ResolveReviewsOpMsTest() :
   HootTestFixture(
-    "test-files/rnd/ops/ResolveReviewsOpMsTest/", "test-output/rnd/ops/ResolveReviewsOpMsTest/")
+    "test-files/ops/ResolveReviewsOpMsTest/", "test-output/ops/ResolveReviewsOpMsTest/")
   {
     setResetType(ResetAll);
   }

@@ -47,9 +47,10 @@ class MultiaryIngestChangesetWriterTest : public HootTestFixture
 
 public:
 
-  MultiaryIngestChangesetWriterTest()
-    : HootTestFixture("test-files/rnd/io/MultiaryIngestChangesetTests/",
-                      "test-output/rnd/io/MultiaryIngestChangesetWriterTest/")
+  MultiaryIngestChangesetWriterTest() :
+  HootTestFixture(
+    "test-files/io/MultiaryIngestChangesetTests/",
+    "test-output/io/MultiaryIngestChangesetWriterTest/")
   {
   }
 

@@ -44,9 +44,8 @@ class MultiaryIngestChangesetReaderTest : public HootTestFixture
 
 public:
 
-  MultiaryIngestChangesetReaderTest()
-    : HootTestFixture("test-files/rnd/io/MultiaryIngestChangesetTests/",
-                      UNUSED_PATH)
+  MultiaryIngestChangesetReaderTest() :
+  HootTestFixture("test-files/io/MultiaryIngestChangesetTests/", UNUSED_PATH)
   {
   }
 
@@ -55,8 +54,8 @@ public:
     MultiaryIngestChangesetReader changesetFileReader;
     changesetFileReader.open(inputFile);
 
-    //MultiaryIngestChangesetReader doesn't parse all the info from the input, as it doesn't currently
-    //need all of it...we only test for what it actually parses.
+    // MultiaryIngestChangesetReader doesn't parse all the info from the input, as it doesn't
+    // currently need all of it...we only test for what it actually parses.
 
     int ctr = 0;
     while (changesetFileReader.hasMoreChanges())

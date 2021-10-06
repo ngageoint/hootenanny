@@ -52,8 +52,8 @@ public:
 
   MultiaryPoiMergerTest() :
   HootTestFixture(
-    "test-files/rnd/conflate/multiary/MultiaryPoiMergerTest/",
-    "test-output/rnd/conflate/multiary/MultiaryPoiMergerTest/")
+    "test-files/conflate/multiary/MultiaryPoiMergerTest/",
+    "test-output/conflate/multiary/MultiaryPoiMergerTest/")
   {
     setResetType(ResetAll);
   }

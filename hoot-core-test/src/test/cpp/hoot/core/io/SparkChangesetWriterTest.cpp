@@ -46,9 +46,9 @@ class SparkChangesetWriterTest : public HootTestFixture
 
 public:
 
-  SparkChangesetWriterTest()
-    : HootTestFixture("test-files/rnd/io/SparkChangesetWriterTest/",
-                      "test-output/rnd/io/SparkChangesetWriterTest/")
+  SparkChangesetWriterTest() :
+  HootTestFixture(
+    "test-files/io/SparkChangesetWriterTest/", "test-output/io/SparkChangesetWriterTest/")
   {
   }
 
