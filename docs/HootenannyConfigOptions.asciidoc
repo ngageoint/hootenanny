@@ -82,8 +82,6 @@ hoot conflate \
   test-output/ToyTestRemoveUnknown2.osm
 -----
 
-TODO: add an options replace example
-
 [[Hoot-ConfigOptions]]
 === Configuration Parameters
 
