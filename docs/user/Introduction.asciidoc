@@ -134,7 +134,11 @@ See also:
 
 *_Average Conflation_*
 
-TODO
+Average Conflation attempts to find a midway point between two features when conflating. Neither
+input is considered more important than the other (this was the original Hootenanny conflation 
+strategy). Both geometries and tag values are averaged together to create the conflated output.
+
+NOTE: Average Conflation is currently only supported for linear features.
 
 *_Horizontal Conflation_*
 

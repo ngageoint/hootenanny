@@ -2,17 +2,20 @@
 [[RiverConflation]]
 === River Conflation
 
-TODO
-
 [[RiverFeatureDefinitions]]
 ==== Feature Definitions
 
-TODO
+River Conflation defines a river as a linear body of water.
 
 [[RiverMatching]]
 ==== Matching
 
-TODO
+River Conflation allows for a manually entered or automatically calculated search radius when 
+determining the maximum distance between features to search when attempting matching. Automatic
+search radius calculation is achieved via calculated tie points via the rubbersheeting algorithm.
+
+Matching is based off both tag and geometric attributes. For geometry matching, sampled angle 
+histogram and a weighted shape distance values are used for comparison. Their match threshold
 
 [[RiverMerging]]
 ==== Merging

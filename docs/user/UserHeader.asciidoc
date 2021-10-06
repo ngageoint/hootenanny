@@ -3,7 +3,8 @@
 
 This section describes the configuration and usage of Hootenanny. Hootenanny can be accessed from 
 both command line and via a simple web user interface (Hootenanny-iD) built on top of the 
-https://www.openstreetmap.org/edit?editor=id[OpenStreetMap iD] Editor. 
+https://www.openstreetmap.org/edit?editor=id[OpenStreetMap iD] Editor. If you plan on only using
+Hootenanny from iD Editor, as a quick start proceed to the "Web User Interface" section.
 
 At its core, Hootenanny  provides a set of tools for manipulating and conflating vector data as well as translating data between various out of the box supported reference tag schemas such as OSM, TDS, UTP, MGCP.  As an extension to the existing translation capabilities within Hootenanny, the Hootenanny-iD web interface provides a simple translation tool known as the _Translation Assistant_ that will walk users through a custom translation of any customer data format into a supported tag schema.  Additional background on the Hootenanny-iD interface and Translation Assistant can be found in the Hootenanny User Interface Guide.
 
