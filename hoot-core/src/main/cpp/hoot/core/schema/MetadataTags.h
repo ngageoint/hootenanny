@@ -293,22 +293,6 @@ public:
   inline static QString RolePart()                      { return "part"; }
   inline static QString RoleReviewee()                  { return "reviewee"; }
 
-  /**
-   * ID Unique to a training data set with multiary training data.
-   * @sa MultiaryMatchComparator
-   */
-  inline static QString TrainingId()                    { return "ID"; }
-  /**
-   * Refers to a match between two or more elements in a multiary training data set.
-   * @sa MultiaryMatchComparator
-   */
-  inline static QString TrainingMatch()                 { return "MATCH"; }
-  /**
-   * Refers to a review between two or more elements in a multiary training data set.
-   * @sa MultiaryMatchComparator
-   */
-  inline static QString TrainingReview()                { return "REVIEW"; }
-
   inline static QString Unknown1()                      { return "Unknown1"; }
   inline static QString Unknown2()                      { return "Unknown2"; }
 

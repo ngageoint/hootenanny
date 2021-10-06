@@ -89,8 +89,8 @@ alleviated by further optimization of the tagging logic.
 ===== False Tag Additions
 
 The conclusion has been reached that it is pretty much impossible to not add some incorrect tags to an input dataset when performing
-implicit feature tagging.  With a lot of manual custom rule file additions, however, the number of incorrectly added tags to the
-input data used by the Unifying POI, Unifying POI/Polygon, and Global Multiary POI regression tests was greatly reduced.  There is likely
+implicit feature tagging. With a lot of manual custom rule file additions, however, the number of incorrectly added tags to the
+input data used by the Unifying POI and Unifying POI/Polygon regression tests was greatly reduced.  There is likely
 still a lot of work to be done to reduce adding incorrect tags going forward.  The bottom line is that implicit feature tagging should
 never be used with data where the addition of any incorrect tags cannot be tolerated.
 
@@ -101,11 +101,4 @@ never be used with data where the addition of any incorrect tags cannot be toler
 Applying implicit feature tagging to the data used by the Unifying POI/Polygon regression tests resulted in moderate correct match
 increases, very slight incorrect match increases, and large reductions in unnecessary reviews.  An examination of the output data
 revealed quite a bit of valuable type information added to the output with a small amount of falsely typed data.
-
-===== Global POI Multiary Conflation
-
-The Global POI Multiary conflation regression tests use Wikimapia as one of its input datasets (see the "Hootenanny Implicit Tag
-Rules Database Generation" section of the Hootenanny Developer Guide for tests location).  The Wikimapia data used had relatively
-poor type tag information associated with it.  Due to that fact, a 4% reduction in incorrectly conflated data occurs when applying
-implicit POI tagging as a conflation pre-operation.  Falsely typed data exists but is relatively small compared to correctly added type tags.
 
