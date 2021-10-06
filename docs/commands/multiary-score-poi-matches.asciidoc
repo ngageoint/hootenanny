@@ -3,9 +3,10 @@
 
 === Description
 
-The `multiary-score-poi-matches` command scores how well Multiary POI Conflation performs using manually matched data as 
-a reference. It reads from inputs, adds UUIDs, conflates using unify, and scores the matches. The command will return an error 
-if the first input contains any REF2 tags or the second input contains any REF1 tags.
+The `multiary-score-poi-matches` command (experimental) scores how well Multiary POI Conflation 
+performs using manually matched data as a reference. It reads from inputs, adds UUIDs, conflates 
+using unify, and scores the matches. The command will return an error if the first input contains 
+any REF2 tags or the second input contains any REF1 tags.
 
 * `input1`      - Input 1; may be any supported input format (e.g. .osm file).
 * `input2`      - Input 2; may be any supported input format (e.g. .osm file).

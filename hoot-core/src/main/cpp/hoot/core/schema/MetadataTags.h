@@ -125,6 +125,7 @@ public:
   inline static QString HootReviewType()                { return "hoot:review:type"; }
   inline static QString HootReviewUuid()                { return "hoot:review:uuid"; }
   inline static QString HootReviewRoadCrossingPolygon() { return "road_crossing_polygon"; }
+  inline static QString HootReviewCrossingRailways()    { return "crossing_railways"; }
 
   inline static QString HootScoreClassification()       { return "hoot:score:classification"; }
   inline static QString HootScoreDetail()               { return "hoot:score:detail"; }

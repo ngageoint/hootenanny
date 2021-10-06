@@ -100,6 +100,13 @@ public:
   static ElementPtr getFirstElementWithTag(
     const OsmMapPtr& map, const QString& tagKey, const QString& tagValue,
     const ElementType& elementType = ElementType::Unknown);
+
+  /**
+   * @brief getNumReviews returns the number of unique reviews in a map
+   * @param map the map to examine
+   * @return a review count
+   */
+  static int getNumReviews(const OsmMapPtr& map);
 };
 
 }

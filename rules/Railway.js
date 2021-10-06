@@ -1,6 +1,8 @@
-/**
- * This script conflates railways using Generic Conflation.
- */
+/*
+  This is the conflate script for Railway Conflation. This handles linear railway features only.
+
+  @todo Clean up some of the one to many code by refactoring into separate functions.
+*/
 
 "use strict";
 
@@ -8,32 +10,35 @@ exports.description = "Matches railways";
 exports.experimental = false;
 exports.baseFeatureType = "Railway";
 exports.geometryType = "line";
-
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
-
 exports.searchRadius = parseFloat(hoot.get("search.radius.railway"));
-
-// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't
-// used. If that ever changes, then the generic score threshold configuration options used below
-// should be replaced with custom score threshold configuration options.
-exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
-exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
-exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
-exports.typeThreshold = parseFloat(hoot.get("railway.type.threshold"));
-
 // This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
 // culling match candidates.
 exports.matchCandidateCriterion = "RailwayCriterion";
+
+// This matcher only sets match/miss/review values to 1.0. Therefore, we just use the default
+// conflate thresholds and they're effectively ignored. If more custom values are ever required,
+// then the generic score threshold configuration options used below should be replaced with custom
+// score threshold configuration options.
+exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
+exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
+exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
+
+// This is used only to determine type similarity and is independent of the other score thresholds.
+exports.typeThreshold = parseFloat(hoot.get("railway.type.threshold"));
+
+// geometry matchers
 
 // We're just using the default max recursions here for MaximalSubline. May need to come up with a
 // custom value via empirical testing. This will not work if we ever end up needing to pass map in
 // here for this data type.
 var sublineStringMatcher = hoot.SublineStringMatcherFactory.getMatcher(exports.baseFeatureType);
-
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 // Use the default spacing of 5 meters.
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
 var hausdorffDistanceExtractor = new hoot.HausdorffDistanceExtractor();
+
+// one to many matching
 
 // determines if one to many matching is enabled
 var oneToManyMatchEnabled = (hoot.get("railway.one.to.many.match") === 'true');
@@ -52,7 +57,7 @@ var oneToManySecondaryMatchTagKey = "hoot:railway:one:to:many:match:secondary";
 var oneToManyDeleteSecondary = (hoot.get("railway.one.to.many.delete.secondary") === 'true');
 if (oneToManyDeleteSecondary)
 {
-  hoot.prependToList({'conflate.post.ops': 'RailwayOneToManySecondaryMatchElementRemover'});
+  hoot.prependToList({'conflate.post.ops': 'RailwayOneToManySecondaryMatchElementRemover'}, false);
 }
 // Save off the default tag merger for merges not involving a one to many match.
 var defaultTagMerger = hoot.get("tag.merger.default");
@@ -62,7 +67,7 @@ var oneToManyTagKey;
 var oneToManySecondaryMatchElementIds = [];
 // This maps secondary element IDs to the number of matches they're involved in.
 var oneToManyMatches = {};
-// This maps secondary element IDs to their matched ref elements (can be combined with
+// This maps secondary element IDs to their matched ref elements (could be combined with
 // oneToManyMatches eventually).
 var oneToManyMatchIds = {};
 
@@ -119,14 +124,14 @@ function geometryMismatch(map, e1, e2, minDistanceScore, minHausdorffDistanceSco
         hoot.trace("edgeDistance: " + edgeDistance);
         if (edgeDistance >= minEdgeDistanceScore)
         {
-          hoot.trace("Geometry match");
+          hoot.trace("Geometry match: " + e1.getElementId()  + ", " + e2.getElementId());
           return false;
         }
       }
     }
   }
 
-  hoot.trace("Geometry mismatch");
+  hoot.trace("Geometry mismatch: " + e1.getElementId()  + ", " + e2.getElementId());
   return true;
 }
 
@@ -155,12 +160,12 @@ function typeMismatch(e1, e2)
  * - miss
  * - review
  *
- * The scores should always sum to one. If they don't you will be taunted
- * mercilessly and we'll normalize it anyway. :P
+ * The scores should always sum to one. If they don't you will be taunted mercilessly and we'll
+ * normalize it anyway. :P
  */
 exports.matchScore = function(map, e1, e2)
 {
-  var result = { miss: 1.0, explain:"miss" };
+  var result = { miss: 1.0, explain: "miss" };
 
   // No intra-dataset conflation is allowed.
   if (e1.getStatusString() === e2.getStatusString())
@@ -196,7 +201,7 @@ exports.matchScore = function(map, e1, e2)
 
   // These score thresholds were determined experimentally (see geometryMismatch) for the default
   // rail conflation routine.
-  var minDistanceScore = 0.577;
+  var minDistanceScore = 0.569;
   var minHausdorffDistanceScore = 0.8;
   var minEdgeDistanceScore = 0.8;
 
@@ -216,24 +221,26 @@ exports.matchScore = function(map, e1, e2)
       // Check the identifying tag to see how many rail tracks this single secondary feature
       // represents.
       var totalMatchesAllowed = parseInt(String(tags2.get(oneToManyTagKey)));
-      // If its a one to many and we've already made the total number of matches, then we won't make
-      // anymore (TODO: not convinced this is doing much and we may eventually find this check isn't
-      // needed).
+      // Formerly, we checked here to see if we had a one to many match and if we'd already made the
+      // total number of matches. In that case we would do no further matching with the feature. In
+      // practice this was leading to inconsistent conflated output. Disabling the logic *so far*
+      // hasn't seemed to reduce one to many conflated output quality, although could be causing
+      // some unnecessary extra processing.
       if (totalMatchesAllowed > 1)
       {
-        if (parseInt(oneToManyMatches[e2.getElementId()]) >= totalMatchesAllowed)
+        /*if (parseInt(oneToManyMatches[e2.getElementId()]) >= totalMatchesAllowed)
         {
           hoot.trace(e2.getElementId() + " has already reached its maximum allowed matches: " + totalMatchesAllowed + ". matched element IDs: " + oneToManyMatchIds[e2.getElementId()]);
           return result;
         }
         else
-        {
+        {*/
           currentMatchAttemptIsOneToMany = true;
           // If we're doing a one to many, we need to cover a wider swath to get all the matches, so
           // lessen the distance score. This value may need to be tweaked over time, as well as the
           // other score thresholds.
           minDistanceScore = 0.468;
-        }
+        //}
       }
     }
   }
@@ -276,7 +283,9 @@ exports.matchScore = function(map, e1, e2)
     // Technically, this match should also be labeled as a one to many match, but the script
     // conflate workflow doesn't require that currently.
   }
-  result = { match: 1.0, explain:"match" };
+
+  hoot.trace("Match: " + e1.getElementId()  + ", " + e2.getElementId());
+  result = { match: 1.0, explain: "match" };
   return result;
 };
 
@@ -317,7 +326,6 @@ exports.mergeSets = function(map, pairs, replaced)
     {
       var refElement;
       var secondaryElement;
-      // TODO: Is this necessary? Are they ever out of order?
       if (element2.getStatusString() === 'unknown2')
       {
         secondaryElement = element2;
@@ -333,6 +341,8 @@ exports.mergeSets = function(map, pairs, replaced)
         hoot.error("No secondary element found for elements: " + element1.getElementId() + " and " + element2.getElementId() + ".");
         return;
       }
+      hoot.trace("refElement: " + refElement.getElementId());
+      hoot.trace("secondaryElement: " + secondaryElement.getElementId());
 
       if (oneToManySecondaryMatchElementIds.includes(String(secondaryElement.getElementId().toString())))
       {
@@ -348,6 +358,7 @@ exports.mergeSets = function(map, pairs, replaced)
         // If we're deleting secondary match features, mark it for removal later.
         if (oneToManyDeleteSecondary)
         {
+          hoot.trace("Adding one to many match tag key to: " + secondaryElement.getElementId());
           secondaryElement.setTag(oneToManySecondaryMatchTagKey, "yes");
         }
         oneToManyMergeOccurred = true;

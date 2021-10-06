@@ -456,9 +456,10 @@ See the User Guide for more specific details on command usage. Most of these exa
 https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RailwayConflation.asciidoc#one-to-many-matching[detail]
 
 -----
-    # Conflate railways by transferring only the "name" tag from secondary to reference rail features.
+    # Conflate railways by transferring only the "name" tag from secondary features to reference 
+    # rail features whose number of tracks are specified by the the tag keys: "lines" and "lanes".
     hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
-      -D railway.one.to.many.match=true -D railway.one.to.many.identifying.keys="passenger_lines" \
+      -D railway.one.to.many.match=true -D railway.one.to.many.identifying.keys="lines;lanes" \
       -D railway.one.to.many.transfer.keys="name" input1.osm input2.osm output.osm
 -----
 
@@ -720,6 +721,12 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 -----
     hoot info --config-options poi.polygon --option-names
+-----
+
+==== List all configuration option names and details containing "poi.polygon":
+
+-----
+    hoot info --config-options poi.polygon --option-details
 -----
 
 ==== List all available cleaning operations:

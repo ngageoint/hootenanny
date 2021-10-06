@@ -3,7 +3,8 @@
 
 === Description
 
-The `multiary-poi-ingest` command ingests POI data for use by the `multiary-conflate` command.
+The `multiary-poi-ingest` command (experimental) ingests POI data for use by the `multiary-conflate` 
+command.
 
 * `input`             - Input; may be any supported input format (e.g. .osm file).
 * `translationScript` - Translation script used to translate the input data; must by a Javascript (.js) or Python 

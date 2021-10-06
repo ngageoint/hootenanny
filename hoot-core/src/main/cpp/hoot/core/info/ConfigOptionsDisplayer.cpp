@@ -85,8 +85,8 @@ QString ConfigOptionsDisplayer::getOptionName(const QString& optionName, const b
   }
 }
 
-QString ConfigOptionsDisplayer::_getAllConfigOptionsDetails(const QString& optionName,
-                                                            const QString& configOptionsFile)
+QString ConfigOptionsDisplayer::_getAllConfigOptionsDetails(
+  const QString& optionName, const QString& configOptionsFile)
 {
   QFile file(configOptionsFile);
   if (!file.open(QFile::ReadOnly))

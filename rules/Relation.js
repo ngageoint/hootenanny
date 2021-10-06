@@ -1,40 +1,51 @@
 /**
- * This script conflates "collection" relations (e.g route, administrative boundary relations, etc.). 
- * Eventually it could be adapted to conflate any relation. It is meant to be run after all other matchers.
+ * This script conflates "collection" relations (e.g route, administrative boundary relations,
+   etc.). Eventually it could be adapted to conflate any relation. It is meant to be run after all
+   other matchers have run.
  */
 
 "use strict";
 
-exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.description = "Matches relations";
-
-// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't
-// used. If that ever changes, then the generic score threshold configuration options used below
-// should be replaced with custom score threshold configuration options.
-exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
-exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
-exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
-
-exports.searchRadius = parseFloat(hoot.get("search.radius.relation"));
-exports.typeThreshold = parseFloat(hoot.get("relation.type.threshold"));
-exports.nameThreshold = parseFloat(hoot.get("relation.name.threshold"));
 exports.experimental = false;
 exports.baseFeatureType = "Relation";
-exports.writeDebugTags = hoot.get("writer.include.debug.tags");
-exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 // Relations can contain features of any geometry type, so we don't need to identify a specific
 // geometry type here.
 exports.geometryType = "";
-
+exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
+exports.searchRadius = parseFloat(hoot.get("search.radius.relation"));
 // This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
 // culling match candidates.
 exports.matchCandidateCriterion = "RelationCriterion";
 
+// This matcher only sets match/miss/review values to 1.0. Therefore, we just use the default
+// conflate thresholds and they're effectively ignored. If more custom values are ever required,
+// then the generic score threshold configuration options used below should be replaced with custom
+// score threshold configuration options.
+exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
+exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
+exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
+
+// These are used only to determine type and name similarity and are independent of the other score
+// thresholds.
+exports.typeThreshold = parseFloat(hoot.get("relation.type.threshold"));
+exports.nameThreshold = parseFloat(hoot.get("relation.name.threshold"));
+
+// geometry matchers
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
 var angleHistExtractor = new hoot.AngleHistogramExtractor();
-// We may eventually want to try something other than the default name extractor here.
+
+// name matcher - We may eventually want to try something other than the default name extractor
+// here.
 var nameExtractor = new hoot.NameExtractor();
+
+// This compares relations by looking at the sum of their members.
 var memberSimilarityExtractor = new hoot.RelationMemberSimilarityExtractor();
+
+// used for debugging
+exports.writeDebugTags = hoot.get("writer.include.debug.tags");
+// used for conflate provenance
+exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
