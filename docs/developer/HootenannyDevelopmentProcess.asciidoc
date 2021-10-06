@@ -2,7 +2,7 @@
 === Development Process
 
 * Open a https://github.com/ngageoint/hootenanny/issues[GitHub issue] for the work to be done and 
-assign it to yourself.
+assign it to yourself. Place the issue in an appropriate Hootenanny epic when possible.
 * Perform the work on a https://github.com/ngageoint/hootenanny/branches[new GitHub branch] 
 derived from the master branch and named as the number of the corresponding GitHub issue.
 * Ensure your changes follow the https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyCodeBestPractices.asciidoc[coding best practices].
