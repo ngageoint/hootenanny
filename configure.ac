@@ -134,11 +134,6 @@ LIBOAUTHCPP_INIT()
 m4_include([m4/services.m4])
 SERVICES_INIT()
 
-# Include R&D
-# This enables research specific functionality. Things that aren't ready for prime time.
-m4_include([m4/rnd.m4])
-RND_INIT()
-
 # Include JOSM
 # This enables validation/cleaning functionality from JOSM.
 m4_include([m4/josm.m4])

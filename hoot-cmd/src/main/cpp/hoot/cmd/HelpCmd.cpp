@@ -50,22 +50,7 @@ public:
   QString getName() const override { return "help"; }
   QString getDescription() const override { return "Displays help documentation"; }
 
-  HelpCmd()
-  {
-    // Add hoot-core commands to this list that are not part of hoot-rnd and are typically used by
-    // developers only. This makes the command list display a little cleaner and less confusing for
-    // those only interested in basic hoot functionality. If a command is in hoot-rnd, it doesn't
-    // need to be manually added to this list. Simply have it return "rnd" in its getType() method.
-    _forceToRndList.append("build-model");
-    _forceToRndList.append("db-delete");
-    _forceToRndList.append("db-list");
-    _forceToRndList.append("is-sorted");
-    _forceToRndList.append("optimize-network-conf");
-    _forceToRndList.append("perturb");
-    _forceToRndList.append("score-matches");
-    _forceToRndList.append("sort");
-    _forceToRndList.append("type-similarity");
-  }
+  HelpCmd() = default;
 
   static bool commandCompare(const QString& n1, const QString& n2)
   {
@@ -96,10 +81,6 @@ public:
   }
 
 private:
-
-  // display names of commands that we want to appear in the advanced rnd list despite the fact
-  // they are part of core
-  QStringList _forceToRndList;
 
   int _printDetails(const QString& command)
   {
@@ -141,7 +122,7 @@ private:
 
     const vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
     vector<std::shared_ptr<Command>> coreCmds;
-    vector<std::shared_ptr<Command>> rndCmds;
+    vector<std::shared_ptr<Command>> advancedCmds;
     for (size_t i = 0; i < cmds.size(); i++)
     {
       const QString cmdClassName = cmds[i];
@@ -154,27 +135,30 @@ private:
         LOG_VART(commandName);
         // Currently, there's only one josm command and we want it in the main list. So, just lump
         // it in with the core commands.
-        if ((command->getType() == "core" || command->getType() == "josm") &&
-            !_forceToRndList.contains(commandName))
+        if ((command->getType() == "core" || command->getType() == "josm"))
         {
           coreCmds.push_back(command);
         }
-        else if (command->getType() == "rnd" || _forceToRndList.contains(commandName))
+        else if (command->getType() == "advanced")
         {
-          rndCmds.push_back(command);
+          advancedCmds.push_back(command);
+        }
+        else
+        {
+          throw IllegalArgumentException("Invalid command type: " + command->getType());
         }
       }
 
     }
     sort(coreCmds.begin(), coreCmds.end(), commandCompare2);
-    sort(rndCmds.begin(), rndCmds.end(), commandCompare2);
+    sort(advancedCmds.begin(), advancedCmds.end(), commandCompare2);
     LOG_VART(coreCmds.size());
-    LOG_VART(rndCmds.size());
+    LOG_VART(advancedCmds.size());
 
     cout << "Basic Commands:" << endl << endl;
     _printCommands(coreCmds);
     cout << endl << "Advanced Commands:" << endl << endl;
-    _printCommands(rndCmds);
+    _printCommands(advancedCmds);
 
     cout << endl << "Log Levels:" << endl << endl;
     cout << "  --error" << endl;

@@ -765,7 +765,6 @@ INPUT                  = ../hoot-core/src/main/cpp/hoot/core \
                          ../hoot-js/src/main/cpp/hoot/js \
                          ../hoot-cmd/src/main/cpp/hoot/cmd \
                          ../hoot-josm/src/main/cpp/hoot/josm \
-                         ../hoot-rnd/src/main/cpp/hoot/rnd \
                          ../tbs/src/test/cpp/tbs/optimization/GoldenSectionSearchTest.cpp \
                          ../tbs/src/test/cpp/tbs/stats/TDistributionTest.cpp \
                          ../tbs/src/main/cpp/tbs/stats/TDistribution.h \

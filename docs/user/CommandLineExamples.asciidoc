@@ -797,25 +797,25 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== List all language detectors:
 
 -----
-    hoot info-rnd --languages --detectors
+    hoot info --languages --detectors
 -----
 
 ==== List all language translators:
 
 -----
-    hoot info-rnd --languages --translators
+    hoot info --languages --translators
 -----
 
 ==== List all detectable languages:
 
 -----
-    hoot info-rnd --languages --detectable
+    hoot info --languages --detectable
 -----
 
 ==== List all translatable languages:
 
 -----
-    hoot info-rnd --languages --translatable
+    hoot info --languages --translatable
 -----
 
 ==== List all entities that can match features:

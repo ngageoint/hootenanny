@@ -1,12 +1,6 @@
 #!/bin/bash
 set -e
 
-# rnd command
-OPT_COMMAND=`hoot | grep eval-point-moves`
-if [ -z "$OPT_COMMAND" ]; then
- exit 0
-fi
-
 mkdir -p $HOOT_HOME/test-output/cmd/quick/EvalPointMovesCmdTest
 
 CONFIG="-C Testing.conf"

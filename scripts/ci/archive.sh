@@ -26,7 +26,7 @@ autoheader
 automake --add-missing --copy
 
 # Run configure, enable R&D, services, and PostgreSQL.
-./configure --quiet --with-rnd --with-services --with-postgresql
+./configure --quiet --with-services --with-postgresql
 
 # Make the archive.
 make -j"$(nproc)" clean
