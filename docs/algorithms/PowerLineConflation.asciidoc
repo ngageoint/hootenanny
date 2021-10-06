@@ -2,33 +2,44 @@
 [[PowerLineConflation]]
 === Power Line Conflation
 
-[[PowerLineFeatureDefinitions]]
+[[PowerLineDefinitions]]
 ==== Feature Definitions
 
-TODO
+Power Line Conflation defines a power line as a linear power line feature whose tags support the 
+definitions used by OpenStreetMap.
 
 [[PowerLineMatching]]
 ==== Matching
 
-TODO
+Power Line matching allows for a manually configured or automatically calculated search radius when 
+determining the maximum distance between features to search during matching. Automatic search radius 
+calculation is achieved via calculated tie points using the rubbersheeting algorithm.
+
+Matching is based off both tag and geometric attributes. For geometry matching, centroid distance, 
+edge distance, weighted metric distance, and weighted shape distance values are used for comparison.
+Their match thresholds were determined against test data using Weka. Additionally, distance 
+weighting is used to favor features that are closer together than those further apart. Tag matching 
+looks at the values of the `voltage` and `location` tags only.
 
 [[PowerLineMerging]]
 ==== Merging
 
-TODO
+Power Line merging uses the standard Hootenanny merging process that is used for merging most linear 
+features, including roads.
 
 [[PowerLineConfigurableOptions]]
 ==== Configurable Options
 
-TODO
+See the descriptions for configuration options named `power.line.*` for more information on how 
+Power Line Conflation behavior may be modified.
 
 [[PowerLineTestResults]]
 ==== Test Results
 
-TODO
+Match truth for several datasets was obtained by having a human manual match features
+(see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx 
+for more details on the process involved). Then, Hootenanny conflated the same data and scored how 
+many matches it correctly made.
 
-[[PowerLineFutureWork]]
-==== Future Work
-
-TODO
+TODO: finish
 

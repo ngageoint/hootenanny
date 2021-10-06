@@ -105,8 +105,6 @@ exports.matchScore = function(map, e1, e2)
   // been updated to account for the fact that buffered overlap, edge distance, and overlap are
   // processing intensive (roughly in order from most to least).
 
-  // TODO: Should we do anything with names?
-
   // If both features have types and they aren't just generic types, let's do a detailed type
   // comparison and look for an explicit type mismatch. Otherwise, move on to the geometry
   // comparison.

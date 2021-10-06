@@ -2,5 +2,38 @@
 [[GenericGeometryConflation]]
 === Generic Geometry Conflation
 
-Generic Geomtry has not been extensively tested for conflation accuracy yet.
+[[GenericGeometryDefinitions]]
+==== Feature Definitions
+
+Generic Geometry Conflation defines a generic geometry as any feature not conflatable by a specific
+Hootenanny conflation routine (e.g. Road Conflation, Building Conflation, etc.).
+
+[[GenericGeometryMatching]]
+==== Matching
+
+Power Line matching allows for a manually configuredsearch radius when determining the maximum 
+distance between features to search during matching.
+
+Matching is based off both tag and geometric attributes. For geometry matching, centroid distance, 
+edge distance, weighted metric distance, and weighted shape distance values are used for comparison.
+Their match thresholds were determined against test data using Weka. Additionally, distance 
+weighting is used to favor features that are closer together than those further apart. Tag matching 
+looks at the values of the `voltage` and `location` tags only.
+
+[[GenericGeometryMerging]]
+==== Merging
+
+Power Line merging uses the standard Hootenanny merging process that is used for merging most linear 
+features, including roads.
+
+[[GenericGeometryConfigurableOptions]]
+==== Configurable Options
+
+See the descriptions for configuration options named `generic.*` for more information on how 
+Generic Geometry Conflation behavior may be modified.
+
+[[GenericGeometryTestResults]]
+==== Test Results
+
+Generic Geometry has not been extensively tested for conflation accuracy yet.
 

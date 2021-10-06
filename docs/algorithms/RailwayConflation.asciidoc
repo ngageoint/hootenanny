@@ -5,13 +5,18 @@
 [[RailwayFeatureDefinitions]]
 ==== Feature Definitions
 
-TODO
+Railway Conflation defines a railway as a linear railway feature whose tags support the definitions 
+used by OpenStreetMap.
 
 [[RailwayMatching]]
 ==== Matching
 
-Default railway matching is determined by geometric similarity only using a maching learning trained 
-model on limited data. See `rules/Railway.js` for the extracted features used.
+Railway matching allows for a manually configured search radius when determining the maximum 
+distance between features to search during matching.
+
+Matching is based off both tag and geometric attributes. For geometry matching, distance score, 
+Hausdorff Distance, and edge distance values are used for comparison. Their match thresholds were
+determined against test data using Weka. Tag matching looks at type tags on features only.
 
 ===== One to Many Matching
 
@@ -27,8 +32,8 @@ will occur for the secondary feature.
 [[RailwayMerging]]
 ==== Merging
 
-Default railway merging uses the default linear merger used by all linear script conflation 
-routines.
+Default railway merging uses the standard Hootenanny merging process that is used for merging most
+linear features, including roads.
 
 ===== One to Many Merging
 
@@ -41,15 +46,21 @@ feature. Optionally, the secondary feature may be deleted from conflated output 
 [[RailwayConfigurableOptions]]
 ==== Configurable Options
 
-See `railway.*` options.
+See the descriptions for configuration options named `railway.*` for more information on how Railway 
+Conflation behavior may be modified.
 
 [[RailwayTestResults]]
 ==== Test Results
 
-TODO
+Match truth for several datasets was obtained by having a human manual match features
+(see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx 
+for more details on the process involved). Then, Hootenanny conflated the same data and scored how 
+many matches it correctly made.
+
+TODO: finish
 
 [[RailwayFutureWork]]
 ==== Future Work
 
-TODO
+Railway Conflation needs to be trained on additional datasets to improve its quality.
 
