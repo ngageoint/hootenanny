@@ -1,9 +1,0 @@
-null transform	0	0	0	0	0	0	um	0	um	0	um
-Memory Copy	0	0	0	0	0	0	um	0	um	0	um
-Reproject	9	0	4.04922e-16	6.66134e-16	1.68294e-16	4.50253e-05	um	7.40708e-05	um	1.87135e-05	um
-Different Reprojections	8	0	5.61002e-16	9.93014e-16	3.37964e-16	6.23807e-05	um	0.000110418	um	3.758e-05	um
-Save to .osm	0	0	0	0	0	0	um	0	um	0	um
-Save to .osm.pbf (100)	10	0	8.14531e-08	1.31981e-07	2.61816e-08	9057.19	um	14675.6	um	2911.26	um
-Save to .osm.pbf (1)	10	0	8.93633e-10	1.28978e-09	2.27773e-10	99.3676	um	143.417	um	25.3272	um
-Save to .shp	0	0	0	0	0	0	um	0	um	0	um
-Save to .gml	10	0	1.87493e-14	1.56325e-13	4.58649e-14	0.00208483	um	0.0173826	um	0.00509995	um

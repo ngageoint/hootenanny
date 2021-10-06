@@ -32,6 +32,8 @@
 #include <hoot/core/info/FormatsDisplayer.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/language/HootServicesLanguageInfoResponseParser.h>
+#include <hoot/core/language/LanguageInfoProvider.h>
 
 // Qt
 #include <QUrl>
@@ -221,6 +223,75 @@ public:
     {
       std::cout << ApiEntityDisplayInfo::getDisplayInfoOps("conflate.pre.ops").toStdString();
     }
+    else if (specifiedOpts.contains("--languages"))
+    {
+      args.removeAt(args.indexOf("--languages"));
+      if (args.size() != 1)
+      {
+        std::cout << getHelp() << std::endl << std::endl;
+        throw IllegalArgumentException(
+          QString("%1 with the --languages option takes one parameter.").arg(getName()));
+      }
+
+      // only allowing one option per command
+      const QStringList supportedLangOpts = _getSupportedLanguageOptions();
+      QStringList specifiedLangOpts;
+      for (int i = 0; i < args.size(); i++)
+      {
+        const QString arg = args.at(i);
+        if (specifiedLangOpts.contains(arg) ||
+            (supportedLangOpts.contains(arg) && !specifiedLangOpts.empty()))
+        {
+          std::cout << getHelp() << std::endl << std::endl;
+          throw IllegalArgumentException(QString("%1 takes a single option.").arg(getName()));
+        }
+        specifiedLangOpts.append(arg);
+      }
+      if (specifiedLangOpts.empty())
+      {
+        std::cout << getHelp() << std::endl << std::endl;
+        throw IllegalArgumentException(
+          QString("%1 with the --languages option takes a single option.").arg(getName()));
+      }
+      LOG_VARD(specifiedLangOpts.size());
+
+      ConfigOptions opts = ConfigOptions(conf());
+
+      try
+      {
+        std::shared_ptr<LanguageInfoProvider> client =
+          Factory::getInstance().constructObject<LanguageInfoProvider>(
+            opts.getLanguageInfoProvider());
+        client->setConfiguration(conf());
+
+        const QString type = args[0].replace("--", "").toLower();
+
+        QString displayStr;
+        if (type == "translatable" || type == "detectable")
+        {
+          displayStr =
+            HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
+              type, client->getAvailableLanguages(type));
+        }
+        else
+        {
+          displayStr =
+            HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(
+              type, client->getAvailableApps(type));
+        }
+        std::cout << displayStr << std::endl;
+      }
+      catch (const HootException& e)
+      {
+        LOG_VART(e.getWhat());
+        if (e.getWhat().contains("Access tokens for user"))
+        {
+          std::cout <<
+            "You must log in to the Hootenanny Web Services before displaying supported language information." <<
+            std::endl;
+        }
+      }
+    }
     // everything else
     else if (specifiedOpts.size() == 1)
     {
@@ -271,6 +342,7 @@ private:
     options.append("--filters");
     options.append("--formats");
     options.append("--geometry-type-criteria");
+    options.append("--languages");
     options.append("--matchers");
     options.append("--match-creators");
     options.append("--mergers");
@@ -284,6 +356,16 @@ private:
     options.append("--value-aggregators");
     options.append("--way-joiners");
     options.append("--way-snap-criteria");
+    return options;
+  }
+
+  QStringList _getSupportedLanguageOptions() const
+  {
+    QStringList options;
+    options.append("--detectable");
+    options.append("--detectors");
+    options.append("--translatable");
+    options.append("--translators");
     return options;
   }
 };

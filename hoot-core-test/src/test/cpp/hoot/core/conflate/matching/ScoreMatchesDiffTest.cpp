@@ -106,6 +106,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ScoreMatchesDiffTest, "glacial");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ScoreMatchesDiffTest, "quick");
 
 }

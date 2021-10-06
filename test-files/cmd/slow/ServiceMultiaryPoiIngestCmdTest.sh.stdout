@@ -4,27 +4,27 @@ MULTIARY INGEST - DELETING REFERENCE LAYER...
 
 MULTIARY INGEST - INGESTING GEONAMES REFERENCE DATASET...
 
-14:28:35.423 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:35.424 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:35.424 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:35.424 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:35.424 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:35.424 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:35.424 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:35.424 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:35.424 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+14:41:21.585 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:21.585 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:21.585 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:21.585 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:21.585 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:21.585 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:21.585 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:21.585 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:21.585 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - INGESTING GEONAMES NEW DATASET...
 
-14:28:36.306 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:36.306 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:36.306 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:36.306 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:36.306 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:36.306 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:36.306 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:36.307 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:36.307 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+14:41:22.289 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:22.290 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:22.290 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:22.290 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:22.290 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:22.290 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:22.290 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:22.290 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:22.290 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - EXPORTING GEONAMES REFERENCE LAYER...
 
@@ -43,28 +43,28 @@ MULTIARY INGEST - DELETING REFERENCE LAYER...
 
 MULTIARY INGEST - INGESTING OSM PBF REFERENCE DATASET...
 
-14:28:38.463 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:38.463 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:38.463 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:38.463 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:38.463 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:38.464 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:38.464 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:38.464 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:38.464 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+14:41:24.057 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:24.057 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:24.057 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:24.057 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:24.057 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:24.057 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:24.057 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:24.057 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:24.057 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - INGESTING OSM PBF NEW DATASET...
 
-14:28:38.843 WARN   .../hoot/rnd/io/OsmFileSorter.cpp(  70) OSM PBF input file: test-files/cmd/glacial/RndServiceMultiaryPoiIngestCmdTest/allCountries-8-15-17-10.osm.pbf is marked as sorted by node ID, as indicated by its header, yet Hootenanny was instructed to sort the file.
-14:28:40.592 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:40.594 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:40.594 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:40.594 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:40.594 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:40.594 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:40.594 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:40.594 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:40.594 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+14:41:24.499 WARN   ...hoot/core/io/OsmFileSorter.cpp(  69) OSM PBF input file: test-files/cmd/slow/ServiceMultiaryPoiIngestCmdTest/allCountries-8-15-17-10.osm.pbf is marked as sorted by node ID, as indicated by its header, yet Hootenanny was instructed to sort the file.
+14:41:25.772 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:25.773 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:25.773 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:25.773 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:25.773 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:25.773 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:25.773 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:25.773 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:25.773 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - EXPORTING OSM PBF REFERENCE LAYER...
 
@@ -83,27 +83,27 @@ MULTIARY INGEST - DELETING REFERENCE LAYER...
 
 MULTIARY INGEST - INGESTING OSM XML REFERENCE DATASET...
 
-14:28:42.947 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:42.947 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:42.947 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:42.947 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:42.947 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:42.947 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:42.947 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:42.947 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:42.947 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+14:41:27.590 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:27.591 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:27.591 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:27.591 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:27.591 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:27.591 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:27.591 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:27.591 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:27.591 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - INGESTING OSM XML NEW DATASET...
 
-14:28:44.850 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:44.850 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:44.850 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:44.850 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:44.850 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:44.850 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:44.851 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:44.851 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:44.851 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+14:41:29.099 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:29.099 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:29.099 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:29.099 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:29.099 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:29.099 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:29.099 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:29.099 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:29.099 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - EXPORTING OSM XML REFERENCE LAYER...
 
@@ -122,29 +122,29 @@ MULTIARY INGEST - DELETING REFERENCE LAYER...
 
 MULTIARY INGEST - INGESTING SHP REFERENCE DATASET...
 
-14:28:46.925 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:46.925 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:46.925 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:46.926 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:46.926 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:46.926 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:46.926 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:46.926 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:46.926 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+14:41:30.833 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:30.833 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:30.833 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:30.833 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:30.833 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:30.833 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:30.833 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:30.833 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:30.833 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - INGESTING SHP NEW DATASET...
 
-14:28:47.323 WARN   .../hoot/rnd/io/OsmFileSorter.cpp(  95) OGR inputs must be converted to the OSM format before sorting by node ID.
-14:28:47.323 WARN   .../hoot/rnd/io/OsmFileSorter.cpp(  96) Converting input to OSM format...
-14:28:48.887 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:48.887 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:48.887 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:48.887 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:48.887 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:48.887 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:48.887 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:48.887 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-14:28:48.887 WARN   ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+14:41:31.278 WARN   ...hoot/core/io/OsmFileSorter.cpp(  94) OGR inputs must be converted to the OSM format before sorting by node ID.
+14:41:31.278 WARN   ...hoot/core/io/OsmFileSorter.cpp(  95) Converting input to OSM format...
+14:41:32.397 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:32.397 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:32.397 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:32.397 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:32.397 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:32.397 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:32.397 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:32.397 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
+14:41:32.397 WARN   ...re/io/SparkChangesetWriter.cpp( 106) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - EXPORTING SHP REFERENCE LAYER...
 
