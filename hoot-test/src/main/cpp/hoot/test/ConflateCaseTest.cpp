@@ -137,7 +137,6 @@ void ConflateCaseTest::runTest()
     _runConflateCmd();
 
     // Run validation on test output if configured for it.
-  # ifdef HOOT_HAVE_JOSM
     LOG_VART(ConfigOptions().getTestValidationEnable());
     if (ConfigOptions().getTestValidationEnable())
     {
@@ -145,7 +144,6 @@ void ConflateCaseTest::runTest()
         _d.dirName(), _d.absolutePath() + "/Output.osm", _d.absolutePath() + "/validation-report",
         _suppressFailureDetail, _printValidationReportDiff);
     }
-  # endif
   }
 }
 

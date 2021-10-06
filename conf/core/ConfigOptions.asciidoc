@@ -5810,7 +5810,8 @@ setting may have a negative impact on performance if set to a very low value.
 * Default Value: `ConflateCmd`
 
 Set the `conflate` command that should be used in a test case. This is only useful when writing
-test cases (`test-files/cases/`) and was originally added to support `MultiaryPoiConflateCmd`.
+test cases (`test-files/cases/`) and was originally added to support the now dormant Multiary
+Conflation capability.
 
 === test.case.conflate.differential
 

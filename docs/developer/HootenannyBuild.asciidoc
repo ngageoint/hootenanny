@@ -28,8 +28,6 @@ This line needs to be re-run everytime you change configuration options:
 The Hootenanny configuration options consist of:
 
 * `--with-services` - builds Hootenanny Core services database code as well as all Hootenanny Java Web Services code.
-* `--with-rnd` - builds Hootenanny Core experimental R&D code
-* `--with-josm` - builds code related to the JOSM integrated features
 * `--with-uitests` - enables the Hootenanny User Interface tests
 * `--with-coverage` - generates code test coverage reports
 
