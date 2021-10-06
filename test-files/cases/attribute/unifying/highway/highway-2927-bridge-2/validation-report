@@ -1,0 +1,9 @@
+Input: test-files/cases/attribute/unifying/highway/highway-2927-bridge-2/Output.osm
+
+Found 66 validation errors in 359 features with JOSM.
+Tag checker (MapCSS based) errors: 6
+Untagged, empty and one node ways errors: 60
+Total failing JOSM validators: 0
+
+Found 0 validation errors in 0 features with Hootenanny.
+Total failing Hootenanny validators: 0
