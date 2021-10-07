@@ -1,0 +1,166 @@
+
+[[Tag-Merging-Configuration]]
+=== Tag Merging
+
+When two features/elements are merged into a single feature/element the tags must be merged into a single set of tags. Depending on the use case, there may be many different desirable ways to merge tags. Described below are the options available for merging tags, although at times the list here may be incomplete. To see a complete list of available tag mergers, use the `info` command:
+-----
+hoot info --tag-mergers
+----- 
+
+The default way to set this configuration for many functions is through the `tag.merger.default` configuration option. Some older operations may not support configurable merging techniques. The default tag merger is: `OverwriteTag2Merger`. To specify a tag merger when conflating:
+-----
+hoot conflate -D tag.merger.default=<TagMergerClassName> input1.osm input2.osm output.osm
+-----
+
+[[Average-Tags]]
+*_Averaging Tag Merger_*
+
+Use an internal method to average the tags between two features. Implementation: `AverageTagMerger`
+
+[[Building-Relation-Member-Tag-Merger]]
+*_Building Relation Member Tag Merger_*
+
+Tag merging specific to buildings belonging to relations. Implementation: `BuildingRelationMemberTagMerger`
+
+[[Generalize-Tag-Merger]]
+*_Generalizing Tag Merger_*
+
+Use an internal method to generalize the tags between two features. For instance, generalizing between `highway=primary` and `highway=secondary` results in `highway=road` since road is the least general form that represents both primary and secondary. Implementation: `GeneralizeTagMerger`
+
+[[Most-Specific-Tag-Merger]]
+*_Most Specific Tag Merger_*
+
+This tag merger keeps only the most specific types as recognized by the Hootenanny schema. If there is a tie in specificity the configuration option, `tag.merger.types.overwrite.reference`, determines which tag is kept. A value of false for the option keeps the tying tag from the reference feature and a value of true keeps the tying tag from the secondary feature. Implementation: `MostSpecificTagMerger`
+
+[[Overwrite-Tag-1]]
+*_Overwriting Tag 1 Tag Merger_*
+
+Overwrite the values in the first input with the values in the second input that have key conflicts. This will still keep all unique names, but all other tags will simply be overwritten. Implementation: `OverwriteTag1Merger`  
+
+Examples:
+
+*Tags on First Input*
+|======
+| key | value
+| name | Simonovsky Val Expressway
+| name:en | Simonovsky Val Expressway
+| highway | trunk
+| ref | RU 24
+| oneway | yes
+| lanes | 2
+| uuid | foo
+|======
+
+*Tags on Second Input*
+|======
+| key | value
+| highway | secondary
+| name | Simonovsky Val Expy
+| name:en | Simonovsky Val Expressway
+| name:ru | *улица Симоновский Вал*
+| ref | 24
+| oneway | true
+| bridge | yes
+| uuid | bar
+|======
+
+*Result*
+|======
+| key | value
+| name | Simonovsky Val Expy
+| name:en | Simonovsky Val Expressway
+| name:ru | *улица Симоновский Вал*
+| alt_name | Simonovsky Val Expressway;RU 24
+| bridge | yes
+| highway | secondary
+| ref | 24
+| oneway | true
+| lanes | 2
+| uuid | bar
+|======
+
+[[Overwrite-Tag-2]]
+*_Overwriting Tag 2 Tag Merger_*
+
+Overwrite the values in the second input with the values in the first input that have key conflicts. This will still keep all unique names, but all other tags will simply be overwritten. Implementation: `OverwriteTag2Merger`
+
+Examples:
+
+*Tags on Input 1*
+|======
+| key | value
+| name | Simonovsky Val Expressway
+| name:en | Simonovsky Val Expressway
+| highway | trunk
+| ref | RU 24
+| oneway | yes
+| lanes | 2
+| uuid | foo
+|======
+
+*Tags on Input 2*
+|======
+| key | value
+| highway | secondary
+| name | Simonovsky Val Expy
+| name:en | Simonovsky Val Expressway
+| name:ru | *улица Симоновский Вал*
+| ref | 24
+| oneway | true
+| bridge | yes
+| uuid | bar
+|======
+
+*Result*
+|======
+| key | value
+| name | Midland Expressway
+| name:en | Midland Expressway
+| name:ru | *улица Симоновский Вал*
+| alt_name | 24;Simonovsky Val Expy
+| bridge | yes
+| highway | trunk
+| ref | RU 24
+| oneway | yes
+| lanes | 2
+| uuid | foo
+|======
+
+[[Provenance-Aware-Overwrite-Tag-Merger]]
+*_Provenance Aware Overwriting Tag Merger_*
+
+This tag merger assumes features in different input files have their provenance tracked with a tag with the key `hoot:source`.
+This tag merger will ensure that tag value is not overwritten for either feature being merged. Instead, the values from both
+features are concatenated together. Implementation `ProvenanceAwareOverwriteTagMerger`.
+
+[[Preserve-Types-Tag-Merger]]
+*_Preserving Types Tag Merger_*
+
+This tag merger preserves tags from both features and is simliar to `MostSpecificTagMerger`. In instances where two features have the same type tag key, the most specific type is chosen and the less specific type is stored in an `alt_types` field. The rule for keeping tags with a tying specificity is the same as used with `MostSpecificTagMerger`. Implementation: `PreserveTypesTagMerger`.
+
+[[Replace-Tag-1-Tag-Merger]]
+*_Replacing Tag 1 Tag Merger_*
+
+This tag merger is similar to `OverWriteTag1Merger` but completely replaces tags in the first input with tags from the second input. Implementation: `ReplaceTag1Merger`
+
+[[Replace-Tag-2-Tag-Merger]]
+*_Replacing Tag 2 Tag Merger_*
+
+This tag merger is similar to `OverWriteTag2Merger` but completely replaces tags in the second input with tags from the first input. Implementation: `ReplaceTag2Merger`
+
+[[Selective-Overwrite-Tag-1-Tag-Merger]]
+*_Selective Overwrite Tag 1 Tag Merger_*
+
+This tag merger is similar to `OverWriteTag1Merger` but completely replaces tags in the first input 
+with tags from the second input based on a set of selected tag keys only. The keys are controlled by 
+the configuration option `selective.overwrite.tag.merger.keys`. Implementation: 
+`SelectiveOverwriteTag1Merger`
+
+[[Selective-Overwrite-Tag-2-Tag-Merger]]
+*_Selective Overwrite Tag 2 Tag Merger_*
+
+This tag merger is similar to `OverWriteTag2Merger` but completely replaces tags in the first input 
+with tags from the second input based on a set of selected tag keys only. The keys are controlled by 
+the configuration option `selective.overwrite.tag.merger.keys`. Implementation: 
+`SelectiveOverwriteTag2Merger`
+

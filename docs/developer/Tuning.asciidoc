@@ -1,6 +1,6 @@
 
 [[HootInstallTuning]]
-=== Tuning
+=== Performance Tuning
 
 The following sections are optional sections to tune the performance of Hootenanny.
 

@@ -1,0 +1,92 @@
+
+=== Data Cleanup
+
+Data provided as input to Hootenanny often contains common defects. These
+defects frequently result from human error; pragmatic solutions for addressing
+these problems are described in detail in the following sections.
+
+NOTE: The list of cleaning operations here is not all inclusive. There have been many added since
+the writing of this documentation. See documentation for the `info` command on how to generate the
+most current list of cleaning operations.
+
+==== Duplicate Ways
+
+In many transportation data sets, it is common to have roads that redundantly
+overlap with other roads. <<DuplicateWay>> demonstrates this with a red and
+green way. The red way is made up of nodes a, b, c and d. The green way is made
+up of nodes c, d and e. During this step we identify and remove any redundant
+sections that exist from the shorter of the two ways. In this case the result
+will be a red way and green way.
+
+[[DuplicateWay]]
+.Example Duplicate Way
+
+image::images/image021.png[]
+
+==== Unlikely Intersections
+
+Most of the tabular data provided to us had no definition of intersection. At
+the point where roads intersect, there were simply two points. It was up to the
+algorithms to determine if it was truly an intersection or just two coincident
+points. To determine if an intersection truly exists, we use the pragmatic rules
+below to calculate an intersection score. If the score is greater than a
+specified threshold, then the intersection is split:
+
+* One road is a motorway, and the other road is not a motorway
+* The tunnel/bridge status doesn't match, e.g., one road is a tunnel, and the other is not a tunnel.
+* The intersecting node is not an endpoint on the way
+* The difference in heading of the way at the point of the intersection is less than 45 degrees.
+
+[[Intersect]]
+.Example Intersection
+
+image::images/image023.png[]
+
+Given the example in <<Intersect>>, if both roads are residential, and there are
+no tunnels/bridges, then it will be maintained as an intersection. However, if
+one of the roads is a bridge or motorway, then a new node will be created (node
+f). That new node will be used to change the green line from e, _b_ and d to e,
+_f_ and d.
+
+==== Find Implicit Divided Highways
+
+In some organization's maintained data sets, it not uncommon to map divided tunnels and bridges as
+undivided. In the scenario in <<UndividedOverpass>> is tagged as `bridge=yes`,
+but due to the strict tabular nature of the data, there is no field in the
+source Shapefile to specify `divider=yes`. For this reason, we deduce that if
+both of the red roads state `divider=yes`, then the green section is also likely
+to be divided, and we introduce the `divider=yes` tag to the green way.
+
+[[UndividedOverpass]]
+.Undivided Overpass
+
+image::images/image025.png[]
+
+==== Superfluous Ways
+
+This step removes any way that contains less than two nodes or has no tags of
+significance. Performing this step reduces the amount of data that is processed
+by conflation and cleans up the map for final presentation.
+
+==== Superfluous Nodes
+
+This step keeps all nodes that are part of a way or contain tags of significance
+and removes all others.
+
+==== Duplicate Names
+
+If a name is recorded multiple times within the attributes, then the duplicate
+names are removed.  For instance, the attributes `name=Foo Street`, `alt_name=Foo
+Street;Bar Street` will be converted to: `name=Foo Street`, `alt_name=Bar Street`.
+You can control whether Hootenanny is sensitive to name case with the
+`duplicate.name.case.sensitive` configuration parameter.
+
+==== Dual Way Splitter
+
+Some data sets map divided highways as a single way. The generally accepted
+approach within OpenStreetMap (OpenStreetMap Wiki, 2012) is to map divided
+highways as two one-way ways. Hootenanny has adopted the two one-way ways
+standard. To accommodate this standard, ways that are marked with the
+`divider=yes` tag are split into two one-way ways with a variation of the GIS
+buffer operation.
+

@@ -1,6 +1,6 @@
 
 [[SchemaFiles]]
-=== Schema Files
+=== Schema
 
 Internally Hootenanny stores all data in the OSM schema (plus some additional
 atypical tags). Using this schema provides us with the flexibility to add new

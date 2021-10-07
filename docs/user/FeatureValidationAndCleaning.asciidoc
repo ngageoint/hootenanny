@@ -72,7 +72,7 @@ together to create a tag filter used to determine which types of polygons are ch
 roads using tag checks of the form: <key1=value1>;<key2=value2>...; e.g. 
 `highway=service;highway=footway`
 
-==== Crossing Railways
+===== Crossing Railways
 
 Using `RailwaysCrossingMarker`, Hootenanny will detect railway lines which cross each other 
 automatically after conflation. Certain rail types may be excluded by adding tag values that have a 
@@ -89,5 +89,6 @@ Hootenanny internally identifies as requiring cleaning. Both Hootenanny cleaning
 auto-fix capabilities may be used for cleaning.
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#clean-erroneous-data-from-two-maps[cleaning examples]
+
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-available-cleaning-operations[list cleaners example]
 

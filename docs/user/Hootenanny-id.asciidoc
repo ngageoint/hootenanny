@@ -494,7 +494,7 @@ This will pop-up a dialog box allowing them to provide some details about the re
 .Bookmark Review.  Clicking the Bookmark Review button pops up a dialog box where a user can enter a title, description, note and email to associate with the review. The bookmark is then accessed in the Manage | Review Bookmarks page.
 image::images/id/hoot_bookmarkreview.png[scaledwidth="75%"]
 
-==== Conflating OSM API Database Data (OpenStreetMap, etc.)
+==== Conflating From An OSM API Database
 
 IMPORTANT:  This section describes conflating data sourced from an OSM API database.  This feature is currently in the prototype phase and is
 not recommended to be used with production OSM API databases where data loss/corruption would be a significant detriment to the

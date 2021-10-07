@@ -1,7 +1,5 @@
 
-=== Generating Test Data
-
-==== Via Perturbation
+=== Generating Test Data Via Perturbation
 
 The `perturb` command is a useful tool for generating test data to evaluate conflation routines. It
 is used widely throughout the regression tests. See the command documentation for further details.

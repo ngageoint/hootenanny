@@ -1,15 +1,20 @@
 
 [[AreaToAreaConflationAlgs]]
-=== Area To Area Conflation
+=== Area Conflation
 
-[[AreaToAreaDefinitions]]
+==== Overview
+
+The goal for the initial conflation of areas was that the number of correctly conflated features 
+plus the number of features marked for manual review would equal at least 80% of the overall 
+conflated features in each test dataset, with the plans of improving that correctness score as high 
+as 90-95% in the future.
+
 ==== Feature Definitions
 
 Area Conflation defines an area as non-building linear or polygonal feature whose tags support the 
 definitions of an area used by OpenStreetMap. Buildings are excluded in order to prevent match 
 overlap with Building Conflation.
 
-[[AreaToAreaMatching]]
 ==== Matching
 
 Area matching uses a manually configured search radius when determining the maximum distance between 
@@ -21,19 +26,16 @@ thresholds were determined against test data using Weka. Tag matching looks at t
 only. Matching employs additional logic to help ensure a review is generated when a one to many 
 match occurs.
 
-[[AreaToAreaMerging]]
 ==== Merging
 
 Area merging uses a simple merging process where a geometry from only one of the features is kept 
 (conflation workflow dependent) and tags are merged based on the configured tag merging strategy.
 
-[[AreaToAreaConfigurableOptions]]
 ==== Configurable Options
 
-See the descriptions for configuration options named `area.*` for more information on how 
-Area Conflation behavior may be modified.
+See the descriptions for configuration options named `area.*` for more information on how Area 
+Conflation behavior may be modified.
 
-[[AreaToAreaTestResults]]
 ==== Test Results
 
 Match truth for several datasets was obtained by having a human manual match features
@@ -41,10 +43,29 @@ Match truth for several datasets was obtained by having a human manual match fea
 for more details on the process involved). Then, Hootenanny conflated the same data and scored how 
 many matches it correctly made.
 
-TODO: finish
+.*Area to Area Test Data Sources*
+[options="header"]
+|======
+| *Test* | *AOI* | *Schema 1* | *Schema 2* | *Geospatial Accuracy* | *Type Attribution* | *Name Attribution* | *Address Attribution* | *Phone Number Attribution*
+| 1 | San Francisco, USA | OSM | city govt | good | average | average | poor in OSM; none in city govt | average
+|======
 
-[[AreaToAreaFutureWork]]
+* OSM = OpenStreetMap.org
+
+.*Area to Area Test Results - October 2021*
+[width="100%"]
+|======
+| *Test* | *AOI* | *Manually Matched Feature Count* | *Percentage Correctly Conflated* | *Percentage Marked for Unecessary Review* | *Percentage Combined Correct and Reviewable*
+| 1 | San Francisco, USA | 150 | 80.6% | 14.4% | **95.0%**
+|======
+
+Combined Correct = number of correct matches + number of unnecessary reviews
+
+An acceptable conflation accuracy was achieved, but since only one test dataset was utilized 
+success cannot be declared.
+
 ==== Future Work
 
-Area Conflation needs to be trained on additional datasets to improve its quality.
+Area Conflation has not been trained on enough datasets and needs to be trained on additional 
+datasets to improve its quality.
 

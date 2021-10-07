@@ -480,8 +480,6 @@ See the Matching Overview section for details on how to change Miss/Match/Review
 
 For now, an area is defined as a polygon representing a semi-permanent location. An example is a park polygon surrounding various other POI's and polygons representing things like baseball fields, clubhouses, tennis courts, etc.
 
-TODO: finish
-
 ==== POI's and Buildings
 
 ===== POI/Building Conflation Standards
@@ -495,7 +493,7 @@ The Hootenanny POI/Building conflation process is interested in the following th
 
 ===== POI/Building Matching Standards
 
-POI to building matching is the process of tagging POI's and buildings with information that explicitly states the matching relationship between them.  POI's and buildings are defined in the POI Matching Standards and Building Matching Standards sections.
+POI to building matching is the process of tagging POI's and buildings with information that explicitly states the matching relationship between them. POI's and buildings are defined in the POI Matching Standards and Building Matching Standards sections.
 
 * Match - The user is confident that the POI and building represent the same entity.
 * Miss - The user is confident that the POI and building do not represent the same entity.
@@ -505,27 +503,19 @@ POI to building matching is the process of tagging POI's and buildings with info
 
 See the Matching Overview section for details on how to change Miss/Match/Review REF tags.
 
-==== POI's and Areas
-
-===== POI/Area Matching Standards
-
-TODO
-
-===== POI/Area Match Tagging
-
-TODO
-
 ==== Rivers
 
-TODO
+No specific river matching standards have been created yet. At this time you may use the road 
+matching standards as a baseline.
 
 ==== Railways
 
-TODO
+No specific railway matching standards have been created yet. At this time you may use the road 
+matching standards as a baseline.
 
 ==== Power Lines
 
-TODO
-
+No specific power line matching standards have been created yet. At this time you may use the road 
+matching standards as a baseline.
 
 

@@ -1,5 +1,5 @@
 
-=== Working with OpenStreetMap Editing API Database Data in Hootenanny
+=== OpenStreetMap API Database
 
 Hootenanny offers the capability to convert data between an OpenStreetMap Editing API Database and any supported 
 Hootenanny data output format. The OpenStreetMap Editing API database allows fetching and saving of raw geo-data 
@@ -13,7 +13,7 @@ Postgres database tuning is very important to support large data ingests.  The H
 instance comes with moderate tuning, but you may need to perform additional tuning for your database. Postgres tuning 
 is outside of the scope of this document, so visit the Postgres website for more information.
 
-==== Configuring an OSM API Database Connection
+==== Configuring a Connection
 
 If you want to make use of an OSM API Database from within the Hootenanny iD Editor UI, you must configure Hootenanny to 
 use your OSM API database (only one database at a time is supported). See "Configuring an OSM API Database Connection" 
@@ -23,7 +23,7 @@ If you are using Hootenanny from the command line no configuration is required, 
 to your OSM API database within the command.  See the `hoot convert` documentation for details on the URL format 
 (also examples below).
 
-==== Creating an OSM API Database
+==== Creating anDatabase
 
 If you do not already have an OSM API database available, you can run the following:
 
@@ -37,7 +37,7 @@ This will create an empty OSM API database with a single test user.  The test da
 osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 --------
 
-==== Writing to an OpenStreetMap Editing API Database Using the Command Line
+==== Writing via Command Line
 
 Hootenanny's `hoot convert` command uses optimized SQL routines to write large amounts of data to the OSM API database, which results in much faster performance than using XML changesets passed to the OSM web services over HTTP (Rails Port or cgimap).  The writer
 has two possible workflows: online and offline.  The offline mode is meant for the fastest performance writing against offline
@@ -127,7 +127,7 @@ IMPORTANT: OSM PBF (.osm.pbf) is currently the most efficient OSM source format 
 See the User Guide descriptions of all settings prefixed with `apidb.bulk.inserter` or `osmapidb.bulk.inserter` for a 
 complete overview of the OSM API database writing options available.
 
-==== Reading from an OpenStreetMap Editing API Database
+==== Reading a Database
 
 Reading from an OpenStreetMap Editing API database requires the use of Hootenanny's `convert` command and the following command arguments described here:
 
@@ -147,7 +147,7 @@ hoot convert osmapidb://hoot:hoottest@localhost:5432/osmapi_test test-output/Toy
 hoot convert -D bounds=-106.5100000,38.3000000,-106.4000000,38.5000000 osmapidb://hoot:hoottest@localhost:5432/osmapi_test test-output/bboxOutput.osm
 ------
 
-==== Validating Writes to the OpenStreetMap Editing API Database
+==== Validating Writes To a Database
 
 After writing to the OpenStreetMap Editing API Database, the data can be validated by performing the following steps:
 
@@ -201,7 +201,7 @@ user 0m0.082s
 sys 0m0.004s
 --------
 
-==== Validating Reads from the OpenStreetMap Editing API Database
+==== Validating Reads From a Database
 
 After reading from the OpenStreetMap Editing API Database, the data can be validated by performing the following steps:
 

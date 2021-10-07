@@ -33,7 +33,7 @@ Hootenanny deals exclusively with vector to vector conflation. The following
 sections discuss when Hootenanny is an appropriate tool for conflation and
 general guidance in determining what strategy to employ when using Hootenanny.
 
-==== Conflation Workflow
+=== Conflation Workflow
 
 Hootenanny is a tool to help the user work through a conflation problem.
 Many aspects of the conflation workflow are automated or semi-automated to help
@@ -48,7 +48,7 @@ the user. Generally the workflow looks something like the following:
 
 The following sections go into the details of each of the above steps.
 
-===== Selecting Appropriate Data
+==== Selecting Appropriate Data
 
 Many factors play into which data is appropriate for conflation. Not all data is suitable for conflation. Below is a short list of examples of both appropriate and inappropriate conflation scenarios.
 
@@ -76,7 +76,7 @@ Appropriate data for conflation:
   local information that isn't available from imagery (e.g. street names). By
   conflating you get the complete coverage along with rich OSM attribution.
 
-===== Normalizing and Preparing Data
+==== Normalizing and Preparing Data
 
 Before conflation can occur Hootenanny expects that all data is provided in a
 modified OSM schema and data model that is a superset of the
@@ -96,7 +96,7 @@ See also:
 * <<clean,clean command>>
 * <<MapCleanerTransforms, map.cleaner.transforms>>
 
-===== Conflation Strategies
+==== Conflation Strategies
 
 These are the conflation strategies supported by Hootenanny:
 
@@ -218,7 +218,7 @@ hoot conflate -C AttributeConflation.conf input1.osm input2.osm output.osm
 
 More details: <<hootuser, AttributeConflation>>
 
-===== Review Conflated Results
+==== Review Conflated Results
 
 There are inevitably data scenarios that do not contain a clear solution when conflating. To handle this Hootenanny presents the user with _reviews_. These reviews are primarily the result of bad input data or ambiguous situations. During the conflation process Hootenanny will merge any features it considers to have a high confidence match and flag features for review if one of the aforementioned scenarios occurs.
 
@@ -241,7 +241,7 @@ See also:
 
 The web interface exposes reviewable items through an intuitive interface that guides the user through the review process.  For additional background on the review process within the user interface please refer to the Hootenanny User Interface Guide.
 
-===== Repeat Conflation Process
+==== Repeat Conflation Process
 
 In some cases there are more than two files that must be conflated. If this is the case the data must be conflated in a pairwise fashion. For instance if you are conflated three data sets, A, B & C, then the conflation may go as follows:
 
@@ -264,7 +264,7 @@ digraph G
 }
 ---------------------------------------------------------------------
 
-===== Export
+==== Export
 
 If you desire your data in an OSM compatible format then this step is
 unnecessary, however, if you would like to use the data in a more typical GIS

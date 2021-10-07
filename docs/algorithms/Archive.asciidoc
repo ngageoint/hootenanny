@@ -1,0 +1,171 @@
+
+[[Archive]]
+=== Archive
+
+This section archives documentation that no longer applies to the current state of the software for 
+historical reasons.
+
+==== Greedy Conflation Algorithm
+
+NOTE: This documentation is part of the original Hootenanny implementation employing the Greedy 
+Conflation Algorithm for roads which is no longer in use.
+
+Conflation is loosely broken into two parts: feature matching and feature transformation (Linna Li, 2011). Feature matching refers to identifying features in two datasets that refer to the same entity in reality. Feature transformation refers to the manipulation of two matched features into a new, better feature. Each feature transformation has the potential to impact the list of remaining matches. In the following sections, we will present the "greedy" approach we use to search for a solution as well as the feature matching and transformation operations supported.
+
+===== Searching for a Better Map
+
+The conflation process adopted by Hootenanny is to first identify all possible feature matches and assign a score from zero to one to each match. Higher scores are better. For every match there is a corresponding transformation that can be applied. The match/transformation combination is referred to as a manipulation. Hootenanny then uses a greedy search to apply the manipulations to the map until there are no longer any manipulations with a score above a set threshold.
+
+<<ExConflInputData>> is a notional example to demonstrate the conflation process and is meant to provide an idea of geospatial and directional conflation process flow. The red and green lines represent the two input datasets. In later figures, the blue lines represent conflated data. One way streets are denoted by arrows.
+
+[[ExConflInputData]]
+.Example conflation input data
+
+image::images/image027.png[]
+
+In the example shown in <<ExConflInputData>>, there are three potential feature matches. The matches have been assigned notional scores for demonstration purposes:
+
+	* ways a-b and v-x score is 0.2
+	* ways c-d and v-x score is 0.8
+	* ways c-d and y-z score is 0.2
+
+The lower scoring matches are due to the directionality of the ways. Due to distance constraints that are not displayed here, ways a-b and y-z are not potential matches. The distance constraints are defined by the accuracy of the input datasets as described in <<ExplDistanceScore>>.
+
+Using a greedy search we will first apply the highest scoring manipulation, ways c-d and v-x.  This will result in the <<GreedySearch>>:
+
+[[GreedySearch]]
+.Example 2 conflated data
+
+image::images/image028.png[]
+
+Now that ways c-d and v-x have been replaced by way m-n, all manipulations involving either ways c-d or v-x are no longer relevant and can be dropped from the conflation list. The remaining red and green lines are considered to be unique to their respective datasets and are carried through to the final result.
+
+===== Manipulations
+
+In the previous section, we explained how manipulations are applied during the conflation process. In this section, we describe the supported manipulations and how they are calculated. Hootenanny is designed in such a way that manipulations are not specific to roads. It would be trivial to expand on this concept to include other feature types such as buildings, points of interest and railroads. Ideas for additional manipulations can be found in <<ExplAdditionalManipulations>>.
+
+[[ExplManipulationsMergeWays]]
+*_Merge Ways_*
+
+By far the most frequently used manipulation with roads is merging two ways. The merge ways manipulation uses the similarity measures defined in <<ExplSimilarityMeasure>> to assign scores. When a match is applied, the attributes are merged using the process described in <<ExplAttributeScore>>. The geometries are merged by averaging the ways.  To average ways the following process is used:
+
+1. Calculate the maximal nearest subline
+2. Assign a weight to each way based on accuracy
+3. Return the weighted average of the two geometries
+
+===== Remove Dangling Way
+
+Sometimes small ways exist that do not actually connect any portion of the network as a result of previous MNS calculations or simply from poorly entered data. This pragmatic manipulation removes very short ways that do not connect two ways together. This manipulation does not have a significant impact on scoring but does impact aesthetics.
+
+[[ExplFourPassConflation]]
+==== Four Pass Conflation
+
+NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been
+left here for references purposes only.
+
+All Hootenanny desktop conflation operations assume that the operation can be completed within RAM. Even if all the data can be loaded into RAM, the desktop version of Hootenanny runs in a single thread. With this constraint, we estimate it would take approximately 2 months to conflate the global road network, or 19GB of compressed input data. To alleviate these issues, we have implemented the conflation operations to execute within the Hadoop environment. This approach works on a single desktop running in pseudo-distributed mode to roughly a 1000 core cluster. We have tested it with clusters as large as 160 cores.
+
+The following sections describe the process flow and a summary of each operation. It is assumed that the reader has a working knowledge of distributed systems and Hadoop. For specific details on how to execute these operations as well as software and hardware requirements, please reference the _Hootenanny User Documentation_ .
+
+===== Process Flow
+
+Before processing can begin, both inputs must be translated and encoded as `.osm.pbf` files using the translation mechanisms described in previous sections. In the case of OpenStreetMap, an entire `.osm.pbf` planet file can be downloaded directly from http://www.openstreetmap.org[OpenStreetMap] without any modifications. Once translation has been completed, the files may be uploaded into HDFS using utilities provided with the Hadoop distribution. On completion, Hootenanny provides a utility to combine output Hadoop files into a single `.osm.pbf` file that can be used by any number of OSM utilities to import the data into PostGIS or another convenient geospatial format.
+1km
+<<DataProcesingSteps>> illustrates the processing steps involved after the data has been prepared. The blue lines depict vector data encoded in the `.osm.pbf` file format. Each colored box represents another step of processing. The boxes with the Hadoop elephant logo represent one or more jobs run on a Hadoop cluster. All data is stored and processed on the Hadoop Distributed File System (HDFS).
+
+[[DataProcesingSteps]]
+.Data Processing Steps
+
+image::images/image047.png[]
+
+===== File Format
+
+The `.osm.pbf` file format (OpenStreetMap) is a binary format based on Google Protocol Buffers (Google Inc.). This format is a standard OpenStreetMap interchange format that combines efficient storage of data through delta encoding and table lookups and further compresses the data using zlib. The file is broken into independent "blobs" that are generally less than 16MB in size.
+
+[[AnatomyOSM-PBF]]
+.Anatomy of an OSM.pbf File
+
+image::images/image048.png[]
+
+Hadoop generally breaks large files into blocks of 64MB for storage. Each of these blocks is stored on multiple nodes within the cluster. While the ~16MB blobs don't fall precisely on the 64MB block boundary, it is close enough to help improve node locality. The independent nature of the blobs allows a custom input format to be defined for Hadoop that enables easy splitting of the job around block boundaries. While this efficiency is convenient, CPU is by far the largest bottleneck, not IO.
+
+In most Hadoop jobs, intermediate OSM primitives (ways and nodes) must be emitted between the map and reduce tasks. For these intermediate values, a modified `.osm.pbf` format is used to reduce the size of records that are shuffled.
+
+===== Join Ways to Nodes
+
+The focus of this operation is three fold:
+	1. Generate a bounding box for the way
+	2. Split long ways into sections smaller than 0.01 degrees or ~1km.
+	3. Re-number primitive IDs to avoid conflicts between the two data sets
+
+The +.osm.pbf+ file stores nodes and ways independently. For this reason, ways must be joined to nodes before the way length and bounding box can be calculated. A simple two-pass Map/Reduce job is used to join the ways to nodes. In the reduce phase of the second pass, the ways are split based on size, and the bounding box is generated. New IDs are assigned to the nodes and ways as needed while saving the output to a new `.osm.pbf.`
+
+The final output is a directory full of `.osm.pbf` blobs, where all primitives are re-numbered, ways have been broken into sections smaller than ~1km, and bounding boxes have been assigned to all ways.
+
+[[ExplPaintTileDensity]]
+===== Paint Tile Density
+
+The density of nodes for both inputs will be used when determining tile boundaries. Calculating the node density is one of the fastest Hadoop operations and simply requires mapping each node in the input to an output pixel during the map stage, then summing the output pixels in the reduce stage. To improve efficiency, a hash map of pixels and counts is maintained in the map stage. The final output is a matrix of node counts in each pixel. The size of a pixel is tunable, but through experimentation 0.01 degree pixel size seems to be optimal. This provides for a large number of tiles that do not exceed the 2GB RAM task limit.
+
+[[ExplDeterminingTileBounds]]
+===== Determining Tile Bounds
+
+Tile boundaries are calculated such that the data is divided into approximately four equally sized portions at each stage while minimizing boundary overlap with complex regions. An approach similar to the building of a KD-Tree is used (Bentley, 1975). Because our input data sets are much larger than can be fit into RAM, we approximate this solution by first using Hadoop to create a raster that counts the number of nodes in each pixel (see <<ExplPaintTileDensity>>). The raster is then loaded into RAM and used for calculating all split points as below:
+
+	1. Split on the Y-axis. The split point is the location that equally divides the data +/- a tunable " _slop"_ value and minimizes the number of nodes that intersect the horizontal split line.
+	2. Split the top half of the data on the X-axis using the same criteria defined above.
+	3. Split the bottom half of the data on the X-axis using the same criteria defined above.
+	4. Recursively continue this process on the bounding boxes as long as a child box has more than the maximum number of nodes that can be processed in RAM at one single time.
+
+Through experimentation, we have found that 10e^6^ is a good number of max nodes within a tile.
+
+Depending on the size of the input data, there may be scenarios where the data is too large to fit within a tile and a max node count of 10e^6^. If this is the case, either the pixel size must decreased or the amount of RAM available to each task in Hadoop increased. See <<ExplImproveDistrTiling>> for potential improvements.
+
+===== Conflation
+
+Four-pass conflation is a process to create seamless conflated data over arbitrarily large data sets. It is assumed that very large objects such as long roads and country boundaries can be broken into small pieces. As long as this assumption is valid, we hypothesize that this approach will work with all common geometry types.
+
+[[NotionalTiling]]
+.Notional Tiling Example
+
+image::images/image049.png[]
+
+There are several steps involved in four pass conflation:
+
+. Determine tile bounds as in <<ExplDeterminingTileBounds>>.
+. Assign each tile to a group: 1, 2, 3 or 4.
+. Conflate all the tiles in group 1 in parallel with a buffer.
+. Use the output of step 3 to conflate all the tiles in group 2 in parallel with a buffer.
+. Use the output of step 4 to conflate all the tiles in group 3 in parallel with a buffer.
+. Use the output of step 5 to conflate all the tiles in group 4 in parallel with a buffer.
+. Update any outstanding node book keeping left over from step 6.
+. Concatenate the output of step 7 into a single global file.
+
+<<NotionalTiling>> shows a notional example of the tiling. The tiles are assigned to groups such that no two tiles in the same group are adjacent to each other. This prevents overlapping data from being conflated during a single pass of conflation. During subsequent passes, the previously conflated data will be included to ensure that seams are matched properly.
+
+The output of this operation is a directory filled with conflated `.osm.pbf` blobs.
+
+===== Export
+
+The final output file is created by concatenating the output of the four-pass conflation and prepending an appropriate header. This output file can be used directly within many common OSM tools or ingested into PostGIS for use with common GIS tools.
+
+===== Impact of Tiling on Output
+
+Initial experimentation with tiling on small data sets does not show a significant difference in the output with a sufficiently large overlap between tiles. Experimentation is required to determine the optimal value, but values as low as a kilometer give visually reasonable results. Very small values, such as 10 meters, show artifacts in the conflation process. More experimentation is necessary to quantify the impacts on the conflation output.
+
+===== Performance
+
+The following table gives rough benchmarks for conflation:
+
+.Conflation Benchmarks
+[options="header"]
+|======
+| *Test Name* | *Local Conflation* | *Hadoop Conflation* | *Input Size (`.osm.pbf`)* | *Cluster*
+| Local Test | 220min | 45min | 46MB | Pseudo-distributed 8 core (circa 2012 hardware)
+| Global Test | - | 15hrs | 19GB | 20 node X 8 cores (circa 2010 hardware)
+|======
+
+The _Local Test_ was run between internal data and OSM data for Iraq. While the Four Pass Conflation technique (<<ExplFourPassConflation>>) increases I/O and overall work performed, a substantial speed improvement is visible just by running on eight cores instead of a single thread.
+
+The _Global Test_ was run between the OSM planet file and approximately six countries of internal data. The low execution time of 15 hours makes the execution of conflation on this scale feasible for weekly or even nightly conflation runs as data evolves and improves. A visual inspection shows results similar to the results found in the smaller test scenarios discussed previously.
+
