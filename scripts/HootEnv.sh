@@ -13,6 +13,11 @@ export CCACHE_SLOPPINESS=time_macros
 export GDAL_LIB_DIR=`gdal-config --libs | sed -e "s/-L//g" | sed -e "s/ *-lgdal.*//g"`
 export GDAL_DATA=`gdal-config --datadir`
 
+# Set JAVA_HOME if not defined
+if [ -z "$JAVA_HOME" ]; then
+  export JAVA_HOME=/usr/lib/jvm
+fi
+
 export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$JAVA_HOME/jre/lib/amd64/server:$HOOT_HOME/lib:$LD_LIBRARY_PATH
 export PATH=$HOOT_HOME/bin/:$PATH
 export QT_SELECT=5
