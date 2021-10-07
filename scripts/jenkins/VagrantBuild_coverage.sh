@@ -10,7 +10,7 @@ source ./SetupEnv.sh
 echo "### Configuring Hoot..."
 echo HOOT_HOME: $HOOT_HOME
 
-aclocal && autoconf && autoheader && automake --add-missing && ./configure --quiet --with-rnd --with-services --with-josm --with-uitests
+aclocal && autoconf && autoheader && automake --add-missing && ./configure --quiet --with-services --with-uitests
 
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'

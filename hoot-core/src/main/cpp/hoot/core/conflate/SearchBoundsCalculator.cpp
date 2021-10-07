@@ -44,9 +44,8 @@ Envelope SearchBoundsCalculator::calculateSearchBounds(
 {
   LOG_INFO("Calculating search radius...");
 
-  // This is likely to cause some performance issues, but only seems to be called by Multiary code
-  // and not doing it here is causing ScriptMatchCreator crashes...so will deal with performance
-  // issue when necessary.
+  // This is likely to cause some runtime performance issues, but not doing it here is causing
+  // ScriptMatchCreator crashes...so will deal with the performance issue when necessary.
   _radiusProvider->init(map);
 
   LOG_VART(map->getElementCount());

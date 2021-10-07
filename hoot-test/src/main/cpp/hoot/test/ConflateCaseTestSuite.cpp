@@ -73,14 +73,8 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
   // a list of strings paths to ignore if this string is found in the path
   QStringList ignoreList;
 
-# ifndef HOOT_HAVE_RND
-  ignoreList << "hoot-rnd";
-# endif
 # ifndef HOOT_HAVE_SERVICES
   ignoreList << "hoot-services";
-# endif
-# ifndef HOOT_HAVE_JOSM
-  ignoreList << "hoot-josm";
 # endif
 
   QStringList dirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);

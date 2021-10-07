@@ -35,6 +35,9 @@ for some test writing tips.
 `HootCoreStable.h`, then you don't need to add an include for it.
 * Keep as much logic out of classes inheriting `BaseCommand` as possible. Create a new class to hold
 logic needed to be executed by the command.
+* If a command you create is meant for more advanced developer facing usage or is experimental, you
+should have it return a type of "advanced" via its `getType` method. This will cause it to be shown
+in the list of advanced commands when command help is displayed.
 * Make use of configuration options via the `Configurable` interface to keep functionality 
 adapatable to a broad range of data inputs.
 * Avoid setting the configuration in a global manner with `conf().set(...)` when possible.
@@ -60,8 +63,6 @@ processed.
 * Use classes inheriting `ElementCriterion` to identify data based on its properties.
 * Use streaming I/O whereever possible to avoid loading large maps into memory all at once.
 * Use `OsmMapReaderFactory`, `OsmMapWriterFactory`, and `IoUtils` for I/O purposes when applicable.
-* Place experimental code into the `hoot-rnd` library. This code is expected to be at a lower TRL 
-than code in `hoot-core`, and we can be a little lenient on test coverage.
 * Make use of the `ApiEntityInfo` interface to appropriately describe map operators (classes 
 inheriting `OsmMapOperation`, `ElementVisitor`, `ElementCriterion`, etc.).
 * Make use of the `OperationStatus` interface and the `Progress` class to appropriately report 

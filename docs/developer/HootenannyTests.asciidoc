@@ -16,9 +16,7 @@ committed in this directory.
 * **slow** - Individual tests that each run in less than 30 sec.
 * **glacial** - Individual tests that each run in less than 15 min. You shouldn't need unit tests 
 that take longer than 15min. If you're writing a regression test that uses large input data and runs 
-longer than 15min, then put it with the regression tests, not the unit tests.  Also, hoot-rnd tests 
-usually get placed in this suite, since they employ non-production based functionality that changes 
-less frequently than code in hoot-core.
+longer than 15min, then put it with the regression tests, not the unit tests.
 
 If you want to run the tests for all codebases at the same time, first configure as described in a
 previous section, then run one of the following commands:
@@ -449,10 +447,10 @@ Details:
 Looking at the function `validateTestOutput` in `ScriptTestUtils.sh`:
 * The empty file, `test-output/test-validation-enabled`, is checked for existence before running 
 validation from a script test. `HootTest` will automatically create this dummy file if the 
-pre-requisites for running validation are met (compiled `--with-josm` and 
-`test.validation.enable=true`). If the pre-requisites have not been met, this file will be removed 
-by `HootTest` and scripts will skip running validation. This is the needed due to the fact the 
-script has no way itself of knowing if the validation pre-requisites have been met.
+pre-requisites for running validation are met (`test.validation.enable=true`). If the pre-requisites 
+have not been met, this file will be removed by `HootTest` and scripts will skip running validation. 
+This is the needed due to the fact the script has no way itself of knowing if the validation 
+pre-requisites have been met.
 * Read the `validateTestOutput` function header for information on the function input variables.
 * A diff is performed against the test output validation report and a baseline validation report. 
 Any differences will show up in the test output and cause the test to fail.

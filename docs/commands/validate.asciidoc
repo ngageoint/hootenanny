@@ -4,7 +4,7 @@
 === Description
 
 The `validate` command uses https://josm.openstreetmap.de/[JOSM] to identify map data with erroneous 
-aspects. This command is only available when Hootenanny is compiled `--with-josm`.
+aspects.
 
 To list information about the available validators use the following options:
 

@@ -73,12 +73,3 @@ The following configuration options point to files which may be used to add cust
 You may need to modify the aforementioned files and then regenerate the rules database in order to achieve the desired tagging performance.
 There are additional customization options available.  See the configuration options "implicit.tagging.*" and "implicit.tagger.*".
 
-==== Tagger Influence on Conflation Performance
-
-At the time of this writing, the only tests currently set up to measure implicit feature tagger performance are those that are part
-of the Global POI conflation multiary and Unifying POI/Polygon regression tests.  The multiary tests can be found in the global-pois
-branch of the hoot-tests repository (hoot-tests/unifying-tests.child/model-training.child/train-multiary-poi.child) and the POI/Polygon
-tests can be found in the hoot-tests master branch.
-
-To implicitly tag other data, see the "Implicit Element Type Tagging Based On Name" section of the Hootenanny User Guide.
-

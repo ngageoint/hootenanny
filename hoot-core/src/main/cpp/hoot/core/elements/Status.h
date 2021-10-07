@@ -41,7 +41,9 @@ public:
     Unknown2,
     Conflated,
     TagChange, // Tags have been changed, but not geometry
-    EnumEnd // Used for calculating multiary inputs
+    // Used for calculating multiary inputs; multiary code has been archived but leaving this here
+    // for the time being
+    EnumEnd
   };
 
   using Type = int;

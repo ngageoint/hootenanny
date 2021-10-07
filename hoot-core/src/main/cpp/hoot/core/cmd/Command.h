@@ -86,8 +86,14 @@ public:
   virtual int run(char* argv[], int argc) = 0;
 
   /**
-   * @brief getType returns the 'type' of command; e.g. 'core' or 'rnd'.
-   * @return the command typedef
+   * @brief getType returns the 'type' of command
+   *
+   * * valid values are: core, josm, and advanced
+   * * core is the default and reserved for commands in hoot-core
+   * * use josm for commands in hoot-josm
+   * * use advanced for commands that should show up under the advanced list when command help is
+   * displayed
+   * @return the command type
    */
   virtual QString getType() const { return "core"; }
 };

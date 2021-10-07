@@ -18,16 +18,6 @@ SUBDIRS += \
     hoot-js
 }
 
-# hoot-swig is not currently in active use
-#swig {
-#SUBDIRS += \
-#    hoot-swig
-#}
-
-rnd {
-SUBDIRS += hoot-rnd
-}
-
 josm {
 SUBDIRS += hoot-josm
 }

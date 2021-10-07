@@ -25,11 +25,6 @@ section below), the entire set of services must be restarted.  Eventually, the t
 separate from the rest of the Hootenanny web services.  This would allows it to be updated with new languages without the need to restart
 all of the web services.
 
-Note that the language translation client (described in the next section) is implemented as a prototype in hoot-rnd.  However, the
-aforementioned service runs regardless of hoot-rnd being enabled and therefore is not actually a prototype.  There is no simple way
-currently to restrict code in hoot-services running based on hoot-rnd enablement.  Therefore, due to the effort that would be involved
-this situation will persist for now and can be rectified at later time if needed.
-
 ==== Client
 
 Access to language translation from Hootenanny core occurs as a visitor which acts as a web client to the translation web service.  It
