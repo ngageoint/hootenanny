@@ -99,7 +99,7 @@ See the User Guide Command Line Documentation section for all configuration opti
 
 Match truth for several datasets was obtained by having a human manual match features
 (see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx for more details on the process
-involved).  Then, Hootenanny conflated the same data and scored how many matches it correctly made.
+involved). Then, Hootenanny conflated the same data and scored how many matches it correctly made.
 
 .POI to Polygon Test Data Sources
 [options="header"]

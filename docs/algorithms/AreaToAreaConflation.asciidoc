@@ -1,41 +1,50 @@
 
-[[AreaToAreaConflationAlgs]]
-=== Area to Area Conflation
+[[AreaToAreaConflation]]
+=== Area To Area Conflation
 
-Area to Area Conflation is based on a Weka derived model and is controlled by the file rules/Area.js.
-
-[[AreaFeatureDefinitions]]
+[[AreaToAreaDefinitions]]
 ==== Feature Definitions
 
-TODO
+Area Conflation defines an area as non-building linear or polygonal feature whose tags support the 
+definitions of an area used by OpenStreetMap. Buildings are excluded in order to prevent match 
+overlap with Building Conflation.
 
-[[AreaMatching]]
+[[AreaToAreaMatching]]
 ==== Matching
 
-TODO
+Area matching uses a manually configured search radius when determining the maximum distance between 
+features to search during matching.
 
-[[AreaMerging]]
+Matching is based off both tag and geometric attributes. For geometry matching, angle histogram, 
+edge distance, buffered overlap, and smaller overlap values are used for comparison. Their match 
+thresholds were determined against test data using Weka. Tag matching looks at type tags on features 
+only. Matching employs additional logic to help ensure a review is generated when a one to many 
+match occurs.
+
+[[AreaToAreaMerging]]
 ==== Merging
 
-TODO
+Area merging uses a simple merging process where a geometry from only one of the features is kept 
+(conflation workflow dependent) and tags are merged based on the configured tag merging strategy.
 
-[[AreaConfigurableOptions]]
+[[AreaToAreaConfigurableOptions]]
 ==== Configurable Options
 
-TODO
+See the descriptions for configuration options named `area.*` for more information on how 
+Area Conflation behavior may be modified.
 
 [[AreaToAreaTestResults]]
 ==== Test Results
 
-Currently, Area to Area Conflation has only been tested against a very small amount of input data.  More inputs will be tested against
-in the future.  The results so far:
+Match truth for several datasets was obtained by having a human manual match features
+(see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx 
+for more details on the process involved). Then, Hootenanny conflated the same data and scored how 
+many matches it correctly made.
 
-Correct Matches: 80%
-Unnecessary Reivews: 14%
-Incorrect Matches: 6%
+TODO: finish
 
 [[AreaToAreaFutureWork]]
 ==== Future Work
 
-* obtain more area datasets, manually match them, and further test Area to Area Conflation
+Area Conflation needs to be trained on additional datasets to improve its quality.
 

@@ -2,35 +2,48 @@
 [[RiverConflation]]
 === River Conflation
 
-TODO
-
 [[RiverFeatureDefinitions]]
 ==== Feature Definitions
 
-TODO
+River Conflation defines a river as a linear body of water whose tags support the definitions used 
+by OpenStreetMap.
 
 [[RiverMatching]]
 ==== Matching
 
-TODO
+River matching allows for a manually configured or automatically calculated search radius when 
+determining the maximum distance between features to search during matching. Automatic search radius 
+calculation is achieved via calculated tie points using the rubbersheeting algorithm.
+
+Matching is based off both tag and geometric attributes. For geometry matching, sampled angle 
+histogram and a weighted shape distance values are used for comparison. Their match thresholds were 
+determined against test data using Weka. Tag matching looks at the similarity of name and type tags.
+
+Long river features can be very computationally expensive to match. Therefore, River Conflation
+employs a backup matching workflow to avoid runaway conflate job times. First, a standard subline 
+matcher used in most Hooteannny linear feature matching is used to match a pair of features. If the 
+matching process exceeds a configurable number of iterations, the matching with that subline matcher 
+is canceled and a second, less complex and processing intensive subline matcher is employed.
 
 [[RiverMerging]]
 ==== Merging
 
-TODO
+River merging uses the standard Hootenanny merging process that is used for merging most linear 
+features, including roads.
 
 [[RiverConfigurableOptions]]
 ==== Configurable Options
 
-TODO
+See the descriptions for configuration options named `river.*` for more information on how River 
+Conflation behavior may be modified.
 
 [[RiverTestResults]]
 ==== Test Results
 
-TODO
+Match truth for several datasets was obtained by having a human manual match features
+(see https://github.com/ngageoint/hootenanny/files/595245/Hootenanny.-.Manual.Matching.9-13-16.pptx 
+for more details on the process involved). Then, Hootenanny conflated the same data and scored how 
+many matches it correctly made.
 
-[[RiverFutureWork]]
-==== Future Work
-
-TODO
+TODO: finish
 
