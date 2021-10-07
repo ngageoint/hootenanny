@@ -1,0 +1,5 @@
+
+=== Geospatial Indexing
+
+Hootenanny performs many filters such as "return all roads within 1km of road x". With large data sets, this can be quite costly. Hootenanny maintains a custom in-memory Hilbert R-Tree (I Kamel, 1993) of the location of both the ways and nodes. This dramatically improves performance on large data sets.
+

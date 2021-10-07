@@ -1,0 +1,27 @@
+
+[[ConflationFeatureAccuracyHandling]]
+=== Feature Accuracy
+
+Feature accuracy is measure of the confidence in how accurately a feature's geospatial coordinates are. Feature accuracy values affect the
+accuracy of conflated output data. Feature circular error (accuracy) can be processed in one of two ways: 1) on a feature by feature basis manually or 2) use Hootenanny's default value to assign it to all features.
+
+For 1), you can manually assign the  either the `circular:error` or `accuracy` tag with your CE value to individual features and Hootenanny will read in the values.
+
+For 2), the default Hootenanny CE value is 15m and is controlled by the `circular.error.default.value` config option. If your feature data has neither the `circular:error` or `accuracy` tags present, hoot will use that value for all features. If you wanted to change the global CE value used for a conflate job to 5.0m, for example, you could do something like this for a conflate job:
+
+`hoot conflate -D conflate.pre.ops++="SetTagValueVisitor" -D set.tag.value.visitor.keys="error:circular" -D set.tag.value.visitor.values=5.0 input1.osm input2.osm out.osm`
+
+That will assign a CE of 5m to all features just before they are conflated.
+
+If you just wanted to update your data with CE tags without conflating, you could just do something like:
+
+`hoot convert -D convert.ops="SetTagValueVisitor"  -D set.tag.value.visitor.keys="error:circular" -D set.tag.value.visitor.values=5.0 -D writer.include.circular.error.tags=true input.osm out.osm`
+
+You can also strictly control the search radius of the conflation routines if you don't want to use CE tags, which may be useful if you're not confident in your CE values and don't want to modify the data. The `search.radius.*` configuration options allow for controlling the conflate search radius. For example, if you wanted to conflate all features with a search radius of 25m:
+
+`hoot conflate -D search.radius=25 input1.osm input2.osm out.osm`
+
+Or if you just wanted to conflate buildings at a 25m radius:
+
+`hoot conflate -D search.radius.building=25 -D match.creators="BuildingMatchCreator" -D merger.creators="BuildingMergerCreator" input1.osm input2.osm out.osm`
+

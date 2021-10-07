@@ -1,6 +1,6 @@
 
 [[AreaToAreaConflationAlgs]]
-=== Area To Area Conflation
+=== Area Conflation
 
 ==== Overview
 

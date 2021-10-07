@@ -1,0 +1,5 @@
+
+=== Services Debugging
+
+https://github.com/ngageoint/hootenanny/blob/master/hoot-services/DEBUG.md[See this]
+

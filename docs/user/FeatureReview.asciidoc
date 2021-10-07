@@ -1,0 +1,19 @@
+
+[[Feature-Review]]
+=== Feature Review
+
+During the conflation process if Hootenanny cannot determine with confidence the best way to
+conflate features, it will mark one or more features as needing a manual review by the user.  Below
+are listed the possible solutions where Hootenanny may request a manual review from a user.
+
+.*Feature Review Situations*
+[width="100%"]
+|======
+| *Needs Review Message* | *Possible Causes* | *Potential User Actions to Take*
+| Elements contain too many ways and the computational complexity is unreasonable. | A multiline string geometry was attempted to be conflated that had more lines in it than Hootenanny can conflate in a reasonable amount of time using its current algorithms. Currently, that is when both input sublines to conflate contain more than four lines, or if the sum of lines they contain is greater than seven. | Review this feature manually. It can only be automatically conflated by developing new conflation algorithms that can handle multilinestring input data of this size.
+| Internal Error: Expected a matching subline, but got an empty match. Please report this to the developers. | An unexpected internal error occurred. Multiple matching line parts have caused extra difficulty during the line matching process. | Review this feature manually, and report this behavior to the Hootenanny development team for further examination.
+| MultiLineString relations can only contain ways when matching sublines. | A input being conflated of geometry type multiline string contained an OSM feature type other than a way (nodes or relations). | Review this feature manually. This is invalid input data for Hootenanny conflation purposes and cannot be conflated automatically.
+| Multiple overlapping way matches were found within one set of ways. | When attempting to conflate sublines from line inputs, multiple overlapping lines were found. | Review this feature manually, as it is too complex for Hootenanny to currently handle.
+| No valid matching subline found. | When conflating two linear inputs, Hootenanny could not find a corresponding matching subline part in one of the inputs. | Review this feature manually, as Hootenanny can not determine automatically whether it matches any feature in the opposite input dataset.
+|======
+

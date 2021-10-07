@@ -1,0 +1,197 @@
+
+=== Supported Feature Types
+
+==== Roads
+
+<<hootuser, RoadConflation>>
+
+===== Road Conflation Algorithms
+
+*_2nd Generation (aka Unifying)_*
+
+<<hootuser, UnifyingConflation>>
+
+*_Network_*
+
+<<hootuser, NetworkConflation>>
+
+===== Configuration
+
+Road Conflation can further be customized with the highway.* configuration options. See the "Configuration Options" section of User Guide
+for more detail.
+
+[[PoiToPoi]]
+==== POIs
+
+Hootenanny provides the ability to perform point to point, i.e. POI to POI, conflation to merge input dataset geometry and attribution using the Unify approach. The _Unify_ POI to POI conflation code uses the Hootenanny JavaScript interface described in <<HootJavaScriptOverview>>
+to find, label and merge match candidate features. Because this code deals with a broader range of POI conditions, conflating POI
+datasets using Unify will invariably produce reviews that the user must manually confirm using the workflow described in the
+<<hootuser>>, _Reviewing Conflicts_.  Further background on Unifying POI conflation can be found in <<hootuser>>, _Unifying
+POI Conflation_. For more details on the POI to POI conflation algorithm, see <<hootuser, PoiToPoi>>
+
+There are a number of configurable distance thresholds that can be specified if
+you are comfortable making changes to JavaScript. Please see
+`$HOOT_HOME/rules/Poi.js` to modify the tables found in the script. Any
+changes made to `Poi.js` will apply to all jobs launched in the user
+interface as well as command line.
+
+To enable or change the POI conflation approach please see the following
+configuration options:
+
+* `match.creators` - <<match.creators>>
+* `merger.creators` - <<merger.creators>>
+
+For background on leveraging the Hootenanny JavaScript interface to call functions using Node.js, see <<HootJavaScriptOverview>>.
+
+[[Building-Conflation]]
+==== Buildings
+
+<<hootuser, BuildingConflation>>
+
+[[PoiToPolygonConflation]]
+==== POI to Polygon
+
+Hootenanny conflates POIs with both building and area polygons.  It uses the following criteria for matching features: distance between
+the two features, name similarity, type similarity, address similarity, and phone number similarity.  See
+<<hootuser, PoiToPolygonConflation>> for specific algorithm details.
+
+[[PoiToPolygonConfigurableOptions]]
+===== Configurable Options
+
+POI to Polygon Conflation can further be customized with the poi.polygon.* configuration options. See the "Configuration Options" section of
+User Guide for more detail.
+
+[[PoiToPolygonStatistics]]
+===== Statistics
+
+Conflation statistics for POI to Polygon Conflation are available from the command line with the `--stats` option as well as in the User
+Interface, the same as with all other types of conflation.  Note that POIs conflatable with polygons have a different definition than those
+conflatable with other POIs, which is less strict.  Therefore, POIs conflatable with polygons are a superset of POIs conflatable with other
+POIs.  Likewise, polygons are a superset of buildings and also include features such as parks, parking lots, etc.  See the Feature Definitions
+section <<hootuser, Hootenanny - User Guide>> for POI and polygon definition details.
+
+[[PoiToPolygonUseCases]]
+===== Use Cases
+
+*_Keep Closest Matches Only_*
+
+By default, POI to Polygon uses a fairly large search radius to try consider as many things possible that might need to be matched together.
+If the following are true, you may want to tweak POI to Polygon conflation to keep the closest distance matches only:
+
+1) You are fairly confident in your geometries across both layers.
+2) You have mostly generic type information on your features.
+3) You are trying to generate fewer reviews at the expense of possibly missing some matches.
+
+In this situation you could run with the following option set:
+
+poi.polygon.keep.closest.matches.only=true - When a feature is matched to more than one other features, only the match with smallest distance between features is kept, despite the search radius
+poi.polygon.additional.search.distance=0 - This reduces the overall search radius, thus reducing reviews (possible also matches) and increasing
+runtime performance.
+poi.polygon.match.threshold=1 - This will prevent reviews from being presented completely.
+
+[[AreaToAreaConflation]]
+==== Areas
+
+Hootenanny makes Area to Area Conflation available, which is turned on by default when using command line conflation.  Hootenanny
+defines an area as a non-building polygon that possesses the OSM `area=yes` tag or equivalent.  Examples: parks, parking lots.
+To read more information on Area to Area Conflation, see <<hootuser, AreaToAreaConflation>>.
+
+[[River-Conflation]]
+==== Rivers
+
+Rivers may be conflated using the Javascript generic conflation capability. For more information on script conflation, see the
+related sections in this document. See the algorithms documentation for more details on the algorithms and techniques used in
+this conflation.
+
+===== Configurable Files
+
+.*River Conflation Related Files*
+[width="65%"]
+|======
+| *Location* | *Description*
+| `conf/schema/waterway.json` | attribute schema definitions
+| `rules/River.js` | custom rule based conflation model
+|======
+
+===== Usage
+
+River conflation can be done from the command line or the web user interface. This section describes how to conflate river data
+from the command line.  For details on how to do it in the web user interface, see the associated section in the Hootenanny User
+Interface guide. To conflate river data, a command similar to the following may be issued:
+
+------
+hoot conflate <river-dataset-1> <river-dataset-2> <output>
+------
+
+All of the settings that can be modified for river conflation exist in `conf/core/ConfigOptions.asciidoc`. Tweaking the settings can
+result in better conflation performance depending on the datasets being conflated. See the "Configuration Options" section of User Guide for
+more detail.
+
+[[Power-Line-Conflation]]
+==== Power Lines
+
+Power lines may be conflated using the Javascript generic conflation capability.  For more information on script conflation, see the
+related sections in this document.  See the algorithms documentation for more details on the algorithms and techniques used in
+this conflation.
+
+===== Configurable Files
+
+.*Power Line Conflation Related Files*
+[width="65%"]
+|======
+| *Location* | *Description*
+| `conf/schema/power.json` | attribute schema definitions
+| `rules/PowerLine.js` | custom rule based conflation model
+|======
+
+===== Usage
+
+Power line conflation can be done from the command line or the web user interface.  Conflating in both environments is similar as described
+in the above River Conflation section.  Railway Conflation can further be customized with the power.line.* configuration options. See the
+"Configuration Options" section of User Guide for more detail.
+
+[[RailwayConflation]]
+==== Railways
+
+Railways may be conflated using the Javascript generic conflation capability. For more information 
+on script conflation, see the related sections in this document. See the Algorithms documentation 
+for more details on the algorithms and techniques used by this conflation.
+
+===== One to Many Matching
+
+Railway conflation has an alternate workflow that allows for transferring selected tags from single 
+rail features in secondary data to multiple rail features in reference data when the single 
+secondary rail identifies how many tracks it represents. See the the "One to Many Matching" section 
+under "Railways" in the Algorithms documentation for more detail. 
+
+===== Configurable Files
+
+.*Railway Conflation Related Files*
+[width="65%"]
+|======
+| *Location* | *Description*
+| `conf/schema/railway.json` | attribute schema definitions
+| `rules/Railway.js` | custom rule based conflation model
+|======
+
+Railway Conflation can further be customized with the railway.* configuration options. See the 
+"Configuration Options" section of User Guide for more detail.
+
+[[GenericGeometry]]
+==== Generic Geometry Features
+
+Hootenanny uses machine learning techniques, customizable scripts, and flexible configuration options to develop algorithms 
+that will yield good conflated output for a given type of data (roads, buildings, etc.). If a type of map data is 
+encountered for which Hootenanny has no specific conflation algorithm available, that data will be conflated with 
+Generic Geometry Conflation scripts. This ensures that all data in an input map has a chance to be conflated. 
+
+A separate script exists for geometry type Hootenanny conflates. The scripts are:
+
+* `Line.js`
+* `Point.js`
+* `Polygon.js`
+* `PointPolygon.js`
+
+The scripts use very simple techniques to attempt to conflate data, including Euclidean distance matching and type 
+tag similarity scoring. Related configuration options include the `search.generic.*` and `generic.*` options.
+

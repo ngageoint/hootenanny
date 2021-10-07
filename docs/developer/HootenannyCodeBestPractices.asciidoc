@@ -83,7 +83,7 @@ appropriate places for the table of contents to format properly.
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[testing document] 
 for some test writing tips.
 
-=== Cleaning Up Header Includes
+==== Cleaning Up Header Includes
 
 Maybe we work this into the build and/or find a better tool, but this is what has been tried so far:
 

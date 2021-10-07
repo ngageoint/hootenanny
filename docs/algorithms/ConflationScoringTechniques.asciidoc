@@ -1,222 +1,20 @@
 
-=== Techniques
+=== Conflation Scoring Techniques
 
-The following sections describe the technical aspects of the data schemas and
-processing techniques used internal to Hootenanny to produce the results
-described in previous sections.
+The following are some notes on some of the techniques that feed conflation scoring. Conflation 
+techniques vary by feature type and change over time, so not all techniques described my currently 
+be in use by Hootenanny.
 
-==== Data Schema
-
-The OSM data model is a single "layer" that contains three elementary data types
-and arbitrary attribute tags. This provides great flexibility to the format, and
-topology is inherent in the format, but type checking relies on the user.
-
-Besides the OSM data, all of the data sets provided for conflation were provided
-as tabular GIS files such as Shapefile or File Geodatabase. These tabular
-formats provide each layer (e.g., road, river, building) as a different file or
-table. The available attributes are predefined as columns in the layer, and
-strong type checking is enforced. The rigidity of the format can provide
-benefits during type checking, but given the broad array of layer types we would
-like to handle within Hootenanny, it becomes a hindrance to predefine all
-possible layers and attributes. Also, maintaining topology within these tabular
-formats can be quite complex. To avoid these issues, we convert all tabular data
-into the OSM data model and format.
-
-The following section discusses the internals of the OSM Data Model and schema
-in more detail.
-
-===== The OSM Data Model
-
-The OSM data model is composed of three different elements. Each element may contain an arbitrary list of attributes called tags:
-
-* Node – Similar to a point, a node contains a location (latitude, longitude)
-  and a set of tags.
-* Way – Similar to a line or polygon, a way is an ordered collection of nodes
-  and a set of tags. The way indirectly contains location via the nodes
-  constitute it.
-* Relation – A relation is a group of nodes, ways, or relations and a set of
-  tags. This construct can be used to create complex geometries (e.g.,
-  multi-polygons or polygons with holes) or simply group and tag similar
-  elements such as all the buildings that make up a shopping center.
-
-[[IntersectAurora]]
-.Intersection in Aurora, Colorado
-
-image::images/image019.png[]
-
-The example in <<IntersectAurora>> shows a road found in Aurora, CO. The tags
-for the way are:
-
-* `highway=residential`
-* `surface=asphalt`
-* `name=East Roxbury Place`
-
-These tags show that the road is residential, paved with asphalt, and named
-"East Roxbury Place." By default the way is not one way (Key:oneway -
-OpenStreetMap Wiki, 2012). In the case of the roads just northeast, the
-`oneway=yes` tag is specified to state explicitly that those roads are one way.
-
-The highlighted red node is part of the labeled way and specifies `highway=stop`
-. When this tag is applied to a node, it designates that there is a stop sign at
-that location in the way. In contrast, the relationship between the stop sign
-and road can be encoded within a tabular data model though it is less natural
-due to joining of layers into a topology.
-
-While tags can be arbitrary, there is a standard schema that is defined by the
-OSM community. We take advantage of this standard during conflation when
-matching and merging features. For example, if the name and road surface type
-matches, there is a higher probability that the features are the same. Tag
-matching is addressed in more detail in <<ExplManipulationsMergeWays>>.
-
-==== Data Cleanup
-
-Data provided as input to Hootenanny often contains common defects. These
-defects frequently result from human error; pragmatic solutions for addressing
-these problems are described in detail in the following sections.
-
-===== Duplicate Ways
-
-In many transportation data sets, it is common to have roads that redundantly
-overlap with other roads. <<DuplicateWay>> demonstrates this with a red and
-green way. The red way is made up of nodes a, b, c and d. The green way is made
-up of nodes c, d and e. During this step we identify and remove any redundant
-sections that exist from the shorter of the two ways. In this case the result
-will be a red way and green way.
-
-[[DuplicateWay]]
-.Example Duplicate Way
-
-image::images/image021.png[]
-
-===== Unlikely Intersections
-
-Most of the tabular data provided to us had no definition of intersection. At
-the point where roads intersect, there were simply two points. It was up to the
-algorithms to determine if it was truly an intersection or just two coincident
-points. To determine if an intersection truly exists, we use the pragmatic rules
-below to calculate an intersection score. If the score is greater than a
-specified threshold, then the intersection is split:
-
-* One road is a motorway, and the other road is not a motorway
-* The tunnel/bridge status doesn't match, e.g., one road is a tunnel, and the other is not a tunnel.
-* The intersecting node is not an endpoint on the way
-* The difference in heading of the way at the point of the intersection is less than 45 degrees.
-
-[[Intersect]]
-.Example Intersection
-
-image::images/image023.png[]
-
-Given the example in <<Intersect>>, if both roads are residential, and there are
-no tunnels/bridges, then it will be maintained as an intersection. However, if
-one of the roads is a bridge or motorway, then a new node will be created (node
-f). That new node will be used to change the green line from e, _b_ and d to e,
-_f_ and d.
-
-===== Find Implicit Divided Highways
-
-In some organization's maintained data sets, it not uncommon to map divided tunnels and bridges as
-undivided. In the scenario in <<UndividedOverpass>> is tagged as `bridge=yes`,
-but due to the strict tabular nature of the data, there is no field in the
-source Shapefile to specify `divider=yes`. For this reason, we deduce that if
-both of the red roads state `divider=yes`, then the green section is also likely
-to be divided, and we introduce the `divider=yes` tag to the green way.
-
-[[UndividedOverpass]]
-.Undivided Overpass
-
-image::images/image025.png[]
-
-===== Superfluous Ways
-
-This step removes any way that contains less than two nodes or has no tags of
-significance. Performing this step reduces the amount of data that is processed
-by conflation and cleans up the map for final presentation.
-
-===== Superfluous Nodes
-
-This step keeps all nodes that are part of a way or contain tags of significance
-and removes all others.
-
-===== Duplicate Names
-
-If a name is recorded multiple times within the attributes, then the duplicate
-names are removed.  For instance, the attributes `name=Foo Street`, `alt_name=Foo
-Street;Bar Street` will be converted to: `name=Foo Street`, `alt_name=Bar Street`.
-You can control whether Hootenanny is sensitive to name case with the
-`duplicate.name.case.sensitive` configuration parameter.
-
-===== Dual Way Splitter
-
-Some data sets map divided highways as a single way. The generally accepted
-approach within OpenStreetMap (OpenStreetMap Wiki, 2012) is to map divided
-highways as two one-way ways. Hootenanny has adopted the two one-way ways
-standard. To accommodate this standard, ways that are marked with the
-`divider=yes` tag are split into two one-way ways with a variation of the GIS
-buffer operation.
-
-==== Indexing
-
-Hootenanny performs many filters such as "return all roads within 1km of road x". With large data sets, this can be quite costly. Hootenanny maintains a custom in-memory Hilbert R-Tree (I Kamel, 1993) of the location of both the ways and nodes. This dramatically improves performance on large data sets.
-
-[[ExplConflation]]
-==== Conflation
-
-Conflation is loosely broken into two parts: feature matching and feature transformation (Linna Li, 2011). Feature matching refers to identifying features in two datasets that refer to the same entity in reality. Feature transformation refers to the manipulation of two matched features into a new, better feature. Each feature transformation has the potential to impact the list of remaining matches. In the following sections, we will present the "greedy" approach we use to search for a solution as well as the feature matching and transformation operations supported.
-
-===== Searching for a Better Map
-
-The conflation process adopted by Hootenanny is to first identify all possible feature matches and assign a score from zero to one to each match. Higher scores are better. For every match there is a corresponding transformation that can be applied. The match/transformation combination is referred to as a manipulation. Hootenanny then uses a greedy search to apply the manipulations to the map until there are no longer any manipulations with a score above a set threshold.
-
-<<ExConflInputData>> is a notional example to demonstrate the conflation process and is meant to provide an idea of geospatial and directional conflation process flow. The red and green lines represent the two input datasets. In later figures, the blue lines represent conflated data. One way streets are denoted by arrows.
-
-[[ExConflInputData]]
-.Example conflation input data
-
-image::images/image027.png[]
-
-In the example shown in <<ExConflInputData>>, there are three potential feature matches. The matches have been assigned notional scores for demonstration purposes:
-
-	* ways a-b and v-x score is 0.2
-	* ways c-d and v-x score is 0.8
-	* ways c-d and y-z score is 0.2
-
-The lower scoring matches are due to the directionality of the ways. Due to distance constraints that are not displayed here, ways a-b and y-z are not potential matches. The distance constraints are defined by the accuracy of the input datasets as described in <<ExplDistanceScore>>.
-
-Using a greedy search we will first apply the highest scoring manipulation, ways c-d and v-x.  This will result in the <<GreedySearch>>:
-
-[[GreedySearch]]
-.Example 2 conflated data
-
-image::images/image028.png[]
-
-Now that ways c-d and v-x have been replaced by way m-n, all manipulations involving either ways c-d or v-x are no longer relevant and can be dropped from the conflation list. The remaining red and green lines are considered to be unique to their respective datasets and are carried through to the final result.
-
-===== Manipulations
-
-In the previous section, we explained how manipulations are applied during the conflation process. In this section, we describe the supported manipulations and how they are calculated. Hootenanny is designed in such a way that manipulations are not specific to roads. It would be trivial to expand on this concept to include other feature types such as buildings, points of interest and railroads. Ideas for additional manipulations can be found in <<ExplAdditionalManipulations>>.
-
-[[ExplManipulationsMergeWays]]
-*_Merge Ways_*
-
-By far the most frequently used manipulation with roads is merging two ways. The merge ways manipulation uses the similarity measures defined in <<ExplSimilarityMeasure>> to assign scores. When a match is applied, the attributes are merged using the process described in <<ExplAttributeScore>>. The geometries are merged by averaging the ways.  To average ways the following process is used:
-
-1. Calculate the maximal nearest subline
-2. Assign a weight to each way based on accuracy
-3. Return the weighted average of the two geometries
-
-*_Maximal Nearest Subline_*
+==== Maximal Nearest Subline
 
 The Maximal Nearest Subline (MNS) algorithm (VividSolutions, 2005) performs the following operation described below:
-
 ____________________________________________________________________
 The Maximal Nearest Subline of A relative to B is the shortest subline of A which contains all the points of A which are the nearest points to the points in B. This effectively "trims" the ends of A which are not near to B.
 ____________________________________________________________________
 
 Hootenanny has adopted a modified version of MNS that also limits the distance that is considered nearest as a function of the accuracy of the ways.
- +
- +
-*_Assign a Weight_*
+ 
+==== Assign a Weight
 
 All accuracy values provided to Hootenanny assume a Gaussian distribution to the data and are provided at 2 Sigma, or approximately a 95% confidence interval. To convert accuracy to weights for both datasets we do the following:
 
@@ -239,7 +37,14 @@ All accuracy values provided to Hootenanny assume a Gaussian distribution to the
 \[ w_2 = \frac { 1 - \sigma_2^2 }{ \sigma_1^2 + \sigma_2^2 } \]
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-The accuracy of the new way is calculated as:
+==== Averaging
+
+Averaging of linear features was a feature of the original Greedy Algorithm implementation of 
+Hootenanny. Later it was dropped and replaced with the concept of Reference Conflation. Later on,
+linear averaging was brought back into Hootenanny for experimental purposes.
+
+Building from the calculations from the previous section, the accuracy of the new way is calculated 
+as:
 
 .Weighted Average
 [latexmath]
@@ -279,20 +84,15 @@ while n1.size() > 1 || n2.size() > 1:
 result.push(average(n1.pop(), n2.pop()))
 ----
 
-
 This approach suffers from the loss of some details in the data set due to averaging, but in most real world cases it yields very good results.
 
-Remove Dangling Way
-
-Sometimes small ways exist that do not actually connect any portion of the network as a result of previous MNS calculations or simply from poorly entered data. This pragmatic manipulation removes very short ways that do not connect two ways together. This manipulation does not have a significant impact on scoring but does impact aesthetics.
-
 [[ExplSimilarityMeasure]]
-*_Similarity Measure_*
+==== Similarity Measure
 
 The following sections describe how we score two features to determine a match. To calculate the final similarity measure, we take the product of all the scores. One exception to this is the attribution score. Through experimentation, we found the attribution score was having too much of an impact. To alleviate this, we reduce the impact on the final score by scaling the attribution score from 0.3 to 1.0.
 
 [[ExplDistanceScore]]
-*_Distance Score_*
+==== Distance Score
 
 While Hausdorff distance is used by (VividSolutions, 2005) and (Linna Li, 2011), we found it was too reactive to outliers in our data. To accommodate this we do the following to calculate distance between ways:
 
@@ -319,7 +119,7 @@ where the variables are as follows:
 
 * latexmath:[$ \mu_{distance} $] - The mean distance between the ways
 
-Parallel Score
+==== Parallel Score
 
 The parallel score assigns high scores to ways that are generally parallel, and lower scores as the two ways deviate away from parallel. This is most useful for short ways that may have a good distance score, but are at very different angles. See <<parallelscores>> for an example. To calculate the parallel score, we march along the two ways and calculate the cosine of the average absolute difference in the headings. This returns 1 for ways that are perfectly parallel and 0 for perpendicular ways.
 
@@ -329,12 +129,11 @@ The parallel score assigns high scores to ways that are generally parallel, and 
 image::images/image041.png[]
 
 [[ExplAttributeScore]]
-*_Attribute Score_*
+==== Attribute Score
 
 The attribute score determines how similar two features are based solely on tags. The score is a value from 0 to 1 and is calculated as the product of the _Name Score_ and the _Enumerated Score_ . The following sections describe how these two scores are calculated.
- +
- +
-*_Name Score_*
+
+==== Name Score
 
 Due to the global nature of OpenStreetMap, names can be provided in multiple scripts as well as various languages, not to mention various spellings and abbreviations. Consider the following examples:
 
@@ -353,7 +152,6 @@ Due to the global nature of OpenStreetMap, names can be provided in multiple scr
 * OTTO ISKANDARDINATA
 * OTTO ISKANDARDINATA (OLLSLA)
 
-
 From the above examples and many others within real world data sets, several things become clear:
 
 1. Names are not necessarily spelled the same way.
@@ -370,11 +168,8 @@ To address these problems, we have adopted an approach with similarities to Smar
 3. Combine a portion of the top scores into a final aggregate score.
 
 The following sections address each of these three steps in addition to mechanisms for merging name tags into an output set of names. Tag merging is used when merging two features into one new, more complete feature. In <<ExplNameComparison>> we will address some opportunities to improve on these approaches.
- +
- +
- +
-*_Normalizing Names_*
 
+===== Normalizing Names
 
 Comparing names is a non-trivial problem that deals with various scripts, local dialects, changes in word ordering, and misspellings. Through the process, we are not attempting to have a perfect solution but a solution that performs well enough in most cases. We have experimented with Hebrew, Arabic, and Russian names using the following steps:
 
@@ -383,9 +178,8 @@ Comparing names is a non-trivial problem that deals with various scripts, local 
 3. Use a variant of Levenshtein distance to calculate the difference between the normalized road names.
 
 In the case of street names, it is common in some languages to prepend the street type, e.g., улица Симоновский Вал (literally, Street Simonovsky Val). When normalizing street names, we will move any common street type names (Lane, Boulevard, Way, Street, etc.) from the beginning of the string to the end. In this example, this results in  Simonovskij Val Street.
- +
- +
-*_Calculating the Individual Name Scores_*
+
+===== Calculating the Individual Name Scores
 
 Now that we have a function for normalizing the names, we can calculate the distance between two names using the following permutation on Levenshtein distance (VI, 1966):
 
@@ -396,11 +190,9 @@ Now that we have a function for normalizing the names, we can calculate the dist
  d = levenshteinDistance(name1, name2)
  return 1.0 – (d / maxLen)
 ----
-
 ____________________________________________________________________
 _Levenshtein's distance, also known as edit distance, is defined as the minimum number of edits needed to transform one string into the other, with the allowable edit operations being insertion, deletion, or substitution of a single character._ footnote:[http://en.wikipedia.org/wiki/Levenshtein_distance]
 ____________________________________________________________________
-
 
 .Example Levenshtein distance Scores:
 [width="75%"]
@@ -414,9 +206,7 @@ ____________________________________________________________________
 | JALAN TOL JAKARTA-CIKAMPEK | JAKARTA CIKAMPEK TOLLROAD | 19 | 0.27 footnote:[This comparison could benefit from treating the name as a "bag" of words rather than an ordered list]
 |======
 
-
-*_Aggregating Individual Name Scores_*
-
+===== Aggregating Individual Name Scores
 
 When two features have multiple names, there are multiple ways the names can be compared and the score aggregated. For example:
 
@@ -438,10 +228,8 @@ After some experimentation we average the top half of the scores using each name
 	* O'Neill Street/O'NEILL ST - .71
 
 In this case, the average is 0.86. Using this approach, we can generate a score from 0 to 1 given a set of names for any two features. This provides a reasonable metric and avoids counting extraneous names such as _Route 128_ or _OLD MILL ST_ that may be omitted from the respective data sets. While this works reasonably well in most cases, more experimentation and research is required to determine better approaches.
- +
- +
- +
-*_Merging Names_*
+
+===== Merging Names
 
 To merge names from two features into one new set of names, we treat the names as a set, where overlapping name values get appended to the `alt_name` tag. For fear of losing an important differentiation, we do not remove names unless there is an exact match. For example:
 
@@ -450,11 +238,9 @@ To merge names from two features into one new set of names, we treat the names a
 			- Feature 2: `name=O'NEILL ST`, `local_name=Pub Alley`
 		*  Post-Merge
 			- `name=O'Neill Street`, `local_name=Pub Alley`, `alt_name=O'NEILL ST;Route 128`
- +
- +
- +
+
 [[CalculatingEnumeratedScore]]
-*_Calculating the Enumerated Score_*
+==== Calculating the Enumerated Score
 
 Enumerated tags are tags with predefined nominal values. This includes `surface=dirt` , `surface=paved`, and `highway=primary` . These tags have relationships that must be manually defined (<<HighwayTagRelate>>).
 
@@ -500,11 +286,11 @@ We have defined over 140 relationships within OSM tags and can use that to compa
 
 We then take the product of the highest non-zero scores using each tag at most once. In this case, it is 0.8 * 1.0 or 0.8 for our final score. Using this approach, we can generate a score from 0 to 1 for a set of enumerated tags.
 
-Zipper Score
+==== Zipper Score
 
 The _zipper score_ gives a higher score for ways that are already joined at one end, and an even higher score for ways joined at both ends. Long roads that are made up of individual ways are more likely to get joined together like a zipper using this score.
 
-Length Score
+==== Length Score
 
 The _length score_ gives higher values to ways that are longer. This encourages longer ways to be merged earlier in the conflation process, and long ways that meet all the above criteria are more likely to be the same than are smaller ways. The length weight is given by:
 

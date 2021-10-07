@@ -19,7 +19,9 @@ When generating the documentation from a pull request job look for
 
 ==== Core JavaScript
 
-See the "JavaScript Overview" section in `docs/Hootenanny - User Guide.pdf` in the `docs` directory of `$HOOT_HOME/hootenanny-$(HOOT_VERSION).tar.gz`.
+See the "JavaScript API" and JavaScript Conflation Reference" sections in 
+`docs/Hootenanny - User Guide.pdf` in the `docs` directory of 
+`$HOOT_HOME/hootenanny-$(HOOT_VERSION).tar.gz`.
 
 ==== Services Java
 
