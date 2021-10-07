@@ -14,8 +14,13 @@ export GDAL_LIB_DIR=`gdal-config --libs | sed -e "s/-L//g" | sed -e "s/ *-lgdal.
 export GDAL_DATA=`gdal-config --datadir`
 
 # Set JAVA_HOME if not defined
-if [ -z "$JAVA_HOME" ]; then
-  export JAVA_HOME=/usr/lib/jvm
+if [ -z "${JAVA_HOME}" ]; then
+  # Use JDK path if present
+  if [ -L "/usr/lib/jvm/java" ]; then
+    export JAVA_HOME="/usr/lib/jvm/java"
+  else # Assume there is just a 'jre' path
+    export JAVA_HOME="/usr/lib/jvm"
+  fi
 fi
 
 export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$JAVA_HOME/jre/lib/amd64/server:$HOOT_HOME/lib:$LD_LIBRARY_PATH
