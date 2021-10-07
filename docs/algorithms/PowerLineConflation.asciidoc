@@ -2,13 +2,84 @@
 [[PowerLineConflation]]
 === Power Line Conflation
 
-[[PowerLineDefinitions]]
+==== Overview
+
+The goal for the initial conflation of power lines was that the number of correctly conflated 
+features plus the number of features marked for manual review would equal at least 80% of the 
+overall conflated features in each test dataset, with the plans of improving that correctness score 
+as high as 90-95% in the future. An attempt was made to have a as close to a minimum of 200 manually 
+matched features as possible in each dataset, while keeping datasets small enough that a single test 
+against them could be run in roughly ten minutes or less.  A rules based conflation model was 
+constructed that maximized the conflation output quality for all input datasets.
+
 ==== Feature Definitions
 
 Power Line Conflation defines a power line as a linear power line feature whose tags support the 
 definitions used by OpenStreetMap.
 
-[[PowerLineMatching]]
+==== Approach
+
+.*Power Line Conflation Attempted Techniques*
+[width="100%"]
+|======
+| *Technique* | *Used in Final Model* | *Description*
+| automatic search radius calculation | yes | use rubber sheeting tie points to determine the best conflation search radius
+| determine input CE | yes | apply a custom circular error value to each input dataset
+| distance weighting | yes | for feature pairs that satisfy the model criterion, favor those that are closer together
+| ensemble subline matching | no | attempt to use multiple types of subline matching
+| Frechet Distance subline matching | yes | use Frechet Distance subline matching
+| geometric based feature extraction | yes | build a rules based model using the geometric properties of the input data
+| location tag matching | yes | disambiguate matches using the location of the power line (overhead vs underground)
+| rubber sheeting input data | yes | move secondary data toward reference data using rubber sheeting before conflation
+| tag based feature extraction | no | build a rules based model using the tag properties of the input data
+| voltage tag matching | yes | disambiguate matches using the voltage rating of the power line
+|======
+
+===== Subline Matching
+
+Due to the detail in some of the input datasets containing many small power line sections, Frechet 
+Distance based subline matching was the only available subline matcher that had reasonable runtime 
+performance. At times, maximal subline matching could catch additional desirable feature matches 
+that Frechet did not (most of which should be reviewed instead of matched).  However, when 
+attempting to combine the two within the model, results did not improve and runtime suffered.
+
+===== Rubber Sheeting
+
+Initially, rubber sheeting resulted in runtime exceptions for some of the input data.  The cause for 
+this seems due to multiple ways sharing the same node, however the exact cause wasn't immediately 
+obvious. Adding a configuration option to disable the error handling, turned on by default, for the 
+situation resulted in an increased conflation score without having an adverse affect on any other 
+conflation.
+
+===== Tags
+
+For the input data that contained them, voltage tags were very valuable when trying to disambiguate 
+matches in dense areas of power lines (especially near power stations).  Fortunately, a lot of the 
+open source data had fairly accurate voltage tags.
+
+To a lesser degree, the location tag used in the OpenStreetMap power line mapping specification was 
+valuable. Since power lines can exist both above and under, it can be difficult to correctly 
+conflate underground power lines if they are not so labeled.
+
+==== Difficulties
+
+The largest difficulty in conflating power lines was due to: 1) differing standards on mapping power 
+lines on towers, 2) data mapped incorrectly based off of aerial imagery, 3) power lines that start 
+as overhead and are later buried underground.
+
+The OpenStreetMap power line mapping specification states that power towers carrying multiple cables 
+be mapped as a single way with tags indicating the number of cables carried.  Other datasets 
+(ENERGYDATA.INFO, California State Government) map each individual cable as a separate way. The 
+desired outcome when conflating these two types of data would be to generate a review for user to 
+decide which way they want to represent the features.  However, that proved difficult to implement 
+in Hootenanny for this situation and needs improvement.
+
+Since power lines can become very dense in urban areas, it can be difficult to correctly map them
+based off of aerial imagery. Some of the OpenStreetMap data used during testing that had been mapped 
+from aerial imagery appeared to incorrectly connect power line ways when compared to the more 
+specialized open source power line datasets coming from power companies (ENERGYDATA.INFO, 
+California State Government).
+
 ==== Matching
 
 Power Line matching allows for a manually configured or automatically calculated search radius when 
@@ -21,19 +92,16 @@ Their match thresholds were determined against test data using Weka. Additionall
 weighting is used to favor features that are closer together than those further apart. Tag matching 
 looks at the values of the `voltage` and `location` tags only.
 
-[[PowerLineMerging]]
 ==== Merging
 
 Power Line merging uses the standard Hootenanny merging process that is used for merging most linear 
 features, including roads.
 
-[[PowerLineConfigurableOptions]]
 ==== Configurable Options
 
 See the descriptions for configuration options named `power.line.*` for more information on how 
 Power Line Conflation behavior may be modified.
 
-[[PowerLineTestResults]]
 ==== Test Results
 
 Match truth for several datasets was obtained by having a human manual match features
@@ -41,5 +109,44 @@ Match truth for several datasets was obtained by having a human manual match fea
 for more details on the process involved). Then, Hootenanny conflated the same data and scored how 
 many matches it correctly made.
 
-TODO: finish
+.Power Line Test Data Sources
+[options="header"]
+|======
+| *Test* | *AOI* | *Schema 1* | *Schema 2* | *Geospatial Accuracy* | *Type Attribution* | *Name Attribution* | *Address Attribution* | *Phone Number Attribution*
+| 1 | Mozambique | EDI | OSM | good | good | poor | none | none 
+| 2 | Namibia | EDI | OSM | good | good | poor | none | none
+| 3 | California Bay Area | CA State Govt | OSM | good | good | good | none | none
+| 4 | Los Angeles | CA State Govt | OSM | good | good | good | none | none
+| 5 | Namibia | MGCP | EDI | good | average | none | none | none
+| 6 | Namibia | EDI | OSM | good | average | none | none | none
+|======
+
+* EDI = ENERGYDATA.INFO
+* OSM = OpenStreetMap.org
+* MGCP = Multi-National Geospatial Co-Production Program
+* Type ratings are based on the presence of `power`, `voltage`, and `location` tags.
+
+.*Power Line Conflation Test Results - October 2021*
+[width="100%"]
+|======
+| *Test* | *AOI* | *Manually Matched Feature Count* | *Percentage Correctly Conflated* | *Percentage Marked for Unnecessary Review* | *Percentage Combined Correct and Reviewable*
+| 1 | Mozambique | 62 | 96.7% | 0.0% | **96.7%**
+| 2 | Namibia | 200 | 53.6% | 1.9% | **55.5%**
+| 3 | California Bay Area | 228 | 74.6% | 0.4% | **75.0%**
+| 4 | Los Angeles | 204 | 69.9% | 1.3% | **70.2%**
+| 5 | Namibia | 41 | 73.9% | 0.0% | **73.9%**
+| 6 | Namibia | 51 | 92.7% | 0.0% | **92.7%**
+|======
+
+Combined Correct = number of correct matches + number of unnecessary reviews
+
+The initial 80% correct conflation threshold goal was met by two of the tests, with three additional 
+tests within >10% of that value. Test #2 obviously requires the most amount of attention.
+
+It is worth noting that some of the ENERGYDATA.INFO (EDI) and MGCP data contain previously added 
+OpenStreetMap (OSM) data. Therefore, in some cases nearly identical sections of data are being 
+conflated together, which Hootenanny performs very well against (as expected).  In those areas test 
+scores could be considered artificially inflated.  However, since it is a quite common workflow to 
+conflate OpenStreetMap into other custom data sources due to OSM's richness as a result of open 
+source contribution, testing conflating such overlapping data is still quite valid.
 

@@ -11,20 +11,74 @@ Hootenanny conflation routine (e.g. Road Conflation, Building Conflation, etc.).
 [[GenericGeometryMatching]]
 ==== Matching
 
-Power Line matching allows for a manually configuredsearch radius when determining the maximum 
+A separate matching routine is employed by each core geometry type, and they are described here.
+
+===== Point
+
+Generic Point matching allows for a manually configured search radius when determining the maximum 
 distance between features to search during matching.
 
-Matching is based off both tag and geometric attributes. For geometry matching, centroid distance, 
-edge distance, weighted metric distance, and weighted shape distance values are used for comparison.
-Their match thresholds were determined against test data using Weka. Additionally, distance 
-weighting is used to favor features that are closer together than those further apart. Tag matching 
-looks at the values of the `voltage` and `location` tags only.
+Matching is based off both tag and geometric attributes. For geometry matching a simple check is
+done to see if the pair of points are within the configured search radius distance. Tag checking 
+examines type tags only for similarity.
+
+===== Line
+
+Generic Line matching allows for a manually configured search radius when determining the maximum 
+distance between features to search during matching.
+
+Matching is based off both tag and geometric attributes. For geometry matching distance score, 
+weighted shape distance, and length score values are used for comparison. Their match thresholds 
+were determined via trial and error with test data. Tag matching compares types tags for similarity 
+only.
+
+Generic Line matching also employs the dual subline matcher technique to alleviate runaway match 
+processing times. See the "Matching" section in the River Conflation algorithms documentation.
+
+===== Polygon
+
+Generic Polygon matching allows for a manually configured search radius when determining the maximum 
+distance between features to search during matching.
+
+Matching is based off both tag and geometric attributes. For geometry matching, overlap and angle 
+histogram score values are used for comparison. Their match thresholds were determined via trial and 
+error with test data. Tag matching compares types tags for similarity only.
+
+===== Point and Polygon
+
+Generic Point and Polygon matching allows for a manually configured search radius when determining 
+the maximum distance between features to search during matching.
+
+Matching is based off both tag and geometric attributes. For geometry matching a simple check is
+done to see if the polygon/point pair are within the configured search radius distance from each 
+other. Tag matching compares types tags for similarity only.
 
 [[GenericGeometryMerging]]
 ==== Merging
 
-Power Line merging uses the standard Hootenanny merging process that is used for merging most linear 
-features, including roads.
+A separate merging routine is employed by each core geometry type, and they are described here.
+
+===== Point
+
+Generic Point merging uses a simple merging process where a geometry from only one of the features 
+is kept (conflation workflow dependent) and tags are merged based on the configured tag merging 
+strategy.
+
+===== Line
+
+Generic Line merging uses the standard Hootenanny merging process that is used for merging most 
+linear features, including roads.
+
+===== Polygon
+
+Generic Polygon merging uses a simple merging process where a geometry from only one of the features 
+is kept (conflation workflow dependent) and tags are merged based on the configured tag merging 
+strategy.
+
+===== Point and Polygon
+
+Generic Point and Polygon merging keeps the polygon geometry. Tags are merged based on the 
+configured tag merging strategy.
 
 [[GenericGeometryConfigurableOptions]]
 ==== Configurable Options
@@ -35,5 +89,10 @@ Generic Geometry Conflation behavior may be modified.
 [[GenericGeometryTestResults]]
 ==== Test Results
 
-Generic Geometry has not been extensively tested for conflation accuracy yet.
+Generic Geometry Conflation has not been extensively tested for conflation accuracy yet.
+
+[[AGenericGeometryFutureWork]]
+==== Future Work
+
+Generic Geometry needs to be trained geospatial datasets to improve its quality.
 
