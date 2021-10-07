@@ -1,5 +1,5 @@
 
-[[AreaToAreaConflation]]
+[[AreaToAreaConflationAlgs]]
 === Area To Area Conflation
 
 [[AreaToAreaDefinitions]]
