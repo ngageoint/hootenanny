@@ -16,14 +16,16 @@ export GDAL_DATA=`gdal-config --datadir`
 # Set JAVA_HOME if not defined
 if [ -z "${JAVA_HOME}" ]; then
   # Use JDK path if present
-  if [ -L "/usr/lib/jvm/java" ]; then
-    export JAVA_HOME="/usr/lib/jvm/java"
+  if [ -L "/usr/lib/jvm/java-1.8.0" ]; then
+    export JAVA_HOME="/usr/lib/jvm/java-1.8.0"
+    export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$JAVA_HOME/jre/lib/amd64/server:$HOOT_HOME/lib:$LD_LIBRARY_PATH
   else # Assume there is just a 'jre' path
-    export JAVA_HOME="/usr/lib/jvm"
+    export JAVA_HOME="/usr/lib/jvm/jre-1.8.0"
+    export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$JAVA_HOME/lib/amd64/server:$HOOT_HOME/lib:$LD_LIBRARY_PATH
   fi
+else
+  export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$JAVA_HOME/jre/lib/amd64/server:$HOOT_HOME/lib:$LD_LIBRARY_PATH
 fi
-
-export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$JAVA_HOME/jre/lib/amd64/server:$HOOT_HOME/lib:$LD_LIBRARY_PATH
 export PATH=$HOOT_HOME/bin/:$PATH
 export QT_SELECT=5
 
