@@ -40,7 +40,8 @@ RUN useradd -mUl -G wheel -u $DEV_UID -s /bin/bash $DEV_NAME \
   && chmod 0440 /etc/sudoers.d/$DEV_NAME \
   && groupmod --gid $DEV_GID $DEV_NAME
 
+COPY scripts/docker_entrypoint.sh   /docker_entrypoint.sh
+
 USER $DEV_NAME
 WORKDIR /home/$DEV_NAME
-
-#RUN flask run -p 4000
+ENTRYPOINT [ "/docker_entrypoint.sh", "-o" ]
