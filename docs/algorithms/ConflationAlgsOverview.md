@@ -14,7 +14,7 @@ line features using a machine learning based approach via script.
 * **[Road Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RoadConflation.asciidoc#road-conflation)** conflates
 linear road features with one of the following algorithms:
   * The **[Unifying (aka 2nd Generation) Roads Algorithm](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/UnifyingConflation.asciidoc)**, which uses a machine learning based approach.
-  * The **[Network Roads Algorithm](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/NetworkConflation.asciidoc)**, which uses a graph theory based approach.
+  * The **[Network Roads Algorithm](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RoadConflation.asciidoc#road-conflation)**, which uses a graph theory based approach.
 
 ## Generic Algorithms
 * **[Generic Line Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#generic-geometry)** is a bare bones algorithm used to match generic linear features for which Hootenanny has no custom matching algorithm available. 

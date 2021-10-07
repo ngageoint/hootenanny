@@ -1,0 +1,168 @@
+
+[[NetworkConflation]]
+=== Network Conflation
+
+In the <<UnifyingConflation,unifying>> and greedy implementations of road conflation line matching
+ information is limited to the lines being matched and in some cases the immediate
+ neighbors and intersections. Once match relationships have been established between roads the
+ set of matches that persist is established by searching the match candidates for a non-conflicting
+ set that maximizes a score. Unfortunately, this optimization at all costs approach can be
+ problematic when a road in input1 can match two roads in input2 equally well. When this happens
+ one of the matches will persist to increase the overall score even though it should likely be
+ treated as a review.
+
+Network conflation treats the two input maps as a network or graph of roads and intersections. This
+ allows a more holistic approach to the optimization stage of conflation where we can use nearby
+ matches to inform match candidates as well as flag ambiguous situations as reviews. The holistic
+ approach also dramatically reduces the number of multi-linestrings produced during the merge phase
+ of conflation.
+
+The network conflation work-flow is broken into a series of stages. These stages will be discussed
+ in more detail below.
+
+1. Convert the OSM node/way/relation data structure into an edge/vertex network.
+2. Establish vertex match candidates and confident matches.
+3. Establish edge match candidates.
+4. Refine match candidate scores.
+5. Label candidate matches.
+6. Apply merge operations.
+
+While this approach could be generalized to any network (e.g. pipelines, railways or rivers) the
+ current implementation focuses specifically on road networks that include roads, cart tracks,
+ bridges, tunnels and other similar types.
+
+==== Convert the OSM Map to a Network
+
+The OSM map already contains enough information in the node/way/relation structure to establish
+ network relationships. During this stage of the operation we simplify the information
+ presented in the OSM map into edges and vertices. We only evaluate elements that are of the
+ appropriate type (e.g. roads). Any node that is at the endpoint of a way has a corresponding
+ vertex created. All ways have a corresponding edge created that connects two vertices at its
+ endpoints. The map is not altered during this process.
+
+==== Establish Vertex Match Candidates
+
+The second stage in network conflation is matching vertices. This is an important aspect to the
+ quality of the network match. Omitting a valid vertex match from the match candidates will ensure
+ an error, but creating too many vertex match candidates dramatically increases the complexity of
+ the problem which will increase both compute time and errors.
+
+Utilizing the tie point matching techniques established in Rubber Sheeting scores
+ are applied to all the match candidates. Confident tie points are a special form of a vertex match.
+ This uses the same confident tie point definition and calculation as is used in
+ Rubber Sheeting. By establishing confident tie points we can eliminate significant
+ portions of possible match situations which improves overall match quality and reduces computation.
+ If a confident tie point is established then all other vertex matches associated that overlap with
+ a confident tie point are removed. In other words, if vertex `A` and vertex `B` is a
+ confident tie point (`AB`) and `AC` is a vertex match candidate then `AC` will be removed as it
+ conflicts with a confident tie point. The math associated with confident tie points is such that
+ two confident tie points cannot overlap.
+
+==== Establish Edge Match Candidates
+
+Edge match candidates are established by iterating over all edges in the first network and
+ comparing those edges to edges in the second network. An R-Tree index is used speed the search
+ process. If two edges are determined to be within the required search radius the two edges are the
+ further evaluated for a match.
+
+In the simplest case both ends of the edge will have matching vertices and the whole edge will be
+ within the specified search radius and angular difference. If this is the case, we have complete
+ 1:1 match and the search is over. However, most of the complexity of finding edge match candidates
+ occurs in the more complex cases, such as 1:m, n:m and partial matches.
+
+If the edges do not end at a vertex match new edges are added on to the match recursively in
+ both directions until the both ends of the match are found. The end may be either a partial
+ match, or a matching vertex. To keep computational complexity down no more than 20 edges will be
+ added to the match before the algorithm will stop searching. While this may result in unmatched
+ edges in very complex situations the compute time is reduced dramatically.
+
+==== Refine Match Candidate Scores
+
+Over time multiple approaches to refining scores were evaluated. A short description of each
+ approach will be presented here as well as a long description of the best performing "Conflicts
+ Matcher".
+
+. Vagabond Network Matcher - The idea presented behind this approach is that you can simulate an
+ actor (vagabond) randomly walking between matched pairs across the network. The more often the
+ vagabond traverses a matched pair the more likely that pair is to be a valid match. Unfortunately
+ this approach failed to converge on a many common cases and closely resembled a greedy approach in
+ some cases.
+. Iterative Matcher - Iteratively assign a score from each edge to all its matching pairs from input
+ 1 to input 2, then conversely from input 2 to input 1. Also perform this for each vertex. Once
+ complete combine these score into a single value for each edge and vertex. This worked well in many
+ cases, but became cumbersome to improve and maintain due to all the special cases.
+. Single Sided Network Matcher - In this case rather than scoring in both directions like the
+ iterative approach, a single sided matching was performed from input 1 to input 2. This succeeded in
+ simplifying the code, but the performance wasn't acceptable in many common cases.
+. Conflicts Network Matcher - This proved to be the most successful approach and incidentally has
+ many analogies with <<UnifyingConflation,unifying>>. In this approach we do not score vertices in
+ any meaningful way, but score edges. Each edge match is marked as either supporting or conflicting
+ with its neighboring matches and by using that support/conflict information we are able to improve
+ or reduce an edge's score.
+
+Several other variations on each of these approaches were also explored, but they came and went
+ quickly and are not worth discussing here.
+
+===== Conflicts Network Matcher
+
+Similar to the other matching techniques, the conflicts network matcher first identifies candidate
+ vertex matches and edge matches. There is a special case where an intersection may match a short
+ segment of road. These are referred to as stub matches and are discussed in more detail below. A
+ summary of the Conflict Network Matcher specific steps is below:
+
+1. Establish support and conflict relationships between matches.
+2. Seed edge scores.
+3. Iteratively adjust scores until they converge or reach another stopping criteria.
+4. Assign relationships to scored matches.
+
+_Establish Relationships_
+
+After edge matches have been established each match is evaluated to determine which matches it
+ supports (e.g. shares an intersection) and which matches are conflicting (applying two
+ conflicting matches would be illegal). These values are recorded in an index for easy retrieval.
+
+_Stubs_
+
+Stubs are introduced during the edge matching phase to represent situations where small road
+ segments match an intersection.
+
+Unfortunately this can introduce a large amount of complexity in some situations as the number of
+ possible options goes up significantly. To help counteract this problem stub matches are given a
+ lower weight than other matches. More details are available below in the _Iteratively Adjust
+ Scores_ section.
+
+_Seed Edge Scores_
+
+All candidate edge matches are seeded with a score of 1. In the future it may make sense to seed
+ with a score that more directly relates to probability of a match or similar, but for now a value
+ of 1 seems to work well enough.
+
+_Iteratively Adjust Scores_
+
+In each iteration the previous scores are stored and a new set of scores are calculated. The new
+ score is calculated as follows:
+
+x - The match we are scoring.
+y~i~ - One of the neighboring matches (either supports or contradicts)
+s~o~ - old score for x.
+s~n~ - new score for x.
+partialHandicap - The handicap applied if `x` is a partial match.
+ `network.conflicts.partial.handicap`
+W(m) - A weighting method that determines the relevance of a neighbor.
+SW(m) - If the two neighbors aren't directly connected, but connected by a stub. Return
+ the highest weight of all the stubs that connect the two matches. Otherwise, return 1.
+stubThrough - `network.conflicts.stub.through.weighting`, defaults to 0.59
+
+At this point 10 iterations are executed of score adjustments before the scores are accepted. In the
+ future it may be worth experimenting with dynamically running the converging process. For example,
+ if the largest score change is less than a threshold then stop iterating. In a number of
+ small real-world datasets 10 iterations is enough to converge.
+
+==== Label Candidate Matches
+
+After match candidate scores have been refined a new match record is created for all matches
+
+==== Apply Merge Operations
+
+After match records have been created, features involved in matches are then merged.
+
