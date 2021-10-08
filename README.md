@@ -116,7 +116,7 @@ wishing to develop their own conflation clients. The web services use
 Basic conflation example:
 
 ```
-# conflate two datasets together
+#  conflate two datasets together
 hoot conflate input1.osm input2.osm output.osm
 ```
 
