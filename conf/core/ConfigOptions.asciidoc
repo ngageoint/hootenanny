@@ -5738,8 +5738,8 @@ merging logic under certain circumstances.
 * Data Type: string
 * Default Value: `asciidoc`
 
-Output format to use when printing OSM+ Tag documentation. Valid formats are: 'csv', 'html',
-'redmine' & 'asciidoc'.
+Output format to use when printing OSM+ Tag documentation. Valid formats are: 'csv', 'html', and
+'asciidoc'.
 
 === tag.printing.script
 

@@ -37,6 +37,15 @@ using namespace std;
 namespace hoot
 {
 
+/**
+ * @brief The SchemaCmd class runs the schema command.
+ *
+ * Note that no command line tests exists for this class since its code is exercised when the
+ * documentation is built.
+ *
+ * neato -Tsvg -Gsize=100,100\! -GK=3 -Gratio=.5 -Gmindist=1 -Gmclimit=10 -Gnodesep=4 -Granksep=4 \
+      -Gsplines=true -Glen=0.5 -Gdpi=100 -Goverlap=false -Elen=3 -o tmp/schema.png tmp/schema.dot
+ */
 class SchemaCmd : public BaseCommand
 {
 public:
@@ -46,7 +55,8 @@ public:
   SchemaCmd() = default;
 
   QString getName() const override { return "schema"; }
-  QString getDescription() const override { return "Displays the tag schema in use"; }
+  QString getDescription() const override
+  { return "Generates documentation for the tag schema in use"; }
 
   int runSimple(QStringList& args) override
   {
@@ -54,23 +64,52 @@ public:
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(
-        QString("%1 takes zero parameters. You provided %2: %3")
+        QString("%1 takes one parameter. You provided %2: %3")
           .arg(getName())
           .arg(args.size())
           .arg(args.join(",")));
     }
 
-    LOG_STATUS("Printing schema...");
-    std::shared_ptr<ScriptSchemaTranslator> schemaPrinter =
-      ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-        ConfigOptions().getTagPrintingScript());
-    if (!schemaPrinter)
+    const QString outputFormat = QFileInfo(args[0]).suffix().toLower();
+    if (_getSupportedTextualFormats.contains(outputFormat))
     {
-      throw IllegalArgumentException(
-        "Unable to find a valid translation format for: " + ConfigOptions().getTagPrintingScript());
+      std::shared_ptr<ScriptSchemaTranslator> schemaPrinter =
+        ScriptSchemaTranslatorFactory::getInstance().createTranslator(
+          ConfigOptions().getTagPrintingScript());
+      if (!schemaPrinter)
+      {
+        throw IllegalArgumentException(
+          "Unable to find printing script: " + ConfigOptions().getTagPrintingScript());
+      }
+    }
+    else if (_getSupportedImageFormats.contains(outputFormat))
+    {
+      // TODO
+    }
+    else
+    {
+      // TODO
     }
 
     return 0;
+  }
+
+private:
+
+  QStringList _getSupportedTextualFormats() const
+  {
+    QStringList formats;
+    formats.append("asciidoc");
+    formats.append("csv");
+    formats.append("html");
+    return formats;
+  }
+
+  QStringList _getSupportedImageFormats() const
+  {
+    QStringList formats;
+    formats.append("svg");
+    return formats;
   }
 };
 
