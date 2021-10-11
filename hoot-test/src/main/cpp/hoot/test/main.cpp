@@ -198,6 +198,8 @@ private:
   double _testTimeout;
 };
 
+static const QRegExp TEST_NAME_FILTER("(N\\d(tgs|hoot)*\\d{2})|(\\d{2})");
+
 void init()
 {
   v8Engine::getInstance();
@@ -279,10 +281,17 @@ void includeExcludeTests(const QStringList& args, vector<CppUnit::Test*>& vTests
     vTests.swap(vTestsToRun);
 }
 
+std::string filterTestName(const std::string& name)
+{
+  QString testName = QString::fromStdString(name).remove(TEST_NAME_FILTER);
+  return testName.replace("TestE", "Test").toStdString();
+}
+
 CppUnit::Test* findTest(CppUnit::Test* t, std::string name)
 {
-  //cout << t->getName() << endl;
-  if (name == t->getName())
+  const std::string testName = filterTestName(t->getName());
+  //cout << testName << endl;
+  if (name == testName)
   {
     return t;
   }
@@ -308,8 +317,9 @@ CppUnit::Test* findTest(std::vector<TestPtr> vTests, std::string name)
 {
   for (size_t i = 0; i < vTests.size(); i++)
   {
-    //cout << vTests[i]->getName() << endl;
-    if (name == vTests[i]->getName())
+    const std::string testName = filterTestName(vTests[i]->getName());
+    //cout << testName << endl;
+    if (name == testName)
     {
       return vTests[i].get();
     }
