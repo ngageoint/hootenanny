@@ -481,8 +481,10 @@ Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
 	  || true \
 	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 
+# schema graph
+
 tmp/schema.dot: qt-make
-	HootTest --single hoot::OsmSchemaTest
+	HootTest --single OsmSchemaTest::loadTest
 
 tmp/schema.png: tmp/schema.dot
 	neato -Tpng -Gsize=50,50\! -GK=3 -Gratio=.5 -Gmindist=1 -Gmclimit=10 -Gnodesep=4 -Granksep=4 -Gsplines=true -Glen=0.5 -Gconcentrate=true -Gdpi=50 -Goverlap=false -Elen=3 -o tmp/schema.png tmp/schema.dot
