@@ -53,7 +53,7 @@ For background on leveraging the Hootenanny JavaScript interface to call functio
 
 Hootenanny conflates POIs with both building and area polygons.  It uses the following criteria for matching features: distance between
 the two features, name similarity, type similarity, address similarity, and phone number similarity.  See
-<<hootuser, PoiToPolygonConflation>> for specific algorithm details.
+<<hootuser, PoiToPolygonConflationAlgs>> for specific algorithm details.
 
 [[PoiToPolygonConfigurableOptions]]
 ===== Configurable Options
