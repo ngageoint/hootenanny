@@ -52,6 +52,7 @@ docs/test.asciidoc
 docs/test.sh
 docs/wpsDocs
 docs/developer/CoreAPI
+docs/schema.asciidoc
 dum*
 fouo
 gcov/

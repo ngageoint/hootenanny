@@ -20,6 +20,8 @@ define buildAsciidoc
 endef
 
 all: \
+	schema-docs \
+	schema-graph \
 	Hootenanny\ -\ User\ Guide.pdf \
 	CoreAPI
 
@@ -37,7 +39,7 @@ $(HOME)/.asciidoc/filters/gnuplot/gnuplot-filter.conf: filters/gnuplot/gnuplot-f
 	cp filters/gnuplot/* $(HOME)/.asciidoc/filters/gnuplot/
 
 clean:
-	rm -rf tmp *.pdf *.png *.html *-docinfo.xml restDocs developer/CoreAPI
+	rm -rf tmp *.pdf *.png *.html *-docinfo.xml restDocs developer/CoreAPI schema.asciidoc
 
 node_modules:
 	npm install --silent xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler
@@ -89,6 +91,9 @@ Hootenanny\ -\ User\ Guide.pdf: \
 	user/*.asciidoc
 	$(call buildAsciidoc)
 
+schema-docs:
+	hoot schema -D tag.printing.format=asciidoc > schema.asciidoc
+
 schema-graph:
-	hoot schema tmp/schema.svg
+	hoot schema schema.png
 	
