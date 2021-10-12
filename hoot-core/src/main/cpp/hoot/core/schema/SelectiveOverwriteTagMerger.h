@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * @brief The SelectiveOverwriteTagMerger class will only transfer tags specified in a list from on
+ * @brief The SelectiveOverwriteTagMerger class will only transfer tags specified in a list from one
  * element to another.
  */
 class SelectiveOverwriteTagMerger : public TagMerger

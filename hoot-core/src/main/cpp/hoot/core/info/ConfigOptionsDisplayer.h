@@ -57,8 +57,8 @@ public:
   
 private:
 
-  static QString _getAllConfigOptionsDetails(const QString& optionName,
-                                             const QString& configOptionsFile);
+  static QString _getAllConfigOptionsDetails(
+    const QString& optionName, const QString& configOptionsFile);
 };
 
 }
