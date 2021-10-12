@@ -832,8 +832,8 @@ void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges
     }
     else if (ElementType::Relation == c.getElement()->getElementType().getEnum())
     {
-      // Diff conflation w/ tags doesn't handle relations. Changed this to log that the relations
-      // are being skipped for now. #4298 would add support for relations.
+      // Diff conflation w/ tags doesn't seem to handle relations but that hasn't been a problem so
+      // far. Changed this to log statement that the relations are being skipped here for now.
 
       LOG_DEBUG("Relation handling not implemented with differential conflation: " << c);
       if (Log::getInstance().getLevel() <= Log::Trace)
