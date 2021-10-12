@@ -13,9 +13,9 @@ def my_callback_fn(context, future):
     print(context, future.result())
 
 #shell2http.register_command(endpoint="saythis", command_name="echo", callback_fn=my_callback_fn, decorators=[])
-shell2http.register_command(endpoint="runsherlockcommands", command_name="./scripts/RunSherlockCommands.sh")
+shell2http.register_command(endpoint="RunCommandsAcrossContainers", command_name="./scripts/docker/RunCommandsAcrossContainers.sh")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
     app.testing = True
-    
+

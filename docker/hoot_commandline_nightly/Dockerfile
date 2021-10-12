@@ -29,7 +29,7 @@ RUN yum -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x
 RUN yum install -y hootenanny-core
 RUN pip3 install flask flask_shell2http flask-executor
 
-ENV FLASK_APP=/home/${DEV_NAME}/python/CommandsAcrossContainer.py
+ENV FLASK_APP=/home/${DEV_NAME}/scripts/docker/CommandsAcrossContainer.py
 ENV FLASK_ENV=development
 
 RUN yum -y clean all && rm -rf /var/cache/yum
@@ -40,8 +40,8 @@ RUN useradd -mUl -G wheel -u $DEV_UID -s /bin/bash $DEV_NAME \
   && chmod 0440 /etc/sudoers.d/$DEV_NAME \
   && groupmod --gid $DEV_GID $DEV_NAME
 
-COPY scripts/docker_entrypoint.sh   /docker_entrypoint.sh
+COPY hootenanny/scripts/docker/hoot_docker_entrypoint.sh   /hoot_docker_entrypoint.sh
 
 USER $DEV_NAME
 WORKDIR /home/$DEV_NAME
-ENTRYPOINT [ "/docker_entrypoint.sh", "-o" ]
+ENTRYPOINT [ "/hoot_docker_entrypoint.sh" ]
