@@ -87,7 +87,6 @@ _asJson(false)
 
 QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName) const
 {
-  // TODO
   if (_asJson)
   {
     throw IllegalArgumentException("JSON format not supported for operations information.");
@@ -172,7 +171,6 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType) const
 
   if (apiEntityType == "operators")
   {
-    // TODO
     if (_asJson)
     {
       throw IllegalArgumentException(
@@ -346,7 +344,6 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType) const
   }
   else if (apiEntityType == "criterion-consumers")
   {
-    // TODO
     if (_asJson)
     {
       throw IllegalArgumentException("JSON format not supported for criterion consumers.");
@@ -512,7 +509,6 @@ template<typename ApiEntity>
 QString ApiEntityDisplayInfo::_getApiEntitiesForMatchMergerCreators(
   const QString& apiEntityClassName) const
 {
-  // TODO
   if (_asJson)
   {
     throw IllegalArgumentException("JSON format not supported for match/merger creators.");
@@ -582,7 +578,6 @@ QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString& classNam
 
 QString ApiEntityDisplayInfo::_getWaySnapCriteria() const
 {
-  // TODO
   if (_asJson)
   {
     throw IllegalArgumentException("JSON format not supported for way snap criteria.");

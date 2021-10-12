@@ -68,7 +68,8 @@ public:
 
 private:
 
-  // TODO
+  // Allows for JSON output formatting instead of text; not supported by all options (support being
+  // added on an as needed basis)
   bool _asJson;
 
   QString _apiEntityTypeForBaseClass(const QString& baseClassName) const;
