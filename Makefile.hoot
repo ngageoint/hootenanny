@@ -481,11 +481,6 @@ Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
 	  || true \
 	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 
-# Schema graph
-
-schema-graph: qt-make
-	hoot schema tmp/schema.svg
-
 # Code Coverage
 
 IGNORED=/usr/\* \*test/cpp\* \*/local/\* \*/tmp/moc/\* \*core/proto\* /opt/\* \*8/\*

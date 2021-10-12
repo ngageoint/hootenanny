@@ -89,3 +89,6 @@ Hootenanny\ -\ User\ Guide.pdf: \
 	user/*.asciidoc
 	$(call buildAsciidoc)
 
+schema-graph:
+	hoot schema tmp/schema.svg
+	
