@@ -58,6 +58,13 @@ public:
 
   int runSimple(QStringList& args) override
   {
+    bool asJson = false;
+    if (args.contains("--json"))
+    {
+      args.removeAt(args.indexOf("--json"));
+      asJson = true;
+    }
+
     const QStringList supportedOpts = _getSupportedOptions();
     QStringList specifiedOpts;
     // Only allowing one option per info command by default. Options with more than sub-option are
@@ -80,8 +87,17 @@ public:
     }
     LOG_VARD(specifiedOpts.size());
 
+    ApiEntityDisplayInfo infoDisplayer;
+    infoDisplayer.setAsJson(asJson);
+
     if (specifiedOpts.contains("--config-options"))
     {
+      if (asJson)
+      {
+        throw IllegalArgumentException(
+          "JSON format not supported for configuration options information.");
+      }
+
       args.removeAt(args.indexOf("--config-options"));
 
       bool getNamesOnly = false;
@@ -124,6 +140,11 @@ public:
     }
     else if (specifiedOpts.contains("--formats"))
     {
+      if (asJson)
+      {
+        throw IllegalArgumentException("JSON format not supported for format information.");
+      }
+
       args.removeAt(args.indexOf("--formats"));
       if (args.size() > 2)
       {
@@ -213,18 +234,23 @@ public:
     }
     else if (specifiedOpts.contains("--cleaning-operations"))
     {
-      std::cout << ApiEntityDisplayInfo::getDisplayInfoOps("map.cleaner.transforms").toStdString();
+      std::cout << infoDisplayer.getDisplayInfoOps("map.cleaner.transforms").toStdString();
     }
     else if (specifiedOpts.contains("--conflate-post-operations"))
     {
-      std::cout << ApiEntityDisplayInfo::getDisplayInfoOps("conflate.post.ops").toStdString();
+      std::cout << infoDisplayer.getDisplayInfoOps("conflate.post.ops").toStdString();
     }
     else if (specifiedOpts.contains("--conflate-pre-operations"))
     {
-      std::cout << ApiEntityDisplayInfo::getDisplayInfoOps("conflate.pre.ops").toStdString();
+      std::cout << infoDisplayer.getDisplayInfoOps("conflate.pre.ops").toStdString();
     }
     else if (specifiedOpts.contains("--languages"))
     {
+      if (asJson)
+      {
+        throw IllegalArgumentException( "JSON format not supported for languages information.");
+      }
+
       args.removeAt(args.indexOf("--languages"));
       if (args.size() != 1)
       {
@@ -315,7 +341,7 @@ public:
             .arg(getName()).arg(apiEntityType));
       }
 
-      std::cout << ApiEntityDisplayInfo::getDisplayInfo(apiEntityType).toStdString();
+      std::cout << infoDisplayer.getDisplayInfo(apiEntityType).toStdString();
     }
     else
     {

@@ -127,7 +127,7 @@ std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(
   return jsonObj;
 }
 
-std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonStringArray(
+std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonArray(
   const QStringList& stringList)
 {
   std::shared_ptr<boost::property_tree::ptree> strArr =

@@ -48,33 +48,40 @@ public:
   static const int MAX_NAME_SIZE;
   static const int MAX_TYPE_SIZE;
 
+  ApiEntityDisplayInfo();
+
   /**
    * Gets display information about an ApiEntity as a string
    *
    * @param apiEntityType the type of entity to display
    */
-  static QString getDisplayInfo(const QString& apiEntityType);
+  QString getDisplayInfo(const QString& apiEntityType) const;
 
   /**
    * Gets display information on the currently configured operations by the given name
    *
    * @param optName a Hootenanny configuration option name identifying a list of operations
    */
-  static QString getDisplayInfoOps(const QString& optName);
+  QString getDisplayInfoOps(const QString& optName) const;
+
+  void setAsJson(bool asJson) { _asJson = asJson; }
 
 private:
 
-  static QString _apiEntityTypeForBaseClass(const QString& baseClassName);
+  // TODO
+  bool _asJson;
+
+  QString _apiEntityTypeForBaseClass(const QString& baseClassName) const;
 
   template<typename ApiEntity, typename ApiEntityChild>
-  static QString _getApiEntities(
+  QString _getApiEntities(
     const QString& apiEntityBaseClassName, const QString& apiEntityType, const bool displayType,
-    const int maxNameSize);
+    const int maxNameSize) const;
 
   template<typename ApiEntity>
-  static QString _getApiEntitiesForMatchMergerCreators(const QString& apiEntityClassName);
+  QString _getApiEntitiesForMatchMergerCreators(const QString& apiEntityClassName) const;
 
-  static QString _getWaySnapCriteria();
+  QString _getWaySnapCriteria() const;
 };
 
 }
