@@ -431,8 +431,6 @@ archive: js-make services-docs docs
 	rm -f $(HOOT_TARNAME).tar.gz
 	scripts/git/git-archive-all.sh --prefix $(HOOT_TARNAME)/ $(HOOT_TARNAME).tar
 	cp docs/*.pdf docs/*.html docs/*.text docs/schema.png $(HOOT_TARNAME)/docs/
-	# Put the docs in their own compressed file
-	tar czf hootenanny-documentation-$(HOOT_VERSION).tar.gz $(HOOT_TARNAME)
 	cp Makefile.in missing aclocal.m4 configure config.h.in $(HOOT_TARNAME)
 	# Copy the protocol buffer generated files. Eases a dependency when building
 	# on CentOS
