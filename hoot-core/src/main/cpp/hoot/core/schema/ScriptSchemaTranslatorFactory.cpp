@@ -51,7 +51,7 @@ bool CompareSt(
 }
 
 std::shared_ptr<ScriptSchemaTranslator> ScriptSchemaTranslatorFactory::createTranslator(
-  QString scriptPath)
+  const QString& scriptPath)
 {
   LOG_VARD(scriptPath);
 
@@ -63,7 +63,6 @@ std::shared_ptr<ScriptSchemaTranslator> ScriptSchemaTranslatorFactory::createTra
     LOG_VART(_translators[i]);
     st.push_back(Factory::getInstance().constructObject<ScriptSchemaTranslator>(_translators[i]));
   }
-
   sort(st.begin(), st.end(), CompareSt);
 
   std::shared_ptr<ScriptSchemaTranslator> result;

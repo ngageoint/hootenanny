@@ -483,12 +483,8 @@ Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
 
 # Schema graph
 
-tmp/schema.dot: qt-make
-	HootTest --single OsmSchemaTest::loadTest
-
-tmp/schema.png: tmp/schema.dot
-	neato -Tsvg -Gsize=100,100\! -GK=3 -Gratio=.5 -Gmindist=1 -Gmclimit=10 -Gnodesep=4 -Granksep=4 \
-	  -Gsplines=true -Glen=0.5 -Gdpi=100 -Goverlap=false -Elen=3 -o tmp/schema.png tmp/schema.dot
+schema-graph: qt-make
+	hoot schema tmp/schema.svg
 
 # Code Coverage
 
