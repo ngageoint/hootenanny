@@ -381,8 +381,9 @@ function dumpAsciidocTags(tagList)
   var shortKeys = Object.keys(tagList);
   shortKeys.sort();
 
-  print('Hootennanny OSM+ Tags');
-  print('=====================');
+  print('');
+  print('== Hootennanny OSM+ Tags');
+  print('');
   print('Generated: ' + Date());
   print('');
 
@@ -416,6 +417,8 @@ function dumpAsciidocTags(tagList)
     print('');
     print('');
   }
+  
+  print('');
 } // End dumpAsciidocTags
 
 // Dump the tagList out as a Large Ugly JSON Blob.

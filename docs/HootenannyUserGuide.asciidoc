@@ -92,6 +92,6 @@ include::user/CommandLineExamples.asciidoc[]
 include::tmp/RulesLib.asciidoc[]
 include::tmp/RulesTemplate.asciidoc[]
 include::HootenannyConfigOptions.asciidoc[]
-//include::schema.asciidoc[]
+include::schema.asciidoc[]
 include::References.asciidoc[]
 
