@@ -44,12 +44,10 @@ var hausdorffDistanceExtractor = new hoot.HausdorffDistanceExtractor();
 var oneToManyMatchEnabled = (hoot.get("railway.one.to.many.match") === 'true');
 // This contains the keys in a secondary feature that will trigger a one to many tag only transfer.
 var oneToManyIdentifyingKeys = hoot.get("railway.one.to.many.identifying.keys").split(';');
-// This contains the keys in a secondary feature that will be transferred to a reference feature
-// one a one to many tag only transfer is triggered.
-var oneToManyTransferKeys = hoot.get("railway.one.to.many.transfer.keys").split(';');
-// Set the transfer keys on SelectiveOverwriteTag1Merger, as that's the tag merger we'll use for
-// this.
-hoot.set({'selective.overwrite.tag.merger.keys': oneToManyTransferKeys});
+// Get the keys that when found in a secondary feature will be transferred to a reference feature
+// when a one a one to many tag only transfer is triggered. Set the transfer keys on
+// SelectiveOverwriteTag1Merger, as that's the tag merger we'll use for this.
+hoot.set({'selective.overwrite.tag.merger.keys': hoot.get("railway.one.to.many.transfer.keys")});
 // Used to tag secondary features to identify them for removal post conflate; matches a var in
 // MetadataTags
 var oneToManySecondaryMatchTagKey = "hoot:railway:one:to:many:match:secondary";
